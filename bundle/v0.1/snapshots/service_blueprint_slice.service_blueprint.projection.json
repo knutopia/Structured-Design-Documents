@@ -1,0 +1,30 @@
+{
+  "view_id": "service_blueprint",
+  "source_example": "service_blueprint_slice",
+  "nodes": [
+    {"id": "D-020", "type": "DataEntity", "name": "Claim"},
+    {"id": "J-020", "type": "Step", "name": "Submit Claim"},
+    {"id": "J-021", "type": "Step", "name": "Receive Confirmation"},
+    {"id": "PL-020", "type": "Policy", "name": "Retention Policy"},
+    {"id": "PR-020", "type": "Process", "name": "Validate Claim"},
+    {"id": "PR-021", "type": "Process", "name": "Notify Customer"},
+    {"id": "SA-020", "type": "SystemAction", "name": "Store Claim"},
+    {"id": "SA-021", "type": "SystemAction", "name": "Send Email"}
+  ],
+  "edges": [
+    {"from": "J-020", "type": "PRECEDES", "to": "J-021"},
+    {"from": "J-020", "type": "REALIZED_BY", "to": "PR-020"},
+    {"from": "J-021", "type": "REALIZED_BY", "to": "PR-021"},
+    {"from": "PR-020", "type": "CONSTRAINED_BY", "to": "PL-020"},
+    {"from": "PR-020", "type": "DEPENDS_ON", "to": "SA-020"},
+    {"from": "PR-020", "type": "PRECEDES", "to": "PR-021"},
+    {"from": "PR-021", "type": "DEPENDS_ON", "to": "SA-021"},
+    {"from": "SA-020", "type": "CONSTRAINED_BY", "to": "PL-020"},
+    {"from": "SA-020", "type": "READS", "to": "D-020"},
+    {"from": "SA-020", "type": "WRITES", "to": "D-020"},
+    {"from": "SA-021", "type": "READS", "to": "D-020"}
+  ],
+  "notes": [
+    "EMITS to Event is omitted because Event is not part of service_blueprint node scope."
+  ]
+}

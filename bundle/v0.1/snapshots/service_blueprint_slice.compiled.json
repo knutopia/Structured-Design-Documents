@@ -1,0 +1,231 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "D-020",
+      "type": "DataEntity",
+      "name": "Claim",
+      "props": {
+        "description": "Customer claim entity",
+        "fields": "claim_id,status",
+        "owner": "Data",
+        "system_of_record": "ClaimsDB"
+      }
+    },
+    {
+      "id": "E-020",
+      "type": "Event",
+      "name": "Claim Confirmed",
+      "props": {
+        "description": "Claim confirmation event",
+        "owner": "Ops",
+        "payload_schema": "{claim_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "J-020",
+      "type": "Step",
+      "name": "Submit Claim",
+      "props": {
+        "actor": "User",
+        "description": "User submits support claim",
+        "intent": "Start claim process",
+        "owner": "Design",
+        "success_criteria": "Claim accepted"
+      }
+    },
+    {
+      "id": "J-021",
+      "type": "Step",
+      "name": "Receive Confirmation",
+      "props": {
+        "actor": "User",
+        "description": "User receives claim confirmation",
+        "intent": "Confirm claim was received",
+        "owner": "Design",
+        "success_criteria": "Confirmation shown"
+      }
+    },
+    {
+      "id": "PL-020",
+      "type": "Policy",
+      "name": "Retention Policy",
+      "props": {
+        "description": "Retention constraints",
+        "enforcement_point": "ClaimsAPI",
+        "owner": "Risk",
+        "policy_owner": "Legal"
+      }
+    },
+    {
+      "id": "PR-020",
+      "type": "Process",
+      "name": "Validate Claim",
+      "props": {
+        "description": "Validate submitted claim",
+        "owner": "Ops",
+        "sla": "30s",
+        "visibility": "frontstage"
+      }
+    },
+    {
+      "id": "PR-021",
+      "type": "Process",
+      "name": "Notify Customer",
+      "props": {
+        "description": "Send claim confirmation",
+        "owner": "Ops",
+        "sla": "60s",
+        "visibility": "support"
+      }
+    },
+    {
+      "id": "SA-020",
+      "type": "SystemAction",
+      "name": "Store Claim",
+      "props": {
+        "action": "createClaim",
+        "description": "Persist claim",
+        "failure_modes": "validationError",
+        "owner": "Eng",
+        "system_name": "ClaimsAPI"
+      }
+    },
+    {
+      "id": "SA-021",
+      "type": "SystemAction",
+      "name": "Send Email",
+      "props": {
+        "action": "sendEmail",
+        "description": "Send confirmation email",
+        "failure_modes": "deliveryError",
+        "owner": "Eng",
+        "system_name": "NotificationService"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "J-020",
+      "type": "PRECEDES",
+      "to": "J-021",
+      "to_name": "Receive Confirmation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-020",
+      "type": "REALIZED_BY",
+      "to": "PR-020",
+      "to_name": "Validate Claim",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-021",
+      "type": "REALIZED_BY",
+      "to": "PR-021",
+      "to_name": "Notify Customer",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-020",
+      "type": "CONSTRAINED_BY",
+      "to": "PL-020",
+      "to_name": "Retention Policy",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-020",
+      "type": "DEPENDS_ON",
+      "to": "SA-020",
+      "to_name": "Store Claim",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-020",
+      "type": "PRECEDES",
+      "to": "PR-021",
+      "to_name": "Notify Customer",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-021",
+      "type": "DEPENDS_ON",
+      "to": "SA-021",
+      "to_name": "Send Email",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-021",
+      "type": "EMITS",
+      "to": "E-020",
+      "to_name": "Claim Confirmed",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "SA-020",
+      "type": "CONSTRAINED_BY",
+      "to": "PL-020",
+      "to_name": "Retention Policy",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "SA-020",
+      "type": "READS",
+      "to": "D-020",
+      "to_name": "Claim",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "SA-020",
+      "type": "WRITES",
+      "to": "D-020",
+      "to_name": "Claim",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "SA-021",
+      "type": "READS",
+      "to": "D-020",
+      "to_name": "Claim",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

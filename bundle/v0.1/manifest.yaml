@@ -1,0 +1,44 @@
+bundle_name: sdd-text-spec-bundle
+bundle_version: "0.1"
+language: sdd-text
+language_version: "0.1"
+
+core:
+  vocab: core/vocab.yaml
+  schema: core/schema.json
+  contracts: core/contracts.yaml
+  views: core/views.yaml
+
+profiles:
+  - id: permissive
+    path: profiles/permissive.yaml
+    intent: Warning-first governance with strict structural validation.
+    default_severity_mode: permissive
+  - id: recommended
+    path: profiles/recommended.yaml
+    intent: Strict governance for production-ready authoring.
+    default_severity_mode: strict
+
+examples:
+  - path: examples/outcome_to_ia_trace.sdd
+    compiled_snapshot: snapshots/outcome_to_ia_trace.compiled.json
+    projection_snapshots:
+      - snapshots/outcome_to_ia_trace.outcome_opportunity_map.projection.json
+      - snapshots/outcome_to_ia_trace.ia_place_map.projection.json
+  - path: examples/place_viewstate_transition.sdd
+    compiled_snapshot: snapshots/place_viewstate_transition.compiled.json
+    projection_snapshots:
+      - snapshots/place_viewstate_transition.ui_contracts.projection.json
+      - snapshots/place_viewstate_transition.ia_place_map.projection.json
+  - path: examples/service_blueprint_slice.sdd
+    compiled_snapshot: snapshots/service_blueprint_slice.compiled.json
+    projection_snapshots:
+      - snapshots/service_blueprint_slice.service_blueprint.projection.json
+      - snapshots/service_blueprint_slice.journey_map.projection.json
+
+compatibility:
+  requires_compiler_min: "0.1.0"
+  notes:
+    - Core vocabulary is closed; non-canonical aliases are informative and must not be emitted by compilers.
+    - Views are typed projection stubs; layout conventions remain renderer-specific unless promoted by profile rules.
+    - Post-extraction policy treats this bundle as machine-readable source of truth for tooling.

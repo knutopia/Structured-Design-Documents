@@ -1,0 +1,87 @@
+id: recommended
+version: "0.1"
+extends: core
+intent: Enforce strict governance for production-grade authoring and deterministic toolchain behavior.
+default_severity_mode: strict
+
+severity_defaults:
+  structural: error
+  endpoint_contracts: error
+  governance: error
+
+rules:
+  - id: endpoint_pairs_enforced
+    source: core/contracts.yaml
+    applies_to: all_relationships
+    severity: error
+  - id: transitions_event_reference
+    source: core/contracts.yaml
+    applies_to: TRANSITIONS_TO
+    severity: error
+    requirement: event_annotation_must_reference_existing_event_id
+  - id: binds_to_requires_field
+    source: core/contracts.yaml
+    applies_to: BINDS_TO
+    severity: error
+  - id: outcome_has_metric
+    source: core/contracts.yaml
+    applies_to: MEASURED_BY
+    severity: error
+  - id: initiative_addresses_opportunity
+    source: core/contracts.yaml
+    applies_to: ADDRESSES
+    severity: error
+  - id: step_realization_required
+    source: core/contracts.yaml
+    applies_to: REALIZED_BY
+    severity: error
+  - id: required_props_by_type
+    source: profile
+    severity: error
+    required_props:
+      Outcome: [owner, description, time_horizon, scope, stakeholder]
+      Metric: [owner, description, definition, source, cadence, metric_type]
+      Opportunity: [owner, description, evidence, segment, severity]
+      Initiative: [owner, description, non_goals, status]
+      Stage: [owner, description, order_index]
+      Step: [owner, description, actor, intent, success_criteria]
+      Area: [owner, description, scope]
+      Place: [owner, description, surface, route_or_key, access]
+      ViewState: [owner, description, place_id, data_required]
+      Component: [owner, description, responsibility, inputs, outputs]
+      State: [owner, description, scope_id, invariants]
+      Event: [owner, description, source_kind, payload_schema]
+      Process: [owner, description, visibility, sla]
+      SystemAction: [owner, description, system_name, action, failure_modes]
+      DataEntity: [owner, description, fields, system_of_record]
+      Policy: [owner, description, policy_owner, enforcement_point]
+  - id: id_prefix_type_coupling
+    source: profile
+    severity: error
+    prefix_map:
+      Outcome: O
+      Metric: M
+      Opportunity: OP
+      Initiative: I
+      Stage: G
+      Step: J
+      Area: A
+      Place: P
+      ViewState: VS
+      Component: C
+      State: ST
+      Event: E
+      Process: PR
+      SystemAction: SA
+      DataEntity: D
+      Policy: PL
+  - id: viewstate_parentage_policy
+    source: profile
+    severity: error
+    authoritative_field: place_id
+    requirement: contains_edge_or_derived_contains
+    derived_edge_policy:
+      materialize: optional
+      marker:
+        derived: "true"
+        reason: place_id_parentage

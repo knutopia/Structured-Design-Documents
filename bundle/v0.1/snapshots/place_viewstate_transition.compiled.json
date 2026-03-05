@@ -1,0 +1,235 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "C-010",
+      "type": "Component",
+      "name": "Billing Form",
+      "props": {
+        "description": "Form collecting billing details",
+        "inputs": "BillingFields",
+        "outputs": "SubmitRequested",
+        "owner": "DesignSystem",
+        "responsibility": "Collect billing details"
+      }
+    },
+    {
+      "id": "C-011",
+      "type": "Component",
+      "name": "Submit Button",
+      "props": {
+        "description": "Primary submit action",
+        "inputs": "Click",
+        "outputs": "SubmitClicked",
+        "owner": "DesignSystem",
+        "responsibility": "Submit billing form"
+      }
+    },
+    {
+      "id": "D-010",
+      "type": "DataEntity",
+      "name": "Subscription",
+      "props": {
+        "description": "Subscription record",
+        "fields": "status",
+        "owner": "Data",
+        "system_of_record": "BillingDB"
+      }
+    },
+    {
+      "id": "E-010",
+      "type": "Event",
+      "name": "Submit",
+      "props": {
+        "description": "Submit action event",
+        "owner": "Design",
+        "payload_schema": "{}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "P-010",
+      "type": "Place",
+      "name": "Billing",
+      "props": {
+        "access": "auth",
+        "description": "Billing place",
+        "owner": "Design",
+        "route_or_key": "/billing",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-011",
+      "type": "Place",
+      "name": "Confirmation",
+      "props": {
+        "access": "auth",
+        "description": "Confirmation place",
+        "owner": "Design",
+        "route_or_key": "/confirmation",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "PL-010",
+      "type": "Policy",
+      "name": "PCI Policy",
+      "props": {
+        "description": "Card data handling policy",
+        "enforcement_point": "BillingAPI",
+        "owner": "Risk",
+        "policy_owner": "Risk"
+      }
+    },
+    {
+      "id": "SA-010",
+      "type": "SystemAction",
+      "name": "Save Subscription",
+      "props": {
+        "action": "updateSubscription",
+        "description": "Persist subscription update",
+        "failure_modes": "timeout",
+        "owner": "Eng",
+        "system_name": "BillingAPI"
+      }
+    },
+    {
+      "id": "VS-010a",
+      "type": "ViewState",
+      "name": "Billing Editing",
+      "props": {
+        "data_required": "PaymentMethod",
+        "description": "Editing state for billing",
+        "owner": "Design",
+        "place_id": "P-010"
+      }
+    },
+    {
+      "id": "VS-010b",
+      "type": "ViewState",
+      "name": "Billing Success",
+      "props": {
+        "data_required": "Receipt",
+        "description": "Success state after submit",
+        "owner": "Design",
+        "place_id": "P-010"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "C-010",
+      "type": "BINDS_TO",
+      "to": "D-010",
+      "to_name": "Subscription",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "field": "status"
+      }
+    },
+    {
+      "from": "C-010",
+      "type": "DEPENDS_ON",
+      "to": "SA-010",
+      "to_name": "Save Subscription",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-011",
+      "type": "EMITS",
+      "to": "E-010",
+      "to_name": "Submit",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-010",
+      "type": "COMPOSED_OF",
+      "to": "C-010",
+      "to_name": "Billing Form",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-010",
+      "type": "CONSTRAINED_BY",
+      "to": "PL-010",
+      "to_name": "PCI Policy",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010a",
+      "to_name": "Billing Editing",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010b",
+      "to_name": "Billing Success",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-010",
+      "type": "NAVIGATES_TO",
+      "to": "P-011",
+      "to_name": "Confirmation",
+      "event": "E-010",
+      "guard": "payment_valid",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "SA-010",
+      "type": "WRITES",
+      "to": "D-010",
+      "to_name": "Subscription",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-010a",
+      "type": "COMPOSED_OF",
+      "to": "C-011",
+      "to_name": "Submit Button",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-010a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-010b",
+      "to_name": "Billing Success",
+      "event": "E-010",
+      "guard": "payment_valid",
+      "effect": "SA-010",
+      "props": {}
+    }
+  ]
+}

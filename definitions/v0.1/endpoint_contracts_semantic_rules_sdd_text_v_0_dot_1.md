@@ -4,6 +4,8 @@ This document defines the **semantic contract** for SDD-Text relationships: whic
 
 **Scope:** These rules apply **after parsing** (EBNF) and **after compilation** to canonical JSON. They are designed to be enforced by tooling (e.g., JSON Schema + additional validators).
 
+Machine-readable extraction target: `bundle/v0.1/core/contracts.yaml`.
+
 ---
 
 ## 1) Conformance Levels
@@ -294,4 +296,3 @@ Tooling SHOULD flag models where most `Step` nodes map 1:1 to Places without Vie
 
 - If you later add `Decision` as a node type, prefer modeling it as a `Step` subtype (type tag or prop) and keep the endpoint contracts unchanged.
 - If you add `IMPLIES` nesting (v0.2+), define it as an authoring-time rule that materializes explicit edges conforming to the contracts above.
-

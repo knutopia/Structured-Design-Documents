@@ -13,6 +13,16 @@ The goal is to reduce the gap between:
 
 ---
 
+## v0.1 Bundle Alignment
+
+For v0.1, this markdown document is explanatory and normative for extraction, while the bundle under `bundle/v0.1/` is the machine-readable artifact for tooling.
+
+- Core machine artifacts: `core/vocab.yaml`, `core/schema.json`, `core/contracts.yaml`, `core/views.yaml`
+- Governance overlays: `profiles/permissive.yaml`, `profiles/recommended.yaml`
+- `core/views.yaml` is currently a typed projection stub: inclusion rules are executable, and under-specified layout conventions are explicit TODO placeholders.
+
+---
+
 ## Why a Typed Graph
 
 Most teams maintain multiple diagram types that partially overlap (journeys, flows, IA, blueprints, state charts). Drift is common because each diagram is authored independently.
@@ -147,6 +157,7 @@ END
 3. **Validate** with:
    - Endpoint contracts (allowed type-pairs per relationship)
    - JSON Schema (required properties, structural constraints)
+   - Optional profile governance (permissive or recommended)
 4. **Render** diagram views (by filtering/projecting node/edge types)
 
 ---

@@ -3,7 +3,7 @@
 This project aims to 
 -define a way to capture structure in interaction design diagrams, 
 -provide ways to produce and consume such "Structured Design Documents" as part of (software-) product creation work,
--enabling people (designers and other product-creation participants) and LLMs to meaningfully harness interaction design as a contributing domain in prodcut creation.
+-enabling people (designers and other product-creation participants) and LLMs to meaningfully harness interaction design as a contributing domain in product creation.
 
 For orientation, read the documents
 
@@ -14,7 +14,13 @@ For orientation, read the documents
 Other folders:
 
 - definitions/vXXX/ houses definitions and rationale for version XXX (currently version 0.1)
-- bundle/vXXX/ houses (future) tight, machine-readable specifications for for version XXX (currently version 0.1). These specifications are meant to drive (future) tooling (so that encoding of actual language spec is done OUTSIDE tooling)
+- bundle/vXXX/ houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
+
+## v0.1 Source-of-Truth Policy (Transitional Split)
+
+- During extraction, markdown files in `definitions/v0.1/` are the normative input.
+- After extraction, files in `bundle/v0.1/` are the machine-readable source of truth for tools.
+- Markdown remains explanatory commentary and rationale, and should stay consistent with the bundle.
 
 ## Current Project Goals
 

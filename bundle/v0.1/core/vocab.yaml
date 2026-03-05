@@ -1,0 +1,113 @@
+version: "0.1"
+closed_vocab: true
+
+node_types:
+  - token: Outcome
+    group: product_intent
+    description: Desired change in user or business reality.
+  - token: Metric
+    group: product_intent
+    description: Measurement definition for an outcome.
+  - token: Opportunity
+    group: product_intent
+    description: Evidence-backed problem or leverage point.
+  - token: Initiative
+    group: product_intent
+    description: Planned solution theme or release slice.
+  - token: Stage
+    group: experience
+    description: Coarse journey phase.
+  - token: Step
+    group: experience
+    description: Unit of user intent or behavior.
+  - token: Area
+    group: structure
+    description: Information architecture grouping.
+  - token: Place
+    group: structure
+    description: Navigable product location.
+  - token: ViewState
+    group: ui_behavior
+    description: Distinct render or interaction mode within a place.
+  - token: Component
+    group: ui_behavior
+    description: UI building block.
+  - token: State
+    group: ui_behavior
+    description: State machine state.
+  - token: Event
+    group: ui_behavior
+    description: Named trigger from user or system.
+  - token: Process
+    group: service_delivery
+    description: Operational activity.
+  - token: SystemAction
+    group: service_delivery
+    description: Discrete system operation or API call.
+  - token: DataEntity
+    group: service_delivery
+    description: Domain object.
+  - token: Policy
+    group: service_delivery
+    description: Rule or constraint.
+
+relationship_types:
+  - token: CONTAINS
+    group: structure
+    description: Hierarchical containment or grouping.
+  - token: COMPOSED_OF
+    group: structure
+    description: UI composition relationship.
+  - token: PRECEDES
+    group: ordering
+    description: Temporal ordering.
+  - token: NAVIGATES_TO
+    group: navigation
+    description: Navigation between places.
+  - token: MEASURED_BY
+    group: traceability
+    description: Outcome is measured by metric.
+  - token: SUPPORTS
+    group: traceability
+    description: Opportunity supports outcome.
+  - token: ADDRESSES
+    group: traceability
+    description: Initiative addresses opportunity.
+  - token: IMPLEMENTED_BY
+    group: traceability
+    description: Initiative implemented by delivery artifacts.
+  - token: REALIZED_BY
+    group: traceability
+    description: Step realized by structure, state, or process.
+  - token: TRANSITIONS_TO
+    group: behavior
+    description: Transition in ViewState or State models.
+  - token: EMITS
+    group: behavior
+    description: Source emits an event.
+  - token: DEPENDS_ON
+    group: dependency_constraints
+    description: Execution dependency.
+  - token: CONSTRAINED_BY
+    group: dependency_constraints
+    description: Element constrained by policy.
+  - token: READS
+    group: data
+    description: System action reads data entity.
+  - token: WRITES
+    group: data
+    description: System action writes data entity.
+  - token: BINDS_TO
+    group: data
+    description: UI component binds to data entity field.
+  - token: INSTRUMENTED_AT
+    group: measurement
+    description: Metric is observed at an experience or event node.
+
+aliases_informative:
+  TRIGGERS: EMITS
+  CALLS: DEPENDS_ON
+  SUCCEEDS: PRECEDES
+  HAS: CONTAINS
+  LOCATED_AT: null
+  SURFACES: null

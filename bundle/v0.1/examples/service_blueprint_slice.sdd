@@ -1,0 +1,80 @@
+SDD-TEXT 0.1
+
+Step J-020 "Submit Claim"
+  owner=Design
+  description="User submits support claim"
+  actor=User
+  intent="Start claim process"
+  success_criteria="Claim accepted"
+  PRECEDES J-021 "Receive Confirmation"
+  REALIZED_BY PR-020 "Validate Claim"
+END
+
+Step J-021 "Receive Confirmation"
+  owner=Design
+  description="User receives claim confirmation"
+  actor=User
+  intent="Confirm claim was received"
+  success_criteria="Confirmation shown"
+  REALIZED_BY PR-021 "Notify Customer"
+END
+
+Process PR-020 "Validate Claim"
+  owner=Ops
+  description="Validate submitted claim"
+  visibility=frontstage
+  sla=30s
+  PRECEDES PR-021 "Notify Customer"
+  DEPENDS_ON SA-020 "Store Claim"
+  CONSTRAINED_BY PL-020 "Retention Policy"
+END
+
+Process PR-021 "Notify Customer"
+  owner=Ops
+  description="Send claim confirmation"
+  visibility=support
+  sla=60s
+  DEPENDS_ON SA-021 "Send Email"
+  EMITS E-020 "Claim Confirmed"
+END
+
+SystemAction SA-020 "Store Claim"
+  owner=Eng
+  description="Persist claim"
+  system_name=ClaimsAPI
+  action=createClaim
+  failure_modes=validationError
+  READS D-020 "Claim"
+  WRITES D-020 "Claim"
+  CONSTRAINED_BY PL-020 "Retention Policy"
+END
+
+SystemAction SA-021 "Send Email"
+  owner=Eng
+  description="Send confirmation email"
+  system_name=NotificationService
+  action=sendEmail
+  failure_modes=deliveryError
+  READS D-020 "Claim"
+END
+
+DataEntity D-020 "Claim"
+  owner=Data
+  description="Customer claim entity"
+  fields="claim_id,status"
+  system_of_record=ClaimsDB
+END
+
+Policy PL-020 "Retention Policy"
+  owner=Risk
+  description="Retention constraints"
+  policy_owner=Legal
+  enforcement_point=ClaimsAPI
+END
+
+Event E-020 "Claim Confirmed"
+  owner=Ops
+  description="Claim confirmation event"
+  source_kind=system
+  payload_schema="{claim_id}"
+END

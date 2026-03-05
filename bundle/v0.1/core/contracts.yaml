@@ -1,0 +1,327 @@
+version: "0.1"
+
+conformance_levels:
+  permissive:
+    description: Validate syntax and references; report governance and contract issues as warnings unless structural failure.
+  strict:
+    description: Enforce all endpoint contracts and strict governance rules.
+
+common_rules:
+  - id: referential_integrity
+    description: Every edge endpoint must resolve to an existing node ID.
+    severity_by_profile:
+      permissive: error
+      recommended: error
+    rule_logic:
+      kind: all_edges_endpoints_exist
+  - id: relationship_directionality
+    description: Relationships are directed and inverse edges must not be inferred.
+    severity_by_profile:
+      permissive: error
+      recommended: error
+    rule_logic:
+      kind: directed_edges_only
+  - id: duplicate_edge_detection
+    description: Duplicate edges are matched on from/type/to/event/guard/effect/props; to_name is excluded from identity.
+    severity_by_profile:
+      permissive: warn
+      recommended: warn
+    rule_logic:
+      kind: duplicate_edge_identity
+      key_fields: [from, type, to, event, guard, effect, props]
+      ignored_fields: [to_name]
+  - id: edge_annotation_semantics_scope
+    description: Event, guard, and effect annotations are semantically defined for TRANSITIONS_TO and optionally NAVIGATES_TO and PRECEDES.
+    severity_by_profile:
+      permissive: warn
+      recommended: warn
+    rule_logic:
+      kind: annotation_semantics_scope
+      semantic_relationships: [TRANSITIONS_TO, NAVIGATES_TO, PRECEDES]
+  - id: to_name_hint_non_semantic
+    description: to_name is a human-readable hint and must not alter edge semantics.
+    severity_by_profile:
+      permissive: warn
+      recommended: warn
+    rule_logic:
+      kind: to_name_non_semantic
+  - id: no_implicit_inverse_edges
+    description: Compiler output remains literal; inferred inverse relationships are renderer-only derived semantics.
+    severity_by_profile:
+      permissive: error
+      recommended: error
+    rule_logic:
+      kind: no_inverse_materialization
+
+relationships:
+  - type: CONTAINS
+    meaning: Hierarchical containment or grouping for IA, journey structure, and UI hierarchy.
+    allowed_endpoints:
+      - from: Stage
+        to: Step
+      - from: Area
+        to: Place
+      - from: Place
+        to: Place
+      - from: Place
+        to: ViewState
+      - from: Component
+        to: Component
+    constraints:
+      - id: contains_acyclic
+        description: Containment should be acyclic.
+        severity_by_profile:
+          permissive: warn
+          recommended: error
+        rule_logic:
+          kind: acyclic_subgraph
+          relationship: CONTAINS
+      - id: contains_single_parent_recommended
+        description: Node should have at most one structural parent via CONTAINS.
+        severity_by_profile:
+          permissive: warn
+          recommended: warn
+        rule_logic:
+          kind: max_incoming_edges
+          relationship: CONTAINS
+          max_incoming: 1
+
+  - type: COMPOSED_OF
+    meaning: Composition relationship for UI assembly.
+    allowed_endpoints:
+      - from: Place
+        to: Component
+      - from: ViewState
+        to: Component
+    constraints:
+      - id: composed_of_acyclic
+        description: Composition should be acyclic.
+        severity_by_profile:
+          permissive: warn
+          recommended: error
+        rule_logic:
+          kind: acyclic_subgraph
+          relationship: COMPOSED_OF
+
+  - type: PRECEDES
+    meaning: Temporal ordering in scenario, process, or state sequence.
+    allowed_endpoints:
+      - from: Step
+        to: Step
+      - from: Process
+        to: Process
+      - from: State
+        to: State
+    constraints:
+      - id: precedes_cycle_policy
+        description: Linear flows should be acyclic; intentional loops should be annotated.
+        severity_by_profile:
+          permissive: warn
+          recommended: warn
+        rule_logic:
+          kind: cyclic_flow_policy
+          relationship: PRECEDES
+          loop_annotation_prop: kind
+          loop_annotation_value: loop
+
+  - type: NAVIGATES_TO
+    meaning: Navigation from one place to another.
+    allowed_endpoints:
+      - from: Place
+        to: Place
+    constraints:
+      - id: navigates_to_event_optional
+        description: Event and guard annotations are optional and represent trigger/precondition when present.
+        severity_by_profile:
+          permissive: info
+          recommended: info
+        rule_logic:
+          kind: optional_annotations
+          supports: [event, guard]
+
+  - type: MEASURED_BY
+    meaning: Outcome is measured by metric.
+    allowed_endpoints:
+      - from: Outcome
+        to: Metric
+    constraints:
+      - id: outcome_has_metric
+        description: Each Outcome should have one or more outgoing MEASURED_BY edges.
+        severity_by_profile:
+          permissive: warn
+          recommended: error
+        rule_logic:
+          kind: min_outgoing_edges_by_type
+          from_type: Outcome
+          relationship: MEASURED_BY
+          min_count: 1
+
+  - type: SUPPORTS
+    meaning: Opportunity contributes to an outcome.
+    allowed_endpoints:
+      - from: Opportunity
+        to: Outcome
+    constraints: []
+
+  - type: ADDRESSES
+    meaning: Initiative addresses an opportunity.
+    allowed_endpoints:
+      - from: Initiative
+        to: Opportunity
+    constraints:
+      - id: initiative_addresses_opportunity
+        description: Each Initiative should address one or more opportunities.
+        severity_by_profile:
+          permissive: warn
+          recommended: error
+        rule_logic:
+          kind: min_outgoing_edges_by_type
+          from_type: Initiative
+          relationship: ADDRESSES
+          min_count: 1
+
+  - type: IMPLEMENTED_BY
+    meaning: Initiative is implemented by concrete delivery artifacts.
+    allowed_endpoints:
+      - from: Initiative
+        to: Place
+      - from: Initiative
+        to: ViewState
+      - from: Initiative
+        to: Component
+      - from: Initiative
+        to: Process
+      - from: Initiative
+        to: SystemAction
+    constraints: []
+
+  - type: REALIZED_BY
+    meaning: Step is realized by product structure, UI state, or service delivery process.
+    allowed_endpoints:
+      - from: Step
+        to: Place
+      - from: Step
+        to: ViewState
+      - from: Step
+        to: Process
+    constraints:
+      - id: step_realization_required
+        description: Every Step should have at least one REALIZED_BY edge.
+        severity_by_profile:
+          permissive: warn
+          recommended: error
+        rule_logic:
+          kind: min_outgoing_edges_by_type
+          from_type: Step
+          relationship: REALIZED_BY
+          min_count: 1
+
+  - type: TRANSITIONS_TO
+    meaning: Transition in ViewState or State model; may include event, guard, and effect.
+    allowed_endpoints:
+      - from: ViewState
+        to: ViewState
+      - from: State
+        to: State
+    constraints:
+      - id: transitions_event_reference
+        description: Event annotation should resolve to Event node ID in recommended profile.
+        severity_by_profile:
+          permissive: warn
+          recommended: error
+        rule_logic:
+          kind: event_annotation_reference
+          relationship: TRANSITIONS_TO
+          allow_label_literals_in_permissive: true
+          require_event_id_in_recommended: true
+          event_node_type: Event
+
+  - type: EMITS
+    meaning: Source emits an event.
+    allowed_endpoints:
+      - from: Component
+        to: Event
+      - from: ViewState
+        to: Event
+      - from: Process
+        to: Event
+      - from: SystemAction
+        to: Event
+    constraints: []
+
+  - type: DEPENDS_ON
+    meaning: Declares required dependency for execution or correctness.
+    allowed_endpoints:
+      - from: Process
+        to: Process
+      - from: Process
+        to: SystemAction
+      - from: ViewState
+        to: SystemAction
+      - from: Component
+        to: SystemAction
+    constraints: []
+
+  - type: CONSTRAINED_BY
+    meaning: Declares policy or rule constraint.
+    allowed_endpoints:
+      - from: Place
+        to: Policy
+      - from: Process
+        to: Policy
+      - from: SystemAction
+        to: Policy
+    constraints:
+      - id: policy_enforcement_coverage
+        description: Policy enforcement_point should correspond to at least one incoming CONSTRAINED_BY edge.
+        severity_by_profile:
+          permissive: warn
+          recommended: warn
+        rule_logic:
+          kind: policy_enforcement_coverage
+          policy_type: Policy
+          relationship: CONSTRAINED_BY
+          policy_field: enforcement_point
+
+  - type: READS
+    meaning: System action reads data entity.
+    allowed_endpoints:
+      - from: SystemAction
+        to: DataEntity
+    constraints: []
+
+  - type: WRITES
+    meaning: System action writes data entity.
+    allowed_endpoints:
+      - from: SystemAction
+        to: DataEntity
+    constraints: []
+
+  - type: BINDS_TO
+    meaning: Component binds to data entity field.
+    allowed_endpoints:
+      - from: Component
+        to: DataEntity
+    constraints:
+      - id: binds_to_requires_field
+        description: BINDS_TO edge must include edge prop field.
+        severity_by_profile:
+          permissive: error
+          recommended: error
+        rule_logic:
+          kind: required_edge_property
+          relationship: BINDS_TO
+          property: field
+
+  - type: INSTRUMENTED_AT
+    meaning: Metric is instrumented at experience, structure, or event node.
+    allowed_endpoints:
+      - from: Metric
+        to: Step
+      - from: Metric
+        to: Place
+      - from: Metric
+        to: ViewState
+      - from: Metric
+        to: Event
+    constraints: []

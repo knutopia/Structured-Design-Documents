@@ -1,0 +1,254 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "A-001",
+      "type": "Area",
+      "name": "Checkout Area",
+      "props": {
+        "description": "Checkout information architecture area",
+        "owner": "Design",
+        "scope": "checkout"
+      }
+    },
+    {
+      "id": "G-001",
+      "type": "Stage",
+      "name": "Checkout",
+      "props": {
+        "description": "Checkout journey stage",
+        "order_index": "10",
+        "owner": "Design"
+      }
+    },
+    {
+      "id": "I-001",
+      "type": "Initiative",
+      "name": "Billing Simplification",
+      "props": {
+        "description": "Reduce friction in billing path",
+        "non_goals": "No pricing changes",
+        "owner": "Product",
+        "status": "active"
+      }
+    },
+    {
+      "id": "J-001",
+      "type": "Step",
+      "name": "Enter Billing",
+      "props": {
+        "actor": "User",
+        "description": "User enters billing information",
+        "intent": "Provide billing details",
+        "owner": "Design",
+        "success_criteria": "Billing data accepted"
+      }
+    },
+    {
+      "id": "J-002",
+      "type": "Step",
+      "name": "Confirm Payment",
+      "props": {
+        "actor": "User",
+        "description": "User confirms payment",
+        "intent": "Submit payment",
+        "owner": "Design",
+        "success_criteria": "Payment confirmed"
+      }
+    },
+    {
+      "id": "M-001",
+      "type": "Metric",
+      "name": "Checkout Completion Rate",
+      "props": {
+        "cadence": "weekly",
+        "definition": "completed / started",
+        "description": "Completed checkout sessions over started sessions",
+        "metric_type": "kpi",
+        "owner": "Analytics",
+        "source": "warehouse"
+      }
+    },
+    {
+      "id": "O-001",
+      "type": "Outcome",
+      "name": "Reduce Abandonment",
+      "props": {
+        "description": "Reduce checkout abandonment",
+        "owner": "Product",
+        "scope": "checkout",
+        "stakeholder": "Growth",
+        "time_horizon": "Q3"
+      }
+    },
+    {
+      "id": "OP-001",
+      "type": "Opportunity",
+      "name": "Payment Friction",
+      "props": {
+        "description": "Users fail to finish payment step",
+        "evidence": "Session replays and support tickets",
+        "owner": "Design",
+        "segment": "new_users",
+        "severity": "high"
+      }
+    },
+    {
+      "id": "P-001",
+      "type": "Place",
+      "name": "Billing",
+      "props": {
+        "access": "auth",
+        "description": "Billing place",
+        "owner": "Design",
+        "route_or_key": "/checkout/billing",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-002",
+      "type": "Place",
+      "name": "Review",
+      "props": {
+        "access": "auth",
+        "description": "Review place",
+        "owner": "Design",
+        "route_or_key": "/checkout/review",
+        "surface": "web"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "A-001",
+      "type": "CONTAINS",
+      "to": "P-001",
+      "to_name": "Billing",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "A-001",
+      "type": "CONTAINS",
+      "to": "P-002",
+      "to_name": "Review",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-001",
+      "type": "CONTAINS",
+      "to": "J-001",
+      "to_name": "Enter Billing",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-001",
+      "type": "CONTAINS",
+      "to": "J-002",
+      "to_name": "Confirm Payment",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-001",
+      "type": "ADDRESSES",
+      "to": "OP-001",
+      "to_name": "Payment Friction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-001",
+      "type": "IMPLEMENTED_BY",
+      "to": "P-001",
+      "to_name": "Billing",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "PRECEDES",
+      "to": "J-002",
+      "to_name": "Confirm Payment",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "REALIZED_BY",
+      "to": "P-001",
+      "to_name": "Billing",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-002",
+      "type": "REALIZED_BY",
+      "to": "P-002",
+      "to_name": "Review",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
+      "to": "J-002",
+      "to_name": "Confirm Payment",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-001",
+      "type": "MEASURED_BY",
+      "to": "M-001",
+      "to_name": "Checkout Completion Rate",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-001",
+      "type": "SUPPORTS",
+      "to": "O-001",
+      "to_name": "Reduce Abandonment",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-001",
+      "type": "NAVIGATES_TO",
+      "to": "P-002",
+      "to_name": "Review",
+      "event": "ClickReview",
+      "guard": "billingComplete",
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

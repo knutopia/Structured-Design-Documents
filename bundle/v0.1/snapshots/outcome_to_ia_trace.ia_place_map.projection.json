@@ -1,0 +1,17 @@
+{
+  "view_id": "ia_place_map",
+  "source_example": "outcome_to_ia_trace",
+  "nodes": [
+    {"id": "A-001", "type": "Area", "name": "Checkout Area"},
+    {"id": "P-001", "type": "Place", "name": "Billing"},
+    {"id": "P-002", "type": "Place", "name": "Review"}
+  ],
+  "edges": [
+    {"from": "A-001", "type": "CONTAINS", "to": "P-001"},
+    {"from": "A-001", "type": "CONTAINS", "to": "P-002"},
+    {"from": "P-001", "type": "NAVIGATES_TO", "to": "P-002"}
+  ],
+  "notes": [
+    "Hierarchy for IA view is driven by CONTAINS."
+  ]
+}
