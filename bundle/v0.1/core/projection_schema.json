@@ -1,0 +1,407 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/sdd-text/0.1/projection_schema.json",
+  "title": "SDD-Text View Projection (v0.1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "version",
+    "view_id",
+    "source_example",
+    "nodes",
+    "edges",
+    "derived",
+    "omissions",
+    "notes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "sdd-text-view-projection"
+    },
+    "version": {
+      "const": "0.1"
+    },
+    "view_id": {
+      "type": "string",
+      "enum": [
+        "outcome_opportunity_map",
+        "journey_map",
+        "service_blueprint",
+        "ia_place_map",
+        "scenario_flow",
+        "ui_contracts"
+      ]
+    },
+    "source_example": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/projectedNode"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/projectedEdge"
+      }
+    },
+    "derived": {
+      "$ref": "#/$defs/derived"
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/omission"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "projectedNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "type": {
+          "$ref": "./schema.json#/$defs/nodeType"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "projectedEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "type",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "type": {
+          "$ref": "./schema.json#/$defs/relType"
+        },
+        "to": {
+          "$ref": "./schema.json#/$defs/id"
+        }
+      }
+    },
+    "derived": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_annotations",
+        "edge_annotations",
+        "node_groups",
+        "view_metadata"
+      ],
+      "properties": {
+        "node_annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nodeAnnotation"
+          }
+        },
+        "edge_annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/edgeAnnotation"
+          }
+        },
+        "node_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nodeGroup"
+          }
+        },
+        "view_metadata": {
+          "$ref": "#/$defs/viewMetadata"
+        }
+      }
+    },
+    "nodeAnnotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id"
+      ],
+      "properties": {
+        "node_id": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "display": {
+          "$ref": "#/$defs/display"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "display"
+          ]
+        },
+        {
+          "required": [
+            "references"
+          ]
+        }
+      ]
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subtitle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "badge": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shape": {
+          "type": "string",
+          "minLength": 1
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metadataEntry"
+          }
+        }
+      },
+      "minProperties": 1
+    },
+    "metadataEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "target_id"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "instrumented_at",
+            "opportunity_ref"
+          ]
+        },
+        "group": {
+          "type": "string",
+          "enum": [
+            "experience",
+            "event"
+          ]
+        },
+        "target_id": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "target_type": {
+          "$ref": "./schema.json#/$defs/nodeType"
+        },
+        "target_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_prop": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "edgeAnnotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "type",
+        "to",
+        "role",
+        "display_label",
+        "label_source"
+      ],
+      "properties": {
+        "from": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "type": {
+          "$ref": "./schema.json#/$defs/relType"
+        },
+        "to": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "branch_label"
+          ]
+        },
+        "display_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label_source": {
+          "type": "string",
+          "enum": [
+            "guard",
+            "event",
+            "to_name",
+            "literal"
+          ]
+        }
+      }
+    },
+    "nodeGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "label",
+        "node_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "lane",
+            "secondary_state_group"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "./schema.json#/$defs/id"
+          },
+          "minItems": 1
+        },
+        "scope_id": {
+          "$ref": "./schema.json#/$defs/id"
+        }
+      }
+    },
+    "viewMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transition_graph_priority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "primary_node_type",
+            "secondary_node_type",
+            "secondary_render_mode",
+            "fallback_to_secondary_when_primary_absent"
+          ],
+          "properties": {
+            "primary_node_type": {
+              "$ref": "./schema.json#/$defs/nodeType"
+            },
+            "secondary_node_type": {
+              "$ref": "./schema.json#/$defs/nodeType"
+            },
+            "secondary_render_mode": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fallback_to_secondary_when_primary_absent": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "omission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "from",
+        "type",
+        "to",
+        "reason"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "edge"
+          ]
+        },
+        "from": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "type": {
+          "$ref": "./schema.json#/$defs/relType"
+        },
+        "to": {
+          "$ref": "./schema.json#/$defs/id"
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "endpoint_out_of_scope",
+            "relationship_not_in_scope",
+            "derived_annotation_instead_of_edge"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

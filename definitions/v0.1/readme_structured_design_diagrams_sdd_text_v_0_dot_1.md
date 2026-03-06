@@ -17,9 +17,18 @@ The goal is to reduce the gap between:
 
 For v0.1, this markdown document is explanatory and normative for extraction, while the bundle under `bundle/v0.1/` is the machine-readable artifact for tooling.
 
-- Core machine artifacts: `core/vocab.yaml`, `core/schema.json`, `core/contracts.yaml`, `core/views.yaml`
+- Core machine artifacts: `core/vocab.yaml`, `core/schema.json`, `core/contracts.yaml`, `core/views.yaml`, `core/projection_schema.json`
 - Governance overlays: `profiles/permissive.yaml`, `profiles/recommended.yaml`
 - `core/views.yaml` now contains executable projection filters plus renderer defaults for annotations, lane mapping, branching, and state-emphasis conventions.
+- `core/projection_schema.json` defines the normalized downstream contract for view projection outputs.
+
+## Design Notes
+
+- `.sdd` authoring remains human-first.
+- Projection normalization is downstream-only.
+- Projection schemas govern renderer outputs, not source syntax.
+- Compiled graph remains literal; projections may include derived render data.
+- Deterministic projection shape exists to stabilize tooling and diffs.
 
 ---
 

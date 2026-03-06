@@ -1,33 +1,105 @@
 {
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
   "view_id": "outcome_opportunity_map",
   "source_example": "outcome_to_ia_trace",
   "nodes": [
-    {"id": "I-001", "type": "Initiative", "name": "Billing Simplification"},
+    {
+      "id": "I-001",
+      "type": "Initiative",
+      "name": "Billing Simplification"
+    },
     {
       "id": "M-001",
       "type": "Metric",
-      "name": "Checkout Completion Rate",
-      "annotations": {
-        "instrumentation": {
-          "experience": [
-            {"id": "J-002", "type": "Step", "name": "Confirm Payment"}
-          ],
-          "event": [
-            {"id": "E-001", "type": "Event", "name": "Payment Submitted"}
-          ]
-        }
-      }
+      "name": "Checkout Completion Rate"
     },
-    {"id": "O-001", "type": "Outcome", "name": "Reduce Abandonment"},
-    {"id": "OP-001", "type": "Opportunity", "name": "Payment Friction"}
+    {
+      "id": "O-001",
+      "type": "Outcome",
+      "name": "Reduce Abandonment"
+    },
+    {
+      "id": "OP-001",
+      "type": "Opportunity",
+      "name": "Payment Friction"
+    }
   ],
   "edges": [
-    {"from": "I-001", "type": "ADDRESSES", "to": "OP-001"},
-    {"from": "O-001", "type": "MEASURED_BY", "to": "M-001"},
-    {"from": "OP-001", "type": "SUPPORTS", "to": "O-001"}
+    {
+      "from": "I-001",
+      "type": "ADDRESSES",
+      "to": "OP-001"
+    },
+    {
+      "from": "O-001",
+      "type": "MEASURED_BY",
+      "to": "M-001"
+    },
+    {
+      "from": "OP-001",
+      "type": "SUPPORTS",
+      "to": "O-001"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "M-001",
+        "references": [
+          {
+            "role": "instrumented_at",
+            "group": "event",
+            "target_id": "E-001",
+            "target_type": "Event",
+            "target_name": "Payment Submitted"
+          },
+          {
+            "role": "instrumented_at",
+            "group": "experience",
+            "target_id": "J-002",
+            "target_type": "Step",
+            "target_name": "Confirm Payment"
+          }
+        ]
+      }
+    ],
+    "edge_annotations": [
+
+    ],
+    "node_groups": [
+
+    ],
+    "view_metadata": {
+    }
+  },
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "I-001",
+      "type": "IMPLEMENTED_BY",
+      "to": "P-001",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type Place is outside the outcome_opportunity_map node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-001",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an event-group metric annotation because the target node type Event is outside the view node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
+      "to": "J-002",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an experience-group metric annotation because the target node type Step is outside the view node scope."
+    }
   ],
   "notes": [
-    "IMPLEMENTED_BY edges are omitted because their endpoints are outside this view's node filter.",
-    "INSTRUMENTED_AT edges targeting out-of-scope nodes are rendered as grouped metric annotations rather than visible edges."
+
   ]
 }

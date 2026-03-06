@@ -1,35 +1,85 @@
 {
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
   "view_id": "ia_place_map",
   "source_example": "place_viewstate_transition",
   "nodes": [
     {
       "id": "P-010",
       "type": "Place",
-      "name": "Billing",
-      "annotations": {
-        "subtitle": "/billing",
-        "badge": "auth",
-        "metadata": {
-          "entry_points": "link:/billing,notification:payment_failed",
-          "primary_nav": "true"
-        }
-      }
+      "name": "Billing"
     },
     {
       "id": "P-011",
       "type": "Place",
-      "name": "Confirmation",
-      "annotations": {
-        "subtitle": "/confirmation",
-        "badge": "role:billing_agent"
-      }
+      "name": "Confirmation"
     }
   ],
   "edges": [
-    {"from": "P-010", "type": "NAVIGATES_TO", "to": "P-011"}
+    {
+      "from": "P-010",
+      "type": "NAVIGATES_TO",
+      "to": "P-011"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "P-010",
+        "display": {
+          "subtitle": "/billing",
+          "badge": "auth",
+          "metadata": [
+            {
+              "key": "entry_points",
+              "value": "link:/billing,notification:payment_failed"
+            },
+            {
+              "key": "primary_nav",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      {
+        "node_id": "P-011",
+        "display": {
+          "subtitle": "/confirmation",
+          "badge": "role:billing_agent",
+          "metadata": [
+
+          ]
+        }
+      }
+    ],
+    "edge_annotations": [
+
+    ],
+    "node_groups": [
+
+    ],
+    "view_metadata": {
+    }
+  },
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010a",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type ViewState is outside the ia_place_map node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010b",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type ViewState is outside the ia_place_map node scope."
+    }
   ],
   "notes": [
-    "CONTAINS edges to ViewState are omitted because ViewState is outside IA node scope.",
-    "Place route, access, entry_points, and primary_nav metadata are rendered as node annotations."
+    "Place route, access, and entry metadata are rendered as node annotations."
   ]
 }

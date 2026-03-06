@@ -1,41 +1,167 @@
 {
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
   "view_id": "ui_contracts",
   "source_example": "place_viewstate_transition",
   "nodes": [
-    {"id": "C-010", "type": "Component", "name": "Billing Form"},
-    {"id": "C-011", "type": "Component", "name": "Submit Button"},
-    {"id": "D-010", "type": "DataEntity", "name": "Subscription"},
-    {"id": "E-010", "type": "Event", "name": "Submit"},
-    {"id": "P-010", "type": "Place", "name": "Billing"},
-    {"id": "P-011", "type": "Place", "name": "Confirmation"},
-    {"id": "SA-010", "type": "SystemAction", "name": "Save Subscription"},
-    {"id": "ST-010a", "type": "State", "name": "Form Ready"},
-    {"id": "ST-010b", "type": "State", "name": "Submitting"},
-    {"id": "VS-010a", "type": "ViewState", "name": "Billing Editing"},
-    {"id": "VS-010b", "type": "ViewState", "name": "Billing Success"}
+    {
+      "id": "C-010",
+      "type": "Component",
+      "name": "Billing Form"
+    },
+    {
+      "id": "C-011",
+      "type": "Component",
+      "name": "Submit Button"
+    },
+    {
+      "id": "D-010",
+      "type": "DataEntity",
+      "name": "Subscription"
+    },
+    {
+      "id": "E-010",
+      "type": "Event",
+      "name": "Submit"
+    },
+    {
+      "id": "P-010",
+      "type": "Place",
+      "name": "Billing"
+    },
+    {
+      "id": "P-011",
+      "type": "Place",
+      "name": "Confirmation"
+    },
+    {
+      "id": "SA-010",
+      "type": "SystemAction",
+      "name": "Save Subscription"
+    },
+    {
+      "id": "ST-010a",
+      "type": "State",
+      "name": "Form Ready"
+    },
+    {
+      "id": "ST-010b",
+      "type": "State",
+      "name": "Submitting"
+    },
+    {
+      "id": "VS-010a",
+      "type": "ViewState",
+      "name": "Billing Editing"
+    },
+    {
+      "id": "VS-010b",
+      "type": "ViewState",
+      "name": "Billing Success"
+    }
   ],
   "edges": [
-    {"from": "C-010", "type": "BINDS_TO", "to": "D-010"},
-    {"from": "C-010", "type": "DEPENDS_ON", "to": "SA-010"},
-    {"from": "C-011", "type": "EMITS", "to": "E-010"},
-    {"from": "P-010", "type": "COMPOSED_OF", "to": "C-010"},
-    {"from": "P-010", "type": "CONTAINS", "to": "VS-010a"},
-    {"from": "P-010", "type": "CONTAINS", "to": "VS-010b"},
-    {"from": "ST-010a", "type": "TRANSITIONS_TO", "to": "ST-010b"},
-    {"from": "VS-010a", "type": "COMPOSED_OF", "to": "C-011"},
-    {"from": "VS-010a", "type": "TRANSITIONS_TO", "to": "VS-010b"}
+    {
+      "from": "C-010",
+      "type": "BINDS_TO",
+      "to": "D-010"
+    },
+    {
+      "from": "C-010",
+      "type": "DEPENDS_ON",
+      "to": "SA-010"
+    },
+    {
+      "from": "C-011",
+      "type": "EMITS",
+      "to": "E-010"
+    },
+    {
+      "from": "P-010",
+      "type": "COMPOSED_OF",
+      "to": "C-010"
+    },
+    {
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010a"
+    },
+    {
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010b"
+    },
+    {
+      "from": "ST-010a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-010b"
+    },
+    {
+      "from": "VS-010a",
+      "type": "COMPOSED_OF",
+      "to": "C-011"
+    },
+    {
+      "from": "VS-010a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-010b"
+    }
   ],
-  "transition_graph_priority": {
-    "primary": "ViewState",
-    "secondary": "State",
-    "secondary_render_mode": "inset"
+  "derived": {
+    "node_annotations": [
+
+    ],
+    "edge_annotations": [
+
+    ],
+    "node_groups": [
+      {
+        "id": "secondary_state_group:C-010",
+        "role": "secondary_state_group",
+        "label": "C-010",
+        "node_ids": [
+          "ST-010a",
+          "ST-010b"
+        ],
+        "scope_id": "C-010"
+      }
+    ],
+    "view_metadata": {
+      "transition_graph_priority": {
+        "primary_node_type": "ViewState",
+        "secondary_node_type": "State",
+        "secondary_render_mode": "inset",
+        "fallback_to_secondary_when_primary_absent": true
+      }
+    }
   },
-  "secondary_state_groups": [
-    {"scope_id": "C-010", "node_ids": ["ST-010a", "ST-010b"]}
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONSTRAINED_BY",
+      "to": "PL-010",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type Policy is outside the ui_contracts node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "NAVIGATES_TO",
+      "to": "P-011",
+      "reason": "relationship_not_in_scope",
+      "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "SA-010",
+      "type": "WRITES",
+      "to": "D-010",
+      "reason": "relationship_not_in_scope",
+      "detail": "WRITES is outside the ui_contracts edge scope."
+    }
   ],
   "notes": [
-    "State nodes are rendered as a secondary inset grouped by State.props.scope_id when ViewState transitions are present.",
-    "CONSTRAINED_BY is omitted because Policy is not part of ui_contracts node scope.",
-    "NAVIGATES_TO is omitted because it is not part of ui_contracts edge scope."
+
   ]
 }

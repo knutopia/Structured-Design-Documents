@@ -49,6 +49,7 @@ bundle/v0.1/ (existing folder - find it!)
     vocab.yaml
     schema.json
     contracts.yaml
+    projection_schema.json
     views.yaml
 
   profiles/
@@ -69,7 +70,7 @@ bundle/v0.1/ (existing folder - find it!)
 A machine-readable manifest that declares:
 
 - bundle name, version
-- paths to core artifacts (vocab/schema/contracts/views)
+- paths to core artifacts (vocab/schema/contracts/projection schema/views)
 - available profiles and their intent
 - compatibility notes (optional)
 
@@ -110,6 +111,14 @@ Operational **projection definitions** for the v0.1 diagram views. For each view
 - hierarchy rule (if any), ordering rule (if any)
 - optional grouping conventions if explicitly normative
 
+### 5a) bundle/v0.1/core/projection_schema.json
+
+A machine-readable schema for normalized **projection snapshot outputs**.
+
+- governs downstream renderer-facing projection JSON only
+- does not change `.sdd` authoring or compiled canonical JSON
+- should define a shared envelope so projection snapshots stay consistent across views
+
 ### 6) bundle/v0.1/profiles/recommended.yaml
 
 A stricter governance profile that can be enabled in validation:
@@ -125,6 +134,7 @@ Provide 2–3 example `.sdd` models that cover multiple node/edge types and at l
 
 - snapshot compiled canonical JSON IR (deterministic ordering)
 - snapshot of at least one view projection output (format can be JSON projection or a text format like Mermaid)
+- JSON projection snapshots should use a shared envelope with `schema`, `version`, `view_id`, `source_example`, `nodes`, `edges`, `derived`, `omissions`, and `notes`
 
 The goal is conformance testing: a tool can run compile+validate+render and match snapshots.
 
@@ -368,4 +378,3 @@ Deliver:
 - The primary objective is **tool readiness**: artifacts should be loadable by a compiler/validator/renderer without special-casing prose.
 - Maintain determinism: sorting rules, stable IDs, and canonicalization must lead to stable snapshots.
 - Do not rely on prior chat as normative input; use only the markdown docs listed above.
-

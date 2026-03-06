@@ -1,12 +1,42 @@
 {
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
   "view_id": "journey_map",
   "source_example": "service_blueprint_slice",
   "nodes": [
-    {"id": "J-020", "type": "Step", "name": "Submit Claim"},
-    {"id": "J-021", "type": "Step", "name": "Receive Confirmation"}
+    {
+      "id": "J-020",
+      "type": "Step",
+      "name": "Submit Claim"
+    },
+    {
+      "id": "J-021",
+      "type": "Step",
+      "name": "Receive Confirmation"
+    }
   ],
   "edges": [
-    {"from": "J-020", "type": "PRECEDES", "to": "J-021"}
+    {
+      "from": "J-020",
+      "type": "PRECEDES",
+      "to": "J-021"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+
+    ],
+    "edge_annotations": [
+
+    ],
+    "node_groups": [
+
+    ],
+    "view_metadata": {
+    }
+  },
+  "omissions": [
+
   ],
   "notes": [
     "No Stage nodes are present in this example; journey projection remains valid with Step-only sequence."

@@ -1,45 +1,177 @@
 {
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
   "view_id": "scenario_flow",
   "source_example": "scenario_branching",
   "nodes": [
     {
       "id": "J-030",
       "type": "Step",
-      "name": "Choose Fulfillment",
-      "annotations": {
-        "kind": "decision",
-        "render_shape": "diamond"
-      }
+      "name": "Choose Fulfillment"
     },
-    {"id": "J-031", "type": "Step", "name": "Enter Delivery Address"},
-    {"id": "J-032", "type": "Step", "name": "Choose Pickup Store"},
-    {"id": "P-030", "type": "Place", "name": "Fulfillment"},
-    {"id": "P-031", "type": "Place", "name": "Delivery Address"},
-    {"id": "P-032", "type": "Place", "name": "Pickup Store"},
-    {"id": "VS-030a", "type": "ViewState", "name": "Fulfillment Choice"},
-    {"id": "VS-031a", "type": "ViewState", "name": "Delivery Address Form"},
-    {"id": "VS-032a", "type": "ViewState", "name": "Pickup Store Selector"}
+    {
+      "id": "J-031",
+      "type": "Step",
+      "name": "Enter Delivery Address"
+    },
+    {
+      "id": "J-032",
+      "type": "Step",
+      "name": "Choose Pickup Store"
+    },
+    {
+      "id": "P-030",
+      "type": "Place",
+      "name": "Fulfillment"
+    },
+    {
+      "id": "P-031",
+      "type": "Place",
+      "name": "Delivery Address"
+    },
+    {
+      "id": "P-032",
+      "type": "Place",
+      "name": "Pickup Store"
+    },
+    {
+      "id": "VS-030a",
+      "type": "ViewState",
+      "name": "Fulfillment Choice"
+    },
+    {
+      "id": "VS-031a",
+      "type": "ViewState",
+      "name": "Delivery Address Form"
+    },
+    {
+      "id": "VS-032a",
+      "type": "ViewState",
+      "name": "Pickup Store Selector"
+    }
   ],
   "edges": [
-    {"from": "J-030", "type": "PRECEDES", "to": "J-031"},
-    {"from": "J-030", "type": "PRECEDES", "to": "J-032"},
-    {"from": "J-030", "type": "REALIZED_BY", "to": "P-030"},
-    {"from": "J-030", "type": "REALIZED_BY", "to": "VS-030a"},
-    {"from": "J-031", "type": "REALIZED_BY", "to": "P-031"},
-    {"from": "J-031", "type": "REALIZED_BY", "to": "VS-031a"},
-    {"from": "J-032", "type": "REALIZED_BY", "to": "P-032"},
-    {"from": "J-032", "type": "REALIZED_BY", "to": "VS-032a"},
-    {"from": "P-030", "type": "NAVIGATES_TO", "to": "P-031"},
-    {"from": "P-030", "type": "NAVIGATES_TO", "to": "P-032"},
-    {"from": "VS-030a", "type": "TRANSITIONS_TO", "to": "VS-031a"},
-    {"from": "VS-030a", "type": "TRANSITIONS_TO", "to": "VS-032a"}
+    {
+      "from": "J-030",
+      "type": "PRECEDES",
+      "to": "J-031"
+    },
+    {
+      "from": "J-030",
+      "type": "PRECEDES",
+      "to": "J-032"
+    },
+    {
+      "from": "J-030",
+      "type": "REALIZED_BY",
+      "to": "P-030"
+    },
+    {
+      "from": "J-030",
+      "type": "REALIZED_BY",
+      "to": "VS-030a"
+    },
+    {
+      "from": "J-031",
+      "type": "REALIZED_BY",
+      "to": "P-031"
+    },
+    {
+      "from": "J-031",
+      "type": "REALIZED_BY",
+      "to": "VS-031a"
+    },
+    {
+      "from": "J-032",
+      "type": "REALIZED_BY",
+      "to": "P-032"
+    },
+    {
+      "from": "J-032",
+      "type": "REALIZED_BY",
+      "to": "VS-032a"
+    },
+    {
+      "from": "P-030",
+      "type": "NAVIGATES_TO",
+      "to": "P-031"
+    },
+    {
+      "from": "P-030",
+      "type": "NAVIGATES_TO",
+      "to": "P-032"
+    },
+    {
+      "from": "VS-030a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-031a"
+    },
+    {
+      "from": "VS-030a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-032a"
+    }
   ],
-  "decision_branches": [
-    {"from": "J-030", "to": "J-031", "label": "delivery_selected", "label_source": "guard"},
-    {"from": "J-030", "to": "J-032", "label": "pickup_selected", "label_source": "guard"}
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "J-030",
+        "display": {
+          "shape": "diamond"
+        }
+      }
+    ],
+    "edge_annotations": [
+      {
+        "from": "J-030",
+        "type": "PRECEDES",
+        "to": "J-031",
+        "role": "branch_label",
+        "display_label": "delivery_selected",
+        "label_source": "guard"
+      },
+      {
+        "from": "J-030",
+        "type": "PRECEDES",
+        "to": "J-032",
+        "role": "branch_label",
+        "display_label": "pickup_selected",
+        "label_source": "guard"
+      }
+    ],
+    "node_groups": [
+
+    ],
+    "view_metadata": {
+    }
+  },
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "P-030",
+      "type": "CONTAINS",
+      "to": "VS-030a",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-031",
+      "type": "CONTAINS",
+      "to": "VS-031a",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-032",
+      "type": "CONTAINS",
+      "to": "VS-032a",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
+    }
   ],
   "notes": [
-    "Branch labels prefer guard text over event IDs or target names when multiple annotations are available.",
-    "CONTAINS edges to ViewState are omitted because hierarchy is not part of scenario_flow edge scope."
+
   ]
 }
