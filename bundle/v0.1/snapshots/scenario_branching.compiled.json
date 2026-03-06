@@ -1,0 +1,286 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "E-030",
+      "type": "Event",
+      "name": "Choose Delivery",
+      "props": {
+        "description": "Delivery option selected",
+        "owner": "Design",
+        "payload_schema": "{fulfillment:delivery}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "E-031",
+      "type": "Event",
+      "name": "Choose Pickup",
+      "props": {
+        "description": "Pickup option selected",
+        "owner": "Design",
+        "payload_schema": "{fulfillment:pickup}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "J-030",
+      "type": "Step",
+      "name": "Choose Fulfillment",
+      "props": {
+        "actor": "User",
+        "description": "User selects delivery or pickup",
+        "intent": "Choose a fulfillment option",
+        "kind": "decision",
+        "owner": "Design",
+        "success_criteria": "Fulfillment option selected"
+      }
+    },
+    {
+      "id": "J-031",
+      "type": "Step",
+      "name": "Enter Delivery Address",
+      "props": {
+        "actor": "User",
+        "description": "User enters a delivery address",
+        "intent": "Provide delivery details",
+        "owner": "Design",
+        "success_criteria": "Delivery address captured"
+      }
+    },
+    {
+      "id": "J-032",
+      "type": "Step",
+      "name": "Choose Pickup Store",
+      "props": {
+        "actor": "User",
+        "description": "User selects a pickup location",
+        "intent": "Choose a store for pickup",
+        "owner": "Design",
+        "success_criteria": "Pickup store selected"
+      }
+    },
+    {
+      "id": "P-030",
+      "type": "Place",
+      "name": "Fulfillment",
+      "props": {
+        "access": "auth",
+        "description": "Fulfillment decision place",
+        "owner": "Design",
+        "route_or_key": "/checkout/fulfillment",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-031",
+      "type": "Place",
+      "name": "Delivery Address",
+      "props": {
+        "access": "auth",
+        "description": "Delivery address place",
+        "owner": "Design",
+        "route_or_key": "/checkout/delivery",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-032",
+      "type": "Place",
+      "name": "Pickup Store",
+      "props": {
+        "access": "auth",
+        "description": "Pickup store selection place",
+        "owner": "Design",
+        "route_or_key": "/checkout/pickup",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "VS-030a",
+      "type": "ViewState",
+      "name": "Fulfillment Choice",
+      "props": {
+        "data_required": "FulfillmentOptions",
+        "description": "Choice state for fulfillment selection",
+        "owner": "Design",
+        "place_id": "P-030"
+      }
+    },
+    {
+      "id": "VS-031a",
+      "type": "ViewState",
+      "name": "Delivery Address Form",
+      "props": {
+        "data_required": "AddressForm",
+        "description": "Delivery address entry state",
+        "owner": "Design",
+        "place_id": "P-031"
+      }
+    },
+    {
+      "id": "VS-032a",
+      "type": "ViewState",
+      "name": "Pickup Store Selector",
+      "props": {
+        "data_required": "StoreList",
+        "description": "Pickup store selection state",
+        "owner": "Design",
+        "place_id": "P-032"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "J-030",
+      "type": "PRECEDES",
+      "to": "J-031",
+      "to_name": "Enter Delivery Address",
+      "event": "E-030",
+      "guard": "delivery_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-030",
+      "type": "PRECEDES",
+      "to": "J-032",
+      "to_name": "Choose Pickup Store",
+      "event": "E-031",
+      "guard": "pickup_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-030",
+      "type": "REALIZED_BY",
+      "to": "P-030",
+      "to_name": "Fulfillment",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-030",
+      "type": "REALIZED_BY",
+      "to": "VS-030a",
+      "to_name": "Fulfillment Choice",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-031",
+      "type": "REALIZED_BY",
+      "to": "P-031",
+      "to_name": "Delivery Address",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-031",
+      "type": "REALIZED_BY",
+      "to": "VS-031a",
+      "to_name": "Delivery Address Form",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-032",
+      "type": "REALIZED_BY",
+      "to": "P-032",
+      "to_name": "Pickup Store",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-032",
+      "type": "REALIZED_BY",
+      "to": "VS-032a",
+      "to_name": "Pickup Store Selector",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-030",
+      "type": "CONTAINS",
+      "to": "VS-030a",
+      "to_name": "Fulfillment Choice",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-030",
+      "type": "NAVIGATES_TO",
+      "to": "P-031",
+      "to_name": "Delivery Address",
+      "event": "E-030",
+      "guard": "delivery_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-030",
+      "type": "NAVIGATES_TO",
+      "to": "P-032",
+      "to_name": "Pickup Store",
+      "event": "E-031",
+      "guard": "pickup_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-031",
+      "type": "CONTAINS",
+      "to": "VS-031a",
+      "to_name": "Delivery Address Form",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-032",
+      "type": "CONTAINS",
+      "to": "VS-032a",
+      "to_name": "Pickup Store Selector",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-030a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-031a",
+      "to_name": "Delivery Address Form",
+      "event": "E-030",
+      "guard": "delivery_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-030a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-032a",
+      "to_name": "Pickup Store Selector",
+      "event": "E-031",
+      "guard": "pickup_selected",
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

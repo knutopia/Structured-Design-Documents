@@ -17,6 +17,7 @@ Metric M-001 "Checkout Completion Rate"
   cadence=weekly
   metric_type=kpi
   INSTRUMENTED_AT J-002 "Confirm Payment"
+  INSTRUMENTED_AT E-001 "Payment Submitted"
 END
 
 Opportunity OP-001 "Payment Friction"
@@ -51,6 +52,7 @@ Step J-001 "Enter Billing"
   actor=User
   intent="Provide billing details"
   success_criteria="Billing data accepted"
+  opportunity_refs=OP-001
   PRECEDES J-002 "Confirm Payment"
   REALIZED_BY P-001 "Billing"
 END
@@ -72,13 +74,20 @@ Area A-001 "Checkout Area"
   CONTAINS P-002 "Review"
 END
 
+Event E-001 "Payment Submitted"
+  owner=Analytics
+  description="Checkout payment submission event"
+  source_kind=system
+  payload_schema="{checkout_id}"
+END
+
 Place P-001 "Billing"
   owner=Design
   description="Billing place"
   surface=web
   route_or_key=/checkout/billing
   access=auth
-  NAVIGATES_TO P-002 "Review" [ClickReview] {billingComplete}
+  NAVIGATES_TO P-002 "Review" [E-001] {billingComplete}
 END
 
 Place P-002 "Review"

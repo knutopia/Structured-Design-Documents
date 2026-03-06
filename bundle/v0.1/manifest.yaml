@@ -24,12 +24,17 @@ examples:
     compiled_snapshot: snapshots/outcome_to_ia_trace.compiled.json
     projection_snapshots:
       - snapshots/outcome_to_ia_trace.outcome_opportunity_map.projection.json
+      - snapshots/outcome_to_ia_trace.journey_map.projection.json
       - snapshots/outcome_to_ia_trace.ia_place_map.projection.json
   - path: examples/place_viewstate_transition.sdd
     compiled_snapshot: snapshots/place_viewstate_transition.compiled.json
     projection_snapshots:
       - snapshots/place_viewstate_transition.ui_contracts.projection.json
       - snapshots/place_viewstate_transition.ia_place_map.projection.json
+  - path: examples/scenario_branching.sdd
+    compiled_snapshot: snapshots/scenario_branching.compiled.json
+    projection_snapshots:
+      - snapshots/scenario_branching.scenario_flow.projection.json
   - path: examples/service_blueprint_slice.sdd
     compiled_snapshot: snapshots/service_blueprint_slice.compiled.json
     projection_snapshots:
@@ -40,5 +45,5 @@ compatibility:
   requires_compiler_min: "0.1.0"
   notes:
     - Core vocabulary is closed; non-canonical aliases are informative and must not be emitted by compilers.
-    - Views are typed projection stubs; layout conventions remain renderer-specific unless promoted by profile rules.
+    - Views provide operational projection definitions and renderer defaults; full spatial layout remains renderer-specific.
     - Post-extraction policy treats this bundle as machine-readable source of truth for tooling.

@@ -128,6 +128,8 @@ Make product intent explicit and traceable: **why** you’re building things, an
 * `Initiative ADDRESSES Opportunity`
 * `Metric INSTRUMENTED_AT Step/Place/ViewState` (optional but powerful)
 
+If an `INSTRUMENTED_AT` target is outside the outcome-map node scope, renderers should surface it as grouped Metric annotations rather than pull the target node into the view.
+
 ## Minimal node properties
 
 * Outcome: `statement`, `time_horizon`, `owner`
@@ -145,22 +147,23 @@ Define **experience intent from above**: stages and steps, needs, friction, mome
 
 ## Nodes used
 
-* `Stage`, `Step`, (optionally `Opportunity`)
+* `Stage`, `Step`
 
 ## Key edges
 
 * `Stage CONTAINS Step`
 * `Step PRECEDES Step`
 * `Step HAS_* properties` (see below)
-* Optional: `Step -> Opportunity` via `SURFACES` (or just reference Opportunity IDs inside Step fields)
+* Optional: `Step.props.opportunity_refs` as a comma-separated list of Opportunity IDs for inline annotations
 
 ## Step properties (this is your “node contract” for the experience layer)
 
 * `actor`
 * `intent`
 * `success_criteria`
+* `opportunity_refs` (optional machine-resolved Opportunity IDs)
 * `touchpoint/channel` (if relevant)
-* `pain_points` (refs)
+* `pain_points` (descriptive refs)
 * `emotion` (optional)
 * `time/effort` (optional)
 * `instrumentation_hooks` (optional)
@@ -190,12 +193,14 @@ Bind experience steps to **frontstage/backstage/system/policy** so design intent
 
 ## Blueprint lane convention (rendering rule, not new semantics)
 
-* Put nodes in lanes by a `visibility` property:
-
-  * `customer-visible` (frontstage)
-  * `not-visible` (backstage)
-  * `support`
-  * `system`
+* Canonical `Process.visibility` values are `frontstage`, `backstage`, and `support`.
+* Render lanes in the order: `customer`, `frontstage`, `backstage`, `support`, `system`, `policy`.
+* Map node types to lanes as follows:
+  * `Step` → `customer`
+  * `Process` → lane from `visibility`
+  * `SystemAction`, `DataEntity` → `system`
+  * `Policy` → `policy`
+* Treat `customer-visible` and `not-visible` as legacy aliases for `frontstage` and `backstage`.
 
 ---
 
@@ -218,9 +223,9 @@ Your “classical IA map” as a **source of truth** for product structure: what
 
 * `route_or_key` (e.g., `/billing`, `billing.settings`)
 * `surface` (web, iOS, Android, kiosk)
-* `access` (public/auth/role)
-* `primary_nav?` (true/false)
-* `entry_points` (links, deep links, notifications)
+* `access` (`public`, `auth`, or `role:<slug>`)
+* `primary_nav?` (`true`/`false`)
+* `entry_points` (serialized in v0.1 as comma-separated `kind:value` entries such as `link:/billing,notification:payment_failed`)
 * `canonical_owner` (design/product/eng)
 
 **How this solves SPA / single-screen paradigms**
@@ -238,7 +243,7 @@ Show a **specific scenario slice** (a flow), but *without* collapsing the world 
 
 ## Nodes used
 
-* `Step`, `Decision` (optional as a Step subtype), `Place`, `ViewState` (optional)
+* `Step` (`kind=decision` when it is a branch point), `Place`, `ViewState` (optional)
 
 ## Key edges
 
@@ -252,6 +257,8 @@ Show a **specific scenario slice** (a flow), but *without* collapsing the world 
 * Scenario flow is **a path through structure**, ordered by Steps.
 
 This is the bridge artifact that both PM and design/eng can read without argument over “screen vs step.”
+
+When a branching Step carries both event and guard annotations, use the guard text as the primary branch label.
 
 ---
 
@@ -295,6 +302,8 @@ Component properties:
 
 This is where “guard” belongs formally.
 
+If a Place has both a ViewState map and a scoped State machine, treat the ViewState map as the primary UI-contract view and render the State machine as nested detail by `scope_id`.
+
 ---
 
 # How the six diagrams connect (traceability rules)
@@ -303,7 +312,7 @@ These are the “must-have” mapping edges that prevent drift:
 
 1. **Opportunity ↔ Journey**
 
-* At least one: `Opportunity LOCATED_AT Step` (or Step references Opportunity IDs)
+* At least one Step SHOULD reference Opportunity IDs through `opportunity_refs`
 
 2. **Journey ↔ Structure**
 
@@ -313,7 +322,7 @@ These are the “must-have” mapping edges that prevent drift:
 
 3. **Structure ↔ UI behavior**
 
-* Every Place must have: `Place COMPOSED_OF Component` and/or `Place HAS ViewStates`
+* Every Place must have: `Place COMPOSED_OF Component` and/or `Place CONTAINS ViewState`
 
 4. **Experience ↔ Service delivery**
 

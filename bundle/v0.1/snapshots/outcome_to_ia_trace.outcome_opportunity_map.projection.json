@@ -3,7 +3,21 @@
   "source_example": "outcome_to_ia_trace",
   "nodes": [
     {"id": "I-001", "type": "Initiative", "name": "Billing Simplification"},
-    {"id": "M-001", "type": "Metric", "name": "Checkout Completion Rate"},
+    {
+      "id": "M-001",
+      "type": "Metric",
+      "name": "Checkout Completion Rate",
+      "annotations": {
+        "instrumentation": {
+          "experience": [
+            {"id": "J-002", "type": "Step", "name": "Confirm Payment"}
+          ],
+          "event": [
+            {"id": "E-001", "type": "Event", "name": "Payment Submitted"}
+          ]
+        }
+      }
+    },
     {"id": "O-001", "type": "Outcome", "name": "Reduce Abandonment"},
     {"id": "OP-001", "type": "Opportunity", "name": "Payment Friction"}
   ],
@@ -13,6 +27,7 @@
     {"from": "OP-001", "type": "SUPPORTS", "to": "O-001"}
   ],
   "notes": [
-    "IMPLEMENTED_BY and INSTRUMENTED_AT edges are omitted because their endpoints are outside this view's node filter."
+    "IMPLEMENTED_BY edges are omitted because their endpoints are outside this view's node filter.",
+    "INSTRUMENTED_AT edges targeting out-of-scope nodes are rendered as grouped metric annotations rather than visible edges."
   ]
 }

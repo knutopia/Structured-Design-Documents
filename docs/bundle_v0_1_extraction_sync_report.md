@@ -17,7 +17,7 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
   - Method: endpoint pairs and constraints encoded as machine-loadable rules with profile-aware severities.
 - `bundle/v0.1/core/views.yaml`
   - Sources: `definitions/v0.1/readme_structured_design_diagrams_sdd_text_v_0_dot_1.md`, `initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md`, `initial_concepts/Initial Concepts2 One-page Schema v0dot1.md`
-  - Method: typed projection stub with executable include filters and TODO placeholders for under-specified conventions.
+  - Method: operational projection definitions with executable include filters and renderer defaults for resolved view conventions.
 - `bundle/v0.1/profiles/permissive.yaml`
   - Sources: endpoint contract conformance guidance plus governance recommendations from `initial_concepts/Initial Concepts2 One-page Schema v0dot1.md`.
 - `bundle/v0.1/profiles/recommended.yaml`
@@ -29,8 +29,8 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
 
 - Source-of-truth tension between top-level readmes and extraction guidance.
   - Resolution: transitional split encoded in docs; markdown is normative input for extraction, bundle governs machine behavior post-extraction.
-- View definitions are less operational than syntax/contracts.
-  - Resolution: `core/views.yaml` implemented as typed projection stub with explicit `status: stub` and `todo_placeholders`.
+- View definitions were initially less operational than syntax/contracts.
+  - Resolution: `core/views.yaml` now encodes explicit renderer defaults for metric annotations, opportunity references, lane mapping, IA metadata, branching decisions, and ViewState-vs-State precedence.
 - Concept docs mention non-canonical relationship aliases.
   - Resolution: aliases recorded under `aliases_informative` in vocab; no additions to canonical relationship token set.
 - Event annotation strictness (`[Event]` as label vs ID).

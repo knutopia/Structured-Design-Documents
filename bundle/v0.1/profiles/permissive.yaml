@@ -54,6 +54,89 @@ rules:
       SystemAction: [owner, description, system_name, action, failure_modes]
       DataEntity: [owner, description, fields, system_of_record]
       Policy: [owner, description, policy_owner, enforcement_point]
+  - id: step_opportunity_refs_valid
+    source: profile
+    severity: warn
+    applies_to: Step
+    rule_logic:
+      kind: delimited_node_references
+      node_type: Step
+      property: opportunity_refs
+      delimiter: ","
+      target_type: Opportunity
+      id_pattern: '^OP-[0-9]{3,}([a-z][a-z0-9]*)?$'
+  - id: process_visibility_enum
+    source: profile
+    severity: warn
+    applies_to: Process
+    rule_logic:
+      kind: enum_property
+      node_type: Process
+      property: visibility
+      allowed_values: [frontstage, backstage, support]
+      accepted_aliases:
+        customer-visible: frontstage
+        not-visible: backstage
+  - id: place_access_format
+    source: profile
+    severity: warn
+    applies_to: Place
+    rule_logic:
+      kind: pattern_property
+      node_type: Place
+      property: access
+      pattern: '^(public|auth|role:[a-z0-9_/-]+)$'
+  - id: place_entry_points_format
+    source: profile
+    severity: warn
+    applies_to: Place
+    rule_logic:
+      kind: delimited_key_value_property
+      node_type: Place
+      property: entry_points
+      delimiter: ","
+      entry_delimiter: ":"
+      key_pattern: '^[a-z][a-z0-9_-]*$'
+      value_pattern: '^.+$'
+  - id: place_primary_nav_boolean_string
+    source: profile
+    severity: warn
+    applies_to: Place
+    rule_logic:
+      kind: enum_property
+      node_type: Place
+      property: primary_nav
+      allowed_values: ["true", "false"]
+      optional: true
+  - id: step_kind_enum
+    source: profile
+    severity: warn
+    applies_to: Step
+    rule_logic:
+      kind: enum_property
+      node_type: Step
+      property: kind
+      allowed_values: [decision]
+      optional: true
+  - id: branching_step_should_be_marked_decision
+    source: profile
+    severity: warn
+    applies_to: PRECEDES
+    rule_logic:
+      kind: branching_step_marker
+      node_type: Step
+      relationship: PRECEDES
+      marker_property: kind
+      required_value: decision
+  - id: state_scope_reference
+    source: profile
+    severity: warn
+    applies_to: State
+    rule_logic:
+      kind: node_reference_property
+      node_type: State
+      property: scope_id
+      allowed_target_types: [Place, Component]
   - id: id_prefix_type_coupling
     source: profile
     severity: warn

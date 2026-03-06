@@ -13,6 +13,17 @@
       }
     },
     {
+      "id": "E-001",
+      "type": "Event",
+      "name": "Payment Submitted",
+      "props": {
+        "description": "Checkout payment submission event",
+        "owner": "Analytics",
+        "payload_schema": "{checkout_id}",
+        "source_kind": "system"
+      }
+    },
+    {
       "id": "G-001",
       "type": "Stage",
       "name": "Checkout",
@@ -41,6 +52,7 @@
         "actor": "User",
         "description": "User enters billing information",
         "intent": "Provide billing details",
+        "opportunity_refs": "OP-001",
         "owner": "Design",
         "success_criteria": "Billing data accepted"
       }
@@ -213,6 +225,16 @@
     {
       "from": "M-001",
       "type": "INSTRUMENTED_AT",
+      "to": "E-001",
+      "to_name": "Payment Submitted",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
       "to": "J-002",
       "to_name": "Confirm Payment",
       "event": null,
@@ -245,7 +267,7 @@
       "type": "NAVIGATES_TO",
       "to": "P-002",
       "to_name": "Review",
-      "event": "ClickReview",
+      "event": "E-001",
       "guard": "billingComplete",
       "effect": null,
       "props": {}

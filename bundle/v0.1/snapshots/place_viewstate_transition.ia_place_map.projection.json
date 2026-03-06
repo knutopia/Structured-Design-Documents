@@ -2,13 +2,34 @@
   "view_id": "ia_place_map",
   "source_example": "place_viewstate_transition",
   "nodes": [
-    {"id": "P-010", "type": "Place", "name": "Billing"},
-    {"id": "P-011", "type": "Place", "name": "Confirmation"}
+    {
+      "id": "P-010",
+      "type": "Place",
+      "name": "Billing",
+      "annotations": {
+        "subtitle": "/billing",
+        "badge": "auth",
+        "metadata": {
+          "entry_points": "link:/billing,notification:payment_failed",
+          "primary_nav": "true"
+        }
+      }
+    },
+    {
+      "id": "P-011",
+      "type": "Place",
+      "name": "Confirmation",
+      "annotations": {
+        "subtitle": "/confirmation",
+        "badge": "role:billing_agent"
+      }
+    }
   ],
   "edges": [
     {"from": "P-010", "type": "NAVIGATES_TO", "to": "P-011"}
   ],
   "notes": [
-    "CONTAINS edges to ViewState are omitted because ViewState is outside IA node scope."
+    "CONTAINS edges to ViewState are omitted because ViewState is outside IA node scope.",
+    "Place route, access, entry_points, and primary_nav metadata are rendered as node annotations."
   ]
 }

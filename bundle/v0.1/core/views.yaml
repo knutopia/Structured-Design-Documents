@@ -3,7 +3,7 @@ version: "0.1"
 views:
   - id: outcome_opportunity_map
     name: Outcome-Opportunity Map
-    status: stub
+    status: operational
     projection:
       include_node_types: [Outcome, Metric, Opportunity, Initiative]
       include_edge_types: [MEASURED_BY, SUPPORTS, ADDRESSES, IMPLEMENTED_BY, INSTRUMENTED_AT]
@@ -13,14 +13,21 @@ views:
       normative_defaults:
         - id: include_edge_only_when_both_endpoints_included
           description: Edge is included only if both endpoints pass node-type filter.
-      todo_placeholders:
-        - id: metric_placement_grouping
-          missing_detail: Grouping and visual clustering rules for metrics by placement target.
-          target_profile: recommended
+      renderer_defaults:
+        instrumentation_annotations:
+          source_edge_type: INSTRUMENTED_AT
+          render_mode: annotate_metric_when_target_out_of_scope
+          group_order: [experience, event]
+          experience_target_types: [Step, Place, ViewState]
+          event_target_types: [Event]
+          target_type_order: [Step, Place, ViewState, Event]
+          display:
+            include_target_id: true
+            include_target_name_when_available: true
 
   - id: journey_map
     name: Journey Map
-    status: stub
+    status: operational
     projection:
       include_node_types: [Stage, Step]
       include_edge_types: [CONTAINS, PRECEDES]
@@ -30,14 +37,17 @@ views:
       normative_defaults:
         - id: stage_step_hierarchy
           description: Stage CONTAINS Step edges define hierarchy.
-      todo_placeholders:
-        - id: optional_opportunity_reference_rendering
-          missing_detail: How Opportunity references from Step props are displayed in journey rendering.
-          target_profile: recommended
+      renderer_defaults:
+        reference_annotations:
+          source_prop: opportunity_refs
+          target_type: Opportunity
+          render_mode: inline_step_badges
+          sort: id_ascending
+          unresolved_reference_policy: validate_in_profile
 
   - id: service_blueprint
     name: Service Blueprint
-    status: stub
+    status: operational
     projection:
       include_node_types: [Step, Process, SystemAction, DataEntity, Policy]
       include_edge_types: [REALIZED_BY, DEPENDS_ON, READS, WRITES, CONSTRAINED_BY, PRECEDES]
@@ -47,14 +57,23 @@ views:
       normative_defaults:
         - id: process_sequence
           description: PRECEDES edges provide optional process ordering overlays.
-      todo_placeholders:
-        - id: visibility_lane_mapping
-          missing_detail: Lane mapping rules by Process.props.visibility.
-          target_profile: recommended
+      renderer_defaults:
+        lane_mapping:
+          lane_order: [customer, frontstage, backstage, support, system, policy]
+          process_visibility_values: [frontstage, backstage, support]
+          aliases:
+            customer-visible: frontstage
+            not-visible: backstage
+          node_type_defaults:
+            Step: customer
+            Process: by_visibility
+            SystemAction: system
+            DataEntity: system
+            Policy: policy
 
   - id: ia_place_map
     name: IA Place Map
-    status: stub
+    status: operational
     projection:
       include_node_types: [Area, Place]
       include_edge_types: [CONTAINS, NAVIGATES_TO]
@@ -64,14 +83,16 @@ views:
       normative_defaults:
         - id: hierarchy_from_contains
           description: IA hierarchy is derived from CONTAINS.
-      todo_placeholders:
-        - id: entrypoint_access_annotations
-          missing_detail: Display conventions for route_or_key, access, and entry-point metadata.
-          target_profile: recommended
+      renderer_defaults:
+        node_annotations:
+          subtitle_prop: route_or_key
+          badge_prop: access
+          metadata_props: [entry_points, primary_nav]
+          access_examples: [public, auth, "role:<slug>"]
 
   - id: scenario_flow
     name: Scenario Flow
-    status: stub
+    status: operational
     projection:
       include_node_types: [Step, Place, ViewState]
       include_edge_types: [PRECEDES, REALIZED_BY, NAVIGATES_TO, TRANSITIONS_TO]
@@ -81,14 +102,16 @@ views:
       normative_defaults:
         - id: step_ordering_primary
           description: PRECEDES on Step is the primary flow spine.
-      todo_placeholders:
-        - id: decision_node_rendering
-          missing_detail: Decision or branching visualization style without adding v0.1 tokens.
-          target_profile: recommended
+      renderer_defaults:
+        decision_nodes:
+          kind_prop: kind
+          decision_value: decision
+          branch_label_precedence: [guard, event, to_name]
+          render_shape: diamond
 
   - id: ui_contracts
     name: UI Contracts
-    status: stub
+    status: operational
     projection:
       include_node_types: [Place, ViewState, Component, State, Event, DataEntity, SystemAction]
       include_edge_types: [COMPOSED_OF, CONTAINS, TRANSITIONS_TO, EMITS, BINDS_TO, DEPENDS_ON]
@@ -98,7 +121,10 @@ views:
       normative_defaults:
         - id: ui_contract_scope
           description: Place and ViewState are containers for component and transition contracts.
-      todo_placeholders:
-        - id: state_vs_viewstate_emphasis
-          missing_detail: Rendering precedence when both State and ViewState graphs are present.
-          target_profile: recommended
+      renderer_defaults:
+        transition_graph_priority:
+          primary: ViewState
+          secondary: State
+          secondary_grouping_prop: scope_id
+          secondary_render_mode: inset
+          fallback_to_secondary_when_primary_absent: true

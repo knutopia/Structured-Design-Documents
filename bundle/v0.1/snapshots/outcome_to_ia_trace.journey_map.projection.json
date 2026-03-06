@@ -1,0 +1,27 @@
+{
+  "view_id": "journey_map",
+  "source_example": "outcome_to_ia_trace",
+  "nodes": [
+    {"id": "G-001", "type": "Stage", "name": "Checkout"},
+    {
+      "id": "J-001",
+      "type": "Step",
+      "name": "Enter Billing",
+      "annotations": {
+        "opportunity_refs": [
+          {"id": "OP-001", "name": "Payment Friction"}
+        ]
+      }
+    },
+    {"id": "J-002", "type": "Step", "name": "Confirm Payment"}
+  ],
+  "edges": [
+    {"from": "G-001", "type": "CONTAINS", "to": "J-001"},
+    {"from": "G-001", "type": "CONTAINS", "to": "J-002"},
+    {"from": "J-001", "type": "PRECEDES", "to": "J-002"}
+  ],
+  "notes": [
+    "Opportunity references are rendered as step annotations driven by Step.props.opportunity_refs.",
+    "Opportunity nodes remain outside the journey view node scope."
+  ]
+}

@@ -73,6 +73,17 @@
     {
       "id": "PR-021",
       "type": "Process",
+      "name": "Review Claim History",
+      "props": {
+        "description": "Assess prior claim context",
+        "owner": "Ops",
+        "sla": "45s",
+        "visibility": "backstage"
+      }
+    },
+    {
+      "id": "PR-022",
+      "type": "Process",
       "name": "Notify Customer",
       "props": {
         "description": "Send claim confirmation",
@@ -95,6 +106,18 @@
     },
     {
       "id": "SA-021",
+      "type": "SystemAction",
+      "name": "Load Claim History",
+      "props": {
+        "action": "getClaimHistory",
+        "description": "Load prior claim history",
+        "failure_modes": "timeout",
+        "owner": "Eng",
+        "system_name": "ClaimsAPI"
+      }
+    },
+    {
+      "id": "SA-022",
       "type": "SystemAction",
       "name": "Send Email",
       "props": {
@@ -130,7 +153,7 @@
     {
       "from": "J-021",
       "type": "REALIZED_BY",
-      "to": "PR-021",
+      "to": "PR-022",
       "to_name": "Notify Customer",
       "event": null,
       "guard": null,
@@ -161,7 +184,7 @@
       "from": "PR-020",
       "type": "PRECEDES",
       "to": "PR-021",
-      "to_name": "Notify Customer",
+      "to_name": "Review Claim History",
       "event": null,
       "guard": null,
       "effect": null,
@@ -171,7 +194,7 @@
       "from": "PR-021",
       "type": "DEPENDS_ON",
       "to": "SA-021",
-      "to_name": "Send Email",
+      "to_name": "Load Claim History",
       "event": null,
       "guard": null,
       "effect": null,
@@ -179,6 +202,26 @@
     },
     {
       "from": "PR-021",
+      "type": "PRECEDES",
+      "to": "PR-022",
+      "to_name": "Notify Customer",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-022",
+      "type": "DEPENDS_ON",
+      "to": "SA-022",
+      "to_name": "Send Email",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-022",
       "type": "EMITS",
       "to": "E-020",
       "to_name": "Claim Confirmed",
@@ -219,6 +262,16 @@
     },
     {
       "from": "SA-021",
+      "type": "READS",
+      "to": "D-020",
+      "to_name": "Claim",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "SA-022",
       "type": "READS",
       "to": "D-020",
       "to_name": "Claim",

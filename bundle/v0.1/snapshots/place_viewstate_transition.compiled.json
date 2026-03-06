@@ -55,7 +55,9 @@
       "props": {
         "access": "auth",
         "description": "Billing place",
+        "entry_points": "link:/billing,notification:payment_failed",
         "owner": "Design",
+        "primary_nav": "true",
         "route_or_key": "/billing",
         "surface": "web"
       }
@@ -65,7 +67,7 @@
       "type": "Place",
       "name": "Confirmation",
       "props": {
-        "access": "auth",
+        "access": "role:billing_agent",
         "description": "Confirmation place",
         "owner": "Design",
         "route_or_key": "/confirmation",
@@ -93,6 +95,28 @@
         "failure_modes": "timeout",
         "owner": "Eng",
         "system_name": "BillingAPI"
+      }
+    },
+    {
+      "id": "ST-010a",
+      "type": "State",
+      "name": "Form Ready",
+      "props": {
+        "description": "Validation state before submission",
+        "invariants": "Required billing fields are valid",
+        "owner": "Design",
+        "scope_id": "C-010"
+      }
+    },
+    {
+      "id": "ST-010b",
+      "type": "State",
+      "name": "Submitting",
+      "props": {
+        "description": "Submission is in progress",
+        "invariants": "Submission request has been issued",
+        "owner": "Design",
+        "scope_id": "C-010"
       }
     },
     {
@@ -209,6 +233,16 @@
       "event": null,
       "guard": null,
       "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-010a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-010b",
+      "to_name": "Submitting",
+      "event": "E-010",
+      "guard": "payment_valid",
+      "effect": "SA-010",
       "props": {}
     },
     {

@@ -9,6 +9,8 @@
     {"id": "P-010", "type": "Place", "name": "Billing"},
     {"id": "P-011", "type": "Place", "name": "Confirmation"},
     {"id": "SA-010", "type": "SystemAction", "name": "Save Subscription"},
+    {"id": "ST-010a", "type": "State", "name": "Form Ready"},
+    {"id": "ST-010b", "type": "State", "name": "Submitting"},
     {"id": "VS-010a", "type": "ViewState", "name": "Billing Editing"},
     {"id": "VS-010b", "type": "ViewState", "name": "Billing Success"}
   ],
@@ -19,10 +21,20 @@
     {"from": "P-010", "type": "COMPOSED_OF", "to": "C-010"},
     {"from": "P-010", "type": "CONTAINS", "to": "VS-010a"},
     {"from": "P-010", "type": "CONTAINS", "to": "VS-010b"},
+    {"from": "ST-010a", "type": "TRANSITIONS_TO", "to": "ST-010b"},
     {"from": "VS-010a", "type": "COMPOSED_OF", "to": "C-011"},
     {"from": "VS-010a", "type": "TRANSITIONS_TO", "to": "VS-010b"}
   ],
+  "transition_graph_priority": {
+    "primary": "ViewState",
+    "secondary": "State",
+    "secondary_render_mode": "inset"
+  },
+  "secondary_state_groups": [
+    {"scope_id": "C-010", "node_ids": ["ST-010a", "ST-010b"]}
+  ],
   "notes": [
+    "State nodes are rendered as a secondary inset grouped by State.props.scope_id when ViewState transitions are present.",
     "CONSTRAINED_BY is omitted because Policy is not part of ui_contracts node scope.",
     "NAVIGATES_TO is omitted because it is not part of ui_contracts edge scope."
   ]

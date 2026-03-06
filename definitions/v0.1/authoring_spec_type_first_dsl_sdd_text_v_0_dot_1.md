@@ -247,6 +247,8 @@ Place P-020 "Billing"
   surface=web
   route_or_key="/billing"
   access=auth
+  entry_points="link:/billing,notification:payment_failed"
+  primary_nav=true
   NAVIGATES_TO P-021 [ClickReview] {hasPlanSelected}
   CONSTRAINED_BY PL-004
 
@@ -271,6 +273,30 @@ Step J-014 "Enter payment details"
   intent="Add a valid payment method"
   success_criteria="Payment method stored and usable"
   REALIZED_BY P-020 "Billing"
+END
+```
+
+### 8.3 Journey step with opportunity references and branching
+
+```text
+Step J-015 "Choose fulfillment"
+  actor=Customer
+  intent="Select delivery or pickup"
+  success_criteria="A fulfillment route is selected"
+  opportunity_refs="OP-001,OP-002"
+  kind=decision
+  PRECEDES J-016 [E-010] {delivery_selected}
+  PRECEDES J-017 [E-011] {pickup_selected}
+END
+```
+
+### 8.4 State machine scoped to a component
+
+```text
+State ST-020a "Form Ready"
+  scope_id=C-010
+  invariants="All required fields valid"
+  TRANSITIONS_TO ST-020b [E-010] {canSubmit} / SA-010
 END
 ```
 

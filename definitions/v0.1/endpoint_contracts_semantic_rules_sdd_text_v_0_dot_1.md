@@ -267,6 +267,7 @@ Each relationship below defines:
 **Additional constraints:**
 - Use `INSTRUMENTED_AT Metric → Event` when the metric is computed from event streams.
 - Use `INSTRUMENTED_AT Metric → Step/Place/ViewState` when the metric is conceptually tied to a moment in the experience (recommended).
+- If a renderer filters out the instrumentation target type, it MAY surface `INSTRUMENTED_AT` as grouped Metric annotations instead of visible edges.
 
 ---
 
@@ -289,6 +290,27 @@ If a `ViewState` has `place_id=P-###`, then one of the following SHOULD be true:
 - `ViewState` is behavioral UI mode within a Place.
 
 Tooling SHOULD flag models where most `Step` nodes map 1:1 to Places without ViewStates in complex flows (heuristic warning).
+
+### 4.4 Journey opportunity traceability
+- Prefer `Step.props.opportunity_refs` as a comma-separated list of `Opportunity` IDs when a journey view needs machine-resolved opportunity references.
+- `pain_points` MAY remain descriptive, but tooling SHOULD use `opportunity_refs` for resolvable traceability.
+
+### 4.5 Service blueprint visibility values
+- `Process.visibility` canonical values are `frontstage`, `backstage`, and `support`.
+- Renderers MAY treat `customer-visible` as an alias for `frontstage` and `not-visible` as an alias for `backstage` in permissive mode, but those labels are non-canonical.
+- `SystemAction` and `DataEntity` occupy a derived `system` lane, and `Policy` occupies a derived `policy` lane.
+
+### 4.6 IA place metadata
+- `Place.access` SHOULD be `public`, `auth`, or `role:<slug>`.
+- `Place.entry_points` MAY be serialized in v0.1 as comma-separated `kind:value` entries.
+
+### 4.7 Scenario branching without new tokens
+- Represent decision points as `Step.props.kind=decision` rather than adding a `Decision` node type in v0.1.
+- When both `{Guard}` and `[Event]` are present on a branching edge, renderers SHOULD prefer the guard text as the branch label.
+
+### 4.8 UI contracts graph precedence
+- When both `ViewState` and `State` graphs are present, treat `ViewState` as the primary graph and `State` as scoped secondary detail.
+- `State.scope_id` SHOULD resolve to an existing `Place` or `Component`.
 
 ---
 

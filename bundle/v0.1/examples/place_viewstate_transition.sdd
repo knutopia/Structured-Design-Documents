@@ -6,6 +6,8 @@ Place P-010 "Billing"
   surface=web
   route_or_key=/billing
   access=auth
+  entry_points="link:/billing,notification:payment_failed"
+  primary_nav=true
   CONTAINS VS-010a "Billing Editing"
   CONTAINS VS-010b "Billing Success"
   COMPOSED_OF C-010 "Billing Form"
@@ -18,7 +20,7 @@ Place P-011 "Confirmation"
   description="Confirmation place"
   surface=web
   route_or_key=/confirmation
-  access=auth
+  access=role:billing_agent
 END
 
 ViewState VS-010a "Billing Editing"
@@ -54,6 +56,21 @@ Component C-011 "Submit Button"
   inputs=Click
   outputs=SubmitClicked
   EMITS E-010 "Submit"
+END
+
+State ST-010a "Form Ready"
+  owner=Design
+  description="Validation state before submission"
+  scope_id=C-010
+  invariants="Required billing fields are valid"
+  TRANSITIONS_TO ST-010b "Submitting" [E-010] {payment_valid} / SA-010
+END
+
+State ST-010b "Submitting"
+  owner=Design
+  description="Submission is in progress"
+  scope_id=C-010
+  invariants="Submission request has been issued"
 END
 
 Event E-010 "Submit"

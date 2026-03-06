@@ -19,7 +19,7 @@ For v0.1, this markdown document is explanatory and normative for extraction, wh
 
 - Core machine artifacts: `core/vocab.yaml`, `core/schema.json`, `core/contracts.yaml`, `core/views.yaml`
 - Governance overlays: `profiles/permissive.yaml`, `profiles/recommended.yaml`
-- `core/views.yaml` is currently a typed projection stub: inclusion rules are executable, and under-specified layout conventions are explicit TODO placeholders.
+- `core/views.yaml` now contains executable projection filters plus renderer defaults for annotations, lane mapping, branching, and state-emphasis conventions.
 
 ---
 
@@ -42,26 +42,32 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
 1. **Outcome–Opportunity Map**
    - Answers: *Why are we doing this? How will we measure success?*
    - Uses: `Outcome`, `Metric`, `Opportunity`, `Initiative`
+   - `INSTRUMENTED_AT` context may render as grouped metric annotations when targets are outside the view scope.
 
 2. **Journey Map**
    - Answers: *What steps happen over time, from the user’s perspective?*
    - Uses: `Stage`, `Step` (`PRECEDES`)
+   - Opportunity traceability is rendered from `Step.props.opportunity_refs`, not a separate v0.1 relationship.
 
 3. **Service Blueprint**
    - Answers: *What frontstage/backstage/system/policy work delivers each step?*
    - Uses: `Step`, `Process`, `SystemAction`, `Policy`, `DataEntity`
+   - Lanes derive from `Process.visibility` plus node-type defaults for system and policy.
 
 4. **IA / Place Map**
    - Answers: *What are the places in the product and how do they connect?*
    - Uses: `Area`, `Place` (`CONTAINS`, `NAVIGATES_TO`)
+   - `route_or_key`, `access`, and optional entry metadata render as node annotations.
 
 5. **Scenario Flow**
    - Answers: *How does a scenario traverse Steps and Places?*
    - Uses: `Step`, `Place`, optional `ViewState`
+   - Branch points are modeled as `Step.props.kind=decision`.
 
 6. **UI Contracts**
    - Answers: *What states and components exist within a Place, and how do they transition?*
    - Uses: `Place`, `ViewState`, `Component`, optional `State`, `Event`
+   - `ViewState` is the primary graph; `State` is scoped secondary detail.
 
 ---
 

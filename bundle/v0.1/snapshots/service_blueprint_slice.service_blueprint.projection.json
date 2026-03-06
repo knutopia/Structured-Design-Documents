@@ -7,24 +7,38 @@
     {"id": "J-021", "type": "Step", "name": "Receive Confirmation"},
     {"id": "PL-020", "type": "Policy", "name": "Retention Policy"},
     {"id": "PR-020", "type": "Process", "name": "Validate Claim"},
-    {"id": "PR-021", "type": "Process", "name": "Notify Customer"},
+    {"id": "PR-021", "type": "Process", "name": "Review Claim History"},
+    {"id": "PR-022", "type": "Process", "name": "Notify Customer"},
     {"id": "SA-020", "type": "SystemAction", "name": "Store Claim"},
-    {"id": "SA-021", "type": "SystemAction", "name": "Send Email"}
+    {"id": "SA-021", "type": "SystemAction", "name": "Load Claim History"},
+    {"id": "SA-022", "type": "SystemAction", "name": "Send Email"}
   ],
   "edges": [
     {"from": "J-020", "type": "PRECEDES", "to": "J-021"},
     {"from": "J-020", "type": "REALIZED_BY", "to": "PR-020"},
-    {"from": "J-021", "type": "REALIZED_BY", "to": "PR-021"},
+    {"from": "J-021", "type": "REALIZED_BY", "to": "PR-022"},
     {"from": "PR-020", "type": "CONSTRAINED_BY", "to": "PL-020"},
     {"from": "PR-020", "type": "DEPENDS_ON", "to": "SA-020"},
     {"from": "PR-020", "type": "PRECEDES", "to": "PR-021"},
     {"from": "PR-021", "type": "DEPENDS_ON", "to": "SA-021"},
+    {"from": "PR-021", "type": "PRECEDES", "to": "PR-022"},
+    {"from": "PR-022", "type": "DEPENDS_ON", "to": "SA-022"},
     {"from": "SA-020", "type": "CONSTRAINED_BY", "to": "PL-020"},
     {"from": "SA-020", "type": "READS", "to": "D-020"},
     {"from": "SA-020", "type": "WRITES", "to": "D-020"},
-    {"from": "SA-021", "type": "READS", "to": "D-020"}
+    {"from": "SA-021", "type": "READS", "to": "D-020"},
+    {"from": "SA-022", "type": "READS", "to": "D-020"}
+  ],
+  "lanes": [
+    {"id": "customer", "node_ids": ["J-020", "J-021"]},
+    {"id": "frontstage", "node_ids": ["PR-020"]},
+    {"id": "backstage", "node_ids": ["PR-021"]},
+    {"id": "support", "node_ids": ["PR-022"]},
+    {"id": "system", "node_ids": ["D-020", "SA-020", "SA-021", "SA-022"]},
+    {"id": "policy", "node_ids": ["PL-020"]}
   ],
   "notes": [
+    "Process lanes are derived from Process.props.visibility using the canonical frontstage/backstage/support values.",
     "EMITS to Event is omitted because Event is not part of service_blueprint node scope."
   ]
 }

@@ -65,7 +65,7 @@ Required: `order_index`
 
 **Step (`J`)**: unit of user intent/behavior (NOT a screen)
 Required: `actor`, `intent`, `success_criteria`
-Recommended: `channel/touchpoint`, `pain_points` (refs), `instrumentation_notes`
+Recommended: `channel/touchpoint`, `pain_points` (descriptive refs), `instrumentation_notes`, `opportunity_refs` (comma-separated Opportunity IDs)
 
 ---
 
@@ -75,8 +75,8 @@ Recommended: `channel/touchpoint`, `pain_points` (refs), `instrumentation_notes`
 Required: `scope`
 
 **Place (`P`)**: navigable/product location (route, destination, conceptual area)
-Required: `surface` (web/iOS/android/etc.), `route_or_key`, `access` (public/auth/role)
-Recommended: `primary_nav` (bool), `entry_points` (deep link, notification, etc.)
+Required: `surface` (web/iOS/android/etc.), `route_or_key`, `access` (`public`, `auth`, or `role:<slug>`)
+Recommended: `primary_nav` (`true`/`false`), `entry_points` (comma-separated `kind:value` entries such as `link:/billing,notification:payment_failed`)
 
 ---
 
@@ -92,6 +92,7 @@ Recommended: `a11y_constraints`, `telemetry_events`
 
 **State (`ST`)**: state machine state (when needed)
 Required: `scope_id` (Place/Component), `invariants` (what must be true)
+Recommended: render as nested detail when a ViewState graph already exists for the same Place
 
 **Event (`E`)**: named trigger (user/system)
 Required: `source_kind` (user/system/timer), `payload_schema` (lightweight)
@@ -102,6 +103,7 @@ Required: `source_kind` (user/system/timer), `payload_schema` (lightweight)
 
 **Process (`PR`)**: operational activity (front/back/support)
 Required: `visibility` (frontstage/backstage/support), `sla` (if any)
+Rendering default: `SystemAction` and `DataEntity` occupy a derived `system` lane and `Policy` occupies a derived `policy` lane
 
 **SystemAction (`SA`)**: discrete system operation/API call
 Required: `system_name`, `action` (verb), `failure_modes`
@@ -179,12 +181,12 @@ Required: `policy_owner` (Legal/Risk/Product/etc.), `enforcement_point` (where a
 
 ## 5) Rendering guidance (what each view “projects”)
 
-* **Outcome Map:** `O, M, OP, I` with `MEASURED_BY, SUPPORTS, ADDRESSES, IMPLEMENTED_BY`
-* **Journey:** `G, J` with `CONTAINS, PRECEDES` (+ references to `OP`)
-* **Service Blueprint:** `J, PR, SA, D, PL` with `REALIZED_BY, DEPENDS_ON, READS/WRITES, CONSTRAINED_BY`
-* **IA Map:** `A, P` with `CONTAINS, NAVIGATES_TO`
-* **Scenario Flow:** `J` + subset `P/VS` with `PRECEDES, REALIZED_BY, NAVIGATES_TO`
-* **UI Contracts:** `P/VS/C` and optionally `ST/E` with `COMPOSED_OF, TRANSITIONS_TO, EMITS, BINDS_TO`
+* **Outcome Map:** `O, M, OP, I` with `MEASURED_BY, SUPPORTS, ADDRESSES, IMPLEMENTED_BY` and grouped Metric instrumentation annotations when `INSTRUMENTED_AT` targets are out of scope
+* **Journey:** `G, J` with `CONTAINS, PRECEDES` plus `Step.props.opportunity_refs` annotations to `OP`
+* **Service Blueprint:** `J, PR, SA, D, PL` with `REALIZED_BY, DEPENDS_ON, READS/WRITES, CONSTRAINED_BY`, rendered in canonical customer/frontstage/backstage/support/system/policy lanes
+* **IA Map:** `A, P` with `CONTAINS, NAVIGATES_TO` plus route/access/entry metadata annotations
+* **Scenario Flow:** `J` + subset `P/VS` with `PRECEDES, REALIZED_BY, NAVIGATES_TO`, where branching Steps use `kind=decision`
+* **UI Contracts:** `P/VS/C` and optionally `ST/E` with `COMPOSED_OF, TRANSITIONS_TO, EMITS, BINDS_TO`, with `ViewState` primary and `State` nested by `scope_id`
 
 ---
 
