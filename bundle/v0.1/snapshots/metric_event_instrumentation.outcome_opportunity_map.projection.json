@@ -1,0 +1,143 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "outcome_opportunity_map",
+  "source_example": "metric_event_instrumentation",
+  "nodes": [
+    {
+      "id": "I-050",
+      "type": "Initiative",
+      "name": "Review Queue Instrumentation"
+    },
+    {
+      "id": "M-050",
+      "type": "Metric",
+      "name": "Alert Stream Coverage"
+    },
+    {
+      "id": "M-051",
+      "type": "Metric",
+      "name": "Manual Review Completion"
+    },
+    {
+      "id": "O-050",
+      "type": "Outcome",
+      "name": "Reduce Risk Review Delays"
+    },
+    {
+      "id": "OP-050",
+      "type": "Opportunity",
+      "name": "Review Queue Visibility"
+    }
+  ],
+  "edges": [
+    {
+      "from": "I-050",
+      "type": "ADDRESSES",
+      "to": "OP-050"
+    },
+    {
+      "from": "O-050",
+      "type": "MEASURED_BY",
+      "to": "M-050"
+    },
+    {
+      "from": "O-050",
+      "type": "MEASURED_BY",
+      "to": "M-051"
+    },
+    {
+      "from": "OP-050",
+      "type": "SUPPORTS",
+      "to": "O-050"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "M-050",
+        "references": [
+          {
+            "role": "instrumented_at",
+            "group": "event",
+            "target_id": "E-050",
+            "target_type": "Event",
+            "target_name": "Alert Emitted"
+          },
+          {
+            "role": "instrumented_at",
+            "group": "event",
+            "target_id": "E-051",
+            "target_type": "Event",
+            "target_name": "Review Completed Event"
+          }
+        ]
+      },
+      {
+        "node_id": "M-051",
+        "references": [
+          {
+            "role": "instrumented_at",
+            "group": "experience",
+            "target_id": "J-050",
+            "target_type": "Step",
+            "target_name": "Review Risk Alert"
+          },
+          {
+            "role": "instrumented_at",
+            "group": "event",
+            "target_id": "E-051",
+            "target_type": "Event",
+            "target_name": "Review Completed Event"
+          }
+        ]
+      }
+    ],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "I-050",
+      "type": "IMPLEMENTED_BY",
+      "to": "P-050",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type Place is outside the outcome_opportunity_map node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "M-050",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-050",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an event-group metric annotation because the target node type Event is outside the view node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "M-050",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-051",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an event-group metric annotation because the target node type Event is outside the view node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "M-051",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-051",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an event-group metric annotation because the target node type Event is outside the view node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "M-051",
+      "type": "INSTRUMENTED_AT",
+      "to": "J-050",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an experience-group metric annotation because the target node type Step is outside the view node scope."
+    }
+  ],
+  "notes": []
+}

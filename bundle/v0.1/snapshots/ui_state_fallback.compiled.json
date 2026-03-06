@@ -1,0 +1,172 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "C-060",
+      "type": "Component",
+      "name": "Review Panel",
+      "props": {
+        "description": "Panel for reviewing and submitting a case",
+        "inputs": "CaseRecord",
+        "outputs": "ReviewSubmitted",
+        "owner": "DesignSystem",
+        "responsibility": "Display case data and submit a review"
+      }
+    },
+    {
+      "id": "D-060",
+      "type": "DataEntity",
+      "name": "CaseRecord",
+      "props": {
+        "description": "Case record used during manual review",
+        "fields": "case_id,status",
+        "owner": "Data",
+        "system_of_record": "CaseDB"
+      }
+    },
+    {
+      "id": "E-060",
+      "type": "Event",
+      "name": "Submit Review",
+      "props": {
+        "description": "User submitted the case review",
+        "owner": "Design",
+        "payload_schema": "{case_id}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "P-060",
+      "type": "Place",
+      "name": "Case Review",
+      "props": {
+        "access": "auth",
+        "description": "Case review place without viewstate-specific rendering",
+        "owner": "Design",
+        "route_or_key": "/cases/review",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "SA-060",
+      "type": "SystemAction",
+      "name": "Save Review",
+      "props": {
+        "action": "saveReview",
+        "description": "Persist the submitted case review",
+        "failure_modes": "timeout",
+        "owner": "Eng",
+        "system_name": "CaseAPI"
+      }
+    },
+    {
+      "id": "ST-060a",
+      "type": "State",
+      "name": "Case Review Ready",
+      "props": {
+        "description": "The case review container is ready for submission",
+        "invariants": "Case data is loaded",
+        "owner": "Design",
+        "scope_id": "P-060"
+      }
+    },
+    {
+      "id": "ST-060b",
+      "type": "State",
+      "name": "Case Review Submitted",
+      "props": {
+        "description": "The review has been submitted from the place scope",
+        "invariants": "A submission request has been issued",
+        "owner": "Design",
+        "scope_id": "P-060"
+      }
+    },
+    {
+      "id": "ST-061a",
+      "type": "State",
+      "name": "Panel Idle",
+      "props": {
+        "description": "The review panel is idle and ready for input",
+        "invariants": "Editable fields are pristine",
+        "owner": "Design",
+        "scope_id": "C-060"
+      }
+    },
+    {
+      "id": "ST-061b",
+      "type": "State",
+      "name": "Panel Dirty",
+      "props": {
+        "description": "The review panel has local changes",
+        "invariants": "Local edits are pending submission",
+        "owner": "Design",
+        "scope_id": "C-060"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "C-060",
+      "type": "BINDS_TO",
+      "to": "D-060",
+      "to_name": "CaseRecord",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "field": "status"
+      }
+    },
+    {
+      "from": "C-060",
+      "type": "DEPENDS_ON",
+      "to": "SA-060",
+      "to_name": "Save Review",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-060",
+      "type": "EMITS",
+      "to": "E-060",
+      "to_name": "Submit Review",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-060",
+      "type": "COMPOSED_OF",
+      "to": "C-060",
+      "to_name": "Review Panel",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-060a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-060b",
+      "to_name": "Case Review Submitted",
+      "event": "E-060",
+      "guard": null,
+      "effect": "SA-060",
+      "props": {}
+    },
+    {
+      "from": "ST-061a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-061b",
+      "to_name": "Panel Dirty",
+      "event": "E-060",
+      "guard": "draft_ready",
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

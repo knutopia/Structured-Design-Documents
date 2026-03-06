@@ -25,6 +25,17 @@
       }
     },
     {
+      "id": "E-032",
+      "type": "Event",
+      "name": "Choose Email Notification",
+      "props": {
+        "description": "Email notification selected",
+        "owner": "Design",
+        "payload_schema": "{contact_method:email}",
+        "source_kind": "user"
+      }
+    },
+    {
       "id": "J-030",
       "type": "Step",
       "name": "Choose Fulfillment",
@@ -59,6 +70,43 @@
         "intent": "Choose a store for pickup",
         "owner": "Design",
         "success_criteria": "Pickup store selected"
+      }
+    },
+    {
+      "id": "J-033",
+      "type": "Step",
+      "name": "Choose Contact Method",
+      "props": {
+        "actor": "User",
+        "description": "User chooses how pickup instructions should be delivered",
+        "intent": "Choose an instruction delivery method",
+        "kind": "decision",
+        "owner": "Design",
+        "success_criteria": "Contact method selected"
+      }
+    },
+    {
+      "id": "J-034",
+      "type": "Step",
+      "name": "Confirm Email Notification",
+      "props": {
+        "actor": "User",
+        "description": "User confirms delivery by email",
+        "intent": "Confirm that instructions should be emailed",
+        "owner": "Design",
+        "success_criteria": "Email notification confirmed"
+      }
+    },
+    {
+      "id": "J-035",
+      "type": "Step",
+      "name": "Review Pickup Instructions",
+      "props": {
+        "actor": "User",
+        "description": "User reviews pickup instructions immediately",
+        "intent": "Review pickup instructions",
+        "owner": "Design",
+        "success_criteria": "Pickup instructions shown"
       }
     },
     {
@@ -98,6 +146,42 @@
       }
     },
     {
+      "id": "P-033",
+      "type": "Place",
+      "name": "Contact Method",
+      "props": {
+        "access": "auth",
+        "description": "Contact method decision place",
+        "owner": "Design",
+        "route_or_key": "/checkout/contact-method",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-034",
+      "type": "Place",
+      "name": "Email Confirmation",
+      "props": {
+        "access": "auth",
+        "description": "Email confirmation place",
+        "owner": "Design",
+        "route_or_key": "/checkout/contact-method/email",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-035",
+      "type": "Place",
+      "name": "Pickup Instructions",
+      "props": {
+        "access": "auth",
+        "description": "Pickup instructions place",
+        "owner": "Design",
+        "route_or_key": "/checkout/contact-method/instructions",
+        "surface": "web"
+      }
+    },
+    {
       "id": "VS-030a",
       "type": "ViewState",
       "name": "Fulfillment Choice",
@@ -128,6 +212,39 @@
         "description": "Pickup store selection state",
         "owner": "Design",
         "place_id": "P-032"
+      }
+    },
+    {
+      "id": "VS-033a",
+      "type": "ViewState",
+      "name": "Contact Method Choice",
+      "props": {
+        "data_required": "ContactMethodOptions",
+        "description": "Choice state for contact method selection",
+        "owner": "Design",
+        "place_id": "P-033"
+      }
+    },
+    {
+      "id": "VS-034a",
+      "type": "ViewState",
+      "name": "Email Confirmation State",
+      "props": {
+        "data_required": "EmailAddress",
+        "description": "Email confirmation state",
+        "owner": "Design",
+        "place_id": "P-034"
+      }
+    },
+    {
+      "id": "VS-035a",
+      "type": "ViewState",
+      "name": "Pickup Instructions State",
+      "props": {
+        "data_required": "PickupInstructions",
+        "description": "Pickup instructions state",
+        "owner": "Design",
+        "place_id": "P-035"
       }
     }
   ],
@@ -174,6 +291,16 @@
     },
     {
       "from": "J-031",
+      "type": "PRECEDES",
+      "to": "J-033",
+      "to_name": "Choose Contact Method",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-031",
       "type": "REALIZED_BY",
       "to": "P-031",
       "to_name": "Delivery Address",
@@ -207,6 +334,86 @@
       "type": "REALIZED_BY",
       "to": "VS-032a",
       "to_name": "Pickup Store Selector",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-033",
+      "type": "PRECEDES",
+      "to": "J-034",
+      "to_name": "Confirm Email Notification",
+      "event": "E-032",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-033",
+      "type": "PRECEDES",
+      "to": "J-035",
+      "to_name": "Review Pickup Instructions",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-033",
+      "type": "REALIZED_BY",
+      "to": "P-033",
+      "to_name": "Contact Method",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-033",
+      "type": "REALIZED_BY",
+      "to": "VS-033a",
+      "to_name": "Contact Method Choice",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-034",
+      "type": "REALIZED_BY",
+      "to": "P-034",
+      "to_name": "Email Confirmation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-034",
+      "type": "REALIZED_BY",
+      "to": "VS-034a",
+      "to_name": "Email Confirmation State",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-035",
+      "type": "REALIZED_BY",
+      "to": "P-035",
+      "to_name": "Pickup Instructions",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-035",
+      "type": "REALIZED_BY",
+      "to": "VS-035a",
+      "to_name": "Pickup Instructions State",
       "event": null,
       "guard": null,
       "effect": null,
@@ -263,6 +470,56 @@
       "props": {}
     },
     {
+      "from": "P-033",
+      "type": "CONTAINS",
+      "to": "VS-033a",
+      "to_name": "Contact Method Choice",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-033",
+      "type": "NAVIGATES_TO",
+      "to": "P-034",
+      "to_name": "Email Confirmation",
+      "event": "E-032",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-033",
+      "type": "NAVIGATES_TO",
+      "to": "P-035",
+      "to_name": "Pickup Instructions",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-034",
+      "type": "CONTAINS",
+      "to": "VS-034a",
+      "to_name": "Email Confirmation State",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-035",
+      "type": "CONTAINS",
+      "to": "VS-035a",
+      "to_name": "Pickup Instructions State",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
       "from": "VS-030a",
       "type": "TRANSITIONS_TO",
       "to": "VS-031a",
@@ -279,6 +536,26 @@
       "to_name": "Pickup Store Selector",
       "event": "E-031",
       "guard": "pickup_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-033a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-034a",
+      "to_name": "Email Confirmation State",
+      "event": "E-032",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-033a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-035a",
+      "to_name": "Pickup Instructions State",
+      "event": null,
+      "guard": null,
       "effect": null,
       "props": {}
     }

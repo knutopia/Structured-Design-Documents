@@ -20,6 +20,21 @@
       "name": "Choose Pickup Store"
     },
     {
+      "id": "J-033",
+      "type": "Step",
+      "name": "Choose Contact Method"
+    },
+    {
+      "id": "J-034",
+      "type": "Step",
+      "name": "Confirm Email Notification"
+    },
+    {
+      "id": "J-035",
+      "type": "Step",
+      "name": "Review Pickup Instructions"
+    },
+    {
       "id": "P-030",
       "type": "Place",
       "name": "Fulfillment"
@@ -35,6 +50,21 @@
       "name": "Pickup Store"
     },
     {
+      "id": "P-033",
+      "type": "Place",
+      "name": "Contact Method"
+    },
+    {
+      "id": "P-034",
+      "type": "Place",
+      "name": "Email Confirmation"
+    },
+    {
+      "id": "P-035",
+      "type": "Place",
+      "name": "Pickup Instructions"
+    },
+    {
       "id": "VS-030a",
       "type": "ViewState",
       "name": "Fulfillment Choice"
@@ -48,6 +78,21 @@
       "id": "VS-032a",
       "type": "ViewState",
       "name": "Pickup Store Selector"
+    },
+    {
+      "id": "VS-033a",
+      "type": "ViewState",
+      "name": "Contact Method Choice"
+    },
+    {
+      "id": "VS-034a",
+      "type": "ViewState",
+      "name": "Email Confirmation State"
+    },
+    {
+      "id": "VS-035a",
+      "type": "ViewState",
+      "name": "Pickup Instructions State"
     }
   ],
   "edges": [
@@ -73,6 +118,11 @@
     },
     {
       "from": "J-031",
+      "type": "PRECEDES",
+      "to": "J-033"
+    },
+    {
+      "from": "J-031",
       "type": "REALIZED_BY",
       "to": "P-031"
     },
@@ -92,6 +142,46 @@
       "to": "VS-032a"
     },
     {
+      "from": "J-033",
+      "type": "PRECEDES",
+      "to": "J-034"
+    },
+    {
+      "from": "J-033",
+      "type": "PRECEDES",
+      "to": "J-035"
+    },
+    {
+      "from": "J-033",
+      "type": "REALIZED_BY",
+      "to": "P-033"
+    },
+    {
+      "from": "J-033",
+      "type": "REALIZED_BY",
+      "to": "VS-033a"
+    },
+    {
+      "from": "J-034",
+      "type": "REALIZED_BY",
+      "to": "P-034"
+    },
+    {
+      "from": "J-034",
+      "type": "REALIZED_BY",
+      "to": "VS-034a"
+    },
+    {
+      "from": "J-035",
+      "type": "REALIZED_BY",
+      "to": "P-035"
+    },
+    {
+      "from": "J-035",
+      "type": "REALIZED_BY",
+      "to": "VS-035a"
+    },
+    {
       "from": "P-030",
       "type": "NAVIGATES_TO",
       "to": "P-031"
@@ -102,6 +192,16 @@
       "to": "P-032"
     },
     {
+      "from": "P-033",
+      "type": "NAVIGATES_TO",
+      "to": "P-034"
+    },
+    {
+      "from": "P-033",
+      "type": "NAVIGATES_TO",
+      "to": "P-035"
+    },
+    {
       "from": "VS-030a",
       "type": "TRANSITIONS_TO",
       "to": "VS-031a"
@@ -110,12 +210,28 @@
       "from": "VS-030a",
       "type": "TRANSITIONS_TO",
       "to": "VS-032a"
+    },
+    {
+      "from": "VS-033a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-034a"
+    },
+    {
+      "from": "VS-033a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-035a"
     }
   ],
   "derived": {
     "node_annotations": [
       {
         "node_id": "J-030",
+        "display": {
+          "shape": "diamond"
+        }
+      },
+      {
+        "node_id": "J-033",
         "display": {
           "shape": "diamond"
         }
@@ -137,13 +253,26 @@
         "role": "branch_label",
         "display_label": "pickup_selected",
         "label_source": "guard"
+      },
+      {
+        "from": "J-033",
+        "type": "PRECEDES",
+        "to": "J-034",
+        "role": "branch_label",
+        "display_label": "E-032",
+        "label_source": "event"
+      },
+      {
+        "from": "J-033",
+        "type": "PRECEDES",
+        "to": "J-035",
+        "role": "branch_label",
+        "display_label": "Review Pickup Instructions",
+        "label_source": "to_name"
       }
     ],
-    "node_groups": [
-
-    ],
-    "view_metadata": {
-    }
+    "node_groups": [],
+    "view_metadata": {}
   },
   "omissions": [
     {
@@ -169,9 +298,31 @@
       "to": "VS-032a",
       "reason": "relationship_not_in_scope",
       "detail": "CONTAINS is outside the scenario_flow edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-033",
+      "type": "CONTAINS",
+      "to": "VS-033a",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-034",
+      "type": "CONTAINS",
+      "to": "VS-034a",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-035",
+      "type": "CONTAINS",
+      "to": "VS-035a",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
     }
   ],
-  "notes": [
-
-  ]
+  "notes": []
 }

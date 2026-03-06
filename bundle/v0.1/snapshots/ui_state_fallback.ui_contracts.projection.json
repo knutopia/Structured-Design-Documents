@@ -1,0 +1,123 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "ui_contracts",
+  "source_example": "ui_state_fallback",
+  "nodes": [
+    {
+      "id": "C-060",
+      "type": "Component",
+      "name": "Review Panel"
+    },
+    {
+      "id": "D-060",
+      "type": "DataEntity",
+      "name": "CaseRecord"
+    },
+    {
+      "id": "E-060",
+      "type": "Event",
+      "name": "Submit Review"
+    },
+    {
+      "id": "P-060",
+      "type": "Place",
+      "name": "Case Review"
+    },
+    {
+      "id": "SA-060",
+      "type": "SystemAction",
+      "name": "Save Review"
+    },
+    {
+      "id": "ST-060a",
+      "type": "State",
+      "name": "Case Review Ready"
+    },
+    {
+      "id": "ST-060b",
+      "type": "State",
+      "name": "Case Review Submitted"
+    },
+    {
+      "id": "ST-061a",
+      "type": "State",
+      "name": "Panel Idle"
+    },
+    {
+      "id": "ST-061b",
+      "type": "State",
+      "name": "Panel Dirty"
+    }
+  ],
+  "edges": [
+    {
+      "from": "C-060",
+      "type": "BINDS_TO",
+      "to": "D-060"
+    },
+    {
+      "from": "C-060",
+      "type": "DEPENDS_ON",
+      "to": "SA-060"
+    },
+    {
+      "from": "C-060",
+      "type": "EMITS",
+      "to": "E-060"
+    },
+    {
+      "from": "P-060",
+      "type": "COMPOSED_OF",
+      "to": "C-060"
+    },
+    {
+      "from": "ST-060a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-060b"
+    },
+    {
+      "from": "ST-061a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-061b"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [
+      {
+        "id": "secondary_state_group:C-060",
+        "role": "secondary_state_group",
+        "label": "C-060",
+        "node_ids": [
+          "ST-061a",
+          "ST-061b"
+        ],
+        "scope_id": "C-060"
+      },
+      {
+        "id": "secondary_state_group:P-060",
+        "role": "secondary_state_group",
+        "label": "P-060",
+        "node_ids": [
+          "ST-060a",
+          "ST-060b"
+        ],
+        "scope_id": "P-060"
+      }
+    ],
+    "view_metadata": {
+      "transition_graph_priority": {
+        "primary_node_type": "ViewState",
+        "secondary_node_type": "State",
+        "secondary_render_mode": "inset",
+        "fallback_to_secondary_when_primary_absent": true
+      }
+    }
+  },
+  "omissions": [],
+  "notes": [
+    "No ViewState nodes are present in this example; State acts as the effective primary transition graph."
+  ]
+}

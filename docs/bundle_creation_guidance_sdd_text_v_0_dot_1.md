@@ -130,7 +130,7 @@ A stricter governance profile that can be enabled in validation:
 
 ### 7) bundle/v0.1/examples/ and snapshots/
 
-Provide 2–3 example `.sdd` models that cover multiple node/edge types and at least 2 views. For each example:
+Provide a small corpus of example `.sdd` models. Include at least 2–3 examples overall, covering multiple node/edge types and at least 2 views across the corpus. At least one example should visibly exercise source nesting (`+ ... END`) in `.sdd` authoring; that coverage is intentionally observable only in source because canonical JSON compilation remains literal.
 
 - snapshot compiled canonical JSON IR (deterministic ordering)
 - snapshot of at least one view projection output (format can be JSON projection or a text format like Mermaid)

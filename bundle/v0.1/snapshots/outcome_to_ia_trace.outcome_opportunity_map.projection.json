@@ -49,29 +49,24 @@
         "references": [
           {
             "role": "instrumented_at",
-            "group": "event",
-            "target_id": "E-001",
-            "target_type": "Event",
-            "target_name": "Payment Submitted"
-          },
-          {
-            "role": "instrumented_at",
             "group": "experience",
             "target_id": "J-002",
             "target_type": "Step",
             "target_name": "Confirm Payment"
+          },
+          {
+            "role": "instrumented_at",
+            "group": "event",
+            "target_id": "E-001",
+            "target_type": "Event",
+            "target_name": "Payment Submitted"
           }
         ]
       }
     ],
-    "edge_annotations": [
-
-    ],
-    "node_groups": [
-
-    ],
-    "view_metadata": {
-    }
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
   },
   "omissions": [
     {
@@ -99,7 +94,5 @@
       "detail": "Rendered as an experience-group metric annotation because the target node type Step is outside the view node scope."
     }
   ],
-  "notes": [
-
-  ]
+  "notes": []
 }

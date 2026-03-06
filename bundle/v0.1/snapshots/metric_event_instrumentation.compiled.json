@@ -1,0 +1,215 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "E-050",
+      "type": "Event",
+      "name": "Alert Emitted",
+      "props": {
+        "description": "A risk alert was emitted into the event stream",
+        "owner": "Analytics",
+        "payload_schema": "{alert_id,risk_level}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-051",
+      "type": "Event",
+      "name": "Review Completed Event",
+      "props": {
+        "description": "A manual review completion event was recorded",
+        "owner": "Analytics",
+        "payload_schema": "{review_id,disposition}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "I-050",
+      "type": "Initiative",
+      "name": "Review Queue Instrumentation",
+      "props": {
+        "description": "Improve visibility into risk review completion",
+        "non_goals": "No workflow automation changes",
+        "owner": "Product",
+        "status": "active"
+      }
+    },
+    {
+      "id": "J-050",
+      "type": "Step",
+      "name": "Review Risk Alert",
+      "props": {
+        "actor": "Analyst",
+        "description": "Analyst reviews a flagged risk alert",
+        "intent": "Assess the flagged alert",
+        "owner": "Design",
+        "success_criteria": "Alert reviewed and disposition recorded"
+      }
+    },
+    {
+      "id": "M-050",
+      "type": "Metric",
+      "name": "Alert Stream Coverage",
+      "props": {
+        "cadence": "daily",
+        "definition": "captured_alerts / emitted_alerts",
+        "description": "Share of risk alerts captured in the event stream",
+        "metric_type": "diagnostic",
+        "owner": "Analytics",
+        "source": "event_stream"
+      }
+    },
+    {
+      "id": "M-051",
+      "type": "Metric",
+      "name": "Manual Review Completion",
+      "props": {
+        "cadence": "weekly",
+        "definition": "completed_reviews / started_reviews",
+        "description": "Share of manual reviews completed without escalation",
+        "metric_type": "kpi",
+        "owner": "Analytics",
+        "source": "warehouse"
+      }
+    },
+    {
+      "id": "O-050",
+      "type": "Outcome",
+      "name": "Reduce Risk Review Delays",
+      "props": {
+        "description": "Reduce the time required to complete manual risk reviews",
+        "owner": "Product",
+        "scope": "risk_review",
+        "stakeholder": "Operations",
+        "time_horizon": "Q4"
+      }
+    },
+    {
+      "id": "OP-050",
+      "type": "Opportunity",
+      "name": "Review Queue Visibility",
+      "props": {
+        "description": "Analysts lack timely visibility into stuck reviews",
+        "evidence": "Ops interviews and queue export analysis",
+        "owner": "Design",
+        "segment": "ops_analysts",
+        "severity": "high"
+      }
+    },
+    {
+      "id": "P-050",
+      "type": "Place",
+      "name": "Risk Review Queue",
+      "props": {
+        "access": "role:risk_analyst",
+        "description": "Queue where analysts review risk alerts",
+        "owner": "Design",
+        "route_or_key": "/risk/reviews",
+        "surface": "web"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "I-050",
+      "type": "ADDRESSES",
+      "to": "OP-050",
+      "to_name": "Review Queue Visibility",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-050",
+      "type": "IMPLEMENTED_BY",
+      "to": "P-050",
+      "to_name": "Risk Review Queue",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-050",
+      "type": "REALIZED_BY",
+      "to": "P-050",
+      "to_name": "Risk Review Queue",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-050",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-050",
+      "to_name": "Alert Emitted",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-050",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-051",
+      "to_name": "Review Completed Event",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-051",
+      "type": "INSTRUMENTED_AT",
+      "to": "E-051",
+      "to_name": "Review Completed Event",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-051",
+      "type": "INSTRUMENTED_AT",
+      "to": "J-050",
+      "to_name": "Review Risk Alert",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-050",
+      "type": "MEASURED_BY",
+      "to": "M-050",
+      "to_name": "Alert Stream Coverage",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-050",
+      "type": "MEASURED_BY",
+      "to": "M-051",
+      "to_name": "Manual Review Completion",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-050",
+      "type": "SUPPORTS",
+      "to": "O-050",
+      "to_name": "Reduce Risk Review Delays",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

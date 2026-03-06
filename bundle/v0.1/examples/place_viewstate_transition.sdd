@@ -1,5 +1,8 @@
 SDD-TEXT 0.1
 
+# Nested blocks intentionally cover source-level authoring convenience.
+# Relationships remain explicit and are still authored separately.
+
 Place P-010 "Billing"
   owner=Design
   description="Billing place"
@@ -13,6 +16,20 @@ Place P-010 "Billing"
   COMPOSED_OF C-010 "Billing Form"
   CONSTRAINED_BY PL-010 "PCI Policy"
   NAVIGATES_TO P-011 "Confirmation" [E-010] {payment_valid}
+  + ViewState VS-010a "Billing Editing"
+    owner=Design
+    description="Editing state for billing"
+    place_id=P-010
+    data_required=PaymentMethod
+    COMPOSED_OF C-011 "Submit Button"
+    TRANSITIONS_TO VS-010b "Billing Success" [E-010] {payment_valid} / SA-010
+  END
+  + ViewState VS-010b "Billing Success"
+    owner=Design
+    description="Success state after submit"
+    place_id=P-010
+    data_required=Receipt
+  END
 END
 
 Place P-011 "Confirmation"
@@ -23,22 +40,6 @@ Place P-011 "Confirmation"
   access=role:billing_agent
 END
 
-ViewState VS-010a "Billing Editing"
-  owner=Design
-  description="Editing state for billing"
-  place_id=P-010
-  data_required=PaymentMethod
-  COMPOSED_OF C-011 "Submit Button"
-  TRANSITIONS_TO VS-010b "Billing Success" [E-010] {payment_valid} / SA-010
-END
-
-ViewState VS-010b "Billing Success"
-  owner=Design
-  description="Success state after submit"
-  place_id=P-010
-  data_required=Receipt
-END
-
 Component C-010 "Billing Form"
   owner=DesignSystem
   description="Form collecting billing details"
@@ -47,6 +48,19 @@ Component C-010 "Billing Form"
   outputs=SubmitRequested
   BINDS_TO D-010 "Subscription" field=status
   DEPENDS_ON SA-010 "Save Subscription"
+  + State ST-010a "Form Ready"
+    owner=Design
+    description="Validation state before submission"
+    scope_id=C-010
+    invariants="Required billing fields are valid"
+    TRANSITIONS_TO ST-010b "Submitting" [E-010] {payment_valid} / SA-010
+  END
+  + State ST-010b "Submitting"
+    owner=Design
+    description="Submission is in progress"
+    scope_id=C-010
+    invariants="Submission request has been issued"
+  END
 END
 
 Component C-011 "Submit Button"
@@ -56,21 +70,6 @@ Component C-011 "Submit Button"
   inputs=Click
   outputs=SubmitClicked
   EMITS E-010 "Submit"
-END
-
-State ST-010a "Form Ready"
-  owner=Design
-  description="Validation state before submission"
-  scope_id=C-010
-  invariants="Required billing fields are valid"
-  TRANSITIONS_TO ST-010b "Submitting" [E-010] {payment_valid} / SA-010
-END
-
-State ST-010b "Submitting"
-  owner=Design
-  description="Submission is in progress"
-  scope_id=C-010
-  invariants="Submission request has been issued"
 END
 
 Event E-010 "Submit"

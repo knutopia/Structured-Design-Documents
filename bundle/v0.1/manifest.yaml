@@ -28,11 +28,19 @@ examples:
       - snapshots/outcome_to_ia_trace.outcome_opportunity_map.projection.json
       - snapshots/outcome_to_ia_trace.journey_map.projection.json
       - snapshots/outcome_to_ia_trace.ia_place_map.projection.json
+  - path: examples/metric_event_instrumentation.sdd
+    compiled_snapshot: snapshots/metric_event_instrumentation.compiled.json
+    projection_snapshots:
+      - snapshots/metric_event_instrumentation.outcome_opportunity_map.projection.json
   - path: examples/place_viewstate_transition.sdd
     compiled_snapshot: snapshots/place_viewstate_transition.compiled.json
     projection_snapshots:
       - snapshots/place_viewstate_transition.ui_contracts.projection.json
       - snapshots/place_viewstate_transition.ia_place_map.projection.json
+  - path: examples/ui_state_fallback.sdd
+    compiled_snapshot: snapshots/ui_state_fallback.compiled.json
+    projection_snapshots:
+      - snapshots/ui_state_fallback.ui_contracts.projection.json
   - path: examples/scenario_branching.sdd
     compiled_snapshot: snapshots/scenario_branching.compiled.json
     projection_snapshots:
