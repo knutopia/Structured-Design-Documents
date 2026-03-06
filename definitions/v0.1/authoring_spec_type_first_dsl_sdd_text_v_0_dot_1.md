@@ -2,6 +2,10 @@
 
 SDD-Text is a compact, human- and LLM-friendly DSL for authoring a typed product/design graph. It compiles deterministically into canonical JSON for validation (e.g., JSON Schema) and rendering into multiple diagram views.
 
+Machine-readable extraction target for source parsing behavior: `bundle/v0.1/core/syntax.yaml`.
+
+This document is intentionally compatible with the EBNF grammar. For extraction into `core/syntax.yaml`, it provides human-oriented operational clarifications such as default version behavior, fixed edge-element order, and canonical compilation expectations; the grammar remains primary for formal parse structure and lexical precision.
+
 ---
 
 ## 0. Versioning

@@ -16,17 +16,19 @@ Other folders:
 - definitions/vXXX/ houses definitions and rationale for version XXX (currently version 0.1)
 - bundle/vXXX/ houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
 
-## v0.1 Source-of-Truth Policy (Transitional Split)
+## v0.1 Source-of-Truth Policy
 
-- During extraction, markdown files in `definitions/v0.1/` are the normative input.
-- After extraction, files in `bundle/v0.1/` are the machine-readable source of truth for tools.
-- Markdown remains explanatory commentary and rationale, and should stay consistent with the bundle.
+- Files in `bundle/v0.1/` are the machine-readable source of truth for tools.
+- Markdown files in `definitions/v0.1/` remains explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
+
+## Project Achievements
+
+### 1. [DONE] Create a well-defined set of specs for version 0.1, in folder bundle/v0.1/
+See 
+docs/Done/[Done] bundle_creation_guidance_sdd_text_v_0_dot_1.md
+docs/bundle_v0_1_extraction_sync_report.md
 
 ## Current Project Goals
-
-### 1. Create a well-defined set of specs for version 0.1, in folder bundle/v0.1/
-
-See docs/bundle_creation_guidance_sdd_text_v_0_dot_1.md
 
 ### 2. Create initial tool chain: Compiler, Validator, Renderer
 

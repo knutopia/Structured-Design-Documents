@@ -12,6 +12,9 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
 - `bundle/v0.1/core/vocab.yaml`
   - Sources: `definitions/v0.1/readme_structured_design_diagrams_sdd_text_v_0_dot_1.md`, `definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md`, `definitions/v0.1/ebnf_grammar_sdd_text_v_0_dot_1.md`, `definitions/v0.1/json_schema_sdd_text_v_0_dot_1.md`
   - Method: closed token set from canonical enums/token lists; no token expansion.
+- `bundle/v0.1/core/syntax.yaml`
+  - Sources: `definitions/v0.1/ebnf_grammar_sdd_text_v_0_dot_1.md`, `definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md`
+  - Method: normalized extraction of normative source syntax into a machine-loadable, line-oriented parser contract; canonical token inventories remain referenced from `bundle/v0.1/core/vocab.yaml` to avoid duplication.
 - `bundle/v0.1/core/contracts.yaml`
   - Source: `definitions/v0.1/endpoint_contracts_semantic_rules_sdd_text_v_0_dot_1.md`
   - Method: endpoint pairs and constraints encoded as machine-loadable rules with profile-aware severities.
@@ -32,6 +35,8 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
 
 - Source-of-truth tension between top-level readmes and extraction guidance.
   - Resolution: transitional split encoded in docs; markdown is normative input for extraction, bundle governs machine behavior post-extraction.
+- Grammar and authoring spec are intentionally compatible but distribute syntax detail differently because they serve different audiences.
+  - Resolution: `core/syntax.yaml` treats the grammar doc as primary for formal structure, lexical precision, and parse precedence, and uses the authoring spec for operational clarifications such as default version behavior and fixed edge-element order.
 - View definitions were initially less operational than syntax/contracts.
   - Resolution: `core/views.yaml` now encodes explicit renderer defaults for metric annotations, opportunity references, lane mapping, IA metadata, branching decisions, and ViewState-vs-State precedence.
 - Projection snapshots had view-specific top-level shapes that were harder to consume consistently.
@@ -40,6 +45,8 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
   - Resolution: aliases recorded under `aliases_informative` in vocab; no additions to canonical relationship token set.
 - Event annotation strictness (`[Event]` as label vs ID).
   - Resolution: permissive profile allows labels with warning; recommended profile requires Event node ID references for `TRANSITIONS_TO`.
+- Unknown backslash escapes in quoted source strings.
+  - Resolution: `core/syntax.yaml` preserves `\\"` and `\\\\` as standardized escapes and treats other backslash sequences as literal characters for v0.1 parser behavior.
 - `ViewState` parentage (`place_id` vs `CONTAINS`).
   - Resolution: `place_id` treated as authoritative field; recommended profile requires explicit `CONTAINS` or explicitly marked derived containment.
 
@@ -51,6 +58,10 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
   - Clarified extraction-time and post-extraction governance responsibilities.
 - `definitions/v0.1/readme_structured_design_diagrams_sdd_text_v_0_dot_1.md`
   - Added `v0.1 Bundle Alignment` section, profile-aware validation note, and short design-note rationale for downstream projection normalization.
+- `definitions/v0.1/ebnf_grammar_sdd_text_v_0_dot_1.md`
+  - Added machine-readable extraction target note and clarified its primary role for formal structure, lexical precision, and parse precedence during `core/syntax.yaml` extraction.
+- `definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md`
+  - Added machine-readable extraction target note and clarified its companion role for operational authoring and canonical-compilation guidance during `core/syntax.yaml` extraction.
 - `definitions/v0.1/json_schema_sdd_text_v_0_dot_1.md`
   - Added machine-readable extraction target path note.
 - `definitions/v0.1/endpoint_contracts_semantic_rules_sdd_text_v_0_dot_1.md`

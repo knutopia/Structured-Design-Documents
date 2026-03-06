@@ -5,6 +5,7 @@ language_version: "0.1"
 
 core:
   vocab: core/vocab.yaml
+  syntax: core/syntax.yaml
   schema: core/schema.json
   contracts: core/contracts.yaml
   # Downstream projection normalization does not change .sdd authoring.
@@ -55,6 +56,7 @@ compatibility:
   requires_compiler_min: "0.1.0"
   notes:
     - Core vocabulary is closed; non-canonical aliases are informative and must not be emitted by compilers.
+    - Source-text parsing follows core/syntax.yaml; post-extraction tooling should treat it as the normative machine-readable parser contract for .sdd files.
     - Projection snapshots follow core/projection_schema.json; that schema governs downstream renderer outputs, not .sdd authoring.
     - Views provide operational projection definitions and renderer defaults; full spatial layout remains renderer-specific.
     - Post-extraction policy treats this bundle as machine-readable source of truth for tooling.

@@ -2,6 +2,10 @@
 
 This document defines the **normative syntax** of SDD-Text v0.1 using EBNF.
 
+Machine-readable extraction target: `bundle/v0.1/core/syntax.yaml`.
+
+This grammar is intentionally compatible with the Authoring Spec. For extraction into `core/syntax.yaml`, it is the primary source for formal parse structure, lexical precision, and line-classification precedence; the Authoring Spec supplies human-oriented operational clarifications without changing syntax.
+
 **Notes**
 - This grammar defines **parsing** only. Semantic validity (endpoint contracts, required props, etc.) is defined in **SDD-Text v0.1 Endpoint Contracts** and in the JSON Schema.
 - Indentation is **not** semantically meaningful.
