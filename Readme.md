@@ -13,8 +13,8 @@ For orientation, read the documents
 
 Other folders:
 
-- file:///definitions/vXXX/ houses definitions and rationale for version XXX (currently version 0.1)
-- file:///bundle/vXXX/ houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
+- file:///definitions (/vXXX) houses definitions and rationale for version XXX (currently version 0.1)
+- file:///bundle (/vXXX) houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
 
 ## v0.1 Source-of-Truth Policy
 
