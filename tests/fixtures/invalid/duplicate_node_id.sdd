@@ -1,0 +1,16 @@
+Place P-001 "Billing"
+  owner=Design
+  description="Billing place"
+  surface=web
+  route_or_key=/billing
+  access=auth
+END
+
+Place P-001 "Billing Again"
+  owner=Design
+  description="Billing place"
+  surface=web
+  route_or_key=/billing-again
+  access=auth
+END
+

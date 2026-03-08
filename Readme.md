@@ -32,4 +32,26 @@ docs/bundle_v0_1_extraction_sync_report.md
 
 ### 2. Create initial tool chain: Compiler, Validator, Renderer
 
-Actual steps and architecture to be determined.
+The initial TypeScript toolchain is now in place at repo root as package `sdd-toolchain`.
+
+Current scope:
+
+- one shared engine with three CLI commands: `compile`, `validate`, and `render`
+- spec-driven parsing, compilation, validation, and IA view rendering against `bundle/v0.1/`
+- first supported end-to-end render slice: `ia_place_map`
+- render targets: DOT and Mermaid source text
+
+Contributor reference docs:
+
+- `docs/toolchain/architecture.md`
+- `docs/toolchain/decisions.md`
+- `docs/toolchain/development.md`
+- `docs/toolchain/deferred_items.md`
+
+Common commands:
+
+- `pnpm build`
+- `pnpm test`
+- `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
+- `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
+- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`

@@ -1,0 +1,8 @@
+digraph ia_place_map {
+  rankdir=LR;
+  node [shape=box];
+  "P-010" [label="Billing\\n/billing\\n[auth]\\nentry_points: link:/billing,notification:payment_failed\\nprimary_nav: true"];
+  "P-011" [label="Confirmation\\n/confirmation\\n[role:billing_agent]"];
+  "P-010" -> "P-011";
+}
+

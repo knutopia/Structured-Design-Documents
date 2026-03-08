@@ -1,0 +1,15 @@
+Area A-001 "Checkout Area"
+  owner=Design
+  description="Checkout IA"
+  scope=checkout
+  CONTAINS P-001 "Billing"
+END
+
+Place P-001 "Billing"
+  owner=Design
+  description="Billing place"
+  surface=web
+  route_or_key=/billing
+  access=private
+END
+

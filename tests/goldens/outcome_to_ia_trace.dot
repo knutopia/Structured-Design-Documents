@@ -1,0 +1,11 @@
+digraph ia_place_map {
+  rankdir=LR;
+  node [shape=box];
+  subgraph cluster_A_001 {
+    label="Checkout Area";
+    "P-001" [label="Billing\\n/checkout/billing\\n[auth]"];
+    "P-002" [label="Review\\n/checkout/review\\n[auth]"];
+  }
+  "P-001" -> "P-002";
+}
+
