@@ -7,14 +7,14 @@ This project aims to
 
 For orientation, read the documents
 
-- initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md
-- initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md
-- initial_concepts/Initial Concepts2 One-page Schema v0dot1.md
+- file:"///initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md"
+- file:"///initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md"
+- file:"///initial_concepts/Initial Concepts2 One-page Schema v0dot1.md"
 
 Other folders:
 
-- definitions/vXXX/ houses definitions and rationale for version XXX (currently version 0.1)
-- bundle/vXXX/ houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
+- file:///definitions/vXXX/ houses definitions and rationale for version XXX (currently version 0.1)
+- file:///bundle/vXXX/ houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
 
 ## v0.1 Source-of-Truth Policy
 
@@ -25,12 +25,13 @@ Other folders:
 
 ### 1. [DONE] Create a well-defined set of specs for version 0.1, in folder bundle/v0.1/
 See 
-docs/Done/[Done] bundle_creation_guidance_sdd_text_v_0_dot_1.md
-docs/bundle_v0_1_extraction_sync_report.md
+file:"///docs/Done/[Done] bundle_creation_guidance_sdd_text_v_0_dot_1.md"
+file:"///docs/bundle_v0_1_extraction_sync_report.md"
 
-## Current Project Goals
-
-### 2. Create initial tool chain: Compiler, Validator, Renderer
+### 2.1 [DONE] Created initial Compiler, Validator, Renderer toolchain
+See:
+file:\\\docs\toolchain
+file:\\\docs\bundle_v0_1_extraction_sync_report.md
 
 The initial TypeScript toolchain is now in place at repo root as package `sdd-toolchain`.
 
@@ -55,3 +56,17 @@ Common commands:
 - `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
+
+## Current Project Goals
+
+### 2.2 Test & Run the New Toolchain
+- Install required local tooling (Node 22 and `pnpm`)
+- Install optional local tooling (Mermaid and Graphviz visualization capability)
+- Actually test the toolchain locally
+- Generate rendered mermaid & graphviz output from .sdd sources
+
+### 2.3 Create Command Line Actions
+- Create command line actions to run toolchain and execute mermaid / graphviz visualization as PNG
+
+### 2.4 Expand the New Toolchain to Cover Remaining View Types
+
