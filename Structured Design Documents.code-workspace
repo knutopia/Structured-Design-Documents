@@ -1,5 +1,9 @@
 {
-	"folders": [],
+	"folders": [
+		{
+			"path": "."
+		}
+	],
 	"settings": {
 		"terminal.integrated.env.osx": {
 			"PATH": "/Users/knut/.platformio/penv/bin:/Users/knut/.platformio/penv:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
