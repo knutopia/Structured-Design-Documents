@@ -4,6 +4,10 @@ function escapeLabel(text: string): string {
   return text.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
+function formatMultilineLabel(lines: string[]): string {
+  return lines.map((line) => escapeLabel(line)).join("\\n");
+}
+
 function quoteId(id: string): string {
   return `"${escapeLabel(id)}"`;
 }
@@ -23,13 +27,13 @@ export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel): string {
       if (!place) {
         continue;
       }
-      lines.push(`    ${quoteId(place.id)} [label="${escapeLabel(place.labelLines.join("\\n"))}"];`);
+      lines.push(`    ${quoteId(place.id)} [label="${formatMultilineLabel(place.labelLines)}"];`);
     }
     lines.push("  }");
   }
 
   for (const place of model.topLevelPlaces) {
-    lines.push(`  ${quoteId(place.id)} [label="${escapeLabel(place.labelLines.join("\\n"))}"];`);
+    lines.push(`  ${quoteId(place.id)} [label="${formatMultilineLabel(place.labelLines)}"];`);
   }
 
   for (const edge of model.edges) {
@@ -39,4 +43,3 @@ export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel): string {
   lines.push("}");
   return lines.join("\n");
 }
-

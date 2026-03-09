@@ -176,7 +176,7 @@ describe("CLI wrappers", () => {
   });
 
   it("show derives a sibling PNG path by default", async () => {
-    const { deps } = createDeps();
+    const { deps, stderr } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -191,10 +191,11 @@ describe("CLI wrappers", () => {
       "digraph G {}",
       "/repo/bundle/v0.1/examples/outcome_to_ia_trace.png"
     );
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.png");
   });
 
   it("show respects an explicit preview output path", async () => {
-    const { deps } = createDeps();
+    const { deps, stderr } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -208,6 +209,23 @@ describe("CLI wrappers", () => {
 
     expect(result.exitCode).toBe(0);
     expect(deps.renderDotToPng).toHaveBeenCalledWith("digraph G {}", "/tmp/custom.png");
+    expect(stderr.join("")).toContain("Wrote /tmp/custom.png");
+  });
+
+  it("announces DOT files written via --out", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "dot",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--out",
+      "/tmp/outcome.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/outcome.dot", "digraph G {}");
+    expect(stderr.join("")).toContain("Wrote /tmp/outcome.dot");
   });
 
   it("show stops before Graphviz when validation fails", async () => {
@@ -239,6 +257,72 @@ describe("CLI wrappers", () => {
     expect(result.exitCode).toBe(1);
     expect(deps.renderDotToPng).not.toHaveBeenCalled();
     expect(stderr.join("")).toContain("validate.failed");
+  });
+
+  it("rejects mismatched DOT output extensions", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "dot",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--out",
+      "/tmp/outcome.mmd"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("--out expects a .dot file");
+    expect(deps.renderSource).not.toHaveBeenCalled();
+  });
+
+  it("rejects mismatched Mermaid output extensions", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "mmd",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--out",
+      "/tmp/outcome.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("--out expects a .mmd file");
+    expect(deps.renderSource).not.toHaveBeenCalled();
+  });
+
+  it("rejects mismatched PNG output extensions", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--out",
+      "/tmp/outcome.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("--out expects a .png file");
+    expect(deps.renderSource).not.toHaveBeenCalled();
+  });
+
+  it("rejects mismatched png-out extensions", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "dot",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--png-out",
+      "/tmp/outcome.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("--png-out expects a .png file");
+    expect(deps.renderSource).not.toHaveBeenCalled();
   });
 
   it("show reports a known-but-not-yet-renderable view clearly", async () => {

@@ -54,6 +54,11 @@ export interface RunCliResult {
   exitCode: number;
 }
 
+interface OutputValidationResult {
+  valid: boolean;
+  message?: string;
+}
+
 function appendLine(content: string): string {
   return content.endsWith("\n") ? content : `${content}\n`;
 }
@@ -133,7 +138,7 @@ function writeDiagnostics(io: Pick<CliDeps, "stderr">, diagnostics: Diagnostic[]
 }
 
 async function writeTextOutput(
-  deps: Pick<CliDeps, "stdout" | "writeTextFile">,
+  deps: Pick<CliDeps, "stdout" | "stderr" | "writeTextFile">,
   outputPath: string | undefined,
   content: string
 ): Promise<void> {
@@ -142,12 +147,38 @@ async function writeTextOutput(
     return;
   }
 
-  await deps.writeTextFile(outputPath, content);
+  const resolvedPath = path.resolve(outputPath);
+  await deps.writeTextFile(resolvedPath, content);
+  deps.stderr(appendLine(`Wrote ${resolvedPath}`));
+}
+
+function announceFileWrite(io: Pick<CliDeps, "stderr">, outputPath: string): void {
+  io.stderr(appendLine(`Wrote ${path.resolve(outputPath)}`));
 }
 
 function replaceExtension(filePath: string, extension: string): string {
   const parsed = path.parse(path.resolve(filePath));
   return path.join(parsed.dir, `${parsed.name}.${extension}`);
+}
+
+function validateOutputExtension(outputPath: string | undefined, expectedExtension: string, optionName: string): OutputValidationResult {
+  if (!outputPath) {
+    return { valid: true };
+  }
+
+  const actualExtension = path.extname(outputPath).toLowerCase();
+  if (!actualExtension) {
+    return { valid: true };
+  }
+
+  if (actualExtension === `.${expectedExtension.toLowerCase()}`) {
+    return { valid: true };
+  }
+
+  return {
+    valid: false,
+    message: `${optionName} expects a .${expectedExtension} file, but got '${outputPath}'.`
+  };
 }
 
 function formatList(values: string[]): string {
@@ -302,6 +333,15 @@ async function runRenderText(
   options: { bundle: string; profile: string; view: string; format: string; out?: string }
 ): Promise<{ exitCode: number; text?: string; sourcePath?: string }> {
   try {
+    const expectedExtension = options.format === "dot" ? "dot" : options.format === "mermaid" ? "mmd" : undefined;
+    if (expectedExtension) {
+      const outputValidation = validateOutputExtension(options.out, expectedExtension, "--out");
+      if (!outputValidation.valid) {
+        deps.stderr(appendLine(outputValidation.message ?? "Invalid output path."));
+        return { exitCode: 2 };
+      }
+    }
+
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
     const supported = ensureTextFormat(bundle, options.view, options.format);
     if (!supported.capability) {
@@ -336,6 +376,12 @@ async function runDotCommand(
   inputPath: string,
   options: { bundle: string; profile: string; out?: string; png?: boolean; pngOut?: string }
 ): Promise<number> {
+  const pngOutputValidation = validateOutputExtension(options.pngOut, "png", "--png-out");
+  if (!pngOutputValidation.valid) {
+    deps.stderr(appendLine(pngOutputValidation.message ?? "Invalid PNG output path."));
+    return 2;
+  }
+
   const renderResult = await runRenderText(deps, inputPath, {
     bundle: options.bundle,
     profile: options.profile,
@@ -354,6 +400,7 @@ async function runDotCommand(
 
   try {
     await deps.renderDotToPng(renderResult.text, pngPath);
+    announceFileWrite(deps, pngPath);
     return 0;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -368,8 +415,19 @@ async function runShowCommand(
   options: { bundle: string; profile: string; view: string; format: string; out?: string; dotOut?: string }
 ): Promise<number> {
   try {
-    const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
     const requestedPreviewFormat = options.format || "png";
+    const previewOutputValidation = validateOutputExtension(options.out, requestedPreviewFormat, "--out");
+    if (!previewOutputValidation.valid) {
+      deps.stderr(appendLine(previewOutputValidation.message ?? "Invalid preview output path."));
+      return 2;
+    }
+    const dotOutputValidation = validateOutputExtension(options.dotOut, "dot", "--dot-out");
+    if (!dotOutputValidation.valid) {
+      deps.stderr(appendLine(dotOutputValidation.message ?? "Invalid DOT output path."));
+      return 2;
+    }
+
+    const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
     const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat);
     if (!supported.capability) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
@@ -388,12 +446,15 @@ async function runShowCommand(
     }
 
     if (options.dotOut) {
-      await deps.writeTextFile(options.dotOut, renderResult.text);
+      const resolvedDotPath = path.resolve(options.dotOut);
+      await deps.writeTextFile(resolvedDotPath, renderResult.text);
+      announceFileWrite(deps, resolvedDotPath);
     }
 
     const previewPath = options.out ?? replaceExtension(input.path, requestedPreviewFormat);
     try {
       await deps.renderDotToPng(renderResult.text, previewPath);
+      announceFileWrite(deps, previewPath);
       return 0;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -412,8 +473,8 @@ function globalHelpText(): string {
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
     "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile recommended",
-    "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out /tmp/outcome.dot",
-    "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out /tmp/outcome.mmd",
+    "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot",
+    "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
     "",
     "Notes:",
@@ -455,7 +516,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out /tmp/outcome.json --diagnostics json"
+      "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runCompile(deps, inputPath, options));
@@ -489,7 +550,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--out <file>", "write rendered output to a file instead of stdout")
     .addHelpText("after", examplesBlock([
       "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot",
-      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out /tmp/outcome.mmd"
+      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd"
     ]))
     .action(async (inputPath, options) => {
       const result = await runRenderText(deps, inputPath, options);
@@ -509,7 +570,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .addHelpText("after", examplesBlock([
       "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --png",
-      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out /tmp/outcome.dot --png-out /tmp/outcome.png"
+      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot --png-out ./outcome.png"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runDotCommand(deps, inputPath, options));
@@ -525,7 +586,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--out <file>", "write Mermaid output to a file instead of stdout")
     .addHelpText("after", examplesBlock([
       "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out /tmp/outcome.mmd"
+      "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd"
     ]))
     .action(async (inputPath, options) => {
       const result = await runRenderText(deps, inputPath, {
@@ -549,7 +610,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out /tmp/outcome.png --dot-out /tmp/outcome.dot",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.png --dot-out ./outcome.dot",
       "Some bundle-defined views may appear before they become renderable in the CLI."
     ]))
     .action(async (inputPath, options) => {
