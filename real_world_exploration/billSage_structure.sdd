@@ -1,0 +1,225 @@
+SDD-TEXT 0.1
+
+Place P-100 "Dashboard"
+  owner=Design
+  description="Shows global status reports, surfaced projections, and recent activities"
+  surface=web
+  route_or_key=/dashboard
+  access=auth
+  entry_points="nav:global_nav"
+  primary_nav=true
+  CONTAINS P-110 "Report View"
+  COMPOSED_OF C-900 "Global Navigation"
+  NAVIGATES_TO P-110 "Report View"
+  + Place P-110 "Report View"
+    owner=Design
+    description="Shows report details from the dashboard"
+    surface=web
+    route_or_key=/dashboard/report-view
+    access=auth
+  END
+END
+
+Area A-200 "Projections"
+  owner=Design
+  description="Simulates future billing cycle outcomes across fee schedule and funding scenarios"
+  scope=projections
+  CONTAINS P-210 "Projections Overview"
+  CONTAINS P-220 "Projection"
+  CONTAINS P-230 "Create New Projection"
+  + Place P-210 "Projections Overview"
+    owner=Design
+    description="Shows a selectable list of linked projections and list selection actions"
+    surface=web
+    route_or_key=/projections
+    access=auth
+    entry_points="nav:global_nav"
+    primary_nav=true
+    CONTAINS VS-210a "Projection List"
+    CONTAINS VS-210b "Duplicate Projection Dialog"
+    CONTAINS VS-210c "Delete Projection Confirmation Dialog"
+    CONTAINS VS-210d "Add Projection to Dashboard Confirmation Dialog"
+    COMPOSED_OF C-900 "Global Navigation"
+    NAVIGATES_TO P-220 "Projection"
+    NAVIGATES_TO P-230 "Create New Projection"
+    + ViewState VS-210a "Projection List"
+      owner=Design
+      description="Shows the projection list with create, duplicate, delete, and add-to-dashboard actions"
+      place_id=P-210
+      data_required=ProjectionCollection
+    END
+    + ViewState VS-210b "Duplicate Projection Dialog"
+      owner=Design
+      description="Confirms duplication of the selected projection"
+      place_id=P-210
+      data_required=SelectedProjection
+    END
+    + ViewState VS-210c "Delete Projection Confirmation Dialog"
+      owner=Design
+      description="Confirms deletion of the selected projection"
+      place_id=P-210
+      data_required=SelectedProjection
+    END
+    + ViewState VS-210d "Add Projection to Dashboard Confirmation Dialog"
+      owner=Design
+      description="Confirms adding the selected projection to the dashboard"
+      place_id=P-210
+      data_required=SelectedProjection
+    END
+  END
+  + Place P-220 "Projection"
+    owner=Design
+    description="Shows an outcome combining a fee schedule scenario with a funding scenario"
+    surface=web
+    route_or_key=/projections/projection
+    access=auth
+    CONTAINS P-221 "Fee Schedule Scenario Details"
+    CONTAINS P-222 "Funding Scenario Details"
+    CONTAINS VS-220a "Overview Tab"
+    CONTAINS VS-220b "Fee Schedules Tab"
+    CONTAINS VS-220c "Funds Tab"
+    NAVIGATES_TO P-221 "Fee Schedule Scenario Details"
+    NAVIGATES_TO P-222 "Funding Scenario Details"
+    + Place P-221 "Fee Schedule Scenario Details"
+      owner=Design
+      description="Shows editable details of a fee schedule scenario"
+      surface=web
+      route_or_key=/projections/projection/fee-schedule-scenario-details
+      access=auth
+      NAVIGATES_TO P-220 "Projection"
+    END
+    + Place P-222 "Funding Scenario Details"
+      owner=Design
+      description="Shows editable details of a funding scenario"
+      surface=web
+      route_or_key=/projections/projection/funding-scenario-details
+      access=auth
+      NAVIGATES_TO P-220 "Projection"
+    END
+    + ViewState VS-220a "Overview Tab"
+      owner=Design
+      description="Shows the overview tab with an interactive graph"
+      place_id=P-220
+      data_required=ProjectionOverview
+    END
+    + ViewState VS-220b "Fee Schedules Tab"
+      owner=Design
+      description="Shows the fee schedule scenario tab with simple editing options"
+      place_id=P-220
+      data_required=FeeScheduleScenario
+    END
+    + ViewState VS-220c "Funds Tab"
+      owner=Design
+      description="Shows the funding scenario tab with simple editing options"
+      place_id=P-220
+      data_required=FundingScenario
+    END
+  END
+  + Place P-230 "Create New Projection"
+    owner=Design
+    description="Creates a new projection through a three-step flow and then opens the created projection"
+    surface=web
+    route_or_key=/projections/create-new-projection
+    access=auth
+    CONTAINS VS-230a "Create New Projection Step 1"
+    CONTAINS VS-230b "Create New Projection Step 2"
+    CONTAINS VS-230c "Create New Projection Step 3"
+    NAVIGATES_TO P-220 "Projection"
+    + ViewState VS-230a "Create New Projection Step 1"
+      owner=Design
+      description="Captures the initial setup for a new projection"
+      place_id=P-230
+      data_required=ProjectionBasics
+      TRANSITIONS_TO VS-230b "Create New Projection Step 2"
+    END
+    + ViewState VS-230b "Create New Projection Step 2"
+      owner=Design
+      description="Configures the fee schedule scenario for a new projection"
+      place_id=P-230
+      data_required=FeeScheduleSelection
+      TRANSITIONS_TO VS-230c "Create New Projection Step 3"
+    END
+    + ViewState VS-230c "Create New Projection Step 3"
+      owner=Design
+      description="Configures the funding scenario before opening the new projection"
+      place_id=P-230
+      data_required=FundingScenarioSelection
+    END
+  END
+END
+
+Area A-300 "Current Bills"
+  owner=Design
+  description="Stages, executes, and monitors billing runs while other places remain TBD"
+  scope=current_bills
+  CONTAINS P-310 "Current Bills"
+  + Place P-310 "Current Bills"
+    owner=Design
+    description="Serves as the landing place for staging and monitoring a billing run"
+    surface=web
+    route_or_key=/current-bills
+    access=auth
+    entry_points="nav:global_nav"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Area A-400 "Review"
+  owner=Design
+  description="Reviews and verifies past billing runs and compares them to past projections while other places remain TBD"
+  scope=review
+  CONTAINS P-410 "Review Past Bills"
+  + Place P-410 "Review Past Bills"
+    owner=Design
+    description="Serves as the landing place for reviewing past billing runs"
+    surface=web
+    route_or_key=/review
+    access=auth
+    entry_points="nav:global_nav"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Area A-500 "Accounts"
+  owner=Design
+  description="Manages, maintains, and examines groups of accounts and individual accounts while other places remain TBD"
+  scope=accounts
+  CONTAINS P-510 "Manage Accounts"
+  + Place P-510 "Manage Accounts"
+    owner=Design
+    description="Serves as the landing place for managing and examining accounts"
+    surface=web
+    route_or_key=/accounts
+    access=auth
+    entry_points="nav:global_nav"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Area A-600 "Fee Schedules"
+  owner=Design
+  description="Creates, manages, maintains, and examines fee schedules while other places remain TBD"
+  scope=fee_schedules
+  CONTAINS P-610 "Manage Fee Schedules"
+  + Place P-610 "Manage Fee Schedules"
+    owner=Design
+    description="Serves as the landing place for managing fee schedules"
+    surface=web
+    route_or_key=/fee-schedules
+    access=auth
+    entry_points="nav:global_nav"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Component C-900 "Global Navigation"
+  owner=Design
+  description="Shared left navigation across primary areas"
+  responsibility="Navigate between primary product areas"
+  inputs=NavSelection
+  outputs=PlaceNavigation
+END

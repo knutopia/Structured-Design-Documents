@@ -1,0 +1,38 @@
+digraph ia_place_map {
+  rankdir=LR;
+  node [shape=box];
+  subgraph cluster_A_200 {
+    label="Projections";
+    "P-210" [label="Projections Overview\n/projections\n[auth]\nentry_points: nav:global_nav\nprimary_nav: true"];
+    "P-220" [label="Projection\n/projections/projection\n[auth]"];
+    "P-230" [label="Create New Projection\n/projections/create-new-projection\n[auth]"];
+  }
+  subgraph cluster_A_300 {
+    label="Current Bills";
+    "P-310" [label="Current Bills\n/current-bills\n[auth]\nentry_points: nav:global_nav\nprimary_nav: true"];
+  }
+  subgraph cluster_A_400 {
+    label="Review";
+    "P-410" [label="Review Past Bills\n/review\n[auth]\nentry_points: nav:global_nav\nprimary_nav: true"];
+  }
+  subgraph cluster_A_500 {
+    label="Accounts";
+    "P-510" [label="Manage Accounts\n/accounts\n[auth]\nentry_points: nav:global_nav\nprimary_nav: true"];
+  }
+  subgraph cluster_A_600 {
+    label="Fee Schedules";
+    "P-610" [label="Manage Fee Schedules\n/fee-schedules\n[auth]\nentry_points: nav:global_nav\nprimary_nav: true"];
+  }
+  "P-100" [label="Dashboard\n/dashboard\n[auth]\nentry_points: nav:global_nav\nprimary_nav: true"];
+  "P-110" [label="Report View\n/dashboard/report-view\n[auth]"];
+  "P-221" [label="Fee Schedule Scenario Details\n/projections/projection/fee-schedule-scenario-details\n[auth]"];
+  "P-222" [label="Funding Scenario Details\n/projections/projection/funding-scenario-details\n[auth]"];
+  "P-100" -> "P-110";
+  "P-210" -> "P-220";
+  "P-210" -> "P-230";
+  "P-220" -> "P-221";
+  "P-220" -> "P-222";
+  "P-221" -> "P-220";
+  "P-222" -> "P-220";
+  "P-230" -> "P-220";
+}
