@@ -95,18 +95,27 @@ The engine enforces:
 - stable diagnostic ordering
 - stable projection ordering
 - stable DOT and Mermaid text output
+- canonical `LF` newlines for repo-stored text artifacts
 
 This makes snapshots useful and keeps diffs reviewable.
+
+Repository text normalization is part of deterministic behavior, not a contributor-specific preference.
+
+- `.gitattributes` defines `LF` as the canonical newline policy for repo text files
+- compiler snapshots, renderer goldens, docs, and spec artifacts should be stored as `LF`
+- CLI text output should remain canonically `LF` regardless of contributor platform
 
 ## Testing Strategy
 
 The test suite uses the bundle examples as conformance fixtures.
 
-- compile tests assert byte-stable compiled JSON against bundle snapshots
+- compile tests assert stable compiled JSON against bundle snapshots after newline normalization
 - validation tests assert zero errors for current manifest examples under `recommended`
 - projection tests assert structural IA behavior, including omissions and renderer-derived annotations
-- render tests assert stable DOT and Mermaid output
+- render tests assert stable DOT and Mermaid output after newline normalization
 - negative fixtures cover syntax, compile, and validation failures
+
+Fixture and golden reads should normalize `CRLF` to `LF` before raw string comparison so mixed contributor environments do not create false negatives. The newline policy still lives in `.gitattributes`; test normalization exists to make assertions platform-tolerant, not to permit committed `CRLF` artifacts.
 
 ## Extension Direction
 

@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
+import { normalizeLineEndings } from "./textNormalization.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -22,8 +23,9 @@ describe("compileSource", () => {
 
       const result = compileSource(input, bundle);
       expect(result.diagnostics).toEqual([]);
-      expect(JSON.stringify(result.graph, null, 2)).toBe(expectedSnapshot.trimEnd());
+      expect(normalizeLineEndings(JSON.stringify(result.graph, null, 2))).toBe(
+        normalizeLineEndings(expectedSnapshot).trimEnd()
+      );
     }
   });
 });
-

@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { loadBundle, renderSource } from "../src/index.js";
+import { normalizeLineEndings } from "./textNormalization.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -26,8 +27,7 @@ describe("renderSource dot", () => {
         format: "dot"
       });
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-      expect(result.text).toBe(golden.trimEnd());
+      expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());
     }
   });
 });
-
