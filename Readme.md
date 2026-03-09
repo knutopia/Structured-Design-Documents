@@ -81,13 +81,4 @@ Verify Graphviz setup with:
 
 ## Current Project Goals
 
-### 2.2 Test & Run the New Toolchain
-- Install required local tooling (Node 22 and `pnpm`)
-- Install optional local tooling (Mermaid and Graphviz visualization capability)
-- Actually test the toolchain locally
-- Generate rendered mermaid & graphviz output from .sdd sources
-
-### 2.3 Create Command Line Actions
-- Create command line actions to run toolchain and execute mermaid / graphviz visualization as PNG
-
-### 2.4 Expand the New Toolchain to Cover Remaining View Types
+### Expand the New Toolchain to Cover Remaining View Types
