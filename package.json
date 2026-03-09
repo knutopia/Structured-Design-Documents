@@ -10,6 +10,7 @@
     "build": "tsc -p tsconfig.json",
     "test": "pnpm run build && vitest run",
     "check": "pnpm run test",
+    "check:graphviz": "node ./scripts/check-graphviz.mjs",
     "sdd": "node dist/cli/main.js"
   },
   "dependencies": {

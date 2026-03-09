@@ -9,7 +9,22 @@ Required local tooling:
 
 The implementation work for v0.1 was done against a workspace-local Node 22 runtime because the machine default was Node 6 and `pnpm` was not installed. A normal contributor setup should install Node 22 and `pnpm` system-wide or through a version manager.
 
-Graphviz and Mermaid CLI are not required for v0.1 because the renderer emits `.dot` and `.mmd` source files only.
+Optional local tooling:
+
+- Graphviz, for previewing or post-processing `.dot` output and for VS Code extensions or other tools that shell out to `dot`
+
+Graphviz is not required for the core v0.1 build and test flow because the renderer emits `.dot` and `.mmd` source files. It is required once you want local DOT rendering, PNG generation, or editor integrations that invoke the Graphviz binary.
+
+Install Graphviz in the same environment that runs the workspace tooling:
+
+- VS Code Remote - WSL, WSL/Ubuntu, or native Linux: `sudo apt update` then `sudo apt install graphviz`
+- Native Windows-side execution: install Graphviz on Windows and ensure `dot.exe` is on `PATH`
+
+Verify the setup with:
+
+```bash
+pnpm run check:graphviz
+```
 
 ## Install
 

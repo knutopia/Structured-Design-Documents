@@ -53,9 +53,31 @@ Common commands:
 
 - `pnpm build`
 - `pnpm test`
+- `pnpm run check:graphviz`
 - `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
+
+## Local Tooling Prerequisites
+
+Required local tooling:
+
+- Node.js 22 LTS
+- `pnpm`
+
+Optional local tooling:
+
+- Graphviz, when you want to preview or post-process `.dot` output or use editor integrations that shell out to `dot`
+
+Install Graphviz in the environment where this workspace runs:
+
+- VS Code Remote - WSL, WSL/Ubuntu, or native Linux: install Graphviz inside that Linux environment, typically with `sudo apt install graphviz`
+- Native Windows-side execution: install Graphviz on Windows and ensure `dot.exe` is on `PATH`
+
+Verify Graphviz setup with:
+
+- `pnpm run check:graphviz`
+- `dot -V`
 
 ## Current Project Goals
 
@@ -69,4 +91,3 @@ Common commands:
 - Create command line actions to run toolchain and execute mermaid / graphviz visualization as PNG
 
 ### 2.4 Expand the New Toolchain to Cover Remaining View Types
-

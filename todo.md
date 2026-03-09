@@ -1,8 +1,8 @@
-# To Do (short term 3-9-26)
+# To Do Notes (short term 3-9-26)
 
-1. CRLF Normalization
+1. [Done] CRLF Normalization
 
-2. Smoke-test the CLI manually against one example:
+2. [Done] Smoke-test the CLI manually against one example:
 pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd
 pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd
 pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid
