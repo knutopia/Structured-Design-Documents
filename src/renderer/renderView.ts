@@ -9,6 +9,7 @@ import { validateGraph } from "../validator/validateGraph.js";
 import { renderIaPlaceMapDot } from "./dot.js";
 import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
 import { renderIaPlaceMapMermaid } from "./mermaid.js";
+import { getFallbackDotPreviewStyle, resolveDotPreviewStyle } from "./previewStyle.js";
 
 function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: RenderOptions): RenderResult {
   const projected = projectView(graph, bundle, options.viewId);
@@ -38,8 +39,10 @@ function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: Rend
   }
 
   const model = buildIaPlaceMapRenderModel(projection as Projection, graph);
+  const view = bundle.views.views.find((candidate) => candidate.id === options.viewId);
+  const dotStyle = view ? resolveDotPreviewStyle(bundle, view) : getFallbackDotPreviewStyle();
   const text =
-    options.format === "dot" ? renderIaPlaceMapDot(model) : renderIaPlaceMapMermaid(model);
+    options.format === "dot" ? renderIaPlaceMapDot(model, dotStyle) : renderIaPlaceMapMermaid(model);
   return {
     format: options.format,
     viewId: options.viewId,
@@ -77,4 +80,3 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])
   };
 }
-

@@ -1,14 +1,16 @@
-import { spawn } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError } from "commander";
 import { loadBundle } from "../bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
+import { embedSvgFont, renderDotToSvg, renderSvgToPng } from "./previewArtifacts.js";
 import { compileSource } from "../compiler/compileSource.js";
 import type { CompileResult } from "../compiler/types.js";
 import { formatJsonDiagnostics } from "../diagnostics/formatJson.js";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
 import { hasErrors } from "../diagnostics/types.js";
+import type { DotPreviewStyle } from "../renderer/previewStyle.js";
+import { resolveDotPreviewStyle } from "../renderer/previewStyle.js";
 import { renderSource } from "../renderer/renderView.js";
 import type { Diagnostic, RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
@@ -18,7 +20,7 @@ const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 
 type DiagnosticsFormat = "pretty" | "json";
 type TextRenderFormat = "dot" | "mermaid";
-type PreviewFormat = "png";
+type PreviewFormat = "svg" | "png";
 
 interface ViewRenderCapability {
   textFormats: TextRenderFormat[];
@@ -30,11 +32,12 @@ interface ViewRenderCapability {
 const viewRenderCapabilities: Partial<Record<string, ViewRenderCapability>> = {
   ia_place_map: {
     textFormats: ["dot", "mermaid"],
-    previewFormats: ["png"],
+    previewFormats: ["svg", "png"],
     previewSourceByFormat: {
+      svg: "dot",
       png: "dot"
     },
-    defaultPreviewFormat: "png"
+    defaultPreviewFormat: "svg"
   }
 };
 
@@ -45,7 +48,9 @@ export interface CliDeps {
   validateGraph: (graph: NonNullable<CompileResult["graph"]>, bundle: Bundle, profileId: string) => ValidationReport;
   renderSource: (input: SourceInput, bundle: Bundle, options: RenderOptions) => RenderResult;
   writeTextFile: (outputPath: string, content: string) => Promise<void>;
-  renderDotToPng: (dot: string, outputPath: string) => Promise<void>;
+  renderDotToSvg: (dot: string, style: DotPreviewStyle) => Promise<string>;
+  embedSvgFont: (svg: string, style: DotPreviewStyle) => Promise<string>;
+  renderSvgToPng: (svg: string, outputPath: string, style: DotPreviewStyle) => Promise<void>;
   stdout: (content: string) => void;
   stderr: (content: string) => void;
 }
@@ -75,30 +80,6 @@ async function defaultWriteTextFile(outputPath: string, content: string): Promis
   await writeFile(path.resolve(outputPath), content, "utf8");
 }
 
-async function defaultRenderDotToPng(dot: string, outputPath: string): Promise<void> {
-  await new Promise<void>((resolve, reject) => {
-    const child = spawn("dot", ["-Tpng", "-o", path.resolve(outputPath)], {
-      stdio: ["pipe", "pipe", "pipe"]
-    });
-
-    let stderr = "";
-    child.stderr.on("data", (chunk: Buffer | string) => {
-      stderr += chunk.toString();
-    });
-    child.on("error", (error) => {
-      reject(error);
-    });
-    child.on("close", (code) => {
-      if (code === 0) {
-        resolve();
-        return;
-      }
-      reject(new Error(stderr.trim() || `Graphviz exited with code ${code ?? "unknown"}`));
-    });
-    child.stdin.end(dot);
-  });
-}
-
 function createDefaultDeps(): CliDeps {
   return {
     loadBundle,
@@ -107,7 +88,9 @@ function createDefaultDeps(): CliDeps {
     validateGraph,
     renderSource,
     writeTextFile: defaultWriteTextFile,
-    renderDotToPng: defaultRenderDotToPng,
+    renderDotToSvg,
+    embedSvgFont,
+    renderSvgToPng,
     stdout: (content) => {
       process.stdout.write(content);
     },
@@ -218,7 +201,7 @@ function getViewCapability(bundle: Bundle, viewId: string): { view?: ViewSpec; c
   };
 }
 
-function ensureTextFormat(bundle: Bundle, viewId: string, format: string): { capability?: ViewRenderCapability; message?: string } {
+function ensureTextFormat(bundle: Bundle, viewId: string, format: string): { view?: ViewSpec; capability?: ViewRenderCapability; message?: string } {
   const resolved = getViewCapability(bundle, viewId);
   if (!resolved.capability) {
     return {
@@ -233,11 +216,12 @@ function ensureTextFormat(bundle: Bundle, viewId: string, format: string): { cap
   }
 
   return {
+    view: resolved.view,
     capability: resolved.capability
   };
 }
 
-function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { capability?: ViewRenderCapability; message?: string } {
+function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { view?: ViewSpec; capability?: ViewRenderCapability; message?: string } {
   const resolved = getViewCapability(bundle, viewId);
   if (!resolved.capability) {
     return {
@@ -252,13 +236,14 @@ function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { 
   }
 
   return {
+    view: resolved.view,
     capability: resolved.capability
   };
 }
 
 function graphvizInstallHint(): string {
   const lines = [
-    "Graphviz is required for PNG preview flows because the CLI shells out to `dot`.",
+    "Graphviz is required for SVG and PNG preview flows because the CLI shells out to `dot` for DOT-to-SVG layout.",
   ];
 
   if (process.platform === "linux" && process.env.WSL_DISTRO_NAME) {
@@ -331,7 +316,7 @@ async function runRenderText(
   deps: CliDeps,
   inputPath: string,
   options: { bundle: string; profile: string; view: string; format: string; out?: string }
-): Promise<{ exitCode: number; text?: string; sourcePath?: string }> {
+): Promise<{ exitCode: number; text?: string; sourcePath?: string; bundle?: Bundle; view?: ViewSpec }> {
   try {
     const expectedExtension = options.format === "dot" ? "dot" : options.format === "mermaid" ? "mmd" : undefined;
     if (expectedExtension) {
@@ -362,6 +347,8 @@ async function runRenderText(
     await writeTextOutput(deps, options.out, result.text);
     return {
       exitCode: 0,
+      bundle,
+      view: supported.view,
       text: result.text,
       sourcePath: input.path
     };
@@ -369,6 +356,24 @@ async function runRenderText(
     deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
     return { exitCode: 1 };
   }
+}
+
+async function writePreviewArtifact(
+  deps: Pick<CliDeps, "writeTextFile" | "renderDotToSvg" | "embedSvgFont" | "renderSvgToPng">,
+  dot: string,
+  outputPath: string,
+  format: PreviewFormat,
+  style: DotPreviewStyle
+): Promise<void> {
+  const rawSvg = await deps.renderDotToSvg(dot, style);
+  const svg = await deps.embedSvgFont(rawSvg, style);
+
+  if (format === "svg") {
+    await deps.writeTextFile(path.resolve(outputPath), svg);
+    return;
+  }
+
+  await deps.renderSvgToPng(svg, outputPath, style);
 }
 
 async function runDotCommand(
@@ -399,7 +404,10 @@ async function runDotCommand(
   }
 
   try {
-    await deps.renderDotToPng(renderResult.text, pngPath);
+    const style = renderResult.bundle && renderResult.view
+      ? resolveDotPreviewStyle(renderResult.bundle, renderResult.view)
+      : { fontFamily: "Public Sans", dpi: 192 };
+    await writePreviewArtifact(deps, renderResult.text, pngPath, "png", style);
     announceFileWrite(deps, pngPath);
     return 0;
   } catch (error) {
@@ -415,7 +423,7 @@ async function runShowCommand(
   options: { bundle: string; profile: string; view: string; format: string; out?: string; dotOut?: string }
 ): Promise<number> {
   try {
-    const requestedPreviewFormat = options.format || "png";
+    const requestedPreviewFormat = (options.format || viewRenderCapabilities[options.view]?.defaultPreviewFormat || "svg") as PreviewFormat;
     const previewOutputValidation = validateOutputExtension(options.out, requestedPreviewFormat, "--out");
     if (!previewOutputValidation.valid) {
       deps.stderr(appendLine(previewOutputValidation.message ?? "Invalid preview output path."));
@@ -429,7 +437,7 @@ async function runShowCommand(
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
     const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat);
-    if (!supported.capability) {
+    if (!supported.capability || !supported.view) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
       return 2;
     }
@@ -452,8 +460,9 @@ async function runShowCommand(
     }
 
     const previewPath = options.out ?? replaceExtension(input.path, requestedPreviewFormat);
+    const style = resolveDotPreviewStyle(bundle, supported.view);
     try {
-      await deps.renderDotToPng(renderResult.text, previewPath);
+      await writePreviewArtifact(deps, renderResult.text, previewPath, requestedPreviewFormat, style);
       announceFileWrite(deps, previewPath);
       return 0;
     } catch (error) {
@@ -482,9 +491,10 @@ function globalHelpText(): string {
     "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot",
     "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
-    "  `show` is the preferred preview command as more renderable views are added.",
+    "  `show` defaults to SVG preview output and uses Graphviz for DOT-to-SVG layout.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -572,7 +582,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
     .option("--out <file>", "write DOT output to a file instead of stdout")
-    .option("--png", "also write a sibling PNG rendered through Graphviz")
+    .option("--png", "also write a sibling PNG rendered through the SVG preview pipeline")
     .option("--png-out <file>", "write PNG output to an explicit file path")
     .addHelpText("after", examplesBlock([
       "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd",
@@ -607,17 +617,18 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to PNG output and requires Graphviz for DOT-to-PNG rendering.")
+    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output and uses Graphviz for DOT-to-SVG layout.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
-    .option("--format <format>", "preview format (currently png)", "png")
+    .option("--format <format>", "preview format (svg or png)", "svg")
     .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")
     .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.png --dot-out ./outcome.dot",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg --dot-out ./outcome.dot",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --dot-out ./outcome.dot",
       "Some bundle-defined views may appear before they become renderable in the CLI."
     ]))
     .action(async (inputPath, options) => {

@@ -67,6 +67,13 @@ The engine owns:
 - generic rule execution
 - output formatting for diagnostics, DOT, and Mermaid
 
+The CLI owns preview artifact generation on top of those text renderers:
+
+- Graphviz-driven DOT-to-SVG layout
+- shared preview-style resolution from `views.yaml`
+- Public Sans font embedding for portable SVG output
+- SVG-to-PNG rasterization for image export
+
 Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `recommended` for strict authoring. See [profiles.md](./profiles.md).
 
 ## IA Place Map Proof Slice
@@ -86,6 +93,13 @@ The renderer currently supports only this view, but it targets two textual forma
 
 Both formats are generated from the same IA render model so view semantics stay centralized.
 
+Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
+
+- `renderSource` still returns only DOT or Mermaid text
+- `sdd show` uses Graphviz to turn DOT into SVG
+- `sdd show --format png` rasterizes that SVG after embedding the bundled font
+- preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level and optional per-view overrides
+
 ## Determinism
 
 Deterministic output is treated as a feature, not a side effect.
@@ -97,6 +111,7 @@ The engine enforces:
 - stable diagnostic ordering
 - stable projection ordering
 - stable DOT and Mermaid text output
+- stable bundle-owned preview styling defaults
 - canonical `LF` newlines for repo-stored text artifacts
 
 This makes snapshots useful and keeps diffs reviewable.

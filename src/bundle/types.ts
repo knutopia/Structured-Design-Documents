@@ -84,6 +84,21 @@ export interface ContractRule {
   rule_logic?: RuleLogic;
 }
 
+export interface DotPreviewStyleConfig {
+  font_family?: string;
+  font_asset?: string;
+  dpi?: number;
+}
+
+export interface PreviewDefaultsConfig {
+  dot?: DotPreviewStyleConfig;
+}
+
+export interface RendererDefaultsConfig {
+  preview?: PreviewDefaultsConfig;
+  [key: string]: unknown;
+}
+
 export interface RelationshipContract {
   type: string;
   meaning?: string;
@@ -115,12 +130,13 @@ export interface ViewSpec {
       id: string;
       description: string;
     }>;
-    renderer_defaults?: Record<string, unknown>;
+    renderer_defaults?: RendererDefaultsConfig;
   };
 }
 
 export interface ViewsConfig {
   version: string;
+  preview_defaults?: PreviewDefaultsConfig;
   views: ViewSpec[];
 }
 
@@ -162,4 +178,3 @@ export interface Bundle {
   views: ViewsConfig;
   profiles: Record<string, ProfileConfig>;
 }
-

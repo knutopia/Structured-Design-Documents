@@ -60,6 +60,13 @@ const bundle: Bundle = {
   },
   views: {
     version: "0.1",
+    preview_defaults: {
+      dot: {
+        font_family: "Public Sans",
+        font_asset: "assets/fonts/public-sans-latin-400-normal.woff",
+        dpi: 192
+      }
+    },
     views: [
       {
         id: "ia_place_map",
@@ -99,7 +106,9 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
   stdout: string[];
   stderr: string[];
   renderSourceMock: ReturnType<typeof vi.fn>;
-  renderDotToPngMock: ReturnType<typeof vi.fn>;
+  renderDotToSvgMock: ReturnType<typeof vi.fn>;
+  embedSvgFontMock: ReturnType<typeof vi.fn>;
+  renderSvgToPngMock: ReturnType<typeof vi.fn>;
 } {
   const stdout: string[] = [];
   const stderr: string[] = [];
@@ -109,13 +118,17 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
     text: options.format === "dot" ? "digraph G {}" : "flowchart TD",
     diagnostics: []
   }));
-  const renderDotToPngMock = vi.fn(async () => undefined);
+  const renderDotToSvgMock = vi.fn(async () => "<svg>raw</svg>");
+  const embedSvgFontMock = vi.fn(async () => "<svg>embedded</svg>");
+  const renderSvgToPngMock = vi.fn(async () => undefined);
 
   return {
     stdout,
     stderr,
     renderSourceMock,
-    renderDotToPngMock,
+    renderDotToSvgMock,
+    embedSvgFontMock,
+    renderSvgToPngMock,
     deps: {
       loadBundle: vi.fn(async () => bundle),
       readSourceInput: vi.fn(async (filePath: string) => ({
@@ -138,7 +151,9 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       })),
       renderSource: renderSourceMock,
       writeTextFile: vi.fn(async () => undefined),
-      renderDotToPng: renderDotToPngMock,
+      renderDotToSvg: renderDotToSvgMock,
+      embedSvgFont: embedSvgFontMock,
+      renderSvgToPng: renderSvgToPngMock,
       stdout: (content: string) => {
         stdout.push(content);
       },
@@ -175,7 +190,7 @@ describe("CLI wrappers", () => {
     });
   });
 
-  it("show derives a sibling PNG path by default", async () => {
+  it("show derives a sibling SVG path by default", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
       "node",
@@ -187,14 +202,27 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(deps.renderDotToPng).toHaveBeenCalledWith(
+    expect(deps.renderDotToSvg).toHaveBeenCalledWith(
       "digraph G {}",
-      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.png"
+      expect.objectContaining({
+        fontFamily: "Public Sans",
+        dpi: 192
+      })
     );
-    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.png");
+    expect(deps.embedSvgFont).toHaveBeenCalledWith(
+      "<svg>raw</svg>",
+      expect.objectContaining({
+        fontFamily: "Public Sans"
+      })
+    );
+    expect(deps.writeTextFile).toHaveBeenCalledWith(
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.svg",
+      "<svg>embedded</svg>"
+    );
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.svg");
   });
 
-  it("show respects an explicit preview output path", async () => {
+  it("show respects an explicit SVG output path", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
       "node",
@@ -204,11 +232,46 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--out",
+      "/tmp/custom.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/custom.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/custom.svg");
+  });
+
+  it("show can render PNG through the SVG intermediary pipeline", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--format",
+      "png",
+      "--out",
       "/tmp/custom.png"
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(deps.renderDotToPng).toHaveBeenCalledWith("digraph G {}", "/tmp/custom.png");
+    expect(deps.renderDotToSvg).toHaveBeenCalledWith(
+      "digraph G {}",
+      expect.objectContaining({
+        fontFamily: "Public Sans",
+        dpi: 192
+      })
+    );
+    expect(deps.embedSvgFont).toHaveBeenCalled();
+    expect(deps.renderSvgToPng).toHaveBeenCalledWith(
+      "<svg>embedded</svg>",
+      "/tmp/custom.png",
+      expect.objectContaining({
+        fontFamily: "Public Sans",
+        dpi: 192
+      })
+    );
     expect(stderr.join("")).toContain("Wrote /tmp/custom.png");
   });
 
@@ -226,6 +289,41 @@ describe("CLI wrappers", () => {
     expect(result.exitCode).toBe(0);
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/outcome.dot", "digraph G {}");
     expect(stderr.join("")).toContain("Wrote /tmp/outcome.dot");
+  });
+
+  it("dot can render PNG through the SVG intermediary pipeline", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "dot",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--png"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(deps.renderDotToSvg).toHaveBeenCalledWith(
+      "digraph G {}",
+      expect.objectContaining({
+        fontFamily: "Public Sans",
+        dpi: 192
+      })
+    );
+    expect(deps.embedSvgFont).toHaveBeenCalledWith(
+      "<svg>raw</svg>",
+      expect.objectContaining({
+        fontFamily: "Public Sans"
+      })
+    );
+    expect(deps.renderSvgToPng).toHaveBeenCalledWith(
+      "<svg>embedded</svg>",
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.png",
+      expect.objectContaining({
+        fontFamily: "Public Sans",
+        dpi: 192
+      })
+    );
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.png");
   });
 
   it("show stops before Graphviz when validation fails", async () => {
@@ -255,7 +353,7 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(deps.renderDotToPng).not.toHaveBeenCalled();
+    expect(deps.renderDotToSvg).not.toHaveBeenCalled();
     expect(stderr.join("")).toContain("validate.failed");
   });
 
@@ -291,7 +389,7 @@ describe("CLI wrappers", () => {
     expect(deps.renderSource).not.toHaveBeenCalled();
   });
 
-  it("rejects mismatched PNG output extensions", async () => {
+  it("rejects mismatched default SVG output extensions", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
       "node",
@@ -300,6 +398,26 @@ describe("CLI wrappers", () => {
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
       "ia_place_map",
+      "--out",
+      "/tmp/outcome.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("--out expects a .svg file");
+    expect(deps.renderSource).not.toHaveBeenCalled();
+  });
+
+  it("rejects mismatched PNG output extensions when png format is requested", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--format",
+      "png",
       "--out",
       "/tmp/outcome.dot"
     ], deps);
@@ -356,6 +474,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("recommended  strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
+    expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
   });
 });

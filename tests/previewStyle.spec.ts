@@ -1,0 +1,124 @@
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+import type { Bundle, ViewSpec } from "../src/bundle/types.js";
+import { resolveDotPreviewStyle } from "../src/renderer/previewStyle.js";
+
+function createView(rendererDefaults: ViewSpec["conventions"]["renderer_defaults"] = {}): ViewSpec {
+  return {
+    id: "ia_place_map",
+    name: "IA Place Map",
+    status: "operational",
+    projection: {
+      include_node_types: [],
+      include_edge_types: [],
+      hierarchy_edges: [],
+      ordering_edges: []
+    },
+    conventions: {
+      renderer_defaults: rendererDefaults
+    }
+  };
+}
+
+function createBundle(view: ViewSpec): Bundle {
+  return {
+    rootDir: "/repo/bundle/v0.1",
+    manifestPath: "/repo/bundle/v0.1/manifest.yaml",
+    manifest: {
+      bundle_name: "test",
+      bundle_version: "0.1.0",
+      language: "sdd",
+      language_version: "0.1",
+      core: {
+        vocab: "core/vocab.yaml",
+        syntax: "core/syntax.yaml",
+        schema: "core/schema.json",
+        contracts: "core/contracts.yaml",
+        projection_schema: "core/projection_schema.json",
+        views: "core/views.yaml"
+      },
+      profiles: [],
+      examples: [],
+      compatibility: {
+        requires_compiler_min: "0.1.0",
+        notes: []
+      }
+    },
+    vocab: {
+      version: "0.1",
+      closed_vocab: true,
+      node_types: [],
+      relationship_types: []
+    },
+    syntax: {
+      version: "0.1",
+      artifact: "sdd",
+      lexical: {
+        identifier_pattern: "",
+        id_pattern: "",
+        version_number_pattern: "",
+        bare_value_pattern: ""
+      },
+      document: {
+        version_declaration: {
+          allowed: true,
+          required: false,
+          literal: "SDD",
+          default_effective_version: "0.1",
+          post_parse_supported_versions: ["0.1"]
+        }
+      },
+      line_kinds: []
+    },
+    schema: {},
+    projectionSchema: {},
+    contracts: {
+      version: "0.1",
+      common_rules: [],
+      relationships: []
+    },
+    views: {
+      version: "0.1",
+      preview_defaults: {
+        dot: {
+          font_family: "Public Sans",
+          font_asset: "assets/fonts/public-sans-latin-400-normal.woff",
+          dpi: 192
+        }
+      },
+      views: [view]
+    },
+    profiles: {}
+  };
+}
+
+describe("resolveDotPreviewStyle", () => {
+  it("applies bundle-level preview defaults", () => {
+    const view = createView();
+    const bundle = createBundle(view);
+
+    expect(resolveDotPreviewStyle(bundle, view)).toEqual({
+      fontFamily: "Public Sans",
+      fontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/public-sans-latin-400-normal.woff"),
+      dpi: 192
+    });
+  });
+
+  it("lets per-view preview overrides win", () => {
+    const view = createView({
+      preview: {
+        dot: {
+          font_family: "Public Sans Display",
+          dpi: 288
+        }
+      }
+    });
+    const bundle = createBundle(view);
+
+    expect(resolveDotPreviewStyle(bundle, view)).toEqual({
+      fontFamily: "Public Sans Display",
+      fontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/public-sans-latin-400-normal.woff"),
+      dpi: 288
+    });
+  });
+});

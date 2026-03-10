@@ -57,7 +57,7 @@ const failure = (result.error && result.error.code === "ENOENT")
 
 console.error(failure);
 console.error("");
-console.error("Graphviz is optional for core build/test work, but required for DOT preview/render flows and editors that shell out to `dot`.");
+console.error("Graphviz is optional for core build/test work, but required for DOT-to-SVG preview flows, SVG-first PNG export, and editors that shell out to `dot`.");
 console.error(installHint());
 console.error("");
 console.error("Verify the installation with:");

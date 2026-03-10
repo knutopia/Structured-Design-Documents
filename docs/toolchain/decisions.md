@@ -9,6 +9,7 @@
 - Only source `.sdd` input is supported in the CLI.
 - Only `ia_place_map` is rendered in v0.1.
 - Renderer outputs text artifacts only: DOT and Mermaid source.
+- Preview artifacts are a CLI concern layered on top of DOT: SVG by default, PNG on demand.
 
 ## Spec-Driven Boundaries
 
@@ -90,6 +91,12 @@ The renderer uses:
 - IA view conventions from the bundle
 
 This allows the bundle to define what matters in the view, while the renderer remains a thin presentation layer over DOT and Mermaid syntax.
+
+Preview generation remains outside the core renderer contract:
+
+- Graphviz is used only for DOT-to-SVG layout
+- SVG and PNG artifacts are produced by the CLI preview pipeline
+- shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
 
 ## Diagnostics And Exit Codes
 

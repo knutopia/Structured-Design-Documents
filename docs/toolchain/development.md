@@ -11,9 +11,21 @@ The implementation work for v0.1 was done against a workspace-local Node 22 runt
 
 Optional local tooling:
 
-- Graphviz, for previewing or post-processing `.dot` output and for VS Code extensions or other tools that shell out to `dot`
+- Graphviz, for CLI preview generation and for VS Code extensions or other tools that shell out to `dot`
 
-Graphviz is not required for the core v0.1 build and test flow because the renderer emits `.dot` and `.mmd` source files. It is required once you want local DOT rendering, PNG generation, or editor integrations that invoke the Graphviz binary.
+Graphviz is not required for the core v0.1 build and test flow because the engine renderers emit `.dot` and `.mmd` source files. It is required once you want CLI preview artifacts (`.svg` by default or `.png` on demand) or editor integrations that invoke the Graphviz binary.
+
+The CLI preview pipeline is SVG-first:
+
+- `sdd show` renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans font, and writes `.svg` by default
+- PNG output is derived from that embedded-font SVG, so preview typography does not depend on a user-installed system font
+- The shared preview defaults live in `bundle/v0.1/core/views.yaml`, and the vendored font asset lives in `bundle/v0.1/assets/fonts/`
+
+Font provenance:
+
+- The vendored `Public Sans` asset is sourced from the upstream `Public Sans` project via the published `@fontsource/public-sans` package and is committed in `bundle/v0.1/assets/fonts/`.
+- Keep `bundle/v0.1/assets/fonts/PublicSans-OFL.txt` with the asset whenever the font file is refreshed.
+- If the font is updated, refresh the vendored file, preserve the license text, and keep the configured `font_asset` path in `bundle/v0.1/core/views.yaml` in sync.
 
 Install Graphviz in the same environment that runs the workspace tooling:
 
@@ -78,6 +90,18 @@ Render IA Place Map to Mermaid:
 pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid
 ```
 
+Render an SVG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
+```
+
+Render a PNG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out /tmp/outcome.png
+```
+
 Write render output to a file:
 
 ```bash
@@ -95,7 +119,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/projector/`: internal view projection
 - `src/renderer/`: IA render model plus DOT and Mermaid emitters
 - `src/diagnostics/`: structured diagnostics and formatting
-- `src/cli/`: thin command wiring
+- `src/cli/`: command wiring plus preview artifact helpers
 - `tests/`: conformance, regression, and negative fixtures
 
 ## Adding A New Validation Primitive

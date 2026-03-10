@@ -1,6 +1,8 @@
 digraph ia_place_map {
   rankdir=LR;
-  node [shape=box];
+  graph [dpi=192, fontname="Public Sans"];
+  node [shape=box, fontname="Public Sans"];
+  edge [fontname="Public Sans"];
   subgraph cluster_A_001 {
     label="Checkout Area";
     "P-001" [label="Billing\n/checkout/billing\n[auth]"];

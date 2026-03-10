@@ -1,4 +1,5 @@
 import type { IaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
+import type { DotPreviewStyle } from "./previewStyle.js";
 
 function escapeLabel(text: string): string {
   return text.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
@@ -12,11 +13,15 @@ function quoteId(id: string): string {
   return `"${escapeLabel(id)}"`;
 }
 
-export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel): string {
+export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: DotPreviewStyle): string {
+  const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
+  const dpi = typeof style?.dpi === "number" && Number.isFinite(style.dpi) ? style.dpi : 192;
   const lines = [
     "digraph ia_place_map {",
     "  rankdir=LR;",
-    "  node [shape=box];"
+    `  graph [dpi=${dpi}, fontname="${fontFamily}"];`,
+    `  node [shape=box, fontname="${fontFamily}"];`,
+    `  edge [fontname="${fontFamily}"];`
   ];
 
   for (const area of model.areas) {

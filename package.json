@@ -14,6 +14,7 @@
     "sdd": "node dist/cli/main.js"
   },
   "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "ajv": "^8.17.1",
     "commander": "^12.1.0",
     "yaml": "^2.6.1"

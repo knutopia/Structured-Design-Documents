@@ -1,5 +1,12 @@
 version: "0.1"
 
+# preview_defaults are shared CLI preview artifact defaults, not source authoring requirements.
+preview_defaults:
+  dot:
+    font_family: Public Sans
+    font_asset: assets/fonts/public-sans-latin-400-normal.woff
+    dpi: 192
+
 # renderer_defaults shape downstream projection output and renderer behavior, not source authoring requirements.
 views:
   - id: outcome_opportunity_map
