@@ -351,7 +351,11 @@ describe("CLI wrappers", () => {
     expect(help).toContain("dot");
     expect(help).toContain("mmd");
     expect(help).toContain("show");
+    expect(help).toContain("Profiles:");
+    expect(help).toContain("simple");
+    expect(help).toContain("recommended  strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
+    expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
   });
 });

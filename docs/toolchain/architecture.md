@@ -67,6 +67,8 @@ The engine owns:
 - generic rule execution
 - output formatting for diagnostics, DOT, and Mermaid
 
+Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `recommended` for strict authoring. See [profiles.md](./profiles.md).
+
 ## IA Place Map Proof Slice
 
 The first end-to-end proof slice is `ia_place_map`.
@@ -104,6 +106,14 @@ Repository text normalization is part of deterministic behavior, not a contribut
 - `.gitattributes` defines `LF` as the canonical newline policy for repo text files
 - compiler snapshots, renderer goldens, docs, and spec artifacts should be stored as `LF`
 - CLI text output should remain canonically `LF` regardless of contributor platform
+
+## Validation Modes
+
+Validation runs on compiled graphs only. Profiles change rule selection and severity, but they do not change parsing, compilation, or rendering contracts.
+
+- `simple` keeps structural checks strict while omitting completeness rules that add repetition during early modeling
+- `permissive` keeps broad governance feedback active, mostly as warnings
+- `recommended` enforces production-grade completeness and policy expectations
 
 ## Testing Strategy
 

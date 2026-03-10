@@ -1,6 +1,8 @@
 version: "0.1"
 
 conformance_levels:
+  simple:
+    description: Validate structural integrity and authored property formats while keeping early-draft diagrams low-noise.
   permissive:
     description: Validate syntax and references; report governance and contract issues as warnings unless structural failure.
   strict:
@@ -10,6 +12,7 @@ common_rules:
   - id: referential_integrity
     description: Every edge endpoint must resolve to an existing node ID.
     severity_by_profile:
+      simple: error
       permissive: error
       recommended: error
     rule_logic:
@@ -17,6 +20,7 @@ common_rules:
   - id: relationship_directionality
     description: Relationships are directed and inverse edges must not be inferred.
     severity_by_profile:
+      simple: error
       permissive: error
       recommended: error
     rule_logic:
@@ -24,6 +28,7 @@ common_rules:
   - id: duplicate_edge_detection
     description: Duplicate edges are matched on from/type/to/event/guard/effect/props; to_name is excluded from identity.
     severity_by_profile:
+      simple: warn
       permissive: warn
       recommended: warn
     rule_logic:
@@ -33,6 +38,7 @@ common_rules:
   - id: edge_annotation_semantics_scope
     description: Event, guard, and effect annotations are semantically defined for TRANSITIONS_TO and optionally NAVIGATES_TO and PRECEDES.
     severity_by_profile:
+      simple: warn
       permissive: warn
       recommended: warn
     rule_logic:
@@ -41,6 +47,7 @@ common_rules:
   - id: to_name_hint_non_semantic
     description: to_name is a human-readable hint and must not alter edge semantics.
     severity_by_profile:
+      simple: warn
       permissive: warn
       recommended: warn
     rule_logic:
@@ -48,6 +55,7 @@ common_rules:
   - id: no_implicit_inverse_edges
     description: Compiler output remains literal; inferred inverse relationships are renderer-only derived semantics.
     severity_by_profile:
+      simple: error
       permissive: error
       recommended: error
     rule_logic:
@@ -71,6 +79,7 @@ relationships:
       - id: contains_acyclic
         description: Containment should be acyclic.
         severity_by_profile:
+          simple: warn
           permissive: warn
           recommended: error
         rule_logic:
@@ -79,6 +88,7 @@ relationships:
       - id: contains_single_parent_recommended
         description: Node should have at most one structural parent via CONTAINS.
         severity_by_profile:
+          simple: warn
           permissive: warn
           recommended: warn
         rule_logic:
@@ -97,6 +107,7 @@ relationships:
       - id: composed_of_acyclic
         description: Composition should be acyclic.
         severity_by_profile:
+          simple: warn
           permissive: warn
           recommended: error
         rule_logic:
@@ -116,6 +127,7 @@ relationships:
       - id: precedes_cycle_policy
         description: Linear flows should be acyclic; intentional loops should be annotated.
         severity_by_profile:
+          simple: warn
           permissive: warn
           recommended: warn
         rule_logic:
@@ -133,6 +145,7 @@ relationships:
       - id: navigates_to_event_optional
         description: Event and guard annotations are optional and represent trigger/precondition when present.
         severity_by_profile:
+          simple: info
           permissive: info
           recommended: info
         rule_logic:
@@ -275,6 +288,7 @@ relationships:
       - id: policy_enforcement_coverage
         description: Policy enforcement_point should correspond to at least one incoming CONSTRAINED_BY edge.
         severity_by_profile:
+          simple: warn
           permissive: warn
           recommended: warn
         rule_logic:
@@ -306,6 +320,7 @@ relationships:
       - id: binds_to_requires_field
         description: BINDS_TO edge must include edge prop field.
         severity_by_profile:
+          simple: error
           permissive: error
           recommended: error
         rule_logic:

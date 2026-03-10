@@ -13,6 +13,10 @@ core:
   views: core/views.yaml
 
 profiles:
+  - id: simple
+    path: profiles/simple.yaml
+    intent: Low-noise drafting with strict structural validation.
+    default_severity_mode: permissive
   - id: permissive
     path: profiles/permissive.yaml
     intent: Warning-first governance with strict structural validation.

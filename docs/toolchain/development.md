@@ -60,6 +60,12 @@ Validate with the default profile:
 pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd
 ```
 
+Validate an early draft with the low-noise profile:
+
+```bash
+pnpm sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple
+```
+
 Render IA Place Map to DOT:
 
 ```bash
@@ -77,6 +83,8 @@ Write render output to a file:
 ```bash
 pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ia_place_map --format mermaid --out /tmp/place_viewstate_transition.mmd
 ```
+
+Profile guidance lives in [profiles.md](./profiles.md).
 
 ## Structure
 

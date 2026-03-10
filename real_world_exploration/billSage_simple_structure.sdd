@@ -1,0 +1,117 @@
+SDD-TEXT 0.1
+
+Place P-100 "Dashboard"
+  description="Shows global status reports, surfaced projections, and recent activities"
+  primary_nav=true
+  CONTAINS P-110 "Report View"
+  COMPOSED_OF C-900 "Global Navigation"
+  NAVIGATES_TO P-110 "Report View"
+  + Place P-110 "Report View"
+  END
+END
+
+Area A-200 "Projections"
+  description="Simulates future billing cycle outcomes across fee schedule and funding scenarios"
+  CONTAINS P-210 "Projections Overview"
+  CONTAINS P-220 "Projection"
+  CONTAINS P-230 "Create New Projection"
+  + Place P-210 "Projections Overview"
+    description="Shows a selectable list of linked projections and list selection actions"
+    primary_nav=true
+    CONTAINS VS-210a "Projection List"
+    CONTAINS VS-210b "Duplicate Projection Dialog"
+    CONTAINS VS-210c "Delete Projection Confirmation Dialog"
+    CONTAINS VS-210d "Add Projection to Dashboard Confirmation Dialog"
+    COMPOSED_OF C-900 "Global Navigation"
+    NAVIGATES_TO P-220 "Projection"
+    NAVIGATES_TO P-230 "Create New Projection"
+    + ViewState VS-210a "Projection List"
+    END
+    + ViewState VS-210b "Duplicate Projection Dialog"
+    END
+    + ViewState VS-210c "Delete Projection Confirmation Dialog"
+    END
+    + ViewState VS-210d "Add Projection to Dashboard Confirmation Dialog"
+    END
+  END
+  + Place P-220 "Projection"
+    description="Shows an outcome combining a fee schedule scenario with a funding scenario"
+    CONTAINS P-221 "Fee Schedule Scenario Details"
+    CONTAINS P-222 "Funding Scenario Details"
+    CONTAINS VS-220a "Overview Tab"
+    CONTAINS VS-220b "Fee Schedules Tab"
+    CONTAINS VS-220c "Funds Tab"
+    NAVIGATES_TO P-221 "Fee Schedule Scenario Details"
+    NAVIGATES_TO P-222 "Funding Scenario Details"
+    + Place P-221 "Fee Schedule Scenario Details"
+      NAVIGATES_TO P-220 "Projection"
+    END
+    + Place P-222 "Funding Scenario Details"
+      NAVIGATES_TO P-220 "Projection"
+    END
+    + ViewState VS-220a "Overview Tab"
+    END
+    + ViewState VS-220b "Fee Schedules Tab"
+    END
+    + ViewState VS-220c "Funds Tab"
+    END
+  END
+  + Place P-230 "Create New Projection"
+    description="Creates a new projection through a three-step flow and then opens the created projection"
+    CONTAINS VS-230a "Create New Projection Step 1"
+    CONTAINS VS-230b "Create New Projection Step 2"
+    CONTAINS VS-230c "Create New Projection Step 3"
+    NAVIGATES_TO P-220 "Projection"
+    + ViewState VS-230a "Create New Projection Step 1"
+      TRANSITIONS_TO VS-230b "Create New Projection Step 2"
+    END
+    + ViewState VS-230b "Create New Projection Step 2"
+      TRANSITIONS_TO VS-230c "Create New Projection Step 3"
+    END
+    + ViewState VS-230c "Create New Projection Step 3"
+    END
+  END
+END
+
+Area A-300 "Current Bills"
+  description="Stages, executes, and monitors billing runs while other places remain TBD"
+  CONTAINS P-310 "Current Bills"
+  + Place P-310 "Current Bills"
+    description="Serves as the landing place for staging and monitoring a billing run"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Area A-400 "Review"
+  description="Reviews and verifies past billing runs and compares them to past projections while other places remain TBD"
+  CONTAINS P-410 "Review Past Bills"
+  + Place P-410 "Review Past Bills"
+    description="Serves as the landing place for reviewing past billing runs"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Area A-500 "Accounts"
+  description="Manages, maintains, and examines groups of accounts and individual accounts while other places remain TBD"
+  CONTAINS P-510 "Manage Accounts"
+  + Place P-510 "Manage Accounts"
+    description="Serves as the landing place for managing and examining accounts"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Area A-600 "Fee Schedules"
+  description="Creates, manages, maintains, and examines fee schedules while other places remain TBD"
+  CONTAINS P-610 "Manage Fee Schedules"
+  + Place P-610 "Manage Fee Schedules"
+    description="Serves as the landing place for managing fee schedules"
+    primary_nav=true
+    COMPOSED_OF C-900 "Global Navigation"
+  END
+END
+
+Component C-900 "Global Navigation"
+END

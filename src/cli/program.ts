@@ -470,9 +470,15 @@ async function runShowCommand(
 function globalHelpText(): string {
   return [
     "",
+    "Profiles:",
+    "  simple       low-noise drafting",
+    "  permissive   warning-first completeness",
+    "  recommended  strict governance (default)",
+    "",
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
     "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile recommended",
+    "  sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple",
     "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot",
     "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
@@ -532,7 +538,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive"
+      "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive",
+      "sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runValidate(deps, inputPath, options));
