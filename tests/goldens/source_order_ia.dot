@@ -1,0 +1,23 @@
+digraph ia_place_map {
+  rankdir=LR;
+  graph [dpi=192, fontname="Public Sans"];
+  node [shape=box, fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  "P-700" [label="Dashboard\n/dashboard\n[auth]"];
+  "P-900" [label="Reports\n/dashboard/reports\n[auth]"];
+  subgraph cluster_A_200 {
+    label="Workflows";
+    "P-300" [label="Zeta\n/workflows/zeta\n[auth]"];
+    "P-100" [label="Alpha\n/workflows/alpha\n[auth]"];
+    "P-200" [label="Beta\n/workflows/beta\n[auth]"];
+  }
+  subgraph cluster_A_500 {
+    label="Archive";
+    "P-050" [label="Archive Home\n/archive\n[auth]"];
+  }
+  "P-700" -> "P-300" [style=invis, weight=100];
+  "P-300" -> "P-050" [style=invis, weight=100];
+  "P-300" -> "P-100" [style=invis, weight=100];
+  "P-100" -> "P-200" [style=invis, weight=100];
+  "P-700" -> "P-900";
+}

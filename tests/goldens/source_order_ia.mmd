@@ -1,0 +1,12 @@
+flowchart LR
+  n_P_700["Dashboard<br/>/dashboard<br/>[auth]"]
+  n_P_900["Reports<br/>/dashboard/reports<br/>[auth]"]
+  subgraph n_A_200["Workflows"]
+    n_P_300["Zeta<br/>/workflows/zeta<br/>[auth]"]
+    n_P_100["Alpha<br/>/workflows/alpha<br/>[auth]"]
+    n_P_200["Beta<br/>/workflows/beta<br/>[auth]"]
+  end
+  subgraph n_A_500["Archive"]
+    n_P_050["Archive Home<br/>/archive<br/>[auth]"]
+  end
+  n_P_700 --> n_P_900

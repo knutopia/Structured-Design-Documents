@@ -8,5 +8,6 @@ digraph ia_place_map {
     "P-001" [label="Billing\n/checkout/billing\n[auth]"];
     "P-002" [label="Review\n/checkout/review\n[auth]"];
   }
+  "P-001" -> "P-002" [style=invis, weight=100];
   "P-001" -> "P-002";
 }

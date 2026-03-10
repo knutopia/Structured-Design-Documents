@@ -1,6 +1,12 @@
 import type { ParseDocument, ParseBodyItem, NodeBlock } from "../parser/types.js";
 import type { Diagnostic } from "../types.js";
-import type { CompiledEdge, CompiledGraph, CompiledNode } from "./types.js";
+import {
+  attachGraphAuthorOrder,
+  type AuthorOrderedEdge,
+  type CompiledEdge,
+  type CompiledGraph,
+  type CompiledNode
+} from "./types.js";
 
 function createDiagnostic(
   file: string,
@@ -41,6 +47,12 @@ function collectNodeBlocks(items: ParseDocument["items"]): NodeBlock[] {
   return nodes;
 }
 
+function collectTopLevelNodeIds(items: ParseDocument["items"]): string[] {
+  return items
+    .filter((item): item is NodeBlock => item.kind === "NodeBlock")
+    .map((item) => item.id);
+}
+
 function collectEdges(block: NodeBlock): CompiledEdge[] {
   return block.bodyItems
     .filter((item): item is Extract<ParseBodyItem, { kind: "EdgeLine" }> => item.kind === "EdgeLine")
@@ -56,11 +68,22 @@ function collectEdges(block: NodeBlock): CompiledEdge[] {
     }));
 }
 
+function collectEdgeLineOrder(block: NodeBlock): AuthorOrderedEdge[] {
+  return block.bodyItems
+    .filter((item): item is Extract<ParseBodyItem, { kind: "EdgeLine" }> => item.kind === "EdgeLine")
+    .map((item) => ({
+      type: item.relType,
+      to: item.to
+    }));
+}
+
 export function buildGraph(document: ParseDocument, sourcePath: string): { graph?: CompiledGraph; diagnostics: Diagnostic[] } {
   const diagnostics: Diagnostic[] = [];
   const nodeBlocks = collectNodeBlocks(document.items);
+  const topLevelNodeIds = collectTopLevelNodeIds(document.items);
   const nodes: CompiledNode[] = [];
   const edges: CompiledEdge[] = [];
+  const edgeLineOrderByParentId = new Map<string, AuthorOrderedEdge[]>();
   const seenIds = new Set<string>();
 
   for (const block of nodeBlocks) {
@@ -89,6 +112,7 @@ export function buildGraph(document: ParseDocument, sourcePath: string): { graph
       name: block.name,
       props
     });
+    edgeLineOrderByParentId.set(block.id, collectEdgeLineOrder(block));
     edges.push(...collectEdges(block));
   }
 
@@ -96,13 +120,19 @@ export function buildGraph(document: ParseDocument, sourcePath: string): { graph
     return { diagnostics };
   }
 
+  const graph: CompiledGraph = {
+    schema: "sdd-text",
+    version: document.effectiveVersion,
+    nodes,
+    edges
+  };
+  attachGraphAuthorOrder(graph, {
+    topLevelNodeIds,
+    edgeLineOrderByParentId
+  });
+
   return {
-    graph: {
-      schema: "sdd-text",
-      version: document.effectiveVersion,
-      nodes,
-      edges
-    },
+    graph,
     diagnostics
   };
 }

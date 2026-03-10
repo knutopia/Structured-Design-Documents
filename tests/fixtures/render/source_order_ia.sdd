@@ -1,0 +1,46 @@
+SDD-TEXT 0.1
+
+Place P-700 "Dashboard"
+  route_or_key=/dashboard
+  surface=web
+  access=auth
+  CONTAINS P-900 "Reports"
+  NAVIGATES_TO P-900 "Reports"
+  + Place P-900 "Reports"
+    route_or_key=/dashboard/reports
+    surface=web
+    access=auth
+  END
+END
+
+Area A-200 "Workflows"
+  scope=workflows
+  CONTAINS P-300 "Zeta"
+  CONTAINS P-100 "Alpha"
+  CONTAINS P-200 "Beta"
+  + Place P-300 "Zeta"
+    route_or_key=/workflows/zeta
+    surface=web
+    access=auth
+  END
+  + Place P-100 "Alpha"
+    route_or_key=/workflows/alpha
+    surface=web
+    access=auth
+  END
+  + Place P-200 "Beta"
+    route_or_key=/workflows/beta
+    surface=web
+    access=auth
+  END
+END
+
+Area A-500 "Archive"
+  scope=archive
+  CONTAINS P-050 "Archive Home"
+  + Place P-050 "Archive Home"
+    route_or_key=/archive
+    surface=web
+    access=auth
+  END
+END

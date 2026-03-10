@@ -58,6 +58,26 @@ Common commands:
 - `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
 
+## Structural Ordering Guidance
+
+For humans and LLMs authoring diagrams:
+
+- If you want sibling order in a structural view, write `CONTAINS` and `COMPOSED_OF` lines in that order.
+- Do not rely on nested `+` block placement for ordering; nesting groups authoring context only.
+- Use `PRECEDES` and `TRANSITIONS_TO` for actual flow/state order, not for sibling arrangement.
+
+Example:
+
+```text
+Area A-200 "Projections"
+  CONTAINS P-210 "Overview"
+  CONTAINS P-220 "Projection"
+  CONTAINS P-230 "Create New Projection"
+END
+```
+
+In hierarchy-aware renderers, the expected sibling order is `Overview`, then `Projection`, then `Create New Projection`, even though compiled JSON remains canonically sorted for stable diffs.
+
 ## Local Tooling Prerequisites
 
 Required local tooling:

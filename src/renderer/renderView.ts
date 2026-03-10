@@ -38,8 +38,8 @@ function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: Rend
     };
   }
 
-  const model = buildIaPlaceMapRenderModel(projection as Projection, graph);
   const view = bundle.views.views.find((candidate) => candidate.id === options.viewId);
+  const model = buildIaPlaceMapRenderModel(projection as Projection, graph, view?.projection.hierarchy_edges ?? []);
   const dotStyle = view ? resolveDotPreviewStyle(bundle, view) : getFallbackDotPreviewStyle();
   const text =
     options.format === "dot" ? renderIaPlaceMapDot(model, dotStyle) : renderIaPlaceMapMermaid(model);

@@ -189,6 +189,15 @@ Nesting does NOT imply any relationship. If you want containment/composition, ad
 - Structural containment: `CONTAINS <child>`
 - UI composition: `COMPOSED_OF <component>`
 
+### 6.4 Structural sibling order
+
+When a rendered view treats one or more relationship types as **hierarchy edges**, sibling order follows the source order of those edge lines within the parent block.
+
+- Typical examples are `CONTAINS` and `COMPOSED_OF` when a view uses them as structural hierarchy.
+- For nodes that are top-level in a rendered view, order follows top-level node declaration order after view filtering.
+- Nesting placement of `+` blocks does NOT define sibling order. Only explicit hierarchy edges do.
+- `PRECEDES` and `TRANSITIONS_TO` remain the source of flow/state ordering; they are not replaced by hierarchy-edge source order.
+
 ---
 
 ## 7. Deterministic compilation to JSON (canonical form)
@@ -220,6 +229,7 @@ To keep diffs stable:
 - Edges MUST be sorted by `(from, type, to, event, guard, effect, props)` where `props` is compared by the lexicographically-sorted sequence of `(key, value_as_json)`, and `value_as_json` is the minified JSON encoding of the value with any object keys sorted lexicographically.
 - `to_name` MUST NOT affect sort order (it is a hint only).
 - Edge `props` keys MUST be sorted lexicographically.
+- Canonical sort order stabilizes compiled artifacts only. Structural renderers MAY additionally use author-order metadata derived from top-level declaration order and hierarchy-edge line order.
 
 ### 7.2 Forward references
 

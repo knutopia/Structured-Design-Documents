@@ -33,7 +33,7 @@ Each stage has a narrow responsibility:
 
 - `loadBundle` resolves the v0.1 manifest and loads vocab, syntax, schema, contracts, profiles, and views.
 - `parseSource` interprets `syntax.yaml` and produces a source-spanned parse document.
-- `compileSource` flattens authoring blocks into canonical graph JSON and validates it against `core/schema.json`.
+- `compileSource` flattens authoring blocks into canonical graph JSON, preserves author-order metadata for renderers, and validates the graph against `core/schema.json`.
 - `validateGraph` executes generic validation rules from contracts plus the selected profile.
 - `projectView` creates a normalized projection envelope for the requested view.
 - `renderSource` turns the IA Place Map projection into DOT or Mermaid text.
@@ -43,7 +43,7 @@ Each stage has a narrow responsibility:
 Lean v0.1 keeps only two meaningful internal forms:
 
 - a parse document with source spans
-- a canonical compiled graph
+- a canonical compiled graph with non-serialized author-order metadata attached for renderer use
 
 Projection is treated as a renderer-facing internal artifact, not a public CLI contract in v0.1.
 
@@ -111,10 +111,17 @@ The engine enforces:
 - stable diagnostic ordering
 - stable projection ordering
 - stable DOT and Mermaid text output
+- stable source-ordered structural rendering for hierarchy views
 - stable bundle-owned preview styling defaults
 - canonical `LF` newlines for repo-stored text artifacts
 
 This makes snapshots useful and keeps diffs reviewable.
+
+Stable diffs and source-ordered structural rendering are intentionally separate concerns:
+
+- compiled JSON stays canonically sorted for snapshots and tooling diffs
+- renderer-facing author order is attached out-of-band and does not change the compiled schema
+- reordering top-level declarations or hierarchy-edge lines is treated as an intentional structural edit, not tool instability
 
 Repository text normalization is part of deterministic behavior, not a contributor-specific preference.
 

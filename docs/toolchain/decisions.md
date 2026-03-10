@@ -59,6 +59,8 @@ Compilation is not responsible for:
 - view-specific derivation
 - renderer-specific formatting
 
+Compilation may attach non-serialized metadata that preserves author order for later renderer use, but that metadata is not part of the compiled JSON contract.
+
 ## Validation Policy
 
 Validation runs on compiled graphs only.
@@ -97,6 +99,22 @@ Preview generation remains outside the core renderer contract:
 - Graphviz is used only for DOT-to-SVG layout
 - SVG and PNG artifacts are produced by the CLI preview pipeline
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
+
+## Source-Ordered Structural Rendering
+
+Structural rendering uses two different order models on purpose:
+
+- canonical JSON sort order for stored compiled artifacts
+- author order metadata for hierarchy-aware rendering
+
+Rules:
+
+- top-level rendered nodes follow top-level source declaration order after view filtering
+- sibling nodes under a structural parent follow the source order of hierarchy edge lines such as `CONTAINS` and `COMPOSED_OF`
+- nesting placement of `+` blocks does not define structural order
+- flow order remains the job of explicit ordering edges such as `PRECEDES` and `TRANSITIONS_TO`
+
+This keeps snapshots stable while still letting renderers honor meaningful source order. Reordering top-level declarations or hierarchy-edge lines is treated as an intentional semantic change to rendered structure.
 
 ## Diagnostics And Exit Codes
 

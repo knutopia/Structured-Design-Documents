@@ -357,6 +357,7 @@ boundaries:
   notes:
     - Bare values are parsed lexically; any boolean or numeric coercion occurs after parsing.
     - Canonical JSON ordering is compiler behavior, not source syntax behavior.
+    - Hierarchy-edge line order may be preserved as author-order metadata for projection and rendering, while nesting placement alone does not define structural order.
     - Nesting syntax does not imply containment or composition semantics.
 
 parse_output_contract:
