@@ -38,9 +38,10 @@ The initial TypeScript toolchain is now in place at repo root as package `sdd-to
 Current scope:
 
 - one shared engine with three CLI commands: `compile`, `validate`, and `render`
-- spec-driven parsing, compilation, validation, and IA view rendering against `bundle/v0.1/`
-- first supported end-to-end render slice: `ia_place_map`
-- render targets: DOT and Mermaid source text
+- spec-driven parsing, compilation, validation, projection, and multi-view rendering against `bundle/v0.1/`
+- renderable views: `ia_place_map`, `journey_map`, and `outcome_opportunity_map`
+- render targets: DOT for all renderable views, plus Mermaid for `ia_place_map`
+- preview path: `sdd show` for DOT-backed SVG/PNG artifacts
 
 Contributor reference docs:
 
@@ -57,6 +58,8 @@ Common commands:
 - `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
+- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format dot`
+- `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
 
 ## Structural Ordering Guidance
 

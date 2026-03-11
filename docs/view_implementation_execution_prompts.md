@@ -20,7 +20,7 @@ Shared prompt shape:
 - Non-Goals
 - Verification
 
-## Prompt 1
+## [Done] Prompt 1
 
 ```text
 Implement Plan 1: the shared foundation for multi-view projection and rendering work.

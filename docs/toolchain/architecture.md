@@ -94,22 +94,25 @@ The CLI owns preview artifact generation on top of those text renderers:
 
 Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `recommended` for strict authoring. See [profiles.md](./profiles.md).
 
-## Renderable Slice
+## Renderable Views
 
-The first end-to-end render slice remains `ia_place_map`.
+The current end-to-end renderable set is:
 
-Why this slice still matters:
+- `ia_place_map` via DOT, Mermaid, and SVG/PNG previews
+- `journey_map` via DOT and SVG/PNG previews
+- `outcome_opportunity_map` via DOT and SVG/PNG previews
 
-- it exercises bundle-driven parsing, compilation, validation, projection, render-model building, and rendering
-- it uses both hierarchy (`CONTAINS`) and navigational flow (`NAVIGATES_TO`)
-- it is small enough to keep fixtures and render outputs stable while the projection layer generalizes
+These views share one pattern:
 
-The renderer currently supports only this view, but it targets two textual formats:
+- each renderable view gets its own render-model builder
+- DOT is the minimum rendering contract for previewable views
+- Mermaid support is optional and should only be added when the result stays readable
 
-- DOT
-- Mermaid flowchart
+The per-view render models keep semantics centralized:
 
-Both formats are generated from the same IA render model so view semantics stay centralized. The multi-view foundation means future renderable views should add their own render-model builders beside this one rather than branching inside emitters or CLI commands.
+- IA organizes source-ordered area and place hierarchies plus place annotations
+- journey maps turn `Stage CONTAINS Step` into stage containers and inline `opportunity_refs` badges
+- outcome-opportunity maps turn type scope plus derived instrumentation annotations into deterministic semantic lanes
 
 Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
 

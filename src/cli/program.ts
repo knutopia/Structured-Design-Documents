@@ -474,7 +474,9 @@ function globalHelpText(): string {
     "  sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple",
     "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot",
     "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd",
+    "  sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view journey_map --format dot --out ./journey.dot",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
@@ -551,7 +553,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--out <file>", "write rendered output to a file instead of stdout")
     .addHelpText("after", examplesBlock([
       "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot",
-      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd"
+      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd",
+      "sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view journey_map --format dot --out ./journey.dot"
     ]))
     .action(async (inputPath, options) => {
       const result = await runRenderText(deps, inputPath, options);
@@ -611,6 +614,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg --dot-out ./outcome.dot",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --dot-out ./outcome.dot",
       "Some bundle-defined views may appear before they become renderable in the CLI."

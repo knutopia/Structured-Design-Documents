@@ -69,6 +69,7 @@ Each relationship below defines:
 **Additional constraints:**
 - Containment SHOULD be acyclic.
 - A node SHOULD have at most one structural parent via `CONTAINS` (recommended). If multiple parents exist, the model becomes a graph of reuse rather than a tree; tooling SHOULD surface this explicitly.
+- In `journey_map`, `Stage CONTAINS Step` is the hierarchy the renderer uses for stage containers.
 
 ---
 
@@ -268,6 +269,7 @@ Each relationship below defines:
 - Use `INSTRUMENTED_AT Metric → Event` when the metric is computed from event streams.
 - Use `INSTRUMENTED_AT Metric → Step/Place/ViewState` when the metric is conceptually tied to a moment in the experience (recommended).
 - If a renderer filters out the instrumentation target type, it MAY surface `INSTRUMENTED_AT` as grouped Metric annotations instead of visible edges.
+- In `outcome_opportunity_map`, those grouped Metric annotations SHOULD keep experience targets separate from event targets for readability.
 
 ---
 
@@ -294,6 +296,7 @@ Tooling SHOULD flag models where most `Step` nodes map 1:1 to Places without Vie
 ### 4.4 Journey opportunity traceability
 - Prefer `Step.props.opportunity_refs` as a comma-separated list of `Opportunity` IDs when a journey view needs machine-resolved opportunity references.
 - `pain_points` MAY remain descriptive, but tooling SHOULD use `opportunity_refs` for resolvable traceability.
+- `journey_map` renderers SHOULD resolve those IDs to inline Step annotations when the referenced `Opportunity` nodes are present in the graph.
 
 ### 4.5 Service blueprint visibility values
 - `Process.visibility` canonical values are `frontstage`, `backstage`, and `support`.

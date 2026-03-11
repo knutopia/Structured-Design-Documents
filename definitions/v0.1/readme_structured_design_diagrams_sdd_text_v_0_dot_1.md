@@ -51,12 +51,13 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
 1. **Outcome–Opportunity Map**
    - Answers: *Why are we doing this? How will we measure success?*
    - Uses: `Outcome`, `Metric`, `Opportunity`, `Initiative`
-   - `INSTRUMENTED_AT` context may render as grouped metric annotations when targets are outside the view scope.
+   - `INSTRUMENTED_AT` context may render as grouped metric annotations when targets are outside the view scope, with experience targets separated from event targets.
 
 2. **Journey Map**
    - Answers: *What steps happen over time, from the user’s perspective?*
-   - Uses: `Stage`, `Step` (`PRECEDES`)
-   - Opportunity traceability is rendered from `Step.props.opportunity_refs`, not a separate v0.1 relationship.
+   - Uses: `Stage`, `Step` (`CONTAINS`, `PRECEDES`)
+   - `Stage CONTAINS Step` defines the stage/step hierarchy when stages are present.
+   - Opportunity traceability is rendered from `Step.props.opportunity_refs`, not a separate v0.1 relationship, and typically appears as inline step badges.
 
 3. **Service Blueprint**
    - Answers: *What frontstage/backstage/system/policy work delivers each step?*

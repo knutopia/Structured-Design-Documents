@@ -70,8 +70,36 @@ const bundle: Bundle = {
     },
     views: [
       {
+        id: "outcome_opportunity_map",
+        name: "Outcome-Opportunity Map",
+        status: "operational",
+        projection: {
+          include_node_types: [],
+          include_edge_types: [],
+          hierarchy_edges: [],
+          ordering_edges: []
+        },
+        conventions: {
+          renderer_defaults: {}
+        }
+      },
+      {
         id: "ia_place_map",
         name: "IA Place Map",
+        status: "operational",
+        projection: {
+          include_node_types: [],
+          include_edge_types: [],
+          hierarchy_edges: [],
+          ordering_edges: []
+        },
+        conventions: {
+          renderer_defaults: {}
+        }
+      },
+      {
+        id: "service_blueprint",
+        name: "Service Blueprint",
         status: "operational",
         projection: {
           include_node_types: [],
@@ -283,6 +311,28 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/custom.png");
   });
 
+  it("show supports journey_map previews through the DOT pipeline", async () => {
+    const { deps, renderSourceMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "journey_map",
+      "--out",
+      "/tmp/journey.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+      viewId: "journey_map",
+      format: "dot"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/journey.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/journey.svg");
+  });
+
   it("announces DOT files written via --out", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
@@ -456,6 +506,24 @@ describe("CLI wrappers", () => {
     expect(deps.renderSource).not.toHaveBeenCalled();
   });
 
+  it("render rejects unsupported Mermaid output for a DOT-only view", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "render",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "journey_map",
+      "--format",
+      "mermaid"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("View 'journey_map' does not support text format 'mermaid'");
+    expect(deps.renderSource).not.toHaveBeenCalled();
+  });
+
   it("show reports a known-but-not-yet-renderable view clearly", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
@@ -464,7 +532,7 @@ describe("CLI wrappers", () => {
       "show",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
-      "journey_map"
+      "service_blueprint"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -487,6 +555,8 @@ describe("CLI wrappers", () => {
     expect(help).toContain("recommended  strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
+    expect(help).toContain("sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view journey_map --format dot --out ./journey.dot");
+    expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
   });

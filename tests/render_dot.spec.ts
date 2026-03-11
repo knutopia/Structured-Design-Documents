@@ -9,12 +9,16 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("renderSource dot", () => {
-  it("renders the IA proof examples to stable DOT output", async () => {
+  it("renders supported bundle views to stable DOT output", async () => {
     const bundle = await loadBundle(manifestPath);
 
-    for (const [exampleName, goldenName] of [
-      ["outcome_to_ia_trace.sdd", "outcome_to_ia_trace.dot"],
-      ["place_viewstate_transition.sdd", "place_viewstate_transition.dot"]
+    for (const [exampleName, viewId, goldenName] of [
+      ["outcome_to_ia_trace.sdd", "ia_place_map", "outcome_to_ia_trace.dot"],
+      ["place_viewstate_transition.sdd", "ia_place_map", "place_viewstate_transition.dot"],
+      ["outcome_to_ia_trace.sdd", "journey_map", "outcome_to_ia_trace.journey_map.dot"],
+      ["service_blueprint_slice.sdd", "journey_map", "service_blueprint_slice.journey_map.dot"],
+      ["outcome_to_ia_trace.sdd", "outcome_opportunity_map", "outcome_to_ia_trace.outcome_opportunity_map.dot"],
+      ["metric_event_instrumentation.sdd", "outcome_opportunity_map", "metric_event_instrumentation.outcome_opportunity_map.dot"]
     ] as const) {
       const examplePath = path.join(bundle.rootDir, "examples", exampleName);
       const input = {
@@ -23,7 +27,7 @@ describe("renderSource dot", () => {
       };
       const golden = await readFile(path.join(repoRoot, "tests/goldens", goldenName), "utf8");
       const result = renderSource(input, bundle, {
-        viewId: "ia_place_map",
+        viewId,
         format: "dot"
       });
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);

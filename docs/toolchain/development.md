@@ -17,6 +17,12 @@ Graphviz is not required for the core v0.1 build and test flow because the engin
 
 Projection remains an internal artifact in v0.1. The repo now projects every manifest-declared view through the shared projector path for tests, while CLI rendering and preview commands stay limited to views registered as renderable.
 
+Current renderable views:
+
+- `ia_place_map`: DOT, Mermaid, SVG, PNG
+- `journey_map`: DOT, SVG, PNG
+- `outcome_opportunity_map`: DOT, SVG, PNG
+
 The CLI preview pipeline is SVG-first:
 
 - `sdd show` renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and writes `.svg` by default
@@ -93,10 +99,34 @@ Render IA Place Map to Mermaid:
 pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid
 ```
 
+Render Journey Map to DOT:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format dot
+```
+
+Render Outcome-Opportunity Map to DOT:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --format dot
+```
+
 Render an SVG preview artifact:
 
 ```bash
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
+```
+
+Render a Journey Map SVG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out /tmp/journey.svg
+```
+
+Render an Outcome-Opportunity Map SVG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg
 ```
 
 Render a PNG preview artifact:
@@ -160,6 +190,6 @@ Practical rule of thumb:
 2. Add or update example coverage and declare projection snapshots in `bundle/v0.1/manifest.yaml`.
 3. Implement a projection builder in `src/projector/` and register it in `src/projector/viewProjectors.ts`.
 4. Keep bundle semantics in that projection builder, using `renderer_defaults` only for downstream derived data.
-5. Add a render model only if the view will become renderable.
+5. Add a render model only if the view will become renderable. Treat DOT as the minimum contract and add Mermaid only when the result stays readable.
 6. Register renderable views in `src/renderer/viewRenderers.ts`; CLI support derives from that registry.
 7. Add explicit CLI support only after the projection and rendering path is proven by tests. v0.1 still has no public `sdd project` command.

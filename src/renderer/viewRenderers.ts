@@ -1,9 +1,11 @@
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import { renderIaPlaceMapDot } from "./dot.js";
+import { renderIaPlaceMapDot, renderJourneyMapDot, renderOutcomeOpportunityMapDot } from "./dot.js";
 import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
+import { buildJourneyMapRenderModel } from "./journeyMapRenderModel.js";
 import { renderIaPlaceMapMermaid } from "./mermaid.js";
+import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
 import { resolveDotPreviewStyle } from "./previewStyle.js";
 
 export type TextRenderFormat = "dot" | "mermaid";
@@ -19,6 +21,18 @@ export interface ViewRenderCapability {
 interface ViewTextRenderer {
   capability: ViewRenderCapability;
   render: (projection: Projection, graph: CompiledGraph, bundle: Bundle, view: ViewSpec, format: TextRenderFormat) => string;
+}
+
+function dotPreviewCapability(): ViewRenderCapability {
+  return {
+    textFormats: ["dot"],
+    previewFormats: ["svg", "png"],
+    previewSourceByFormat: {
+      svg: "dot",
+      png: "dot"
+    },
+    defaultPreviewFormat: "svg"
+  };
 }
 
 const iaPlaceMapRenderer: ViewTextRenderer = {
@@ -41,7 +55,30 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
   }
 };
 
+const journeyMapRenderer: ViewTextRenderer = {
+  capability: dotPreviewCapability(),
+  render: (projection, graph, bundle, view) => {
+    const model = buildJourneyMapRenderModel(
+      projection,
+      graph,
+      view.projection.hierarchy_edges ?? [],
+      view.projection.ordering_edges ?? []
+    );
+    return renderJourneyMapDot(model, resolveDotPreviewStyle(bundle, view));
+  }
+};
+
+const outcomeOpportunityMapRenderer: ViewTextRenderer = {
+  capability: dotPreviewCapability(),
+  render: (projection, graph, bundle, view) => {
+    const model = buildOutcomeOpportunityMapRenderModel(projection, graph);
+    return renderOutcomeOpportunityMapDot(model, resolveDotPreviewStyle(bundle, view));
+  }
+};
+
 const viewRenderers: Partial<Record<string, ViewTextRenderer>> = {
+  outcome_opportunity_map: outcomeOpportunityMapRenderer,
+  journey_map: journeyMapRenderer,
   ia_place_map: iaPlaceMapRenderer
 };
 
