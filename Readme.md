@@ -102,3 +102,7 @@ Verify Graphviz setup with:
 ## Current Project Goals
 
 ### Expand the New Toolchain to Cover Remaining View Types
+
+Execution-ready prompts for the four planned implementation phases are in:
+
+- `docs/view_implementation_execution_prompts.md`
