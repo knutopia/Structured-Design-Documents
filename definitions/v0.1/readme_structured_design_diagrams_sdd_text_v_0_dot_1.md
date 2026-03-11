@@ -63,6 +63,7 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
    - Answers: *What frontstage/backstage/system/policy work delivers each step?*
    - Uses: `Step`, `Process`, `SystemAction`, `Policy`, `DataEntity`
    - Lanes derive from `Process.visibility` plus node-type defaults for system and policy.
+   - Canonical `Process.visibility` values are `frontstage`, `backstage`, and `support`; legacy `customer-visible` and `not-visible` are downstream compatibility aliases for `frontstage` and `backstage`.
 
 4. **IA / Place Map**
    - Answers: *What are the places in the product and how do they connect?*
@@ -73,6 +74,7 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
    - Answers: *How does a scenario traverse Steps and Places?*
    - Uses: `Step`, `Place`, optional `ViewState`
    - Branch points are modeled as `Step.props.kind=decision`.
+   - Branch labels prefer guard text, then event id, then the target node name when neither guard nor event is present.
 
 6. **UI Contracts**
    - Answers: *What states and components exist within a Place, and how do they transition?*

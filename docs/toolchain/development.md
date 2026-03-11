@@ -22,6 +22,8 @@ Current renderable views:
 - `ia_place_map`: DOT, Mermaid, SVG, PNG
 - `journey_map`: DOT, SVG, PNG
 - `outcome_opportunity_map`: DOT, SVG, PNG
+- `service_blueprint`: DOT, SVG, PNG
+- `scenario_flow`: DOT, SVG, PNG
 
 The CLI preview pipeline is SVG-first:
 
@@ -111,6 +113,18 @@ Render Outcome-Opportunity Map to DOT:
 pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --format dot
 ```
 
+Render Service Blueprint to DOT:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format dot
+```
+
+Render Scenario Flow to DOT:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot
+```
+
 Render an SVG preview artifact:
 
 ```bash
@@ -127,6 +141,18 @@ Render an Outcome-Opportunity Map SVG preview artifact:
 
 ```bash
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg
+```
+
+Render a Service Blueprint SVG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out /tmp/blueprint.svg
+```
+
+Render a Scenario Flow SVG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --out /tmp/scenario.svg
 ```
 
 Render a PNG preview artifact:
@@ -168,6 +194,14 @@ Practical rule of thumb:
 - if a rule should reject or warn on author input, it belongs in contracts or profiles
 - if a rule explains how a view should be interpreted, document it under `normative_defaults`
 - if a rule drives derived projection or rendering behavior, encode it under `renderer_defaults`
+
+Authoring guidance for the newly renderable views:
+
+- `service_blueprint` expects canonical `Process.visibility` values of `frontstage`, `backstage`, or `support`
+- downstream rendering still maps legacy `customer-visible` to `frontstage` and `not-visible` to `backstage`, but those aliases are compatibility behavior rather than canonical authoring
+- `Step` nodes always occupy the derived `customer` lane; `SystemAction` and `DataEntity` occupy `system`; `Policy` occupies `policy`
+- `scenario_flow` branch points should be modeled as `Step.props.kind=decision`
+- branch labels follow bundle precedence: guard text first, then event id, then the target node name when neither guard nor event is present
 
 ## Adding A New Validation Primitive
 

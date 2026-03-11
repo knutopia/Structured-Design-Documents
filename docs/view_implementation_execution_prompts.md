@@ -92,7 +92,7 @@ Final Response Expectations
 - Do not hand off partial work without saying exactly what remains.
 ```
 
-## Prompt 2
+## [Done] Prompt 2
 
 ```text
 Implement Plan 2: `journey_map` and `outcome_opportunity_map` end-to-end on top of the shared foundation from Plan 1.

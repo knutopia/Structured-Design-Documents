@@ -10,6 +10,16 @@ import type {
   OutcomeOpportunityRenderLane,
   OutcomeOpportunityRenderNode
 } from "./outcomeOpportunityMapRenderModel.js";
+import type {
+  ScenarioFlowRenderLane,
+  ScenarioFlowRenderModel,
+  ScenarioFlowRenderNode
+} from "./scenarioFlowRenderModel.js";
+import type {
+  ServiceBlueprintRenderLane,
+  ServiceBlueprintRenderModel,
+  ServiceBlueprintRenderNode
+} from "./serviceBlueprintRenderModel.js";
 import type { DotPreviewStyle } from "./previewStyle.js";
 
 function escapeLabel(text: string): string {
@@ -26,6 +36,23 @@ function quoteId(id: string): string {
 
 function clusterId(prefix: string, id: string): string {
   return `${prefix}_${id.replace(/[^A-Za-z0-9_]/g, "_")}`;
+}
+
+function formatAttributeValue(value: string | number | boolean): string {
+  if (typeof value === "string") {
+    return `"${escapeLabel(value)}"`;
+  }
+
+  return String(value);
+}
+
+function formatAttributes(attributes: Record<string, string | number | boolean | undefined>): string {
+  const entries = Object.entries(attributes).filter((entry): entry is [string, string | number | boolean] => entry[1] !== undefined);
+  if (entries.length === 0) {
+    return "";
+  }
+
+  return ` [${entries.map(([key, value]) => `${key}=${formatAttributeValue(value)}`).join(", ")}]`;
 }
 
 function renderInvisibleOrderChains(
@@ -181,6 +208,136 @@ export function renderOutcomeOpportunityMapDot(
 
   for (const edge of model.edges) {
     lines.push(`  ${quoteId(edge.from)} -> ${quoteId(edge.to)} [label="${escapeLabel(edge.label)}"];`);
+  }
+
+  lines.push("}");
+  return lines.join("\n");
+}
+
+function renderServiceBlueprintNode(node: ServiceBlueprintRenderNode, indent: string, lines: string[]): void {
+  lines.push(
+    `${indent}${quoteId(node.id)}${formatAttributes({
+      shape: node.shape,
+      style: node.style,
+      label: formatMultilineLabel(node.labelLines)
+    })};`
+  );
+}
+
+function renderServiceBlueprintLane(
+  lane: ServiceBlueprintRenderLane,
+  nodesById: Map<string, ServiceBlueprintRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${clusterId("rank", lane.id)} {`);
+  lines.push(`${indent}  rank=same;`);
+  lines.push(`${indent}  ${quoteId(lane.headerId)} [shape=plaintext, label="${escapeLabel(lane.label)}"];`);
+  for (const nodeId of lane.nodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderServiceBlueprintNode(node, `${indent}  `, lines);
+  }
+  lines.push(`${indent}}`);
+}
+
+export function renderServiceBlueprintDot(model: ServiceBlueprintRenderModel, style?: DotPreviewStyle): string {
+  const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
+  const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
+  const lines = [
+    "digraph service_blueprint {",
+    "  rankdir=TB;",
+    `  graph [fontname="${fontFamily}", nodesep=0.6, ranksep=0.9];`,
+    `  node [fontname="${fontFamily}"];`,
+    `  edge [fontname="${fontFamily}"];`
+  ];
+
+  for (const lane of model.lanes) {
+    renderServiceBlueprintLane(lane, nodesById, "  ", lines);
+  }
+
+  for (const nodeId of model.ungroupedNodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderServiceBlueprintNode(node, "  ", lines);
+  }
+
+  renderInvisibleOrderChains(model.siblingOrderChains, lines, new Set(model.edges.map((edge) => `${edge.from}->${edge.to}`)));
+
+  for (const edge of model.edges) {
+    lines.push(
+      `  ${quoteId(edge.from)} -> ${quoteId(edge.to)}${formatAttributes({
+        label: edge.label,
+        style: edge.style,
+        constraint: edge.constraint,
+        weight: edge.weight
+      })};`
+    );
+  }
+
+  lines.push("}");
+  return lines.join("\n");
+}
+
+function renderScenarioFlowNode(node: ScenarioFlowRenderNode, indent: string, lines: string[]): void {
+  lines.push(
+    `${indent}${quoteId(node.id)}${formatAttributes({
+      shape: node.shape,
+      style: node.style,
+      label: formatMultilineLabel(node.labelLines)
+    })};`
+  );
+}
+
+function renderScenarioFlowLane(
+  lane: ScenarioFlowRenderLane,
+  nodesById: Map<string, ScenarioFlowRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${clusterId("rank", lane.id)} {`);
+  lines.push(`${indent}  rank=same;`);
+  lines.push(`${indent}  ${quoteId(lane.headerId)} [shape=plaintext, label="${escapeLabel(lane.label)}"];`);
+  for (const nodeId of lane.nodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderScenarioFlowNode(node, `${indent}  `, lines);
+  }
+  lines.push(`${indent}}`);
+}
+
+export function renderScenarioFlowDot(model: ScenarioFlowRenderModel, style?: DotPreviewStyle): string {
+  const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
+  const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
+  const lines = [
+    "digraph scenario_flow {",
+    "  rankdir=TB;",
+    `  graph [fontname="${fontFamily}", nodesep=0.7, ranksep=0.9];`,
+    `  node [fontname="${fontFamily}"];`,
+    `  edge [fontname="${fontFamily}"];`
+  ];
+
+  for (const lane of model.lanes) {
+    renderScenarioFlowLane(lane, nodesById, "  ", lines);
+  }
+
+  renderInvisibleOrderChains(model.siblingOrderChains, lines, new Set(model.edges.map((edge) => `${edge.from}->${edge.to}`)));
+
+  for (const edge of model.edges) {
+    lines.push(
+      `  ${quoteId(edge.from)} -> ${quoteId(edge.to)}${formatAttributes({
+        label: edge.label,
+        style: edge.style,
+        constraint: edge.constraint,
+        weight: edge.weight
+      })};`
+    );
   }
 
   lines.push("}");

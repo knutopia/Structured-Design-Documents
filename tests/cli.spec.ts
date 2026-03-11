@@ -112,8 +112,36 @@ const bundle: Bundle = {
         }
       },
       {
+        id: "scenario_flow",
+        name: "Scenario Flow",
+        status: "operational",
+        projection: {
+          include_node_types: [],
+          include_edge_types: [],
+          hierarchy_edges: [],
+          ordering_edges: []
+        },
+        conventions: {
+          renderer_defaults: {}
+        }
+      },
+      {
         id: "journey_map",
         name: "Journey Map",
+        status: "operational",
+        projection: {
+          include_node_types: [],
+          include_edge_types: [],
+          hierarchy_edges: [],
+          ordering_edges: []
+        },
+        conventions: {
+          renderer_defaults: {}
+        }
+      },
+      {
+        id: "ui_contracts",
+        name: "UI Contracts",
         status: "operational",
         projection: {
           include_node_types: [],
@@ -333,6 +361,50 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/journey.svg");
   });
 
+  it("show supports service_blueprint previews through the DOT pipeline", async () => {
+    const { deps, renderSourceMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/service_blueprint_slice.sdd",
+      "--view",
+      "service_blueprint",
+      "--out",
+      "/tmp/blueprint.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+      viewId: "service_blueprint",
+      format: "dot"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/blueprint.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/blueprint.svg");
+  });
+
+  it("show supports scenario_flow previews through the DOT pipeline", async () => {
+    const { deps, renderSourceMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/scenario_branching.sdd",
+      "--view",
+      "scenario_flow",
+      "--out",
+      "/tmp/scenario.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+      viewId: "scenario_flow",
+      format: "dot"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/scenario.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/scenario.svg");
+  });
+
   it("announces DOT files written via --out", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
@@ -532,7 +604,7 @@ describe("CLI wrappers", () => {
       "show",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
-      "service_blueprint"
+      "ui_contracts"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -555,7 +627,8 @@ describe("CLI wrappers", () => {
     expect(help).toContain("recommended  strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
-    expect(help).toContain("sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view journey_map --format dot --out ./journey.dot");
+    expect(help).toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
+    expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");

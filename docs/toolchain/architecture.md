@@ -64,6 +64,12 @@ This keeps the architecture boundary explicit:
 - emitters only format already-derived render data
 - preview generation remains a CLI concern layered on top of DOT-backed renderers
 
+That separation matters most for the non-IA views:
+
+- service blueprints derive lane membership in projection, then let the render model translate those derived lane groups into row-oriented DOT structures
+- scenario flows derive decision-node shape and branch-label precedence in projection, then let the render model decide which rendered edges surface those labels
+- emitters stay intentionally dumb so bundle semantics do not get duplicated across output formats
+
 Not every projected view is renderable yet, and that is intentional. Projection coverage can land before CLI rendering support. v0.1 still does not expose a public `sdd project` command.
 
 ## Bundle Ownership
@@ -101,6 +107,8 @@ The current end-to-end renderable set is:
 - `ia_place_map` via DOT, Mermaid, and SVG/PNG previews
 - `journey_map` via DOT and SVG/PNG previews
 - `outcome_opportunity_map` via DOT and SVG/PNG previews
+- `service_blueprint` via DOT and SVG/PNG previews
+- `scenario_flow` via DOT and SVG/PNG previews
 
 These views share one pattern:
 
@@ -113,6 +121,8 @@ The per-view render models keep semantics centralized:
 - IA organizes source-ordered area and place hierarchies plus place annotations
 - journey maps turn `Stage CONTAINS Step` into stage containers and inline `opportunity_refs` badges
 - outcome-opportunity maps turn type scope plus derived instrumentation annotations into deterministic semantic lanes
+- service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
+- scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 
 Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
 

@@ -474,8 +474,9 @@ function globalHelpText(): string {
     "  sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple",
     "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot",
     "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd",
-    "  sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view journey_map --format dot --out ./journey.dot",
+    "  sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+    "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
@@ -554,7 +555,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .addHelpText("after", examplesBlock([
       "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot",
       "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd",
-      "sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view journey_map --format dot --out ./journey.dot"
+      "sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format dot --out ./blueprint.dot",
+      "sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot"
     ]))
     .action(async (inputPath, options) => {
       const result = await runRenderText(deps, inputPath, options);
@@ -615,6 +617,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
+      "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
+      "sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --out ./scenario.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg --dot-out ./outcome.dot",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --dot-out ./outcome.dot",

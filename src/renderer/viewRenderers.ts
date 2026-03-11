@@ -1,12 +1,20 @@
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import { renderIaPlaceMapDot, renderJourneyMapDot, renderOutcomeOpportunityMapDot } from "./dot.js";
+import {
+  renderIaPlaceMapDot,
+  renderJourneyMapDot,
+  renderOutcomeOpportunityMapDot,
+  renderScenarioFlowDot,
+  renderServiceBlueprintDot
+} from "./dot.js";
 import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
 import { buildJourneyMapRenderModel } from "./journeyMapRenderModel.js";
 import { renderIaPlaceMapMermaid } from "./mermaid.js";
 import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
 import { resolveDotPreviewStyle } from "./previewStyle.js";
+import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
+import { buildServiceBlueprintRenderModel } from "./serviceBlueprintRenderModel.js";
 
 export type TextRenderFormat = "dot" | "mermaid";
 export type PreviewFormat = "svg" | "png";
@@ -76,10 +84,28 @@ const outcomeOpportunityMapRenderer: ViewTextRenderer = {
   }
 };
 
+const serviceBlueprintRenderer: ViewTextRenderer = {
+  capability: dotPreviewCapability(),
+  render: (projection, graph, bundle, view) => {
+    const model = buildServiceBlueprintRenderModel(projection, graph);
+    return renderServiceBlueprintDot(model, resolveDotPreviewStyle(bundle, view));
+  }
+};
+
+const scenarioFlowRenderer: ViewTextRenderer = {
+  capability: dotPreviewCapability(),
+  render: (projection, graph, bundle, view) => {
+    const model = buildScenarioFlowRenderModel(projection, graph);
+    return renderScenarioFlowDot(model, resolveDotPreviewStyle(bundle, view));
+  }
+};
+
 const viewRenderers: Partial<Record<string, ViewTextRenderer>> = {
   outcome_opportunity_map: outcomeOpportunityMapRenderer,
   journey_map: journeyMapRenderer,
-  ia_place_map: iaPlaceMapRenderer
+  service_blueprint: serviceBlueprintRenderer,
+  ia_place_map: iaPlaceMapRenderer,
+  scenario_flow: scenarioFlowRenderer
 };
 
 export function getViewTextRenderer(viewId: string): ViewTextRenderer | undefined {
