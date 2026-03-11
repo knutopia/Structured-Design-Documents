@@ -20,6 +20,16 @@ import type {
   ServiceBlueprintRenderModel,
   ServiceBlueprintRenderNode
 } from "./serviceBlueprintRenderModel.js";
+import type {
+  UiContractsComponentItem,
+  UiContractsPlaceItem,
+  UiContractsRenderModel,
+  UiContractsRenderNode,
+  UiContractsRootItem,
+  UiContractsStateGroupItem,
+  UiContractsSupportingLane,
+  UiContractsViewStateItem
+} from "./uiContractsRenderModel.js";
 import type { DotPreviewStyle } from "./previewStyle.js";
 
 function escapeLabel(text: string): string {
@@ -325,6 +335,186 @@ export function renderScenarioFlowDot(model: ScenarioFlowRenderModel, style?: Do
 
   for (const lane of model.lanes) {
     renderScenarioFlowLane(lane, nodesById, "  ", lines);
+  }
+
+  renderInvisibleOrderChains(model.siblingOrderChains, lines, new Set(model.edges.map((edge) => `${edge.from}->${edge.to}`)));
+
+  for (const edge of model.edges) {
+    lines.push(
+      `  ${quoteId(edge.from)} -> ${quoteId(edge.to)}${formatAttributes({
+        label: edge.label,
+        style: edge.style,
+        constraint: edge.constraint,
+        weight: edge.weight
+      })};`
+    );
+  }
+
+  lines.push("}");
+  return lines.join("\n");
+}
+
+function renderUiContractsNode(node: UiContractsRenderNode, indent: string, lines: string[]): void {
+  lines.push(
+    `${indent}${quoteId(node.id)}${formatAttributes({
+      shape: node.shape,
+      style: node.style,
+      label: formatMultilineLabel(node.labelLines)
+    })};`
+  );
+}
+
+function renderUiContractsComponent(
+  item: UiContractsComponentItem,
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  const node = nodesById.get(item.nodeId);
+  if (!node) {
+    return;
+  }
+
+  renderUiContractsNode(node, indent, lines);
+}
+
+function renderUiContractsStateGroup(
+  item: UiContractsStateGroupItem,
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
+  lines.push(
+    `${indent}  graph${formatAttributes({
+      label: formatMultilineLabel(item.labelLines),
+      style: item.style
+    })};`
+  );
+  for (const nodeId of item.nodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderUiContractsNode(node, `${indent}  `, lines);
+  }
+  lines.push(`${indent}}`);
+}
+
+function renderUiContractsViewState(
+  item: UiContractsViewStateItem,
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  if (item.childItems.length === 0) {
+    const node = nodesById.get(item.nodeId);
+    if (node) {
+      renderUiContractsNode(node, indent, lines);
+    }
+    return;
+  }
+
+  lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
+  lines.push(
+    `${indent}  graph${formatAttributes({
+      label: "",
+      style: item.style
+    })};`
+  );
+  const node = nodesById.get(item.nodeId);
+  if (node) {
+    renderUiContractsNode(node, `${indent}  `, lines);
+  }
+  renderUiContractsItems(item.childItems, nodesById, `${indent}  `, lines);
+  lines.push(`${indent}}`);
+}
+
+function renderUiContractsPlace(
+  item: UiContractsPlaceItem,
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
+  lines.push(
+    `${indent}  graph${formatAttributes({
+      label: formatMultilineLabel(item.labelLines),
+      style: "rounded"
+    })};`
+  );
+  lines.push(
+    `${indent}  ${quoteId(item.anchorId)}${formatAttributes({
+      label: "",
+      shape: "point",
+      width: 0,
+      height: 0,
+      style: "invis"
+    })};`
+  );
+  renderUiContractsItems(item.childItems, nodesById, `${indent}  `, lines);
+  lines.push(`${indent}}`);
+}
+
+function renderUiContractsItems(
+  items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem> | UiContractsRootItem[],
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  for (const item of items) {
+    if (item.kind === "place") {
+      renderUiContractsPlace(item, nodesById, indent, lines);
+      continue;
+    }
+
+    if (item.kind === "view_state") {
+      renderUiContractsViewState(item, nodesById, indent, lines);
+      continue;
+    }
+
+    if (item.kind === "state_group") {
+      renderUiContractsStateGroup(item, nodesById, indent, lines);
+      continue;
+    }
+
+    renderUiContractsComponent(item, nodesById, indent, lines);
+  }
+}
+
+function renderUiContractsSupportingLane(
+  lane: UiContractsSupportingLane,
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${clusterId("rank", lane.headerId)} {`);
+  lines.push(`${indent}  rank=same;`);
+  lines.push(`${indent}  ${quoteId(lane.headerId)} [shape=plaintext, label="${escapeLabel(lane.label)}"];`);
+  for (const nodeId of lane.nodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderUiContractsNode(node, `${indent}  `, lines);
+  }
+  lines.push(`${indent}}`);
+}
+
+export function renderUiContractsDot(model: UiContractsRenderModel, style?: DotPreviewStyle): string {
+  const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
+  const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
+  const lines = [
+    "digraph ui_contracts {",
+    "  rankdir=LR;",
+    `  graph [fontname="${fontFamily}", compound=true, nodesep=0.7, ranksep=1.0];`,
+    `  node [fontname="${fontFamily}"];`,
+    `  edge [fontname="${fontFamily}"];`
+  ];
+
+  renderUiContractsItems(model.rootItems, nodesById, "  ", lines);
+  if (model.supportingLane) {
+    renderUiContractsSupportingLane(model.supportingLane, nodesById, "  ", lines);
   }
 
   renderInvisibleOrderChains(model.siblingOrderChains, lines, new Set(model.edges.map((edge) => `${edge.from}->${edge.to}`)));

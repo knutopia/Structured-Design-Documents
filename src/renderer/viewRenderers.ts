@@ -6,7 +6,8 @@ import {
   renderJourneyMapDot,
   renderOutcomeOpportunityMapDot,
   renderScenarioFlowDot,
-  renderServiceBlueprintDot
+  renderServiceBlueprintDot,
+  renderUiContractsDot
 } from "./dot.js";
 import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
 import { buildJourneyMapRenderModel } from "./journeyMapRenderModel.js";
@@ -15,6 +16,7 @@ import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRe
 import { resolveDotPreviewStyle } from "./previewStyle.js";
 import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
 import { buildServiceBlueprintRenderModel } from "./serviceBlueprintRenderModel.js";
+import { buildUiContractsRenderModel } from "./uiContractsRenderModel.js";
 
 export type TextRenderFormat = "dot" | "mermaid";
 export type PreviewFormat = "svg" | "png";
@@ -100,12 +102,21 @@ const scenarioFlowRenderer: ViewTextRenderer = {
   }
 };
 
+const uiContractsRenderer: ViewTextRenderer = {
+  capability: dotPreviewCapability(),
+  render: (projection, graph, bundle, view) => {
+    const model = buildUiContractsRenderModel(projection, graph);
+    return renderUiContractsDot(model, resolveDotPreviewStyle(bundle, view));
+  }
+};
+
 const viewRenderers: Partial<Record<string, ViewTextRenderer>> = {
   outcome_opportunity_map: outcomeOpportunityMapRenderer,
   journey_map: journeyMapRenderer,
   service_blueprint: serviceBlueprintRenderer,
   ia_place_map: iaPlaceMapRenderer,
-  scenario_flow: scenarioFlowRenderer
+  scenario_flow: scenarioFlowRenderer,
+  ui_contracts: uiContractsRenderer
 };
 
 export function getViewTextRenderer(viewId: string): ViewTextRenderer | undefined {

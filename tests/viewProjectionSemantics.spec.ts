@@ -150,4 +150,73 @@ END
       }
     ]);
   });
+
+  it("keeps ViewState as the primary ui_contracts graph and groups scoped State detail", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(bundle.rootDir, "examples/place_viewstate_transition.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+
+    const projected = projectView(compiled.graph!, bundle, "ui_contracts");
+
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection?.derived.node_groups).toEqual([
+      {
+        id: "secondary_state_group:C-010",
+        role: "secondary_state_group",
+        label: "C-010",
+        node_ids: ["ST-010a", "ST-010b"],
+        scope_id: "C-010"
+      }
+    ]);
+    expect(projected.projection?.derived.view_metadata).toEqual({
+      transition_graph_priority: {
+        primary_node_type: "ViewState",
+        secondary_node_type: "State",
+        secondary_render_mode: "inset",
+        fallback_to_secondary_when_primary_absent: true
+      }
+    });
+    expect(projected.projection?.notes).toEqual([]);
+  });
+
+  it("falls back to scoped State graphs when ui_contracts has no ViewState nodes", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(bundle.rootDir, "examples/ui_state_fallback.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+
+    const projected = projectView(compiled.graph!, bundle, "ui_contracts");
+
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection?.derived.node_groups).toEqual([
+      {
+        id: "secondary_state_group:C-060",
+        role: "secondary_state_group",
+        label: "C-060",
+        node_ids: ["ST-061a", "ST-061b"],
+        scope_id: "C-060"
+      },
+      {
+        id: "secondary_state_group:P-060",
+        role: "secondary_state_group",
+        label: "P-060",
+        node_ids: ["ST-060a", "ST-060b"],
+        scope_id: "P-060"
+      }
+    ]);
+    expect(projected.projection?.notes).toEqual([
+      "No ViewState nodes are present in this example; State acts as the effective primary transition graph."
+    ]);
+  });
 });

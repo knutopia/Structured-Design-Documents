@@ -80,6 +80,8 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
    - Answers: *What states and components exist within a Place, and how do they transition?*
    - Uses: `Place`, `ViewState`, `Component`, optional `State`, `Event`
    - `ViewState` is the primary graph; `State` is scoped secondary detail.
+   - Use `State.scope_id` to bind state detail to the owning `Place` or `Component`.
+   - If a slice has no `ViewState` nodes, grouped `State` transitions become the effective primary graph for this view.
 
 ---
 

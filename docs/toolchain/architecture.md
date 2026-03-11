@@ -68,6 +68,7 @@ That separation matters most for the non-IA views:
 
 - service blueprints derive lane membership in projection, then let the render model translate those derived lane groups into row-oriented DOT structures
 - scenario flows derive decision-node shape and branch-label precedence in projection, then let the render model decide which rendered edges surface those labels
+- ui contracts derive transition-graph priority in projection, then let the render model decide whether `ViewState` remains primary or scoped `State` groups become the effective primary fallback
 - emitters stay intentionally dumb so bundle semantics do not get duplicated across output formats
 
 Not every projected view is renderable yet, and that is intentional. Projection coverage can land before CLI rendering support. v0.1 still does not expose a public `sdd project` command.
@@ -109,6 +110,7 @@ The current end-to-end renderable set is:
 - `outcome_opportunity_map` via DOT and SVG/PNG previews
 - `service_blueprint` via DOT and SVG/PNG previews
 - `scenario_flow` via DOT and SVG/PNG previews
+- `ui_contracts` via DOT and SVG/PNG previews
 
 These views share one pattern:
 
@@ -123,6 +125,7 @@ The per-view render models keep semantics centralized:
 - outcome-opportunity maps turn type scope plus derived instrumentation annotations into deterministic semantic lanes
 - service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
+- ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter
 
 Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
 

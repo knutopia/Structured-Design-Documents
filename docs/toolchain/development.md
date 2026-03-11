@@ -24,6 +24,7 @@ Current renderable views:
 - `outcome_opportunity_map`: DOT, SVG, PNG
 - `service_blueprint`: DOT, SVG, PNG
 - `scenario_flow`: DOT, SVG, PNG
+- `ui_contracts`: DOT, SVG, PNG
 
 The CLI preview pipeline is SVG-first:
 
@@ -125,6 +126,12 @@ Render Scenario Flow to DOT:
 pnpm sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot
 ```
 
+Render UI Contracts to DOT:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot
+```
+
 Render an SVG preview artifact:
 
 ```bash
@@ -153,6 +160,12 @@ Render a Scenario Flow SVG preview artifact:
 
 ```bash
 pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --out /tmp/scenario.svg
+```
+
+Render a UI Contracts SVG preview artifact:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out /tmp/ui-contracts.svg
 ```
 
 Render a PNG preview artifact:
@@ -202,6 +215,9 @@ Authoring guidance for the newly renderable views:
 - `Step` nodes always occupy the derived `customer` lane; `SystemAction` and `DataEntity` occupy `system`; `Policy` occupies `policy`
 - `scenario_flow` branch points should be modeled as `Step.props.kind=decision`
 - branch labels follow bundle precedence: guard text first, then event id, then the target node name when neither guard nor event is present
+- `ui_contracts` treats `ViewState` transitions as the primary UI-contract graph when any `ViewState` nodes are present
+- use `State` for scoped secondary detail on a `Place` or `Component`, and set `State.scope_id` to that owning node id
+- if a UI contract slice has no `ViewState` nodes, renderers fall back to the grouped `State` transitions as the effective primary graph instead of inventing a separate state-machine subsystem
 
 ## Adding A New Validation Primitive
 

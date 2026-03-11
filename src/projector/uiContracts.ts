@@ -12,6 +12,7 @@ import {
 interface TransitionGraphPriorityConfig {
   primary?: string;
   secondary?: string;
+  secondaryGroupingProp?: string;
   secondaryRenderMode?: string;
   fallbackToSecondaryWhenPrimaryAbsent: boolean;
 }
@@ -22,6 +23,8 @@ function readTransitionGraphPriorityConfig(view: ViewSpec): TransitionGraphPrior
   return {
     primary: typeof defaults.primary === "string" ? defaults.primary : undefined,
     secondary: typeof defaults.secondary === "string" ? defaults.secondary : undefined,
+    secondaryGroupingProp:
+      typeof defaults.secondary_grouping_prop === "string" ? defaults.secondary_grouping_prop : undefined,
     secondaryRenderMode: typeof defaults.secondary_render_mode === "string" ? defaults.secondary_render_mode : undefined,
     fallbackToSecondaryWhenPrimaryAbsent: defaults.fallback_to_secondary_when_primary_absent === true
   };
@@ -30,9 +33,10 @@ function readTransitionGraphPriorityConfig(view: ViewSpec): TransitionGraphPrior
 function buildSecondaryStateGroups(
   graph: CompiledGraph,
   projectedNodeIds: Set<string>,
-  secondaryType: string | undefined
+  secondaryType: string | undefined,
+  groupingProp: string | undefined
 ): ProjectionNodeGroup[] {
-  if (!secondaryType) {
+  if (!secondaryType || !groupingProp) {
     return [];
   }
 
@@ -42,7 +46,7 @@ function buildSecondaryStateGroups(
       continue;
     }
 
-    const scopeId = node.props.scope_id;
+    const scopeId = node.props[groupingProp];
     if (!scopeId) {
       continue;
     }
@@ -90,7 +94,12 @@ function buildOmissions(
 export function buildUiContractsProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec): ProjectionResult {
   const context = createProjectionBuilderContext(graph, bundle, view);
   const config = readTransitionGraphPriorityConfig(view);
-  const nodeGroups = buildSecondaryStateGroups(graph, context.projectedNodeIds, config.secondary);
+  const nodeGroups = buildSecondaryStateGroups(
+    graph,
+    context.projectedNodeIds,
+    config.secondary,
+    config.secondaryGroupingProp
+  );
   const notes: string[] = [];
 
   if (

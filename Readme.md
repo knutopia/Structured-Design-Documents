@@ -39,7 +39,7 @@ Current scope:
 
 - one shared engine with three CLI commands: `compile`, `validate`, and `render`
 - spec-driven parsing, compilation, validation, projection, and multi-view rendering against `bundle/v0.1/`
-- renderable views: `ia_place_map`, `journey_map`, and `outcome_opportunity_map`
+- renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
 - render targets: DOT for all renderable views, plus Mermaid for `ia_place_map`
 - preview path: `sdd show` for DOT-backed SVG/PNG artifacts
 
@@ -59,6 +59,7 @@ Common commands:
 - `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format dot`
+- `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
 - `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
 
 ## Structural Ordering Guidance
@@ -80,6 +81,13 @@ END
 ```
 
 In hierarchy-aware renderers, the expected sibling order is `Overview`, then `Projection`, then `Create New Projection`, even though compiled JSON remains canonically sorted for stable diffs.
+
+## UI Contracts Authoring Guidance
+
+- Use `ViewState` for within-place UI mode changes such as tabs, wizards, or success/error screens. In `ui_contracts`, that transition graph is primary whenever `ViewState` nodes are present.
+- Use `State` only when you need scoped state-machine detail on a `Place` or `Component`, such as a form lifecycle or panel-local dirty/ready/submitting states.
+- Set `State.scope_id` to the owning `Place` or `Component` id. A place-scoped state describes container-wide behavior; a component-scoped state describes local widget behavior.
+- If a slice has no `ViewState` nodes, `ui_contracts` falls back to the grouped `State` transitions as the effective primary graph rather than rendering an empty view-state layer.
 
 ## Local Tooling Prerequisites
 

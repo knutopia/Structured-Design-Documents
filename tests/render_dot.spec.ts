@@ -20,7 +20,9 @@ describe("renderSource dot", () => {
       ["service_blueprint_slice.sdd", "service_blueprint", "service_blueprint_slice.service_blueprint.dot"],
       ["outcome_to_ia_trace.sdd", "outcome_opportunity_map", "outcome_to_ia_trace.outcome_opportunity_map.dot"],
       ["metric_event_instrumentation.sdd", "outcome_opportunity_map", "metric_event_instrumentation.outcome_opportunity_map.dot"],
-      ["scenario_branching.sdd", "scenario_flow", "scenario_branching.scenario_flow.dot"]
+      ["scenario_branching.sdd", "scenario_flow", "scenario_branching.scenario_flow.dot"],
+      ["place_viewstate_transition.sdd", "ui_contracts", "place_viewstate_transition.ui_contracts.dot"],
+      ["ui_state_fallback.sdd", "ui_contracts", "ui_state_fallback.ui_contracts.dot"]
     ] as const) {
       const examplePath = path.join(bundle.rootDir, "examples", exampleName);
       const input = {

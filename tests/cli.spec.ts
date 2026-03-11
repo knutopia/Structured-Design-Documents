@@ -405,6 +405,28 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/scenario.svg");
   });
 
+  it("show supports ui_contracts previews through the DOT pipeline", async () => {
+    const { deps, renderSourceMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/place_viewstate_transition.sdd",
+      "--view",
+      "ui_contracts",
+      "--out",
+      "/tmp/ui-contracts.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ui_contracts",
+      format: "dot"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/ui-contracts.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/ui-contracts.svg");
+  });
+
   it("announces DOT files written via --out", async () => {
     const { deps, stderr } = createDeps();
     const result = await runCli([
@@ -596,22 +618,6 @@ describe("CLI wrappers", () => {
     expect(deps.renderSource).not.toHaveBeenCalled();
   });
 
-  it("show reports a known-but-not-yet-renderable view clearly", async () => {
-    const { deps, stderr } = createDeps();
-    const result = await runCli([
-      "node",
-      "sdd",
-      "show",
-      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "--view",
-      "ui_contracts"
-    ], deps);
-
-    expect(result.exitCode).toBe(2);
-    expect(stderr.join("")).toContain("defined in the bundle but is not renderable yet");
-    expect(deps.renderSource).not.toHaveBeenCalled();
-  });
-
   it("help output includes the new commands and guidance", () => {
     const { deps, stdout } = createDeps();
     const program = createProgram(deps);
@@ -630,7 +636,9 @@ describe("CLI wrappers", () => {
     expect(help).toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
+    expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
+    expect(help).toContain("sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
   });
 });

@@ -1,0 +1,40 @@
+digraph ui_contracts {
+  rankdir=LR;
+  graph [fontname="Public Sans", compound=true, nodesep=0.7, ranksep=1.0];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph cluster_P_060 {
+    graph [label="Case Review\\n/cases/review\\n[auth]", style="rounded"];
+    "P-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    subgraph cluster_secondary_state_group_P_060 {
+      graph [label="State graph: Case Review\\nscope_id=P-060", style="rounded"];
+      "ST-060a" [shape="ellipse", label="Case Review Ready"];
+      "ST-060b" [shape="ellipse", label="Case Review Submitted"];
+    }
+    "C-060" [shape="box", style="rounded", label="Review Panel"];
+    subgraph cluster_secondary_state_group_C_060 {
+      graph [label="State graph: Review Panel\\nscope_id=C-060", style="rounded"];
+      "ST-061a" [shape="ellipse", label="Panel Idle"];
+      "ST-061b" [shape="ellipse", label="Panel Dirty"];
+    }
+  }
+  subgraph rank_supporting_contracts__header {
+    rank=same;
+    "supporting_contracts__header" [shape=plaintext, label="Supporting Contracts"];
+    "E-060" [shape="oval", label="Submit Review"];
+    "SA-060" [shape="component", label="Save Review"];
+    "D-060" [shape="cylinder", label="CaseRecord"];
+  }
+  "P-060__anchor" -> "supporting_contracts__header" [style=invis, weight=100];
+  "P-060__anchor" -> "ST-060a" [style=invis, weight=100];
+  "ST-060a" -> "C-060" [style=invis, weight=100];
+  "C-060" -> "ST-061a" [style=invis, weight=100];
+  "supporting_contracts__header" -> "E-060" [style=invis, weight=100];
+  "E-060" -> "SA-060" [style=invis, weight=100];
+  "SA-060" -> "D-060" [style=invis, weight=100];
+  "C-060" -> "D-060" [label="binds field status", style="dotted", constraint=false];
+  "C-060" -> "SA-060" [label="depends on", constraint=false];
+  "C-060" -> "E-060" [label="emits", style="dashed", constraint=false];
+  "ST-060a" -> "ST-060b" [label="[E-060] / SA-060", style="solid", weight=4];
+  "ST-061a" -> "ST-061b" [label="[E-060] {draft_ready}", style="solid", weight=4];
+}

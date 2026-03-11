@@ -167,7 +167,7 @@ Final Response Expectations
 - Do not hand off partial work without saying exactly what remains.
 ```
 
-## Prompt 3
+## [Done] Prompt 3
 
 ```text
 Implement Plan 3: `service_blueprint` and `scenario_flow` end-to-end on top of the shared foundation from Plans 1 and 2.
@@ -242,7 +242,7 @@ Final Response Expectations
 - Do not hand off partial work without saying exactly what remains.
 ```
 
-## Prompt 4
+## [Done] Prompt 4
 
 ```text
 Implement Plan 4: `ui_contracts` end-to-end on top of the shared foundation from Plans 1 through 3.
