@@ -5,12 +5,6 @@ import path from "node:path";
 import { Resvg } from "@resvg/resvg-js";
 import type { DotPreviewStyle } from "../renderer/previewStyle.js";
 
-type ResvgOptionsWithFontBuffers = NonNullable<ConstructorParameters<typeof Resvg>[1]> & {
-  font?: NonNullable<NonNullable<ConstructorParameters<typeof Resvg>[1]>["font"]> & {
-    fontBuffers?: Uint8Array[];
-  };
-};
-
 function escapeXml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -44,13 +38,13 @@ function inferFontMimeType(fontPath: string): { mimeType: string; format: string
 }
 
 async function withFontConfig<T>(style: DotPreviewStyle, run: (env: NodeJS.ProcessEnv) => Promise<T>): Promise<T> {
-  if (!style.fontAssetPath) {
+  if (!style.svgFontAssetPath) {
     return run(process.env);
   }
 
   const tempDir = await mkdtemp(path.join(os.tmpdir(), "sdd-fontconfig-"));
   const fontsConfPath = path.join(tempDir, "fonts.conf");
-  const fontDir = path.dirname(style.fontAssetPath);
+  const fontDir = path.dirname(style.svgFontAssetPath);
   const fontCacheDir = path.join(tempDir, "cache");
   const fontsConfig = `<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
@@ -106,12 +100,12 @@ export async function renderDotToSvg(dot: string, style: DotPreviewStyle): Promi
 }
 
 export async function embedSvgFont(svg: string, style: DotPreviewStyle): Promise<string> {
-  if (!style.fontAssetPath) {
+  if (!style.svgFontAssetPath) {
     return svg;
   }
 
-  const fontBuffer = await readFile(style.fontAssetPath);
-  const { mimeType, format } = inferFontMimeType(style.fontAssetPath);
+  const fontBuffer = await readFile(style.svgFontAssetPath);
+  const { mimeType, format } = inferFontMimeType(style.svgFontAssetPath);
   const fontData = fontBuffer.toString("base64");
   const fontFaceBlock = `<style><![CDATA[
 @font-face {
@@ -132,11 +126,10 @@ export async function embedSvgFont(svg: string, style: DotPreviewStyle): Promise
 }
 
 export async function renderSvgToPng(svg: string, outputPath: string, style: DotPreviewStyle): Promise<void> {
-  const fontBuffer = style.fontAssetPath ? new Uint8Array(await readFile(style.fontAssetPath)) : undefined;
-  const resvgOptions: ResvgOptionsWithFontBuffers = {
+  const resvgOptions: ConstructorParameters<typeof Resvg>[1] = {
     dpi: style.dpi,
     font: {
-      ...(fontBuffer ? { fontBuffers: [fontBuffer] } : {}),
+      ...(style.pngFontAssetPath ? { fontFiles: [style.pngFontAssetPath] } : {}),
       loadSystemFonts: false,
       defaultFontFamily: style.fontFamily,
       sansSerifFamily: style.fontFamily,
@@ -144,9 +137,7 @@ export async function renderSvgToPng(svg: string, outputPath: string, style: Dot
       monospaceFamily: style.fontFamily
     }
   };
-  // resvg-js supports `fontBuffers` at runtime, but this package version's Node typings
-  // do not expose it, so we widen the options locally before constructing Resvg.
-  const resvg = new Resvg(svg, resvgOptions as ConstructorParameters<typeof Resvg>[1]);
+  const resvg = new Resvg(svg, resvgOptions);
 
   await writeFile(path.resolve(outputPath), resvg.render().asPng());
 }

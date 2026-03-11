@@ -63,7 +63,8 @@ const bundle: Bundle = {
     preview_defaults: {
       dot: {
         font_family: "Public Sans",
-        font_asset: "assets/fonts/public-sans-latin-400-normal.woff",
+        svg_font_asset: "assets/fonts/PublicSans-Regular.woff",
+        png_font_asset: "assets/fonts/PublicSans-Regular.otf",
         dpi: 192
       }
     },
@@ -206,13 +207,16 @@ describe("CLI wrappers", () => {
       "digraph G {}",
       expect.objectContaining({
         fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff",
+        pngFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.otf",
         dpi: 192
       })
     );
     expect(deps.embedSvgFont).toHaveBeenCalledWith(
       "<svg>raw</svg>",
       expect.objectContaining({
-        fontFamily: "Public Sans"
+        fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff"
       })
     );
     expect(deps.writeTextFile).toHaveBeenCalledWith(
@@ -260,6 +264,8 @@ describe("CLI wrappers", () => {
       "digraph G {}",
       expect.objectContaining({
         fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff",
+        pngFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.otf",
         dpi: 192
       })
     );
@@ -269,6 +275,8 @@ describe("CLI wrappers", () => {
       "/tmp/custom.png",
       expect.objectContaining({
         fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff",
+        pngFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.otf",
         dpi: 192
       })
     );
@@ -306,13 +314,16 @@ describe("CLI wrappers", () => {
       "digraph G {}",
       expect.objectContaining({
         fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff",
+        pngFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.otf",
         dpi: 192
       })
     );
     expect(deps.embedSvgFont).toHaveBeenCalledWith(
       "<svg>raw</svg>",
       expect.objectContaining({
-        fontFamily: "Public Sans"
+        fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff"
       })
     );
     expect(deps.renderSvgToPng).toHaveBeenCalledWith(
@@ -320,6 +331,8 @@ describe("CLI wrappers", () => {
       "/repo/bundle/v0.1/examples/outcome_to_ia_trace.png",
       expect.objectContaining({
         fontFamily: "Public Sans",
+        svgFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.woff",
+        pngFontAssetPath: "/repo/bundle/v0.1/assets/fonts/PublicSans-Regular.otf",
         dpi: 192
       })
     );

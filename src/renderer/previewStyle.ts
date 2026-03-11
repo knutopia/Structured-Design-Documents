@@ -3,7 +3,8 @@ import type { Bundle, DotPreviewStyleConfig, ViewSpec } from "../bundle/types.js
 
 export interface DotPreviewStyle {
   fontFamily: string;
-  fontAssetPath?: string;
+  svgFontAssetPath?: string;
+  pngFontAssetPath?: string;
   dpi: number;
 }
 
@@ -24,7 +25,17 @@ function resolveStyleOverride(config: DotPreviewStyleConfig | undefined, bundleR
   }
 
   if (typeof config.font_asset === "string" && config.font_asset.trim()) {
-    override.fontAssetPath = path.resolve(bundleRoot, config.font_asset);
+    const fontAssetPath = path.resolve(bundleRoot, config.font_asset);
+    override.svgFontAssetPath = fontAssetPath;
+    override.pngFontAssetPath = fontAssetPath;
+  }
+
+  if (typeof config.svg_font_asset === "string" && config.svg_font_asset.trim()) {
+    override.svgFontAssetPath = path.resolve(bundleRoot, config.svg_font_asset);
+  }
+
+  if (typeof config.png_font_asset === "string" && config.png_font_asset.trim()) {
+    override.pngFontAssetPath = path.resolve(bundleRoot, config.png_font_asset);
   }
 
   if (typeof config.dpi === "number" && Number.isFinite(config.dpi)) {

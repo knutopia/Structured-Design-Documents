@@ -4,7 +4,9 @@ version: "0.1"
 preview_defaults:
   dot:
     font_family: Public Sans
-    font_asset: assets/fonts/public-sans-latin-400-normal.woff
+    # Keep SVG on a webfont for compact embedded output and PNG on a desktop font for Resvg.
+    svg_font_asset: assets/fonts/PublicSans-Regular.woff
+    png_font_asset: assets/fonts/PublicSans-Regular.otf
     dpi: 192
 
 # renderer_defaults shape downstream projection output and renderer behavior, not source authoring requirements.

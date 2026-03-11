@@ -17,15 +17,16 @@ Graphviz is not required for the core v0.1 build and test flow because the engin
 
 The CLI preview pipeline is SVG-first:
 
-- `sdd show` renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans font, and writes `.svg` by default
-- PNG output is derived from that embedded-font SVG, so preview typography does not depend on a user-installed system font
-- The shared preview defaults live in `bundle/v0.1/core/views.yaml`, and the vendored font asset lives in `bundle/v0.1/assets/fonts/`
+- `sdd show` renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and writes `.svg` by default
+- PNG output is derived from that SVG, but rasterization uses a vendored Public Sans desktop font so preview typography does not depend on a user-installed system font
+- The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
 Font provenance:
 
-- The vendored `Public Sans` asset is sourced from the upstream `Public Sans` project via the published `@fontsource/public-sans` package and is committed in `bundle/v0.1/assets/fonts/`.
-- Keep `bundle/v0.1/assets/fonts/PublicSans-OFL.txt` with the asset whenever the font file is refreshed.
-- If the font is updated, refresh the vendored file, preserve the license text, and keep the configured `font_asset` path in `bundle/v0.1/core/views.yaml` in sync.
+- The vendored `Public Sans` preview assets are sourced from the official upstream `Public Sans v2.001` release archive and are committed in `bundle/v0.1/assets/fonts/`.
+- `PublicSans-Regular.woff` is the SVG/web asset and `PublicSans-Regular.otf` is the PNG/native-rendering asset.
+- Keep `bundle/v0.1/assets/fonts/PublicSans-OFL.txt` with the assets whenever either file is refreshed.
+- If the font is updated, refresh both assets from the same upstream release, preserve the license text, and keep the configured `svg_font_asset` and `png_font_asset` paths in `bundle/v0.1/core/views.yaml` in sync.
 
 Install Graphviz in the same environment that runs the workspace tooling:
 

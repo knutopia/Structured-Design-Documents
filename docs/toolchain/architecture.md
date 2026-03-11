@@ -71,8 +71,8 @@ The CLI owns preview artifact generation on top of those text renderers:
 
 - Graphviz-driven DOT-to-SVG layout
 - shared preview-style resolution from `views.yaml`
-- Public Sans font embedding for portable SVG output
-- SVG-to-PNG rasterization for image export
+- Public Sans webfont embedding for portable SVG output
+- SVG-to-PNG rasterization with a vendored desktop Public Sans font for image export
 
 Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `recommended` for strict authoring. See [profiles.md](./profiles.md).
 
@@ -96,9 +96,9 @@ Both formats are generated from the same IA render model so view semantics stay 
 Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only DOT or Mermaid text
-- `sdd show` uses Graphviz to turn DOT into SVG
-- `sdd show --format png` rasterizes that SVG after embedding the bundled font
-- preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level and optional per-view overrides
+- `sdd show` uses Graphviz to turn DOT into SVG with the vendored Public Sans webfont available for layout, then embeds that webfont into the output SVG
+- `sdd show --format png` rasterizes that SVG with the vendored Public Sans desktop font so PNG export does not depend on user-installed fonts
+- preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
 
 ## Determinism
 

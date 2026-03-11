@@ -87,6 +87,8 @@ export interface ContractRule {
 export interface DotPreviewStyleConfig {
   font_family?: string;
   font_asset?: string;
+  svg_font_asset?: string;
+  png_font_asset?: string;
   dpi?: number;
 }
 

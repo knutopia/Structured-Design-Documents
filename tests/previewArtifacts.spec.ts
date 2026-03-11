@@ -62,7 +62,8 @@ describe("previewArtifacts", () => {
       '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><text font-family="Public Sans">Hello</text></svg>',
       {
         fontFamily: "Public Sans",
-        fontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/public-sans-latin-400-normal.woff"),
+        svgFontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.woff"),
+        pngFontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.otf"),
         dpi: 192
       }
     );
@@ -72,8 +73,8 @@ describe("previewArtifacts", () => {
     expect(result).toContain("data:font/woff;base64,");
   });
 
-  it("passes custom fonts to Resvg via fontBuffers for PNG rendering", async () => {
-    const outputPath = "/tmp/previewArtifacts-fontbuffers.png";
+  it("passes the desktop font asset to Resvg via fontFiles for PNG rendering", async () => {
+    const outputPath = "/tmp/previewArtifacts-fontfiles.png";
     ResvgMock.mockImplementation(() => ({
       render: () => ({
         asPng: () => Buffer.from("png")
@@ -86,7 +87,8 @@ describe("previewArtifacts", () => {
       outputPath,
       {
         fontFamily: "Public Sans",
-        fontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/public-sans-latin-400-normal.woff"),
+        svgFontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.woff"),
+        pngFontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.otf"),
         dpi: 192
       }
     );
@@ -103,10 +105,12 @@ describe("previewArtifacts", () => {
         monospaceFamily: "Public Sans"
       }
     });
-    expect(options.font.fontFiles).toBeUndefined();
-    expect(options.font.fontBuffers).toHaveLength(1);
-    expect(options.font.fontBuffers[0]).toBeInstanceOf(Uint8Array);
-    expect(options.font.fontBuffers[0].byteLength).toBeGreaterThan(0);
+    expect(options.font.fontFiles).toEqual([
+      path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.otf")
+    ]);
+    expect(options.font.fontFiles).not.toContain(
+      path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.woff")
+    );
 
     await rm(outputPath, { force: true });
   });

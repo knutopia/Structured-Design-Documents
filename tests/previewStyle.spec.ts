@@ -82,7 +82,8 @@ function createBundle(view: ViewSpec): Bundle {
       preview_defaults: {
         dot: {
           font_family: "Public Sans",
-          font_asset: "assets/fonts/public-sans-latin-400-normal.woff",
+          svg_font_asset: "assets/fonts/PublicSans-Regular.woff",
+          png_font_asset: "assets/fonts/PublicSans-Regular.otf",
           dpi: 192
         }
       },
@@ -99,16 +100,18 @@ describe("resolveDotPreviewStyle", () => {
 
     expect(resolveDotPreviewStyle(bundle, view)).toEqual({
       fontFamily: "Public Sans",
-      fontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/public-sans-latin-400-normal.woff"),
+      svgFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSans-Regular.woff"),
+      pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSans-Regular.otf"),
       dpi: 192
     });
   });
 
-  it("lets per-view preview overrides win", () => {
+  it("lets per-view target-specific preview overrides win", () => {
     const view = createView({
       preview: {
         dot: {
           font_family: "Public Sans Display",
+          png_font_asset: "assets/fonts/PublicSansDisplay-Regular.otf",
           dpi: 288
         }
       }
@@ -117,8 +120,34 @@ describe("resolveDotPreviewStyle", () => {
 
     expect(resolveDotPreviewStyle(bundle, view)).toEqual({
       fontFamily: "Public Sans Display",
-      fontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/public-sans-latin-400-normal.woff"),
+      svgFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSans-Regular.woff"),
+      pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSansDisplay-Regular.otf"),
       dpi: 288
+    });
+  });
+
+  it("falls back to the legacy shared font_asset for both targets", () => {
+    const view = createView();
+    const bundle = {
+      ...createBundle(view),
+      views: {
+        version: "0.1",
+        preview_defaults: {
+          dot: {
+            font_family: "Public Sans",
+            font_asset: "assets/fonts/LegacyPublicSans-Regular.woff",
+            dpi: 192
+          }
+        },
+        views: [view]
+      }
+    } satisfies Bundle;
+
+    expect(resolveDotPreviewStyle(bundle, view)).toEqual({
+      fontFamily: "Public Sans",
+      svgFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/LegacyPublicSans-Regular.woff"),
+      pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/LegacyPublicSans-Regular.woff"),
+      dpi: 192
     });
   });
 });
