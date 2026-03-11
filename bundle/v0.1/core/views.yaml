@@ -9,7 +9,10 @@ preview_defaults:
     png_font_asset: assets/fonts/PublicSans-Regular.otf
     dpi: 192
 
-# renderer_defaults shape downstream projection output and renderer behavior, not source authoring requirements.
+# normative_defaults describe the default semantic reading that projection/render tooling should explain or honor.
+# They do not by themselves validate source files or alter compiled graph semantics.
+# renderer_defaults are machine-readable downstream conventions for projection builders, render-model builders,
+# and preview-style resolution. They may change derived projection data or render output, but not .sdd syntax.
 views:
   - id: outcome_opportunity_map
     name: Outcome-Opportunity Map

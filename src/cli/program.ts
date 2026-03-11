@@ -12,6 +12,13 @@ import { hasErrors } from "../diagnostics/types.js";
 import type { DotPreviewStyle } from "../renderer/previewStyle.js";
 import { resolveDotPreviewStyle } from "../renderer/previewStyle.js";
 import { renderSource } from "../renderer/renderView.js";
+import {
+  getKnownRenderableViewIds,
+  getViewRenderCapability,
+  type PreviewFormat,
+  type TextRenderFormat,
+  type ViewRenderCapability
+} from "../renderer/viewRenderers.js";
 import type { Diagnostic, RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import type { ValidationReport } from "../validator/types.js";
@@ -19,27 +26,6 @@ import type { ValidationReport } from "../validator/types.js";
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 
 type DiagnosticsFormat = "pretty" | "json";
-type TextRenderFormat = "dot" | "mermaid";
-type PreviewFormat = "svg" | "png";
-
-interface ViewRenderCapability {
-  textFormats: TextRenderFormat[];
-  previewFormats: PreviewFormat[];
-  previewSourceByFormat: Record<PreviewFormat, TextRenderFormat>;
-  defaultPreviewFormat: PreviewFormat;
-}
-
-const viewRenderCapabilities: Partial<Record<string, ViewRenderCapability>> = {
-  ia_place_map: {
-    textFormats: ["dot", "mermaid"],
-    previewFormats: ["svg", "png"],
-    previewSourceByFormat: {
-      svg: "dot",
-      png: "dot"
-    },
-    defaultPreviewFormat: "svg"
-  }
-};
 
 export interface CliDeps {
   loadBundle: (manifestPath: string) => Promise<Bundle>;
@@ -173,9 +159,7 @@ function getViewSpec(bundle: Bundle, viewId: string): ViewSpec | undefined {
 }
 
 function getKnownRenderableViews(bundle: Bundle): string[] {
-  return bundle.views.views
-    .filter((view) => viewRenderCapabilities[view.id])
-    .map((view) => view.id);
+  return getKnownRenderableViewIds(bundle);
 }
 
 function getViewCapability(bundle: Bundle, viewId: string): { view?: ViewSpec; capability?: ViewRenderCapability; message?: string } {
@@ -186,7 +170,7 @@ function getViewCapability(bundle: Bundle, viewId: string): { view?: ViewSpec; c
     };
   }
 
-  const capability = viewRenderCapabilities[viewId];
+  const capability = getViewRenderCapability(viewId);
   if (!capability) {
     const supportedViews = getKnownRenderableViews(bundle);
     return {
@@ -423,7 +407,7 @@ async function runShowCommand(
   options: { bundle: string; profile: string; view: string; format: string; out?: string; dotOut?: string }
 ): Promise<number> {
   try {
-    const requestedPreviewFormat = (options.format || viewRenderCapabilities[options.view]?.defaultPreviewFormat || "svg") as PreviewFormat;
+    const requestedPreviewFormat = (options.format || getViewRenderCapability(options.view)?.defaultPreviewFormat || "svg") as PreviewFormat;
     const previewOutputValidation = validateOutputExtension(options.out, requestedPreviewFormat, "--out");
     if (!previewOutputValidation.valid) {
       deps.stderr(appendLine(previewOutputValidation.message ?? "Invalid preview output path."));

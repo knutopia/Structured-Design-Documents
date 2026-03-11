@@ -13,8 +13,8 @@ The bundle in `bundle/v0.1/` is the source of truth for language behavior. The e
 - syntax loading and parsing
 - graph compilation and canonicalization
 - rule execution
-- IA view projection
-- text rendering
+- view projection builders
+- text rendering for renderable views
 
 The engine does not hardcode v0.1 domain semantics beyond the generic primitives needed to execute the bundle.
 
@@ -35,8 +35,8 @@ Each stage has a narrow responsibility:
 - `parseSource` interprets `syntax.yaml` and produces a source-spanned parse document.
 - `compileSource` flattens authoring blocks into canonical graph JSON, preserves author-order metadata for renderers, and validates the graph against `core/schema.json`.
 - `validateGraph` executes generic validation rules from contracts plus the selected profile.
-- `projectView` creates a normalized projection envelope for the requested view.
-- `renderSource` turns the IA Place Map projection into DOT or Mermaid text.
+- `projectView` resolves the requested bundle view through a shared projector registry and creates a normalized projection envelope for that view.
+- `renderSource` resolves renderable views through a renderer registry and turns their projections into DOT or Mermaid text.
 
 ## Internal Forms
 
@@ -49,6 +49,23 @@ Projection is treated as a renderer-facing internal artifact, not a public CLI c
 
 This keeps the implementation small while still separating syntax, semantics, and rendering.
 
+## View Extension Pattern
+
+View support now follows one internal pattern instead of adding one-off IA branches:
+
+- `src/projector/projectView.ts` is the single entry point for projection.
+- `src/projector/viewProjectors.ts` maps bundle `view_id` values to per-view projection builders.
+- each projection builder owns bundle-driven semantics such as derived annotations, omission policy, node grouping, and projection notes.
+- `src/renderer/viewRenderers.ts` separately maps renderable views to render-model and emitter adapters.
+
+This keeps the architecture boundary explicit:
+
+- bundle semantics belong in projection builders and render-model builders
+- emitters only format already-derived render data
+- preview generation remains a CLI concern layered on top of DOT-backed renderers
+
+Not every projected view is renderable yet, and that is intentional. Projection coverage can land before CLI rendering support. v0.1 still does not expose a public `sdd project` command.
+
 ## Bundle Ownership
 
 The bundle owns:
@@ -57,7 +74,7 @@ The bundle owns:
 - line classification and block structure
 - node and relationship vocabularies
 - validation rule selection and rule configuration
-- view scope and IA rendering conventions
+- view scope plus view-specific projection and rendering conventions
 
 The engine owns:
 
@@ -65,7 +82,8 @@ The engine owns:
 - source span tracking
 - canonical ordering
 - generic rule execution
-- output formatting for diagnostics, DOT, and Mermaid
+- projector and renderer registries
+- output formatting for diagnostics, DOT, and Mermaid emitters
 
 The CLI owns preview artifact generation on top of those text renderers:
 
@@ -76,22 +94,22 @@ The CLI owns preview artifact generation on top of those text renderers:
 
 Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `recommended` for strict authoring. See [profiles.md](./profiles.md).
 
-## IA Place Map Proof Slice
+## Renderable Slice
 
-The first end-to-end proof slice is `ia_place_map`.
+The first end-to-end render slice remains `ia_place_map`.
 
-Why this slice was chosen:
+Why this slice still matters:
 
-- it exercises bundle-driven parsing, compilation, validation, projection, and rendering
+- it exercises bundle-driven parsing, compilation, validation, projection, render-model building, and rendering
 - it uses both hierarchy (`CONTAINS`) and navigational flow (`NAVIGATES_TO`)
-- it is small enough to keep fixtures and render outputs stable
+- it is small enough to keep fixtures and render outputs stable while the projection layer generalizes
 
 The renderer currently supports only this view, but it targets two textual formats:
 
 - DOT
 - Mermaid flowchart
 
-Both formats are generated from the same IA render model so view semantics stay centralized.
+Both formats are generated from the same IA render model so view semantics stay centralized. The multi-view foundation means future renderable views should add their own render-model builders beside this one rather than branching inside emitters or CLI commands.
 
 Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
 
@@ -143,7 +161,7 @@ The test suite uses the bundle examples as conformance fixtures.
 
 - compile tests assert stable compiled JSON against bundle snapshots after newline normalization
 - validation tests assert zero errors for current manifest examples under `recommended`
-- projection tests assert structural IA behavior, including omissions and renderer-derived annotations
+- projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
 - render tests assert stable DOT and Mermaid output after newline normalization
 - negative fixtures cover syntax, compile, and validation failures
 
@@ -157,4 +175,4 @@ Add engine code only when one of these is true:
 
 - the bundle introduces a new generic primitive that needs an interpreter
 - the engine needs infrastructure for deterministic behavior or better diagnostics
-- a new renderer format needs a presentation adapter over an existing projection
+- a new view needs a projection builder, render model, or renderer adapter that keeps semantics out of emitters

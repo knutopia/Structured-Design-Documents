@@ -3,13 +3,9 @@ import { compileSource } from "../compiler/compileSource.js";
 import { getGraphSourcePath, type CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics } from "../diagnostics/types.js";
 import { projectView } from "../projector/projectView.js";
-import type { Projection } from "../projector/types.js";
 import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
-import { renderIaPlaceMapDot } from "./dot.js";
-import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
-import { renderIaPlaceMapMermaid } from "./mermaid.js";
-import { getFallbackDotPreviewStyle, resolveDotPreviewStyle } from "./previewStyle.js";
+import { getViewTextRenderer } from "./viewRenderers.js";
 
 function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: RenderOptions): RenderResult {
   const projected = projectView(graph, bundle, options.viewId);
@@ -22,13 +18,14 @@ function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: Rend
     };
   }
 
-  const projection = projected.projection;
-  if (projection.view_id !== "ia_place_map") {
+  const view = bundle.views.views.find((candidate) => candidate.id === options.viewId);
+  const renderer = getViewTextRenderer(options.viewId);
+  if (!view || !renderer || !renderer.capability.textFormats.includes(options.format)) {
     diagnostics.push({
       stage: "render",
       code: "render.unsupported_view",
       severity: "error",
-      message: `View '${projection.view_id}' is not supported in v0.1`,
+      message: `View '${options.viewId}' is not supported in v0.1`,
       file: getGraphSourcePath(graph) ?? "<compiled>"
     });
     return {
@@ -38,15 +35,10 @@ function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: Rend
     };
   }
 
-  const view = bundle.views.views.find((candidate) => candidate.id === options.viewId);
-  const model = buildIaPlaceMapRenderModel(projection as Projection, graph, view?.projection.hierarchy_edges ?? []);
-  const dotStyle = view ? resolveDotPreviewStyle(bundle, view) : getFallbackDotPreviewStyle();
-  const text =
-    options.format === "dot" ? renderIaPlaceMapDot(model, dotStyle) : renderIaPlaceMapMermaid(model);
   return {
     format: options.format,
     viewId: options.viewId,
-    text,
+    text: renderer.render(projected.projection, graph, bundle, view, options.format),
     diagnostics: sortDiagnostics(diagnostics)
   };
 }

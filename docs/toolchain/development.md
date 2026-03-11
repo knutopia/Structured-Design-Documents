@@ -15,6 +15,8 @@ Optional local tooling:
 
 Graphviz is not required for the core v0.1 build and test flow because the engine renderers emit `.dot` and `.mmd` source files. It is required once you want CLI preview artifacts (`.svg` by default or `.png` on demand) or editor integrations that invoke the Graphviz binary.
 
+Projection remains an internal artifact in v0.1. The repo now projects every manifest-declared view through the shared projector path for tests, while CLI rendering and preview commands stay limited to views registered as renderable.
+
 The CLI preview pipeline is SVG-first:
 
 - `sdd show` renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and writes `.svg` by default
@@ -117,11 +119,25 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/parser/`: syntax-driven line classification and block parsing
 - `src/compiler/`: graph construction, canonicalization, schema validation
 - `src/validator/`: generic rule execution and profile validation
-- `src/projector/`: internal view projection
-- `src/renderer/`: IA render model plus DOT and Mermaid emitters
+- `src/projector/`: internal multi-view projection registry, shared helpers, and per-view builders
+- `src/renderer/`: render capability registry, view render models, emitters, and preview style resolution
 - `src/diagnostics/`: structured diagnostics and formatting
 - `src/cli/`: command wiring plus preview artifact helpers
 - `tests/`: conformance, regression, and negative fixtures
+
+## Bundle View Conventions
+
+`bundle/v0.1/core/views.yaml` has three different kinds of downstream view settings:
+
+- `preview_defaults`: shared preview artifact defaults for DOT-backed CLI previews such as fonts and DPI. These affect SVG/PNG generation, not `.sdd` authoring.
+- `normative_defaults`: descriptive statements about the default semantic reading of a view. They explain how a contributor or projection consumer should interpret the view, but they do not by themselves validate source files or mutate compiled graphs.
+- `renderer_defaults`: machine-readable downstream conventions consumed by projection builders, render-model builders, and preview-style resolution. These can change derived annotations, node groups, view metadata, shapes, labels, lane assignment, or preview styling without changing `.sdd` syntax.
+
+Practical rule of thumb:
+
+- if a rule should reject or warn on author input, it belongs in contracts or profiles
+- if a rule explains how a view should be interpreted, document it under `normative_defaults`
+- if a rule drives derived projection or rendering behavior, encode it under `renderer_defaults`
 
 ## Adding A New Validation Primitive
 
@@ -132,14 +148,18 @@ Profile guidance lives in [profiles.md](./profiles.md).
 
 ## Adding A New Renderer Format
 
-1. Reuse the existing IA render model in `src/renderer/iaPlaceMapRenderModel.ts`.
+1. Reuse an existing view render model when possible, or add a new render-model builder if the view needs one.
 2. Add a new emitter beside `dot.ts` and `mermaid.ts`.
-3. Keep all view semantics in projection and render-model construction, not in the emitter.
-4. Add stable golden tests for the new text output.
+3. Register format support through the render capability registry in `src/renderer/viewRenderers.ts`.
+4. Keep all view semantics in projection and render-model construction, not in the emitter.
+5. Add stable golden tests for the new text output.
 
 ## Adding A New View
 
 1. Add the view to the bundle.
-2. Extend the internal projection layer if the view needs new projection semantics.
-3. Add a render model only if the current IA model is insufficient.
-4. Add explicit CLI support only after the projection and rendering path is proven by tests.
+2. Add or update example coverage and declare projection snapshots in `bundle/v0.1/manifest.yaml`.
+3. Implement a projection builder in `src/projector/` and register it in `src/projector/viewProjectors.ts`.
+4. Keep bundle semantics in that projection builder, using `renderer_defaults` only for downstream derived data.
+5. Add a render model only if the view will become renderable.
+6. Register renderable views in `src/renderer/viewRenderers.ts`; CLI support derives from that registry.
+7. Add explicit CLI support only after the projection and rendering path is proven by tests. v0.1 still has no public `sdd project` command.

@@ -39,7 +39,26 @@
   ],
   "derived": {
     "node_annotations": [
+      {
+        "node_id": "P-001",
+        "display": {
+          "subtitle": "/checkout/billing",
+          "badge": "auth",
+          "metadata": [
 
+          ]
+        }
+      },
+      {
+        "node_id": "P-002",
+        "display": {
+          "subtitle": "/checkout/review",
+          "badge": "auth",
+          "metadata": [
+
+          ]
+        }
+      }
     ],
     "edge_annotations": [
 
@@ -50,10 +69,8 @@
     "view_metadata": {
     }
   },
-  "omissions": [
-
-  ],
+  "omissions": [],
   "notes": [
-    "Hierarchy for IA view is driven by CONTAINS."
+    "Place route, access, and entry metadata are rendered as node annotations."
   ]
 }

@@ -65,6 +65,22 @@
     {
       "kind": "edge",
       "from": "P-010",
+      "type": "COMPOSED_OF",
+      "to": "C-010",
+      "reason": "relationship_not_in_scope",
+      "detail": "COMPOSED_OF is outside the ia_place_map edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONSTRAINED_BY",
+      "to": "PL-010",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONSTRAINED_BY is outside the ia_place_map edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
       "type": "CONTAINS",
       "to": "VS-010a",
       "reason": "endpoint_out_of_scope",
