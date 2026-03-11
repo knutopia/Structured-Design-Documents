@@ -1,6 +1,6 @@
 digraph ia_place_map {
   rankdir=LR;
-  graph [dpi=192, fontname="Public Sans"];
+  graph [fontname="Public Sans"];
   node [shape=box, fontname="Public Sans"];
   edge [fontname="Public Sans"];
   "P-700" [label="Dashboard\n/dashboard\n[auth]"];

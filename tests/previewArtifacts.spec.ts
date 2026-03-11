@@ -1,11 +1,63 @@
+import { EventEmitter } from "node:events";
+import { rm } from "node:fs/promises";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
-import { embedSvgFont } from "../src/cli/previewArtifacts.js";
+import { PassThrough } from "node:stream";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const { spawnMock, ResvgMock } = vi.hoisted(() => ({
+  spawnMock: vi.fn(),
+  ResvgMock: vi.fn()
+}));
+
+vi.mock("node:child_process", () => ({
+  spawn: spawnMock
+}));
+
+vi.mock("@resvg/resvg-js", () => ({
+  Resvg: ResvgMock
+}));
 
 const repoRoot = "/home/knut/projects/sdd";
 
-describe("embedSvgFont", () => {
+describe("previewArtifacts", () => {
+  afterEach(() => {
+    spawnMock.mockReset();
+    ResvgMock.mockReset();
+  });
+
+  it("renders SVG without passing a Graphviz DPI override", async () => {
+    spawnMock.mockImplementation(() => {
+      const child = new EventEmitter() as EventEmitter & {
+        stdin: PassThrough;
+        stdout: PassThrough;
+        stderr: PassThrough;
+      };
+      child.stdin = new PassThrough();
+      child.stdout = new PassThrough();
+      child.stderr = new PassThrough();
+
+      queueMicrotask(() => {
+        child.stdout.write("<svg>ok</svg>");
+        child.stdout.end();
+        child.emit("close", 0);
+      });
+
+      return child;
+    });
+
+    const { renderDotToSvg } = await import("../src/cli/previewArtifacts.js");
+    await expect(renderDotToSvg("digraph G {}", { fontFamily: "Public Sans", dpi: 192 })).resolves.toBe("<svg>ok</svg>");
+    expect(spawnMock).toHaveBeenCalledWith(
+      "dot",
+      ["-Tsvg"],
+      expect.objectContaining({
+        stdio: ["pipe", "pipe", "pipe"]
+      })
+    );
+  });
+
   it("injects an embedded Public Sans font face into SVG output", async () => {
+    const { embedSvgFont } = await import("../src/cli/previewArtifacts.js");
     const result = await embedSvgFont(
       '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><text font-family="Public Sans">Hello</text></svg>',
       {
@@ -18,5 +70,44 @@ describe("embedSvgFont", () => {
     expect(result).toContain("@font-face");
     expect(result).toContain("Public Sans");
     expect(result).toContain("data:font/woff;base64,");
+  });
+
+  it("passes custom fonts to Resvg via fontBuffers for PNG rendering", async () => {
+    const outputPath = "/tmp/previewArtifacts-fontbuffers.png";
+    ResvgMock.mockImplementation(() => ({
+      render: () => ({
+        asPng: () => Buffer.from("png")
+      })
+    }));
+
+    const { renderSvgToPng } = await import("../src/cli/previewArtifacts.js");
+    await renderSvgToPng(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><text font-family="Public Sans">Hello</text></svg>',
+      outputPath,
+      {
+        fontFamily: "Public Sans",
+        fontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/public-sans-latin-400-normal.woff"),
+        dpi: 192
+      }
+    );
+
+    expect(ResvgMock).toHaveBeenCalledTimes(1);
+    const options = ResvgMock.mock.calls[0][1];
+    expect(options).toMatchObject({
+      dpi: 192,
+      font: {
+        loadSystemFonts: false,
+        defaultFontFamily: "Public Sans",
+        sansSerifFamily: "Public Sans",
+        serifFamily: "Public Sans",
+        monospaceFamily: "Public Sans"
+      }
+    });
+    expect(options.font.fontFiles).toBeUndefined();
+    expect(options.font.fontBuffers).toHaveLength(1);
+    expect(options.font.fontBuffers[0]).toBeInstanceOf(Uint8Array);
+    expect(options.font.fontBuffers[0].byteLength).toBeGreaterThan(0);
+
+    await rm(outputPath, { force: true });
   });
 });

@@ -34,11 +34,10 @@ function renderItems(items: IaRenderItem[], indent: string, lines: string[]): vo
 
 export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: DotPreviewStyle): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
-  const dpi = typeof style?.dpi === "number" && Number.isFinite(style.dpi) ? style.dpi : 192;
   const lines = [
     "digraph ia_place_map {",
     "  rankdir=LR;",
-    `  graph [dpi=${dpi}, fontname="${fontFamily}"];`,
+    `  graph [fontname="${fontFamily}"];`,
     `  node [shape=box, fontname="${fontFamily}"];`,
     `  edge [fontname="${fontFamily}"];`
   ];
