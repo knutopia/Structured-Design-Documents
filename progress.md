@@ -6,6 +6,11 @@
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 
+## Thu 3-12-26
+
+-added mermaid for new diagram types
+-added full set of examples across all types - they look pretty bad.
+
 ## Wed 3-11-26
 
 -debugged font issue

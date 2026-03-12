@@ -20,11 +20,13 @@ Projection remains an internal artifact in v0.1. The repo now projects every man
 Current renderable views:
 
 - `ia_place_map`: DOT, Mermaid, SVG, PNG
-- `journey_map`: DOT, SVG, PNG
-- `outcome_opportunity_map`: DOT, SVG, PNG
-- `service_blueprint`: DOT, SVG, PNG
-- `scenario_flow`: DOT, SVG, PNG
-- `ui_contracts`: DOT, SVG, PNG
+- `journey_map`: DOT, Mermaid, SVG, PNG
+- `outcome_opportunity_map`: DOT, Mermaid, SVG, PNG
+- `service_blueprint`: DOT, Mermaid, SVG, PNG
+- `scenario_flow`: DOT, Mermaid, SVG, PNG
+- `ui_contracts`: DOT, Mermaid, SVG, PNG
+
+Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
 
 The CLI preview pipeline is SVG-first:
 
@@ -70,6 +72,12 @@ pnpm build
 pnpm test
 ```
 
+## Regenerate Rendered Corpus
+
+```bash
+TMPDIR=/tmp pnpm run generate:rendered-examples
+```
+
 ## CLI Usage
 
 Compile a source file:
@@ -108,10 +116,22 @@ Render Journey Map to DOT:
 pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format dot
 ```
 
+Render Journey Map to Mermaid:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid
+```
+
 Render Outcome-Opportunity Map to DOT:
 
 ```bash
 pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --format dot
+```
+
+Render Outcome-Opportunity Map to Mermaid:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --format mermaid
 ```
 
 Render Service Blueprint to DOT:
@@ -120,16 +140,34 @@ Render Service Blueprint to DOT:
 pnpm sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format dot
 ```
 
+Render Service Blueprint to Mermaid:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format mermaid
+```
+
 Render Scenario Flow to DOT:
 
 ```bash
 pnpm sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot
 ```
 
+Render Scenario Flow to Mermaid:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format mermaid
+```
+
 Render UI Contracts to DOT:
 
 ```bash
 pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot
+```
+
+Render UI Contracts to Mermaid:
+
+```bash
+pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format mermaid
 ```
 
 Render an SVG preview artifact:
@@ -177,7 +215,7 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map -
 Write render output to a file:
 
 ```bash
-pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ia_place_map --format mermaid --out /tmp/place_viewstate_transition.mmd
+pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format mermaid --out /tmp/place_viewstate_transition.mmd
 ```
 
 Profile guidance lives in [profiles.md](./profiles.md).
@@ -190,6 +228,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/validator/`: generic rule execution and profile validation
 - `src/projector/`: internal multi-view projection registry, shared helpers, and per-view builders
 - `src/renderer/`: render capability registry, view render models, emitters, and preview style resolution
+- `src/examples/`: curated render-pair discovery plus rendered-corpus generation helpers
 - `src/diagnostics/`: structured diagnostics and formatting
 - `src/cli/`: command wiring plus preview artifact helpers
 - `tests/`: conformance, regression, and negative fixtures

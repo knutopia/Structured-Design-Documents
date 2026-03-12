@@ -1,0 +1,24 @@
+flowchart LR
+  subgraph n_P_060["Case Review<br/>/cases/review<br/>[auth]"]
+    subgraph n_secondary_state_group_P_060["State graph: Case Review<br/>scope_id=P-060"]
+      n_ST_060a(["Case Review Ready"])
+      n_ST_060b(["Case Review Submitted"])
+    end
+    n_C_060("Review Panel")
+    subgraph n_secondary_state_group_C_060["State graph: Review Panel<br/>scope_id=C-060"]
+      n_ST_061a(["Panel Idle"])
+      n_ST_061b(["Panel Dirty"])
+    end
+  end
+  subgraph n_supporting_contracts__header["Supporting Contracts"]
+    n_E_060(["Submit Review"])
+    n_SA_060[["Save Review"]]
+    n_D_060["CaseRecord"]
+  end
+  n_C_060 -->|binds field status| n_D_060
+  n_C_060 -->|depends on| n_SA_060
+  n_C_060 -->|emits| n_E_060
+  n_ST_060a -->|[E-060] / SA-060| n_ST_060b
+  n_ST_061a -->|[E-060] {draft_ready}| n_ST_061b
+  linkStyle 2 stroke-dasharray: 6 4;
+  linkStyle 0 stroke-dasharray: 2 4;

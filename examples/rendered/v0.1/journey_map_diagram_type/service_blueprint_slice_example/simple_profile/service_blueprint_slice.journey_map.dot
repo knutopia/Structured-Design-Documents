@@ -1,0 +1,9 @@
+digraph journey_map {
+  rankdir=LR;
+  graph [fontname="Public Sans"];
+  node [shape=box, style="rounded", fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  "J-020" [label="Submit Claim"];
+  "J-021" [label="Receive Confirmation"];
+  "J-020" -> "J-021";
+}

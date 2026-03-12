@@ -21,6 +21,14 @@ Other folders:
 - Files in `bundle/v0.1/` are the machine-readable source of truth for tools.
 - Markdown files in `definitions/v0.1/` remains explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
 
+## Current Project Goals
+
+### Expand the Toolchain to produce .SVG output
+
+The ia_place_map type can be rendered as an SVG. Expand this capability to allow ALL diagram types to be rendered as SVG.
+
+- `docs/view_implementation_execution_prompts.md`
+
 ## Project Achievements
 
 ### 1. [DONE] Create a well-defined set of specs for version 0.1, in folder bundle/v0.1/
@@ -28,7 +36,7 @@ See
 file:"///docs/Done/[Done] bundle_creation_guidance_sdd_text_v_0_dot_1.md"
 file:"///docs/bundle_v0_1_extraction_sync_report.md"
 
-### 2.1 [DONE] Created initial Compiler, Validator, Renderer toolchain
+### 2. [DONE] Created initial Compiler, Validator, Renderer toolchain
 See:
 file:\\\docs\toolchain
 file:\\\docs\bundle_v0_1_extraction_sync_report.md
@@ -40,8 +48,9 @@ Current scope:
 - one shared engine with three CLI commands: `compile`, `validate`, and `render`
 - spec-driven parsing, compilation, validation, projection, and multi-view rendering against `bundle/v0.1/`
 - renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
-- render targets: DOT for all renderable views, plus Mermaid for `ia_place_map`
+- render targets: DOT and Mermaid for all renderable views
 - preview path: `sdd show` for DOT-backed SVG/PNG artifacts
+- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`
 
 Contributor reference docs:
 
@@ -55,14 +64,22 @@ Common commands:
 - `pnpm build`
 - `pnpm test`
 - `pnpm run check:graphviz`
+- `pnpm run generate:rendered-examples`
 - `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
-- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format dot`
+- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid`
 - `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
 - `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
 
-## Structural Ordering Guidance
+## 3. [Done] Expanded the New Toolchain to Cover Remaining View Types
+
+Executed the following: docs/Done/[Done] view_implementation_execution_prompts.md
+...covering all diagram types.
+
+## Project Guidance
+
+### Structural Ordering Guidance
 
 For humans and LLMs authoring diagrams:
 
@@ -82,14 +99,14 @@ END
 
 In hierarchy-aware renderers, the expected sibling order is `Overview`, then `Projection`, then `Create New Projection`, even though compiled JSON remains canonically sorted for stable diffs.
 
-## UI Contracts Authoring Guidance
+### UI Contracts Authoring Guidance
 
 - Use `ViewState` for within-place UI mode changes such as tabs, wizards, or success/error screens. In `ui_contracts`, that transition graph is primary whenever `ViewState` nodes are present.
 - Use `State` only when you need scoped state-machine detail on a `Place` or `Component`, such as a form lifecycle or panel-local dirty/ready/submitting states.
 - Set `State.scope_id` to the owning `Place` or `Component` id. A place-scoped state describes container-wide behavior; a component-scoped state describes local widget behavior.
 - If a slice has no `ViewState` nodes, `ui_contracts` falls back to the grouped `State` transitions as the effective primary graph rather than rendering an empty view-state layer.
 
-## Local Tooling Prerequisites
+### Local Tooling Prerequisites
 
 Required local tooling:
 
@@ -109,11 +126,3 @@ Verify Graphviz setup with:
 
 - `pnpm run check:graphviz`
 - `dot -V`
-
-## Current Project Goals
-
-### Expand the New Toolchain to Cover Remaining View Types
-
-Execution-ready prompts for the four planned implementation phases are in:
-
-- `docs/view_implementation_execution_prompts.md`

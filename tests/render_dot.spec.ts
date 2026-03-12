@@ -2,6 +2,11 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import {
+  discoverCuratedRenderedExamplePairs,
+  expandCuratedRenderedExampleVariants,
+  planRenderedCorpusOutputPaths
+} from "../src/examples/renderedCorpus.js";
 import { loadBundle, renderSource } from "../src/index.js";
 import { normalizeLineEndings } from "./textNormalization.js";
 
@@ -9,33 +14,47 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("renderSource dot", () => {
-  it("renders supported bundle views to stable DOT output", async () => {
+  it("renders curated manifest-backed views to stable DOT output", async () => {
     const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
 
-    for (const [exampleName, viewId, goldenName] of [
-      ["outcome_to_ia_trace.sdd", "ia_place_map", "outcome_to_ia_trace.dot"],
-      ["place_viewstate_transition.sdd", "ia_place_map", "place_viewstate_transition.dot"],
-      ["outcome_to_ia_trace.sdd", "journey_map", "outcome_to_ia_trace.journey_map.dot"],
-      ["service_blueprint_slice.sdd", "journey_map", "service_blueprint_slice.journey_map.dot"],
-      ["service_blueprint_slice.sdd", "service_blueprint", "service_blueprint_slice.service_blueprint.dot"],
-      ["outcome_to_ia_trace.sdd", "outcome_opportunity_map", "outcome_to_ia_trace.outcome_opportunity_map.dot"],
-      ["metric_event_instrumentation.sdd", "outcome_opportunity_map", "metric_event_instrumentation.outcome_opportunity_map.dot"],
-      ["scenario_branching.sdd", "scenario_flow", "scenario_branching.scenario_flow.dot"],
-      ["place_viewstate_transition.sdd", "ui_contracts", "place_viewstate_transition.ui_contracts.dot"],
-      ["ui_state_fallback.sdd", "ui_contracts", "ui_state_fallback.ui_contracts.dot"]
-    ] as const) {
-      const examplePath = path.join(bundle.rootDir, "examples", exampleName);
+    for (const variant of variants) {
+      const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+      const examplePath = variant.example.absolutePath;
       const input = {
         path: examplePath,
         text: await readFile(examplePath, "utf8")
       };
-      const golden = await readFile(path.join(repoRoot, "tests/goldens", goldenName), "utf8");
+      const golden = await readFile(outputPaths.dotOutputPath, "utf8");
       const result = renderSource(input, bundle, {
-        viewId,
-        format: "dot"
+        viewId: variant.viewId,
+        format: "dot",
+        profileId: variant.profileId
       });
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());
     }
+  });
+
+  it("single-escapes multiline ui_contracts labels in DOT output", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const result = renderSource(input, bundle, {
+      viewId: "ui_contracts",
+      format: "dot",
+      profileId: "permissive"
+    });
+
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.text).toContain('label="Billing\\n/billing\\n[auth]"');
+    expect(result.text).not.toContain('label="Billing\\\\n/billing\\\\n[auth]"');
+    expect(result.text).toContain('label="Billing Editing\\ndata: PaymentMethod"');
+    expect(result.text).not.toContain('label="Billing Editing\\\\ndata: PaymentMethod"');
   });
 });

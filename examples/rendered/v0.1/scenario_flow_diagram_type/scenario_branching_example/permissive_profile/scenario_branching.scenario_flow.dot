@@ -1,0 +1,75 @@
+digraph scenario_flow {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "J-030" [shape="diamond", label="Choose Fulfillment"];
+    "J-031" [shape="box", style="rounded", label="Enter Delivery Address"];
+    "J-032" [shape="box", style="rounded", label="Choose Pickup Store"];
+    "J-033" [shape="diamond", label="Choose Contact Method"];
+    "J-034" [shape="box", style="rounded", label="Confirm Email Notification"];
+    "J-035" [shape="box", style="rounded", label="Review Pickup Instructions"];
+  }
+  subgraph rank_place {
+    rank=same;
+    "lane_place" [shape=plaintext, label="Places"];
+    "P-030" [shape="box", style="rounded", label="Fulfillment"];
+    "P-031" [shape="box", style="rounded", label="Delivery Address"];
+    "P-032" [shape="box", style="rounded", label="Pickup Store"];
+    "P-033" [shape="box", style="rounded", label="Contact Method"];
+    "P-034" [shape="box", style="rounded", label="Email Confirmation"];
+    "P-035" [shape="box", style="rounded", label="Pickup Instructions"];
+  }
+  subgraph rank_view_state {
+    rank=same;
+    "lane_view_state" [shape=plaintext, label="View States"];
+    "VS-030a" [shape="box", style="rounded,dashed", label="Fulfillment Choice"];
+    "VS-031a" [shape="box", style="rounded,dashed", label="Delivery Address Form"];
+    "VS-032a" [shape="box", style="rounded,dashed", label="Pickup Store Selector"];
+    "VS-033a" [shape="box", style="rounded,dashed", label="Contact Method Choice"];
+    "VS-034a" [shape="box", style="rounded,dashed", label="Email Confirmation State"];
+    "VS-035a" [shape="box", style="rounded,dashed", label="Pickup Instructions State"];
+  }
+  "lane_step" -> "lane_place" [style=invis, weight=100];
+  "lane_place" -> "lane_view_state" [style=invis, weight=100];
+  "lane_step" -> "J-030" [style=invis, weight=100];
+  "J-031" -> "J-032" [style=invis, weight=100];
+  "J-032" -> "J-033" [style=invis, weight=100];
+  "J-034" -> "J-035" [style=invis, weight=100];
+  "lane_place" -> "P-030" [style=invis, weight=100];
+  "P-031" -> "P-032" [style=invis, weight=100];
+  "P-032" -> "P-033" [style=invis, weight=100];
+  "P-034" -> "P-035" [style=invis, weight=100];
+  "lane_view_state" -> "VS-030a" [style=invis, weight=100];
+  "VS-031a" -> "VS-032a" [style=invis, weight=100];
+  "VS-032a" -> "VS-033a" [style=invis, weight=100];
+  "VS-034a" -> "VS-035a" [style=invis, weight=100];
+  "J-030" -> "J-031" [label="delivery_selected", weight=4];
+  "J-030" -> "J-032" [label="pickup_selected", weight=4];
+  "J-030" -> "P-030" [style="dotted", constraint=false];
+  "J-030" -> "VS-030a" [style="dotted", constraint=false];
+  "J-031" -> "J-033" [weight=4];
+  "J-031" -> "P-031" [style="dotted", constraint=false];
+  "J-031" -> "VS-031a" [style="dotted", constraint=false];
+  "J-032" -> "P-032" [style="dotted", constraint=false];
+  "J-032" -> "VS-032a" [style="dotted", constraint=false];
+  "J-033" -> "J-034" [label="E-032", weight=4];
+  "J-033" -> "J-035" [label="Review Pickup Instructions", weight=4];
+  "J-033" -> "P-033" [style="dotted", constraint=false];
+  "J-033" -> "VS-033a" [style="dotted", constraint=false];
+  "J-034" -> "P-034" [style="dotted", constraint=false];
+  "J-034" -> "VS-034a" [style="dotted", constraint=false];
+  "J-035" -> "P-035" [style="dotted", constraint=false];
+  "J-035" -> "VS-035a" [style="dotted", constraint=false];
+  "P-030" -> "P-031" [style="solid", weight=3];
+  "P-030" -> "P-032" [style="solid", weight=3];
+  "P-033" -> "P-034" [style="solid", weight=3];
+  "P-033" -> "P-035" [style="solid", weight=3];
+  "VS-030a" -> "VS-031a" [style="dashed", weight=3];
+  "VS-030a" -> "VS-032a" [style="dashed", weight=3];
+  "VS-033a" -> "VS-034a" [style="dashed", weight=3];
+  "VS-033a" -> "VS-035a" [style="dashed", weight=3];
+}

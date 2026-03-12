@@ -1,0 +1,67 @@
+digraph service_blueprint {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.6, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_lane_01_customer {
+    rank=same;
+    "lane:01:customer__header" [shape=plaintext, label="customer"];
+    "J-020" [shape="box", style="rounded", label="Submit Claim"];
+    "J-021" [shape="box", style="rounded", label="Receive Confirmation"];
+  }
+  subgraph rank_lane_02_frontstage {
+    rank=same;
+    "lane:02:frontstage__header" [shape=plaintext, label="frontstage"];
+    "PR-020" [shape="box", label="Validate Claim"];
+  }
+  subgraph rank_lane_03_backstage {
+    rank=same;
+    "lane:03:backstage__header" [shape=plaintext, label="backstage"];
+    "PR-021" [shape="box", label="Review Claim History"];
+  }
+  subgraph rank_lane_04_support {
+    rank=same;
+    "lane:04:support__header" [shape=plaintext, label="support"];
+    "PR-022" [shape="box", label="Notify Customer"];
+  }
+  subgraph rank_lane_05_system {
+    rank=same;
+    "lane:05:system__header" [shape=plaintext, label="system"];
+    "SA-020" [shape="component", label="Store Claim"];
+    "SA-021" [shape="component", label="Load Claim History"];
+    "SA-022" [shape="component", label="Send Email"];
+    "D-020" [shape="cylinder", label="Claim"];
+  }
+  subgraph rank_lane_06_policy {
+    rank=same;
+    "lane:06:policy__header" [shape=plaintext, label="policy"];
+    "PL-020" [shape="hexagon", label="Retention Policy"];
+  }
+  "lane:01:customer__header" -> "lane:02:frontstage__header" [style=invis, weight=100];
+  "lane:02:frontstage__header" -> "lane:03:backstage__header" [style=invis, weight=100];
+  "lane:03:backstage__header" -> "lane:04:support__header" [style=invis, weight=100];
+  "lane:04:support__header" -> "lane:05:system__header" [style=invis, weight=100];
+  "lane:05:system__header" -> "lane:06:policy__header" [style=invis, weight=100];
+  "lane:01:customer__header" -> "J-020" [style=invis, weight=100];
+  "lane:02:frontstage__header" -> "PR-020" [style=invis, weight=100];
+  "lane:03:backstage__header" -> "PR-021" [style=invis, weight=100];
+  "lane:04:support__header" -> "PR-022" [style=invis, weight=100];
+  "lane:05:system__header" -> "SA-020" [style=invis, weight=100];
+  "SA-020" -> "SA-021" [style=invis, weight=100];
+  "SA-021" -> "SA-022" [style=invis, weight=100];
+  "lane:06:policy__header" -> "PL-020" [style=invis, weight=100];
+  "J-020" -> "J-021" [weight=4];
+  "J-020" -> "PR-020" [label="realized by", style="dashed", constraint=false];
+  "J-021" -> "PR-022" [label="realized by", style="dashed", constraint=false];
+  "PR-020" -> "PL-020" [label="constrained by", style="dotted", constraint=false];
+  "PR-020" -> "SA-020" [label="depends on", constraint=false];
+  "PR-020" -> "PR-021" [weight=4];
+  "PR-021" -> "SA-021" [label="depends on", constraint=false];
+  "PR-021" -> "PR-022" [weight=4];
+  "PR-022" -> "SA-022" [label="depends on", constraint=false];
+  "SA-020" -> "PL-020" [label="constrained by", style="dotted", constraint=false];
+  "SA-020" -> "D-020" [label="reads", style="dashed", constraint=false];
+  "SA-020" -> "D-020" [label="writes", style="bold", constraint=false];
+  "SA-021" -> "D-020" [label="reads", style="dashed", constraint=false];
+  "SA-022" -> "D-020" [label="reads", style="dashed", constraint=false];
+}

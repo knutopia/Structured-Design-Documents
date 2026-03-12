@@ -11,7 +11,14 @@ import {
 } from "./dot.js";
 import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
 import { buildJourneyMapRenderModel } from "./journeyMapRenderModel.js";
-import { renderIaPlaceMapMermaid } from "./mermaid.js";
+import {
+  renderIaPlaceMapMermaid,
+  renderJourneyMapMermaid,
+  renderOutcomeOpportunityMapMermaid,
+  renderScenarioFlowMermaid,
+  renderServiceBlueprintMermaid,
+  renderUiContractsMermaid
+} from "./mermaid.js";
 import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
 import { resolveDotPreviewStyle } from "./previewStyle.js";
 import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
@@ -33,9 +40,9 @@ interface ViewTextRenderer {
   render: (projection: Projection, graph: CompiledGraph, bundle: Bundle, view: ViewSpec, format: TextRenderFormat) => string;
 }
 
-function dotPreviewCapability(): ViewRenderCapability {
+function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
-    textFormats: ["dot"],
+    textFormats: ["dot", "mermaid"],
     previewFormats: ["svg", "png"],
     previewSourceByFormat: {
       svg: "dot",
@@ -66,47 +73,67 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
 };
 
 const journeyMapRenderer: ViewTextRenderer = {
-  capability: dotPreviewCapability(),
-  render: (projection, graph, bundle, view) => {
+  capability: dotAndMermaidPreviewCapability(),
+  render: (projection, graph, bundle, view, format) => {
     const model = buildJourneyMapRenderModel(
       projection,
       graph,
       view.projection.hierarchy_edges ?? [],
       view.projection.ordering_edges ?? []
     );
-    return renderJourneyMapDot(model, resolveDotPreviewStyle(bundle, view));
+    if (format === "dot") {
+      return renderJourneyMapDot(model, resolveDotPreviewStyle(bundle, view));
+    }
+
+    return renderJourneyMapMermaid(model);
   }
 };
 
 const outcomeOpportunityMapRenderer: ViewTextRenderer = {
-  capability: dotPreviewCapability(),
-  render: (projection, graph, bundle, view) => {
+  capability: dotAndMermaidPreviewCapability(),
+  render: (projection, graph, bundle, view, format) => {
     const model = buildOutcomeOpportunityMapRenderModel(projection, graph);
-    return renderOutcomeOpportunityMapDot(model, resolveDotPreviewStyle(bundle, view));
+    if (format === "dot") {
+      return renderOutcomeOpportunityMapDot(model, resolveDotPreviewStyle(bundle, view));
+    }
+
+    return renderOutcomeOpportunityMapMermaid(model);
   }
 };
 
 const serviceBlueprintRenderer: ViewTextRenderer = {
-  capability: dotPreviewCapability(),
-  render: (projection, graph, bundle, view) => {
+  capability: dotAndMermaidPreviewCapability(),
+  render: (projection, graph, bundle, view, format) => {
     const model = buildServiceBlueprintRenderModel(projection, graph);
-    return renderServiceBlueprintDot(model, resolveDotPreviewStyle(bundle, view));
+    if (format === "dot") {
+      return renderServiceBlueprintDot(model, resolveDotPreviewStyle(bundle, view));
+    }
+
+    return renderServiceBlueprintMermaid(model);
   }
 };
 
 const scenarioFlowRenderer: ViewTextRenderer = {
-  capability: dotPreviewCapability(),
-  render: (projection, graph, bundle, view) => {
+  capability: dotAndMermaidPreviewCapability(),
+  render: (projection, graph, bundle, view, format) => {
     const model = buildScenarioFlowRenderModel(projection, graph);
-    return renderScenarioFlowDot(model, resolveDotPreviewStyle(bundle, view));
+    if (format === "dot") {
+      return renderScenarioFlowDot(model, resolveDotPreviewStyle(bundle, view));
+    }
+
+    return renderScenarioFlowMermaid(model);
   }
 };
 
 const uiContractsRenderer: ViewTextRenderer = {
-  capability: dotPreviewCapability(),
-  render: (projection, graph, bundle, view) => {
+  capability: dotAndMermaidPreviewCapability(),
+  render: (projection, graph, bundle, view, format) => {
     const model = buildUiContractsRenderModel(projection, graph);
-    return renderUiContractsDot(model, resolveDotPreviewStyle(bundle, view));
+    if (format === "dot") {
+      return renderUiContractsDot(model, resolveDotPreviewStyle(bundle, view));
+    }
+
+    return renderUiContractsMermaid(model);
   }
 };
 

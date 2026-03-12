@@ -1,0 +1,36 @@
+digraph outcome_opportunity_map {
+  rankdir=LR;
+  graph [fontname="Public Sans", nodesep=0.6, ranksep=1.0];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_initiative {
+    rank=same;
+    "lane_initiative" [shape=plaintext, label="Initiatives"];
+    "I-001" [shape="box", label="Billing Simplification"];
+  }
+  subgraph rank_opportunity {
+    rank=same;
+    "lane_opportunity" [shape=plaintext, label="Opportunities"];
+    "OP-001" [shape="hexagon", label="Payment Friction"];
+  }
+  subgraph rank_outcome {
+    rank=same;
+    "lane_outcome" [shape=plaintext, label="Outcomes"];
+    "O-001" [shape="ellipse", label="Reduce Abandonment"];
+  }
+  subgraph rank_metric {
+    rank=same;
+    "lane_metric" [shape=plaintext, label="Metrics"];
+    "M-001" [shape="note", label="Checkout Completion Rate\nExperience: J-002 Confirm Payment\nEvent: E-001 Payment Submitted"];
+  }
+  "lane_initiative" -> "lane_opportunity" [style=invis, weight=100];
+  "lane_opportunity" -> "lane_outcome" [style=invis, weight=100];
+  "lane_outcome" -> "lane_metric" [style=invis, weight=100];
+  "lane_initiative" -> "I-001" [style=invis, weight=100];
+  "lane_opportunity" -> "OP-001" [style=invis, weight=100];
+  "lane_outcome" -> "O-001" [style=invis, weight=100];
+  "lane_metric" -> "M-001" [style=invis, weight=100];
+  "I-001" -> "OP-001" [label="addresses"];
+  "O-001" -> "M-001" [label="measured by"];
+  "OP-001" -> "O-001" [label="supports"];
+}

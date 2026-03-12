@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph n_initiative["Initiatives"]
+    n_I_001["Billing Simplification"]
+  end
+  subgraph n_opportunity["Opportunities"]
+    n_OP_001["Payment Friction"]
+  end
+  subgraph n_outcome["Outcomes"]
+    n_O_001["Reduce Abandonment"]
+  end
+  subgraph n_metric["Metrics"]
+    n_M_001["Checkout Completion Rate<br/>Experience: J-002 Confirm Payment<br/>Event: E-001 Payment Submitted"]
+  end
+  n_I_001 -->|addresses| n_OP_001
+  n_O_001 -->|measured by| n_M_001
+  n_OP_001 -->|supports| n_O_001

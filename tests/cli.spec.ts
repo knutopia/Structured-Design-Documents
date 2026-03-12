@@ -600,8 +600,8 @@ describe("CLI wrappers", () => {
     expect(deps.renderSource).not.toHaveBeenCalled();
   });
 
-  it("render rejects unsupported Mermaid output for a DOT-only view", async () => {
-    const { deps, stderr } = createDeps();
+  it("render accepts Mermaid output for non-IA views", async () => {
+    const { deps, stdout, renderSourceMock } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -610,12 +610,18 @@ describe("CLI wrappers", () => {
       "--view",
       "journey_map",
       "--format",
-      "mermaid"
+      "mermaid",
+      "--out",
+      "/tmp/journey.mmd"
     ], deps);
 
-    expect(result.exitCode).toBe(2);
-    expect(stderr.join("")).toContain("View 'journey_map' does not support text format 'mermaid'");
-    expect(deps.renderSource).not.toHaveBeenCalled();
+    expect(result.exitCode).toBe(0);
+    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+      viewId: "journey_map",
+      format: "mermaid"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/journey.mmd", "flowchart TD");
+    expect(stdout.join("")).not.toContain("error");
   });
 
   it("help output includes the new commands and guidance", () => {
@@ -633,6 +639,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("recommended  strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
+    expect(help).toContain("sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd");
     expect(help).toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");

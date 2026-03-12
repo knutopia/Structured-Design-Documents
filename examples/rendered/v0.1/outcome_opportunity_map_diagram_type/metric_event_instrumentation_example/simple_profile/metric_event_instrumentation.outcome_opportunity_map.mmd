@@ -1,0 +1,18 @@
+flowchart LR
+  subgraph n_initiative["Initiatives"]
+    n_I_050["Review Queue Instrumentation"]
+  end
+  subgraph n_opportunity["Opportunities"]
+    n_OP_050["Review Queue Visibility"]
+  end
+  subgraph n_outcome["Outcomes"]
+    n_O_050["Reduce Risk Review Delays"]
+  end
+  subgraph n_metric["Metrics"]
+    n_M_050["Alert Stream Coverage<br/>Event: E-050 Alert Emitted<br/>Event: E-051 Review Completed Event"]
+    n_M_051["Manual Review Completion<br/>Experience: J-050 Review Risk Alert<br/>Event: E-051 Review Completed Event"]
+  end
+  n_I_050 -->|addresses| n_OP_050
+  n_O_050 -->|measured by| n_M_050
+  n_O_050 -->|measured by| n_M_051
+  n_OP_050 -->|supports| n_O_050

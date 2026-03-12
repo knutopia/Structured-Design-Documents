@@ -32,12 +32,26 @@ import type {
 } from "./uiContractsRenderModel.js";
 import type { DotPreviewStyle } from "./previewStyle.js";
 
+interface RawDotAttributeValue {
+  kind: "raw";
+  value: string;
+}
+
+type DotAttributeValue = string | number | boolean | RawDotAttributeValue;
+
 function escapeLabel(text: string): string {
   return text.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
-function formatMultilineLabel(lines: string[]): string {
-  return lines.map((line) => escapeLabel(line)).join("\\n");
+function rawDotAttributeValue(value: string): RawDotAttributeValue {
+  return {
+    kind: "raw",
+    value
+  };
+}
+
+function formatMultilineLabel(lines: string[]): RawDotAttributeValue {
+  return rawDotAttributeValue(lines.map((line) => escapeLabel(line)).join("\\n"));
 }
 
 function quoteId(id: string): string {
@@ -48,7 +62,11 @@ function clusterId(prefix: string, id: string): string {
   return `${prefix}_${id.replace(/[^A-Za-z0-9_]/g, "_")}`;
 }
 
-function formatAttributeValue(value: string | number | boolean): string {
+function formatAttributeValue(value: DotAttributeValue): string {
+  if (typeof value === "object") {
+    return `"${value.value}"`;
+  }
+
   if (typeof value === "string") {
     return `"${escapeLabel(value)}"`;
   }
@@ -56,8 +74,8 @@ function formatAttributeValue(value: string | number | boolean): string {
   return String(value);
 }
 
-function formatAttributes(attributes: Record<string, string | number | boolean | undefined>): string {
-  const entries = Object.entries(attributes).filter((entry): entry is [string, string | number | boolean] => entry[1] !== undefined);
+function formatAttributes(attributes: Record<string, DotAttributeValue | undefined>): string {
+  const entries = Object.entries(attributes).filter((entry): entry is [string, DotAttributeValue] => entry[1] !== undefined);
   if (entries.length === 0) {
     return "";
   }
@@ -83,7 +101,7 @@ function renderInvisibleOrderChains(
 }
 
 function renderPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(place.id)} [label="${formatMultilineLabel(place.labelLines)}"];`);
+  lines.push(`${indent}${quoteId(place.id)}${formatAttributes({ label: formatMultilineLabel(place.labelLines) })};`);
   renderItems(place.items, indent, lines);
 }
 
@@ -124,7 +142,7 @@ export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: DotPre
 }
 
 function renderJourneyStep(step: JourneyRenderStep, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(step.id)} [label="${formatMultilineLabel(step.labelLines)}"];`);
+  lines.push(`${indent}${quoteId(step.id)}${formatAttributes({ label: formatMultilineLabel(step.labelLines) })};`);
 }
 
 function renderJourneyStage(stage: JourneyRenderStage, indent: string, lines: string[]): void {
@@ -172,9 +190,7 @@ export function renderJourneyMapDot(model: JourneyMapRenderModel, style?: DotPre
 }
 
 function renderOutcomeOpportunityNode(node: OutcomeOpportunityRenderNode, indent: string, lines: string[]): void {
-  lines.push(
-    `${indent}${quoteId(node.id)} [shape=${node.shape}, label="${formatMultilineLabel(node.labelLines)}"];`
-  );
+  lines.push(`${indent}${quoteId(node.id)}${formatAttributes({ shape: node.shape, label: formatMultilineLabel(node.labelLines) })};`);
 }
 
 function renderOutcomeOpportunityLane(

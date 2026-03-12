@@ -71,7 +71,7 @@ That separation matters most for the non-IA views:
 - ui contracts derive transition-graph priority in projection, then let the render model decide whether `ViewState` remains primary or scoped `State` groups become the effective primary fallback
 - emitters stay intentionally dumb so bundle semantics do not get duplicated across output formats
 
-Not every projected view is renderable yet, and that is intentional. Projection coverage can land before CLI rendering support. v0.1 still does not expose a public `sdd project` command.
+All bundle-defined v0.1 views are now renderable as DOT and Mermaid text. v0.1 still does not expose a public `sdd project` command, so projection remains an internal contract exercised through tests and renderer inputs.
 
 ## Bundle Ownership
 
@@ -106,17 +106,17 @@ Profiles are validation overlays, not language variants. The core bundle defines
 The current end-to-end renderable set is:
 
 - `ia_place_map` via DOT, Mermaid, and SVG/PNG previews
-- `journey_map` via DOT and SVG/PNG previews
-- `outcome_opportunity_map` via DOT and SVG/PNG previews
-- `service_blueprint` via DOT and SVG/PNG previews
-- `scenario_flow` via DOT and SVG/PNG previews
-- `ui_contracts` via DOT and SVG/PNG previews
+- `journey_map` via DOT, Mermaid, and SVG/PNG previews
+- `outcome_opportunity_map` via DOT, Mermaid, and SVG/PNG previews
+- `service_blueprint` via DOT, Mermaid, and SVG/PNG previews
+- `scenario_flow` via DOT, Mermaid, and SVG/PNG previews
+- `ui_contracts` via DOT, Mermaid, and SVG/PNG previews
 
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
-- DOT is the minimum rendering contract for previewable views
-- Mermaid support is optional and should only be added when the result stays readable
+- DOT remains the preview-source contract for SVG/PNG generation
+- Mermaid is a parallel readable text contract, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
 
@@ -178,7 +178,8 @@ The test suite uses the bundle examples as conformance fixtures.
 - compile tests assert stable compiled JSON against bundle snapshots after newline normalization
 - validation tests assert zero errors for current manifest examples under `recommended`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
-- render tests assert stable DOT and Mermaid output after newline normalization
+- render tests assert stable DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
+- corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile `.dot`, `.mmd`, `.svg`, and `.png` artifacts
 - negative fixtures cover syntax, compile, and validation failures
 
 Fixture and golden reads should normalize `CRLF` to `LF` before raw string comparison so mixed contributor environments do not create false negatives. The newline policy still lives in `.gitattributes`; test normalization exists to make assertions platform-tolerant, not to permit committed `CRLF` artifacts.

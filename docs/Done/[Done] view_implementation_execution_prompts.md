@@ -1,6 +1,6 @@
-# View Implementation Execution Prompts
+# [Done:] View Implementation Execution Prompts
 
-These prompts are designed to be copied into fresh Codex threads, one prompt per thread.
+These prompts are designed to be copied into fresh Codex threads, one prompt per thread. They will create the capability to render all view types.
 
 Usage:
 
