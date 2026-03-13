@@ -34,7 +34,7 @@ export interface UiContractsComponentItem {
   kind: "component";
   id: string;
   nodeId: string;
-  titleNodeId?: string;
+  endpointId?: string;
   labelLines?: string[];
   childItems: Array<UiContractsStateGroupItem | UiContractsLeafNodeItem>;
   orderAnchorId: string;
@@ -44,7 +44,7 @@ export interface UiContractsComponentItem {
 export interface UiContractsStateGroupItem {
   kind: "state_group";
   id: string;
-  titleNodeId: string;
+  endpointId: string;
   labelLines: string[];
   nodeIds: string[];
   orderAnchorId: string;
@@ -55,7 +55,7 @@ export interface UiContractsViewStateItem {
   kind: "view_state";
   id: string;
   nodeId: string;
-  titleNodeId?: string;
+  endpointId?: string;
   labelLines?: string[];
   childItems: Array<UiContractsComponentItem | UiContractsLeafNodeItem>;
   orderAnchorId: string;
@@ -65,7 +65,7 @@ export interface UiContractsViewStateItem {
 export interface UiContractsPlaceItem {
   kind: "place";
   id: string;
-  titleNodeId: string;
+  endpointId: string;
   labelLines: string[];
   childItems: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem>;
   orderAnchorId: string;
@@ -74,7 +74,7 @@ export interface UiContractsPlaceItem {
 export interface UiContractsSupportingGroupItem {
   kind: "support_group";
   id: string;
-  titleNodeId: string;
+  endpointId: string;
   labelLines: string[];
   nodeIds: string[];
   orderAnchorId: string;
@@ -564,10 +564,10 @@ export function buildUiContractsRenderModel(
   const buildStateGroup = (group: ProjectionNodeGroup): UiContractsStateGroupItem => ({
     kind: "state_group",
     id: group.id,
-    titleNodeId: `${group.id}__title`,
+    endpointId: `${group.id}__anchor`,
     labelLines: buildStateGroupLabelLines(group, graphNodesById.get(group.scope_id ?? group.label), effectiveTransitionNodeType),
     nodeIds: [...group.node_ids],
-    orderAnchorId: `${group.id}__title`,
+    orderAnchorId: `${group.id}__anchor`,
     style:
       effectiveTransitionNodeType === "State" || metadata.secondary_render_mode !== "inset" ? "rounded" : "rounded,dashed"
   });
@@ -586,10 +586,10 @@ export function buildUiContractsRenderModel(
       kind: "component",
       id: componentId,
       nodeId: componentId,
-      titleNodeId: isContainer ? `${componentId}__title` : undefined,
+      endpointId: isContainer ? `${componentId}__anchor` : undefined,
       labelLines: isContainer ? buildComponentContainerLabelLines(componentId, graphNodesById) : undefined,
       childItems,
-      orderAnchorId: isContainer ? `${componentId}__title` : componentId,
+      orderAnchorId: isContainer ? `${componentId}__anchor` : componentId,
       style: "rounded"
     };
   };
@@ -616,12 +616,12 @@ export function buildUiContractsRenderModel(
       kind: "view_state",
       id: viewStateId,
       nodeId: viewStateId,
-      titleNodeId: isContainer ? `${viewStateId}__title` : undefined,
+      endpointId: isContainer ? `${viewStateId}__anchor` : undefined,
       labelLines: isContainer
         ? buildViewStateContainerLabelLines(viewStateId, graphNodesById, displayOptions.includeViewStateDataRequired)
         : undefined,
       childItems,
-      orderAnchorId: isContainer ? `${viewStateId}__title` : viewStateId,
+      orderAnchorId: isContainer ? `${viewStateId}__anchor` : viewStateId,
       style: "rounded,dashed"
     };
   };
@@ -660,10 +660,10 @@ export function buildUiContractsRenderModel(
     return {
       kind: "place",
       id: placeId,
-      titleNodeId: `${placeId}__title`,
+      endpointId: `${placeId}__anchor`,
       labelLines: buildPlaceLabelLines(placeId, graphNodesById, displayPolicy),
       childItems,
-      orderAnchorId: `${placeId}__title`
+      orderAnchorId: `${placeId}__anchor`
     };
   };
 
@@ -730,10 +730,10 @@ export function buildUiContractsRenderModel(
     rootItems.push({
       kind: "support_group",
       id: "shared_supporting_contracts",
-      titleNodeId: "shared_supporting_contracts__title",
+      endpointId: "shared_supporting_contracts__anchor",
       labelLines: ["Shared Supporting Contracts"],
       nodeIds: [...sharedSupportNodeIds],
-      orderAnchorId: "shared_supporting_contracts__title",
+      orderAnchorId: "shared_supporting_contracts__anchor",
       style: "rounded"
     });
   }
@@ -751,26 +751,26 @@ export function buildUiContractsRenderModel(
     }
   }
 
-  const containerTitleByNodeId = new Map<string, string>();
-  const collectContainerTitles = (
+  const containerEndpointByNodeId = new Map<string, string>();
+  const collectContainerEndpoints = (
     items: Array<UiContractsRootItem | UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
   ): void => {
     for (const item of items) {
       if (item.kind === "place" || item.kind === "state_group" || item.kind === "support_group" || item.kind === "node") {
         if (item.kind === "place") {
-          collectContainerTitles(item.childItems);
+          collectContainerEndpoints(item.childItems);
         }
         continue;
       }
 
-      if (item.titleNodeId) {
-        containerTitleByNodeId.set(item.nodeId, item.titleNodeId);
+      if (item.endpointId) {
+        containerEndpointByNodeId.set(item.nodeId, item.endpointId);
         hiddenNodeIds.add(item.nodeId);
       }
-      collectContainerTitles(item.childItems);
+      collectContainerEndpoints(item.childItems);
     }
   };
-  collectContainerTitles(rootItems);
+  collectContainerEndpoints(rootItems);
 
   const nodes = projection.nodes
     .filter(
@@ -791,43 +791,10 @@ export function buildUiContractsRenderModel(
         labelLines
       };
     });
-  const syntheticTitleNodes: UiContractsRenderNode[] = [];
-  const collectSyntheticTitleNodes = (
-    items: Array<UiContractsRootItem | UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
-  ): void => {
-    for (const item of items) {
-      if (item.kind === "node") {
-        continue;
-      }
-
-      if (item.kind === "place" || item.kind === "state_group" || item.kind === "support_group") {
-        syntheticTitleNodes.push({
-          id: item.titleNodeId,
-          shape: "plaintext",
-          labelLines: item.labelLines
-        });
-        if (item.kind === "place") {
-          collectSyntheticTitleNodes(item.childItems);
-        }
-        continue;
-      }
-
-      if (item.titleNodeId) {
-        syntheticTitleNodes.push({
-          id: item.titleNodeId,
-          shape: "plaintext",
-          labelLines: item.labelLines ?? []
-        });
-      }
-      collectSyntheticTitleNodes(item.childItems);
-    }
-  };
-  collectSyntheticTitleNodes(rootItems);
-  nodes.push(...syntheticTitleNodes);
   const renderedNodeIds = new Set(nodes.map((node) => node.id));
   const isRenderedEndpoint = (nodeId: string): boolean =>
-    placeIds.has(nodeId) || renderedNodeIds.has(nodeId) || containerTitleByNodeId.has(nodeId);
-  const resolveRenderedEndpointId = (nodeId: string): string => containerTitleByNodeId.get(nodeId) ?? nodeId;
+    placeIds.has(nodeId) || renderedNodeIds.has(nodeId) || containerEndpointByNodeId.has(nodeId);
+  const resolveRenderedEndpointId = (nodeId: string): string => containerEndpointByNodeId.get(nodeId) ?? nodeId;
   const localSupportEdgeKeys = new Set(
     [...ownedSupportNodeIdsByOwnerId.entries()].flatMap(([ownerId, nodeIds]) =>
       nodeIds.map((nodeId) => `${ownerId}->${nodeId}`)

@@ -64,8 +64,8 @@ END
       throw new Error("Expected nested view state item.");
     }
 
-    expect(viewState.titleNodeId).toBe("VS-100__title");
-    expect(viewState.orderAnchorId).toBe("VS-100__title");
+    expect(viewState.endpointId).toBe("VS-100__anchor");
+    expect(viewState.orderAnchorId).toBe("VS-100__anchor");
     expect(viewState.labelLines).toEqual(["ViewState: Editing", "data: DraftRecord"]);
     expect(viewState.childItems.map((item) => item.kind)).toEqual(["node", "node"]);
     expect(viewState.childItems.map((item) => item.orderAnchorId)).toEqual(["E-100", "SA-100"]);
@@ -98,9 +98,9 @@ END
       throw new Error("Expected nested view state item.");
     }
 
-    expect(viewState.titleNodeId).toBe("VS-010a__title");
+    expect(viewState.endpointId).toBe("VS-010a__anchor");
     expect(viewState.childItems[0]?.kind).toBe("component");
-    expect(model.edges.some((edge) => edge.from === "VS-010a__title" && edge.to === "C-011__title")).toBe(false);
+    expect(model.edges.some((edge) => edge.from === "VS-010a__anchor" && edge.to === "C-011__anchor")).toBe(false);
   });
 
   it("falls back to a shared supporting group when a support node has multiple structural owners", async () => {
@@ -157,7 +157,7 @@ END
       throw new Error("Expected root component item.");
     }
 
-    expect(component.titleNodeId).toBeUndefined();
+    expect(component.endpointId).toBeUndefined();
     expect(component.orderAnchorId).toBe("C-300");
     expect(component.labelLines).toBeUndefined();
     expect(component.childItems).toEqual([]);
@@ -189,7 +189,7 @@ END
       throw new Error("Expected nested component item.");
     }
 
-    expect(component.titleNodeId).toBe("C-060__title");
+    expect(component.endpointId).toBe("C-060__anchor");
     expect(component.labelLines).toEqual(["Component: Review Panel"]);
     expect(component.childItems.map((item) => item.kind)).toEqual(["node", "node", "node", "state_group"]);
     expect(component.childItems.filter((item) => item.kind === "node").map((item) => item.orderAnchorId)).toEqual([
@@ -218,7 +218,7 @@ END
 
     expect(
       model.edges
-        .filter((edge) => edge.from === "C-060__title")
+        .filter((edge) => edge.from === "C-060__anchor")
         .map((edge) => ({ to: edge.to, constraint: edge.constraint }))
     ).toEqual([
       { to: "D-060", constraint: true },
@@ -226,8 +226,8 @@ END
       { to: "E-060", constraint: true }
     ]);
 
-    expect(model.siblingOrderChains).toContainEqual(["secondary_state_group:P-060__title", "C-060__title"]);
-    expect(model.siblingOrderChains).toContainEqual(["D-060", "secondary_state_group:C-060__title"]);
+    expect(model.siblingOrderChains).toContainEqual(["secondary_state_group:P-060__anchor", "C-060__anchor"]);
+    expect(model.siblingOrderChains).toContainEqual(["D-060", "secondary_state_group:C-060__anchor"]);
     expect(model.siblingOrderChains).not.toContainEqual(["E-060", "SA-060", "D-060"]);
   });
 });

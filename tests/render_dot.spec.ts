@@ -52,14 +52,14 @@ describe("renderSource dot", () => {
     });
 
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-    expect(result.text).toContain('"P-010__title" [shape="plaintext", label="Billing\\l/billing\\l[auth]\\l"];');
-    expect(result.text).not.toContain('"P-010__title" [shape="plaintext", label="Billing\\\\l/billing\\\\l[auth]\\\\l"];');
-    expect(result.text).toContain('"VS-010a__title" [shape="plaintext", label="ViewState: Billing Editing\\ldata: PaymentMethod\\l"];');
-    expect(result.text).not.toContain('"VS-010a__title" [shape="plaintext", label="ViewState: Billing Editing\\\\ldata: PaymentMethod\\\\l"];');
+    expect(result.text).toContain('graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Billing</TD></TR><TR><TD ALIGN="LEFT">/billing</TD></TR><TR><TD ALIGN="LEFT">[auth]</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];');
+    expect(result.text).toContain('graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">ViewState: Billing Editing</TD></TR><TR><TD ALIGN="LEFT">data: PaymentMethod</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];');
     expect(result.text).toContain("subgraph cluster_VS_010a {");
     expect(result.text).not.toContain("subgraph cluster_VS_010a__detail {");
     expect(result.text).not.toContain('"VS-010a" [shape="box", style="rounded,dashed", label="Billing Editing\\ndata: PaymentMethod"];');
-    expect(result.text).toContain('"P-010__title" -> "P-011__title" [style=invis, weight=100];');
+    expect(result.text).toContain('"P-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];');
+    expect(result.text).toContain('"VS-010a__anchor" [label="", shape="point", width=0, height=0, style="invis"];');
+    expect(result.text).not.toContain('"P-010__title" [shape="plaintext"');
   });
 
   it("renders component containers only when ui_contracts detail is visible", async () => {
@@ -83,7 +83,7 @@ describe("renderSource dot", () => {
 
     expect(simple.text).not.toContain("subgraph cluster_C_010 {");
     expect(permissive.text).toContain("subgraph cluster_C_010 {");
-    expect(permissive.text).toContain('"C-010__title" [shape="plaintext", label="Component: Billing Form\\l"];');
+    expect(permissive.text).toContain('graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Billing Form</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];');
     expect(permissive.text).not.toContain('"C-010" [shape="box", style="rounded", label="Billing Form"];');
   });
 
@@ -132,7 +132,7 @@ describe("renderSource dot", () => {
     expect(fallbackResult.text).toContain("[Submit Review] {draft_ready}");
   });
 
-  it("uses visible title nodes for containerized ui_contracts owners and keeps local support edges constrained", async () => {
+  it("uses invisible endpoint anchors for containerized ui_contracts owners and keeps local support edges constrained", async () => {
     const bundle = await loadBundle(manifestPath);
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/ui_state_fallback.sdd");
     const input = {
@@ -147,10 +147,10 @@ describe("renderSource dot", () => {
     });
 
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-    expect(result.text).toContain('"C-060__title" [shape="plaintext", label="Component: Review Panel\\l"];');
+    expect(result.text).toContain('"C-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];');
     expect(result.text).not.toContain('"C-060" [shape="box", style="rounded", label="Review Panel"];');
-    expect(result.text).toContain('"C-060__title" -> "E-060" [label="emits", style="dashed", constraint=true];');
-    expect(result.text).toContain('"P-060__title" -> "secondary_state_group:P-060__title" [style=invis, weight=100];');
+    expect(result.text).toContain('"C-060__anchor" -> "E-060" [label="emits", style="dashed", constraint=true];');
+    expect(result.text).toContain('"P-060__anchor" -> "secondary_state_group:P-060__anchor" [style=invis, weight=100];');
     expect(result.text).not.toContain('"E-060" -> "SA-060" [style=invis, weight=100];');
     expect(result.text).not.toContain('"SA-060" -> "D-060" [style=invis, weight=100];');
   });

@@ -413,6 +413,17 @@ function renderUiContractsNode(
   }
 }
 
+function renderUiContractsContainerTitle(
+  endpointId: string,
+  labelLines: string[],
+  containerTitleIds: string[],
+  indent: string,
+  lines: string[]
+): void {
+  pushNode(lines, [], endpointId, labelLines, "box", false, indent);
+  containerTitleIds.push(mermaidId(endpointId));
+}
+
 function renderUiContractsComponent(
   item: UiContractsComponentItem,
   nodesById: Map<string, UiContractsRenderNode>,
@@ -421,12 +432,9 @@ function renderUiContractsComponent(
   indent: string,
   lines: string[]
 ): void {
-  if (item.titleNodeId) {
+  if (item.endpointId) {
     lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}[" "]`);
-    const titleNode = nodesById.get(item.titleNodeId);
-    if (titleNode) {
-      renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
-    }
+    renderUiContractsContainerTitle(item.endpointId, item.labelLines ?? [], containerTitleIds, `${indent}  `, lines);
     renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
     lines.push(`${indent}end`);
     return;
@@ -449,10 +457,7 @@ function renderUiContractsStateGroup(
   lines: string[]
 ): void {
   lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
-  const titleNode = nodesById.get(item.titleNodeId);
-  if (titleNode) {
-    renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
-  }
+  renderUiContractsContainerTitle(item.endpointId, item.labelLines, containerTitleIds, `${indent}  `, lines);
   for (const nodeId of item.nodeIds) {
     const node = nodesById.get(nodeId);
     if (!node) {
@@ -471,12 +476,9 @@ function renderUiContractsViewState(
   indent: string,
   lines: string[]
 ): void {
-  if (item.titleNodeId) {
+  if (item.endpointId) {
     lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
-    const titleNode = nodesById.get(item.titleNodeId);
-    if (titleNode) {
-      renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
-    }
+    renderUiContractsContainerTitle(item.endpointId, item.labelLines ?? [], containerTitleIds, `${indent}  `, lines);
     renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
     lines.push(`${indent}end`);
     return;
@@ -497,10 +499,7 @@ function renderUiContractsPlace(
   lines: string[]
 ): void {
   lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
-  const titleNode = nodesById.get(item.titleNodeId);
-  if (titleNode) {
-    renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
-  }
+  renderUiContractsContainerTitle(item.endpointId, item.labelLines, containerTitleIds, `${indent}  `, lines);
   renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
   lines.push(`${indent}end`);
 }
@@ -514,10 +513,7 @@ function renderUiContractsSupportGroup(
   lines: string[]
 ): void {
   lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
-  const titleNode = nodesById.get(item.titleNodeId);
-  if (titleNode) {
-    renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
-  }
+  renderUiContractsContainerTitle(item.endpointId, item.labelLines, containerTitleIds, `${indent}  `, lines);
   for (const nodeId of item.nodeIds) {
     const node = nodesById.get(nodeId);
     if (!node) {

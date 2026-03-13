@@ -4,36 +4,36 @@ digraph ui_contracts {
   node [fontname="Public Sans"];
   edge [fontname="Public Sans"];
   subgraph cluster_P_060 {
-    graph [label="", style="rounded"];
-    "P-060__title" [shape="plaintext", label="Case Review\l/cases/review\l[auth]\l"];
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Case Review</TD></TR><TR><TD ALIGN="LEFT">/cases/review</TD></TR><TR><TD ALIGN="LEFT">[auth]</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "P-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
     subgraph cluster_secondary_state_group_P_060 {
-      graph [label="", style="rounded"];
-      "secondary_state_group:P-060__title" [shape="plaintext", label="State graph: Case Review\lscope_id=P-060\l"];
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">State graph: Case Review</TD></TR><TR><TD ALIGN="LEFT">scope_id=P-060</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+      "secondary_state_group:P-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
       "ST-060a" [shape="ellipse", label="Case Review Ready"];
       "ST-060b" [shape="ellipse", label="Case Review Submitted"];
     }
     subgraph cluster_C_060 {
-      graph [label="", style="rounded"];
-      "C-060__title" [shape="plaintext", label="Component: Review Panel\l"];
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Review Panel</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+      "C-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
       "E-060" [shape="oval", label="Submit Review"];
       "SA-060" [shape="component", label="Save Review"];
       "D-060" [shape="cylinder", label="CaseRecord"];
       subgraph cluster_secondary_state_group_C_060 {
-        graph [label="", style="rounded"];
-        "secondary_state_group:C-060__title" [shape="plaintext", label="State graph: Review Panel\lscope_id=C-060\l"];
+        graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">State graph: Review Panel</TD></TR><TR><TD ALIGN="LEFT">scope_id=C-060</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+        "secondary_state_group:C-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
         "ST-061a" [shape="ellipse", label="Panel Idle"];
         "ST-061b" [shape="ellipse", label="Panel Dirty"];
       }
     }
   }
-  "P-060__title" -> "secondary_state_group:P-060__title" [style=invis, weight=100];
-  "secondary_state_group:P-060__title" -> "C-060__title" [style=invis, weight=100];
-  "secondary_state_group:P-060__title" -> "ST-060a" [style=invis, weight=100];
-  "D-060" -> "secondary_state_group:C-060__title" [style=invis, weight=100];
-  "secondary_state_group:C-060__title" -> "ST-061a" [style=invis, weight=100];
-  "C-060__title" -> "D-060" [label="binds field status", style="dotted", constraint=true];
-  "C-060__title" -> "SA-060" [label="depends on", constraint=true];
-  "C-060__title" -> "E-060" [label="emits", style="dashed", constraint=true];
+  "P-060__anchor" -> "secondary_state_group:P-060__anchor" [style=invis, weight=100];
+  "secondary_state_group:P-060__anchor" -> "C-060__anchor" [style=invis, weight=100];
+  "secondary_state_group:P-060__anchor" -> "ST-060a" [style=invis, weight=100];
+  "D-060" -> "secondary_state_group:C-060__anchor" [style=invis, weight=100];
+  "secondary_state_group:C-060__anchor" -> "ST-061a" [style=invis, weight=100];
+  "C-060__anchor" -> "D-060" [label="binds field status", style="dotted", constraint=true];
+  "C-060__anchor" -> "SA-060" [label="depends on", constraint=true];
+  "C-060__anchor" -> "E-060" [label="emits", style="dashed", constraint=true];
   "ST-060a" -> "ST-060b" [label="[Submit Review] / SA-060", style="solid", weight=4];
   "ST-061a" -> "ST-061b" [label="[Submit Review] {draft_ready}", style="solid", weight=4];
 }

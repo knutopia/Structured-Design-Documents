@@ -1,18 +1,18 @@
 flowchart LR
   subgraph n_P_010[" "]
-    n_P_010__title["Billing"]
+    n_P_010__anchor["Billing"]
     subgraph n_VS_010a[" "]
-      n_VS_010a__title["ViewState: Billing Editing"]
+      n_VS_010a__anchor["ViewState: Billing Editing"]
       n_C_011("Submit Button")
     end
     n_VS_010b("Billing Success")
     n_C_010("Billing Form")
   end
   subgraph n_P_011[" "]
-    n_P_011__title["Confirmation"]
+    n_P_011__anchor["Confirmation"]
   end
-  n_VS_010a__title -->|[Submit] {payment_valid} / SA-010| n_VS_010b
+  n_VS_010a__anchor -->|[Submit] {payment_valid} / SA-010| n_VS_010b
   classDef dashedNode stroke-dasharray: 6 4;
   class n_VS_010b dashedNode;
   classDef containerTitle fill:transparent,stroke:transparent,color:#111;
-  class n_P_010__title,n_VS_010a__title,n_P_011__title containerTitle;
+  class n_P_010__anchor,n_VS_010a__anchor,n_P_011__anchor containerTitle;

@@ -4,44 +4,44 @@ digraph ui_contracts {
   node [fontname="Public Sans"];
   edge [fontname="Public Sans"];
   subgraph cluster_P_010 {
-    graph [label="", style="rounded"];
-    "P-010__title" [shape="plaintext", label="Billing\l/billing\l[auth]\l"];
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Billing</TD></TR><TR><TD ALIGN="LEFT">/billing</TD></TR><TR><TD ALIGN="LEFT">[auth]</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "P-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];
     subgraph cluster_VS_010a {
-      graph [label="", style="rounded,dashed"];
-      "VS-010a__title" [shape="plaintext", label="ViewState: Billing Editing\ldata: PaymentMethod\l"];
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">ViewState: Billing Editing</TD></TR><TR><TD ALIGN="LEFT">data: PaymentMethod</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+      "VS-010a__anchor" [label="", shape="point", width=0, height=0, style="invis"];
       subgraph cluster_C_011 {
-        graph [label="", style="rounded"];
-        "C-011__title" [shape="plaintext", label="Component: Submit Button\l"];
+        graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Submit Button</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+        "C-011__anchor" [label="", shape="point", width=0, height=0, style="invis"];
         "E-010" [shape="oval", label="Submit"];
       }
     }
     "VS-010b" [shape="box", style="rounded,dashed", label="Billing Success\ndata: Receipt"];
     subgraph cluster_C_010 {
-      graph [label="", style="rounded"];
-      "C-010__title" [shape="plaintext", label="Component: Billing Form\l"];
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Billing Form</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+      "C-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];
       "SA-010" [shape="component", label="Save Subscription"];
       "D-010" [shape="cylinder", label="Subscription"];
       subgraph cluster_secondary_state_group_C_010 {
-        graph [label="", style="rounded,dashed"];
-        "secondary_state_group:C-010__title" [shape="plaintext", label="State detail: Billing Form\lscope_id=C-010\l"];
+        graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">State detail: Billing Form</TD></TR><TR><TD ALIGN="LEFT">scope_id=C-010</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+        "secondary_state_group:C-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];
         "ST-010a" [shape="ellipse", style="dashed", label="Form Ready"];
         "ST-010b" [shape="ellipse", style="dashed", label="Submitting"];
       }
     }
   }
   subgraph cluster_P_011 {
-    graph [label="", style="rounded"];
-    "P-011__title" [shape="plaintext", label="Confirmation\l/confirmation\l[role:billing_agent]\l"];
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Confirmation</TD></TR><TR><TD ALIGN="LEFT">/confirmation</TD></TR><TR><TD ALIGN="LEFT">[role:billing_agent]</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "P-011__anchor" [label="", shape="point", width=0, height=0, style="invis"];
   }
-  "P-010__title" -> "P-011__title" [style=invis, weight=100];
-  "P-010__title" -> "VS-010a__title" [style=invis, weight=100];
-  "VS-010b" -> "C-010__title" [style=invis, weight=100];
-  "VS-010a__title" -> "C-011__title" [style=invis, weight=100];
-  "D-010" -> "secondary_state_group:C-010__title" [style=invis, weight=100];
-  "secondary_state_group:C-010__title" -> "ST-010a" [style=invis, weight=100];
-  "C-010__title" -> "D-010" [label="binds field status", style="dotted", constraint=true];
-  "C-010__title" -> "SA-010" [label="depends on", constraint=true];
-  "C-011__title" -> "E-010" [label="emits", style="dashed", constraint=true];
+  "P-010__anchor" -> "P-011__anchor" [style=invis, weight=100];
+  "P-010__anchor" -> "VS-010a__anchor" [style=invis, weight=100];
+  "VS-010b" -> "C-010__anchor" [style=invis, weight=100];
+  "VS-010a__anchor" -> "C-011__anchor" [style=invis, weight=100];
+  "D-010" -> "secondary_state_group:C-010__anchor" [style=invis, weight=100];
+  "secondary_state_group:C-010__anchor" -> "ST-010a" [style=invis, weight=100];
+  "C-010__anchor" -> "D-010" [label="binds field status", style="dotted", constraint=true];
+  "C-010__anchor" -> "SA-010" [label="depends on", constraint=true];
+  "C-011__anchor" -> "E-010" [label="emits", style="dashed", constraint=true];
   "ST-010a" -> "ST-010b" [label="[Submit] {payment_valid} / SA-010", style="dashed", weight=3];
-  "VS-010a__title" -> "VS-010b" [label="[Submit] {payment_valid} / SA-010", style="solid", weight=4];
+  "VS-010a__anchor" -> "VS-010b" [label="[Submit] {payment_valid} / SA-010", style="solid", weight=4];
 }

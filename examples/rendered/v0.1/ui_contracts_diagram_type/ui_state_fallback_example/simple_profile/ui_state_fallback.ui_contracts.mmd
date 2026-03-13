@@ -1,29 +1,29 @@
 flowchart LR
   subgraph n_P_060[" "]
-    n_P_060__title["Case Review"]
+    n_P_060__anchor["Case Review"]
     subgraph n_secondary_state_group_P_060[" "]
-      n_secondary_state_group_P_060__title["State graph: Case Review<br/>scope_id=P-060"]
+      n_secondary_state_group_P_060__anchor["State graph: Case Review<br/>scope_id=P-060"]
       n_ST_060a(["Case Review Ready"])
       n_ST_060b(["Case Review Submitted"])
     end
     subgraph n_C_060__group[" "]
-      n_C_060__title["Component: Review Panel"]
+      n_C_060__anchor["Component: Review Panel"]
       n_E_060(["Submit Review"])
       n_SA_060[["Save Review"]]
       n_D_060["CaseRecord"]
       subgraph n_secondary_state_group_C_060[" "]
-        n_secondary_state_group_C_060__title["State graph: Review Panel<br/>scope_id=C-060"]
+        n_secondary_state_group_C_060__anchor["State graph: Review Panel<br/>scope_id=C-060"]
         n_ST_061a(["Panel Idle"])
         n_ST_061b(["Panel Dirty"])
       end
     end
   end
-  n_C_060__title -->|binds field status| n_D_060
-  n_C_060__title -->|depends on| n_SA_060
-  n_C_060__title -->|emits| n_E_060
+  n_C_060__anchor -->|binds field status| n_D_060
+  n_C_060__anchor -->|depends on| n_SA_060
+  n_C_060__anchor -->|emits| n_E_060
   n_ST_060a -->|[Submit Review] / SA-060| n_ST_060b
   n_ST_061a -->|[Submit Review] {draft_ready}| n_ST_061b
   classDef containerTitle fill:transparent,stroke:transparent,color:#111;
-  class n_P_060__title,n_secondary_state_group_P_060__title,n_C_060__title,n_secondary_state_group_C_060__title containerTitle;
+  class n_P_060__anchor,n_secondary_state_group_P_060__anchor,n_C_060__anchor,n_secondary_state_group_C_060__anchor containerTitle;
   linkStyle 2 stroke-dasharray: 6 4;
   linkStyle 0 stroke-dasharray: 2 4;
