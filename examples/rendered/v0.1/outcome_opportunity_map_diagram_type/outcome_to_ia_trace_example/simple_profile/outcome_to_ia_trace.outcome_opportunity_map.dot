@@ -21,7 +21,7 @@ digraph outcome_opportunity_map {
   subgraph rank_metric {
     rank=same;
     "lane_metric" [shape=plaintext, label="Metrics"];
-    "M-001" [shape="note", label="Checkout Completion Rate\nExperience: J-002 Confirm Payment\nEvent: E-001 Payment Submitted"];
+    "M-001" [shape="note", label="Checkout Completion Rate"];
   }
   "lane_initiative" -> "lane_opportunity" [style=invis, weight=100];
   "lane_opportunity" -> "lane_outcome" [style=invis, weight=100];

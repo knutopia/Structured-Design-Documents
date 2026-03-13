@@ -22,19 +22,19 @@ flowchart TB
     n_PL_020["Retention Policy"]
   end
   n_J_020 --> n_J_021
-  n_J_020 -->|realized by| n_PR_020
-  n_J_021 -->|realized by| n_PR_022
-  n_PR_020 -->|constrained by| n_PL_020
-  n_PR_020 -->|depends on| n_SA_020
+  n_J_020 --> n_PR_020
+  n_J_021 --> n_PR_022
+  n_PR_020 --> n_PL_020
+  n_PR_020 --> n_SA_020
   n_PR_020 --> n_PR_021
-  n_PR_021 -->|depends on| n_SA_021
+  n_PR_021 --> n_SA_021
   n_PR_021 --> n_PR_022
-  n_PR_022 -->|depends on| n_SA_022
-  n_SA_020 -->|constrained by| n_PL_020
-  n_SA_020 -->|reads| n_D_020
-  n_SA_020 -->|writes| n_D_020
-  n_SA_021 -->|reads| n_D_020
-  n_SA_022 -->|reads| n_D_020
+  n_PR_022 --> n_SA_022
+  n_SA_020 --> n_PL_020
+  n_SA_020 --> n_D_020
+  n_SA_020 --> n_D_020
+  n_SA_021 --> n_D_020
+  n_SA_022 --> n_D_020
   linkStyle 1,2,10,12,13 stroke-dasharray: 6 4;
   linkStyle 3,9 stroke-dasharray: 2 4;
   linkStyle 11 stroke-width: 3px;

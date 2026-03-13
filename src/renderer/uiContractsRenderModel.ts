@@ -1,6 +1,9 @@
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledEdge, CompiledGraph } from "../compiler/types.js";
 import type { Projection, ProjectionNodeGroup } from "../projector/types.js";
+import { buildIaStylePlaceLabelLines } from "./placeLabelLines.js";
+import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
+import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
 
 type UiContractsNodeType = "Component" | "DataEntity" | "Event" | "State" | "SystemAction" | "ViewState";
 type RenderedTransitionType = "State" | "ViewState";
@@ -77,6 +80,12 @@ interface TransitionGraphPriorityViewMetadata {
   fallback_to_secondary_when_primary_absent?: boolean;
 }
 
+interface UiContractsDisplayOptions {
+  includeViewStateDataRequired: boolean;
+  showSecondaryStateGroupsWhenPrimaryViewState: boolean;
+  showSupportingContractLaneWhenPrimaryViewState: boolean;
+}
+
 function getTransitionGraphPriorityMetadata(projection: Projection): TransitionGraphPriorityViewMetadata {
   const raw = projection.derived.view_metadata.transition_graph_priority;
   if (!raw || typeof raw !== "object") {
@@ -90,6 +99,22 @@ function getTransitionGraphPriorityMetadata(projection: Projection): TransitionG
     secondary_render_mode: typeof metadata.secondary_render_mode === "string" ? metadata.secondary_render_mode : undefined,
     fallback_to_secondary_when_primary_absent:
       metadata.fallback_to_secondary_when_primary_absent === true
+  };
+}
+
+function readUiContractsDisplayOptions(policy: ResolvedProfileDisplayPolicy): UiContractsDisplayOptions {
+  return {
+    includeViewStateDataRequired: readBooleanProfileDisplaySetting(policy, "show_view_state_data_required", true),
+    showSecondaryStateGroupsWhenPrimaryViewState: readBooleanProfileDisplaySetting(
+      policy,
+      "show_secondary_state_groups_when_primary_view_state",
+      true
+    ),
+    showSupportingContractLaneWhenPrimaryViewState: readBooleanProfileDisplaySetting(
+      policy,
+      "show_supporting_contract_lane_when_primary_view_state",
+      true
+    )
   };
 }
 
@@ -235,14 +260,11 @@ function buildPlaceLabelLines(placeId: string, graphNodesById: Map<string, { nam
     return [placeId];
   }
 
-  const labelLines = [place.name];
-  if (place.props.route_or_key) {
-    labelLines.push(place.props.route_or_key);
-  }
-  if (place.props.access) {
-    labelLines.push(`[${place.props.access}]`);
-  }
-  return labelLines;
+  return buildIaStylePlaceLabelLines({
+    name: place.name,
+    subtitle: place.props.route_or_key,
+    badge: place.props.access
+  });
 }
 
 function buildStateGroupLabelLines(
@@ -321,12 +343,21 @@ function collectSiblingOrderChains(rootItems: UiContractsRootItem[], supportingL
   return chains;
 }
 
-export function buildUiContractsRenderModel(projection: Projection, graph: CompiledGraph): UiContractsRenderModel {
+export function buildUiContractsRenderModel(
+  projection: Projection,
+  graph: CompiledGraph,
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
+): UiContractsRenderModel {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectedNodeIds = new Set(projection.nodes.map((node) => node.id));
   const hierarchyEdges = projection.edges.filter((edge) => edge.type === "COMPOSED_OF" || edge.type === "CONTAINS");
+  const displayOptions = readUiContractsDisplayOptions(displayPolicy);
   const metadata = getTransitionGraphPriorityMetadata(projection);
   const effectiveTransitionNodeType = getEffectiveTransitionNodeType(projection, metadata);
+  const showSecondaryStateGroups =
+    effectiveTransitionNodeType === "State" || displayOptions.showSecondaryStateGroupsWhenPrimaryViewState;
+  const showSupportingContractLane =
+    effectiveTransitionNodeType === "State" || displayOptions.showSupportingContractLaneWhenPrimaryViewState;
 
   const viewStateIds = new Set(
     projection.nodes.filter((node) => node.type === "ViewState").map((node) => node.id)
@@ -371,6 +402,9 @@ export function buildUiContractsRenderModel(projection: Projection, graph: Compi
     groups.push(group);
     stateGroupsByScopeId.set(scopeId, groups);
   }
+  const visibleStateNodeIds = new Set(
+    showSecondaryStateGroups ? secondaryStateGroups.flatMap((group) => group.node_ids) : []
+  );
 
   const buildStateGroup = (group: ProjectionNodeGroup): UiContractsStateGroupItem => ({
     kind: "state_group",
@@ -383,7 +417,7 @@ export function buildUiContractsRenderModel(projection: Projection, graph: Compi
   });
 
   const buildScopedGroupItems = (scopeId: string): UiContractsStateGroupItem[] =>
-    (stateGroupsByScopeId.get(scopeId) ?? []).map((group) => buildStateGroup(group));
+    showSecondaryStateGroups ? (stateGroupsByScopeId.get(scopeId) ?? []).map((group) => buildStateGroup(group)) : [];
 
   const buildComponentItems = (parentId: string): Array<UiContractsComponentItem | UiContractsStateGroupItem> => {
     const orderedComponentIds = getSourceOrderedStructuralStream(
@@ -530,21 +564,37 @@ export function buildUiContractsRenderModel(projection: Projection, graph: Compi
       .map((node) => node.id)
   );
   const supportingLane =
-    externalNodeIds.length > 0
+    showSupportingContractLane && externalNodeIds.length > 0
       ? {
           headerId: "supporting_contracts__header",
           label: "Supporting Contracts",
           nodeIds: externalNodeIds
         }
       : undefined;
+  const hiddenNodeIds = new Set<string>();
+  if (!showSecondaryStateGroups) {
+    for (const group of secondaryStateGroups) {
+      for (const nodeId of group.node_ids) {
+        hiddenNodeIds.add(nodeId);
+      }
+    }
+  }
+  if (!showSupportingContractLane) {
+    for (const nodeId of externalNodeIds) {
+      hiddenNodeIds.add(nodeId);
+    }
+  }
 
   const nodes = projection.nodes
-    .filter((node): node is typeof node & { type: UiContractsNodeType } => node.type !== "Place")
+    .filter(
+      (node): node is typeof node & { type: UiContractsNodeType } =>
+        node.type !== "Place" && !hiddenNodeIds.has(node.id) && (node.type !== "State" || visibleStateNodeIds.has(node.id))
+    )
     .map<UiContractsRenderNode>((node) => {
       const graphNode = graphNodesById.get(node.id);
       const display = nodeDisplay(node.type, effectiveTransitionNodeType);
       const labelLines = [node.name];
-      if (node.type === "ViewState" && graphNode?.props.data_required) {
+      if (displayOptions.includeViewStateDataRequired && node.type === "ViewState" && graphNode?.props.data_required) {
         labelLines.push(`data: ${graphNode.props.data_required}`);
       }
       return {
@@ -554,9 +604,17 @@ export function buildUiContractsRenderModel(projection: Projection, graph: Compi
         labelLines
       };
     });
+  const renderedNodeIds = new Set(nodes.map((node) => node.id));
+  const isRenderedEndpoint = (nodeId: string): boolean => placeIds.has(nodeId) || renderedNodeIds.has(nodeId);
 
   const edges = projection.edges
-    .filter((edge) => edge.type !== "COMPOSED_OF" && edge.type !== "CONTAINS")
+    .filter(
+      (edge) =>
+        edge.type !== "COMPOSED_OF" &&
+        edge.type !== "CONTAINS" &&
+        isRenderedEndpoint(edge.from) &&
+        isRenderedEndpoint(edge.to)
+    )
     .map<UiContractsRenderEdge>((edge) => {
       const sourceEdge = graph.edges.find(
         (candidate) => candidate.from === edge.from && candidate.type === edge.type && candidate.to === edge.to

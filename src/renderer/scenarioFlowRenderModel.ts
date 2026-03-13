@@ -1,6 +1,8 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
+import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
+import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
 
 type ScenarioLaneId = "step" | "place" | "view_state";
 
@@ -32,6 +34,10 @@ export interface ScenarioFlowRenderModel {
   nodes: ScenarioFlowRenderNode[];
   edges: ScenarioFlowRenderEdge[];
   siblingOrderChains: string[][];
+}
+
+interface ScenarioFlowDisplayOptions {
+  showBranchLabels: boolean;
 }
 
 const laneSpecs: Array<{ id: ScenarioLaneId; label: string; type: string }> = [
@@ -103,7 +109,18 @@ function edgeDisplay(type: string, label?: string): Omit<ScenarioFlowRenderEdge,
   }
 }
 
-export function buildScenarioFlowRenderModel(projection: Projection, graph: CompiledGraph): ScenarioFlowRenderModel {
+function readScenarioFlowDisplayOptions(policy: ResolvedProfileDisplayPolicy): ScenarioFlowDisplayOptions {
+  return {
+    showBranchLabels: readBooleanProfileDisplaySetting(policy, "show_branch_labels", true)
+  };
+}
+
+export function buildScenarioFlowRenderModel(
+  projection: Projection,
+  graph: CompiledGraph,
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
+): ScenarioFlowRenderModel {
+  const displayOptions = readScenarioFlowDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const nodeAnnotationsById = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
@@ -145,7 +162,9 @@ export function buildScenarioFlowRenderModel(projection: Projection, graph: Comp
   });
 
   const edges = projection.edges.map<ScenarioFlowRenderEdge>((edge) => {
-    const branchLabel = edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to))?.display_label;
+    const branchLabel = displayOptions.showBranchLabels
+      ? edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to))?.display_label
+      : undefined;
     return {
       from: edge.from,
       to: edge.to,

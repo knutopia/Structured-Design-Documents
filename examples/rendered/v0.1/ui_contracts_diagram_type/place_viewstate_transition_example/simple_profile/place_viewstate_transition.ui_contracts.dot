@@ -8,40 +8,19 @@ digraph ui_contracts {
     "P-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];
     subgraph cluster_VS_010a {
       graph [label="", style="rounded,dashed"];
-      "VS-010a" [shape="box", style="rounded,dashed", label="Billing Editing\ndata: PaymentMethod"];
+      "VS-010a" [shape="box", style="rounded,dashed", label="Billing Editing"];
       "C-011" [shape="box", style="rounded", label="Submit Button"];
     }
-    "VS-010b" [shape="box", style="rounded,dashed", label="Billing Success\ndata: Receipt"];
+    "VS-010b" [shape="box", style="rounded,dashed", label="Billing Success"];
     "C-010" [shape="box", style="rounded", label="Billing Form"];
-    subgraph cluster_secondary_state_group_C_010 {
-      graph [label="State detail: Billing Form\nscope_id=C-010", style="rounded,dashed"];
-      "ST-010a" [shape="ellipse", style="dashed", label="Form Ready"];
-      "ST-010b" [shape="ellipse", style="dashed", label="Submitting"];
-    }
   }
   subgraph cluster_P_011 {
     graph [label="Confirmation\n/confirmation\n[role:billing_agent]", style="rounded"];
     "P-011__anchor" [label="", shape="point", width=0, height=0, style="invis"];
   }
-  subgraph rank_supporting_contracts__header {
-    rank=same;
-    "supporting_contracts__header" [shape=plaintext, label="Supporting Contracts"];
-    "E-010" [shape="oval", label="Submit"];
-    "SA-010" [shape="component", label="Save Subscription"];
-    "D-010" [shape="cylinder", label="Subscription"];
-  }
   "P-010__anchor" -> "P-011__anchor" [style=invis, weight=100];
-  "P-011__anchor" -> "supporting_contracts__header" [style=invis, weight=100];
   "P-010__anchor" -> "VS-010a" [style=invis, weight=100];
   "VS-010b" -> "C-010" [style=invis, weight=100];
-  "C-010" -> "ST-010a" [style=invis, weight=100];
   "VS-010a" -> "C-011" [style=invis, weight=100];
-  "supporting_contracts__header" -> "E-010" [style=invis, weight=100];
-  "E-010" -> "SA-010" [style=invis, weight=100];
-  "SA-010" -> "D-010" [style=invis, weight=100];
-  "C-010" -> "D-010" [label="binds field status", style="dotted", constraint=false];
-  "C-010" -> "SA-010" [label="depends on", constraint=false];
-  "C-011" -> "E-010" [label="emits", style="dashed", constraint=false];
-  "ST-010a" -> "ST-010b" [label="[E-010] {payment_valid} / SA-010", style="dashed", weight=3];
   "VS-010a" -> "VS-010b" [label="[E-010] {payment_valid} / SA-010", style="solid", weight=4];
 }

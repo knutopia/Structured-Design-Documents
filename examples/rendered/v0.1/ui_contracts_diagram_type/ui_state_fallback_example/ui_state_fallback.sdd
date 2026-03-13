@@ -9,6 +9,17 @@ Place P-060 "Case Review"
   COMPOSED_OF C-060 "Review Panel"
 END
 
+Component C-060 "Review Panel"
+  owner=DesignSystem
+  description="Panel for reviewing and submitting a case"
+  responsibility="Display case data and submit a review"
+  inputs=CaseRecord
+  outputs=ReviewSubmitted
+  EMITS E-060 "Submit Review"
+  BINDS_TO D-060 "CaseRecord" field=status
+  DEPENDS_ON SA-060 "Save Review"
+END
+
 State ST-060a "Case Review Ready"
   owner=Design
   description="The case review container is ready for submission"
@@ -37,17 +48,6 @@ State ST-061b "Panel Dirty"
   description="The review panel has local changes"
   scope_id=C-060
   invariants="Local edits are pending submission"
-END
-
-Component C-060 "Review Panel"
-  owner=DesignSystem
-  description="Panel for reviewing and submitting a case"
-  responsibility="Display case data and submit a review"
-  inputs=CaseRecord
-  outputs=ReviewSubmitted
-  EMITS E-060 "Submit Review"
-  BINDS_TO D-060 "CaseRecord" field=status
-  DEPENDS_ON SA-060 "Save Review"
 END
 
 Event E-060 "Submit Review"

@@ -239,7 +239,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 
 - `preview_defaults`: shared preview artifact defaults for DOT-backed CLI previews such as fonts and DPI. These affect SVG/PNG generation, not `.sdd` authoring.
 - `normative_defaults`: descriptive statements about the default semantic reading of a view. They explain how a contributor or projection consumer should interpret the view, but they do not by themselves validate source files or mutate compiled graphs.
-- `renderer_defaults`: machine-readable downstream conventions consumed by projection builders, render-model builders, and preview-style resolution. These can change derived annotations, node groups, view metadata, shapes, labels, lane assignment, or preview styling without changing `.sdd` syntax.
+- `renderer_defaults`: machine-readable downstream conventions consumed by projection builders, render-model builders, and preview-style resolution. These can change derived annotations, node groups, view metadata, shapes, labels, lane assignment, preview styling, or profile-specific display density without changing `.sdd` syntax.
 
 Practical rule of thumb:
 

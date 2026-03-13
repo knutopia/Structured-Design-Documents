@@ -85,6 +85,7 @@ function buildReadmeContent(
   lines.push(
     "Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs."
   );
+  lines.push("`simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.");
   lines.push("");
 
   return lines.join("\n");

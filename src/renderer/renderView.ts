@@ -38,7 +38,7 @@ function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: Rend
   return {
     format: options.format,
     viewId: options.viewId,
-    text: renderer.render(projected.projection, graph, bundle, view, options.format),
+    text: renderer.render(projected.projection, graph, bundle, view, options.format, options.profileId ?? "recommended"),
     diagnostics: sortDiagnostics(diagnostics)
   };
 }

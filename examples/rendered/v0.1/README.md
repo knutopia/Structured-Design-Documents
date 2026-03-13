@@ -26,3 +26,4 @@ Curated view/example pairs:
 Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`, `recommended_profile`.
 
 Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs.
+`simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.

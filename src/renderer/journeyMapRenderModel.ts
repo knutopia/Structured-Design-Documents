@@ -1,6 +1,8 @@
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
+import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
+import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
 
 export interface JourneyRenderStep {
   kind: "step";
@@ -31,6 +33,10 @@ export interface JourneyMapRenderModel {
   siblingOrderChains: string[][];
 }
 
+interface JourneyMapDisplayOptions {
+  showReferenceBadges: boolean;
+}
+
 function collectSiblingOrderChains(items: JourneyRenderItem[]): string[][] {
   const chains: string[][] = [];
   const rootAnchors = items.map((item) => item.orderAnchorId);
@@ -56,12 +62,20 @@ function buildReferenceBadge(targetId: string, targetName?: string): string {
   return `[${targetName && targetName.length > 0 ? targetName : targetId}]`;
 }
 
+function readJourneyMapDisplayOptions(policy: ResolvedProfileDisplayPolicy): JourneyMapDisplayOptions {
+  return {
+    showReferenceBadges: readBooleanProfileDisplaySetting(policy, "show_reference_badges", true)
+  };
+}
+
 export function buildJourneyMapRenderModel(
   projection: Projection,
   graph: CompiledGraph,
   hierarchyEdgeTypes: string[],
-  orderingEdgeTypes: string[]
+  orderingEdgeTypes: string[],
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
 ): JourneyMapRenderModel {
+  const displayOptions = readJourneyMapDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const annotationsByNodeId = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
@@ -90,8 +104,10 @@ export function buildJourneyMapRenderModel(
     }
 
     const labelLines = [projectionNode.name];
-    for (const reference of annotationsByNodeId.get(stepId)?.references ?? []) {
-      labelLines.push(buildReferenceBadge(reference.target_id, reference.target_name));
+    if (displayOptions.showReferenceBadges) {
+      for (const reference of annotationsByNodeId.get(stepId)?.references ?? []) {
+        labelLines.push(buildReferenceBadge(reference.target_id, reference.target_name));
+      }
     }
 
     return {

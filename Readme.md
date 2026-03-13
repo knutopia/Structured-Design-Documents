@@ -50,7 +50,7 @@ Current scope:
 - renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
 - render targets: DOT and Mermaid for all renderable views
 - preview path: `sdd show` for DOT-backed SVG/PNG artifacts
-- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`
+- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`, where `simple_profile` may omit optional overlays for lower-noise review
 
 Contributor reference docs:
 

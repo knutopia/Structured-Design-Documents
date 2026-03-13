@@ -47,8 +47,8 @@ digraph scenario_flow {
   "VS-031a" -> "VS-032a" [style=invis, weight=100];
   "VS-032a" -> "VS-033a" [style=invis, weight=100];
   "VS-034a" -> "VS-035a" [style=invis, weight=100];
-  "J-030" -> "J-031" [label="delivery_selected", weight=4];
-  "J-030" -> "J-032" [label="pickup_selected", weight=4];
+  "J-030" -> "J-031" [weight=4];
+  "J-030" -> "J-032" [weight=4];
   "J-030" -> "P-030" [style="dotted", constraint=false];
   "J-030" -> "VS-030a" [style="dotted", constraint=false];
   "J-031" -> "J-033" [weight=4];
@@ -56,8 +56,8 @@ digraph scenario_flow {
   "J-031" -> "VS-031a" [style="dotted", constraint=false];
   "J-032" -> "P-032" [style="dotted", constraint=false];
   "J-032" -> "VS-032a" [style="dotted", constraint=false];
-  "J-033" -> "J-034" [label="E-032", weight=4];
-  "J-033" -> "J-035" [label="Review Pickup Instructions", weight=4];
+  "J-033" -> "J-034" [weight=4];
+  "J-033" -> "J-035" [weight=4];
   "J-033" -> "P-033" [style="dotted", constraint=false];
   "J-033" -> "VS-033a" [style="dotted", constraint=false];
   "J-034" -> "P-034" [style="dotted", constraint=false];

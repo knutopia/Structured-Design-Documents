@@ -1,6 +1,6 @@
 # Validation Profiles
 
-Profiles change validation strictness without changing `.sdd` syntax, compiled graph shape, or renderer behavior.
+Profiles change validation strictness without changing `.sdd` syntax, compiled graph shape, or projection scope. They can also adjust optional render detail, with `simple` using a lower-noise display policy where configured.
 
 ## Profile Ladder
 

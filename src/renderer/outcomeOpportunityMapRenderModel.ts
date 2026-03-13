@@ -1,6 +1,8 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
+import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
+import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
 
 type OutcomeOpportunityLaneId = "initiative" | "opportunity" | "outcome" | "metric";
 
@@ -29,6 +31,10 @@ export interface OutcomeOpportunityMapRenderModel {
   nodes: OutcomeOpportunityRenderNode[];
   edges: OutcomeOpportunityRenderEdge[];
   siblingOrderChains: string[][];
+}
+
+interface OutcomeOpportunityMapDisplayOptions {
+  showInstrumentationAnnotations: boolean;
 }
 
 const laneOrder: Array<{ id: OutcomeOpportunityLaneId; label: string; type: string }> = [
@@ -70,10 +76,20 @@ function shapeForNodeType(type: string): string {
   }
 }
 
+function readOutcomeOpportunityMapDisplayOptions(
+  policy: ResolvedProfileDisplayPolicy
+): OutcomeOpportunityMapDisplayOptions {
+  return {
+    showInstrumentationAnnotations: readBooleanProfileDisplaySetting(policy, "show_instrumentation_annotations", true)
+  };
+}
+
 export function buildOutcomeOpportunityMapRenderModel(
   projection: Projection,
-  graph: CompiledGraph
+  graph: CompiledGraph,
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
 ): OutcomeOpportunityMapRenderModel {
+  const displayOptions = readOutcomeOpportunityMapDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const annotationsByNodeId = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
@@ -93,8 +109,10 @@ export function buildOutcomeOpportunityMapRenderModel(
     return laneNodeIds.map<OutcomeOpportunityRenderNode>((nodeId) => {
       const node = projectionNodesById.get(nodeId)!;
       const labelLines = [node.name];
-      for (const reference of annotationsByNodeId.get(nodeId)?.references ?? []) {
-        labelLines.push(`${capitalize(reference.group)}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`);
+      if (displayOptions.showInstrumentationAnnotations) {
+        for (const reference of annotationsByNodeId.get(nodeId)?.references ?? []) {
+          labelLines.push(`${capitalize(reference.group)}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`);
+        }
       }
 
       return {

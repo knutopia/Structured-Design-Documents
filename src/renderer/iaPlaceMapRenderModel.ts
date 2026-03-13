@@ -1,6 +1,8 @@
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
+import { buildIaStylePlaceLabelLines } from "./placeLabelLines.js";
+import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
 
 export interface IaRenderArea {
   kind: "area";
@@ -50,7 +52,8 @@ function collectSiblingOrderChains(items: IaRenderItem[]): string[][] {
 export function buildIaPlaceMapRenderModel(
   projection: Projection,
   graph: CompiledGraph,
-  hierarchyEdgeTypes: string[]
+  hierarchyEdgeTypes: string[],
+  _displayPolicy: ResolvedProfileDisplayPolicy = {}
 ): IaPlaceMapRenderModel {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
@@ -89,21 +92,13 @@ export function buildIaPlaceMapRenderModel(
 
     const graphNode = graphNodesById.get(placeId);
     const annotation = annotationsByNodeId.get(placeId);
-    const labelLines = [projectionNode.name];
     const display = annotation?.display;
-    if (display?.subtitle) {
-      labelLines.push(display.subtitle);
-    } else if (graphNode?.props.route_or_key) {
-      labelLines.push(graphNode.props.route_or_key);
-    }
-    if (display?.badge) {
-      labelLines.push(`[${display.badge}]`);
-    } else if (graphNode?.props.access) {
-      labelLines.push(`[${graphNode.props.access}]`);
-    }
-    for (const metadata of display?.metadata ?? []) {
-      labelLines.push(`${metadata.key}: ${metadata.value}`);
-    }
+    const labelLines = buildIaStylePlaceLabelLines({
+      name: projectionNode.name,
+      subtitle: display?.subtitle ?? graphNode?.props.route_or_key,
+      badge: display?.badge ?? graphNode?.props.access,
+      metadata: display?.metadata ?? []
+    });
 
     const childItems = getSourceOrderedStructuralStream(graph, placeId, hierarchyEdgeTypes, visiblePlaceIds)
       .filter((entry) => structuralParentByChildId.get(entry.to) === placeId)

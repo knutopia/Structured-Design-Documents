@@ -1,6 +1,8 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
+import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
+import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
 
 export interface ServiceBlueprintRenderNode {
   id: string;
@@ -33,6 +35,10 @@ export interface ServiceBlueprintRenderModel {
   ungroupedNodeIds: string[];
 }
 
+interface ServiceBlueprintDisplayOptions {
+  showSecondaryEdgeLabels: boolean;
+}
+
 function orderNodeIds(graph: CompiledGraph, nodeIds: string[]): string[] {
   return getTopLevelNodeIdsInAuthorOrder(graph, nodeIds);
 }
@@ -63,7 +69,13 @@ function nodeDisplay(type: string): Pick<ServiceBlueprintRenderNode, "shape" | "
   }
 }
 
-function edgeDisplay(type: string): Omit<ServiceBlueprintRenderEdge, "from" | "to"> {
+function readServiceBlueprintDisplayOptions(policy: ResolvedProfileDisplayPolicy): ServiceBlueprintDisplayOptions {
+  return {
+    showSecondaryEdgeLabels: readBooleanProfileDisplaySetting(policy, "show_secondary_edge_labels", true)
+  };
+}
+
+function edgeDisplay(type: string, showSecondaryEdgeLabels: boolean): Omit<ServiceBlueprintRenderEdge, "from" | "to"> {
   switch (type) {
     case "PRECEDES":
       return {
@@ -71,44 +83,48 @@ function edgeDisplay(type: string): Omit<ServiceBlueprintRenderEdge, "from" | "t
       };
     case "REALIZED_BY":
       return {
-        label: "realized by",
+        ...(showSecondaryEdgeLabels ? { label: "realized by" } : {}),
         style: "dashed",
         constraint: false
       };
     case "DEPENDS_ON":
       return {
-        label: "depends on",
+        ...(showSecondaryEdgeLabels ? { label: "depends on" } : {}),
         constraint: false
       };
     case "READS":
       return {
-        label: "reads",
+        ...(showSecondaryEdgeLabels ? { label: "reads" } : {}),
         style: "dashed",
         constraint: false
       };
     case "WRITES":
       return {
-        label: "writes",
+        ...(showSecondaryEdgeLabels ? { label: "writes" } : {}),
         style: "bold",
         constraint: false
       };
     case "CONSTRAINED_BY":
       return {
-        label: "constrained by",
+        ...(showSecondaryEdgeLabels ? { label: "constrained by" } : {}),
         style: "dotted",
         constraint: false
       };
     default:
       return {
-        label: type.toLowerCase().replace(/_/g, " ")
+        ...(type === "PRECEDES" || !showSecondaryEdgeLabels
+          ? {}
+          : { label: type.toLowerCase().replace(/_/g, " ") })
       };
   }
 }
 
 export function buildServiceBlueprintRenderModel(
   projection: Projection,
-  graph: CompiledGraph
+  graph: CompiledGraph,
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
 ): ServiceBlueprintRenderModel {
+  const displayOptions = readServiceBlueprintDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const laneGroups = projection.derived.node_groups.filter((group) => group.role === "lane");
   const groupedNodeIds = new Set(laneGroups.flatMap((group) => group.node_ids));
@@ -138,7 +154,7 @@ export function buildServiceBlueprintRenderModel(
   const edges = projection.edges.map<ServiceBlueprintRenderEdge>((edge) => ({
     from: edge.from,
     to: edge.to,
-    ...edgeDisplay(edge.type)
+    ...edgeDisplay(edge.type, displayOptions.showSecondaryEdgeLabels)
   }));
 
   const siblingOrderChains = [

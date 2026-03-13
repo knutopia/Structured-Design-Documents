@@ -20,6 +20,7 @@ import {
   renderUiContractsMermaid
 } from "./mermaid.js";
 import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
+import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
 import { resolveDotPreviewStyle } from "./previewStyle.js";
 import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
 import { buildServiceBlueprintRenderModel } from "./serviceBlueprintRenderModel.js";
@@ -37,7 +38,14 @@ export interface ViewRenderCapability {
 
 interface ViewTextRenderer {
   capability: ViewRenderCapability;
-  render: (projection: Projection, graph: CompiledGraph, bundle: Bundle, view: ViewSpec, format: TextRenderFormat) => string;
+  render: (
+    projection: Projection,
+    graph: CompiledGraph,
+    bundle: Bundle,
+    view: ViewSpec,
+    format: TextRenderFormat,
+    profileId: string
+  ) => string;
 }
 
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
@@ -62,8 +70,9 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
     },
     defaultPreviewFormat: "svg"
   },
-  render: (projection, graph, bundle, view, format) => {
-    const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? []);
+  render: (projection, graph, bundle, view, format, profileId) => {
+    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+    const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
     if (format === "dot") {
       return renderIaPlaceMapDot(model, resolveDotPreviewStyle(bundle, view));
     }
@@ -74,12 +83,14 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
 
 const journeyMapRenderer: ViewTextRenderer = {
   capability: dotAndMermaidPreviewCapability(),
-  render: (projection, graph, bundle, view, format) => {
+  render: (projection, graph, bundle, view, format, profileId) => {
+    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildJourneyMapRenderModel(
       projection,
       graph,
       view.projection.hierarchy_edges ?? [],
-      view.projection.ordering_edges ?? []
+      view.projection.ordering_edges ?? [],
+      displayPolicy
     );
     if (format === "dot") {
       return renderJourneyMapDot(model, resolveDotPreviewStyle(bundle, view));
@@ -91,8 +102,9 @@ const journeyMapRenderer: ViewTextRenderer = {
 
 const outcomeOpportunityMapRenderer: ViewTextRenderer = {
   capability: dotAndMermaidPreviewCapability(),
-  render: (projection, graph, bundle, view, format) => {
-    const model = buildOutcomeOpportunityMapRenderModel(projection, graph);
+  render: (projection, graph, bundle, view, format, profileId) => {
+    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+    const model = buildOutcomeOpportunityMapRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
       return renderOutcomeOpportunityMapDot(model, resolveDotPreviewStyle(bundle, view));
     }
@@ -103,8 +115,9 @@ const outcomeOpportunityMapRenderer: ViewTextRenderer = {
 
 const serviceBlueprintRenderer: ViewTextRenderer = {
   capability: dotAndMermaidPreviewCapability(),
-  render: (projection, graph, bundle, view, format) => {
-    const model = buildServiceBlueprintRenderModel(projection, graph);
+  render: (projection, graph, bundle, view, format, profileId) => {
+    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+    const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
       return renderServiceBlueprintDot(model, resolveDotPreviewStyle(bundle, view));
     }
@@ -115,8 +128,9 @@ const serviceBlueprintRenderer: ViewTextRenderer = {
 
 const scenarioFlowRenderer: ViewTextRenderer = {
   capability: dotAndMermaidPreviewCapability(),
-  render: (projection, graph, bundle, view, format) => {
-    const model = buildScenarioFlowRenderModel(projection, graph);
+  render: (projection, graph, bundle, view, format, profileId) => {
+    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+    const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
       return renderScenarioFlowDot(model, resolveDotPreviewStyle(bundle, view));
     }
@@ -127,8 +141,9 @@ const scenarioFlowRenderer: ViewTextRenderer = {
 
 const uiContractsRenderer: ViewTextRenderer = {
   capability: dotAndMermaidPreviewCapability(),
-  render: (projection, graph, bundle, view, format) => {
-    const model = buildUiContractsRenderModel(projection, graph);
+  render: (projection, graph, bundle, view, format, profileId) => {
+    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+    const model = buildUiContractsRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
       return renderUiContractsDot(model, resolveDotPreviewStyle(bundle, view));
     }

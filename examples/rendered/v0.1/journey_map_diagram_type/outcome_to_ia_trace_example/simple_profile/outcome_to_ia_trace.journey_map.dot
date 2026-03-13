@@ -7,7 +7,7 @@ digraph journey_map {
     label="Checkout";
     style="rounded";
     "G-001__anchor" [label="", shape=point, width=0, height=0, style=invis];
-    "J-001" [label="Enter Billing\n[Payment Friction]"];
+    "J-001" [label="Enter Billing"];
     "J-002" [label="Confirm Payment"];
   }
   "G-001__anchor" -> "J-001" [style=invis, weight=100];

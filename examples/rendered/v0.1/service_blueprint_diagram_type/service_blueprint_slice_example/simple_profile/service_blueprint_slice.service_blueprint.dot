@@ -51,17 +51,17 @@ digraph service_blueprint {
   "SA-021" -> "SA-022" [style=invis, weight=100];
   "lane:06:policy__header" -> "PL-020" [style=invis, weight=100];
   "J-020" -> "J-021" [weight=4];
-  "J-020" -> "PR-020" [label="realized by", style="dashed", constraint=false];
-  "J-021" -> "PR-022" [label="realized by", style="dashed", constraint=false];
-  "PR-020" -> "PL-020" [label="constrained by", style="dotted", constraint=false];
-  "PR-020" -> "SA-020" [label="depends on", constraint=false];
+  "J-020" -> "PR-020" [style="dashed", constraint=false];
+  "J-021" -> "PR-022" [style="dashed", constraint=false];
+  "PR-020" -> "PL-020" [style="dotted", constraint=false];
+  "PR-020" -> "SA-020" [constraint=false];
   "PR-020" -> "PR-021" [weight=4];
-  "PR-021" -> "SA-021" [label="depends on", constraint=false];
+  "PR-021" -> "SA-021" [constraint=false];
   "PR-021" -> "PR-022" [weight=4];
-  "PR-022" -> "SA-022" [label="depends on", constraint=false];
-  "SA-020" -> "PL-020" [label="constrained by", style="dotted", constraint=false];
-  "SA-020" -> "D-020" [label="reads", style="dashed", constraint=false];
-  "SA-020" -> "D-020" [label="writes", style="bold", constraint=false];
-  "SA-021" -> "D-020" [label="reads", style="dashed", constraint=false];
-  "SA-022" -> "D-020" [label="reads", style="dashed", constraint=false];
+  "PR-022" -> "SA-022" [constraint=false];
+  "SA-020" -> "PL-020" [style="dotted", constraint=false];
+  "SA-020" -> "D-020" [style="dashed", constraint=false];
+  "SA-020" -> "D-020" [style="bold", constraint=false];
+  "SA-021" -> "D-020" [style="dashed", constraint=false];
+  "SA-022" -> "D-020" [style="dashed", constraint=false];
 }
