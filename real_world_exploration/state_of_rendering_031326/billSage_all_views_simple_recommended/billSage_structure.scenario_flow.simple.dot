@@ -1,0 +1,62 @@
+digraph scenario_flow {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_place {
+    rank=same;
+    "lane_place" [shape=plaintext, label="Places"];
+    "P-100" [shape="box", style="rounded", label="Dashboard"];
+    "P-110" [shape="box", style="rounded", label="Report View"];
+    "P-210" [shape="box", style="rounded", label="Projections Overview"];
+    "P-220" [shape="box", style="rounded", label="Projection"];
+    "P-221" [shape="box", style="rounded", label="Fee Schedule Scenario Details"];
+    "P-222" [shape="box", style="rounded", label="Funding Scenario Details"];
+    "P-230" [shape="box", style="rounded", label="Create New Projection"];
+    "P-310" [shape="box", style="rounded", label="Current Bills"];
+    "P-410" [shape="box", style="rounded", label="Review Past Bills"];
+    "P-510" [shape="box", style="rounded", label="Manage Accounts"];
+    "P-610" [shape="box", style="rounded", label="Manage Fee Schedules"];
+  }
+  subgraph rank_view_state {
+    rank=same;
+    "lane_view_state" [shape=plaintext, label="View States"];
+    "VS-210a" [shape="box", style="rounded,dashed", label="Projection List"];
+    "VS-210b" [shape="box", style="rounded,dashed", label="Duplicate Projection Dialog"];
+    "VS-210c" [shape="box", style="rounded,dashed", label="Delete Projection Confirmation Dialog"];
+    "VS-210d" [shape="box", style="rounded,dashed", label="Add Projection to Dashboard Confirmation Dialog"];
+    "VS-220a" [shape="box", style="rounded,dashed", label="Overview Tab"];
+    "VS-220b" [shape="box", style="rounded,dashed", label="Fee Schedules Tab"];
+    "VS-220c" [shape="box", style="rounded,dashed", label="Funds Tab"];
+    "VS-230a" [shape="box", style="rounded,dashed", label="Create New Projection Step 1"];
+    "VS-230b" [shape="box", style="rounded,dashed", label="Create New Projection Step 2"];
+    "VS-230c" [shape="box", style="rounded,dashed", label="Create New Projection Step 3"];
+  }
+  "lane_place" -> "lane_view_state" [style=invis, weight=100];
+  "lane_place" -> "P-100" [style=invis, weight=100];
+  "P-110" -> "P-210" [style=invis, weight=100];
+  "P-221" -> "P-222" [style=invis, weight=100];
+  "P-222" -> "P-230" [style=invis, weight=100];
+  "P-230" -> "P-310" [style=invis, weight=100];
+  "P-310" -> "P-410" [style=invis, weight=100];
+  "P-410" -> "P-510" [style=invis, weight=100];
+  "P-510" -> "P-610" [style=invis, weight=100];
+  "lane_view_state" -> "VS-210a" [style=invis, weight=100];
+  "VS-210a" -> "VS-210b" [style=invis, weight=100];
+  "VS-210b" -> "VS-210c" [style=invis, weight=100];
+  "VS-210c" -> "VS-210d" [style=invis, weight=100];
+  "VS-210d" -> "VS-220a" [style=invis, weight=100];
+  "VS-220a" -> "VS-220b" [style=invis, weight=100];
+  "VS-220b" -> "VS-220c" [style=invis, weight=100];
+  "VS-220c" -> "VS-230a" [style=invis, weight=100];
+  "P-100" -> "P-110" [style="solid", weight=3];
+  "P-210" -> "P-220" [style="solid", weight=3];
+  "P-210" -> "P-230" [style="solid", weight=3];
+  "P-220" -> "P-221" [style="solid", weight=3];
+  "P-220" -> "P-222" [style="solid", weight=3];
+  "P-221" -> "P-220" [style="solid", weight=3];
+  "P-222" -> "P-220" [style="solid", weight=3];
+  "P-230" -> "P-220" [style="solid", weight=3];
+  "VS-230a" -> "VS-230b" [style="dashed", weight=3];
+  "VS-230b" -> "VS-230c" [style="dashed", weight=3];
+}

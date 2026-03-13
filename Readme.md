@@ -23,11 +23,11 @@ Other folders:
 
 ## Current Project Goals
 
-### Expand the Toolchain to produce .SVG output
+### Replace failed SVG / DOT with better quality rendering output
 
-The ia_place_map type can be rendered as an SVG. Expand this capability to allow ALL diagram types to be rendered as SVG.
+While we have achieved rendering Grapviz & Mermaid rendering coverage for all diagram types, most output is so badly mangled that it is unusable as a visual communications artifact. Experimenting with potential improvements, it is clear that the root cause is a combination of a) severe limitations of DOT and MMD capabilities and b) blindness of Codex the authoring LLM to anything related to design quality.
 
-- `docs/view_implementation_execution_prompts.md`
+To move forward, we will re-implement rendering with a new, more grid-based layout system, since designs that produce usable diagrams do rely on grids.
 
 ## Project Achievements
 
@@ -71,6 +71,8 @@ Common commands:
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid`
 - `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
 - `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
+
+
 
 ## Project Guidance
 

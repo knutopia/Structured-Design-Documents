@@ -1,0 +1,6 @@
+digraph service_blueprint {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.6, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+}

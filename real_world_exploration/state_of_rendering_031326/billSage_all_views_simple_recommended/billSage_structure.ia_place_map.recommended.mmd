@@ -1,0 +1,30 @@
+flowchart LR
+  n_P_100["Dashboard<br/>/dashboard<br/>[auth]<br/>entry_points: nav:global_nav<br/>primary_nav: true"]
+  n_P_110["Report View<br/>/dashboard/report-view<br/>[auth]"]
+  subgraph n_A_200["Projections"]
+    n_P_210["Projections Overview<br/>/projections<br/>[auth]<br/>entry_points: nav:global_nav<br/>primary_nav: true"]
+    n_P_220["Projection<br/>/projections/projection<br/>[auth]"]
+    n_P_221["Fee Schedule Scenario Details<br/>/projections/projection/fee-schedule-scenario-details<br/>[auth]"]
+    n_P_222["Funding Scenario Details<br/>/projections/projection/funding-scenario-details<br/>[auth]"]
+    n_P_230["Create New Projection<br/>/projections/create-new-projection<br/>[auth]"]
+  end
+  subgraph n_A_300["Current Bills"]
+    n_P_310["Current Bills<br/>/current-bills<br/>[auth]<br/>entry_points: nav:global_nav<br/>primary_nav: true"]
+  end
+  subgraph n_A_400["Review"]
+    n_P_410["Review Past Bills<br/>/review<br/>[auth]<br/>entry_points: nav:global_nav<br/>primary_nav: true"]
+  end
+  subgraph n_A_500["Accounts"]
+    n_P_510["Manage Accounts<br/>/accounts<br/>[auth]<br/>entry_points: nav:global_nav<br/>primary_nav: true"]
+  end
+  subgraph n_A_600["Fee Schedules"]
+    n_P_610["Manage Fee Schedules<br/>/fee-schedules<br/>[auth]<br/>entry_points: nav:global_nav<br/>primary_nav: true"]
+  end
+  n_P_100 --> n_P_110
+  n_P_210 --> n_P_220
+  n_P_210 --> n_P_230
+  n_P_220 --> n_P_221
+  n_P_220 --> n_P_222
+  n_P_221 --> n_P_220
+  n_P_222 --> n_P_220
+  n_P_230 --> n_P_220

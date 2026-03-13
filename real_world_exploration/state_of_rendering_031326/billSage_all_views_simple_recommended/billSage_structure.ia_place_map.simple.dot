@@ -1,0 +1,48 @@
+digraph ia_place_map {
+  rankdir=LR;
+  graph [fontname="Public Sans"];
+  node [shape=box, fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  "P-100" [label="Dashboard\nprimary_nav: true"];
+  "P-110" [label="Report View"];
+  subgraph cluster_A_200 {
+    label="Projections";
+    "P-210" [label="Projections Overview\nprimary_nav: true"];
+    "P-220" [label="Projection"];
+    "P-221" [label="Fee Schedule Scenario Details"];
+    "P-222" [label="Funding Scenario Details"];
+    "P-230" [label="Create New Projection"];
+  }
+  subgraph cluster_A_300 {
+    label="Current Bills";
+    "P-310" [label="Current Bills\nprimary_nav: true"];
+  }
+  subgraph cluster_A_400 {
+    label="Review";
+    "P-410" [label="Review Past Bills\nprimary_nav: true"];
+  }
+  subgraph cluster_A_500 {
+    label="Accounts";
+    "P-510" [label="Manage Accounts\nprimary_nav: true"];
+  }
+  subgraph cluster_A_600 {
+    label="Fee Schedules";
+    "P-610" [label="Manage Fee Schedules\nprimary_nav: true"];
+  }
+  "P-100" -> "P-210" [style=invis, weight=100];
+  "P-210" -> "P-310" [style=invis, weight=100];
+  "P-310" -> "P-410" [style=invis, weight=100];
+  "P-410" -> "P-510" [style=invis, weight=100];
+  "P-510" -> "P-610" [style=invis, weight=100];
+  "P-210" -> "P-220" [style=invis, weight=100];
+  "P-220" -> "P-230" [style=invis, weight=100];
+  "P-221" -> "P-222" [style=invis, weight=100];
+  "P-100" -> "P-110";
+  "P-210" -> "P-220";
+  "P-210" -> "P-230";
+  "P-220" -> "P-221";
+  "P-220" -> "P-222";
+  "P-221" -> "P-220";
+  "P-222" -> "P-220";
+  "P-230" -> "P-220";
+}

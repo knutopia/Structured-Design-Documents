@@ -6,6 +6,10 @@
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 
+## Fri 3-14-26
+
+-attempted more ui_contracts rendering variations. Graphviz is a failure.
+
 ## Thu 3-12-26
 
 -added mermaid for new diagram types
