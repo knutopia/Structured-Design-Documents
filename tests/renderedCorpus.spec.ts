@@ -55,4 +55,36 @@ describe("rendered example corpus", () => {
     expect(svg).not.toContain("Billing\\n/billing\\n[auth]");
     expect(svg).not.toContain("Billing Editing\\ndata: PaymentMethod");
   });
+
+  it("keeps forbidden place routing and access fields out of simple rendered corpus artifacts", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
+      (variant) => variant.profileId === "simple"
+    );
+
+    for (const variant of variants) {
+      const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+      const dot = await readFile(outputPaths.dotOutputPath, "utf8");
+      const mermaid = await readFile(outputPaths.mermaidOutputPath, "utf8");
+
+      for (const text of [dot, mermaid]) {
+        expect(text).not.toContain("entry_points:");
+        expect(text).not.toContain("[auth]");
+        expect(text).not.toContain("[role:");
+        expect(text).not.toContain("/billing");
+        expect(text).not.toContain("/checkout/");
+        expect(text).not.toContain("/cases/review");
+      }
+    }
+
+    const iaVariant = variants.find((variant) => (
+      variant.viewId === "ia_place_map"
+      && variant.example.name === "place_viewstate_transition"
+    ));
+    expect(iaVariant).toBeDefined();
+
+    const iaDot = await readFile(planRenderedCorpusOutputPaths(bundle, iaVariant!).dotOutputPath, "utf8");
+    expect(iaDot).toContain("primary_nav: true");
+  });
 });

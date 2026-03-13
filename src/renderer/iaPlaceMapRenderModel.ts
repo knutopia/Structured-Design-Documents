@@ -53,7 +53,7 @@ export function buildIaPlaceMapRenderModel(
   projection: Projection,
   graph: CompiledGraph,
   hierarchyEdgeTypes: string[],
-  _displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
 ): IaPlaceMapRenderModel {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
@@ -98,6 +98,8 @@ export function buildIaPlaceMapRenderModel(
       subtitle: display?.subtitle ?? graphNode?.props.route_or_key,
       badge: display?.badge ?? graphNode?.props.access,
       metadata: display?.metadata ?? []
+    }, {
+      displayPolicy
     });
 
     const childItems = getSourceOrderedStructuralStream(graph, placeId, hierarchyEdgeTypes, visiblePlaceIds)

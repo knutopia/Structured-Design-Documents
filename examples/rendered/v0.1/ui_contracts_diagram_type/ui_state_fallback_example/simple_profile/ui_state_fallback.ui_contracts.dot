@@ -4,7 +4,7 @@ digraph ui_contracts {
   node [fontname="Public Sans"];
   edge [fontname="Public Sans"];
   subgraph cluster_P_060 {
-    graph [label="Case Review\n/cases/review\n[auth]", style="rounded"];
+    graph [label="Case Review", style="rounded"];
     "P-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
     subgraph cluster_secondary_state_group_P_060 {
       graph [label="State graph: Case Review\nscope_id=P-060", style="rounded"];

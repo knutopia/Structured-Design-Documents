@@ -50,7 +50,7 @@ Current scope:
 - renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
 - render targets: DOT and Mermaid for all renderable views
 - preview path: `sdd show` for DOT-backed SVG/PNG artifacts
-- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`, where `simple_profile` may omit optional overlays for lower-noise review
+- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`, where `simple_profile` omits lower-priority overlays including place route/access/entry-point fields
 
 Contributor reference docs:
 
@@ -71,11 +71,6 @@ Common commands:
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid`
 - `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
 - `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
-
-## 3. [Done] Expanded the New Toolchain to Cover Remaining View Types
-
-Executed the following: docs/Done/[Done] view_implementation_execution_prompts.md
-...covering all diagram types.
 
 ## Project Guidance
 

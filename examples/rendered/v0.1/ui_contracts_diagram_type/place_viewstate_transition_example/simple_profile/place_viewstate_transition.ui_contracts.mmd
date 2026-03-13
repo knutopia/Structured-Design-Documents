@@ -1,5 +1,5 @@
 flowchart LR
-  subgraph n_P_010["Billing<br/>/billing<br/>[auth]"]
+  subgraph n_P_010["Billing"]
     subgraph n_VS_010a__group[" "]
       n_VS_010a("Billing Editing")
       n_C_011("Submit Button")
@@ -7,7 +7,7 @@ flowchart LR
     n_VS_010b("Billing Success")
     n_C_010("Billing Form")
   end
-  subgraph n_P_011["Confirmation<br/>/confirmation<br/>[role:billing_agent]"]
+  subgraph n_P_011["Confirmation"]
   end
   n_VS_010a -->|[E-010] {payment_valid} / SA-010| n_VS_010b
   classDef dashedNode stroke-dasharray: 6 4;

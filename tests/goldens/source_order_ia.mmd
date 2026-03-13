@@ -1,12 +1,12 @@
 flowchart LR
-  n_P_700["Dashboard<br/>/dashboard<br/>[auth]"]
-  n_P_900["Reports<br/>/dashboard/reports<br/>[auth]"]
+  n_P_700["Dashboard"]
+  n_P_900["Reports"]
   subgraph n_A_200["Workflows"]
-    n_P_300["Zeta<br/>/workflows/zeta<br/>[auth]"]
-    n_P_100["Alpha<br/>/workflows/alpha<br/>[auth]"]
-    n_P_200["Beta<br/>/workflows/beta<br/>[auth]"]
+    n_P_300["Zeta"]
+    n_P_100["Alpha"]
+    n_P_200["Beta"]
   end
   subgraph n_A_500["Archive"]
-    n_P_050["Archive Home<br/>/archive<br/>[auth]"]
+    n_P_050["Archive Home"]
   end
   n_P_700 --> n_P_900

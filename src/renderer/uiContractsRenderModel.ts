@@ -254,7 +254,11 @@ function contractEdgeDisplay(edge: Pick<CompiledEdge, "type" | "props">): Omit<U
   }
 }
 
-function buildPlaceLabelLines(placeId: string, graphNodesById: Map<string, { name: string; props: Record<string, string> }>): string[] {
+function buildPlaceLabelLines(
+  placeId: string,
+  graphNodesById: Map<string, { name: string; props: Record<string, string> }>,
+  displayPolicy: ResolvedProfileDisplayPolicy
+): string[] {
   const place = graphNodesById.get(placeId);
   if (!place) {
     return [placeId];
@@ -264,6 +268,8 @@ function buildPlaceLabelLines(placeId: string, graphNodesById: Map<string, { nam
     name: place.name,
     subtitle: place.props.route_or_key,
     badge: place.props.access
+  }, {
+    displayPolicy
   });
 }
 
@@ -485,7 +491,7 @@ export function buildUiContractsRenderModel(
     return {
       kind: "place",
       id: placeId,
-      labelLines: buildPlaceLabelLines(placeId, graphNodesById),
+      labelLines: buildPlaceLabelLines(placeId, graphNodesById, displayPolicy),
       anchorId: `${placeId}__anchor`,
       childItems,
       orderAnchorId: `${placeId}__anchor`

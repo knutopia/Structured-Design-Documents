@@ -88,7 +88,7 @@ export function buildIaPlaceMapProjection(graph: CompiledGraph, bundle: Bundle, 
     omissions,
     notes:
       nodeAnnotations.length > 0
-        ? ["Place route, access, and entry metadata are rendered as node annotations."]
+        ? ["Place route, access, and entry metadata are available as node annotations for profile-aware rendering."]
         : ["Hierarchy for IA view is driven by CONTAINS."]
   });
 }

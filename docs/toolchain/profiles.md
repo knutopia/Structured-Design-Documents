@@ -8,6 +8,8 @@ Profiles change validation strictness without changing `.sdd` syntax, compiled g
 - `permissive`: warning-first completeness; keeps the current governance-oriented rules active, mostly as warnings
 - `recommended`: strict governance for production-ready models
 
+In v0.1 rendering, `simple` suppresses place `route_or_key`, `access`, and `entry_points` wherever a renderer could otherwise show them. `primary_nav` remains visible only in views that already render it.
+
 ## When To Use Which
 
 - Use `simple` when the goal is to capture structure and flow without filling in repetitive metadata yet.

@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle, renderSource } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import { normalizeLineEndings } from "./textNormalization.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -19,7 +18,7 @@ async function loadExampleInput(bundleRoot: string, exampleName: string): Promis
 }
 
 describe("profile-aware render detail", () => {
-  it("keeps ia_place_map output unchanged across simple and permissive", async () => {
+  it("hides route, access, and entry-point annotations in simple ia_place_map while keeping primary_nav", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadExampleInput(bundle.rootDir, "place_viewstate_transition");
 
@@ -37,7 +36,39 @@ describe("profile-aware render detail", () => {
 
       expect(simple.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(permissive.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-      expect(normalizeLineEndings(simple.text!)).toBe(normalizeLineEndings(permissive.text!));
+      expect(simple.text).not.toContain("/billing");
+      expect(simple.text).not.toContain("[auth]");
+      expect(simple.text).not.toContain("entry_points:");
+      expect(simple.text).toContain("primary_nav: true");
+      expect(permissive.text).toContain("/billing");
+      expect(permissive.text).toContain("[auth]");
+      expect(permissive.text).toContain("entry_points:");
+      expect(permissive.text).toContain("primary_nav: true");
+    }
+  });
+
+  it("hides route and access annotations in simple ia_place_map examples that do not use primary_nav", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadExampleInput(bundle.rootDir, "outcome_to_ia_trace");
+
+    for (const format of formats) {
+      const simple = renderSource(input, bundle, {
+        viewId: "ia_place_map",
+        format,
+        profileId: "simple"
+      });
+      const permissive = renderSource(input, bundle, {
+        viewId: "ia_place_map",
+        format,
+        profileId: "permissive"
+      });
+
+      expect(simple.text).not.toContain("/checkout/billing");
+      expect(simple.text).not.toContain("/checkout/review");
+      expect(simple.text).not.toContain("[auth]");
+      expect(permissive.text).toContain("/checkout/billing");
+      expect(permissive.text).toContain("/checkout/review");
+      expect(permissive.text).toContain("[auth]");
     }
   });
 
@@ -151,10 +182,14 @@ describe("profile-aware render detail", () => {
       });
 
       expect(simple.text).toContain("Billing Editing");
+      expect(simple.text).not.toContain("/billing");
+      expect(simple.text).not.toContain("[auth]");
       expect(simple.text).not.toContain("data: PaymentMethod");
       expect(simple.text).not.toContain("State detail: Billing Form");
       expect(simple.text).not.toContain("Form Ready");
       expect(simple.text).not.toContain("Supporting Contracts");
+      expect(permissive.text).toContain("/billing");
+      expect(permissive.text).toContain("[auth]");
       expect(permissive.text).toContain("data: PaymentMethod");
       expect(permissive.text).toContain("State detail: Billing Form");
       expect(permissive.text).toContain("Supporting Contracts");
@@ -171,9 +206,18 @@ describe("profile-aware render detail", () => {
         format,
         profileId: "simple"
       });
+      const permissive = renderSource(input, bundle, {
+        viewId: "ui_contracts",
+        format,
+        profileId: "permissive"
+      });
 
       expect(simple.text).toContain("State graph: Case Review");
       expect(simple.text).toContain("State graph: Review Panel");
+      expect(simple.text).not.toContain("/cases/review");
+      expect(simple.text).not.toContain("[auth]");
+      expect(permissive.text).toContain("/cases/review");
+      expect(permissive.text).toContain("[auth]");
     }
   });
 

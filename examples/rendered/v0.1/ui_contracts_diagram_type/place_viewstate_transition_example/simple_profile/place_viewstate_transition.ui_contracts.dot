@@ -4,7 +4,7 @@ digraph ui_contracts {
   node [fontname="Public Sans"];
   edge [fontname="Public Sans"];
   subgraph cluster_P_010 {
-    graph [label="Billing\n/billing\n[auth]", style="rounded"];
+    graph [label="Billing", style="rounded"];
     "P-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];
     subgraph cluster_VS_010a {
       graph [label="", style="rounded,dashed"];
@@ -15,7 +15,7 @@ digraph ui_contracts {
     "C-010" [shape="box", style="rounded", label="Billing Form"];
   }
   subgraph cluster_P_011 {
-    graph [label="Confirmation\n/confirmation\n[role:billing_agent]", style="rounded"];
+    graph [label="Confirmation", style="rounded"];
     "P-011__anchor" [label="", shape="point", width=0, height=0, style="invis"];
   }
   "P-010__anchor" -> "P-011__anchor" [style=invis, weight=100];

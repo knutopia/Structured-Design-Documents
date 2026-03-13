@@ -3,8 +3,8 @@ digraph ia_place_map {
   graph [fontname="Public Sans"];
   node [shape=box, fontname="Public Sans"];
   edge [fontname="Public Sans"];
-  "P-010" [label="Billing\n/billing\n[auth]\nentry_points: link:/billing,notification:payment_failed\nprimary_nav: true"];
-  "P-011" [label="Confirmation\n/confirmation\n[role:billing_agent]"];
+  "P-010" [label="Billing\nprimary_nav: true"];
+  "P-011" [label="Confirmation"];
   "P-010" -> "P-011" [style=invis, weight=100];
   "P-010" -> "P-011";
 }

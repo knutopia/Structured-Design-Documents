@@ -71,6 +71,6 @@
   },
   "omissions": [],
   "notes": [
-    "Place route, access, and entry metadata are rendered as node annotations."
+    "Place route, access, and entry metadata are available as node annotations for profile-aware rendering."
   ]
 }
