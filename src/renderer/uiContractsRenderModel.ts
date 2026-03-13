@@ -34,6 +34,8 @@ export interface UiContractsComponentItem {
   kind: "component";
   id: string;
   nodeId: string;
+  anchorId: string;
+  labelLines?: string[];
   childItems: Array<UiContractsStateGroupItem | UiContractsLeafNodeItem>;
   orderAnchorId: string;
   style?: string;
@@ -52,6 +54,8 @@ export interface UiContractsViewStateItem {
   kind: "view_state";
   id: string;
   nodeId: string;
+  anchorId: string;
+  labelLines?: string[];
   childItems: Array<UiContractsComponentItem | UiContractsLeafNodeItem>;
   orderAnchorId: string;
   style?: string;
@@ -248,29 +252,32 @@ function transitionEdgeDisplay(
   };
 }
 
-function contractEdgeDisplay(edge: Pick<CompiledEdge, "type" | "props">): Omit<UiContractsRenderEdge, "from" | "to"> {
+function contractEdgeDisplay(
+  edge: Pick<CompiledEdge, "type" | "props">,
+  constraint = false
+): Omit<UiContractsRenderEdge, "from" | "to"> {
   switch (edge.type) {
     case "EMITS":
       return {
         label: "emits",
         style: "dashed",
-        constraint: false
+        constraint
       };
     case "DEPENDS_ON":
       return {
         label: "depends on",
-        constraint: false
+        constraint
       };
     case "BINDS_TO":
       return {
         label: edge.props.field ? `binds field ${edge.props.field}` : "binds to",
         style: "dotted",
-        constraint: false
+        constraint
       };
     default:
       return {
         label: edge.type.toLowerCase().replace(/_/g, " "),
-        constraint: false
+        constraint
       };
   }
 }
@@ -306,18 +313,87 @@ function buildStateGroupLabelLines(
   ];
 }
 
+function buildComponentContainerLabelLines(
+  componentId: string,
+  graphNodesById: Map<string, { name: string }>
+): string[] {
+  return [`Component: ${graphNodesById.get(componentId)?.name ?? componentId}`];
+}
+
+function buildViewStateContainerLabelLines(
+  viewStateId: string,
+  graphNodesById: Map<string, { name: string; props: Record<string, string> }>,
+  includeViewStateDataRequired: boolean
+): string[] {
+  const viewState = graphNodesById.get(viewStateId);
+  if (!viewState) {
+    return [`ViewState: ${viewStateId}`];
+  }
+
+  const labelLines = [`ViewState: ${viewState.name}`];
+  if (includeViewStateDataRequired && viewState.props.data_required) {
+    labelLines.push(`data: ${viewState.props.data_required}`);
+  }
+  return labelLines;
+}
+
 function collectSiblingOrderChains(rootItems: UiContractsRootItem[]): string[][] {
   const chains: string[][] = [];
+
+  const pushChain = (...nodeIds: string[]): void => {
+    const filtered = nodeIds.filter((nodeId) => nodeId.length > 0);
+    if (filtered.length < 2) {
+      return;
+    }
+
+    const deduped: string[] = [];
+    for (const nodeId of filtered) {
+      if (deduped.at(-1) !== nodeId) {
+        deduped.push(nodeId);
+      }
+    }
+
+    if (deduped.length > 1) {
+      chains.push(deduped);
+    }
+  };
+
+  const collectChildBoundaryChains = (
+    parentAnchorId: string,
+    items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
+  ): void => {
+    let previousAnchorId = parentAnchorId;
+    let index = 0;
+
+    while (index < items.length) {
+      const item = items[index];
+      if (item.kind === "node") {
+        const runStartAnchorId = item.orderAnchorId;
+        let runEndAnchorId = runStartAnchorId;
+        index += 1;
+
+        while (index < items.length && items[index]?.kind === "node") {
+          runEndAnchorId = items[index]!.orderAnchorId;
+          index += 1;
+        }
+
+        pushChain(previousAnchorId, runStartAnchorId);
+        previousAnchorId = runEndAnchorId;
+        continue;
+      }
+
+      pushChain(previousAnchorId, item.orderAnchorId);
+      previousAnchorId = item.orderAnchorId;
+      index += 1;
+    }
+  };
 
   const collectNestedChains = (
     items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
   ): void => {
     for (const item of items) {
       if (item.kind === "view_state" || item.kind === "component") {
-        const childAnchors = item.childItems.map((child) => child.orderAnchorId);
-        if (childAnchors.length > 0) {
-          chains.push([item.nodeId, ...childAnchors]);
-        }
+        collectChildBoundaryChains(item.orderAnchorId, item.childItems);
         collectNestedChains(item.childItems);
         continue;
       }
@@ -330,19 +406,13 @@ function collectSiblingOrderChains(rootItems: UiContractsRootItem[]): string[][]
 
   for (const item of rootItems) {
     if (item.kind === "place") {
-      const childAnchors = item.childItems.map((child) => child.orderAnchorId);
-      if (childAnchors.length > 0) {
-        chains.push([item.anchorId, ...childAnchors]);
-      }
+      collectChildBoundaryChains(item.anchorId, item.childItems);
       collectNestedChains(item.childItems);
       continue;
     }
 
     if (item.kind === "view_state" || item.kind === "component") {
-      const childAnchors = item.childItems.map((child) => child.orderAnchorId);
-      if (childAnchors.length > 0) {
-        chains.push([item.nodeId, ...childAnchors]);
-      }
+      collectChildBoundaryChains(item.orderAnchorId, item.childItems);
       collectNestedChains(item.childItems);
       continue;
     }
@@ -491,17 +561,24 @@ export function buildUiContractsRenderModel(
   const buildScopedGroupItems = (scopeId: string): UiContractsStateGroupItem[] =>
     showSecondaryStateGroups ? (stateGroupsByScopeId.get(scopeId) ?? []).map((group) => buildStateGroup(group)) : [];
 
-  const buildComponentItem = (componentId: string): UiContractsComponentItem => ({
-    kind: "component",
-    id: componentId,
-    nodeId: componentId,
-    childItems: [
-      ...buildScopedGroupItems(componentId),
-      ...buildOwnedSupportItems(componentId)
-    ],
-    orderAnchorId: componentId,
-    style: "rounded"
-  });
+  const buildComponentItem = (componentId: string): UiContractsComponentItem => {
+    const childItems = [
+      ...buildOwnedSupportItems(componentId),
+      ...buildScopedGroupItems(componentId)
+    ];
+
+    const isContainer = childItems.length > 0;
+    return {
+      kind: "component",
+      id: componentId,
+      nodeId: componentId,
+      anchorId: isContainer ? `${componentId}__anchor` : componentId,
+      labelLines: isContainer ? buildComponentContainerLabelLines(componentId, graphNodesById) : undefined,
+      childItems,
+      orderAnchorId: isContainer ? `${componentId}__anchor` : componentId,
+      style: "rounded"
+    };
+  };
 
   const buildComponentItems = (parentId: string): UiContractsComponentItem[] => {
     const orderedComponentIds = getSourceOrderedStructuralStream(
@@ -514,17 +591,26 @@ export function buildUiContractsRenderModel(
     return orderedComponentIds.map((componentId) => buildComponentItem(componentId));
   };
 
-  const buildViewStateItem = (viewStateId: string): UiContractsViewStateItem => ({
-    kind: "view_state",
-    id: viewStateId,
-    nodeId: viewStateId,
-    childItems: [
+  const buildViewStateItem = (viewStateId: string): UiContractsViewStateItem => {
+    const childItems = [
       ...buildComponentItems(viewStateId),
       ...buildOwnedSupportItems(viewStateId)
-    ],
-    orderAnchorId: viewStateId,
-    style: "rounded,dashed"
-  });
+    ];
+    const isContainer = childItems.length > 0;
+
+    return {
+      kind: "view_state",
+      id: viewStateId,
+      nodeId: viewStateId,
+      anchorId: isContainer ? `${viewStateId}__anchor` : viewStateId,
+      labelLines: isContainer
+        ? buildViewStateContainerLabelLines(viewStateId, graphNodesById, displayOptions.includeViewStateDataRequired)
+        : undefined,
+      childItems,
+      orderAnchorId: isContainer ? `${viewStateId}__anchor` : viewStateId,
+      style: "rounded,dashed"
+    };
+  };
 
   const buildPlaceItem = (placeId: string): UiContractsPlaceItem => {
     const orderedStructuralChildren = getSourceOrderedStructuralStream(
@@ -650,6 +736,27 @@ export function buildUiContractsRenderModel(
     }
   }
 
+  const containerAnchorByNodeId = new Map<string, string>();
+  const collectContainerAnchors = (
+    items: Array<UiContractsRootItem | UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
+  ): void => {
+    for (const item of items) {
+      if (item.kind === "place" || item.kind === "state_group" || item.kind === "support_group" || item.kind === "node") {
+        if (item.kind === "place") {
+          collectContainerAnchors(item.childItems);
+        }
+        continue;
+      }
+
+      if (item.childItems.length > 0) {
+        containerAnchorByNodeId.set(item.nodeId, item.anchorId);
+        hiddenNodeIds.add(item.nodeId);
+      }
+      collectContainerAnchors(item.childItems);
+    }
+  };
+  collectContainerAnchors(rootItems);
+
   const nodes = projection.nodes
     .filter(
       (node): node is typeof node & { type: UiContractsNodeType } =>
@@ -670,7 +777,14 @@ export function buildUiContractsRenderModel(
       };
     });
   const renderedNodeIds = new Set(nodes.map((node) => node.id));
-  const isRenderedEndpoint = (nodeId: string): boolean => placeIds.has(nodeId) || renderedNodeIds.has(nodeId);
+  const isRenderedEndpoint = (nodeId: string): boolean =>
+    placeIds.has(nodeId) || renderedNodeIds.has(nodeId) || containerAnchorByNodeId.has(nodeId);
+  const resolveRenderedEndpointId = (nodeId: string): string => containerAnchorByNodeId.get(nodeId) ?? nodeId;
+  const localSupportEdgeKeys = new Set(
+    [...ownedSupportNodeIdsByOwnerId.entries()].flatMap(([ownerId, nodeIds]) =>
+      nodeIds.map((nodeId) => `${ownerId}->${nodeId}`)
+    )
+  );
 
   const edges = projection.edges
     .filter(
@@ -686,16 +800,19 @@ export function buildUiContractsRenderModel(
       );
       if (edge.type === "TRANSITIONS_TO") {
         return {
-          from: edge.from,
-          to: edge.to,
+          from: resolveRenderedEndpointId(edge.from),
+          to: resolveRenderedEndpointId(edge.to),
           ...transitionEdgeDisplay(sourceEdge ?? { ...edge, event: null, guard: null, effect: null, from: edge.from }, graphNodesById, effectiveTransitionNodeType)
         };
       }
 
       return {
-        from: edge.from,
-        to: edge.to,
-        ...contractEdgeDisplay(sourceEdge ?? { type: edge.type, props: {} })
+        from: resolveRenderedEndpointId(edge.from),
+        to: resolveRenderedEndpointId(edge.to),
+        ...contractEdgeDisplay(
+          sourceEdge ?? { type: edge.type, props: {} },
+          localSupportEdgeKeys.has(`${edge.from}->${edge.to}`)
+        )
       };
     });
 

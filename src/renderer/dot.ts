@@ -381,6 +381,18 @@ function renderUiContractsNode(node: UiContractsRenderNode, indent: string, line
   );
 }
 
+function renderUiContractsAnchor(anchorId: string, indent: string, lines: string[]): void {
+  lines.push(
+    `${indent}${quoteId(anchorId)}${formatAttributes({
+      label: "",
+      shape: "point",
+      width: 0,
+      height: 0,
+      style: "invis"
+    })};`
+  );
+}
+
 function renderUiContractsComponent(
   item: UiContractsComponentItem,
   nodesById: Map<string, UiContractsRenderNode>,
@@ -391,14 +403,11 @@ function renderUiContractsComponent(
     lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
     lines.push(
       `${indent}  graph${formatAttributes({
-        label: "",
+        label: formatMultilineLabel(item.labelLines ?? []),
         style: item.style
       })};`
     );
-    const node = nodesById.get(item.nodeId);
-    if (node) {
-      renderUiContractsNode(node, `${indent}  `, lines);
-    }
+    renderUiContractsAnchor(item.anchorId, `${indent}  `, lines);
     renderUiContractsItems(item.childItems, nodesById, `${indent}  `, lines);
     lines.push(`${indent}}`);
     return;
@@ -452,14 +461,11 @@ function renderUiContractsViewState(
   lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
   lines.push(
     `${indent}  graph${formatAttributes({
-      label: "",
+      label: formatMultilineLabel(item.labelLines ?? []),
       style: item.style
     })};`
   );
-  const node = nodesById.get(item.nodeId);
-  if (node) {
-    renderUiContractsNode(node, `${indent}  `, lines);
-  }
+  renderUiContractsAnchor(item.anchorId, `${indent}  `, lines);
   renderUiContractsItems(item.childItems, nodesById, `${indent}  `, lines);
   lines.push(`${indent}}`);
 }

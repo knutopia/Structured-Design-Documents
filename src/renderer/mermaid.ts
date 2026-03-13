@@ -184,6 +184,25 @@ function pushDashedNodeStyles(lines: string[], dashedNodeIds: string[]): void {
   lines.push(`  class ${dashedNodeIds.join(",")} dashedNode;`);
 }
 
+function pushHiddenAnchor(
+  lines: string[],
+  hiddenAnchorIds: string[],
+  id: string,
+  indent = "  "
+): void {
+  lines.push(`${indent}${mermaidId(id)}[""]`);
+  hiddenAnchorIds.push(mermaidId(id));
+}
+
+function pushHiddenAnchorStyles(lines: string[], hiddenAnchorIds: string[]): void {
+  if (hiddenAnchorIds.length === 0) {
+    return;
+  }
+
+  lines.push("  classDef hiddenAnchor fill:transparent,stroke:transparent,color:transparent;");
+  lines.push(`  class ${hiddenAnchorIds.join(",")} hiddenAnchor;`);
+}
+
 function renderIaPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
   pushNode(lines, [], place.id, place.labelLines, "box", false, indent);
   renderIaItems(place.items, indent, lines);
@@ -399,16 +418,14 @@ function renderUiContractsComponent(
   item: UiContractsComponentItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
+  hiddenAnchorIds: string[],
   indent: string,
   lines: string[]
 ): void {
   if (item.childItems.length > 0) {
-    lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}[" "]`);
-    const node = nodesById.get(item.nodeId);
-    if (node) {
-      renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
-    }
-    renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, `${indent}  `, lines);
+    lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}["${formatLabelLines(item.labelLines ?? [])}"]`);
+    pushHiddenAnchor(lines, hiddenAnchorIds, item.anchorId, `${indent}  `);
+    renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, hiddenAnchorIds, `${indent}  `, lines);
     lines.push(`${indent}end`);
     return;
   }
@@ -425,6 +442,7 @@ function renderUiContractsStateGroup(
   item: UiContractsStateGroupItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
+  hiddenAnchorIds: string[],
   indent: string,
   lines: string[]
 ): void {
@@ -443,6 +461,7 @@ function renderUiContractsViewState(
   item: UiContractsViewStateItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
+  hiddenAnchorIds: string[],
   indent: string,
   lines: string[]
 ): void {
@@ -454,12 +473,9 @@ function renderUiContractsViewState(
     return;
   }
 
-  lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}[" "]`);
-  const node = nodesById.get(item.nodeId);
-  if (node) {
-    renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
-  }
-  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, `${indent}  `, lines);
+  lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}["${formatLabelLines(item.labelLines ?? [])}"]`);
+  pushHiddenAnchor(lines, hiddenAnchorIds, item.anchorId, `${indent}  `);
+  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, hiddenAnchorIds, `${indent}  `, lines);
   lines.push(`${indent}end`);
 }
 
@@ -467,11 +483,12 @@ function renderUiContractsPlace(
   item: UiContractsPlaceItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
+  hiddenAnchorIds: string[],
   indent: string,
   lines: string[]
 ): void {
   lines.push(`${indent}subgraph ${mermaidId(item.id)}["${formatLabelLines(item.labelLines)}"]`);
-  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, `${indent}  `, lines);
+  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, hiddenAnchorIds, `${indent}  `, lines);
   lines.push(`${indent}end`);
 }
 
@@ -479,6 +496,7 @@ function renderUiContractsSupportGroup(
   item: UiContractsSupportingGroupItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
+  hiddenAnchorIds: string[],
   indent: string,
   lines: string[]
 ): void {
@@ -499,27 +517,28 @@ function renderUiContractsItems(
     | UiContractsRootItem[],
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
+  hiddenAnchorIds: string[],
   indent: string,
   lines: string[]
 ): void {
   for (const item of items) {
     if (item.kind === "place") {
-      renderUiContractsPlace(item, nodesById, dashedNodeIds, indent, lines);
+      renderUiContractsPlace(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
       continue;
     }
 
     if (item.kind === "view_state") {
-      renderUiContractsViewState(item, nodesById, dashedNodeIds, indent, lines);
+      renderUiContractsViewState(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
       continue;
     }
 
     if (item.kind === "state_group") {
-      renderUiContractsStateGroup(item, nodesById, dashedNodeIds, indent, lines);
+      renderUiContractsStateGroup(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
       continue;
     }
 
     if (item.kind === "support_group") {
-      renderUiContractsSupportGroup(item, nodesById, dashedNodeIds, indent, lines);
+      renderUiContractsSupportGroup(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
       continue;
     }
 
@@ -531,7 +550,7 @@ function renderUiContractsItems(
       continue;
     }
 
-    renderUiContractsComponent(item, nodesById, dashedNodeIds, indent, lines);
+    renderUiContractsComponent(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
   }
 }
 
@@ -539,15 +558,17 @@ export function renderUiContractsMermaid(model: UiContractsRenderModel): string 
   const lines = ["flowchart LR"];
   const registry = createEdgeRegistry();
   const dashedNodeIds: string[] = [];
+  const hiddenAnchorIds: string[] = [];
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
 
-  renderUiContractsItems(model.rootItems, nodesById, dashedNodeIds, "  ", lines);
+  renderUiContractsItems(model.rootItems, nodesById, dashedNodeIds, hiddenAnchorIds, "  ", lines);
 
   for (const edge of model.edges) {
     pushEdge(lines, registry, edge.from, edge.to, edge.label, mapMermaidEdgeStyle(edge.style));
   }
 
   pushDashedNodeStyles(lines, dashedNodeIds);
+  pushHiddenAnchorStyles(lines, hiddenAnchorIds);
   pushLinkStyles(lines, registry);
   return lines.join("\n");
 }

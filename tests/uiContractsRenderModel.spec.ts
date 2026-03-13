@@ -64,6 +64,9 @@ END
       throw new Error("Expected nested view state item.");
     }
 
+    expect(viewState.anchorId).toBe("VS-100__anchor");
+    expect(viewState.orderAnchorId).toBe("VS-100__anchor");
+    expect(viewState.labelLines).toEqual(["ViewState: Editing", "data: DraftRecord"]);
     expect(viewState.childItems.map((item) => item.kind)).toEqual(["node", "node"]);
     expect(viewState.childItems.map((item) => item.orderAnchorId)).toEqual(["E-100", "SA-100"]);
     expect(model.rootItems.some((item) => item.kind === "support_group")).toBe(false);
@@ -123,6 +126,8 @@ END
       throw new Error("Expected root component item.");
     }
 
+    expect(component.anchorId).toBe("C-300");
+    expect(component.labelLines).toBeUndefined();
     expect(component.childItems).toEqual([]);
   });
 
@@ -152,10 +157,45 @@ END
       throw new Error("Expected nested component item.");
     }
 
+    expect(component.anchorId).toBe("C-060__anchor");
+    expect(component.labelLines).toEqual(["Component: Review Panel"]);
+    expect(component.childItems.map((item) => item.kind)).toEqual(["node", "node", "node", "state_group"]);
     expect(component.childItems.filter((item) => item.kind === "node").map((item) => item.orderAnchorId)).toEqual([
       "E-060",
       "SA-060",
       "D-060"
     ]);
+  });
+
+  it("routes local supporting edges through the hidden owner anchor without support-to-support order chains", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(bundle.rootDir, "examples/ui_state_fallback.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+
+    const projected = projectView(compiled.graph!, bundle, "ui_contracts");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+
+    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!);
+
+    expect(
+      model.edges
+        .filter((edge) => edge.from === "C-060__anchor")
+        .map((edge) => ({ to: edge.to, constraint: edge.constraint }))
+    ).toEqual([
+      { to: "D-060", constraint: true },
+      { to: "SA-060", constraint: true },
+      { to: "E-060", constraint: true }
+    ]);
+
+    expect(model.siblingOrderChains).toContainEqual(["ST-060a", "C-060__anchor"]);
+    expect(model.siblingOrderChains).toContainEqual(["D-060", "ST-061a"]);
+    expect(model.siblingOrderChains).not.toContainEqual(["E-060", "SA-060", "D-060"]);
   });
 });

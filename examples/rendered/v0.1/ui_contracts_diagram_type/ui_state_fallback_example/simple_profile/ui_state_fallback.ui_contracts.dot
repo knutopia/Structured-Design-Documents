@@ -12,27 +12,24 @@ digraph ui_contracts {
       "ST-060b" [shape="ellipse", label="Case Review Submitted"];
     }
     subgraph cluster_C_060 {
-      graph [label="", style="rounded"];
-      "C-060" [shape="box", style="rounded", label="Review Panel"];
+      graph [label="Component: Review Panel", style="rounded"];
+      "C-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      "E-060" [shape="oval", label="Submit Review"];
+      "SA-060" [shape="component", label="Save Review"];
+      "D-060" [shape="cylinder", label="CaseRecord"];
       subgraph cluster_secondary_state_group_C_060 {
         graph [label="State graph: Review Panel\nscope_id=C-060", style="rounded"];
         "ST-061a" [shape="ellipse", label="Panel Idle"];
         "ST-061b" [shape="ellipse", label="Panel Dirty"];
       }
-      "E-060" [shape="oval", label="Submit Review"];
-      "SA-060" [shape="component", label="Save Review"];
-      "D-060" [shape="cylinder", label="CaseRecord"];
     }
   }
   "P-060__anchor" -> "ST-060a" [style=invis, weight=100];
-  "ST-060a" -> "C-060" [style=invis, weight=100];
-  "C-060" -> "ST-061a" [style=invis, weight=100];
-  "ST-061a" -> "E-060" [style=invis, weight=100];
-  "E-060" -> "SA-060" [style=invis, weight=100];
-  "SA-060" -> "D-060" [style=invis, weight=100];
-  "C-060" -> "D-060" [label="binds field status", style="dotted", constraint=false];
-  "C-060" -> "SA-060" [label="depends on", constraint=false];
-  "C-060" -> "E-060" [label="emits", style="dashed", constraint=false];
+  "ST-060a" -> "C-060__anchor" [style=invis, weight=100];
+  "D-060" -> "ST-061a" [style=invis, weight=100];
+  "C-060__anchor" -> "D-060" [label="binds field status", style="dotted", constraint=true];
+  "C-060__anchor" -> "SA-060" [label="depends on", constraint=true];
+  "C-060__anchor" -> "E-060" [label="emits", style="dashed", constraint=true];
   "ST-060a" -> "ST-060b" [label="[Submit Review] / SA-060", style="solid", weight=4];
   "ST-061a" -> "ST-061b" [label="[Submit Review] {draft_ready}", style="solid", weight=4];
 }

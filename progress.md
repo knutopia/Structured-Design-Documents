@@ -10,6 +10,7 @@
 
 -added mermaid for new diagram types
 -added full set of examples across all types - they look pretty bad.
+-reshuffled rendering of ui_contracts type - still not good enough
 
 ## Wed 3-11-26
 
