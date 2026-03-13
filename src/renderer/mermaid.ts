@@ -139,6 +139,11 @@ function parseNodeStyle(style: string | undefined): { shape: MermaidNodeShape; d
 function inferNodeShape(shape: string, style?: string): { shape: MermaidNodeShape; dashed: boolean } {
   const parsedStyle = parseNodeStyle(style);
   switch (shape) {
+    case "plaintext":
+      return {
+        shape: "box",
+        dashed: false
+      };
     case "diamond":
       return {
         shape: "diamond",
@@ -184,23 +189,13 @@ function pushDashedNodeStyles(lines: string[], dashedNodeIds: string[]): void {
   lines.push(`  class ${dashedNodeIds.join(",")} dashedNode;`);
 }
 
-function pushHiddenAnchor(
-  lines: string[],
-  hiddenAnchorIds: string[],
-  id: string,
-  indent = "  "
-): void {
-  lines.push(`${indent}${mermaidId(id)}[""]`);
-  hiddenAnchorIds.push(mermaidId(id));
-}
-
-function pushHiddenAnchorStyles(lines: string[], hiddenAnchorIds: string[]): void {
-  if (hiddenAnchorIds.length === 0) {
+function pushContainerTitleStyles(lines: string[], containerTitleIds: string[]): void {
+  if (containerTitleIds.length === 0) {
     return;
   }
 
-  lines.push("  classDef hiddenAnchor fill:transparent,stroke:transparent,color:transparent;");
-  lines.push(`  class ${hiddenAnchorIds.join(",")} hiddenAnchor;`);
+  lines.push("  classDef containerTitle fill:transparent,stroke:transparent,color:#111;");
+  lines.push(`  class ${containerTitleIds.join(",")} containerTitle;`);
 }
 
 function renderIaPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
@@ -407,25 +402,32 @@ export function renderScenarioFlowMermaid(model: ScenarioFlowRenderModel): strin
 function renderUiContractsNode(
   node: UiContractsRenderNode,
   dashedNodeIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
   const display = inferNodeShape(node.shape, node.style);
   pushNode(lines, dashedNodeIds, node.id, node.labelLines, display.shape, display.dashed, indent);
+  if (node.shape === "plaintext") {
+    containerTitleIds.push(mermaidId(node.id));
+  }
 }
 
 function renderUiContractsComponent(
   item: UiContractsComponentItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
-  hiddenAnchorIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
-  if (item.childItems.length > 0) {
-    lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}["${formatLabelLines(item.labelLines ?? [])}"]`);
-    pushHiddenAnchor(lines, hiddenAnchorIds, item.anchorId, `${indent}  `);
-    renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, hiddenAnchorIds, `${indent}  `, lines);
+  if (item.titleNodeId) {
+    lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}[" "]`);
+    const titleNode = nodesById.get(item.titleNodeId);
+    if (titleNode) {
+      renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
+    }
+    renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
     lines.push(`${indent}end`);
     return;
   }
@@ -435,24 +437,28 @@ function renderUiContractsComponent(
     return;
   }
 
-  renderUiContractsNode(node, dashedNodeIds, indent, lines);
+  renderUiContractsNode(node, dashedNodeIds, containerTitleIds, indent, lines);
 }
 
 function renderUiContractsStateGroup(
   item: UiContractsStateGroupItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
-  hiddenAnchorIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
-  lines.push(`${indent}subgraph ${mermaidId(item.id)}["${formatLabelLines(item.labelLines)}"]`);
+  lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
+  const titleNode = nodesById.get(item.titleNodeId);
+  if (titleNode) {
+    renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
+  }
   for (const nodeId of item.nodeIds) {
     const node = nodesById.get(nodeId);
     if (!node) {
       continue;
     }
-    renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
+    renderUiContractsNode(node, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
   }
   lines.push(`${indent}end`);
 }
@@ -461,34 +467,41 @@ function renderUiContractsViewState(
   item: UiContractsViewStateItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
-  hiddenAnchorIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
-  if (item.childItems.length === 0) {
-    const node = nodesById.get(item.nodeId);
-    if (node) {
-      renderUiContractsNode(node, dashedNodeIds, indent, lines);
+  if (item.titleNodeId) {
+    lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
+    const titleNode = nodesById.get(item.titleNodeId);
+    if (titleNode) {
+      renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
     }
+    renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
+    lines.push(`${indent}end`);
     return;
   }
 
-  lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}["${formatLabelLines(item.labelLines ?? [])}"]`);
-  pushHiddenAnchor(lines, hiddenAnchorIds, item.anchorId, `${indent}  `);
-  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, hiddenAnchorIds, `${indent}  `, lines);
-  lines.push(`${indent}end`);
+  const node = nodesById.get(item.nodeId);
+  if (node) {
+    renderUiContractsNode(node, dashedNodeIds, containerTitleIds, indent, lines);
+  }
 }
 
 function renderUiContractsPlace(
   item: UiContractsPlaceItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
-  hiddenAnchorIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
-  lines.push(`${indent}subgraph ${mermaidId(item.id)}["${formatLabelLines(item.labelLines)}"]`);
-  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, hiddenAnchorIds, `${indent}  `, lines);
+  lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
+  const titleNode = nodesById.get(item.titleNodeId);
+  if (titleNode) {
+    renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
+  }
+  renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
   lines.push(`${indent}end`);
 }
 
@@ -496,17 +509,21 @@ function renderUiContractsSupportGroup(
   item: UiContractsSupportingGroupItem,
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
-  hiddenAnchorIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
-  lines.push(`${indent}subgraph ${mermaidId(item.id)}["${formatLabelLines(item.labelLines)}"]`);
+  lines.push(`${indent}subgraph ${mermaidId(item.id)}[" "]`);
+  const titleNode = nodesById.get(item.titleNodeId);
+  if (titleNode) {
+    renderUiContractsNode(titleNode, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
+  }
   for (const nodeId of item.nodeIds) {
     const node = nodesById.get(nodeId);
     if (!node) {
       continue;
     }
-    renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
+    renderUiContractsNode(node, dashedNodeIds, containerTitleIds, `${indent}  `, lines);
   }
   lines.push(`${indent}end`);
 }
@@ -517,40 +534,40 @@ function renderUiContractsItems(
     | UiContractsRootItem[],
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
-  hiddenAnchorIds: string[],
+  containerTitleIds: string[],
   indent: string,
   lines: string[]
 ): void {
   for (const item of items) {
     if (item.kind === "place") {
-      renderUiContractsPlace(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
+      renderUiContractsPlace(item, nodesById, dashedNodeIds, containerTitleIds, indent, lines);
       continue;
     }
 
     if (item.kind === "view_state") {
-      renderUiContractsViewState(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
+      renderUiContractsViewState(item, nodesById, dashedNodeIds, containerTitleIds, indent, lines);
       continue;
     }
 
     if (item.kind === "state_group") {
-      renderUiContractsStateGroup(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
+      renderUiContractsStateGroup(item, nodesById, dashedNodeIds, containerTitleIds, indent, lines);
       continue;
     }
 
     if (item.kind === "support_group") {
-      renderUiContractsSupportGroup(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
+      renderUiContractsSupportGroup(item, nodesById, dashedNodeIds, containerTitleIds, indent, lines);
       continue;
     }
 
     if (item.kind === "node") {
       const node = nodesById.get(item.nodeId);
       if (node) {
-        renderUiContractsNode(node, dashedNodeIds, indent, lines);
+        renderUiContractsNode(node, dashedNodeIds, containerTitleIds, indent, lines);
       }
       continue;
     }
 
-    renderUiContractsComponent(item, nodesById, dashedNodeIds, hiddenAnchorIds, indent, lines);
+    renderUiContractsComponent(item, nodesById, dashedNodeIds, containerTitleIds, indent, lines);
   }
 }
 
@@ -558,17 +575,17 @@ export function renderUiContractsMermaid(model: UiContractsRenderModel): string 
   const lines = ["flowchart LR"];
   const registry = createEdgeRegistry();
   const dashedNodeIds: string[] = [];
-  const hiddenAnchorIds: string[] = [];
+  const containerTitleIds: string[] = [];
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
 
-  renderUiContractsItems(model.rootItems, nodesById, dashedNodeIds, hiddenAnchorIds, "  ", lines);
+  renderUiContractsItems(model.rootItems, nodesById, dashedNodeIds, containerTitleIds, "  ", lines);
 
   for (const edge of model.edges) {
     pushEdge(lines, registry, edge.from, edge.to, edge.label, mapMermaidEdgeStyle(edge.style));
   }
 
   pushDashedNodeStyles(lines, dashedNodeIds);
-  pushHiddenAnchorStyles(lines, hiddenAnchorIds);
+  pushContainerTitleStyles(lines, containerTitleIds);
   pushLinkStyles(lines, registry);
   return lines.join("\n");
 }

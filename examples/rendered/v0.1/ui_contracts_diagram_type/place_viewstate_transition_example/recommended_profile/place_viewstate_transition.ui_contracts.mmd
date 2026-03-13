@@ -1,33 +1,36 @@
 flowchart LR
-  subgraph n_P_010["Billing<br/>/billing<br/>[auth]"]
-    subgraph n_VS_010a__group["ViewState: Billing Editing<br/>data: PaymentMethod"]
-      n_VS_010a__anchor[""]
-      subgraph n_C_011__group["Component: Submit Button"]
-        n_C_011__anchor[""]
+  subgraph n_P_010[" "]
+    n_P_010__title["Billing<br/>/billing<br/>[auth]"]
+    subgraph n_VS_010a[" "]
+      n_VS_010a__title["ViewState: Billing Editing<br/>data: PaymentMethod"]
+      subgraph n_C_011__group[" "]
+        n_C_011__title["Component: Submit Button"]
         n_E_010(["Submit"])
       end
     end
     n_VS_010b("Billing Success<br/>data: Receipt")
-    subgraph n_C_010__group["Component: Billing Form"]
-      n_C_010__anchor[""]
+    subgraph n_C_010__group[" "]
+      n_C_010__title["Component: Billing Form"]
       n_SA_010[["Save Subscription"]]
       n_D_010["Subscription"]
-      subgraph n_secondary_state_group_C_010["State detail: Billing Form<br/>scope_id=C-010"]
+      subgraph n_secondary_state_group_C_010[" "]
+        n_secondary_state_group_C_010__title["State detail: Billing Form<br/>scope_id=C-010"]
         n_ST_010a(["Form Ready"])
         n_ST_010b(["Submitting"])
       end
     end
   end
-  subgraph n_P_011["Confirmation<br/>/confirmation<br/>[role:billing_agent]"]
+  subgraph n_P_011[" "]
+    n_P_011__title["Confirmation<br/>/confirmation<br/>[role:billing_agent]"]
   end
-  n_C_010__anchor -->|binds field status| n_D_010
-  n_C_010__anchor -->|depends on| n_SA_010
-  n_C_011__anchor -->|emits| n_E_010
+  n_C_010__title -->|binds field status| n_D_010
+  n_C_010__title -->|depends on| n_SA_010
+  n_C_011__title -->|emits| n_E_010
   n_ST_010a -->|[Submit] {payment_valid} / SA-010| n_ST_010b
-  n_VS_010a__anchor -->|[Submit] {payment_valid} / SA-010| n_VS_010b
+  n_VS_010a__title -->|[Submit] {payment_valid} / SA-010| n_VS_010b
   classDef dashedNode stroke-dasharray: 6 4;
   class n_VS_010b,n_ST_010a,n_ST_010b dashedNode;
-  classDef hiddenAnchor fill:transparent,stroke:transparent,color:transparent;
-  class n_VS_010a__anchor,n_C_011__anchor,n_C_010__anchor hiddenAnchor;
+  classDef containerTitle fill:transparent,stroke:transparent,color:#111;
+  class n_P_010__title,n_VS_010a__title,n_C_011__title,n_C_010__title,n_secondary_state_group_C_010__title,n_P_011__title containerTitle;
   linkStyle 2,3 stroke-dasharray: 6 4;
   linkStyle 0 stroke-dasharray: 2 4;

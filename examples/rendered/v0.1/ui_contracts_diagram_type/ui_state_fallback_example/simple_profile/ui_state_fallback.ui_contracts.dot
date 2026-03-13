@@ -4,32 +4,36 @@ digraph ui_contracts {
   node [fontname="Public Sans"];
   edge [fontname="Public Sans"];
   subgraph cluster_P_060 {
-    graph [label="Case Review", style="rounded"];
-    "P-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    graph [label="", style="rounded"];
+    "P-060__title" [shape="plaintext", label="Case Review\l"];
     subgraph cluster_secondary_state_group_P_060 {
-      graph [label="State graph: Case Review\nscope_id=P-060", style="rounded"];
+      graph [label="", style="rounded"];
+      "secondary_state_group:P-060__title" [shape="plaintext", label="State graph: Case Review\lscope_id=P-060\l"];
       "ST-060a" [shape="ellipse", label="Case Review Ready"];
       "ST-060b" [shape="ellipse", label="Case Review Submitted"];
     }
     subgraph cluster_C_060 {
-      graph [label="Component: Review Panel", style="rounded"];
-      "C-060__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      graph [label="", style="rounded"];
+      "C-060__title" [shape="plaintext", label="Component: Review Panel\l"];
       "E-060" [shape="oval", label="Submit Review"];
       "SA-060" [shape="component", label="Save Review"];
       "D-060" [shape="cylinder", label="CaseRecord"];
       subgraph cluster_secondary_state_group_C_060 {
-        graph [label="State graph: Review Panel\nscope_id=C-060", style="rounded"];
+        graph [label="", style="rounded"];
+        "secondary_state_group:C-060__title" [shape="plaintext", label="State graph: Review Panel\lscope_id=C-060\l"];
         "ST-061a" [shape="ellipse", label="Panel Idle"];
         "ST-061b" [shape="ellipse", label="Panel Dirty"];
       }
     }
   }
-  "P-060__anchor" -> "ST-060a" [style=invis, weight=100];
-  "ST-060a" -> "C-060__anchor" [style=invis, weight=100];
-  "D-060" -> "ST-061a" [style=invis, weight=100];
-  "C-060__anchor" -> "D-060" [label="binds field status", style="dotted", constraint=true];
-  "C-060__anchor" -> "SA-060" [label="depends on", constraint=true];
-  "C-060__anchor" -> "E-060" [label="emits", style="dashed", constraint=true];
+  "P-060__title" -> "secondary_state_group:P-060__title" [style=invis, weight=100];
+  "secondary_state_group:P-060__title" -> "C-060__title" [style=invis, weight=100];
+  "secondary_state_group:P-060__title" -> "ST-060a" [style=invis, weight=100];
+  "D-060" -> "secondary_state_group:C-060__title" [style=invis, weight=100];
+  "secondary_state_group:C-060__title" -> "ST-061a" [style=invis, weight=100];
+  "C-060__title" -> "D-060" [label="binds field status", style="dotted", constraint=true];
+  "C-060__title" -> "SA-060" [label="depends on", constraint=true];
+  "C-060__title" -> "E-060" [label="emits", style="dashed", constraint=true];
   "ST-060a" -> "ST-060b" [label="[Submit Review] / SA-060", style="solid", weight=4];
   "ST-061a" -> "ST-061b" [label="[Submit Review] {draft_ready}", style="solid", weight=4];
 }

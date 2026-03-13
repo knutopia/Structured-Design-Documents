@@ -64,12 +64,43 @@ END
       throw new Error("Expected nested view state item.");
     }
 
-    expect(viewState.anchorId).toBe("VS-100__anchor");
-    expect(viewState.orderAnchorId).toBe("VS-100__anchor");
+    expect(viewState.titleNodeId).toBe("VS-100__title");
+    expect(viewState.orderAnchorId).toBe("VS-100__title");
     expect(viewState.labelLines).toEqual(["ViewState: Editing", "data: DraftRecord"]);
     expect(viewState.childItems.map((item) => item.kind)).toEqual(["node", "node"]);
     expect(viewState.childItems.map((item) => item.orderAnchorId)).toEqual(["E-100", "SA-100"]);
     expect(model.rootItems.some((item) => item.kind === "support_group")).toBe(false);
+  });
+
+  it("renders COMPOSED_OF inside a container without visible ui_contracts edges to the child component", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(bundle.rootDir, "examples/place_viewstate_transition.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+
+    const projected = projectView(compiled.graph!, bundle, "ui_contracts");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+
+    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!);
+    const place = model.rootItems[0];
+    if (!place || place.kind !== "place") {
+      throw new Error("Expected root place item.");
+    }
+
+    const viewState = place.childItems.find((item) => item.kind === "view_state");
+    if (!viewState || viewState.kind !== "view_state") {
+      throw new Error("Expected nested view state item.");
+    }
+
+    expect(viewState.titleNodeId).toBe("VS-010a__title");
+    expect(viewState.childItems[0]?.kind).toBe("component");
+    expect(model.edges.some((edge) => edge.from === "VS-010a__title" && edge.to === "C-011__title")).toBe(false);
   });
 
   it("falls back to a shared supporting group when a support node has multiple structural owners", async () => {
@@ -126,7 +157,8 @@ END
       throw new Error("Expected root component item.");
     }
 
-    expect(component.anchorId).toBe("C-300");
+    expect(component.titleNodeId).toBeUndefined();
+    expect(component.orderAnchorId).toBe("C-300");
     expect(component.labelLines).toBeUndefined();
     expect(component.childItems).toEqual([]);
   });
@@ -157,7 +189,7 @@ END
       throw new Error("Expected nested component item.");
     }
 
-    expect(component.anchorId).toBe("C-060__anchor");
+    expect(component.titleNodeId).toBe("C-060__title");
     expect(component.labelLines).toEqual(["Component: Review Panel"]);
     expect(component.childItems.map((item) => item.kind)).toEqual(["node", "node", "node", "state_group"]);
     expect(component.childItems.filter((item) => item.kind === "node").map((item) => item.orderAnchorId)).toEqual([
@@ -167,7 +199,7 @@ END
     ]);
   });
 
-  it("routes local supporting edges through the hidden owner anchor without support-to-support order chains", async () => {
+  it("routes local supporting edges through the visible container title without support-to-support order chains", async () => {
     const bundle = await loadBundle(manifestPath);
     const examplePath = path.join(bundle.rootDir, "examples/ui_state_fallback.sdd");
     const input = {
@@ -186,7 +218,7 @@ END
 
     expect(
       model.edges
-        .filter((edge) => edge.from === "C-060__anchor")
+        .filter((edge) => edge.from === "C-060__title")
         .map((edge) => ({ to: edge.to, constraint: edge.constraint }))
     ).toEqual([
       { to: "D-060", constraint: true },
@@ -194,8 +226,8 @@ END
       { to: "E-060", constraint: true }
     ]);
 
-    expect(model.siblingOrderChains).toContainEqual(["ST-060a", "C-060__anchor"]);
-    expect(model.siblingOrderChains).toContainEqual(["D-060", "ST-061a"]);
+    expect(model.siblingOrderChains).toContainEqual(["secondary_state_group:P-060__title", "C-060__title"]);
+    expect(model.siblingOrderChains).toContainEqual(["D-060", "secondary_state_group:C-060__title"]);
     expect(model.siblingOrderChains).not.toContainEqual(["E-060", "SA-060", "D-060"]);
   });
 });
