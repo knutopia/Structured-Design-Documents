@@ -187,12 +187,16 @@ describe("profile-aware render detail", () => {
       expect(simple.text).not.toContain("data: PaymentMethod");
       expect(simple.text).not.toContain("State detail: Billing Form");
       expect(simple.text).not.toContain("Form Ready");
+      expect(simple.text).not.toContain("Save Subscription");
+      expect(simple.text).not.toContain("Subscription");
       expect(simple.text).not.toContain("Supporting Contracts");
       expect(permissive.text).toContain("/billing");
       expect(permissive.text).toContain("[auth]");
       expect(permissive.text).toContain("data: PaymentMethod");
       expect(permissive.text).toContain("State detail: Billing Form");
-      expect(permissive.text).toContain("Supporting Contracts");
+      expect(permissive.text).toContain("Save Subscription");
+      expect(permissive.text).toContain("Subscription");
+      expect(permissive.text).not.toContain("Supporting Contracts");
     }
   });
 
@@ -243,8 +247,12 @@ describe("profile-aware render detail", () => {
     });
 
     expect(simple.text).not.toContain("Form Ready");
+    expect(simple.text).not.toContain("Save Subscription");
+    expect(simple.text).not.toContain("Subscription");
     expect(simple.text).not.toContain("Supporting Contracts");
     expect(permissive.text).toContain("Form Ready");
-    expect(permissive.text).toContain("Supporting Contracts");
+    expect(permissive.text).toContain("Save Subscription");
+    expect(permissive.text).toContain("Subscription");
+    expect(permissive.text).not.toContain("Supporting Contracts");
   });
 });

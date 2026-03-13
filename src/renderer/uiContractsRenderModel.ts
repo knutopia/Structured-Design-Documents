@@ -24,10 +24,19 @@ export interface UiContractsRenderEdge {
   weight?: number;
 }
 
-export interface UiContractsComponentItem {
-  kind: "component";
+export interface UiContractsLeafNodeItem {
+  kind: "node";
   nodeId: string;
   orderAnchorId: string;
+}
+
+export interface UiContractsComponentItem {
+  kind: "component";
+  id: string;
+  nodeId: string;
+  childItems: Array<UiContractsStateGroupItem | UiContractsLeafNodeItem>;
+  orderAnchorId: string;
+  style?: string;
 }
 
 export interface UiContractsStateGroupItem {
@@ -43,7 +52,7 @@ export interface UiContractsViewStateItem {
   kind: "view_state";
   id: string;
   nodeId: string;
-  childItems: Array<UiContractsComponentItem | UiContractsStateGroupItem>;
+  childItems: Array<UiContractsComponentItem | UiContractsLeafNodeItem>;
   orderAnchorId: string;
   style?: string;
 }
@@ -57,20 +66,27 @@ export interface UiContractsPlaceItem {
   orderAnchorId: string;
 }
 
-export type UiContractsRootItem = UiContractsPlaceItem | UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem;
-
-export interface UiContractsSupportingLane {
-  headerId: string;
-  label: string;
+export interface UiContractsSupportingGroupItem {
+  kind: "support_group";
+  id: string;
+  labelLines: string[];
   nodeIds: string[];
+  orderAnchorId: string;
+  style?: string;
 }
+
+export type UiContractsRootItem =
+  | UiContractsPlaceItem
+  | UiContractsViewStateItem
+  | UiContractsComponentItem
+  | UiContractsStateGroupItem
+  | UiContractsSupportingGroupItem;
 
 export interface UiContractsRenderModel {
   rootItems: UiContractsRootItem[];
   nodes: UiContractsRenderNode[];
   edges: UiContractsRenderEdge[];
   siblingOrderChains: string[][];
-  supportingLane?: UiContractsSupportingLane;
 }
 
 interface TransitionGraphPriorityViewMetadata {
@@ -147,10 +163,15 @@ function orderNodeIds(graph: CompiledGraph, nodeIds: Iterable<string>): string[]
   return getTopLevelNodeIdsInAuthorOrder(graph, nodeIds);
 }
 
-function formatTransitionLabel(edge: Pick<CompiledEdge, "event" | "guard" | "effect">): string | undefined {
+function formatTransitionLabel(
+  edge: Pick<CompiledEdge, "event" | "guard" | "effect">,
+  graphNodesById: Map<string, { type: string; name: string }>
+): string | undefined {
   const parts: string[] = [];
   if (edge.event) {
-    parts.push(`[${edge.event}]`);
+    const eventNode = graphNodesById.get(edge.event);
+    const eventLabel = eventNode?.type === "Event" ? eventNode.name : edge.event;
+    parts.push(`[${eventLabel}]`);
   }
   if (edge.guard) {
     parts.push(`{${edge.guard}}`);
@@ -200,11 +221,11 @@ function nodeDisplay(type: UiContractsNodeType, effectiveTransitionNodeType: Ren
 
 function transitionEdgeDisplay(
   edge: Pick<CompiledEdge, "type" | "event" | "guard" | "effect" | "from">,
-  graphNodesById: Map<string, { type: string }>,
+  graphNodesById: Map<string, { type: string; name: string }>,
   effectiveTransitionNodeType: RenderedTransitionType
 ): Omit<UiContractsRenderEdge, "from" | "to"> {
   const fromType = graphNodesById.get(edge.from)?.type;
-  const label = formatTransitionLabel(edge);
+  const label = formatTransitionLabel(edge, graphNodesById);
 
   if (fromType === "State") {
     return effectiveTransitionNodeType === "State"
@@ -285,14 +306,14 @@ function buildStateGroupLabelLines(
   ];
 }
 
-function collectSiblingOrderChains(rootItems: UiContractsRootItem[], supportingLane?: UiContractsSupportingLane): string[][] {
+function collectSiblingOrderChains(rootItems: UiContractsRootItem[]): string[][] {
   const chains: string[][] = [];
 
   const collectNestedChains = (
-    items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem>
+    items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
   ): void => {
     for (const item of items) {
-      if (item.kind === "view_state") {
+      if (item.kind === "view_state" || item.kind === "component") {
         const childAnchors = item.childItems.map((child) => child.orderAnchorId);
         if (childAnchors.length > 0) {
           chains.push([item.nodeId, ...childAnchors]);
@@ -317,7 +338,7 @@ function collectSiblingOrderChains(rootItems: UiContractsRootItem[], supportingL
       continue;
     }
 
-    if (item.kind === "view_state") {
+    if (item.kind === "view_state" || item.kind === "component") {
       const childAnchors = item.childItems.map((child) => child.orderAnchorId);
       if (childAnchors.length > 0) {
         chains.push([item.nodeId, ...childAnchors]);
@@ -326,22 +347,12 @@ function collectSiblingOrderChains(rootItems: UiContractsRootItem[], supportingL
       continue;
     }
 
-    if (item.kind === "state_group" && item.nodeIds.length > 1) {
+    if ((item.kind === "state_group" || item.kind === "support_group") && item.nodeIds.length > 1) {
       chains.push(item.nodeIds);
     }
   }
 
-  if (supportingLane) {
-    const laneChain = [supportingLane.headerId, ...supportingLane.nodeIds];
-    if (laneChain.length > 1) {
-      chains.push(laneChain);
-    }
-  }
-
   const rootAnchors = rootItems.map((item) => item.orderAnchorId);
-  if (supportingLane) {
-    rootAnchors.push(supportingLane.headerId);
-  }
   if (rootAnchors.length > 1) {
     chains.unshift(rootAnchors);
   }
@@ -362,7 +373,7 @@ export function buildUiContractsRenderModel(
   const effectiveTransitionNodeType = getEffectiveTransitionNodeType(projection, metadata);
   const showSecondaryStateGroups =
     effectiveTransitionNodeType === "State" || displayOptions.showSecondaryStateGroupsWhenPrimaryViewState;
-  const showSupportingContractLane =
+  const showSupportingContracts =
     effectiveTransitionNodeType === "State" || displayOptions.showSupportingContractLaneWhenPrimaryViewState;
 
   const viewStateIds = new Set(
@@ -372,6 +383,11 @@ export function buildUiContractsRenderModel(
     projection.nodes.filter((node) => node.type === "Component").map((node) => node.id)
   );
   const placeIds = new Set(projection.nodes.filter((node) => node.type === "Place").map((node) => node.id));
+  const supportNodeIds = new Set(
+    projection.nodes
+      .filter((node) => node.type === "Event" || node.type === "DataEntity" || node.type === "SystemAction")
+      .map((node) => node.id)
+  );
 
   const childViewStatesByPlaceId = new Map<string, string[]>();
   const childComponentsByParentId = new Map<string, string[]>();
@@ -412,6 +428,56 @@ export function buildUiContractsRenderModel(
     showSecondaryStateGroups ? secondaryStateGroups.flatMap((group) => group.node_ids) : []
   );
 
+  const structuralSupportOwnersByTargetId = new Map<string, Set<string>>();
+  const addStructuralSupportOwner = (targetId: string, ownerId: string): void => {
+    const owners = structuralSupportOwnersByTargetId.get(targetId) ?? new Set<string>();
+    owners.add(ownerId);
+    structuralSupportOwnersByTargetId.set(targetId, owners);
+  };
+
+  for (const edge of projection.edges) {
+    if (!supportNodeIds.has(edge.to)) {
+      continue;
+    }
+
+    if (edge.type === "BINDS_TO" && componentIds.has(edge.from)) {
+      addStructuralSupportOwner(edge.to, edge.from);
+      continue;
+    }
+
+    if (edge.type === "DEPENDS_ON" && (componentIds.has(edge.from) || viewStateIds.has(edge.from))) {
+      addStructuralSupportOwner(edge.to, edge.from);
+      continue;
+    }
+
+    if (edge.type === "EMITS" && (componentIds.has(edge.from) || viewStateIds.has(edge.from))) {
+      addStructuralSupportOwner(edge.to, edge.from);
+    }
+  }
+
+  const ownedSupportNodeIdsByOwnerId = new Map<string, string[]>();
+  const sharedSupportNodeIds: string[] = [];
+  for (const nodeId of orderNodeIds(graph, supportNodeIds)) {
+    const owners = [...(structuralSupportOwnersByTargetId.get(nodeId) ?? new Set<string>())];
+    if (owners.length === 1) {
+      const ownedNodeIds = ownedSupportNodeIdsByOwnerId.get(owners[0]) ?? [];
+      ownedNodeIds.push(nodeId);
+      ownedSupportNodeIdsByOwnerId.set(owners[0], ownedNodeIds);
+      continue;
+    }
+
+    sharedSupportNodeIds.push(nodeId);
+  }
+
+  const buildOwnedSupportItems = (ownerId: string): UiContractsLeafNodeItem[] =>
+    showSupportingContracts
+      ? (ownedSupportNodeIdsByOwnerId.get(ownerId) ?? []).map((nodeId) => ({
+          kind: "node",
+          nodeId,
+          orderAnchorId: nodeId
+        }))
+      : [];
+
   const buildStateGroup = (group: ProjectionNodeGroup): UiContractsStateGroupItem => ({
     kind: "state_group",
     id: group.id,
@@ -425,7 +491,19 @@ export function buildUiContractsRenderModel(
   const buildScopedGroupItems = (scopeId: string): UiContractsStateGroupItem[] =>
     showSecondaryStateGroups ? (stateGroupsByScopeId.get(scopeId) ?? []).map((group) => buildStateGroup(group)) : [];
 
-  const buildComponentItems = (parentId: string): Array<UiContractsComponentItem | UiContractsStateGroupItem> => {
+  const buildComponentItem = (componentId: string): UiContractsComponentItem => ({
+    kind: "component",
+    id: componentId,
+    nodeId: componentId,
+    childItems: [
+      ...buildScopedGroupItems(componentId),
+      ...buildOwnedSupportItems(componentId)
+    ],
+    orderAnchorId: componentId,
+    style: "rounded"
+  });
+
+  const buildComponentItems = (parentId: string): UiContractsComponentItem[] => {
     const orderedComponentIds = getSourceOrderedStructuralStream(
       graph,
       parentId,
@@ -433,21 +511,17 @@ export function buildUiContractsRenderModel(
       childComponentsByParentId.get(parentId) ?? []
     ).map((edge) => edge.to);
 
-    return orderedComponentIds.flatMap((componentId) => [
-      {
-        kind: "component" as const,
-        nodeId: componentId,
-        orderAnchorId: componentId
-      },
-      ...buildScopedGroupItems(componentId)
-    ]);
+    return orderedComponentIds.map((componentId) => buildComponentItem(componentId));
   };
 
   const buildViewStateItem = (viewStateId: string): UiContractsViewStateItem => ({
     kind: "view_state",
     id: viewStateId,
     nodeId: viewStateId,
-    childItems: buildComponentItems(viewStateId),
+    childItems: [
+      ...buildComponentItems(viewStateId),
+      ...buildOwnedSupportItems(viewStateId)
+    ],
     orderAnchorId: viewStateId,
     style: "rounded,dashed"
   });
@@ -475,12 +549,7 @@ export function buildUiContractsRenderModel(
       }
 
       if (componentIds.has(childId)) {
-        childItems.push({
-          kind: "component",
-          nodeId: childId,
-          orderAnchorId: childId
-        });
-        childItems.push(...buildScopedGroupItems(childId));
+        childItems.push(buildComponentItem(childId));
       }
     }
 
@@ -518,14 +587,7 @@ export function buildUiContractsRenderModel(
     rootItemsByAnchorId.set(viewStateId, [item]);
   }
   for (const componentId of rootComponentIds) {
-    rootItemsByAnchorId.set(componentId, [
-      {
-        kind: "component",
-        nodeId: componentId,
-        orderAnchorId: componentId
-      },
-      ...buildScopedGroupItems(componentId)
-    ]);
+    rootItemsByAnchorId.set(componentId, [buildComponentItem(componentId)]);
   }
 
   const orderedRootNodeIds = orderNodeIds(graph, [...rootItemsByAnchorId.keys()]);
@@ -535,26 +597,28 @@ export function buildUiContractsRenderModel(
 
   const groupedStateScopeIds = new Set(stateGroupsByScopeId.keys());
   const renderedStateScopeIds = new Set<string>();
-  for (const rootItem of rootItems) {
-    if (rootItem.kind === "place") {
-      renderedStateScopeIds.add(rootItem.id);
-      for (const childItem of rootItem.childItems) {
-        if (childItem.kind === "component") {
-          renderedStateScopeIds.add(childItem.nodeId);
-        }
-        if (childItem.kind === "view_state") {
-          for (const nestedItem of childItem.childItems) {
-            if (nestedItem.kind === "component") {
-              renderedStateScopeIds.add(nestedItem.nodeId);
-            }
-          }
-        }
+  const collectRenderedStateScopes = (
+    items: Array<UiContractsRootItem | UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
+  ): void => {
+    for (const item of items) {
+      if (item.kind === "place") {
+        renderedStateScopeIds.add(item.id);
+        collectRenderedStateScopes(item.childItems);
+        continue;
+      }
+
+      if (item.kind === "view_state") {
+        collectRenderedStateScopes(item.childItems);
+        continue;
+      }
+
+      if (item.kind === "component") {
+        renderedStateScopeIds.add(item.nodeId);
+        collectRenderedStateScopes(item.childItems);
       }
     }
-    if (rootItem.kind === "component") {
-      renderedStateScopeIds.add(rootItem.nodeId);
-    }
-  }
+  };
+  collectRenderedStateScopes(rootItems);
 
   for (const scopeId of [...groupedStateScopeIds].sort((left, right) => left.localeCompare(right))) {
     if (renderedStateScopeIds.has(scopeId)) {
@@ -562,21 +626,16 @@ export function buildUiContractsRenderModel(
     }
     rootItems.push(...buildScopedGroupItems(scopeId));
   }
-
-  const externalNodeIds = orderNodeIds(
-    graph,
-    projection.nodes
-      .filter((node) => node.type === "Event" || node.type === "DataEntity" || node.type === "SystemAction")
-      .map((node) => node.id)
-  );
-  const supportingLane =
-    showSupportingContractLane && externalNodeIds.length > 0
-      ? {
-          headerId: "supporting_contracts__header",
-          label: "Supporting Contracts",
-          nodeIds: externalNodeIds
-        }
-      : undefined;
+  if (showSupportingContracts && sharedSupportNodeIds.length > 0) {
+    rootItems.push({
+      kind: "support_group",
+      id: "shared_supporting_contracts",
+      labelLines: ["Shared Supporting Contracts"],
+      nodeIds: [...sharedSupportNodeIds],
+      orderAnchorId: sharedSupportNodeIds[0],
+      style: "rounded"
+    });
+  }
   const hiddenNodeIds = new Set<string>();
   if (!showSecondaryStateGroups) {
     for (const group of secondaryStateGroups) {
@@ -585,8 +644,8 @@ export function buildUiContractsRenderModel(
       }
     }
   }
-  if (!showSupportingContractLane) {
-    for (const nodeId of externalNodeIds) {
+  if (!showSupportingContracts) {
+    for (const nodeId of supportNodeIds) {
       hiddenNodeIds.add(nodeId);
     }
   }
@@ -644,7 +703,6 @@ export function buildUiContractsRenderModel(
     rootItems,
     nodes,
     edges,
-    siblingOrderChains: collectSiblingOrderChains(rootItems, supportingLane),
-    supportingLane
+    siblingOrderChains: collectSiblingOrderChains(rootItems)
   };
 }

@@ -21,13 +21,14 @@ import type {
   ServiceBlueprintRenderNode
 } from "./serviceBlueprintRenderModel.js";
 import type {
+  UiContractsLeafNodeItem,
   UiContractsComponentItem,
   UiContractsPlaceItem,
   UiContractsRenderModel,
   UiContractsRenderNode,
   UiContractsRootItem,
   UiContractsStateGroupItem,
-  UiContractsSupportingLane,
+  UiContractsSupportingGroupItem,
   UiContractsViewStateItem
 } from "./uiContractsRenderModel.js";
 
@@ -401,6 +402,17 @@ function renderUiContractsComponent(
   indent: string,
   lines: string[]
 ): void {
+  if (item.childItems.length > 0) {
+    lines.push(`${indent}subgraph ${mermaidId(`${item.id}__group`)}[" "]`);
+    const node = nodesById.get(item.nodeId);
+    if (node) {
+      renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
+    }
+    renderUiContractsItems(item.childItems, nodesById, dashedNodeIds, `${indent}  `, lines);
+    lines.push(`${indent}end`);
+    return;
+  }
+
   const node = nodesById.get(item.nodeId);
   if (!node) {
     return;
@@ -463,8 +475,28 @@ function renderUiContractsPlace(
   lines.push(`${indent}end`);
 }
 
+function renderUiContractsSupportGroup(
+  item: UiContractsSupportingGroupItem,
+  nodesById: Map<string, UiContractsRenderNode>,
+  dashedNodeIds: string[],
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${mermaidId(item.id)}["${formatLabelLines(item.labelLines)}"]`);
+  for (const nodeId of item.nodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
+  }
+  lines.push(`${indent}end`);
+}
+
 function renderUiContractsItems(
-  items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem> | UiContractsRootItem[],
+  items:
+    | Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
+    | UiContractsRootItem[],
   nodesById: Map<string, UiContractsRenderNode>,
   dashedNodeIds: string[],
   indent: string,
@@ -486,26 +518,21 @@ function renderUiContractsItems(
       continue;
     }
 
-    renderUiContractsComponent(item, nodesById, dashedNodeIds, indent, lines);
-  }
-}
-
-function renderUiContractsSupportingLane(
-  lane: UiContractsSupportingLane,
-  nodesById: Map<string, UiContractsRenderNode>,
-  dashedNodeIds: string[],
-  indent: string,
-  lines: string[]
-): void {
-  lines.push(`${indent}subgraph ${mermaidId(lane.headerId)}["${escapeLabel(lane.label)}"]`);
-  for (const nodeId of lane.nodeIds) {
-    const node = nodesById.get(nodeId);
-    if (!node) {
+    if (item.kind === "support_group") {
+      renderUiContractsSupportGroup(item, nodesById, dashedNodeIds, indent, lines);
       continue;
     }
-    renderUiContractsNode(node, dashedNodeIds, `${indent}  `, lines);
+
+    if (item.kind === "node") {
+      const node = nodesById.get(item.nodeId);
+      if (node) {
+        renderUiContractsNode(node, dashedNodeIds, indent, lines);
+      }
+      continue;
+    }
+
+    renderUiContractsComponent(item, nodesById, dashedNodeIds, indent, lines);
   }
-  lines.push(`${indent}end`);
 }
 
 export function renderUiContractsMermaid(model: UiContractsRenderModel): string {
@@ -515,9 +542,6 @@ export function renderUiContractsMermaid(model: UiContractsRenderModel): string 
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
 
   renderUiContractsItems(model.rootItems, nodesById, dashedNodeIds, "  ", lines);
-  if (model.supportingLane) {
-    renderUiContractsSupportingLane(model.supportingLane, nodesById, dashedNodeIds, "  ", lines);
-  }
 
   for (const edge of model.edges) {
     pushEdge(lines, registry, edge.from, edge.to, edge.label, mapMermaidEdgeStyle(edge.style));

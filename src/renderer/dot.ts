@@ -21,13 +21,14 @@ import type {
   ServiceBlueprintRenderNode
 } from "./serviceBlueprintRenderModel.js";
 import type {
+  UiContractsLeafNodeItem,
   UiContractsComponentItem,
   UiContractsPlaceItem,
   UiContractsRenderModel,
   UiContractsRenderNode,
   UiContractsRootItem,
   UiContractsStateGroupItem,
-  UiContractsSupportingLane,
+  UiContractsSupportingGroupItem,
   UiContractsViewStateItem
 } from "./uiContractsRenderModel.js";
 import type { DotPreviewStyle } from "./previewStyle.js";
@@ -386,6 +387,23 @@ function renderUiContractsComponent(
   indent: string,
   lines: string[]
 ): void {
+  if (item.childItems.length > 0) {
+    lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
+    lines.push(
+      `${indent}  graph${formatAttributes({
+        label: "",
+        style: item.style
+      })};`
+    );
+    const node = nodesById.get(item.nodeId);
+    if (node) {
+      renderUiContractsNode(node, `${indent}  `, lines);
+    }
+    renderUiContractsItems(item.childItems, nodesById, `${indent}  `, lines);
+    lines.push(`${indent}}`);
+    return;
+  }
+
   const node = nodesById.get(item.nodeId);
   if (!node) {
     return;
@@ -446,6 +464,29 @@ function renderUiContractsViewState(
   lines.push(`${indent}}`);
 }
 
+function renderUiContractsSupportGroup(
+  item: UiContractsSupportingGroupItem,
+  nodesById: Map<string, UiContractsRenderNode>,
+  indent: string,
+  lines: string[]
+): void {
+  lines.push(`${indent}subgraph ${clusterId("cluster", item.id)} {`);
+  lines.push(
+    `${indent}  graph${formatAttributes({
+      label: formatMultilineLabel(item.labelLines),
+      style: item.style
+    })};`
+  );
+  for (const nodeId of item.nodeIds) {
+    const node = nodesById.get(nodeId);
+    if (!node) {
+      continue;
+    }
+    renderUiContractsNode(node, `${indent}  `, lines);
+  }
+  lines.push(`${indent}}`);
+}
+
 function renderUiContractsPlace(
   item: UiContractsPlaceItem,
   nodesById: Map<string, UiContractsRenderNode>,
@@ -473,7 +514,9 @@ function renderUiContractsPlace(
 }
 
 function renderUiContractsItems(
-  items: Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem> | UiContractsRootItem[],
+  items:
+    | Array<UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem>
+    | UiContractsRootItem[],
   nodesById: Map<string, UiContractsRenderNode>,
   indent: string,
   lines: string[]
@@ -494,27 +537,21 @@ function renderUiContractsItems(
       continue;
     }
 
-    renderUiContractsComponent(item, nodesById, indent, lines);
-  }
-}
-
-function renderUiContractsSupportingLane(
-  lane: UiContractsSupportingLane,
-  nodesById: Map<string, UiContractsRenderNode>,
-  indent: string,
-  lines: string[]
-): void {
-  lines.push(`${indent}subgraph ${clusterId("rank", lane.headerId)} {`);
-  lines.push(`${indent}  rank=same;`);
-  lines.push(`${indent}  ${quoteId(lane.headerId)} [shape=plaintext, label="${escapeLabel(lane.label)}"];`);
-  for (const nodeId of lane.nodeIds) {
-    const node = nodesById.get(nodeId);
-    if (!node) {
+    if (item.kind === "support_group") {
+      renderUiContractsSupportGroup(item, nodesById, indent, lines);
       continue;
     }
-    renderUiContractsNode(node, `${indent}  `, lines);
+
+    if (item.kind === "node") {
+      const node = nodesById.get(item.nodeId);
+      if (node) {
+        renderUiContractsNode(node, indent, lines);
+      }
+      continue;
+    }
+
+    renderUiContractsComponent(item, nodesById, indent, lines);
   }
-  lines.push(`${indent}}`);
 }
 
 export function renderUiContractsDot(model: UiContractsRenderModel, style?: DotPreviewStyle): string {
@@ -529,9 +566,6 @@ export function renderUiContractsDot(model: UiContractsRenderModel, style?: DotP
   ];
 
   renderUiContractsItems(model.rootItems, nodesById, "  ", lines);
-  if (model.supportingLane) {
-    renderUiContractsSupportingLane(model.supportingLane, nodesById, "  ", lines);
-  }
 
   renderInvisibleOrderChains(model.siblingOrderChains, lines, new Set(model.edges.map((edge) => `${edge.from}->${edge.to}`)));
 

@@ -256,6 +256,8 @@ Authoring guidance for the newly renderable views:
 - branch labels follow bundle precedence: guard text first, then event id, then the target node name when neither guard nor event is present
 - `ui_contracts` treats `ViewState` transitions as the primary UI-contract graph when any `ViewState` nodes are present
 - use `State` for scoped secondary detail on a `Place` or `Component`, and set `State.scope_id` to that owning node id
+- component-scoped `State` detail renders inside the owning component rather than as a sibling of that component
+- supporting `Event`, `SystemAction`, and `DataEntity` nodes render inside their unique structural owner in `ui_contracts`; only ambiguous or ownerless support nodes fall back to a shared root-level group
 - if a UI contract slice has no `ViewState` nodes, renderers fall back to the grouped `State` transitions as the effective primary graph instead of inventing a separate state-machine subsystem
 
 ## Adding A New Validation Primitive

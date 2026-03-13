@@ -57,4 +57,72 @@ describe("renderSource dot", () => {
     expect(result.text).toContain('label="Billing Editing\\ndata: PaymentMethod"');
     expect(result.text).not.toContain('label="Billing Editing\\\\ndata: PaymentMethod"');
   });
+
+  it("renders component containers only when ui_contracts detail is visible", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const simple = renderSource(input, bundle, {
+      viewId: "ui_contracts",
+      format: "dot",
+      profileId: "simple"
+    });
+    const permissive = renderSource(input, bundle, {
+      viewId: "ui_contracts",
+      format: "dot",
+      profileId: "permissive"
+    });
+
+    expect(simple.text).not.toContain("subgraph cluster_C_010 {");
+    expect(permissive.text).toContain("subgraph cluster_C_010 {");
+  });
+
+  it("uses event names in ui_contracts transition labels when event annotations resolve", async () => {
+    const bundle = await loadBundle(manifestPath);
+
+    for (const exampleName of ["place_viewstate_transition", "ui_state_fallback"]) {
+      const examplePath = path.join(repoRoot, "bundle/v0.1/examples", `${exampleName}.sdd`);
+      const input = {
+        path: examplePath,
+        text: await readFile(examplePath, "utf8")
+      };
+
+      const result = renderSource(input, bundle, {
+        viewId: "ui_contracts",
+        format: "dot",
+        profileId: "permissive"
+      });
+
+      expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+      expect(result.text).not.toContain("[E-010]");
+      expect(result.text).not.toContain("[E-060]");
+    }
+
+    const placeExamplePath = path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd");
+    const placeResult = renderSource({
+      path: placeExamplePath,
+      text: await readFile(placeExamplePath, "utf8")
+    }, bundle, {
+      viewId: "ui_contracts",
+      format: "dot",
+      profileId: "permissive"
+    });
+    expect(placeResult.text).toContain("[Submit] {payment_valid} / SA-010");
+
+    const fallbackExamplePath = path.join(repoRoot, "bundle/v0.1/examples/ui_state_fallback.sdd");
+    const fallbackResult = renderSource({
+      path: fallbackExamplePath,
+      text: await readFile(fallbackExamplePath, "utf8")
+    }, bundle, {
+      viewId: "ui_contracts",
+      format: "dot",
+      profileId: "permissive"
+    });
+    expect(fallbackResult.text).toContain("[Submit Review] / SA-060");
+    expect(fallbackResult.text).toContain("[Submit Review] {draft_ready}");
+  });
 });

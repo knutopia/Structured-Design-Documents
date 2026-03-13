@@ -22,5 +22,5 @@ digraph ui_contracts {
   "P-010__anchor" -> "VS-010a" [style=invis, weight=100];
   "VS-010b" -> "C-010" [style=invis, weight=100];
   "VS-010a" -> "C-011" [style=invis, weight=100];
-  "VS-010a" -> "VS-010b" [label="[E-010] {payment_valid} / SA-010", style="solid", weight=4];
+  "VS-010a" -> "VS-010b" [label="[Submit] {payment_valid} / SA-010", style="solid", weight=4];
 }
