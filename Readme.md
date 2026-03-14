@@ -38,6 +38,22 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 - UI Contract:
   UI composition and state changes, per Place (and optionally per component)
 
+## Orientation
+
+Original document outlining the idea: 
+[Structured Design Artifacts to Advance the Software Product Design Practice]("initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md")
+
+Core concepts:
+- [Initial Concepts 1: a 6-Diagram Suite v0.1]("initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md")
+- [Initial Concepts 2: One-page Schema v0.1]("initial_concepts/Initial Concepts2 One-page Schema v0dot1.md")
+
+Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
+
+Other folders:
+
+- [definitions/](definitions/) (/vXXX) houses definitions and rationale for version XXX (currently version 0.1)
+- [bundle/](bundle/) (/vXXX) houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
+
 ## Again, Why?
 
 - To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly-outdated insulated documents with something that integrates well with overall product process and with future tooling. 
@@ -55,22 +71,6 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 - To give LLMs, graphical UI design tools, and diagramming tools a way to interact, API-driven, with a future product design structure source of truth.
 
 ...in other words, to elevate product creation by properly integrating product design.
-
-## Orientation
-
-Original document outlining the idea: 
-[Structured Design Artifacts to Advance the Software Product Design Practice]("initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md")
-
-Core concepts:
-- [Initial Concepts 1: a 6-Diagram Suite v0.1]("initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md")
-- [Initial Concepts 2: One-page Schema v0.1]("initial_concepts/Initial Concepts2 One-page Schema v0dot1.md")
-
-Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
-
-Other folders:
-
-- [definitions/](definitions/) (/vXXX) houses definitions and rationale for version XXX (currently version 0.1)
-- [bundle/](bundle/) (/vXXX) houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
 
 ## Current State
 
