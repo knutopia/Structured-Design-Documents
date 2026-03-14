@@ -40,13 +40,19 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 
 ## Again, Why?
 
--To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly-outdated insulated documents with something that integrates well with overall product process and with future tooling. 
--To give any product person with a little coding talent a means to create and edit design diagrams (scary to designers but practical)
--To give product managers and their tools the opportunity to link product issues (epics, stories, tasks, bugs) to specific destinations (places, screens etc) in a "live" product design document
--To give LLMs the capability to read design diagrams without burning tokens on deciphering blobs of pixels
--To give LLMs the capability to express product design as output (instead of just creating pixel blobs and code blobs)
--To give graphical UI design tools and diagramming tools the means to maintain semantic content
--To give LLMs, graphical UI design tools, and diagramming tools a way to interact, API-driven, with a future product design structure source of truth.
+- To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly-outdated insulated documents with something that integrates well with overall product process and with future tooling. 
+
+- To give any product person with a little coding talent a means to create and edit design diagrams (scary to designers but practical)
+
+- To give product managers and their tools the opportunity to link product issues (epics, stories, tasks, bugs) to specific destinations (places, screens etc) in a "live" product design document
+
+- To give LLMs the capability to read design diagrams without burning tokens on deciphering blobs of pixels
+
+- To give LLMs the capability to express product design as output (instead of just creating pixel blobs and code blobs)
+
+- To give graphical UI design tools and diagramming tools the means to maintain semantic content
+
+- To give LLMs, graphical UI design tools, and diagramming tools a way to interact, API-driven, with a future product design structure source of truth.
 
 ...in other words, to elevate product creation by properly integrating product design.
 
