@@ -40,12 +40,13 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 
 ## Orientation
 
-Original document outlining the idea: 
-[Structured Design Artifacts to Advance the Software Product Design Practice]("initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md")
+Original document outlining the idea:
+[Structured Design Artifacts to Advance the Software Product Design Practice](<initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md>)
 
 Core concepts:
-- [`Initial Concepts 1: a 6-Diagram Suite v0.1`](`initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md`)
-- [`Initial Concepts 2: One-page Schema v0.1`](`initial_concepts/Initial Concepts2 One-page Schema v0dot1.md`)
+- [Initial Concepts 1: a 6-Diagram Suite v0.1](<initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
+- [Initial Concepts 2: One-page Schema v0.1](<initial_concepts/Initial Concepts2 One-page Schema v0dot1.md>)
+
 
 Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
