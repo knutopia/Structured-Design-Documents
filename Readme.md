@@ -1,4 +1,4 @@
-# Readme: Structured Design Documents Project Overview
+# Readme: Structured Design Documents
 
 This project aims to define a way to capture structure in product design diagrams, using a simple language. 
 
