@@ -4,7 +4,9 @@ This project aims to define a way to capture structure in product design diagram
 
 That makes such diagrams easy to author, to maintain and to integrate with, by people (including non-designers) and by LLMs. 
 
-This in turn might give product design (the discipline and the domain of knowledge) a "seat at the table" in the spec-to-prompt-to-code product creation loop.
+This in turn gives LLMS (and design-aware people in the product loop) a way to work with product design in an expressive way, instead of product design as something buried in code. 
+
+Structured design documents also will integrate well, on a node-level, with concerns of the larger product creation / product management process ("think jira-issue-to-screen" mapping.)
 
 ## A simple, Well-Stuctured Language to Express Product Design
 
@@ -39,12 +41,14 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 ## Again, Why?
 
 -To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly-outdated insulated documents with something that integrates well with overall product process and with future tooling. 
--To give any product person with a little "coding talent" a means to create and edit design diagrams
+-To give any product person with a little coding talent a means to create and edit design diagrams (scary to designers but practical)
 -To give product managers and their tools the opportunity to link product issues (epics, stories, tasks, bugs) to specific destinations (places, screens etc) in a "live" product design document
 -To give LLMs the capability to read design diagrams without burning tokens on deciphering blobs of pixels
 -To give LLMs the capability to express product design as output (instead of just creating pixel blobs and code blobs)
 -To give graphical UI design tools and diagramming tools the means to maintain semantic content
 -To give LLMs, graphical UI design tools, and diagramming tools a way to interact, API-driven, with a future product design structure source of truth.
+
+...in other words, to elevate product creation by properly integrating product design.
 
 ## Orientation
 
