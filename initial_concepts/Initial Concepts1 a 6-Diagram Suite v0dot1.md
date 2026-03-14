@@ -262,9 +262,16 @@ When a branching Step carries both event and guard annotations, use the guard te
 
 ---
 
-# 6) Diagram: Place Contract (UI composition + state model view)
+# 6) Diagram: UI Contract (UI composition + state model view)
 
 This is your “from below” foundation. Do it **per Place** (and optionally per key component).
+
+Authoring Guidance:
+
+- Use `ViewState` for within-place UI mode changes such as tabs, wizards, or success/error screens. In `ui_contracts`, that transition graph is primary whenever `ViewState` nodes are present.
+- Use `State` only when you need scoped state-machine detail on a `Place` or `Component`, such as a form lifecycle or panel-local dirty/ready/submitting states.
+- Set `State.scope_id` to the owning `Place` or `Component` id. A place-scoped state describes container-wide behavior; a component-scoped state describes local widget behavior.
+- If a slice has no `ViewState` nodes, `ui_contracts` falls back to the grouped `State` transitions as the effective primary graph rather than rendering an empty view-state layer.
 
 ## 6A) ViewState map (within a Place)
 

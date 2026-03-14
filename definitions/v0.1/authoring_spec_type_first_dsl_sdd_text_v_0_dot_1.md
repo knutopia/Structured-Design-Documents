@@ -198,6 +198,23 @@ When a rendered view treats one or more relationship types as **hierarchy edges*
 - Nesting placement of `+` blocks does NOT define sibling order. Only explicit hierarchy edges do.
 - `PRECEDES` and `TRANSITIONS_TO` remain the source of flow/state ordering; they are not replaced by hierarchy-edge source order.
 
+In other words, as an author of SDD,
+
+- If you want sibling order in a structural view, write `CONTAINS` and `COMPOSED_OF` lines in that order.
+- Do not rely on nested `+` block placement for ordering; nesting groups authoring context only.
+- Use `PRECEDES` and `TRANSITIONS_TO` for actual flow/state order, not for sibling arrangement.
+
+Example: to show the places "Potatoes Overview" followed by "Potato Details" followed by "Create New Potato", all within the area "Everything Potato", use the following nesting sequence:
+
+```text
+Area A-200 "Everything Potatoes"
+  CONTAINS P-210 "Potatoes Overview"
+  CONTAINS P-220 "Potato Details"
+  CONTAINS P-230 "Create New Potato"
+END
+```
+
+A hierarchy-aware renderer will honor that sequence when generating the diagram, even though compiled JSON remains canonically sorted for stable diffs.
 ---
 
 ## 7. Deterministic compilation to JSON (canonical form)
@@ -326,8 +343,18 @@ END
 ---
 
 ## 10. Suggested next increment (v0.2)
+  
+### 10.1 Replace Failed Rendering System (first priority)
 
-- Formal EBNF grammar.
+Mermaid and Graphviz are now proven to be inappropriate rendering platforms.
+Codes is now proven to be an inappropriate development partner to make decisions about graphing.
+
+The way forward is to move to another rendering solution that
+-creates grid-based layouts
+-allows for rule-based placement of elements in grids
+-with some level of decision making, machine- or human-driven, to steer the layout of diagrams.
+
+### 10.2 Language Improvements (second priority)
 - Optional `IMPLIES` nesting rules. Context: v0.1 treats nesting (`+`) as a pure authoring affordance. In practice, authors almost always intend a relationship when they nest (e.g., a `Place` that “contains” nested `ViewState`s, or a `Place` that “composes” nested `Component`s). An opt-in `IMPLIES` mechanism lets tooling auto-add the most likely edge (e.g., nesting a `ViewState` under a `Place` implies `CONTAINS`) to reduce repetitive edge authoring—while still allowing explicit overrides (e.g., suppress the implied edge or choose `COMPOSED_OF` instead of `CONTAINS`).
 - Standardized `Event` references (require `E-*` nodes). Context: v0.1 allows `[<Event>]` to be either a freeform label or an `Event` node ID. Standardizing on explicit `Event` nodes improves referential integrity, reuse (the same event used across multiple transitions), and downstream tooling (instrumentation mapping, analytics taxonomies, test generation). A practical compromise for authoring is to allow tooling to auto-materialize missing `E-*` nodes from inline labels (with a warning) in “permissive” mode, and require explicit `E-*` references in “strict” mode.
 - Strict endpoint contracts (allowed type pairs per relationship).

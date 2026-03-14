@@ -1,125 +1,73 @@
-# Readme: Structured Design Documentation Project Overview
+# Readme: Structured Design Documents Project Overview
 
-This project aims to 
--define a way to capture structure in interaction design diagrams, 
--provide ways to produce and consume such "Structured Design Documents" as part of (software-) product creation work,
--enabling people (designers and other product-creation participants) and LLMs to meaningfully harness interaction design as a contributing domain in product creation.
+This project aims to define a way to capture structure in product design diagrams, using a simple language. 
 
-For orientation, read the documents
+That makes such diagrams easy to author, to maintain and to integrate with, by people (including non-designers) and by LLMs. 
 
-- file:"///initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md"
-- file:"///initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md"
-- file:"///initial_concepts/Initial Concepts2 One-page Schema v0dot1.md"
+This in turn might give product design (the discipline and the domain of knowledge) a "seat at the table" in the spec-to-prompt-to-code product creation loop.
+
+## A simple, Well-Stuctured Language to Express Product Design
+
+This project defines SDD-Text: a compact DSL (Domain-Specific Language) for authoring a typed product/design graph. SDD-text is easy read and to write, for people and for LLMs.
+
+Besides the language definition, the project also contains a basic toolchain to compile, validate and render SDD-Text diagrams.
+
+SDD-Text is defined as a spec bundle that is meant to evolve. It compiles deterministically into canonical JSON for validation (e.g., JSON Schema). This makes SDD-Text usable by software development tooling.
+
+SDD-Text can create a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. Different aspects of the unified graph can then be shown (rendered) as diagrams.
+
+## Diagram Types (Initial Targets)
+
+- Outcome-Opportunity Map:
+  Product intent, explicit and traceable: what the product solves, and how to know it works.
+
+- Journey Map:
+  Experience intent from above: stages and steps, needs, friction, moments of truth.
+
+- Service Blueprint:
+  Connects user experience steps to the layers needed to realize it.
+
+- IA (Information Architecture) / Place Map:
+  Source of truth for product structure: what exists, where it lives, and how it connects.
+
+- Scenario Flow:
+  Step-by-step UI-level activities (but *without* collapsing the world into screens)
+
+- UI Contract:
+  UI composition and state changes, per Place (and optionally per component)
+
+## Again, Why?
+
+-To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly-outdated insulated documents with something that integrates well with overall product process and with future tooling. 
+-To give any product person with a little "coding talent" a means to create and edit design diagrams
+-To give product managers and their tools the opportunity to link product issues (epics, stories, tasks, bugs) to specific destinations (places, screens etc) in a "live" product design document
+-To give LLMs the capability to read design diagrams without burning tokens on deciphering blobs of pixels
+-To give LLMs the capability to express product design as output (instead of just creating pixel blobs and code blobs)
+-To give graphical UI design tools and diagramming tools the means to maintain semantic content
+-To give LLMs, graphical UI design tools, and diagramming tools a way to interact, API-driven, with a future product design structure source of truth.
+
+## Orientation
+
+Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice]("initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md")
+
+Core concepts:
+- [Initial Concepts 1: a 6-Diagram Suite v0.1]("initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md")
+- [Initial Concepts 2: One-page Schema v0.1]("initial_concepts/Initial Concepts2 One-page Schema v0dot1.md")
 
 Other folders:
 
-- file:///definitions (/vXXX) houses definitions and rationale for version XXX (currently version 0.1)
-- file:///bundle (/vXXX) houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
+- [definitions/](definitions/) (/vXXX) houses definitions and rationale for version XXX (currently version 0.1)
+- [bundle/](bundle/) (/vXXX) houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
 
-## v0.1 Source-of-Truth Policy
+## Current State
 
-- Files in `bundle/v0.1/` are the machine-readable source of truth for tools.
-- Markdown files in `definitions/v0.1/` remains explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
+-Solid v0.1 SDDT spec.
+-Completed initial compile-validate-render pipeline
 
-## Current Project Goals
-
-### Replace failed SVG / DOT with better quality rendering output
-
-While we have achieved rendering Grapviz & Mermaid rendering coverage for all diagram types, most output is so badly mangled that it is unusable as a visual communications artifact. Experimenting with potential improvements, it is clear that the root cause is a combination of a) severe limitations of DOT and MMD capabilities and b) blindness of Codex the authoring LLM to anything related to design quality.
-
-To move forward, we will re-implement rendering with a new, more grid-based layout system, since designs that produce usable diagrams do rely on grids.
-
-## Project Achievements
-
-### 1. [DONE] Create a well-defined set of specs for version 0.1, in folder bundle/v0.1/
-See 
-file:"///docs/Done/[Done] bundle_creation_guidance_sdd_text_v_0_dot_1.md"
-file:"///docs/bundle_v0_1_extraction_sync_report.md"
-
-### 2. [DONE] Created initial Compiler, Validator, Renderer toolchain
-See:
-file:\\\docs\toolchain
-file:\\\docs\bundle_v0_1_extraction_sync_report.md
-
-The initial TypeScript toolchain is now in place at repo root as package `sdd-toolchain`.
-
-Current scope:
-
-- one shared engine with three CLI commands: `compile`, `validate`, and `render`
-- spec-driven parsing, compilation, validation, projection, and multi-view rendering against `bundle/v0.1/`
-- renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
-- render targets: DOT and Mermaid for all renderable views
-- preview path: `sdd show` for DOT-backed SVG/PNG artifacts
-- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`, where `simple_profile` omits lower-priority overlays including place route/access/entry-point fields
-
-Contributor reference docs:
-
-- `docs/toolchain/architecture.md`
-- `docs/toolchain/decisions.md`
-- `docs/toolchain/development.md`
-- `docs/toolchain/deferred_items.md`
-
-Common commands:
-
-- `pnpm build`
-- `pnpm test`
-- `pnpm run check:graphviz`
-- `pnpm run generate:rendered-examples`
-- `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
-- `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
-- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
-- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid`
-- `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
-- `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
-
-
-
-## Project Guidance
-
-### Structural Ordering Guidance
-
-For humans and LLMs authoring diagrams:
-
-- If you want sibling order in a structural view, write `CONTAINS` and `COMPOSED_OF` lines in that order.
-- Do not rely on nested `+` block placement for ordering; nesting groups authoring context only.
-- Use `PRECEDES` and `TRANSITIONS_TO` for actual flow/state order, not for sibling arrangement.
-
-Example:
-
-```text
-Area A-200 "Projections"
-  CONTAINS P-210 "Overview"
-  CONTAINS P-220 "Projection"
-  CONTAINS P-230 "Create New Projection"
-END
-```
-
-In hierarchy-aware renderers, the expected sibling order is `Overview`, then `Projection`, then `Create New Projection`, even though compiled JSON remains canonically sorted for stable diffs.
-
-### UI Contracts Authoring Guidance
-
-- Use `ViewState` for within-place UI mode changes such as tabs, wizards, or success/error screens. In `ui_contracts`, that transition graph is primary whenever `ViewState` nodes are present.
-- Use `State` only when you need scoped state-machine detail on a `Place` or `Component`, such as a form lifecycle or panel-local dirty/ready/submitting states.
-- Set `State.scope_id` to the owning `Place` or `Component` id. A place-scoped state describes container-wide behavior; a component-scoped state describes local widget behavior.
-- If a slice has no `ViewState` nodes, `ui_contracts` falls back to the grouped `State` transitions as the effective primary graph rather than rendering an empty view-state layer.
-
-### Local Tooling Prerequisites
-
-Required local tooling:
-
-- Node.js 22 LTS
-- `pnpm`
-
-Optional local tooling:
-
-- Graphviz, when you want to preview or post-process `.dot` output or use editor integrations that shell out to `dot`
-
-Install Graphviz in the environment where this workspace runs:
-
-- VS Code Remote - WSL, WSL/Ubuntu, or native Linux: install Graphviz inside that Linux environment, typically with `sudo apt install graphviz`
-- Native Windows-side execution: install Graphviz on Windows and ensure `dot.exe` is on `PATH`
-
-Verify Graphviz setup with:
-
-- `pnpm run check:graphviz`
-- `dot -V`
+Needs work:
+-Rendering output is poor. 
+  -Need to replace graphviz with more suitabe engine
+  -Need to invest time in rendering templates / rules per diagram typr
+-Examples are mostly low-quality
+  -Need to invest time in example authoring
+  

@@ -6,9 +6,15 @@
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 
+## Sat 3-15-26
+
+-Cleaned up Readme.md
+-Added content to AGENTS.md
+
 ## Fri 3-14-26
 
 -attempted more ui_contracts rendering variations. Graphviz is a failure.
+-attempted Context7 MCP install, failed
 
 ## Thu 3-12-26
 
