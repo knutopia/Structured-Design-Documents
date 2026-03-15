@@ -1,6 +1,6 @@
 # Specific Layout Concerns per Diagram Type
 
-This is supporting information for evolving the renderer migration.
+This is supporting information for the renderer migration.
 
 Different diagrams have different specific layout needs that the rendering engine must address. Here are some of them.
 

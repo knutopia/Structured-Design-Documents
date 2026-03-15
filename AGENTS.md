@@ -45,6 +45,8 @@ Verify Graphviz setup with:
 
 ### Replace failed SVG / DOT with better quality rendering output
 
+Execute `docs/renderer_migration_master_plan.md`!
+
 While we have achieved rendering Grapviz & Mermaid rendering coverage for all diagram types, most output is so badly mangled that it is unusable as a visual communications artifact. Experimenting with potential improvements, it is clear that the root cause is a combination of a) severe limitations of DOT and MMD capabilities and b) blindness of Codex the authoring LLM to anything related to design quality.
 
 To move forward, we will re-implement rendering with a new, more grid-based layout system, since designs that produce usable diagrams do rely on grids.

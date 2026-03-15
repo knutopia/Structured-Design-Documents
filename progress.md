@@ -6,6 +6,10 @@
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 
+## Sun 3-16-26
+
+-Preparing renderer migration to elkjs / generic
+
 ## Sat 3-15-26
 
 -Cleaned up Readme.md
