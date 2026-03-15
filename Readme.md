@@ -4,7 +4,7 @@ This project aims to define a way to capture structure in product design diagram
 
 That makes such diagrams easy to author, to maintain and to integrate with, by people (including non-designers) and by LLMs. 
 
-This in turn gives LLMS (and design-aware people in the product loop) a way to work with product design in an expressive way, making product design information a first-class citizen in LLM workflows.
+This in turn gives LLMs (and design-aware people in the product loop) a way to work with product design in an expressive way, making product design information a first-class citizen in LLM workflows.
 
 Structured design documents also will integrate well, on a node-level, with concerns of the larger product creation / product management process (think "jira-issue-to-screen" mapping.)
 
