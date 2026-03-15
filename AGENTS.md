@@ -7,9 +7,11 @@
 - If a shell still does not see `node` or `pnpm`, use:
   `source ~/.nvm/nvm.sh && <command>`
 
-### Optional Local Tooling: Graphviz for Previews
+### Optional Local Tooling: Graphviz for Current Legacy Previews
 
-Graphviz is not required to compile and validate SDD content, but it is needed to preview or post-process `.dot` output, as well as `.svg` and `.png` output (which depend on `.dot`.)
+Graphviz is not required to compile and validate SDD content. It is currently needed for legacy preview flows that turn `.dot` output into `.svg` and `.png` artifacts.
+
+During the renderer migration, treat this as a current legacy workflow detail, not as an architectural requirement for all future SVG or PNG rendering paths.
 
 Install Graphviz in the environment where this workspace runs:
 
@@ -24,7 +26,7 @@ Verify Graphviz setup with:
 ## v0.1 Source-of-Truth Policy
 
 - Files in `bundle/v0.1/` are the machine-readable source of truth for tools.
-- Markdown files in `definitions/v0.1/` remains explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
+- Markdown files in `definitions/v0.1/` remain explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
 
 ## Test And CLI Commands
 
@@ -41,63 +43,30 @@ Verify Graphviz setup with:
 - In this WSL setup, default temp resolution may point at `/mnt/c/TEMP`, which can fail with `EACCES`.
 - `TMPDIR=/tmp` avoids that problem and should be the default for test runs.
 
-## Current Project Goals
+## Current Project Goal
 
-### Replace failed SVG / DOT with better quality rendering output
+Current renderer migration work should follow:
 
-Execute `docs/renderer_migration_master_plan.md`!
+- `docs/renderer_migration_master_plan.md`
+- `docs/toolchain/renderer_migration_guidance.md`
+- `docs/Specific Layout Concerns per Diagram Type.md`
 
-While we have achieved rendering Grapviz & Mermaid rendering coverage for all diagram types, most output is so badly mangled that it is unusable as a visual communications artifact. Experimenting with potential improvements, it is clear that the root cause is a combination of a) severe limitations of DOT and MMD capabilities and b) blindness of Codex the authoring LLM to anything related to design quality.
+The current migration focus is proving the staged SVG renderer architecture on `ia_place_map` and `ui_contracts` before expanding to the remaining diagram types.
 
-To move forward, we will re-implement rendering with a new, more grid-based layout system, since designs that produce usable diagrams do rely on grids.
+## Renderer Migration Constraints
 
-## Project Achievements
+- Treat `docs/renderer_migration_master_plan.md` as a sequential plan. Work on one explicitly selected step at a time, and do not start later steps early.
+- Preserve parser, compiler, validator, and projection behavior unless the selected migration step explicitly says otherwise.
+- Keep projection as the semantic boundary between graph semantics and rendering technology. Do not push layout, routing, text wrapping, or SVG structure into parsing, compilation, validation, or projection.
+- Keep the staged renderer pipeline explicit: `projection -> RendererScene -> MeasuredScene -> PositionedScene -> SVG -> PNG`.
+- Keep renderer-owned scene contracts backend-agnostic. Do not store final coordinates, final line breaks, ELK JSON, DOT text, Mermaid text, or SVG strings in `RendererScene`.
+- Treat DOT text rendering, Mermaid text rendering, and Graphviz-backed preview rendering as `LEGACY` renderer paths during the migration.
+- Preserve `LEGACY` outputs unless the selected migration step explicitly changes that behavior.
+- Make SVG the first-class artifact backend for the new staged path. Keep PNG as rasterization derived from SVG rather than a separate scene renderer.
+- Treat text measurement, text wrapping, width-band policy, overflow policy, theme tokens, layout strategies, routing, and renderer diagnostics as shared renderer infrastructure. If a view exposes a gap, fix the shared layer rather than patching the view with one-off logic.
+- Use ELK only as a macro-layout strategy for eligible scene subgraphs. ELK must not become the renderer scene format or the source of truth for text composition.
+- Limit new staged-renderer proof work to `ia_place_map` and `ui_contracts` until the shared architecture is proven.
+- Preserve deterministic behavior: stable ordering, vendored font usage, canonical `LF` newlines for stored text artifacts, deterministic measurement and layout, deterministic SVG serialization, and explicit renderer diagnostics for degraded output.
+- Each migration step should land code, tests, and any required documentation updates, not just design notes.
 
-### 1. [DONE] Created a well-defined set of specs for version 0.1, in folder bundle/v0.1/
-See 
-`docs/Done/[Done] bundle_creation_guidance_sdd_text_v_0_dot_1.md`
-`docs/bundle_v0_1_extraction_sync_report.md`
-
-### 2. [DONE] Created initial Compiler, Validator, Renderer toolchain
-
-See:
-`docs\toolchain`
-`docs/Done/[Done] bundle_v0_1_extraction_sync_report.md`
-
-The initial TypeScript toolchain is now in place at repo root as package `sdd-toolchain`.
-
-Current scope:
-
-- one shared engine with three CLI commands: `compile`, `validate`, and `render`
-
-- spec-driven parsing, compilation, validation, projection, and multi-view rendering against `bundle/v0.1/`
-  - machine-readable extraction target for source parsing behavior: `bundle/v0.1/core/syntax.yaml`.
-    This document is intentionally compatible with the EBNF grammar. For extraction into `core/syntax.yaml`, it provides human-oriented operational clarifications such as default version behavior, fixed edge-element order, and canonical compilation expectations; the grammar remains primary for formal parse structure and lexical precision.
-
-- renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
-
-- render targets: DOT, Mermaid, SVG, PNG for all renderable views
-
-- preview path: `sdd show` for DOT-backed SVG/PNG artifacts
-
-- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`, where `simple_profile` omits lower-priority overlays including place route/access/entry-point fields
-
-Contributor reference docs:
-
-- `docs/toolchain/architecture.md`
-- `docs/toolchain/decisions.md`
-- `docs/toolchain/development.md`
-- `docs/toolchain/deferred_items.md`
-
-Common commands:
-
-- `pnpm build`
-- `pnpm test`
-- `pnpm run check:graphviz`
-- `pnpm run generate:rendered-examples`
-- `pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd`
-- `pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd`
-- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot`
-- `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid`
-- `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
-- `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
+For completed project milestones and legacy toolchain background, see `docs/Done/project_achievements.md`.
