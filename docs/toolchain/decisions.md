@@ -20,16 +20,21 @@
 
 The TypeScript code should not contain hardcoded checks for specific node or edge semantics when a bundle rule already expresses that behavior.
 
-## Minimal Internal Forms
+## Internal Forms
 
-No extra generalized IR was added.
-
-The implementation keeps:
+The public semantic pipeline stays lean:
 
 - a parse document for syntax-aware compilation and diagnostics
-- a compiled graph for validation and rendering
+- a compiled graph for validation
+- an internal projection envelope for rendering
 
-This is enough for v0.1 and avoids building abstraction layers before they are needed.
+The renderer migration now adds renderer-owned internal forms under `src/renderer/staged/`:
+
+- `RendererScene`
+- `MeasuredScene`
+- `PositionedScene`
+
+These forms are internal-only implementation contracts. They do not change the compiled graph contract, the projection contract, or current CLI outputs, and they exist in parallel with the legacy DOT, Mermaid, and Graphviz-backed preview paths until view migration is ready.
 
 ## String-First Property Policy
 

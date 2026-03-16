@@ -228,7 +228,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/compiler/`: graph construction, canonicalization, schema validation
 - `src/validator/`: generic rule execution and profile validation
 - `src/projector/`: internal multi-view projection registry, shared helpers, and per-view builders
-- `src/renderer/`: render capability registry, view render models, emitters, legacy preview backend plumbing, and preview style resolution
+- `src/renderer/`: render capability registry, view render models, emitters, staged renderer contracts, legacy preview backend plumbing, and preview style resolution
 - `src/examples/`: curated render-pair discovery plus rendered-corpus generation helpers
 - `src/diagnostics/`: structured diagnostics and formatting
 - `src/cli/`: command wiring
@@ -275,6 +275,13 @@ Authoring guidance for the newly renderable views:
 3. Register format support through the render capability registry in `src/renderer/viewRenderers.ts`.
 4. Keep all view semantics in projection and render-model construction, not in the emitter.
 5. Add stable golden tests for the new text output.
+
+## Staged Renderer Notes
+
+- `src/renderer/staged/` holds the internal `RendererScene`, `MeasuredScene`, and `PositionedScene` contracts plus the current stub pipeline for those stages.
+- This staged pipeline is intentionally separate from `renderSource`, `viewRenderers.ts`, and the CLI preview registry until a later migration step moves specific views onto it.
+- `tests/rendererStageSnapshotHarness.ts` is the shared helper for deterministic staged-renderer JSON comparisons.
+- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and are implementation-contract fixtures, not bundle source-of-truth artifacts.
 
 ## Adding A New View
 

@@ -29,6 +29,12 @@ The engine runs this pipeline:
 5. internal `projectView`
 6. `renderSource`
 
+The staged renderer migration also introduces an internal-only renderer pipeline after projection for future SVG work:
+
+1. `RendererScene`
+2. `MeasuredScene`
+3. `PositionedScene`
+
 Each stage has a narrow responsibility:
 
 - `loadBundle` resolves the v0.1 manifest and loads vocab, syntax, schema, contracts, profiles, and views.
@@ -40,14 +46,19 @@ Each stage has a narrow responsibility:
 
 ## Internal Forms
 
-Lean v0.1 keeps only two meaningful internal forms:
+Lean v0.1 still keeps the public-facing semantic spine small:
 
 - a parse document with source spans
 - a canonical compiled graph with non-serialized author-order metadata attached for renderer use
+- a renderer-facing projection envelope used as the semantic input to rendering
 
-Projection is treated as a renderer-facing internal artifact, not a public CLI contract in v0.1.
+The renderer migration now adds internal staged-renderer forms under `src/renderer/staged/`:
 
-This keeps the implementation small while still separating syntax, semantics, and rendering.
+- `RendererScene`, which maps projection semantics onto renderer-owned primitives without coordinates
+- `MeasuredScene`, which records intrinsic content sizing and wrapped text without global placement
+- `PositionedScene`, which records absolute placement and routed connector geometry for backend painting
+
+These scene forms are internal contracts only. They are not new CLI outputs, they do not change bundle or projection contracts, and the current DOT, Mermaid, and Graphviz-backed preview flows remain the active execution path.
 
 ## View Extension Pattern
 
@@ -94,6 +105,8 @@ The engine owns:
 
 The CLI owns preview artifact generation on top of those text renderers through a backend-aware preview layer.
 
+The engine also owns the internal staged-renderer contracts and snapshot-tested stub pipeline that future SVG work will build on, while keeping that pipeline separate from the current legacy renderer path until view migration begins.
+
 The only preview backend currently wired in v0.1 is the `legacy_graphviz_preview` backend, which owns:
 
 - Graphviz-driven DOT-to-SVG layout
@@ -135,6 +148,7 @@ Preview artifacts build on top of a backend-aware preview layer rather than expa
 - `sdd show` resolves preview output through a backend registry; today that registry selects `legacy_graphviz_preview`, which turns DOT into SVG with the vendored Public Sans webfont available for layout and then embeds that webfont into the output SVG
 - `sdd show --format png` currently uses that same legacy backend to rasterize the SVG with the vendored Public Sans desktop font so PNG export does not depend on user-installed fonts
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
+- the staged renderer contracts exist in parallel as internal-only scene, measurement, and positioning forms and are snapshot-tested separately from the legacy artifact corpus
 
 ## Determinism
 
@@ -181,6 +195,7 @@ The test suite uses the bundle examples as conformance fixtures.
 - validation tests assert zero errors for current manifest examples under `recommended`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
 - render tests assert stable DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
+- staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON under `tests/goldens/renderer-stages/` without changing current legacy outputs
 - corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile `.dot`, `.mmd`, `.svg`, and `.png` artifacts
 - negative fixtures cover syntax, compile, and validation failures
 

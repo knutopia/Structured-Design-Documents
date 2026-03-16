@@ -1,0 +1,30 @@
+[
+  {
+    "phase": "scene",
+    "code": "renderer.scene.unsupported_primitive",
+    "severity": "error",
+    "message": "Unsupported primitive combination",
+    "targetId": "node-9"
+  },
+  {
+    "phase": "layout",
+    "code": "renderer.layout.stubbed",
+    "severity": "warn",
+    "message": "Layout fallback",
+    "targetId": "root"
+  },
+  {
+    "phase": "measure",
+    "code": "renderer.measure.stubbed",
+    "severity": "info",
+    "message": "Measurement fallback",
+    "targetId": "node-2"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.stubbed",
+    "severity": "info",
+    "message": "Routing fallback",
+    "targetId": "edge-2"
+  }
+]

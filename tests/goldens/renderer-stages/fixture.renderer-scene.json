@@ -1,0 +1,228 @@
+{
+  "viewId": "ia_place_map",
+  "profileId": "recommended",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "ia_place_map"
+    ],
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 24,
+      "crossAlignment": "start"
+    },
+    "chrome": {
+      "padding": {
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
+      },
+      "gutter": 24
+    },
+    "ports": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "area-A-001",
+        "role": "top_level_area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12,
+          "crossAlignment": "stretch"
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 28
+        },
+        "ports": [
+          {
+            "id": "south",
+            "role": "primary_out",
+            "side": "south"
+          }
+        ],
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-001",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "place",
+              "top_place"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band"
+            },
+            "content": [
+              {
+                "id": "title",
+                "kind": "text",
+                "text": "Checkout Billing",
+                "textStyleRole": "title",
+                "priority": "primary"
+              },
+              {
+                "id": "subtitle",
+                "kind": "metadata",
+                "text": "/checkout/billing",
+                "textStyleRole": "subtitle",
+                "priority": "secondary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "east",
+                "role": "primary_out",
+                "side": "east"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "P-002",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "place",
+              "nested_place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "title",
+                "kind": "text",
+                "text": "Checkout Review",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "west",
+                "role": "primary_in",
+                "side": "west"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "node",
+        "id": "P-003",
+        "role": "place",
+        "primitive": "card",
+        "classes": [
+          "place",
+          "top_level"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "overflowPolicy": {
+          "kind": "clamp_with_ellipsis",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "title",
+            "kind": "text",
+            "text": "Confirmation",
+            "textStyleRole": "title",
+            "priority": "primary"
+          },
+          {
+            "id": "badge",
+            "kind": "badge_text",
+            "text": "auth",
+            "textStyleRole": "badge",
+            "priority": "secondary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "west",
+            "role": "primary_in",
+            "side": "west"
+          }
+        ]
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "nav-001",
+      "role": "navigation",
+      "classes": [
+        "primary_path"
+      ],
+      "from": {
+        "itemId": "P-001",
+        "portId": "east"
+      },
+      "to": {
+        "itemId": "P-003",
+        "portId": "west"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "avoidNodeBoxes": true,
+        "preferAxis": "horizontal",
+        "sourcePortRole": "primary_out",
+        "targetPortRole": "primary_in"
+      },
+      "label": {
+        "text": "Primary path",
+        "textStyleRole": "edge_label"
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "phase": "scene",
+      "code": "renderer.scene.synthetic_fixture",
+      "severity": "info",
+      "message": "Synthetic fixture scene for staged renderer snapshot coverage.",
+      "targetId": "root"
+    }
+  ]
+}
