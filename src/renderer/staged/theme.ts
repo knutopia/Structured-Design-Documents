@@ -174,10 +174,10 @@ const defaultTheme: RendererTheme = {
       secondaryGap: 8,
       minHeight: 36,
       portInset: 10,
+      badgePadding: defaultBoxSpacing(4, 8, 4, 8),
       textRule: {
-        allowedKinds: ["text", "metadata"],
-        movableSecondaryKinds: ["metadata"],
-        maxBlocks: 2
+        allowedKinds: ["text", "badge_text", "metadata"],
+        movableSecondaryKinds: ["badge_text", "metadata"]
       }
     },
     badge: {

@@ -391,7 +391,8 @@ function measureContainerHeaderContent(
       const resolvedRole = resolveTextRoleForBlock(block.kind, block.textStyleRole);
       const style = getTextStyle(context, container.id, resolvedRole);
       const wrapped = wrapTextBlock(block.text, Number.MAX_SAFE_INTEGER, style, context.measureText);
-      return createMeasuredBlock(block, "primary", wrapped, Number.MAX_SAFE_INTEGER);
+      const badgePadding = block.kind === "badge_text" ? headerTheme.badgePadding : undefined;
+      return createMeasuredBlock(block, "primary", wrapped, Number.MAX_SAFE_INTEGER, badgePadding);
     });
   const contentWidth = measuredBlocks.length > 0 ? Math.max(...measuredBlocks.map((block) => block.width)) : 0;
   const layoutWidth = roundMetric(headerPadding.left + contentWidth + headerPadding.right);

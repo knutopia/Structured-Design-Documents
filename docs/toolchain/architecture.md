@@ -178,6 +178,8 @@ The per-view render models keep semantics centralized:
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter
 
+Inside the staged renderer, `ui_contracts` now also has an internal scene-builder scaffolding path for structural SVG work and renderer-stage goldens, but that path is still internal in this migration phase and does not change the default preview backend yet.
+
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only DOT or Mermaid text
@@ -185,7 +187,7 @@ Preview artifacts build on top of a backend-aware preview layer rather than expa
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
 - `sdd show --dot-out` automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs, and `ia_place_map` now exercises that staged path through the normal preview workflow and committed corpus
+- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs; `ia_place_map` now exercises that staged path through the normal preview workflow and committed corpus, while `ui_contracts` currently exercises it through internal staged scene tests only
 
 ## Determinism
 
