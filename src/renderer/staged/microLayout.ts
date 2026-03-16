@@ -59,6 +59,12 @@ interface NodeLayoutResult {
   widthBand: WidthBand;
 }
 
+interface ContainerHeaderLayoutResult {
+  blocks: MeasuredContentBlock[];
+  width: number;
+  height: number;
+}
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
@@ -353,6 +359,55 @@ function positionMeasuredBlocks(
     width,
     height,
     widthBand: "narrow"
+  };
+}
+
+function measureContainerHeaderContent(
+  context: MeasureContext,
+  container: SceneContainer,
+  chrome: ChromeSpec
+): ContainerHeaderLayoutResult {
+  const headerContent = container.headerContent ?? [];
+  if (headerContent.length === 0) {
+    return {
+      blocks: [],
+      width: 0,
+      height: 0
+    };
+  }
+
+  context.diagnostics.push(...validatePrimitiveContent(container.id, "header", headerContent, context.theme));
+  const headerTheme = getNodePrimitiveTheme(context.theme, "header");
+  const headerPadding = {
+    top: headerTheme.padding.top,
+    right: chrome.padding.right,
+    bottom: headerTheme.padding.bottom,
+    left: chrome.padding.left
+  };
+  const measuredBlocks = headerContent
+    .filter((block) => headerTheme.textRule.allowedKinds.includes(block.kind))
+    .slice(0, headerTheme.textRule.maxBlocks ?? Number.POSITIVE_INFINITY)
+    .map((block) => {
+      const resolvedRole = resolveTextRoleForBlock(block.kind, block.textStyleRole);
+      const style = getTextStyle(context, container.id, resolvedRole);
+      const wrapped = wrapTextBlock(block.text, Number.MAX_SAFE_INTEGER, style, context.measureText);
+      return createMeasuredBlock(block, "primary", wrapped, Number.MAX_SAFE_INTEGER);
+    });
+  const contentWidth = measuredBlocks.length > 0 ? Math.max(...measuredBlocks.map((block) => block.width)) : 0;
+  const layoutWidth = roundMetric(headerPadding.left + contentWidth + headerPadding.right);
+  const positioned = positionMeasuredBlocks(
+    measuredBlocks,
+    headerPadding,
+    headerTheme.blockGap,
+    headerTheme.secondaryGap,
+    headerTheme.minHeight,
+    layoutWidth
+  );
+
+  return {
+    blocks: positioned.blocks,
+    width: layoutWidth,
+    height: positioned.height
   };
 }
 
@@ -769,6 +824,9 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     chrome.headerBandHeight = containerTheme.defaultHeaderBandHeight;
   }
 
+  const headerLayout = measureContainerHeaderContent(context, container, chrome);
+  chrome.headerBandHeight = Math.max(chrome.headerBandHeight ?? 0, headerLayout.height);
+
   return {
     kind: "container",
     id: container.id,
@@ -777,6 +835,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     classes: [...container.classes],
     layout: { ...container.layout },
     chrome,
+    headerContent: headerLayout.blocks,
     children,
     ports: measureContainerPorts(context, container),
     width: 0,

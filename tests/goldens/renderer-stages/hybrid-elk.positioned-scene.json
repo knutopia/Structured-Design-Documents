@@ -26,6 +26,7 @@
       "gutter": 16,
       "headerBandHeight": 0
     },
+    "headerContent": [],
     "children": [
       {
         "kind": "container",
@@ -50,6 +51,7 @@
           "gutter": 12,
           "headerBandHeight": 28
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",

@@ -8,14 +8,12 @@ Different diagrams have different specific layout needs that the rendering engin
 
 - horizontal top level layout with clean vertical alignment
 - no content visually ABOVE top level nodes
-- MIX of Place and Area on top level
-
-- Vertical layout for Area that CONTAINS lower-level Place nodes
-    - Within Places in Area, there often is a "Top" Place followed (in ordered CONTAINS statements in source) by other Place nodes (that are often navigation targets from the "Top" Place). This hierarchy within should by default be shown by a horizontal offset / "indent" (to the right) of the lower-level Place nodes, compared to the "Top" Place.
-        -This "Top-to-lower" Place hierarchy may occur on multiple levels. Indent should solve for this.
-- A top-level Place nodes may be followed (in source) by another Place node (without explicit containment) that should show "underneath" (vertically but with indentation.)
-    -This "Top-to-lower" Place hierarchy may occur on multiple levels. Indent should solve for this.
--Differentiating between node types should be possible (label or simple visual convention) across rendering profiles (even in "Simple".)
+- mixed top-level `Place` and `Area` handling
+- vertical layout for an `Area` that contains lower-level `Place` nodes
+- within an `Area`, consecutive sibling `Place` items in ordered `CONTAINS` source order should render as a recursive top-to-lower place chain with rightward indentation
+- the same source-order chaining rule applies at top level: consecutive sibling `Place` items render as an implicit lower-level place chain until a non-`Place` sibling boundary breaks the chain
+- this top-to-lower place hierarchy may occur on multiple levels, so indentation must support recursive chaining
+- differentiating between node types should be possible across rendering profiles, even in `simple`
 
 ## ui_contracts
 

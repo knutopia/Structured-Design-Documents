@@ -33,27 +33,36 @@ export function buildFixtureScene(): RendererScene {
           id: "area-A-001",
           role: "top_level_area",
           primitive: "cluster",
-          classes: ["area"],
-          layout: {
-            strategy: "stack",
-            direction: "vertical",
-            gap: 12,
-            crossAlignment: "stretch"
+        classes: ["area"],
+        layout: {
+          strategy: "stack",
+          direction: "vertical",
+          gap: 12,
+          crossAlignment: "stretch"
+        },
+        chrome: {
+          padding: {
+            top: 12,
+            right: 12,
+            bottom: 12,
+            left: 12
           },
-          chrome: {
-            padding: {
-              top: 12,
-              right: 12,
-              bottom: 12,
-              left: 12
-            },
-            gutter: 12,
-            headerBandHeight: 28
-          },
-          ports: [
-            {
-              id: "south",
-              role: "primary_out",
+          gutter: 12,
+          headerBandHeight: 28
+        },
+        headerContent: [
+          {
+            id: "area-title",
+            kind: "text",
+            text: "Checkout Area",
+            textStyleRole: "title",
+            priority: "primary"
+          }
+        ],
+        ports: [
+          {
+            id: "south",
+            role: "primary_out",
               side: "south"
             }
           ],

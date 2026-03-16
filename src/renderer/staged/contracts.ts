@@ -106,6 +106,7 @@ export interface SceneContainer {
   classes: string[];
   layout: LayoutIntent;
   chrome: ChromeSpec;
+  headerContent?: ContentBlock[];
   children: SceneItem[];
   ports: PortSpec[];
 }
@@ -181,6 +182,7 @@ export interface MeasuredContainer {
   classes: string[];
   layout: LayoutIntent;
   chrome: ChromeSpec;
+  headerContent: MeasuredContentBlock[];
   children: MeasuredItem[];
   ports: MeasuredPort[];
   width: number;
@@ -253,6 +255,7 @@ export interface PositionedContainer {
   classes: string[];
   layout: LayoutIntent;
   chrome: ChromeSpec;
+  headerContent: MeasuredContentBlock[];
   children: PositionedItem[];
   ports: MeasuredPort[];
   x: number;

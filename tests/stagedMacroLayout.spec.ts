@@ -210,12 +210,12 @@ describe("staged macro-layout", () => {
     expect(area.x).toBe(16);
     expect(area.y).toBe(16);
     expect(area.width).toBe(248);
-    expect(area.height).toBe(178);
-    expect(area.children[0]?.y).toBe(56);
+    expect(area.height).toBe(190);
+    expect(area.children[0]?.y).toBe(68);
     expect(area.ports[0]).toEqual(expect.objectContaining({
       id: "south",
       x: 124,
-      y: 178
+      y: 190
     }));
 
     const edge = result.positionedScene.edges[0];
@@ -223,7 +223,7 @@ describe("staged macro-layout", () => {
       itemId: "P-001",
       portId: "east",
       x: 252,
-      y: 89
+      y: 101
     });
     expect(edge?.to).toEqual({
       itemId: "P-003",
@@ -233,7 +233,7 @@ describe("staged macro-layout", () => {
     });
     expect(edge?.route.points).toHaveLength(4);
     expect(edge?.label?.x).toBeCloseTo(228.222, 3);
-    expect(edge?.label?.y).toBeCloseTo(59.5, 3);
+    expect(edge?.label?.y).toBeCloseTo(65.5, 3);
     expect(result.positionedScene.diagnostics).toContainEqual(expect.objectContaining({
       code: "renderer.routing.preference_fallback",
       targetId: "nav-001"
@@ -617,6 +617,7 @@ describe("staged macro-layout", () => {
           gutter: 16,
           headerBandHeight: 0
         },
+        headerContent: [],
         ports: [],
         children: [
           {

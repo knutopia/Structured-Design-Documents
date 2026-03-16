@@ -27,6 +27,7 @@ export function buildPositionedSvgFixture(themeId = "default"): PositionedScene 
         gutter: 24,
         headerBandHeight: 0
       },
+      headerContent: [],
       children: [
         {
           kind: "container",
@@ -50,6 +51,21 @@ export function buildPositionedSvgFixture(themeId = "default"): PositionedScene 
             gutter: 12,
             headerBandHeight: 28
           },
+          headerContent: [
+            {
+              id: "area-title",
+              kind: "text",
+              textStyleRole: "title",
+              lines: ["Checkout Area"],
+              x: 12,
+              y: 10,
+              width: 110.832,
+              height: 20,
+              lineHeight: 20,
+              region: "primary",
+              priority: "primary"
+            }
+          ],
           children: [
             {
               kind: "node",

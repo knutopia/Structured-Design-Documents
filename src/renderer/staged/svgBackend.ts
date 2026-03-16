@@ -354,6 +354,38 @@ function renderNodeLabels(
   return lines.join("\n");
 }
 
+function renderContainerLabels(
+  container: PositionedContainer,
+  diagnostics: RendererDiagnostic[],
+  theme: RendererTheme
+): string | undefined {
+  if (container.headerContent.length === 0) {
+    return undefined;
+  }
+
+  const classList = buildItemClassList("container", container.primitive, container.role, container.classes, "labels");
+  const lines = [
+    `<g class="${classList}" data-item-id="${escapeXml(container.id)}" data-role="${escapeXml(container.role)}">`
+  ];
+
+  for (const block of container.headerContent) {
+    const resolvedRole = resolveTextRoleForBlock(block.kind, block.textStyleRole);
+    const style = getTextStyleForBackend(theme, resolvedRole, container.id, diagnostics);
+    const markup = renderTextBlock(
+      container.x + block.x,
+      container.y + block.y,
+      block.lines,
+      style,
+      block.lineHeight,
+      buildTextClassList(resolvedRole, block.kind, block.region)
+    );
+    lines.push(...indentLines(markup, 2));
+  }
+
+  lines.push("</g>");
+  return lines.join("\n");
+}
+
 function collectPaintElements(
   item: PositionedItem,
   groups: PaintElementMap,
@@ -364,6 +396,11 @@ function collectPaintElements(
     const chrome = renderContainerChrome(item, diagnostics, theme);
     if (chrome) {
       groups.chrome.push(chrome);
+    }
+
+    const labels = renderContainerLabels(item, diagnostics, theme);
+    if (labels) {
+      groups.labels.push(labels);
     }
 
     for (const child of item.children) {

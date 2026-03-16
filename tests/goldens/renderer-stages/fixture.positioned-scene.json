@@ -27,6 +27,7 @@
       "gutter": 24,
       "headerBandHeight": 0
     },
+    "headerContent": [],
     "children": [
       {
         "kind": "container",
@@ -50,8 +51,25 @@
             "left": 12
           },
           "gutter": 12,
-          "headerBandHeight": 28
+          "headerBandHeight": 40
         },
+        "headerContent": [
+          {
+            "id": "area-title",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Checkout Area"
+            ],
+            "x": 12,
+            "y": 10,
+            "width": 110.224,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
         "children": [
           {
             "kind": "node",
@@ -120,7 +138,7 @@
               "status": "fits"
             },
             "x": 28,
-            "y": 56,
+            "y": 68,
             "width": 224,
             "height": 66
           },
@@ -174,7 +192,7 @@
               "status": "fits"
             },
             "x": 28,
-            "y": 134,
+            "y": 146,
             "width": 168,
             "height": 48
           }
@@ -185,13 +203,13 @@
             "role": "primary_out",
             "side": "south",
             "x": 124,
-            "y": 178
+            "y": 190
           }
         ],
         "x": 16,
         "y": 16,
         "width": 248,
-        "height": 178
+        "height": 190
       },
       {
         "kind": "node",
@@ -268,7 +286,7 @@
     "x": 0,
     "y": 0,
     "width": 528,
-    "height": 210
+    "height": 222
   },
   "edges": [
     {
@@ -281,7 +299,7 @@
         "itemId": "P-001",
         "portId": "east",
         "x": 252,
-        "y": 89
+        "y": 101
       },
       "to": {
         "itemId": "P-003",
@@ -294,11 +312,11 @@
         "points": [
           {
             "x": 252,
-            "y": 89
+            "y": 101
           },
           {
             "x": 270,
-            "y": 89
+            "y": 101
           },
           {
             "x": 270,
@@ -319,7 +337,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 228.222,
-        "y": 59.5
+        "y": 65.5
       },
       "paintGroup": "edges"
     }

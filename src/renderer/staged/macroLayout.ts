@@ -3,6 +3,7 @@ import type {
   EdgeMarkers,
   LayoutDirection,
   LayoutIntent,
+  MeasuredContentBlock,
   LayoutStrategy,
   MeasuredContainer,
   MeasuredEdge,
@@ -121,6 +122,13 @@ function cloneMeasuredPort(port: MeasuredPort): MeasuredPort {
   };
 }
 
+function cloneMeasuredContentBlock(block: MeasuredContentBlock): MeasuredContentBlock {
+  return {
+    ...block,
+    lines: [...block.lines]
+  };
+}
+
 function clonePositionedNode(node: MeasuredNode): PositionedNode {
   return {
     kind: "node",
@@ -131,10 +139,7 @@ function clonePositionedNode(node: MeasuredNode): PositionedNode {
     widthPolicy: cloneWidthPolicy(node.widthPolicy),
     widthBand: node.widthBand,
     overflowPolicy: cloneOverflowPolicy(node.overflowPolicy),
-    content: node.content.map((block) => ({
-      ...block,
-      lines: [...block.lines]
-    })),
+    content: node.content.map((block) => cloneMeasuredContentBlock(block)),
     ports: node.ports.map((port) => cloneMeasuredPort(port)),
     overflow: {
       ...node.overflow
@@ -163,6 +168,15 @@ function getCrossSize(item: PositionedItem, direction: LayoutDirection): number 
 
 function resolveGap(container: Pick<MeasuredContainer, "layout" | "chrome">): number {
   return roundMetric(container.layout.gap ?? container.chrome.gutter ?? 0);
+}
+
+function resolveContainerHeaderWidth(headerContent: MeasuredContentBlock[], chrome: ChromeSpec): number {
+  if (headerContent.length === 0) {
+    return 0;
+  }
+
+  const maxRight = Math.max(...headerContent.map((block) => block.x + block.width));
+  return roundMetric(maxRight + chrome.padding.right);
 }
 
 function createLayoutDiagnostic(code: string, message: string, targetId: string): RendererDiagnostic {
@@ -243,12 +257,14 @@ function resizeContainerToCell(
 }
 
 function offsetPositionedItem(item: PositionedItem, dx: number, dy: number): void {
+  const originalX = item.x;
+  const originalY = item.y;
   item.x = roundMetric(item.x + dx);
   item.y = roundMetric(item.y + dy);
 
   if (item.kind === "container") {
     for (const child of item.children) {
-      offsetPositionedItem(child, dx, dy);
+      offsetPositionedItem(child, dx + originalX, dy + originalY);
     }
   }
 }
@@ -595,6 +611,7 @@ async function layoutContainer(
   }
 
   const width = roundMetric(chrome.padding.left + layoutResult.contentWidth + chrome.padding.right);
+  const headerWidth = resolveContainerHeaderWidth(container.headerContent, chrome);
   const height = roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) + layoutResult.contentHeight + chrome.padding.bottom);
   const positioned: PositionedContainer = {
     kind: "container",
@@ -604,11 +621,12 @@ async function layoutContainer(
     classes: [...container.classes],
     layout: cloneLayoutIntent(container.layout),
     chrome,
+    headerContent: container.headerContent.map((block) => cloneMeasuredContentBlock(block)),
     children: positionedChildren,
     ports: container.ports.map((port) => cloneMeasuredPort(port)),
     x: 0,
     y: 0,
-    width,
+    width: Math.max(width, headerWidth),
     height
   };
 

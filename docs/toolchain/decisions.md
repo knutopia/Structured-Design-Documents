@@ -141,6 +141,7 @@ Rules:
 - sibling nodes under a structural parent follow the source order of hierarchy edge lines such as `CONTAINS` and `COMPOSED_OF`
 - nesting placement of `+` blocks does not define structural order
 - flow order remains the job of explicit ordering edges such as `PRECEDES` and `TRANSITIONS_TO`
+- for `ia_place_map`, a run of consecutive sibling `Place` nodes at one structural level is interpreted as a chained lower-level place sequence in that same source order, and the run ends when the next sibling is not a `Place`
 
 This keeps snapshots stable while still letting renderers honor meaningful source order. Reordering top-level declarations or hierarchy-edge lines is treated as an intentional semantic change to rendered structure.
 

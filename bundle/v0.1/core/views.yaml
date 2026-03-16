@@ -117,6 +117,8 @@ views:
       normative_defaults:
         - id: hierarchy_from_contains
           description: IA hierarchy is derived from CONTAINS.
+        - id: source_order_place_chains
+          description: At any rendered structural level, consecutive sibling Place nodes form an author-ordered lower-level place chain until a non-Place sibling boundary breaks the chain.
       renderer_defaults:
         node_annotations:
           subtitle_prop: route_or_key

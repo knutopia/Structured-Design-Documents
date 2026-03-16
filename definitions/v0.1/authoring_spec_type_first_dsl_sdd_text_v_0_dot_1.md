@@ -203,6 +203,7 @@ In other words, as an author of SDD,
 - If you want sibling order in a structural view, write `CONTAINS` and `COMPOSED_OF` lines in that order.
 - Do not rely on nested `+` block placement for ordering; nesting groups authoring context only.
 - Use `PRECEDES` and `TRANSITIONS_TO` for actual flow/state order, not for sibling arrangement.
+- In `ia_place_map`, consecutive sibling `Place` items at the same rendered structural level are interpreted as an author-ordered place chain until a non-`Place` sibling boundary breaks that chain.
 
 Example: to show the places "Potatoes Overview" followed by "Potato Details" followed by "Create New Potato", all within the area "Everything Potato", use the following nesting sequence:
 

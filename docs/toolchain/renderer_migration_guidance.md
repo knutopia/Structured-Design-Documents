@@ -102,6 +102,7 @@ Its job is to translate projection semantics into reusable visual primitives wit
 
 - stable element ids
 - hierarchical containers
+- optional container header content blocks for containers that render labeled chrome
 - primitive kinds such as `card`, `cluster`, `lane`, `header`, `badge`, `edge_label`
 - semantic class tags and theme roles
 - ordered child relationships
@@ -128,6 +129,7 @@ Its job is to resolve intrinsic content size before any global placement happens
 
 - exact node width and height
 - wrapped text lines per text block
+- measured container header blocks and any header-band height growth they require
 - resolved header, subtitle, badge, and metadata block sizes
 - container chrome size such as padding, label bar height, and internal gutters
 - resolved port offsets relative to local node bounds

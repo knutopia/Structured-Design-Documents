@@ -52,6 +52,15 @@
           "gutter": 12,
           "headerBandHeight": 28
         },
+        "headerContent": [
+          {
+            "id": "area-title",
+            "kind": "text",
+            "text": "Checkout Area",
+            "textStyleRole": "title",
+            "priority": "primary"
+          }
+        ],
         "ports": [
           {
             "id": "south",
