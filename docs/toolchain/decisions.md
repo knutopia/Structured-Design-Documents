@@ -48,7 +48,7 @@ The Step 4 backend boundary is also now explicit:
 - `PositionedScene` is the sole input to the staged SVG backend
 - staged SVG serialization is deterministic and emits shared paint-group wrappers, class hooks, and marker definitions
 - staged PNG output is derived from staged SVG through shared rasterization helpers
-- preview routing still remains on `legacy_graphviz_preview` until later migration steps prove a view-specific staged path end to end
+- preview routing is now view-specific: `ia_place_map` defaults to the staged preview backend while legacy Graphviz preview remains in parallel for DOT-capable workflows and for the remaining views
 
 The Step 5 macro-layout boundary is now explicit too:
 
@@ -122,7 +122,7 @@ This allows the bundle to define what matters in the view, while the renderer re
 
 Preview generation remains outside the core renderer contract:
 
-- preview routing is backend-aware, and the only current preview backend is `legacy_graphviz_preview`
+- preview routing is backend-aware, with `staged_ia_place_map_preview` now defaulting `ia_place_map` SVG/PNG previews and `legacy_graphviz_preview` still serving the remaining views plus explicit legacy `ia_place_map` preview requests
 - `legacy_graphviz_preview` currently uses Graphviz only for DOT-to-SVG layout
 - SVG and PNG artifacts are produced by the CLI preview pipeline
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed

@@ -256,6 +256,17 @@ function resizeContainerToCell(
   item.ports = resolveContainerPorts(item, context.theme);
 }
 
+function translatePositionedSubtree(item: PositionedItem, dx: number, dy: number): void {
+  item.x = roundMetric(item.x + dx);
+  item.y = roundMetric(item.y + dy);
+
+  if (item.kind === "container") {
+    for (const child of item.children) {
+      translatePositionedSubtree(child, dx, dy);
+    }
+  }
+}
+
 function offsetPositionedItem(item: PositionedItem, dx: number, dy: number): void {
   const originalX = item.x;
   const originalY = item.y;
@@ -263,8 +274,10 @@ function offsetPositionedItem(item: PositionedItem, dx: number, dy: number): voi
   item.y = roundMetric(item.y + dy);
 
   if (item.kind === "container") {
+    const childDx = roundMetric(dx + originalX);
+    const childDy = roundMetric(dy + originalY);
     for (const child of item.children) {
-      offsetPositionedItem(child, dx + originalX, dy + originalY);
+      translatePositionedSubtree(child, childDx, childDy);
     }
   }
 }

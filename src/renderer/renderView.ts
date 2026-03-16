@@ -7,7 +7,7 @@ import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import { getTextArtifactCapability, getViewTextRenderer } from "./viewRenderers.js";
 
-function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: RenderOptions): RenderResult {
+export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, options: RenderOptions): RenderResult {
   const projected = projectView(graph, bundle, options.viewId);
   const diagnostics = [...projected.diagnostics];
   if (!projected.projection) {
@@ -64,7 +64,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     };
   }
 
-  const rendered = renderCompiledGraph(compileResult.graph, bundle, options);
+  const rendered = renderCompiledGraphText(compileResult.graph, bundle, options);
   return {
     format: options.format,
     viewId: options.viewId,

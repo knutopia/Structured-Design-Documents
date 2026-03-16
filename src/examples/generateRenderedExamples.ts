@@ -2,14 +2,20 @@ import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
 import { loadBundle } from "../bundle/loadBundle.js";
-import { assertPreviewBackendAvailable, renderPreviewArtifact } from "../renderer/previewBackends.js";
+import { assertPreviewBackendAvailable } from "../renderer/previewBackends.js";
+import { renderSourcePreview } from "../renderer/previewWorkflow.js";
 import { renderSource } from "../renderer/renderView.js";
-import { getPreviewArtifactCapability, getViewRenderCapability } from "../renderer/viewRenderers.js";
+import {
+  getPreviewArtifactCapabilities,
+  getPreviewArtifactCapability,
+  getViewRenderCapability
+} from "../renderer/viewRenderers.js";
 import {
   discoverCuratedRenderedExamplePairs,
   expandCuratedRenderedExampleVariants,
   getRenderedCorpusExampleDirName,
   getRenderedCorpusProfileDirName,
+  getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
   getRenderedCorpusViewDirName,
   planRenderedCorpusOutputPaths
@@ -53,7 +59,19 @@ function buildReadmeContent(
   lines.push(
     "Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs."
   );
+  lines.push(
+    "Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings."
+  );
   lines.push("`simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.");
+  lines.push("");
+  lines.push("`ia_place_map` visual review checklist:");
+  lines.push("");
+  lines.push("- top-level items read left-to-right with clean vertical alignment");
+  lines.push("- no headers, labels, or routed edges sit visually above the top-level nodes");
+  lines.push("- mixed top-level `Place` and `Area` ordering follows source order");
+  lines.push("- implicit place chains indent rightward recursively at top level and inside areas");
+  lines.push("- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
+  lines.push("- navigation connectors stay readable for both within-chain and cross-chain links");
   lines.push("");
 
   return lines.join("\n");
@@ -122,33 +140,82 @@ async function main(): Promise<void> {
     await writeFile(outputPaths.mermaidOutputPath, `${mermaidResult.text}\n`, "utf8");
 
     const capability = getViewRenderCapability(variant.viewId);
+    if (!capability) {
+      throw new Error(`View '${variant.viewId}' does not support preview generation.`);
+    }
     const svgCapability = capability ? getPreviewArtifactCapability(capability, "svg") : undefined;
     const pngCapability = capability ? getPreviewArtifactCapability(capability, "png") : undefined;
     if (!svgCapability || !pngCapability) {
-      throw new Error(`View '${variant.viewId}' does not support legacy SVG/PNG preview generation.`);
+      throw new Error(`View '${variant.viewId}' does not support SVG/PNG preview generation.`);
     }
 
-    const svgArtifact = await renderPreviewArtifact({
-      backendId: svgCapability.backendId,
-      bundle,
-      view,
+    const svgResult = await renderSourcePreview(input, bundle, {
+      viewId: variant.viewId,
       format: "svg",
-      sourceText: dotResult.text
+      profileId: variant.profileId,
+      backendId: svgCapability.backendId
     });
-    const pngArtifact = await renderPreviewArtifact({
-      backendId: pngCapability.backendId,
-      bundle,
-      view,
+    const pngResult = await renderSourcePreview(input, bundle, {
+      viewId: variant.viewId,
       format: "png",
-      sourceText: dotResult.text
+      profileId: variant.profileId,
+      backendId: pngCapability.backendId
     });
 
-    if (svgArtifact.format !== "svg" || pngArtifact.format !== "png") {
-      throw new Error(`Unexpected preview artifact format while generating ${variant.viewId} corpus outputs.`);
+    if (!svgResult.artifact || svgResult.artifact.format !== "svg" || svgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+      throw new Error(
+        `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${svgCapability.backendId}).\n${formatPrettyDiagnostics(svgResult.diagnostics)}`
+      );
+    }
+    if (!pngResult.artifact || pngResult.artifact.format !== "png" || pngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+      throw new Error(
+        `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${pngCapability.backendId}).\n${formatPrettyDiagnostics(pngResult.diagnostics)}`
+      );
     }
 
-    await writeFile(outputPaths.svgOutputPath, svgArtifact.text, "utf8");
-    await writeFile(outputPaths.pngOutputPath, pngArtifact.bytes);
+    await writeFile(outputPaths.svgOutputPath, svgResult.artifact.text, "utf8");
+    await writeFile(outputPaths.pngOutputPath, pngResult.artifact.bytes);
+
+    for (const extraSvgCapability of getPreviewArtifactCapabilities(capability, "svg").filter(
+      (candidate) => candidate.backendId !== svgCapability.backendId
+    )) {
+      const extraSvgResult = await renderSourcePreview(input, bundle, {
+        viewId: variant.viewId,
+        format: "svg",
+        profileId: variant.profileId,
+        backendId: extraSvgCapability.backendId
+      });
+      if (!extraSvgResult.artifact || extraSvgResult.artifact.format !== "svg" || extraSvgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+        throw new Error(
+          `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${extraSvgCapability.backendId}).\n${formatPrettyDiagnostics(extraSvgResult.diagnostics)}`
+        );
+      }
+      await writeFile(
+        getRenderedCorpusPreviewOutputPath(bundle, variant, "svg", extraSvgCapability.backendId, svgCapability.backendId),
+        extraSvgResult.artifact.text,
+        "utf8"
+      );
+    }
+
+    for (const extraPngCapability of getPreviewArtifactCapabilities(capability, "png").filter(
+      (candidate) => candidate.backendId !== pngCapability.backendId
+    )) {
+      const extraPngResult = await renderSourcePreview(input, bundle, {
+        viewId: variant.viewId,
+        format: "png",
+        profileId: variant.profileId,
+        backendId: extraPngCapability.backendId
+      });
+      if (!extraPngResult.artifact || extraPngResult.artifact.format !== "png" || extraPngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+        throw new Error(
+          `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${extraPngCapability.backendId}).\n${formatPrettyDiagnostics(extraPngResult.diagnostics)}`
+        );
+      }
+      await writeFile(
+        getRenderedCorpusPreviewOutputPath(bundle, variant, "png", extraPngCapability.backendId, pngCapability.backendId),
+        extraPngResult.artifact.bytes
+      );
+    }
 
     if (!outputIndex.some((entry) => entry.viewId === variant.viewId && entry.exampleName === variant.example.name)) {
       outputIndex.push({

@@ -4,7 +4,7 @@ export type PreviewFormat = "svg" | "png";
 export type RendererBackendClass = "legacy" | "staged" | "experimental";
 
 export type TextRendererBackendId = "legacy_dot" | "legacy_mermaid";
-export type PreviewRendererBackendId = "legacy_graphviz_preview";
+export type PreviewRendererBackendId = "legacy_graphviz_preview" | "staged_ia_place_map_preview";
 
 export interface TextArtifactCapability {
   format: TextRenderFormat;

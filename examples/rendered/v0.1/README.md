@@ -26,4 +26,14 @@ Curated view/example pairs:
 Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`, `recommended_profile`.
 
 Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs.
+Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
 `simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.
+
+`ia_place_map` visual review checklist:
+
+- top-level items read left-to-right with clean vertical alignment
+- no headers, labels, or routed edges sit visually above the top-level nodes
+- mixed top-level `Place` and `Area` ordering follows source order
+- implicit place chains indent rightward recursively at top level and inside areas
+- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
+- navigation connectors stay readable for both within-chain and cross-chain links

@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Bundle, BundleManifestExample } from "../bundle/types.js";
+import type { PreviewFormat, PreviewRendererBackendId } from "../renderer/renderArtifacts.js";
 
 export interface CanonicalBundleExampleFile {
   name: string;
@@ -159,4 +160,18 @@ export function planRenderedCorpusOutputPaths(
     svgOutputPath: path.join(profileDir, `${renderedStem}.svg`),
     pngOutputPath: path.join(profileDir, `${renderedStem}.png`)
   };
+}
+
+export function getRenderedCorpusPreviewOutputPath(
+  bundle: Bundle,
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">,
+  format: PreviewFormat,
+  backendId: PreviewRendererBackendId,
+  defaultBackendId: PreviewRendererBackendId
+): string {
+  const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+  const renderedStem = `${variant.example.name}.${variant.viewId}`;
+  const backendSuffix = backendId === defaultBackendId ? "" : `.${backendId}`;
+
+  return path.join(outputPaths.profileDir, `${renderedStem}${backendSuffix}.${format}`);
 }

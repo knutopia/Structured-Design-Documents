@@ -163,6 +163,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
   stdout: string[];
   stderr: string[];
   renderSourceMock: ReturnType<typeof vi.fn>;
+  renderSourcePreviewMock: ReturnType<typeof vi.fn>;
   renderPreviewArtifactMock: ReturnType<typeof vi.fn>;
   writeBinaryFileMock: ReturnType<typeof vi.fn>;
 } {
@@ -193,12 +194,51 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       }
     };
   });
+  const renderSourcePreviewMock = vi.fn(async (_input, _bundle, options) => {
+    const backendId = options.backendId ?? (options.viewId === "ia_place_map" ? "staged_ia_place_map_preview" : "legacy_graphviz_preview");
+    const artifact = options.format === "svg"
+      ? {
+        format: "svg" as const,
+        text: backendId === "staged_ia_place_map_preview" ? "<svg>staged</svg>" : "<svg>embedded</svg>",
+        ...(backendId === "legacy_graphviz_preview" ? {
+          sourceArtifacts: {
+            dot: "digraph G {}"
+          }
+        } : {})
+      }
+      : {
+        format: "png" as const,
+        bytes: Uint8Array.from(Buffer.from("png")),
+        ...(backendId === "legacy_graphviz_preview" ? {
+          sourceArtifacts: {
+            dot: "digraph G {}"
+          }
+        } : {})
+      };
+
+    return {
+      view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
+      capability: {
+        textArtifacts: [],
+        previewArtifacts: [],
+        defaultPreviewFormat: "svg" as const
+      },
+      previewCapability: {
+        format: options.format,
+        backendId,
+        backendClass: backendId === "legacy_graphviz_preview" ? "legacy" as const : "staged" as const
+      },
+      artifact,
+      diagnostics: []
+    };
+  });
   const writeBinaryFileMock = vi.fn(async () => undefined);
 
   return {
     stdout,
     stderr,
     renderSourceMock,
+    renderSourcePreviewMock,
     renderPreviewArtifactMock,
     writeBinaryFileMock,
     deps: {
@@ -222,6 +262,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
         warningCount: 0
       })),
       renderSource: renderSourceMock,
+      renderSourcePreview: renderSourcePreviewMock,
       writeTextFile: vi.fn(async () => undefined),
       writeBinaryFile: writeBinaryFileMock,
       renderPreviewArtifact: renderPreviewArtifactMock,
@@ -262,7 +303,7 @@ describe("CLI wrappers", () => {
   });
 
   it("show derives a sibling SVG path by default", async () => {
-    const { deps, stderr, renderPreviewArtifactMock } = createDeps();
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -273,16 +314,14 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderPreviewArtifactMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        backendId: "legacy_graphviz_preview",
-        format: "svg",
-        sourceText: "digraph G {}"
-      })
-    );
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ia_place_map",
+      format: "svg",
+      backendId: "staged_ia_place_map_preview"
+    });
     expect(deps.writeTextFile).toHaveBeenCalledWith(
       "/repo/bundle/v0.1/examples/outcome_to_ia_trace.svg",
-      "<svg>embedded</svg>"
+      "<svg>staged</svg>"
     );
     expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.svg");
   });
@@ -301,12 +340,37 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/custom.svg", "<svg>embedded</svg>");
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/custom.svg", "<svg>staged</svg>");
     expect(stderr.join("")).toContain("Wrote /tmp/custom.svg");
   });
 
-  it("show writes --dot-out from backend-declared source artifacts", async () => {
-    const { deps, stderr, renderPreviewArtifactMock } = createDeps();
+  it("show allows ia_place_map to opt back into the legacy preview backend", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--backend",
+      "legacy_graphviz_preview",
+      "--out",
+      "/tmp/legacy.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ia_place_map",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/legacy.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/legacy.svg");
+  });
+
+  it("show writes --dot-out from backend-declared source artifacts by auto-selecting the legacy backend", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -321,24 +385,17 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderPreviewArtifactMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        backendId: "legacy_graphviz_preview",
-        format: "svg",
-        sourceText: "digraph G {}"
-      })
-    );
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ia_place_map",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/custom.dot", "digraph G {}");
     expect(stderr.join("")).toContain("Wrote /tmp/custom.dot");
   });
 
-  it("show rejects --dot-out when the preview backend does not expose DOT source artifacts", async () => {
-    const { deps, stderr } = createDeps({
-      renderPreviewArtifact: vi.fn(async () => ({
-        format: "svg" as const,
-        text: "<svg>embedded</svg>"
-      }))
-    });
+  it("show rejects explicit staged --backend with --dot-out", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -346,16 +403,19 @@ describe("CLI wrappers", () => {
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
       "ia_place_map",
+      "--backend",
+      "staged_ia_place_map_preview",
       "--dot-out",
       "/tmp/custom.dot"
     ], deps);
 
     expect(result.exitCode).toBe(2);
     expect(stderr.join("")).toContain("does not expose a DOT intermediate");
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
   });
 
   it("show can render PNG through the SVG intermediary pipeline", async () => {
-    const { deps, stderr, renderPreviewArtifactMock, writeBinaryFileMock } = createDeps();
+    const { deps, stderr, renderSourcePreviewMock, writeBinaryFileMock } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -370,19 +430,17 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderPreviewArtifactMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        backendId: "legacy_graphviz_preview",
-        format: "png",
-        sourceText: "digraph G {}"
-      })
-    );
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ia_place_map",
+      format: "png",
+      backendId: "staged_ia_place_map_preview"
+    });
     expect(writeBinaryFileMock).toHaveBeenCalledWith("/tmp/custom.png", expect.any(Uint8Array));
     expect(stderr.join("")).toContain("Wrote /tmp/custom.png");
   });
 
-  it("show supports journey_map previews through the DOT pipeline", async () => {
-    const { deps, renderSourceMock, stderr } = createDeps();
+  it("show supports journey_map previews through the legacy backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -395,16 +453,17 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "journey_map",
-      format: "dot"
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/journey.svg", "<svg>embedded</svg>");
     expect(stderr.join("")).toContain("Wrote /tmp/journey.svg");
   });
 
-  it("show supports service_blueprint previews through the DOT pipeline", async () => {
-    const { deps, renderSourceMock, stderr } = createDeps();
+  it("show supports service_blueprint previews through the legacy backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -417,16 +476,17 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "service_blueprint",
-      format: "dot"
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/blueprint.svg", "<svg>embedded</svg>");
     expect(stderr.join("")).toContain("Wrote /tmp/blueprint.svg");
   });
 
-  it("show supports scenario_flow previews through the DOT pipeline", async () => {
-    const { deps, renderSourceMock, stderr } = createDeps();
+  it("show supports scenario_flow previews through the legacy backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -439,16 +499,17 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "scenario_flow",
-      format: "dot"
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/scenario.svg", "<svg>embedded</svg>");
     expect(stderr.join("")).toContain("Wrote /tmp/scenario.svg");
   });
 
-  it("show supports ui_contracts previews through the DOT pipeline", async () => {
-    const { deps, renderSourceMock, stderr } = createDeps();
+  it("show supports ui_contracts previews through the legacy backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
       "sdd",
@@ -461,9 +522,10 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(renderSourceMock.mock.calls[0][2]).toMatchObject({
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "ui_contracts",
-      format: "dot"
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/ui-contracts.svg", "<svg>embedded</svg>");
     expect(stderr.join("")).toContain("Wrote /tmp/ui-contracts.svg");
@@ -500,7 +562,11 @@ describe("CLI wrappers", () => {
       expect.objectContaining({
         backendId: "legacy_graphviz_preview",
         format: "png",
-        sourceText: "digraph G {}"
+        source: {
+          kind: "text",
+          format: "dot",
+          text: "digraph G {}"
+        }
       })
     );
     expect(writeBinaryFileMock).toHaveBeenCalledWith(
@@ -512,9 +578,18 @@ describe("CLI wrappers", () => {
 
   it("show stops before Graphviz when validation fails", async () => {
     const { deps, stderr } = createDeps({
-      renderSource: vi.fn(() => ({
-        viewId: "ia_place_map",
-        format: "dot",
+      renderSourcePreview: vi.fn(async () => ({
+        view: bundle.views.views.find((candidate) => candidate.id === "ia_place_map")!,
+        capability: {
+          textArtifacts: [],
+          previewArtifacts: [],
+          defaultPreviewFormat: "svg" as const
+        },
+        previewCapability: {
+          format: "svg" as const,
+          backendId: "staged_ia_place_map_preview" as const,
+          backendClass: "staged" as const
+        },
         diagnostics: [
           {
             stage: "validate",
@@ -588,7 +663,7 @@ describe("CLI wrappers", () => {
 
     expect(result.exitCode).toBe(2);
     expect(stderr.join("")).toContain("--out expects a .svg file");
-    expect(deps.renderSource).not.toHaveBeenCalled();
+    expect(deps.renderSourcePreview).not.toHaveBeenCalled();
   });
 
   it("rejects mismatched PNG output extensions when png format is requested", async () => {
@@ -608,7 +683,7 @@ describe("CLI wrappers", () => {
 
     expect(result.exitCode).toBe(2);
     expect(stderr.join("")).toContain("--out expects a .png file");
-    expect(deps.renderSource).not.toHaveBeenCalled();
+    expect(deps.renderSourcePreview).not.toHaveBeenCalled();
   });
 
   it("rejects mismatched png-out extensions", async () => {

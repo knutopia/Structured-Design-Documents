@@ -13,7 +13,12 @@ import type {
   SceneNode
 } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
-import { renderPositionedSceneToSvg, type StagedSvgArtifact } from "./svgBackend.js";
+import {
+  renderPositionedSceneToPng,
+  renderPositionedSceneToSvg,
+  type StagedPngArtifact,
+  type StagedSvgArtifact
+} from "./svgBackend.js";
 
 const ROOT_GAP = 48;
 const AREA_GAP = 20;
@@ -32,6 +37,7 @@ interface SceneBuildContext {
 }
 
 export interface IaPlaceMapStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
+export interface IaPlaceMapStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
 
 function createRootSceneItemId(scopeId: string, placeId: string): string {
   return `chain-${scopeId}-${placeId}`;
@@ -441,6 +447,23 @@ export async function renderIaPlaceMapStagedSvg(
   const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, profileId, themeId);
   const pipeline = await runStagedRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
+
+  return {
+    ...pipeline,
+    ...rendered
+  };
+}
+
+export async function renderIaPlaceMapStagedPng(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<IaPlaceMapStagedPngResult> {
+  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, profileId, themeId);
+  const pipeline = await runStagedRendererPipeline(rendererScene);
+  const rendered = await renderPositionedSceneToPng(pipeline.positionedScene);
 
   return {
     ...pipeline,

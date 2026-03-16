@@ -337,6 +337,78 @@ describe("staged macro-layout", () => {
     expect(result.positionedScene.root.height).toBe(246);
   });
 
+  it("translates nested container subtrees without compounding intermediate offsets", async () => {
+    const nestedBranch: SceneContainer = {
+      kind: "container",
+      id: "nested-branch",
+      role: "branch",
+      primitive: "cluster",
+      classes: ["branch"],
+      layout: {
+        strategy: "stack",
+        direction: "vertical",
+        gap: 8
+      },
+      chrome: {
+        padding: {
+          top: 10,
+          right: 10,
+          bottom: 10,
+          left: 10
+        }
+      },
+      ports: [],
+      children: [buildCardNode("nested-leaf", "chip", "Nested Leaf")]
+    };
+
+    const nestedArea: SceneContainer = {
+      kind: "container",
+      id: "nested-area",
+      role: "area",
+      primitive: "cluster",
+      classes: ["area"],
+      layout: {
+        strategy: "stack",
+        direction: "vertical",
+        gap: 12
+      },
+      chrome: {
+        padding: {
+          top: 12,
+          right: 12,
+          bottom: 12,
+          left: 12
+        }
+      },
+      ports: [],
+      children: [nestedBranch]
+    };
+
+    const scene = buildRootScene(
+      {
+        strategy: "stack",
+        direction: "vertical",
+        gap: 16
+      },
+      [nestedArea]
+    );
+
+    const result = await runStagedRendererPipeline(scene);
+    const area = findPositionedItem(result.positionedScene.root, "nested-area");
+    const branch = findPositionedItem(result.positionedScene.root, "nested-branch");
+    const leaf = findPositionedItem(result.positionedScene.root, "nested-leaf");
+
+    if (area.kind !== "container" || branch.kind !== "container") {
+      throw new Error("Expected nested items to remain containers.");
+    }
+
+    expect(result.positionedScene.root.width).toBe(172);
+    expect(result.positionedScene.root.height).toBe(196);
+    expect(area).toEqual(expect.objectContaining({ x: 16, y: 16, width: 140, height: 164 }));
+    expect(branch).toEqual(expect.objectContaining({ x: 28, y: 56, width: 116, height: 112 }));
+    expect(leaf).toEqual(expect.objectContaining({ x: 38, y: 94, width: 96, height: 64 }));
+  });
+
   it("falls back to a single-column grid when columns are invalid", async () => {
     const scene = buildRootScene(
       {

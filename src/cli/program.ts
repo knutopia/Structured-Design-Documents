@@ -14,15 +14,22 @@ import {
   type PreviewArtifactResult,
   type RenderPreviewArtifactRequest
 } from "../renderer/previewBackends.js";
+import {
+  renderSourcePreview,
+  type SourcePreviewRenderResult
+} from "../renderer/previewWorkflow.js";
 import { renderSource } from "../renderer/renderView.js";
 import {
   getKnownRenderableViewIds,
+  getPreviewArtifactCapabilities,
   getPreviewArtifactCapability,
   getSupportedPreviewFormats,
+  getSupportedPreviewBackendIds,
   getSupportedTextFormats,
   getTextArtifactCapability,
   getViewRenderCapability,
   type PreviewFormat,
+  type PreviewRendererBackendId,
   type TextRenderFormat,
   type ViewRenderCapability
 } from "../renderer/viewRenderers.js";
@@ -40,6 +47,12 @@ export interface CliDeps {
   compileSource: (input: SourceInput, bundle: Bundle) => CompileResult;
   validateGraph: (graph: NonNullable<CompileResult["graph"]>, bundle: Bundle, profileId: string) => ValidationReport;
   renderSource: (input: SourceInput, bundle: Bundle, options: RenderOptions) => RenderResult;
+  renderSourcePreview: (input: SourceInput, bundle: Bundle, options: {
+    viewId: string;
+    format: PreviewFormat;
+    profileId: string;
+    backendId?: PreviewRendererBackendId;
+  }) => Promise<SourcePreviewRenderResult>;
   writeTextFile: (outputPath: string, content: string) => Promise<void>;
   writeBinaryFile: (outputPath: string, content: Uint8Array) => Promise<void>;
   renderPreviewArtifact: (request: RenderPreviewArtifactRequest) => Promise<PreviewArtifactResult>;
@@ -83,6 +96,7 @@ function createDefaultDeps(): CliDeps {
     compileSource,
     validateGraph,
     renderSource,
+    renderSourcePreview,
     writeTextFile: defaultWriteTextFile,
     writeBinaryFile: defaultWriteBinaryFile,
     renderPreviewArtifact,
@@ -132,6 +146,11 @@ async function writeTextOutput(
 
 function announceFileWrite(io: Pick<CliDeps, "stderr">, outputPath: string): void {
   io.stderr(appendLine(`Wrote ${path.resolve(outputPath)}`));
+}
+
+function appendInstallHint(message: string, backendId: PreviewRendererBackendId): string {
+  const hint = getPreviewBackend(backendId).installHint();
+  return hint ? `${message}\n${hint}` : message;
 }
 
 function replaceExtension(filePath: string, extension: string): string {
@@ -215,7 +234,12 @@ function ensureTextFormat(bundle: Bundle, viewId: string, format: string): { vie
   };
 }
 
-function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { view?: ViewSpec; capability?: ViewRenderCapability; message?: string } {
+function ensurePreviewFormat(
+  bundle: Bundle,
+  viewId: string,
+  format: string,
+  backendId?: PreviewRendererBackendId
+): { view?: ViewSpec; capability?: ViewRenderCapability; message?: string } {
   const resolved = getViewCapability(bundle, viewId);
   if (!resolved.capability) {
     return {
@@ -224,9 +248,12 @@ function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { 
   }
 
   const previewFormat = format as PreviewFormat;
-  if (!getPreviewArtifactCapability(resolved.capability, previewFormat)) {
+  if (!getPreviewArtifactCapability(resolved.capability, previewFormat, backendId)) {
+    const supportedBackendIds = backendId
+      ? ` Supported backends for '${previewFormat}': ${formatList(getSupportedPreviewBackendIds(resolved.capability, previewFormat))}.`
+      : "";
     return {
-      message: `View '${viewId}' does not support preview format '${format}'. Supported preview formats: ${formatList(getSupportedPreviewFormats(resolved.capability))}.`
+      message: `View '${viewId}' does not support preview format '${format}'${backendId ? ` with backend '${backendId}'` : ""}. Supported preview formats: ${formatList(getSupportedPreviewFormats(resolved.capability))}.${supportedBackendIds}`
     };
   }
 
@@ -376,7 +403,7 @@ async function runDotCommand(
   }
 
   const capability = getViewRenderCapability("ia_place_map");
-  const previewCapability = capability ? getPreviewArtifactCapability(capability, "png") : undefined;
+  const previewCapability = capability ? getPreviewArtifactCapability(capability, "png", "legacy_graphviz_preview") : undefined;
   if (!previewCapability || !renderResult.bundle || !renderResult.view) {
     deps.stderr(appendLine("The ia_place_map view does not support PNG preview output."));
     return 2;
@@ -388,25 +415,58 @@ async function runDotCommand(
       bundle: renderResult.bundle,
       view: renderResult.view,
       format: "png",
-      sourceText: renderResult.text
+      source: {
+        kind: "text",
+        format: "dot",
+        text: renderResult.text
+      }
     });
     await writePreviewOutput(deps, pngPath, artifact);
     announceFileWrite(deps, pngPath);
     return 0;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    deps.stderr(appendLine(`${message}\n${getPreviewBackend(previewCapability.backendId).installHint()}`));
+    deps.stderr(appendLine(appendInstallHint(message, previewCapability.backendId)));
     return 1;
   }
+}
+
+function resolveShowPreviewCapability(
+  capability: ViewRenderCapability,
+  format: PreviewFormat,
+  backendId: PreviewRendererBackendId | undefined,
+  preferDotIntermediate: boolean
+): ReturnType<typeof getPreviewArtifactCapability> {
+  if (backendId) {
+    return getPreviewArtifactCapability(capability, format, backendId);
+  }
+
+  if (!preferDotIntermediate) {
+    return getPreviewArtifactCapability(capability, format);
+  }
+
+  return getPreviewArtifactCapabilities(capability, format).find((candidate) => {
+    const backend = getPreviewBackend(candidate.backendId);
+    return backend.inputRequirement.kind === "text" && backend.inputRequirement.sourceFormat === "dot";
+  });
 }
 
 async function runShowCommand(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile: string; view: string; format: string; out?: string; dotOut?: string }
+  options: {
+    bundle: string;
+    profile: string;
+    view: string;
+    format: string;
+    out?: string;
+    dotOut?: string;
+    backend?: string;
+  }
 ): Promise<number> {
   try {
     const requestedPreviewFormat = (options.format || getViewRenderCapability(options.view)?.defaultPreviewFormat || "svg") as PreviewFormat;
+    const requestedBackendId = options.backend as PreviewRendererBackendId | undefined;
     const previewOutputValidation = validateOutputExtension(options.out, requestedPreviewFormat, "--out");
     if (!previewOutputValidation.valid) {
       deps.stderr(appendLine(previewOutputValidation.message ?? "Invalid preview output path."));
@@ -419,40 +479,47 @@ async function runShowCommand(
     }
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat);
+    const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat, requestedBackendId);
     if (!supported.capability || !supported.view) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
       return 2;
     }
 
-    const previewCapability = getPreviewArtifactCapability(supported.capability, requestedPreviewFormat);
+    const previewCapability = resolveShowPreviewCapability(
+      supported.capability,
+      requestedPreviewFormat,
+      requestedBackendId,
+      Boolean(options.dotOut && !requestedBackendId)
+    );
     if (!previewCapability) {
+      const supportedBackends = formatList(getSupportedPreviewBackendIds(supported.capability, requestedPreviewFormat));
       deps.stderr(appendLine(`Unsupported preview request for view '${options.view}'.`));
+      deps.stderr(appendLine(`Supported preview backends for ${requestedPreviewFormat}: ${supportedBackends}.`));
       return 2;
     }
-
-    const previewBackend = getPreviewBackend(previewCapability.backendId);
-    const renderResult = deps.renderSource(input, bundle, {
-      viewId: options.view,
-      format: previewBackend.sourceFormat,
-      profileId: options.profile
-    });
-    writeDiagnostics(deps, renderResult.diagnostics, "pretty");
-    if (!renderResult.text || hasErrors(renderResult.diagnostics)) {
-      return hasErrors(renderResult.diagnostics) ? 1 : 0;
+    if (options.dotOut) {
+      const previewBackend = getPreviewBackend(previewCapability.backendId);
+      if (previewBackend.inputRequirement.kind !== "text" || previewBackend.inputRequirement.sourceFormat !== "dot") {
+        deps.stderr(appendLine(`Preview backend '${previewCapability.backendId}' does not expose a DOT intermediate for '--dot-out'.`));
+        return 2;
+      }
     }
 
     const previewPath = options.out ?? replaceExtension(input.path, requestedPreviewFormat);
     try {
-      const artifact = await deps.renderPreviewArtifact({
+      const renderResult = await deps.renderSourcePreview(input, bundle, {
         backendId: previewCapability.backendId,
-        bundle,
-        view: supported.view,
+        viewId: options.view,
         format: requestedPreviewFormat,
-        sourceText: renderResult.text
+        profileId: options.profile
       });
+      writeDiagnostics(deps, renderResult.diagnostics, "pretty");
+      if (!renderResult.artifact || hasErrors(renderResult.diagnostics)) {
+        return hasErrors(renderResult.diagnostics) ? 1 : 0;
+      }
+
       if (options.dotOut) {
-        const dotSource = artifact.sourceArtifacts?.dot;
+        const dotSource = renderResult.artifact.sourceArtifacts?.dot;
         if (!dotSource) {
           deps.stderr(appendLine(`Preview backend '${previewCapability.backendId}' does not expose a DOT intermediate for '--dot-out'.`));
           return 2;
@@ -461,12 +528,12 @@ async function runShowCommand(
         await deps.writeTextFile(resolvedDotPath, dotSource);
         announceFileWrite(deps, resolvedDotPath);
       }
-      await writePreviewOutput(deps, previewPath, artifact);
+      await writePreviewOutput(deps, previewPath, renderResult.artifact);
       announceFileWrite(deps, previewPath);
       return 0;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      deps.stderr(appendLine(`${message}\n${previewBackend.installHint()}`));
+      deps.stderr(appendLine(appendInstallHint(message, previewCapability.backendId)));
       return 1;
     }
   } catch (error) {
@@ -497,9 +564,10 @@ function globalHelpText(): string {
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
     "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
     "",
     "Notes:",
-    "  `show` defaults to SVG preview output and currently uses the legacy Graphviz preview backend.",
+    "  `show` defaults to SVG preview output. `ia_place_map` now defaults to the staged preview backend, while other views stay on the legacy Graphviz preview backend.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -626,16 +694,18 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output and currently routes through the legacy Graphviz preview backend.")
+    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map` now uses the staged preview backend by default, while the remaining views continue to route through the legacy Graphviz preview backend unless you override `--backend`.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
     .option("--format <format>", "preview format (svg or png)", "svg")
+    .option("--backend <backend>", "preview backend id override")
     .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")
     .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
       "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
       "sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --out ./scenario.svg",

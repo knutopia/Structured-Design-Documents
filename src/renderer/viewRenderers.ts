@@ -25,6 +25,7 @@ import { resolveLegacyDotPreviewStyle } from "./previewStyle.js";
 import type {
   PreviewArtifactCapability,
   PreviewFormat,
+  PreviewRendererBackendId,
   TextArtifactCapability,
   TextRenderFormat
 } from "./renderArtifacts.js";
@@ -45,6 +46,7 @@ export interface ViewRenderCapability {
   textArtifacts: TextArtifactCapability[];
   previewArtifacts: PreviewArtifactCapability[];
   defaultPreviewFormat: PreviewFormat;
+  defaultPreviewBackends?: Partial<Record<PreviewFormat, PreviewRendererBackendId>>;
 }
 
 interface ViewTextRenderer {
@@ -85,16 +87,46 @@ const legacyPreviewArtifacts: PreviewArtifactCapability[] = [
   }
 ];
 
+const legacyPreviewDefaults: Partial<Record<PreviewFormat, PreviewRendererBackendId>> = {
+  svg: "legacy_graphviz_preview",
+  png: "legacy_graphviz_preview"
+};
+
+const stagedIaPlaceMapPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "staged_ia_place_map_preview",
+    backendClass: "staged"
+  },
+  {
+    format: "png",
+    backendId: "staged_ia_place_map_preview",
+    backendClass: "staged"
+  }
+];
+
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
     textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
     previewArtifacts: legacyPreviewArtifacts.map((artifact) => ({ ...artifact })),
-    defaultPreviewFormat: "svg"
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: legacyPreviewDefaults
   };
 }
 
 const iaPlaceMapRenderer: ViewTextRenderer = {
-  capability: dotAndMermaidPreviewCapability(),
+  capability: {
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: [
+      ...stagedIaPlaceMapPreviewArtifacts.map((artifact) => ({ ...artifact })),
+      ...legacyPreviewArtifacts.map((artifact) => ({ ...artifact }))
+    ],
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: {
+      svg: "staged_ia_place_map_preview",
+      png: "staged_ia_place_map_preview"
+    }
+  },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
@@ -199,7 +231,14 @@ export function getSupportedTextFormats(capability: ViewRenderCapability): TextR
 }
 
 export function getSupportedPreviewFormats(capability: ViewRenderCapability): PreviewFormat[] {
-  return capability.previewArtifacts.map((artifact) => artifact.format);
+  return [...new Set(capability.previewArtifacts.map((artifact) => artifact.format))];
+}
+
+export function getPreviewArtifactCapabilities(
+  capability: ViewRenderCapability,
+  format?: PreviewFormat
+): PreviewArtifactCapability[] {
+  return capability.previewArtifacts.filter((artifact) => (format ? artifact.format === format : true));
 }
 
 export function getTextArtifactCapability(
@@ -211,9 +250,26 @@ export function getTextArtifactCapability(
 
 export function getPreviewArtifactCapability(
   capability: ViewRenderCapability,
-  format: PreviewFormat
+  format: PreviewFormat,
+  backendId?: PreviewRendererBackendId
 ): PreviewArtifactCapability | undefined {
+  if (backendId) {
+    return capability.previewArtifacts.find((artifact) => artifact.format === format && artifact.backendId === backendId);
+  }
+
+  const defaultBackendId = capability.defaultPreviewBackends?.[format];
+  if (defaultBackendId) {
+    return capability.previewArtifacts.find((artifact) => artifact.format === format && artifact.backendId === defaultBackendId);
+  }
+
   return capability.previewArtifacts.find((artifact) => artifact.format === format);
+}
+
+export function getSupportedPreviewBackendIds(
+  capability: ViewRenderCapability,
+  format: PreviewFormat
+): PreviewRendererBackendId[] {
+  return getPreviewArtifactCapabilities(capability, format).map((artifact) => artifact.backendId);
 }
 
 export function getKnownRenderableViewIds(bundle: Bundle): string[] {

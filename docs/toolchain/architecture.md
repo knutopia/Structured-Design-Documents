@@ -140,7 +140,10 @@ Within that staged pipeline, renderer-owned measurement infrastructure is now sh
 
 This keeps text sizing and width policy out of future view scene builders.
 
-The only preview backend currently wired in v0.1 is the `legacy_graphviz_preview` backend, which owns:
+Preview backends now split by view:
+
+- `staged_ia_place_map_preview` is the default preview backend for `ia_place_map`; it owns staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
+- `legacy_graphviz_preview` remains the default preview backend for the remaining views and remains selectable for `ia_place_map`; it owns:
 
 - Graphviz-driven DOT-to-SVG layout
 - shared preview-style resolution from `views.yaml`
@@ -163,7 +166,7 @@ The current end-to-end renderable set is:
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
-- preview capability is modeled per artifact, with SVG and PNG currently routed through `legacy_graphviz_preview`
+- preview capability is modeled per artifact, with `ia_place_map` now defaulting SVG and PNG previews to `staged_ia_place_map_preview` while the remaining views still route those previews through `legacy_graphviz_preview`
 - Mermaid is a parallel readable text contract, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
@@ -178,10 +181,11 @@ The per-view render models keep semantics centralized:
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only DOT or Mermaid text
-- `sdd show` resolves preview output through a backend registry; today that registry selects `legacy_graphviz_preview`, which turns DOT into SVG with the vendored Public Sans webfont available for layout and then embeds that webfont into the output SVG
-- `sdd show --format png` currently uses that same legacy backend to rasterize the SVG with the vendored Public Sans desktop font so PNG export does not depend on user-installed fonts
+- `sdd show` resolves preview output through a backend registry; `ia_place_map` now defaults to `staged_ia_place_map_preview`, while the remaining views still default to `legacy_graphviz_preview`
+- `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
+- `sdd show --dot-out` automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend exist in parallel as internal-only scene and artifact forms and are snapshot-tested separately from the legacy artifact corpus
+- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs, and `ia_place_map` now exercises that staged path through the normal preview workflow and committed corpus
 
 ## Determinism
 

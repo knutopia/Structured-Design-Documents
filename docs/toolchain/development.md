@@ -26,14 +26,15 @@ Current renderable views:
 - `scenario_flow`: DOT, Mermaid, SVG, PNG
 - `ui_contracts`: DOT, Mermaid, SVG, PNG
 
-Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
+Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile; preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
 
 The CLI preview pipeline is SVG-first:
 
 - `sdd show` resolves preview output through a backend-aware registry and writes `.svg` by default
-- the only preview backend currently registered is `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
-- PNG output is still derived from SVG, and the legacy backend uses a vendored Public Sans desktop font so preview typography does not depend on a user-installed system font
-- the staged renderer now also has an internal SVG backend plus shared SVG-to-PNG helpers, but preview routing still stays on `legacy_graphviz_preview` until later migration steps
+- `ia_place_map` now defaults `sdd show` to the staged preview backend `staged_ia_place_map_preview`, which renders projection-driven staged SVG directly and derives PNG from that SVG
+- the remaining views still default to `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
+- legacy Graphviz preview remains selectable for `ia_place_map` with `--backend legacy_graphviz_preview`, and `--dot-out` automatically chooses a DOT-capable backend when needed
+- PNG output is still derived from SVG in both preview paths, and the vendored Public Sans desktop font keeps preview typography independent of user-installed system fonts
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
 Font provenance:
@@ -176,6 +177,12 @@ Render an SVG preview artifact:
 
 ```bash
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
+```
+
+Render the preserved legacy Graphviz preview for `ia_place_map` explicitly:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out /tmp/outcome-legacy.svg
 ```
 
 Render a Journey Map SVG preview artifact:
