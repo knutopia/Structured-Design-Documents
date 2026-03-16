@@ -19,9 +19,10 @@ export type OverflowPolicyKind =
   | "clamp_with_ellipsis"
   | "secondary_area"
   | "diagnostic";
-export type OverflowStatus = "fits" | "clamped" | "escalated_width_band" | "overflowed" | "stubbed";
+export type OverflowStatus = "fits" | "clamped" | "escalated_width_band" | "overflowed";
 export type ContentBlockKind = "text" | "badge_text" | "metadata" | "edge_label";
 export type ContentPriority = "primary" | "secondary";
+export type ContentRegion = "primary" | "secondary";
 export type PortSide = "north" | "south" | "east" | "west";
 export type RoutingStyle = "orthogonal" | "straight" | "stepped";
 export type PreferredAxis = "horizontal" | "vertical";
@@ -148,8 +149,13 @@ export interface MeasuredContentBlock {
   kind: ContentBlockKind;
   textStyleRole: string;
   lines: string[];
+  x: number;
+  y: number;
   width: number;
   height: number;
+  lineHeight: number;
+  region: ContentRegion;
+  wasClamped?: boolean;
   priority?: ContentPriority;
 }
 
@@ -201,6 +207,7 @@ export interface MeasuredEdgeLabel {
   lines: string[];
   width: number;
   height: number;
+  lineHeight: number;
   textStyleRole: string;
 }
 

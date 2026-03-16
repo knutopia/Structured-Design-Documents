@@ -78,7 +78,8 @@
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band"
+              "kind": "escalate_width_band",
+              "maxLines": 2
             },
             "content": [
               {

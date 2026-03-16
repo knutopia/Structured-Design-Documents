@@ -36,6 +36,13 @@ The renderer migration now adds renderer-owned internal forms under `src/rendere
 
 These forms are internal-only implementation contracts. They do not change the compiled graph contract, the projection contract, or current CLI outputs, and they exist in parallel with the legacy DOT, Mermaid, and Graphviz-backed preview paths until view migration is ready.
 
+The Step 3 measurement boundary is intentionally opinionated:
+
+- staged renderer measurement uses a pure-Node text service backed by vendored Public Sans assets
+- staged theme tokens own all values that affect measurement and later placement
+- width bands and overflow policy are shared renderer infrastructure, not view-specific heuristics
+- node micro-layout is real now, while container bounds and macro-layout remain separate later-stage responsibilities
+
 ## String-First Property Policy
 
 Compiled properties remain strings in v0.1.

@@ -1,16 +1,12 @@
 import type {
   ChromeSpec,
-  ContentBlock,
   LayoutIntent,
   MeasuredContainer,
-  MeasuredContentBlock,
   MeasuredEdge,
   MeasuredItem,
   MeasuredNode,
-  MeasuredPort,
   MeasuredScene,
   OverflowPolicy,
-  PortSpec,
   PositionedContainer,
   PositionedEdge,
   PositionedEdgeLabel,
@@ -19,13 +15,10 @@ import type {
   PositionedScene,
   RendererScene,
   RoutingIntent,
-  SceneContainer,
-  SceneEdge,
-  SceneItem,
-  SceneNode,
   WidthPolicy
 } from "./contracts.js";
 import { sortRendererDiagnostics, type RendererDiagnostic, type RendererDiagnosticPhase } from "./diagnostics.js";
+import { measureRendererScene } from "./microLayout.js";
 
 export interface StagedRendererPipelineResult {
   rendererScene: RendererScene;
@@ -58,108 +51,6 @@ function cloneOverflowPolicy(overflowPolicy: OverflowPolicy): OverflowPolicy {
   return {
     kind: overflowPolicy.kind,
     maxLines: overflowPolicy.maxLines
-  };
-}
-
-function cloneRoutingIntent(routing: RoutingIntent): RoutingIntent {
-  return {
-    ...routing
-  };
-}
-
-function measurePorts(ports: PortSpec[]): MeasuredPort[] {
-  return ports.map((port) => ({
-    id: port.id,
-    role: port.role,
-    side: port.side,
-    x: 0,
-    y: 0
-  }));
-}
-
-function measureContent(content: ContentBlock[]): MeasuredContentBlock[] {
-  return content.map((block) => ({
-    id: block.id,
-    kind: block.kind,
-    textStyleRole: block.textStyleRole,
-    lines: [block.text],
-    width: 0,
-    height: 0,
-    priority: block.priority
-  }));
-}
-
-function measureItem(item: SceneItem): MeasuredItem {
-  if (item.kind === "container") {
-    return measureContainer(item);
-  }
-
-  return measureNode(item);
-}
-
-function measureContainer(container: SceneContainer): MeasuredContainer {
-  return {
-    kind: "container",
-    id: container.id,
-    role: container.role,
-    primitive: container.primitive,
-    classes: [...container.classes],
-    layout: cloneLayoutIntent(container.layout),
-    chrome: cloneChromeSpec(container.chrome),
-    children: container.children.map((child) => measureItem(child)),
-    ports: measurePorts(container.ports),
-    width: 0,
-    height: 0
-  };
-}
-
-function measureNode(node: SceneNode): MeasuredNode {
-  return {
-    kind: "node",
-    id: node.id,
-    role: node.role,
-    primitive: node.primitive,
-    classes: [...node.classes],
-    widthPolicy: cloneWidthPolicy(node.widthPolicy),
-    widthBand: node.widthPolicy.preferred,
-    overflowPolicy: cloneOverflowPolicy(node.overflowPolicy),
-    content: measureContent(node.content),
-    ports: measurePorts(node.ports),
-    overflow: {
-      status: "stubbed",
-      detail: "Step 2 stub measurement does not compute intrinsic sizing yet."
-    },
-    width: 0,
-    height: 0
-  };
-}
-
-function measureEdge(edge: SceneEdge): MeasuredEdge {
-  return {
-    id: edge.id,
-    role: edge.role,
-    classes: [...edge.classes],
-    from: {
-      itemId: edge.from.itemId,
-      portId: edge.from.portId,
-      x: 0,
-      y: 0
-    },
-    to: {
-      itemId: edge.to.itemId,
-      portId: edge.to.portId,
-      x: 0,
-      y: 0
-    },
-    routing: cloneRoutingIntent(edge.routing),
-    label: edge.label
-      ? {
-          lines: [edge.label.text],
-          width: 0,
-          height: 0,
-          textStyleRole: edge.label.textStyleRole
-        }
-      : undefined
   };
 }
 
@@ -265,22 +156,7 @@ function createStubDiagnostic(phase: RendererDiagnosticPhase, code: string, mess
 }
 
 export function measureScene(scene: RendererScene): MeasuredScene {
-  return {
-    viewId: scene.viewId,
-    profileId: scene.profileId,
-    themeId: scene.themeId,
-    root: measureContainer(scene.root),
-    edges: scene.edges.map((edge) => measureEdge(edge)),
-    diagnostics: sortRendererDiagnostics([
-      ...scene.diagnostics,
-      createStubDiagnostic(
-        "measure",
-        "renderer.measure.stubbed",
-        "Measurement is currently a stub and does not compute intrinsic sizes or wrapped lines.",
-        scene.root.id
-      )
-    ])
-  };
+  return measureRendererScene(scene);
 }
 
 export function positionScene(measuredScene: MeasuredScene): PositionedScene {

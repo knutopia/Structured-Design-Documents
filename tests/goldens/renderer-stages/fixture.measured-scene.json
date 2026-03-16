@@ -24,7 +24,8 @@
         "bottom": 16,
         "left": 16
       },
-      "gutter": 24
+      "gutter": 24,
+      "headerBandHeight": 0
     },
     "children": [
       {
@@ -71,7 +72,8 @@
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band"
+              "kind": "escalate_width_band",
+              "maxLines": 2
             },
             "content": [
               {
@@ -81,8 +83,12 @@
                 "lines": [
                   "Checkout Billing"
                 ],
-                "width": 0,
-                "height": 0,
+                "x": 12,
+                "y": 12,
+                "width": 122.352,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               },
               {
@@ -92,8 +98,12 @@
                 "lines": [
                   "/checkout/billing"
                 ],
-                "width": 0,
-                "height": 0,
+                "x": 12,
+                "y": 38,
+                "width": 102.434,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary",
                 "priority": "secondary"
               }
             ],
@@ -102,16 +112,15 @@
                 "id": "east",
                 "role": "primary_out",
                 "side": "east",
-                "x": 0,
-                "y": 0
+                "x": 224,
+                "y": 33
               }
             ],
             "overflow": {
-              "status": "stubbed",
-              "detail": "Step 2 stub measurement does not compute intrinsic sizing yet."
+              "status": "fits"
             },
-            "width": 0,
-            "height": 0
+            "width": 224,
+            "height": 66
           },
           {
             "kind": "node",
@@ -141,8 +150,12 @@
                 "lines": [
                   "Checkout Review"
                 ],
-                "width": 0,
-                "height": 0,
+                "x": 12,
+                "y": 12,
+                "width": 127.856,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -152,15 +165,14 @@
                 "role": "primary_in",
                 "side": "west",
                 "x": 0,
-                "y": 0
+                "y": 24
               }
             ],
             "overflow": {
-              "status": "stubbed",
-              "detail": "Step 2 stub measurement does not compute intrinsic sizing yet."
+              "status": "fits"
             },
-            "width": 0,
-            "height": 0
+            "width": 168,
+            "height": 48
           }
         ],
         "ports": [
@@ -204,8 +216,12 @@
             "lines": [
               "Confirmation"
             ],
-            "width": 0,
-            "height": 0,
+            "x": 12,
+            "y": 12,
+            "width": 96.368,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           },
           {
@@ -215,8 +231,12 @@
             "lines": [
               "auth"
             ],
-            "width": 0,
-            "height": 0,
+            "x": 12,
+            "y": 38,
+            "width": 41.188,
+            "height": 22,
+            "lineHeight": 14,
+            "region": "primary",
             "priority": "secondary"
           }
         ],
@@ -226,15 +246,14 @@
             "role": "primary_in",
             "side": "west",
             "x": 0,
-            "y": 0
+            "y": 36
           }
         ],
         "overflow": {
-          "status": "stubbed",
-          "detail": "Step 2 stub measurement does not compute intrinsic sizing yet."
+          "status": "fits"
         },
-        "width": 0,
-        "height": 0
+        "width": 224,
+        "height": 72
       }
     ],
     "ports": [],
@@ -271,8 +290,9 @@
         "lines": [
           "Primary path"
         ],
-        "width": 0,
-        "height": 0,
+        "width": 83.556,
+        "height": 22,
+        "lineHeight": 14,
         "textStyleRole": "edge_label"
       }
     }
@@ -287,10 +307,10 @@
     },
     {
       "phase": "measure",
-      "code": "renderer.measure.stubbed",
+      "code": "renderer.measure.container_ports_deferred",
       "severity": "info",
-      "message": "Measurement is currently a stub and does not compute intrinsic sizes or wrapped lines.",
-      "targetId": "root"
+      "message": "Container port offsets remain deferred until macro-layout reserves container bounds.",
+      "targetId": "area-A-001"
     }
   ]
 }

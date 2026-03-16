@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { RendererScene } from "../src/renderer/staged/contracts.js";
+import type { MeasuredNode, RendererScene, SceneNode } from "../src/renderer/staged/contracts.js";
 import {
   hasRendererErrors,
   sortRendererDiagnostics,
@@ -7,22 +7,23 @@ import {
 } from "../src/renderer/staged/diagnostics.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
+import { buildFixtureScene } from "./stagedRendererFixtures.js";
 
-function buildFixtureScene(): RendererScene {
+function buildSingleNodeScene(node: SceneNode, themeId = "default"): RendererScene {
   return {
     viewId: "ia_place_map",
     profileId: "recommended",
-    themeId: "default",
+    themeId,
     root: {
       kind: "container",
       id: "root",
       role: "diagram_root",
       primitive: "root",
-      classes: ["diagram", "ia_place_map"],
+      classes: ["diagram", "test_scene"],
       layout: {
         strategy: "stack",
-        direction: "horizontal",
-        gap: 24,
+        direction: "vertical",
+        gap: 16,
         crossAlignment: "start"
       },
       chrome: {
@@ -32,185 +33,24 @@ function buildFixtureScene(): RendererScene {
           bottom: 16,
           left: 16
         },
-        gutter: 24
+        gutter: 16
       },
       ports: [],
-      children: [
-        {
-          kind: "container",
-          id: "area-A-001",
-          role: "top_level_area",
-          primitive: "cluster",
-          classes: ["area"],
-          layout: {
-            strategy: "stack",
-            direction: "vertical",
-            gap: 12,
-            crossAlignment: "stretch"
-          },
-          chrome: {
-            padding: {
-              top: 12,
-              right: 12,
-              bottom: 12,
-              left: 12
-            },
-            gutter: 12,
-            headerBandHeight: 28
-          },
-          ports: [
-            {
-              id: "south",
-              role: "primary_out",
-              side: "south"
-            }
-          ],
-          children: [
-            {
-              kind: "node",
-              id: "P-001",
-              role: "place",
-              primitive: "card",
-              classes: ["place", "top_place"],
-              widthPolicy: {
-                preferred: "standard",
-                allowed: ["narrow", "standard", "wide"]
-              },
-              overflowPolicy: {
-                kind: "escalate_width_band"
-              },
-              content: [
-                {
-                  id: "title",
-                  kind: "text",
-                  text: "Checkout Billing",
-                  textStyleRole: "title",
-                  priority: "primary"
-                },
-                {
-                  id: "subtitle",
-                  kind: "metadata",
-                  text: "/checkout/billing",
-                  textStyleRole: "subtitle",
-                  priority: "secondary"
-                }
-              ],
-              ports: [
-                {
-                  id: "east",
-                  role: "primary_out",
-                  side: "east"
-                }
-              ]
-            },
-            {
-              kind: "node",
-              id: "P-002",
-              role: "place",
-              primitive: "card",
-              classes: ["place", "nested_place"],
-              widthPolicy: {
-                preferred: "narrow",
-                allowed: ["narrow", "standard"]
-              },
-              overflowPolicy: {
-                kind: "grow_height"
-              },
-              content: [
-                {
-                  id: "title",
-                  kind: "text",
-                  text: "Checkout Review",
-                  textStyleRole: "title",
-                  priority: "primary"
-                }
-              ],
-              ports: [
-                {
-                  id: "west",
-                  role: "primary_in",
-                  side: "west"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          kind: "node",
-          id: "P-003",
-          role: "place",
-          primitive: "card",
-          classes: ["place", "top_level"],
-          widthPolicy: {
-            preferred: "standard",
-            allowed: ["standard", "wide"]
-          },
-          overflowPolicy: {
-            kind: "clamp_with_ellipsis",
-            maxLines: 2
-          },
-          content: [
-            {
-              id: "title",
-              kind: "text",
-              text: "Confirmation",
-              textStyleRole: "title",
-              priority: "primary"
-            },
-            {
-              id: "badge",
-              kind: "badge_text",
-              text: "auth",
-              textStyleRole: "badge",
-              priority: "secondary"
-            }
-          ],
-          ports: [
-            {
-              id: "west",
-              role: "primary_in",
-              side: "west"
-            }
-          ]
-        }
-      ]
+      children: [node]
     },
-    edges: [
-      {
-        id: "nav-001",
-        role: "navigation",
-        classes: ["primary_path"],
-        from: {
-          itemId: "P-001",
-          portId: "east"
-        },
-        to: {
-          itemId: "P-003",
-          portId: "west"
-        },
-        routing: {
-          style: "orthogonal",
-          avoidNodeBoxes: true,
-          preferAxis: "horizontal",
-          sourcePortRole: "primary_out",
-          targetPortRole: "primary_in"
-        },
-        label: {
-          text: "Primary path",
-          textStyleRole: "edge_label"
-        }
-      }
-    ],
-    diagnostics: [
-      {
-        phase: "scene",
-        code: "renderer.scene.synthetic_fixture",
-        severity: "info",
-        message: "Synthetic fixture scene for staged renderer snapshot coverage.",
-        targetId: "root"
-      }
-    ]
+    edges: [],
+    diagnostics: []
   };
+}
+
+function getOnlyMeasuredNode(scene: RendererScene): MeasuredNode {
+  const result = runStagedRendererPipeline(scene);
+  const child = result.measuredScene.root.children[0];
+  if (!child || child.kind !== "node") {
+    throw new Error("Expected exactly one measured node.");
+  }
+
+  return child;
 }
 
 describe("staged renderer contracts and harness", () => {
@@ -265,5 +105,207 @@ describe("staged renderer contracts and harness", () => {
     const scene = buildFixtureScene();
 
     expect(runStagedRendererPipeline(scene)).toEqual(runStagedRendererPipeline(scene));
+  });
+
+  it("preserves explicit newlines and falls back to grapheme splitting for long tokens", () => {
+    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+      kind: "node",
+      id: "node-1",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "chip",
+        allowed: ["chip"]
+      },
+      overflowPolicy: {
+        kind: "grow_height"
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "Alpha\nSupercalifragilisticexpialidocious",
+          textStyleRole: "title",
+          priority: "primary"
+        }
+      ],
+      ports: []
+    }));
+
+    expect(node.content[0]?.lines[0]).toBe("Alpha");
+    expect(node.content[0]?.lines.slice(1).join("")).toBe("Supercalifragilisticexpialidocious");
+    expect(node.content[0]?.lines.length).toBeGreaterThan(2);
+  });
+
+  it("escalates width bands deterministically when maxLines would otherwise be exceeded", () => {
+    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+      kind: "node",
+      id: "node-2",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "narrow",
+        allowed: ["narrow", "standard"]
+      },
+      overflowPolicy: {
+        kind: "escalate_width_band",
+        maxLines: 1
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "Quarterly Revenue Panel",
+          textStyleRole: "title",
+          priority: "primary"
+        }
+      ],
+      ports: []
+    }));
+
+    expect(node.widthBand).toBe("standard");
+    expect(node.overflow.status).toBe("escalated_width_band");
+    expect(node.content[0]?.lines).toHaveLength(1);
+  });
+
+  it("grows height instead of clipping when grow_height is selected", () => {
+    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+      kind: "node",
+      id: "node-3",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "chip",
+        allowed: ["chip"]
+      },
+      overflowPolicy: {
+        kind: "grow_height"
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "This node needs multiple wrapped lines in a very small width band",
+          textStyleRole: "title",
+          priority: "primary"
+        }
+      ],
+      ports: []
+    }));
+
+    expect(node.widthBand).toBe("chip");
+    expect(node.overflow.status).toBe("fits");
+    expect(node.content[0]?.lines.length).toBeGreaterThan(2);
+  });
+
+  it("clamps overflowing text with ellipsis when requested", () => {
+    const scene = buildSingleNodeScene({
+      kind: "node",
+      id: "node-4",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "chip",
+        allowed: ["chip"]
+      },
+      overflowPolicy: {
+        kind: "clamp_with_ellipsis",
+        maxLines: 2
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "This node has far too much text to fit on two tiny lines without clamping",
+          textStyleRole: "title",
+          priority: "primary"
+        }
+      ],
+      ports: []
+    });
+    const result = runStagedRendererPipeline(scene);
+    const node = getOnlyMeasuredNode(scene);
+
+    expect(node.overflow.status).toBe("clamped");
+    expect(node.content[0]?.lines).toHaveLength(2);
+    expect(node.content[0]?.wasClamped).toBe(true);
+    expect(node.content[0]?.lines[1]?.endsWith("...")).toBe(true);
+    expect(result.measuredScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.measure.text_clamped")).toBe(true);
+  });
+
+  it("moves secondary blocks into a secondary region before declaring overflow", () => {
+    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+      kind: "node",
+      id: "node-5",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "chip",
+        allowed: ["chip"]
+      },
+      overflowPolicy: {
+        kind: "secondary_area",
+        maxLines: 1
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "Home",
+          textStyleRole: "title",
+          priority: "primary"
+        },
+        {
+          id: "badge",
+          kind: "badge_text",
+          text: "role:billing_administrator_access",
+          textStyleRole: "badge",
+          priority: "secondary"
+        }
+      ],
+      ports: []
+    }));
+
+    expect(node.overflow.status).toBe("fits");
+    expect(node.content.find((block) => block.id === "badge")?.region).toBe("secondary");
+  });
+
+  it("falls back to the default theme with an explicit diagnostic for unknown theme ids", () => {
+    const scene = buildSingleNodeScene({
+      kind: "node",
+      id: "node-6",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "standard",
+        allowed: ["standard"]
+      },
+      overflowPolicy: {
+        kind: "grow_height"
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "Settings",
+          textStyleRole: "title",
+          priority: "primary"
+        }
+      ],
+      ports: []
+    }, "mystery");
+    const result = runStagedRendererPipeline(scene);
+
+    expect(result.measuredScene.themeId).toBe("default");
+    expect(result.measuredScene.diagnostics).toContainEqual(expect.objectContaining({
+      code: "renderer.measure.unknown_theme",
+      severity: "warn"
+    }));
   });
 });

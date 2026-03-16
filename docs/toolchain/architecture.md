@@ -60,6 +60,14 @@ The renderer migration now adds internal staged-renderer forms under `src/render
 
 These scene forms are internal contracts only. They are not new CLI outputs, they do not change bundle or projection contracts, and the current DOT, Mermaid, and Graphviz-backed preview flows remain the active execution path.
 
+Step 3 turns `MeasuredScene` into a real micro-layout boundary rather than a placeholder copy:
+
+- staged measurement now resolves a shared renderer theme before sizing
+- text is measured from vendored Public Sans font assets with a pure Node service
+- width-band selection, text wrapping, explicit clamping, and secondary-area fallback happen before any macro-layout
+- measured nodes now carry wrapped lines, local content block frames, local port offsets, and explicit overflow outcomes
+- container child measurement is recursive, but container bounds and container-port offsets remain deferred until the macro-layout step
+
 ## View Extension Pattern
 
 View support now follows one internal pattern instead of adding one-off IA branches:
@@ -106,6 +114,15 @@ The engine owns:
 The CLI owns preview artifact generation on top of those text renderers through a backend-aware preview layer.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested stub pipeline that future SVG work will build on, while keeping that pipeline separate from the current legacy renderer path until view migration begins.
+
+Within that staged pipeline, renderer-owned measurement infrastructure is now shared rather than view-specific:
+
+- `src/renderer/staged/theme.ts` owns staged theme resolution and measurement-affecting tokens
+- `src/renderer/staged/primitives.ts` owns shared primitive flow rules and primitive-content validation
+- `src/renderer/staged/textMeasurement.ts` owns deterministic font-backed width measurement
+- `src/renderer/staged/microLayout.ts` owns intrinsic node sizing and edge-label wrapping
+
+This keeps text sizing and width policy out of future view scene builders.
 
 The only preview backend currently wired in v0.1 is the `legacy_graphviz_preview` backend, which owns:
 
@@ -163,6 +180,7 @@ The engine enforces:
 - stable DOT and Mermaid text output
 - stable source-ordered structural rendering for hierarchy views
 - stable bundle-owned preview styling defaults
+- stable staged theme resolution and font-backed measurement
 - canonical `LF` newlines for repo-stored text artifacts
 
 This makes snapshots useful and keeps diffs reviewable.
@@ -196,6 +214,7 @@ The test suite uses the bundle examples as conformance fixtures.
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
 - render tests assert stable DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
 - staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON under `tests/goldens/renderer-stages/` without changing current legacy outputs
+- staged micro-layout tests cover wrapping, width-band escalation, clamping, secondary-area handling, and unknown-theme fallback
 - corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile `.dot`, `.mmd`, `.svg`, and `.png` artifacts
 - negative fixtures cover syntax, compile, and validation failures
 
