@@ -11,8 +11,11 @@ import type {
   SceneContainerPrimitive,
   SceneNodePrimitive
 } from "./contracts.js";
-import type { RendererDiagnostic } from "./diagnostics.js";
-import { sortRendererDiagnostics } from "./diagnostics.js";
+import {
+  createBackendDiagnostic,
+  sortRendererDiagnostics,
+  type RendererDiagnostic
+} from "./diagnostics.js";
 import { getContainerPrimitiveTheme, getNodePrimitiveTheme, resolveTextRoleForBlock } from "./primitives.js";
 import { resolveRendererTheme, type RendererTheme, type TextStyleToken } from "./theme.js";
 import { buildEmbeddedFontFaceStyleElement, renderSvgToPng } from "../svgArtifacts.js";
@@ -138,13 +141,11 @@ function getTextStyleForBackend(
     return style;
   }
 
-  diagnostics.push({
-    phase: "backend",
-    code: "renderer.backend.unknown_text_style",
-    severity: "warn",
-    message: `Unknown text style role "${role}". Falling back to "label".`,
-    targetId
-  });
+  diagnostics.push(createBackendDiagnostic(
+    "renderer.backend.unknown_text_style",
+    `Unknown text style role "${role}". Falling back to "label".`,
+    { targetId }
+  ));
 
   return theme.textStyles.label;
 }
@@ -178,13 +179,11 @@ function renderPortCircle(
   theme: RendererTheme
 ): string {
   if (!Number.isFinite(x) || !Number.isFinite(y)) {
-    diagnostics.push({
-      phase: "backend",
-      code: "renderer.backend.invalid_port_coordinates",
-      severity: "warn",
-      message: "Skipping a port because its coordinates are not finite.",
-      targetId
-    });
+    diagnostics.push(createBackendDiagnostic(
+      "renderer.backend.invalid_port_coordinates",
+      "Skipping a port because its coordinates are not finite.",
+      { targetId }
+    ));
     return "";
   }
 
@@ -263,13 +262,11 @@ function renderNodeChrome(
       `  <rect class="scene-node__chrome" x="${formatNumber(node.x)}" y="${formatNumber(node.y)}" width="${formatNumber(node.width)}" height="${formatNumber(node.height)}" rx="${formatNumber(radius)}" ry="${formatNumber(radius)}"/>`
     );
   } else {
-    diagnostics.push({
-      phase: "backend",
-      code: "renderer.backend.unsupported_node_primitive",
-      severity: "warn",
-      message: `Unsupported node primitive "${node.primitive}".`,
-      targetId: node.id
-    });
+    diagnostics.push(createBackendDiagnostic(
+      "renderer.backend.unsupported_node_primitive",
+      `Unsupported node primitive "${node.primitive}".`,
+      { targetId: node.id }
+    ));
   }
 
   for (const block of node.content) {
@@ -422,13 +419,11 @@ function collectPaintElements(
 
 function buildRoutePath(points: Point[], edgeId: string, diagnostics: RendererDiagnostic[]): string | undefined {
   if (points.length < 2) {
-    diagnostics.push({
-      phase: "backend",
-      code: "renderer.backend.invalid_edge_route",
-      severity: "warn",
-      message: "Skipping edge because the route needs at least two points.",
-      targetId: edgeId
-    });
+    diagnostics.push(createBackendDiagnostic(
+      "renderer.backend.invalid_edge_route",
+      "Skipping edge because the route needs at least two points.",
+      { targetId: edgeId }
+    ));
     return undefined;
   }
 
@@ -566,13 +561,11 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
   const groups = buildPaintElementMap();
 
   if (scene.root.width <= 0 || scene.root.height <= 0) {
-    diagnostics.push({
-      phase: "backend",
-      code: "renderer.backend.invalid_root_bounds",
-      severity: "warn",
-      message: "Root bounds should be positive for SVG output. Falling back to a 1x1 viewport.",
-      targetId: scene.root.id
-    });
+    diagnostics.push(createBackendDiagnostic(
+      "renderer.backend.invalid_root_bounds",
+      "Root bounds should be positive for SVG output. Falling back to a 1x1 viewport.",
+      { targetId: scene.root.id }
+    ));
   }
 
   collectPaintElements(scene.root, groups, diagnostics, theme);

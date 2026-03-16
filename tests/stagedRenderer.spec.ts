@@ -109,6 +109,28 @@ describe("staged renderer contracts and harness", () => {
     expect(first).toEqual(second);
   });
 
+  it("keeps container-port deferral as internal state rather than a surfaced diagnostic", async () => {
+    const result = await runStagedRendererPipeline(buildFixtureScene());
+    const area = result.positionedScene.root.children[0];
+
+    expect(result.measuredScene.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.measure.container_ports_deferred"
+    )).toBe(false);
+    expect(result.positionedScene.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.measure.container_ports_deferred"
+    )).toBe(false);
+
+    if (!area || area.kind !== "container") {
+      throw new Error("Expected the synthetic fixture to include a positioned area container.");
+    }
+
+    expect(area.ports[0]).toEqual(expect.objectContaining({
+      x: expect.any(Number),
+      y: expect.any(Number)
+    }));
+    expect(area.ports[0]?.y).toBeGreaterThan(0);
+  });
+
   it("preserves explicit newlines and falls back to grapheme splitting for long tokens", async () => {
     const node = await getOnlyMeasuredNode(buildSingleNodeScene({
       kind: "node",

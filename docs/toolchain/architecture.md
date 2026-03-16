@@ -130,6 +130,7 @@ The engine also owns the internal staged-renderer contracts and snapshot-tested 
 
 Within that staged pipeline, renderer-owned measurement infrastructure is now shared rather than view-specific:
 
+- `src/renderer/staged/sceneBuilders.ts` owns reusable root-container, card-node, and port-builder helpers for the migrated staged views
 - `src/renderer/staged/theme.ts` owns staged theme resolution and measurement-affecting tokens
 - `src/renderer/staged/primitives.ts` owns shared primitive flow rules and primitive-content validation
 - `src/renderer/staged/textMeasurement.ts` owns deterministic font-backed width measurement
@@ -139,6 +140,7 @@ Within that staged pipeline, renderer-owned measurement infrastructure is now sh
 - `src/renderer/svgArtifacts.ts` owns shared embedded-font and SVG-to-PNG helpers used by both staged and legacy preview paths
 
 This keeps text sizing and width policy out of future view scene builders.
+Measured-scene diagnostics are now reserved for actual degraded output or fallback behavior; expected container-port deferral remains internal until macro-layout resolves final container bounds.
 
 Preview backends now split by view:
 
@@ -176,9 +178,9 @@ The per-view render models keep semantics centralized:
 - outcome-opportunity maps turn type scope plus derived instrumentation annotations into deterministic semantic lanes
 - service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
-- ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter
+- ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter and inside the staged scene builder
 
-Inside the staged renderer, `ui_contracts` now also has an internal scene-builder scaffolding path for structural SVG work and renderer-stage goldens, but that path is still internal in this migration phase and does not change the default preview backend yet.
+Inside the staged renderer, `ui_contracts` now also has an internal routed and balanced SVG path with renderer-stage goldens, but that path still remains internal in this migration phase and does not change the default preview backend yet.
 
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
@@ -187,7 +189,7 @@ Preview artifacts build on top of a backend-aware preview layer rather than expa
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
 - `sdd show --dot-out` automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs; `ia_place_map` now exercises that staged path through the normal preview workflow and committed corpus, while `ui_contracts` currently exercises it through internal staged scene tests only
+- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs; `ia_place_map` now exercises that staged path through the normal preview workflow and committed corpus, while `ui_contracts` currently exercises it through internal staged scene and SVG tests only
 
 ## Determinism
 

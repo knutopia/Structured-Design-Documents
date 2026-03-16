@@ -10,7 +10,7 @@ import type {
   PositionedItem,
   PositionedRoute
 } from "./contracts.js";
-import type { RendererDiagnostic, RendererDiagnosticSeverity } from "./diagnostics.js";
+import { createRoutingDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 
 export interface IndexedPositionedItem {
   item: PositionedItem;
@@ -27,21 +27,7 @@ const EDGE_LABEL_SEGMENT_OFFSET = 12;
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
-
-export function createRoutingDiagnostic(
-  code: string,
-  message: string,
-  targetId: string,
-  severity: RendererDiagnosticSeverity = "warn"
-): RendererDiagnostic {
-  return {
-    phase: "routing",
-    code,
-    severity,
-    message,
-    targetId
-  };
-}
+export { createRoutingDiagnostic } from "./diagnostics.js";
 
 function cloneMeasuredPort(port: MeasuredPort): MeasuredPort {
   return {

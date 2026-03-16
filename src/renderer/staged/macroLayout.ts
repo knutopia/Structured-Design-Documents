@@ -20,7 +20,11 @@ import type {
   PositionedScene,
   WidthPolicy
 } from "./contracts.js";
-import { sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
+import {
+  createLayoutDiagnostic,
+  sortRendererDiagnostics,
+  type RendererDiagnostic
+} from "./diagnostics.js";
 import { runElkLayeredLayout, type ElkAdaptedEdge } from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
 import {
@@ -65,7 +69,6 @@ type LayoutStrategyHandler = (
   context: LayoutContext
 ) => Promise<ContainerLayoutResult>;
 
-const DEFERRED_CONTAINER_PORT_DIAGNOSTIC = "renderer.measure.container_ports_deferred";
 const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels", "edges", "edge_labels"];
 
 function roundMetric(value: number): number {
@@ -178,16 +181,6 @@ function resolveContainerHeaderWidth(headerContent: MeasuredContentBlock[], chro
 
   const maxRight = Math.max(...headerContent.map((block) => block.x + block.width));
   return roundMetric(maxRight + chrome.padding.right);
-}
-
-function createLayoutDiagnostic(code: string, message: string, targetId: string): RendererDiagnostic {
-  return {
-    phase: "layout",
-    code,
-    severity: "warn",
-    message,
-    targetId
-  };
 }
 
 function resolvePortOffset(
@@ -458,7 +451,7 @@ async function layoutGridContainer(
       createLayoutDiagnostic(
         "renderer.layout.invalid_grid_columns",
         `Grid containers require layout.columns >= 1. Falling back to a single-column grid.`,
-        container.id
+        { targetId: container.id }
       )
     );
     columns = 1;
@@ -621,7 +614,7 @@ function resolveLayoutHandler(container: MeasuredContainer, context: LayoutConte
     createLayoutDiagnostic(
       "renderer.layout.strategy_fallback",
       `Layout strategy "${container.layout.strategy}" is not implemented in Step 5. Falling back to "stack".`,
-      container.id
+      { targetId: container.id }
     )
   );
   return layoutStackContainer;
@@ -684,7 +677,9 @@ async function layoutContainer(
     const diagnosticMessage = container.layout.strategy === "elk_layered"
       ? `ELK layout failed for container "${container.id}". Falling back to "stack". ${message}`
       : `Layout strategy "${container.layout.strategy}" failed for container "${container.id}". Falling back to "stack". ${message}`;
-    context.diagnostics.push(createLayoutDiagnostic(diagnosticCode, diagnosticMessage, container.id));
+    context.diagnostics.push(createLayoutDiagnostic(diagnosticCode, diagnosticMessage, {
+      targetId: container.id
+    }));
     layoutResult = await layoutStackContainer(container, positionedChildren, ownedEdges, context);
   }
 
@@ -888,10 +883,9 @@ function positionMeasuredEdge(
 }
 
 export async function positionMeasuredScene(measuredScene: MeasuredScene): Promise<PositionedScene> {
-  const diagnostics = measuredScene.diagnostics.filter((diagnostic) => diagnostic.code !== DEFERRED_CONTAINER_PORT_DIAGNOSTIC);
   const context: LayoutContext = {
     theme: getRendererTheme(measuredScene.themeId, "layout"),
-    diagnostics: [...diagnostics],
+    diagnostics: [...measuredScene.diagnostics],
     strategyRegistry
   };
 

@@ -7,7 +7,11 @@ import type {
   SceneNodePrimitive,
   WidthBand
 } from "./contracts.js";
-import type { RendererDiagnostic, RendererDiagnosticPhase } from "./diagnostics.js";
+import {
+  createRendererDiagnostic,
+  type RendererDiagnostic,
+  type RendererDiagnosticPhase
+} from "./diagnostics.js";
 
 export interface TextStyleToken {
   fontFamily: string;
@@ -338,12 +342,12 @@ export function resolveRendererTheme(
   return {
     theme: defaultTheme,
     diagnostics: [
-      {
-        phase: diagnosticPhase,
-        code: `renderer.${diagnosticPhase}.unknown_theme`,
-        severity: "warn",
-        message: `Unknown staged renderer theme "${themeId}". Falling back to "default".`
-      }
+      createRendererDiagnostic(
+        diagnosticPhase,
+        `renderer.${diagnosticPhase}.unknown_theme`,
+        "warn",
+        `Unknown staged renderer theme "${themeId}". Falling back to "default".`
+      )
     ]
   };
 }

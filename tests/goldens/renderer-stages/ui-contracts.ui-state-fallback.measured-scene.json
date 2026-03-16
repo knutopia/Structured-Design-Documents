@@ -895,20 +895,5 @@
       }
     }
   ],
-  "diagnostics": [
-    {
-      "phase": "measure",
-      "code": "renderer.measure.container_ports_deferred",
-      "severity": "info",
-      "message": "Container port offsets remain deferred until macro-layout reserves container bounds.",
-      "targetId": "C-060"
-    },
-    {
-      "phase": "measure",
-      "code": "renderer.measure.container_ports_deferred",
-      "severity": "info",
-      "message": "Container port offsets remain deferred until macro-layout reserves container bounds.",
-      "targetId": "P-060"
-    }
-  ]
+  "diagnostics": []
 }

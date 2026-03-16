@@ -14,6 +14,11 @@ import type {
 } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import {
+  buildCardinalPorts,
+  buildCardNode,
+  buildDiagramRootContainer
+} from "./sceneBuilders.js";
+import {
   renderPositionedSceneToPng,
   renderPositionedSceneToSvg,
   type StagedPngArtifact,
@@ -113,31 +118,6 @@ function buildPlaceContentBlocks(
   return blocks;
 }
 
-function buildPlacePorts(): SceneNode["ports"] {
-  return [
-    {
-      id: "north",
-      role: "north",
-      side: "north"
-    },
-    {
-      id: "south",
-      role: "south",
-      side: "south"
-    },
-    {
-      id: "east",
-      role: "east",
-      side: "east"
-    },
-    {
-      id: "west",
-      role: "west",
-      side: "west"
-    }
-  ];
-}
-
 function buildPlaceNode(
   place: IaRenderPlace,
   depth: number,
@@ -147,23 +127,17 @@ function buildPlaceNode(
 ): SceneNode {
   context.placeRoutingById.set(place.id, { chainId });
 
-  return {
-    kind: "node",
+  return buildCardNode({
     id: place.id,
     role: "place",
-    primitive: "card",
     classes: ["place", depth === 0 ? "root_place" : "nested_place", `depth-${depth}`],
     widthPolicy: {
       preferred: "narrow",
       allowed: ["narrow", "standard", "wide"]
     },
-    overflowPolicy: {
-      kind: "escalate_width_band",
-      maxLines: 2
-    },
     content: buildPlaceContentBlocks(place.id, context, displayOptions),
-    ports: buildPlacePorts()
-  };
+    ports: buildCardinalPorts()
+  });
 }
 
 function buildDescendantsContainer(
@@ -407,12 +381,8 @@ export function buildIaPlaceMapRendererScene(
     viewId: "ia_place_map",
     profileId,
     themeId,
-    root: {
-      kind: "container",
-      id: "root",
-      role: "diagram_root",
-      primitive: "root",
-      classes: ["diagram", "ia_place_map"],
+    root: buildDiagramRootContainer({
+      viewId: "ia_place_map",
       layout: {
         strategy: "stack",
         direction: "horizontal",
@@ -429,9 +399,8 @@ export function buildIaPlaceMapRendererScene(
         gutter: ROOT_GAP,
         headerBandHeight: 0
       },
-      children: rootChildren,
-      ports: []
-    },
+      children: rootChildren
+    }),
     edges: buildNavigationEdges(model.edges, context.placeRoutingById),
     diagnostics: []
   };

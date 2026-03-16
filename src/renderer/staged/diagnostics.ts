@@ -10,6 +10,11 @@ export interface RendererDiagnostic {
   details?: string;
 }
 
+interface RendererDiagnosticOptions {
+  targetId?: string;
+  details?: string;
+}
+
 const severityOrder: Record<RendererDiagnosticSeverity, number> = {
   error: 0,
   warn: 1,
@@ -23,6 +28,68 @@ const phaseOrder: Record<RendererDiagnosticPhase, number> = {
   routing: 3,
   backend: 4
 };
+
+export function createRendererDiagnostic(
+  phase: RendererDiagnosticPhase,
+  code: string,
+  severity: RendererDiagnosticSeverity,
+  message: string,
+  options: RendererDiagnosticOptions = {}
+): RendererDiagnostic {
+  return {
+    phase,
+    code,
+    severity,
+    message,
+    targetId: options.targetId,
+    details: options.details
+  };
+}
+
+export function createSceneDiagnostic(
+  code: string,
+  message: string,
+  options: RendererDiagnosticOptions & { severity?: RendererDiagnosticSeverity } = {}
+): RendererDiagnostic {
+  return createRendererDiagnostic("scene", code, options.severity ?? "warn", message, options);
+}
+
+export function createMeasureDiagnostic(
+  code: string,
+  message: string,
+  options: RendererDiagnosticOptions & { severity?: RendererDiagnosticSeverity } = {}
+): RendererDiagnostic {
+  return createRendererDiagnostic("measure", code, options.severity ?? "warn", message, options);
+}
+
+export function createLayoutDiagnostic(
+  code: string,
+  message: string,
+  options: RendererDiagnosticOptions & { severity?: RendererDiagnosticSeverity } = {}
+): RendererDiagnostic {
+  return createRendererDiagnostic("layout", code, options.severity ?? "warn", message, options);
+}
+
+export function createRoutingDiagnostic(
+  code: string,
+  message: string,
+  targetId: string,
+  severity: RendererDiagnosticSeverity = "warn",
+  details?: string
+): RendererDiagnostic {
+  return createRendererDiagnostic("routing", code, severity, message, {
+    targetId,
+    details
+  });
+}
+
+export function createBackendDiagnostic(
+  code: string,
+  message: string,
+  options: RendererDiagnosticOptions & { severity?: RendererDiagnosticSeverity } = {}
+): RendererDiagnostic {
+  return createRendererDiagnostic("backend", code, options.severity ?? "warn", message, options);
+}
 
 export function compareRendererDiagnostics(a: RendererDiagnostic, b: RendererDiagnostic): number {
   const severityCompare = severityOrder[a.severity] - severityOrder[b.severity];

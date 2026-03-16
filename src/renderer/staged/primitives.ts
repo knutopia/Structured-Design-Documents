@@ -4,7 +4,7 @@ import type {
   SceneContainerPrimitive,
   SceneNodePrimitive
 } from "./contracts.js";
-import type { RendererDiagnostic } from "./diagnostics.js";
+import { createMeasureDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 import type { ContainerPrimitiveTheme, NodePrimitiveTheme, RendererTheme } from "./theme.js";
 
 export function getNodePrimitiveTheme(
@@ -35,26 +35,22 @@ export function validatePrimitiveContent(
 
   if (disallowedKinds.length > 0) {
     const kinds = [...new Set(disallowedKinds)].join(", ");
-    diagnostics.push({
-      phase: "measure",
-      code: "renderer.measure.unsupported_primitive_content",
-      severity: "warn",
-      message: `Primitive "${primitive}" does not support content kind(s): ${kinds}.`,
-      targetId: nodeId
-    });
+    diagnostics.push(createMeasureDiagnostic(
+      "renderer.measure.unsupported_primitive_content",
+      `Primitive "${primitive}" does not support content kind(s): ${kinds}.`,
+      { targetId: nodeId }
+    ));
   }
 
   if (
     typeof primitiveTheme.textRule.maxBlocks === "number" &&
     blocks.length > primitiveTheme.textRule.maxBlocks
   ) {
-    diagnostics.push({
-      phase: "measure",
-      code: "renderer.measure.primitive_block_limit",
-      severity: "warn",
-      message: `Primitive "${primitive}" accepts at most ${primitiveTheme.textRule.maxBlocks} content block(s). Extra blocks will be ignored.`,
-      targetId: nodeId
-    });
+    diagnostics.push(createMeasureDiagnostic(
+      "renderer.measure.primitive_block_limit",
+      `Primitive "${primitive}" accepts at most ${primitiveTheme.textRule.maxBlocks} content block(s). Extra blocks will be ignored.`,
+      { targetId: nodeId }
+    ));
   }
 
   return diagnostics;

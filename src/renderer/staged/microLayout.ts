@@ -21,8 +21,11 @@ import type {
   WidthBand,
   WidthPolicy
 } from "./contracts.js";
-import type { RendererDiagnostic } from "./diagnostics.js";
-import { sortRendererDiagnostics } from "./diagnostics.js";
+import {
+  createMeasureDiagnostic,
+  sortRendererDiagnostics,
+  type RendererDiagnostic
+} from "./diagnostics.js";
 import {
   getContainerPrimitiveTheme,
   getNodePrimitiveTheme,
@@ -113,13 +116,11 @@ function getTextStyle(
     return style;
   }
 
-  context.diagnostics.push({
-    phase: "measure",
-    code: "renderer.measure.unknown_text_style",
-    severity: "warn",
-    message: `Unknown text style role "${role}". Falling back to "label".`,
-    targetId: nodeId
-  });
+  context.diagnostics.push(createMeasureDiagnostic(
+    "renderer.measure.unknown_text_style",
+    `Unknown text style role "${role}". Falling back to "label".`,
+    { targetId: nodeId }
+  ));
   return context.theme.textStyles.label;
 }
 
@@ -422,13 +423,11 @@ function buildCandidateBands(widthPolicy: WidthPolicy, diagnostics: RendererDiag
   const validAllowed = deduped.filter((band): band is WidthBand => WIDTH_BAND_ORDER.includes(band));
   if (!validAllowed.includes(widthPolicy.preferred)) {
     validAllowed.push(widthPolicy.preferred);
-    diagnostics.push({
-      phase: "measure",
-      code: "renderer.measure.preferred_width_band_missing",
-      severity: "warn",
-      message: `Preferred width band "${widthPolicy.preferred}" was not listed in allowed width bands. It has been injected for deterministic measurement.`,
-      targetId
-    });
+    diagnostics.push(createMeasureDiagnostic(
+      "renderer.measure.preferred_width_band_missing",
+      `Preferred width band "${widthPolicy.preferred}" was not listed in allowed width bands. It has been injected for deterministic measurement.`,
+      { targetId }
+    ));
   }
 
   validAllowed.sort((left, right) => WIDTH_BAND_ORDER.indexOf(left) - WIDTH_BAND_ORDER.indexOf(right));
@@ -485,13 +484,10 @@ function createOverflowDiagnostic(
   targetId: string,
   severity: "warn" | "info" = "warn"
 ): RendererDiagnostic {
-  return {
-    phase: "measure",
-    code,
+  return createMeasureDiagnostic(code, message, {
     severity,
-    message,
     targetId
-  };
+  });
 }
 
 function addConfiguredFallbackDiagnostic(
@@ -788,20 +784,8 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
 }
 
 function measureContainerPorts(
-  context: MeasureContext,
   container: SceneContainer
 ): MeasuredPort[] {
-  if (container.ports.length > 0) {
-    context.diagnostics.push(
-      createOverflowDiagnostic(
-        "renderer.measure.container_ports_deferred",
-        `Container port offsets remain deferred until macro-layout reserves container bounds.`,
-        container.id,
-        "info"
-      )
-    );
-  }
-
   return container.ports.map((port) => createMeasuredPort(port, 0, 0));
 }
 
@@ -839,7 +823,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     chrome,
     headerContent: headerLayout.blocks,
     children,
-    ports: measureContainerPorts(context, container),
+    ports: measureContainerPorts(container),
     width: 0,
     height: 0
   };

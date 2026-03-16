@@ -24,9 +24,16 @@ import type {
   PortSpec,
   WidthPolicy
 } from "./contracts.js";
-import type { RendererDiagnostic } from "./diagnostics.js";
+import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
+import {
+  buildCardNode,
+  buildContainerContractPorts,
+  buildContractTargetPorts,
+  buildDiagramRootContainer,
+  buildTransitionPorts
+} from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
   renderPositionedSceneToSvg,
@@ -63,16 +70,6 @@ interface SceneBuildContext {
 }
 
 export interface UiContractsStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
-
-function buildSceneDiagnostic(code: string, message: string, targetId?: string): RendererDiagnostic {
-  return {
-    phase: "scene",
-    code,
-    severity: "warn",
-    message,
-    targetId
-  };
-}
 
 function buildRootChrome(): SceneContainer["chrome"] {
   return {
@@ -142,38 +139,6 @@ function registerSceneItemKind(
   context.sceneItemKindById.set(itemId, kind);
 }
 
-function buildTransitionPorts(itemId: string): PortSpec[] {
-  return [
-    {
-      id: `${itemId}__transition_in`,
-      role: "transition_in",
-      side: "west"
-    },
-    {
-      id: `${itemId}__transition_out`,
-      role: "transition_out",
-      side: "east"
-    }
-  ];
-}
-
-function buildContainerContractPorts(itemId: string): PortSpec[] {
-  return [{
-    id: `${itemId}__contract_out`,
-    role: "contract_out",
-    side: "west",
-    offsetPolicy: "content_start"
-  }];
-}
-
-function buildContractTargetPorts(itemId: string): PortSpec[] {
-  return [{
-    id: `${itemId}__contract_in`,
-    role: "contract_in",
-    side: "west"
-  }];
-}
-
 function buildLeafNodePorts(
   nodeId: string,
   projectionNodeType: string | undefined
@@ -200,32 +165,26 @@ function buildRenderableLeafNode(
 
   if (!renderNode) {
     context.diagnostics.push(
-      buildSceneDiagnostic(
+      createSceneDiagnostic(
         "renderer.scene.ui_contracts_missing_render_node",
         `Could not resolve render-node metadata for "${nodeId}". Falling back to a generic node label.`,
-        nodeId
+        { targetId: nodeId }
       )
     );
   }
 
   context.renderedLeafNodeIds.add(nodeId);
 
-  const node: SceneNode = {
-    kind: "node",
+  const node = buildCardNode({
     id: nodeId,
     role: projectionNode?.type?.toLowerCase() ?? "node",
-    primitive: "card",
     classes: renderNode ? buildLeafNodeClasses(renderNode) : ["semantic_node", "fallback_node"],
     widthPolicy: buildRenderableNodeWidthPolicy(projectionNode?.type),
-    overflowPolicy: {
-      kind: "escalate_width_band",
-      maxLines: 2
-    },
     content: renderNode
       ? buildLeafNodeContent(renderNode)
       : buildContentBlocksFromLabelLines(`${nodeId}__content`, [projectionNode?.name ?? nodeId]),
     ports: buildLeafNodePorts(nodeId, projectionNode?.type)
-  };
+  });
 
   registerSceneItemKind(node.id, node.kind, context);
   return node;
@@ -578,7 +537,7 @@ function buildSceneEdges(
 
   if (semanticEdges.length !== model.edges.length) {
     context.diagnostics.push(
-      buildSceneDiagnostic(
+      createSceneDiagnostic(
         "renderer.scene.ui_contracts_edge_alignment",
         `Expected ${semanticEdges.length} semantic ui_contracts edge(s), but the render model produced ${model.edges.length}. Falling back to generic edge roles.`
       )
@@ -605,10 +564,10 @@ function buildSceneEdge(
 
   if (semanticEdge && (semanticEdge.from !== from || semanticEdge.to !== to)) {
     context.diagnostics.push(
-      buildSceneDiagnostic(
+      createSceneDiagnostic(
         "renderer.scene.ui_contracts_endpoint_alignment",
         `The staged ui_contracts scene resolved "${edge.from}" -> "${from}" and "${edge.to}" -> "${to}", which differs from the semantic edge mapping "${semanticEdge.from}" -> "${semanticEdge.to}".`,
-        semanticEdge.type
+        { targetId: semanticEdge.type }
       )
     );
   }
@@ -663,12 +622,8 @@ export function buildUiContractsRendererScene(
     viewId: "ui_contracts",
     profileId,
     themeId,
-    root: {
-      kind: "container",
-      id: "root",
-      role: "diagram_root",
-      primitive: "root",
-      classes: ["diagram", "ui_contracts"],
+    root: buildDiagramRootContainer({
+      viewId: "ui_contracts",
       layout: {
         strategy: "stack",
         direction: "vertical",
@@ -676,9 +631,8 @@ export function buildUiContractsRendererScene(
         crossAlignment: "stretch"
       },
       chrome: buildRootChrome(),
-      children: rootChildren,
-      ports: []
-    },
+      children: rootChildren
+    }),
     edges: buildSceneEdges(projection, model, context),
     diagnostics: [...context.diagnostics]
   };

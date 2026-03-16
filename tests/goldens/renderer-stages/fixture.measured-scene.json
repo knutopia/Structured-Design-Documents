@@ -322,13 +322,6 @@
       "severity": "info",
       "message": "Synthetic fixture scene for staged renderer snapshot coverage.",
       "targetId": "root"
-    },
-    {
-      "phase": "measure",
-      "code": "renderer.measure.container_ports_deferred",
-      "severity": "info",
-      "message": "Container port offsets remain deferred until macro-layout reserves container bounds.",
-      "targetId": "area-A-001"
     }
   ]
 }

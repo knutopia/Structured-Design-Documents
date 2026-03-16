@@ -287,18 +287,19 @@ Authoring guidance for the newly renderable views:
 ## Staged Renderer Notes
 
 - `src/renderer/staged/` holds the internal `RendererScene`, `MeasuredScene`, and `PositionedScene` contracts plus the current staged pipeline for those stages.
+- `src/renderer/staged/sceneBuilders.ts` holds the shared root-container, card-node, and reusable port builders extracted from the first two migrated views.
 - `src/renderer/staged/theme.ts` is the staged theme registry for measurement-affecting tokens, width bands, and vendored font asset paths.
 - `src/renderer/staged/primitives.ts` defines shared primitive flow rules and validates primitive/content combinations before layout.
 - `src/renderer/staged/textMeasurement.ts` performs deterministic font-backed measurement with the vendored Public Sans OTF asset.
-- `src/renderer/staged/microLayout.ts` is the Step 3 micro-layout entry point: intrinsic node sizing, wrapped lines, local content frames, local node-port offsets, and explicit overflow outcomes.
+- `src/renderer/staged/microLayout.ts` is the Step 3 micro-layout entry point: intrinsic node sizing, wrapped lines, local content frames, local node-port offsets, and explicit overflow outcomes. Measured-scene diagnostics should describe true fallback or degraded output, not expected intermediate container-port deferral.
 - `src/renderer/staged/macroLayout.ts` is the Step 5 macro-layout entry point: recursive `stack`/`grid`/`lanes` placement, container bounds, container-port resolution, and simple staged routing.
 - `src/renderer/staged/svgBackend.ts` is the Step 4 backend entry point: deterministic SVG emission from `PositionedScene` plus staged PNG derivation from that SVG.
-- `src/renderer/staged/uiContracts.ts` now holds the Step 9 structural `ui_contracts` scene builder and internal staged SVG path; CLI preview routing for `ui_contracts` still remains on the legacy preview backend at this step.
+- `src/renderer/staged/uiContracts.ts` now holds the routed and balanced internal staged `ui_contracts` scene builder plus staged SVG path; CLI preview routing for `ui_contracts` still remains on the legacy preview backend at this step.
 - `src/renderer/svgArtifacts.ts` holds the shared embedded-font and SVG-to-PNG helpers reused by the staged backend and the legacy Graphviz preview backend.
 - This staged pipeline is intentionally separate from `renderSource`, `viewRenderers.ts`, and the CLI preview registry until a later migration step moves specific views onto it.
 - `tests/rendererStageSnapshotHarness.ts` is the shared helper for deterministic staged-renderer JSON comparisons.
-- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures for the staged fixture set plus the current `ia_place_map` and structural `ui_contracts` coverage; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
-- The staged pipeline now has real shared measurement plus real manual macro-layout for `stack`, `grid`, and `lanes`; ELK-backed layout and harder routing cases still remain for later steps.
+- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures for the staged fixture set plus the current `ia_place_map` and internal staged `ui_contracts` coverage; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
+- The staged pipeline now has shared measurement, manual macro-layout, selective `elk_layered` placement, and shared routing strong enough for `ia_place_map` plus the current internal `ui_contracts` coverage, while preview routing remains intentionally limited to `ia_place_map` at this step.
 
 ## Adding A New View
 
