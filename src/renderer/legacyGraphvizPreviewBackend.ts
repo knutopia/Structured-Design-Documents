@@ -1,12 +1,12 @@
 import { spawn, spawnSync } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { Resvg } from "@resvg/resvg-js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { PreviewFormat, TextRenderFormat } from "./renderArtifacts.js";
 import type { LegacyDotPreviewStyle } from "./previewStyle.js";
 import { resolveLegacyDotPreviewStyle } from "./previewStyle.js";
+import { embedSvgFontFace, renderSvgToPng } from "./svgArtifacts.js";
 
 export const LEGACY_GRAPHVIZ_PREVIEW_BACKEND_ID = "legacy_graphviz_preview";
 export const LEGACY_GRAPHVIZ_PREVIEW_SOURCE_FORMAT: TextRenderFormat = "dot";
@@ -20,34 +20,6 @@ export interface LegacyGraphvizPreviewRequest {
 
 function escapeXml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function inferFontMimeType(fontPath: string): { mimeType: string; format: string } {
-  if (fontPath.endsWith(".woff2")) {
-    return {
-      mimeType: "font/woff2",
-      format: "woff2"
-    };
-  }
-
-  if (fontPath.endsWith(".woff")) {
-    return {
-      mimeType: "font/woff",
-      format: "woff"
-    };
-  }
-
-  if (fontPath.endsWith(".otf")) {
-    return {
-      mimeType: "font/otf",
-      format: "opentype"
-    };
-  }
-
-  return {
-    mimeType: "font/ttf",
-    format: "truetype"
-  };
 }
 
 async function withFontConfig<T>(style: LegacyDotPreviewStyle, run: (env: NodeJS.ProcessEnv) => Promise<T>): Promise<T> {
@@ -144,46 +116,18 @@ export async function renderLegacyDotToSvg(dot: string, style: LegacyDotPreviewS
 }
 
 export async function embedLegacySvgFont(svg: string, style: LegacyDotPreviewStyle): Promise<string> {
-  if (!style.svgFontAssetPath) {
-    return svg;
-  }
-
-  const fontBuffer = await readFile(style.svgFontAssetPath);
-  const { mimeType, format } = inferFontMimeType(style.svgFontAssetPath);
-  const fontData = fontBuffer.toString("base64");
-  const fontFaceBlock = `<style><![CDATA[
-@font-face {
-  font-family: '${style.fontFamily}';
-  src: url("data:${mimeType};base64,${fontData}") format('${format}');
-  font-style: normal;
-  font-weight: 400;
-}
-]]></style>`;
-
-  const svgOpenTagMatch = svg.match(/<svg\b[^>]*>/);
-  if (!svgOpenTagMatch) {
-    return svg;
-  }
-
-  const insertionOffset = svgOpenTagMatch.index! + svgOpenTagMatch[0].length;
-  return `${svg.slice(0, insertionOffset)}\n${fontFaceBlock}\n${svg.slice(insertionOffset)}`;
+  return embedSvgFontFace(svg, {
+    fontFamily: style.fontFamily,
+    fontAssetPath: style.svgFontAssetPath
+  });
 }
 
 export async function renderLegacySvgToPng(svg: string, style: LegacyDotPreviewStyle): Promise<Uint8Array> {
-  const resvgOptions: ConstructorParameters<typeof Resvg>[1] = {
+  return renderSvgToPng(svg, {
     dpi: style.dpi,
-    font: {
-      ...(style.pngFontAssetPath ? { fontFiles: [style.pngFontAssetPath] } : {}),
-      loadSystemFonts: false,
-      defaultFontFamily: style.fontFamily,
-      sansSerifFamily: style.fontFamily,
-      serifFamily: style.fontFamily,
-      monospaceFamily: style.fontFamily
-    }
-  };
-  const resvg = new Resvg(svg, resvgOptions);
-
-  return resvg.render().asPng();
+    fontFamily: style.fontFamily,
+    pngFontAssetPath: style.pngFontAssetPath
+  });
 }
 
 export async function renderLegacyGraphvizPreview(request: LegacyGraphvizPreviewRequest): Promise<string | Uint8Array> {

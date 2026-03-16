@@ -7,7 +7,7 @@ import type {
   SceneNodePrimitive,
   WidthBand
 } from "./contracts.js";
-import type { RendererDiagnostic } from "./diagnostics.js";
+import type { RendererDiagnostic, RendererDiagnosticPhase } from "./diagnostics.js";
 
 export interface TextStyleToken {
   fontFamily: string;
@@ -39,6 +39,39 @@ export interface ContainerPrimitiveTheme {
   portInset: number;
 }
 
+export interface PrimitiveCornerRadii {
+  container: Record<SceneContainerPrimitive, number>;
+  node: Record<SceneNodePrimitive, number>;
+}
+
+export interface RendererPaintPalette {
+  canvas: string;
+  containerFill: string;
+  containerStroke: string;
+  headerBandFill: string;
+  nodeFill: string;
+  nodeStroke: string;
+  badgeFill: string;
+  badgeStroke: string;
+  connectorPortFill: string;
+  connectorPortStroke: string;
+  text: string;
+  secondaryText: string;
+  edge: string;
+  edgeLabelFill: string;
+  edgeLabelStroke: string;
+}
+
+export interface RendererPaintTheme {
+  canvasBackground: string;
+  strokeWidth: number;
+  edgeStrokeWidth: number;
+  portRadius: number;
+  arrowSize: number;
+  cornerRadii: PrimitiveCornerRadii;
+  palette: RendererPaintPalette;
+}
+
 export interface RendererTheme {
   id: string;
   revision: string;
@@ -53,6 +86,7 @@ export interface RendererTheme {
   textStyles: Record<string, TextStyleToken>;
   nodePrimitives: Record<SceneNodePrimitive, NodePrimitiveTheme>;
   containerPrimitives: Record<SceneContainerPrimitive, ContainerPrimitiveTheme>;
+  paint: RendererPaintTheme;
 }
 
 export const WIDTH_BAND_ORDER: WidthBand[] = ["chip", "narrow", "standard", "wide"];
@@ -237,6 +271,48 @@ const defaultTheme: RendererTheme = {
       defaultHeaderBandHeight: 0,
       portInset: 8
     }
+  },
+  paint: {
+    canvasBackground: "#f7f8fb",
+    strokeWidth: 1.5,
+    edgeStrokeWidth: 2,
+    portRadius: 4,
+    arrowSize: 10,
+    cornerRadii: {
+      container: {
+        root: 18,
+        cluster: 16,
+        lane: 16,
+        stack: 0,
+        grid: 0
+      },
+      node: {
+        card: 14,
+        header: 12,
+        badge: 999,
+        label: 6,
+        annotation_list: 10,
+        edge_label: 8,
+        connector_port: 999
+      }
+    },
+    palette: {
+      canvas: "#f7f8fb",
+      containerFill: "#eef2f7",
+      containerStroke: "#94a3b8",
+      headerBandFill: "#dbe4f0",
+      nodeFill: "#ffffff",
+      nodeStroke: "#64748b",
+      badgeFill: "#dbeafe",
+      badgeStroke: "#2563eb",
+      connectorPortFill: "#ffffff",
+      connectorPortStroke: "#2563eb",
+      text: "#0f172a",
+      secondaryText: "#475569",
+      edge: "#1d4ed8",
+      edgeLabelFill: "#ffffff",
+      edgeLabelStroke: "#93c5fd"
+    }
   }
 };
 
@@ -247,7 +323,10 @@ export interface ResolvedRendererTheme {
   diagnostics: RendererDiagnostic[];
 }
 
-export function resolveRendererTheme(themeId: string): ResolvedRendererTheme {
+export function resolveRendererTheme(
+  themeId: string,
+  diagnosticPhase: RendererDiagnosticPhase = "measure"
+): ResolvedRendererTheme {
   const theme = themeRegistry.get(themeId);
   if (theme) {
     return {
@@ -260,8 +339,8 @@ export function resolveRendererTheme(themeId: string): ResolvedRendererTheme {
     theme: defaultTheme,
     diagnostics: [
       {
-        phase: "measure",
-        code: "renderer.measure.unknown_theme",
+        phase: diagnosticPhase,
+        code: `renderer.${diagnosticPhase}.unknown_theme`,
         severity: "warn",
         message: `Unknown staged renderer theme "${themeId}". Falling back to "default".`
       }
@@ -269,6 +348,6 @@ export function resolveRendererTheme(themeId: string): ResolvedRendererTheme {
   };
 }
 
-export function getRendererTheme(themeId: string): RendererTheme {
-  return resolveRendererTheme(themeId).theme;
+export function getRendererTheme(themeId: string, diagnosticPhase: RendererDiagnosticPhase = "measure"): RendererTheme {
+  return resolveRendererTheme(themeId, diagnosticPhase).theme;
 }

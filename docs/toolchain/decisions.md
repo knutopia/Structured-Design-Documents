@@ -43,6 +43,13 @@ The Step 3 measurement boundary is intentionally opinionated:
 - width bands and overflow policy are shared renderer infrastructure, not view-specific heuristics
 - node micro-layout is real now, while container bounds and macro-layout remain separate later-stage responsibilities
 
+The Step 4 backend boundary is also now explicit:
+
+- `PositionedScene` is the sole input to the staged SVG backend
+- staged SVG serialization is deterministic and emits shared paint-group wrappers, class hooks, and marker definitions
+- staged PNG output is derived from staged SVG through shared rasterization helpers
+- preview routing still remains on `legacy_graphviz_preview` until later migration steps prove a view-specific staged path end to end
+
 ## String-First Property Policy
 
 Compiled properties remain strings in v0.1.
@@ -112,6 +119,7 @@ Preview generation remains outside the core renderer contract:
 - `legacy_graphviz_preview` currently uses Graphviz only for DOT-to-SVG layout
 - SVG and PNG artifacts are produced by the CLI preview pipeline
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
+- shared SVG font-embedding and SVG-to-PNG helpers are now reused by both the staged backend and `legacy_graphviz_preview`
 
 ## Source-Ordered Structural Rendering
 

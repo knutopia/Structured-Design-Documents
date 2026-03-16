@@ -27,6 +27,7 @@ export type PortSide = "north" | "south" | "east" | "west";
 export type RoutingStyle = "orthogonal" | "straight" | "stepped";
 export type PreferredAxis = "horizontal" | "vertical";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
+export type EdgeMarkerKind = "none" | "arrow";
 
 export interface BoxSpacing {
   top: number;
@@ -91,6 +92,11 @@ export interface EdgeLabelSpec {
   textStyleRole: string;
 }
 
+export interface EdgeMarkers {
+  start?: EdgeMarkerKind;
+  end?: EdgeMarkerKind;
+}
+
 export interface SceneContainer {
   kind: "container";
   id: string;
@@ -125,6 +131,7 @@ export interface SceneEdge {
   to: SceneEdgeEndpoint;
   routing: RoutingIntent;
   label?: EdgeLabelSpec;
+  markers?: EdgeMarkers;
 }
 
 export interface RendererScene {
@@ -219,6 +226,7 @@ export interface MeasuredEdge {
   to: MeasuredEdgeEndpoint;
   routing: RoutingIntent;
   label?: MeasuredEdgeLabel;
+  markers?: EdgeMarkers;
 }
 
 export interface MeasuredScene {
@@ -287,6 +295,7 @@ export interface PositionedEdgeLabel {
   lines: string[];
   width: number;
   height: number;
+  lineHeight: number;
   textStyleRole: string;
   x: number;
   y: number;
@@ -300,6 +309,7 @@ export interface PositionedEdge {
   to: PositionedEdgeEndpoint;
   route: PositionedRoute;
   label?: PositionedEdgeLabel;
+  markers?: EdgeMarkers;
   paintGroup: PaintGroup;
 }
 

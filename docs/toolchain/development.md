@@ -33,6 +33,7 @@ The CLI preview pipeline is SVG-first:
 - `sdd show` resolves preview output through a backend-aware registry and writes `.svg` by default
 - the only preview backend currently registered is `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
 - PNG output is still derived from SVG, and the legacy backend uses a vendored Public Sans desktop font so preview typography does not depend on a user-installed system font
+- the staged renderer now also has an internal SVG backend plus shared SVG-to-PNG helpers, but preview routing still stays on `legacy_graphviz_preview` until later migration steps
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
 Font provenance:
@@ -228,7 +229,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/compiler/`: graph construction, canonicalization, schema validation
 - `src/validator/`: generic rule execution and profile validation
 - `src/projector/`: internal multi-view projection registry, shared helpers, and per-view builders
-- `src/renderer/`: render capability registry, view render models, emitters, staged renderer contracts, legacy preview backend plumbing, and preview style resolution
+- `src/renderer/`: render capability registry, view render models, emitters, staged renderer contracts and backends, shared SVG artifact helpers, legacy preview backend plumbing, and preview style resolution
 - `src/examples/`: curated render-pair discovery plus rendered-corpus generation helpers
 - `src/diagnostics/`: structured diagnostics and formatting
 - `src/cli/`: command wiring
@@ -283,9 +284,11 @@ Authoring guidance for the newly renderable views:
 - `src/renderer/staged/primitives.ts` defines shared primitive flow rules and validates primitive/content combinations before layout.
 - `src/renderer/staged/textMeasurement.ts` performs deterministic font-backed measurement with the vendored Public Sans OTF asset.
 - `src/renderer/staged/microLayout.ts` is the Step 3 micro-layout entry point: intrinsic node sizing, wrapped lines, local content frames, local node-port offsets, and explicit overflow outcomes.
+- `src/renderer/staged/svgBackend.ts` is the Step 4 backend entry point: deterministic SVG emission from `PositionedScene` plus staged PNG derivation from that SVG.
+- `src/renderer/svgArtifacts.ts` holds the shared embedded-font and SVG-to-PNG helpers reused by the staged backend and the legacy Graphviz preview backend.
 - This staged pipeline is intentionally separate from `renderSource`, `viewRenderers.ts`, and the CLI preview registry until a later migration step moves specific views onto it.
 - `tests/rendererStageSnapshotHarness.ts` is the shared helper for deterministic staged-renderer JSON comparisons.
-- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and are implementation-contract fixtures, not bundle source-of-truth artifacts.
+- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
 - The staged measurement step is real for nodes and edge labels, but container bounds, container-port offsets, macro-layout, and routing still remain deferred to later steps.
 
 ## Adding A New View

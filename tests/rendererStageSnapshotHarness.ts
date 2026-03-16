@@ -11,3 +11,8 @@ export async function expectRendererStageSnapshot(snapshotFileName: string, valu
   const expected = await readFile(path.join(rendererStageGoldensRoot, snapshotFileName), "utf8");
   expect(normalizeLineEndings(JSON.stringify(value, null, 2))).toBe(normalizeLineEndings(expected).trimEnd());
 }
+
+export async function expectRendererStageTextSnapshot(snapshotFileName: string, value: string): Promise<void> {
+  const expected = await readFile(path.join(rendererStageGoldensRoot, snapshotFileName), "utf8");
+  expect(normalizeLineEndings(value)).toBe(normalizeLineEndings(expected).trimEnd());
+}

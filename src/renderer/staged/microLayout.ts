@@ -824,7 +824,8 @@ function measureEdge(edge: SceneEdge, context: MeasureContext): MeasuredEdge {
     routing: {
       ...edge.routing
     },
-    label: edge.label ? measureEdgeLabel(edge.label, context, edge.id) : undefined
+    label: edge.label ? measureEdgeLabel(edge.label, context, edge.id) : undefined,
+    markers: edge.markers ? { ...edge.markers } : undefined
   };
 }
 

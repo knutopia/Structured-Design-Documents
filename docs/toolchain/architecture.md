@@ -29,7 +29,7 @@ The engine runs this pipeline:
 5. internal `projectView`
 6. `renderSource`
 
-The staged renderer migration also introduces an internal-only renderer pipeline after projection for future SVG work:
+The staged renderer migration also introduces an internal-only renderer pipeline after projection for staged SVG work:
 
 1. `RendererScene`
 2. `MeasuredScene`
@@ -67,6 +67,12 @@ Step 3 turns `MeasuredScene` into a real micro-layout boundary rather than a pla
 - width-band selection, text wrapping, explicit clamping, and secondary-area fallback happen before any macro-layout
 - measured nodes now carry wrapped lines, local content block frames, local port offsets, and explicit overflow outcomes
 - container child measurement is recursive, but container bounds and container-port offsets remain deferred until the macro-layout step
+
+Step 4 adds the first staged artifact backend on top of those contracts:
+
+- `src/renderer/staged/svgBackend.ts` renders hand-authored `PositionedScene` fixtures to deterministic SVG with shared paint-group ordering, class hooks, embedded font CSS, and marker definitions
+- staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
+- preview routing is still unchanged; no CLI path selects the staged backend yet
 
 ## View Extension Pattern
 
@@ -121,6 +127,8 @@ Within that staged pipeline, renderer-owned measurement infrastructure is now sh
 - `src/renderer/staged/primitives.ts` owns shared primitive flow rules and primitive-content validation
 - `src/renderer/staged/textMeasurement.ts` owns deterministic font-backed width measurement
 - `src/renderer/staged/microLayout.ts` owns intrinsic node sizing and edge-label wrapping
+- `src/renderer/staged/svgBackend.ts` owns deterministic SVG emission from `PositionedScene`
+- `src/renderer/svgArtifacts.ts` owns shared embedded-font and SVG-to-PNG helpers used by both staged and legacy preview paths
 
 This keeps text sizing and width policy out of future view scene builders.
 
@@ -165,7 +173,7 @@ Preview artifacts build on top of a backend-aware preview layer rather than expa
 - `sdd show` resolves preview output through a backend registry; today that registry selects `legacy_graphviz_preview`, which turns DOT into SVG with the vendored Public Sans webfont available for layout and then embeds that webfont into the output SVG
 - `sdd show --format png` currently uses that same legacy backend to rasterize the SVG with the vendored Public Sans desktop font so PNG export does not depend on user-installed fonts
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts exist in parallel as internal-only scene, measurement, and positioning forms and are snapshot-tested separately from the legacy artifact corpus
+- the staged renderer contracts and staged SVG backend exist in parallel as internal-only scene and artifact forms and are snapshot-tested separately from the legacy artifact corpus
 
 ## Determinism
 
@@ -213,7 +221,7 @@ The test suite uses the bundle examples as conformance fixtures.
 - validation tests assert zero errors for current manifest examples under `recommended`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
 - render tests assert stable DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
-- staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON under `tests/goldens/renderer-stages/` without changing current legacy outputs
+- staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON plus deterministic staged SVG fixtures under `tests/goldens/renderer-stages/` without changing current legacy outputs
 - staged micro-layout tests cover wrapping, width-band escalation, clamping, secondary-area handling, and unknown-theme fallback
 - corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile `.dot`, `.mmd`, `.svg`, and `.png` artifacts
 - negative fixtures cover syntax, compile, and validation failures

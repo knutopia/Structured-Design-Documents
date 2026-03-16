@@ -308,6 +308,7 @@
         ],
         "width": 83.556,
         "height": 22,
+        "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 0,
         "y": 0

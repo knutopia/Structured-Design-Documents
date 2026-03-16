@@ -1,5 +1,6 @@
 import type {
   ChromeSpec,
+  EdgeMarkers,
   LayoutIntent,
   MeasuredContainer,
   MeasuredEdge,
@@ -51,6 +52,17 @@ function cloneOverflowPolicy(overflowPolicy: OverflowPolicy): OverflowPolicy {
   return {
     kind: overflowPolicy.kind,
     maxLines: overflowPolicy.maxLines
+  };
+}
+
+function cloneEdgeMarkers(markers: EdgeMarkers | undefined): EdgeMarkers | undefined {
+  if (!markers) {
+    return undefined;
+  }
+
+  return {
+    start: markers.start,
+    end: markers.end
   };
 }
 
@@ -110,6 +122,7 @@ function positionEdgeLabel(label: NonNullable<MeasuredEdge["label"]>): Positione
     lines: [...label.lines],
     width: label.width,
     height: label.height,
+    lineHeight: label.lineHeight,
     textStyleRole: label.textStyleRole,
     x: 0,
     y: 0
@@ -141,6 +154,7 @@ function positionEdge(edge: MeasuredEdge): PositionedEdge {
       ]
     },
     label: edge.label ? positionEdgeLabel(edge.label) : undefined,
+    markers: cloneEdgeMarkers(edge.markers),
     paintGroup: "edges"
   };
 }
