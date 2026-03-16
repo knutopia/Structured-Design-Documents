@@ -74,12 +74,12 @@ Step 4 adds the first staged artifact backend on top of those contracts:
 - staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
 - preview routing is still unchanged; no CLI path selects the staged backend yet
 
-Step 5 turns `PositionedScene` into a real manual macro-layout boundary:
+The staged macro-layout boundary now owns both manual placement and the first shared routed edge behaviors:
 
-- `src/renderer/staged/macroLayout.ts` owns the recursive strategy registry for `stack`, `grid`, and `lanes`
-- container chrome, padding, header bands, bounds, and container-port offsets are now resolved during layout rather than left at placeholder values
-- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, and simple deterministic route geometry before SVG emission
-- unsupported strategies such as `elk_layered` still fall back to deterministic stack placement until the ELK step lands
+- `src/renderer/staged/macroLayout.ts` owns the recursive strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
+- container chrome, padding, header bands, bounds, and container-port offsets are resolved during layout rather than left at placeholder values
+- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, and segment-aware edge-label placement before SVG emission
+- `elk_layered` spacing now reserves room for owned edge labels so horizontal transition graphs can remain readable without view-specific SVG hacks
 
 ## View Extension Pattern
 

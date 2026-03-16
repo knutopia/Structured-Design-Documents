@@ -17,7 +17,8 @@ export interface ElkAdaptedEdge {
 export interface ElkLayeredAdapterInput {
   containerId: string;
   direction: LayoutDirection;
-  gap: number;
+  nodeGap: number;
+  layerGap: number;
   children: PositionedItem[];
   edges: ElkAdaptedEdge[];
 }
@@ -138,8 +139,8 @@ export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promis
       "elk.direction": resolveElkDirection(input.direction),
       "elk.edgeRouting": "ORTHOGONAL",
       "elk.padding": "[left=0,top=0,right=0,bottom=0]",
-      "elk.spacing.nodeNode": String(input.gap),
-      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.gap)
+      "elk.spacing.nodeNode": String(input.nodeGap),
+      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
     },
     children: input.children.map((child) => createElkNode(child)),
     edges: input.edges.map((edge) => ({

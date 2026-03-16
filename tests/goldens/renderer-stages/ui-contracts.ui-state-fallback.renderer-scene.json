@@ -30,7 +30,7 @@
     "children": [
       {
         "kind": "container",
-        "id": "P-010",
+        "id": "P-060",
         "role": "place",
         "primitive": "cluster",
         "classes": [
@@ -54,21 +54,21 @@
         },
         "headerContent": [
           {
-            "id": "P-010__header__line_0",
+            "id": "P-060__header__line_0",
             "kind": "text",
-            "text": "Billing",
+            "text": "Case Review",
             "textStyleRole": "title",
             "priority": "primary"
           },
           {
-            "id": "P-010__header__line_1",
+            "id": "P-060__header__line_1",
             "kind": "text",
-            "text": "/billing",
+            "text": "/cases/review",
             "textStyleRole": "subtitle",
             "priority": "secondary"
           },
           {
-            "id": "P-010__header__line_2",
+            "id": "P-060__header__line_2",
             "kind": "badge_text",
             "text": "auth",
             "textStyleRole": "badge",
@@ -78,13 +78,13 @@
         "children": [
           {
             "kind": "container",
-            "id": "view_state_graph:P-010",
-            "role": "view_state_graph",
+            "id": "secondary_state_group:P-060",
+            "role": "state_graph",
             "primitive": "cluster",
             "classes": [
               "synthetic",
               "transition_graph",
-              "view_state_graph"
+              "state_graph"
             ],
             "layout": {
               "strategy": "elk_layered",
@@ -103,167 +103,29 @@
             },
             "headerContent": [
               {
-                "id": "view_state_graph:P-010__header__line_0",
+                "id": "secondary_state_group:P-060__header__line_0",
                 "kind": "text",
-                "text": "ViewState Graph",
+                "text": "State graph: Case Review",
                 "textStyleRole": "title",
                 "priority": "primary"
+              },
+              {
+                "id": "secondary_state_group:P-060__header__line_1",
+                "kind": "metadata",
+                "text": "scope_id=P-060",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
               }
             ],
             "children": [
               {
-                "kind": "container",
-                "id": "VS-010a",
-                "role": "view_state",
-                "primitive": "cluster",
-                "classes": [
-                  "view_state",
-                  "scope",
-                  "chrome-dashed"
-                ],
-                "layout": {
-                  "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 16,
-                  "crossAlignment": "stretch"
-                },
-                "chrome": {
-                  "padding": {
-                    "top": 12,
-                    "right": 12,
-                    "bottom": 12,
-                    "left": 12
-                  },
-                  "gutter": 16
-                },
-                "headerContent": [
-                  {
-                    "id": "VS-010a__header__line_0",
-                    "kind": "text",
-                    "text": "ViewState: Billing Editing",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  },
-                  {
-                    "id": "VS-010a__header__line_1",
-                    "kind": "metadata",
-                    "text": "data: PaymentMethod",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
-                "children": [
-                  {
-                    "kind": "container",
-                    "id": "C-011",
-                    "role": "component",
-                    "primitive": "cluster",
-                    "classes": [
-                      "component",
-                      "scope"
-                    ],
-                    "layout": {
-                      "strategy": "stack",
-                      "direction": "vertical",
-                      "gap": 16,
-                      "crossAlignment": "stretch"
-                    },
-                    "chrome": {
-                      "padding": {
-                        "top": 12,
-                        "right": 12,
-                        "bottom": 12,
-                        "left": 12
-                      },
-                      "gutter": 16
-                    },
-                    "headerContent": [
-                      {
-                        "id": "C-011__header__line_0",
-                        "kind": "text",
-                        "text": "Component: Submit Button",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
-                    "children": [
-                      {
-                        "kind": "node",
-                        "id": "E-010",
-                        "role": "event",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node",
-                          "shape-oval"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "chip",
-                          "allowed": [
-                            "chip",
-                            "narrow",
-                            "standard"
-                          ]
-                        },
-                        "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
-                        },
-                        "content": [
-                          {
-                            "id": "E-010__content__line_0",
-                            "kind": "text",
-                            "text": "Submit",
-                            "textStyleRole": "title",
-                            "priority": "primary"
-                          }
-                        ],
-                        "ports": [
-                          {
-                            "id": "E-010__contract_in",
-                            "role": "contract_in",
-                            "side": "west"
-                          }
-                        ]
-                      }
-                    ],
-                    "ports": [
-                      {
-                        "id": "C-011__contract_out",
-                        "role": "contract_out",
-                        "side": "west",
-                        "offsetPolicy": "content_start"
-                      }
-                    ]
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "VS-010a__transition_in",
-                    "role": "transition_in",
-                    "side": "west"
-                  },
-                  {
-                    "id": "VS-010a__transition_out",
-                    "role": "transition_out",
-                    "side": "east"
-                  },
-                  {
-                    "id": "VS-010a__contract_out",
-                    "role": "contract_out",
-                    "side": "west",
-                    "offsetPolicy": "content_start"
-                  }
-                ]
-              },
-              {
                 "kind": "node",
-                "id": "VS-010b",
-                "role": "viewstate",
+                "id": "ST-060a",
+                "role": "state",
                 "primitive": "card",
                 "classes": [
                   "semantic_node",
-                  "shape-box",
-                  "chrome-dashed"
+                  "shape-ellipse"
                 ],
                 "widthPolicy": {
                   "preferred": "narrow",
@@ -279,28 +141,64 @@
                 },
                 "content": [
                   {
-                    "id": "VS-010b__content__line_0",
+                    "id": "ST-060a__content__line_0",
                     "kind": "text",
-                    "text": "Billing Success",
+                    "text": "Case Review Ready",
                     "textStyleRole": "title",
                     "priority": "primary"
-                  },
-                  {
-                    "id": "VS-010b__content__line_1",
-                    "kind": "metadata",
-                    "text": "data: Receipt",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
                   }
                 ],
                 "ports": [
                   {
-                    "id": "VS-010b__transition_in",
+                    "id": "ST-060a__transition_in",
                     "role": "transition_in",
                     "side": "west"
                   },
                   {
-                    "id": "VS-010b__transition_out",
+                    "id": "ST-060a__transition_out",
+                    "role": "transition_out",
+                    "side": "east"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "ST-060b",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shape-ellipse"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "ST-060b__content__line_0",
+                    "kind": "text",
+                    "text": "Case Review Submitted",
+                    "textStyleRole": "title",
+                    "priority": "primary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "ST-060b__transition_in",
+                    "role": "transition_in",
+                    "side": "west"
+                  },
+                  {
+                    "id": "ST-060b__transition_out",
                     "role": "transition_out",
                     "side": "east"
                   }
@@ -311,7 +209,7 @@
           },
           {
             "kind": "container",
-            "id": "C-010",
+            "id": "C-060",
             "role": "component",
             "primitive": "cluster",
             "classes": [
@@ -335,9 +233,9 @@
             },
             "headerContent": [
               {
-                "id": "C-010__header__line_0",
+                "id": "C-060__header__line_0",
                 "kind": "text",
-                "text": "Component: Billing Form",
+                "text": "Component: Review Panel",
                 "textStyleRole": "title",
                 "priority": "primary"
               }
@@ -345,7 +243,45 @@
             "children": [
               {
                 "kind": "node",
-                "id": "SA-010",
+                "id": "E-060",
+                "role": "event",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shape-oval"
+                ],
+                "widthPolicy": {
+                  "preferred": "chip",
+                  "allowed": [
+                    "chip",
+                    "narrow",
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "E-060__content__line_0",
+                    "kind": "text",
+                    "text": "Submit Review",
+                    "textStyleRole": "title",
+                    "priority": "primary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "E-060__contract_in",
+                    "role": "contract_in",
+                    "side": "west"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "SA-060",
                 "role": "systemaction",
                 "primitive": "card",
                 "classes": [
@@ -366,16 +302,16 @@
                 },
                 "content": [
                   {
-                    "id": "SA-010__content__line_0",
+                    "id": "SA-060__content__line_0",
                     "kind": "text",
-                    "text": "Save Subscription",
+                    "text": "Save Review",
                     "textStyleRole": "title",
                     "priority": "primary"
                   }
                 ],
                 "ports": [
                   {
-                    "id": "SA-010__contract_in",
+                    "id": "SA-060__contract_in",
                     "role": "contract_in",
                     "side": "west"
                   }
@@ -383,7 +319,7 @@
               },
               {
                 "kind": "node",
-                "id": "D-010",
+                "id": "D-060",
                 "role": "dataentity",
                 "primitive": "card",
                 "classes": [
@@ -404,16 +340,16 @@
                 },
                 "content": [
                   {
-                    "id": "D-010__content__line_0",
+                    "id": "D-060__content__line_0",
                     "kind": "text",
-                    "text": "Subscription",
+                    "text": "CaseRecord",
                     "textStyleRole": "title",
                     "priority": "primary"
                   }
                 ],
                 "ports": [
                   {
-                    "id": "D-010__contract_in",
+                    "id": "D-060__contract_in",
                     "role": "contract_in",
                     "side": "west"
                   }
@@ -421,14 +357,13 @@
               },
               {
                 "kind": "container",
-                "id": "secondary_state_group:C-010",
+                "id": "secondary_state_group:C-060",
                 "role": "state_graph",
                 "primitive": "cluster",
                 "classes": [
                   "synthetic",
                   "transition_graph",
-                  "state_graph",
-                  "chrome-dashed"
+                  "state_graph"
                 ],
                 "layout": {
                   "strategy": "elk_layered",
@@ -447,16 +382,16 @@
                 },
                 "headerContent": [
                   {
-                    "id": "secondary_state_group:C-010__header__line_0",
+                    "id": "secondary_state_group:C-060__header__line_0",
                     "kind": "text",
-                    "text": "State detail: Billing Form",
+                    "text": "State graph: Review Panel",
                     "textStyleRole": "title",
                     "priority": "primary"
                   },
                   {
-                    "id": "secondary_state_group:C-010__header__line_1",
+                    "id": "secondary_state_group:C-060__header__line_1",
                     "kind": "metadata",
-                    "text": "scope_id=C-010",
+                    "text": "scope_id=C-060",
                     "textStyleRole": "metadata",
                     "priority": "secondary"
                   }
@@ -464,13 +399,12 @@
                 "children": [
                   {
                     "kind": "node",
-                    "id": "ST-010a",
+                    "id": "ST-061a",
                     "role": "state",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-ellipse",
-                      "chrome-dashed"
+                      "shape-ellipse"
                     ],
                     "widthPolicy": {
                       "preferred": "narrow",
@@ -486,21 +420,21 @@
                     },
                     "content": [
                       {
-                        "id": "ST-010a__content__line_0",
+                        "id": "ST-061a__content__line_0",
                         "kind": "text",
-                        "text": "Form Ready",
+                        "text": "Panel Idle",
                         "textStyleRole": "title",
                         "priority": "primary"
                       }
                     ],
                     "ports": [
                       {
-                        "id": "ST-010a__transition_in",
+                        "id": "ST-061a__transition_in",
                         "role": "transition_in",
                         "side": "west"
                       },
                       {
-                        "id": "ST-010a__transition_out",
+                        "id": "ST-061a__transition_out",
                         "role": "transition_out",
                         "side": "east"
                       }
@@ -508,13 +442,12 @@
                   },
                   {
                     "kind": "node",
-                    "id": "ST-010b",
+                    "id": "ST-061b",
                     "role": "state",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-ellipse",
-                      "chrome-dashed"
+                      "shape-ellipse"
                     ],
                     "widthPolicy": {
                       "preferred": "narrow",
@@ -530,21 +463,21 @@
                     },
                     "content": [
                       {
-                        "id": "ST-010b__content__line_0",
+                        "id": "ST-061b__content__line_0",
                         "kind": "text",
-                        "text": "Submitting",
+                        "text": "Panel Dirty",
                         "textStyleRole": "title",
                         "priority": "primary"
                       }
                     ],
                     "ports": [
                       {
-                        "id": "ST-010b__transition_in",
+                        "id": "ST-061b__transition_in",
                         "role": "transition_in",
                         "side": "west"
                       },
                       {
-                        "id": "ST-010b__transition_out",
+                        "id": "ST-061b__transition_out",
                         "role": "transition_out",
                         "side": "east"
                       }
@@ -556,7 +489,7 @@
             ],
             "ports": [
               {
-                "id": "C-010__contract_out",
+                "id": "C-060__contract_out",
                 "role": "contract_out",
                 "side": "west",
                 "offsetPolicy": "content_start"
@@ -566,64 +499,7 @@
         ],
         "ports": [
           {
-            "id": "P-010__contract_out",
-            "role": "contract_out",
-            "side": "west",
-            "offsetPolicy": "content_start"
-          }
-        ]
-      },
-      {
-        "kind": "container",
-        "id": "P-011",
-        "role": "place",
-        "primitive": "cluster",
-        "classes": [
-          "place",
-          "scope"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 16,
-          "crossAlignment": "stretch"
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 16
-        },
-        "headerContent": [
-          {
-            "id": "P-011__header__line_0",
-            "kind": "text",
-            "text": "Confirmation",
-            "textStyleRole": "title",
-            "priority": "primary"
-          },
-          {
-            "id": "P-011__header__line_1",
-            "kind": "text",
-            "text": "/confirmation",
-            "textStyleRole": "subtitle",
-            "priority": "secondary"
-          },
-          {
-            "id": "P-011__header__line_2",
-            "kind": "badge_text",
-            "text": "role:billing_agent",
-            "textStyleRole": "badge",
-            "priority": "secondary"
-          }
-        ],
-        "children": [],
-        "ports": [
-          {
-            "id": "P-011__contract_out",
+            "id": "P-060__contract_out",
             "role": "contract_out",
             "side": "west",
             "offsetPolicy": "content_start"
@@ -635,17 +511,17 @@
   },
   "edges": [
     {
-      "id": "binds_to:C-010->D-010",
+      "id": "binds_to:C-060->D-060",
       "role": "binds_to",
       "classes": [
         "edge-dotted",
         "constraint_edge"
       ],
       "from": {
-        "itemId": "C-010"
+        "itemId": "C-060"
       },
       "to": {
-        "itemId": "D-010"
+        "itemId": "D-060"
       },
       "routing": {
         "style": "orthogonal",
@@ -662,16 +538,16 @@
       }
     },
     {
-      "id": "depends_on:C-010->SA-010",
+      "id": "depends_on:C-060->SA-060",
       "role": "depends_on",
       "classes": [
         "constraint_edge"
       ],
       "from": {
-        "itemId": "C-010"
+        "itemId": "C-060"
       },
       "to": {
-        "itemId": "SA-010"
+        "itemId": "SA-060"
       },
       "routing": {
         "style": "orthogonal",
@@ -688,17 +564,17 @@
       }
     },
     {
-      "id": "emits:C-011->E-010",
+      "id": "emits:C-060->E-060",
       "role": "emits",
       "classes": [
         "edge-dashed",
         "constraint_edge"
       ],
       "from": {
-        "itemId": "C-011"
+        "itemId": "C-060"
       },
       "to": {
-        "itemId": "E-010"
+        "itemId": "E-060"
       },
       "routing": {
         "style": "orthogonal",
@@ -715,17 +591,16 @@
       }
     },
     {
-      "id": "transitions_to:ST-010a->ST-010b",
+      "id": "transitions_to:ST-060a->ST-060b",
       "role": "transitions_to",
       "classes": [
-        "edge-dashed",
         "free_edge"
       ],
       "from": {
-        "itemId": "ST-010a"
+        "itemId": "ST-060a"
       },
       "to": {
-        "itemId": "ST-010b"
+        "itemId": "ST-060b"
       },
       "routing": {
         "style": "orthogonal",
@@ -735,7 +610,7 @@
         "targetPortRole": "transition_in"
       },
       "label": {
-        "text": "[Submit] {payment_valid} / SA-010",
+        "text": "[Submit Review] / SA-060",
         "textStyleRole": "edge_label"
       },
       "markers": {
@@ -743,16 +618,16 @@
       }
     },
     {
-      "id": "transitions_to:VS-010a->VS-010b",
+      "id": "transitions_to:ST-061a->ST-061b",
       "role": "transitions_to",
       "classes": [
         "free_edge"
       ],
       "from": {
-        "itemId": "VS-010a"
+        "itemId": "ST-061a"
       },
       "to": {
-        "itemId": "VS-010b"
+        "itemId": "ST-061b"
       },
       "routing": {
         "style": "orthogonal",
@@ -762,7 +637,7 @@
         "targetPortRole": "transition_in"
       },
       "label": {
-        "text": "[Submit] {payment_valid} / SA-010",
+        "text": "[Submit Review] {draft_ready}",
         "textStyleRole": "edge_label"
       },
       "markers": {

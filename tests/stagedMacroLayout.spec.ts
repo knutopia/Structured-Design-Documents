@@ -200,7 +200,7 @@ function findPositionedItem(root: PositionedContainer, id: string): PositionedIt
 }
 
 describe("staged macro-layout", () => {
-  it("places stack containers with chrome, resolved ports, and midpoint edge labels", async () => {
+  it("places stack containers with chrome, resolved ports, and segment-aware edge labels", async () => {
     const result = await runStagedRendererPipeline(buildFixtureScene());
     const area = findPositionedItem(result.positionedScene.root, "area-A-001");
     if (area.kind !== "container") {
@@ -232,7 +232,7 @@ describe("staged macro-layout", () => {
       y: 52
     });
     expect(edge?.route.points).toHaveLength(4);
-    expect(edge?.label?.x).toBeCloseTo(228.222, 3);
+    expect(edge?.label?.x).toBeCloseTo(282, 3);
     expect(edge?.label?.y).toBeCloseTo(65.5, 3);
     expect(result.positionedScene.diagnostics).toContainEqual(expect.objectContaining({
       code: "renderer.routing.preference_fallback",

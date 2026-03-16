@@ -39,8 +39,8 @@
           "scope"
         ],
         "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
+          "strategy": "grid",
+          "columns": 2,
           "gap": 16,
           "crossAlignment": "stretch"
         },
@@ -287,25 +287,65 @@
                             "priority": "primary"
                           }
                         ],
-                        "ports": [],
+                        "ports": [
+                          {
+                            "id": "E-010__contract_in",
+                            "role": "contract_in",
+                            "side": "west",
+                            "x": 0,
+                            "y": 24
+                          }
+                        ],
                         "overflow": {
                           "status": "fits"
                         },
-                        "x": 72,
+                        "x": 73,
                         "y": 298,
                         "width": 96,
                         "height": 48
                       }
                     ],
-                    "ports": [],
-                    "x": 60,
+                    "ports": [
+                      {
+                        "id": "C-011__contract_out",
+                        "role": "contract_out",
+                        "side": "west",
+                        "offsetPolicy": "content_start",
+                        "x": 0,
+                        "y": 52
+                      }
+                    ],
+                    "x": 61,
                     "y": 246,
                     "width": 224.56,
                     "height": 112
                   }
                 ],
-                "ports": [],
-                "x": 48,
+                "ports": [
+                  {
+                    "id": "VS-010a__transition_in",
+                    "role": "transition_in",
+                    "side": "west",
+                    "x": 0,
+                    "y": 98
+                  },
+                  {
+                    "id": "VS-010a__transition_out",
+                    "role": "transition_out",
+                    "side": "east",
+                    "x": 248.56,
+                    "y": 98
+                  },
+                  {
+                    "id": "VS-010a__contract_out",
+                    "role": "contract_out",
+                    "side": "west",
+                    "offsetPolicy": "content_start",
+                    "x": 0,
+                    "y": 72
+                  }
+                ],
+                "x": 49,
                 "y": 174,
                 "width": 248.56,
                 "height": 196
@@ -365,11 +405,26 @@
                     "priority": "secondary"
                   }
                 ],
-                "ports": [],
+                "ports": [
+                  {
+                    "id": "VS-010b__transition_in",
+                    "role": "transition_in",
+                    "side": "west",
+                    "x": 0,
+                    "y": 33
+                  },
+                  {
+                    "id": "VS-010b__transition_out",
+                    "role": "transition_out",
+                    "side": "east",
+                    "x": 168,
+                    "y": 33
+                  }
+                ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 320.56,
+                "x": 481.984,
                 "y": 239,
                 "width": 168,
                 "height": 66
@@ -378,8 +433,8 @@
             "ports": [],
             "x": 36,
             "y": 122,
-            "width": 464.56,
-            "height": 260
+            "width": 626.984,
+            "height": 324
           },
           {
             "kind": "container",
@@ -463,12 +518,20 @@
                     "priority": "primary"
                   }
                 ],
-                "ports": [],
+                "ports": [
+                  {
+                    "id": "SA-010__contract_in",
+                    "role": "contract_in",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 48,
-                "y": 450,
+                "x": 690.984,
+                "y": 174,
                 "width": 224,
                 "height": 48
               },
@@ -511,12 +574,20 @@
                     "priority": "primary"
                   }
                 ],
-                "ports": [],
+                "ports": [
+                  {
+                    "id": "D-010__contract_in",
+                    "role": "contract_in",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 48,
-                "y": 514,
+                "x": 690.984,
+                "y": 238,
                 "width": 224,
                 "height": 48
               },
@@ -620,12 +691,27 @@
                         "priority": "primary"
                       }
                     ],
-                    "ports": [],
+                    "ports": [
+                      {
+                        "id": "ST-010a__transition_in",
+                        "role": "transition_in",
+                        "side": "west",
+                        "x": 0,
+                        "y": 24
+                      },
+                      {
+                        "id": "ST-010a__transition_out",
+                        "role": "transition_out",
+                        "side": "east",
+                        "x": 168,
+                        "y": 24
+                      }
+                    ],
                     "overflow": {
                       "status": "fits"
                     },
-                    "x": 60,
-                    "y": 650,
+                    "x": 703.984,
+                    "y": 374,
                     "width": 168,
                     "height": 48
                   },
@@ -669,35 +755,68 @@
                         "priority": "primary"
                       }
                     ],
-                    "ports": [],
+                    "ports": [
+                      {
+                        "id": "ST-010b__transition_in",
+                        "role": "transition_in",
+                        "side": "west",
+                        "x": 0,
+                        "y": 24
+                      },
+                      {
+                        "id": "ST-010b__transition_out",
+                        "role": "transition_out",
+                        "side": "east",
+                        "x": 168,
+                        "y": 24
+                      }
+                    ],
                     "overflow": {
                       "status": "fits"
                     },
-                    "x": 252,
-                    "y": 650,
+                    "x": 1056.408,
+                    "y": 374,
                     "width": 168,
                     "height": 48
                   }
                 ],
                 "ports": [],
-                "x": 48,
-                "y": 578,
-                "width": 384,
+                "x": 690.984,
+                "y": 302,
+                "width": 546.424,
                 "height": 132
               }
             ],
-            "ports": [],
-            "x": 36,
-            "y": 398,
-            "width": 464.56,
+            "ports": [
+              {
+                "id": "C-010__contract_out",
+                "role": "contract_out",
+                "side": "west",
+                "offsetPolicy": "content_start",
+                "x": 0,
+                "y": 52
+              }
+            ],
+            "x": 678.984,
+            "y": 122,
+            "width": 570.424,
             "height": 324
           }
         ],
-        "ports": [],
+        "ports": [
+          {
+            "id": "P-010__contract_out",
+            "role": "contract_out",
+            "side": "west",
+            "offsetPolicy": "content_start",
+            "x": 0,
+            "y": 98
+          }
+        ],
         "x": 24,
         "y": 24,
-        "width": 488.56,
-        "height": 710
+        "width": 1237.408,
+        "height": 434
       },
       {
         "kind": "container",
@@ -772,18 +891,27 @@
           }
         ],
         "children": [],
-        "ports": [],
+        "ports": [
+          {
+            "id": "P-011__contract_out",
+            "role": "contract_out",
+            "side": "west",
+            "offsetPolicy": "content_start",
+            "x": 0,
+            "y": 98
+          }
+        ],
         "x": 24,
-        "y": 762,
-        "width": 488.56,
+        "y": 486,
+        "width": 1237.408,
         "height": 110
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 536.56,
-    "height": 896
+    "width": 1285.408,
+    "height": 620
   },
   "edges": [
     {
@@ -795,32 +923,34 @@
       ],
       "from": {
         "itemId": "C-010",
-        "x": 36,
-        "y": 560
+        "portId": "C-010__contract_out",
+        "x": 678.984,
+        "y": 174
       },
       "to": {
         "itemId": "D-010",
-        "x": 272,
-        "y": 538
+        "portId": "D-010__contract_in",
+        "x": 690.984,
+        "y": 262
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 36,
-            "y": 560
+            "x": 678.984,
+            "y": 174
           },
           {
-            "x": 154,
-            "y": 560
+            "x": 684.984,
+            "y": 174
           },
           {
-            "x": 154,
-            "y": 538
+            "x": 684.984,
+            "y": 262
           },
           {
-            "x": 272,
-            "y": 538
+            "x": 690.984,
+            "y": 262
           }
         ]
       },
@@ -832,8 +962,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 100.126,
-        "y": 538
+        "x": 696.984,
+        "y": 207
       },
       "markers": {
         "end": "arrow"
@@ -848,32 +978,34 @@
       ],
       "from": {
         "itemId": "C-010",
-        "x": 36,
-        "y": 560
+        "portId": "C-010__contract_out",
+        "x": 678.984,
+        "y": 174
       },
       "to": {
         "itemId": "SA-010",
-        "x": 272,
-        "y": 474
+        "portId": "SA-010__contract_in",
+        "x": 690.984,
+        "y": 198
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 36,
-            "y": 560
+            "x": 678.984,
+            "y": 174
           },
           {
-            "x": 154,
-            "y": 560
+            "x": 684.984,
+            "y": 174
           },
           {
-            "x": 154,
-            "y": 474
+            "x": 684.984,
+            "y": 198
           },
           {
-            "x": 272,
-            "y": 474
+            "x": 690.984,
+            "y": 198
           }
         ]
       },
@@ -885,8 +1017,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 115.759,
-        "y": 506
+        "x": 646.743,
+        "y": 175
       },
       "markers": {
         "end": "arrow"
@@ -902,31 +1034,33 @@
       ],
       "from": {
         "itemId": "C-011",
-        "x": 60,
-        "y": 302
+        "portId": "C-011__contract_out",
+        "x": 61,
+        "y": 298
       },
       "to": {
         "itemId": "E-010",
-        "x": 168,
+        "portId": "E-010__contract_in",
+        "x": 73,
         "y": 322
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 60,
-            "y": 302
+            "x": 61,
+            "y": 298
           },
           {
-            "x": 114,
-            "y": 302
+            "x": 67,
+            "y": 298
           },
           {
-            "x": 114,
+            "x": 67,
             "y": 322
           },
           {
-            "x": 168,
+            "x": 73,
             "y": 322
           }
         ]
@@ -939,8 +1073,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 92.565,
-        "y": 301
+        "x": 45.565,
+        "y": 299
       },
       "markers": {
         "end": "arrow"
@@ -956,24 +1090,26 @@
       ],
       "from": {
         "itemId": "ST-010a",
-        "x": 228,
-        "y": 674
+        "portId": "ST-010a__transition_out",
+        "x": 871.984,
+        "y": 398
       },
       "to": {
         "itemId": "ST-010b",
-        "x": 252,
-        "y": 674
+        "portId": "ST-010b__transition_in",
+        "x": 1056.408,
+        "y": 398
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 228,
-            "y": 674
+            "x": 871.984,
+            "y": 398
           },
           {
-            "x": 252,
-            "y": 674
+            "x": 1056.408,
+            "y": 398
           }
         ]
       },
@@ -986,8 +1122,8 @@
         "height": 36,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 160.788,
-        "y": 656
+        "x": 884.984,
+        "y": 350
       },
       "markers": {
         "end": "arrow"
@@ -1002,23 +1138,25 @@
       ],
       "from": {
         "itemId": "VS-010a",
-        "x": 296.56,
+        "portId": "VS-010a__transition_out",
+        "x": 297.56,
         "y": 272
       },
       "to": {
         "itemId": "VS-010b",
-        "x": 320.56,
+        "portId": "VS-010b__transition_in",
+        "x": 481.984,
         "y": 272
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 296.56,
+            "x": 297.56,
             "y": 272
           },
           {
-            "x": 320.56,
+            "x": 481.984,
             "y": 272
           }
         ]
@@ -1032,8 +1170,8 @@
         "height": 36,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 229.348,
-        "y": 254
+        "x": 310.56,
+        "y": 224
       },
       "markers": {
         "end": "arrow"
@@ -1041,7 +1179,22 @@
       "paintGroup": "edges"
     }
   ],
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "phase": "routing",
+      "code": "renderer.routing.edge_label_segment_fallback",
+      "severity": "info",
+      "message": "Edge label placement for \"depends_on:C-010->SA-010\" could not find a long enough route segment. Falling back to midpoint placement.",
+      "targetId": "depends_on:C-010->SA-010"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.edge_label_segment_fallback",
+      "severity": "info",
+      "message": "Edge label placement for \"emits:C-011->E-010\" could not find a long enough route segment. Falling back to midpoint placement.",
+      "targetId": "emits:C-011->E-010"
+    }
+  ],
   "paintOrder": [
     "chrome",
     "nodes",

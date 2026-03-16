@@ -1,0 +1,45 @@
+SDD-TEXT 0.1
+
+Place P-700 "Dense Review"
+  route_or_key=/dense
+  access=auth
+  CONTAINS VS-700a "Editing"
+  CONTAINS VS-700b "Done"
+  COMPOSED_OF C-700 "Review Form"
+END
+
+Place P-701 "Sparse Review"
+  route_or_key=/sparse
+  access=auth
+END
+
+Place P-702 "Summary Review"
+  route_or_key=/summary
+  access=auth
+  COMPOSED_OF C-702 "Summary Card"
+END
+
+ViewState VS-700a "Editing"
+  place_id=P-700
+  data_required=DraftRecord
+  TRANSITIONS_TO VS-700b "Done" [E-700]
+END
+
+ViewState VS-700b "Done"
+  place_id=P-700
+  data_required=Receipt
+END
+
+Component C-700 "Review Form"
+  BINDS_TO D-700 "ReviewRecord" field=status
+  EMITS E-700 "Submit Review"
+END
+
+Component C-702 "Summary Card"
+END
+
+Event E-700 "Submit Review"
+END
+
+DataEntity D-700 "ReviewRecord"
+END

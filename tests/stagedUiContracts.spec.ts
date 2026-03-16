@@ -131,6 +131,11 @@ describe("staged ui_contracts", () => {
     const componentGraph = findPositionedItem(rendered.positionedScene.root, "secondary_state_group:C-060");
     expect(placeGraph.kind).toBe("container");
     expect(componentGraph.kind).toBe("container");
+
+    await expectRendererStageSnapshot("ui-contracts.ui-state-fallback.renderer-scene.json", rendererScene);
+    await expectRendererStageSnapshot("ui-contracts.ui-state-fallback.measured-scene.json", rendered.measuredScene);
+    await expectRendererStageSnapshot("ui-contracts.ui-state-fallback.positioned-scene.json", rendered.positionedScene);
+    await expectRendererStageTextSnapshot("ui-contracts.ui-state-fallback.svg", rendered.svg);
   });
 
   it("keeps the shared supporting group structural in the staged scene", async () => {
@@ -165,5 +170,45 @@ END
         .filter((edge) => edge.role === "emits" && edge.to.itemId === "E-200")
         .map((edge) => edge.from.itemId)
     ).toEqual(["C-200", "C-201"]);
+  });
+
+  it("keeps root places vertically balanced while dense places switch to a place grid", async () => {
+    const examplePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_dense_sparse_staged.sdd");
+    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "recommended");
+
+    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(rendererScene.root.layout).toEqual(expect.objectContaining({
+      strategy: "stack",
+      direction: "vertical",
+      crossAlignment: "stretch"
+    }));
+
+    const densePlace = findPositionedItem(rendered.positionedScene.root, "P-700");
+    const sparsePlace = findPositionedItem(rendered.positionedScene.root, "P-701");
+    const summaryPlace = findPositionedItem(rendered.positionedScene.root, "P-702");
+    if (densePlace.kind !== "container" || sparsePlace.kind !== "container" || summaryPlace.kind !== "container") {
+      throw new Error("Expected dense/sparse staged ui_contracts places to remain containers.");
+    }
+
+    expect(densePlace.layout).toEqual(expect.objectContaining({
+      strategy: "grid",
+      columns: 2,
+      crossAlignment: "stretch"
+    }));
+    expect(sparsePlace.layout).toEqual(expect.objectContaining({
+      strategy: "stack",
+      direction: "vertical"
+    }));
+    expect(summaryPlace.layout).toEqual(expect.objectContaining({
+      strategy: "stack",
+      direction: "vertical"
+    }));
+    expect(densePlace.x).toBe(sparsePlace.x);
+    expect(densePlace.x).toBe(summaryPlace.x);
+    expect(densePlace.width).toBe(sparsePlace.width);
+    expect(densePlace.width).toBe(summaryPlace.width);
+
+    await expectRendererStageSnapshot("ui-contracts.dense-sparse.positioned-scene.json", rendered.positionedScene);
+    await expectRendererStageTextSnapshot("ui-contracts.dense-sparse.svg", rendered.svg);
   });
 });

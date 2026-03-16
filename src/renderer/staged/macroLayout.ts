@@ -117,6 +117,7 @@ function cloneMeasuredPort(port: MeasuredPort): MeasuredPort {
     role: port.role,
     side: port.side,
     offset: port.offset,
+    offsetPolicy: port.offsetPolicy,
     x: port.x,
     y: port.y
   };
@@ -189,38 +190,86 @@ function createLayoutDiagnostic(code: string, message: string, targetId: string)
   };
 }
 
-function resolveLocalPortPosition(port: MeasuredPort, width: number, height: number, portInset: number): MeasuredPort {
+function resolvePortOffset(
+  port: MeasuredPort,
+  chrome: ChromeSpec | undefined,
+  width: number,
+  height: number,
+  portInset: number
+): number {
+  if (port.offset !== undefined) {
+    return roundMetric(port.offset);
+  }
+
+  switch (port.offsetPolicy) {
+    case "header_center":
+      if (chrome && (port.side === "east" || port.side === "west")) {
+        return roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) / 2);
+      }
+      if (chrome && (port.side === "north" || port.side === "south")) {
+        return roundMetric(chrome.padding.left + width / 2);
+      }
+      break;
+    case "content_start":
+      if (chrome && (port.side === "east" || port.side === "west")) {
+        return roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0));
+      }
+      if (chrome && (port.side === "north" || port.side === "south")) {
+        return roundMetric(chrome.padding.left);
+      }
+      break;
+    case "center":
+    case undefined:
+      break;
+  }
+
+  return port.side === "north" || port.side === "south"
+    ? roundMetric(width / 2)
+    : roundMetric(Math.max(portInset, height / 2));
+}
+
+function resolveLocalPortPosition(
+  port: MeasuredPort,
+  width: number,
+  height: number,
+  portInset: number,
+  chrome?: ChromeSpec
+): MeasuredPort {
+  const resolvedOffset = resolvePortOffset(port, chrome, width, height, portInset);
+
   switch (port.side) {
     case "north":
       return {
         ...cloneMeasuredPort(port),
-        x: roundMetric(port.offset ?? width / 2),
+        x: resolvedOffset,
         y: 0
       };
     case "south":
       return {
         ...cloneMeasuredPort(port),
-        x: roundMetric(port.offset ?? width / 2),
+        x: resolvedOffset,
         y: roundMetric(height)
       };
     case "east":
       return {
         ...cloneMeasuredPort(port),
         x: roundMetric(width),
-        y: roundMetric(port.offset ?? Math.max(portInset, height / 2))
+        y: resolvedOffset
       };
     case "west":
       return {
         ...cloneMeasuredPort(port),
         x: 0,
-        y: roundMetric(port.offset ?? Math.max(portInset, height / 2))
+        y: resolvedOffset
       };
   }
 }
 
 function resolveContainerPorts(container: PositionedContainer, theme: RendererTheme): MeasuredPort[] {
   const primitiveTheme = getContainerPrimitiveTheme(theme, container.primitive);
-  return container.ports.map((port) => resolveLocalPortPosition(port, container.width, container.height, primitiveTheme.portInset));
+  return container.ports.map((port) =>
+    resolveLocalPortPosition(port, container.width, container.height, primitiveTheme.portInset, container.chrome)
+  );
 }
 
 function resizeContainerCrossAxis(
@@ -494,6 +543,26 @@ function buildElkAdaptedEdges(
   });
 }
 
+function resolveElkLayerGap(
+  container: MeasuredContainer,
+  ownedEdges: MeasuredEdge[]
+): number {
+  const baseGap = resolveGap(container);
+  const direction = container.layout.direction ?? "horizontal";
+  const maxLabelSpan = Math.max(
+    0,
+    ...ownedEdges.map((edge) => {
+      if (!edge.label) {
+        return 0;
+      }
+
+      return direction === "horizontal" ? edge.label.width : edge.label.height;
+    })
+  );
+
+  return roundMetric(Math.max(baseGap, maxLabelSpan > 0 ? maxLabelSpan + baseGap : 0));
+}
+
 async function layoutElkLayeredContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
@@ -507,13 +576,13 @@ async function layoutElkLayeredContainer(
     };
   }
 
-  const gap = resolveGap(container);
   const direction = container.layout.direction ?? "horizontal";
   const adaptedEdges = buildElkAdaptedEdges(children, ownedEdges);
   const elkResult = await runElkLayeredLayout({
     containerId: container.id,
     direction,
-    gap,
+    nodeGap: resolveGap(container),
+    layerGap: resolveElkLayerGap(container, ownedEdges),
     children,
     edges: adaptedEdges
   });
@@ -792,15 +861,27 @@ function positionMeasuredEdge(
   const route = canUseElkRoute
     ? buildRouteFromLocalHint(edge, from, to, owner, localHint)
     : buildSharedRoute(edge, from, to);
+  const positionedFrom = {
+    itemId: from.itemId,
+    portId: from.portId,
+    x: from.x,
+    y: from.y
+  };
+  const positionedTo = {
+    itemId: to.itemId,
+    portId: to.portId,
+    x: to.x,
+    y: to.y
+  };
 
   return {
     id: edge.id,
     role: edge.role,
     classes: [...edge.classes],
-    from,
-    to,
+    from: positionedFrom,
+    to: positionedTo,
     route,
-    label: edge.label ? positionEdgeLabel(edge.label, route) : undefined,
+    label: edge.label ? positionEdgeLabel(edge.label, route, diagnostics, edge.id) : undefined,
     markers: cloneEdgeMarkers(edge.markers),
     paintGroup: "edges"
   };

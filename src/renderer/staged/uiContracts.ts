@@ -21,6 +21,7 @@ import type {
   SceneEdge,
   SceneItem,
   SceneNode,
+  PortSpec,
   WidthPolicy
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
@@ -57,6 +58,7 @@ interface SceneBuildContext {
   renderNodesById: ReadonlyMap<string, UiContractsRenderNode>;
   endpointSceneIdByModelId: Map<string, string>;
   containerSceneIdBySemanticNodeId: Map<string, string>;
+  sceneItemKindById: Map<string, SceneItem["kind"]>;
   renderedLeafNodeIds: Set<string>;
 }
 
@@ -132,6 +134,63 @@ function buildLeafNodeClasses(node: UiContractsRenderNode): string[] {
   ];
 }
 
+function registerSceneItemKind(
+  itemId: string,
+  kind: SceneItem["kind"],
+  context: SceneBuildContext
+): void {
+  context.sceneItemKindById.set(itemId, kind);
+}
+
+function buildTransitionPorts(itemId: string): PortSpec[] {
+  return [
+    {
+      id: `${itemId}__transition_in`,
+      role: "transition_in",
+      side: "west"
+    },
+    {
+      id: `${itemId}__transition_out`,
+      role: "transition_out",
+      side: "east"
+    }
+  ];
+}
+
+function buildContainerContractPorts(itemId: string): PortSpec[] {
+  return [{
+    id: `${itemId}__contract_out`,
+    role: "contract_out",
+    side: "west",
+    offsetPolicy: "content_start"
+  }];
+}
+
+function buildContractTargetPorts(itemId: string): PortSpec[] {
+  return [{
+    id: `${itemId}__contract_in`,
+    role: "contract_in",
+    side: "west"
+  }];
+}
+
+function buildLeafNodePorts(
+  nodeId: string,
+  projectionNodeType: string | undefined
+): PortSpec[] {
+  switch (projectionNodeType) {
+    case "State":
+    case "ViewState":
+      return buildTransitionPorts(nodeId);
+    case "Event":
+    case "DataEntity":
+    case "SystemAction":
+      return buildContractTargetPorts(nodeId);
+    default:
+      return [];
+  }
+}
+
 function buildRenderableLeafNode(
   nodeId: string,
   context: SceneBuildContext
@@ -151,7 +210,7 @@ function buildRenderableLeafNode(
 
   context.renderedLeafNodeIds.add(nodeId);
 
-  return {
+  const node: SceneNode = {
     kind: "node",
     id: nodeId,
     role: projectionNode?.type?.toLowerCase() ?? "node",
@@ -165,8 +224,11 @@ function buildRenderableLeafNode(
     content: renderNode
       ? buildLeafNodeContent(renderNode)
       : buildContentBlocksFromLabelLines(`${nodeId}__content`, [projectionNode?.name ?? nodeId]),
-    ports: []
+    ports: buildLeafNodePorts(nodeId, projectionNode?.type)
   };
+
+  registerSceneItemKind(node.id, node.kind, context);
+  return node;
 }
 
 function createScopeContainer(
@@ -175,7 +237,8 @@ function createScopeContainer(
   classes: string[],
   headerLines: readonly string[],
   children: SceneItem[],
-  layout: SceneContainer["layout"]
+  layout: SceneContainer["layout"],
+  ports: SceneContainer["ports"] = []
 ): SceneContainer {
   return {
     kind: "container",
@@ -187,7 +250,7 @@ function createScopeContainer(
     chrome: buildScopeChrome(),
     headerContent: buildContentBlocksFromLabelLines(`${id}__header`, headerLines),
     children,
-    ports: []
+    ports
   };
 }
 
@@ -211,7 +274,7 @@ function buildViewStateGraphContainer(
   context: SceneBuildContext
 ): SceneContainer {
   const id = `view_state_graph:${scopeSceneId}`;
-  return createScopeContainer(
+  const container = createScopeContainer(
     id,
     "view_state_graph",
     ["synthetic", "transition_graph", "view_state_graph"],
@@ -224,6 +287,9 @@ function buildViewStateGraphContainer(
       crossAlignment: "start"
     }
   );
+
+  registerSceneItemKind(container.id, container.kind, context);
+  return container;
 }
 
 function buildStateGroupScene(
@@ -232,7 +298,7 @@ function buildStateGroupScene(
 ): SceneContainer {
   registerContainerEndpoint(undefined, item.endpointId, item.id, context);
 
-  return createScopeContainer(
+  const container = createScopeContainer(
     item.id,
     "state_graph",
     ["synthetic", "transition_graph", "state_graph", ...buildChromeStyleClasses(item.style)],
@@ -245,6 +311,9 @@ function buildStateGroupScene(
       crossAlignment: "start"
     }
   );
+
+  registerSceneItemKind(container.id, container.kind, context);
+  return container;
 }
 
 function buildSupportGroupScene(
@@ -253,7 +322,7 @@ function buildSupportGroupScene(
 ): SceneContainer {
   registerContainerEndpoint(undefined, item.endpointId, item.id, context);
 
-  return createScopeContainer(
+  const container = createScopeContainer(
     item.id,
     "support_group",
     ["synthetic", "support_group", ...buildChromeStyleClasses(item.style)],
@@ -266,6 +335,9 @@ function buildSupportGroupScene(
       crossAlignment: "stretch"
     }
   );
+
+  registerSceneItemKind(container.id, container.kind, context);
+  return container;
 }
 
 function buildViewStateScene(
@@ -278,7 +350,7 @@ function buildViewStateScene(
 
   registerContainerEndpoint(item.nodeId, item.endpointId, item.id, context);
 
-  return createScopeContainer(
+  const container = createScopeContainer(
     item.id,
     "view_state",
     ["view_state", "scope", ...buildChromeStyleClasses(item.style)],
@@ -289,8 +361,15 @@ function buildViewStateScene(
       direction: "vertical",
       gap: SCOPE_GAP,
       crossAlignment: "stretch"
-    }
+    },
+    [
+      ...buildTransitionPorts(item.id),
+      ...buildContainerContractPorts(item.id)
+    ]
   );
+
+  registerSceneItemKind(container.id, container.kind, context);
+  return container;
 }
 
 function buildComponentScene(
@@ -303,7 +382,7 @@ function buildComponentScene(
 
   registerContainerEndpoint(item.nodeId, item.endpointId, item.id, context);
 
-  return createScopeContainer(
+  const container = createScopeContainer(
     item.id,
     "component",
     ["component", "scope", ...buildChromeStyleClasses(item.style)],
@@ -314,8 +393,37 @@ function buildComponentScene(
       direction: "vertical",
       gap: SCOPE_GAP,
       crossAlignment: "stretch"
-    }
+    },
+    buildContainerContractPorts(item.id)
   );
+
+  registerSceneItemKind(container.id, container.kind, context);
+  return container;
+}
+
+function resolvePlaceLayout(children: SceneItem[]): SceneContainer["layout"] {
+  const hasTransitionGraph = children.some(
+    (child) => child.kind === "container" && child.classes.includes("transition_graph")
+  );
+  const hasNonTransitionSibling = children.some(
+    (child) => child.kind !== "container" || !child.classes.includes("transition_graph")
+  );
+
+  if (hasTransitionGraph && hasNonTransitionSibling) {
+    return {
+      strategy: "grid",
+      columns: 2,
+      gap: SCOPE_GAP,
+      crossAlignment: "stretch"
+    };
+  }
+
+  return {
+    strategy: "stack",
+    direction: "vertical",
+    gap: SCOPE_GAP,
+    crossAlignment: "stretch"
+  };
 }
 
 function buildPlaceScene(
@@ -323,20 +431,20 @@ function buildPlaceScene(
   context: SceneBuildContext
 ): SceneContainer {
   registerContainerEndpoint(item.id, item.endpointId, item.id, context);
+  const children = buildScopedSceneItems(item.childItems, item.id, context);
 
-  return createScopeContainer(
+  const container = createScopeContainer(
     item.id,
     "place",
     ["place", "scope"],
     item.labelLines,
-    buildScopedSceneItems(item.childItems, item.id, context),
-    {
-      strategy: "stack",
-      direction: "vertical",
-      gap: SCOPE_GAP,
-      crossAlignment: "stretch"
-    }
+    children,
+    resolvePlaceLayout(children),
+    buildContainerContractPorts(item.id)
   );
+
+  registerSceneItemKind(container.id, container.kind, context);
+  return container;
 }
 
 function buildSceneItem(
@@ -431,12 +539,27 @@ function buildSemanticRenderableEdges(
     }));
 }
 
-function buildRoutingIntent(role: string): SceneEdge["routing"] {
+function buildRoutingIntent(
+  role: string,
+  fromKind: SceneItem["kind"] | undefined,
+  toKind: SceneItem["kind"] | undefined
+): SceneEdge["routing"] {
   if (role === "transitions_to") {
     return {
       style: "orthogonal",
       preferAxis: "horizontal",
-      avoidNodeBoxes: true
+      avoidNodeBoxes: true,
+      sourcePortRole: "transition_out",
+      targetPortRole: "transition_in"
+    };
+  }
+
+  if (role === "emits" || role === "depends_on" || role === "binds_to") {
+    return {
+      style: "orthogonal",
+      preferAxis: "horizontal",
+      sourcePortRole: fromKind === "container" ? "contract_out" : undefined,
+      targetPortRole: toKind === "node" ? "contract_in" : undefined
     };
   }
 
@@ -473,6 +596,8 @@ function buildSceneEdge(
   const from = resolveModelEndpointToSceneItemId(edge.from, context);
   const to = resolveModelEndpointToSceneItemId(edge.to, context);
   const role = semanticEdge?.type?.toLowerCase() ?? "relationship";
+  const fromKind = context.sceneItemKindById.get(from);
+  const toKind = context.sceneItemKindById.get(to);
   const edgeClasses = [
     ...buildEdgeStyleClasses(edge.style),
     edge.constraint === true ? "constraint_edge" : "free_edge"
@@ -498,7 +623,7 @@ function buildSceneEdge(
     to: {
       itemId: to
     },
-    routing: buildRoutingIntent(role),
+    routing: buildRoutingIntent(role, fromKind, toKind),
     label: edge.label
       ? {
           text: edge.label,
@@ -529,6 +654,7 @@ export function buildUiContractsRendererScene(
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node])),
     endpointSceneIdByModelId: new Map(),
     containerSceneIdBySemanticNodeId: new Map(),
+    sceneItemKindById: new Map(),
     renderedLeafNodeIds: new Set()
   };
   const rootChildren = buildScopedSceneItems(model.rootItems, "root", context);

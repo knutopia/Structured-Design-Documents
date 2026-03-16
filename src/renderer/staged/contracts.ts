@@ -24,6 +24,7 @@ export type ContentBlockKind = "text" | "badge_text" | "metadata" | "edge_label"
 export type ContentPriority = "primary" | "secondary";
 export type ContentRegion = "primary" | "secondary";
 export type PortSide = "north" | "south" | "east" | "west";
+export type PortOffsetPolicy = "center" | "header_center" | "content_start";
 export type RoutingStyle = "orthogonal" | "straight" | "stepped";
 export type PreferredAxis = "horizontal" | "vertical";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
@@ -73,6 +74,7 @@ export interface PortSpec {
   role: string;
   side: PortSide;
   offset?: number;
+  offsetPolicy?: PortOffsetPolicy;
 }
 
 export interface SceneEdgeEndpoint {
@@ -150,6 +152,7 @@ export interface MeasuredPort {
   role: string;
   side: PortSide;
   offset?: number;
+  offsetPolicy?: PortOffsetPolicy;
   x: number;
   y: number;
 }

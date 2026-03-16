@@ -2,6 +2,7 @@ import type {
   MeasuredEdge,
   MeasuredEdgeEndpoint,
   MeasuredPort,
+  PortSide,
   Point,
   PositionedContainer,
   PositionedEdgeEndpoint,
@@ -15,6 +16,13 @@ export interface IndexedPositionedItem {
   item: PositionedItem;
   portsById: Map<string, MeasuredPort>;
 }
+
+interface ResolvedEdgeEndpoint extends PositionedEdgeEndpoint {
+  side?: PortSide;
+}
+
+const EDGE_LABEL_SEGMENT_CLEARANCE = 12;
+const EDGE_LABEL_SEGMENT_OFFSET = 12;
 
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -41,6 +49,7 @@ function cloneMeasuredPort(port: MeasuredPort): MeasuredPort {
     role: port.role,
     side: port.side,
     offset: port.offset,
+    offsetPolicy: port.offsetPolicy,
     x: port.x,
     y: port.y
   };
@@ -166,7 +175,7 @@ function resolveEndpointPort(
   oppositeItem: PositionedItem | undefined,
   preferAxis: MeasuredEdge["routing"]["preferAxis"],
   diagnostics: RendererDiagnostic[]
-): PositionedEdgeEndpoint {
+): ResolvedEdgeEndpoint {
   if (endpoint.portId) {
     const explicitPort = indexedItem.portsById.get(endpoint.portId);
     if (explicitPort) {
@@ -174,6 +183,7 @@ function resolveEndpointPort(
       return {
         itemId: endpoint.itemId,
         portId: explicitPort.id,
+        side: explicitPort.side,
         x: point.x,
         y: point.y
       };
@@ -195,6 +205,7 @@ function resolveEndpointPort(
       return {
         itemId: endpoint.itemId,
         portId: rolePort.id,
+        side: rolePort.side,
         x: point.x,
         y: point.y
       };
@@ -215,6 +226,7 @@ function resolveEndpointPort(
   return {
     itemId: endpoint.itemId,
     portId: undefined,
+    side,
     x: point.x,
     y: point.y
   };
@@ -228,7 +240,7 @@ export function resolveEdgeEndpoint(
   oppositeItem: PositionedItem | undefined,
   preferAxis: MeasuredEdge["routing"]["preferAxis"],
   diagnostics: RendererDiagnostic[]
-): PositionedEdgeEndpoint {
+): ResolvedEdgeEndpoint {
   const indexedItem = index.get(endpoint.itemId);
   if (!indexedItem) {
     diagnostics.push(
@@ -242,6 +254,7 @@ export function resolveEdgeEndpoint(
     return {
       itemId: endpoint.itemId,
       portId: endpoint.portId,
+      side: undefined,
       x: 0,
       y: 0
     };
@@ -259,16 +272,34 @@ export function resolveEdgeEndpoint(
 }
 
 export function collapseRoutePoints(points: Point[]): Point[] {
-  const collapsed: Point[] = [];
+  const deduped: Point[] = [];
 
   for (const point of points) {
     const rounded = {
       x: roundMetric(point.x),
       y: roundMetric(point.y)
     };
-    const last = collapsed[collapsed.length - 1];
+    const last = deduped[deduped.length - 1];
     if (!last || last.x !== rounded.x || last.y !== rounded.y) {
-      collapsed.push(rounded);
+      deduped.push(rounded);
+    }
+  }
+
+  const collapsed: Point[] = [];
+  for (const point of deduped) {
+    collapsed.push(point);
+    while (collapsed.length >= 3) {
+      const tail = collapsed.length - 1;
+      const previous = collapsed[tail - 2];
+      const current = collapsed[tail - 1];
+      const next = collapsed[tail];
+      const isCollinearHorizontal = previous.y === current.y && current.y === next.y;
+      const isCollinearVertical = previous.x === current.x && current.x === next.x;
+      if (!isCollinearHorizontal && !isCollinearVertical) {
+        break;
+      }
+
+      collapsed.splice(tail - 1, 1);
     }
   }
 
@@ -281,9 +312,76 @@ export function collapseRoutePoints(points: Point[]): Point[] {
   return collapsed;
 }
 
-function buildSharedRoutePoints(edge: MeasuredEdge, from: Point, to: Point): Point[] {
+function isHorizontalSide(side: PortSide | undefined): side is "east" | "west" {
+  return side === "east" || side === "west";
+}
+
+function isVerticalSide(side: PortSide | undefined): side is "north" | "south" {
+  return side === "north" || side === "south";
+}
+
+function resolveOrthogonalBendCoordinate(
+  fromCoordinate: number,
+  toCoordinate: number
+): number {
+  return roundMetric((fromCoordinate + toCoordinate) / 2);
+}
+
+function buildOrthogonalRoutePoints(
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint,
+  preferAxis: MeasuredEdge["routing"]["preferAxis"]
+): Point[] {
+  if (from.x === to.x || from.y === to.y) {
+    return [
+      { x: from.x, y: from.y },
+      { x: to.x, y: to.y }
+    ];
+  }
+
+  if (isHorizontalSide(from.side) && isHorizontalSide(to.side)) {
+    const bendX = resolveOrthogonalBendCoordinate(from.x, to.x);
+    return [
+      { x: from.x, y: from.y },
+      { x: bendX, y: from.y },
+      { x: bendX, y: to.y },
+      { x: to.x, y: to.y }
+    ];
+  }
+
+  if (isVerticalSide(from.side) && isVerticalSide(to.side)) {
+    const bendY = resolveOrthogonalBendCoordinate(from.y, to.y);
+    return [
+      { x: from.x, y: from.y },
+      { x: from.x, y: bendY },
+      { x: to.x, y: bendY },
+      { x: to.x, y: to.y }
+    ];
+  }
+
+  return preferAxis === "horizontal"
+    ? [
+        { x: from.x, y: from.y },
+        { x: to.x, y: from.y },
+        { x: to.x, y: to.y }
+      ]
+    : [
+        { x: from.x, y: from.y },
+        { x: from.x, y: to.y },
+        { x: to.x, y: to.y }
+      ];
+}
+
+function buildSharedRoutePoints(
+  edge: MeasuredEdge,
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint
+): Point[] {
   if (edge.routing.style === "straight") {
-    return [from, to];
+    return [
+      { x: from.x, y: from.y },
+      { x: to.x, y: to.y }
+    ];
   }
 
   const preferAxis = edge.routing.preferAxis
@@ -291,36 +389,38 @@ function buildSharedRoutePoints(edge: MeasuredEdge, from: Point, to: Point): Poi
 
   if (edge.routing.style === "stepped") {
     return preferAxis === "horizontal"
-      ? [from, { x: to.x, y: from.y }, to]
-      : [from, { x: from.x, y: to.y }, to];
+      ? [
+          { x: from.x, y: from.y },
+          { x: to.x, y: from.y },
+          { x: to.x, y: to.y }
+        ]
+      : [
+          { x: from.x, y: from.y },
+          { x: from.x, y: to.y },
+          { x: to.x, y: to.y }
+        ];
   }
 
-  const midpoint = preferAxis === "horizontal"
-    ? roundMetric((from.x + to.x) / 2)
-    : roundMetric((from.y + to.y) / 2);
-
-  return preferAxis === "horizontal"
-    ? [from, { x: midpoint, y: from.y }, { x: midpoint, y: to.y }, to]
-    : [from, { x: from.x, y: midpoint }, { x: to.x, y: midpoint }, to];
+  return buildOrthogonalRoutePoints(from, to, preferAxis);
 }
 
 export function buildSharedRoute(
   edge: MeasuredEdge,
-  from: PositionedEdgeEndpoint,
-  to: PositionedEdgeEndpoint
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint
 ): PositionedRoute {
   return {
     style: edge.routing.style,
     points: collapseRoutePoints(
-      buildSharedRoutePoints(edge, { x: from.x, y: from.y }, { x: to.x, y: to.y })
+      buildSharedRoutePoints(edge, from, to)
     )
   };
 }
 
 export function buildRouteFromLocalHint(
   edge: MeasuredEdge,
-  from: PositionedEdgeEndpoint,
-  to: PositionedEdgeEndpoint,
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint,
   owner: PositionedContainer,
   localPoints: Point[]
 ): PositionedRoute {
@@ -351,6 +451,37 @@ function getPolylineLength(points: Point[]): number {
   return total;
 }
 
+interface RouteSegment {
+  start: Point;
+  end: Point;
+  length: number;
+  orientation: "horizontal" | "vertical";
+}
+
+function getRouteSegments(route: PositionedRoute): RouteSegment[] {
+  const segments: RouteSegment[] = [];
+
+  for (let index = 1; index < route.points.length; index += 1) {
+    const start = route.points[index - 1];
+    const end = route.points[index];
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const length = Math.hypot(dx, dy);
+    if (length === 0) {
+      continue;
+    }
+
+    segments.push({
+      start,
+      end,
+      length: roundMetric(length),
+      orientation: Math.abs(dx) >= Math.abs(dy) ? "horizontal" : "vertical"
+    });
+  }
+
+  return segments;
+}
+
 function getPointAtDistance(points: Point[], distance: number): Point {
   if (points.length === 0) {
     return { x: 0, y: 0 };
@@ -379,10 +510,72 @@ function getPointAtDistance(points: Point[], distance: number): Point {
   };
 }
 
-export function positionEdgeLabel(
+function chooseLabelSegment(
   label: NonNullable<MeasuredEdge["label"]>,
   route: PositionedRoute
+): RouteSegment | undefined {
+  const segments = getRouteSegments(route);
+  const usableSegments = segments.filter((segment) => {
+    const requiredLength = segment.orientation === "horizontal"
+      ? label.width + EDGE_LABEL_SEGMENT_CLEARANCE
+      : label.height + EDGE_LABEL_SEGMENT_CLEARANCE;
+    return segment.length >= requiredLength;
+  });
+
+  if (usableSegments.length === 0) {
+    return undefined;
+  }
+
+  return usableSegments.reduce((selected, candidate) =>
+    candidate.length > selected.length ? candidate : selected
+  );
+}
+
+export function positionEdgeLabel(
+  label: NonNullable<MeasuredEdge["label"]>,
+  route: PositionedRoute,
+  diagnostics?: RendererDiagnostic[],
+  edgeId?: string
 ): PositionedEdgeLabel {
+  const segment = chooseLabelSegment(label, route);
+  if (segment) {
+    const midpoint = {
+      x: roundMetric((segment.start.x + segment.end.x) / 2),
+      y: roundMetric((segment.start.y + segment.end.y) / 2)
+    };
+
+    return segment.orientation === "horizontal"
+      ? {
+          lines: [...label.lines],
+          width: label.width,
+          height: label.height,
+          lineHeight: label.lineHeight,
+          textStyleRole: label.textStyleRole,
+          x: roundMetric(midpoint.x - label.width / 2),
+          y: roundMetric(midpoint.y - label.height - EDGE_LABEL_SEGMENT_OFFSET)
+        }
+      : {
+          lines: [...label.lines],
+          width: label.width,
+          height: label.height,
+          lineHeight: label.lineHeight,
+          textStyleRole: label.textStyleRole,
+          x: roundMetric(midpoint.x + EDGE_LABEL_SEGMENT_OFFSET),
+          y: roundMetric(midpoint.y - label.height / 2)
+        };
+  }
+
+  if (diagnostics && edgeId) {
+    diagnostics.push(
+      createRoutingDiagnostic(
+        "renderer.routing.edge_label_segment_fallback",
+        `Edge label placement for "${edgeId}" could not find a long enough route segment. Falling back to midpoint placement.`,
+        edgeId,
+        "info"
+      )
+    );
+  }
+
   const totalLength = getPolylineLength(route.points);
   const midpoint = getPointAtDistance(route.points, totalLength / 2);
 

@@ -52,10 +52,10 @@ The Step 4 backend boundary is also now explicit:
 
 The Step 5 macro-layout boundary is now explicit too:
 
-- `src/renderer/staged/macroLayout.ts` owns the shared manual strategy registry for `stack`, `grid`, and `lanes`
+- `src/renderer/staged/macroLayout.ts` owns the shared strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
 - container bounds and container-port offsets are now resolved during macro-layout rather than carried forward as placeholders
-- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, deterministic orthogonal/stepped routes, and midpoint edge-label placement
-- unsupported strategies still fall back to deterministic stack placement until the ELK step lands
+- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, and segment-aware edge-label placement
+- `elk_layered` layout now reserves spacing for owned edge labels so transition graphs can stay horizontal and readable without per-view routing hacks
 
 ## String-First Property Policy
 
