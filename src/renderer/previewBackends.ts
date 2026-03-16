@@ -19,8 +19,13 @@ import {
   renderIaPlaceMapStagedPng,
   renderIaPlaceMapStagedSvg
 } from "./staged/iaPlaceMap.js";
+import {
+  renderUiContractsStagedPng,
+  renderUiContractsStagedSvg
+} from "./staged/uiContracts.js";
 
 export const STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID = "staged_ia_place_map_preview";
+export const STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID = "staged_ui_contracts_preview";
 
 export type PreviewArtifactSource =
   | {
@@ -77,6 +82,80 @@ export interface PreviewBackendDescriptor {
   render: (request: RenderPreviewArtifactRequest) => Promise<PreviewArtifactResult>;
 }
 
+interface StagedProjectionPreviewBackendOptions {
+  id: PreviewRendererBackendId;
+  viewId: string;
+  renderSvg: (
+    projection: Projection,
+    graph: CompiledGraph,
+    view: ViewSpec,
+    profileId: string,
+    themeId?: string
+  ) => Promise<{
+    svg: string;
+    diagnostics: RendererDiagnostic[];
+  }>;
+  renderPng: (
+    projection: Projection,
+    graph: CompiledGraph,
+    view: ViewSpec,
+    profileId: string,
+    themeId?: string
+  ) => Promise<{
+    png: Uint8Array;
+    diagnostics: RendererDiagnostic[];
+  }>;
+}
+
+function createStagedProjectionPreviewBackend(
+  options: StagedProjectionPreviewBackendOptions
+): PreviewBackendDescriptor {
+  return {
+    id: options.id,
+    backendClass: "staged",
+    inputRequirement: {
+      kind: "projection"
+    },
+    installHint: () => "",
+    render: async (request) => {
+      if (request.source.kind !== "projection") {
+        throw new Error(`Preview backend '${options.id}' requires projection source input.`);
+      }
+      if (request.view.id !== options.viewId) {
+        throw new Error(`Preview backend '${options.id}' only supports the ${options.viewId} view.`);
+      }
+
+      if (request.format === "svg") {
+        const rendered = await options.renderSvg(
+          request.source.projection,
+          request.source.graph,
+          request.view,
+          request.source.profileId,
+          request.source.themeId
+        );
+        return {
+          format: "svg",
+          text: rendered.svg,
+          diagnostics: rendered.diagnostics
+        };
+      }
+
+      const rendered = await options.renderPng(
+        request.source.projection,
+        request.source.graph,
+        request.view,
+        request.source.profileId,
+        request.source.themeId
+      );
+      return {
+        format: "png",
+        bytes: rendered.png,
+        diagnostics: rendered.diagnostics
+      };
+    }
+  };
+}
+
 const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor> = {
   [LEGACY_GRAPHVIZ_PREVIEW_BACKEND_ID]: {
     id: LEGACY_GRAPHVIZ_PREVIEW_BACKEND_ID,
@@ -112,50 +191,18 @@ const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor
       };
     }
   },
-  [STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID]: {
+  [STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
     id: STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID,
-    backendClass: "staged",
-    inputRequirement: {
-      kind: "projection"
-    },
-    installHint: () => "",
-    render: async (request) => {
-      if (request.source.kind !== "projection") {
-        throw new Error(`Preview backend '${STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID}' requires projection source input.`);
-      }
-      if (request.view.id !== "ia_place_map") {
-        throw new Error(`Preview backend '${STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID}' only supports the ia_place_map view.`);
-      }
-
-      if (request.format === "svg") {
-        const rendered = await renderIaPlaceMapStagedSvg(
-          request.source.projection,
-          request.source.graph,
-          request.view,
-          request.source.profileId,
-          request.source.themeId
-        );
-        return {
-          format: "svg",
-          text: rendered.svg,
-          diagnostics: rendered.diagnostics
-        };
-      }
-
-      const rendered = await renderIaPlaceMapStagedPng(
-        request.source.projection,
-        request.source.graph,
-        request.view,
-        request.source.profileId,
-        request.source.themeId
-      );
-      return {
-        format: "png",
-        bytes: rendered.png,
-        diagnostics: rendered.diagnostics
-      };
-    }
-  }
+    viewId: "ia_place_map",
+    renderSvg: renderIaPlaceMapStagedSvg,
+    renderPng: renderIaPlaceMapStagedPng
+  }),
+  [STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
+    id: STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID,
+    viewId: "ui_contracts",
+    renderSvg: renderUiContractsStagedSvg,
+    renderPng: renderUiContractsStagedPng
+  })
 };
 
 export function getPreviewBackend(backendId: PreviewRendererBackendId): PreviewBackendDescriptor {

@@ -37,3 +37,10 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - implicit place chains indent rightward recursively at top level and inside areas
 - `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
 - navigation connectors stay readable for both within-chain and cross-chain links
+
+`ui_contracts` visual review checklist:
+
+- top-level Place containers remain vertically balanced even when content density varies sharply
+- synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope
+- contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement
+- default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed

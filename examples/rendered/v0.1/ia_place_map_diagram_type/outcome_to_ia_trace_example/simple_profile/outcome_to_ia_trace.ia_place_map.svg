@@ -14,12 +14,16 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
+    .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
     .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
+    .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
+    .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
     .scene-edge-label__box { fill: #ffffff; stroke: #93c5fd; stroke-width: 1.5; }
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }

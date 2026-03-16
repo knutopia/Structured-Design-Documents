@@ -73,6 +73,13 @@ function buildReadmeContent(
   lines.push("- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
   lines.push("- navigation connectors stay readable for both within-chain and cross-chain links");
   lines.push("");
+  lines.push("`ui_contracts` visual review checklist:");
+  lines.push("");
+  lines.push("- top-level Place containers remain vertically balanced even when content density varies sharply");
+  lines.push("- synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope");
+  lines.push("- contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement");
+  lines.push("- default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed");
+  lines.push("");
 
   return lines.join("\n");
 }

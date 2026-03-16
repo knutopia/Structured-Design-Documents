@@ -36,7 +36,9 @@ import {
 } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
+  renderPositionedSceneToPng,
   renderPositionedSceneToSvg,
+  type StagedPngArtifact,
   type StagedSvgArtifact
 } from "./svgBackend.js";
 
@@ -70,6 +72,7 @@ interface SceneBuildContext {
 }
 
 export interface UiContractsStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
+export interface UiContractsStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
 
 function buildRootChrome(): SceneContainer["chrome"] {
   return {
@@ -648,6 +651,23 @@ export async function renderUiContractsStagedSvg(
   const rendererScene = buildUiContractsRendererScene(projection, graph, view, profileId, themeId);
   const pipeline = await runStagedRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
+
+  return {
+    ...pipeline,
+    ...rendered
+  };
+}
+
+export async function renderUiContractsStagedPng(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<UiContractsStagedPngResult> {
+  const rendererScene = buildUiContractsRendererScene(projection, graph, view, profileId, themeId);
+  const pipeline = await runStagedRendererPipeline(rendererScene);
+  const rendered = await renderPositionedSceneToPng(pipeline.positionedScene);
 
   return {
     ...pipeline,

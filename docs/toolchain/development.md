@@ -32,8 +32,9 @@ The CLI preview pipeline is SVG-first:
 
 - `sdd show` resolves preview output through a backend-aware registry and writes `.svg` by default
 - `ia_place_map` now defaults `sdd show` to the staged preview backend `staged_ia_place_map_preview`, which renders projection-driven staged SVG directly and derives PNG from that SVG
+- `ui_contracts` now also defaults `sdd show` to the staged preview backend `staged_ui_contracts_preview`, which renders the routed and balanced staged SVG directly and derives PNG from that SVG
 - the remaining views still default to `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
-- legacy Graphviz preview remains selectable for `ia_place_map` with `--backend legacy_graphviz_preview`, and `--dot-out` automatically chooses a DOT-capable backend when needed
+- legacy Graphviz preview remains selectable for `ia_place_map` and `ui_contracts` with `--backend legacy_graphviz_preview`, and `--dot-out` automatically chooses a DOT-capable backend when needed
 - PNG output is still derived from SVG in both preview paths, and the vendored Public Sans desktop font keeps preview typography independent of user-installed system fonts
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
@@ -215,6 +216,12 @@ Render a UI Contracts SVG preview artifact:
 pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out /tmp/ui-contracts.svg
 ```
 
+Render the preserved legacy Graphviz UI Contracts preview explicitly:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out /tmp/ui-contracts-legacy.svg
+```
+
 Render a PNG preview artifact:
 
 ```bash
@@ -294,12 +301,12 @@ Authoring guidance for the newly renderable views:
 - `src/renderer/staged/microLayout.ts` is the Step 3 micro-layout entry point: intrinsic node sizing, wrapped lines, local content frames, local node-port offsets, and explicit overflow outcomes. Measured-scene diagnostics should describe true fallback or degraded output, not expected intermediate container-port deferral.
 - `src/renderer/staged/macroLayout.ts` is the Step 5 macro-layout entry point: recursive `stack`/`grid`/`lanes` placement, container bounds, container-port resolution, and simple staged routing.
 - `src/renderer/staged/svgBackend.ts` is the Step 4 backend entry point: deterministic SVG emission from `PositionedScene` plus staged PNG derivation from that SVG.
-- `src/renderer/staged/uiContracts.ts` now holds the routed and balanced internal staged `ui_contracts` scene builder plus staged SVG path; CLI preview routing for `ui_contracts` still remains on the legacy preview backend at this step.
+- `src/renderer/staged/uiContracts.ts` now holds the routed and balanced staged `ui_contracts` scene builder plus staged SVG/PNG preview path used by the public `staged_ui_contracts_preview` backend.
 - `src/renderer/svgArtifacts.ts` holds the shared embedded-font and SVG-to-PNG helpers reused by the staged backend and the legacy Graphviz preview backend.
 - This staged pipeline is intentionally separate from `renderSource`, `viewRenderers.ts`, and the CLI preview registry until a later migration step moves specific views onto it.
 - `tests/rendererStageSnapshotHarness.ts` is the shared helper for deterministic staged-renderer JSON comparisons.
 - Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures for the staged fixture set plus the current `ia_place_map` and internal staged `ui_contracts` coverage; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
-- The staged pipeline now has shared measurement, manual macro-layout, selective `elk_layered` placement, and shared routing strong enough for `ia_place_map` plus the current internal `ui_contracts` coverage, while preview routing remains intentionally limited to `ia_place_map` at this step.
+- The staged pipeline now has shared measurement, manual macro-layout, selective `elk_layered` placement, and shared routing strong enough for both proof views, with `ia_place_map` and `ui_contracts` both exercised through public staged preview workflows.
 
 ## Adding A New View
 

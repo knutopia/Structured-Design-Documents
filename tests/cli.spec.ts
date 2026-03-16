@@ -195,11 +195,16 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
     };
   });
   const renderSourcePreviewMock = vi.fn(async (_input, _bundle, options) => {
-    const backendId = options.backendId ?? (options.viewId === "ia_place_map" ? "staged_ia_place_map_preview" : "legacy_graphviz_preview");
+    const backendId = options.backendId
+      ?? (options.viewId === "ia_place_map"
+        ? "staged_ia_place_map_preview"
+        : options.viewId === "ui_contracts"
+          ? "staged_ui_contracts_preview"
+          : "legacy_graphviz_preview");
     const artifact = options.format === "svg"
       ? {
         format: "svg" as const,
-        text: backendId === "staged_ia_place_map_preview" ? "<svg>staged</svg>" : "<svg>embedded</svg>",
+        text: backendId.startsWith("staged_") ? "<svg>staged</svg>" : "<svg>embedded</svg>",
         ...(backendId === "legacy_graphviz_preview" ? {
           sourceArtifacts: {
             dot: "digraph G {}"
@@ -508,7 +513,7 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/scenario.svg");
   });
 
-  it("show supports ui_contracts previews through the legacy backend", async () => {
+  it("show defaults ui_contracts previews to the staged backend", async () => {
     const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
@@ -525,10 +530,80 @@ describe("CLI wrappers", () => {
     expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "ui_contracts",
       format: "svg",
+      backendId: "staged_ui_contracts_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/ui-contracts.svg", "<svg>staged</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/ui-contracts.svg");
+  });
+
+  it("show allows ui_contracts to opt back into the legacy preview backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/place_viewstate_transition.sdd",
+      "--view",
+      "ui_contracts",
+      "--backend",
+      "legacy_graphviz_preview",
+      "--out",
+      "/tmp/ui-contracts-legacy.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ui_contracts",
+      format: "svg",
       backendId: "legacy_graphviz_preview"
     });
-    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/ui-contracts.svg", "<svg>embedded</svg>");
-    expect(stderr.join("")).toContain("Wrote /tmp/ui-contracts.svg");
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/ui-contracts-legacy.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/ui-contracts-legacy.svg");
+  });
+
+  it("show writes ui_contracts --dot-out from backend-declared source artifacts by auto-selecting the legacy backend", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/place_viewstate_transition.sdd",
+      "--view",
+      "ui_contracts",
+      "--out",
+      "/tmp/ui-contracts.svg",
+      "--dot-out",
+      "/tmp/ui-contracts.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ui_contracts",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/ui-contracts.dot", "digraph G {}");
+    expect(stderr.join("")).toContain("Wrote /tmp/ui-contracts.dot");
+  });
+
+  it("show rejects explicit staged ui_contracts --backend with --dot-out", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/place_viewstate_transition.sdd",
+      "--view",
+      "ui_contracts",
+      "--backend",
+      "staged_ui_contracts_preview",
+      "--dot-out",
+      "/tmp/ui-contracts.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(stderr.join("")).toContain("does not expose a DOT intermediate");
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
   });
 
   it("announces DOT files written via --out", async () => {
@@ -746,6 +821,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
+    expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
     expect(help).toContain("sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");

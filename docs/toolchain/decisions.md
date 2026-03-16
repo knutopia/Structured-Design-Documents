@@ -122,7 +122,7 @@ This allows the bundle to define what matters in the view, while the renderer re
 
 Preview generation remains outside the core renderer contract:
 
-- preview routing is backend-aware, with `staged_ia_place_map_preview` now defaulting `ia_place_map` SVG/PNG previews and `legacy_graphviz_preview` still serving the remaining views plus explicit legacy `ia_place_map` preview requests
+- preview routing is backend-aware, with `staged_ia_place_map_preview` now defaulting `ia_place_map` SVG/PNG previews, `staged_ui_contracts_preview` now defaulting `ui_contracts` SVG/PNG previews, and `legacy_graphviz_preview` still serving the remaining views plus explicit legacy `ia_place_map` and `ui_contracts` preview requests
 - `legacy_graphviz_preview` currently uses Graphviz only for DOT-to-SVG layout
 - SVG and PNG artifacts are produced by the CLI preview pipeline
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed

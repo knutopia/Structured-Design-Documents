@@ -105,6 +105,19 @@ const stagedIaPlaceMapPreviewArtifacts: PreviewArtifactCapability[] = [
   }
 ];
 
+const stagedUiContractsPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "staged_ui_contracts_preview",
+    backendClass: "staged"
+  },
+  {
+    format: "png",
+    backendId: "staged_ui_contracts_preview",
+    backendClass: "staged"
+  }
+];
+
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
     textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
@@ -197,7 +210,18 @@ const scenarioFlowRenderer: ViewTextRenderer = {
 };
 
 const uiContractsRenderer: ViewTextRenderer = {
-  capability: dotAndMermaidPreviewCapability(),
+  capability: {
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: [
+      ...stagedUiContractsPreviewArtifacts.map((artifact) => ({ ...artifact })),
+      ...legacyPreviewArtifacts.map((artifact) => ({ ...artifact }))
+    ],
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: {
+      svg: "staged_ui_contracts_preview",
+      png: "staged_ui_contracts_preview"
+    }
+  },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildUiContractsRenderModel(projection, graph, displayPolicy);

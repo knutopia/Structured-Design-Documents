@@ -80,4 +80,46 @@ describe("preview workflow", () => {
     expect(result.artifact.bytes.length).toBeGreaterThan(32);
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
+
+  it("renders ui_contracts SVG previews through the staged backend by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("place_viewstate_transition.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "ui_contracts",
+      format: "svg",
+      profileId: "recommended"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected staged SVG artifact.");
+    }
+
+    expect(result.artifact.text).toContain('class="staged-svg');
+    expect(result.artifact.text).toContain("ViewState Graph");
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders ui_contracts PNG previews through the staged backend by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("ui_state_fallback.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "ui_contracts",
+      format: "png",
+      profileId: "recommended"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("png");
+    if (!result.artifact || result.artifact.format !== "png") {
+      throw new Error("Expected staged PNG artifact.");
+    }
+
+    expect(Array.from(result.artifact.bytes.slice(0, PNG_SIGNATURE.length))).toEqual(PNG_SIGNATURE);
+    expect(result.artifact.bytes.length).toBeGreaterThan(32);
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
 });

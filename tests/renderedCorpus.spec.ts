@@ -92,6 +92,58 @@ describe("rendered example corpus", () => {
     }
   });
 
+  it("keeps staged ui_contracts previews as the default corpus artifacts while preserving legacy preview siblings", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
+      (variant) => variant.viewId === "ui_contracts"
+    );
+
+    for (const variant of variants) {
+      const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+      const defaultSvg = await readFile(outputPaths.svgOutputPath, "utf8");
+      expect(defaultSvg).toContain('class="staged-svg');
+
+      const legacySvgPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "svg",
+        "legacy_graphviz_preview",
+        "staged_ui_contracts_preview"
+      );
+      const legacyPngPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "png",
+        "legacy_graphviz_preview",
+        "staged_ui_contracts_preview"
+      );
+
+      await access(legacySvgPath);
+      await access(legacyPngPath);
+
+      const legacySvg = await readFile(legacySvgPath, "utf8");
+      expect(legacySvg).not.toContain('class="staged-svg');
+    }
+
+    await expect(access(path.join(
+      repoRoot,
+      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/recommended_profile/ui_state_fallback.ui_contracts_BROKEN.svg"
+    ))).rejects.toThrow();
+    await expect(access(path.join(
+      repoRoot,
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/recommended_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
+    ))).rejects.toThrow();
+    await expect(access(path.join(
+      repoRoot,
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/recommended_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
+    ))).rejects.toThrow();
+    await expect(access(path.join(
+      repoRoot,
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/recommended_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
+    ))).rejects.toThrow();
+  });
+
   it("keeps forbidden place routing and access fields out of simple rendered corpus artifacts", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
