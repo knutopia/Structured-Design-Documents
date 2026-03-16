@@ -21,18 +21,29 @@ import {
 } from "./mermaid.js";
 import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
 import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
-import { resolveDotPreviewStyle } from "./previewStyle.js";
+import { resolveLegacyDotPreviewStyle } from "./previewStyle.js";
+import type {
+  PreviewArtifactCapability,
+  PreviewFormat,
+  TextArtifactCapability,
+  TextRenderFormat
+} from "./renderArtifacts.js";
+export type {
+  PreviewArtifactCapability,
+  PreviewFormat,
+  PreviewRendererBackendId,
+  RendererBackendClass,
+  TextArtifactCapability,
+  TextRenderFormat,
+  TextRendererBackendId
+} from "./renderArtifacts.js";
 import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
 import { buildServiceBlueprintRenderModel } from "./serviceBlueprintRenderModel.js";
 import { buildUiContractsRenderModel } from "./uiContractsRenderModel.js";
 
-export type TextRenderFormat = "dot" | "mermaid";
-export type PreviewFormat = "svg" | "png";
-
 export interface ViewRenderCapability {
-  textFormats: TextRenderFormat[];
-  previewFormats: PreviewFormat[];
-  previewSourceByFormat: Record<PreviewFormat, TextRenderFormat>;
+  textArtifacts: TextArtifactCapability[];
+  previewArtifacts: PreviewArtifactCapability[];
   defaultPreviewFormat: PreviewFormat;
 }
 
@@ -48,33 +59,47 @@ interface ViewTextRenderer {
   ) => string;
 }
 
+const legacyTextArtifacts: TextArtifactCapability[] = [
+  {
+    format: "dot",
+    backendId: "legacy_dot",
+    backendClass: "legacy"
+  },
+  {
+    format: "mermaid",
+    backendId: "legacy_mermaid",
+    backendClass: "legacy"
+  }
+];
+
+const legacyPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "legacy_graphviz_preview",
+    backendClass: "legacy"
+  },
+  {
+    format: "png",
+    backendId: "legacy_graphviz_preview",
+    backendClass: "legacy"
+  }
+];
+
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
-    textFormats: ["dot", "mermaid"],
-    previewFormats: ["svg", "png"],
-    previewSourceByFormat: {
-      svg: "dot",
-      png: "dot"
-    },
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: legacyPreviewArtifacts.map((artifact) => ({ ...artifact })),
     defaultPreviewFormat: "svg"
   };
 }
 
 const iaPlaceMapRenderer: ViewTextRenderer = {
-  capability: {
-    textFormats: ["dot", "mermaid"],
-    previewFormats: ["svg", "png"],
-    previewSourceByFormat: {
-      svg: "dot",
-      png: "dot"
-    },
-    defaultPreviewFormat: "svg"
-  },
+  capability: dotAndMermaidPreviewCapability(),
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
     if (format === "dot") {
-      return renderIaPlaceMapDot(model, resolveDotPreviewStyle(bundle, view));
+      return renderIaPlaceMapDot(model, resolveLegacyDotPreviewStyle(bundle, view));
     }
 
     return renderIaPlaceMapMermaid(model);
@@ -93,7 +118,7 @@ const journeyMapRenderer: ViewTextRenderer = {
       displayPolicy
     );
     if (format === "dot") {
-      return renderJourneyMapDot(model, resolveDotPreviewStyle(bundle, view));
+      return renderJourneyMapDot(model, resolveLegacyDotPreviewStyle(bundle, view));
     }
 
     return renderJourneyMapMermaid(model);
@@ -106,7 +131,7 @@ const outcomeOpportunityMapRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildOutcomeOpportunityMapRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderOutcomeOpportunityMapDot(model, resolveDotPreviewStyle(bundle, view));
+      return renderOutcomeOpportunityMapDot(model, resolveLegacyDotPreviewStyle(bundle, view));
     }
 
     return renderOutcomeOpportunityMapMermaid(model);
@@ -119,7 +144,7 @@ const serviceBlueprintRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderServiceBlueprintDot(model, resolveDotPreviewStyle(bundle, view));
+      return renderServiceBlueprintDot(model, resolveLegacyDotPreviewStyle(bundle, view));
     }
 
     return renderServiceBlueprintMermaid(model);
@@ -132,7 +157,7 @@ const scenarioFlowRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderScenarioFlowDot(model, resolveDotPreviewStyle(bundle, view));
+      return renderScenarioFlowDot(model, resolveLegacyDotPreviewStyle(bundle, view));
     }
 
     return renderScenarioFlowMermaid(model);
@@ -145,7 +170,7 @@ const uiContractsRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildUiContractsRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderUiContractsDot(model, resolveDotPreviewStyle(bundle, view));
+      return renderUiContractsDot(model, resolveLegacyDotPreviewStyle(bundle, view));
     }
 
     return renderUiContractsMermaid(model);
@@ -167,6 +192,28 @@ export function getViewTextRenderer(viewId: string): ViewTextRenderer | undefine
 
 export function getViewRenderCapability(viewId: string): ViewRenderCapability | undefined {
   return viewRenderers[viewId]?.capability;
+}
+
+export function getSupportedTextFormats(capability: ViewRenderCapability): TextRenderFormat[] {
+  return capability.textArtifacts.map((artifact) => artifact.format);
+}
+
+export function getSupportedPreviewFormats(capability: ViewRenderCapability): PreviewFormat[] {
+  return capability.previewArtifacts.map((artifact) => artifact.format);
+}
+
+export function getTextArtifactCapability(
+  capability: ViewRenderCapability,
+  format: TextRenderFormat
+): TextArtifactCapability | undefined {
+  return capability.textArtifacts.find((artifact) => artifact.format === format);
+}
+
+export function getPreviewArtifactCapability(
+  capability: ViewRenderCapability,
+  format: PreviewFormat
+): PreviewArtifactCapability | undefined {
+  return capability.previewArtifacts.find((artifact) => artifact.format === format);
 }
 
 export function getKnownRenderableViewIds(bundle: Bundle): string[] {

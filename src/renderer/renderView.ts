@@ -5,7 +5,7 @@ import { hasErrors, sortDiagnostics } from "../diagnostics/types.js";
 import { projectView } from "../projector/projectView.js";
 import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
-import { getViewTextRenderer } from "./viewRenderers.js";
+import { getTextArtifactCapability, getViewTextRenderer } from "./viewRenderers.js";
 
 function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: RenderOptions): RenderResult {
   const projected = projectView(graph, bundle, options.viewId);
@@ -20,7 +20,7 @@ function renderCompiledGraph(graph: CompiledGraph, bundle: Bundle, options: Rend
 
   const view = bundle.views.views.find((candidate) => candidate.id === options.viewId);
   const renderer = getViewTextRenderer(options.viewId);
-  if (!view || !renderer || !renderer.capability.textFormats.includes(options.format)) {
+  if (!view || !renderer || !getTextArtifactCapability(renderer.capability, options.format)) {
     diagnostics.push({
       stage: "render",
       code: "render.unsupported_view",

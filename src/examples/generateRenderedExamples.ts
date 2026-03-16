@@ -1,11 +1,10 @@
-import { spawnSync } from "node:child_process";
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
 import { loadBundle } from "../bundle/loadBundle.js";
-import { renderDotToSvg, embedSvgFont, renderSvgToPng } from "../cli/previewArtifacts.js";
+import { assertPreviewBackendAvailable, renderPreviewArtifact } from "../renderer/previewBackends.js";
 import { renderSource } from "../renderer/renderView.js";
-import { resolveDotPreviewStyle } from "../renderer/previewStyle.js";
+import { getPreviewArtifactCapability, getViewRenderCapability } from "../renderer/viewRenderers.js";
 import {
   discoverCuratedRenderedExamplePairs,
   expandCuratedRenderedExampleVariants,
@@ -17,37 +16,6 @@ import {
 } from "./renderedCorpus.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
-
-function graphvizInstallHint(): string {
-  const lines = [
-    "Graphviz is required to generate the committed SVG and PNG example corpus."
-  ];
-
-  if (process.platform === "linux" && process.env.WSL_DISTRO_NAME) {
-    lines.push("Install Graphviz inside WSL and verify it with `dot -V`.");
-  } else if (process.platform === "linux") {
-    lines.push("Install Graphviz with your distro package manager and verify it with `dot -V`.");
-  } else if (process.platform === "win32") {
-    lines.push("Install Graphviz on Windows, ensure `dot.exe` is on PATH, and verify it with `dot -V`.");
-  } else {
-    lines.push("Install Graphviz for your platform and verify it with `dot -V`.");
-  }
-
-  return lines.join(" ");
-}
-
-function assertGraphvizAvailable(): void {
-  const result = spawnSync("dot", ["-V"], {
-    encoding: "utf8"
-  });
-
-  if (result.status === 0) {
-    return;
-  }
-
-  const details = (result.stderr || result.stdout || "").trim();
-  throw new Error(`${details || "Graphviz is not installed or `dot` is not on PATH."} ${graphvizInstallHint()}`);
-}
 
 function buildReadmeContent(
   manifestPath: string,
@@ -93,7 +61,7 @@ function buildReadmeContent(
 
 async function main(): Promise<void> {
   const manifestPath = process.argv[2] ? path.resolve(process.argv[2]) : defaultManifestPath;
-  assertGraphvizAvailable();
+  assertPreviewBackendAvailable("legacy_graphviz_preview");
 
   const bundle = await loadBundle(manifestPath);
   const discovery = await discoverCuratedRenderedExamplePairs(bundle);
@@ -153,11 +121,34 @@ async function main(): Promise<void> {
     await writeFile(outputPaths.dotOutputPath, `${dotResult.text}\n`, "utf8");
     await writeFile(outputPaths.mermaidOutputPath, `${mermaidResult.text}\n`, "utf8");
 
-    const style = resolveDotPreviewStyle(bundle, view);
-    const rawSvg = await renderDotToSvg(dotResult.text, style);
-    const svg = await embedSvgFont(rawSvg, style);
-    await writeFile(outputPaths.svgOutputPath, svg, "utf8");
-    await renderSvgToPng(svg, outputPaths.pngOutputPath, style);
+    const capability = getViewRenderCapability(variant.viewId);
+    const svgCapability = capability ? getPreviewArtifactCapability(capability, "svg") : undefined;
+    const pngCapability = capability ? getPreviewArtifactCapability(capability, "png") : undefined;
+    if (!svgCapability || !pngCapability) {
+      throw new Error(`View '${variant.viewId}' does not support legacy SVG/PNG preview generation.`);
+    }
+
+    const svgArtifact = await renderPreviewArtifact({
+      backendId: svgCapability.backendId,
+      bundle,
+      view,
+      format: "svg",
+      sourceText: dotResult.text
+    });
+    const pngArtifact = await renderPreviewArtifact({
+      backendId: pngCapability.backendId,
+      bundle,
+      view,
+      format: "png",
+      sourceText: dotResult.text
+    });
+
+    if (svgArtifact.format !== "svg" || pngArtifact.format !== "png") {
+      throw new Error(`Unexpected preview artifact format while generating ${variant.viewId} corpus outputs.`);
+    }
+
+    await writeFile(outputPaths.svgOutputPath, svgArtifact.text, "utf8");
+    await writeFile(outputPaths.pngOutputPath, pngArtifact.bytes);
 
     if (!outputIndex.some((entry) => entry.viewId === variant.viewId && entry.exampleName === variant.example.name)) {
       outputIndex.push({

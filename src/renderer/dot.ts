@@ -31,7 +31,7 @@ import type {
   UiContractsSupportingGroupItem,
   UiContractsViewStateItem
 } from "./uiContractsRenderModel.js";
-import type { DotPreviewStyle } from "./previewStyle.js";
+import type { LegacyDotPreviewStyle } from "./previewStyle.js";
 
 interface RawDotAttributeValue {
   kind: "raw";
@@ -137,7 +137,7 @@ function renderItems(items: IaRenderItem[], indent: string, lines: string[]): vo
   }
 }
 
-export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: DotPreviewStyle): string {
+export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: LegacyDotPreviewStyle): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
   const lines = [
     "digraph ia_place_map {",
@@ -185,7 +185,7 @@ function renderJourneyItems(items: JourneyRenderItem[], indent: string, lines: s
   }
 }
 
-export function renderJourneyMapDot(model: JourneyMapRenderModel, style?: DotPreviewStyle): string {
+export function renderJourneyMapDot(model: JourneyMapRenderModel, style?: LegacyDotPreviewStyle): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
   const lines = [
     "digraph journey_map {",
@@ -232,7 +232,7 @@ function renderOutcomeOpportunityLane(
 
 export function renderOutcomeOpportunityMapDot(
   model: OutcomeOpportunityMapRenderModel,
-  style?: DotPreviewStyle
+  style?: LegacyDotPreviewStyle
 ): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
@@ -287,7 +287,7 @@ function renderServiceBlueprintLane(
   lines.push(`${indent}}`);
 }
 
-export function renderServiceBlueprintDot(model: ServiceBlueprintRenderModel, style?: DotPreviewStyle): string {
+export function renderServiceBlueprintDot(model: ServiceBlueprintRenderModel, style?: LegacyDotPreviewStyle): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
   const lines = [
@@ -356,7 +356,7 @@ function renderScenarioFlowLane(
   lines.push(`${indent}}`);
 }
 
-export function renderScenarioFlowDot(model: ScenarioFlowRenderModel, style?: DotPreviewStyle): string {
+export function renderScenarioFlowDot(model: ScenarioFlowRenderModel, style?: LegacyDotPreviewStyle): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
   const lines = [
@@ -581,7 +581,7 @@ function renderUiContractsItems(
   }
 }
 
-export function renderUiContractsDot(model: UiContractsRenderModel, style?: DotPreviewStyle): string {
+export function renderUiContractsDot(model: UiContractsRenderModel, style?: LegacyDotPreviewStyle): string {
   const fontFamily = style?.fontFamily ? escapeLabel(style.fontFamily) : "Public Sans";
   const nodesById = new Map(model.nodes.map((node) => [node.id, node]));
   const lines = [

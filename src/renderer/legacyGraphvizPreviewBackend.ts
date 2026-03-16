@@ -1,9 +1,22 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-js";
-import type { DotPreviewStyle } from "../renderer/previewStyle.js";
+import type { Bundle, ViewSpec } from "../bundle/types.js";
+import type { PreviewFormat, TextRenderFormat } from "./renderArtifacts.js";
+import type { LegacyDotPreviewStyle } from "./previewStyle.js";
+import { resolveLegacyDotPreviewStyle } from "./previewStyle.js";
+
+export const LEGACY_GRAPHVIZ_PREVIEW_BACKEND_ID = "legacy_graphviz_preview";
+export const LEGACY_GRAPHVIZ_PREVIEW_SOURCE_FORMAT: TextRenderFormat = "dot";
+
+export interface LegacyGraphvizPreviewRequest {
+  bundle: Bundle;
+  view: ViewSpec;
+  format: PreviewFormat;
+  sourceText: string;
+}
 
 function escapeXml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -37,7 +50,7 @@ function inferFontMimeType(fontPath: string): { mimeType: string; format: string
   };
 }
 
-async function withFontConfig<T>(style: DotPreviewStyle, run: (env: NodeJS.ProcessEnv) => Promise<T>): Promise<T> {
+async function withFontConfig<T>(style: LegacyDotPreviewStyle, run: (env: NodeJS.ProcessEnv) => Promise<T>): Promise<T> {
   if (!style.svgFontAssetPath) {
     return run(process.env);
   }
@@ -66,7 +79,38 @@ async function withFontConfig<T>(style: DotPreviewStyle, run: (env: NodeJS.Proce
   }
 }
 
-export async function renderDotToSvg(dot: string, style: DotPreviewStyle): Promise<string> {
+export function legacyGraphvizInstallHint(): string {
+  const lines = [
+    "Graphviz is required for the current legacy SVG and PNG preview flows because the legacy Graphviz preview backend shells out to `dot` for DOT-to-SVG layout."
+  ];
+
+  if (process.platform === "linux" && process.env.WSL_DISTRO_NAME) {
+    lines.push("Install Graphviz inside WSL and verify it with `dot -V` or `pnpm run check:graphviz`.");
+  } else if (process.platform === "linux") {
+    lines.push("Install Graphviz with your distro package manager and verify it with `dot -V`.");
+  } else if (process.platform === "win32") {
+    lines.push("Install Graphviz on Windows, ensure `dot.exe` is on PATH, and verify it with `dot -V`.");
+  } else {
+    lines.push("Install Graphviz for your platform and verify it with `dot -V`.");
+  }
+
+  return lines.join(" ");
+}
+
+export function assertLegacyGraphvizPreviewAvailable(): void {
+  const result = spawnSync("dot", ["-V"], {
+    encoding: "utf8"
+  });
+
+  if (result.status === 0) {
+    return;
+  }
+
+  const details = (result.stderr || result.stdout || "").trim();
+  throw new Error(`${details || "Graphviz is not installed or `dot` is not on PATH."} ${legacyGraphvizInstallHint()}`);
+}
+
+export async function renderLegacyDotToSvg(dot: string, style: LegacyDotPreviewStyle): Promise<string> {
   return withFontConfig(style, async (env) => {
     return new Promise<string>((resolve, reject) => {
       const child = spawn("dot", ["-Tsvg"], {
@@ -99,7 +143,7 @@ export async function renderDotToSvg(dot: string, style: DotPreviewStyle): Promi
   });
 }
 
-export async function embedSvgFont(svg: string, style: DotPreviewStyle): Promise<string> {
+export async function embedLegacySvgFont(svg: string, style: LegacyDotPreviewStyle): Promise<string> {
   if (!style.svgFontAssetPath) {
     return svg;
   }
@@ -125,7 +169,7 @@ export async function embedSvgFont(svg: string, style: DotPreviewStyle): Promise
   return `${svg.slice(0, insertionOffset)}\n${fontFaceBlock}\n${svg.slice(insertionOffset)}`;
 }
 
-export async function renderSvgToPng(svg: string, outputPath: string, style: DotPreviewStyle): Promise<void> {
+export async function renderLegacySvgToPng(svg: string, style: LegacyDotPreviewStyle): Promise<Uint8Array> {
   const resvgOptions: ConstructorParameters<typeof Resvg>[1] = {
     dpi: style.dpi,
     font: {
@@ -139,5 +183,17 @@ export async function renderSvgToPng(svg: string, outputPath: string, style: Dot
   };
   const resvg = new Resvg(svg, resvgOptions);
 
-  await writeFile(path.resolve(outputPath), resvg.render().asPng());
+  return resvg.render().asPng();
+}
+
+export async function renderLegacyGraphvizPreview(request: LegacyGraphvizPreviewRequest): Promise<string | Uint8Array> {
+  const style = resolveLegacyDotPreviewStyle(request.bundle, request.view);
+  const rawSvg = await renderLegacyDotToSvg(request.sourceText, style);
+  const svg = await embedLegacySvgFont(rawSvg, style);
+
+  if (request.format === "svg") {
+    return svg;
+  }
+
+  return renderLegacySvgToPng(svg, style);
 }

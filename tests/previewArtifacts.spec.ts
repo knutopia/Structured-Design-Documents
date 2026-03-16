@@ -1,5 +1,4 @@
 import { EventEmitter } from "node:events";
-import { rm } from "node:fs/promises";
 import path from "node:path";
 import { PassThrough } from "node:stream";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -19,7 +18,7 @@ vi.mock("@resvg/resvg-js", () => ({
 
 const repoRoot = "/home/knut/projects/sdd";
 
-describe("previewArtifacts", () => {
+describe("legacyGraphvizPreviewBackend helpers", () => {
   afterEach(() => {
     spawnMock.mockReset();
     ResvgMock.mockReset();
@@ -45,8 +44,8 @@ describe("previewArtifacts", () => {
       return child;
     });
 
-    const { renderDotToSvg } = await import("../src/cli/previewArtifacts.js");
-    await expect(renderDotToSvg("digraph G {}", { fontFamily: "Public Sans", dpi: 192 })).resolves.toBe("<svg>ok</svg>");
+    const { renderLegacyDotToSvg } = await import("../src/renderer/legacyGraphvizPreviewBackend.js");
+    await expect(renderLegacyDotToSvg("digraph G {}", { fontFamily: "Public Sans", dpi: 192 })).resolves.toBe("<svg>ok</svg>");
     expect(spawnMock).toHaveBeenCalledWith(
       "dot",
       ["-Tsvg"],
@@ -57,8 +56,8 @@ describe("previewArtifacts", () => {
   });
 
   it("injects an embedded Public Sans font face into SVG output", async () => {
-    const { embedSvgFont } = await import("../src/cli/previewArtifacts.js");
-    const result = await embedSvgFont(
+    const { embedLegacySvgFont } = await import("../src/renderer/legacyGraphvizPreviewBackend.js");
+    const result = await embedLegacySvgFont(
       '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><text font-family="Public Sans">Hello</text></svg>',
       {
         fontFamily: "Public Sans",
@@ -74,17 +73,15 @@ describe("previewArtifacts", () => {
   });
 
   it("passes the desktop font asset to Resvg via fontFiles for PNG rendering", async () => {
-    const outputPath = "/tmp/previewArtifacts-fontfiles.png";
     ResvgMock.mockImplementation(() => ({
       render: () => ({
         asPng: () => Buffer.from("png")
       })
     }));
 
-    const { renderSvgToPng } = await import("../src/cli/previewArtifacts.js");
-    await renderSvgToPng(
+    const { renderLegacySvgToPng } = await import("../src/renderer/legacyGraphvizPreviewBackend.js");
+    const png = await renderLegacySvgToPng(
       '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><text font-family="Public Sans">Hello</text></svg>',
-      outputPath,
       {
         fontFamily: "Public Sans",
         svgFontAssetPath: path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.woff"),
@@ -111,7 +108,6 @@ describe("previewArtifacts", () => {
     expect(options.font.fontFiles).not.toContain(
       path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.woff")
     );
-
-    await rm(outputPath, { force: true });
+    expect(Buffer.from(png)).toEqual(Buffer.from("png"));
   });
 });

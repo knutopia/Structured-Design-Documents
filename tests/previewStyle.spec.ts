@@ -1,7 +1,7 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { Bundle, ViewSpec } from "../src/bundle/types.js";
-import { resolveDotPreviewStyle } from "../src/renderer/previewStyle.js";
+import { resolveLegacyDotPreviewStyle } from "../src/renderer/previewStyle.js";
 
 function createView(rendererDefaults: ViewSpec["conventions"]["renderer_defaults"] = {}): ViewSpec {
   return {
@@ -93,12 +93,12 @@ function createBundle(view: ViewSpec): Bundle {
   };
 }
 
-describe("resolveDotPreviewStyle", () => {
+describe("resolveLegacyDotPreviewStyle", () => {
   it("applies bundle-level preview defaults", () => {
     const view = createView();
     const bundle = createBundle(view);
 
-    expect(resolveDotPreviewStyle(bundle, view)).toEqual({
+    expect(resolveLegacyDotPreviewStyle(bundle, view)).toEqual({
       fontFamily: "Public Sans",
       svgFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSans-Regular.woff"),
       pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSans-Regular.otf"),
@@ -118,7 +118,7 @@ describe("resolveDotPreviewStyle", () => {
     });
     const bundle = createBundle(view);
 
-    expect(resolveDotPreviewStyle(bundle, view)).toEqual({
+    expect(resolveLegacyDotPreviewStyle(bundle, view)).toEqual({
       fontFamily: "Public Sans Display",
       svgFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSans-Regular.woff"),
       pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/PublicSansDisplay-Regular.otf"),
@@ -143,7 +143,7 @@ describe("resolveDotPreviewStyle", () => {
       }
     } satisfies Bundle;
 
-    expect(resolveDotPreviewStyle(bundle, view)).toEqual({
+    expect(resolveLegacyDotPreviewStyle(bundle, view)).toEqual({
       fontFamily: "Public Sans",
       svgFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/LegacyPublicSans-Regular.woff"),
       pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/LegacyPublicSans-Regular.woff"),

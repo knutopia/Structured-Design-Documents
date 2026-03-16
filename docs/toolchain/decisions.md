@@ -96,7 +96,8 @@ This allows the bundle to define what matters in the view, while the renderer re
 
 Preview generation remains outside the core renderer contract:
 
-- Graphviz is used only for DOT-to-SVG layout
+- preview routing is backend-aware, and the only current preview backend is `legacy_graphviz_preview`
+- `legacy_graphviz_preview` currently uses Graphviz only for DOT-to-SVG layout
 - SVG and PNG artifacts are produced by the CLI preview pipeline
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
 

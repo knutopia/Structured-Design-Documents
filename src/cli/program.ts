@@ -3,17 +3,24 @@ import path from "node:path";
 import { Command, CommanderError } from "commander";
 import { loadBundle } from "../bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
-import { embedSvgFont, renderDotToSvg, renderSvgToPng } from "./previewArtifacts.js";
 import { compileSource } from "../compiler/compileSource.js";
 import type { CompileResult } from "../compiler/types.js";
 import { formatJsonDiagnostics } from "../diagnostics/formatJson.js";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
 import { hasErrors } from "../diagnostics/types.js";
-import type { DotPreviewStyle } from "../renderer/previewStyle.js";
-import { resolveDotPreviewStyle } from "../renderer/previewStyle.js";
+import {
+  getPreviewBackend,
+  renderPreviewArtifact,
+  type PreviewArtifactResult,
+  type RenderPreviewArtifactRequest
+} from "../renderer/previewBackends.js";
 import { renderSource } from "../renderer/renderView.js";
 import {
   getKnownRenderableViewIds,
+  getPreviewArtifactCapability,
+  getSupportedPreviewFormats,
+  getSupportedTextFormats,
+  getTextArtifactCapability,
   getViewRenderCapability,
   type PreviewFormat,
   type TextRenderFormat,
@@ -34,9 +41,8 @@ export interface CliDeps {
   validateGraph: (graph: NonNullable<CompileResult["graph"]>, bundle: Bundle, profileId: string) => ValidationReport;
   renderSource: (input: SourceInput, bundle: Bundle, options: RenderOptions) => RenderResult;
   writeTextFile: (outputPath: string, content: string) => Promise<void>;
-  renderDotToSvg: (dot: string, style: DotPreviewStyle) => Promise<string>;
-  embedSvgFont: (svg: string, style: DotPreviewStyle) => Promise<string>;
-  renderSvgToPng: (svg: string, outputPath: string, style: DotPreviewStyle) => Promise<void>;
+  writeBinaryFile: (outputPath: string, content: Uint8Array) => Promise<void>;
+  renderPreviewArtifact: (request: RenderPreviewArtifactRequest) => Promise<PreviewArtifactResult>;
   stdout: (content: string) => void;
   stderr: (content: string) => void;
 }
@@ -66,6 +72,10 @@ async function defaultWriteTextFile(outputPath: string, content: string): Promis
   await writeFile(path.resolve(outputPath), content, "utf8");
 }
 
+async function defaultWriteBinaryFile(outputPath: string, content: Uint8Array): Promise<void> {
+  await writeFile(path.resolve(outputPath), content);
+}
+
 function createDefaultDeps(): CliDeps {
   return {
     loadBundle,
@@ -74,9 +84,8 @@ function createDefaultDeps(): CliDeps {
     validateGraph,
     renderSource,
     writeTextFile: defaultWriteTextFile,
-    renderDotToSvg,
-    embedSvgFont,
-    renderSvgToPng,
+    writeBinaryFile: defaultWriteBinaryFile,
+    renderPreviewArtifact,
     stdout: (content) => {
       process.stdout.write(content);
     },
@@ -193,9 +202,10 @@ function ensureTextFormat(bundle: Bundle, viewId: string, format: string): { vie
     };
   }
 
-  if (!resolved.capability.textFormats.includes(format as TextRenderFormat)) {
+  const textFormat = format as TextRenderFormat;
+  if (!getTextArtifactCapability(resolved.capability, textFormat)) {
     return {
-      message: `View '${viewId}' does not support text format '${format}'. Supported text formats: ${formatList(resolved.capability.textFormats)}.`
+      message: `View '${viewId}' does not support text format '${format}'. Supported text formats: ${formatList(getSupportedTextFormats(resolved.capability))}.`
     };
   }
 
@@ -213,9 +223,10 @@ function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { 
     };
   }
 
-  if (!resolved.capability.previewFormats.includes(format as PreviewFormat)) {
+  const previewFormat = format as PreviewFormat;
+  if (!getPreviewArtifactCapability(resolved.capability, previewFormat)) {
     return {
-      message: `View '${viewId}' does not support preview format '${format}'. Supported preview formats: ${formatList(resolved.capability.previewFormats)}.`
+      message: `View '${viewId}' does not support preview format '${format}'. Supported preview formats: ${formatList(getSupportedPreviewFormats(resolved.capability))}.`
     };
   }
 
@@ -223,24 +234,6 @@ function ensurePreviewFormat(bundle: Bundle, viewId: string, format: string): { 
     view: resolved.view,
     capability: resolved.capability
   };
-}
-
-function graphvizInstallHint(): string {
-  const lines = [
-    "Graphviz is required for SVG and PNG preview flows because the CLI shells out to `dot` for DOT-to-SVG layout.",
-  ];
-
-  if (process.platform === "linux" && process.env.WSL_DISTRO_NAME) {
-    lines.push("Install Graphviz inside WSL and verify it with `dot -V` or `pnpm run check:graphviz`.");
-  } else if (process.platform === "linux") {
-    lines.push("Install Graphviz with your distro package manager and verify it with `dot -V`.");
-  } else if (process.platform === "win32") {
-    lines.push("Install Graphviz on Windows, ensure `dot.exe` is on PATH, and verify it with `dot -V`.");
-  } else {
-    lines.push("Install Graphviz for your platform and verify it with `dot -V`.");
-  }
-
-  return lines.join(" ");
 }
 
 interface CompileContext {
@@ -342,22 +335,17 @@ async function runRenderText(
   }
 }
 
-async function writePreviewArtifact(
-  deps: Pick<CliDeps, "writeTextFile" | "renderDotToSvg" | "embedSvgFont" | "renderSvgToPng">,
-  dot: string,
+async function writePreviewOutput(
+  deps: Pick<CliDeps, "writeBinaryFile" | "writeTextFile">,
   outputPath: string,
-  format: PreviewFormat,
-  style: DotPreviewStyle
+  artifact: PreviewArtifactResult
 ): Promise<void> {
-  const rawSvg = await deps.renderDotToSvg(dot, style);
-  const svg = await deps.embedSvgFont(rawSvg, style);
-
-  if (format === "svg") {
-    await deps.writeTextFile(path.resolve(outputPath), svg);
+  if (artifact.format === "svg") {
+    await deps.writeTextFile(path.resolve(outputPath), artifact.text);
     return;
   }
 
-  await deps.renderSvgToPng(svg, outputPath, style);
+  await deps.writeBinaryFile(path.resolve(outputPath), artifact.bytes);
 }
 
 async function runDotCommand(
@@ -387,16 +375,27 @@ async function runDotCommand(
     return 0;
   }
 
+  const capability = getViewRenderCapability("ia_place_map");
+  const previewCapability = capability ? getPreviewArtifactCapability(capability, "png") : undefined;
+  if (!previewCapability || !renderResult.bundle || !renderResult.view) {
+    deps.stderr(appendLine("The ia_place_map view does not support PNG preview output."));
+    return 2;
+  }
+
   try {
-    const style = renderResult.bundle && renderResult.view
-      ? resolveDotPreviewStyle(renderResult.bundle, renderResult.view)
-      : { fontFamily: "Public Sans", dpi: 192 };
-    await writePreviewArtifact(deps, renderResult.text, pngPath, "png", style);
+    const artifact = await deps.renderPreviewArtifact({
+      backendId: previewCapability.backendId,
+      bundle: renderResult.bundle,
+      view: renderResult.view,
+      format: "png",
+      sourceText: renderResult.text
+    });
+    await writePreviewOutput(deps, pngPath, artifact);
     announceFileWrite(deps, pngPath);
     return 0;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    deps.stderr(appendLine(`${message}\n${graphvizInstallHint()}`));
+    deps.stderr(appendLine(`${message}\n${getPreviewBackend(previewCapability.backendId).installHint()}`));
     return 1;
   }
 }
@@ -426,10 +425,16 @@ async function runShowCommand(
       return 2;
     }
 
-    const sourceFormat = supported.capability.previewSourceByFormat[requestedPreviewFormat as PreviewFormat];
+    const previewCapability = getPreviewArtifactCapability(supported.capability, requestedPreviewFormat);
+    if (!previewCapability) {
+      deps.stderr(appendLine(`Unsupported preview request for view '${options.view}'.`));
+      return 2;
+    }
+
+    const previewBackend = getPreviewBackend(previewCapability.backendId);
     const renderResult = deps.renderSource(input, bundle, {
       viewId: options.view,
-      format: sourceFormat,
+      format: previewBackend.sourceFormat,
       profileId: options.profile
     });
     writeDiagnostics(deps, renderResult.diagnostics, "pretty");
@@ -437,21 +442,31 @@ async function runShowCommand(
       return hasErrors(renderResult.diagnostics) ? 1 : 0;
     }
 
-    if (options.dotOut) {
-      const resolvedDotPath = path.resolve(options.dotOut);
-      await deps.writeTextFile(resolvedDotPath, renderResult.text);
-      announceFileWrite(deps, resolvedDotPath);
-    }
-
     const previewPath = options.out ?? replaceExtension(input.path, requestedPreviewFormat);
-    const style = resolveDotPreviewStyle(bundle, supported.view);
     try {
-      await writePreviewArtifact(deps, renderResult.text, previewPath, requestedPreviewFormat, style);
+      const artifact = await deps.renderPreviewArtifact({
+        backendId: previewCapability.backendId,
+        bundle,
+        view: supported.view,
+        format: requestedPreviewFormat,
+        sourceText: renderResult.text
+      });
+      if (options.dotOut) {
+        const dotSource = artifact.sourceArtifacts?.dot;
+        if (!dotSource) {
+          deps.stderr(appendLine(`Preview backend '${previewCapability.backendId}' does not expose a DOT intermediate for '--dot-out'.`));
+          return 2;
+        }
+        const resolvedDotPath = path.resolve(options.dotOut);
+        await deps.writeTextFile(resolvedDotPath, dotSource);
+        announceFileWrite(deps, resolvedDotPath);
+      }
+      await writePreviewOutput(deps, previewPath, artifact);
       announceFileWrite(deps, previewPath);
       return 0;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      deps.stderr(appendLine(`${message}\n${graphvizInstallHint()}`));
+      deps.stderr(appendLine(`${message}\n${previewBackend.installHint()}`));
       return 1;
     }
   } catch (error) {
@@ -484,7 +499,7 @@ function globalHelpText(): string {
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
-    "  `show` defaults to SVG preview output and uses Graphviz for DOT-to-SVG layout.",
+    "  `show` defaults to SVG preview output and currently uses the legacy Graphviz preview backend.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -611,7 +626,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output and uses Graphviz for DOT-to-SVG layout.")
+    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output and currently routes through the legacy Graphviz preview backend.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)

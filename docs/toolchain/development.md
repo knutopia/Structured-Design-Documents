@@ -30,8 +30,9 @@ Committed rendered examples live under `examples/rendered/v0.1/`. Each view/exam
 
 The CLI preview pipeline is SVG-first:
 
-- `sdd show` renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and writes `.svg` by default
-- PNG output is derived from that SVG, but rasterization uses a vendored Public Sans desktop font so preview typography does not depend on a user-installed system font
+- `sdd show` resolves preview output through a backend-aware registry and writes `.svg` by default
+- the only preview backend currently registered is `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
+- PNG output is still derived from SVG, and the legacy backend uses a vendored Public Sans desktop font so preview typography does not depend on a user-installed system font
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
 Font provenance:
@@ -227,10 +228,10 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/compiler/`: graph construction, canonicalization, schema validation
 - `src/validator/`: generic rule execution and profile validation
 - `src/projector/`: internal multi-view projection registry, shared helpers, and per-view builders
-- `src/renderer/`: render capability registry, view render models, emitters, and preview style resolution
+- `src/renderer/`: render capability registry, view render models, emitters, legacy preview backend plumbing, and preview style resolution
 - `src/examples/`: curated render-pair discovery plus rendered-corpus generation helpers
 - `src/diagnostics/`: structured diagnostics and formatting
-- `src/cli/`: command wiring plus preview artifact helpers
+- `src/cli/`: command wiring
 - `tests/`: conformance, regression, and negative fixtures
 
 ## Bundle View Conventions

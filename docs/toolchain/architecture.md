@@ -92,7 +92,9 @@ The engine owns:
 - projector and renderer registries
 - output formatting for diagnostics, DOT, and Mermaid emitters
 
-The CLI owns preview artifact generation on top of those text renderers:
+The CLI owns preview artifact generation on top of those text renderers through a backend-aware preview layer.
+
+The only preview backend currently wired in v0.1 is the `legacy_graphviz_preview` backend, which owns:
 
 - Graphviz-driven DOT-to-SVG layout
 - shared preview-style resolution from `views.yaml`
@@ -115,7 +117,7 @@ The current end-to-end renderable set is:
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
-- DOT remains the preview-source contract for SVG/PNG generation
+- preview capability is modeled per artifact, with SVG and PNG currently routed through `legacy_graphviz_preview`
 - Mermaid is a parallel readable text contract, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
@@ -127,11 +129,11 @@ The per-view render models keep semantics centralized:
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter
 
-Preview artifacts build on top of DOT rather than expanding the engine render contract. In v0.1:
+Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only DOT or Mermaid text
-- `sdd show` uses Graphviz to turn DOT into SVG with the vendored Public Sans webfont available for layout, then embeds that webfont into the output SVG
-- `sdd show --format png` rasterizes that SVG with the vendored Public Sans desktop font so PNG export does not depend on user-installed fonts
+- `sdd show` resolves preview output through a backend registry; today that registry selects `legacy_graphviz_preview`, which turns DOT into SVG with the vendored Public Sans webfont available for layout and then embeds that webfont into the output SVG
+- `sdd show --format png` currently uses that same legacy backend to rasterize the SVG with the vendored Public Sans desktop font so PNG export does not depend on user-installed fonts
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
 
 ## Determinism
