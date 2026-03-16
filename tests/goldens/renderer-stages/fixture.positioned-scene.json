@@ -119,8 +119,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 0,
-            "y": 0,
+            "x": 28,
+            "y": 56,
             "width": 224,
             "height": 66
           },
@@ -173,8 +173,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 0,
-            "y": 0,
+            "x": 28,
+            "y": 134,
             "width": 168,
             "height": 48
           }
@@ -184,14 +184,14 @@
             "id": "south",
             "role": "primary_out",
             "side": "south",
-            "x": 0,
-            "y": 0
+            "x": 124,
+            "y": 178
           }
         ],
-        "x": 0,
-        "y": 0,
-        "width": 0,
-        "height": 0
+        "x": 16,
+        "y": 16,
+        "width": 248,
+        "height": 178
       },
       {
         "kind": "node",
@@ -258,8 +258,8 @@
         "overflow": {
           "status": "fits"
         },
-        "x": 0,
-        "y": 0,
+        "x": 288,
+        "y": 16,
         "width": 224,
         "height": 72
       }
@@ -267,8 +267,8 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 0,
-    "height": 0
+    "width": 528,
+    "height": 210
   },
   "edges": [
     {
@@ -280,25 +280,33 @@
       "from": {
         "itemId": "P-001",
         "portId": "east",
-        "x": 0,
-        "y": 0
+        "x": 252,
+        "y": 89
       },
       "to": {
         "itemId": "P-003",
         "portId": "west",
-        "x": 0,
-        "y": 0
+        "x": 288,
+        "y": 52
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 0,
-            "y": 0
+            "x": 252,
+            "y": 89
           },
           {
-            "x": 0,
-            "y": 0
+            "x": 270,
+            "y": 89
+          },
+          {
+            "x": 270,
+            "y": 52
+          },
+          {
+            "x": 288,
+            "y": 52
           }
         ]
       },
@@ -310,8 +318,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 0,
-        "y": 0
+        "x": 228.222,
+        "y": 59.5
       },
       "paintGroup": "edges"
     }
@@ -325,25 +333,11 @@
       "targetId": "root"
     },
     {
-      "phase": "measure",
-      "code": "renderer.measure.container_ports_deferred",
-      "severity": "info",
-      "message": "Container port offsets remain deferred until macro-layout reserves container bounds.",
-      "targetId": "area-A-001"
-    },
-    {
-      "phase": "layout",
-      "code": "renderer.layout.stubbed",
-      "severity": "info",
-      "message": "Macro-layout is currently a stub and leaves all items at placeholder coordinates.",
-      "targetId": "root"
-    },
-    {
       "phase": "routing",
-      "code": "renderer.routing.stubbed",
+      "code": "renderer.routing.preference_fallback",
       "severity": "info",
-      "message": "Routing is currently a stub and emits placeholder edge paths only.",
-      "targetId": "root"
+      "message": "Edge \"nav-001\" requested avoidNodeBoxes, but Step 5 currently applies simple deterministic routing only.",
+      "targetId": "nav-001"
     }
   ],
   "paintOrder": [

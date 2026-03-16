@@ -41,6 +41,7 @@ export interface LayoutIntent {
   direction?: LayoutDirection;
   gap?: number;
   crossAlignment?: CrossAlignment;
+  columns?: number;
 }
 
 export interface ChromeSpec {
@@ -147,6 +148,7 @@ export interface MeasuredPort {
   id: string;
   role: string;
   side: PortSide;
+  offset?: number;
   x: number;
   y: number;
 }

@@ -74,6 +74,13 @@ Step 4 adds the first staged artifact backend on top of those contracts:
 - staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
 - preview routing is still unchanged; no CLI path selects the staged backend yet
 
+Step 5 turns `PositionedScene` into a real manual macro-layout boundary:
+
+- `src/renderer/staged/macroLayout.ts` owns the recursive strategy registry for `stack`, `grid`, and `lanes`
+- container chrome, padding, header bands, bounds, and container-port offsets are now resolved during layout rather than left at placeholder values
+- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, and simple deterministic route geometry before SVG emission
+- unsupported strategies such as `elk_layered` still fall back to deterministic stack placement until the ELK step lands
+
 ## View Extension Pattern
 
 View support now follows one internal pattern instead of adding one-off IA branches:
@@ -119,7 +126,7 @@ The engine owns:
 
 The CLI owns preview artifact generation on top of those text renderers through a backend-aware preview layer.
 
-The engine also owns the internal staged-renderer contracts and snapshot-tested stub pipeline that future SVG work will build on, while keeping that pipeline separate from the current legacy renderer path until view migration begins.
+The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that future SVG work will build on, while keeping that pipeline separate from the current legacy renderer path until view migration begins.
 
 Within that staged pipeline, renderer-owned measurement infrastructure is now shared rather than view-specific:
 
@@ -127,6 +134,7 @@ Within that staged pipeline, renderer-owned measurement infrastructure is now sh
 - `src/renderer/staged/primitives.ts` owns shared primitive flow rules and primitive-content validation
 - `src/renderer/staged/textMeasurement.ts` owns deterministic font-backed width measurement
 - `src/renderer/staged/microLayout.ts` owns intrinsic node sizing and edge-label wrapping
+- `src/renderer/staged/macroLayout.ts` owns recursive manual container layout, container bounds, container ports, and simple staged routing
 - `src/renderer/staged/svgBackend.ts` owns deterministic SVG emission from `PositionedScene`
 - `src/renderer/svgArtifacts.ts` owns shared embedded-font and SVG-to-PNG helpers used by both staged and legacy preview paths
 

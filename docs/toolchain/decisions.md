@@ -50,6 +50,13 @@ The Step 4 backend boundary is also now explicit:
 - staged PNG output is derived from staged SVG through shared rasterization helpers
 - preview routing still remains on `legacy_graphviz_preview` until later migration steps prove a view-specific staged path end to end
 
+The Step 5 macro-layout boundary is now explicit too:
+
+- `src/renderer/staged/macroLayout.ts` owns the shared manual strategy registry for `stack`, `grid`, and `lanes`
+- container bounds and container-port offsets are now resolved during macro-layout rather than carried forward as placeholders
+- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, deterministic orthogonal/stepped routes, and midpoint edge-label placement
+- unsupported strategies still fall back to deterministic stack placement until the ELK step lands
+
 ## String-First Property Policy
 
 Compiled properties remain strings in v0.1.

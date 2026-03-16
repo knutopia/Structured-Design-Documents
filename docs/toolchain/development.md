@@ -284,12 +284,13 @@ Authoring guidance for the newly renderable views:
 - `src/renderer/staged/primitives.ts` defines shared primitive flow rules and validates primitive/content combinations before layout.
 - `src/renderer/staged/textMeasurement.ts` performs deterministic font-backed measurement with the vendored Public Sans OTF asset.
 - `src/renderer/staged/microLayout.ts` is the Step 3 micro-layout entry point: intrinsic node sizing, wrapped lines, local content frames, local node-port offsets, and explicit overflow outcomes.
+- `src/renderer/staged/macroLayout.ts` is the Step 5 macro-layout entry point: recursive `stack`/`grid`/`lanes` placement, container bounds, container-port resolution, and simple staged routing.
 - `src/renderer/staged/svgBackend.ts` is the Step 4 backend entry point: deterministic SVG emission from `PositionedScene` plus staged PNG derivation from that SVG.
 - `src/renderer/svgArtifacts.ts` holds the shared embedded-font and SVG-to-PNG helpers reused by the staged backend and the legacy Graphviz preview backend.
 - This staged pipeline is intentionally separate from `renderSource`, `viewRenderers.ts`, and the CLI preview registry until a later migration step moves specific views onto it.
 - `tests/rendererStageSnapshotHarness.ts` is the shared helper for deterministic staged-renderer JSON comparisons.
 - Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
-- The staged measurement step is real for nodes and edge labels, but container bounds, container-port offsets, macro-layout, and routing still remain deferred to later steps.
+- The staged pipeline now has real shared measurement plus real manual macro-layout for `stack`, `grid`, and `lanes`; ELK-backed layout and harder routing cases still remain for later steps.
 
 ## Adding A New View
 

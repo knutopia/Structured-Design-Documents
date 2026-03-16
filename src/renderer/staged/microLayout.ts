@@ -90,6 +90,7 @@ function createMeasuredPort(port: PortSpec, x: number, y: number): MeasuredPort 
     id: port.id,
     role: port.role,
     side: port.side,
+    offset: port.offset,
     x: roundMetric(x),
     y: roundMetric(y)
   };
