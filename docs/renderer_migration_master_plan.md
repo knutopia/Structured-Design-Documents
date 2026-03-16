@@ -67,6 +67,7 @@ Each future implementation thread should:
 9. `ui_contracts` scene builder scaffolding
 10. `ui_contracts` routing and balance implementation
 11. Shared hardening after the first two views
+11.5. `ui_contracts` preview integration and backend promotion
 12. Re-plan and execute the remaining views
 
 ## Step 1: Backend-Aware Renderer Plumbing
@@ -506,6 +507,49 @@ The first two views will surface missing primitives, missing diagnostics, and du
 - the first two migrated views do not depend on obviously duplicated generic logic
 - the renderer architecture is stronger after the first-wave implementations than it was before them
 
+## Step 11.5: `ui_contracts` Preview Integration And Backend Promotion
+
+### Goal
+
+Promote staged `ui_contracts` from an internal staged SVG path to a public preview backend used in normal repo workflows.
+
+### Why This Step Exists
+
+Steps 9 and 10 prove staged `ui_contracts` rendering quality, and Step 11 hardens shared infrastructure, but none of those steps makes staged `ui_contracts` the real CLI preview path, default preview backend, or committed corpus path. A separate promotion gate is needed before broader rollout.
+
+### In Scope
+
+- add a public staged preview backend for `ui_contracts` in `src/renderer/previewBackends.ts`
+- add backend ids and preview capability wiring in `src/renderer/renderArtifacts.ts` and `src/renderer/viewRenderers.ts`
+- wire staged `ui_contracts` SVG and staged PNG, with PNG derived from the staged SVG path
+- switch or intentionally parallelize CLI preview routing in `src/renderer/previewWorkflow.ts` and related preview selection so staged `ui_contracts` is reachable in normal public workflows
+- promote staged `ui_contracts` to the default preview backend while preserving explicit legacy Graphviz preview access in parallel
+- update rendered corpus generation so default `ui_contracts` SVG and PNG artifacts come from the staged backend, with preserved legacy backend siblings where appropriate
+- add public-workflow tests for default backend resolution, explicit legacy fallback, `--dot-out` behavior, corpus and default-backend expectations, and staged SVG and PNG regression coverage
+- update reviewer or workflow guidance where the public backend change affects normal usage
+
+### Out Of Scope
+
+- migrating additional views
+- changing parser, compiler, validator, or projection semantics
+- removing legacy DOT, Mermaid, or explicit legacy Graphviz preview support for `ui_contracts`
+- global default promotion beyond `ia_place_map` and `ui_contracts`
+
+### Primary Deliverables
+
+- public `staged_ui_contracts_preview` backend
+- default staged SVG and PNG preview path for `ui_contracts`
+- committed corpus coverage for staged-default plus preserved legacy preview artifacts
+- public-workflow regression tests mirroring the `ia_place_map` promotion standard
+
+### Done When
+
+- `sdd show` resolves `ui_contracts` SVG and PNG previews to the staged backend by default
+- explicit legacy `ui_contracts` preview requests still work
+- staged `ui_contracts` PNG is derived from staged SVG
+- corpus defaults and tests treat staged `ui_contracts` previews as the public path
+- `ui_contracts` is exercised through the same public staged-preview boundary already proven for `ia_place_map`
+
 ## Step 12: Re-Plan And Execute The Remaining Views
 
 ### Goal
@@ -518,7 +562,7 @@ The remaining views should benefit from the lessons of the first wave rather tha
 
 ### In Scope
 
-- review lessons from steps 1 through 11
+- review lessons from steps 1 through 11.5
 - choose the next migration order for the remaining views
 - create a second-wave master plan or a sequence of view-specific implementation steps
 - begin execution only after that re-plan is accepted
@@ -553,7 +597,8 @@ Use these review points to decide whether to continue as planned or adjust:
 - after Step 6: confirm hybrid manual plus ELK layout is viable before migrating views
 - after Step 8: confirm `ia_place_map` proves the architecture rather than just a special-case implementation
 - after Step 10: confirm `ui_contracts` proves the hardest routing and balance cases
-- after Step 11: confirm the shared architecture is ready for broader rollout
+- after Step 11: confirm the shared architecture is ready for `ui_contracts` public preview promotion
+- after Step 11.5: confirm both first-wave views are proven through normal public staged preview workflows before broader rollout
 
 ## Success Condition For The First Wave
 
@@ -562,5 +607,7 @@ The first wave is successful when all of the following are true:
 - `ia_place_map` renders to usable SVG through the new staged renderer path
 - `ui_contracts` renders to usable SVG through the new staged renderer path
 - both views rely on shared measurement, layout, and backend infrastructure rather than isolated emitters
+- both views are exercised through normal public staged preview workflows rather than internal-only renderer tests
+- the committed rendered corpus treats staged SVG and PNG previews as the default public artifacts for both proof views, while preserved legacy preview artifacts remain available in parallel where appropriate
 - legacy DOT and Mermaid outputs still exist in parallel
 - the repo has enough tests, artifacts, and documentation to continue migration view by view with confidence
