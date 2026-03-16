@@ -43,8 +43,8 @@ function buildSingleNodeScene(node: SceneNode, themeId = "default"): RendererSce
   };
 }
 
-function getOnlyMeasuredNode(scene: RendererScene): MeasuredNode {
-  const result = runStagedRendererPipeline(scene);
+async function getOnlyMeasuredNode(scene: RendererScene): Promise<MeasuredNode> {
+  const result = await runStagedRendererPipeline(scene);
   const child = result.measuredScene.root.children[0];
   if (!child || child.kind !== "node") {
     throw new Error("Expected exactly one measured node.");
@@ -56,7 +56,7 @@ function getOnlyMeasuredNode(scene: RendererScene): MeasuredNode {
 describe("staged renderer contracts and harness", () => {
   it("matches committed renderer-stage snapshots for the synthetic fixture scene", async () => {
     const scene = buildFixtureScene();
-    const result = runStagedRendererPipeline(scene);
+    const result = await runStagedRendererPipeline(scene);
 
     await expectRendererStageSnapshot("fixture.renderer-scene.json", scene);
     await expectRendererStageSnapshot("fixture.measured-scene.json", result.measuredScene);
@@ -101,14 +101,16 @@ describe("staged renderer contracts and harness", () => {
     await expectRendererStageSnapshot("diagnostics.sorted.json", sorted);
   });
 
-  it("returns the same staged pipeline result for repeated runs on identical scenes", () => {
+  it("returns the same staged pipeline result for repeated runs on identical scenes", async () => {
     const scene = buildFixtureScene();
+    const first = await runStagedRendererPipeline(scene);
+    const second = await runStagedRendererPipeline(scene);
 
-    expect(runStagedRendererPipeline(scene)).toEqual(runStagedRendererPipeline(scene));
+    expect(first).toEqual(second);
   });
 
-  it("preserves explicit newlines and falls back to grapheme splitting for long tokens", () => {
-    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+  it("preserves explicit newlines and falls back to grapheme splitting for long tokens", async () => {
+    const node = await getOnlyMeasuredNode(buildSingleNodeScene({
       kind: "node",
       id: "node-1",
       role: "place",
@@ -138,8 +140,8 @@ describe("staged renderer contracts and harness", () => {
     expect(node.content[0]?.lines.length).toBeGreaterThan(2);
   });
 
-  it("escalates width bands deterministically when maxLines would otherwise be exceeded", () => {
-    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+  it("escalates width bands deterministically when maxLines would otherwise be exceeded", async () => {
+    const node = await getOnlyMeasuredNode(buildSingleNodeScene({
       kind: "node",
       id: "node-2",
       role: "place",
@@ -170,8 +172,8 @@ describe("staged renderer contracts and harness", () => {
     expect(node.content[0]?.lines).toHaveLength(1);
   });
 
-  it("grows height instead of clipping when grow_height is selected", () => {
-    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+  it("grows height instead of clipping when grow_height is selected", async () => {
+    const node = await getOnlyMeasuredNode(buildSingleNodeScene({
       kind: "node",
       id: "node-3",
       role: "place",
@@ -201,7 +203,7 @@ describe("staged renderer contracts and harness", () => {
     expect(node.content[0]?.lines.length).toBeGreaterThan(2);
   });
 
-  it("clamps overflowing text with ellipsis when requested", () => {
+  it("clamps overflowing text with ellipsis when requested", async () => {
     const scene = buildSingleNodeScene({
       kind: "node",
       id: "node-4",
@@ -227,8 +229,8 @@ describe("staged renderer contracts and harness", () => {
       ],
       ports: []
     });
-    const result = runStagedRendererPipeline(scene);
-    const node = getOnlyMeasuredNode(scene);
+    const result = await runStagedRendererPipeline(scene);
+    const node = await getOnlyMeasuredNode(scene);
 
     expect(node.overflow.status).toBe("clamped");
     expect(node.content[0]?.lines).toHaveLength(2);
@@ -237,8 +239,8 @@ describe("staged renderer contracts and harness", () => {
     expect(result.measuredScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.measure.text_clamped")).toBe(true);
   });
 
-  it("moves secondary blocks into a secondary region before declaring overflow", () => {
-    const node = getOnlyMeasuredNode(buildSingleNodeScene({
+  it("moves secondary blocks into a secondary region before declaring overflow", async () => {
+    const node = await getOnlyMeasuredNode(buildSingleNodeScene({
       kind: "node",
       id: "node-5",
       role: "place",
@@ -275,7 +277,7 @@ describe("staged renderer contracts and harness", () => {
     expect(node.content.find((block) => block.id === "badge")?.region).toBe("secondary");
   });
 
-  it("falls back to the default theme with an explicit diagnostic for unknown theme ids", () => {
+  it("falls back to the default theme with an explicit diagnostic for unknown theme ids", async () => {
     const scene = buildSingleNodeScene({
       kind: "node",
       id: "node-6",
@@ -300,7 +302,7 @@ describe("staged renderer contracts and harness", () => {
       ],
       ports: []
     }, "mystery");
-    const result = runStagedRendererPipeline(scene);
+    const result = await runStagedRendererPipeline(scene);
 
     expect(result.measuredScene.themeId).toBe("default");
     expect(result.measuredScene.diagnostics).toContainEqual(expect.objectContaining({

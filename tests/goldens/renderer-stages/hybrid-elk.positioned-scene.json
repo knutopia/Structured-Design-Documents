@@ -1,0 +1,315 @@
+{
+  "viewId": "ia_place_map",
+  "profileId": "recommended",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "test_scene"
+    ],
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 24
+    },
+    "chrome": {
+      "padding": {
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
+      },
+      "gutter": 16,
+      "headerBandHeight": 0
+    },
+    "children": [
+      {
+        "kind": "container",
+        "id": "elk-zone",
+        "role": "elk_group",
+        "primitive": "cluster",
+        "classes": [
+          "elk_group"
+        ],
+        "layout": {
+          "strategy": "elk_layered",
+          "direction": "vertical",
+          "gap": 20
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 28
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "elk-top",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow"
+              ]
+            },
+            "widthBand": "narrow",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "elk-top-title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Top"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 26.96,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "south",
+                "role": "primary_out",
+                "side": "south",
+                "x": 84,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 28,
+            "y": 56,
+            "width": 168,
+            "height": 48
+          },
+          {
+            "kind": "node",
+            "id": "elk-bottom",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow"
+              ]
+            },
+            "widthBand": "narrow",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "elk-bottom-title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Bottom"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 53.792,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "primary_in",
+                "side": "north",
+                "x": 84,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "primary_out",
+                "side": "east",
+                "x": 168,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 28,
+            "y": 126,
+            "width": 168,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 16,
+        "y": 16,
+        "width": 193,
+        "height": 170
+      },
+      {
+        "kind": "node",
+        "id": "peer",
+        "role": "place",
+        "primitive": "card",
+        "classes": [
+          "place"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [
+          {
+            "id": "peer-title",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Peer"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 34.432,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "west",
+            "role": "primary_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 233,
+        "y": 16,
+        "width": 224,
+        "height": 48
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 473,
+    "height": 202
+  },
+  "edges": [
+    {
+      "id": "elk-internal",
+      "role": "transition",
+      "classes": [
+        "internal"
+      ],
+      "from": {
+        "itemId": "elk-top",
+        "portId": "south",
+        "x": 112,
+        "y": 104
+      },
+      "to": {
+        "itemId": "elk-bottom",
+        "portId": "north",
+        "x": 112,
+        "y": 126
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 112,
+            "y": 104
+          },
+          {
+            "x": 112,
+            "y": 126
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "elk-external",
+      "role": "navigation",
+      "classes": [
+        "external"
+      ],
+      "from": {
+        "itemId": "elk-bottom",
+        "portId": "east",
+        "x": 196,
+        "y": 150
+      },
+      "to": {
+        "itemId": "peer",
+        "portId": "west",
+        "x": 233,
+        "y": 40
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 196,
+            "y": 150
+          },
+          {
+            "x": 214.5,
+            "y": 150
+          },
+          {
+            "x": 214.5,
+            "y": 40
+          },
+          {
+            "x": 233,
+            "y": 40
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

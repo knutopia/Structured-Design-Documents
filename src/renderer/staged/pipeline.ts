@@ -16,13 +16,13 @@ export function measureScene(scene: RendererScene): MeasuredScene {
   return measureRendererScene(scene);
 }
 
-export function positionScene(measuredScene: MeasuredScene): PositionedScene {
+export async function positionScene(measuredScene: MeasuredScene): Promise<PositionedScene> {
   return positionMeasuredScene(measuredScene);
 }
 
-export function runStagedRendererPipeline(scene: RendererScene): StagedRendererPipelineResult {
+export async function runStagedRendererPipeline(scene: RendererScene): Promise<StagedRendererPipelineResult> {
   const measuredScene = measureScene(scene);
-  const positionedScene = positionScene(measuredScene);
+  const positionedScene = await positionScene(measuredScene);
 
   return {
     rendererScene: scene,

@@ -6,7 +6,6 @@ import type {
   LayoutStrategy,
   MeasuredContainer,
   MeasuredEdge,
-  MeasuredEdgeEndpoint,
   MeasuredItem,
   MeasuredNode,
   MeasuredPort,
@@ -15,16 +14,24 @@ import type {
   Point,
   PositionedContainer,
   PositionedEdge,
-  PositionedEdgeEndpoint,
-  PositionedEdgeLabel,
   PositionedItem,
   PositionedNode,
-  PositionedRoute,
   PositionedScene,
   WidthPolicy
 } from "./contracts.js";
 import { sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
+import { runElkLayeredLayout, type ElkAdaptedEdge } from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
+import {
+  buildPositionedIndex,
+  buildRouteFromLocalHint,
+  buildSharedRoute,
+  createRoutingDiagnostic,
+  type IndexedPositionedItem,
+  positionEdgeLabel,
+  resolveEdgeEndpoint,
+  resolvePortOnItem
+} from "./routing.js";
 import { getRendererTheme, type RendererTheme } from "./theme.js";
 
 interface LayoutContext {
@@ -36,18 +43,26 @@ interface LayoutContext {
 interface ContainerLayoutResult {
   contentWidth: number;
   contentHeight: number;
+  routeHints?: Map<string, Point[]>;
+}
+
+interface LayoutItemResult {
+  item: PositionedItem;
+  routeHints: Map<string, Point[]>;
+}
+
+interface MeasuredItemIndexEntry {
+  item: MeasuredItem;
+  parentContainerId?: string;
+  ancestorContainerIds: string[];
 }
 
 type LayoutStrategyHandler = (
   container: MeasuredContainer,
   children: PositionedItem[],
+  ownedEdges: MeasuredEdge[],
   context: LayoutContext
-) => ContainerLayoutResult;
-
-interface IndexedPositionedItem {
-  item: PositionedItem;
-  portsById: Map<string, MeasuredPort>;
-}
+) => Promise<ContainerLayoutResult>;
 
 const DEFERRED_CONTAINER_PORT_DIAGNOSTIC = "renderer.measure.container_ports_deferred";
 const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels", "edges", "edge_labels"];
@@ -160,16 +175,6 @@ function createLayoutDiagnostic(code: string, message: string, targetId: string)
   };
 }
 
-function createRoutingDiagnostic(code: string, message: string, targetId: string, severity: "error" | "warn" | "info" = "warn"): RendererDiagnostic {
-  return {
-    phase: "routing",
-    code,
-    severity,
-    message,
-    targetId
-  };
-}
-
 function resolveLocalPortPosition(port: MeasuredPort, width: number, height: number, portInset: number): MeasuredPort {
   switch (port.side) {
     case "north":
@@ -248,6 +253,28 @@ function offsetPositionedItem(item: PositionedItem, dx: number, dy: number): voi
   }
 }
 
+function offsetLocalRouteHints(routeHints: Map<string, Point[]>, dx: number, dy: number): Map<string, Point[]> {
+  const shifted = new Map<string, Point[]>();
+
+  for (const [edgeId, points] of routeHints.entries()) {
+    shifted.set(
+      edgeId,
+      points.map((point) => ({
+        x: roundMetric(point.x + dx),
+        y: roundMetric(point.y + dy)
+      }))
+    );
+  }
+
+  return shifted;
+}
+
+function mergeRouteHints(target: Map<string, Point[]>, source: Map<string, Point[]>): void {
+  for (const [edgeId, points] of source.entries()) {
+    target.set(edgeId, points.map((point) => ({ ...point })));
+  }
+}
+
 function layoutLinearContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
@@ -310,33 +337,36 @@ function layoutLinearContainer(
     };
 }
 
-function layoutStackContainer(
+async function layoutStackContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
+  _ownedEdges: MeasuredEdge[],
   context: LayoutContext
-): ContainerLayoutResult {
+): Promise<ContainerLayoutResult> {
   return layoutLinearContainer(container, children, context, {
     defaultDirection: "vertical",
     alwaysStretchContainers: false
   });
 }
 
-function layoutLanesContainer(
+async function layoutLanesContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
+  _ownedEdges: MeasuredEdge[],
   context: LayoutContext
-): ContainerLayoutResult {
+): Promise<ContainerLayoutResult> {
   return layoutLinearContainer(container, children, context, {
     defaultDirection: "vertical",
     alwaysStretchContainers: true
   });
 }
 
-function layoutGridContainer(
+async function layoutGridContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
+  _ownedEdges: MeasuredEdge[],
   context: LayoutContext
-): ContainerLayoutResult {
+): Promise<ContainerLayoutResult> {
   if (children.length === 0) {
     return {
       contentWidth: 0,
@@ -404,19 +434,84 @@ function layoutGridContainer(
   };
 }
 
+function buildElkAdaptedEdges(
+  children: PositionedItem[],
+  ownedEdges: MeasuredEdge[]
+): ElkAdaptedEdge[] {
+  const childIds = new Set(children.map((child) => child.id));
+  const childItems = new Map(children.map((child) => [child.id, child]));
+
+  return ownedEdges.flatMap((edge) => {
+    if (!childIds.has(edge.from.itemId) || !childIds.has(edge.to.itemId)) {
+      return [];
+    }
+
+    const sourceItem = childItems.get(edge.from.itemId);
+    const targetItem = childItems.get(edge.to.itemId);
+    if (!sourceItem || !targetItem) {
+      return [];
+    }
+
+    const sourcePort = resolvePortOnItem(sourceItem, edge.from, edge.routing.sourcePortRole);
+    const targetPort = resolvePortOnItem(targetItem, edge.to, edge.routing.targetPortRole);
+
+    return [{
+      id: edge.id,
+      sourceItemId: edge.from.itemId,
+      targetItemId: edge.to.itemId,
+      sourcePortId: sourcePort?.id,
+      targetPortId: targetPort?.id
+    }];
+  });
+}
+
+async function layoutElkLayeredContainer(
+  container: MeasuredContainer,
+  children: PositionedItem[],
+  ownedEdges: MeasuredEdge[],
+  _context: LayoutContext
+): Promise<ContainerLayoutResult> {
+  if (children.length === 0) {
+    return {
+      contentWidth: 0,
+      contentHeight: 0
+    };
+  }
+
+  const gap = resolveGap(container);
+  const direction = container.layout.direction ?? "horizontal";
+  const adaptedEdges = buildElkAdaptedEdges(children, ownedEdges);
+  const elkResult = await runElkLayeredLayout({
+    containerId: container.id,
+    direction,
+    gap,
+    children,
+    edges: adaptedEdges
+  });
+
+  for (const child of children) {
+    const positioned = elkResult.childPositions.get(child.id);
+    if (!positioned) {
+      throw new Error(`ELK did not return child coordinates for "${child.id}".`);
+    }
+
+    child.x = roundMetric(positioned.x);
+    child.y = roundMetric(positioned.y);
+  }
+
+  return {
+    contentWidth: elkResult.contentWidth,
+    contentHeight: elkResult.contentHeight,
+    routeHints: elkResult.edgeRoutes
+  };
+}
+
 const strategyRegistry: ReadonlyMap<LayoutStrategy, LayoutStrategyHandler> = new Map([
   ["stack", layoutStackContainer],
   ["grid", layoutGridContainer],
-  ["lanes", layoutLanesContainer]
+  ["lanes", layoutLanesContainer],
+  ["elk_layered", layoutElkLayeredContainer]
 ]);
-
-function layoutItem(item: MeasuredItem, context: LayoutContext): PositionedItem {
-  if (item.kind === "node") {
-    return clonePositionedNode(item);
-  }
-
-  return layoutContainer(item, context);
-}
 
 function resolveLayoutHandler(container: MeasuredContainer, context: LayoutContext): LayoutStrategyHandler {
   const handler = context.strategyRegistry.get(container.layout.strategy);
@@ -434,30 +529,73 @@ function resolveLayoutHandler(container: MeasuredContainer, context: LayoutConte
   return layoutStackContainer;
 }
 
-function layoutContainer(container: MeasuredContainer, context: LayoutContext): PositionedContainer {
-  const positionedChildren = container.children.map((child) => layoutItem(child, context));
+function validateContentBounds(contentWidth: number, contentHeight: number): boolean {
+  return Number.isFinite(contentWidth)
+    && Number.isFinite(contentHeight)
+    && contentWidth >= 0
+    && contentHeight >= 0;
+}
+
+async function layoutItem(
+  item: MeasuredItem,
+  context: LayoutContext,
+  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
+): Promise<LayoutItemResult> {
+  if (item.kind === "node") {
+    return {
+      item: clonePositionedNode(item),
+      routeHints: new Map()
+    };
+  }
+
+  return layoutContainer(item, context, ownedEdgesByContainer);
+}
+
+async function layoutContainer(
+  container: MeasuredContainer,
+  context: LayoutContext,
+  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
+): Promise<LayoutItemResult> {
+  const childResults: LayoutItemResult[] = [];
+  for (const child of container.children) {
+    childResults.push(await layoutItem(child, context, ownedEdgesByContainer));
+  }
+
+  const positionedChildren = childResults.map((result) => result.item);
+  const descendantRouteHints = new Map<string, Point[]>();
+  for (const childResult of childResults) {
+    mergeRouteHints(descendantRouteHints, childResult.routeHints);
+  }
+
   const chrome = cloneChromeSpec(container.chrome);
   const contentOrigin = getContentOrigin(chrome);
+  const ownedEdges = ownedEdgesByContainer.get(container.id) ?? [];
   const handler = resolveLayoutHandler(container, context);
-  let layout = handler(container, positionedChildren, context);
 
-  if (handler !== layoutStackContainer && layout.contentWidth < 0) {
-    context.diagnostics.push(
-      createLayoutDiagnostic(
-        "renderer.layout.strategy_failure",
-        `Layout strategy "${container.layout.strategy}" produced an invalid width. Falling back to "stack".`,
-        container.id
-      )
-    );
-    layout = layoutStackContainer(container, positionedChildren, context);
+  let layoutResult: ContainerLayoutResult;
+  try {
+    layoutResult = await handler(container, positionedChildren, ownedEdges, context);
+    if (!validateContentBounds(layoutResult.contentWidth, layoutResult.contentHeight)) {
+      throw new Error(`Strategy "${container.layout.strategy}" produced invalid content bounds.`);
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const diagnosticCode = container.layout.strategy === "elk_layered"
+      ? "renderer.layout.elk_failure"
+      : "renderer.layout.strategy_failure";
+    const diagnosticMessage = container.layout.strategy === "elk_layered"
+      ? `ELK layout failed for container "${container.id}". Falling back to "stack". ${message}`
+      : `Layout strategy "${container.layout.strategy}" failed for container "${container.id}". Falling back to "stack". ${message}`;
+    context.diagnostics.push(createLayoutDiagnostic(diagnosticCode, diagnosticMessage, container.id));
+    layoutResult = await layoutStackContainer(container, positionedChildren, ownedEdges, context);
   }
 
   for (const child of positionedChildren) {
     offsetPositionedItem(child, contentOrigin.x, contentOrigin.y);
   }
 
-  const width = roundMetric(chrome.padding.left + layout.contentWidth + chrome.padding.right);
-  const height = roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) + layout.contentHeight + chrome.padding.bottom);
+  const width = roundMetric(chrome.padding.left + layoutResult.contentWidth + chrome.padding.right);
+  const height = roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) + layoutResult.contentHeight + chrome.padding.bottom);
   const positioned: PositionedContainer = {
     kind: "container",
     id: container.id,
@@ -475,304 +613,113 @@ function layoutContainer(container: MeasuredContainer, context: LayoutContext): 
   };
 
   positioned.ports = resolveContainerPorts(positioned, context.theme);
-  return positioned;
+
+  if (layoutResult.routeHints) {
+    mergeRouteHints(descendantRouteHints, offsetLocalRouteHints(layoutResult.routeHints, contentOrigin.x, contentOrigin.y));
+  }
+
+  return {
+    item: positioned,
+    routeHints: descendantRouteHints
+  };
 }
 
-function buildPositionedIndex(container: PositionedContainer, index = new Map<string, IndexedPositionedItem>()): Map<string, IndexedPositionedItem> {
+function buildMeasuredItemIndex(
+  container: MeasuredContainer,
+  parentContainerId: string | undefined,
+  ancestors: string[],
+  index: Map<string, MeasuredItemIndexEntry>
+): void {
+  const containerAncestors = [...ancestors, container.id];
   index.set(container.id, {
     item: container,
-    portsById: new Map(container.ports.map((port) => [port.id, port]))
+    parentContainerId,
+    ancestorContainerIds: containerAncestors
   });
 
   for (const child of container.children) {
     if (child.kind === "container") {
-      buildPositionedIndex(child, index);
+      buildMeasuredItemIndex(child, container.id, containerAncestors, index);
       continue;
     }
 
     index.set(child.id, {
       item: child,
-      portsById: new Map(child.ports.map((port) => [port.id, port]))
+      parentContainerId: container.id,
+      ancestorContainerIds: containerAncestors
     });
   }
-
-  return index;
 }
 
-function getItemCenter(item: PositionedItem): Point {
-  return {
-    x: roundMetric(item.x + item.width / 2),
-    y: roundMetric(item.y + item.height / 2)
-  };
-}
+function resolveEdgeOwnerContainerId(
+  edge: MeasuredEdge,
+  index: ReadonlyMap<string, MeasuredItemIndexEntry>,
+  rootId: string
+): string {
+  const fromAncestors = index.get(edge.from.itemId)?.ancestorContainerIds ?? [rootId];
+  const toAncestors = index.get(edge.to.itemId)?.ancestorContainerIds ?? [rootId];
+  const maxDepth = Math.min(fromAncestors.length, toAncestors.length);
+  let ownerId = rootId;
 
-function getPortAbsolutePoint(item: PositionedItem, port: MeasuredPort): Point {
-  return {
-    x: roundMetric(item.x + port.x),
-    y: roundMetric(item.y + port.y)
-  };
-}
-
-function chooseFallbackSide(item: PositionedItem, oppositeItem: PositionedItem | undefined, preferAxis: MeasuredEdge["routing"]["preferAxis"]): MeasuredPort["side"] {
-  if (!oppositeItem) {
-    if (preferAxis === "vertical") {
-      return "south";
+  for (let depth = 0; depth < maxDepth; depth += 1) {
+    if (fromAncestors[depth] !== toAncestors[depth]) {
+      break;
     }
-    return "east";
+    ownerId = fromAncestors[depth];
   }
 
-  const itemCenter = getItemCenter(item);
-  const oppositeCenter = getItemCenter(oppositeItem);
-  const dx = oppositeCenter.x - itemCenter.x;
-  const dy = oppositeCenter.y - itemCenter.y;
-
-  if (preferAxis === "horizontal" || (preferAxis === undefined && Math.abs(dx) >= Math.abs(dy))) {
-    return dx >= 0 ? "east" : "west";
-  }
-
-  return dy >= 0 ? "south" : "north";
+  return ownerId;
 }
 
-function getFallbackAnchor(item: PositionedItem, side: MeasuredPort["side"]): Point {
-  switch (side) {
-    case "north":
-      return {
-        x: roundMetric(item.x + item.width / 2),
-        y: roundMetric(item.y)
-      };
-    case "south":
-      return {
-        x: roundMetric(item.x + item.width / 2),
-        y: roundMetric(item.y + item.height)
-      };
-    case "east":
-      return {
-        x: roundMetric(item.x + item.width),
-        y: roundMetric(item.y + item.height / 2)
-      };
-    case "west":
-      return {
-        x: roundMetric(item.x),
-        y: roundMetric(item.y + item.height / 2)
-      };
-  }
-}
+function buildOwnedEdgesByContainer(
+  edges: MeasuredEdge[],
+  index: ReadonlyMap<string, MeasuredItemIndexEntry>,
+  rootId: string
+): {
+  ownedEdgesByContainer: Map<string, MeasuredEdge[]>;
+  ownerContainerByEdgeId: Map<string, string>;
+} {
+  const ownedEdgesByContainer = new Map<string, MeasuredEdge[]>();
+  const ownerContainerByEdgeId = new Map<string, string>();
 
-function findPortByRole(item: PositionedItem, role: string): MeasuredPort | undefined {
-  return item.ports.find((port) => port.role === role);
-}
-
-function resolveEndpointPort(
-  endpoint: MeasuredEdgeEndpoint,
-  preferredRole: string | undefined,
-  edgeId: string,
-  indexedItem: IndexedPositionedItem,
-  oppositeItem: PositionedItem | undefined,
-  preferAxis: MeasuredEdge["routing"]["preferAxis"],
-  diagnostics: RendererDiagnostic[]
-): PositionedEdgeEndpoint {
-  if (endpoint.portId) {
-    const explicitPort = indexedItem.portsById.get(endpoint.portId);
-    if (explicitPort) {
-      const point = getPortAbsolutePoint(indexedItem.item, explicitPort);
-      return {
-        itemId: endpoint.itemId,
-        portId: explicitPort.id,
-        x: point.x,
-        y: point.y
-      };
-    }
-
-    diagnostics.push(
-      createRoutingDiagnostic(
-        "renderer.routing.unresolved_port",
-        `Could not resolve port "${endpoint.portId}" on item "${endpoint.itemId}". Falling back to another anchor.`,
-        edgeId
-      )
-    );
-  }
-
-  if (preferredRole) {
-    const rolePort = findPortByRole(indexedItem.item, preferredRole);
-    if (rolePort) {
-      const point = getPortAbsolutePoint(indexedItem.item, rolePort);
-      return {
-        itemId: endpoint.itemId,
-        portId: rolePort.id,
-        x: point.x,
-        y: point.y
-      };
-    }
-
-    diagnostics.push(
-      createRoutingDiagnostic(
-        "renderer.routing.unresolved_port_role",
-        `Could not resolve port role "${preferredRole}" on item "${endpoint.itemId}". Falling back to a box anchor.`,
-        edgeId,
-        "info"
-      )
-    );
-  }
-
-  const side = chooseFallbackSide(indexedItem.item, oppositeItem, preferAxis);
-  const point = getFallbackAnchor(indexedItem.item, side);
-  return {
-    itemId: endpoint.itemId,
-    portId: undefined,
-    x: point.x,
-    y: point.y
-  };
-}
-
-function resolveEdgeEndpoint(
-  endpoint: MeasuredEdgeEndpoint,
-  preferredRole: string | undefined,
-  edgeId: string,
-  index: Map<string, IndexedPositionedItem>,
-  oppositeItem: PositionedItem | undefined,
-  preferAxis: MeasuredEdge["routing"]["preferAxis"],
-  diagnostics: RendererDiagnostic[]
-): PositionedEdgeEndpoint {
-  const indexedItem = index.get(endpoint.itemId);
-  if (!indexedItem) {
-    diagnostics.push(
-      createRoutingDiagnostic(
-        "renderer.routing.unresolved_item",
-        `Could not resolve routed item "${endpoint.itemId}". Falling back to the scene origin.`,
-        edgeId,
-        "error"
-      )
-    );
-    return {
-      itemId: endpoint.itemId,
-      portId: endpoint.portId,
-      x: 0,
-      y: 0
-    };
-  }
-
-  return resolveEndpointPort(
-    endpoint,
-    preferredRole,
-    edgeId,
-    indexedItem,
-    oppositeItem,
-    preferAxis,
-    diagnostics
-  );
-}
-
-function collapseRoutePoints(points: Point[]): Point[] {
-  const collapsed: Point[] = [];
-
-  for (const point of points) {
-    const rounded = {
-      x: roundMetric(point.x),
-      y: roundMetric(point.y)
-    };
-    const last = collapsed[collapsed.length - 1];
-    if (!last || last.x !== rounded.x || last.y !== rounded.y) {
-      collapsed.push(rounded);
-    }
-  }
-
-  if (collapsed.length === 1) {
-    collapsed.push({
-      ...collapsed[0]
-    });
-  }
-
-  return collapsed;
-}
-
-function buildEdgeRoutePoints(edge: MeasuredEdge, from: Point, to: Point): Point[] {
-  if (edge.routing.style === "straight") {
-    return [from, to];
-  }
-
-  const preferAxis = edge.routing.preferAxis
-    ?? (Math.abs(to.x - from.x) >= Math.abs(to.y - from.y) ? "horizontal" : "vertical");
-
-  if (edge.routing.style === "stepped") {
-    return preferAxis === "horizontal"
-      ? [from, { x: to.x, y: from.y }, to]
-      : [from, { x: from.x, y: to.y }, to];
-  }
-
-  const midpoint = preferAxis === "horizontal"
-    ? roundMetric((from.x + to.x) / 2)
-    : roundMetric((from.y + to.y) / 2);
-
-  return preferAxis === "horizontal"
-    ? [from, { x: midpoint, y: from.y }, { x: midpoint, y: to.y }, to]
-    : [from, { x: from.x, y: midpoint }, { x: to.x, y: midpoint }, to];
-}
-
-function buildRoute(edge: MeasuredEdge, from: PositionedEdgeEndpoint, to: PositionedEdgeEndpoint): PositionedRoute {
-  return {
-    style: edge.routing.style,
-    points: collapseRoutePoints(
-      buildEdgeRoutePoints(edge, { x: from.x, y: from.y }, { x: to.x, y: to.y })
-    )
-  };
-}
-
-function getPolylineLength(points: Point[]): number {
-  let total = 0;
-  for (let index = 1; index < points.length; index += 1) {
-    const previous = points[index - 1];
-    const current = points[index];
-    total += Math.hypot(current.x - previous.x, current.y - previous.y);
-  }
-  return total;
-}
-
-function getPointAtDistance(points: Point[], distance: number): Point {
-  if (points.length === 0) {
-    return { x: 0, y: 0 };
-  }
-
-  let traversed = 0;
-  for (let index = 1; index < points.length; index += 1) {
-    const previous = points[index - 1];
-    const current = points[index];
-    const segment = Math.hypot(current.x - previous.x, current.y - previous.y);
-    if (segment === 0) {
+  for (const edge of edges) {
+    const ownerId = resolveEdgeOwnerContainerId(edge, index, rootId);
+    ownerContainerByEdgeId.set(edge.id, ownerId);
+    const existing = ownedEdgesByContainer.get(ownerId);
+    if (existing) {
+      existing.push(edge);
       continue;
     }
-    if (traversed + segment >= distance) {
-      const ratio = (distance - traversed) / segment;
-      return {
-        x: roundMetric(previous.x + (current.x - previous.x) * ratio),
-        y: roundMetric(previous.y + (current.y - previous.y) * ratio)
-      };
-    }
-    traversed += segment;
+    ownedEdgesByContainer.set(ownerId, [edge]);
   }
 
   return {
-    ...points[points.length - 1]
+    ownedEdgesByContainer,
+    ownerContainerByEdgeId
   };
 }
 
-function positionEdgeLabel(label: NonNullable<MeasuredEdge["label"]>, route: PositionedRoute): PositionedEdgeLabel {
-  const totalLength = getPolylineLength(route.points);
-  const midpoint = getPointAtDistance(route.points, totalLength / 2);
+function resolveOwnerContainer(
+  edge: MeasuredEdge,
+  root: PositionedContainer,
+  index: ReadonlyMap<string, IndexedPositionedItem>,
+  ownerContainerByEdgeId: ReadonlyMap<string, string>
+): PositionedContainer {
+  const ownerId = ownerContainerByEdgeId.get(edge.id);
+  if (!ownerId) {
+    return root;
+  }
 
-  return {
-    lines: [...label.lines],
-    width: label.width,
-    height: label.height,
-    lineHeight: label.lineHeight,
-    textStyleRole: label.textStyleRole,
-    x: roundMetric(midpoint.x - label.width / 2),
-    y: roundMetric(midpoint.y - label.height / 2)
-  };
+  const ownerItem = index.get(ownerId)?.item;
+  return ownerItem && ownerItem.kind === "container" ? ownerItem : root;
 }
 
 function positionMeasuredEdge(
   edge: MeasuredEdge,
-  index: Map<string, IndexedPositionedItem>,
+  root: PositionedContainer,
+  index: ReadonlyMap<string, IndexedPositionedItem>,
+  ownerContainerByEdgeId: ReadonlyMap<string, string>,
+  routeHints: ReadonlyMap<string, Point[]>,
   diagnostics: RendererDiagnostic[]
 ): PositionedEdge {
   const sourceItem = index.get(edge.from.itemId)?.item;
@@ -796,7 +743,11 @@ function positionMeasuredEdge(
     diagnostics
   );
 
-  if (edge.routing.avoidNodeBoxes) {
+  const owner = resolveOwnerContainer(edge, root, index, ownerContainerByEdgeId);
+  const localHint = routeHints.get(edge.id);
+  const canUseElkRoute = edge.routing.style === "orthogonal" && Array.isArray(localHint) && localHint.length > 0;
+
+  if (edge.routing.avoidNodeBoxes && !canUseElkRoute) {
     diagnostics.push(
       createRoutingDiagnostic(
         "renderer.routing.preference_fallback",
@@ -807,7 +758,10 @@ function positionMeasuredEdge(
     );
   }
 
-  const route = buildRoute(edge, from, to);
+  const route = canUseElkRoute
+    ? buildRouteFromLocalHint(edge, from, to, owner, localHint)
+    : buildSharedRoute(edge, from, to);
+
   return {
     id: edge.id,
     role: edge.role,
@@ -821,16 +775,39 @@ function positionMeasuredEdge(
   };
 }
 
-export function positionMeasuredScene(measuredScene: MeasuredScene): PositionedScene {
+export async function positionMeasuredScene(measuredScene: MeasuredScene): Promise<PositionedScene> {
   const diagnostics = measuredScene.diagnostics.filter((diagnostic) => diagnostic.code !== DEFERRED_CONTAINER_PORT_DIAGNOSTIC);
   const context: LayoutContext = {
     theme: getRendererTheme(measuredScene.themeId, "layout"),
     diagnostics: [...diagnostics],
     strategyRegistry
   };
-  const root = layoutContainer(measuredScene.root, context);
+
+  const measuredItemIndex = new Map<string, MeasuredItemIndexEntry>();
+  buildMeasuredItemIndex(measuredScene.root, undefined, [], measuredItemIndex);
+
+  const {
+    ownedEdgesByContainer,
+    ownerContainerByEdgeId
+  } = buildOwnedEdgesByContainer(measuredScene.edges, measuredItemIndex, measuredScene.root.id);
+
+  const rootResult = await layoutContainer(measuredScene.root, context, ownedEdgesByContainer);
+  if (rootResult.item.kind !== "container") {
+    throw new Error("Root layout result must be a container.");
+  }
+
+  const root = rootResult.item;
   const index = buildPositionedIndex(root);
-  const edges = measuredScene.edges.map((edge) => positionMeasuredEdge(edge, index, context.diagnostics));
+  const edges = measuredScene.edges.map((edge) =>
+    positionMeasuredEdge(
+      edge,
+      root,
+      index,
+      ownerContainerByEdgeId,
+      rootResult.routeHints,
+      context.diagnostics
+    )
+  );
 
   return {
     viewId: measuredScene.viewId,

@@ -17,6 +17,9 @@ importers:
       commander:
         specifier: ^12.1.0
         version: 12.1.0
+      elkjs:
+        specifier: ^0.11.1
+        version: 0.11.1
       fontkit:
         specifier: ^2.0.4
         version: 2.0.4
@@ -641,6 +644,9 @@ packages:
   dfa@1.2.0:
     resolution: {integrity: sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==}
 
+  elkjs@0.11.1:
+    resolution: {integrity: sha512-zxxR9k+rx5ktMwT/FwyLdPCrq7xN6e4VGGHH8hA01vVYKjTFik7nHOxBnAYtrgYUB1RpAiLvA1/U2YraWxyKKg==}
+
   es-module-lexer@1.7.0:
     resolution: {integrity: sha512-jEQoCwk8hyb2AZziIOLhDqpm5+2ww5uIE6lkO/6jcOCusfk6LhMHpXXfBLXTZ7Ydyt0j4VoUQv6uGNYbdW+kBA==}
 
@@ -1219,6 +1225,8 @@ snapshots:
   deep-eql@5.0.2: {}
 
   dfa@1.2.0: {}
+
+  elkjs@0.11.1: {}
 
   es-module-lexer@1.7.0: {}
 
