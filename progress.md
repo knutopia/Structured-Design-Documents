@@ -9,6 +9,7 @@
 ## Sun 3-16-26
 
 -Preparing renderer migration to elkjs / generic
+-Started master plan based renderer migration
 
 ## Sat 3-15-26
 
