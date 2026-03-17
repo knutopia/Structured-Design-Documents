@@ -333,260 +333,119 @@
             ],
             "children": [
               {
-                "kind": "node",
-                "id": "E-060",
-                "role": "event",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-oval"
-                ],
-                "widthPolicy": {
-                  "preferred": "chip",
-                  "allowed": [
-                    "chip",
-                    "narrow",
-                    "standard"
-                  ]
-                },
-                "widthBand": "chip",
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "E-060__content__line_0",
-                    "kind": "text",
-                    "textStyleRole": "title",
-                    "lines": [
-                      "Submit",
-                      "Review"
-                    ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 53.68,
-                    "height": 40,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "E-060__contract_in",
-                    "role": "contract_in",
-                    "side": "west",
-                    "x": 0,
-                    "y": 32
-                  }
-                ],
-                "overflow": {
-                  "status": "fits"
-                },
-                "width": 96,
-                "height": 64
-              },
-              {
-                "kind": "node",
-                "id": "SA-060",
-                "role": "systemaction",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-component"
-                ],
-                "widthPolicy": {
-                  "preferred": "standard",
-                  "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
-                  ]
-                },
-                "widthBand": "standard",
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "SA-060__content__line_0",
-                    "kind": "text",
-                    "textStyleRole": "title",
-                    "lines": [
-                      "Save Review"
-                    ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 92.936,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "SA-060__contract_in",
-                    "role": "contract_in",
-                    "side": "west",
-                    "x": 0,
-                    "y": 24
-                  }
-                ],
-                "overflow": {
-                  "status": "fits"
-                },
-                "width": 224,
-                "height": 48
-              },
-              {
-                "kind": "node",
-                "id": "D-060",
-                "role": "dataentity",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-cylinder"
-                ],
-                "widthPolicy": {
-                  "preferred": "standard",
-                  "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
-                  ]
-                },
-                "widthBand": "standard",
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "D-060__content__line_0",
-                    "kind": "text",
-                    "textStyleRole": "title",
-                    "lines": [
-                      "CaseRecord"
-                    ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 89.704,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "D-060__contract_in",
-                    "role": "contract_in",
-                    "side": "west",
-                    "x": 0,
-                    "y": 24
-                  }
-                ],
-                "overflow": {
-                  "status": "fits"
-                },
-                "width": 224,
-                "height": 48
-              },
-              {
                 "kind": "container",
-                "id": "secondary_state_group:C-060",
-                "role": "state_graph",
-                "primitive": "cluster",
+                "id": "C-060__content",
+                "role": "contract_gutter",
+                "primitive": "stack",
                 "classes": [
-                  "synthetic",
-                  "transition_graph",
-                  "state_graph"
+                  "contract_gutter"
                 ],
                 "layout": {
-                  "strategy": "elk_layered",
-                  "direction": "horizontal",
-                  "gap": 24,
-                  "crossAlignment": "start"
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 16,
+                  "crossAlignment": "stretch"
                 },
                 "chrome": {
                   "padding": {
-                    "top": 12,
-                    "right": 12,
-                    "bottom": 12,
-                    "left": 12
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 128
                   },
                   "gutter": 16,
-                  "headerBandHeight": 60
+                  "headerBandHeight": 0
                 },
-                "headerContent": [
-                  {
-                    "id": "secondary_state_group:C-060__header__line_0",
-                    "kind": "text",
-                    "textStyleRole": "title",
-                    "lines": [
-                      "State graph: Review Panel"
-                    ],
-                    "x": 12,
-                    "y": 10,
-                    "width": 193.632,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
-                  },
-                  {
-                    "id": "secondary_state_group:C-060__header__line_1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
-                    "lines": [
-                      "scope_id=C-060"
-                    ],
-                    "x": 12,
-                    "y": 34,
-                    "width": 91.068,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
-                  }
-                ],
+                "headerContent": [],
                 "children": [
                   {
                     "kind": "node",
-                    "id": "ST-061a",
-                    "role": "state",
+                    "id": "E-060",
+                    "role": "event",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-ellipse"
+                      "shape-oval"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "chip",
                       "allowed": [
+                        "chip",
                         "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
-                    "widthBand": "narrow",
+                    "widthBand": "chip",
                     "overflowPolicy": {
                       "kind": "escalate_width_band",
                       "maxLines": 2
                     },
                     "content": [
                       {
-                        "id": "ST-061a__content__line_0",
+                        "id": "E-060__content__line_0",
                         "kind": "text",
                         "textStyleRole": "title",
                         "lines": [
-                          "Panel Idle"
+                          "Submit",
+                          "Review"
                         ],
                         "x": 12,
                         "y": 12,
-                        "width": 73.488,
+                        "width": 53.68,
+                        "height": 40,
+                        "lineHeight": 20,
+                        "region": "primary",
+                        "priority": "primary"
+                      }
+                    ],
+                    "ports": [
+                      {
+                        "id": "E-060__contract_in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "x": 0,
+                        "y": 32
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "width": 96,
+                    "height": 64
+                  },
+                  {
+                    "kind": "node",
+                    "id": "SA-060",
+                    "role": "systemaction",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node",
+                      "shape-component"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "narrow",
+                        "standard",
+                        "wide"
+                      ]
+                    },
+                    "widthBand": "standard",
+                    "overflowPolicy": {
+                      "kind": "escalate_width_band",
+                      "maxLines": 2
+                    },
+                    "content": [
+                      {
+                        "id": "SA-060__content__line_0",
+                        "kind": "text",
+                        "textStyleRole": "title",
+                        "lines": [
+                          "Save Review"
+                        ],
+                        "x": 12,
+                        "y": 12,
+                        "width": 92.936,
                         "height": 20,
                         "lineHeight": 20,
                         "region": "primary",
@@ -595,59 +454,52 @@
                     ],
                     "ports": [
                       {
-                        "id": "ST-061a__transition_in",
-                        "role": "transition_in",
+                        "id": "SA-060__contract_in",
+                        "role": "contract_in",
                         "side": "west",
                         "x": 0,
-                        "y": 24
-                      },
-                      {
-                        "id": "ST-061a__transition_out",
-                        "role": "transition_out",
-                        "side": "east",
-                        "x": 168,
                         "y": 24
                       }
                     ],
                     "overflow": {
                       "status": "fits"
                     },
-                    "width": 168,
+                    "width": 224,
                     "height": 48
                   },
                   {
                     "kind": "node",
-                    "id": "ST-061b",
-                    "role": "state",
+                    "id": "D-060",
+                    "role": "dataentity",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-ellipse"
+                      "shape-cylinder"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
                         "narrow",
                         "standard",
                         "wide"
                       ]
                     },
-                    "widthBand": "narrow",
+                    "widthBand": "standard",
                     "overflowPolicy": {
                       "kind": "escalate_width_band",
                       "maxLines": 2
                     },
                     "content": [
                       {
-                        "id": "ST-061b__content__line_0",
+                        "id": "D-060__content__line_0",
                         "kind": "text",
                         "textStyleRole": "title",
                         "lines": [
-                          "Panel Dirty"
+                          "CaseRecord"
                         ],
                         "x": 12,
                         "y": 12,
-                        "width": 81.88,
+                        "width": 89.704,
                         "height": 20,
                         "lineHeight": 20,
                         "region": "primary",
@@ -656,25 +508,204 @@
                     ],
                     "ports": [
                       {
-                        "id": "ST-061b__transition_in",
-                        "role": "transition_in",
+                        "id": "D-060__contract_in",
+                        "role": "contract_in",
                         "side": "west",
                         "x": 0,
-                        "y": 24
-                      },
-                      {
-                        "id": "ST-061b__transition_out",
-                        "role": "transition_out",
-                        "side": "east",
-                        "x": 168,
                         "y": 24
                       }
                     ],
                     "overflow": {
                       "status": "fits"
                     },
-                    "width": 168,
+                    "width": 224,
                     "height": 48
+                  },
+                  {
+                    "kind": "container",
+                    "id": "secondary_state_group:C-060",
+                    "role": "state_graph",
+                    "primitive": "cluster",
+                    "classes": [
+                      "synthetic",
+                      "transition_graph",
+                      "state_graph"
+                    ],
+                    "layout": {
+                      "strategy": "elk_layered",
+                      "direction": "horizontal",
+                      "gap": 24,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 12,
+                        "right": 12,
+                        "bottom": 12,
+                        "left": 12
+                      },
+                      "gutter": 16,
+                      "headerBandHeight": 60
+                    },
+                    "headerContent": [
+                      {
+                        "id": "secondary_state_group:C-060__header__line_0",
+                        "kind": "text",
+                        "textStyleRole": "title",
+                        "lines": [
+                          "State graph: Review Panel"
+                        ],
+                        "x": 12,
+                        "y": 10,
+                        "width": 193.632,
+                        "height": 20,
+                        "lineHeight": 20,
+                        "region": "primary",
+                        "priority": "primary"
+                      },
+                      {
+                        "id": "secondary_state_group:C-060__header__line_1",
+                        "kind": "metadata",
+                        "textStyleRole": "metadata",
+                        "lines": [
+                          "scope_id=C-060"
+                        ],
+                        "x": 12,
+                        "y": 34,
+                        "width": 91.068,
+                        "height": 16,
+                        "lineHeight": 16,
+                        "region": "primary",
+                        "priority": "secondary"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "node",
+                        "id": "ST-061a",
+                        "role": "state",
+                        "primitive": "card",
+                        "classes": [
+                          "semantic_node",
+                          "shape-ellipse"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "narrow",
+                          "allowed": [
+                            "narrow",
+                            "standard",
+                            "wide"
+                          ]
+                        },
+                        "widthBand": "narrow",
+                        "overflowPolicy": {
+                          "kind": "escalate_width_band",
+                          "maxLines": 2
+                        },
+                        "content": [
+                          {
+                            "id": "ST-061a__content__line_0",
+                            "kind": "text",
+                            "textStyleRole": "title",
+                            "lines": [
+                              "Panel Idle"
+                            ],
+                            "x": 12,
+                            "y": 12,
+                            "width": 73.488,
+                            "height": 20,
+                            "lineHeight": 20,
+                            "region": "primary",
+                            "priority": "primary"
+                          }
+                        ],
+                        "ports": [
+                          {
+                            "id": "ST-061a__transition_in",
+                            "role": "transition_in",
+                            "side": "west",
+                            "x": 0,
+                            "y": 24
+                          },
+                          {
+                            "id": "ST-061a__transition_out",
+                            "role": "transition_out",
+                            "side": "east",
+                            "x": 168,
+                            "y": 24
+                          }
+                        ],
+                        "overflow": {
+                          "status": "fits"
+                        },
+                        "width": 168,
+                        "height": 48
+                      },
+                      {
+                        "kind": "node",
+                        "id": "ST-061b",
+                        "role": "state",
+                        "primitive": "card",
+                        "classes": [
+                          "semantic_node",
+                          "shape-ellipse"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "narrow",
+                          "allowed": [
+                            "narrow",
+                            "standard",
+                            "wide"
+                          ]
+                        },
+                        "widthBand": "narrow",
+                        "overflowPolicy": {
+                          "kind": "escalate_width_band",
+                          "maxLines": 2
+                        },
+                        "content": [
+                          {
+                            "id": "ST-061b__content__line_0",
+                            "kind": "text",
+                            "textStyleRole": "title",
+                            "lines": [
+                              "Panel Dirty"
+                            ],
+                            "x": 12,
+                            "y": 12,
+                            "width": 81.88,
+                            "height": 20,
+                            "lineHeight": 20,
+                            "region": "primary",
+                            "priority": "primary"
+                          }
+                        ],
+                        "ports": [
+                          {
+                            "id": "ST-061b__transition_in",
+                            "role": "transition_in",
+                            "side": "west",
+                            "x": 0,
+                            "y": 24
+                          },
+                          {
+                            "id": "ST-061b__transition_out",
+                            "role": "transition_out",
+                            "side": "east",
+                            "x": 168,
+                            "y": 24
+                          }
+                        ],
+                        "overflow": {
+                          "status": "fits"
+                        },
+                        "width": 168,
+                        "height": 48
+                      }
+                    ],
+                    "ports": [],
+                    "width": 0,
+                    "height": 0
                   }
                 ],
                 "ports": [],
@@ -735,6 +766,7 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "horizontal",
+        "bendPlacement": "target_bias",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },
@@ -770,6 +802,7 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "horizontal",
+        "bendPlacement": "target_bias",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },
@@ -806,6 +839,7 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "horizontal",
+        "bendPlacement": "target_bias",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },

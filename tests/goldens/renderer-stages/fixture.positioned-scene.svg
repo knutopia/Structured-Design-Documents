@@ -14,13 +14,14 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
+    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
     .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
     .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
-    .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
@@ -35,7 +36,7 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
     </marker>
   </defs>
@@ -46,13 +47,11 @@
     <g id="scene-container-area-a-001" class="scene-container primitive-cluster role-top_level_area paint-chrome area" data-item-id="area-A-001" data-role="top_level_area">
       <rect class="scene-container__chrome" x="24" y="24" width="248" height="184" rx="16" ry="16"/>
       <rect class="scene-container__header-band" x="24" y="24" width="248" height="28" rx="14" ry="14"/>
-      <circle class="scene-port role-primary_out" cx="148" cy="208" r="4"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-p-001" class="scene-node primitive-card role-place paint-nodes place top_place" data-item-id="P-001" data-role="place">
       <rect class="scene-node__chrome" x="48" y="68" width="160" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-primary_out" cx="208" cy="104" r="4"/>
     </g>
     <g id="scene-node-status-01" class="scene-node primitive-badge role-status_badge paint-nodes status_chip" data-item-id="status-01" data-role="status_badge">
       <rect class="scene-node__chrome" x="48" y="152" width="88" height="30" rx="999" ry="999"/>
@@ -64,7 +63,6 @@
     <g id="scene-node-p-003" class="scene-node primitive-card role-place paint-nodes place top_level" data-item-id="P-003" data-role="place">
       <rect class="scene-node__chrome" x="320" y="68" width="192" height="66" rx="14" ry="14"/>
       <rect class="scene-badge__chrome" x="332" y="106" width="40" height="22" rx="999" ry="999"/>
-      <circle class="scene-port role-primary_in" cx="320" cy="104" r="4"/>
     </g>
     <g id="scene-node-header-01" class="scene-node primitive-header role-context_header paint-nodes context" data-item-id="header-01" data-role="context_header">
       <rect class="scene-node__chrome" x="320" y="164" width="192" height="56" rx="12" ry="12"/>

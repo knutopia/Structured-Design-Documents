@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="825.778" height="674" viewBox="0 0 825.778 674" class="staged-svg view-ui_contracts profile-recommended theme-default theme-revision-public-sans-v0-1" data-view-id="ui_contracts" data-profile-id="recommended" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="953.778" height="674" viewBox="0 0 953.778 674" class="staged-svg view-ui_contracts profile-recommended theme-default theme-revision-public-sans-v0-1" data-view-id="ui_contracts" data-profile-id="recommended" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -14,13 +14,14 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
+    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
     .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
     .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
-    .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
@@ -35,57 +36,47 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ui_contracts" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="825.778" height="674" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="953.778" height="674" rx="18" ry="18"/>
     </g>
     <g id="scene-container-p-700" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-700" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="24" width="777.778" height="302" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="24" width="777.778" height="86" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="24" cy="122" r="4"/>
+      <rect class="scene-container__chrome" x="24" y="24" width="905.778" height="302" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="24" width="905.778" height="86" rx="16" ry="16"/>
     </g>
     <g id="scene-container-view_state_graph-p-700" class="scene-container primitive-cluster role-view_state_graph paint-chrome synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-700" data-role="view_state_graph">
       <rect class="scene-container__chrome" x="36" y="122" width="489.778" height="192" rx="16" ry="16"/>
       <rect class="scene-container__header-band" x="36" y="122" width="489.778" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-c-700" class="scene-container primitive-cluster role-component paint-chrome component scope" data-item-id="C-700" data-role="component">
-      <rect class="scene-container__chrome" x="541.778" y="122" width="248" height="192" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="541.778" y="122" width="248" height="40" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="541.778" cy="174" r="4"/>
+      <rect class="scene-container__chrome" x="541.778" y="122" width="376" height="192" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="541.778" y="122" width="376" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-p-701" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-701" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="354" width="777.778" height="110" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="354" width="777.778" height="86" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="24" cy="452" r="4"/>
+      <rect class="scene-container__chrome" x="24" y="354" width="905.778" height="110" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="354" width="905.778" height="86" rx="16" ry="16"/>
     </g>
     <g id="scene-container-p-702" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-702" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="492" width="777.778" height="158" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="492" width="777.778" height="86" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="24" cy="590" r="4"/>
+      <rect class="scene-container__chrome" x="24" y="492" width="905.778" height="158" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="492" width="905.778" height="86" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-vs-700a" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-700a" data-role="viewstate">
       <rect class="scene-node__chrome" x="49" y="174" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-transition_in" cx="49" cy="207" r="4"/>
-      <circle class="scene-port role-transition_out" cx="217" cy="207" r="4"/>
     </g>
     <g id="scene-node-vs-700b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-700b" data-role="viewstate">
       <rect class="scene-node__chrome" x="344.778" y="174" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-transition_in" cx="344.778" cy="207" r="4"/>
-      <circle class="scene-port role-transition_out" cx="512.778" cy="207" r="4"/>
     </g>
     <g id="scene-node-e-700" class="scene-node primitive-card role-event paint-nodes semantic_node shape-oval" data-item-id="E-700" data-role="event">
-      <rect class="scene-node__chrome" x="553.778" y="174" width="96" height="64" rx="14" ry="14"/>
-      <circle class="scene-port role-contract_in" cx="553.778" cy="206" r="4"/>
+      <rect class="scene-node__chrome" x="681.778" y="174" width="96" height="64" rx="14" ry="14"/>
     </g>
     <g id="scene-node-d-700" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shape-cylinder" data-item-id="D-700" data-role="dataentity">
-      <rect class="scene-node__chrome" x="553.778" y="254" width="224" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-contract_in" cx="553.778" cy="278" r="4"/>
+      <rect class="scene-node__chrome" x="681.778" y="254" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-c-702" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-702" data-role="component">
       <rect class="scene-node__chrome" x="36" y="590" width="168" height="48" rx="14" ry="14"/>
@@ -130,14 +121,14 @@
         </text>
     </g>
     <g class="scene-node primitive-card role-event paint-labels semantic_node shape-oval" data-item-id="E-700" data-role="event">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="565.778" y="202">
-          <tspan x="565.778" dy="0">Submit</tspan>
-          <tspan x="565.778" dy="20">Review</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="693.778" y="202">
+          <tspan x="693.778" dy="0">Submit</tspan>
+          <tspan x="693.778" dy="20">Review</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shape-cylinder" data-item-id="D-700" data-role="dataentity">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="565.778" y="282">
-          <tspan x="565.778" dy="0">ReviewRecord</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="693.778" y="282">
+          <tspan x="693.778" dy="0">ReviewRecord</tspan>
         </text>
     </g>
     <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-701" data-role="place">
@@ -170,10 +161,10 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-binds_to-c-700--d-700" class="scene-edge role-binds_to route-orthogonal paint-edges edge-dotted constraint_edge" data-edge-id="binds_to:C-700-&gt;D-700" data-role="binds_to">
-      <path class="scene-edge__path" d="M 541.778 174 L 547.778 174 L 547.778 278 L 553.778 278" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 541.778 174 L 669.778 174 L 669.778 278 L 681.778 278" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-emits-c-700--e-700" class="scene-edge role-emits route-orthogonal paint-edges edge-dashed constraint_edge" data-edge-id="emits:C-700-&gt;E-700" data-role="emits">
-      <path class="scene-edge__path" d="M 541.778 174 L 547.778 174 L 547.778 206 L 553.778 206" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 541.778 174 L 669.778 174 L 669.778 206 L 681.778 206" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-transitions_to-vs-700a--vs-700b" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-700a-&gt;VS-700b" data-role="transitions_to">
       <path class="scene-edge__path" d="M 217 207 L 344.778 207" marker-end="url(#scene-marker-arrow)"/>
@@ -181,15 +172,15 @@
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-binds_to edge-dotted constraint_edge" data-edge-id="binds_to:C-700-&gt;D-700" data-role="binds_to">
-      <rect class="scene-edge-label__box" x="559.778" y="215" width="107.748" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="565.778" y="231">
-          <tspan x="565.778" dy="0">binds field status</tspan>
+      <rect class="scene-edge-label__box" x="551.904" y="140" width="107.748" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="557.904" y="156">
+          <tspan x="557.904" dy="0">binds field status</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-emits edge-dashed constraint_edge" data-edge-id="emits:C-700-&gt;E-700" data-role="emits">
-      <rect class="scene-edge-label__box" x="526.343" y="179" width="42.87" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="532.343" y="195">
-          <tspan x="532.343" dy="0">emits</tspan>
+      <rect class="scene-edge-label__box" x="584.343" y="140" width="42.87" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="590.343" y="156">
+          <tspan x="590.343" dy="0">emits</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transitions_to free_edge" data-edge-id="transitions_to:VS-700a-&gt;VS-700b" data-role="transitions_to">

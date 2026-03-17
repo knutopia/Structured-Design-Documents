@@ -28,12 +28,14 @@ describe("staged SVG backend", () => {
 
     expect(svg).toContain("@font-face");
     expect(svg).toContain('id="scene-marker-arrow"');
+    expect(svg).toContain('markerUnits="userSpaceOnUse"');
     expect(svg).toContain('data-paint-group="chrome"');
     expect(svg.indexOf('data-paint-group="chrome"')).toBeLessThan(svg.indexOf('data-paint-group="nodes"'));
     expect(svg.indexOf('data-paint-group="nodes"')).toBeLessThan(svg.indexOf('data-paint-group="labels"'));
     expect(svg.indexOf('data-paint-group="labels"')).toBeLessThan(svg.indexOf('data-paint-group="edges"'));
     expect(svg.indexOf('data-paint-group="edges"')).toBeLessThan(svg.indexOf('data-paint-group="edge_labels"'));
     expect(svg).toContain('marker-end="url(#scene-marker-arrow)"');
+    expect(svg).not.toContain('class="scene-port');
   });
 
   it("derives PNG from the staged SVG output", async () => {

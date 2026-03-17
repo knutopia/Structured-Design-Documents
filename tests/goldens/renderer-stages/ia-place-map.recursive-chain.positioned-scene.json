@@ -1,0 +1,636 @@
+{
+  "viewId": "ia_place_map",
+  "profileId": "simple",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "ia_place_map"
+    ],
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 48,
+      "crossAlignment": "start"
+    },
+    "chrome": {
+      "padding": {
+        "top": 24,
+        "right": 24,
+        "bottom": 24,
+        "left": 24
+      },
+      "gutter": 48,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "P-800__branch",
+        "role": "place_branch",
+        "primitive": "stack",
+        "classes": [
+          "place_branch",
+          "branch_root",
+          "depth-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "gutter": 16,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-800",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "place",
+              "root_place",
+              "depth-0"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "narrow",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-800__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Overview"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 68.656,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "north_chain",
+                "role": "north_chain",
+                "side": "north",
+                "offset": 24,
+                "x": 24,
+                "y": 0
+              },
+              {
+                "id": "south_chain",
+                "role": "south_chain",
+                "side": "south",
+                "offset": 24,
+                "x": 24,
+                "y": 48
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 168,
+                "y": 24
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 24,
+            "y": 24,
+            "width": 168,
+            "height": 48
+          },
+          {
+            "kind": "container",
+            "id": "P-800__descendants",
+            "role": "place_descendants",
+            "primitive": "stack",
+            "classes": [
+              "place_descendants"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 12,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 40
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "container",
+                "id": "P-801__branch",
+                "role": "place_branch",
+                "primitive": "stack",
+                "classes": [
+                  "place_branch",
+                  "branch_nested",
+                  "depth-1"
+                ],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 16,
+                  "crossAlignment": "start"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 0
+                  },
+                  "gutter": 16,
+                  "headerBandHeight": 0
+                },
+                "headerContent": [],
+                "children": [
+                  {
+                    "kind": "node",
+                    "id": "P-801",
+                    "role": "place",
+                    "primitive": "card",
+                    "classes": [
+                      "place",
+                      "nested_place",
+                      "depth-1"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "narrow",
+                      "allowed": [
+                        "narrow",
+                        "standard",
+                        "wide"
+                      ]
+                    },
+                    "widthBand": "narrow",
+                    "overflowPolicy": {
+                      "kind": "escalate_width_band",
+                      "maxLines": 2
+                    },
+                    "content": [
+                      {
+                        "id": "P-801__title",
+                        "kind": "text",
+                        "textStyleRole": "title",
+                        "lines": [
+                          "Details"
+                        ],
+                        "x": 12,
+                        "y": 12,
+                        "width": 51.576,
+                        "height": 20,
+                        "lineHeight": 20,
+                        "region": "primary",
+                        "priority": "primary"
+                      }
+                    ],
+                    "ports": [
+                      {
+                        "id": "north_chain",
+                        "role": "north_chain",
+                        "side": "north",
+                        "offset": 24,
+                        "x": 24,
+                        "y": 0
+                      },
+                      {
+                        "id": "south_chain",
+                        "role": "south_chain",
+                        "side": "south",
+                        "offset": 24,
+                        "x": 24,
+                        "y": 48
+                      },
+                      {
+                        "id": "east",
+                        "role": "east",
+                        "side": "east",
+                        "x": 168,
+                        "y": 24
+                      },
+                      {
+                        "id": "west",
+                        "role": "west",
+                        "side": "west",
+                        "x": 0,
+                        "y": 24
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "x": 64,
+                    "y": 88,
+                    "width": 168,
+                    "height": 48
+                  },
+                  {
+                    "kind": "container",
+                    "id": "P-801__descendants",
+                    "role": "place_descendants",
+                    "primitive": "stack",
+                    "classes": [
+                      "place_descendants"
+                    ],
+                    "layout": {
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 12,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 40
+                      },
+                      "gutter": 12,
+                      "headerBandHeight": 0
+                    },
+                    "headerContent": [],
+                    "children": [
+                      {
+                        "kind": "container",
+                        "id": "P-802__branch",
+                        "role": "place_branch",
+                        "primitive": "stack",
+                        "classes": [
+                          "place_branch",
+                          "branch_nested",
+                          "depth-2"
+                        ],
+                        "layout": {
+                          "strategy": "stack",
+                          "direction": "vertical",
+                          "gap": 16,
+                          "crossAlignment": "start"
+                        },
+                        "chrome": {
+                          "padding": {
+                            "top": 0,
+                            "right": 0,
+                            "bottom": 0,
+                            "left": 0
+                          },
+                          "gutter": 16,
+                          "headerBandHeight": 0
+                        },
+                        "headerContent": [],
+                        "children": [
+                          {
+                            "kind": "node",
+                            "id": "P-802",
+                            "role": "place",
+                            "primitive": "card",
+                            "classes": [
+                              "place",
+                              "nested_place",
+                              "depth-2"
+                            ],
+                            "widthPolicy": {
+                              "preferred": "narrow",
+                              "allowed": [
+                                "narrow",
+                                "standard",
+                                "wide"
+                              ]
+                            },
+                            "widthBand": "narrow",
+                            "overflowPolicy": {
+                              "kind": "escalate_width_band",
+                              "maxLines": 2
+                            },
+                            "content": [
+                              {
+                                "id": "P-802__title",
+                                "kind": "text",
+                                "textStyleRole": "title",
+                                "lines": [
+                                  "Review"
+                                ],
+                                "x": 12,
+                                "y": 12,
+                                "width": 52.928,
+                                "height": 20,
+                                "lineHeight": 20,
+                                "region": "primary",
+                                "priority": "primary"
+                              }
+                            ],
+                            "ports": [
+                              {
+                                "id": "north_chain",
+                                "role": "north_chain",
+                                "side": "north",
+                                "offset": 24,
+                                "x": 24,
+                                "y": 0
+                              },
+                              {
+                                "id": "south_chain",
+                                "role": "south_chain",
+                                "side": "south",
+                                "offset": 24,
+                                "x": 24,
+                                "y": 48
+                              },
+                              {
+                                "id": "east",
+                                "role": "east",
+                                "side": "east",
+                                "x": 168,
+                                "y": 24
+                              },
+                              {
+                                "id": "west",
+                                "role": "west",
+                                "side": "west",
+                                "x": 0,
+                                "y": 24
+                              }
+                            ],
+                            "overflow": {
+                              "status": "fits"
+                            },
+                            "x": 104,
+                            "y": 152,
+                            "width": 168,
+                            "height": 48
+                          }
+                        ],
+                        "ports": [],
+                        "x": 104,
+                        "y": 152,
+                        "width": 168,
+                        "height": 48
+                      }
+                    ],
+                    "ports": [],
+                    "x": 64,
+                    "y": 152,
+                    "width": 208,
+                    "height": 48
+                  }
+                ],
+                "ports": [],
+                "x": 64,
+                "y": 88,
+                "width": 208,
+                "height": 112
+              }
+            ],
+            "ports": [],
+            "x": 24,
+            "y": 88,
+            "width": 248,
+            "height": 112
+          }
+        ],
+        "ports": [],
+        "x": 24,
+        "y": 24,
+        "width": 248,
+        "height": 176
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 296,
+    "height": 224
+  },
+  "edges": [
+    {
+      "id": "P-800__nav__P-801",
+      "role": "navigation",
+      "classes": [
+        "within_chain"
+      ],
+      "from": {
+        "itemId": "P-800",
+        "portId": "south_chain",
+        "x": 48,
+        "y": 72
+      },
+      "to": {
+        "itemId": "P-801",
+        "portId": "north_chain",
+        "x": 88,
+        "y": 88
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 48,
+            "y": 72
+          },
+          {
+            "x": 48,
+            "y": 76
+          },
+          {
+            "x": 88,
+            "y": 76
+          },
+          {
+            "x": 88,
+            "y": 88
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-801__nav__P-800",
+      "role": "navigation",
+      "classes": [
+        "within_chain"
+      ],
+      "from": {
+        "itemId": "P-801",
+        "portId": "north_chain",
+        "x": 88,
+        "y": 88
+      },
+      "to": {
+        "itemId": "P-800",
+        "portId": "south_chain",
+        "x": 48,
+        "y": 72
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 88,
+            "y": 88
+          },
+          {
+            "x": 88,
+            "y": 84
+          },
+          {
+            "x": 48,
+            "y": 84
+          },
+          {
+            "x": 48,
+            "y": 72
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-801__nav__P-802",
+      "role": "navigation",
+      "classes": [
+        "within_chain"
+      ],
+      "from": {
+        "itemId": "P-801",
+        "portId": "south_chain",
+        "x": 88,
+        "y": 136
+      },
+      "to": {
+        "itemId": "P-802",
+        "portId": "north_chain",
+        "x": 128,
+        "y": 152
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 88,
+            "y": 136
+          },
+          {
+            "x": 88,
+            "y": 140
+          },
+          {
+            "x": 128,
+            "y": 140
+          },
+          {
+            "x": 128,
+            "y": 152
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-802__nav__P-801",
+      "role": "navigation",
+      "classes": [
+        "within_chain"
+      ],
+      "from": {
+        "itemId": "P-802",
+        "portId": "north_chain",
+        "x": 128,
+        "y": 152
+      },
+      "to": {
+        "itemId": "P-801",
+        "portId": "south_chain",
+        "x": 88,
+        "y": 136
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 128,
+            "y": 152
+          },
+          {
+            "x": 128,
+            "y": 148
+          },
+          {
+            "x": 88,
+            "y": 148
+          },
+          {
+            "x": 88,
+            "y": 136
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

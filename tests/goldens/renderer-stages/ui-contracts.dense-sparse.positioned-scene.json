@@ -355,117 +355,150 @@
             ],
             "children": [
               {
-                "kind": "node",
-                "id": "E-700",
-                "role": "event",
-                "primitive": "card",
+                "kind": "container",
+                "id": "C-700__content",
+                "role": "contract_gutter",
+                "primitive": "stack",
                 "classes": [
-                  "semantic_node",
-                  "shape-oval"
+                  "contract_gutter"
                 ],
-                "widthPolicy": {
-                  "preferred": "chip",
-                  "allowed": [
-                    "chip",
-                    "narrow",
-                    "standard"
-                  ]
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 16,
+                  "crossAlignment": "stretch"
                 },
-                "widthBand": "chip",
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                "chrome": {
+                  "padding": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 128
+                  },
+                  "gutter": 16,
+                  "headerBandHeight": 0
                 },
-                "content": [
+                "headerContent": [],
+                "children": [
                   {
-                    "id": "E-700__content__line_0",
-                    "kind": "text",
-                    "textStyleRole": "title",
-                    "lines": [
-                      "Submit",
-                      "Review"
+                    "kind": "node",
+                    "id": "E-700",
+                    "role": "event",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node",
+                      "shape-oval"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 53.68,
-                    "height": 40,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
+                    "widthPolicy": {
+                      "preferred": "chip",
+                      "allowed": [
+                        "chip",
+                        "narrow",
+                        "standard"
+                      ]
+                    },
+                    "widthBand": "chip",
+                    "overflowPolicy": {
+                      "kind": "escalate_width_band",
+                      "maxLines": 2
+                    },
+                    "content": [
+                      {
+                        "id": "E-700__content__line_0",
+                        "kind": "text",
+                        "textStyleRole": "title",
+                        "lines": [
+                          "Submit",
+                          "Review"
+                        ],
+                        "x": 12,
+                        "y": 12,
+                        "width": 53.68,
+                        "height": 40,
+                        "lineHeight": 20,
+                        "region": "primary",
+                        "priority": "primary"
+                      }
+                    ],
+                    "ports": [
+                      {
+                        "id": "E-700__contract_in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "x": 0,
+                        "y": 32
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "x": 681.778,
+                    "y": 174,
+                    "width": 96,
+                    "height": 64
+                  },
                   {
-                    "id": "E-700__contract_in",
-                    "role": "contract_in",
-                    "side": "west",
-                    "x": 0,
-                    "y": 32
+                    "kind": "node",
+                    "id": "D-700",
+                    "role": "dataentity",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node",
+                      "shape-cylinder"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "narrow",
+                        "standard",
+                        "wide"
+                      ]
+                    },
+                    "widthBand": "standard",
+                    "overflowPolicy": {
+                      "kind": "escalate_width_band",
+                      "maxLines": 2
+                    },
+                    "content": [
+                      {
+                        "id": "D-700__content__line_0",
+                        "kind": "text",
+                        "textStyleRole": "title",
+                        "lines": [
+                          "ReviewRecord"
+                        ],
+                        "x": 12,
+                        "y": 12,
+                        "width": 105.912,
+                        "height": 20,
+                        "lineHeight": 20,
+                        "region": "primary",
+                        "priority": "primary"
+                      }
+                    ],
+                    "ports": [
+                      {
+                        "id": "D-700__contract_in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "x": 0,
+                        "y": 24
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "x": 681.778,
+                    "y": 254,
+                    "width": 224,
+                    "height": 48
                   }
                 ],
-                "overflow": {
-                  "status": "fits"
-                },
+                "ports": [],
                 "x": 553.778,
                 "y": 174,
-                "width": 96,
-                "height": 64
-              },
-              {
-                "kind": "node",
-                "id": "D-700",
-                "role": "dataentity",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-cylinder"
-                ],
-                "widthPolicy": {
-                  "preferred": "standard",
-                  "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
-                  ]
-                },
-                "widthBand": "standard",
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "D-700__content__line_0",
-                    "kind": "text",
-                    "textStyleRole": "title",
-                    "lines": [
-                      "ReviewRecord"
-                    ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 105.912,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "D-700__contract_in",
-                    "role": "contract_in",
-                    "side": "west",
-                    "x": 0,
-                    "y": 24
-                  }
-                ],
-                "overflow": {
-                  "status": "fits"
-                },
-                "x": 553.778,
-                "y": 254,
-                "width": 224,
-                "height": 48
+                "width": 352,
+                "height": 128
               }
             ],
             "ports": [
@@ -480,7 +513,7 @@
             ],
             "x": 541.778,
             "y": 122,
-            "width": 248,
+            "width": 376,
             "height": 192
           }
         ],
@@ -496,7 +529,7 @@
         ],
         "x": 24,
         "y": 24,
-        "width": 777.778,
+        "width": 905.778,
         "height": 302
       },
       {
@@ -584,7 +617,7 @@
         ],
         "x": 24,
         "y": 354,
-        "width": 777.778,
+        "width": 905.778,
         "height": 110
       },
       {
@@ -721,14 +754,14 @@
         ],
         "x": 24,
         "y": 492,
-        "width": 777.778,
+        "width": 905.778,
         "height": 158
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 825.778,
+    "width": 953.778,
     "height": 674
   },
   "edges": [
@@ -748,7 +781,7 @@
       "to": {
         "itemId": "D-700",
         "portId": "D-700__contract_in",
-        "x": 553.778,
+        "x": 681.778,
         "y": 278
       },
       "route": {
@@ -759,15 +792,15 @@
             "y": 174
           },
           {
-            "x": 547.778,
+            "x": 669.778,
             "y": 174
           },
           {
-            "x": 547.778,
+            "x": 669.778,
             "y": 278
           },
           {
-            "x": 553.778,
+            "x": 681.778,
             "y": 278
           }
         ]
@@ -780,8 +813,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 559.778,
-        "y": 215
+        "x": 551.904,
+        "y": 140
       },
       "markers": {
         "end": "arrow"
@@ -804,7 +837,7 @@
       "to": {
         "itemId": "E-700",
         "portId": "E-700__contract_in",
-        "x": 553.778,
+        "x": 681.778,
         "y": 206
       },
       "route": {
@@ -815,15 +848,15 @@
             "y": 174
           },
           {
-            "x": 547.778,
+            "x": 669.778,
             "y": 174
           },
           {
-            "x": 547.778,
+            "x": 669.778,
             "y": 206
           },
           {
-            "x": 553.778,
+            "x": 681.778,
             "y": 206
           }
         ]
@@ -836,8 +869,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 526.343,
-        "y": 179
+        "x": 584.343,
+        "y": 140
       },
       "markers": {
         "end": "arrow"
@@ -892,15 +925,7 @@
       "paintGroup": "edges"
     }
   ],
-  "diagnostics": [
-    {
-      "phase": "routing",
-      "code": "renderer.routing.edge_label_segment_fallback",
-      "severity": "info",
-      "message": "Edge label placement for \"emits:C-700->E-700\" could not find a long enough route segment. Falling back to midpoint placement.",
-      "targetId": "emits:C-700->E-700"
-    }
-  ],
+  "diagnostics": [],
   "paintOrder": [
     "chrome",
     "nodes",

@@ -23,6 +23,8 @@ interface ResolvedEdgeEndpoint extends PositionedEdgeEndpoint {
 
 const EDGE_LABEL_SEGMENT_CLEARANCE = 12;
 const EDGE_LABEL_SEGMENT_OFFSET = 12;
+const MIN_ARROW_MARKER_LEG = 12;
+const TARGET_BIASED_BEND_SOURCE_CLEARANCE = 4;
 
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -308,15 +310,36 @@ function isVerticalSide(side: PortSide | undefined): side is "north" | "south" {
 
 function resolveOrthogonalBendCoordinate(
   fromCoordinate: number,
-  toCoordinate: number
+  toCoordinate: number,
+  bendPlacement: MeasuredEdge["routing"]["bendPlacement"] = "midpoint"
 ): number {
-  return roundMetric((fromCoordinate + toCoordinate) / 2);
+  if (bendPlacement !== "target_bias") {
+    return roundMetric((fromCoordinate + toCoordinate) / 2);
+  }
+
+  const direction = fromCoordinate <= toCoordinate ? 1 : -1;
+  const sourceBound = fromCoordinate + direction * TARGET_BIASED_BEND_SOURCE_CLEARANCE;
+  const targetBound = toCoordinate - direction * MIN_ARROW_MARKER_LEG;
+  return roundMetric(direction > 0 ? Math.max(sourceBound, targetBound) : Math.min(sourceBound, targetBound));
+}
+
+function getAxisAlignedSegmentLength(start: Point, end: Point): number | undefined {
+  if (start.x === end.x) {
+    return roundMetric(Math.abs(end.y - start.y));
+  }
+
+  if (start.y === end.y) {
+    return roundMetric(Math.abs(end.x - start.x));
+  }
+
+  return undefined;
 }
 
 function buildOrthogonalRoutePoints(
   from: ResolvedEdgeEndpoint,
   to: ResolvedEdgeEndpoint,
-  preferAxis: MeasuredEdge["routing"]["preferAxis"]
+  preferAxis: MeasuredEdge["routing"]["preferAxis"],
+  bendPlacement: MeasuredEdge["routing"]["bendPlacement"]
 ): Point[] {
   if (from.x === to.x || from.y === to.y) {
     return [
@@ -326,7 +349,7 @@ function buildOrthogonalRoutePoints(
   }
 
   if (isHorizontalSide(from.side) && isHorizontalSide(to.side)) {
-    const bendX = resolveOrthogonalBendCoordinate(from.x, to.x);
+    const bendX = resolveOrthogonalBendCoordinate(from.x, to.x, bendPlacement);
     return [
       { x: from.x, y: from.y },
       { x: bendX, y: from.y },
@@ -336,7 +359,7 @@ function buildOrthogonalRoutePoints(
   }
 
   if (isVerticalSide(from.side) && isVerticalSide(to.side)) {
-    const bendY = resolveOrthogonalBendCoordinate(from.y, to.y);
+    const bendY = resolveOrthogonalBendCoordinate(from.y, to.y, bendPlacement);
     return [
       { x: from.x, y: from.y },
       { x: from.x, y: bendY },
@@ -387,18 +410,138 @@ function buildSharedRoutePoints(
         ];
   }
 
-  return buildOrthogonalRoutePoints(from, to, preferAxis);
+  return buildOrthogonalRoutePoints(from, to, preferAxis, edge.routing.bendPlacement);
+}
+
+function adjustEndMarkerLeg(points: Point[]): Point[] | undefined {
+  if (points.length < 4) {
+    return undefined;
+  }
+
+  const adjusted = points.map((point) => ({ ...point }));
+  const target = adjusted[adjusted.length - 1];
+  const bend = adjusted[adjusted.length - 2];
+  const previousBend = adjusted[adjusted.length - 3];
+  const currentLegLength = getAxisAlignedSegmentLength(bend, target);
+  if (currentLegLength === undefined || currentLegLength >= MIN_ARROW_MARKER_LEG) {
+    return adjusted;
+  }
+
+  if (bend.y === target.y && previousBend.x === bend.x) {
+    const direction = bend.x <= target.x ? 1 : -1;
+    const desiredX = roundMetric(target.x - direction * MIN_ARROW_MARKER_LEG);
+    previousBend.x = desiredX;
+    bend.x = desiredX;
+    return adjusted;
+  }
+
+  if (bend.x === target.x && previousBend.y === bend.y) {
+    const direction = bend.y <= target.y ? 1 : -1;
+    const desiredY = roundMetric(target.y - direction * MIN_ARROW_MARKER_LEG);
+    previousBend.y = desiredY;
+    bend.y = desiredY;
+    return adjusted;
+  }
+
+  return undefined;
+}
+
+function adjustStartMarkerLeg(points: Point[]): Point[] | undefined {
+  if (points.length < 4) {
+    return undefined;
+  }
+
+  const adjusted = points.map((point) => ({ ...point }));
+  const source = adjusted[0];
+  const bend = adjusted[1];
+  const nextBend = adjusted[2];
+  const currentLegLength = getAxisAlignedSegmentLength(source, bend);
+  if (currentLegLength === undefined || currentLegLength >= MIN_ARROW_MARKER_LEG) {
+    return adjusted;
+  }
+
+  if (source.y === bend.y && bend.x === nextBend.x) {
+    const direction = source.x <= bend.x ? 1 : -1;
+    const desiredX = roundMetric(source.x + direction * MIN_ARROW_MARKER_LEG);
+    bend.x = desiredX;
+    nextBend.x = desiredX;
+    return adjusted;
+  }
+
+  if (source.x === bend.x && bend.y === nextBend.y) {
+    const direction = source.y <= bend.y ? 1 : -1;
+    const desiredY = roundMetric(source.y + direction * MIN_ARROW_MARKER_LEG);
+    bend.y = desiredY;
+    nextBend.y = desiredY;
+    return adjusted;
+  }
+
+  return undefined;
+}
+
+function enforceMinimumMarkerLeg(
+  points: Point[],
+  edgeId: string,
+  terminal: "start" | "end",
+  diagnostics: RendererDiagnostic[]
+): Point[] {
+  const adjusted = terminal === "start" ? adjustStartMarkerLeg(points) : adjustEndMarkerLeg(points);
+  if (adjusted) {
+    return collapseRoutePoints(adjusted);
+  }
+
+  diagnostics.push(
+    createRoutingDiagnostic(
+      "renderer.routing.marker_leg_minimum_unmet",
+      `Edge "${edgeId}" could not reserve the minimum ${MIN_ARROW_MARKER_LEG}px ${terminal} marker leg with the current route shape.`,
+      edgeId,
+      "info"
+    )
+  );
+  return points;
+}
+
+function enforceMarkerLegs(
+  edge: MeasuredEdge,
+  points: Point[],
+  diagnostics: RendererDiagnostic[]
+): Point[] {
+  let routedPoints = points;
+
+  if (edge.markers?.start === "arrow") {
+    const startLegLength = getAxisAlignedSegmentLength(routedPoints[0]!, routedPoints[1]!);
+    if (startLegLength !== undefined && startLegLength < MIN_ARROW_MARKER_LEG) {
+      routedPoints = enforceMinimumMarkerLeg(routedPoints, edge.id, "start", diagnostics);
+    }
+  }
+
+  if (edge.markers?.end === "arrow") {
+    const endLegLength = getAxisAlignedSegmentLength(
+      routedPoints[routedPoints.length - 2]!,
+      routedPoints[routedPoints.length - 1]!
+    );
+    if (endLegLength !== undefined && endLegLength < MIN_ARROW_MARKER_LEG) {
+      routedPoints = enforceMinimumMarkerLeg(routedPoints, edge.id, "end", diagnostics);
+    }
+  }
+
+  return routedPoints;
 }
 
 export function buildSharedRoute(
   edge: MeasuredEdge,
   from: ResolvedEdgeEndpoint,
-  to: ResolvedEdgeEndpoint
+  to: ResolvedEdgeEndpoint,
+  diagnostics: RendererDiagnostic[]
 ): PositionedRoute {
   return {
     style: edge.routing.style,
-    points: collapseRoutePoints(
-      buildSharedRoutePoints(edge, from, to)
+    points: enforceMarkerLegs(
+      edge,
+      collapseRoutePoints(
+        buildSharedRoutePoints(edge, from, to)
+      ),
+      diagnostics
     )
   };
 }
@@ -408,7 +551,8 @@ export function buildRouteFromLocalHint(
   from: ResolvedEdgeEndpoint,
   to: ResolvedEdgeEndpoint,
   owner: PositionedContainer,
-  localPoints: Point[]
+  localPoints: Point[],
+  diagnostics: RendererDiagnostic[]
 ): PositionedRoute {
   const middlePoints = localPoints
     .slice(1, -1)
@@ -419,11 +563,15 @@ export function buildRouteFromLocalHint(
 
   return {
     style: edge.routing.style,
-    points: collapseRoutePoints([
-      { x: from.x, y: from.y },
-      ...middlePoints,
-      { x: to.x, y: to.y }
-    ])
+    points: enforceMarkerLegs(
+      edge,
+      collapseRoutePoints([
+        { x: from.x, y: from.y },
+        ...middlePoints,
+        { x: to.x, y: to.y }
+      ]),
+      diagnostics
+    )
   };
 }
 

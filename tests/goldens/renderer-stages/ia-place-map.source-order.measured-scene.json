@@ -99,17 +99,19 @@
             ],
             "ports": [
               {
-                "id": "north",
-                "role": "north",
+                "id": "north_chain",
+                "role": "north_chain",
                 "side": "north",
-                "x": 84,
+                "offset": 24,
+                "x": 24,
                 "y": 0
               },
               {
-                "id": "south",
-                "role": "south",
+                "id": "south_chain",
+                "role": "south_chain",
                 "side": "south",
-                "x": 84,
+                "offset": 24,
+                "x": 24,
                 "y": 48
               },
               {
@@ -229,17 +231,19 @@
                     ],
                     "ports": [
                       {
-                        "id": "north",
-                        "role": "north",
+                        "id": "north_chain",
+                        "role": "north_chain",
                         "side": "north",
-                        "x": 84,
+                        "offset": 24,
+                        "x": 24,
                         "y": 0
                       },
                       {
-                        "id": "south",
-                        "role": "south",
+                        "id": "south_chain",
+                        "role": "south_chain",
                         "side": "south",
-                        "x": 84,
+                        "offset": 24,
+                        "x": 24,
                         "y": 48
                       },
                       {
@@ -390,17 +394,19 @@
                 ],
                 "ports": [
                   {
-                    "id": "north",
-                    "role": "north",
+                    "id": "north_chain",
+                    "role": "north_chain",
                     "side": "north",
-                    "x": 84,
+                    "offset": 24,
+                    "x": 24,
                     "y": 0
                   },
                   {
-                    "id": "south",
-                    "role": "south",
+                    "id": "south_chain",
+                    "role": "south_chain",
                     "side": "south",
-                    "x": 84,
+                    "offset": 24,
+                    "x": 24,
                     "y": 48
                   },
                   {
@@ -520,17 +526,19 @@
                         ],
                         "ports": [
                           {
-                            "id": "north",
-                            "role": "north",
+                            "id": "north_chain",
+                            "role": "north_chain",
                             "side": "north",
-                            "x": 84,
+                            "offset": 24,
+                            "x": 24,
                             "y": 0
                           },
                           {
-                            "id": "south",
-                            "role": "south",
+                            "id": "south_chain",
+                            "role": "south_chain",
                             "side": "south",
-                            "x": 84,
+                            "offset": 24,
+                            "x": 24,
                             "y": 48
                           },
                           {
@@ -650,17 +658,19 @@
                                 ],
                                 "ports": [
                                   {
-                                    "id": "north",
-                                    "role": "north",
+                                    "id": "north_chain",
+                                    "role": "north_chain",
                                     "side": "north",
-                                    "x": 84,
+                                    "offset": 24,
+                                    "x": 24,
                                     "y": 0
                                   },
                                   {
-                                    "id": "south",
-                                    "role": "south",
+                                    "id": "south_chain",
+                                    "role": "south_chain",
                                     "side": "south",
-                                    "x": 84,
+                                    "offset": 24,
+                                    "x": 24,
                                     "y": 48
                                   },
                                   {
@@ -826,17 +836,19 @@
                 ],
                 "ports": [
                   {
-                    "id": "north",
-                    "role": "north",
+                    "id": "north_chain",
+                    "role": "north_chain",
                     "side": "north",
-                    "x": 84,
+                    "offset": 24,
+                    "x": 24,
                     "y": 0
                   },
                   {
-                    "id": "south",
-                    "role": "south",
+                    "id": "south_chain",
+                    "role": "south_chain",
                     "side": "south",
-                    "x": 84,
+                    "offset": 24,
+                    "x": 24,
                     "y": 48
                   },
                   {
@@ -884,19 +896,20 @@
       ],
       "from": {
         "itemId": "P-700",
-        "portId": "south",
+        "portId": "south_chain",
         "x": 0,
         "y": 0
       },
       "to": {
         "itemId": "P-900",
-        "portId": "north",
+        "portId": "north_chain",
         "x": 0,
         "y": 0
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "vertical"
+        "preferAxis": "vertical",
+        "bendPlacement": "target_bias"
       },
       "markers": {
         "end": "arrow"

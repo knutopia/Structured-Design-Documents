@@ -170,26 +170,6 @@ function renderTextBlock(
   ].join("\n");
 }
 
-function renderPortCircle(
-  x: number,
-  y: number,
-  role: string,
-  diagnostics: RendererDiagnostic[],
-  targetId: string,
-  theme: RendererTheme
-): string {
-  if (!Number.isFinite(x) || !Number.isFinite(y)) {
-    diagnostics.push(createBackendDiagnostic(
-      "renderer.backend.invalid_port_coordinates",
-      "Skipping a port because its coordinates are not finite.",
-      { targetId }
-    ));
-    return "";
-  }
-
-  return `<circle class="${buildClassList("scene-port", `role-${sanitizeToken(role)}`)}" cx="${formatNumber(x)}" cy="${formatNumber(y)}" r="${formatNumber(theme.paint.portRadius)}"/>`;
-}
-
 function renderContainerChrome(
   container: PositionedContainer,
   diagnostics: RendererDiagnostic[],
@@ -211,20 +191,6 @@ function renderContainerChrome(
       lines.push(
         `  <rect class="scene-container__header-band" x="${formatNumber(container.x)}" y="${formatNumber(container.y)}" width="${formatNumber(container.width)}" height="${formatNumber(container.chrome.headerBandHeight)}" rx="${formatNumber(headerRadius)}" ry="${formatNumber(headerRadius)}"/>`
       );
-    }
-  }
-
-  for (const port of container.ports) {
-    const markup = renderPortCircle(
-      container.x + port.x,
-      container.y + port.y,
-      port.role,
-      diagnostics,
-      container.id,
-      theme
-    );
-    if (markup) {
-      lines.push(`  ${markup}`);
     }
   }
 
@@ -272,20 +238,6 @@ function renderNodeChrome(
   for (const block of node.content) {
     if (block.kind === "badge_text") {
       lines.push(`  ${renderBadgeChrome(node, block)}`);
-    }
-  }
-
-  for (const port of node.ports) {
-    const markup = renderPortCircle(
-      node.x + port.x,
-      node.y + port.y,
-      port.role,
-      diagnostics,
-      node.id,
-      theme
-    );
-    if (markup) {
-      lines.push(`  ${markup}`);
     }
   }
 
@@ -504,13 +456,14 @@ function buildStyleLines(theme: RendererTheme): string[] {
     `.scene-container__chrome { fill: ${paint.palette.containerFill}; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
     `.scene-container.primitive-root .scene-container__chrome { fill: ${paint.palette.canvas}; }`,
     `.scene-container__header-band { fill: ${paint.palette.headerBandFill}; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
+    `.scene-container.role-view_state .scene-container__chrome { fill: ${paint.palette.nodeFill}; }`,
+    `.scene-container.role-view_state .scene-container__header-band { fill: ${paint.palette.nodeFill}; stroke: transparent; }`,
     `.scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }`,
     `.scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }`,
     `.scene-node__chrome { fill: ${paint.palette.nodeFill}; stroke: ${paint.palette.nodeStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
     `.scene-node.primitive-badge .scene-node__chrome { fill: ${paint.palette.badgeFill}; stroke: ${paint.palette.badgeStroke}; }`,
     `.scene-node.primitive-connector_port .scene-node__chrome { fill: ${paint.palette.connectorPortFill}; stroke: ${paint.palette.connectorPortStroke}; }`,
     `.scene-badge__chrome { fill: ${paint.palette.badgeFill}; stroke: ${paint.palette.badgeStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
-    `.scene-port { fill: ${paint.palette.connectorPortFill}; stroke: ${paint.palette.connectorPortStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
     `.scene-edge__path { fill: none; stroke: ${paint.palette.edge}; stroke-width: ${formatNumber(paint.edgeStrokeWidth)}; }`,
     `.scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }`,
     `.scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }`,
@@ -545,7 +498,7 @@ function buildDefs(theme: RendererTheme): Promise<string[]> {
 
     defs.push(`<style><![CDATA[\n${buildStyleLines(theme).join("\n")}\n]]></style>`);
     defs.push([
-      `<marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="${formatNumber(theme.paint.arrowSize - 1)}" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" orient="auto-start-reverse">`,
+      `<marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="${formatNumber(theme.paint.arrowSize - 1)}" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto-start-reverse">`,
       `  <path class="scene-marker" d="M 0 0 L ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize / 2)} L 0 ${formatNumber(theme.paint.arrowSize)} z"/>`,
       "</marker>"
     ].join("\n"));

@@ -854,8 +854,8 @@ function positionMeasuredEdge(
   }
 
   const route = canUseElkRoute
-    ? buildRouteFromLocalHint(edge, from, to, owner, localHint)
-    : buildSharedRoute(edge, from, to);
+    ? buildRouteFromLocalHint(edge, from, to, owner, localHint, diagnostics)
+    : buildSharedRoute(edge, from, to, diagnostics);
   const positionedFrom = {
     itemId: from.itemId,
     portId: from.portId,

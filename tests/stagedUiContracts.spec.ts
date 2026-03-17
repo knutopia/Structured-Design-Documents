@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import type { PositionedContainer, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
+import type { PositionedContainer, PositionedEdge, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
 import {
   buildUiContractsRendererScene,
   renderUiContractsStagedSvg
@@ -60,6 +60,17 @@ function findContainerChildIds(
   throw new Error(`Could not find renderer-scene container "${containerId}".`);
 }
 
+function getTerminalSegmentLength(edge: PositionedEdge): number {
+  const points = edge.route.points;
+  const end = points[points.length - 1];
+  const beforeEnd = points[points.length - 2];
+  if (!end || !beforeEnd) {
+    throw new Error(`Edge "${edge.id}" is missing route points.`);
+  }
+
+  return Math.hypot(end.x - beforeEnd.x, end.y - beforeEnd.y);
+}
+
 async function buildUiContractsArtifactsFromInput(
   input: { path: string; text: string },
   profileId: string
@@ -106,6 +117,10 @@ describe("staged ui_contracts", () => {
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-010", "P-011"]);
     expect(findContainerChildIds(rendererScene, "P-010")).toEqual(["view_state_graph:P-010", "C-010"]);
+    expect(rendered.svg).not.toContain('class="scene-port');
+    expect(rendered.svg).not.toContain("ViewState: Billing Editing");
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_segment_fallback")).toBe(false);
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
 
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.renderer-scene.json", rendererScene);
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.measured-scene.json", rendered.measuredScene);
@@ -126,6 +141,9 @@ describe("staged ui_contracts", () => {
     expect(rendered.svg).toContain("State graph: Case Review");
     expect(rendered.svg).toContain("State graph: Review Panel");
     expect(rendered.svg).not.toContain("ViewState Graph");
+    expect(rendered.svg).not.toContain('class="scene-port');
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_segment_fallback")).toBe(false);
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
 
     const placeGraph = findPositionedItem(rendered.positionedScene.root, "secondary_state_group:P-060");
     const componentGraph = findPositionedItem(rendered.positionedScene.root, "secondary_state_group:C-060");
@@ -164,6 +182,7 @@ END
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-200", "shared_supporting_contracts"]);
     expect(rendered.svg).toContain("Shared Supporting Contracts");
+    expect(rendered.svg).not.toContain('class="scene-port');
     expect(findPositionedItem(rendered.positionedScene.root, "shared_supporting_contracts").kind).toBe("container");
     expect(
       rendered.positionedScene.edges
@@ -207,6 +226,8 @@ END
     expect(densePlace.x).toBe(summaryPlace.x);
     expect(densePlace.width).toBe(sparsePlace.width);
     expect(densePlace.width).toBe(summaryPlace.width);
+    expect(rendered.svg).not.toContain('class="scene-port');
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
 
     await expectRendererStageSnapshot("ui-contracts.dense-sparse.positioned-scene.json", rendered.positionedScene);
     await expectRendererStageTextSnapshot("ui-contracts.dense-sparse.svg", rendered.svg);

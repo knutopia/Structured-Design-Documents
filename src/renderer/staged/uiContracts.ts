@@ -46,6 +46,7 @@ const ROOT_GAP = 28;
 const SCOPE_GAP = 16;
 const SUPPORT_GAP = 12;
 const TRANSITION_GRAPH_GAP = 24;
+const CONTRACT_GUTTER_WIDTH = 128;
 
 type UiContractsSceneSource =
   | UiContractsRootItem
@@ -216,6 +217,57 @@ function createScopeContainer(
   };
 }
 
+function buildContractGutterContent(
+  scopeSceneId: string,
+  children: SceneItem[]
+): SceneContainer {
+  return {
+    kind: "container",
+    id: `${scopeSceneId}__content`,
+    role: "contract_gutter",
+    primitive: "stack",
+    classes: ["contract_gutter"],
+    layout: {
+      strategy: "stack",
+      direction: "vertical",
+      gap: SCOPE_GAP,
+      crossAlignment: "stretch"
+    },
+    chrome: {
+      padding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: CONTRACT_GUTTER_WIDTH
+      },
+      gutter: SCOPE_GAP,
+      headerBandHeight: 0
+    },
+    children,
+    ports: []
+  };
+}
+
+function wrapScopedChildrenForContractGutter(
+  scopeSceneId: string,
+  children: SceneItem[],
+  hasLocalSupportChildren: boolean
+): SceneItem[] {
+  return hasLocalSupportChildren ? [buildContractGutterContent(scopeSceneId, children)] : children;
+}
+
+function normalizeViewStateHeaderLines(
+  headerLines: readonly string[] | undefined,
+  fallbackId: string
+): string[] {
+  if (!headerLines || headerLines.length === 0) {
+    return [fallbackId];
+  }
+
+  const [firstLine, ...rest] = headerLines;
+  return [firstLine.replace(/^ViewState:\s*/, ""), ...rest];
+}
+
 function registerContainerEndpoint(
   semanticNodeId: string | undefined,
   endpointId: string | undefined,
@@ -311,13 +363,19 @@ function buildViewStateScene(
   }
 
   registerContainerEndpoint(item.nodeId, item.endpointId, item.id, context);
+  const hasLocalSupportChildren = item.childItems.some((child) => child.kind === "node");
+  const children = wrapScopedChildrenForContractGutter(
+    item.id,
+    buildScopedSceneItems(item.childItems, item.id, context),
+    hasLocalSupportChildren
+  );
 
   const container = createScopeContainer(
     item.id,
     "view_state",
     ["view_state", "scope", ...buildChromeStyleClasses(item.style)],
-    item.labelLines ?? [item.nodeId],
-    buildScopedSceneItems(item.childItems, item.id, context),
+    normalizeViewStateHeaderLines(item.labelLines, item.nodeId),
+    children,
     {
       strategy: "stack",
       direction: "vertical",
@@ -343,13 +401,19 @@ function buildComponentScene(
   }
 
   registerContainerEndpoint(item.nodeId, item.endpointId, item.id, context);
+  const hasLocalSupportChildren = item.childItems.some((child) => child.kind === "node");
+  const children = wrapScopedChildrenForContractGutter(
+    item.id,
+    buildScopedSceneItems(item.childItems, item.id, context),
+    hasLocalSupportChildren
+  );
 
   const container = createScopeContainer(
     item.id,
     "component",
     ["component", "scope", ...buildChromeStyleClasses(item.style)],
     item.labelLines ?? [item.nodeId],
-    buildScopedSceneItems(item.childItems, item.id, context),
+    children,
     {
       strategy: "stack",
       direction: "vertical",
@@ -520,6 +584,7 @@ function buildRoutingIntent(
     return {
       style: "orthogonal",
       preferAxis: "horizontal",
+      bendPlacement: "target_bias",
       sourcePortRole: fromKind === "container" ? "contract_out" : undefined,
       targetPortRole: toKind === "node" ? "contract_in" : undefined
     };

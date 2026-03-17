@@ -383,6 +383,8 @@ Micro-layout computes the local offsets of those ports.
 
 Macro-layout chooses which declared ports each edge uses and then routes accordingly.
 
+Those ports are semantic routing anchors, not default visual decoration. Normal staged SVG output should keep ordinary node/container ports hidden unless a view explicitly uses a visible `connector_port` primitive.
+
 ### Routing policy belongs to the layout layer
 
 The scene builder should declare routing preferences, not actual polylines.
@@ -394,8 +396,11 @@ Examples:
 - `stepped`
 - `avoid_node_boxes`
 - `prefer_vertical_entry`
+- `bendPlacement: target_bias`
 
 The routing system then resolves those preferences after placement.
+
+Shared routing policy should also reserve a minimum readable terminal leg for arrow-ended routes when geometry allows, instead of leaving arrowheads cramped against a final bend.
 
 ELK may route edges inside ELK-managed containers. Shared router logic may route edges for manual `grid` or `lanes` containers. The important point is that routing remains a shared subsystem rather than being embedded in individual view emitters.
 
@@ -456,6 +461,7 @@ SVG generation should consume `PositionedScene` and should own:
 
 - shape emission
 - marker and arrowhead definitions
+- normal visibility policy for semantic routing anchors
 - layer ordering
 - text element emission from already-wrapped lines
 - CSS class injection
@@ -501,6 +507,7 @@ That includes:
 - stroke width
 - border radius
 - arrow size
+- minimum marker-leg clearance
 
 Measurement and final rendering must use the same theme revision and the same font assets.
 
@@ -543,10 +550,10 @@ Recommended bias by view:
 
 - `service_blueprint`: prefer manual `lanes` and `grid` strategies first, because its semantics are already row-oriented
 - `journey_map`: prefer lane or strip layout for phases, with routing support for cross-phase references
-- `ia_place_map`: use hierarchical containers, explicit ports, and likely ELK at the root where cross-area navigation matters
+- `ia_place_map`: use hierarchical containers, explicit ports, and deterministic tree routing for same-chain place navigation; reserve ELK for broader cross-area or future hybrid graph cases
 - `scenario_flow`: likely benefits most from `elk_layered` plus explicit decision-node port policy
 - `outcome_opportunity_map`: may mix semantic lanes with ELK-managed routing between lane-contained nodes
-- `ui_contracts`: likely benefits from manual scoped containers plus selective ELK use for transition routing
+- `ui_contracts`: likely benefits from manual scoped containers, reserved gutter space for container-origin contract edges, and selective ELK use for transition routing
 
 The point is not to assign one universal engine to every view. The point is to let each view reuse the same renderer contracts while choosing the right layout strategies.
 

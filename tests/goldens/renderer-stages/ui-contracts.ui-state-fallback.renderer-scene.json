@@ -242,176 +242,45 @@
             ],
             "children": [
               {
-                "kind": "node",
-                "id": "E-060",
-                "role": "event",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-oval"
-                ],
-                "widthPolicy": {
-                  "preferred": "chip",
-                  "allowed": [
-                    "chip",
-                    "narrow",
-                    "standard"
-                  ]
-                },
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "E-060__content__line_0",
-                    "kind": "text",
-                    "text": "Submit Review",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "E-060__contract_in",
-                    "role": "contract_in",
-                    "side": "west"
-                  }
-                ]
-              },
-              {
-                "kind": "node",
-                "id": "SA-060",
-                "role": "systemaction",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-component"
-                ],
-                "widthPolicy": {
-                  "preferred": "standard",
-                  "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
-                  ]
-                },
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "SA-060__content__line_0",
-                    "kind": "text",
-                    "text": "Save Review",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "SA-060__contract_in",
-                    "role": "contract_in",
-                    "side": "west"
-                  }
-                ]
-              },
-              {
-                "kind": "node",
-                "id": "D-060",
-                "role": "dataentity",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shape-cylinder"
-                ],
-                "widthPolicy": {
-                  "preferred": "standard",
-                  "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
-                  ]
-                },
-                "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
-                },
-                "content": [
-                  {
-                    "id": "D-060__content__line_0",
-                    "kind": "text",
-                    "text": "CaseRecord",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
-                "ports": [
-                  {
-                    "id": "D-060__contract_in",
-                    "role": "contract_in",
-                    "side": "west"
-                  }
-                ]
-              },
-              {
                 "kind": "container",
-                "id": "secondary_state_group:C-060",
-                "role": "state_graph",
-                "primitive": "cluster",
+                "id": "C-060__content",
+                "role": "contract_gutter",
+                "primitive": "stack",
                 "classes": [
-                  "synthetic",
-                  "transition_graph",
-                  "state_graph"
+                  "contract_gutter"
                 ],
                 "layout": {
-                  "strategy": "elk_layered",
-                  "direction": "horizontal",
-                  "gap": 24,
-                  "crossAlignment": "start"
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 16,
+                  "crossAlignment": "stretch"
                 },
                 "chrome": {
                   "padding": {
-                    "top": 12,
-                    "right": 12,
-                    "bottom": 12,
-                    "left": 12
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 128
                   },
-                  "gutter": 16
+                  "gutter": 16,
+                  "headerBandHeight": 0
                 },
-                "headerContent": [
-                  {
-                    "id": "secondary_state_group:C-060__header__line_0",
-                    "kind": "text",
-                    "text": "State graph: Review Panel",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  },
-                  {
-                    "id": "secondary_state_group:C-060__header__line_1",
-                    "kind": "metadata",
-                    "text": "scope_id=C-060",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
                 "children": [
                   {
                     "kind": "node",
-                    "id": "ST-061a",
-                    "role": "state",
+                    "id": "E-060",
+                    "role": "event",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-ellipse"
+                      "shape-oval"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "chip",
                       "allowed": [
+                        "chip",
                         "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
@@ -420,37 +289,32 @@
                     },
                     "content": [
                       {
-                        "id": "ST-061a__content__line_0",
+                        "id": "E-060__content__line_0",
                         "kind": "text",
-                        "text": "Panel Idle",
+                        "text": "Submit Review",
                         "textStyleRole": "title",
                         "priority": "primary"
                       }
                     ],
                     "ports": [
                       {
-                        "id": "ST-061a__transition_in",
-                        "role": "transition_in",
+                        "id": "E-060__contract_in",
+                        "role": "contract_in",
                         "side": "west"
-                      },
-                      {
-                        "id": "ST-061a__transition_out",
-                        "role": "transition_out",
-                        "side": "east"
                       }
                     ]
                   },
                   {
                     "kind": "node",
-                    "id": "ST-061b",
-                    "role": "state",
+                    "id": "SA-060",
+                    "role": "systemaction",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-ellipse"
+                      "shape-component"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
                         "narrow",
                         "standard",
@@ -463,25 +327,189 @@
                     },
                     "content": [
                       {
-                        "id": "ST-061b__content__line_0",
+                        "id": "SA-060__content__line_0",
                         "kind": "text",
-                        "text": "Panel Dirty",
+                        "text": "Save Review",
                         "textStyleRole": "title",
                         "priority": "primary"
                       }
                     ],
                     "ports": [
                       {
-                        "id": "ST-061b__transition_in",
-                        "role": "transition_in",
+                        "id": "SA-060__contract_in",
+                        "role": "contract_in",
                         "side": "west"
-                      },
-                      {
-                        "id": "ST-061b__transition_out",
-                        "role": "transition_out",
-                        "side": "east"
                       }
                     ]
+                  },
+                  {
+                    "kind": "node",
+                    "id": "D-060",
+                    "role": "dataentity",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node",
+                      "shape-cylinder"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "narrow",
+                        "standard",
+                        "wide"
+                      ]
+                    },
+                    "overflowPolicy": {
+                      "kind": "escalate_width_band",
+                      "maxLines": 2
+                    },
+                    "content": [
+                      {
+                        "id": "D-060__content__line_0",
+                        "kind": "text",
+                        "text": "CaseRecord",
+                        "textStyleRole": "title",
+                        "priority": "primary"
+                      }
+                    ],
+                    "ports": [
+                      {
+                        "id": "D-060__contract_in",
+                        "role": "contract_in",
+                        "side": "west"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "container",
+                    "id": "secondary_state_group:C-060",
+                    "role": "state_graph",
+                    "primitive": "cluster",
+                    "classes": [
+                      "synthetic",
+                      "transition_graph",
+                      "state_graph"
+                    ],
+                    "layout": {
+                      "strategy": "elk_layered",
+                      "direction": "horizontal",
+                      "gap": 24,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 12,
+                        "right": 12,
+                        "bottom": 12,
+                        "left": 12
+                      },
+                      "gutter": 16
+                    },
+                    "headerContent": [
+                      {
+                        "id": "secondary_state_group:C-060__header__line_0",
+                        "kind": "text",
+                        "text": "State graph: Review Panel",
+                        "textStyleRole": "title",
+                        "priority": "primary"
+                      },
+                      {
+                        "id": "secondary_state_group:C-060__header__line_1",
+                        "kind": "metadata",
+                        "text": "scope_id=C-060",
+                        "textStyleRole": "metadata",
+                        "priority": "secondary"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "node",
+                        "id": "ST-061a",
+                        "role": "state",
+                        "primitive": "card",
+                        "classes": [
+                          "semantic_node",
+                          "shape-ellipse"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "narrow",
+                          "allowed": [
+                            "narrow",
+                            "standard",
+                            "wide"
+                          ]
+                        },
+                        "overflowPolicy": {
+                          "kind": "escalate_width_band",
+                          "maxLines": 2
+                        },
+                        "content": [
+                          {
+                            "id": "ST-061a__content__line_0",
+                            "kind": "text",
+                            "text": "Panel Idle",
+                            "textStyleRole": "title",
+                            "priority": "primary"
+                          }
+                        ],
+                        "ports": [
+                          {
+                            "id": "ST-061a__transition_in",
+                            "role": "transition_in",
+                            "side": "west"
+                          },
+                          {
+                            "id": "ST-061a__transition_out",
+                            "role": "transition_out",
+                            "side": "east"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "node",
+                        "id": "ST-061b",
+                        "role": "state",
+                        "primitive": "card",
+                        "classes": [
+                          "semantic_node",
+                          "shape-ellipse"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "narrow",
+                          "allowed": [
+                            "narrow",
+                            "standard",
+                            "wide"
+                          ]
+                        },
+                        "overflowPolicy": {
+                          "kind": "escalate_width_band",
+                          "maxLines": 2
+                        },
+                        "content": [
+                          {
+                            "id": "ST-061b__content__line_0",
+                            "kind": "text",
+                            "text": "Panel Dirty",
+                            "textStyleRole": "title",
+                            "priority": "primary"
+                          }
+                        ],
+                        "ports": [
+                          {
+                            "id": "ST-061b__transition_in",
+                            "role": "transition_in",
+                            "side": "west"
+                          },
+                          {
+                            "id": "ST-061b__transition_out",
+                            "role": "transition_out",
+                            "side": "east"
+                          }
+                        ]
+                      }
+                    ],
+                    "ports": []
                   }
                 ],
                 "ports": []
@@ -526,6 +554,7 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "horizontal",
+        "bendPlacement": "target_bias",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },
@@ -552,6 +581,7 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "horizontal",
+        "bendPlacement": "target_bias",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },
@@ -579,6 +609,7 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "horizontal",
+        "bendPlacement": "target_bias",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },

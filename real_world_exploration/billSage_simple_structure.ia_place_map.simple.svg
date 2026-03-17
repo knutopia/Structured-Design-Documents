@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="288" height="232" viewBox="0 0 288 232" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1616" height="506" viewBox="0 0 1616 506" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -14,14 +14,13 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
-    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
-    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
     .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
     .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
+    .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
@@ -36,47 +35,243 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="288" height="232" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="1616" height="506" rx="18" ry="18"/>
     </g>
-    <g id="scene-container-a-001" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-001" data-role="area">
-      <rect class="scene-container__chrome" x="24" y="24" width="240" height="184" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="24" width="240" height="40" rx="16" ry="16"/>
+    <g id="scene-container-a-200" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-200" data-role="area">
+      <rect class="scene-container__chrome" x="280" y="24" width="320" height="458" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="280" y="24" width="320" height="40" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-a-300" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-300" data-role="area">
+      <rect class="scene-container__chrome" x="648" y="24" width="200" height="138" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="648" y="24" width="200" height="40" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-a-400" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-400" data-role="area">
+      <rect class="scene-container__chrome" x="896" y="24" width="200" height="138" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="896" y="24" width="200" height="40" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-a-500" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-500" data-role="area">
+      <rect class="scene-container__chrome" x="1144" y="24" width="200" height="138" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="1144" y="24" width="200" height="40" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-a-600" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-600" data-role="area">
+      <rect class="scene-container__chrome" x="1392" y="24" width="200" height="158" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="1392" y="24" width="200" height="40" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-p-001" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-001" data-role="place">
-      <rect class="scene-node__chrome" x="40" y="80" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-p-100" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-100" data-role="place">
+      <rect class="scene-node__chrome" x="24" y="24" width="168" height="66" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="108" cy="24" r="4"/>
+      <circle class="scene-port role-south" cx="108" cy="90" r="4"/>
+      <circle class="scene-port role-east" cx="192" cy="57" r="4"/>
+      <circle class="scene-port role-west" cx="24" cy="57" r="4"/>
     </g>
-    <g id="scene-node-p-002" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-002" data-role="place">
-      <rect class="scene-node__chrome" x="80" y="144" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-p-110" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-110" data-role="place">
+      <rect class="scene-node__chrome" x="64" y="106" width="168" height="48" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="148" cy="106" r="4"/>
+      <circle class="scene-port role-south" cx="148" cy="154" r="4"/>
+      <circle class="scene-port role-east" cx="232" cy="130" r="4"/>
+      <circle class="scene-port role-west" cx="64" cy="130" r="4"/>
+    </g>
+    <g id="scene-node-p-210" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-210" data-role="place">
+      <rect class="scene-node__chrome" x="296" y="80" width="168" height="86" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="380" cy="80" r="4"/>
+      <circle class="scene-port role-south" cx="380" cy="166" r="4"/>
+      <circle class="scene-port role-east" cx="464" cy="123" r="4"/>
+      <circle class="scene-port role-west" cx="296" cy="123" r="4"/>
+    </g>
+    <g id="scene-node-p-220" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-220" data-role="place">
+      <rect class="scene-node__chrome" x="336" y="182" width="168" height="48" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="420" cy="182" r="4"/>
+      <circle class="scene-port role-south" cx="420" cy="230" r="4"/>
+      <circle class="scene-port role-east" cx="504" cy="206" r="4"/>
+      <circle class="scene-port role-west" cx="336" cy="206" r="4"/>
+    </g>
+    <g id="scene-node-p-221" class="scene-node primitive-card role-place paint-nodes place nested_place depth-2" data-item-id="P-221" data-role="place">
+      <rect class="scene-node__chrome" x="376" y="246" width="168" height="64" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="460" cy="246" r="4"/>
+      <circle class="scene-port role-south" cx="460" cy="310" r="4"/>
+      <circle class="scene-port role-east" cx="544" cy="278" r="4"/>
+      <circle class="scene-port role-west" cx="376" cy="278" r="4"/>
+    </g>
+    <g id="scene-node-p-222" class="scene-node primitive-card role-place paint-nodes place nested_place depth-3" data-item-id="P-222" data-role="place">
+      <rect class="scene-node__chrome" x="416" y="326" width="168" height="64" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="500" cy="326" r="4"/>
+      <circle class="scene-port role-south" cx="500" cy="390" r="4"/>
+      <circle class="scene-port role-east" cx="584" cy="358" r="4"/>
+      <circle class="scene-port role-west" cx="416" cy="358" r="4"/>
+    </g>
+    <g id="scene-node-p-230" class="scene-node primitive-card role-place paint-nodes place nested_place depth-2" data-item-id="P-230" data-role="place">
+      <rect class="scene-node__chrome" x="376" y="402" width="168" height="64" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="460" cy="402" r="4"/>
+      <circle class="scene-port role-south" cx="460" cy="466" r="4"/>
+      <circle class="scene-port role-east" cx="544" cy="434" r="4"/>
+      <circle class="scene-port role-west" cx="376" cy="434" r="4"/>
+    </g>
+    <g id="scene-node-p-310" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-310" data-role="place">
+      <rect class="scene-node__chrome" x="664" y="80" width="168" height="66" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="748" cy="80" r="4"/>
+      <circle class="scene-port role-south" cx="748" cy="146" r="4"/>
+      <circle class="scene-port role-east" cx="832" cy="113" r="4"/>
+      <circle class="scene-port role-west" cx="664" cy="113" r="4"/>
+    </g>
+    <g id="scene-node-p-410" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-410" data-role="place">
+      <rect class="scene-node__chrome" x="912" y="80" width="168" height="66" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="996" cy="80" r="4"/>
+      <circle class="scene-port role-south" cx="996" cy="146" r="4"/>
+      <circle class="scene-port role-east" cx="1080" cy="113" r="4"/>
+      <circle class="scene-port role-west" cx="912" cy="113" r="4"/>
+    </g>
+    <g id="scene-node-p-510" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-510" data-role="place">
+      <rect class="scene-node__chrome" x="1160" y="80" width="168" height="66" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="1244" cy="80" r="4"/>
+      <circle class="scene-port role-south" cx="1244" cy="146" r="4"/>
+      <circle class="scene-port role-east" cx="1328" cy="113" r="4"/>
+      <circle class="scene-port role-west" cx="1160" cy="113" r="4"/>
+    </g>
+    <g id="scene-node-p-610" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-610" data-role="place">
+      <rect class="scene-node__chrome" x="1408" y="80" width="168" height="86" rx="14" ry="14"/>
+      <circle class="scene-port role-north" cx="1492" cy="80" r="4"/>
+      <circle class="scene-port role-south" cx="1492" cy="166" r="4"/>
+      <circle class="scene-port role-east" cx="1576" cy="123" r="4"/>
+      <circle class="scene-port role-west" cx="1408" cy="123" r="4"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-001" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="40" y="50">
-          <tspan x="40" dy="0">Checkout Area</tspan>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-100" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="52">
+          <tspan x="36" dy="0">Dashboard</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="36" y="74">
+          <tspan x="36" dy="0">primary_nav: true</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-001" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="52" y="108">
-          <tspan x="52" dy="0">Billing</tspan>
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-110" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="76" y="134">
+          <tspan x="76" dy="0">Report View</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-002" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="92" y="172">
-          <tspan x="92" dy="0">Review</tspan>
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-200" data-role="area">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="296" y="50">
+          <tspan x="296" dy="0">Projections</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-210" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="308" y="108">
+          <tspan x="308" dy="0">Projections</tspan>
+          <tspan x="308" dy="20">Overview</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="308" y="150">
+          <tspan x="308" dy="0">primary_nav: true</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-220" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="348" y="210">
+          <tspan x="348" dy="0">Projection</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-2" data-item-id="P-221" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="388" y="274">
+          <tspan x="388" dy="0">Fee Schedule</tspan>
+          <tspan x="388" dy="20">Scenario Details</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-3" data-item-id="P-222" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="428" y="354">
+          <tspan x="428" dy="0">Funding Scenario</tspan>
+          <tspan x="428" dy="20">Details</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-2" data-item-id="P-230" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="388" y="430">
+          <tspan x="388" dy="0">Create New</tspan>
+          <tspan x="388" dy="20">Projection</tspan>
+        </text>
+    </g>
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-300" data-role="area">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="664" y="50">
+          <tspan x="664" dy="0">Current Bills</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-310" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="676" y="108">
+          <tspan x="676" dy="0">Current Bills</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="676" y="130">
+          <tspan x="676" dy="0">primary_nav: true</tspan>
+        </text>
+    </g>
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-400" data-role="area">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="912" y="50">
+          <tspan x="912" dy="0">Review</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-410" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="924" y="108">
+          <tspan x="924" dy="0">Review Past Bills</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="924" y="130">
+          <tspan x="924" dy="0">primary_nav: true</tspan>
+        </text>
+    </g>
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-500" data-role="area">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1160" y="50">
+          <tspan x="1160" dy="0">Accounts</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-510" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1172" y="108">
+          <tspan x="1172" dy="0">Manage Accounts</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="1172" y="130">
+          <tspan x="1172" dy="0">primary_nav: true</tspan>
+        </text>
+    </g>
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-600" data-role="area">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1408" y="50">
+          <tspan x="1408" dy="0">Fee Schedules</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-610" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1420" y="108">
+          <tspan x="1420" dy="0">Manage Fee</tspan>
+          <tspan x="1420" dy="20">Schedules</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="1420" y="150">
+          <tspan x="1420" dy="0">primary_nav: true</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-p-001__nav__p-002" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-001__nav__P-002" data-role="navigation">
-      <path class="scene-edge__path" d="M 64 128 L 64 132 L 104 132 L 104 144" marker-end="url(#scene-marker-arrow)"/>
+    <g id="scene-edge-p-100__nav__p-110" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-100__nav__P-110" data-role="navigation">
+      <path class="scene-edge__path" d="M 108 90 L 108 98 L 148 98 L 148 106" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-210__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-210__nav__P-220" data-role="navigation">
+      <path class="scene-edge__path" d="M 380 166 L 380 174 L 420 174 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-210__nav__p-230" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-210__nav__P-230" data-role="navigation">
+      <path class="scene-edge__path" d="M 380 166 L 380 284 L 460 284 L 460 402" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-220__nav__p-221" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-220__nav__P-221" data-role="navigation">
+      <path class="scene-edge__path" d="M 420 230 L 420 238 L 460 238 L 460 246" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-220__nav__p-222" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-220__nav__P-222" data-role="navigation">
+      <path class="scene-edge__path" d="M 420 230 L 420 278 L 500 278 L 500 326" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-221__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-221__nav__P-220" data-role="navigation">
+      <path class="scene-edge__path" d="M 460 310 L 460 246 L 420 246 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-222__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-222__nav__P-220" data-role="navigation">
+      <path class="scene-edge__path" d="M 500 390 L 500 286 L 420 286 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+    </g>
+    <g id="scene-edge-p-230__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-230__nav__P-220" data-role="navigation">
+      <path class="scene-edge__path" d="M 460 466 L 460 324 L 420 324 L 420 182" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

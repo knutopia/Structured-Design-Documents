@@ -78,8 +78,10 @@ The staged macro-layout boundary now owns both manual placement and the first sh
 
 - `src/renderer/staged/macroLayout.ts` owns the recursive strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
 - container chrome, padding, header bands, bounds, and container-port offsets are resolved during layout rather than left at placeholder values
-- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, and segment-aware edge-label placement before SVG emission
+- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, target-biased bends where requested, minimum marker-leg clearance for arrow-ended routes when geometry allows, and segment-aware edge-label placement before SVG emission
 - `elk_layered` spacing now reserves room for owned edge labels so horizontal transition graphs can remain readable without view-specific SVG hacks
+
+Ports in those staged scene contracts are semantic routing anchors, not normal painted output. The staged SVG backend keeps explicit `connector_port` primitives visible when a view intentionally uses them, but ordinary node and container ports are internal geometry only.
 
 ## View Extension Pattern
 
@@ -180,6 +182,8 @@ The per-view render models keep semantics centralized:
 - service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter and inside the staged scene builder
+- inside the staged renderer, `ia_place_map` same-chain navigation now uses deterministic tree routing with dedicated left-biased chain ports rather than ELK-driven chain routing
+- inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
 
 Inside the staged renderer, `ui_contracts` still keeps its renderer-stage goldens as internal contract coverage, but the routed and balanced staged path now also serves the public `staged_ui_contracts_preview` backend.
 

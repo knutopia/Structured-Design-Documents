@@ -8,7 +8,7 @@ import {
   buildIaPlaceMapRendererScene,
   renderIaPlaceMapStagedSvg
 } from "../src/renderer/staged/iaPlaceMap.js";
-import type { PositionedContainer, PositionedItem } from "../src/renderer/staged/contracts.js";
+import type { PositionedContainer, PositionedEdge, PositionedItem } from "../src/renderer/staged/contracts.js";
 import {
   expectRendererStageSnapshot,
   expectRendererStageTextSnapshot
@@ -34,6 +34,17 @@ function findPositionedItem(root: PositionedContainer, id: string): PositionedIt
   }
 
   throw new Error(`Could not find positioned item "${id}".`);
+}
+
+function getTerminalSegmentLength(edge: PositionedEdge): number {
+  const points = edge.route.points;
+  const end = points[points.length - 1];
+  const beforeEnd = points[points.length - 2];
+  if (!end || !beforeEnd) {
+    throw new Error(`Edge "${edge.id}" is missing route points.`);
+  }
+
+  return Math.hypot(end.x - beforeEnd.x, end.y - beforeEnd.y);
 }
 
 async function loadInput(filePath: string): Promise<{ path: string; text: string }> {
@@ -81,6 +92,7 @@ describe("staged ia_place_map", () => {
       "A-200",
       "A-500"
     ]);
+    expect(rendered.svg).not.toContain('class="scene-port');
 
     await expectRendererStageSnapshot("ia-place-map.source-order.renderer-scene.json", rendererScene);
     await expectRendererStageSnapshot("ia-place-map.source-order.measured-scene.json", rendered.measuredScene);
@@ -97,17 +109,19 @@ describe("staged ia_place_map", () => {
     expect(rendered.svg).toContain("/checkout/billing");
     expect(rendered.svg).toContain("auth");
     expect(rendered.svg).toContain('marker-end="url(#scene-marker-arrow)"');
+    expect(rendered.svg).not.toContain('class="scene-port');
     expect(rendered.positionedScene.edges).toHaveLength(1);
     expect(rendered.positionedScene.edges[0]).toEqual(expect.objectContaining({
       from: expect.objectContaining({
         itemId: "P-001",
-        portId: "south"
+        portId: "south_chain"
       }),
       to: expect.objectContaining({
         itemId: "P-002",
-        portId: "north"
+        portId: "north_chain"
       })
     }));
+    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(12);
   });
 
   it("applies simple-profile suppression while still indenting implicit top-level place sequences", async () => {
@@ -132,12 +146,50 @@ describe("staged ia_place_map", () => {
     expect(rendered.positionedScene.edges[0]).toEqual(expect.objectContaining({
       from: expect.objectContaining({
         itemId: "P-010",
-        portId: "south"
+        portId: "south_chain"
       }),
       to: expect.objectContaining({
         itemId: "P-011",
-        portId: "north"
+        portId: "north_chain"
       })
     }));
+    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(12);
+  });
+
+  it("uses deterministic target-biased chain routing for both downward and upward recursive navigation", async () => {
+    const fixturePath = path.join(repoRoot, "tests/fixtures/render/recursive_chain_ia.sdd");
+    const { rendered } = await buildIaArtifacts(fixturePath, "simple");
+
+    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(rendered.positionedScene.edges).toHaveLength(4);
+
+    const edgePorts = rendered.positionedScene.edges.map((edge) => ({
+      id: edge.id,
+      fromPort: edge.from.portId,
+      toPort: edge.to.portId
+    }));
+    expect(edgePorts).toContainEqual({
+      id: "P-800__nav__P-801",
+      fromPort: "south_chain",
+      toPort: "north_chain"
+    });
+    expect(edgePorts).toContainEqual({
+      id: "P-801__nav__P-802",
+      fromPort: "south_chain",
+      toPort: "north_chain"
+    });
+    expect(edgePorts).toContainEqual({
+      id: "P-801__nav__P-800",
+      fromPort: "north_chain",
+      toPort: "south_chain"
+    });
+    expect(edgePorts).toContainEqual({
+      id: "P-802__nav__P-801",
+      fromPort: "north_chain",
+      toPort: "south_chain"
+    });
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
+
+    await expectRendererStageSnapshot("ia-place-map.recursive-chain.positioned-scene.json", rendered.positionedScene);
   });
 });

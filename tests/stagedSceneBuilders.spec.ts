@@ -5,6 +5,7 @@ import {
   buildContainerContractPorts,
   buildContractTargetPorts,
   buildDiagramRootContainer,
+  buildIaPlaceMapPorts,
   buildTransitionPorts
 } from "../src/renderer/staged/sceneBuilders.js";
 
@@ -88,6 +89,12 @@ describe("staged scene builders", () => {
     expect(buildCardinalPorts()).toEqual([
       { id: "north", role: "north", side: "north", offset: undefined, offsetPolicy: undefined },
       { id: "south", role: "south", side: "south", offset: undefined, offsetPolicy: undefined },
+      { id: "east", role: "east", side: "east", offset: undefined, offsetPolicy: undefined },
+      { id: "west", role: "west", side: "west", offset: undefined, offsetPolicy: undefined }
+    ]);
+    expect(buildIaPlaceMapPorts()).toEqual([
+      { id: "north_chain", role: "north_chain", side: "north", offset: 24, offsetPolicy: undefined },
+      { id: "south_chain", role: "south_chain", side: "south", offset: 24, offsetPolicy: undefined },
       { id: "east", role: "east", side: "east", offset: undefined, offsetPolicy: undefined },
       { id: "west", role: "west", side: "west", offset: undefined, offsetPolicy: undefined }
     ]);

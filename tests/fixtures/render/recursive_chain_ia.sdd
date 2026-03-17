@@ -1,0 +1,23 @@
+SDD-TEXT 0.1
+
+Place P-800 "Overview"
+  route_or_key=/overview
+  surface=web
+  access=auth
+  CONTAINS P-801 "Details"
+  NAVIGATES_TO P-801 "Details"
+  + Place P-801 "Details"
+    route_or_key=/overview/details
+    surface=web
+    access=auth
+    CONTAINS P-802 "Review"
+    NAVIGATES_TO P-802 "Review"
+    NAVIGATES_TO P-800 "Overview"
+    + Place P-802 "Review"
+      route_or_key=/overview/review
+      surface=web
+      access=auth
+      NAVIGATES_TO P-801 "Details"
+    END
+  END
+END

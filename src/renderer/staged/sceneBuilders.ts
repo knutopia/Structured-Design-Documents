@@ -78,6 +78,19 @@ export function buildCardinalPorts(): SceneNode["ports"] {
   ];
 }
 
+export function buildIaPlaceMapPorts(chainPortOffset = 24): SceneNode["ports"] {
+  return [
+    buildPortSpec("north_chain", "north_chain", "north", {
+      offset: chainPortOffset
+    }),
+    buildPortSpec("south_chain", "south_chain", "south", {
+      offset: chainPortOffset
+    }),
+    buildPortSpec("east", "east", "east"),
+    buildPortSpec("west", "west", "west")
+  ];
+}
+
 export function buildTransitionPorts(itemId: string): PortSpec[] {
   return [
     buildPortSpec(`${itemId}__transition_in`, "transition_in", "west"),

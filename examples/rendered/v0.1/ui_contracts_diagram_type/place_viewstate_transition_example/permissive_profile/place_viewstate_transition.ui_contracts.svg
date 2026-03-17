@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1285.408" height="620" viewBox="0 0 1285.408 620" class="staged-svg view-ui_contracts profile-permissive theme-default theme-revision-public-sans-v0-1" data-view-id="ui_contracts" data-profile-id="permissive" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1436.848" height="620" viewBox="0 0 1436.848 620" class="staged-svg view-ui_contracts profile-permissive theme-default theme-revision-public-sans-v0-1" data-view-id="ui_contracts" data-profile-id="permissive" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -14,13 +14,14 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
+    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
     .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
     .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
-    .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
@@ -35,77 +36,61 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ui_contracts" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1285.408" height="620" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="1436.848" height="620" rx="18" ry="18"/>
     </g>
     <g id="scene-container-p-010" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-010" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="24" width="1237.408" height="434" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="24" width="1237.408" height="86" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="24" cy="122" r="4"/>
+      <rect class="scene-container__chrome" x="24" y="24" width="1388.848" height="434" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="24" width="1388.848" height="86" rx="16" ry="16"/>
     </g>
     <g id="scene-container-view_state_graph-p-010" class="scene-container primitive-cluster role-view_state_graph paint-chrome synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-010" data-role="view_state_graph">
-      <rect class="scene-container__chrome" x="36" y="122" width="626.984" height="324" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="36" y="122" width="626.984" height="40" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="36" y="122" width="650.424" height="324" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="36" y="122" width="650.424" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-vs-010a" class="scene-container primitive-cluster role-view_state paint-chrome view_state scope chrome-dashed" data-item-id="VS-010a" data-role="view_state">
-      <rect class="scene-container__chrome" x="49" y="174" width="248.56" height="196" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="49" y="174" width="248.56" height="60" rx="16" ry="16"/>
-      <circle class="scene-port role-transition_in" cx="49" cy="272" r="4"/>
-      <circle class="scene-port role-transition_out" cx="297.56" cy="272" r="4"/>
-      <circle class="scene-port role-contract_out" cx="49" cy="246" r="4"/>
+      <rect class="scene-container__chrome" x="49" y="174" width="272" height="196" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="49" y="174" width="272" height="60" rx="16" ry="16"/>
     </g>
     <g id="scene-container-c-011" class="scene-container primitive-cluster role-component paint-chrome component scope" data-item-id="C-011" data-role="component">
-      <rect class="scene-container__chrome" x="61" y="246" width="224.56" height="112" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="61" y="246" width="224.56" height="40" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="61" cy="298" r="4"/>
+      <rect class="scene-container__chrome" x="61" y="246" width="248" height="112" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="61" y="246" width="248" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-c-010" class="scene-container primitive-cluster role-component paint-chrome component scope" data-item-id="C-010" data-role="component">
-      <rect class="scene-container__chrome" x="678.984" y="122" width="570.424" height="324" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="678.984" y="122" width="570.424" height="40" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="678.984" cy="174" r="4"/>
+      <rect class="scene-container__chrome" x="702.424" y="122" width="698.424" height="324" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="702.424" y="122" width="698.424" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-secondary_state_group-c-010" class="scene-container primitive-cluster role-state_graph paint-chrome synthetic transition_graph state_graph chrome-dashed" data-item-id="secondary_state_group:C-010" data-role="state_graph">
-      <rect class="scene-container__chrome" x="690.984" y="302" width="546.424" height="132" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="690.984" y="302" width="546.424" height="60" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="842.424" y="302" width="546.424" height="132" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="842.424" y="302" width="546.424" height="60" rx="16" ry="16"/>
     </g>
     <g id="scene-container-p-011" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-011" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="486" width="1237.408" height="110" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="486" width="1237.408" height="86" rx="16" ry="16"/>
-      <circle class="scene-port role-contract_out" cx="24" cy="584" r="4"/>
+      <rect class="scene-container__chrome" x="24" y="486" width="1388.848" height="110" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="486" width="1388.848" height="86" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-e-010" class="scene-node primitive-card role-event paint-nodes semantic_node shape-oval" data-item-id="E-010" data-role="event">
-      <rect class="scene-node__chrome" x="73" y="298" width="96" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-contract_in" cx="73" cy="322" r="4"/>
+      <rect class="scene-node__chrome" x="201" y="298" width="96" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-vs-010b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-010b" data-role="viewstate">
-      <rect class="scene-node__chrome" x="481.984" y="239" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-transition_in" cx="481.984" cy="272" r="4"/>
-      <circle class="scene-port role-transition_out" cx="649.984" cy="272" r="4"/>
+      <rect class="scene-node__chrome" x="505.424" y="239" width="168" height="66" rx="14" ry="14"/>
     </g>
     <g id="scene-node-sa-010" class="scene-node primitive-card role-systemaction paint-nodes semantic_node shape-component" data-item-id="SA-010" data-role="systemaction">
-      <rect class="scene-node__chrome" x="690.984" y="174" width="224" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-contract_in" cx="690.984" cy="198" r="4"/>
+      <rect class="scene-node__chrome" x="842.424" y="174" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-d-010" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shape-cylinder" data-item-id="D-010" data-role="dataentity">
-      <rect class="scene-node__chrome" x="690.984" y="238" width="224" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-contract_in" cx="690.984" cy="262" r="4"/>
+      <rect class="scene-node__chrome" x="842.424" y="238" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-st-010a" class="scene-node primitive-card role-state paint-nodes semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010a" data-role="state">
-      <rect class="scene-node__chrome" x="703.984" y="374" width="168" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-transition_in" cx="703.984" cy="398" r="4"/>
-      <circle class="scene-port role-transition_out" cx="871.984" cy="398" r="4"/>
+      <rect class="scene-node__chrome" x="855.424" y="374" width="168" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-st-010b" class="scene-node primitive-card role-state paint-nodes semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010b" data-role="state">
-      <rect class="scene-node__chrome" x="1056.408" y="374" width="168" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-transition_in" cx="1056.408" cy="398" r="4"/>
-      <circle class="scene-port role-transition_out" cx="1224.408" cy="398" r="4"/>
+      <rect class="scene-node__chrome" x="1207.848" y="374" width="168" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -127,7 +112,7 @@
     </g>
     <g class="scene-container primitive-cluster role-view_state paint-labels view_state scope chrome-dashed" data-item-id="VS-010a" data-role="view_state">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="200">
-          <tspan x="61" dy="0">ViewState: Billing Editing</tspan>
+          <tspan x="61" dy="0">Billing Editing</tspan>
         </text>
       <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="61" y="220">
           <tspan x="61" dy="0">data: PaymentMethod</tspan>
@@ -139,49 +124,49 @@
         </text>
     </g>
     <g class="scene-node primitive-card role-event paint-labels semantic_node shape-oval" data-item-id="E-010" data-role="event">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="85" y="326">
-          <tspan x="85" dy="0">Submit</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="213" y="326">
+          <tspan x="213" dy="0">Submit</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-010b" data-role="viewstate">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="493.984" y="267">
-          <tspan x="493.984" dy="0">Billing Success</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="517.424" y="267">
+          <tspan x="517.424" dy="0">Billing Success</tspan>
         </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="493.984" y="289">
-          <tspan x="493.984" dy="0">data: Receipt</tspan>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="517.424" y="289">
+          <tspan x="517.424" dy="0">data: Receipt</tspan>
         </text>
     </g>
     <g class="scene-container primitive-cluster role-component paint-labels component scope" data-item-id="C-010" data-role="component">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="690.984" y="148">
-          <tspan x="690.984" dy="0">Component: Billing Form</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="714.424" y="148">
+          <tspan x="714.424" dy="0">Component: Billing Form</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-systemaction paint-labels semantic_node shape-component" data-item-id="SA-010" data-role="systemaction">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="702.984" y="202">
-          <tspan x="702.984" dy="0">Save Subscription</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="854.424" y="202">
+          <tspan x="854.424" dy="0">Save Subscription</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shape-cylinder" data-item-id="D-010" data-role="dataentity">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="702.984" y="266">
-          <tspan x="702.984" dy="0">Subscription</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="854.424" y="266">
+          <tspan x="854.424" dy="0">Subscription</tspan>
         </text>
     </g>
     <g class="scene-container primitive-cluster role-state_graph paint-labels synthetic transition_graph state_graph chrome-dashed" data-item-id="secondary_state_group:C-010" data-role="state_graph">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="702.984" y="328">
-          <tspan x="702.984" dy="0">State detail: Billing Form</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="854.424" y="328">
+          <tspan x="854.424" dy="0">State detail: Billing Form</tspan>
         </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="702.984" y="348">
-          <tspan x="702.984" dy="0">scope_id=C-010</tspan>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="854.424" y="348">
+          <tspan x="854.424" dy="0">scope_id=C-010</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-state paint-labels semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010a" data-role="state">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="715.984" y="402">
-          <tspan x="715.984" dy="0">Form Ready</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="867.424" y="402">
+          <tspan x="867.424" dy="0">Form Ready</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-state paint-labels semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010b" data-role="state">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1068.408" y="402">
-          <tspan x="1068.408" dy="0">Submitting</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1219.848" y="402">
+          <tspan x="1219.848" dy="0">Submitting</tspan>
         </text>
     </g>
     <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-011" data-role="place">
@@ -198,52 +183,52 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-binds_to-c-010--d-010" class="scene-edge role-binds_to route-orthogonal paint-edges edge-dotted constraint_edge" data-edge-id="binds_to:C-010-&gt;D-010" data-role="binds_to">
-      <path class="scene-edge__path" d="M 678.984 174 L 684.984 174 L 684.984 262 L 690.984 262" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 702.424 174 L 830.424 174 L 830.424 262 L 842.424 262" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-depends_on-c-010--sa-010" class="scene-edge role-depends_on route-orthogonal paint-edges constraint_edge" data-edge-id="depends_on:C-010-&gt;SA-010" data-role="depends_on">
-      <path class="scene-edge__path" d="M 678.984 174 L 684.984 174 L 684.984 198 L 690.984 198" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 702.424 174 L 830.424 174 L 830.424 198 L 842.424 198" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-emits-c-011--e-010" class="scene-edge role-emits route-orthogonal paint-edges edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
-      <path class="scene-edge__path" d="M 61 298 L 67 298 L 67 322 L 73 322" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 61 298 L 189 298 L 189 322 L 201 322" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-transitions_to-st-010a--st-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 871.984 398 L 1056.408 398" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 1023.424 398 L 1207.848 398" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-transitions_to-vs-010a--vs-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 297.56 272 L 481.984 272" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 321 272 L 505.424 272" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-binds_to edge-dotted constraint_edge" data-edge-id="binds_to:C-010-&gt;D-010" data-role="binds_to">
-      <rect class="scene-edge-label__box" x="696.984" y="207" width="107.748" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="702.984" y="223">
-          <tspan x="702.984" dy="0">binds field status</tspan>
+      <rect class="scene-edge-label__box" x="712.55" y="140" width="107.748" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="718.55" y="156">
+          <tspan x="718.55" dy="0">binds field status</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-depends_on constraint_edge" data-edge-id="depends_on:C-010-&gt;SA-010" data-role="depends_on">
-      <rect class="scene-edge-label__box" x="646.743" y="175" width="76.482" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="652.743" y="191">
-          <tspan x="652.743" dy="0">depends on</tspan>
+      <rect class="scene-edge-label__box" x="728.183" y="140" width="76.482" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="734.183" y="156">
+          <tspan x="734.183" dy="0">depends on</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-emits edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
-      <rect class="scene-edge-label__box" x="45.565" y="299" width="42.87" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="51.565" y="315">
-          <tspan x="51.565" dy="0">emits</tspan>
+      <rect class="scene-edge-label__box" x="103.565" y="264" width="42.87" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="109.565" y="280">
+          <tspan x="109.565" dy="0">emits</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transitions_to edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
-      <rect class="scene-edge-label__box" x="884.984" y="350" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="890.984" y="366">
-          <tspan x="890.984" dy="0">[Submit] {payment_valid} /</tspan>
-          <tspan x="890.984" dy="14">SA-010</tspan>
+      <rect class="scene-edge-label__box" x="1036.424" y="350" width="158.424" height="36" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1042.424" y="366">
+          <tspan x="1042.424" dy="0">[Submit] {payment_valid} /</tspan>
+          <tspan x="1042.424" dy="14">SA-010</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transitions_to free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
-      <rect class="scene-edge-label__box" x="310.56" y="224" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="316.56" y="240">
-          <tspan x="316.56" dy="0">[Submit] {payment_valid} /</tspan>
-          <tspan x="316.56" dy="14">SA-010</tspan>
+      <rect class="scene-edge-label__box" x="334" y="224" width="158.424" height="36" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="340" y="240">
+          <tspan x="340" dy="0">[Submit] {payment_valid} /</tspan>
+          <tspan x="340" dy="14">SA-010</tspan>
         </text>
     </g>
   </g>

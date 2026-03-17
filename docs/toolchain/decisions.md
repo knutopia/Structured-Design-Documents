@@ -54,8 +54,9 @@ The Step 5 macro-layout boundary is now explicit too:
 
 - `src/renderer/staged/macroLayout.ts` owns the shared strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
 - container bounds and container-port offsets are now resolved during macro-layout rather than carried forward as placeholders
-- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, and segment-aware edge-label placement
+- staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, target-biased bends where requested, minimum arrow marker clearance on terminal legs when geometry allows, and segment-aware edge-label placement
 - `elk_layered` layout now reserves spacing for owned edge labels so transition graphs can stay horizontal and readable without per-view routing hacks
+- ordinary node and container ports remain internal routing anchors and are not painted in normal staged SVG output
 
 ## String-First Property Policy
 
@@ -142,6 +143,7 @@ Rules:
 - nesting placement of `+` blocks does not define structural order
 - flow order remains the job of explicit ordering edges such as `PRECEDES` and `TRANSITIONS_TO`
 - for `ia_place_map`, a run of consecutive sibling `Place` nodes at one structural level is interpreted as a chained lower-level place sequence in that same source order, and the run ends when the next sibling is not a `Place`
+- for staged `ia_place_map`, same-chain navigation follows that author-ordered recursive place chain with deterministic tree routing and dedicated chain ports; ELK is not the default chain router
 
 This keeps snapshots stable while still letting renderers honor meaningful source order. Reordering top-level declarations or hierarchy-edge lines is treated as an intentional semantic change to rendered structure.
 

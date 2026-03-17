@@ -14,7 +14,7 @@ import type {
 } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import {
-  buildCardinalPorts,
+  buildIaPlaceMapPorts,
   buildCardNode,
   buildDiagramRootContainer
 } from "./sceneBuilders.js";
@@ -30,15 +30,18 @@ const AREA_GAP = 20;
 const PLACE_BRANCH_GAP = 16;
 const DESCENDANT_GAP = 12;
 const DESCENDANT_INDENT = 40;
+const CHAIN_PORT_OFFSET = 24;
 
 interface PlaceRoutingContext {
   chainId: string;
+  chainOrder: number;
 }
 
 interface SceneBuildContext {
   projectionNodesById: ReadonlyMap<string, Projection["nodes"][number]>;
   annotationsByNodeId: ReadonlyMap<string, ProjectionNodeAnnotation>;
   placeRoutingById: Map<string, PlaceRoutingContext>;
+  nextChainOrder: number;
 }
 
 export interface IaPlaceMapStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
@@ -125,7 +128,11 @@ function buildPlaceNode(
   chainId: string,
   displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
 ): SceneNode {
-  context.placeRoutingById.set(place.id, { chainId });
+  context.placeRoutingById.set(place.id, {
+    chainId,
+    chainOrder: context.nextChainOrder
+  });
+  context.nextChainOrder += 1;
 
   return buildCardNode({
     id: place.id,
@@ -136,7 +143,7 @@ function buildPlaceNode(
       allowed: ["narrow", "standard", "wide"]
     },
     content: buildPlaceContentBlocks(place.id, context, displayOptions),
-    ports: buildCardinalPorts()
+    ports: buildIaPlaceMapPorts(CHAIN_PORT_OFFSET)
   });
 }
 
@@ -337,6 +344,10 @@ function buildNavigationEdges(
     const sourceRouting = placeRoutingById.get(edge.from);
     const targetRouting = placeRoutingById.get(edge.to);
     const sameChain = sourceRouting?.chainId && targetRouting?.chainId && sourceRouting.chainId === targetRouting.chainId;
+    const isDownwardSameChain = sameChain
+      && sourceRouting !== undefined
+      && targetRouting !== undefined
+      && sourceRouting.chainOrder > targetRouting.chainOrder;
 
     return {
       id: `${edge.from}__nav__${edge.to}`,
@@ -344,15 +355,16 @@ function buildNavigationEdges(
       classes: [sameChain ? "within_chain" : "cross_chain"],
       from: {
         itemId: edge.from,
-        portId: sameChain ? "south" : "east"
+        portId: sameChain ? (isDownwardSameChain ? "south_chain" : "north_chain") : "east"
       },
       to: {
         itemId: edge.to,
-        portId: sameChain ? "north" : "west"
+        portId: sameChain ? (isDownwardSameChain ? "north_chain" : "south_chain") : "west"
       },
       routing: {
         style: "orthogonal",
-        preferAxis: sameChain ? "vertical" : "horizontal"
+        preferAxis: sameChain ? "vertical" : "horizontal",
+        bendPlacement: sameChain ? "target_bias" : undefined
       },
       markers: {
         end: "arrow"
@@ -373,7 +385,8 @@ export function buildIaPlaceMapRendererScene(
   const context: SceneBuildContext = {
     projectionNodesById: new Map(projection.nodes.map((node) => [node.id, node])),
     annotationsByNodeId: new Map(projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])),
-    placeRoutingById: new Map()
+    placeRoutingById: new Map(),
+    nextChainOrder: 0
   };
   const rootChildren = buildSceneItemsFromSequence(model.rootItems, "root", 0, context, displayOptions);
 

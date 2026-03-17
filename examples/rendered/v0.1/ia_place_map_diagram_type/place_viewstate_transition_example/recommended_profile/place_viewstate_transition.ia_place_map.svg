@@ -14,13 +14,14 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
+    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
     .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
     .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
-    .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
@@ -35,7 +36,7 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
     </marker>
   </defs>
@@ -48,18 +49,10 @@
     <g id="scene-node-p-010" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-010" data-role="place">
       <rect class="scene-node__chrome" x="24" y="24" width="304" height="154" rx="14" ry="14"/>
       <rect class="scene-badge__chrome" x="36" y="84" width="41.188" height="22" rx="999" ry="999"/>
-      <circle class="scene-port role-north" cx="176" cy="24" r="4"/>
-      <circle class="scene-port role-south" cx="176" cy="178" r="4"/>
-      <circle class="scene-port role-east" cx="328" cy="101" r="4"/>
-      <circle class="scene-port role-west" cx="24" cy="101" r="4"/>
     </g>
     <g id="scene-node-p-011" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-011" data-role="place">
       <rect class="scene-node__chrome" x="64" y="194" width="168" height="94" rx="14" ry="14"/>
       <rect class="scene-badge__chrome" x="76" y="254" width="113.152" height="22" rx="999" ry="999"/>
-      <circle class="scene-port role-north" cx="148" cy="194" r="4"/>
-      <circle class="scene-port role-south" cx="148" cy="288" r="4"/>
-      <circle class="scene-port role-east" cx="232" cy="241" r="4"/>
-      <circle class="scene-port role-west" cx="64" cy="241" r="4"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -95,7 +88,7 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-p-010__nav__p-011" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-010__nav__P-011" data-role="navigation">
-      <path class="scene-edge__path" d="M 176 178 L 176 186 L 148 186 L 148 194" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 48 178 L 48 182 L 88 182 L 88 194" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
