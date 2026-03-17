@@ -30,6 +30,14 @@ export interface ElkLayeredAdapterResult {
   edgeRoutes: Map<string, Point[]>;
 }
 
+export interface ElkFixedPositionRoutingInput extends ElkLayeredAdapterInput {
+  positionTolerance?: number;
+}
+
+export interface ElkFixedPositionRoutingResult extends ElkLayeredAdapterResult {
+  positionsPreserved: boolean;
+}
+
 type ElkLike = {
   layout(graph: ElkNode): Promise<ElkNode>;
 };
@@ -75,6 +83,8 @@ function createElkPort(port: MeasuredPort, itemId: string): ElkPort {
 function createElkNode(item: PositionedItem): ElkNode {
   return {
     id: item.id,
+    x: roundMetric(item.x),
+    y: roundMetric(item.y),
     width: item.width,
     height: item.height,
     layoutOptions: item.ports.length > 0
@@ -131,17 +141,13 @@ function flattenSectionPoints(sections: ElkEdgeSection[] | undefined): Point[] {
   return collapseRoutePoints(points);
 }
 
-export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promise<ElkLayeredAdapterResult> {
-  const graph = {
+function createElkGraph(
+  input: ElkLayeredAdapterInput,
+  layoutOptions: Record<string, string>
+): ElkNode {
+  return {
     id: input.containerId,
-    layoutOptions: {
-      "elk.algorithm": "layered",
-      "elk.direction": resolveElkDirection(input.direction),
-      "elk.edgeRouting": "ORTHOGONAL",
-      "elk.padding": "[left=0,top=0,right=0,bottom=0]",
-      "elk.spacing.nodeNode": String(input.nodeGap),
-      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
-    },
+    layoutOptions,
     children: input.children.map((child) => createElkNode(child)),
     edges: input.edges.map((edge) => ({
       id: edge.id,
@@ -150,9 +156,13 @@ export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promis
       sourcePort: edge.sourcePortId ? `${edge.sourceItemId}:${edge.sourcePortId}` : undefined,
       targetPort: edge.targetPortId ? `${edge.targetItemId}:${edge.targetPortId}` : undefined
     }))
-  };
+  } as unknown as ElkNode;
+}
 
-  const laidOut = await elk.layout(graph as unknown as ElkNode);
+function collectElkLayoutResult(
+  input: ElkLayeredAdapterInput,
+  laidOut: ElkNode
+): ElkLayeredAdapterResult {
   const childPositions = new Map<string, Point>();
 
   for (const child of input.children) {
@@ -188,5 +198,55 @@ export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promis
     contentHeight: roundMetric(contentHeight),
     childPositions,
     edgeRoutes
+  };
+}
+
+export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promise<ElkLayeredAdapterResult> {
+  const graph = {
+    ...createElkGraph(input, {
+      "elk.algorithm": "layered",
+      "elk.direction": resolveElkDirection(input.direction),
+      "elk.edgeRouting": "ORTHOGONAL",
+      "elk.padding": "[left=0,top=0,right=0,bottom=0]",
+      "elk.spacing.nodeNode": String(input.nodeGap),
+      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
+    })
+  };
+
+  const laidOut = await elk.layout(graph as unknown as ElkNode);
+  return collectElkLayoutResult(input, laidOut);
+}
+
+export async function runElkFixedPositionRouting(
+  input: ElkFixedPositionRoutingInput
+): Promise<ElkFixedPositionRoutingResult> {
+  const graph = {
+    ...createElkGraph(input, {
+      "elk.algorithm": "layered",
+      "elk.direction": resolveElkDirection(input.direction),
+      "elk.edgeRouting": "ORTHOGONAL",
+      "elk.interactive": "true",
+      "elk.padding": "[left=0,top=0,right=0,bottom=0]",
+      "elk.spacing.nodeNode": String(input.nodeGap),
+      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
+    })
+  };
+
+  const laidOut = await elk.layout(graph as unknown as ElkNode);
+  const result = collectElkLayoutResult(input, laidOut);
+  const tolerance = input.positionTolerance ?? 0.5;
+  const positionsPreserved = input.children.every((child) => {
+    const resolved = result.childPositions.get(child.id);
+    if (!resolved) {
+      return false;
+    }
+
+    return Math.abs(resolved.x - child.x) <= tolerance
+      && Math.abs(resolved.y - child.y) <= tolerance;
+  });
+
+  return {
+    ...result,
+    positionsPreserved
   };
 }

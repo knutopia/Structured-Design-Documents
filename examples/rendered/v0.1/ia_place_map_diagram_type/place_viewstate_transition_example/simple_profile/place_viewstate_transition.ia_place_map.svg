@@ -70,7 +70,7 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-p-010__nav__p-011" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-010__nav__P-011" data-role="navigation">
-      <path class="scene-edge__path" d="M 48 90 L 48 94 L 88 94 L 88 106" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 48 90 L 32 90 L 32 82 L 88 82 L 88 106" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

@@ -2,12 +2,14 @@ import { describe, expect, it } from "vitest";
 import type {
   MeasuredScene,
   PositionedContainer,
+  Point,
   PositionedItem,
   RendererScene,
   SceneContainer,
   SceneEdge,
   SceneNode
 } from "../src/renderer/staged/contracts.js";
+import { runElkFixedPositionRouting } from "../src/renderer/staged/elkAdapter.js";
 import { positionMeasuredScene } from "../src/renderer/staged/macroLayout.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
@@ -197,6 +199,23 @@ function findPositionedItem(root: PositionedContainer, id: string): PositionedIt
   }
 
   throw new Error(`Could not find positioned item "${id}".`);
+}
+
+function getTerminalSegment(edge: { route: { points: Point[] } }): { dx: number; dy: number; length: number } {
+  const points = edge.route.points;
+  const end = points[points.length - 1];
+  const beforeEnd = points[points.length - 2];
+  if (!end || !beforeEnd) {
+    throw new Error("Expected a routed edge with at least two points.");
+  }
+
+  const dx = end.x - beforeEnd.x;
+  const dy = end.y - beforeEnd.y;
+  return {
+    dx,
+    dy,
+    length: Math.hypot(dx, dy)
+  };
 }
 
 describe("staged macro-layout", () => {
@@ -633,6 +652,237 @@ describe("staged macro-layout", () => {
       { x: 288, y: 86 }
     ]);
     expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.preference_fallback")).toBe(false);
+  });
+
+  it("applies the stronger vertical target-approach rule to manually routed orthogonal edges", async () => {
+    const scene = buildRootScene(
+      {
+        strategy: "stack",
+        direction: "vertical",
+        gap: 56
+      },
+      [
+        buildCardNode("manual-top", "narrow", "Manual Top", [
+          {
+            id: "south",
+            role: "chain_out",
+            side: "south"
+          }
+        ]),
+        buildCardNode("manual-bottom", "narrow", "Manual Bottom", [
+          {
+            id: "north",
+            role: "chain_in",
+            side: "north"
+          }
+        ])
+      ],
+      [
+        {
+          id: "manual-target-approach",
+          role: "navigation",
+          classes: ["within_chain"],
+          from: {
+            itemId: "manual-top",
+            portId: "south"
+          },
+          to: {
+            itemId: "manual-bottom",
+            portId: "north"
+          },
+          routing: {
+            style: "orthogonal",
+            preferAxis: "vertical",
+            bendPlacement: "target_bias",
+            targetApproach: "vertical_child",
+            sourcePortRole: "chain_out",
+            targetPortRole: "chain_in"
+          },
+          markers: {
+            end: "arrow"
+          }
+        }
+      ]
+    );
+
+    const result = await runStagedRendererPipeline(scene);
+    const edge = result.positionedScene.edges[0];
+    const terminal = getTerminalSegment(edge!);
+
+    expect(terminal.dx).toBe(0);
+    expect(terminal.length).toBeGreaterThanOrEqual(20);
+    expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+  });
+
+  it("applies the stronger vertical target-approach rule after ELK route hints are returned", async () => {
+    const scene = buildRootScene(
+      {
+        strategy: "elk_layered",
+        direction: "vertical",
+        gap: 20
+      },
+      [
+        buildCardNode("elk-top-approach", "narrow", "Top", [
+          {
+            id: "south",
+            role: "chain_out",
+            side: "south"
+          }
+        ]),
+        buildCardNode("elk-bottom-approach", "narrow", "Bottom", [
+          {
+            id: "north",
+            role: "chain_in",
+            side: "north"
+          }
+        ])
+      ],
+      [
+        {
+          id: "elk-target-approach",
+          role: "navigation",
+          classes: ["within_chain"],
+          from: {
+            itemId: "elk-top-approach",
+            portId: "south"
+          },
+          to: {
+            itemId: "elk-bottom-approach",
+            portId: "north"
+          },
+          routing: {
+            style: "orthogonal",
+            preferAxis: "vertical",
+            targetApproach: "vertical_child",
+            sourcePortRole: "chain_out",
+            targetPortRole: "chain_in"
+          },
+          markers: {
+            end: "arrow"
+          }
+        }
+      ]
+    );
+
+    const result = await runStagedRendererPipeline(scene);
+    const edge = result.positionedScene.edges[0];
+    const terminal = getTerminalSegment(edge!);
+
+    expect(terminal.dx).toBe(0);
+    expect(terminal.length).toBeGreaterThanOrEqual(20);
+    expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+  });
+
+  it("preserves already-laid-out child positions when fixed-position ELK routing is used on matching geometry", async () => {
+    const children = [
+      {
+        kind: "node" as const,
+        id: "fixed-top",
+        role: "place",
+        primitive: "card" as const,
+        classes: ["place"],
+        widthPolicy: {
+          preferred: "narrow" as const,
+          allowed: ["narrow" as const]
+        },
+        widthBand: "narrow" as const,
+        overflowPolicy: {
+          kind: "grow_height" as const
+        },
+        content: [],
+        ports: [
+          {
+            id: "south",
+            role: "primary_out",
+            side: "south" as const,
+            x: 84,
+            y: 48
+          }
+        ],
+        overflow: {
+          status: "fits" as const
+        },
+        x: 16,
+        y: 16,
+        width: 168,
+        height: 48
+      },
+      {
+        kind: "node" as const,
+        id: "fixed-bottom",
+        role: "place",
+        primitive: "card" as const,
+        classes: ["place"],
+        widthPolicy: {
+          preferred: "narrow" as const,
+          allowed: ["narrow" as const]
+        },
+        widthBand: "narrow" as const,
+        overflowPolicy: {
+          kind: "grow_height" as const
+        },
+        content: [],
+        ports: [
+          {
+            id: "north",
+            role: "primary_in",
+            side: "north" as const,
+            x: 84,
+            y: 0
+          }
+        ],
+        overflow: {
+          status: "fits" as const
+        },
+        x: 16,
+        y: 86,
+        width: 168,
+        height: 48
+      }
+    ];
+
+    const seeded = await runElkFixedPositionRouting({
+      containerId: "fixed-position-check",
+      direction: "vertical",
+      nodeGap: 20,
+      layerGap: 20,
+      children,
+      edges: [
+        {
+          id: "fixed-route",
+          sourceItemId: "fixed-top",
+          targetItemId: "fixed-bottom",
+          sourcePortId: "south",
+          targetPortId: "north"
+        }
+      ]
+    });
+
+    const elkResult = await runElkFixedPositionRouting({
+      containerId: "fixed-position-check-seeded",
+      direction: "vertical",
+      nodeGap: 20,
+      layerGap: 20,
+      children: children.map((child) => ({
+        ...child,
+        x: seeded.childPositions.get(child.id)?.x ?? child.x,
+        y: seeded.childPositions.get(child.id)?.y ?? child.y
+      })),
+      edges: [
+        {
+          id: "fixed-route",
+          sourceItemId: "fixed-top",
+          targetItemId: "fixed-bottom",
+          sourcePortId: "south",
+          targetPortId: "north"
+        }
+      ]
+    });
+
+    expect(elkResult.positionsPreserved).toBe(true);
+    expect(elkResult.childPositions.get("fixed-top")).toEqual(expect.objectContaining({ x: 0, y: 0 }));
+    expect(elkResult.childPositions.get("fixed-bottom")).toEqual(expect.objectContaining({ x: 0, y: 70 }));
+    expect(elkResult.edgeRoutes.get("fixed-route")).toBeDefined();
   });
 
   it("routes mixed-region edges once after elk placement and matches the committed hybrid snapshot", async () => {

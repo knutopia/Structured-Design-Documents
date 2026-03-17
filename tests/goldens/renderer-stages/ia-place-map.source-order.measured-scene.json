@@ -909,7 +909,8 @@
       "routing": {
         "style": "orthogonal",
         "preferAxis": "vertical",
-        "bendPlacement": "target_bias"
+        "bendPlacement": "target_bias",
+        "targetApproach": "vertical_child"
       },
       "markers": {
         "end": "arrow"

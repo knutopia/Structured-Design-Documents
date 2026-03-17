@@ -474,12 +474,16 @@
             "y": 72
           },
           {
-            "x": 48,
-            "y": 76
+            "x": 32,
+            "y": 72
+          },
+          {
+            "x": 32,
+            "y": 64
           },
           {
             "x": 88,
-            "y": 76
+            "y": 64
           },
           {
             "x": 88,
@@ -518,12 +522,16 @@
             "y": 88
           },
           {
-            "x": 88,
-            "y": 84
+            "x": 32,
+            "y": 88
+          },
+          {
+            "x": 32,
+            "y": 96
           },
           {
             "x": 48,
-            "y": 84
+            "y": 96
           },
           {
             "x": 48,
@@ -562,12 +570,16 @@
             "y": 136
           },
           {
-            "x": 88,
-            "y": 140
+            "x": 72,
+            "y": 136
+          },
+          {
+            "x": 72,
+            "y": 128
           },
           {
             "x": 128,
-            "y": 140
+            "y": 128
           },
           {
             "x": 128,
@@ -606,12 +618,16 @@
             "y": 152
           },
           {
-            "x": 128,
-            "y": 148
+            "x": 72,
+            "y": 152
+          },
+          {
+            "x": 72,
+            "y": 160
           },
           {
             "x": 88,
-            "y": 148
+            "y": 160
           },
           {
             "x": 88,
@@ -625,7 +641,36 @@
       "paintGroup": "edges"
     }
   ],
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "phase": "routing",
+      "code": "renderer.routing.ia_branch_elk_fixed_fallback",
+      "severity": "info",
+      "message": "Branch-local fixed-position ELK routing for \"P-800__branch\" could not preserve node placement. Trying local placement+routing fallback.",
+      "targetId": "P-800__branch"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.ia_branch_elk_fixed_fallback",
+      "severity": "info",
+      "message": "Branch-local fixed-position ELK routing for \"P-801__branch\" could not preserve node placement. Trying local placement+routing fallback.",
+      "targetId": "P-801__branch"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.ia_branch_elk_layout_rejected",
+      "severity": "info",
+      "message": "Branch-local ELK placement fallback for \"P-800__branch\" would exceed the current branch bounds. Keeping manual routing for this region.",
+      "targetId": "P-800__branch"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.ia_branch_elk_layout_rejected",
+      "severity": "info",
+      "message": "Branch-local ELK placement fallback for \"P-801__branch\" would exceed the current branch bounds. Keeping manual routing for this region.",
+      "targetId": "P-801__branch"
+    }
+  ],
   "paintOrder": [
     "chrome",
     "nodes",

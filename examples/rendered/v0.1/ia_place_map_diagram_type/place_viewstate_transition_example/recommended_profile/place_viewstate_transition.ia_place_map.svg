@@ -88,7 +88,7 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-p-010__nav__p-011" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-010__nav__P-011" data-role="navigation">
-      <path class="scene-edge__path" d="M 48 178 L 48 182 L 88 182 L 88 194" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 48 178 L 32 178 L 32 170 L 88 170 L 88 194" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

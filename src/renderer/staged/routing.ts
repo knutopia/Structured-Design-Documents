@@ -21,10 +21,22 @@ interface ResolvedEdgeEndpoint extends PositionedEdgeEndpoint {
   side?: PortSide;
 }
 
+export interface SourceContractLaneAssignment {
+  labelX: number;
+  labelY: number;
+  rowY: number;
+  laneExitX: number;
+  usableWidth: number;
+}
+
 const EDGE_LABEL_SEGMENT_CLEARANCE = 12;
 const EDGE_LABEL_SEGMENT_OFFSET = 12;
 const MIN_ARROW_MARKER_LEG = 12;
 const TARGET_BIASED_BEND_SOURCE_CLEARANCE = 4;
+const TARGET_APPROACH_ZONE = 24;
+const TARGET_APPROACH_MIN_FINAL_LEG = 20;
+const TARGET_APPROACH_SOURCE_CLEARANCE = 8;
+const TARGET_APPROACH_ESCAPE_CLEARANCE = 8;
 
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -413,6 +425,127 @@ function buildSharedRoutePoints(
   return buildOrthogonalRoutePoints(from, to, preferAxis, edge.routing.bendPlacement);
 }
 
+function canApplyVerticalTargetApproach(
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint
+): boolean {
+  if (!isVerticalSide(to.side)) {
+    return false;
+  }
+
+  if (to.side === "north") {
+    return from.y + TARGET_APPROACH_SOURCE_CLEARANCE <= to.y - TARGET_APPROACH_ZONE;
+  }
+
+  return from.y - TARGET_APPROACH_SOURCE_CLEARANCE >= to.y + TARGET_APPROACH_ZONE;
+}
+
+function applyVerticalTargetApproach(
+  points: Point[],
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint
+): Point[] | undefined {
+  if (points.length < 2 || !isVerticalSide(to.side)) {
+    return undefined;
+  }
+
+  const bendY = roundMetric(to.y + (to.side === "north" ? -TARGET_APPROACH_ZONE : TARGET_APPROACH_ZONE));
+  if (canApplyVerticalTargetApproach(from, to)) {
+    const sourceClearanceY = roundMetric(
+      from.y + (to.side === "north" ? TARGET_APPROACH_SOURCE_CLEARANCE : -TARGET_APPROACH_SOURCE_CLEARANCE)
+    );
+    const adjusted: Point[] = [{ x: from.x, y: from.y }];
+    let current = adjusted[0]!;
+
+    if (current.y !== sourceClearanceY) {
+      adjusted.push({
+        x: current.x,
+        y: sourceClearanceY
+      });
+      current = adjusted[adjusted.length - 1]!;
+    }
+
+    const routeWithoutTarget = points.slice(1, -1);
+    for (const point of routeWithoutTarget) {
+      adjusted.push({
+        x: point.x,
+        y: point.y
+      });
+      current = adjusted[adjusted.length - 1]!;
+    }
+
+    if (current.y !== bendY) {
+      adjusted.push({
+        x: current.x,
+        y: bendY
+      });
+      current = adjusted[adjusted.length - 1]!;
+    }
+
+    if (current.x !== to.x) {
+      adjusted.push({
+        x: to.x,
+        y: current.y
+      });
+    }
+
+    adjusted.push({
+      x: to.x,
+      y: to.y
+    });
+
+    const finalLegLength = getAxisAlignedSegmentLength(adjusted[adjusted.length - 2]!, adjusted[adjusted.length - 1]!);
+    if (finalLegLength !== undefined && finalLegLength >= TARGET_APPROACH_MIN_FINAL_LEG) {
+      return collapseRoutePoints(adjusted);
+    }
+  }
+
+  const escapeX = roundMetric(Math.min(from.x, to.x) - (TARGET_APPROACH_SOURCE_CLEARANCE + TARGET_APPROACH_ESCAPE_CLEARANCE));
+  const escaped = collapseRoutePoints([
+    { x: from.x, y: from.y },
+    { x: escapeX, y: from.y },
+    { x: escapeX, y: bendY },
+    { x: to.x, y: bendY },
+    { x: to.x, y: to.y }
+  ]);
+  const escapedFinalLegLength = getAxisAlignedSegmentLength(
+    escaped[escaped.length - 2]!,
+    escaped[escaped.length - 1]!
+  );
+  if (escapedFinalLegLength !== undefined && escapedFinalLegLength >= TARGET_APPROACH_MIN_FINAL_LEG) {
+    return escaped;
+  }
+
+  return undefined;
+}
+
+function applyTargetApproach(
+  edge: MeasuredEdge,
+  points: Point[],
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint,
+  diagnostics: RendererDiagnostic[]
+): Point[] {
+  if (edge.routing.targetApproach !== "vertical_child") {
+    return points;
+  }
+
+  const adjusted = applyVerticalTargetApproach(points, from, to);
+  if (adjusted) {
+    return adjusted;
+  }
+
+  diagnostics.push(
+    createRoutingDiagnostic(
+      "renderer.routing.target_approach_unmet",
+      `Edge "${edge.id}" could not satisfy the requested "${edge.routing.targetApproach}" target-approach geometry with the current route shape.`,
+      edge.id,
+      "info"
+    )
+  );
+  return points;
+}
+
 function adjustEndMarkerLeg(points: Point[]): Point[] | undefined {
   if (points.length < 4) {
     return undefined;
@@ -534,13 +667,40 @@ export function buildSharedRoute(
   to: ResolvedEdgeEndpoint,
   diagnostics: RendererDiagnostic[]
 ): PositionedRoute {
+  const routedPoints = collapseRoutePoints(
+    buildSharedRoutePoints(edge, from, to)
+  );
+
   return {
     style: edge.routing.style,
     points: enforceMarkerLegs(
       edge,
-      collapseRoutePoints(
-        buildSharedRoutePoints(edge, from, to)
-      ),
+      applyTargetApproach(edge, routedPoints, from, to, diagnostics),
+      diagnostics
+    )
+  };
+}
+
+export function buildSourceContractLaneRoute(
+  edge: MeasuredEdge,
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint,
+  lane: SourceContractLaneAssignment,
+  diagnostics: RendererDiagnostic[]
+): PositionedRoute {
+  const lanePoints = collapseRoutePoints([
+    { x: from.x, y: from.y },
+    { x: from.x, y: lane.rowY },
+    { x: lane.laneExitX, y: lane.rowY },
+    { x: lane.laneExitX, y: to.y },
+    { x: to.x, y: to.y }
+  ]);
+
+  return {
+    style: edge.routing.style,
+    points: enforceMarkerLegs(
+      edge,
+      applyTargetApproach(edge, lanePoints, from, to, diagnostics),
       diagnostics
     )
   };
@@ -565,11 +725,17 @@ export function buildRouteFromLocalHint(
     style: edge.routing.style,
     points: enforceMarkerLegs(
       edge,
-      collapseRoutePoints([
+      applyTargetApproach(
+        edge,
+        collapseRoutePoints([
         { x: from.x, y: from.y },
         ...middlePoints,
         { x: to.x, y: to.y }
-      ]),
+        ]),
+        from,
+        to,
+        diagnostics
+      ),
       diagnostics
     )
   };
@@ -721,5 +887,20 @@ export function positionEdgeLabel(
     textStyleRole: label.textStyleRole,
     x: roundMetric(midpoint.x - label.width / 2),
     y: roundMetric(midpoint.y - label.height / 2)
+  };
+}
+
+export function positionEdgeLabelInLane(
+  label: NonNullable<MeasuredEdge["label"]>,
+  lane: Pick<SourceContractLaneAssignment, "labelX" | "labelY">
+): PositionedEdgeLabel {
+  return {
+    lines: [...label.lines],
+    width: label.width,
+    height: label.height,
+    lineHeight: label.lineHeight,
+    textStyleRole: label.textStyleRole,
+    x: roundMetric(lane.labelX),
+    y: roundMetric(lane.labelY)
   };
 }

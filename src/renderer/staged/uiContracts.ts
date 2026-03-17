@@ -581,11 +581,13 @@ function buildRoutingIntent(
   }
 
   if (role === "emits" || role === "depends_on" || role === "binds_to") {
+    const sourceIsContainer = fromKind === "container";
     return {
       style: "orthogonal",
       preferAxis: "horizontal",
       bendPlacement: "target_bias",
-      sourcePortRole: fromKind === "container" ? "contract_out" : undefined,
+      labelPlacement: sourceIsContainer ? "source_contract_lane" : "segment",
+      sourcePortRole: sourceIsContainer ? "contract_out" : undefined,
       targetPortRole: toKind === "node" ? "contract_in" : undefined
     };
   }

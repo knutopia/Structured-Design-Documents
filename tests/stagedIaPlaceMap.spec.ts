@@ -47,6 +47,23 @@ function getTerminalSegmentLength(edge: PositionedEdge): number {
   return Math.hypot(end.x - beforeEnd.x, end.y - beforeEnd.y);
 }
 
+function getTerminalSegment(edge: PositionedEdge): { dx: number; dy: number; length: number } {
+  const points = edge.route.points;
+  const end = points[points.length - 1];
+  const beforeEnd = points[points.length - 2];
+  if (!end || !beforeEnd) {
+    throw new Error(`Edge "${edge.id}" is missing route points.`);
+  }
+
+  const dx = end.x - beforeEnd.x;
+  const dy = end.y - beforeEnd.y;
+  return {
+    dx,
+    dy,
+    length: Math.hypot(dx, dy)
+  };
+}
+
 async function loadInput(filePath: string): Promise<{ path: string; text: string }> {
   return {
     path: filePath,
@@ -121,7 +138,12 @@ describe("staged ia_place_map", () => {
         portId: "north_chain"
       })
     }));
-    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(12);
+    expect(getTerminalSegment(rendered.positionedScene.edges[0]!)).toEqual(expect.objectContaining({
+      dx: 0,
+      length: expect.any(Number)
+    }));
+    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(20);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
   });
 
   it("applies simple-profile suppression while still indenting implicit top-level place sequences", async () => {
@@ -153,7 +175,12 @@ describe("staged ia_place_map", () => {
         portId: "north_chain"
       })
     }));
-    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(12);
+    expect(getTerminalSegment(rendered.positionedScene.edges[0]!)).toEqual(expect.objectContaining({
+      dx: 0,
+      length: expect.any(Number)
+    }));
+    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(20);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
   });
 
   it("uses deterministic target-biased chain routing for both downward and upward recursive navigation", async () => {
@@ -188,7 +215,11 @@ describe("staged ia_place_map", () => {
       fromPort: "north_chain",
       toPort: "south_chain"
     });
-    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegment(edge).dx === 0)).toBe(true);
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 20)).toBe(true);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.ia_branch_elk_fixed_fallback")).toBe(true);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.ia_branch_elk_layout_rejected")).toBe(true);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
 
     await expectRendererStageSnapshot("ia-place-map.recursive-chain.positioned-scene.json", rendered.positionedScene);
   });

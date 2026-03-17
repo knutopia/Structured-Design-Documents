@@ -950,12 +950,16 @@
             "y": 72
           },
           {
-            "x": 48,
-            "y": 76
+            "x": 32,
+            "y": 72
+          },
+          {
+            "x": 32,
+            "y": 64
           },
           {
             "x": 88,
-            "y": 76
+            "y": 64
           },
           {
             "x": 88,
@@ -969,7 +973,22 @@
       "paintGroup": "edges"
     }
   ],
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "phase": "routing",
+      "code": "renderer.routing.ia_branch_elk_fixed_fallback",
+      "severity": "info",
+      "message": "Branch-local fixed-position ELK routing for \"P-700__branch\" could not preserve node placement. Trying local placement+routing fallback.",
+      "targetId": "P-700__branch"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.ia_branch_elk_layout_rejected",
+      "severity": "info",
+      "message": "Branch-local ELK placement fallback for \"P-700__branch\" would exceed the current branch bounds. Keeping manual routing for this region.",
+      "targetId": "P-700__branch"
+    }
+  ],
   "paintOrder": [
     "chrome",
     "nodes",

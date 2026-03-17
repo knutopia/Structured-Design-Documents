@@ -143,7 +143,7 @@ Rules:
 - nesting placement of `+` blocks does not define structural order
 - flow order remains the job of explicit ordering edges such as `PRECEDES` and `TRANSITIONS_TO`
 - for `ia_place_map`, a run of consecutive sibling `Place` nodes at one structural level is interpreted as a chained lower-level place sequence in that same source order, and the run ends when the next sibling is not a `Place`
-- for staged `ia_place_map`, same-chain navigation follows that author-ordered recursive place chain with deterministic tree routing and dedicated chain ports; ELK is not the default chain router
+- for staged `ia_place_map`, same-chain navigation follows that author-ordered recursive place chain with branch-local ELK routing when local geometry allows it, then falls back to deterministic tree routing with dedicated chain ports and a shared vertical target-approach rule; ELK is still not a global chain-layout source of truth
 
 This keeps snapshots stable while still letting renderers honor meaningful source order. Reordering top-level declarations or hierarchy-edge lines is treated as an intentional semantic change to rendered structure.
 

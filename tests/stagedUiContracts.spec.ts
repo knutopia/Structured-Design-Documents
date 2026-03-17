@@ -71,6 +71,15 @@ function getTerminalSegmentLength(edge: PositionedEdge): number {
   return Math.hypot(end.x - beforeEnd.x, end.y - beforeEnd.y);
 }
 
+function findEdge(scene: Awaited<ReturnType<typeof buildUiContractsArtifacts>>["rendered"]["positionedScene"], edgeId: string): PositionedEdge {
+  const edge = scene.edges.find((candidate) => candidate.id === edgeId);
+  if (!edge) {
+    throw new Error(`Could not find positioned edge "${edgeId}".`);
+  }
+
+  return edge;
+}
+
 async function buildUiContractsArtifactsFromInput(
   input: { path: string; text: string },
   profileId: string
@@ -122,6 +131,25 @@ describe("staged ui_contracts", () => {
     expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_segment_fallback")).toBe(false);
     expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
 
+    const billingForm = findPositionedItem(rendered.positionedScene.root, "C-010");
+    const billingFormGutter = findPositionedItem(rendered.positionedScene.root, "C-010__content");
+    if (billingForm.kind !== "container" || billingFormGutter.kind !== "container") {
+      throw new Error("Expected Billing Form to remain a staged container with a contract gutter.");
+    }
+
+    const bindsTo = findEdge(rendered.positionedScene, "binds_to:C-010->D-010");
+    const dependsOn = findEdge(rendered.positionedScene, "depends_on:C-010->SA-010");
+    const laneTop = billingForm.y + billingForm.chrome.padding.top + (billingForm.chrome.headerBandHeight ?? 0) + 12;
+    const laneLeft = billingFormGutter.x + 12;
+    const laneRight = billingFormGutter.x + billingFormGutter.chrome.padding.left;
+
+    expect(bindsTo.label?.x).toBeGreaterThanOrEqual(laneLeft);
+    expect(dependsOn.label?.x).toBeGreaterThanOrEqual(laneLeft);
+    expect(bindsTo.label?.y).toBeGreaterThanOrEqual(laneTop);
+    expect(dependsOn.label?.y).toBeGreaterThan(bindsTo.label?.y ?? 0);
+    expect(bindsTo.route.points[2]?.x).toBe(laneRight);
+    expect(dependsOn.route.points[2]?.x).toBe(laneRight);
+
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.renderer-scene.json", rendererScene);
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.measured-scene.json", rendered.measuredScene);
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.positioned-scene.json", rendered.positionedScene);
@@ -143,6 +171,7 @@ describe("staged ui_contracts", () => {
     expect(rendered.svg).not.toContain("ViewState Graph");
     expect(rendered.svg).not.toContain('class="scene-port');
     expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_segment_fallback")).toBe(false);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_lane_fallback")).toBe(false);
     expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
 
     const placeGraph = findPositionedItem(rendered.positionedScene.root, "secondary_state_group:P-060");

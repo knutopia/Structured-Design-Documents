@@ -14,13 +14,14 @@
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
+    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
     .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
     .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
     .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
     .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
     .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
     .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
-    .scene-port { fill: #ffffff; stroke: #2563eb; stroke-width: 1.5; }
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
@@ -35,7 +36,7 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
     </marker>
   </defs>
@@ -67,80 +68,36 @@
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-p-100" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-100" data-role="place">
       <rect class="scene-node__chrome" x="24" y="24" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="108" cy="24" r="4"/>
-      <circle class="scene-port role-south" cx="108" cy="90" r="4"/>
-      <circle class="scene-port role-east" cx="192" cy="57" r="4"/>
-      <circle class="scene-port role-west" cx="24" cy="57" r="4"/>
     </g>
     <g id="scene-node-p-110" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-110" data-role="place">
       <rect class="scene-node__chrome" x="64" y="106" width="168" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="148" cy="106" r="4"/>
-      <circle class="scene-port role-south" cx="148" cy="154" r="4"/>
-      <circle class="scene-port role-east" cx="232" cy="130" r="4"/>
-      <circle class="scene-port role-west" cx="64" cy="130" r="4"/>
     </g>
     <g id="scene-node-p-210" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-210" data-role="place">
       <rect class="scene-node__chrome" x="296" y="80" width="168" height="86" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="380" cy="80" r="4"/>
-      <circle class="scene-port role-south" cx="380" cy="166" r="4"/>
-      <circle class="scene-port role-east" cx="464" cy="123" r="4"/>
-      <circle class="scene-port role-west" cx="296" cy="123" r="4"/>
     </g>
     <g id="scene-node-p-220" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-220" data-role="place">
       <rect class="scene-node__chrome" x="336" y="182" width="168" height="48" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="420" cy="182" r="4"/>
-      <circle class="scene-port role-south" cx="420" cy="230" r="4"/>
-      <circle class="scene-port role-east" cx="504" cy="206" r="4"/>
-      <circle class="scene-port role-west" cx="336" cy="206" r="4"/>
     </g>
     <g id="scene-node-p-221" class="scene-node primitive-card role-place paint-nodes place nested_place depth-2" data-item-id="P-221" data-role="place">
       <rect class="scene-node__chrome" x="376" y="246" width="168" height="64" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="460" cy="246" r="4"/>
-      <circle class="scene-port role-south" cx="460" cy="310" r="4"/>
-      <circle class="scene-port role-east" cx="544" cy="278" r="4"/>
-      <circle class="scene-port role-west" cx="376" cy="278" r="4"/>
     </g>
     <g id="scene-node-p-222" class="scene-node primitive-card role-place paint-nodes place nested_place depth-3" data-item-id="P-222" data-role="place">
       <rect class="scene-node__chrome" x="416" y="326" width="168" height="64" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="500" cy="326" r="4"/>
-      <circle class="scene-port role-south" cx="500" cy="390" r="4"/>
-      <circle class="scene-port role-east" cx="584" cy="358" r="4"/>
-      <circle class="scene-port role-west" cx="416" cy="358" r="4"/>
     </g>
     <g id="scene-node-p-230" class="scene-node primitive-card role-place paint-nodes place nested_place depth-2" data-item-id="P-230" data-role="place">
       <rect class="scene-node__chrome" x="376" y="402" width="168" height="64" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="460" cy="402" r="4"/>
-      <circle class="scene-port role-south" cx="460" cy="466" r="4"/>
-      <circle class="scene-port role-east" cx="544" cy="434" r="4"/>
-      <circle class="scene-port role-west" cx="376" cy="434" r="4"/>
     </g>
     <g id="scene-node-p-310" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-310" data-role="place">
       <rect class="scene-node__chrome" x="664" y="80" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="748" cy="80" r="4"/>
-      <circle class="scene-port role-south" cx="748" cy="146" r="4"/>
-      <circle class="scene-port role-east" cx="832" cy="113" r="4"/>
-      <circle class="scene-port role-west" cx="664" cy="113" r="4"/>
     </g>
     <g id="scene-node-p-410" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-410" data-role="place">
       <rect class="scene-node__chrome" x="912" y="80" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="996" cy="80" r="4"/>
-      <circle class="scene-port role-south" cx="996" cy="146" r="4"/>
-      <circle class="scene-port role-east" cx="1080" cy="113" r="4"/>
-      <circle class="scene-port role-west" cx="912" cy="113" r="4"/>
     </g>
     <g id="scene-node-p-510" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-510" data-role="place">
       <rect class="scene-node__chrome" x="1160" y="80" width="168" height="66" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="1244" cy="80" r="4"/>
-      <circle class="scene-port role-south" cx="1244" cy="146" r="4"/>
-      <circle class="scene-port role-east" cx="1328" cy="113" r="4"/>
-      <circle class="scene-port role-west" cx="1160" cy="113" r="4"/>
     </g>
     <g id="scene-node-p-610" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-610" data-role="place">
       <rect class="scene-node__chrome" x="1408" y="80" width="168" height="86" rx="14" ry="14"/>
-      <circle class="scene-port role-north" cx="1492" cy="80" r="4"/>
-      <circle class="scene-port role-south" cx="1492" cy="166" r="4"/>
-      <circle class="scene-port role-east" cx="1576" cy="123" r="4"/>
-      <circle class="scene-port role-west" cx="1408" cy="123" r="4"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -250,28 +207,28 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-p-100__nav__p-110" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-100__nav__P-110" data-role="navigation">
-      <path class="scene-edge__path" d="M 108 90 L 108 98 L 148 98 L 148 106" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 48 90 L 32 90 L 32 82 L 88 82 L 88 106" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-210__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-210__nav__P-220" data-role="navigation">
-      <path class="scene-edge__path" d="M 380 166 L 380 174 L 420 174 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 320 166 L 304 166 L 304 158 L 360 158 L 360 182" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-210__nav__p-230" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-210__nav__P-230" data-role="navigation">
-      <path class="scene-edge__path" d="M 380 166 L 380 284 L 460 284 L 460 402" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 320 166 L 320 390 L 400 390 L 400 402" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-220__nav__p-221" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-220__nav__P-221" data-role="navigation">
-      <path class="scene-edge__path" d="M 420 230 L 420 238 L 460 238 L 460 246" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 360 230 L 344 230 L 344 222 L 400 222 L 400 246" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-220__nav__p-222" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-220__nav__P-222" data-role="navigation">
-      <path class="scene-edge__path" d="M 420 230 L 420 278 L 500 278 L 500 326" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 360 230 L 360 314 L 440 314 L 440 326" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-221__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-221__nav__P-220" data-role="navigation">
-      <path class="scene-edge__path" d="M 460 310 L 460 246 L 420 246 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 400 246 L 344 246 L 344 254 L 360 254 L 360 230" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-222__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-222__nav__P-220" data-role="navigation">
-      <path class="scene-edge__path" d="M 500 390 L 500 286 L 420 286 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 440 326 L 440 242 L 360 242 L 360 230" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-p-230__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-230__nav__P-220" data-role="navigation">
-      <path class="scene-edge__path" d="M 460 466 L 460 324 L 420 324 L 420 182" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 400 402 L 400 242 L 360 242 L 360 230" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

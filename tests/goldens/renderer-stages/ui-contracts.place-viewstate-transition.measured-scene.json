@@ -969,6 +969,7 @@
         "style": "orthogonal",
         "preferAxis": "horizontal",
         "bendPlacement": "target_bias",
+        "labelPlacement": "source_contract_lane",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },
@@ -1005,6 +1006,7 @@
         "style": "orthogonal",
         "preferAxis": "horizontal",
         "bendPlacement": "target_bias",
+        "labelPlacement": "source_contract_lane",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },
@@ -1042,6 +1044,7 @@
         "style": "orthogonal",
         "preferAxis": "horizontal",
         "bendPlacement": "target_bias",
+        "labelPlacement": "source_contract_lane",
         "sourcePortRole": "contract_out",
         "targetPortRole": "contract_in"
       },

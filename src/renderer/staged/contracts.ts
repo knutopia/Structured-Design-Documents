@@ -28,6 +28,8 @@ export type PortOffsetPolicy = "center" | "header_center" | "content_start";
 export type RoutingStyle = "orthogonal" | "straight" | "stepped";
 export type PreferredAxis = "horizontal" | "vertical";
 export type OrthogonalBendPlacement = "midpoint" | "target_bias";
+export type TargetApproachPreset = "vertical_child";
+export type EdgeLabelPlacement = "segment" | "source_contract_lane";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
 export type EdgeMarkerKind = "none" | "arrow";
 
@@ -88,6 +90,8 @@ export interface RoutingIntent {
   avoidNodeBoxes?: boolean;
   preferAxis?: PreferredAxis;
   bendPlacement?: OrthogonalBendPlacement;
+  targetApproach?: TargetApproachPreset;
+  labelPlacement?: EdgeLabelPlacement;
   sourcePortRole?: string;
   targetPortRole?: string;
 }

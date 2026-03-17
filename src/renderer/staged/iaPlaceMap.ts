@@ -364,7 +364,8 @@ function buildNavigationEdges(
       routing: {
         style: "orthogonal",
         preferAxis: sameChain ? "vertical" : "horizontal",
-        bendPlacement: sameChain ? "target_bias" : undefined
+        bendPlacement: sameChain ? "target_bias" : undefined,
+        targetApproach: sameChain ? "vertical_child" : undefined
       },
       markers: {
         end: "arrow"
