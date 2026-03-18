@@ -189,7 +189,7 @@
       <path class="scene-edge__path" d="M 702.424 174 L 702.424 227 L 842.424 227 L 842.424 198" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-emits-c-011--e-010" class="scene-edge role-emits route-orthogonal paint-edges edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
-      <path class="scene-edge__path" d="M 61 298 L 61 310 L 201 310 L 201 322" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 61 298 L 61 306 L 201 306 L 201 322" marker-end="url(#scene-marker-arrow)"/>
     </g>
     <g id="scene-edge-transitions_to-st-010a--st-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
       <path class="scene-edge__path" d="M 1023.424 398 L 1207.848 398" marker-end="url(#scene-marker-arrow)"/>
