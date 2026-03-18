@@ -27,7 +27,8 @@ import {
 
 const ROOT_GAP = 48;
 const AREA_GAP = 20;
-const PLACE_BRANCH_GAP = 16;
+// const PLACE_BRANCH_GAP = 16;
+const PLACE_BRANCH_GAP = 40;
 const DESCENDANT_GAP = 12;
 const DESCENDANT_INDENT = 40;
 const CHAIN_PORT_OFFSET = 24;

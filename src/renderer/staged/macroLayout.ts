@@ -80,7 +80,8 @@ type LayoutStrategyHandler = (
 
 const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels", "edges", "edge_labels"];
 const IA_BRANCH_ELK_NODE_GAP = 24;
-const IA_BRANCH_ELK_LAYER_GAP = 24;
+// const IA_BRANCH_ELK_LAYER_GAP = 24;
+const IA_BRANCH_ELK_LAYER_GAP = 32;
 const CONTRACT_LABEL_LANE_INSET = 12;
 const CONTRACT_LABEL_LANE_WIDTH_REDUCTION = 16;
 const CONTRACT_LABEL_LANE_TOP_PADDING = 12;

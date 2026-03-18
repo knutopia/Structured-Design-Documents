@@ -6,6 +6,16 @@
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 
+## Wed 3-19-26
+
+-abandoned visual fixes mess
+
+
+## Mon 3-17-26
+
+-pushed remaining stages of master plan, completed renderer migration for ia_place_map and ui_contracts
+-revised rendering details
+
 ## Sun 3-16-26
 
 -Preparing renderer migration to elkjs / generic
