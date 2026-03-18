@@ -50,9 +50,9 @@
       <rect class="scene-node__chrome" x="24" y="24" width="304" height="154" rx="14" ry="14"/>
       <rect class="scene-badge__chrome" x="36" y="84" width="41.188" height="22" rx="999" ry="999"/>
     </g>
-    <g id="scene-node-p-011" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-011" data-role="place">
-      <rect class="scene-node__chrome" x="64" y="218" width="168" height="94" rx="14" ry="14"/>
-      <rect class="scene-badge__chrome" x="76" y="278" width="113.152" height="22" rx="999" ry="999"/>
+    <g id="scene-node-p-011" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-011" data-role="place">
+      <rect class="scene-node__chrome" x="24" y="218" width="168" height="94" rx="14" ry="14"/>
+      <rect class="scene-badge__chrome" x="36" y="278" width="113.152" height="22" rx="999" ry="999"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -74,21 +74,21 @@
           <tspan x="36" dy="0">primary_nav: true</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-011" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="76" y="246">
-          <tspan x="76" dy="0">Confirmation</tspan>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-011" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="246">
+          <tspan x="36" dy="0">Confirmation</tspan>
         </text>
-      <text class="scene-text text-role-subtitle block-kind-text block-region-primary" x="76" y="269">
-          <tspan x="76" dy="0">/confirmation</tspan>
+      <text class="scene-text text-role-subtitle block-kind-text block-region-primary" x="36" y="269">
+          <tspan x="36" dy="0">/confirmation</tspan>
         </text>
-      <text class="scene-text text-role-badge block-kind-badge_text block-region-primary" x="84" y="294">
-          <tspan x="84" dy="0">role:billing_agent</tspan>
+      <text class="scene-text text-role-badge block-kind-badge_text block-region-primary" x="44" y="294">
+          <tspan x="44" dy="0">role:billing_agent</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-p-010__nav__p-011" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-010__nav__P-011" data-role="navigation">
-      <path class="scene-edge__path" d="M 48 178 L 48 202 L 88 202 L 88 218" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 48 178 L 48 218" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

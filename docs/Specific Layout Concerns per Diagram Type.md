@@ -10,10 +10,10 @@ Different diagrams have different specific layout needs that the rendering engin
 - no content visually ABOVE top level nodes
 - mixed top-level `Place` and `Area` handling
 - vertical layout for an `Area` that contains lower-level `Place` nodes
-- within an `Area`, consecutive sibling `Place` items in ordered `CONTAINS` source order should render as a recursive top-to-lower place chain with rightward indentation
+- within an `Area`, consecutive sibling `Place` items in ordered `CONTAINS` source order should render as an author-ordered lower-level place chain whose siblings stay aligned at one shared rendered depth
 - the same source-order chaining rule applies at top level: consecutive sibling `Place` items render as an implicit lower-level place chain until a non-`Place` sibling boundary breaks the chain
-- this top-to-lower place hierarchy may occur on multiple levels, so indentation must support recursive chaining
-- same-chain navigation should keep deterministic recursive place structure while allowing branch-local ELK routing where it can improve a local chain region without becoming the whole-layout source of truth
+- explicit structural `Place` descendants may still introduce deeper rendered levels, but consecutive sibling `Place` runs within each rendered level should not recursively indent equal siblings
+- same-chain navigation should keep deterministic place-chain structure while allowing branch-local ELK routing where it can improve a local chain region without becoming the whole-layout source of truth
 - same-chain branch regions may need to grow locally before parent layout is finalized so ELK has enough room to route without immediately collapsing back to the manual obstacle router
 - same-chain navigation should reserve a readable vertical target approach into child nodes, even when that requires a source-side escape lane rather than a simple midpoint dogleg
 - internal routing anchors should not be painted as visible dots in normal output

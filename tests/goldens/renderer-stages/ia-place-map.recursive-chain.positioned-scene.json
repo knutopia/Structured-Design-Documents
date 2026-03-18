@@ -42,7 +42,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 16,
+          "gap": 40,
           "crossAlignment": "start"
         },
         "chrome": {
@@ -52,7 +52,7 @@
             "bottom": 0,
             "left": 0
           },
-          "gutter": 16,
+          "gutter": 40,
           "headerBandHeight": 0
         },
         "headerContent": [],
@@ -176,7 +176,7 @@
                 "layout": {
                   "strategy": "stack",
                   "direction": "vertical",
-                  "gap": 16,
+                  "gap": 40,
                   "crossAlignment": "start"
                 },
                 "chrome": {
@@ -186,7 +186,7 @@
                     "bottom": 0,
                     "left": 0
                   },
-                  "gutter": 16,
+                  "gutter": 40,
                   "headerBandHeight": 0
                 },
                 "headerContent": [],
@@ -267,7 +267,7 @@
                       "status": "fits"
                     },
                     "x": 64,
-                    "y": 88,
+                    "y": 112,
                     "width": 168,
                     "height": 48
                   },
@@ -310,7 +310,7 @@
                         "layout": {
                           "strategy": "stack",
                           "direction": "vertical",
-                          "gap": 16,
+                          "gap": 40,
                           "crossAlignment": "start"
                         },
                         "chrome": {
@@ -320,7 +320,7 @@
                             "bottom": 0,
                             "left": 0
                           },
-                          "gutter": 16,
+                          "gutter": 40,
                           "headerBandHeight": 0
                         },
                         "headerContent": [],
@@ -401,51 +401,51 @@
                               "status": "fits"
                             },
                             "x": 104,
-                            "y": 152,
+                            "y": 200,
                             "width": 168,
                             "height": 48
                           }
                         ],
                         "ports": [],
                         "x": 104,
-                        "y": 152,
+                        "y": 200,
                         "width": 168,
                         "height": 48
                       }
                     ],
                     "ports": [],
                     "x": 64,
-                    "y": 152,
+                    "y": 200,
                     "width": 208,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 64,
-                "y": 88,
+                "y": 112,
                 "width": 208,
-                "height": 112
+                "height": 136
               }
             ],
             "ports": [],
             "x": 24,
-            "y": 88,
+            "y": 112,
             "width": 248,
-            "height": 112
+            "height": 136
           }
         ],
         "ports": [],
         "x": 24,
         "y": 24,
         "width": 248,
-        "height": 176
+        "height": 224
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
     "width": 296,
-    "height": 224
+    "height": 272
   },
   "edges": [
     {
@@ -464,7 +464,7 @@
         "itemId": "P-801",
         "portId": "north_chain",
         "x": 88,
-        "y": 88
+        "y": 112
       },
       "route": {
         "style": "orthogonal",
@@ -474,20 +474,16 @@
             "y": 72
           },
           {
-            "x": 32,
-            "y": 72
-          },
-          {
-            "x": 32,
-            "y": 64
+            "x": 48,
+            "y": 96
           },
           {
             "x": 88,
-            "y": 64
+            "y": 96
           },
           {
             "x": 88,
-            "y": 88
+            "y": 112
           }
         ]
       },
@@ -506,7 +502,7 @@
         "itemId": "P-801",
         "portId": "north_chain",
         "x": 88,
-        "y": 88
+        "y": 112
       },
       "to": {
         "itemId": "P-800",
@@ -519,19 +515,15 @@
         "points": [
           {
             "x": 88,
-            "y": 88
+            "y": 112
           },
           {
-            "x": 32,
+            "x": 88,
             "y": 88
-          },
-          {
-            "x": 32,
-            "y": 96
           },
           {
             "x": 48,
-            "y": 96
+            "y": 88
           },
           {
             "x": 48,
@@ -554,36 +546,32 @@
         "itemId": "P-801",
         "portId": "south_chain",
         "x": 88,
-        "y": 136
+        "y": 160
       },
       "to": {
         "itemId": "P-802",
         "portId": "north_chain",
         "x": 128,
-        "y": 152
+        "y": 200
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 88,
-            "y": 136
+            "y": 160
           },
           {
-            "x": 72,
-            "y": 136
-          },
-          {
-            "x": 72,
-            "y": 128
+            "x": 88,
+            "y": 184
           },
           {
             "x": 128,
-            "y": 128
+            "y": 184
           },
           {
             "x": 128,
-            "y": 152
+            "y": 200
           }
         ]
       },
@@ -602,36 +590,32 @@
         "itemId": "P-802",
         "portId": "north_chain",
         "x": 128,
-        "y": 152
+        "y": 200
       },
       "to": {
         "itemId": "P-801",
         "portId": "south_chain",
         "x": 88,
-        "y": 136
+        "y": 160
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 128,
-            "y": 152
+            "y": 200
           },
           {
-            "x": 72,
-            "y": 152
+            "x": 128,
+            "y": 176
           },
           {
-            "x": 72,
-            "y": 160
+            "x": 88,
+            "y": 176
           },
           {
             "x": 88,
             "y": 160
-          },
-          {
-            "x": 88,
-            "y": 136
           }
         ]
       },
@@ -669,6 +653,34 @@
       "severity": "info",
       "message": "Branch-local ELK placement fallback for \"P-801__branch\" would exceed the current branch bounds. Keeping manual routing for this region.",
       "targetId": "P-801__branch"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.target_approach_unmet",
+      "severity": "info",
+      "message": "Edge \"P-800__nav__P-801\" could not satisfy the requested \"vertical_child\" target-approach geometry with the current route shape.",
+      "targetId": "P-800__nav__P-801"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.target_approach_unmet",
+      "severity": "info",
+      "message": "Edge \"P-801__nav__P-800\" could not satisfy the requested \"vertical_child\" target-approach geometry with the current route shape.",
+      "targetId": "P-801__nav__P-800"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.target_approach_unmet",
+      "severity": "info",
+      "message": "Edge \"P-801__nav__P-802\" could not satisfy the requested \"vertical_child\" target-approach geometry with the current route shape.",
+      "targetId": "P-801__nav__P-802"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.target_approach_unmet",
+      "severity": "info",
+      "message": "Edge \"P-802__nav__P-801\" could not satisfy the requested \"vertical_child\" target-approach geometry with the current route shape.",
+      "targetId": "P-802__nav__P-801"
     }
   ],
   "paintOrder": [

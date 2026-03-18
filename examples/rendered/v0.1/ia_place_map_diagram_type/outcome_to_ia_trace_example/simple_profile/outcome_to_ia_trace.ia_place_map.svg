@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="288" height="256" viewBox="0 0 288 256" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="248" height="256" viewBox="0 0 248 256" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -42,19 +42,19 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="288" height="256" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="248" height="256" rx="18" ry="18"/>
     </g>
     <g id="scene-container-a-001" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-001" data-role="area">
-      <rect class="scene-container__chrome" x="24" y="24" width="240" height="208" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="24" width="240" height="40" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="24" y="24" width="200" height="208" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="24" width="200" height="40" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-p-001" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-001" data-role="place">
-      <rect class="scene-node__chrome" x="41" y="81" width="168" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="40" y="80" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-002" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-002" data-role="place">
-      <rect class="scene-node__chrome" x="41" y="163" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-p-002" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-002" data-role="place">
+      <rect class="scene-node__chrome" x="40" y="168" width="168" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -64,19 +64,19 @@
         </text>
     </g>
     <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-001" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="53" y="109">
-          <tspan x="53" dy="0">Billing</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="52" y="108">
+          <tspan x="52" dy="0">Billing</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-002" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="53" y="191">
-          <tspan x="53" dy="0">Review</tspan>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-002" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="52" y="196">
+          <tspan x="52" dy="0">Review</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-p-001__nav__p-002" class="scene-edge role-navigation route-orthogonal paint-edges within_chain" data-edge-id="P-001__nav__P-002" data-role="navigation">
-      <path class="scene-edge__path" d="M 65 129 L 65 163" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 64 128 L 64 168" marker-end="url(#scene-marker-arrow)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

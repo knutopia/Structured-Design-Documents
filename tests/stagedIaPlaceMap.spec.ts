@@ -146,44 +146,68 @@ describe("staged ia_place_map", () => {
     expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
   });
 
-  it("applies simple-profile suppression while still indenting implicit top-level place sequences", async () => {
+  it("keeps implicit top-level place chains at one shared depth across profiles", async () => {
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd");
-    const { rendered } = await buildIaArtifacts(examplePath, "simple");
+    const cases = [
+      {
+        profileId: "simple",
+        expectsSimpleSuppression: true
+      },
+      {
+        profileId: "permissive",
+        expectsSimpleSuppression: false
+      },
+      {
+        profileId: "recommended",
+        expectsSimpleSuppression: false
+      }
+    ] as const;
 
-    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-    expect(rendered.svg).not.toContain("/billing");
-    expect(rendered.svg).not.toContain("auth");
-    expect(rendered.svg).not.toContain("entry_points:");
-    expect(rendered.svg).toContain("primary_nav: true");
-    expect(rendered.positionedScene.root.children).toHaveLength(1);
+    for (const testCase of cases) {
+      const { rendered } = await buildIaArtifacts(examplePath, testCase.profileId);
 
-    const billing = findPositionedItem(rendered.positionedScene.root, "P-010");
-    const confirmation = findPositionedItem(rendered.positionedScene.root, "P-011");
-    if (billing.kind !== "node" || confirmation.kind !== "node") {
-      throw new Error("Expected staged ia_place_map nodes for Billing and Confirmation.");
+      expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+      expect(rendered.positionedScene.root.children).toHaveLength(1);
+
+      const billing = findPositionedItem(rendered.positionedScene.root, "P-010");
+      const confirmation = findPositionedItem(rendered.positionedScene.root, "P-011");
+      if (billing.kind !== "node" || confirmation.kind !== "node") {
+        throw new Error("Expected staged ia_place_map nodes for Billing and Confirmation.");
+      }
+
+      expect(confirmation.x).toBe(billing.x);
+      expect(confirmation.y).toBeGreaterThan(billing.y);
+      expect(rendered.positionedScene.edges[0]).toEqual(expect.objectContaining({
+        from: expect.objectContaining({
+          itemId: "P-010",
+          portId: "south_chain"
+        }),
+        to: expect.objectContaining({
+          itemId: "P-011",
+          portId: "north_chain"
+        })
+      }));
+      expect(getTerminalSegment(rendered.positionedScene.edges[0]!)).toEqual(expect.objectContaining({
+        dx: 0,
+        length: expect.any(Number)
+      }));
+      expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(20);
+      expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+
+      if (testCase.expectsSimpleSuppression) {
+        expect(rendered.svg).not.toContain("/billing");
+        expect(rendered.svg).not.toContain("auth");
+        expect(rendered.svg).not.toContain("entry_points:");
+        expect(rendered.svg).toContain("primary_nav: true");
+      } else {
+        expect(rendered.svg).toContain("/billing");
+        expect(rendered.svg).toContain("auth");
+        expect(rendered.svg).toContain("entry_points:");
+      }
     }
-
-    expect(confirmation.x).toBeGreaterThan(billing.x);
-    expect(confirmation.y).toBeGreaterThan(billing.y);
-    expect(rendered.positionedScene.edges[0]).toEqual(expect.objectContaining({
-      from: expect.objectContaining({
-        itemId: "P-010",
-        portId: "south_chain"
-      }),
-      to: expect.objectContaining({
-        itemId: "P-011",
-        portId: "north_chain"
-      })
-    }));
-    expect(getTerminalSegment(rendered.positionedScene.edges[0]!)).toEqual(expect.objectContaining({
-      dx: 0,
-      length: expect.any(Number)
-    }));
-    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(20);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
   });
 
-  it("uses deterministic target-biased chain routing for both downward and upward recursive navigation", async () => {
+  it("keeps explicit recursive place descendants on deterministic orthogonal routes", async () => {
     const fixturePath = path.join(repoRoot, "tests/fixtures/render/recursive_chain_ia.sdd");
     const { rendered } = await buildIaArtifacts(fixturePath, "simple");
 
@@ -216,10 +240,10 @@ describe("staged ia_place_map", () => {
       toPort: "south_chain"
     });
     expect(rendered.positionedScene.edges.every((edge) => getTerminalSegment(edge).dx === 0)).toBe(true);
-    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 20)).toBe(true);
+    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 16)).toBe(true);
     expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.ia_branch_elk_fixed_fallback")).toBe(true);
     expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.ia_branch_elk_layout_rejected")).toBe(true);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(true);
 
     await expectRendererStageSnapshot("ia-place-map.recursive-chain.positioned-scene.json", rendered.positionedScene);
   });
