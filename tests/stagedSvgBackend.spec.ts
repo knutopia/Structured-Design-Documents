@@ -22,14 +22,15 @@ describe("staged SVG backend", () => {
     expect(first).toEqual(second);
   });
 
-  it("emits layered paint groups, embedded font CSS, and shared marker defs", async () => {
+  it("emits layered paint groups, embedded font CSS, and split arrow marker defs", async () => {
     const scene = buildPositionedSvgFixture();
     const { svg } = await renderPositionedSceneToSvg(scene);
 
     expect(svg).toContain("@font-face");
-    expect(svg).toContain('id="scene-marker-arrow-end"');
-    expect(svg).toContain('id="scene-marker-arrow-start"');
+    expect(svg.match(/id="scene-marker-arrow-end"/g)).toHaveLength(1);
+    expect(svg.match(/id="scene-marker-arrow-start"/g)).toHaveLength(1);
     expect(svg).toContain('markerUnits="userSpaceOnUse"');
+    expect(svg).not.toContain('orient="auto-start-reverse"');
     expect(svg).toContain('data-paint-group="chrome"');
     expect(svg.indexOf('data-paint-group="chrome"')).toBeLessThan(svg.indexOf('data-paint-group="nodes"'));
     expect(svg.indexOf('data-paint-group="nodes"')).toBeLessThan(svg.indexOf('data-paint-group="labels"'));

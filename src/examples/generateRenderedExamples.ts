@@ -69,9 +69,10 @@ function buildReadmeContent(
   lines.push("- top-level items read left-to-right with clean vertical alignment");
   lines.push("- no headers, labels, or routed edges sit visually above the top-level nodes");
   lines.push("- mixed top-level `Place` and `Area` ordering follows source order");
-  lines.push("- implicit place chains indent rightward recursively at top level and inside areas");
+  lines.push("- same-scope follower places align at one indent level under the earliest preceding hub that navigates to them");
+  lines.push("- single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk");
   lines.push("- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
-  lines.push("- navigation connectors stay readable for both within-chain and cross-chain links");
+  lines.push("- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes");
   lines.push("");
   lines.push("`ui_contracts` visual review checklist:");
   lines.push("");

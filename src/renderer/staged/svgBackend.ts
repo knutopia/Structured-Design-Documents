@@ -41,6 +41,11 @@ interface PaintElementMap {
   edge_labels: string[];
 }
 
+const EDGE_MARKER_IDS = {
+  start: "scene-marker-arrow-start",
+  end: "scene-marker-arrow-end"
+} as const;
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
@@ -383,13 +388,35 @@ function buildRoutePath(points: Point[], edgeId: string, diagnostics: RendererDi
   return [`M ${formatNumber(first.x)} ${formatNumber(first.y)}`, ...rest.map((point) => `L ${formatNumber(point.x)} ${formatNumber(point.y)}`)].join(" ");
 }
 
+function buildArrowMarkerDef(direction: keyof typeof EDGE_MARKER_IDS, arrowSize: number): string {
+  const refX = direction === "end" ? formatNumber(arrowSize - 1) : "1";
+  const path = direction === "end"
+    ? `M 0 0 L ${formatNumber(arrowSize)} ${formatNumber(arrowSize / 2)} L 0 ${formatNumber(arrowSize)} z`
+    : `M ${formatNumber(arrowSize)} 0 L 0 ${formatNumber(arrowSize / 2)} L ${formatNumber(arrowSize)} ${formatNumber(arrowSize)} z`;
+
+  return [
+    `<marker id="${EDGE_MARKER_IDS[direction]}" class="scene-marker" viewBox="0 0 ${formatNumber(arrowSize)} ${formatNumber(arrowSize)}" refX="${refX}" refY="${formatNumber(arrowSize / 2)}" markerWidth="${formatNumber(arrowSize)}" markerHeight="${formatNumber(arrowSize)}" markerUnits="userSpaceOnUse" orient="auto">`,
+    `  <path class="scene-marker" d="${path}"/>`,
+    "</marker>"
+  ].join("\n");
+}
+
+function buildArrowMarkerDefs(theme: RendererTheme): string[] {
+  // Resvg mis-orients auto-start-reverse in some PNG rasters, so we keep
+  // separate start/end markers and mirror the start arrow geometry ourselves.
+  return [
+    buildArrowMarkerDef("end", theme.paint.arrowSize),
+    buildArrowMarkerDef("start", theme.paint.arrowSize)
+  ];
+}
+
 function resolveMarkerAttributes(edge: PositionedEdge): string {
   const attributes: string[] = [];
   if (edge.markers?.start === "arrow") {
-    attributes.push('marker-start="url(#scene-marker-arrow-start)"');
+    attributes.push(`marker-start="url(#${EDGE_MARKER_IDS.start})"`);
   }
   if (edge.markers?.end === "arrow") {
-    attributes.push('marker-end="url(#scene-marker-arrow-end)"');
+    attributes.push(`marker-end="url(#${EDGE_MARKER_IDS.end})"`);
   }
 
   return attributes.length > 0 ? ` ${attributes.join(" ")}` : "";
@@ -497,16 +524,7 @@ function buildDefs(theme: RendererTheme): Promise<string[]> {
     }
 
     defs.push(`<style><![CDATA[\n${buildStyleLines(theme).join("\n")}\n]]></style>`);
-    defs.push([
-      `<marker id="scene-marker-arrow-end" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="${formatNumber(theme.paint.arrowSize - 1)}" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto">`,
-      `  <path class="scene-marker" d="M 0 0 L ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize / 2)} L 0 ${formatNumber(theme.paint.arrowSize)} z"/>`,
-      "</marker>"
-    ].join("\n"));
-    defs.push([
-      `<marker id="scene-marker-arrow-start" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="1" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto">`,
-      `  <path class="scene-marker" d="M ${formatNumber(theme.paint.arrowSize)} 0 L 0 ${formatNumber(theme.paint.arrowSize / 2)} L ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)} z"/>`,
-      "</marker>"
-    ].join("\n"));
+    defs.push(...buildArrowMarkerDefs(theme));
 
     return defs;
   });

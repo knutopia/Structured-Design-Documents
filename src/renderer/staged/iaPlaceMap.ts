@@ -6,12 +6,14 @@ import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
 import { buildIaPlaceMapRenderModel, type IaRenderArea, type IaRenderItem, type IaRenderPlace } from "../iaPlaceMapRenderModel.js";
 import type {
   ContentBlock,
+  LocalRoutePattern,
   RendererScene,
   SceneContainer,
   SceneEdge,
   SceneItem,
   SceneNode
 } from "./contracts.js";
+import { IA_LOCAL_ROUTE_PATTERNS } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import {
   buildIaPlaceMapPorts,
@@ -33,6 +35,7 @@ const OWNED_SCOPE_INDENT = 48;
 const CHAIN_PORT_OFFSET = 24;
 
 type OwnedScopeKind = "contains_scope_single" | "contains_scope_branch" | "follower_scope";
+type LocalStructureRelation = "contains" | "follower";
 type ScopeEntry =
   | {
     kind: "area";
@@ -43,6 +46,20 @@ type ScopeEntry =
     place: IaRenderPlace;
     followers: IaRenderPlace[];
   };
+
+interface PlannedLocalStructureEdge {
+  targetId: string;
+  relation: LocalStructureRelation;
+  localPattern: LocalRoutePattern;
+  mergedNavigation: boolean;
+}
+
+interface OwnedScopePlan {
+  explicitEntries: ScopeEntry[];
+  followers: readonly IaRenderPlace[];
+  kind: OwnedScopeKind | undefined;
+  edgePlans: PlannedLocalStructureEdge[];
+}
 
 interface SceneBuildContext {
   projectionNodesById: ReadonlyMap<string, Projection["nodes"][number]>;
@@ -185,6 +202,34 @@ function hasForwardNavigation(sourceId: string, targetId: string, context: Scene
   return context.navigationTargetsBySourceId.get(sourceId)?.has(targetId) ?? false;
 }
 
+function collectFollowerPlaces(
+  hubPlace: IaRenderPlace,
+  items: readonly IaRenderItem[],
+  startIndex: number,
+  claimedFollowerIds: Set<string>,
+  context: SceneBuildContext
+): IaRenderPlace[] {
+  const followers: IaRenderPlace[] = [];
+
+  for (let candidateIndex = startIndex + 1; candidateIndex < items.length; candidateIndex += 1) {
+    const candidate = items[candidateIndex];
+    if (!candidate || candidate.kind !== "place") {
+      break;
+    }
+    if (claimedFollowerIds.has(candidate.id)) {
+      continue;
+    }
+    if (!hasForwardNavigation(hubPlace.id, candidate.id, context)) {
+      continue;
+    }
+
+    followers.push(candidate);
+    claimedFollowerIds.add(candidate.id);
+  }
+
+  return followers;
+}
+
 function planScopeEntries(items: readonly IaRenderItem[], context: SceneBuildContext): ScopeEntry[] {
   const planned: ScopeEntry[] = [];
   const claimedFollowerIds = new Set<string>();
@@ -204,27 +249,10 @@ function planScopeEntries(items: readonly IaRenderItem[], context: SceneBuildCon
       continue;
     }
 
-    const followers: IaRenderPlace[] = [];
-    for (let candidateIndex = index + 1; candidateIndex < items.length; candidateIndex += 1) {
-      const candidate = items[candidateIndex];
-      if (!candidate || candidate.kind !== "place") {
-        break;
-      }
-      if (claimedFollowerIds.has(candidate.id)) {
-        continue;
-      }
-      if (!hasForwardNavigation(item.id, candidate.id, context)) {
-        continue;
-      }
-
-      followers.push(candidate);
-      claimedFollowerIds.add(candidate.id);
-    }
-
     planned.push({
       kind: "place",
       place: item,
-      followers
+      followers: collectFollowerPlaces(item, items, index, claimedFollowerIds, context)
     });
   }
 
@@ -291,27 +319,94 @@ function buildPlaceGroupContainer(placeId: string, depth: number, children: Scen
   };
 }
 
-function createLocalStructureEdge(
-  sourceId: string,
-  targetId: string,
-  relation: "contains" | "follower",
-  localPattern: "ia_direct_vertical" | "ia_shared_trunk",
-  mergedNavigation: boolean
-): SceneEdge {
-  const isDirectVertical = localPattern === "ia_direct_vertical";
-  const edgeId = relation === "contains" && !mergedNavigation
-    ? `${sourceId}__contains__${targetId}`
-    : `${sourceId}__nav__${targetId}`;
+function resolveOwnedScopeKind(explicitEntryCount: number, followerCount: number): OwnedScopeKind | undefined {
+  if (explicitEntryCount + followerCount === 0) {
+    return undefined;
+  }
+
+  if (followerCount > 0) {
+    return "follower_scope";
+  }
+
+  return explicitEntryCount === 1 ? "contains_scope_single" : "contains_scope_branch";
+}
+
+function getContainsLocalPattern(kind: OwnedScopeKind): LocalRoutePattern {
+  return kind === "contains_scope_single"
+    ? IA_LOCAL_ROUTE_PATTERNS.directVertical
+    : IA_LOCAL_ROUTE_PATTERNS.sharedTrunk;
+}
+
+function planOwnedScopeEdgePlans(
+  ownerPlaceId: string,
+  explicitEntries: readonly ScopeEntry[],
+  followers: readonly IaRenderPlace[],
+  ownedScopeKind: OwnedScopeKind | undefined,
+  context: SceneBuildContext
+): PlannedLocalStructureEdge[] {
+  if (!ownedScopeKind) {
+    return [];
+  }
+
+  const edgePlans: PlannedLocalStructureEdge[] = [];
+  const containsLocalPattern = getContainsLocalPattern(ownedScopeKind);
+
+  for (const entry of explicitEntries) {
+    if (entry.kind !== "place") {
+      continue;
+    }
+
+    edgePlans.push({
+      targetId: entry.place.id,
+      relation: "contains",
+      localPattern: containsLocalPattern,
+      mergedNavigation: hasForwardNavigation(ownerPlaceId, entry.place.id, context)
+    });
+  }
+
+  for (const follower of followers) {
+    edgePlans.push({
+      targetId: follower.id,
+      relation: "follower",
+      localPattern: IA_LOCAL_ROUTE_PATTERNS.sharedTrunk,
+      mergedNavigation: true
+    });
+  }
+
+  return edgePlans;
+}
+
+function planOwnedScope(
+  place: IaRenderPlace,
+  followers: readonly IaRenderPlace[],
+  context: SceneBuildContext
+): OwnedScopePlan {
+  const explicitEntries = planScopeEntries(place.items, context);
+  const kind = resolveOwnedScopeKind(explicitEntries.length, followers.length);
+
+  return {
+    explicitEntries,
+    followers,
+    kind,
+    edgePlans: planOwnedScopeEdgePlans(place.id, explicitEntries, followers, kind, context)
+  };
+}
+
+function createLocalStructureEdge(sourceId: string, edgePlan: PlannedLocalStructureEdge): SceneEdge {
+  const isDirectVertical = edgePlan.localPattern === IA_LOCAL_ROUTE_PATTERNS.directVertical;
+  const edgeId = edgePlan.relation === "contains" && !edgePlan.mergedNavigation
+    ? `${sourceId}__contains__${edgePlan.targetId}`
+    : `${sourceId}__nav__${edgePlan.targetId}`;
 
   return {
     id: edgeId,
-    role: relation === "contains"
-      ? (mergedNavigation ? "contains_navigation" : "contains_place")
+    role: edgePlan.relation === "contains"
+      ? (edgePlan.mergedNavigation ? "contains_navigation" : "contains_place")
       : "navigation",
     classes: [
       "ia_local_structure",
-      relation === "contains" ? "contains_edge" : "follower_edge",
-      mergedNavigation ? "merged_navigation" : "structural_only",
+      edgePlan.relation === "contains" ? "contains_edge" : "follower_edge",
+      edgePlan.mergedNavigation ? "merged_navigation" : "structural_only",
       isDirectVertical ? "direct_vertical" : "shared_trunk"
     ],
     from: {
@@ -319,60 +414,18 @@ function createLocalStructureEdge(
       portId: "south_chain"
     },
     to: {
-      itemId: targetId,
+      itemId: edgePlan.targetId,
       portId: isDirectVertical ? "north_chain" : "west"
     },
     routing: {
       style: "orthogonal",
       preferAxis: isDirectVertical ? "vertical" : "horizontal",
-      localPattern
+      localPattern: edgePlan.localPattern
     },
     markers: {
       end: "arrow"
     }
   };
-}
-
-function appendOwnedScopeEdges(
-  ownerPlaceId: string,
-  explicitEntries: readonly ScopeEntry[],
-  followers: readonly IaRenderPlace[],
-  ownedScopeKind: OwnedScopeKind | undefined,
-  context: SceneBuildContext
-): void {
-  if (!ownedScopeKind) {
-    return;
-  }
-
-  const containsPattern = ownedScopeKind === "contains_scope_single" ? "ia_direct_vertical" : "ia_shared_trunk";
-
-  for (const entry of explicitEntries) {
-    if (entry.kind !== "place") {
-      continue;
-    }
-
-    context.edges.push(
-      createLocalStructureEdge(
-        ownerPlaceId,
-        entry.place.id,
-        "contains",
-        containsPattern,
-        hasForwardNavigation(ownerPlaceId, entry.place.id, context)
-      )
-    );
-  }
-
-  for (const follower of followers) {
-    context.edges.push(
-      createLocalStructureEdge(
-        ownerPlaceId,
-        follower.id,
-        "follower",
-        "ia_shared_trunk",
-        true
-      )
-    );
-  }
 }
 
 function buildSceneItemFromScopeEntry(
@@ -395,29 +448,19 @@ function buildPlaceGroup(
   context: SceneBuildContext,
   displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
 ): SceneContainer {
-  const explicitEntries = planScopeEntries(place.items, context);
-  const explicitChildren = explicitEntries.map((entry) =>
+  const ownedScope = planOwnedScope(place, followers, context);
+  const explicitChildren = ownedScope.explicitEntries.map((entry) =>
     buildSceneItemFromScopeEntry(entry, `${scopeId}/${place.id}`, depth + 1, context, displayOptions)
   );
-  const followerChildren = followers.map((follower) =>
+  const followerChildren = ownedScope.followers.map((follower) =>
     buildPlaceGroup(follower, [], `${scopeId}/${place.id}__followers`, depth + 1, context, displayOptions)
   );
   const ownedChildren = [...explicitChildren, ...followerChildren];
-
-  let ownedScopeKind: OwnedScopeKind | undefined;
-  if (ownedChildren.length > 0) {
-    ownedScopeKind = followers.length > 0
-      ? "follower_scope"
-      : explicitChildren.length === 1
-        ? "contains_scope_single"
-        : "contains_scope_branch";
-  }
-
-  appendOwnedScopeEdges(place.id, explicitEntries, followers, ownedScopeKind, context);
+  context.edges.push(...ownedScope.edgePlans.map((edgePlan) => createLocalStructureEdge(place.id, edgePlan)));
 
   const children: SceneItem[] = [buildPlaceNode(place, depth, context, displayOptions)];
-  if (ownedScopeKind) {
-    children.push(buildOwnedScopeContainer(place.id, ownedScopeKind, ownedChildren));
+  if (ownedScope.kind) {
+    children.push(buildOwnedScopeContainer(place.id, ownedScope.kind, ownedChildren));
   }
 
   return buildPlaceGroupContainer(place.id, depth, children);

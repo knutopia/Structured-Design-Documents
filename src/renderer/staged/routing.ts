@@ -1,14 +1,15 @@
-import type {
-  MeasuredEdge,
-  MeasuredEdgeEndpoint,
-  MeasuredPort,
-  PortSide,
-  Point,
-  PositionedContainer,
-  PositionedEdgeEndpoint,
-  PositionedEdgeLabel,
-  PositionedItem,
-  PositionedRoute
+import {
+  IA_LOCAL_ROUTE_PATTERNS,
+  type MeasuredEdge,
+  type MeasuredEdgeEndpoint,
+  type MeasuredPort,
+  type PortSide,
+  type Point,
+  type PositionedContainer,
+  type PositionedEdgeEndpoint,
+  type PositionedEdgeLabel,
+  type PositionedItem,
+  type PositionedRoute
 } from "./contracts.js";
 import { createRoutingDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 
@@ -691,10 +692,10 @@ export function buildLocalPatternRoute(
   let points: Point[] | undefined;
 
   switch (edge.routing.localPattern) {
-    case "ia_direct_vertical":
+    case IA_LOCAL_ROUTE_PATTERNS.directVertical:
       points = buildIaDirectVerticalRoutePoints(from, to);
       break;
-    case "ia_shared_trunk":
+    case IA_LOCAL_ROUTE_PATTERNS.sharedTrunk:
       points = buildIaSharedTrunkRoutePoints(from, to);
       break;
     default:

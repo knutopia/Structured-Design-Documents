@@ -34,9 +34,10 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - top-level items read left-to-right with clean vertical alignment
 - no headers, labels, or routed edges sit visually above the top-level nodes
 - mixed top-level `Place` and `Area` ordering follows source order
-- implicit place chains indent rightward recursively at top level and inside areas
+- same-scope follower places align at one indent level under the earliest preceding hub that navigates to them
+- single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk
 - `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
-- navigation connectors stay readable for both within-chain and cross-chain links
+- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes
 
 `ui_contracts` visual review checklist:
 

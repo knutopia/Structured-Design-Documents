@@ -8,7 +8,7 @@ import {
   buildIaPlaceMapRendererScene,
   renderIaPlaceMapStagedSvg
 } from "../src/renderer/staged/iaPlaceMap.js";
-import type { PositionedContainer, PositionedEdge, PositionedItem } from "../src/renderer/staged/contracts.js";
+import { IA_LOCAL_ROUTE_PATTERNS, type PositionedContainer, type PositionedEdge, type PositionedItem, type RendererScene, type SceneContainer, type SceneItem } from "../src/renderer/staged/contracts.js";
 import {
   expectRendererStageSnapshot,
   expectRendererStageTextSnapshot
@@ -34,6 +34,34 @@ function findPositionedItem(root: PositionedContainer, id: string): PositionedIt
   }
 
   throw new Error(`Could not find positioned item "${id}".`);
+}
+
+function findSceneItem(root: SceneContainer, id: string): SceneItem {
+  const queue: SceneItem[] = [...root.children];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current) {
+      continue;
+    }
+    if (current.id === id) {
+      return current;
+    }
+    if (current.kind === "container") {
+      queue.push(...current.children);
+    }
+  }
+
+  throw new Error(`Could not find scene item "${id}".`);
+}
+
+function findSceneContainer(root: SceneContainer, id: string): SceneContainer {
+  const item = findSceneItem(root, id);
+  if (item.kind !== "container") {
+    throw new Error(`Expected "${id}" to resolve to a scene container.`);
+  }
+
+  return item;
 }
 
 function getTerminalSegmentLength(edge: PositionedEdge): number {
@@ -116,6 +144,30 @@ async function buildIaArtifacts(examplePath: string, profileId: string) {
     rendererScene,
     rendered
   };
+}
+
+async function buildIaRendererSceneFromSource(sourceText: string, profileId = "simple"): Promise<RendererScene> {
+  const bundle = await loadBundle(manifestPath);
+  const view = bundle.views.views.find((candidate) => candidate.id === "ia_place_map");
+  if (!view) {
+    throw new Error("Could not resolve the ia_place_map view.");
+  }
+
+  const input = {
+    path: path.join(repoRoot, "tests/fixtures/render/__inline_ia_cleanup__.sdd"),
+    text: `${sourceText.trim()}\n`
+  };
+  const compiled = compileSource(input, bundle);
+  if (!compiled.graph) {
+    throw new Error(`Could not compile inline ia_place_map source.\n${JSON.stringify(compiled.diagnostics, null, 2)}`);
+  }
+
+  const projected = projectView(compiled.graph, bundle, "ia_place_map");
+  if (!projected.projection) {
+    throw new Error("Could not project inline ia_place_map source.");
+  }
+
+  return buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, profileId);
 }
 
 describe("staged ia_place_map", () => {
@@ -215,6 +267,143 @@ describe("staged ia_place_map", () => {
     await expectRendererStageSnapshot("ia-place-map.recursive-chain.measured-scene.json", rendered.measuredScene);
     await expectRendererStageSnapshot("ia-place-map.recursive-chain.positioned-scene.json", rendered.positionedScene);
     await expectRendererStageTextSnapshot("ia-place-map.recursive-chain.svg", rendered.svg);
+  });
+
+  it("assigns same-scope followers to the earliest preceding hub that navigates to them", async () => {
+    const rendererScene = await buildIaRendererSceneFromSource(`
+      SDD-TEXT 0.1
+
+      Place P-100 "Hub A"
+        route_or_key=/hub-a
+        surface=web
+        access=auth
+        NAVIGATES_TO P-300 "Follower"
+      END
+
+      Place P-200 "Hub B"
+        route_or_key=/hub-b
+        surface=web
+        access=auth
+        NAVIGATES_TO P-300 "Follower"
+      END
+
+      Place P-300 "Follower"
+        route_or_key=/follower
+        surface=web
+        access=auth
+      END
+    `);
+
+    expect(rendererScene.root.children.map((child) => child.id)).toEqual([
+      "P-100__group",
+      "P-200__group"
+    ]);
+    expect(rendererScene.edges.map((edge) => edge.id)).toEqual(["P-100__nav__P-300"]);
+
+    const followerScope = findSceneContainer(rendererScene.root, "P-100__follower_scope");
+    expect(followerScope.children.map((child) => child.id)).toEqual(["P-300__group"]);
+  });
+
+  it("stops follower claiming at area boundaries, which are the current non-place scope entries", async () => {
+    const rendererScene = await buildIaRendererSceneFromSource(`
+      SDD-TEXT 0.1
+
+      Place P-100 "Hub"
+        route_or_key=/hub
+        surface=web
+        access=auth
+        NAVIGATES_TO P-300 "Follower"
+      END
+
+      Area A-200 "Boundary"
+        scope=boundary
+        CONTAINS P-210 "Inside"
+        + Place P-210 "Inside"
+          route_or_key=/boundary
+          surface=web
+          access=auth
+        END
+      END
+
+      Place P-300 "Follower"
+        route_or_key=/follower
+        surface=web
+        access=auth
+      END
+    `);
+
+    expect(rendererScene.root.children.map((child) => child.id)).toEqual([
+      "P-100__group",
+      "A-200",
+      "P-300__group"
+    ]);
+    expect(rendererScene.edges).toEqual([]);
+  });
+
+  it("keeps explicit contained children owned by their parent place even when that parent is a follower", async () => {
+    const rendererScene = await buildIaRendererSceneFromSource(`
+      SDD-TEXT 0.1
+
+      Place P-100 "Hub"
+        route_or_key=/hub
+        surface=web
+        access=auth
+        NAVIGATES_TO P-200 "Follower Parent"
+      END
+
+      Place P-200 "Follower Parent"
+        route_or_key=/parent
+        surface=web
+        access=auth
+        CONTAINS P-210 "Contained Child"
+        + Place P-210 "Contained Child"
+          route_or_key=/parent/child
+          surface=web
+          access=auth
+        END
+      END
+    `);
+
+    expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-100__group"]);
+    expect(findSceneContainer(rendererScene.root, "P-100__follower_scope").children.map((child) => child.id)).toEqual([
+      "P-200__group"
+    ]);
+    expect(findSceneContainer(rendererScene.root, "P-200__contains_scope_single").children.map((child) => child.id)).toEqual([
+      "P-210__group"
+    ]);
+    expect(rendererScene.edges.map((edge) => edge.id).sort()).toEqual([
+      "P-100__nav__P-200",
+      "P-200__contains__P-210"
+    ]);
+  });
+
+  it("merges contains plus forward navigation into one local structure edge", async () => {
+    const rendererScene = await buildIaRendererSceneFromSource(`
+      SDD-TEXT 0.1
+
+      Place P-100 "Hub"
+        route_or_key=/hub
+        surface=web
+        access=auth
+        CONTAINS P-110 "Child"
+        NAVIGATES_TO P-110 "Child"
+        + Place P-110 "Child"
+          route_or_key=/hub/child
+          surface=web
+          access=auth
+        END
+      END
+    `);
+
+    expect(rendererScene.edges).toHaveLength(1);
+    expect(rendererScene.edges[0]).toEqual(expect.objectContaining({
+      id: "P-100__nav__P-110",
+      role: "contains_navigation",
+      classes: expect.arrayContaining(["ia_local_structure", "contains_edge", "merged_navigation", "direct_vertical"]),
+      routing: expect.objectContaining({
+        localPattern: IA_LOCAL_ROUTE_PATTERNS.directVertical
+      })
+    }));
   });
 
   it("matches the reference-style hub and follower geometry for billSage_structure", async () => {

@@ -34,6 +34,11 @@ export type LocalRoutePattern = "ia_direct_vertical" | "ia_shared_trunk";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
 export type EdgeMarkerKind = "none" | "arrow";
 
+export const IA_LOCAL_ROUTE_PATTERNS = {
+  directVertical: "ia_direct_vertical",
+  sharedTrunk: "ia_shared_trunk"
+} as const satisfies Record<"directVertical" | "sharedTrunk", LocalRoutePattern>;
+
 export interface BoxSpacing {
   top: number;
   right: number;
