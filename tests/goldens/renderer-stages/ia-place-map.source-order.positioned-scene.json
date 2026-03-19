@@ -31,18 +31,18 @@
     "children": [
       {
         "kind": "container",
-        "id": "P-700__branch",
-        "role": "place_branch",
+        "id": "P-700__group",
+        "role": "place_group",
         "primitive": "stack",
         "classes": [
-          "place_branch",
-          "branch_root",
+          "place_group",
+          "group_root",
           "depth-0"
         ],
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 16,
+          "gap": 32,
           "crossAlignment": "start"
         },
         "chrome": {
@@ -52,7 +52,7 @@
             "bottom": 0,
             "left": 0
           },
-          "gutter": 16,
+          "gutter": 32,
           "headerBandHeight": 0
         },
         "headerContent": [],
@@ -139,16 +139,17 @@
           },
           {
             "kind": "container",
-            "id": "P-700__descendants",
-            "role": "place_descendants",
+            "id": "P-700__contains_scope_single",
+            "role": "contains_scope_single",
             "primitive": "stack",
             "classes": [
-              "place_descendants"
+              "owned_scope",
+              "contains_scope_single"
             ],
             "layout": {
               "strategy": "stack",
               "direction": "vertical",
-              "gap": 12,
+              "gap": 32,
               "crossAlignment": "start"
             },
             "chrome": {
@@ -156,27 +157,27 @@
                 "top": 0,
                 "right": 0,
                 "bottom": 0,
-                "left": 40
+                "left": 0
               },
-              "gutter": 12,
+              "gutter": 32,
               "headerBandHeight": 0
             },
             "headerContent": [],
             "children": [
               {
                 "kind": "container",
-                "id": "P-900__branch",
-                "role": "place_branch",
+                "id": "P-900__group",
+                "role": "place_group",
                 "primitive": "stack",
                 "classes": [
-                  "place_branch",
-                  "branch_nested",
+                  "place_group",
+                  "group_nested",
                   "depth-1"
                 ],
                 "layout": {
                   "strategy": "stack",
                   "direction": "vertical",
-                  "gap": 16,
+                  "gap": 32,
                   "crossAlignment": "start"
                 },
                 "chrome": {
@@ -186,7 +187,7 @@
                     "bottom": 0,
                     "left": 0
                   },
-                  "gutter": 16,
+                  "gutter": 32,
                   "headerBandHeight": 0
                 },
                 "headerContent": [],
@@ -266,31 +267,31 @@
                     "overflow": {
                       "status": "fits"
                     },
-                    "x": 64,
-                    "y": 88,
+                    "x": 24,
+                    "y": 104,
                     "width": 168,
                     "height": 48
                   }
                 ],
                 "ports": [],
-                "x": 64,
-                "y": 88,
+                "x": 24,
+                "y": 104,
                 "width": 168,
                 "height": 48
               }
             ],
             "ports": [],
             "x": 24,
-            "y": 88,
-            "width": 208,
+            "y": 104,
+            "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 24,
         "y": 24,
-        "width": 208,
-        "height": 112
+        "width": 168,
+        "height": 128
       },
       {
         "kind": "container",
@@ -336,18 +337,18 @@
         "children": [
           {
             "kind": "container",
-            "id": "P-300__branch",
-            "role": "place_branch",
+            "id": "P-300__group",
+            "role": "place_group",
             "primitive": "stack",
             "classes": [
-              "place_branch",
-              "branch_root",
+              "place_group",
+              "group_root",
               "depth-0"
             ],
             "layout": {
               "strategy": "stack",
               "direction": "vertical",
-              "gap": 16,
+              "gap": 32,
               "crossAlignment": "start"
             },
             "chrome": {
@@ -357,7 +358,7 @@
                 "bottom": 0,
                 "left": 0
               },
-              "gutter": 16,
+              "gutter": 32,
               "headerBandHeight": 0
             },
             "headerContent": [],
@@ -437,320 +438,254 @@
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 296,
+                "x": 256,
                 "y": 80,
                 "width": 168,
                 "height": 48
-              },
-              {
-                "kind": "container",
-                "id": "P-300__descendants",
-                "role": "place_descendants",
-                "primitive": "stack",
-                "classes": [
-                  "place_descendants"
-                ],
-                "layout": {
-                  "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 12,
-                  "crossAlignment": "start"
-                },
-                "chrome": {
-                  "padding": {
-                    "top": 0,
-                    "right": 0,
-                    "bottom": 0,
-                    "left": 40
-                  },
-                  "gutter": 12,
-                  "headerBandHeight": 0
-                },
-                "headerContent": [],
-                "children": [
-                  {
-                    "kind": "container",
-                    "id": "P-100__branch",
-                    "role": "place_branch",
-                    "primitive": "stack",
-                    "classes": [
-                      "place_branch",
-                      "branch_nested",
-                      "depth-1"
-                    ],
-                    "layout": {
-                      "strategy": "stack",
-                      "direction": "vertical",
-                      "gap": 16,
-                      "crossAlignment": "start"
-                    },
-                    "chrome": {
-                      "padding": {
-                        "top": 0,
-                        "right": 0,
-                        "bottom": 0,
-                        "left": 0
-                      },
-                      "gutter": 16,
-                      "headerBandHeight": 0
-                    },
-                    "headerContent": [],
-                    "children": [
-                      {
-                        "kind": "node",
-                        "id": "P-100",
-                        "role": "place",
-                        "primitive": "card",
-                        "classes": [
-                          "place",
-                          "nested_place",
-                          "depth-1"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "narrow",
-                          "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
-                          ]
-                        },
-                        "widthBand": "narrow",
-                        "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
-                        },
-                        "content": [
-                          {
-                            "id": "P-100__title",
-                            "kind": "text",
-                            "textStyleRole": "title",
-                            "lines": [
-                              "Alpha"
-                            ],
-                            "x": 12,
-                            "y": 12,
-                            "width": 43.704,
-                            "height": 20,
-                            "lineHeight": 20,
-                            "region": "primary",
-                            "priority": "primary"
-                          }
-                        ],
-                        "ports": [
-                          {
-                            "id": "north_chain",
-                            "role": "north_chain",
-                            "side": "north",
-                            "offset": 24,
-                            "x": 24,
-                            "y": 0
-                          },
-                          {
-                            "id": "south_chain",
-                            "role": "south_chain",
-                            "side": "south",
-                            "offset": 24,
-                            "x": 24,
-                            "y": 48
-                          },
-                          {
-                            "id": "east",
-                            "role": "east",
-                            "side": "east",
-                            "x": 168,
-                            "y": 24
-                          },
-                          {
-                            "id": "west",
-                            "role": "west",
-                            "side": "west",
-                            "x": 0,
-                            "y": 24
-                          }
-                        ],
-                        "overflow": {
-                          "status": "fits"
-                        },
-                        "x": 336,
-                        "y": 144,
-                        "width": 168,
-                        "height": 48
-                      },
-                      {
-                        "kind": "container",
-                        "id": "P-100__descendants",
-                        "role": "place_descendants",
-                        "primitive": "stack",
-                        "classes": [
-                          "place_descendants"
-                        ],
-                        "layout": {
-                          "strategy": "stack",
-                          "direction": "vertical",
-                          "gap": 12,
-                          "crossAlignment": "start"
-                        },
-                        "chrome": {
-                          "padding": {
-                            "top": 0,
-                            "right": 0,
-                            "bottom": 0,
-                            "left": 40
-                          },
-                          "gutter": 12,
-                          "headerBandHeight": 0
-                        },
-                        "headerContent": [],
-                        "children": [
-                          {
-                            "kind": "container",
-                            "id": "P-200__branch",
-                            "role": "place_branch",
-                            "primitive": "stack",
-                            "classes": [
-                              "place_branch",
-                              "branch_nested",
-                              "depth-2"
-                            ],
-                            "layout": {
-                              "strategy": "stack",
-                              "direction": "vertical",
-                              "gap": 16,
-                              "crossAlignment": "start"
-                            },
-                            "chrome": {
-                              "padding": {
-                                "top": 0,
-                                "right": 0,
-                                "bottom": 0,
-                                "left": 0
-                              },
-                              "gutter": 16,
-                              "headerBandHeight": 0
-                            },
-                            "headerContent": [],
-                            "children": [
-                              {
-                                "kind": "node",
-                                "id": "P-200",
-                                "role": "place",
-                                "primitive": "card",
-                                "classes": [
-                                  "place",
-                                  "nested_place",
-                                  "depth-2"
-                                ],
-                                "widthPolicy": {
-                                  "preferred": "narrow",
-                                  "allowed": [
-                                    "narrow",
-                                    "standard",
-                                    "wide"
-                                  ]
-                                },
-                                "widthBand": "narrow",
-                                "overflowPolicy": {
-                                  "kind": "escalate_width_band",
-                                  "maxLines": 2
-                                },
-                                "content": [
-                                  {
-                                    "id": "P-200__title",
-                                    "kind": "text",
-                                    "textStyleRole": "title",
-                                    "lines": [
-                                      "Beta"
-                                    ],
-                                    "x": 12,
-                                    "y": 12,
-                                    "width": 34.496,
-                                    "height": 20,
-                                    "lineHeight": 20,
-                                    "region": "primary",
-                                    "priority": "primary"
-                                  }
-                                ],
-                                "ports": [
-                                  {
-                                    "id": "north_chain",
-                                    "role": "north_chain",
-                                    "side": "north",
-                                    "offset": 24,
-                                    "x": 24,
-                                    "y": 0
-                                  },
-                                  {
-                                    "id": "south_chain",
-                                    "role": "south_chain",
-                                    "side": "south",
-                                    "offset": 24,
-                                    "x": 24,
-                                    "y": 48
-                                  },
-                                  {
-                                    "id": "east",
-                                    "role": "east",
-                                    "side": "east",
-                                    "x": 168,
-                                    "y": 24
-                                  },
-                                  {
-                                    "id": "west",
-                                    "role": "west",
-                                    "side": "west",
-                                    "x": 0,
-                                    "y": 24
-                                  }
-                                ],
-                                "overflow": {
-                                  "status": "fits"
-                                },
-                                "x": 376,
-                                "y": 208,
-                                "width": 168,
-                                "height": 48
-                              }
-                            ],
-                            "ports": [],
-                            "x": 376,
-                            "y": 208,
-                            "width": 168,
-                            "height": 48
-                          }
-                        ],
-                        "ports": [],
-                        "x": 336,
-                        "y": 208,
-                        "width": 208,
-                        "height": 48
-                      }
-                    ],
-                    "ports": [],
-                    "x": 336,
-                    "y": 144,
-                    "width": 208,
-                    "height": 112
-                  }
-                ],
-                "ports": [],
-                "x": 296,
-                "y": 144,
-                "width": 248,
-                "height": 112
               }
             ],
             "ports": [],
-            "x": 296,
+            "x": 256,
             "y": 80,
-            "width": 248,
-            "height": 176
+            "width": 168,
+            "height": 48
+          },
+          {
+            "kind": "container",
+            "id": "P-100__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-100",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-100__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Alpha"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 43.704,
+                    "height": 20,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 256,
+                "y": 148,
+                "width": 168,
+                "height": 48
+              }
+            ],
+            "ports": [],
+            "x": 256,
+            "y": 148,
+            "width": 168,
+            "height": 48
+          },
+          {
+            "kind": "container",
+            "id": "P-200__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-200",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-200__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Beta"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 34.496,
+                    "height": 20,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 256,
+                "y": 216,
+                "width": 168,
+                "height": 48
+              }
+            ],
+            "ports": [],
+            "x": 256,
+            "y": 216,
+            "width": 168,
+            "height": 48
           }
         ],
         "ports": [],
-        "x": 280,
+        "x": 240,
         "y": 24,
-        "width": 280,
-        "height": 248
+        "width": 200,
+        "height": 256
       },
       {
         "kind": "container",
@@ -796,18 +731,18 @@
         "children": [
           {
             "kind": "container",
-            "id": "P-050__branch",
-            "role": "place_branch",
+            "id": "P-050__group",
+            "role": "place_group",
             "primitive": "stack",
             "classes": [
-              "place_branch",
-              "branch_root",
+              "place_group",
+              "group_root",
               "depth-0"
             ],
             "layout": {
               "strategy": "stack",
               "direction": "vertical",
-              "gap": 16,
+              "gap": 32,
               "crossAlignment": "start"
             },
             "chrome": {
@@ -817,7 +752,7 @@
                 "bottom": 0,
                 "left": 0
               },
-              "gutter": 16,
+              "gutter": 32,
               "headerBandHeight": 0
             },
             "headerContent": [],
@@ -897,21 +832,21 @@
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 624,
+                "x": 504,
                 "y": 80,
                 "width": 168,
                 "height": 48
               }
             ],
             "ports": [],
-            "x": 624,
+            "x": 504,
             "y": 80,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 608,
+        "x": 488,
         "y": 24,
         "width": 200,
         "height": 120
@@ -920,15 +855,18 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 832,
-    "height": 296
+    "width": 712,
+    "height": 304
   },
   "edges": [
     {
       "id": "P-700__nav__P-900",
-      "role": "navigation",
+      "role": "contains_navigation",
       "classes": [
-        "within_chain"
+        "ia_local_structure",
+        "contains_edge",
+        "merged_navigation",
+        "direct_vertical"
       ],
       "from": {
         "itemId": "P-700",
@@ -939,8 +877,8 @@
       "to": {
         "itemId": "P-900",
         "portId": "north_chain",
-        "x": 88,
-        "y": 88
+        "x": 48,
+        "y": 104
       },
       "route": {
         "style": "orthogonal",
@@ -950,20 +888,8 @@
             "y": 72
           },
           {
-            "x": 32,
-            "y": 72
-          },
-          {
-            "x": 32,
-            "y": 64
-          },
-          {
-            "x": 88,
-            "y": 64
-          },
-          {
-            "x": 88,
-            "y": 88
+            "x": 48,
+            "y": 104
           }
         ]
       },
@@ -973,22 +899,7 @@
       "paintGroup": "edges"
     }
   ],
-  "diagnostics": [
-    {
-      "phase": "routing",
-      "code": "renderer.routing.ia_branch_elk_fixed_fallback",
-      "severity": "info",
-      "message": "Branch-local fixed-position ELK routing for \"P-700__branch\" could not preserve node placement. Trying local placement+routing fallback.",
-      "targetId": "P-700__branch"
-    },
-    {
-      "phase": "routing",
-      "code": "renderer.routing.ia_branch_elk_layout_rejected",
-      "severity": "info",
-      "message": "Branch-local ELK placement fallback for \"P-700__branch\" would exceed the current branch bounds. Keeping manual routing for this region.",
-      "targetId": "P-700__branch"
-    }
-  ],
+  "diagnostics": [],
   "paintOrder": [
     "chrome",
     "nodes",

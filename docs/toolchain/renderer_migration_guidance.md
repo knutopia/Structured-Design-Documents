@@ -550,7 +550,7 @@ Recommended bias by view:
 
 - `service_blueprint`: prefer manual `lanes` and `grid` strategies first, because its semantics are already row-oriented
 - `journey_map`: prefer lane or strip layout for phases, with routing support for cross-phase references
-- `ia_place_map`: use hierarchical containers, explicit ports, and deterministic recursive place structure; prefer branch-local ELK route hints for same-chain navigation when local geometry allows it, then fall back to deterministic tree routing with a shared vertical target-approach rule
+- `ia_place_map`: use hierarchical containers, explicit ports, and manual hub/follower grouping; let owned child scopes and follower scopes grow parent geometry bottom-up, then route only local structure connectors with deterministic direct-vertical and shared-trunk patterns
 - `scenario_flow`: likely benefits most from `elk_layered` plus explicit decision-node port policy
 - `outcome_opportunity_map`: may mix semantic lanes with ELK-managed routing between lane-contained nodes
 - `ui_contracts`: likely benefits from manual scoped containers, reserved gutter space plus dedicated label lanes for container-origin contract edges, and selective ELK use for transition routing

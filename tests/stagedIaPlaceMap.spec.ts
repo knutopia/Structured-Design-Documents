@@ -64,6 +64,26 @@ function getTerminalSegment(edge: PositionedEdge): { dx: number; dy: number; len
   };
 }
 
+function expectDirectVerticalRoute(edge: PositionedEdge): void {
+  expect(edge.route.points).toHaveLength(2);
+  expect(getTerminalSegment(edge)).toEqual(expect.objectContaining({
+    dx: 0,
+    length: expect.any(Number)
+  }));
+  expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(20);
+}
+
+function expectSharedTrunkRoute(edge: PositionedEdge): void {
+  expect(edge.route.points).toHaveLength(3);
+  expect(edge.route.points[0]?.x).toBe(edge.route.points[1]?.x);
+  expect(edge.route.points[1]?.y).toBe(edge.route.points[2]?.y);
+  expect(getTerminalSegment(edge)).toEqual(expect.objectContaining({
+    dy: 0,
+    length: expect.any(Number)
+  }));
+  expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(20);
+}
+
 async function loadInput(filePath: string): Promise<{ path: string; text: string }> {
   return {
     path: filePath,
@@ -105,7 +125,7 @@ describe("staged ia_place_map", () => {
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendered.positionedScene.root.children.map((child) => child.id)).toEqual([
-      "P-700__branch",
+      "P-700__group",
       "A-200",
       "A-500"
     ]);
@@ -125,25 +145,21 @@ describe("staged ia_place_map", () => {
     expect(rendered.svg).toContain("Checkout Area");
     expect(rendered.svg).toContain("/checkout/billing");
     expect(rendered.svg).toContain("auth");
-    expect(rendered.svg).toContain('marker-end="url(#scene-marker-arrow)"');
+    expect(rendered.svg).toContain('marker-end="url(#scene-marker-arrow-end)"');
     expect(rendered.svg).not.toContain('class="scene-port');
     expect(rendered.positionedScene.edges).toHaveLength(1);
     expect(rendered.positionedScene.edges[0]).toEqual(expect.objectContaining({
+      classes: expect.arrayContaining(["ia_local_structure", "follower_edge", "merged_navigation", "shared_trunk"]),
       from: expect.objectContaining({
         itemId: "P-001",
         portId: "south_chain"
       }),
       to: expect.objectContaining({
         itemId: "P-002",
-        portId: "north_chain"
+        portId: "west"
       })
     }));
-    expect(getTerminalSegment(rendered.positionedScene.edges[0]!)).toEqual(expect.objectContaining({
-      dx: 0,
-      length: expect.any(Number)
-    }));
-    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(20);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+    expectSharedTrunkRoute(rendered.positionedScene.edges[0]!);
   });
 
   it("applies simple-profile suppression while still indenting implicit top-level place sequences", async () => {
@@ -166,61 +182,100 @@ describe("staged ia_place_map", () => {
     expect(confirmation.x).toBeGreaterThan(billing.x);
     expect(confirmation.y).toBeGreaterThan(billing.y);
     expect(rendered.positionedScene.edges[0]).toEqual(expect.objectContaining({
+      classes: expect.arrayContaining(["ia_local_structure", "follower_edge", "merged_navigation", "shared_trunk"]),
       from: expect.objectContaining({
         itemId: "P-010",
         portId: "south_chain"
       }),
       to: expect.objectContaining({
         itemId: "P-011",
-        portId: "north_chain"
+        portId: "west"
       })
     }));
-    expect(getTerminalSegment(rendered.positionedScene.edges[0]!)).toEqual(expect.objectContaining({
-      dx: 0,
-      length: expect.any(Number)
-    }));
-    expect(getTerminalSegmentLength(rendered.positionedScene.edges[0]!)).toBeGreaterThanOrEqual(20);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+    expectSharedTrunkRoute(rendered.positionedScene.edges[0]!);
   });
 
-  it("uses deterministic target-biased chain routing for both downward and upward recursive navigation", async () => {
+  it("renders only forward local-structure connectors for recursive contain chains", async () => {
     const fixturePath = path.join(repoRoot, "tests/fixtures/render/recursive_chain_ia.sdd");
-    const { rendered } = await buildIaArtifacts(fixturePath, "simple");
+    const { rendererScene, rendered } = await buildIaArtifacts(fixturePath, "simple");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-    expect(rendered.positionedScene.edges).toHaveLength(4);
+    expect(rendered.positionedScene.edges).toHaveLength(2);
 
-    const edgePorts = rendered.positionedScene.edges.map((edge) => ({
-      id: edge.id,
-      fromPort: edge.from.portId,
-      toPort: edge.to.portId
-    }));
-    expect(edgePorts).toContainEqual({
-      id: "P-800__nav__P-801",
-      fromPort: "south_chain",
-      toPort: "north_chain"
-    });
-    expect(edgePorts).toContainEqual({
-      id: "P-801__nav__P-802",
-      fromPort: "south_chain",
-      toPort: "north_chain"
-    });
-    expect(edgePorts).toContainEqual({
-      id: "P-801__nav__P-800",
-      fromPort: "north_chain",
-      toPort: "south_chain"
-    });
-    expect(edgePorts).toContainEqual({
-      id: "P-802__nav__P-801",
-      fromPort: "north_chain",
-      toPort: "south_chain"
-    });
-    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegment(edge).dx === 0)).toBe(true);
-    expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 20)).toBe(true);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.ia_branch_elk_fixed_fallback")).toBe(true);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.ia_branch_elk_layout_rejected")).toBe(true);
-    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
+    expect(rendered.positionedScene.edges.map((edge) => edge.id).sort()).toEqual([
+      "P-800__nav__P-801",
+      "P-801__nav__P-802"
+    ]);
+    expect(rendered.positionedScene.edges.every((edge) => edge.classes.includes("contains_edge"))).toBe(true);
+    expect(rendered.positionedScene.edges.every((edge) => edge.classes.includes("direct_vertical"))).toBe(true);
+    expect(rendered.positionedScene.edges.every((edge) => edge.to.portId === "north_chain")).toBe(true);
+    rendered.positionedScene.edges.forEach((edge) => expectDirectVerticalRoute(edge));
 
+    await expectRendererStageSnapshot("ia-place-map.recursive-chain.renderer-scene.json", rendererScene);
+    await expectRendererStageSnapshot("ia-place-map.recursive-chain.measured-scene.json", rendered.measuredScene);
     await expectRendererStageSnapshot("ia-place-map.recursive-chain.positioned-scene.json", rendered.positionedScene);
+    await expectRendererStageTextSnapshot("ia-place-map.recursive-chain.svg", rendered.svg);
+  });
+
+  it("matches the reference-style hub and follower geometry for billSage_structure", async () => {
+    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_structure.sdd");
+    const { rendererScene, rendered } = await buildIaArtifacts(examplePath, "recommended");
+
+    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+
+    const dashboard = findPositionedItem(rendered.positionedScene.root, "P-100");
+    const reportView = findPositionedItem(rendered.positionedScene.root, "P-110");
+    const overview = findPositionedItem(rendered.positionedScene.root, "P-210");
+    const projection = findPositionedItem(rendered.positionedScene.root, "P-220");
+    const feeSchedule = findPositionedItem(rendered.positionedScene.root, "P-221");
+    const funding = findPositionedItem(rendered.positionedScene.root, "P-222");
+    const createProjection = findPositionedItem(rendered.positionedScene.root, "P-230");
+
+    if (
+      dashboard.kind !== "node"
+      || reportView.kind !== "node"
+      || overview.kind !== "node"
+      || projection.kind !== "node"
+      || feeSchedule.kind !== "node"
+      || funding.kind !== "node"
+      || createProjection.kind !== "node"
+    ) {
+      throw new Error("Expected billSage fixture items to resolve to staged place nodes.");
+    }
+
+    expect(reportView.x).toBe(dashboard.x);
+    expect(projection.x).toBeGreaterThan(overview.x);
+    expect(createProjection.x).toBe(projection.x);
+    expect(feeSchedule.x).toBeGreaterThan(projection.x);
+    expect(funding.x).toBe(feeSchedule.x);
+    expect(feeSchedule.y).toBeGreaterThan(projection.y);
+    expect(funding.y).toBeGreaterThan(feeSchedule.y);
+    expect(createProjection.y).toBeGreaterThan(funding.y);
+
+    expect(rendered.positionedScene.edges.map((edge) => edge.id)).toEqual([
+      "P-100__nav__P-110",
+      "P-220__nav__P-221",
+      "P-220__nav__P-222",
+      "P-210__nav__P-220",
+      "P-210__nav__P-230"
+    ]);
+    expect(rendered.positionedScene.edges.some((edge) => edge.id === "P-221__nav__P-220")).toBe(false);
+    expect(rendered.positionedScene.edges.some((edge) => edge.id === "P-222__nav__P-220")).toBe(false);
+    expect(rendered.positionedScene.edges.some((edge) => edge.id === "P-230__nav__P-220")).toBe(false);
+
+    const directVertical = rendered.positionedScene.edges.find((edge) => edge.id === "P-100__nav__P-110");
+    if (!directVertical) {
+      throw new Error("Expected the direct Dashboard -> Report View connector.");
+    }
+    expectDirectVerticalRoute(directVertical);
+
+    rendered.positionedScene.edges
+      .filter((edge) => edge.id !== "P-100__nav__P-110")
+      .forEach((edge) => expectSharedTrunkRoute(edge));
+
+    await expectRendererStageSnapshot("ia-place-map.billSage-structure.renderer-scene.json", rendererScene);
+    await expectRendererStageSnapshot("ia-place-map.billSage-structure.measured-scene.json", rendered.measuredScene);
+    await expectRendererStageSnapshot("ia-place-map.billSage-structure.positioned-scene.json", rendered.positionedScene);
+    await expectRendererStageTextSnapshot("ia-place-map.billSage-structure.svg", rendered.svg);
   });
 });

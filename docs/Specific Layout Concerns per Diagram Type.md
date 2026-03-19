@@ -10,12 +10,13 @@ Different diagrams have different specific layout needs that the rendering engin
 - no content visually ABOVE top level nodes
 - mixed top-level `Place` and `Area` handling
 - vertical layout for an `Area` that contains lower-level `Place` nodes
-- within an `Area`, consecutive sibling `Place` items in ordered `CONTAINS` source order should render as a recursive top-to-lower place chain with rightward indentation
-- the same source-order chaining rule applies at top level: consecutive sibling `Place` items render as an implicit lower-level place chain until a non-`Place` sibling boundary breaks the chain
-- this top-to-lower place hierarchy may occur on multiple levels, so indentation must support recursive chaining
-- same-chain navigation should keep deterministic recursive place structure while allowing branch-local ELK routing where it can improve a local chain region without becoming the whole-layout source of truth
-- same-chain branch regions may need to grow locally before parent layout is finalized so ELK has enough room to route without immediately collapsing back to the manual obstacle router
-- same-chain navigation should reserve a readable vertical target approach into child nodes, even when that requires a source-side escape lane rather than a simple midpoint dogleg
+- explicit `Place CONTAINS Place` creates owned child scope
+- same-scope follower indentation is a renderer rule, not a projection rule: the earliest preceding sibling `Place` that has forward `NAVIGATES_TO` edges to later direct sibling `Place` items may claim those later siblings as followers
+- follower claiming is local to one sibling scope, stops at `Area` or non-`Place` boundaries, and does not cross explicit containment boundaries
+- top level stays horizontal, `Area` interiors stay vertical, and each `place_group` stays vertical: place card first, owned scope second
+- a single explicit contained child stays directly below its parent with no extra indent; multi-child contained scopes and follower scopes reserve a left trunk lane and indent the child column to the right
+- lower-level content must make the space it needs before routing: child scopes determine parent width and height, including connector corridor space
+- staged `ia_place_map` routing is deterministic and manual: direct single-child connectors go bottom-to-top vertically, while branched/follower connectors use a shared vertical trunk with a left-entry horizontal terminal segment
 - internal routing anchors should not be painted as visible dots in normal output
 - differentiating between node types should be possible across rendering profiles, even in `simple`
 

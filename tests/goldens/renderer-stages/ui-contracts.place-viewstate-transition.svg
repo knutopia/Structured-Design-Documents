@@ -36,8 +36,11 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow-end" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
+    </marker>
+    <marker id="scene-marker-arrow-start" class="scene-marker" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="scene-marker" d="M 10 0 L 0 5 L 10 10 z"/>
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
@@ -183,19 +186,19 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-binds_to-c-010--d-010" class="scene-edge role-binds_to route-orthogonal paint-edges edge-dotted constraint_edge" data-edge-id="binds_to:C-010-&gt;D-010" data-role="binds_to">
-      <path class="scene-edge__path" d="M 702.424 174 L 702.424 197 L 842.424 197 L 842.424 262" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 702.424 174 L 702.424 197 L 842.424 197 L 842.424 262" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-depends_on-c-010--sa-010" class="scene-edge role-depends_on route-orthogonal paint-edges constraint_edge" data-edge-id="depends_on:C-010-&gt;SA-010" data-role="depends_on">
-      <path class="scene-edge__path" d="M 702.424 174 L 702.424 227 L 842.424 227 L 842.424 198" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 702.424 174 L 702.424 227 L 842.424 227 L 842.424 198" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-emits-c-011--e-010" class="scene-edge role-emits route-orthogonal paint-edges edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
-      <path class="scene-edge__path" d="M 61 298 L 61 310 L 201 310 L 201 322" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 61 298 L 61 310 L 201 310 L 201 322" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-transitions_to-st-010a--st-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 1023.424 398 L 1207.848 398" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 1023.424 398 L 1207.848 398" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-transitions_to-vs-010a--vs-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 321 272 L 505.424 272" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 321 272 L 505.424 272" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

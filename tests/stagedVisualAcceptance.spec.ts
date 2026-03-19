@@ -34,28 +34,42 @@ function getVisibleNodeBoxes(root: Awaited<ReturnType<typeof renderStagedArtifac
   });
 }
 
-function expectVerticalTargetApproach(edge: ReturnType<typeof getEdgeById>): void {
-  const segment = getTerminalSegment(edge);
-  expect(segment.start.x).toBe(segment.end.x);
-  expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(20);
-
-  const bend = getPenultimatePoint(edge);
-  if (edge.to.portId === "north_chain") {
-    expect(bend.y).toBeLessThanOrEqual(edge.to.y - 24);
-  } else if (edge.to.portId === "south_chain") {
-    expect(bend.y).toBeGreaterThanOrEqual(edge.to.y + 24);
-  } else {
-    throw new Error(`Expected a north/south chain target port for "${edge.id}".`);
+function expectIaLocalStructureRoute(edge: ReturnType<typeof getEdgeById>): void {
+  if (edge.classes.includes("direct_vertical")) {
+    expect(edge.route.points).toHaveLength(2);
+    const segment = getTerminalSegment(edge);
+    expect(segment.start.x).toBe(segment.end.x);
+    expect(edge.to.portId).toBe("north_chain");
+    expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(20);
+    return;
   }
+
+  if (edge.classes.includes("shared_trunk")) {
+    expect(edge.route.points).toHaveLength(3);
+    expect(edge.route.points[0]?.x).toBe(edge.route.points[1]?.x);
+    expect(edge.route.points[1]?.y).toBe(edge.route.points[2]?.y);
+    expect(edge.to.portId).toBe("west");
+    const bend = getPenultimatePoint(edge);
+    expect(bend.y).toBe(edge.to.y);
+    const segment = getTerminalSegment(edge);
+    expect(segment.start.y).toBe(segment.end.y);
+    expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(20);
+    return;
+  }
+
+  throw new Error(`Expected IA local-structure route classes on "${edge.id}".`);
 }
 
 describe("staged visual acceptance", () => {
   it("keeps target ia_place_map artifacts free of fallback diagnostics, node-crossing routes, and weak target approaches", async () => {
     const cases = [
       {
-        sourcePath: path.join(repoRoot, "real_world_exploration/billSage_simple_structure.sdd"),
-        outputArtifactPath: path.join(repoRoot, "real_world_exploration/billSage_simple_structure.ia_place_map.simple.png"),
-        profileId: "simple"
+        sourcePath: path.join(repoRoot, "real_world_exploration/billSage_structure.sdd"),
+        outputArtifactPath: path.join(
+          repoRoot,
+          "real_world_exploration/reference/billSage_structure.ia_place_map.recommended.bottomToLeft_connectors.reference.png"
+        ),
+        profileId: "recommended"
       },
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),
@@ -74,11 +88,11 @@ describe("staged visual acceptance", () => {
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, FORBIDDEN_DIAGNOSTICS);
 
-      const sameChainEdges = rendered.positionedScene.edges.filter((edge) => edge.classes.includes("within_chain"));
-      expect(sameChainEdges.length).toBeGreaterThan(0);
-      expectNoRouteIntersectionsWithNonEndpointBoxes(sameChainEdges, getVisibleNodeBoxes(rendered.positionedScene.root));
-      for (const edge of sameChainEdges) {
-        expectVerticalTargetApproach(edge);
+      const localStructureEdges = rendered.positionedScene.edges.filter((edge) => edge.classes.includes("ia_local_structure"));
+      expect(localStructureEdges.length).toBeGreaterThan(0);
+      expectNoRouteIntersectionsWithNonEndpointBoxes(localStructureEdges, getVisibleNodeBoxes(rendered.positionedScene.root));
+      for (const edge of localStructureEdges) {
+        expectIaLocalStructureRoute(edge);
       }
 
       expect(testCase.outputArtifactPath).toContain(".png");

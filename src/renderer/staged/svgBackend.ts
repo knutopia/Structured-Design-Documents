@@ -386,10 +386,10 @@ function buildRoutePath(points: Point[], edgeId: string, diagnostics: RendererDi
 function resolveMarkerAttributes(edge: PositionedEdge): string {
   const attributes: string[] = [];
   if (edge.markers?.start === "arrow") {
-    attributes.push('marker-start="url(#scene-marker-arrow)"');
+    attributes.push('marker-start="url(#scene-marker-arrow-start)"');
   }
   if (edge.markers?.end === "arrow") {
-    attributes.push('marker-end="url(#scene-marker-arrow)"');
+    attributes.push('marker-end="url(#scene-marker-arrow-end)"');
   }
 
   return attributes.length > 0 ? ` ${attributes.join(" ")}` : "";
@@ -498,9 +498,13 @@ function buildDefs(theme: RendererTheme): Promise<string[]> {
 
     defs.push(`<style><![CDATA[\n${buildStyleLines(theme).join("\n")}\n]]></style>`);
     defs.push([
-//      `<marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="${formatNumber(theme.paint.arrowSize - 1)}" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto-start-reverse">`,
-      `<marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="${formatNumber(theme.paint.arrowSize - 1)}" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto">`,
+      `<marker id="scene-marker-arrow-end" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="${formatNumber(theme.paint.arrowSize - 1)}" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto">`,
       `  <path class="scene-marker" d="M 0 0 L ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize / 2)} L 0 ${formatNumber(theme.paint.arrowSize)} z"/>`,
+      "</marker>"
+    ].join("\n"));
+    defs.push([
+      `<marker id="scene-marker-arrow-start" class="scene-marker" viewBox="0 0 ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)}" refX="1" refY="${formatNumber(theme.paint.arrowSize / 2)}" markerWidth="${formatNumber(theme.paint.arrowSize)}" markerHeight="${formatNumber(theme.paint.arrowSize)}" markerUnits="userSpaceOnUse" orient="auto">`,
+      `  <path class="scene-marker" d="M ${formatNumber(theme.paint.arrowSize)} 0 L 0 ${formatNumber(theme.paint.arrowSize / 2)} L ${formatNumber(theme.paint.arrowSize)} ${formatNumber(theme.paint.arrowSize)} z"/>`,
       "</marker>"
     ].join("\n"));
 

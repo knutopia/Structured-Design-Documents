@@ -36,8 +36,11 @@
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
-    <marker id="scene-marker-arrow" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <marker id="scene-marker-arrow-end" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
       <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
+    </marker>
+    <marker id="scene-marker-arrow-start" class="scene-marker" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="scene-marker" d="M 10 0 L 0 5 L 10 10 z"/>
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
@@ -161,13 +164,13 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-binds_to-c-700--d-700" class="scene-edge role-binds_to route-orthogonal paint-edges edge-dotted constraint_edge" data-edge-id="binds_to:C-700-&gt;D-700" data-role="binds_to">
-      <path class="scene-edge__path" d="M 541.778 174 L 541.778 197 L 681.778 197 L 681.778 278" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 541.778 174 L 541.778 197 L 681.778 197 L 681.778 278" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-emits-c-700--e-700" class="scene-edge role-emits route-orthogonal paint-edges edge-dashed constraint_edge" data-edge-id="emits:C-700-&gt;E-700" data-role="emits">
-      <path class="scene-edge__path" d="M 541.778 174 L 541.778 227 L 681.778 227 L 681.778 206" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 541.778 174 L 541.778 227 L 681.778 227 L 681.778 206" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-transitions_to-vs-700a--vs-700b" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-700a-&gt;VS-700b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 217 207 L 344.778 207" marker-end="url(#scene-marker-arrow)"/>
+      <path class="scene-edge__path" d="M 217 207 L 344.778 207" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

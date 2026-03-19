@@ -27,7 +27,6 @@
       "gutter": 48,
       "headerBandHeight": 0
     },
-    "headerContent": [],
     "children": [
       {
         "kind": "container",
@@ -55,7 +54,6 @@
           "gutter": 32,
           "headerBandHeight": 0
         },
-        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -75,7 +73,6 @@
                 "wide"
               ]
             },
-            "widthBand": "narrow",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -84,16 +81,8 @@
               {
                 "id": "P-800__title",
                 "kind": "text",
+                "text": "Overview",
                 "textStyleRole": "title",
-                "lines": [
-                  "Overview"
-                ],
-                "x": 12,
-                "y": 12,
-                "width": 68.656,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -102,40 +91,25 @@
                 "id": "north_chain",
                 "role": "north_chain",
                 "side": "north",
-                "offset": 24,
-                "x": 24,
-                "y": 0
+                "offset": 24
               },
               {
                 "id": "south_chain",
                 "role": "south_chain",
                 "side": "south",
-                "offset": 24,
-                "x": 24,
-                "y": 48
+                "offset": 24
               },
               {
                 "id": "east",
                 "role": "east",
-                "side": "east",
-                "x": 168,
-                "y": 24
+                "side": "east"
               },
               {
                 "id": "west",
                 "role": "west",
-                "side": "west",
-                "x": 0,
-                "y": 24
+                "side": "west"
               }
-            ],
-            "overflow": {
-              "status": "fits"
-            },
-            "x": 24,
-            "y": 24,
-            "width": 168,
-            "height": 48
+            ]
           },
           {
             "kind": "container",
@@ -162,7 +136,6 @@
               "gutter": 32,
               "headerBandHeight": 0
             },
-            "headerContent": [],
             "children": [
               {
                 "kind": "container",
@@ -190,7 +163,6 @@
                   "gutter": 32,
                   "headerBandHeight": 0
                 },
-                "headerContent": [],
                 "children": [
                   {
                     "kind": "node",
@@ -210,7 +182,6 @@
                         "wide"
                       ]
                     },
-                    "widthBand": "narrow",
                     "overflowPolicy": {
                       "kind": "escalate_width_band",
                       "maxLines": 2
@@ -219,16 +190,8 @@
                       {
                         "id": "P-801__title",
                         "kind": "text",
+                        "text": "Details",
                         "textStyleRole": "title",
-                        "lines": [
-                          "Details"
-                        ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 51.576,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
                         "priority": "primary"
                       }
                     ],
@@ -237,40 +200,25 @@
                         "id": "north_chain",
                         "role": "north_chain",
                         "side": "north",
-                        "offset": 24,
-                        "x": 24,
-                        "y": 0
+                        "offset": 24
                       },
                       {
                         "id": "south_chain",
                         "role": "south_chain",
                         "side": "south",
-                        "offset": 24,
-                        "x": 24,
-                        "y": 48
+                        "offset": 24
                       },
                       {
                         "id": "east",
                         "role": "east",
-                        "side": "east",
-                        "x": 168,
-                        "y": 24
+                        "side": "east"
                       },
                       {
                         "id": "west",
                         "role": "west",
-                        "side": "west",
-                        "x": 0,
-                        "y": 24
+                        "side": "west"
                       }
-                    ],
-                    "overflow": {
-                      "status": "fits"
-                    },
-                    "x": 24,
-                    "y": 104,
-                    "width": 168,
-                    "height": 48
+                    ]
                   },
                   {
                     "kind": "container",
@@ -297,7 +245,6 @@
                       "gutter": 32,
                       "headerBandHeight": 0
                     },
-                    "headerContent": [],
                     "children": [
                       {
                         "kind": "container",
@@ -325,7 +272,6 @@
                           "gutter": 32,
                           "headerBandHeight": 0
                         },
-                        "headerContent": [],
                         "children": [
                           {
                             "kind": "node",
@@ -345,7 +291,6 @@
                                 "wide"
                               ]
                             },
-                            "widthBand": "narrow",
                             "overflowPolicy": {
                               "kind": "escalate_width_band",
                               "maxLines": 2
@@ -354,16 +299,8 @@
                               {
                                 "id": "P-802__title",
                                 "kind": "text",
+                                "text": "Review",
                                 "textStyleRole": "title",
-                                "lines": [
-                                  "Review"
-                                ],
-                                "x": 12,
-                                "y": 12,
-                                "width": 52.928,
-                                "height": 20,
-                                "lineHeight": 20,
-                                "region": "primary",
                                 "priority": "primary"
                               }
                             ],
@@ -372,82 +309,43 @@
                                 "id": "north_chain",
                                 "role": "north_chain",
                                 "side": "north",
-                                "offset": 24,
-                                "x": 24,
-                                "y": 0
+                                "offset": 24
                               },
                               {
                                 "id": "south_chain",
                                 "role": "south_chain",
                                 "side": "south",
-                                "offset": 24,
-                                "x": 24,
-                                "y": 48
+                                "offset": 24
                               },
                               {
                                 "id": "east",
                                 "role": "east",
-                                "side": "east",
-                                "x": 168,
-                                "y": 24
+                                "side": "east"
                               },
                               {
                                 "id": "west",
                                 "role": "west",
-                                "side": "west",
-                                "x": 0,
-                                "y": 24
+                                "side": "west"
                               }
-                            ],
-                            "overflow": {
-                              "status": "fits"
-                            },
-                            "x": 24,
-                            "y": 184,
-                            "width": 168,
-                            "height": 48
+                            ]
                           }
                         ],
-                        "ports": [],
-                        "x": 24,
-                        "y": 184,
-                        "width": 168,
-                        "height": 48
+                        "ports": []
                       }
                     ],
-                    "ports": [],
-                    "x": 24,
-                    "y": 184,
-                    "width": 168,
-                    "height": 48
+                    "ports": []
                   }
                 ],
-                "ports": [],
-                "x": 24,
-                "y": 104,
-                "width": 168,
-                "height": 128
+                "ports": []
               }
             ],
-            "ports": [],
-            "x": 24,
-            "y": 104,
-            "width": 168,
-            "height": 128
+            "ports": []
           }
         ],
-        "ports": [],
-        "x": 24,
-        "y": 24,
-        "width": 168,
-        "height": 208
+        "ports": []
       }
     ],
-    "ports": [],
-    "x": 0,
-    "y": 0,
-    "width": 216,
-    "height": 256
+    "ports": []
   },
   "edges": [
     {
@@ -461,33 +359,20 @@
       ],
       "from": {
         "itemId": "P-801",
-        "portId": "south_chain",
-        "x": 48,
-        "y": 152
+        "portId": "south_chain"
       },
       "to": {
         "itemId": "P-802",
-        "portId": "north_chain",
-        "x": 48,
-        "y": 184
+        "portId": "north_chain"
       },
-      "route": {
+      "routing": {
         "style": "orthogonal",
-        "points": [
-          {
-            "x": 48,
-            "y": 152
-          },
-          {
-            "x": 48,
-            "y": 184
-          }
-        ]
+        "preferAxis": "vertical",
+        "localPattern": "ia_direct_vertical"
       },
       "markers": {
         "end": "arrow"
-      },
-      "paintGroup": "edges"
+      }
     },
     {
       "id": "P-800__nav__P-801",
@@ -500,41 +385,21 @@
       ],
       "from": {
         "itemId": "P-800",
-        "portId": "south_chain",
-        "x": 48,
-        "y": 72
+        "portId": "south_chain"
       },
       "to": {
         "itemId": "P-801",
-        "portId": "north_chain",
-        "x": 48,
-        "y": 104
+        "portId": "north_chain"
       },
-      "route": {
+      "routing": {
         "style": "orthogonal",
-        "points": [
-          {
-            "x": 48,
-            "y": 72
-          },
-          {
-            "x": 48,
-            "y": 104
-          }
-        ]
+        "preferAxis": "vertical",
+        "localPattern": "ia_direct_vertical"
       },
       "markers": {
         "end": "arrow"
-      },
-      "paintGroup": "edges"
+      }
     }
   ],
-  "diagnostics": [],
-  "paintOrder": [
-    "chrome",
-    "nodes",
-    "labels",
-    "edges",
-    "edge_labels"
-  ]
+  "diagnostics": []
 }

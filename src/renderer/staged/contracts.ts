@@ -30,6 +30,7 @@ export type PreferredAxis = "horizontal" | "vertical";
 export type OrthogonalBendPlacement = "midpoint" | "target_bias";
 export type TargetApproachPreset = "vertical_child";
 export type EdgeLabelPlacement = "segment" | "source_contract_lane";
+export type LocalRoutePattern = "ia_direct_vertical" | "ia_shared_trunk";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
 export type EdgeMarkerKind = "none" | "arrow";
 
@@ -94,6 +95,7 @@ export interface RoutingIntent {
   labelPlacement?: EdgeLabelPlacement;
   sourcePortRole?: string;
   targetPortRole?: string;
+  localPattern?: LocalRoutePattern;
 }
 
 export interface EdgeLabelSpec {

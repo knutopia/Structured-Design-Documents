@@ -142,8 +142,8 @@ Rules:
 - sibling nodes under a structural parent follow the source order of hierarchy edge lines such as `CONTAINS` and `COMPOSED_OF`
 - nesting placement of `+` blocks does not define structural order
 - flow order remains the job of explicit ordering edges such as `PRECEDES` and `TRANSITIONS_TO`
-- for `ia_place_map`, a run of consecutive sibling `Place` nodes at one structural level is interpreted as a chained lower-level place sequence in that same source order, and the run ends when the next sibling is not a `Place`
-- for staged `ia_place_map`, same-chain navigation follows that author-ordered recursive place chain with branch-local ELK routing when local geometry allows it, then falls back to deterministic tree routing with dedicated chain ports and a shared vertical target-approach rule; ELK is still not a global chain-layout source of truth
+- for staged `ia_place_map`, explicit `Place CONTAINS Place` creates owned child scope, while same-scope follower indentation is a renderer-side rule: the earliest preceding sibling `Place` with forward `NAVIGATES_TO` edges to later direct sibling `Place` items may claim those later siblings as followers within that sibling scope
+- staged `ia_place_map` layout is bottom-up and manual: owned scopes reserve their own trunk-lane and indent geometry before routing, and staged IA renders only local structure connectors using deterministic direct-vertical and shared-trunk patterns without IA-specific ELK fallback
 
 This keeps snapshots stable while still letting renderers honor meaningful source order. Reordering top-level declarations or hierarchy-edge lines is treated as an intentional semantic change to rendered structure.
 

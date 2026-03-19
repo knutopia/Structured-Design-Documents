@@ -31,11 +31,9 @@ export interface SourceContractLaneAssignment {
 
 const EDGE_LABEL_SEGMENT_CLEARANCE = 12;
 const EDGE_LABEL_SEGMENT_OFFSET = 12;
-//const MIN_ARROW_MARKER_LEG = 12;
-const MIN_ARROW_MARKER_LEG = 16;
+const MIN_ARROW_MARKER_LEG = 12;
 const TARGET_BIASED_BEND_SOURCE_CLEARANCE = 4;
-// const TARGET_APPROACH_ZONE = 24;
-const TARGET_APPROACH_ZONE = 16;
+const TARGET_APPROACH_ZONE = 24;
 const TARGET_APPROACH_MIN_FINAL_LEG = 20;
 const TARGET_APPROACH_SOURCE_CLEARANCE = 8;
 const TARGET_APPROACH_ESCAPE_CLEARANCE = 8;
@@ -661,6 +659,56 @@ function enforceMarkerLegs(
   }
 
   return routedPoints;
+}
+
+function buildIaDirectVerticalRoutePoints(
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint
+): Point[] {
+  return [
+    { x: from.x, y: from.y },
+    { x: to.x, y: to.y }
+  ];
+}
+
+function buildIaSharedTrunkRoutePoints(
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint
+): Point[] {
+  return [
+    { x: from.x, y: from.y },
+    { x: from.x, y: to.y },
+    { x: to.x, y: to.y }
+  ];
+}
+
+export function buildLocalPatternRoute(
+  edge: MeasuredEdge,
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint,
+  diagnostics: RendererDiagnostic[]
+): PositionedRoute | undefined {
+  let points: Point[] | undefined;
+
+  switch (edge.routing.localPattern) {
+    case "ia_direct_vertical":
+      points = buildIaDirectVerticalRoutePoints(from, to);
+      break;
+    case "ia_shared_trunk":
+      points = buildIaSharedTrunkRoutePoints(from, to);
+      break;
+    default:
+      return undefined;
+  }
+
+  return {
+    style: edge.routing.style,
+    points: enforceMarkerLegs(
+      edge,
+      collapseRoutePoints(points),
+      diagnostics
+    )
+  };
 }
 
 export function buildSharedRoute(

@@ -1,0 +1,2395 @@
+{
+  "viewId": "ia_place_map",
+  "profileId": "recommended",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "ia_place_map"
+    ],
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 48,
+      "crossAlignment": "start"
+    },
+    "chrome": {
+      "padding": {
+        "top": 24,
+        "right": 24,
+        "bottom": 24,
+        "left": 24
+      },
+      "gutter": 48,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "P-100__group",
+        "role": "place_group",
+        "primitive": "stack",
+        "classes": [
+          "place_group",
+          "group_root",
+          "depth-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 32,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "gutter": 32,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-100",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "place",
+              "root_place",
+              "depth-0"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "narrow",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-100__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Dashboard"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 80.192,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              },
+              {
+                "id": "P-100__subtitle",
+                "kind": "text",
+                "textStyleRole": "subtitle",
+                "lines": [
+                  "/dashboard"
+                ],
+                "x": 12,
+                "y": 38,
+                "width": 68.452,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "secondary"
+              },
+              {
+                "id": "P-100__badge",
+                "kind": "badge_text",
+                "textStyleRole": "badge",
+                "lines": [
+                  "auth"
+                ],
+                "x": 12,
+                "y": 60,
+                "width": 41.188,
+                "height": 22,
+                "lineHeight": 14,
+                "region": "primary",
+                "priority": "secondary"
+              },
+              {
+                "id": "P-100__metadata__entry_points__0",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
+                "lines": [
+                  "entry_points:",
+                  "nav:global_nav"
+                ],
+                "x": 12,
+                "y": 88,
+                "width": 82.956,
+                "height": 32,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "secondary"
+              },
+              {
+                "id": "P-100__metadata__primary_nav__1",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
+                "lines": [
+                  "primary_nav: true"
+                ],
+                "x": 12,
+                "y": 126,
+                "width": 96.834,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "secondary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "north_chain",
+                "role": "north_chain",
+                "side": "north",
+                "offset": 24,
+                "x": 24,
+                "y": 0
+              },
+              {
+                "id": "south_chain",
+                "role": "south_chain",
+                "side": "south",
+                "offset": 24,
+                "x": 24,
+                "y": 154
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 168,
+                "y": 77
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 77
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 24,
+            "y": 24,
+            "width": 168,
+            "height": 154
+          },
+          {
+            "kind": "container",
+            "id": "P-100__contains_scope_single",
+            "role": "contains_scope_single",
+            "primitive": "stack",
+            "classes": [
+              "owned_scope",
+              "contains_scope_single"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "container",
+                "id": "P-110__group",
+                "role": "place_group",
+                "primitive": "stack",
+                "classes": [
+                  "place_group",
+                  "group_nested",
+                  "depth-1"
+                ],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 32,
+                  "crossAlignment": "start"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 0
+                  },
+                  "gutter": 32,
+                  "headerBandHeight": 0
+                },
+                "headerContent": [],
+                "children": [
+                  {
+                    "kind": "node",
+                    "id": "P-110",
+                    "role": "place",
+                    "primitive": "card",
+                    "classes": [
+                      "place",
+                      "nested_place",
+                      "depth-1"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "narrow",
+                      "allowed": [
+                        "narrow",
+                        "standard",
+                        "wide"
+                      ]
+                    },
+                    "widthBand": "narrow",
+                    "overflowPolicy": {
+                      "kind": "escalate_width_band",
+                      "maxLines": 2
+                    },
+                    "content": [
+                      {
+                        "id": "P-110__title",
+                        "kind": "text",
+                        "textStyleRole": "title",
+                        "lines": [
+                          "Report View"
+                        ],
+                        "x": 12,
+                        "y": 12,
+                        "width": 90.12,
+                        "height": 20,
+                        "lineHeight": 20,
+                        "region": "primary",
+                        "priority": "primary"
+                      },
+                      {
+                        "id": "P-110__subtitle",
+                        "kind": "text",
+                        "textStyleRole": "subtitle",
+                        "lines": [
+                          "/dashboard/report-view"
+                        ],
+                        "x": 12,
+                        "y": 38,
+                        "width": 141.947,
+                        "height": 16,
+                        "lineHeight": 16,
+                        "region": "primary",
+                        "priority": "secondary"
+                      },
+                      {
+                        "id": "P-110__badge",
+                        "kind": "badge_text",
+                        "textStyleRole": "badge",
+                        "lines": [
+                          "auth"
+                        ],
+                        "x": 12,
+                        "y": 60,
+                        "width": 41.188,
+                        "height": 22,
+                        "lineHeight": 14,
+                        "region": "primary",
+                        "priority": "secondary"
+                      }
+                    ],
+                    "ports": [
+                      {
+                        "id": "north_chain",
+                        "role": "north_chain",
+                        "side": "north",
+                        "offset": 24,
+                        "x": 24,
+                        "y": 0
+                      },
+                      {
+                        "id": "south_chain",
+                        "role": "south_chain",
+                        "side": "south",
+                        "offset": 24,
+                        "x": 24,
+                        "y": 94
+                      },
+                      {
+                        "id": "east",
+                        "role": "east",
+                        "side": "east",
+                        "x": 168,
+                        "y": 47
+                      },
+                      {
+                        "id": "west",
+                        "role": "west",
+                        "side": "west",
+                        "x": 0,
+                        "y": 47
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "x": 24,
+                    "y": 210,
+                    "width": 168,
+                    "height": 94
+                  }
+                ],
+                "ports": [],
+                "x": 24,
+                "y": 210,
+                "width": 168,
+                "height": 94
+              }
+            ],
+            "ports": [],
+            "x": 24,
+            "y": 210,
+            "width": 168,
+            "height": 94
+          }
+        ],
+        "ports": [],
+        "x": 24,
+        "y": 24,
+        "width": 168,
+        "height": 280
+      },
+      {
+        "kind": "container",
+        "id": "A-200",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-200__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Projections"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 83.432,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-210__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-210",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-210__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Projections",
+                      "Overview"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 83.432,
+                    "height": 40,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  },
+                  {
+                    "id": "P-210__subtitle",
+                    "kind": "text",
+                    "textStyleRole": "subtitle",
+                    "lines": [
+                      "/projections"
+                    ],
+                    "x": 12,
+                    "y": 58,
+                    "width": 71.812,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-210__badge",
+                    "kind": "badge_text",
+                    "textStyleRole": "badge",
+                    "lines": [
+                      "auth"
+                    ],
+                    "x": 12,
+                    "y": 80,
+                    "width": 41.188,
+                    "height": 22,
+                    "lineHeight": 14,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-210__metadata__entry_points__0",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "entry_points:",
+                      "nav:global_nav"
+                    ],
+                    "x": 12,
+                    "y": 108,
+                    "width": 82.956,
+                    "height": 32,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-210__metadata__primary_nav__1",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "primary_nav: true"
+                    ],
+                    "x": 12,
+                    "y": 146,
+                    "width": 96.834,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 174
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 87
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 87
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 256,
+                "y": 80,
+                "width": 168,
+                "height": 174
+              },
+              {
+                "kind": "container",
+                "id": "P-210__follower_scope",
+                "role": "follower_scope",
+                "primitive": "stack",
+                "classes": [
+                  "owned_scope",
+                  "follower_scope"
+                ],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 32,
+                  "crossAlignment": "start"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 48
+                  },
+                  "gutter": 32,
+                  "headerBandHeight": 0
+                },
+                "headerContent": [],
+                "children": [
+                  {
+                    "kind": "container",
+                    "id": "P-220__group",
+                    "role": "place_group",
+                    "primitive": "stack",
+                    "classes": [
+                      "place_group",
+                      "group_nested",
+                      "depth-1"
+                    ],
+                    "layout": {
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 32,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
+                      },
+                      "gutter": 32,
+                      "headerBandHeight": 0
+                    },
+                    "headerContent": [],
+                    "children": [
+                      {
+                        "kind": "node",
+                        "id": "P-220",
+                        "role": "place",
+                        "primitive": "card",
+                        "classes": [
+                          "place",
+                          "nested_place",
+                          "depth-1"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "narrow",
+                          "allowed": [
+                            "narrow",
+                            "standard",
+                            "wide"
+                          ]
+                        },
+                        "widthBand": "narrow",
+                        "overflowPolicy": {
+                          "kind": "escalate_width_band",
+                          "maxLines": 2
+                        },
+                        "content": [
+                          {
+                            "id": "P-220__title",
+                            "kind": "text",
+                            "textStyleRole": "title",
+                            "lines": [
+                              "Projection"
+                            ],
+                            "x": 12,
+                            "y": 12,
+                            "width": 75.416,
+                            "height": 20,
+                            "lineHeight": 20,
+                            "region": "primary",
+                            "priority": "primary"
+                          },
+                          {
+                            "id": "P-220__subtitle",
+                            "kind": "text",
+                            "textStyleRole": "subtitle",
+                            "lines": [
+                              "/projections/projection"
+                            ],
+                            "x": 12,
+                            "y": 38,
+                            "width": 137.111,
+                            "height": 16,
+                            "lineHeight": 16,
+                            "region": "primary",
+                            "priority": "secondary"
+                          },
+                          {
+                            "id": "P-220__badge",
+                            "kind": "badge_text",
+                            "textStyleRole": "badge",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 12,
+                            "y": 60,
+                            "width": 41.188,
+                            "height": 22,
+                            "lineHeight": 14,
+                            "region": "primary",
+                            "priority": "secondary"
+                          }
+                        ],
+                        "ports": [
+                          {
+                            "id": "north_chain",
+                            "role": "north_chain",
+                            "side": "north",
+                            "offset": 24,
+                            "x": 24,
+                            "y": 0
+                          },
+                          {
+                            "id": "south_chain",
+                            "role": "south_chain",
+                            "side": "south",
+                            "offset": 24,
+                            "x": 24,
+                            "y": 94
+                          },
+                          {
+                            "id": "east",
+                            "role": "east",
+                            "side": "east",
+                            "x": 168,
+                            "y": 47
+                          },
+                          {
+                            "id": "west",
+                            "role": "west",
+                            "side": "west",
+                            "x": 0,
+                            "y": 47
+                          }
+                        ],
+                        "overflow": {
+                          "status": "fits"
+                        },
+                        "x": 304,
+                        "y": 286,
+                        "width": 168,
+                        "height": 94
+                      },
+                      {
+                        "kind": "container",
+                        "id": "P-220__contains_scope_branch",
+                        "role": "contains_scope_branch",
+                        "primitive": "stack",
+                        "classes": [
+                          "owned_scope",
+                          "contains_scope_branch"
+                        ],
+                        "layout": {
+                          "strategy": "stack",
+                          "direction": "vertical",
+                          "gap": 32,
+                          "crossAlignment": "start"
+                        },
+                        "chrome": {
+                          "padding": {
+                            "top": 0,
+                            "right": 0,
+                            "bottom": 0,
+                            "left": 48
+                          },
+                          "gutter": 32,
+                          "headerBandHeight": 0
+                        },
+                        "headerContent": [],
+                        "children": [
+                          {
+                            "kind": "container",
+                            "id": "P-221__group",
+                            "role": "place_group",
+                            "primitive": "stack",
+                            "classes": [
+                              "place_group",
+                              "group_nested",
+                              "depth-2"
+                            ],
+                            "layout": {
+                              "strategy": "stack",
+                              "direction": "vertical",
+                              "gap": 32,
+                              "crossAlignment": "start"
+                            },
+                            "chrome": {
+                              "padding": {
+                                "top": 0,
+                                "right": 0,
+                                "bottom": 0,
+                                "left": 0
+                              },
+                              "gutter": 32,
+                              "headerBandHeight": 0
+                            },
+                            "headerContent": [],
+                            "children": [
+                              {
+                                "kind": "node",
+                                "id": "P-221",
+                                "role": "place",
+                                "primitive": "card",
+                                "classes": [
+                                  "place",
+                                  "nested_place",
+                                  "depth-2"
+                                ],
+                                "widthPolicy": {
+                                  "preferred": "narrow",
+                                  "allowed": [
+                                    "narrow",
+                                    "standard",
+                                    "wide"
+                                  ]
+                                },
+                                "widthBand": "standard",
+                                "overflowPolicy": {
+                                  "kind": "escalate_width_band",
+                                  "maxLines": 2
+                                },
+                                "content": [
+                                  {
+                                    "id": "P-221__title",
+                                    "kind": "text",
+                                    "textStyleRole": "title",
+                                    "lines": [
+                                      "Fee Schedule Scenario",
+                                      "Details"
+                                    ],
+                                    "x": 12,
+                                    "y": 12,
+                                    "width": 170.752,
+                                    "height": 40,
+                                    "lineHeight": 20,
+                                    "region": "primary",
+                                    "priority": "primary"
+                                  },
+                                  {
+                                    "id": "P-221__subtitle",
+                                    "kind": "text",
+                                    "textStyleRole": "subtitle",
+                                    "lines": [
+                                      "/projections/projection/fee-sche",
+                                      "dule-scenario-details"
+                                    ],
+                                    "x": 12,
+                                    "y": 58,
+                                    "width": 194.961,
+                                    "height": 32,
+                                    "lineHeight": 16,
+                                    "region": "primary",
+                                    "priority": "secondary"
+                                  },
+                                  {
+                                    "id": "P-221__badge",
+                                    "kind": "badge_text",
+                                    "textStyleRole": "badge",
+                                    "lines": [
+                                      "auth"
+                                    ],
+                                    "x": 12,
+                                    "y": 96,
+                                    "width": 41.188,
+                                    "height": 22,
+                                    "lineHeight": 14,
+                                    "region": "primary",
+                                    "priority": "secondary"
+                                  }
+                                ],
+                                "ports": [
+                                  {
+                                    "id": "north_chain",
+                                    "role": "north_chain",
+                                    "side": "north",
+                                    "offset": 24,
+                                    "x": 24,
+                                    "y": 0
+                                  },
+                                  {
+                                    "id": "south_chain",
+                                    "role": "south_chain",
+                                    "side": "south",
+                                    "offset": 24,
+                                    "x": 24,
+                                    "y": 130
+                                  },
+                                  {
+                                    "id": "east",
+                                    "role": "east",
+                                    "side": "east",
+                                    "x": 224,
+                                    "y": 65
+                                  },
+                                  {
+                                    "id": "west",
+                                    "role": "west",
+                                    "side": "west",
+                                    "x": 0,
+                                    "y": 65
+                                  }
+                                ],
+                                "overflow": {
+                                  "status": "escalated_width_band"
+                                },
+                                "x": 352,
+                                "y": 412,
+                                "width": 224,
+                                "height": 130
+                              }
+                            ],
+                            "ports": [],
+                            "x": 352,
+                            "y": 412,
+                            "width": 224,
+                            "height": 130
+                          },
+                          {
+                            "kind": "container",
+                            "id": "P-222__group",
+                            "role": "place_group",
+                            "primitive": "stack",
+                            "classes": [
+                              "place_group",
+                              "group_nested",
+                              "depth-2"
+                            ],
+                            "layout": {
+                              "strategy": "stack",
+                              "direction": "vertical",
+                              "gap": 32,
+                              "crossAlignment": "start"
+                            },
+                            "chrome": {
+                              "padding": {
+                                "top": 0,
+                                "right": 0,
+                                "bottom": 0,
+                                "left": 0
+                              },
+                              "gutter": 32,
+                              "headerBandHeight": 0
+                            },
+                            "headerContent": [],
+                            "children": [
+                              {
+                                "kind": "node",
+                                "id": "P-222",
+                                "role": "place",
+                                "primitive": "card",
+                                "classes": [
+                                  "place",
+                                  "nested_place",
+                                  "depth-2"
+                                ],
+                                "widthPolicy": {
+                                  "preferred": "narrow",
+                                  "allowed": [
+                                    "narrow",
+                                    "standard",
+                                    "wide"
+                                  ]
+                                },
+                                "widthBand": "standard",
+                                "overflowPolicy": {
+                                  "kind": "escalate_width_band",
+                                  "maxLines": 2
+                                },
+                                "content": [
+                                  {
+                                    "id": "P-222__title",
+                                    "kind": "text",
+                                    "textStyleRole": "title",
+                                    "lines": [
+                                      "Funding Scenario Details"
+                                    ],
+                                    "x": 12,
+                                    "y": 12,
+                                    "width": 185.864,
+                                    "height": 20,
+                                    "lineHeight": 20,
+                                    "region": "primary",
+                                    "priority": "primary"
+                                  },
+                                  {
+                                    "id": "P-222__subtitle",
+                                    "kind": "text",
+                                    "textStyleRole": "subtitle",
+                                    "lines": [
+                                      "/projections/projection/funding-s",
+                                      "cenario-details"
+                                    ],
+                                    "x": 12,
+                                    "y": 38,
+                                    "width": 199.693,
+                                    "height": 32,
+                                    "lineHeight": 16,
+                                    "region": "primary",
+                                    "priority": "secondary"
+                                  },
+                                  {
+                                    "id": "P-222__badge",
+                                    "kind": "badge_text",
+                                    "textStyleRole": "badge",
+                                    "lines": [
+                                      "auth"
+                                    ],
+                                    "x": 12,
+                                    "y": 76,
+                                    "width": 41.188,
+                                    "height": 22,
+                                    "lineHeight": 14,
+                                    "region": "primary",
+                                    "priority": "secondary"
+                                  }
+                                ],
+                                "ports": [
+                                  {
+                                    "id": "north_chain",
+                                    "role": "north_chain",
+                                    "side": "north",
+                                    "offset": 24,
+                                    "x": 24,
+                                    "y": 0
+                                  },
+                                  {
+                                    "id": "south_chain",
+                                    "role": "south_chain",
+                                    "side": "south",
+                                    "offset": 24,
+                                    "x": 24,
+                                    "y": 110
+                                  },
+                                  {
+                                    "id": "east",
+                                    "role": "east",
+                                    "side": "east",
+                                    "x": 224,
+                                    "y": 55
+                                  },
+                                  {
+                                    "id": "west",
+                                    "role": "west",
+                                    "side": "west",
+                                    "x": 0,
+                                    "y": 55
+                                  }
+                                ],
+                                "overflow": {
+                                  "status": "escalated_width_band"
+                                },
+                                "x": 352,
+                                "y": 574,
+                                "width": 224,
+                                "height": 110
+                              }
+                            ],
+                            "ports": [],
+                            "x": 352,
+                            "y": 574,
+                            "width": 224,
+                            "height": 110
+                          }
+                        ],
+                        "ports": [],
+                        "x": 304,
+                        "y": 412,
+                        "width": 272,
+                        "height": 272
+                      }
+                    ],
+                    "ports": [],
+                    "x": 304,
+                    "y": 286,
+                    "width": 272,
+                    "height": 398
+                  },
+                  {
+                    "kind": "container",
+                    "id": "P-230__group",
+                    "role": "place_group",
+                    "primitive": "stack",
+                    "classes": [
+                      "place_group",
+                      "group_nested",
+                      "depth-1"
+                    ],
+                    "layout": {
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 32,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
+                      },
+                      "gutter": 32,
+                      "headerBandHeight": 0
+                    },
+                    "headerContent": [],
+                    "children": [
+                      {
+                        "kind": "node",
+                        "id": "P-230",
+                        "role": "place",
+                        "primitive": "card",
+                        "classes": [
+                          "place",
+                          "nested_place",
+                          "depth-1"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "narrow",
+                          "allowed": [
+                            "narrow",
+                            "standard",
+                            "wide"
+                          ]
+                        },
+                        "widthBand": "narrow",
+                        "overflowPolicy": {
+                          "kind": "escalate_width_band",
+                          "maxLines": 2
+                        },
+                        "content": [
+                          {
+                            "id": "P-230__title",
+                            "kind": "text",
+                            "textStyleRole": "title",
+                            "lines": [
+                              "Create New",
+                              "Projection"
+                            ],
+                            "x": 12,
+                            "y": 12,
+                            "width": 86.848,
+                            "height": 40,
+                            "lineHeight": 20,
+                            "region": "primary",
+                            "priority": "primary"
+                          },
+                          {
+                            "id": "P-230__subtitle",
+                            "kind": "text",
+                            "textStyleRole": "subtitle",
+                            "lines": [
+                              "/projections/create-ne",
+                              "w-projection"
+                            ],
+                            "x": 12,
+                            "y": 58,
+                            "width": 134.667,
+                            "height": 32,
+                            "lineHeight": 16,
+                            "region": "primary",
+                            "priority": "secondary"
+                          },
+                          {
+                            "id": "P-230__badge",
+                            "kind": "badge_text",
+                            "textStyleRole": "badge",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 12,
+                            "y": 96,
+                            "width": 41.188,
+                            "height": 22,
+                            "lineHeight": 14,
+                            "region": "primary",
+                            "priority": "secondary"
+                          }
+                        ],
+                        "ports": [
+                          {
+                            "id": "north_chain",
+                            "role": "north_chain",
+                            "side": "north",
+                            "offset": 24,
+                            "x": 24,
+                            "y": 0
+                          },
+                          {
+                            "id": "south_chain",
+                            "role": "south_chain",
+                            "side": "south",
+                            "offset": 24,
+                            "x": 24,
+                            "y": 130
+                          },
+                          {
+                            "id": "east",
+                            "role": "east",
+                            "side": "east",
+                            "x": 168,
+                            "y": 65
+                          },
+                          {
+                            "id": "west",
+                            "role": "west",
+                            "side": "west",
+                            "x": 0,
+                            "y": 65
+                          }
+                        ],
+                        "overflow": {
+                          "status": "fits"
+                        },
+                        "x": 304,
+                        "y": 716,
+                        "width": 168,
+                        "height": 130
+                      }
+                    ],
+                    "ports": [],
+                    "x": 304,
+                    "y": 716,
+                    "width": 168,
+                    "height": 130
+                  }
+                ],
+                "ports": [],
+                "x": 256,
+                "y": 286,
+                "width": 320,
+                "height": 560
+              }
+            ],
+            "ports": [],
+            "x": 256,
+            "y": 80,
+            "width": 320,
+            "height": 766
+          }
+        ],
+        "ports": [],
+        "x": 240,
+        "y": 24,
+        "width": 352,
+        "height": 838
+      },
+      {
+        "kind": "container",
+        "id": "A-300",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-300__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Current Bills"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 92.96,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-310__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-310",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-310__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Current Bills"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 92.96,
+                    "height": 20,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  },
+                  {
+                    "id": "P-310__subtitle",
+                    "kind": "text",
+                    "textStyleRole": "subtitle",
+                    "lines": [
+                      "/current-bills"
+                    ],
+                    "x": 12,
+                    "y": 38,
+                    "width": 78.644,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-310__badge",
+                    "kind": "badge_text",
+                    "textStyleRole": "badge",
+                    "lines": [
+                      "auth"
+                    ],
+                    "x": 12,
+                    "y": 60,
+                    "width": 41.188,
+                    "height": 22,
+                    "lineHeight": 14,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-310__metadata__entry_points__0",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "entry_points:",
+                      "nav:global_nav"
+                    ],
+                    "x": 12,
+                    "y": 88,
+                    "width": 82.956,
+                    "height": 32,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-310__metadata__primary_nav__1",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "primary_nav: true"
+                    ],
+                    "x": 12,
+                    "y": 126,
+                    "width": 96.834,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 154
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 77
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 77
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 656,
+                "y": 80,
+                "width": 168,
+                "height": 154
+              }
+            ],
+            "ports": [],
+            "x": 656,
+            "y": 80,
+            "width": 168,
+            "height": 154
+          }
+        ],
+        "ports": [],
+        "x": 640,
+        "y": 24,
+        "width": 200,
+        "height": 226
+      },
+      {
+        "kind": "container",
+        "id": "A-400",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-400__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Review"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 52.928,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-410__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-410",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-410__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Review Past Bills"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 125.688,
+                    "height": 20,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  },
+                  {
+                    "id": "P-410__subtitle",
+                    "kind": "text",
+                    "textStyleRole": "subtitle",
+                    "lines": [
+                      "/review"
+                    ],
+                    "x": 12,
+                    "y": 38,
+                    "width": 43.96,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-410__badge",
+                    "kind": "badge_text",
+                    "textStyleRole": "badge",
+                    "lines": [
+                      "auth"
+                    ],
+                    "x": 12,
+                    "y": 60,
+                    "width": 41.188,
+                    "height": 22,
+                    "lineHeight": 14,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-410__metadata__entry_points__0",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "entry_points:",
+                      "nav:global_nav"
+                    ],
+                    "x": 12,
+                    "y": 88,
+                    "width": 82.956,
+                    "height": 32,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-410__metadata__primary_nav__1",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "primary_nav: true"
+                    ],
+                    "x": 12,
+                    "y": 126,
+                    "width": 96.834,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 154
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 77
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 77
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 904,
+                "y": 80,
+                "width": 168,
+                "height": 154
+              }
+            ],
+            "ports": [],
+            "x": 904,
+            "y": 80,
+            "width": 168,
+            "height": 154
+          }
+        ],
+        "ports": [],
+        "x": 888,
+        "y": 24,
+        "width": 200,
+        "height": 226
+      },
+      {
+        "kind": "container",
+        "id": "A-500",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-500__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Accounts"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 70.024,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-510__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-510",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-510__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Manage Accounts"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 133.584,
+                    "height": 20,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  },
+                  {
+                    "id": "P-510__subtitle",
+                    "kind": "text",
+                    "textStyleRole": "subtitle",
+                    "lines": [
+                      "/accounts"
+                    ],
+                    "x": 12,
+                    "y": 38,
+                    "width": 59.585,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-510__badge",
+                    "kind": "badge_text",
+                    "textStyleRole": "badge",
+                    "lines": [
+                      "auth"
+                    ],
+                    "x": 12,
+                    "y": 60,
+                    "width": 41.188,
+                    "height": 22,
+                    "lineHeight": 14,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-510__metadata__entry_points__0",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "entry_points:",
+                      "nav:global_nav"
+                    ],
+                    "x": 12,
+                    "y": 88,
+                    "width": 82.956,
+                    "height": 32,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-510__metadata__primary_nav__1",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "primary_nav: true"
+                    ],
+                    "x": 12,
+                    "y": 126,
+                    "width": 96.834,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 154
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 77
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 77
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 1152,
+                "y": 80,
+                "width": 168,
+                "height": 154
+              }
+            ],
+            "ports": [],
+            "x": 1152,
+            "y": 80,
+            "width": 168,
+            "height": 154
+          }
+        ],
+        "ports": [],
+        "x": 1136,
+        "y": 24,
+        "width": 200,
+        "height": 226
+      },
+      {
+        "kind": "container",
+        "id": "A-600",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-600__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Fee Schedules"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 109.264,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-610__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-610",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "place",
+                  "root_place",
+                  "depth-0"
+                ],
+                "widthPolicy": {
+                  "preferred": "narrow",
+                  "allowed": [
+                    "narrow",
+                    "standard",
+                    "wide"
+                  ]
+                },
+                "widthBand": "narrow",
+                "overflowPolicy": {
+                  "kind": "escalate_width_band",
+                  "maxLines": 2
+                },
+                "content": [
+                  {
+                    "id": "P-610__title",
+                    "kind": "text",
+                    "textStyleRole": "title",
+                    "lines": [
+                      "Manage Fee",
+                      "Schedules"
+                    ],
+                    "x": 12,
+                    "y": 12,
+                    "width": 90.952,
+                    "height": 40,
+                    "lineHeight": 20,
+                    "region": "primary",
+                    "priority": "primary"
+                  },
+                  {
+                    "id": "P-610__subtitle",
+                    "kind": "text",
+                    "textStyleRole": "subtitle",
+                    "lines": [
+                      "/fee-schedules"
+                    ],
+                    "x": 12,
+                    "y": 58,
+                    "width": 90.747,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-610__badge",
+                    "kind": "badge_text",
+                    "textStyleRole": "badge",
+                    "lines": [
+                      "auth"
+                    ],
+                    "x": 12,
+                    "y": 80,
+                    "width": 41.188,
+                    "height": 22,
+                    "lineHeight": 14,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-610__metadata__entry_points__0",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "entry_points:",
+                      "nav:global_nav"
+                    ],
+                    "x": 12,
+                    "y": 108,
+                    "width": 82.956,
+                    "height": 32,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  },
+                  {
+                    "id": "P-610__metadata__primary_nav__1",
+                    "kind": "metadata",
+                    "textStyleRole": "metadata",
+                    "lines": [
+                      "primary_nav: true"
+                    ],
+                    "x": 12,
+                    "y": 146,
+                    "width": 96.834,
+                    "height": 16,
+                    "lineHeight": 16,
+                    "region": "primary",
+                    "priority": "secondary"
+                  }
+                ],
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 174
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 168,
+                    "y": 87
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 87
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 1400,
+                "y": 80,
+                "width": 168,
+                "height": 174
+              }
+            ],
+            "ports": [],
+            "x": 1400,
+            "y": 80,
+            "width": 168,
+            "height": 174
+          }
+        ],
+        "ports": [],
+        "x": 1384,
+        "y": 24,
+        "width": 200,
+        "height": 246
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 1608,
+    "height": 886
+  },
+  "edges": [
+    {
+      "id": "P-100__nav__P-110",
+      "role": "contains_navigation",
+      "classes": [
+        "ia_local_structure",
+        "contains_edge",
+        "merged_navigation",
+        "direct_vertical"
+      ],
+      "from": {
+        "itemId": "P-100",
+        "portId": "south_chain",
+        "x": 48,
+        "y": 178
+      },
+      "to": {
+        "itemId": "P-110",
+        "portId": "north_chain",
+        "x": 48,
+        "y": 210
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 48,
+            "y": 178
+          },
+          {
+            "x": 48,
+            "y": 210
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-220__nav__P-221",
+      "role": "contains_navigation",
+      "classes": [
+        "ia_local_structure",
+        "contains_edge",
+        "merged_navigation",
+        "shared_trunk"
+      ],
+      "from": {
+        "itemId": "P-220",
+        "portId": "south_chain",
+        "x": 328,
+        "y": 380
+      },
+      "to": {
+        "itemId": "P-221",
+        "portId": "west",
+        "x": 352,
+        "y": 477
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 328,
+            "y": 380
+          },
+          {
+            "x": 328,
+            "y": 477
+          },
+          {
+            "x": 352,
+            "y": 477
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-220__nav__P-222",
+      "role": "contains_navigation",
+      "classes": [
+        "ia_local_structure",
+        "contains_edge",
+        "merged_navigation",
+        "shared_trunk"
+      ],
+      "from": {
+        "itemId": "P-220",
+        "portId": "south_chain",
+        "x": 328,
+        "y": 380
+      },
+      "to": {
+        "itemId": "P-222",
+        "portId": "west",
+        "x": 352,
+        "y": 629
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 328,
+            "y": 380
+          },
+          {
+            "x": 328,
+            "y": 629
+          },
+          {
+            "x": 352,
+            "y": 629
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-210__nav__P-220",
+      "role": "navigation",
+      "classes": [
+        "ia_local_structure",
+        "follower_edge",
+        "merged_navigation",
+        "shared_trunk"
+      ],
+      "from": {
+        "itemId": "P-210",
+        "portId": "south_chain",
+        "x": 280,
+        "y": 254
+      },
+      "to": {
+        "itemId": "P-220",
+        "portId": "west",
+        "x": 304,
+        "y": 333
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 280,
+            "y": 254
+          },
+          {
+            "x": 280,
+            "y": 333
+          },
+          {
+            "x": 304,
+            "y": 333
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "P-210__nav__P-230",
+      "role": "navigation",
+      "classes": [
+        "ia_local_structure",
+        "follower_edge",
+        "merged_navigation",
+        "shared_trunk"
+      ],
+      "from": {
+        "itemId": "P-210",
+        "portId": "south_chain",
+        "x": 280,
+        "y": 254
+      },
+      "to": {
+        "itemId": "P-230",
+        "portId": "west",
+        "x": 304,
+        "y": 781
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 280,
+            "y": 254
+          },
+          {
+            "x": 280,
+            "y": 781
+          },
+          {
+            "x": 304,
+            "y": 781
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

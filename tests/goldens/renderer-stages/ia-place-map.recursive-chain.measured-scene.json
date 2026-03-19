@@ -132,8 +132,6 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 24,
-            "y": 24,
             "width": 168,
             "height": 48
           },
@@ -267,8 +265,6 @@
                     "overflow": {
                       "status": "fits"
                     },
-                    "x": 24,
-                    "y": 104,
                     "width": 168,
                     "height": 48
                   },
@@ -402,52 +398,38 @@
                             "overflow": {
                               "status": "fits"
                             },
-                            "x": 24,
-                            "y": 184,
                             "width": 168,
                             "height": 48
                           }
                         ],
                         "ports": [],
-                        "x": 24,
-                        "y": 184,
-                        "width": 168,
-                        "height": 48
+                        "width": 0,
+                        "height": 0
                       }
                     ],
                     "ports": [],
-                    "x": 24,
-                    "y": 184,
-                    "width": 168,
-                    "height": 48
+                    "width": 0,
+                    "height": 0
                   }
                 ],
                 "ports": [],
-                "x": 24,
-                "y": 104,
-                "width": 168,
-                "height": 128
+                "width": 0,
+                "height": 0
               }
             ],
             "ports": [],
-            "x": 24,
-            "y": 104,
-            "width": 168,
-            "height": 128
+            "width": 0,
+            "height": 0
           }
         ],
         "ports": [],
-        "x": 24,
-        "y": 24,
-        "width": 168,
-        "height": 208
+        "width": 0,
+        "height": 0
       }
     ],
     "ports": [],
-    "x": 0,
-    "y": 0,
-    "width": 216,
-    "height": 256
+    "width": 0,
+    "height": 0
   },
   "edges": [
     {
@@ -462,32 +444,23 @@
       "from": {
         "itemId": "P-801",
         "portId": "south_chain",
-        "x": 48,
-        "y": 152
+        "x": 0,
+        "y": 0
       },
       "to": {
         "itemId": "P-802",
         "portId": "north_chain",
-        "x": 48,
-        "y": 184
+        "x": 0,
+        "y": 0
       },
-      "route": {
+      "routing": {
         "style": "orthogonal",
-        "points": [
-          {
-            "x": 48,
-            "y": 152
-          },
-          {
-            "x": 48,
-            "y": 184
-          }
-        ]
+        "preferAxis": "vertical",
+        "localPattern": "ia_direct_vertical"
       },
       "markers": {
         "end": "arrow"
-      },
-      "paintGroup": "edges"
+      }
     },
     {
       "id": "P-800__nav__P-801",
@@ -501,40 +474,24 @@
       "from": {
         "itemId": "P-800",
         "portId": "south_chain",
-        "x": 48,
-        "y": 72
+        "x": 0,
+        "y": 0
       },
       "to": {
         "itemId": "P-801",
         "portId": "north_chain",
-        "x": 48,
-        "y": 104
+        "x": 0,
+        "y": 0
       },
-      "route": {
+      "routing": {
         "style": "orthogonal",
-        "points": [
-          {
-            "x": 48,
-            "y": 72
-          },
-          {
-            "x": 48,
-            "y": 104
-          }
-        ]
+        "preferAxis": "vertical",
+        "localPattern": "ia_direct_vertical"
       },
       "markers": {
         "end": "arrow"
-      },
-      "paintGroup": "edges"
+      }
     }
   ],
-  "diagnostics": [],
-  "paintOrder": [
-    "chrome",
-    "nodes",
-    "labels",
-    "edges",
-    "edge_labels"
-  ]
+  "diagnostics": []
 }

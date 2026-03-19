@@ -182,7 +182,7 @@ The per-view render models keep semantics centralized:
 - service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter and inside the staged scene builder
-- inside the staged renderer, `ia_place_map` same-chain navigation now keeps the recursive tree structure deterministic while using branch-local ELK route hints when they fit, then falling back to dedicated left-biased chain ports plus a shared vertical target-approach rule
+- inside the staged renderer, `ia_place_map` now uses manual hub/follower grouping and bottom-up owned-scope sizing: explicit containment creates owned child scope, forward local navigation may create same-scope follower scope, and local structure connectors use deterministic direct-vertical or shared-trunk routing without IA-specific ELK fallback
 - inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges, assigns those edges to an invisible label lane inside that gutter, and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
 
 Inside the staged renderer, `ui_contracts` still keeps its renderer-stage goldens as internal contract coverage, but the routed and balanced staged path now also serves the public `staged_ui_contracts_preview` backend.

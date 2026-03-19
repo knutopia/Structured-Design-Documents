@@ -27,30 +27,33 @@ import {
 
 const ROOT_GAP = 48;
 const AREA_GAP = 20;
-// const PLACE_BRANCH_GAP = 16;
-const PLACE_BRANCH_GAP = 40;
-const DESCENDANT_GAP = 12;
-const DESCENDANT_INDENT = 40;
+const PLACE_GROUP_GAP = 32;
+const OWNED_SCOPE_GAP = 32;
+const OWNED_SCOPE_INDENT = 48;
 const CHAIN_PORT_OFFSET = 24;
 
-interface PlaceRoutingContext {
-  chainId: string;
-  chainOrder: number;
-}
+type OwnedScopeKind = "contains_scope_single" | "contains_scope_branch" | "follower_scope";
+type ScopeEntry =
+  | {
+    kind: "area";
+    area: IaRenderArea;
+  }
+  | {
+    kind: "place";
+    place: IaRenderPlace;
+    followers: IaRenderPlace[];
+  };
 
 interface SceneBuildContext {
   projectionNodesById: ReadonlyMap<string, Projection["nodes"][number]>;
   annotationsByNodeId: ReadonlyMap<string, ProjectionNodeAnnotation>;
-  placeRoutingById: Map<string, PlaceRoutingContext>;
-  nextChainOrder: number;
+  navigationTargetsBySourceId: ReadonlyMap<string, ReadonlySet<string>>;
+  placeOrderById: ReadonlyMap<string, number>;
+  edges: SceneEdge[];
 }
 
 export interface IaPlaceMapStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
 export interface IaPlaceMapStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
-
-function createRootSceneItemId(scopeId: string, placeId: string): string {
-  return `chain-${scopeId}-${placeId}`;
-}
 
 function shouldIncludeMetadata(
   key: string,
@@ -126,15 +129,8 @@ function buildPlaceNode(
   place: IaRenderPlace,
   depth: number,
   context: SceneBuildContext,
-  chainId: string,
   displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
 ): SceneNode {
-  context.placeRoutingById.set(place.id, {
-    chainId,
-    chainOrder: context.nextChainOrder
-  });
-  context.nextChainOrder += 1;
-
   return buildCardNode({
     id: place.id,
     role: "place",
@@ -148,20 +144,108 @@ function buildPlaceNode(
   });
 }
 
-function buildDescendantsContainer(
-  place: IaRenderPlace,
-  descendants: SceneItem[]
+function buildPlaceOrderIndex(items: readonly IaRenderItem[], placeOrderById: Map<string, number>, state: { next: number }): void {
+  for (const item of items) {
+    if (item.kind === "area") {
+      buildPlaceOrderIndex(item.items, placeOrderById, state);
+      continue;
+    }
+
+    placeOrderById.set(item.id, state.next);
+    state.next += 1;
+    buildPlaceOrderIndex(item.items, placeOrderById, state);
+  }
+}
+
+function buildNavigationTargetsBySourceId(edges: readonly { from: string; to: string }[]): Map<string, ReadonlySet<string>> {
+  const targetsBySourceId = new Map<string, Set<string>>();
+
+  for (const edge of edges) {
+    const existing = targetsBySourceId.get(edge.from);
+    if (existing) {
+      existing.add(edge.to);
+      continue;
+    }
+
+    targetsBySourceId.set(edge.from, new Set([edge.to]));
+  }
+
+  return new Map(
+    [...targetsBySourceId.entries()].map(([sourceId, targets]) => [sourceId, new Set(targets) as ReadonlySet<string>])
+  );
+}
+
+function hasForwardNavigation(sourceId: string, targetId: string, context: SceneBuildContext): boolean {
+  const sourceOrder = context.placeOrderById.get(sourceId);
+  const targetOrder = context.placeOrderById.get(targetId);
+  if (sourceOrder === undefined || targetOrder === undefined || sourceOrder >= targetOrder) {
+    return false;
+  }
+
+  return context.navigationTargetsBySourceId.get(sourceId)?.has(targetId) ?? false;
+}
+
+function planScopeEntries(items: readonly IaRenderItem[], context: SceneBuildContext): ScopeEntry[] {
+  const planned: ScopeEntry[] = [];
+  const claimedFollowerIds = new Set<string>();
+
+  for (let index = 0; index < items.length; index += 1) {
+    const item = items[index];
+    if (!item) {
+      continue;
+    }
+
+    if (item.kind === "area") {
+      planned.push({ kind: "area", area: item });
+      continue;
+    }
+
+    if (claimedFollowerIds.has(item.id)) {
+      continue;
+    }
+
+    const followers: IaRenderPlace[] = [];
+    for (let candidateIndex = index + 1; candidateIndex < items.length; candidateIndex += 1) {
+      const candidate = items[candidateIndex];
+      if (!candidate || candidate.kind !== "place") {
+        break;
+      }
+      if (claimedFollowerIds.has(candidate.id)) {
+        continue;
+      }
+      if (!hasForwardNavigation(item.id, candidate.id, context)) {
+        continue;
+      }
+
+      followers.push(candidate);
+      claimedFollowerIds.add(candidate.id);
+    }
+
+    planned.push({
+      kind: "place",
+      place: item,
+      followers
+    });
+  }
+
+  return planned;
+}
+
+function buildOwnedScopeContainer(
+  ownerPlaceId: string,
+  kind: OwnedScopeKind,
+  children: SceneItem[]
 ): SceneContainer {
   return {
     kind: "container",
-    id: `${place.id}__descendants`,
-    role: "place_descendants",
+    id: `${ownerPlaceId}__${kind}`,
+    role: kind,
     primitive: "stack",
-    classes: ["place_descendants"],
+    classes: ["owned_scope", kind],
     layout: {
       strategy: "stack",
       direction: "vertical",
-      gap: DESCENDANT_GAP,
+      gap: OWNED_SCOPE_GAP,
       crossAlignment: "start"
     },
     chrome: {
@@ -169,39 +253,27 @@ function buildDescendantsContainer(
         top: 0,
         right: 0,
         bottom: 0,
-        left: DESCENDANT_INDENT
+        left: kind === "contains_scope_single" ? 0 : OWNED_SCOPE_INDENT
       },
-      gutter: DESCENDANT_GAP,
+      gutter: OWNED_SCOPE_GAP,
       headerBandHeight: 0
     },
-    children: descendants,
+    children,
     ports: []
   };
 }
 
-function buildPlaceBranch(
-  place: IaRenderPlace,
-  descendants: SceneItem[],
-  depth: number,
-  context: SceneBuildContext,
-  chainId: string,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
-): SceneContainer {
-  const children: SceneItem[] = [buildPlaceNode(place, depth, context, chainId, displayOptions)];
-  if (descendants.length > 0) {
-    children.push(buildDescendantsContainer(place, descendants));
-  }
-
+function buildPlaceGroupContainer(placeId: string, depth: number, children: SceneItem[]): SceneContainer {
   return {
     kind: "container",
-    id: `${place.id}__branch`,
-    role: "place_branch",
+    id: `${placeId}__group`,
+    role: "place_group",
     primitive: "stack",
-    classes: ["place_branch", depth === 0 ? "branch_root" : "branch_nested", `depth-${depth}`],
+    classes: ["place_group", depth === 0 ? "group_root" : "group_nested", `depth-${depth}`],
     layout: {
       strategy: "stack",
       direction: "vertical",
-      gap: PLACE_BRANCH_GAP,
+      gap: PLACE_GROUP_GAP,
       crossAlignment: "start"
     },
     chrome: {
@@ -211,7 +283,7 @@ function buildPlaceBranch(
         bottom: 0,
         left: 0
       },
-      gutter: PLACE_BRANCH_GAP,
+      gutter: PLACE_GROUP_GAP,
       headerBandHeight: 0
     },
     children,
@@ -219,50 +291,136 @@ function buildPlaceBranch(
   };
 }
 
-function buildPlaceBranchFromSequence(
-  items: IaRenderItem[],
-  startIndex: number,
+function createLocalStructureEdge(
+  sourceId: string,
+  targetId: string,
+  relation: "contains" | "follower",
+  localPattern: "ia_direct_vertical" | "ia_shared_trunk",
+  mergedNavigation: boolean
+): SceneEdge {
+  const isDirectVertical = localPattern === "ia_direct_vertical";
+  const edgeId = relation === "contains" && !mergedNavigation
+    ? `${sourceId}__contains__${targetId}`
+    : `${sourceId}__nav__${targetId}`;
+
+  return {
+    id: edgeId,
+    role: relation === "contains"
+      ? (mergedNavigation ? "contains_navigation" : "contains_place")
+      : "navigation",
+    classes: [
+      "ia_local_structure",
+      relation === "contains" ? "contains_edge" : "follower_edge",
+      mergedNavigation ? "merged_navigation" : "structural_only",
+      isDirectVertical ? "direct_vertical" : "shared_trunk"
+    ],
+    from: {
+      itemId: sourceId,
+      portId: "south_chain"
+    },
+    to: {
+      itemId: targetId,
+      portId: isDirectVertical ? "north_chain" : "west"
+    },
+    routing: {
+      style: "orthogonal",
+      preferAxis: isDirectVertical ? "vertical" : "horizontal",
+      localPattern
+    },
+    markers: {
+      end: "arrow"
+    }
+  };
+}
+
+function appendOwnedScopeEdges(
+  ownerPlaceId: string,
+  explicitEntries: readonly ScopeEntry[],
+  followers: readonly IaRenderPlace[],
+  ownedScopeKind: OwnedScopeKind | undefined,
+  context: SceneBuildContext
+): void {
+  if (!ownedScopeKind) {
+    return;
+  }
+
+  const containsPattern = ownedScopeKind === "contains_scope_single" ? "ia_direct_vertical" : "ia_shared_trunk";
+
+  for (const entry of explicitEntries) {
+    if (entry.kind !== "place") {
+      continue;
+    }
+
+    context.edges.push(
+      createLocalStructureEdge(
+        ownerPlaceId,
+        entry.place.id,
+        "contains",
+        containsPattern,
+        hasForwardNavigation(ownerPlaceId, entry.place.id, context)
+      )
+    );
+  }
+
+  for (const follower of followers) {
+    context.edges.push(
+      createLocalStructureEdge(
+        ownerPlaceId,
+        follower.id,
+        "follower",
+        "ia_shared_trunk",
+        true
+      )
+    );
+  }
+}
+
+function buildSceneItemFromScopeEntry(
+  entry: ScopeEntry,
   scopeId: string,
   depth: number,
   context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>,
-  chainId?: string
-): { item: SceneContainer; nextIndex: number } {
-  const current = items[startIndex];
-  if (!current || current.kind !== "place") {
-    throw new Error(`Expected a place item at index ${startIndex}.`);
-  }
+  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+): SceneItem {
+  return entry.kind === "area"
+    ? buildAreaScene(entry.area, scopeId, context, displayOptions)
+    : buildPlaceGroup(entry.place, entry.followers, scopeId, depth, context, displayOptions);
+}
 
-  const resolvedChainId = chainId ?? createRootSceneItemId(scopeId, current.id);
-  const explicitDescendants = buildSceneItemsFromSequence(
-    current.items,
-    `${scopeId}/${current.id}`,
-    depth + 1,
-    context,
-    displayOptions,
-    resolvedChainId
+function buildPlaceGroup(
+  place: IaRenderPlace,
+  followers: readonly IaRenderPlace[],
+  scopeId: string,
+  depth: number,
+  context: SceneBuildContext,
+  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+): SceneContainer {
+  const explicitEntries = planScopeEntries(place.items, context);
+  const explicitChildren = explicitEntries.map((entry) =>
+    buildSceneItemFromScopeEntry(entry, `${scopeId}/${place.id}`, depth + 1, context, displayOptions)
   );
+  const followerChildren = followers.map((follower) =>
+    buildPlaceGroup(follower, [], `${scopeId}/${place.id}__followers`, depth + 1, context, displayOptions)
+  );
+  const ownedChildren = [...explicitChildren, ...followerChildren];
 
-  let nextIndex = startIndex + 1;
-  const descendants = [...explicitDescendants];
-  if (nextIndex < items.length && items[nextIndex]?.kind === "place") {
-    const implicitDescendant = buildPlaceBranchFromSequence(
-      items,
-      nextIndex,
-      scopeId,
-      depth + 1,
-      context,
-      displayOptions,
-      resolvedChainId
-    );
-    descendants.push(implicitDescendant.item);
-    nextIndex = implicitDescendant.nextIndex;
+  let ownedScopeKind: OwnedScopeKind | undefined;
+  if (ownedChildren.length > 0) {
+    ownedScopeKind = followers.length > 0
+      ? "follower_scope"
+      : explicitChildren.length === 1
+        ? "contains_scope_single"
+        : "contains_scope_branch";
   }
 
-  return {
-    item: buildPlaceBranch(current, descendants, depth, context, resolvedChainId, displayOptions),
-    nextIndex
-  };
+  appendOwnedScopeEdges(place.id, explicitEntries, followers, ownedScopeKind, context);
+
+  const children: SceneItem[] = [buildPlaceNode(place, depth, context, displayOptions)];
+  if (ownedScopeKind) {
+    children.push(buildOwnedScopeContainer(place.id, ownedScopeKind, ownedChildren));
+  }
+
+  return buildPlaceGroupContainer(place.id, depth, children);
 }
 
 function buildAreaScene(
@@ -301,78 +459,21 @@ function buildAreaScene(
         priority: "primary"
       }
     ],
-    children: buildSceneItemsFromSequence(area.items, `${scopeId}/${area.id}`, 0, context, displayOptions),
+    children: buildScopeSceneItems(area.items, `${scopeId}/${area.id}`, 0, context, displayOptions),
     ports: []
   };
 }
 
-function buildSceneItemsFromSequence(
-  items: IaRenderItem[],
+function buildScopeSceneItems(
+  items: readonly IaRenderItem[],
   scopeId: string,
   depth: number,
   context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>,
-  chainId?: string
+  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
 ): SceneItem[] {
-  const built: SceneItem[] = [];
-  let index = 0;
-
-  while (index < items.length) {
-    const item = items[index];
-    if (!item) {
-      break;
-    }
-
-    if (item.kind === "area") {
-      built.push(buildAreaScene(item, scopeId, context, displayOptions));
-      index += 1;
-      continue;
-    }
-
-    const branch = buildPlaceBranchFromSequence(items, index, scopeId, depth, context, displayOptions, chainId);
-    built.push(branch.item);
-    index = branch.nextIndex;
-  }
-
-  return built;
-}
-
-function buildNavigationEdges(
-  modelEdges: ReturnType<typeof buildIaPlaceMapRenderModel>["edges"],
-  placeRoutingById: ReadonlyMap<string, PlaceRoutingContext>
-): SceneEdge[] {
-  return modelEdges.map((edge) => {
-    const sourceRouting = placeRoutingById.get(edge.from);
-    const targetRouting = placeRoutingById.get(edge.to);
-    const sameChain = sourceRouting?.chainId && targetRouting?.chainId && sourceRouting.chainId === targetRouting.chainId;
-    const isDownwardSameChain = sameChain
-      && sourceRouting !== undefined
-      && targetRouting !== undefined
-      && sourceRouting.chainOrder > targetRouting.chainOrder;
-
-    return {
-      id: `${edge.from}__nav__${edge.to}`,
-      role: "navigation",
-      classes: [sameChain ? "within_chain" : "cross_chain"],
-      from: {
-        itemId: edge.from,
-        portId: sameChain ? (isDownwardSameChain ? "south_chain" : "north_chain") : "east"
-      },
-      to: {
-        itemId: edge.to,
-        portId: sameChain ? (isDownwardSameChain ? "north_chain" : "south_chain") : "west"
-      },
-      routing: {
-        style: "orthogonal",
-        preferAxis: sameChain ? "vertical" : "horizontal",
-        bendPlacement: sameChain ? "target_bias" : undefined,
-        targetApproach: sameChain ? "vertical_child" : undefined
-      },
-      markers: {
-        end: "arrow"
-      }
-    };
-  });
+  return planScopeEntries(items, context).map((entry) =>
+    buildSceneItemFromScopeEntry(entry, scopeId, depth, context, displayOptions)
+  );
 }
 
 export function buildIaPlaceMapRendererScene(
@@ -384,13 +485,17 @@ export function buildIaPlaceMapRendererScene(
 ): RendererScene {
   const displayOptions = resolvePlaceLabelDisplayOptions(resolveProfileDisplayPolicy(view, profileId));
   const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? []);
+  const placeOrderById = new Map<string, number>();
+  buildPlaceOrderIndex(model.rootItems, placeOrderById, { next: 0 });
+
   const context: SceneBuildContext = {
     projectionNodesById: new Map(projection.nodes.map((node) => [node.id, node])),
     annotationsByNodeId: new Map(projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])),
-    placeRoutingById: new Map(),
-    nextChainOrder: 0
+    navigationTargetsBySourceId: buildNavigationTargetsBySourceId(model.edges),
+    placeOrderById,
+    edges: []
   };
-  const rootChildren = buildSceneItemsFromSequence(model.rootItems, "root", 0, context, displayOptions);
+  const rootChildren = buildScopeSceneItems(model.rootItems, "root", 0, context, displayOptions);
 
   return {
     viewId: "ia_place_map",
@@ -416,7 +521,7 @@ export function buildIaPlaceMapRendererScene(
       },
       children: rootChildren
     }),
-    edges: buildNavigationEdges(model.edges, context.placeRoutingById),
+    edges: context.edges,
     diagnostics: []
   };
 }

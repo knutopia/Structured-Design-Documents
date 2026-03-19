@@ -26,12 +26,12 @@ import {
   type RendererDiagnostic
 } from "./diagnostics.js";
 import {
-  runElkFixedPositionRouting,
   runElkLayeredLayout,
   type ElkAdaptedEdge
 } from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
 import {
+  buildLocalPatternRoute,
   buildPositionedIndex,
   buildSourceContractLaneRoute,
   buildRouteFromLocalHint,
@@ -79,9 +79,6 @@ type LayoutStrategyHandler = (
 ) => Promise<ContainerLayoutResult>;
 
 const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels", "edges", "edge_labels"];
-const IA_BRANCH_ELK_NODE_GAP = 24;
-// const IA_BRANCH_ELK_LAYER_GAP = 24;
-const IA_BRANCH_ELK_LAYER_GAP = 32;
 const CONTRACT_LABEL_LANE_INSET = 12;
 const CONTRACT_LABEL_LANE_WIDTH_REDUCTION = 16;
 const CONTRACT_LABEL_LANE_TOP_PADDING = 12;
@@ -810,263 +807,6 @@ function buildOwnedEdgesByContainer(
   };
 }
 
-function collectDescendantNodesByRole(
-  container: PositionedContainer,
-  role: string
-): PositionedNode[] {
-  const nodes: PositionedNode[] = [];
-  const queue: PositionedItem[] = [...container.children];
-
-  while (queue.length > 0) {
-    const current = queue.shift();
-    if (!current) {
-      continue;
-    }
-
-    if (current.kind === "container") {
-      queue.push(...current.children);
-      continue;
-    }
-
-    if (current.role === role) {
-      nodes.push(current);
-    }
-  }
-
-  return nodes;
-}
-
-function cloneNodeRelativeToOwner(
-  node: PositionedNode,
-  owner: PositionedContainer
-): PositionedNode {
-  return {
-    kind: "node",
-    id: node.id,
-    role: node.role,
-    primitive: node.primitive,
-    classes: [...node.classes],
-    widthPolicy: {
-      preferred: node.widthPolicy.preferred,
-      allowed: [...node.widthPolicy.allowed]
-    },
-    widthBand: node.widthBand,
-    overflowPolicy: {
-      kind: node.overflowPolicy.kind,
-      maxLines: node.overflowPolicy.maxLines
-    },
-    content: node.content.map((block) => cloneMeasuredContentBlock(block)),
-    ports: node.ports.map((port) => cloneMeasuredPort(port)),
-    overflow: {
-      status: node.overflow.status,
-      detail: node.overflow.detail
-    },
-    x: roundMetric(node.x - owner.x),
-    y: roundMetric(node.y - owner.y),
-    width: node.width,
-    height: node.height
-  };
-}
-
-function resolveNodeBounds(nodes: PositionedNode[]): { x: number; y: number; width: number; height: number } | undefined {
-  if (nodes.length === 0) {
-    return undefined;
-  }
-
-  const minX = Math.min(...nodes.map((node) => node.x));
-  const minY = Math.min(...nodes.map((node) => node.y));
-  const maxX = Math.max(...nodes.map((node) => node.x + node.width));
-  const maxY = Math.max(...nodes.map((node) => node.y + node.height));
-
-  return {
-    x: roundMetric(minX),
-    y: roundMetric(minY),
-    width: roundMetric(maxX - minX),
-    height: roundMetric(maxY - minY)
-  };
-}
-
-function hasRouteHintsForEdges(
-  routeHints: ReadonlyMap<string, Point[]>,
-  edges: readonly MeasuredEdge[]
-): boolean {
-  return edges.every((edge) => {
-    const points = routeHints.get(edge.id);
-    return Array.isArray(points) && points.length > 0;
-  });
-}
-
-function applyRelativeNodePositions(
-  owner: PositionedContainer,
-  nodesById: ReadonlyMap<string, PositionedNode>,
-  childPositions: ReadonlyMap<string, Point>,
-  offset: Point
-): void {
-  for (const [nodeId, position] of childPositions.entries()) {
-    const node = nodesById.get(nodeId);
-    if (!node) {
-      continue;
-    }
-
-    node.x = roundMetric(owner.x + offset.x + position.x);
-    node.y = roundMetric(owner.y + offset.y + position.y);
-  }
-}
-
-async function buildIaBranchLocalElkRouteHints(
-  root: PositionedContainer,
-  viewId: string,
-  edges: readonly MeasuredEdge[],
-  ownerContainerByEdgeId: ReadonlyMap<string, string>,
-  diagnostics: RendererDiagnostic[]
-): Promise<Map<string, Point[]>> {
-  if (viewId !== "ia_place_map") {
-    return new Map();
-  }
-
-  const index = buildPositionedIndex(root);
-  const sameChainEdgesByOwner = new Map<string, MeasuredEdge[]>();
-  for (const edge of edges) {
-    if (!edge.classes.includes("within_chain")) {
-      continue;
-    }
-
-    const ownerId = ownerContainerByEdgeId.get(edge.id);
-    if (!ownerId) {
-      continue;
-    }
-
-    const existing = sameChainEdgesByOwner.get(ownerId);
-    if (existing) {
-      existing.push(edge);
-    } else {
-      sameChainEdgesByOwner.set(ownerId, [edge]);
-    }
-  }
-
-  const routeHints = new Map<string, Point[]>();
-
-  for (const [ownerId, ownerEdges] of sameChainEdgesByOwner.entries()) {
-    const ownerItem = index.get(ownerId)?.item;
-    if (!ownerItem || ownerItem.kind !== "container") {
-      continue;
-    }
-
-    const descendantNodes = collectDescendantNodesByRole(ownerItem, "place");
-    if (descendantNodes.length < 2) {
-      continue;
-    }
-
-    const localNodes = descendantNodes.map((node) => cloneNodeRelativeToOwner(node, ownerItem));
-    const adaptedEdges = buildElkAdaptedEdges(localNodes, ownerEdges);
-    if (adaptedEdges.length === 0) {
-      continue;
-    }
-
-    try {
-      const fixedRouting = await runElkFixedPositionRouting({
-        containerId: `${ownerId}__same_chain_fixed`,
-        direction: "vertical",
-        nodeGap: IA_BRANCH_ELK_NODE_GAP,
-        layerGap: IA_BRANCH_ELK_LAYER_GAP,
-        children: localNodes,
-        edges: adaptedEdges
-      });
-      if (fixedRouting.positionsPreserved && hasRouteHintsForEdges(fixedRouting.edgeRoutes, ownerEdges)) {
-        mergeRouteHints(routeHints, fixedRouting.edgeRoutes);
-        continue;
-      }
-
-      diagnostics.push(
-        createRoutingDiagnostic(
-          "renderer.routing.ia_branch_elk_fixed_fallback",
-          `Branch-local fixed-position ELK routing for "${ownerId}" could not preserve node placement. Trying local placement+routing fallback.`,
-          ownerId,
-          "info"
-        )
-      );
-    } catch (error) {
-      diagnostics.push(
-        createRoutingDiagnostic(
-          "renderer.routing.ia_branch_elk_fixed_failure",
-          `Branch-local fixed-position ELK routing failed for "${ownerId}". Trying local placement+routing fallback.`,
-          ownerId,
-          "info",
-          error instanceof Error ? error.message : String(error)
-        )
-      );
-    }
-
-    const currentBounds = resolveNodeBounds(localNodes);
-    if (!currentBounds) {
-      continue;
-    }
-
-    try {
-      const fallbackLayout = await runElkLayeredLayout({
-        containerId: `${ownerId}__same_chain_layout`,
-        direction: "vertical",
-        nodeGap: IA_BRANCH_ELK_NODE_GAP,
-        layerGap: IA_BRANCH_ELK_LAYER_GAP,
-        children: localNodes,
-        edges: adaptedEdges
-      });
-
-      if (!hasRouteHintsForEdges(fallbackLayout.edgeRoutes, ownerEdges)) {
-        diagnostics.push(
-          createRoutingDiagnostic(
-            "renderer.routing.ia_branch_elk_layout_incomplete",
-            `Branch-local ELK placement fallback for "${ownerId}" did not return complete route hints. Keeping manual routing for this region.`,
-            ownerId,
-            "info"
-          )
-        );
-        continue;
-      }
-
-      if (fallbackLayout.contentWidth > currentBounds.width || fallbackLayout.contentHeight > currentBounds.height) {
-        diagnostics.push(
-          createRoutingDiagnostic(
-            "renderer.routing.ia_branch_elk_layout_rejected",
-            `Branch-local ELK placement fallback for "${ownerId}" would exceed the current branch bounds. Keeping manual routing for this region.`,
-            ownerId,
-            "info"
-          )
-        );
-        continue;
-      }
-
-      const nodesById = new Map(descendantNodes.map((node) => [node.id, node]));
-      const offset = {
-        x: currentBounds.x,
-        y: currentBounds.y
-      };
-      applyRelativeNodePositions(ownerItem, nodesById, fallbackLayout.childPositions, offset);
-      mergeRouteHints(routeHints, offsetLocalRouteHints(fallbackLayout.edgeRoutes, offset.x, offset.y));
-      diagnostics.push(
-        createRoutingDiagnostic(
-          "renderer.routing.ia_branch_elk_layout_applied",
-          `Applied branch-local ELK placement+routing fallback for "${ownerId}" within the existing branch bounds.`,
-          ownerId,
-          "info"
-        )
-      );
-    } catch (error) {
-      diagnostics.push(
-        createRoutingDiagnostic(
-          "renderer.routing.ia_branch_elk_layout_failure",
-          `Branch-local ELK placement fallback failed for "${ownerId}". Keeping manual routing for this region.`,
-          ownerId,
-          "info",
-          error instanceof Error ? error.message : String(error)
-        )
-      );
-    }
-  }
-
-  return routeHints;
-}
-
 function resolveContractLabelLane(
   sourceContainer: PositionedContainer
 ): SourceContractLaneAssignment | undefined {
@@ -1231,6 +971,7 @@ function positionMeasuredEdge(
   const localHint = routeHints.get(edge.id);
   const canUseElkRoute = edge.routing.style === "orthogonal" && Array.isArray(localHint) && localHint.length > 0;
   const contractLabelLane = contractLabelLanes.get(edge.id);
+  const localPatternRoute = buildLocalPatternRoute(edge, from, to, diagnostics);
 
   if (edge.routing.avoidNodeBoxes && !canUseElkRoute) {
     diagnostics.push(
@@ -1245,6 +986,8 @@ function positionMeasuredEdge(
 
   const route = canUseElkRoute
     ? buildRouteFromLocalHint(edge, from, to, owner, localHint, diagnostics)
+    : localPatternRoute
+      ? localPatternRoute
     : contractLabelLane
       ? buildSourceContractLaneRoute(edge, from, to, contractLabelLane, diagnostics)
       : buildSharedRoute(edge, from, to, diagnostics);
@@ -1299,14 +1042,6 @@ export async function positionMeasuredScene(measuredScene: MeasuredScene): Promi
   }
 
   const root = rootResult.item;
-  const branchRouteHints = await buildIaBranchLocalElkRouteHints(
-    root,
-    measuredScene.viewId,
-    measuredScene.edges,
-    ownerContainerByEdgeId,
-    context.diagnostics
-  );
-  mergeRouteHints(rootResult.routeHints, branchRouteHints);
   const index = buildPositionedIndex(root);
   const contractLabelLanes = buildContractLabelLaneAssignments(measuredScene.edges, index, context.diagnostics);
   const edges = measuredScene.edges.map((edge) =>

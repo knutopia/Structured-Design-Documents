@@ -6,6 +6,11 @@
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 
+## Thu 3-20-26
+
+-created reference design & notes for ia_place_map
+-successful build without elk
+
 ## Wed 3-19-26
 
 -abandoned visual fixes mess
