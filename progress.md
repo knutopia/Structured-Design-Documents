@@ -9,7 +9,9 @@
 ## Wed 3-19-26
 
 -abandoned visual fixes mess
--got stuck with git revert when rollback was neededg
+-got stuck with git revert when rollback was needed
+-attempted navigate-based indent for IA but failed
+-restored repo, giving up for now.
 
 ## Mon 3-17-26
 
