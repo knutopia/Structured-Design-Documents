@@ -148,10 +148,13 @@ function buildPlaceNode(
   });
 }
 
-function buildDescendantsContainer(placeId: string, descendants: SceneItem[]): SceneContainer {
+function buildDescendantsContainer(
+  place: IaRenderPlace,
+  descendants: SceneItem[]
+): SceneContainer {
   return {
     kind: "container",
-    id: `${placeId}__descendants`,
+    id: `${place.id}__descendants`,
     role: "place_descendants",
     primitive: "stack",
     classes: ["place_descendants"],
@@ -176,57 +179,17 @@ function buildDescendantsContainer(placeId: string, descendants: SceneItem[]): S
   };
 }
 
-function buildPlaceChainContainer(
-  firstPlaceId: string,
-  depth: number,
-  branches: SceneContainer[]
-): SceneContainer {
-  return {
-    kind: "container",
-    id: `${firstPlaceId}__place_chain`,
-    role: "place_chain",
-    primitive: "stack",
-    classes: ["place_chain", depth === 0 ? "chain_root" : "chain_nested", `depth-${depth}`],
-    layout: {
-      strategy: "stack",
-      direction: "vertical",
-      gap: PLACE_BRANCH_GAP,
-      crossAlignment: "start"
-    },
-    chrome: {
-      padding: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-      },
-      gutter: PLACE_BRANCH_GAP,
-      headerBandHeight: 0
-    },
-    children: branches,
-    ports: []
-  };
-}
-
 function buildPlaceBranch(
   place: IaRenderPlace,
-  scopeId: string,
+  descendants: SceneItem[],
   depth: number,
   context: SceneBuildContext,
   chainId: string,
   displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
 ): SceneContainer {
   const children: SceneItem[] = [buildPlaceNode(place, depth, context, chainId, displayOptions)];
-  const descendants = buildSceneItemsFromSequence(
-    place.items,
-    `${scopeId}/${place.id}`,
-    depth + 1,
-    context,
-    displayOptions,
-    chainId
-  );
   if (descendants.length > 0) {
-    children.push(buildDescendantsContainer(place.id, descendants));
+    children.push(buildDescendantsContainer(place, descendants));
   }
 
   return {
@@ -256,7 +219,7 @@ function buildPlaceBranch(
   };
 }
 
-function buildPlaceRunFromSequence(
+function buildPlaceBranchFromSequence(
   items: IaRenderItem[],
   startIndex: number,
   scopeId: string,
@@ -264,26 +227,40 @@ function buildPlaceRunFromSequence(
   context: SceneBuildContext,
   displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>,
   chainId?: string
-): { items: SceneItem[]; nextIndex: number } {
+): { item: SceneContainer; nextIndex: number } {
   const current = items[startIndex];
   if (!current || current.kind !== "place") {
     throw new Error(`Expected a place item at index ${startIndex}.`);
   }
 
   const resolvedChainId = chainId ?? createRootSceneItemId(scopeId, current.id);
-  const branches: SceneContainer[] = [];
-  let nextIndex = startIndex;
+  const explicitDescendants = buildSceneItemsFromSequence(
+    current.items,
+    `${scopeId}/${current.id}`,
+    depth + 1,
+    context,
+    displayOptions,
+    resolvedChainId
+  );
 
-  while (nextIndex < items.length && items[nextIndex]?.kind === "place") {
-    const place = items[nextIndex] as IaRenderPlace;
-    branches.push(buildPlaceBranch(place, scopeId, depth, context, resolvedChainId, displayOptions));
-    nextIndex += 1;
+  let nextIndex = startIndex + 1;
+  const descendants = [...explicitDescendants];
+  if (nextIndex < items.length && items[nextIndex]?.kind === "place") {
+    const implicitDescendant = buildPlaceBranchFromSequence(
+      items,
+      nextIndex,
+      scopeId,
+      depth + 1,
+      context,
+      displayOptions,
+      resolvedChainId
+    );
+    descendants.push(implicitDescendant.item);
+    nextIndex = implicitDescendant.nextIndex;
   }
 
   return {
-    items: branches.length === 1
-      ? [branches[0]!]
-      : [buildPlaceChainContainer(current.id, depth, branches)],
+    item: buildPlaceBranch(current, descendants, depth, context, resolvedChainId, displayOptions),
     nextIndex
   };
 }
@@ -352,9 +329,9 @@ function buildSceneItemsFromSequence(
       continue;
     }
 
-    const placeRun = buildPlaceRunFromSequence(items, index, scopeId, depth, context, displayOptions, chainId);
-    built.push(...placeRun.items);
-    index = placeRun.nextIndex;
+    const branch = buildPlaceBranchFromSequence(items, index, scopeId, depth, context, displayOptions, chainId);
+    built.push(branch.item);
+    index = branch.nextIndex;
   }
 
   return built;
@@ -371,7 +348,7 @@ function buildNavigationEdges(
     const isDownwardSameChain = sameChain
       && sourceRouting !== undefined
       && targetRouting !== undefined
-      && sourceRouting.chainOrder < targetRouting.chainOrder;
+      && sourceRouting.chainOrder > targetRouting.chainOrder;
 
     return {
       id: `${edge.from}__nav__${edge.to}`,

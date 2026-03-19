@@ -53,6 +53,11 @@ describe("staged visual acceptance", () => {
   it("keeps target ia_place_map artifacts free of fallback diagnostics, node-crossing routes, and weak target approaches", async () => {
     const cases = [
       {
+        sourcePath: path.join(repoRoot, "real_world_exploration/billSage_simple_structure.sdd"),
+        outputArtifactPath: path.join(repoRoot, "real_world_exploration/billSage_simple_structure.ia_place_map.simple.png"),
+        profileId: "simple"
+      },
+      {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),
         outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile/outcome_to_ia_trace.ia_place_map.png"),
         profileId: "recommended"

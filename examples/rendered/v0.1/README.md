@@ -34,7 +34,7 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - top-level items read left-to-right with clean vertical alignment
 - no headers, labels, or routed edges sit visually above the top-level nodes
 - mixed top-level `Place` and `Area` ordering follows source order
-- implicit place chains keep equal sibling places aligned at one shared lower level instead of recursively indenting them
+- implicit place chains indent rightward recursively at top level and inside areas
 - `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
 - navigation connectors stay readable for both within-chain and cross-chain links
 

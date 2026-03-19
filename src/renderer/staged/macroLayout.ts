@@ -896,39 +896,6 @@ function hasRouteHintsForEdges(
   });
 }
 
-function canUseDirectVerticalSameChainRoute(
-  edge: MeasuredEdge,
-  index: ReadonlyMap<string, IndexedPositionedItem>
-): boolean {
-  const sourceItem = index.get(edge.from.itemId)?.item;
-  const targetItem = index.get(edge.to.itemId)?.item;
-  if (!sourceItem || !targetItem) {
-    return false;
-  }
-
-  const sourcePort = resolvePortOnItem(sourceItem, edge.from, edge.routing.sourcePortRole);
-  const targetPort = resolvePortOnItem(targetItem, edge.to, edge.routing.targetPortRole);
-  if (!sourcePort || !targetPort) {
-    return false;
-  }
-
-  const sourcePoint = {
-    x: roundMetric(sourceItem.x + sourcePort.x),
-    y: roundMetric(sourceItem.y + sourcePort.y)
-  };
-  const targetPoint = {
-    x: roundMetric(targetItem.x + targetPort.x),
-    y: roundMetric(targetItem.y + targetPort.y)
-  };
-
-  if (sourcePoint.x !== targetPoint.x || sourcePoint.y === targetPoint.y) {
-    return false;
-  }
-
-  return (sourcePort.side === "south" && targetPort.side === "north" && sourcePoint.y < targetPoint.y)
-    || (sourcePort.side === "north" && targetPort.side === "south" && sourcePoint.y > targetPoint.y);
-}
-
 function applyRelativeNodePositions(
   owner: PositionedContainer,
   nodesById: ReadonlyMap<string, PositionedNode>,
@@ -993,10 +960,6 @@ async function buildIaBranchLocalElkRouteHints(
     const localNodes = descendantNodes.map((node) => cloneNodeRelativeToOwner(node, ownerItem));
     const adaptedEdges = buildElkAdaptedEdges(localNodes, ownerEdges);
     if (adaptedEdges.length === 0) {
-      continue;
-    }
-
-    if (ownerEdges.every((edge) => canUseDirectVerticalSameChainRoute(edge, index))) {
       continue;
     }
 

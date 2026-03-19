@@ -31,7 +31,8 @@ export interface SourceContractLaneAssignment {
 
 const EDGE_LABEL_SEGMENT_CLEARANCE = 12;
 const EDGE_LABEL_SEGMENT_OFFSET = 12;
-const MIN_ARROW_MARKER_LEG = 12;
+//const MIN_ARROW_MARKER_LEG = 12;
+const MIN_ARROW_MARKER_LEG = 16;
 const TARGET_BIASED_BEND_SOURCE_CLEARANCE = 4;
 // const TARGET_APPROACH_ZONE = 24;
 const TARGET_APPROACH_ZONE = 16;
@@ -520,32 +521,6 @@ function applyVerticalTargetApproach(
   return undefined;
 }
 
-function routeSatisfiesVerticalTargetApproach(
-  points: Point[],
-  to: ResolvedEdgeEndpoint
-): boolean {
-  if (points.length < 2 || !isVerticalSide(to.side)) {
-    return false;
-  }
-
-  const end = points[points.length - 1];
-  const beforeEnd = points[points.length - 2];
-  if (!end || !beforeEnd || beforeEnd.x !== end.x) {
-    return false;
-  }
-
-  const finalLegLength = getAxisAlignedSegmentLength(beforeEnd, end);
-  if (finalLegLength === undefined || finalLegLength < TARGET_APPROACH_MIN_FINAL_LEG) {
-    return false;
-  }
-
-  if (to.side === "north") {
-    return beforeEnd.y <= to.y - TARGET_APPROACH_ZONE;
-  }
-
-  return beforeEnd.y >= to.y + TARGET_APPROACH_ZONE;
-}
-
 function applyTargetApproach(
   edge: MeasuredEdge,
   points: Point[],
@@ -554,10 +529,6 @@ function applyTargetApproach(
   diagnostics: RendererDiagnostic[]
 ): Point[] {
   if (edge.routing.targetApproach !== "vertical_child") {
-    return points;
-  }
-
-  if (routeSatisfiesVerticalTargetApproach(points, to)) {
     return points;
   }
 

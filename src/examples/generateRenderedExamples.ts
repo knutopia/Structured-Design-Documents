@@ -69,7 +69,7 @@ function buildReadmeContent(
   lines.push("- top-level items read left-to-right with clean vertical alignment");
   lines.push("- no headers, labels, or routed edges sit visually above the top-level nodes");
   lines.push("- mixed top-level `Place` and `Area` ordering follows source order");
-  lines.push("- implicit place chains keep equal sibling places aligned at one shared lower level instead of recursively indenting them");
+  lines.push("- implicit place chains indent rightward recursively at top level and inside areas");
   lines.push("- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
   lines.push("- navigation connectors stay readable for both within-chain and cross-chain links");
   lines.push("");
