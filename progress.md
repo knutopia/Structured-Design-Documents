@@ -9,7 +9,7 @@
 ## Wed 3-19-26
 
 -abandoned visual fixes mess
--got stuck with git revert when rollback was needed
+-got stuck with git revert when rollback was neededg
 
 ## Mon 3-17-26
 
