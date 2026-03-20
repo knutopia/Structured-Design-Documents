@@ -118,6 +118,19 @@ const stagedUiContractsPreviewArtifacts: PreviewArtifactCapability[] = [
   }
 ];
 
+const stagedServiceBlueprintPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "staged_service_blueprint_preview",
+    backendClass: "staged"
+  },
+  {
+    format: "png",
+    backendId: "staged_service_blueprint_preview",
+    backendClass: "staged"
+  }
+];
+
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
     textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
@@ -184,7 +197,18 @@ const outcomeOpportunityMapRenderer: ViewTextRenderer = {
 };
 
 const serviceBlueprintRenderer: ViewTextRenderer = {
-  capability: dotAndMermaidPreviewCapability(),
+  capability: {
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: [
+      ...stagedServiceBlueprintPreviewArtifacts.map((artifact) => ({ ...artifact })),
+      ...legacyPreviewArtifacts.map((artifact) => ({ ...artifact }))
+    ],
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: {
+      svg: "staged_service_blueprint_preview",
+      png: "staged_service_blueprint_preview"
+    }
+  },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);

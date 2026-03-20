@@ -9,7 +9,7 @@ export type SceneNodePrimitive =
   | "annotation_list"
   | "edge_label"
   | "connector_port";
-export type LayoutStrategy = "stack" | "grid" | "lanes" | "elk_layered" | "manual";
+export type LayoutStrategy = "stack" | "grid" | "lanes" | "elk_layered" | "elk_lanes" | "manual";
 export type LayoutDirection = "horizontal" | "vertical";
 export type CrossAlignment = "start" | "center" | "stretch";
 export type WidthBand = "chip" | "narrow" | "standard" | "wide";
@@ -29,7 +29,7 @@ export type RoutingStyle = "orthogonal" | "straight" | "stepped";
 export type PreferredAxis = "horizontal" | "vertical";
 export type OrthogonalBendPlacement = "midpoint" | "target_bias";
 export type TargetApproachPreset = "vertical_child";
-export type EdgeLabelPlacement = "segment" | "source_contract_lane";
+export type EdgeLabelPlacement = "segment" | "segment_strict" | "source_contract_lane";
 export type LocalRoutePattern = "ia_direct_vertical" | "ia_shared_trunk";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
 export type EdgeMarkerKind = "none" | "arrow";

@@ -110,11 +110,62 @@ describe("view render capabilities", () => {
     });
   });
 
+  it("defaults service_blueprint previews to the staged backend while preserving legacy preview support", () => {
+    const capability = getViewRenderCapability("service_blueprint");
+
+    expect(capability).toBeDefined();
+    expect(capability?.textArtifacts).toEqual([
+      {
+        format: "dot",
+        backendId: "legacy_dot",
+        backendClass: "legacy"
+      },
+      {
+        format: "mermaid",
+        backendId: "legacy_mermaid",
+        backendClass: "legacy"
+      }
+    ]);
+    expect(getPreviewArtifactCapabilities(capability!, "svg")).toEqual([
+      {
+        format: "svg",
+        backendId: "staged_service_blueprint_preview",
+        backendClass: "staged"
+      },
+      {
+        format: "svg",
+        backendId: "legacy_graphviz_preview",
+        backendClass: "legacy"
+      }
+    ]);
+    expect(getPreviewArtifactCapabilities(capability!, "png")).toEqual([
+      {
+        format: "png",
+        backendId: "staged_service_blueprint_preview",
+        backendClass: "staged"
+      },
+      {
+        format: "png",
+        backendId: "legacy_graphviz_preview",
+        backendClass: "legacy"
+      }
+    ]);
+    expect(getPreviewArtifactCapability(capability!, "svg")).toEqual({
+      format: "svg",
+      backendId: "staged_service_blueprint_preview",
+      backendClass: "staged"
+    });
+    expect(getPreviewArtifactCapability(capability!, "png")).toEqual({
+      format: "png",
+      backendId: "staged_service_blueprint_preview",
+      backendClass: "staged"
+    });
+  });
+
   it("keeps the remaining views on legacy preview backends", () => {
     for (const viewId of [
       "journey_map",
       "outcome_opportunity_map",
-      "service_blueprint",
       "scenario_flow"
     ]) {
       expect(getViewRenderCapability(viewId)).toEqual({

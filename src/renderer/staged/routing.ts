@@ -738,6 +738,81 @@ export function buildSharedRoute(
   };
 }
 
+export function offsetParallelOrthogonalRoute(
+  route: PositionedRoute,
+  offset: number
+): PositionedRoute {
+  if (offset === 0 || route.style !== "orthogonal" || route.points.length < 2) {
+    return route;
+  }
+
+  const shifted = route.points.map((point) => ({ ...point }));
+
+  if (shifted.length === 2) {
+    const [start, end] = shifted;
+    if (start.x === end.x) {
+      return {
+        style: route.style,
+        points: collapseRoutePoints([
+          start,
+          { x: roundMetric(start.x + offset), y: start.y },
+          { x: roundMetric(end.x + offset), y: end.y },
+          end
+        ])
+      };
+    }
+
+    if (start.y === end.y) {
+      return {
+        style: route.style,
+        points: collapseRoutePoints([
+          start,
+          { x: start.x, y: roundMetric(start.y + offset) },
+          { x: end.x, y: roundMetric(end.y + offset) },
+          end
+        ])
+      };
+    }
+
+    return route;
+  }
+
+  const first = shifted[0]!;
+  const second = shifted[1]!;
+  const penultimate = shifted[shifted.length - 2]!;
+  const last = shifted[shifted.length - 1]!;
+
+  if (first.x === second.x && penultimate.x === last.x) {
+    for (let index = 1; index < shifted.length - 1; index += 1) {
+      shifted[index] = {
+        x: shifted[index]!.x,
+        y: roundMetric(shifted[index]!.y + offset)
+      };
+    }
+
+    return {
+      style: route.style,
+      points: collapseRoutePoints(shifted)
+    };
+  }
+
+  if (first.y === second.y && penultimate.y === last.y) {
+    for (let index = 1; index < shifted.length - 1; index += 1) {
+      shifted[index] = {
+        x: roundMetric(shifted[index]!.x + offset),
+        y: shifted[index]!.y
+      };
+    }
+
+    return {
+      style: route.style,
+      points: collapseRoutePoints(shifted)
+    };
+  }
+
+  return route;
+}
+
 export function buildSourceContractLaneRoute(
   edge: MeasuredEdge,
   from: ResolvedEdgeEndpoint,
@@ -969,6 +1044,54 @@ export function positionEdgeLabel(
     x: roundMetric(midpoint.x - label.width / 2),
     y: roundMetric(midpoint.y - label.height / 2)
   };
+}
+
+export function tryPositionEdgeLabelOnSegment(
+  label: NonNullable<MeasuredEdge["label"]>,
+  route: PositionedRoute,
+  diagnostics?: RendererDiagnostic[],
+  edgeId?: string
+): PositionedEdgeLabel | undefined {
+  const segment = chooseLabelSegment(label, route);
+  if (!segment) {
+    if (diagnostics && edgeId) {
+      diagnostics.push(
+        createRoutingDiagnostic(
+          "renderer.routing.edge_label_segment_omitted",
+          `Edge label placement for "${edgeId}" could not find a long enough route segment. Omitting the label.`,
+          edgeId,
+          "info"
+        )
+      );
+    }
+
+    return undefined;
+  }
+
+  const midpoint = {
+    x: roundMetric((segment.start.x + segment.end.x) / 2),
+    y: roundMetric((segment.start.y + segment.end.y) / 2)
+  };
+
+  return segment.orientation === "horizontal"
+    ? {
+        lines: [...label.lines],
+        width: label.width,
+        height: label.height,
+        lineHeight: label.lineHeight,
+        textStyleRole: label.textStyleRole,
+        x: roundMetric(midpoint.x - label.width / 2),
+        y: roundMetric(midpoint.y - label.height - EDGE_LABEL_SEGMENT_OFFSET)
+      }
+    : {
+        lines: [...label.lines],
+        width: label.width,
+        height: label.height,
+        lineHeight: label.lineHeight,
+        textStyleRole: label.textStyleRole,
+        x: roundMetric(midpoint.x + EDGE_LABEL_SEGMENT_OFFSET),
+        y: roundMetric(midpoint.y - label.height / 2)
+      };
 }
 
 export function positionEdgeLabelInLane(

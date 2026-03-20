@@ -144,6 +144,41 @@ describe("rendered example corpus", () => {
     ))).rejects.toThrow();
   });
 
+  it("keeps staged service_blueprint previews as the default corpus artifacts while preserving legacy preview siblings", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
+      (variant) => variant.viewId === "service_blueprint"
+    );
+
+    for (const variant of variants) {
+      const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+      const defaultSvg = await readFile(outputPaths.svgOutputPath, "utf8");
+      expect(defaultSvg).toContain('class="staged-svg');
+
+      const legacySvgPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "svg",
+        "legacy_graphviz_preview",
+        "staged_service_blueprint_preview"
+      );
+      const legacyPngPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "png",
+        "legacy_graphviz_preview",
+        "staged_service_blueprint_preview"
+      );
+
+      await access(legacySvgPath);
+      await access(legacyPngPath);
+
+      const legacySvg = await readFile(legacySvgPath, "utf8");
+      expect(legacySvg).not.toContain('class="staged-svg');
+    }
+  });
+
   it("keeps forbidden place routing and access fields out of simple rendered corpus artifacts", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);

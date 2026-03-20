@@ -29,6 +29,9 @@ export function buildEdgeStyleClasses(style: string | undefined): string[] {
   if (tokens.includes("dotted")) {
     classes.push("edge-dotted");
   }
+  if (tokens.includes("bold")) {
+    classes.push("edge-bold");
+  }
 
   return classes;
 }

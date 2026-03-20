@@ -13,6 +13,7 @@ import type {
 } from "../src/renderer/staged/contracts.js";
 import { buildIaPlaceMapRendererScene } from "../src/renderer/staged/iaPlaceMap.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import { buildServiceBlueprintRendererScene } from "../src/renderer/staged/serviceBlueprint.js";
 import { buildUiContractsRendererScene } from "../src/renderer/staged/uiContracts.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -43,7 +44,7 @@ export interface EdgeLabelBox extends Rect {
 
 export async function renderStagedArtifacts(
   sourcePath: string,
-  viewId: "ia_place_map" | "ui_contracts",
+  viewId: "ia_place_map" | "service_blueprint" | "ui_contracts",
   profileId: string
 ): Promise<RenderedStagedArtifacts> {
   const bundle = await loadBundle(manifestPath);
@@ -62,7 +63,9 @@ export async function renderStagedArtifacts(
 
   const rendererScene = viewId === "ia_place_map"
     ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, profileId)
-    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, profileId);
+    : viewId === "ui_contracts"
+      ? buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, profileId)
+      : buildServiceBlueprintRendererScene(projected.projection!, compiled.graph!, view, profileId);
 
   return runStagedRendererPipeline(rendererScene);
 }

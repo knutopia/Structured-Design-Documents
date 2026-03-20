@@ -3,8 +3,17 @@ import type {
   LayoutDirection,
   MeasuredPort,
   Point,
+  PortSide,
   PositionedItem
 } from "./contracts.js";
+
+export type ElkLayoutOptions = Record<string, string>;
+
+export interface ElkPortLayoutOverride {
+  side?: PortSide;
+  index?: number;
+  layoutOptions?: ElkLayoutOptions;
+}
 
 export interface ElkAdaptedEdge {
   id: string;
@@ -12,6 +21,7 @@ export interface ElkAdaptedEdge {
   targetItemId: string;
   sourcePortId?: string;
   targetPortId?: string;
+  layoutOptions?: ElkLayoutOptions;
 }
 
 export interface ElkLayeredAdapterInput {
@@ -21,6 +31,9 @@ export interface ElkLayeredAdapterInput {
   layerGap: number;
   children: PositionedItem[];
   edges: ElkAdaptedEdge[];
+  rootLayoutOptions?: ElkLayoutOptions;
+  nodeLayoutOptions?: Record<string, ElkLayoutOptions>;
+  portLayoutOptions?: Record<string, Record<string, ElkPortLayoutOverride>>;
 }
 
 export interface ElkLayeredAdapterResult {
@@ -44,6 +57,11 @@ type ElkLike = {
 
 const elk = new (ElkConstructor as unknown as { new(): ElkLike })();
 
+const ROOT_COORD_LAYOUT_OPTIONS = {
+  "org.eclipse.elk.json.shapeCoords": "ROOT",
+  "org.eclipse.elk.json.edgeCoords": "ROOT"
+} satisfies ElkLayoutOptions;
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
@@ -52,7 +70,7 @@ function resolveElkDirection(direction: LayoutDirection): "RIGHT" | "DOWN" {
   return direction === "vertical" ? "DOWN" : "RIGHT";
 }
 
-function toElkPortSide(side: MeasuredPort["side"]): "NORTH" | "SOUTH" | "EAST" | "WEST" {
+function toElkPortSide(side: PortSide): "NORTH" | "SOUTH" | "EAST" | "WEST" {
   switch (side) {
     case "north":
       return "NORTH";
@@ -67,32 +85,61 @@ function toElkPortSide(side: MeasuredPort["side"]): "NORTH" | "SOUTH" | "EAST" |
   throw new Error(`Unsupported ELK port side "${String(side)}".`);
 }
 
-function createElkPort(port: MeasuredPort, itemId: string): ElkPort {
+function mergeLayoutOptions(...options: Array<ElkLayoutOptions | undefined>): ElkLayoutOptions | undefined {
+  const merged = Object.assign({}, ...options.filter((option) => option !== undefined));
+  return Object.keys(merged).length > 0 ? merged : undefined;
+}
+
+function createElkPort(
+  port: MeasuredPort,
+  itemId: string,
+  override: ElkPortLayoutOverride | undefined
+): ElkPort {
+  const side = override?.side ?? port.side;
+  const layoutOptions = mergeLayoutOptions(
+    {
+      "org.eclipse.elk.port.side": toElkPortSide(side)
+    },
+    override?.index === undefined
+      ? undefined
+      : {
+        "org.eclipse.elk.port.index": String(override.index)
+      },
+    override?.layoutOptions
+  );
+
   return {
     id: `${itemId}:${port.id}`,
     x: roundMetric(port.x - 0.5),
     y: roundMetric(port.y - 0.5),
     width: 1,
     height: 1,
-    layoutOptions: {
-      "elk.port.side": toElkPortSide(port.side)
-    }
+    layoutOptions
   };
 }
 
-function createElkNode(item: PositionedItem): ElkNode {
+function createElkNode(
+  item: PositionedItem,
+  input: ElkLayeredAdapterInput
+): ElkNode {
+  const portLayoutOptions = input.portLayoutOptions?.[item.id];
+  const layoutOptions = mergeLayoutOptions(
+    item.ports.length > 0
+      ? {
+        "org.eclipse.elk.portConstraints": "FIXED_POS"
+      }
+      : undefined,
+    input.nodeLayoutOptions?.[item.id]
+  );
+
   return {
     id: item.id,
     x: roundMetric(item.x),
     y: roundMetric(item.y),
     width: item.width,
     height: item.height,
-    layoutOptions: item.ports.length > 0
-      ? {
-        "elk.portConstraints": "FIXED_POS"
-      }
-      : undefined,
-    ports: item.ports.map((port) => createElkPort(port, item.id))
+    layoutOptions,
+    ports: item.ports.map((port) => createElkPort(port, item.id, portLayoutOptions?.[port.id]))
   };
 }
 
@@ -143,18 +190,19 @@ function flattenSectionPoints(sections: ElkEdgeSection[] | undefined): Point[] {
 
 function createElkGraph(
   input: ElkLayeredAdapterInput,
-  layoutOptions: Record<string, string>
+  layoutOptions: ElkLayoutOptions
 ): ElkNode {
   return {
     id: input.containerId,
-    layoutOptions,
-    children: input.children.map((child) => createElkNode(child)),
+    layoutOptions: mergeLayoutOptions(layoutOptions, ROOT_COORD_LAYOUT_OPTIONS, input.rootLayoutOptions),
+    children: input.children.map((child) => createElkNode(child, input)),
     edges: input.edges.map((edge) => ({
       id: edge.id,
       source: edge.sourceItemId,
       target: edge.targetItemId,
       sourcePort: edge.sourcePortId ? `${edge.sourceItemId}:${edge.sourcePortId}` : undefined,
-      targetPort: edge.targetPortId ? `${edge.targetItemId}:${edge.targetPortId}` : undefined
+      targetPort: edge.targetPortId ? `${edge.targetItemId}:${edge.targetPortId}` : undefined,
+      layoutOptions: edge.layoutOptions
     }))
   } as unknown as ElkNode;
 }
@@ -202,16 +250,14 @@ function collectElkLayoutResult(
 }
 
 export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promise<ElkLayeredAdapterResult> {
-  const graph = {
-    ...createElkGraph(input, {
-      "elk.algorithm": "layered",
-      "elk.direction": resolveElkDirection(input.direction),
-      "elk.edgeRouting": "ORTHOGONAL",
-      "elk.padding": "[left=0,top=0,right=0,bottom=0]",
-      "elk.spacing.nodeNode": String(input.nodeGap),
-      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
-    })
-  };
+  const graph = createElkGraph(input, {
+    "org.eclipse.elk.algorithm": "layered",
+    "org.eclipse.elk.direction": resolveElkDirection(input.direction),
+    "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
+    "org.eclipse.elk.padding": "[left=0,top=0,right=0,bottom=0]",
+    "org.eclipse.elk.spacing.nodeNode": String(input.nodeGap),
+    "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
+  });
 
   const laidOut = await elk.layout(graph as unknown as ElkNode);
   return collectElkLayoutResult(input, laidOut);
@@ -220,17 +266,15 @@ export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promis
 export async function runElkFixedPositionRouting(
   input: ElkFixedPositionRoutingInput
 ): Promise<ElkFixedPositionRoutingResult> {
-  const graph = {
-    ...createElkGraph(input, {
-      "elk.algorithm": "layered",
-      "elk.direction": resolveElkDirection(input.direction),
-      "elk.edgeRouting": "ORTHOGONAL",
-      "elk.interactive": "true",
-      "elk.padding": "[left=0,top=0,right=0,bottom=0]",
-      "elk.spacing.nodeNode": String(input.nodeGap),
-      "elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
-    })
-  };
+  const graph = createElkGraph(input, {
+    "org.eclipse.elk.algorithm": "layered",
+    "org.eclipse.elk.direction": resolveElkDirection(input.direction),
+    "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
+    "org.eclipse.elk.interactive": "true",
+    "org.eclipse.elk.padding": "[left=0,top=0,right=0,bottom=0]",
+    "org.eclipse.elk.spacing.nodeNode": String(input.nodeGap),
+    "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
+  });
 
   const laidOut = await elk.layout(graph as unknown as ElkNode);
   const result = collectElkLayoutResult(input, laidOut);

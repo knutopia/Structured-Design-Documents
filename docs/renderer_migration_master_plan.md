@@ -568,13 +568,20 @@ The remaining views should benefit from the lessons of the first wave rather tha
 - choose the next migration order for the remaining views
 - create a second-wave master plan or a sequence of view-specific implementation steps
 - begin execution only after that re-plan is accepted
+- execute approved post-proof-view migrations one view at a time, carrying code, tests, preview wiring, corpus updates, and documentation together
 
 ### Recommended Next Candidates
 
-- `service_blueprint`, because it aligns well with manual lane and grid strategies
+- `service_blueprint`, because it is the first post-proof-view migration and validates a lane-owned, ELK-assisted two-pass layout for remaining lane-oriented views
 - `journey_map`, because it should benefit from shared lane and strip infrastructure
 - `outcome_opportunity_map`, because it can likely reuse lane plus routing patterns
 - `scenario_flow`, because its branching and routing complexity may make it a better late-stage migration
+
+### Execution Note
+
+- `service_blueprint` now ships on the staged preview path by default for SVG and PNG
+- the implemented approach keeps lane geometry renderer-owned, uses a first ELK pass for horizontal ordering and peer banding, then reroutes against final snapped lane rows in a second pass
+- explicit legacy Graphviz preview access remains available in parallel
 
 ### Out Of Scope
 

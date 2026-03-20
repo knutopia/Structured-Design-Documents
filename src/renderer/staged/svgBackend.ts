@@ -494,6 +494,7 @@ function buildStyleLines(theme: RendererTheme): string[] {
     `.scene-edge__path { fill: none; stroke: ${paint.palette.edge}; stroke-width: ${formatNumber(paint.edgeStrokeWidth)}; }`,
     `.scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }`,
     `.scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }`,
+    `.scene-edge.edge-bold .scene-edge__path { stroke-width: ${formatNumber(paint.edgeStrokeWidth + 1)}; }`,
     `.scene-edge-label__box { fill: ${paint.palette.edgeLabelFill}; stroke: ${paint.palette.edgeLabelStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
     `.scene-marker { fill: ${paint.palette.edge}; }`,
     `.scene-text { fill: ${paint.palette.text}; }`,

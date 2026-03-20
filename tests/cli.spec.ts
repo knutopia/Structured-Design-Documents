@@ -200,6 +200,8 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
         ? "staged_ia_place_map_preview"
         : options.viewId === "ui_contracts"
           ? "staged_ui_contracts_preview"
+          : options.viewId === "service_blueprint"
+            ? "staged_service_blueprint_preview"
           : "legacy_graphviz_preview");
     const artifact = options.format === "svg"
       ? {
@@ -467,7 +469,7 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/journey.svg");
   });
 
-  it("show supports service_blueprint previews through the legacy backend", async () => {
+  it("show defaults service_blueprint previews to the staged backend", async () => {
     const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
@@ -484,10 +486,35 @@ describe("CLI wrappers", () => {
     expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "service_blueprint",
       format: "svg",
+      backendId: "staged_service_blueprint_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/blueprint.svg", "<svg>staged</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/blueprint.svg");
+  });
+
+  it("show allows service_blueprint to opt back into the legacy preview backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/service_blueprint_slice.sdd",
+      "--view",
+      "service_blueprint",
+      "--backend",
+      "legacy_graphviz_preview",
+      "--out",
+      "/tmp/blueprint-legacy.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "service_blueprint",
+      format: "svg",
       backendId: "legacy_graphviz_preview"
     });
-    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/blueprint.svg", "<svg>embedded</svg>");
-    expect(stderr.join("")).toContain("Wrote /tmp/blueprint.svg");
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/blueprint-legacy.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/blueprint-legacy.svg");
   });
 
   it("show supports scenario_flow previews through the legacy backend", async () => {
@@ -819,6 +846,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd");
     expect(help).toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
+    expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out ./blueprint-legacy.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg");
