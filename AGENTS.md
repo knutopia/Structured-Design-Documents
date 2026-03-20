@@ -23,6 +23,12 @@ Verify Graphviz setup with:
 - `pnpm run check:graphviz`
 - `dot -V`
 
+### Graphing with Elkjs
+
+Some diagram types use the Elkjs (Eclipse Layout Kernel) layout engine. When encountering Elkjs-related tasks, DO review current Elkjs online documentation - do not guess - know your choices.
+Elkjs project & readme: https://github.com/kieler/elkjs
+Elk documentation: https://eclipse.dev/elk/reference.html
+
 ## v0.1 Source-of-Truth Policy
 
 - Files in `bundle/v0.1/` are the machine-readable source of truth for tools.

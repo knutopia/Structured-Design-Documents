@@ -5,11 +5,15 @@
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
+-a style that shows node type for all nodes
+-a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
 ## Thu 3-20-26
 
 -created reference design & notes for ia_place_map
 -successful build without elk
+-resolved issues with label lane in ui_contracts
+-created elk primer for service_blueprint (next diagram type)
 
 ## Wed 3-19-26
 

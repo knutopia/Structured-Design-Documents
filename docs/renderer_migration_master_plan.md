@@ -1,5 +1,7 @@
 # Renderer Migration Master Plan
 
+This is DONE except for step 12. We have reasonably-working ia_place_map and ui_contracts renderers.
+
 ## Purpose
 
 This document breaks the renderer migration into a sequence of well-defined steps.

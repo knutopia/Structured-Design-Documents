@@ -1,4 +1,4 @@
-# Specific Layout Concerns per Diagram Type
+# [Deprecated] Specific Layout Concerns per Diagram Type
 
 This is supporting information for the renderer migration.
 
