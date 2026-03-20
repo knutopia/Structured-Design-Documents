@@ -774,7 +774,7 @@
       ],
       "from": {
         "itemId": "C-700",
-        "x": 553.778,
+        "x": 541.778,
         "y": 278
       },
       "to": {
@@ -787,7 +787,7 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 553.778,
+            "x": 541.778,
             "y": 278
           },
           {
@@ -804,7 +804,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 565.778,
+        "x": 553.778,
         "y": 267
       },
       "markers": {
@@ -821,7 +821,7 @@
       ],
       "from": {
         "itemId": "C-700",
-        "x": 553.778,
+        "x": 541.778,
         "y": 206
       },
       "to": {
@@ -834,7 +834,7 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 553.778,
+            "x": 541.778,
             "y": 206
           },
           {
@@ -851,7 +851,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 565.778,
+        "x": 553.778,
         "y": 195
       },
       "markers": {

@@ -161,8 +161,7 @@ function renderTextBlock(
   lines: string[],
   style: TextStyleToken,
   lineHeight: number,
-  classes: string,
-  firstBaselineOffset = style.fontSize
+  classes: string
 ): string {
   const lineMarkup = lines.map((line, index) => {
     const dy = index === 0 ? "0" : formatNumber(lineHeight);
@@ -170,7 +169,7 @@ function renderTextBlock(
   });
 
   return [
-    `<text class="${classes}" x="${formatNumber(x)}" y="${formatNumber(y + firstBaselineOffset)}">`,
+    `<text class="${classes}" x="${formatNumber(x)}" y="${formatNumber(y + style.fontSize)}">`,
     ...lineMarkup,
     "  </text>"
   ].join("\n");
@@ -459,17 +458,13 @@ function renderEdgeLabel(
     `role-${sanitizeToken(edge.role)}`,
     ...edge.classes.map((className) => sanitizeToken(className))
   );
-  const firstBaselineOffset = roundMetric(
-    style.fontSize + (label.lineHeight - style.fontSize) / 2
-  );
   const textMarkup = renderTextBlock(
     label.x + labelTheme.padding.left,
     label.y + labelTheme.padding.top,
     label.lines,
     style,
     label.lineHeight,
-    buildTextClassList(resolvedRole, "edge_label"),
-    firstBaselineOffset
+    buildTextClassList(resolvedRole, "edge_label")
   );
 
   return [

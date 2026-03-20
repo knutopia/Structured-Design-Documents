@@ -989,7 +989,7 @@
       ],
       "from": {
         "itemId": "C-010",
-        "x": 714.424,
+        "x": 702.424,
         "y": 262
       },
       "to": {
@@ -1002,7 +1002,7 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 714.424,
+            "x": 702.424,
             "y": 262
           },
           {
@@ -1019,7 +1019,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 726.424,
+        "x": 714.424,
         "y": 251
       },
       "markers": {
@@ -1035,7 +1035,7 @@
       ],
       "from": {
         "itemId": "C-010",
-        "x": 714.424,
+        "x": 702.424,
         "y": 198
       },
       "to": {
@@ -1048,7 +1048,7 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 714.424,
+            "x": 702.424,
             "y": 198
           },
           {
@@ -1065,7 +1065,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 726.424,
+        "x": 714.424,
         "y": 187
       },
       "markers": {
@@ -1082,7 +1082,7 @@
       ],
       "from": {
         "itemId": "C-011",
-        "x": 73,
+        "x": 61,
         "y": 322
       },
       "to": {
@@ -1095,7 +1095,7 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 73,
+            "x": 61,
             "y": 322
           },
           {
@@ -1112,7 +1112,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 85,
+        "x": 73,
         "y": 311
       },
       "markers": {

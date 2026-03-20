@@ -89,7 +89,6 @@ type LayoutStrategyHandler = (
 ) => Promise<ContainerLayoutResult>;
 
 const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels", "edges", "edge_labels"];
-const CONTRACT_LABEL_LANE_INSET = 12;
 const CONTRACT_LABEL_LANE_WIDTH_REDUCTION = 16;
 const CONTRACT_LABEL_LANE_TOP_PADDING = 12;
 
@@ -841,10 +840,10 @@ function resolveContractLabelLane(
   }
 
   return {
-    labelX: roundMetric(gutterContainer.x + CONTRACT_LABEL_LANE_INSET),
+    labelX: roundMetric(gutterContainer.x),
     labelY: 0,
     routeCenterY: 0,
-    routeX: roundMetric(gutterContainer.x),
+    routeX: roundMetric(sourceContainer.x),
     routeMinY,
     routeMaxY,
     usableWidth

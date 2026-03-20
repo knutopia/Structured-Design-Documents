@@ -140,7 +140,7 @@ function getLabelCenterY(edge: PositionedEdge): number {
 
 function resolveContractLaneBounds(sourceItem: PositionedContainer, gutterItem: PositionedContainer) {
   return {
-    left: gutterItem.x + 12,
+    left: gutterItem.x,
     top: sourceItem.y + sourceItem.chrome.padding.top + (sourceItem.chrome.headerBandHeight ?? 0) + 12,
     bottom: sourceItem.y + sourceItem.height - sourceItem.chrome.padding.bottom
   };
@@ -440,9 +440,15 @@ describe("staged ui_contracts", () => {
     const billingLaneBounds = resolveContractLaneBounds(billingForm, billingFormGutter);
     const submitLaneBounds = resolveContractLaneBounds(submitButton, submitButtonGutter);
 
-    expectHorizontalLocalSupportRoute(bindsTo, billingFormGutter.x);
-    expectHorizontalLocalSupportRoute(dependsOn, billingFormGutter.x);
-    expectHorizontalLocalSupportRoute(emits, submitButtonGutter.x);
+    expectHorizontalLocalSupportRoute(bindsTo, billingForm.x);
+    expectHorizontalLocalSupportRoute(dependsOn, billingForm.x);
+    expectHorizontalLocalSupportRoute(emits, submitButton.x);
+    expect(getRouteStart(bindsTo).x).toBe(billingForm.x);
+    expect(getRouteStart(dependsOn).x).toBe(billingForm.x);
+    expect(getRouteStart(emits).x).toBe(submitButton.x);
+    expect(getEdgeLabel(bindsTo).x).toBe(billingFormGutter.x);
+    expect(getEdgeLabel(dependsOn).x).toBe(billingFormGutter.x);
+    expect(getEdgeLabel(emits).x).toBe(submitButtonGutter.x);
     expectLabelInsideLane(bindsTo, billingLaneBounds);
     expectLabelInsideLane(dependsOn, billingLaneBounds);
     expectLabelInsideLane(emits, submitLaneBounds);
@@ -492,9 +498,15 @@ describe("staged ui_contracts", () => {
     const emits = findEdge(rendered.positionedScene, "emits:C-060->E-060");
     const laneBounds = resolveContractLaneBounds(reviewPanel, reviewPanelGutter);
 
-    expectHorizontalLocalSupportRoute(bindsTo, reviewPanelGutter.x);
-    expectHorizontalLocalSupportRoute(dependsOn, reviewPanelGutter.x);
-    expectHorizontalLocalSupportRoute(emits, reviewPanelGutter.x);
+    expectHorizontalLocalSupportRoute(bindsTo, reviewPanel.x);
+    expectHorizontalLocalSupportRoute(dependsOn, reviewPanel.x);
+    expectHorizontalLocalSupportRoute(emits, reviewPanel.x);
+    expect(getRouteStart(bindsTo).x).toBe(reviewPanel.x);
+    expect(getRouteStart(dependsOn).x).toBe(reviewPanel.x);
+    expect(getRouteStart(emits).x).toBe(reviewPanel.x);
+    expect(getEdgeLabel(bindsTo).x).toBe(reviewPanelGutter.x);
+    expect(getEdgeLabel(dependsOn).x).toBe(reviewPanelGutter.x);
+    expect(getEdgeLabel(emits).x).toBe(reviewPanelGutter.x);
     expect(emits.to.y).toBeLessThan(dependsOn.to.y);
     expect(dependsOn.to.y).toBeLessThan(bindsTo.to.y);
     expect(emits.from.y).toBeLessThan(dependsOn.from.y);
@@ -576,8 +588,10 @@ END
       getLabelCenterY(second) - second.to.y
     ];
 
-    expectHorizontalLocalSupportRoute(first, billingFormGutter.x);
-    expectHorizontalLocalSupportRoute(second, billingFormGutter.x);
+    expectHorizontalLocalSupportRoute(first, billingForm.x);
+    expectHorizontalLocalSupportRoute(second, billingForm.x);
+    expect(firstLabel.x).toBe(billingFormGutter.x);
+    expect(secondLabel.x).toBe(billingFormGutter.x);
     expectLabelInsideLane(first, laneBounds);
     expectLabelInsideLane(second, laneBounds);
     expect(first.to.y).toBeLessThan(second.to.y);
