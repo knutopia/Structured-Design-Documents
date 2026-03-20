@@ -54,6 +54,10 @@ function findEdge(
   return edge;
 }
 
+function getNodeCenterX(item: Extract<PositionedItem, { kind: "node" }>): number {
+  return item.x + item.width / 2;
+}
+
 async function buildServiceBlueprintArtifactsFromInput(
   input: { path: string; text: string },
   profileId: string
@@ -111,6 +115,7 @@ describe("staged service_blueprint", () => {
     ]);
 
     const submitClaim = findPositionedItem(rendered.positionedScene.root, "J-020");
+    const receiveConfirmation = findPositionedItem(rendered.positionedScene.root, "J-021");
     const validateClaim = findPositionedItem(rendered.positionedScene.root, "PR-020");
     const reviewClaimHistory = findPositionedItem(rendered.positionedScene.root, "PR-021");
     const notifyCustomer = findPositionedItem(rendered.positionedScene.root, "PR-022");
@@ -122,6 +127,7 @@ describe("staged service_blueprint", () => {
 
     if (
       submitClaim.kind !== "node"
+      || receiveConfirmation.kind !== "node"
       || validateClaim.kind !== "node"
       || reviewClaimHistory.kind !== "node"
       || notifyCustomer.kind !== "node"
@@ -134,10 +140,11 @@ describe("staged service_blueprint", () => {
       throw new Error("Expected positioned service_blueprint semantic nodes.");
     }
 
-    expect(validateClaim.x).toBe(submitClaim.x);
-    expect(storeClaim.x).toBe(validateClaim.x);
-    expect(loadClaimHistory.x).toBe(reviewClaimHistory.x);
-    expect(sendEmail.x).toBe(notifyCustomer.x);
+    expect(getNodeCenterX(validateClaim)).toBe(getNodeCenterX(submitClaim));
+    expect(getNodeCenterX(storeClaim)).toBe(getNodeCenterX(validateClaim));
+    expect(getNodeCenterX(loadClaimHistory)).toBe(getNodeCenterX(reviewClaimHistory));
+    expect(getNodeCenterX(notifyCustomer)).toBe(getNodeCenterX(receiveConfirmation));
+    expect(getNodeCenterX(sendEmail)).toBe(getNodeCenterX(notifyCustomer));
     expect(claimEntity.x).toBeGreaterThan(sendEmail.x);
     expect(retentionPolicy.x).toBe(claimEntity.x);
 

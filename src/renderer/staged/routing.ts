@@ -40,6 +40,7 @@ const TARGET_APPROACH_ZONE = 24;
 const TARGET_APPROACH_MIN_FINAL_LEG = 20;
 const TARGET_APPROACH_SOURCE_CLEARANCE = 8;
 const TARGET_APPROACH_ESCAPE_CLEARANCE = 8;
+const NODE_DETOUR_CLEARANCE = 24;
 
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -829,6 +830,59 @@ export function buildSourceContractLaneRoute(
     points: enforceMarkerLegs(
       edge,
       applyTargetApproach(edge, lanePoints, from, to, diagnostics),
+      diagnostics
+    )
+  };
+}
+
+export function buildSameRowSouthToNorthDetourRoute(
+  edge: MeasuredEdge,
+  from: ResolvedEdgeEndpoint,
+  to: ResolvedEdgeEndpoint,
+  sourceItem: PositionedItem,
+  targetItem: PositionedItem,
+  diagnostics: RendererDiagnostic[]
+): PositionedRoute | undefined {
+  if (sourceItem.kind !== "node" || targetItem.kind !== "node") {
+    return undefined;
+  }
+  if (from.side !== "south" || to.side !== "north") {
+    return undefined;
+  }
+
+  const sourceTop = sourceItem.y;
+  const sourceBottom = sourceItem.y + sourceItem.height;
+  const targetTop = targetItem.y;
+  const targetBottom = targetItem.y + targetItem.height;
+  const verticalOverlap = Math.min(sourceBottom, targetBottom) - Math.max(sourceTop, targetTop);
+  if (verticalOverlap <= 0) {
+    return undefined;
+  }
+
+  const unionLeft = Math.min(sourceItem.x, targetItem.x);
+  const unionRight = Math.max(sourceItem.x + sourceItem.width, targetItem.x + targetItem.width);
+  const unionTop = Math.min(sourceTop, targetTop);
+  const unionBottom = Math.max(sourceBottom, targetBottom);
+  const belowY = roundMetric(unionBottom + NODE_DETOUR_CLEARANCE);
+  const aboveY = roundMetric(unionTop - NODE_DETOUR_CLEARANCE);
+  const leftDetourX = roundMetric(unionLeft - NODE_DETOUR_CLEARANCE);
+  const rightDetourX = roundMetric(unionRight + NODE_DETOUR_CLEARANCE);
+  const leftDetourCost = Math.abs(from.x - leftDetourX) + Math.abs(to.x - leftDetourX);
+  const rightDetourCost = Math.abs(from.x - rightDetourX) + Math.abs(to.x - rightDetourX);
+  const detourX = leftDetourCost <= rightDetourCost ? leftDetourX : rightDetourX;
+
+  return {
+    style: edge.routing.style,
+    points: enforceMarkerLegs(
+      edge,
+      collapseRoutePoints([
+        { x: from.x, y: from.y },
+        { x: from.x, y: belowY },
+        { x: detourX, y: belowY },
+        { x: detourX, y: aboveY },
+        { x: to.x, y: aboveY },
+        { x: to.x, y: to.y }
+      ]),
       diagnostics
     )
   };

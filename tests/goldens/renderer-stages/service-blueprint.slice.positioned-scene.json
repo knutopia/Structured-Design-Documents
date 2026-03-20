@@ -257,7 +257,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 254,
+            "x": 552,
             "y": 72,
             "width": 168,
             "height": 64
@@ -266,7 +266,7 @@
         "ports": [],
         "x": 24,
         "y": 24,
-        "width": 1174.364,
+        "width": 982,
         "height": 124
       },
       {
@@ -400,7 +400,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 68,
+            "x": 40,
             "y": 222,
             "width": 224,
             "height": 48
@@ -409,7 +409,7 @@
         "ports": [],
         "x": 24,
         "y": 166,
-        "width": 1174.364,
+        "width": 982,
         "height": 124
       },
       {
@@ -543,7 +543,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 378.182,
+            "x": 282,
             "y": 364,
             "width": 224,
             "height": 48
@@ -552,7 +552,7 @@
         "ports": [],
         "x": 24,
         "y": 308,
-        "width": 1174.364,
+        "width": 982,
         "height": 124
       },
       {
@@ -686,7 +686,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 716.364,
+            "x": 524,
             "y": 506,
             "width": 224,
             "height": 48
@@ -695,7 +695,7 @@
         "ports": [],
         "x": 24,
         "y": 450,
-        "width": 1174.364,
+        "width": 982,
         "height": 124
       },
       {
@@ -830,7 +830,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 68,
+            "x": 40,
             "y": 648,
             "width": 224,
             "height": 48
@@ -925,7 +925,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 378.182,
+            "x": 282,
             "y": 648,
             "width": 224,
             "height": 48
@@ -1020,7 +1020,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 716.364,
+            "x": 524,
             "y": 648,
             "width": 224,
             "height": 48
@@ -1115,7 +1115,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 958.364,
+            "x": 766,
             "y": 648,
             "width": 224,
             "height": 48
@@ -1124,7 +1124,7 @@
         "ports": [],
         "x": 24,
         "y": 592,
-        "width": 1174.364,
+        "width": 982,
         "height": 124
       },
       {
@@ -1258,7 +1258,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 958.364,
+            "x": 766,
             "y": 790,
             "width": 224,
             "height": 48
@@ -1267,14 +1267,14 @@
         "ports": [],
         "x": 24,
         "y": 734,
-        "width": 1174.364,
+        "width": 982,
         "height": 124
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1222.364,
+    "width": 1030,
     "height": 882
   },
   "edges": [
@@ -1295,7 +1295,7 @@
       "to": {
         "itemId": "J-021",
         "portId": "flow_in",
-        "x": 254,
+        "x": 552,
         "y": 104
       },
       "route": {
@@ -1306,7 +1306,7 @@
             "y": 104
           },
           {
-            "x": 254,
+            "x": 552,
             "y": 104
           }
         ]
@@ -1334,7 +1334,7 @@
       "to": {
         "itemId": "PR-020",
         "portId": "support_in",
-        "x": 180,
+        "x": 152,
         "y": 222
       },
       "route": {
@@ -1346,14 +1346,6 @@
           },
           {
             "x": 152,
-            "y": 175
-          },
-          {
-            "x": 180,
-            "y": 175
-          },
-          {
-            "x": 180,
             "y": 222
           }
         ]
@@ -1367,7 +1359,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 164,
-        "y": 140.5
+        "y": 164
       },
       "markers": {
         "end": "arrow"
@@ -1386,32 +1378,24 @@
       "from": {
         "itemId": "J-021",
         "portId": "support_out",
-        "x": 338,
+        "x": 636,
         "y": 136
       },
       "to": {
         "itemId": "PR-022",
         "portId": "support_in",
-        "x": 828.364,
+        "x": 636,
         "y": 506
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 338,
+            "x": 636,
             "y": 136
           },
           {
-            "x": 338,
-            "y": 321
-          },
-          {
-            "x": 828.364,
-            "y": 321
-          },
-          {
-            "x": 828.364,
+            "x": 636,
             "y": 506
           }
         ]
@@ -1424,8 +1408,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 546.888,
-        "y": 287
+        "x": 648,
+        "y": 310
       },
       "markers": {
         "end": "arrow"
@@ -1444,32 +1428,32 @@
       "from": {
         "itemId": "PR-020",
         "portId": "resource_out",
-        "x": 104,
+        "x": 76,
         "y": 270
       },
       "to": {
         "itemId": "PL-020",
         "portId": "resource_in",
-        "x": 994.364,
+        "x": 802,
         "y": 790
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 104,
+            "x": 76,
             "y": 270
           },
           {
-            "x": 104,
+            "x": 76,
             "y": 530
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 530
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 790
           }
         ]
@@ -1482,7 +1466,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 502.091,
+        "x": 391.909,
         "y": 496
       },
       "markers": {
@@ -1501,24 +1485,24 @@
       "from": {
         "itemId": "PR-020",
         "portId": "support_out",
-        "x": 180,
+        "x": 152,
         "y": 270
       },
       "to": {
         "itemId": "SA-020",
         "portId": "support_in",
-        "x": 180,
+        "x": 152,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 180,
+            "x": 152,
             "y": 270
           },
           {
-            "x": 180,
+            "x": 152,
             "y": 648
           }
         ]
@@ -1531,7 +1515,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 192,
+        "x": 164,
         "y": 448
       },
       "markers": {
@@ -1550,32 +1534,32 @@
       "from": {
         "itemId": "PR-020",
         "portId": "flow_out",
-        "x": 292,
+        "x": 264,
         "y": 246
       },
       "to": {
         "itemId": "PR-021",
         "portId": "flow_in",
-        "x": 378.182,
+        "x": 282,
         "y": 388
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 292,
+            "x": 264,
             "y": 246
           },
           {
-            "x": 335.091,
+            "x": 270,
             "y": 246
           },
           {
-            "x": 335.091,
+            "x": 270,
             "y": 388
           },
           {
-            "x": 378.182,
+            "x": 282,
             "y": 388
           }
         ]
@@ -1596,24 +1580,24 @@
       "from": {
         "itemId": "PR-021",
         "portId": "support_out",
-        "x": 490.182,
+        "x": 394,
         "y": 412
       },
       "to": {
         "itemId": "SA-021",
         "portId": "support_in",
-        "x": 490.182,
+        "x": 394,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 490.182,
+            "x": 394,
             "y": 412
           },
           {
-            "x": 490.182,
+            "x": 394,
             "y": 648
           }
         ]
@@ -1626,7 +1610,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 502.182,
+        "x": 406,
         "y": 519
       },
       "markers": {
@@ -1645,32 +1629,32 @@
       "from": {
         "itemId": "PR-021",
         "portId": "flow_out",
-        "x": 602.182,
+        "x": 506,
         "y": 388
       },
       "to": {
         "itemId": "PR-022",
         "portId": "flow_in",
-        "x": 716.364,
+        "x": 524,
         "y": 530
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 602.182,
+            "x": 506,
             "y": 388
           },
           {
-            "x": 659.273,
+            "x": 512,
             "y": 388
           },
           {
-            "x": 659.273,
+            "x": 512,
             "y": 530
           },
           {
-            "x": 716.364,
+            "x": 524,
             "y": 530
           }
         ]
@@ -1691,24 +1675,24 @@
       "from": {
         "itemId": "PR-022",
         "portId": "support_out",
-        "x": 828.364,
+        "x": 636,
         "y": 554
       },
       "to": {
         "itemId": "SA-022",
         "portId": "support_in",
-        "x": 828.364,
+        "x": 636,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 828.364,
+            "x": 636,
             "y": 554
           },
           {
-            "x": 828.364,
+            "x": 636,
             "y": 648
           }
         ]
@@ -1721,7 +1705,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 840.364,
+        "x": 648,
         "y": 590
       },
       "markers": {
@@ -1741,32 +1725,32 @@
       "from": {
         "itemId": "SA-020",
         "portId": "resource_out",
-        "x": 104,
+        "x": 76,
         "y": 696
       },
       "to": {
         "itemId": "PL-020",
         "portId": "resource_in",
-        "x": 994.364,
+        "x": 802,
         "y": 790
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 104,
+            "x": 76,
             "y": 696
           },
           {
-            "x": 104,
+            "x": 76,
             "y": 743
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 743
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 790
           }
         ]
@@ -1779,7 +1763,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 502.091,
+        "x": 391.909,
         "y": 709
       },
       "markers": {
@@ -1799,32 +1783,32 @@
       "from": {
         "itemId": "SA-020",
         "portId": "resource_out",
-        "x": 104,
+        "x": 76,
         "y": 696
       },
       "to": {
         "itemId": "D-020",
         "portId": "resource_in",
-        "x": 994.364,
+        "x": 802,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 104,
+            "x": 76,
             "y": 696
           },
           {
-            "x": 104,
+            "x": 76,
             "y": 664
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 664
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 648
           }
         ]
@@ -1837,7 +1821,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 527.591,
+        "x": 417.409,
         "y": 630
       },
       "markers": {
@@ -1857,32 +1841,32 @@
       "from": {
         "itemId": "SA-020",
         "portId": "resource_out",
-        "x": 104,
+        "x": 76,
         "y": 696
       },
       "to": {
         "itemId": "D-020",
         "portId": "resource_in",
-        "x": 994.364,
+        "x": 802,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 104,
+            "x": 76,
             "y": 696
           },
           {
-            "x": 104,
+            "x": 76,
             "y": 680
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 680
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 648
           }
         ]
@@ -1895,7 +1879,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 526.004,
+        "x": 415.822,
         "y": 646
       },
       "markers": {
@@ -1915,32 +1899,32 @@
       "from": {
         "itemId": "SA-021",
         "portId": "resource_out",
-        "x": 414.182,
+        "x": 318,
         "y": 696
       },
       "to": {
         "itemId": "D-020",
         "portId": "resource_in",
-        "x": 994.364,
+        "x": 802,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 414.182,
+            "x": 318,
             "y": 696
           },
           {
-            "x": 414.182,
+            "x": 318,
             "y": 672
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 672
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 648
           }
         ]
@@ -1953,7 +1937,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 682.682,
+        "x": 538.409,
         "y": 638
       },
       "markers": {
@@ -1973,32 +1957,32 @@
       "from": {
         "itemId": "SA-022",
         "portId": "resource_out",
-        "x": 752.364,
+        "x": 560,
         "y": 696
       },
       "to": {
         "itemId": "D-020",
         "portId": "resource_in",
-        "x": 994.364,
+        "x": 802,
         "y": 648
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 752.364,
+            "x": 560,
             "y": 696
           },
           {
-            "x": 752.364,
+            "x": 560,
             "y": 672
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 672
           },
           {
-            "x": 994.364,
+            "x": 802,
             "y": 648
           }
         ]
@@ -2011,7 +1995,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 851.773,
+        "x": 659.409,
         "y": 638
       },
       "markers": {

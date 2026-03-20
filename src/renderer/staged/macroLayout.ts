@@ -634,6 +634,10 @@ function shouldApplyInLayerConstraint(
   return false;
 }
 
+function isOperationalSemanticType(type: string): boolean {
+  return type === "step" || type === "process" || type === "systemaction";
+}
+
 function buildElkLaneNodeLayoutOptions(
   laneNodes: readonly LaneNodeEntry[],
   ownedEdges: readonly MeasuredEdge[]
@@ -746,6 +750,281 @@ function biasResourceNodesIntoTrailingZone(
     });
 
   return biased;
+}
+
+function buildSemanticLaneColumnXById(
+  laneNodes: readonly LaneNodeEntry[],
+  ownedEdges: readonly MeasuredEdge[],
+  gap: number,
+  orderingHintXByNodeId?: ReadonlyMap<string, number>
+): Map<string, number> {
+  const entryByNodeId = new Map(laneNodes.map((entry) => [entry.item.id, entry]));
+  const operationalEntries = laneNodes.filter((entry) => isOperationalSemanticType(getNodeSemanticType(entry.item)));
+  const operationalNodeIds = new Set(operationalEntries.map((entry) => entry.item.id));
+  const parentByNodeId = new Map<string, string>();
+
+  const find = (nodeId: string): string => {
+    const currentParent = parentByNodeId.get(nodeId) ?? nodeId;
+    if (currentParent === nodeId) {
+      parentByNodeId.set(nodeId, nodeId);
+      return nodeId;
+    }
+
+    const root = find(currentParent);
+    parentByNodeId.set(nodeId, root);
+    return root;
+  };
+
+  const union = (leftId: string, rightId: string): void => {
+    const leftRoot = find(leftId);
+    const rightRoot = find(rightId);
+    if (leftRoot === rightRoot) {
+      return;
+    }
+
+    const leftEntry = entryByNodeId.get(leftRoot);
+    const rightEntry = entryByNodeId.get(rightRoot);
+    const leftOrder = leftEntry?.authorOrder ?? Number.MAX_SAFE_INTEGER;
+    const rightOrder = rightEntry?.authorOrder ?? Number.MAX_SAFE_INTEGER;
+    if (leftOrder < rightOrder || (leftOrder === rightOrder && leftRoot.localeCompare(rightRoot) < 0)) {
+      parentByNodeId.set(rightRoot, leftRoot);
+    } else {
+      parentByNodeId.set(leftRoot, rightRoot);
+    }
+  };
+
+  operationalEntries.forEach((entry) => {
+    parentByNodeId.set(entry.item.id, entry.item.id);
+  });
+
+  ownedEdges.forEach((edge) => {
+    if (!operationalNodeIds.has(edge.from.itemId) || !operationalNodeIds.has(edge.to.itemId)) {
+      return;
+    }
+
+    const targetEntry = entryByNodeId.get(edge.to.itemId);
+    if (!targetEntry) {
+      return;
+    }
+
+    if (!shouldApplyInLayerConstraint(getEdgeSemanticType(edge), getNodeSemanticType(targetEntry.item))) {
+      return;
+    }
+
+    union(edge.from.itemId, edge.to.itemId);
+  });
+
+  interface OperationalGroup {
+    id: string;
+    memberIds: string[];
+    minAuthorOrder: number;
+    minLaneIndex: number;
+    orderingHintX: number;
+    maxWidth: number;
+  }
+
+  const groupById = new Map<string, OperationalGroup>();
+
+  operationalEntries.forEach((entry) => {
+    const groupId = find(entry.item.id);
+    const existing = groupById.get(groupId);
+    const orderingHintX = orderingHintXByNodeId?.get(entry.item.id) ?? 0;
+    if (existing) {
+      existing.memberIds.push(entry.item.id);
+      existing.minAuthorOrder = Math.min(existing.minAuthorOrder, entry.authorOrder);
+      existing.minLaneIndex = Math.min(existing.minLaneIndex, entry.laneIndex);
+      existing.orderingHintX = Math.min(existing.orderingHintX, orderingHintX);
+      existing.maxWidth = Math.max(existing.maxWidth, entry.item.width);
+      return;
+    }
+
+    groupById.set(groupId, {
+      id: groupId,
+      memberIds: [entry.item.id],
+      minAuthorOrder: entry.authorOrder,
+      minLaneIndex: entry.laneIndex,
+      orderingHintX,
+      maxWidth: entry.item.width
+    });
+  });
+
+  const outgoingByGroupId = new Map<string, Set<string>>();
+  const indegreeByGroupId = new Map<string, number>();
+
+  groupById.forEach((group) => {
+    outgoingByGroupId.set(group.id, new Set());
+    indegreeByGroupId.set(group.id, 0);
+  });
+
+  ownedEdges.forEach((edge) => {
+    if (getEdgeSemanticType(edge) !== "precedes") {
+      return;
+    }
+    if (!operationalNodeIds.has(edge.from.itemId) || !operationalNodeIds.has(edge.to.itemId)) {
+      return;
+    }
+
+    const sourceGroupId = find(edge.from.itemId);
+    const targetGroupId = find(edge.to.itemId);
+    if (sourceGroupId === targetGroupId) {
+      return;
+    }
+
+    const outgoing = outgoingByGroupId.get(sourceGroupId);
+    if (!outgoing || outgoing.has(targetGroupId)) {
+      return;
+    }
+
+    outgoing.add(targetGroupId);
+    indegreeByGroupId.set(targetGroupId, (indegreeByGroupId.get(targetGroupId) ?? 0) + 1);
+  });
+
+  const compareGroups = (left: OperationalGroup, right: OperationalGroup): number =>
+    left.orderingHintX - right.orderingHintX
+    || left.minAuthorOrder - right.minAuthorOrder
+    || left.minLaneIndex - right.minLaneIndex
+    || left.id.localeCompare(right.id);
+
+  const queue = [...groupById.values()]
+    .filter((group) => (indegreeByGroupId.get(group.id) ?? 0) === 0)
+    .sort(compareGroups);
+  const orderedGroupIds: string[] = [];
+  const remainingIndegree = new Map(indegreeByGroupId);
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current) {
+      continue;
+    }
+
+    orderedGroupIds.push(current.id);
+
+    for (const targetGroupId of outgoingByGroupId.get(current.id) ?? []) {
+      const nextIndegree = (remainingIndegree.get(targetGroupId) ?? 0) - 1;
+      remainingIndegree.set(targetGroupId, nextIndegree);
+      if (nextIndegree === 0) {
+        const targetGroup = groupById.get(targetGroupId);
+        if (targetGroup) {
+          queue.push(targetGroup);
+          queue.sort(compareGroups);
+        }
+      }
+    }
+  }
+
+  if (orderedGroupIds.length !== groupById.size) {
+    const remainingGroups = [...groupById.values()]
+      .filter((group) => !orderedGroupIds.includes(group.id))
+      .sort(compareGroups)
+      .map((group) => group.id);
+    orderedGroupIds.push(...remainingGroups);
+  }
+
+  const dataEntityEntries = laneNodes.filter((entry) => getNodeSemanticType(entry.item) === "dataentity");
+  const policyEntries = laneNodes.filter((entry) => getNodeSemanticType(entry.item) === "policy");
+  const columnIndexByNodeId = new Map<string, number>();
+
+  orderedGroupIds.forEach((groupId, columnIndex) => {
+    const group = groupById.get(groupId);
+    if (!group) {
+      return;
+    }
+
+    group.memberIds.forEach((memberId) => {
+      columnIndexByNodeId.set(memberId, columnIndex);
+    });
+  });
+
+  const dataEntityColumnIndex = orderedGroupIds.length;
+  dataEntityEntries.forEach((entry) => {
+    columnIndexByNodeId.set(entry.item.id, dataEntityColumnIndex);
+  });
+
+  const maxWidthByColumnIndex = new Map<number, number>();
+  laneNodes.forEach((entry) => {
+    const columnIndex = columnIndexByNodeId.get(entry.item.id) ?? 0;
+    maxWidthByColumnIndex.set(
+      columnIndex,
+      Math.max(maxWidthByColumnIndex.get(columnIndex) ?? 0, entry.item.width)
+    );
+  });
+
+  const orderedColumnIndices = [...new Set(columnIndexByNodeId.values())].sort((left, right) => left - right);
+  const centerXByColumnIndex = new Map<number, number>();
+  let currentLeft = 0;
+
+  orderedColumnIndices.forEach((columnIndex) => {
+    const columnWidth = maxWidthByColumnIndex.get(columnIndex) ?? 0;
+    centerXByColumnIndex.set(columnIndex, roundMetric(currentLeft + columnWidth / 2));
+    currentLeft = roundMetric(currentLeft + columnWidth + gap);
+  });
+
+  const xByNodeId = new Map<string, number>();
+  laneNodes.forEach((entry) => {
+    const columnIndex = columnIndexByNodeId.get(entry.item.id) ?? 0;
+    const centerX = centerXByColumnIndex.get(columnIndex) ?? 0;
+    xByNodeId.set(entry.item.id, roundMetric(centerX - entry.item.width / 2));
+  });
+
+  const operationalCenterByNodeId = new Map<string, number>();
+  operationalEntries.forEach((entry) => {
+    const columnIndex = columnIndexByNodeId.get(entry.item.id) ?? 0;
+    operationalCenterByNodeId.set(entry.item.id, centerXByColumnIndex.get(columnIndex) ?? 0);
+  });
+
+  const preferredPolicyCenterByNodeId = new Map<string, number>();
+  policyEntries.forEach((entry) => {
+    const relatedCenters = ownedEdges.flatMap((edge) => {
+      if (getEdgeSemanticType(edge) !== "constrained_by") {
+        return [];
+      }
+      if (edge.to.itemId !== entry.item.id) {
+        return [];
+      }
+
+      const sourceCenter = operationalCenterByNodeId.get(edge.from.itemId);
+      return sourceCenter === undefined ? [] : [sourceCenter];
+    });
+
+    if (relatedCenters.length === 0) {
+      preferredPolicyCenterByNodeId.set(
+        entry.item.id,
+        centerXByColumnIndex.get(dataEntityColumnIndex) ?? 0
+      );
+      return;
+    }
+
+    const averageCenter = relatedCenters.reduce((sum, center) => sum + center, 0) / relatedCenters.length;
+    preferredPolicyCenterByNodeId.set(entry.item.id, roundMetric(averageCenter));
+  });
+
+  const policiesByLaneIndex = new Map<number, LaneNodeEntry[]>();
+  policyEntries.forEach((entry) => {
+    const existing = policiesByLaneIndex.get(entry.laneIndex) ?? [];
+    existing.push(entry);
+    policiesByLaneIndex.set(entry.laneIndex, existing);
+  });
+
+  policiesByLaneIndex.forEach((entries) => {
+    let currentRight = Number.NEGATIVE_INFINITY;
+    [...entries]
+      .sort((left, right) =>
+        (preferredPolicyCenterByNodeId.get(left.item.id) ?? 0) - (preferredPolicyCenterByNodeId.get(right.item.id) ?? 0)
+        || left.authorOrder - right.authorOrder
+        || left.item.id.localeCompare(right.item.id)
+      )
+      .forEach((entry) => {
+        const preferredCenter = preferredPolicyCenterByNodeId.get(entry.item.id) ?? 0;
+        const preferredX = roundMetric(preferredCenter - entry.item.width / 2);
+        const resolvedX = Number.isFinite(currentRight)
+          ? Math.max(preferredX, roundMetric(currentRight + gap))
+          : preferredX;
+        xByNodeId.set(entry.item.id, resolvedX);
+        currentRight = roundMetric(resolvedX + entry.item.width);
+      });
+  });
+
+  return xByNodeId;
 }
 
 function alignSameBandPeers(
@@ -1114,7 +1393,7 @@ async function layoutElkLanesContainer(
     "org.eclipse.elk.layered.mergeEdges": "false"
   };
 
-  let xByNodeId: Map<string, number> | undefined;
+  let orderingHintXByNodeId: Map<string, number> | undefined;
 
   try {
     const elkResult = await runElkLayeredLayout({
@@ -1131,19 +1410,7 @@ async function layoutElkLanesContainer(
       },
       nodeLayoutOptions
     });
-    xByNodeId = resolveLaneNodeCollisions(
-      laneNodes,
-      biasResourceNodesIntoTrailingZone(
-        laneNodes,
-        alignSameBandPeers(
-          laneNodes,
-          ownedEdges,
-          buildLaneNodeXByIdFromFirstPass(laneNodes, elkResult.childPositions)
-        ),
-        resolveGap(container)
-      ),
-      resolveGap(container)
-    );
+    orderingHintXByNodeId = buildLaneNodeXByIdFromFirstPass(laneNodes, elkResult.childPositions);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     context.diagnostics.push(
@@ -1153,12 +1420,15 @@ async function layoutElkLanesContainer(
         { targetId: container.id }
       )
     );
-    xByNodeId = resolveLaneNodeCollisions(
-      laneNodes,
-      buildFallbackLaneNodeXById(laneNodes, ownedEdges, resolveGap(container)),
-      resolveGap(container)
-    );
+    orderingHintXByNodeId = buildFallbackLaneNodeXById(laneNodes, ownedEdges, resolveGap(container));
   }
+
+  const xByNodeId = buildSemanticLaneColumnXById(
+    laneNodes,
+    ownedEdges,
+    resolveGap(container),
+    orderingHintXByNodeId
+  );
 
   const snappedGeometry = applyLaneRowGeometry(container, children, laneNodes, xByNodeId, context);
   const absoluteNodes = buildAbsoluteLaneNodes(laneNodes);
@@ -1171,7 +1441,12 @@ async function layoutElkLanesContainer(
       layerGap: resolveElkLayerGap(container, ownedEdges),
       children: absoluteNodes,
       edges: secondPassEdges,
-      rootLayoutOptions: commonRootLayoutOptions,
+      rootLayoutOptions: {
+        ...commonRootLayoutOptions,
+        "org.eclipse.elk.layered.cycleBreaking.strategy": "INTERACTIVE",
+        "org.eclipse.elk.layered.crossingMinimization.strategy": "INTERACTIVE",
+        "org.eclipse.elk.layered.interactiveReferencePoint": "CENTER"
+      },
       positionTolerance: 0.5
     });
 
