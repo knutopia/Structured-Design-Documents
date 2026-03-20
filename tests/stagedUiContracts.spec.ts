@@ -4,11 +4,20 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import type { PositionedContainer, PositionedEdge, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
+import type {
+  PositionedContainer,
+  PositionedEdge,
+  PositionedItem,
+  RendererScene,
+  SceneContainer,
+  SceneEdge,
+  SceneNode
+} from "../src/renderer/staged/contracts.js";
 import {
   buildUiContractsRendererScene,
   renderUiContractsStagedSvg
 } from "../src/renderer/staged/uiContracts.js";
+import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import {
   expectRendererStageSnapshot,
   expectRendererStageTextSnapshot
@@ -71,6 +80,29 @@ function getTerminalSegmentLength(edge: PositionedEdge): number {
   return Math.hypot(end.x - beforeEnd.x, end.y - beforeEnd.y);
 }
 
+function getRouteStart(edge: PositionedEdge) {
+  const start = edge.route.points[0];
+  if (!start) {
+    throw new Error(`Edge "${edge.id}" is missing a route start point.`);
+  }
+
+  return start;
+}
+
+function getTerminalSegment(edge: PositionedEdge) {
+  const points = edge.route.points;
+  const end = points[points.length - 1];
+  const beforeEnd = points[points.length - 2];
+  if (!end || !beforeEnd) {
+    throw new Error(`Edge "${edge.id}" is missing route points.`);
+  }
+
+  return {
+    start: beforeEnd,
+    end
+  };
+}
+
 function findEdge(scene: Awaited<ReturnType<typeof buildUiContractsArtifacts>>["rendered"]["positionedScene"], edgeId: string): PositionedEdge {
   const edge = scene.edges.find((candidate) => candidate.id === edgeId);
   if (!edge) {
@@ -78,6 +110,47 @@ function findEdge(scene: Awaited<ReturnType<typeof buildUiContractsArtifacts>>["
   }
 
   return edge;
+}
+
+function expectHorizontalLocalSupportRoute(edge: PositionedEdge, sourceX: number): void {
+  const routeStart = getRouteStart(edge);
+  const terminalSegment = getTerminalSegment(edge);
+
+  expect(edge.from.x).toBe(sourceX);
+  expect(edge.from.y).toBe(edge.to.y);
+  expect(routeStart.x).toBe(sourceX);
+  expect(routeStart.y).toBe(edge.to.y);
+  expect(terminalSegment.start.y).toBe(terminalSegment.end.y);
+  expect(terminalSegment.end.y).toBe(edge.to.y);
+  expect(terminalSegment.start.x).toBeLessThan(terminalSegment.end.x);
+}
+
+function getEdgeLabel(edge: PositionedEdge) {
+  if (!edge.label) {
+    throw new Error(`Edge "${edge.id}" is missing a positioned label.`);
+  }
+
+  return edge.label;
+}
+
+function getLabelCenterY(edge: PositionedEdge): number {
+  const label = getEdgeLabel(edge);
+  return label.y + label.height / 2;
+}
+
+function resolveContractLaneBounds(sourceItem: PositionedContainer, gutterItem: PositionedContainer) {
+  return {
+    left: gutterItem.x + 12,
+    top: sourceItem.y + sourceItem.chrome.padding.top + (sourceItem.chrome.headerBandHeight ?? 0) + 12,
+    bottom: sourceItem.y + sourceItem.height - sourceItem.chrome.padding.bottom
+  };
+}
+
+function expectLabelInsideLane(edge: PositionedEdge, laneBounds: ReturnType<typeof resolveContractLaneBounds>): void {
+  const label = getEdgeLabel(edge);
+  expect(label.x).toBeGreaterThanOrEqual(laneBounds.left);
+  expect(label.y).toBeGreaterThanOrEqual(laneBounds.top);
+  expect(label.y + label.height).toBeLessThanOrEqual(laneBounds.bottom);
 }
 
 async function buildUiContractsArtifactsFromInput(
@@ -118,6 +191,222 @@ async function buildUiContractsArtifacts(examplePath: string, profileId: string)
   }, profileId);
 }
 
+function buildSyntheticCrowdedLaneScene(): RendererScene {
+  const buildSupportNode = (id: string, title: string): SceneNode => ({
+    kind: "node",
+    id,
+    role: "dataentity",
+    primitive: "card",
+    classes: ["semantic_node", "shape-cylinder"],
+    widthPolicy: {
+      preferred: "standard",
+      allowed: ["standard"]
+    },
+    overflowPolicy: {
+      kind: "grow_height"
+    },
+    content: [
+      {
+        id: `${id}__content__line_0`,
+        kind: "text",
+        text: title,
+        textStyleRole: "title",
+        priority: "primary"
+      }
+    ],
+    ports: [
+      {
+        id: `${id}__contract_in`,
+        role: "contract_in",
+        side: "west"
+      }
+    ]
+  });
+
+  const buildAuxiliaryNode = (id: string, title: string): SceneNode => ({
+    kind: "node",
+    id,
+    role: "component",
+    primitive: "card",
+    classes: ["semantic_node", "shape-box"],
+    widthPolicy: {
+      preferred: "standard",
+      allowed: ["standard"]
+    },
+    overflowPolicy: {
+      kind: "grow_height"
+    },
+    content: [
+      {
+        id: `${id}__content__line_0`,
+        kind: "text",
+        text: title,
+        textStyleRole: "title",
+        priority: "primary"
+      }
+    ],
+    ports: []
+  });
+
+  const contractGutter: SceneContainer = {
+    kind: "container",
+    id: "C-900__content",
+    role: "contract_gutter",
+    primitive: "stack",
+    classes: ["contract_gutter"],
+    layout: {
+      strategy: "stack",
+      direction: "vertical",
+      gap: 12,
+      crossAlignment: "stretch"
+    },
+    chrome: {
+      padding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 128
+      },
+      gutter: 16,
+      headerBandHeight: 0
+    },
+    headerContent: [],
+    children: [
+      buildSupportNode("D-901", "Primary Status"),
+      buildSupportNode("D-902", "Secondary Status")
+    ],
+    ports: []
+  };
+
+  return {
+    viewId: "ui_contracts",
+    profileId: "recommended",
+    themeId: "default",
+    root: {
+      kind: "container",
+      id: "root",
+      role: "diagram_root",
+      primitive: "root",
+      classes: ["diagram", "ui_contracts"],
+      layout: {
+        strategy: "stack",
+        direction: "vertical",
+        gap: 24,
+        crossAlignment: "stretch"
+      },
+      chrome: {
+        padding: {
+          top: 24,
+          right: 24,
+          bottom: 24,
+          left: 24
+        },
+        gutter: 24,
+        headerBandHeight: 0
+      },
+      headerContent: [],
+      children: [
+        {
+          kind: "container",
+          id: "C-900",
+          role: "component",
+          primitive: "cluster",
+          classes: ["component", "scope"],
+          layout: {
+            strategy: "stack",
+            direction: "vertical",
+            gap: 16,
+            crossAlignment: "stretch"
+          },
+          chrome: {
+            padding: {
+              top: 12,
+              right: 12,
+              bottom: 12,
+              left: 12
+            },
+            gutter: 16,
+            headerBandHeight: 40
+          },
+          headerContent: [
+            {
+              id: "C-900__header__line_0",
+              kind: "text",
+              text: "Component: Billing Form",
+              textStyleRole: "title",
+              priority: "primary"
+            }
+          ],
+          children: [
+            contractGutter,
+            buildAuxiliaryNode("C-900__aux", "Audit Panel")
+          ],
+          ports: [
+            {
+              id: "C-900__contract_out",
+              role: "contract_out",
+              side: "west",
+              offsetPolicy: "content_start"
+            }
+          ]
+        }
+      ],
+      ports: []
+    },
+    edges: [
+      {
+        id: "binds_to:C-900->D-901",
+        role: "binds_to",
+        classes: ["constraint_edge"],
+        from: {
+          itemId: "C-900"
+        },
+        to: {
+          itemId: "D-901"
+        },
+        routing: {
+          style: "orthogonal",
+          labelPlacement: "source_contract_lane",
+          sourcePortRole: "contract_out",
+          targetPortRole: "contract_in"
+        },
+        label: {
+          text: "binds\nalpha\nbeta\ngamma",
+          textStyleRole: "edge_label"
+        },
+        markers: {
+          end: "arrow"
+        }
+      },
+      {
+        id: "binds_to:C-900->D-902",
+        role: "binds_to",
+        classes: ["constraint_edge"],
+        from: {
+          itemId: "C-900"
+        },
+        to: {
+          itemId: "D-902"
+        },
+        routing: {
+          style: "orthogonal",
+          labelPlacement: "source_contract_lane",
+          sourcePortRole: "contract_out",
+          targetPortRole: "contract_in"
+        },
+        label: {
+          text: "binds\ndelta\nepsilon\nzeta",
+          textStyleRole: "edge_label"
+        },
+        markers: {
+          end: "arrow"
+        }
+      }
+    ],
+    diagnostics: []
+  };
+}
+
 describe("staged ui_contracts", () => {
   it("matches committed staged snapshots for place_viewstate_transition in recommended profile", async () => {
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd");
@@ -129,26 +418,40 @@ describe("staged ui_contracts", () => {
     expect(rendered.svg).not.toContain('class="scene-port');
     expect(rendered.svg).not.toContain("ViewState: Billing Editing");
     expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_segment_fallback")).toBe(false);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_lane_fallback")).toBe(false);
     expect(rendered.positionedScene.edges.every((edge) => getTerminalSegmentLength(edge) >= 12)).toBe(true);
 
     const billingForm = findPositionedItem(rendered.positionedScene.root, "C-010");
     const billingFormGutter = findPositionedItem(rendered.positionedScene.root, "C-010__content");
-    if (billingForm.kind !== "container" || billingFormGutter.kind !== "container") {
+    const submitButton = findPositionedItem(rendered.positionedScene.root, "C-011");
+    const submitButtonGutter = findPositionedItem(rendered.positionedScene.root, "C-011__content");
+    if (
+      billingForm.kind !== "container"
+      || billingFormGutter.kind !== "container"
+      || submitButton.kind !== "container"
+      || submitButtonGutter.kind !== "container"
+    ) {
       throw new Error("Expected Billing Form to remain a staged container with a contract gutter.");
     }
 
     const bindsTo = findEdge(rendered.positionedScene, "binds_to:C-010->D-010");
     const dependsOn = findEdge(rendered.positionedScene, "depends_on:C-010->SA-010");
-    const laneTop = billingForm.y + billingForm.chrome.padding.top + (billingForm.chrome.headerBandHeight ?? 0) + 12;
-    const laneLeft = billingFormGutter.x + 12;
-    const laneRight = billingFormGutter.x + billingFormGutter.chrome.padding.left;
+    const emits = findEdge(rendered.positionedScene, "emits:C-011->E-010");
+    const billingLaneBounds = resolveContractLaneBounds(billingForm, billingFormGutter);
+    const submitLaneBounds = resolveContractLaneBounds(submitButton, submitButtonGutter);
 
-    expect(bindsTo.label?.x).toBeGreaterThanOrEqual(laneLeft);
-    expect(dependsOn.label?.x).toBeGreaterThanOrEqual(laneLeft);
-    expect(bindsTo.label?.y).toBeGreaterThanOrEqual(laneTop);
-    expect(dependsOn.label?.y).toBeGreaterThan(bindsTo.label?.y ?? 0);
-    expect(bindsTo.route.points[2]?.x).toBe(laneRight);
-    expect(dependsOn.route.points[2]?.x).toBe(laneRight);
+    expectHorizontalLocalSupportRoute(bindsTo, billingFormGutter.x);
+    expectHorizontalLocalSupportRoute(dependsOn, billingFormGutter.x);
+    expectHorizontalLocalSupportRoute(emits, submitButtonGutter.x);
+    expectLabelInsideLane(bindsTo, billingLaneBounds);
+    expectLabelInsideLane(dependsOn, billingLaneBounds);
+    expectLabelInsideLane(emits, submitLaneBounds);
+    expect(getLabelCenterY(dependsOn)).toBe(dependsOn.to.y);
+    expect(getLabelCenterY(bindsTo)).toBe(bindsTo.to.y);
+    expect(getLabelCenterY(emits)).toBe(emits.to.y);
+    expect(dependsOn.to.y).toBeLessThan(bindsTo.to.y);
+    expect(dependsOn.from.y).toBeLessThan(bindsTo.from.y);
+    expect(getLabelCenterY(dependsOn)).toBeLessThan(getLabelCenterY(bindsTo));
 
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.renderer-scene.json", rendererScene);
     await expectRendererStageSnapshot("ui-contracts.place-viewstate-transition.measured-scene.json", rendered.measuredScene);
@@ -176,8 +479,34 @@ describe("staged ui_contracts", () => {
 
     const placeGraph = findPositionedItem(rendered.positionedScene.root, "secondary_state_group:P-060");
     const componentGraph = findPositionedItem(rendered.positionedScene.root, "secondary_state_group:C-060");
+    const reviewPanel = findPositionedItem(rendered.positionedScene.root, "C-060");
+    const reviewPanelGutter = findPositionedItem(rendered.positionedScene.root, "C-060__content");
     expect(placeGraph.kind).toBe("container");
     expect(componentGraph.kind).toBe("container");
+    if (reviewPanel.kind !== "container" || reviewPanelGutter.kind !== "container") {
+      throw new Error("Expected Review Panel to remain a staged container with a contract gutter.");
+    }
+
+    const bindsTo = findEdge(rendered.positionedScene, "binds_to:C-060->D-060");
+    const dependsOn = findEdge(rendered.positionedScene, "depends_on:C-060->SA-060");
+    const emits = findEdge(rendered.positionedScene, "emits:C-060->E-060");
+    const laneBounds = resolveContractLaneBounds(reviewPanel, reviewPanelGutter);
+
+    expectHorizontalLocalSupportRoute(bindsTo, reviewPanelGutter.x);
+    expectHorizontalLocalSupportRoute(dependsOn, reviewPanelGutter.x);
+    expectHorizontalLocalSupportRoute(emits, reviewPanelGutter.x);
+    expect(emits.to.y).toBeLessThan(dependsOn.to.y);
+    expect(dependsOn.to.y).toBeLessThan(bindsTo.to.y);
+    expect(emits.from.y).toBeLessThan(dependsOn.from.y);
+    expect(dependsOn.from.y).toBeLessThan(bindsTo.from.y);
+    expectLabelInsideLane(emits, laneBounds);
+    expectLabelInsideLane(dependsOn, laneBounds);
+    expectLabelInsideLane(bindsTo, laneBounds);
+    expect(getLabelCenterY(emits)).toBe(emits.to.y);
+    expect(getLabelCenterY(dependsOn)).toBe(dependsOn.to.y);
+    expect(getLabelCenterY(bindsTo)).toBe(bindsTo.to.y);
+    expect(getLabelCenterY(emits)).toBeLessThan(getLabelCenterY(dependsOn));
+    expect(getLabelCenterY(dependsOn)).toBeLessThan(getLabelCenterY(bindsTo));
 
     await expectRendererStageSnapshot("ui-contracts.ui-state-fallback.renderer-scene.json", rendererScene);
     await expectRendererStageSnapshot("ui-contracts.ui-state-fallback.measured-scene.json", rendered.measuredScene);
@@ -214,10 +543,47 @@ END
     expect(rendered.svg).not.toContain('class="scene-port');
     expect(findPositionedItem(rendered.positionedScene.root, "shared_supporting_contracts").kind).toBe("container");
     expect(
+      rendererScene.edges
+        .filter((edge) => edge.role === "emits" && edge.to.itemId === "E-200")
+        .map((edge) => edge.routing.labelPlacement)
+    ).toEqual(["segment", "segment"]);
+    expect(rendered.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_lane_fallback")).toBe(false);
+    expect(
       rendered.positionedScene.edges
         .filter((edge) => edge.role === "emits" && edge.to.itemId === "E-200")
         .map((edge) => edge.from.itemId)
     ).toEqual(["C-200", "C-201"]);
+  });
+
+  it("packs crowded contract-lane pills around their routes without overlap", async () => {
+    const result = await runStagedRendererPipeline(buildSyntheticCrowdedLaneScene());
+
+    expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.edge_label_lane_fallback")).toBe(false);
+
+    const billingForm = findPositionedItem(result.positionedScene.root, "C-900");
+    const billingFormGutter = findPositionedItem(result.positionedScene.root, "C-900__content");
+    if (billingForm.kind !== "container" || billingFormGutter.kind !== "container") {
+      throw new Error("Expected Billing Form to remain a staged container with a contract gutter.");
+    }
+
+    const first = findEdge(result.positionedScene, "binds_to:C-900->D-901");
+    const second = findEdge(result.positionedScene, "binds_to:C-900->D-902");
+    const firstLabel = getEdgeLabel(first);
+    const secondLabel = getEdgeLabel(second);
+    const laneBounds = resolveContractLaneBounds(billingForm, billingFormGutter);
+    const displacements = [
+      getLabelCenterY(first) - first.to.y,
+      getLabelCenterY(second) - second.to.y
+    ];
+
+    expectHorizontalLocalSupportRoute(first, billingFormGutter.x);
+    expectHorizontalLocalSupportRoute(second, billingFormGutter.x);
+    expectLabelInsideLane(first, laneBounds);
+    expectLabelInsideLane(second, laneBounds);
+    expect(first.to.y).toBeLessThan(second.to.y);
+    expect(firstLabel.y + firstLabel.height).toBe(secondLabel.y);
+    expect(displacements.some((value) => value !== 0)).toBe(true);
+    expect(displacements[0]).toBeLessThanOrEqual(displacements[1] ?? Number.POSITIVE_INFINITY);
   });
 
   it("keeps root places vertically balanced while dense places switch to a place grid", async () => {

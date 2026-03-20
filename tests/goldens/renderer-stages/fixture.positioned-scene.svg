@@ -121,7 +121,7 @@
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-navigation primary_path" data-edge-id="nav-001" data-role="navigation">
       <rect class="scene-edge-label__box" x="224" y="76" width="88" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="230" y="92">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="230" y="93">
           <tspan x="230" dy="0">Primary path</tspan>
         </text>
     </g>

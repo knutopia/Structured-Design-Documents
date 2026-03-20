@@ -568,7 +568,8 @@ function buildSemanticRenderableEdges(
 function buildRoutingIntent(
   role: string,
   fromKind: SceneItem["kind"] | undefined,
-  toKind: SceneItem["kind"] | undefined
+  toKind: SceneItem["kind"] | undefined,
+  useSourceContractLane: boolean
 ): SceneEdge["routing"] {
   if (role === "transitions_to") {
     return {
@@ -586,7 +587,7 @@ function buildRoutingIntent(
       style: "orthogonal",
       preferAxis: "horizontal",
       bendPlacement: "target_bias",
-      labelPlacement: sourceIsContainer ? "source_contract_lane" : "segment",
+      labelPlacement: sourceIsContainer && useSourceContractLane ? "source_contract_lane" : "segment",
       sourcePortRole: sourceIsContainer ? "contract_out" : undefined,
       targetPortRole: toKind === "node" ? "contract_in" : undefined
     };
@@ -652,7 +653,7 @@ function buildSceneEdge(
     to: {
       itemId: to
     },
-    routing: buildRoutingIntent(role, fromKind, toKind),
+    routing: buildRoutingIntent(role, fromKind, toKind, edge.constraint === true),
     label: edge.label
       ? {
           text: edge.label,

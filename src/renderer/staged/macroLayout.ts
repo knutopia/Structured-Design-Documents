@@ -41,6 +41,7 @@ import {
   positionEdgeLabelInLane,
   positionEdgeLabel,
   resolveEdgeEndpoint,
+  resolveSourceContractLaneOrigin,
   resolvePortOnItem,
   type SourceContractLaneAssignment
 } from "./routing.js";
@@ -65,6 +66,15 @@ interface LayoutItemResult {
 
 type ContractLabelLaneAssignments = ReadonlyMap<string, SourceContractLaneAssignment>;
 
+interface ContractLaneCandidate {
+  edge: MeasuredEdge;
+  label: NonNullable<MeasuredEdge["label"]>;
+  sourceItem: PositionedContainer;
+  lane: SourceContractLaneAssignment;
+  targetX: number;
+  targetY: number;
+}
+
 interface MeasuredItemIndexEntry {
   item: MeasuredItem;
   parentContainerId?: string;
@@ -82,7 +92,6 @@ const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels",
 const CONTRACT_LABEL_LANE_INSET = 12;
 const CONTRACT_LABEL_LANE_WIDTH_REDUCTION = 16;
 const CONTRACT_LABEL_LANE_TOP_PADDING = 12;
-const CONTRACT_LABEL_LANE_ROW_GAP = 8;
 
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -823,13 +832,82 @@ function resolveContractLabelLane(
     return undefined;
   }
 
+  const routeMinY = roundMetric(
+    sourceContainer.y + sourceContainer.chrome.padding.top + (sourceContainer.chrome.headerBandHeight ?? 0)
+  );
+  const routeMaxY = roundMetric(sourceContainer.y + sourceContainer.height - sourceContainer.chrome.padding.bottom);
+  if (routeMaxY < routeMinY) {
+    return undefined;
+  }
+
   return {
     labelX: roundMetric(gutterContainer.x + CONTRACT_LABEL_LANE_INSET),
     labelY: 0,
-    rowY: 0,
-    laneExitX: roundMetric(gutterContainer.x + laneWidth),
+    routeCenterY: 0,
+    routeX: roundMetric(gutterContainer.x),
+    routeMinY,
+    routeMaxY,
     usableWidth
   };
+}
+
+function resolveContractLaneBodyTop(sourceItem: PositionedContainer): number {
+  return roundMetric(
+    sourceItem.y
+    + sourceItem.chrome.padding.top
+    + (sourceItem.chrome.headerBandHeight ?? 0)
+    + CONTRACT_LABEL_LANE_TOP_PADDING
+  );
+}
+
+function resolveContractLaneBodyBottom(sourceItem: PositionedContainer): number {
+  return roundMetric(sourceItem.y + sourceItem.height - sourceItem.chrome.padding.bottom);
+}
+
+function packRouteCenteredLaneLabelTops(
+  candidates: readonly ContractLaneCandidate[],
+  laneBodyTop: number,
+  laneBodyBottom: number
+): number[] | undefined {
+  if (candidates.length === 0) {
+    return [];
+  }
+
+  const totalLabelHeight = roundMetric(
+    candidates.reduce((sum, candidate) => sum + candidate.label.height, 0)
+  );
+  const availableHeight = roundMetric(laneBodyBottom - laneBodyTop);
+  if (totalLabelHeight > availableHeight) {
+    return undefined;
+  }
+
+  const placements = candidates.map((candidate) => ({
+    height: candidate.label.height,
+    top: roundMetric(candidate.targetY - candidate.label.height / 2)
+  }));
+
+  let previousBottom = laneBodyTop;
+  for (const placement of placements) {
+    placement.top = roundMetric(Math.max(placement.top, previousBottom, laneBodyTop));
+    previousBottom = roundMetric(placement.top + placement.height);
+  }
+
+  let nextBottom = laneBodyBottom;
+  for (let index = placements.length - 1; index >= 0; index -= 1) {
+    const placement = placements[index];
+    if (!placement) {
+      continue;
+    }
+    const maxTop = roundMetric(nextBottom - placement.height);
+    placement.top = roundMetric(Math.min(placement.top, maxTop));
+    nextBottom = placement.top;
+  }
+
+  if (placements[0] && placements[0].top < laneBodyTop) {
+    return undefined;
+  }
+
+  return placements.map((placement) => placement.top);
 }
 
 function buildContractLabelLaneAssignments(
@@ -838,7 +916,7 @@ function buildContractLabelLaneAssignments(
   diagnostics: RendererDiagnostic[]
 ): Map<string, SourceContractLaneAssignment> {
   const assignments = new Map<string, SourceContractLaneAssignment>();
-  const nextLaneOffsetByContainerId = new Map<string, number>();
+  const sourceCandidates = new Map<string, ContractLaneCandidate[]>();
 
   for (const edge of edges) {
     if (edge.routing.labelPlacement !== "source_contract_lane" || !edge.label) {
@@ -883,40 +961,77 @@ function buildContractLabelLaneAssignments(
       continue;
     }
 
-    const nextOffset = nextLaneOffsetByContainerId.get(sourceItem.id) ?? 0;
-    const laneTop = roundMetric(
-      sourceItem.y
-      + sourceItem.chrome.padding.top
-      + (sourceItem.chrome.headerBandHeight ?? 0)
-      + CONTRACT_LABEL_LANE_TOP_PADDING
-      + nextOffset
+    const target = resolveEdgeEndpoint(
+      edge.to,
+      edge.routing.targetPortRole,
+      edge.id,
+      index,
+      sourceItem,
+      edge.routing.preferAxis,
+      diagnostics
     );
-    const bodyBottom = roundMetric(sourceItem.y + sourceItem.height - sourceItem.chrome.padding.bottom);
-    const labelBottom = roundMetric(laneTop + edge.label.height);
+    const existing = sourceCandidates.get(sourceItem.id) ?? [];
+    existing.push({
+      edge,
+      label: edge.label,
+      sourceItem,
+      lane,
+      targetX: target.x,
+      targetY: target.y
+    });
+    sourceCandidates.set(sourceItem.id, existing);
+  }
 
-    if (labelBottom > bodyBottom) {
-      diagnostics.push(
-        createRoutingDiagnostic(
-          "renderer.routing.edge_label_lane_fallback",
-          `Edge "${edge.id}" label lane rows would exceed the source container body. Falling back to segment placement.`,
-          edge.id,
-          "info"
-        )
-      );
+  for (const candidates of sourceCandidates.values()) {
+    candidates.sort((left, right) =>
+      left.targetY - right.targetY
+      || left.targetX - right.targetX
+      || left.edge.id.localeCompare(right.edge.id)
+    );
+
+    const firstCandidate = candidates[0];
+    if (!firstCandidate) {
       continue;
     }
 
-    assignments.set(edge.id, {
-      labelX: lane.labelX,
-      labelY: laneTop,
-      rowY: roundMetric(laneTop + edge.label.height / 2),
-      laneExitX: lane.laneExitX,
-      usableWidth: lane.usableWidth
-    });
-    nextLaneOffsetByContainerId.set(
-      sourceItem.id,
-      roundMetric(nextOffset + edge.label.height + CONTRACT_LABEL_LANE_ROW_GAP)
-    );
+    const laneBodyTop = resolveContractLaneBodyTop(firstCandidate.sourceItem);
+    const laneBodyBottom = resolveContractLaneBodyBottom(firstCandidate.sourceItem);
+    const resolvedLabelTops = packRouteCenteredLaneLabelTops(candidates, laneBodyTop, laneBodyBottom);
+
+    if (!resolvedLabelTops) {
+      for (const candidate of candidates) {
+        diagnostics.push(
+          createRoutingDiagnostic(
+            "renderer.routing.edge_label_lane_fallback",
+            `Edge "${candidate.edge.id}" label lane rows could not fit within the source container body after route-centered packing. Falling back to segment placement.`,
+            candidate.edge.id,
+            "info"
+          )
+        );
+      }
+      continue;
+    }
+
+    for (const [candidateIndex, candidate] of candidates.entries()) {
+      const {
+        edge,
+        lane,
+        targetY
+      } = candidate;
+      const labelTop = resolvedLabelTops[candidateIndex];
+      if (labelTop === undefined) {
+        continue;
+      }
+      assignments.set(edge.id, {
+        labelX: lane.labelX,
+        labelY: labelTop,
+        routeCenterY: roundMetric(targetY),
+        routeX: lane.routeX,
+        routeMinY: lane.routeMinY,
+        routeMaxY: lane.routeMaxY,
+        usableWidth: lane.usableWidth
+      });
+    }
   }
 
   return assignments;
@@ -972,6 +1087,12 @@ function positionMeasuredEdge(
   const canUseElkRoute = edge.routing.style === "orthogonal" && Array.isArray(localHint) && localHint.length > 0;
   const contractLabelLane = contractLabelLanes.get(edge.id);
   const localPatternRoute = buildLocalPatternRoute(edge, from, to, diagnostics);
+  const contractLaneOrigin = contractLabelLane
+    ? resolveSourceContractLaneOrigin(edge.from.itemId, to, contractLabelLane, edge.id, diagnostics)
+    : undefined;
+  const contractLaneRoute = contractLaneOrigin
+    ? buildSourceContractLaneRoute(edge, contractLaneOrigin, to, diagnostics)
+    : undefined;
 
   if (edge.routing.avoidNodeBoxes && !canUseElkRoute) {
     diagnostics.push(
@@ -988,14 +1109,14 @@ function positionMeasuredEdge(
     ? buildRouteFromLocalHint(edge, from, to, owner, localHint, diagnostics)
     : localPatternRoute
       ? localPatternRoute
-    : contractLabelLane
-      ? buildSourceContractLaneRoute(edge, from, to, contractLabelLane, diagnostics)
+    : contractLaneRoute
+      ? contractLaneRoute
       : buildSharedRoute(edge, from, to, diagnostics);
   const positionedFrom = {
-    itemId: from.itemId,
-    portId: from.portId,
-    x: from.x,
-    y: from.y
+    itemId: contractLaneRoute ? contractLaneOrigin?.itemId ?? from.itemId : from.itemId,
+    portId: contractLaneRoute ? contractLaneOrigin?.portId : from.portId,
+    x: contractLaneRoute ? contractLaneOrigin?.x ?? from.x : from.x,
+    y: contractLaneRoute ? contractLaneOrigin?.y ?? from.y : from.y
   };
   const positionedTo = {
     itemId: to.itemId,
@@ -1012,7 +1133,7 @@ function positionMeasuredEdge(
     to: positionedTo,
     route,
     label: edge.label
-      ? contractLabelLane
+      ? contractLaneRoute && contractLabelLane
         ? positionEdgeLabelInLane(edge.label, contractLabelLane)
         : positionEdgeLabel(edge.label, route, diagnostics, edge.id)
       : undefined,

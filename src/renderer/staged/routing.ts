@@ -25,8 +25,10 @@ interface ResolvedEdgeEndpoint extends PositionedEdgeEndpoint {
 export interface SourceContractLaneAssignment {
   labelX: number;
   labelY: number;
-  rowY: number;
-  laneExitX: number;
+  routeCenterY: number;
+  routeX: number;
+  routeMinY: number;
+  routeMaxY: number;
   usableWidth: number;
 }
 
@@ -43,6 +45,10 @@ function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
 export { createRoutingDiagnostic } from "./diagnostics.js";
+
+function clampMetric(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 function cloneMeasuredPort(port: MeasuredPort): MeasuredPort {
   return {
@@ -736,14 +742,10 @@ export function buildSourceContractLaneRoute(
   edge: MeasuredEdge,
   from: ResolvedEdgeEndpoint,
   to: ResolvedEdgeEndpoint,
-  lane: SourceContractLaneAssignment,
   diagnostics: RendererDiagnostic[]
 ): PositionedRoute {
   const lanePoints = collapseRoutePoints([
     { x: from.x, y: from.y },
-    { x: from.x, y: lane.rowY },
-    { x: lane.laneExitX, y: lane.rowY },
-    { x: lane.laneExitX, y: to.y },
     { x: to.x, y: to.y }
   ]);
 
@@ -754,6 +756,34 @@ export function buildSourceContractLaneRoute(
       applyTargetApproach(edge, lanePoints, from, to, diagnostics),
       diagnostics
     )
+  };
+}
+
+export function resolveSourceContractLaneOrigin(
+  sourceItemId: string,
+  destination: Pick<ResolvedEdgeEndpoint, "y">,
+  lane: Pick<SourceContractLaneAssignment, "routeX" | "routeMinY" | "routeMaxY">,
+  edgeId: string,
+  diagnostics: RendererDiagnostic[]
+): ResolvedEdgeEndpoint | undefined {
+  const routeY = roundMetric(clampMetric(destination.y, lane.routeMinY, lane.routeMaxY));
+  if (routeY !== roundMetric(destination.y)) {
+    diagnostics.push(
+      createRoutingDiagnostic(
+        "renderer.routing.source_contract_lane_geometry_fallback",
+        `Edge "${edgeId}" could not align its synthetic source anchor to the destination row within the source container body. Falling back to shared routing.`,
+        edgeId,
+        "info"
+      )
+    );
+    return undefined;
+  }
+
+  return {
+    itemId: sourceItemId,
+    portId: undefined,
+    x: roundMetric(lane.routeX),
+    y: routeY
   };
 }
 

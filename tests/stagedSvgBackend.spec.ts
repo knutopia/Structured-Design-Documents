@@ -60,4 +60,24 @@ describe("staged SVG backend", () => {
       severity: "warn"
     }));
   });
+
+  it("centers edge-label text with a line-height-aware baseline while leaving other text unchanged", async () => {
+    const singleLineScene = buildPositionedSvgFixture();
+    const { svg: singleLineSvg } = await renderPositionedSceneToSvg(singleLineScene);
+
+    expect(singleLineSvg).toContain('<text class="scene-text text-role-edge_label block-kind-edge_label" x="230" y="93">');
+    expect(singleLineSvg).toContain('<text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="50">');
+
+    const multiLineScene = buildPositionedSvgFixture();
+    const edgeLabel = multiLineScene.edges[0]?.label;
+    if (!edgeLabel) {
+      throw new Error("Synthetic SVG fixture is missing its edge label.");
+    }
+    edgeLabel.lines = ["Primary path", "With approval"];
+    edgeLabel.height = 36;
+
+    const { svg: multiLineSvg } = await renderPositionedSceneToSvg(multiLineScene);
+    expect(multiLineSvg).toContain('<text class="scene-text text-role-edge_label block-kind-edge_label" x="230" y="93">');
+    expect(multiLineSvg).toContain('<tspan x="230" dy="14">With approval</tspan>');
+  });
 });

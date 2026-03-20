@@ -781,9 +781,8 @@
       ],
       "from": {
         "itemId": "C-060",
-        "portId": "C-060__contract_out",
-        "x": 594.35,
-        "y": 174
+        "x": 606.35,
+        "y": 342
       },
       "to": {
         "itemId": "D-060",
@@ -795,16 +794,8 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 594.35,
-            "y": 174
-          },
-          {
-            "x": 594.35,
-            "y": 197
-          },
-          {
-            "x": 734.35,
-            "y": 197
+            "x": 606.35,
+            "y": 342
           },
           {
             "x": 734.35,
@@ -821,7 +812,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 618.35,
-        "y": 186
+        "y": 331
       },
       "markers": {
         "end": "arrow"
@@ -836,9 +827,8 @@
       ],
       "from": {
         "itemId": "C-060",
-        "portId": "C-060__contract_out",
-        "x": 594.35,
-        "y": 174
+        "x": 606.35,
+        "y": 278
       },
       "to": {
         "itemId": "SA-060",
@@ -850,16 +840,8 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 594.35,
-            "y": 174
-          },
-          {
-            "x": 594.35,
-            "y": 227
-          },
-          {
-            "x": 734.35,
-            "y": 227
+            "x": 606.35,
+            "y": 278
           },
           {
             "x": 734.35,
@@ -876,7 +858,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 618.35,
-        "y": 216
+        "y": 267
       },
       "markers": {
         "end": "arrow"
@@ -892,9 +874,8 @@
       ],
       "from": {
         "itemId": "C-060",
-        "portId": "C-060__contract_out",
-        "x": 594.35,
-        "y": 174
+        "x": 606.35,
+        "y": 206
       },
       "to": {
         "itemId": "E-060",
@@ -906,16 +887,8 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 594.35,
-            "y": 174
-          },
-          {
-            "x": 594.35,
-            "y": 257
-          },
-          {
-            "x": 734.35,
-            "y": 257
+            "x": 606.35,
+            "y": 206
           },
           {
             "x": 734.35,
@@ -932,7 +905,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 618.35,
-        "y": 246
+        "y": 195
       },
       "markers": {
         "end": "arrow"
