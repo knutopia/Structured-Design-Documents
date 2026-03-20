@@ -1,5 +1,9 @@
 # **Possible Architecture: Service Blueprint Rendering Pipeline**
 
+> Status: historical and superseded for staged renderer work.
+> The snapped two-pass `elk_lanes` approach described below is rejected.
+> See [Service Blueprint Renderer Reset.md](/home/knut/projects/sdd/docs/service_blueprint_renderer_implementation/Service%20Blueprint%20Renderer%20Reset.md) for the current architectural constraints.
+
 ## **1\. Executive Summary**
 
 This document outlines the rendering pipeline for the service\_blueprint diagram type within the Structured Design Documents (SDD) project. The solution uses elkjs (Eclipse Layout Kernel) to transform intermediate YAML structures into fully routed, highly structured SVG service blueprints.  
@@ -206,4 +210,3 @@ Since we rely on a Flat Graph with Y-hints, the renderer owns the final lane geo
 | elk.port.index | Port | \[integer\] | Explicit ordering of ports on a node |
 | elk.layered.priority.straightness | Edge | 1-10 | Higher value \= straighter line (use for PRECEDES) |
 | elk.edgeLabels.placement | Label | CENTER | Positions label nicely on the route |
-

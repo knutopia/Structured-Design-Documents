@@ -16,30 +16,33 @@ import type {
   SceneEdge,
   SceneItem,
   SceneNode,
+  LayoutIntent,
   WidthPolicy
 } from "./contracts.js";
-import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
+import {
+  createBackendDiagnostic,
+  createSceneDiagnostic,
+  sortRendererDiagnostics,
+  type RendererDiagnostic
+} from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
-import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
-import {
-  renderPositionedSceneToPng,
-  renderPositionedSceneToSvg,
-  type StagedPngArtifact,
-  type StagedSvgArtifact
-} from "./svgBackend.js";
+import type { StagedPngArtifact, StagedSvgArtifact } from "./svgBackend.js";
 
 const ROOT_GAP = 18;
 const LANE_STACK_GAP = 12;
+const SERVICE_BLUEPRINT_FAIL_CLOSED_MESSAGE = "Staged service_blueprint preview is temporarily disabled while the broken two-pass ELK lane renderer is removed. service_blueprint requires ELK-authoritative final geometry; use --backend legacy_graphviz_preview for preview output until the replacement lands.";
 
 interface SceneBuildContext {
   diagnostics: RendererDiagnostic[];
   renderNodesById: ReadonlyMap<string, ServiceBlueprintRenderNode>;
 }
 
-export interface ServiceBlueprintStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
-export interface ServiceBlueprintStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
+export const SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE = "renderer.backend.service_blueprint_staged_disabled";
+
+export interface ServiceBlueprintStagedSvgResult extends StagedSvgArtifact {}
+export interface ServiceBlueprintStagedPngResult extends StagedPngArtifact {}
 
 function buildRootChrome(): SceneContainer["chrome"] {
   return {
@@ -51,6 +54,14 @@ function buildRootChrome(): SceneContainer["chrome"] {
     },
     gutter: ROOT_GAP,
     headerBandHeight: 0
+  };
+}
+
+function buildDisabledRootLayout(): LayoutIntent {
+  return {
+    strategy: "stack",
+    direction: "vertical",
+    gap: ROOT_GAP
   };
 }
 
@@ -295,11 +306,7 @@ export function buildServiceBlueprintRendererScene(
     themeId,
     root: buildDiagramRootContainer({
       viewId: "service_blueprint",
-      layout: {
-        strategy: "elk_lanes",
-        direction: "horizontal",
-        gap: ROOT_GAP
-      },
+      layout: buildDisabledRootLayout(),
       chrome: buildRootChrome(),
       children: rootChildren,
       classes: ["service_blueprint"]
@@ -307,6 +314,17 @@ export function buildServiceBlueprintRendererScene(
     edges: buildSceneEdges(model),
     diagnostics: context.diagnostics
   };
+}
+
+function buildFailClosedDiagnostics(sceneDiagnostics: readonly RendererDiagnostic[]): RendererDiagnostic[] {
+  return sortRendererDiagnostics([
+    ...sceneDiagnostics,
+    createBackendDiagnostic(
+      SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE,
+      SERVICE_BLUEPRINT_FAIL_CLOSED_MESSAGE,
+      { severity: "error", targetId: "root" }
+    )
+  ]);
 }
 
 export async function renderServiceBlueprintStagedSvg(
@@ -317,12 +335,9 @@ export async function renderServiceBlueprintStagedSvg(
   themeId = "default"
 ): Promise<ServiceBlueprintStagedSvgResult> {
   const rendererScene = buildServiceBlueprintRendererScene(projection, graph, view, profileId, themeId);
-  const pipeline = await runStagedRendererPipeline(rendererScene);
-  const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
-
   return {
-    ...pipeline,
-    ...rendered
+    svg: "",
+    diagnostics: buildFailClosedDiagnostics(rendererScene.diagnostics)
   };
 }
 
@@ -334,11 +349,9 @@ export async function renderServiceBlueprintStagedPng(
   themeId = "default"
 ): Promise<ServiceBlueprintStagedPngResult> {
   const rendererScene = buildServiceBlueprintRendererScene(projection, graph, view, profileId, themeId);
-  const pipeline = await runStagedRendererPipeline(rendererScene);
-  const rendered = await renderPositionedSceneToPng(pipeline.positionedScene);
-
   return {
-    ...pipeline,
-    ...rendered
+    svg: "",
+    png: new Uint8Array(),
+    diagnostics: buildFailClosedDiagnostics(rendererScene.diagnostics)
   };
 }

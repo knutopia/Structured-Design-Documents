@@ -26,15 +26,16 @@ Current renderable views:
 - `scenario_flow`: DOT, Mermaid, SVG, PNG
 - `ui_contracts`: DOT, Mermaid, SVG, PNG
 
-Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile; preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
+Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile when that backend emits artifacts; preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. A fail-closed default staged backend may intentionally omit unsuffixed preview files for that view/profile. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
 
 The CLI preview pipeline is SVG-first:
 
 - `sdd show` resolves preview output through a backend-aware registry and writes `.svg` by default
 - `ia_place_map` now defaults `sdd show` to the staged preview backend `staged_ia_place_map_preview`, which renders projection-driven staged SVG directly and derives PNG from that SVG
 - `ui_contracts` now also defaults `sdd show` to the staged preview backend `staged_ui_contracts_preview`, which renders the routed and balanced staged SVG directly and derives PNG from that SVG
+- `service_blueprint` now also selects the staged preview backend `staged_service_blueprint_preview` by default, but that backend currently fails closed until the ELK-authoritative rewrite lands; use `--backend legacy_graphviz_preview` for working preview artifacts
 - the remaining views still default to `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
-- legacy Graphviz preview remains selectable for `ia_place_map` and `ui_contracts` with `--backend legacy_graphviz_preview`, and `--dot-out` automatically chooses a DOT-capable backend when needed
+- legacy Graphviz preview remains selectable for `ia_place_map`, `service_blueprint`, and `ui_contracts` with `--backend legacy_graphviz_preview`, and `--dot-out` automatically chooses a DOT-capable backend when needed
 - PNG output is still derived from SVG in both preview paths, and the vendored Public Sans desktop font keeps preview typography independent of user-installed system fonts
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
@@ -198,10 +199,16 @@ Render an Outcome-Opportunity Map SVG preview artifact:
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg
 ```
 
-Render a Service Blueprint SVG preview artifact:
+Attempt the default Service Blueprint staged SVG preview artifact:
 
 ```bash
 pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out /tmp/blueprint.svg
+```
+
+Render the preserved legacy Graphviz Service Blueprint preview explicitly:
+
+```bash
+pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out /tmp/blueprint-legacy.svg
 ```
 
 Render a Scenario Flow SVG preview artifact:

@@ -569,7 +569,8 @@ function globalHelpText(): string {
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
     "",
     "Notes:",
-    "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now default to staged preview backends, while other views stay on the legacy Graphviz preview backend.",
+    "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
+    "  `service_blueprint` staged preview currently fails closed until the ELK-authoritative rewrite lands; use `--backend legacy_graphviz_preview` for working preview artifacts.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -696,7 +697,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now use staged preview backends by default, while the remaining views continue to route through the legacy Graphviz preview backend unless you override `--backend`.")
+    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while the remaining views continue to route through the legacy Graphviz preview backend unless you override `--backend`. `service_blueprint` staged preview currently fails closed until its ELK-authoritative rewrite lands.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)

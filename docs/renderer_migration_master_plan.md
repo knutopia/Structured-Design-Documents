@@ -572,16 +572,16 @@ The remaining views should benefit from the lessons of the first wave rather tha
 
 ### Recommended Next Candidates
 
-- `service_blueprint`, because it is the first post-proof-view migration and validates a lane-owned, ELK-assisted two-pass layout for remaining lane-oriented views
+- `service_blueprint`, because it is the first post-proof-view migration and now requires an ELK-authoritative rewrite after rejecting the snapped two-pass lane approach
 - `journey_map`, because it should benefit from shared lane and strip infrastructure
 - `outcome_opportunity_map`, because it can likely reuse lane plus routing patterns
 - `scenario_flow`, because its branching and routing complexity may make it a better late-stage migration
 
 ### Execution Note
 
-- `service_blueprint` now ships on the staged preview path by default for SVG and PNG
-- the implemented approach keeps lane geometry renderer-owned, uses a first ELK pass for horizontal ordering and peer banding, then reroutes against final snapped lane rows in a second pass
-- explicit legacy Graphviz preview access remains available in parallel
+- `service_blueprint` still selects the staged preview backend by default for SVG and PNG, but that backend now fails closed while the rejected two-pass `elk_lanes` path is removed
+- the replacement `service_blueprint` staged path must let `ELK Layered` own final node placement and final routing in the same run
+- explicit legacy Graphviz preview access remains available in parallel and is the working preview path until the rewrite lands
 
 ### Out Of Scope
 

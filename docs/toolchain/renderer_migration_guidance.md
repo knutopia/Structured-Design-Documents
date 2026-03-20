@@ -548,7 +548,7 @@ The architecture must support different views choosing different layout mixes.
 
 Recommended bias by view:
 
-- `service_blueprint`: use renderer-owned lane rows plus an `elk_lanes` macro-layout strategy; let ELK handle horizontal ordering, same-band peer alignment, and rerouting against final snapped node boxes rather than treating ELK as the lane geometry owner
+- `service_blueprint`: if ELK is used, let `ELK Layered` own final node placement and final routing in the same run; do not snap lane rows after layout and do not rely on renderer-side routing fallback
 - `journey_map`: prefer lane or strip layout for phases, with routing support for cross-phase references
 - `ia_place_map`: use hierarchical containers, explicit ports, and manual hub/follower grouping; let owned child scopes and follower scopes grow parent geometry bottom-up, then route only local structure connectors with deterministic direct-vertical and shared-trunk patterns
 - `scenario_flow`: likely benefits most from `elk_layered` plus explicit decision-node port policy

@@ -22,6 +22,7 @@ import {
 } from "./renderedCorpus.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
+const SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE = "renderer.backend.service_blueprint_staged_disabled";
 
 function buildReadmeContent(
   manifestPath: string,
@@ -60,7 +61,10 @@ function buildReadmeContent(
     "Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs."
   );
   lines.push(
-    "Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings."
+    "Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings."
+  );
+  lines.push(
+    "A fail-closed default staged backend may intentionally omit unsuffixed preview files while keeping explicit backend-suffixed legacy preview artifacts committed."
   );
   lines.push("`simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.");
   lines.push("");
@@ -102,6 +106,19 @@ async function main(): Promise<void> {
   }
 
   const outputIndex: Array<{ viewId: string; exampleName: string }> = [];
+
+  const isExpectedFailClosedDefaultPreview = (
+    viewId: string,
+    backendId: string,
+    diagnostics: { code: string; severity: string }[]
+  ): boolean => (
+    viewId === "service_blueprint"
+    && backendId === "staged_service_blueprint_preview"
+    && diagnostics.some((diagnostic) => (
+      diagnostic.severity === "error"
+      && diagnostic.code === SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE
+    ))
+  );
 
   for (const variant of variants) {
     const view = bundle.views.views.find((candidate) => candidate.id === variant.viewId);
@@ -170,19 +187,34 @@ async function main(): Promise<void> {
       backendId: pngCapability.backendId
     });
 
-    if (!svgResult.artifact || svgResult.artifact.format !== "svg" || svgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+    const defaultSvgFailClosed = isExpectedFailClosedDefaultPreview(
+      variant.viewId,
+      svgCapability.backendId,
+      svgResult.diagnostics
+    );
+    const defaultPngFailClosed = isExpectedFailClosedDefaultPreview(
+      variant.viewId,
+      pngCapability.backendId,
+      pngResult.diagnostics
+    );
+
+    if (!defaultSvgFailClosed && (!svgResult.artifact || svgResult.artifact.format !== "svg" || svgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error"))) {
       throw new Error(
         `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${svgCapability.backendId}).\n${formatPrettyDiagnostics(svgResult.diagnostics)}`
       );
     }
-    if (!pngResult.artifact || pngResult.artifact.format !== "png" || pngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+    if (!defaultPngFailClosed && (!pngResult.artifact || pngResult.artifact.format !== "png" || pngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error"))) {
       throw new Error(
         `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${pngCapability.backendId}).\n${formatPrettyDiagnostics(pngResult.diagnostics)}`
       );
     }
 
-    await writeFile(outputPaths.svgOutputPath, svgResult.artifact.text, "utf8");
-    await writeFile(outputPaths.pngOutputPath, pngResult.artifact.bytes);
+    if (!defaultSvgFailClosed && svgResult.artifact?.format === "svg") {
+      await writeFile(outputPaths.svgOutputPath, svgResult.artifact.text, "utf8");
+    }
+    if (!defaultPngFailClosed && pngResult.artifact?.format === "png") {
+      await writeFile(outputPaths.pngOutputPath, pngResult.artifact.bytes);
+    }
 
     for (const extraSvgCapability of getPreviewArtifactCapabilities(capability, "svg").filter(
       (candidate) => candidate.backendId !== svgCapability.backendId

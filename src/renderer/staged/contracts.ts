@@ -9,7 +9,7 @@ export type SceneNodePrimitive =
   | "annotation_list"
   | "edge_label"
   | "connector_port";
-export type LayoutStrategy = "stack" | "grid" | "lanes" | "elk_layered" | "elk_lanes" | "manual";
+export type LayoutStrategy = "stack" | "grid" | "lanes" | "elk_layered" | "manual";
 export type LayoutDirection = "horizontal" | "vertical";
 export type CrossAlignment = "start" | "center" | "stretch";
 export type WidthBand = "chip" | "narrow" | "standard" | "wide";

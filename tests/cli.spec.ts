@@ -471,6 +471,27 @@ describe("CLI wrappers", () => {
 
   it("show defaults service_blueprint previews to the staged backend", async () => {
     const { deps, renderSourcePreviewMock, stderr } = createDeps();
+    renderSourcePreviewMock.mockResolvedValueOnce({
+      view: bundle.views.views.find((candidate) => candidate.id === "service_blueprint")!,
+      capability: {
+        textArtifacts: [],
+        previewArtifacts: [],
+        defaultPreviewFormat: "svg" as const
+      },
+      previewCapability: {
+        format: "svg" as const,
+        backendId: "staged_service_blueprint_preview" as const,
+        backendClass: "staged" as const
+      },
+      diagnostics: [
+        {
+          stage: "render" as const,
+          code: "renderer.backend.service_blueprint_staged_disabled",
+          severity: "error" as const,
+          message: "service_blueprint requires ELK-authoritative final geometry"
+        }
+      ]
+    });
     const result = await runCli([
       "node",
       "sdd",
@@ -482,14 +503,14 @@ describe("CLI wrappers", () => {
       "/tmp/blueprint.svg"
     ], deps);
 
-    expect(result.exitCode).toBe(0);
+    expect(result.exitCode).toBe(1);
     expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "service_blueprint",
       format: "svg",
       backendId: "staged_service_blueprint_preview"
     });
-    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/blueprint.svg", "<svg>staged</svg>");
-    expect(stderr.join("")).toContain("Wrote /tmp/blueprint.svg");
+    expect(deps.writeTextFile).not.toHaveBeenCalledWith("/tmp/blueprint.svg", expect.any(String));
+    expect(stderr.join("")).toContain("ELK-authoritative final geometry");
   });
 
   it("show allows service_blueprint to opt back into the legacy preview backend", async () => {

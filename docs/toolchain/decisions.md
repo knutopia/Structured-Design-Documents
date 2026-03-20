@@ -129,6 +129,16 @@ Preview generation remains outside the core renderer contract:
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
 - shared SVG font-embedding and SVG-to-PNG helpers are now reused by both the staged backend and `legacy_graphviz_preview`
 
+## Service Blueprint Renderer Reset
+
+- `service_blueprint` staged preview currently fails closed by design while the rejected two-pass `elk_lanes` path is removed.
+- The shipped `elkjs` bundle in this repo does not provide `Libavoid`, so the current toolchain does not have a standalone ELK obstacle router available.
+- `ELK Fixed` is not treated as a standalone router, and `interactive` or `semiInteractive` are not treated as a fixed-position rerouting contract.
+- `service_blueprint` may not snap nodes after ELK and then trust the pre-snap or partially-rerouted edge geometry.
+- `service_blueprint` may not use renderer-side routing fallback on the staged preview path.
+- If ELK routing is used for `service_blueprint`, `ELK Layered` must own final node placement and final routing in the same run.
+- Semantic lanes and semantic columns may still be renderer-owned inputs, but they must be materialized as ELK-visible structure rather than post-layout overrides.
+
 ## Source-Ordered Structural Rendering
 
 Structural rendering uses two different order models on purpose:

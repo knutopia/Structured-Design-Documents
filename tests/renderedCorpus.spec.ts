@@ -30,8 +30,13 @@ describe("rendered example corpus", () => {
       await access(outputPaths.sourceOutputPath);
       await access(outputPaths.dotOutputPath);
       await access(outputPaths.mermaidOutputPath);
-      await access(outputPaths.svgOutputPath);
-      await access(outputPaths.pngOutputPath);
+      if (variant.viewId === "service_blueprint") {
+        await expect(access(outputPaths.svgOutputPath)).rejects.toThrow();
+        await expect(access(outputPaths.pngOutputPath)).rejects.toThrow();
+      } else {
+        await access(outputPaths.svgOutputPath);
+        await access(outputPaths.pngOutputPath);
+      }
 
       const copiedSource = await readFile(outputPaths.sourceOutputPath, "utf8");
       const canonicalSource = await readFile(variant.example.absolutePath, "utf8");
@@ -144,7 +149,7 @@ describe("rendered example corpus", () => {
     ))).rejects.toThrow();
   });
 
-  it("keeps staged service_blueprint previews as the default corpus artifacts while preserving legacy preview siblings", async () => {
+  it("keeps service_blueprint default preview artifacts absent while preserving explicit legacy preview siblings", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
@@ -153,8 +158,8 @@ describe("rendered example corpus", () => {
 
     for (const variant of variants) {
       const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
-      const defaultSvg = await readFile(outputPaths.svgOutputPath, "utf8");
-      expect(defaultSvg).toContain('class="staged-svg');
+      await expect(access(outputPaths.svgOutputPath)).rejects.toThrow();
+      await expect(access(outputPaths.pngOutputPath)).rejects.toThrow();
 
       const legacySvgPath = getRenderedCorpusPreviewOutputPath(
         bundle,
@@ -176,6 +181,7 @@ describe("rendered example corpus", () => {
 
       const legacySvg = await readFile(legacySvgPath, "utf8");
       expect(legacySvg).not.toContain('class="staged-svg');
+      expect(legacySvg).toContain("<svg");
     }
   });
 

@@ -26,7 +26,8 @@ Curated view/example pairs:
 Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`, `recommended_profile`.
 
 Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs.
-Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
+Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
+A fail-closed default staged backend may intentionally omit unsuffixed preview files while keeping explicit backend-suffixed legacy preview artifacts committed.
 `simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.
 
 `ia_place_map` visual review checklist:

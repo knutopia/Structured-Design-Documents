@@ -4,61 +4,16 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import type {
-  PositionedContainer,
-  PositionedEdge,
-  PositionedItem
-} from "../src/renderer/staged/contracts.js";
 import {
+  SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE,
   buildServiceBlueprintRendererScene,
   renderServiceBlueprintStagedSvg
 } from "../src/renderer/staged/serviceBlueprint.js";
-import {
-  expectRendererStageSnapshot,
-  expectRendererStageTextSnapshot
-} from "./rendererStageSnapshotHarness.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
-function findPositionedItem(root: PositionedContainer, id: string): PositionedItem {
-  const queue: PositionedItem[] = [...root.children];
-
-  while (queue.length > 0) {
-    const current = queue.shift();
-    if (!current) {
-      continue;
-    }
-
-    if (current.id === id) {
-      return current;
-    }
-
-    if (current.kind === "container") {
-      queue.push(...current.children);
-    }
-  }
-
-  throw new Error(`Could not find positioned item "${id}".`);
-}
-
-function findEdge(
-  scene: Awaited<ReturnType<typeof buildServiceBlueprintArtifacts>>["rendered"]["positionedScene"],
-  edgeId: string
-): PositionedEdge {
-  const edge = scene.edges.find((candidate) => candidate.id === edgeId);
-  if (!edge) {
-    throw new Error(`Could not find positioned edge "${edgeId}".`);
-  }
-
-  return edge;
-}
-
-function getNodeCenterX(item: Extract<PositionedItem, { kind: "node" }>): number {
-  return item.x + item.width / 2;
-}
-
-async function buildServiceBlueprintArtifactsFromInput(
+async function resolveServiceBlueprintContext(
   input: { path: string; text: string },
   profileId: string
 ) {
@@ -80,32 +35,41 @@ async function buildServiceBlueprintArtifactsFromInput(
     throw new Error(`Could not project ${input.path} to service_blueprint.`);
   }
 
-  const rendererScene = buildServiceBlueprintRendererScene(projected.projection, compiled.graph, view, profileId);
-  const rendered = await renderServiceBlueprintStagedSvg(projected.projection, compiled.graph, view, profileId);
-
   return {
-    rendererScene,
-    rendered
+    graph: compiled.graph,
+    projection: projected.projection,
+    view
   };
 }
 
-async function buildServiceBlueprintArtifacts(examplePath: string, profileId: string) {
-  return buildServiceBlueprintArtifactsFromInput({
-    path: examplePath,
-    text: await readFile(examplePath, "utf8")
-  }, profileId);
+async function loadExampleInput(fileName: string): Promise<{ path: string; text: string }> {
+  const filePath = path.join(repoRoot, "bundle/v0.1/examples", fileName);
+  return {
+    path: filePath,
+    text: await readFile(filePath, "utf8")
+  };
 }
 
 describe("staged service_blueprint", () => {
-  it("matches committed staged snapshots for the sample slice and preserves blueprint lane semantics", async () => {
-    const examplePath = path.join(repoRoot, "bundle/v0.1/examples/service_blueprint_slice.sdd");
-    const { rendererScene, rendered } = await buildServiceBlueprintArtifacts(examplePath, "recommended");
-
-    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-    expect(rendered.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
-      "renderer.layout.elk_lanes_second_pass_unstable"
+  it("builds a deterministic lane scene for the sample slice", async () => {
+    const context = await resolveServiceBlueprintContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
     );
-    expect(rendered.positionedScene.root.children.map((child) => child.id)).toEqual([
+
+    const rendererScene = buildServiceBlueprintRendererScene(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+
+    expect(rendererScene.root.layout).toEqual({
+      strategy: "stack",
+      direction: "vertical",
+      gap: 18
+    });
+    expect(rendererScene.root.children.map((child) => child.id)).toEqual([
       "lane:01:customer",
       "lane:02:frontstage",
       "lane:03:backstage",
@@ -113,52 +77,31 @@ describe("staged service_blueprint", () => {
       "lane:05:system",
       "lane:06:policy"
     ]);
-
-    const submitClaim = findPositionedItem(rendered.positionedScene.root, "J-020");
-    const receiveConfirmation = findPositionedItem(rendered.positionedScene.root, "J-021");
-    const validateClaim = findPositionedItem(rendered.positionedScene.root, "PR-020");
-    const reviewClaimHistory = findPositionedItem(rendered.positionedScene.root, "PR-021");
-    const notifyCustomer = findPositionedItem(rendered.positionedScene.root, "PR-022");
-    const storeClaim = findPositionedItem(rendered.positionedScene.root, "SA-020");
-    const loadClaimHistory = findPositionedItem(rendered.positionedScene.root, "SA-021");
-    const sendEmail = findPositionedItem(rendered.positionedScene.root, "SA-022");
-    const claimEntity = findPositionedItem(rendered.positionedScene.root, "D-020");
-    const retentionPolicy = findPositionedItem(rendered.positionedScene.root, "PL-020");
-
-    if (
-      submitClaim.kind !== "node"
-      || receiveConfirmation.kind !== "node"
-      || validateClaim.kind !== "node"
-      || reviewClaimHistory.kind !== "node"
-      || notifyCustomer.kind !== "node"
-      || storeClaim.kind !== "node"
-      || loadClaimHistory.kind !== "node"
-      || sendEmail.kind !== "node"
-      || claimEntity.kind !== "node"
-      || retentionPolicy.kind !== "node"
-    ) {
-      throw new Error("Expected positioned service_blueprint semantic nodes.");
-    }
-
-    expect(getNodeCenterX(validateClaim)).toBe(getNodeCenterX(submitClaim));
-    expect(getNodeCenterX(storeClaim)).toBe(getNodeCenterX(validateClaim));
-    expect(getNodeCenterX(loadClaimHistory)).toBe(getNodeCenterX(reviewClaimHistory));
-    expect(getNodeCenterX(notifyCustomer)).toBe(getNodeCenterX(receiveConfirmation));
-    expect(getNodeCenterX(sendEmail)).toBe(getNodeCenterX(notifyCustomer));
-    expect(claimEntity.x).toBeGreaterThan(sendEmail.x);
-    expect(retentionPolicy.x).toBe(claimEntity.x);
-
-    const readsRoute = findEdge(rendered.positionedScene, "SA-020__reads__D-020");
-    const writesRoute = findEdge(rendered.positionedScene, "SA-020__writes__D-020");
-    expect(readsRoute.route.points).not.toEqual(writesRoute.route.points);
-
-    await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", rendererScene);
-    await expectRendererStageSnapshot("service-blueprint.slice.measured-scene.json", rendered.measuredScene);
-    await expectRendererStageSnapshot("service-blueprint.slice.positioned-scene.json", rendered.positionedScene);
-    await expectRendererStageTextSnapshot("service-blueprint.slice.svg", rendered.svg);
   });
 
-  it("appends a synthetic ungrouped lane when projected nodes have no derived lane mapping", async () => {
+  it("fails closed with a high-signal renderer error instead of emitting staged preview geometry", async () => {
+    const context = await resolveServiceBlueprintContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+
+    const rendered = await renderServiceBlueprintStagedSvg(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+
+    expect(rendered.svg).toBe("");
+    expect(rendered.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
+      SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE
+    );
+    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toHaveLength(1);
+    expect(rendered.diagnostics[0]?.message).toContain("ELK-authoritative final geometry");
+    expect(rendered.diagnostics[0]?.message).toContain("--backend legacy_graphviz_preview");
+  });
+
+  it("appends a synthetic ungrouped lane during scene construction when projection omits derived lane mapping", async () => {
     const source = `
 SDD-TEXT 0.1
 
@@ -168,21 +111,28 @@ END
 Process PR-100 "Investigate"
 END
 `;
-    const { rendererScene, rendered } = await buildServiceBlueprintArtifactsFromInput({
+    const context = await resolveServiceBlueprintContext({
       path: path.join(repoRoot, "tests/fixtures/render/__inline_service_blueprint_ungrouped__.sdd"),
       text: source.trimStart()
     }, "recommended");
 
+    const rendererScene = buildServiceBlueprintRendererScene(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+
     expect(rendererScene.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
       "renderer.scene.service_blueprint_ungrouped_lane"
     );
-    expect(rendered.positionedScene.root.children.map((child) => child.id)).toEqual([
+    expect(rendererScene.root.children.map((child) => child.id)).toEqual([
       "lane:01:customer",
       "lane:99:ungrouped"
     ]);
   });
 
-  it("renders disconnected nodes deterministically in lane order", async () => {
+  it("keeps disconnected scene construction deterministic in lane order", async () => {
     const source = `
 SDD-TEXT 0.1
 
@@ -196,15 +146,28 @@ END
 SystemAction SA-200 "Log"
 END
 `;
-    const first = await buildServiceBlueprintArtifactsFromInput({
+    const firstContext = await resolveServiceBlueprintContext({
       path: path.join(repoRoot, "tests/fixtures/render/__inline_service_blueprint_disconnected_a__.sdd"),
       text: source.trimStart()
     }, "recommended");
-    const second = await buildServiceBlueprintArtifactsFromInput({
+    const secondContext = await resolveServiceBlueprintContext({
       path: path.join(repoRoot, "tests/fixtures/render/__inline_service_blueprint_disconnected_b__.sdd"),
       text: source.trimStart()
     }, "recommended");
 
-    expect(first.rendered.positionedScene).toEqual(second.rendered.positionedScene);
+    const firstScene = buildServiceBlueprintRendererScene(
+      firstContext.projection,
+      firstContext.graph,
+      firstContext.view,
+      "recommended"
+    );
+    const secondScene = buildServiceBlueprintRendererScene(
+      secondContext.projection,
+      secondContext.graph,
+      secondContext.view,
+      "recommended"
+    );
+
+    expect(firstScene).toEqual(secondScene);
   });
 });
