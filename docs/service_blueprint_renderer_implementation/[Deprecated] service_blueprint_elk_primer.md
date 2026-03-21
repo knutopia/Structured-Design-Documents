@@ -1,4 +1,4 @@
-# ELK Primer For `service_blueprint`
+# [Deprecated] ELK Primer For `service_blueprint`
 
 This note is a focused primer on how [`elkjs`](https://github.com/kieler/elkjs) and the ELK reference can be used to draw a `service_blueprint` diagram.
 

@@ -1,4 +1,4 @@
-# **Possible Architecture: Service Blueprint Rendering Pipeline**
+# [Deprecated] **Possible Architecture: Service Blueprint Rendering Pipeline**
 
 > Status: historical and superseded for staged renderer work.
 > The snapped two-pass `elk_lanes` approach described below is rejected.
