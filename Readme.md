@@ -14,7 +14,7 @@ This project defines SDD-Text: a compact DSL (Domain-Specific Language) for auth
 
 Besides the language definition, the project also contains a basic toolchain to compile, validate and render SDD-Text diagrams.
 
-SDD-Text is defined as a spec bundle that is meant to evolve. It compiles deterministically into canonical JSON for validation (e.g., JSON Schema). This makes SDD-Text usable by software development tooling.
+SDD-Text is defined as a spec bundle that is meant to evolve. It compiles deterministically into canonical JSON for validation. This makes SDD-Text usable by software development tooling. The result can then be rendered as a diagram. Because rendering is separate from the source model, tools that work with design structure do not need graphical capabilities, while rendering tools can focus solely on presentation.
 
 SDD-Text can create a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. Different aspects of the unified graph can then be shown (rendered) as diagrams.
 
