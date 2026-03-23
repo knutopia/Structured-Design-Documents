@@ -8,6 +8,21 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 3-24-26
+
+-completed service_blueprint layout rules
+-updated service_blueprint reference design
+
+## Sat 3-22-26
+
+-drafted service_blueprint layout rules
+-created service_blueprint reference design
+
+## Fri 3-21-26
+
+-improved lanes issues on ui_contracts
+-implemented elk-based, flawed service_blueprint
+
 ## Thu 3-20-26
 
 -created reference design & notes for ia_place_map
