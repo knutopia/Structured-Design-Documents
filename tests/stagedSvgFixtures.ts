@@ -402,6 +402,7 @@ export function buildPositionedSvgFixture(themeId = "default"): PositionedScene 
         targetId: "root"
       }
     ],
+    decorations: [],
     paintOrder: ["chrome", "nodes", "labels", "edges", "edge_labels"]
   };
 }

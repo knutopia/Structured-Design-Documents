@@ -570,7 +570,7 @@ function globalHelpText(): string {
     "",
     "Notes:",
     "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
-    "  `service_blueprint` staged preview currently fails closed until the ELK-authoritative rewrite lands; use `--backend legacy_graphviz_preview` for working preview artifacts.",
+    "  `service_blueprint` now renders through the ELK-authoritative staged preview backend by default; `--backend legacy_graphviz_preview` remains available for comparison.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -697,7 +697,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while the remaining views continue to route through the legacy Graphviz preview backend unless you override `--backend`. `service_blueprint` staged preview currently fails closed until its ELK-authoritative rewrite lands.")
+    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while the remaining views continue to route through the legacy Graphviz preview backend unless you override `--backend`.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)

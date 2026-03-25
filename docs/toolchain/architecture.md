@@ -148,7 +148,7 @@ Preview backends now split by view:
 
 - `staged_ia_place_map_preview` is the default preview backend for `ia_place_map`; it owns staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
 - `staged_ui_contracts_preview` is the default preview backend for `ui_contracts`; it owns the routed and balanced staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
-- `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`, but it currently fails closed while the rejected two-pass `elk_lanes` path is removed; explicit `legacy_graphviz_preview` remains the working preview path until the ELK-authoritative rewrite lands
+- `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, ELK-authoritative staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `legacy_graphviz_preview` remains the default preview backend for the remaining views and remains selectable for `ia_place_map`, `service_blueprint`, and `ui_contracts`; it owns:
 
 - Graphviz-driven DOT-to-SVG layout
@@ -172,7 +172,7 @@ The current end-to-end renderable set is:
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
-- preview capability is modeled per artifact, with `ia_place_map` and `ui_contracts` now defaulting SVG and PNG previews to staged backends, `service_blueprint` selecting a fail-closed staged backend by default, and the remaining views routing those previews through `legacy_graphviz_preview`
+- preview capability is modeled per artifact, with `ia_place_map`, `service_blueprint`, and `ui_contracts` now defaulting SVG and PNG previews to staged backends and the remaining views routing those previews through `legacy_graphviz_preview`
 - Mermaid is a parallel readable text contract, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
@@ -191,11 +191,11 @@ Inside the staged renderer, `ui_contracts` still keeps its renderer-stage golden
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only DOT or Mermaid text
-- `sdd show` resolves preview output through a backend registry; `ia_place_map` and `ui_contracts` now default to staged preview backends, `service_blueprint` currently selects a fail-closed staged backend by default, and the remaining views still default to `legacy_graphviz_preview`
+- `sdd show` resolves preview output through a backend registry; `ia_place_map`, `service_blueprint`, and `ui_contracts` now default to staged preview backends, and the remaining views still default to `legacy_graphviz_preview`
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
 - `sdd show --dot-out` automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs; `ia_place_map` and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, `service_blueprint` currently fails closed on the staged preview path until its ELK-authoritative rewrite lands, and legacy Graphviz preview remains explicitly available in parallel
+- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs; `ia_place_map`, `service_blueprint`, and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
 
 ## Determinism
 

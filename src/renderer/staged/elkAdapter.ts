@@ -1,10 +1,21 @@
 import ElkConstructor, { type ElkEdgeSection, type ElkNode, type ElkPort } from "elkjs/lib/main.js";
 import type {
+  ChromeSpec,
   LayoutDirection,
+  MeasuredContainer,
+  MeasuredContentBlock,
+  MeasuredEdge,
+  MeasuredEdgeEndpoint,
+  MeasuredItem,
+  MeasuredNode,
   MeasuredPort,
+  OverflowPolicy,
   Point,
+  PortOffsetPolicy,
   PortSide,
-  PositionedItem
+  PositionedContainer,
+  PositionedNode,
+  WidthPolicy
 } from "./contracts.js";
 
 export type ElkLayoutOptions = Record<string, string>;
@@ -29,7 +40,7 @@ export interface ElkLayeredAdapterInput {
   direction: LayoutDirection;
   nodeGap: number;
   layerGap: number;
-  children: PositionedItem[];
+  children: Array<Pick<PositionedNode | PositionedContainer, "id" | "x" | "y" | "width" | "height" | "ports">>;
   edges: ElkAdaptedEdge[];
   rootLayoutOptions?: ElkLayoutOptions;
   nodeLayoutOptions?: Record<string, ElkLayoutOptions>;
@@ -51,9 +62,21 @@ export interface ElkFixedPositionRoutingResult extends ElkLayeredAdapterResult {
   positionsPreserved: boolean;
 }
 
+export interface ElkHierarchicalLayoutInput {
+  root: MeasuredContainer;
+  edges: MeasuredEdge[];
+}
+
+export interface ElkHierarchicalLayoutResult {
+  root: PositionedContainer;
+  edgeRoutes: Map<string, Point[]>;
+}
+
 type ElkLike = {
   layout(graph: ElkNode): Promise<ElkNode>;
 };
+
+type MeasuredItemIndex = ReadonlyMap<string, MeasuredItem>;
 
 const elk = new (ElkConstructor as unknown as { new(): ElkLike })();
 
@@ -66,7 +89,7 @@ function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
 
-function resolveElkDirection(direction: LayoutDirection): "RIGHT" | "DOWN" {
+function resolveElkDirection(direction: LayoutDirection | undefined): "RIGHT" | "DOWN" {
   return direction === "vertical" ? "DOWN" : "RIGHT";
 }
 
@@ -81,13 +104,16 @@ function toElkPortSide(side: PortSide): "NORTH" | "SOUTH" | "EAST" | "WEST" {
     case "west":
       return "WEST";
   }
-
-  throw new Error(`Unsupported ELK port side "${String(side)}".`);
 }
 
 function mergeLayoutOptions(...options: Array<ElkLayoutOptions | undefined>): ElkLayoutOptions | undefined {
   const merged = Object.assign({}, ...options.filter((option) => option !== undefined));
   return Object.keys(merged).length > 0 ? merged : undefined;
+}
+
+function formatElkPadding(chrome: ChromeSpec): string {
+  const top = roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0));
+  return `[left=${roundMetric(chrome.padding.left)},top=${top},right=${roundMetric(chrome.padding.right)},bottom=${roundMetric(chrome.padding.bottom)}]`;
 }
 
 function createElkPort(
@@ -118,8 +144,8 @@ function createElkPort(
   };
 }
 
-function createElkNode(
-  item: PositionedItem,
+function createFlatElkNode(
+  item: Pick<PositionedNode | PositionedContainer, "id" | "x" | "y" | "width" | "height" | "ports">,
   input: ElkLayeredAdapterInput
 ): ElkNode {
   const portLayoutOptions = input.portLayoutOptions?.[item.id];
@@ -139,7 +165,10 @@ function createElkNode(
     width: item.width,
     height: item.height,
     layoutOptions,
-    ports: item.ports.map((port) => createElkPort(port, item.id, portLayoutOptions?.[port.id]))
+    ports: item.ports.map((port, index) => createElkPort(port, item.id, {
+      index,
+      ...portLayoutOptions?.[port.id]
+    }))
   };
 }
 
@@ -188,14 +217,14 @@ function flattenSectionPoints(sections: ElkEdgeSection[] | undefined): Point[] {
   return collapseRoutePoints(points);
 }
 
-function createElkGraph(
+function createFlatElkGraph(
   input: ElkLayeredAdapterInput,
   layoutOptions: ElkLayoutOptions
 ): ElkNode {
   return {
     id: input.containerId,
     layoutOptions: mergeLayoutOptions(layoutOptions, ROOT_COORD_LAYOUT_OPTIONS, input.rootLayoutOptions),
-    children: input.children.map((child) => createElkNode(child, input)),
+    children: input.children.map((child) => createFlatElkNode(child, input)),
     edges: input.edges.map((edge) => ({
       id: edge.id,
       source: edge.sourceItemId,
@@ -207,7 +236,7 @@ function createElkGraph(
   } as unknown as ElkNode;
 }
 
-function collectElkLayoutResult(
+function collectFlatElkLayoutResult(
   input: ElkLayeredAdapterInput,
   laidOut: ElkNode
 ): ElkLayeredAdapterResult {
@@ -218,12 +247,9 @@ function collectElkLayoutResult(
     if (!laidOutChild || !Number.isFinite(laidOutChild.x) || !Number.isFinite(laidOutChild.y)) {
       throw new Error(`ELK did not return finite coordinates for child "${child.id}".`);
     }
-    const childX = laidOutChild.x ?? 0;
-    const childY = laidOutChild.y ?? 0;
-
     childPositions.set(child.id, {
-      x: roundMetric(childX),
-      y: roundMetric(childY)
+      x: roundMetric(laidOutChild.x ?? 0),
+      y: roundMetric(laidOutChild.y ?? 0)
     });
   }
 
@@ -238,19 +264,329 @@ function collectElkLayoutResult(
   if (!Number.isFinite(laidOut.width) || !Number.isFinite(laidOut.height)) {
     throw new Error(`ELK returned a non-finite graph size for "${input.containerId}".`);
   }
-  const contentWidth = laidOut.width ?? 0;
-  const contentHeight = laidOut.height ?? 0;
 
   return {
-    contentWidth: roundMetric(contentWidth),
-    contentHeight: roundMetric(contentHeight),
+    contentWidth: roundMetric(laidOut.width ?? 0),
+    contentHeight: roundMetric(laidOut.height ?? 0),
     childPositions,
     edgeRoutes
   };
 }
 
+function cloneWidthPolicy(widthPolicy: WidthPolicy): WidthPolicy {
+  return {
+    preferred: widthPolicy.preferred,
+    allowed: [...widthPolicy.allowed]
+  };
+}
+
+function cloneOverflowPolicy(overflowPolicy: OverflowPolicy): OverflowPolicy {
+  return {
+    kind: overflowPolicy.kind,
+    maxLines: overflowPolicy.maxLines
+  };
+}
+
+function cloneMeasuredContentBlock(block: MeasuredContentBlock): MeasuredContentBlock {
+  return {
+    ...block,
+    lines: [...block.lines]
+  };
+}
+
+function cloneMeasuredPort(port: MeasuredPort): MeasuredPort {
+  return {
+    id: port.id,
+    role: port.role,
+    side: port.side,
+    offset: port.offset,
+    offsetPolicy: port.offsetPolicy,
+    x: port.x,
+    y: port.y
+  };
+}
+
+function resolvePortOffset(
+  port: MeasuredPort,
+  chrome: ChromeSpec | undefined,
+  width: number,
+  height: number,
+  portInset: number
+): number {
+  if (port.offset !== undefined) {
+    return roundMetric(port.offset);
+  }
+
+  switch (port.offsetPolicy as PortOffsetPolicy | undefined) {
+    case "header_center":
+      if (chrome && (port.side === "east" || port.side === "west")) {
+        return roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) / 2);
+      }
+      if (chrome && (port.side === "north" || port.side === "south")) {
+        return roundMetric(chrome.padding.left + width / 2);
+      }
+      break;
+    case "content_start":
+      if (chrome && (port.side === "east" || port.side === "west")) {
+        return roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0));
+      }
+      if (chrome && (port.side === "north" || port.side === "south")) {
+        return roundMetric(chrome.padding.left);
+      }
+      break;
+    case "center":
+    case undefined:
+      break;
+  }
+
+  return port.side === "north" || port.side === "south"
+    ? roundMetric(width / 2)
+    : roundMetric(Math.max(portInset, height / 2));
+}
+
+function resolveLocalPortPosition(
+  port: MeasuredPort,
+  width: number,
+  height: number,
+  portInset: number,
+  chrome?: ChromeSpec
+): MeasuredPort {
+  const resolvedOffset = resolvePortOffset(port, chrome, width, height, portInset);
+
+  switch (port.side) {
+    case "north":
+      return {
+        ...cloneMeasuredPort(port),
+        x: resolvedOffset,
+        y: 0
+      };
+    case "south":
+      return {
+        ...cloneMeasuredPort(port),
+        x: resolvedOffset,
+        y: roundMetric(height)
+      };
+    case "east":
+      return {
+        ...cloneMeasuredPort(port),
+        x: roundMetric(width),
+        y: resolvedOffset
+      };
+    case "west":
+      return {
+        ...cloneMeasuredPort(port),
+        x: 0,
+        y: resolvedOffset
+      };
+  }
+}
+
+function buildMeasuredIndex(item: MeasuredItem, index = new Map<string, MeasuredItem>()): Map<string, MeasuredItem> {
+  index.set(item.id, item);
+  if (item.kind === "container") {
+    for (const child of item.children) {
+      buildMeasuredIndex(child, index);
+    }
+  }
+  return index;
+}
+
+function findMeasuredPortByRole(
+  item: Pick<MeasuredItem, "ports">,
+  endpoint: Pick<MeasuredEdgeEndpoint, "portId">,
+  preferredRole: string | undefined
+): MeasuredPort | undefined {
+  if (endpoint.portId) {
+    return item.ports.find((port) => port.id === endpoint.portId);
+  }
+
+  if (!preferredRole) {
+    return undefined;
+  }
+
+  return item.ports.find((port) => port.role === preferredRole);
+}
+
+function createHierarchicalElkPort(port: MeasuredPort, itemId: string, index: number): ElkPort {
+  return createElkPort(port, itemId, {
+    index
+  });
+}
+
+function resolveContainerLayoutOptions(container: MeasuredContainer, isRoot: boolean): ElkLayoutOptions {
+  const gap = roundMetric(container.layout.gap ?? container.chrome.gutter ?? 12);
+  const layeredDefaults: ElkLayoutOptions = isRoot
+    ? {
+      "org.eclipse.elk.algorithm": "layered",
+      "org.eclipse.elk.direction": resolveElkDirection(container.layout.direction),
+      "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
+      "org.eclipse.elk.padding": formatElkPadding(container.chrome),
+      "org.eclipse.elk.spacing.nodeNode": String(gap),
+      "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(gap),
+      "org.eclipse.elk.layered.mergeEdges": "false"
+    }
+    : {
+      "org.eclipse.elk.padding": formatElkPadding(container.chrome)
+    };
+
+  const hierarchyOptions = container.layout.elk?.hierarchyHandling === "include_children"
+    ? {
+      "org.eclipse.elk.hierarchyHandling": "INCLUDE_CHILDREN"
+    }
+    : undefined;
+
+  return mergeLayoutOptions(
+    layeredDefaults,
+    hierarchyOptions,
+    isRoot ? ROOT_COORD_LAYOUT_OPTIONS : undefined,
+    container.layout.elk?.layoutOptions
+  ) ?? {};
+}
+
+function createHierarchicalElkNode(item: MeasuredItem, isRoot = false): ElkNode {
+  if (item.kind === "node") {
+    return {
+      id: item.id,
+      width: item.width,
+      height: item.height,
+      layoutOptions: item.ports.length > 0
+        ? {
+          "org.eclipse.elk.portConstraints": "FIXED_POS"
+        }
+        : undefined,
+      ports: item.ports.map((port, index) => createHierarchicalElkPort(port, item.id, index))
+    } as unknown as ElkNode;
+  }
+
+  return {
+    id: item.id,
+    layoutOptions: resolveContainerLayoutOptions(item, isRoot),
+    ports: item.ports.map((port, index) => createHierarchicalElkPort(port, item.id, index)),
+    children: item.children.map((child) => createHierarchicalElkNode(child)),
+    width: item.children.length === 0 ? 0 : undefined,
+    height: item.children.length === 0 ? 0 : undefined
+  } as unknown as ElkNode;
+}
+
+function createHierarchicalElkGraph(input: ElkHierarchicalLayoutInput): ElkNode {
+  const index = buildMeasuredIndex(input.root);
+
+  return {
+    ...createHierarchicalElkNode(input.root, true),
+    edges: input.edges.map((edge) => {
+      const sourceItem = index.get(edge.from.itemId);
+      const targetItem = index.get(edge.to.itemId);
+      const sourcePort = sourceItem
+        ? findMeasuredPortByRole(sourceItem, edge.from, edge.routing.sourcePortRole)
+        : undefined;
+      const targetPort = targetItem
+        ? findMeasuredPortByRole(targetItem, edge.to, edge.routing.targetPortRole)
+        : undefined;
+
+      return {
+        id: edge.id,
+        source: edge.from.itemId,
+        target: edge.to.itemId,
+        sourcePort: sourcePort ? `${edge.from.itemId}:${sourcePort.id}` : undefined,
+        targetPort: targetPort ? `${edge.to.itemId}:${targetPort.id}` : undefined,
+        layoutOptions: edge.routing.elkLayoutOptions
+      };
+    })
+  } as unknown as ElkNode;
+}
+
+function collectAbsoluteNodeFrames(
+  node: ElkNode,
+  offsetX: number,
+  offsetY: number,
+  frames: Map<string, { x: number; y: number; width: number; height: number }>
+): void {
+  const absoluteX = roundMetric(offsetX + (node.x ?? 0));
+  const absoluteY = roundMetric(offsetY + (node.y ?? 0));
+  const width = roundMetric(node.width ?? 0);
+  const height = roundMetric(node.height ?? 0);
+  frames.set(node.id, {
+    x: absoluteX,
+    y: absoluteY,
+    width,
+    height
+  });
+
+  for (const child of node.children ?? []) {
+    collectAbsoluteNodeFrames(child as ElkNode, absoluteX, absoluteY, frames);
+  }
+}
+
+function buildPositionedSubtree(
+  item: MeasuredItem,
+  frames: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>
+): PositionedNode | PositionedContainer {
+  const frame = frames.get(item.id);
+  if (!frame) {
+    throw new Error(`ELK did not return a frame for "${item.id}".`);
+  }
+
+  if (item.kind === "node") {
+    return {
+      kind: "node",
+      id: item.id,
+      role: item.role,
+      primitive: item.primitive,
+      classes: [...item.classes],
+      widthPolicy: cloneWidthPolicy(item.widthPolicy),
+      widthBand: item.widthBand,
+      overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
+      content: item.content.map((block) => cloneMeasuredContentBlock(block)),
+      ports: item.ports.map((port) => cloneMeasuredPort(port)),
+      overflow: {
+        ...item.overflow
+      },
+      x: frame.x,
+      y: frame.y,
+      width: frame.width || item.width,
+      height: frame.height || item.height,
+      fixedSize: item.fixedSize
+    };
+  }
+
+  return {
+    kind: "container",
+    id: item.id,
+    role: item.role,
+    primitive: item.primitive,
+    classes: [...item.classes],
+    layout: {
+      ...item.layout,
+      elk: item.layout.elk
+        ? {
+          ...item.layout.elk,
+          layoutOptions: item.layout.elk.layoutOptions ? { ...item.layout.elk.layoutOptions } : undefined
+        }
+        : undefined
+    },
+    chrome: {
+      padding: { ...item.chrome.padding },
+      gutter: item.chrome.gutter,
+      headerBandHeight: item.chrome.headerBandHeight
+    },
+    headerContent: item.headerContent.map((block) => cloneMeasuredContentBlock(block)),
+    children: item.children.map((child) => buildPositionedSubtree(child, frames)),
+    ports: item.ports.map((port) => resolveLocalPortPosition(
+      port,
+      frame.width,
+      frame.height,
+      8,
+      item.chrome
+    )),
+    x: frame.x,
+    y: frame.y,
+    width: frame.width,
+    height: frame.height
+  };
+}
+
 export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promise<ElkLayeredAdapterResult> {
-  const graph = createElkGraph(input, {
+  const graph = createFlatElkGraph(input, {
     "org.eclipse.elk.algorithm": "layered",
     "org.eclipse.elk.direction": resolveElkDirection(input.direction),
     "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
@@ -260,13 +596,13 @@ export async function runElkLayeredLayout(input: ElkLayeredAdapterInput): Promis
   });
 
   const laidOut = await elk.layout(graph as unknown as ElkNode);
-  return collectElkLayoutResult(input, laidOut);
+  return collectFlatElkLayoutResult(input, laidOut);
 }
 
 export async function runElkFixedPositionRouting(
   input: ElkFixedPositionRoutingInput
 ): Promise<ElkFixedPositionRoutingResult> {
-  const graph = createElkGraph(input, {
+  const graph = createFlatElkGraph(input, {
     "org.eclipse.elk.algorithm": "layered",
     "org.eclipse.elk.direction": resolveElkDirection(input.direction),
     "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
@@ -277,7 +613,7 @@ export async function runElkFixedPositionRouting(
   });
 
   const laidOut = await elk.layout(graph as unknown as ElkNode);
-  const result = collectElkLayoutResult(input, laidOut);
+  const result = collectFlatElkLayoutResult(input, laidOut);
   const tolerance = input.positionTolerance ?? 0.5;
   const positionsPreserved = input.children.every((child) => {
     const resolved = result.childPositions.get(child.id);
@@ -292,5 +628,32 @@ export async function runElkFixedPositionRouting(
   return {
     ...result,
     positionsPreserved
+  };
+}
+
+export async function runElkLayeredSubtreeLayout(
+  input: ElkHierarchicalLayoutInput
+): Promise<ElkHierarchicalLayoutResult> {
+  const graph = createHierarchicalElkGraph(input);
+  const laidOut = await elk.layout(graph as unknown as ElkNode);
+  const frames = new Map<string, { x: number; y: number; width: number; height: number }>();
+  collectAbsoluteNodeFrames(laidOut, 0, 0, frames);
+
+  const root = buildPositionedSubtree(input.root, frames);
+  if (root.kind !== "container") {
+    throw new Error("Hierarchical ELK layout must return a container root.");
+  }
+
+  const edgeRoutes = new Map<string, Point[]>();
+  for (const edge of laidOut.edges ?? []) {
+    const flattened = flattenSectionPoints(edge.sections);
+    if (flattened.length > 0 && edge.id) {
+      edgeRoutes.set(edge.id, flattened);
+    }
+  }
+
+  return {
+    root,
+    edgeRoutes
   };
 }

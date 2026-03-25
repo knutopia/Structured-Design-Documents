@@ -529,6 +529,7 @@
       "paintGroup": "edges"
     }
   ],
+  "decorations": [],
   "diagnostics": [],
   "paintOrder": [
     "chrome",

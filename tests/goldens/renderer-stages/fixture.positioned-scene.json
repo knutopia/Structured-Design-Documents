@@ -342,6 +342,7 @@
       "paintGroup": "edges"
     }
   ],
+  "decorations": [],
   "diagnostics": [
     {
       "phase": "scene",

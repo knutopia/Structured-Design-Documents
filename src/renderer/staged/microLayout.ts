@@ -762,9 +762,37 @@ function measureNodePorts(
 
 function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
   context.diagnostics.push(...validatePrimitiveContent(item.id, item.primitive, item.content, context.theme));
+  const primitiveTheme = getNodePrimitiveTheme(context.theme, item.primitive);
+
+  if (item.fixedSize) {
+    const width = roundMetric(item.fixedSize.width);
+    const height = roundMetric(item.fixedSize.height);
+
+    return {
+      kind: "node",
+      id: item.id,
+      role: item.role,
+      primitive: item.primitive,
+      classes: [...item.classes],
+      widthPolicy: cloneWidthPolicy(item.widthPolicy),
+      widthBand: item.widthPolicy.preferred,
+      overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
+      content: [],
+      ports: measureNodePorts(item, width, height, primitiveTheme.portInset),
+      overflow: {
+        status: "fits"
+      },
+      width,
+      height,
+      fixedSize: {
+        width,
+        height
+      }
+    };
+  }
+
   const candidateBands = buildCandidateBands(item.widthPolicy, context.diagnostics, item.id);
   const { layout, overflowStatus } = applyNodeOverflowPolicy(context, item, candidateBands);
-  const primitiveTheme = getNodePrimitiveTheme(context.theme, item.primitive);
 
   return {
     kind: "node",
@@ -779,7 +807,8 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
     ports: measureNodePorts(item, layout.width, layout.height, primitiveTheme.portInset),
     overflow: overflowStatus,
     width: layout.width,
-    height: layout.height
+    height: layout.height,
+    fixedSize: item.fixedSize
   };
 }
 

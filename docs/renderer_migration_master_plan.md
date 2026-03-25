@@ -579,9 +579,9 @@ The remaining views should benefit from the lessons of the first wave rather tha
 
 ### Execution Note
 
-- `service_blueprint` still selects the staged preview backend by default for SVG and PNG, but that backend now fails closed while the rejected two-pass `elk_lanes` path is removed
-- the replacement `service_blueprint` staged path must let `ELK Layered` own final node placement and final routing in the same run
-- explicit legacy Graphviz preview access remains available in parallel and is the working preview path until the rewrite lands
+- `service_blueprint` now selects the staged preview backend by default for SVG and PNG and routes that preview through the ELK-authoritative staged path
+- the `service_blueprint` staged path lets `ELK Layered` own final node placement and final routing for semantic edges in the working preview implementation
+- explicit legacy Graphviz preview access remains available in parallel for comparison
 
 ### Out Of Scope
 

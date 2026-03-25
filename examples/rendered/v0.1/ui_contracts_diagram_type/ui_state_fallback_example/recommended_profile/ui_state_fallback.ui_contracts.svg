@@ -25,7 +25,6 @@
     .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
     .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
     .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
-    .scene-edge.edge-bold .scene-edge__path { stroke-width: 3; }
     .scene-edge-label__box { fill: #ffffff; stroke: #93c5fd; stroke-width: 1.5; }
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }

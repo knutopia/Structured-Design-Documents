@@ -1,0 +1,5295 @@
+{
+  "viewId": "service_blueprint",
+  "profileId": "recommended",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "service_blueprint",
+      "service_blueprint"
+    ],
+    "layout": {
+      "strategy": "elk_layered",
+      "direction": "horizontal",
+      "gap": 18,
+      "elk": {
+        "strict": true,
+        "layoutOptions": {
+          "org.eclipse.elk.separateConnectedComponents": "false",
+          "org.eclipse.elk.considerModelOrder.strategy": "NODES_AND_EDGES",
+          "org.eclipse.elk.layered.crossingMinimization.forceNodeModelOrder": "true",
+          "org.eclipse.elk.layered.considerModelOrder.portModelOrder": "true",
+          "org.eclipse.elk.layered.nodePlacement.favorStraightEdges": "true",
+          "org.eclipse.elk.layered.mergeEdges": "false",
+          "org.eclipse.elk.layered.mergeHierarchyEdges": "false"
+        }
+      }
+    },
+    "chrome": {
+      "padding": {
+        "top": 28,
+        "right": 28,
+        "bottom": 28,
+        "left": 132
+      },
+      "gutter": 24,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "node",
+        "id": "guide__band:anchor:1",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_band_guide",
+          "guide-band-a1"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 132,
+        "y": 537.75,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "guide__band:interstitial:1",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_band_guide",
+          "guide-band-i1"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 392.432,
+        "y": 356.5,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "guide__band:anchor:2",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_band_guide",
+          "guide-band-a2"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 723.614,
+        "y": 356.25,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "guide__band:sidecar:1",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_band_guide",
+          "guide-band-r"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1027.65,
+        "y": 325.5,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "J-020",
+        "role": "step",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-box",
+          "type-step",
+          "lane-customer",
+          "band-a1",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "narrow",
+          "allowed": [
+            "narrow",
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "narrow",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-020__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Submit Claim"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 100.104,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 168,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 84,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 84,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 247.182,
+        "y": 60,
+        "width": 168,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "lane:01:customer__shell__slot__band:interstitial:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-customer",
+          "band-i1",
+          "slot-kind-interstitial"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 640.364,
+        "y": 59.333,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "J-021",
+        "role": "step",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-box",
+          "type-step",
+          "lane-customer",
+          "band-a2",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "narrow",
+          "allowed": [
+            "narrow",
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "narrow",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-021__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Receive",
+              "Confirmation"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 96.368,
+            "height": 40,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 32
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 168,
+            "y": 32
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 84,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 84,
+            "y": 64
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 64
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 885.364,
+        "y": 60,
+        "width": 168,
+        "height": 64
+      },
+      {
+        "kind": "node",
+        "id": "lane:01:customer__shell__slot__band:sidecar:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-customer",
+          "band-r",
+          "slot-kind-sidecar"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1241.546,
+        "y": 39,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "PR-020",
+        "role": "process",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-box",
+          "type-process",
+          "lane-frontstage",
+          "band-a1",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "PR-020__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Validate Claim"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 107.08,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 529.364,
+        "y": 130,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-frontstage",
+          "band-i1",
+          "slot-kind-interstitial"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 951.764,
+        "y": 302,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-frontstage",
+          "band-a2",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1256.346,
+        "y": 59,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-frontstage",
+          "band-r",
+          "slot-kind-sidecar"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1561.228,
+        "y": 58.667,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:03:backstage__shell__slot__band:anchor:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-backstage",
+          "band-a1",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 968.364,
+        "y": 345.5,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "PR-021",
+        "role": "process",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-box",
+          "type-process",
+          "lane-backstage",
+          "band-i1",
+          "slot-kind-interstitial"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "PR-021__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Review Claim History"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 157.4,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1167.546,
+        "y": 424.167,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "lane:03:backstage__shell__slot__band:anchor:2__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-backstage",
+          "band-a2",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1594.528,
+        "y": 187,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-backstage",
+          "band-r",
+          "slot-kind-sidecar"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1899.41,
+        "y": 186.667,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:04:support__shell__slot__band:anchor:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-support",
+          "band-a1",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1278.546,
+        "y": 313.833,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:04:support__shell__slot__band:interstitial:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-support",
+          "band-i1",
+          "slot-kind-interstitial"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1594.528,
+        "y": 436.167,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "PR-022",
+        "role": "process",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-box",
+          "type-process",
+          "lane-support",
+          "band-a2",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "PR-022__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Notify Customer"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 122.088,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1843.91,
+        "y": 357.5,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "lane:04:support__shell__slot__band:sidecar:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-support",
+          "band-r",
+          "slot-kind-sidecar"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 2237.592,
+        "y": 325.643,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "SA-020",
+        "role": "systemaction",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-component",
+          "type-systemaction",
+          "lane-system",
+          "band-a1",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "narrow",
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "SA-020__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Store Claim"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 86.968,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1505.728,
+        "y": 222,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "SA-021",
+        "role": "systemaction",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-component",
+          "type-systemaction",
+          "lane-system",
+          "band-i1",
+          "slot-kind-interstitial"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "narrow",
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "SA-021__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Load Claim History"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 140.792,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1843.91,
+        "y": 437.5,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "SA-022",
+        "role": "systemaction",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-component",
+          "type-systemaction",
+          "lane-system",
+          "band-a2",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "narrow",
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "SA-022__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Send Email"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 83.744,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 2182.092,
+        "y": 437.5,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "D-020",
+        "role": "dataentity",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-cylinder",
+          "type-dataentity",
+          "lane-system",
+          "band-r",
+          "slot-kind-sidecar"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "narrow",
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "D-020__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Claim"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 42.536,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 2520.274,
+        "y": 437.5,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "lane:06:policy__shell__slot__band:anchor:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-policy",
+          "band-a1",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1917.91,
+        "y": 538.167,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:06:policy__shell__slot__band:interstitial:1__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-policy",
+          "band-i1",
+          "slot-kind-interstitial"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 2237.592,
+        "y": 538.167,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "lane:06:policy__shell__slot__band:anchor:2__anchor",
+        "role": "helper",
+        "primitive": "connector_port",
+        "classes": [
+          "service_blueprint_helper",
+          "service_blueprint_slot_anchor",
+          "lane-policy",
+          "band-a2",
+          "slot-kind-anchor"
+        ],
+        "widthPolicy": {
+          "preferred": "chip",
+          "allowed": [
+            "chip"
+          ]
+        },
+        "widthBand": "chip",
+        "overflowPolicy": {
+          "kind": "grow_height"
+        },
+        "content": [],
+        "ports": [],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 2575.774,
+        "y": 538.167,
+        "width": 2,
+        "height": 2,
+        "fixedSize": {
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "kind": "node",
+        "id": "PL-020",
+        "role": "policy",
+        "primitive": "card",
+        "classes": [
+          "semantic_node",
+          "service_blueprint_node",
+          "shape-hexagon",
+          "type-policy",
+          "lane-policy",
+          "band-r",
+          "slot-kind-sidecar"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "PL-020__content__line_0",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Retention Policy"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 120.536,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "flow_in",
+            "role": "flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "flow_out",
+            "role": "flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "support_in",
+            "role": "support_in",
+            "side": "north",
+            "x": 112,
+            "y": 0
+          },
+          {
+            "id": "support_out",
+            "role": "support_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "resource_in",
+            "role": "resource_in",
+            "side": "north",
+            "offset": 36,
+            "x": 36,
+            "y": 0
+          },
+          {
+            "id": "resource_out",
+            "role": "resource_out",
+            "side": "south",
+            "offset": 36,
+            "x": 36,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 2858.456,
+        "y": 539.167,
+        "width": 224,
+        "height": 48
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 3111.456,
+    "height": 616.167
+  },
+  "edges": [
+    {
+      "id": "guide__band:anchor:1__helper__guide__band:interstitial:1",
+      "role": "helper_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 392.432,
+        "y": 357.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 184,
+            "y": 539
+          },
+          {
+            "x": 184,
+            "y": 357.5
+          },
+          {
+            "x": 392.432,
+            "y": 357.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__guide__band:anchor:2",
+      "role": "helper_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "guide__band:anchor:2",
+        "x": 723.614,
+        "y": 357.25
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 723.614,
+            "y": 357.25
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__guide__band:sidecar:1",
+      "role": "helper_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1027.65,
+        "y": 326.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 864.364,
+            "y": 357.25
+          },
+          {
+            "x": 864.364,
+            "y": 326.5
+          },
+          {
+            "x": 1027.65,
+            "y": 326.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:1__helper__J-020",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "J-020",
+        "x": 247.182,
+        "y": 84
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 144,
+            "y": 538
+          },
+          {
+            "x": 144,
+            "y": 60
+          },
+          {
+            "x": 247.182,
+            "y": 84
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__lane:01:customer__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "lane:01:customer__shell__slot__band:interstitial:1__anchor",
+        "x": 640.364,
+        "y": 60.333
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 446.182,
+            "y": 356.75
+          },
+          {
+            "x": 446.182,
+            "y": 60.667
+          },
+          {
+            "x": 640.364,
+            "y": 60.333
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-020__helper__lane:01:customer__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "J-020",
+        "x": 415.182,
+        "y": 84
+      },
+      "to": {
+        "itemId": "lane:01:customer__shell__slot__band:interstitial:1__anchor",
+        "x": 640.364,
+        "y": 60.333
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 415.182,
+            "y": 84
+          },
+          {
+            "x": 640.364,
+            "y": 60.333
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__J-021",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "J-021",
+        "x": 885.364,
+        "y": 92
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 844.364,
+            "y": 356.75
+          },
+          {
+            "x": 844.364,
+            "y": 60
+          },
+          {
+            "x": 885.364,
+            "y": 92
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:01:customer__shell__slot__band:interstitial:1__anchor__helper__J-021",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:01:customer__shell__slot__band:interstitial:1__anchor",
+        "x": 642.364,
+        "y": 60.333
+      },
+      "to": {
+        "itemId": "J-021",
+        "x": 885.364,
+        "y": 92
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 642.364,
+            "y": 60.333
+          },
+          {
+            "x": 885.364,
+            "y": 92
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:sidecar:1__helper__lane:01:customer__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1029.65,
+        "y": 326.5
+      },
+      "to": {
+        "itemId": "lane:01:customer__shell__slot__band:sidecar:1__anchor",
+        "x": 1241.546,
+        "y": 40
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1029.65,
+            "y": 326.5
+          },
+          {
+            "x": 1074.364,
+            "y": 325.786
+          },
+          {
+            "x": 1074.364,
+            "y": 40.333
+          },
+          {
+            "x": 1241.546,
+            "y": 40
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-021__helper__lane:01:customer__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "J-021",
+        "x": 1053.364,
+        "y": 92
+      },
+      "to": {
+        "itemId": "lane:01:customer__shell__slot__band:sidecar:1__anchor",
+        "x": 1241.546,
+        "y": 40
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1053.364,
+            "y": 92
+          },
+          {
+            "x": 1064.364,
+            "y": 60
+          },
+          {
+            "x": 1064.364,
+            "y": 39.667
+          },
+          {
+            "x": 1241.546,
+            "y": 40
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:1__helper__PR-020",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "PR-020",
+        "x": 529.364,
+        "y": 154
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 154,
+            "y": 538.25
+          },
+          {
+            "x": 154,
+            "y": 130
+          },
+          {
+            "x": 529.364,
+            "y": 154
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+        "x": 951.764,
+        "y": 303
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 456.182,
+            "y": 357
+          },
+          {
+            "x": 456.182,
+            "y": 303.5
+          },
+          {
+            "x": 951.764,
+            "y": 303
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-020__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "PR-020",
+        "x": 753.364,
+        "y": 154
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+        "x": 951.764,
+        "y": 303
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 753.364,
+            "y": 154
+          },
+          {
+            "x": 804.364,
+            "y": 130
+          },
+          {
+            "x": 804.364,
+            "y": 303
+          },
+          {
+            "x": 951.764,
+            "y": 303
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+        "x": 1256.346,
+        "y": 60
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 834.364,
+            "y": 356.5
+          },
+          {
+            "x": 834.364,
+            "y": 48
+          },
+          {
+            "x": 1084.364,
+            "y": 48
+          },
+          {
+            "x": 1084.364,
+            "y": 59.5
+          },
+          {
+            "x": 1256.346,
+            "y": 60
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor__helper__lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+        "x": 953.764,
+        "y": 303
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+        "x": 1256.346,
+        "y": 60
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 953.764,
+            "y": 303
+          },
+          {
+            "x": 1084.364,
+            "y": 302.667
+          },
+          {
+            "x": 1084.364,
+            "y": 60.5
+          },
+          {
+            "x": 1256.346,
+            "y": 60
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:sidecar:1__helper__lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1029.65,
+        "y": 326.5
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1561.228,
+        "y": 59.667
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1029.65,
+            "y": 326.5
+          },
+          {
+            "x": 1094.364,
+            "y": 326.071
+          },
+          {
+            "x": 1094.364,
+            "y": 177
+          },
+          {
+            "x": 1412.546,
+            "y": 177
+          },
+          {
+            "x": 1412.546,
+            "y": 60.167
+          },
+          {
+            "x": 1561.228,
+            "y": 59.667
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:02:frontstage__shell__slot__band:anchor:2__anchor__helper__lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+        "x": 1258.346,
+        "y": 60
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1561.228,
+        "y": 59.667
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1258.346,
+            "y": 60
+          },
+          {
+            "x": 1561.228,
+            "y": 59.667
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:1__helper__lane:03:backstage__shell__slot__band:anchor:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:1__anchor",
+        "x": 968.364,
+        "y": 346.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 194,
+            "y": 539.25
+          },
+          {
+            "x": 194,
+            "y": 413.167
+          },
+          {
+            "x": 874.364,
+            "y": 413.167
+          },
+          {
+            "x": 874.364,
+            "y": 346.833
+          },
+          {
+            "x": 968.364,
+            "y": 346.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__PR-021",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "PR-021",
+        "x": 1167.546,
+        "y": 448.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 456.182,
+            "y": 357.5
+          },
+          {
+            "x": 456.182,
+            "y": 424.167
+          },
+          {
+            "x": 1167.546,
+            "y": 448.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:03:backstage__shell__slot__band:anchor:1__anchor__helper__PR-021",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:1__anchor",
+        "x": 970.364,
+        "y": 346.5
+      },
+      "to": {
+        "itemId": "PR-021",
+        "x": 1167.546,
+        "y": 448.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 970.364,
+            "y": 346.5
+          },
+          {
+            "x": 1074.364,
+            "y": 346.833
+          },
+          {
+            "x": 1074.364,
+            "y": 424.167
+          },
+          {
+            "x": 1167.546,
+            "y": 448.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:2__anchor",
+        "x": 1594.528,
+        "y": 188
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 854.364,
+            "y": 357
+          },
+          {
+            "x": 854.364,
+            "y": 188
+          },
+          {
+            "x": 1594.528,
+            "y": 188
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-021__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "PR-021",
+        "x": 1391.546,
+        "y": 448.167
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:2__anchor",
+        "x": 1594.528,
+        "y": 188
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1391.546,
+            "y": 448.167
+          },
+          {
+            "x": 1412.546,
+            "y": 424.167
+          },
+          {
+            "x": 1412.546,
+            "y": 188.5
+          },
+          {
+            "x": 1594.528,
+            "y": 188
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:sidecar:1__helper__lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1029.65,
+        "y": 326.5
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1899.41,
+        "y": 187.667
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1029.65,
+            "y": 326.5
+          },
+          {
+            "x": 1104.364,
+            "y": 326.357
+          },
+          {
+            "x": 1104.364,
+            "y": 210
+          },
+          {
+            "x": 1790.728,
+            "y": 210
+          },
+          {
+            "x": 1790.728,
+            "y": 188.167
+          },
+          {
+            "x": 1899.41,
+            "y": 187.667
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:03:backstage__shell__slot__band:anchor:2__anchor__helper__lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:2__anchor",
+        "x": 1596.528,
+        "y": 188
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1899.41,
+        "y": 187.667
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1596.528,
+            "y": 188
+          },
+          {
+            "x": 1899.41,
+            "y": 187.667
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:1__helper__lane:04:support__shell__slot__band:anchor:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:anchor:1__anchor",
+        "x": 1278.546,
+        "y": 314.833
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 174,
+            "y": 538.75
+          },
+          {
+            "x": 174,
+            "y": 314.5
+          },
+          {
+            "x": 1278.546,
+            "y": 314.833
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__lane:04:support__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:interstitial:1__anchor",
+        "x": 1594.528,
+        "y": 437.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 446.182,
+            "y": 357.75
+          },
+          {
+            "x": 446.182,
+            "y": 483.167
+          },
+          {
+            "x": 1402.546,
+            "y": 483.167
+          },
+          {
+            "x": 1402.546,
+            "y": 437.667
+          },
+          {
+            "x": 1594.528,
+            "y": 437.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:04:support__shell__slot__band:anchor:1__anchor__helper__lane:04:support__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:04:support__shell__slot__band:anchor:1__anchor",
+        "x": 1280.546,
+        "y": 314.833
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:interstitial:1__anchor",
+        "x": 1594.528,
+        "y": 437.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1280.546,
+            "y": 314.833
+          },
+          {
+            "x": 1422.546,
+            "y": 315.167
+          },
+          {
+            "x": 1422.546,
+            "y": 436.667
+          },
+          {
+            "x": 1594.528,
+            "y": 437.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__PR-022",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "PR-022",
+        "x": 1843.91,
+        "y": 381.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 1843.91,
+            "y": 381.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:04:support__shell__slot__band:interstitial:1__anchor__helper__PR-022",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:04:support__shell__slot__band:interstitial:1__anchor",
+        "x": 1596.528,
+        "y": 437.167
+      },
+      "to": {
+        "itemId": "PR-022",
+        "x": 1843.91,
+        "y": 381.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1596.528,
+            "y": 437.167
+          },
+          {
+            "x": 1750.728,
+            "y": 436.833
+          },
+          {
+            "x": 1750.728,
+            "y": 357.5
+          },
+          {
+            "x": 1843.91,
+            "y": 381.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:sidecar:1__helper__lane:04:support__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1029.65,
+        "y": 326.5
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:sidecar:1__anchor",
+        "x": 2237.592,
+        "y": 326.643
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1029.65,
+            "y": 326.5
+          },
+          {
+            "x": 2237.592,
+            "y": 326.643
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-022__helper__lane:04:support__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "PR-022",
+        "x": 2067.91,
+        "y": 381.5
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:sidecar:1__anchor",
+        "x": 2237.592,
+        "y": 326.643
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2067.91,
+            "y": 381.5
+          },
+          {
+            "x": 2118.91,
+            "y": 357.5
+          },
+          {
+            "x": 2118.91,
+            "y": 327.143
+          },
+          {
+            "x": 2237.592,
+            "y": 326.643
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:1__helper__SA-020",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "SA-020",
+        "x": 1505.728,
+        "y": 246
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 164,
+            "y": 538.5
+          },
+          {
+            "x": 164,
+            "y": 222
+          },
+          {
+            "x": 1505.728,
+            "y": 246
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__SA-021",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "SA-021",
+        "x": 1843.91,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 436.182,
+            "y": 358
+          },
+          {
+            "x": 436.182,
+            "y": 505.167
+          },
+          {
+            "x": 1790.728,
+            "y": 505.167
+          },
+          {
+            "x": 1790.728,
+            "y": 437.5
+          },
+          {
+            "x": 1843.91,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-020__helper__SA-021",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "SA-020",
+        "x": 1729.728,
+        "y": 246
+      },
+      "to": {
+        "itemId": "SA-021",
+        "x": 1843.91,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1729.728,
+            "y": 246
+          },
+          {
+            "x": 1770.728,
+            "y": 222
+          },
+          {
+            "x": 1770.728,
+            "y": 437.5
+          },
+          {
+            "x": 1843.91,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__SA-022",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "SA-022",
+        "x": 2182.092,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 774.364,
+            "y": 357.75
+          },
+          {
+            "x": 774.364,
+            "y": 516.167
+          },
+          {
+            "x": 2098.91,
+            "y": 516.167
+          },
+          {
+            "x": 2098.91,
+            "y": 437.5
+          },
+          {
+            "x": 2182.092,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-021__helper__SA-022",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "SA-021",
+        "x": 2067.91,
+        "y": 461.5
+      },
+      "to": {
+        "itemId": "SA-022",
+        "x": 2182.092,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2067.91,
+            "y": 461.5
+          },
+          {
+            "x": 2182.092,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:sidecar:1__helper__D-020",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1029.65,
+        "y": 326.5
+      },
+      "to": {
+        "itemId": "D-020",
+        "x": 2520.274,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1029.65,
+            "y": 326.5
+          },
+          {
+            "x": 1084.364,
+            "y": 326.929
+          },
+          {
+            "x": 1084.364,
+            "y": 527.167
+          },
+          {
+            "x": 2437.092,
+            "y": 527.167
+          },
+          {
+            "x": 2437.092,
+            "y": 437.5
+          },
+          {
+            "x": 2520.274,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-022__helper__D-020",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "SA-022",
+        "x": 2406.092,
+        "y": 461.5
+      },
+      "to": {
+        "itemId": "D-020",
+        "x": 2520.274,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2406.092,
+            "y": 461.5
+          },
+          {
+            "x": 2520.274,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:1__helper__lane:06:policy__shell__slot__band:anchor:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:1",
+        "x": 134,
+        "y": 538.75
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:1__anchor",
+        "x": 1917.91,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 134,
+            "y": 538.75
+          },
+          {
+            "x": 1917.91,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:interstitial:1__helper__lane:06:policy__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:interstitial:1",
+        "x": 394.432,
+        "y": 357.5
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:interstitial:1__anchor",
+        "x": 2237.592,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 394.432,
+            "y": 357.5
+          },
+          {
+            "x": 426.182,
+            "y": 358.25
+          },
+          {
+            "x": 426.182,
+            "y": 550.5
+          },
+          {
+            "x": 2078.91,
+            "y": 550.5
+          },
+          {
+            "x": 2078.91,
+            "y": 539.667
+          },
+          {
+            "x": 2237.592,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:06:policy__shell__slot__band:anchor:1__anchor__helper__lane:06:policy__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:1__anchor",
+        "x": 1919.91,
+        "y": 539.167
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:interstitial:1__anchor",
+        "x": 2237.592,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1919.91,
+            "y": 539.167
+          },
+          {
+            "x": 2237.592,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:anchor:2__helper__lane:06:policy__shell__slot__band:anchor:2__anchor",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:anchor:2",
+        "x": 725.614,
+        "y": 357.25
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:2__anchor",
+        "x": 2575.774,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 725.614,
+            "y": 357.25
+          },
+          {
+            "x": 764.364,
+            "y": 358
+          },
+          {
+            "x": 764.364,
+            "y": 561.5
+          },
+          {
+            "x": 2417.092,
+            "y": 561.5
+          },
+          {
+            "x": 2417.092,
+            "y": 539.667
+          },
+          {
+            "x": 2575.774,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:06:policy__shell__slot__band:interstitial:1__anchor__helper__lane:06:policy__shell__slot__band:anchor:2__anchor",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:06:policy__shell__slot__band:interstitial:1__anchor",
+        "x": 2239.592,
+        "y": 539.167
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:2__anchor",
+        "x": 2575.774,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2239.592,
+            "y": 539.167
+          },
+          {
+            "x": 2575.774,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "guide__band:sidecar:1__helper__PL-020",
+      "role": "helper_align",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_align",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "guide__band:sidecar:1",
+        "x": 1029.65,
+        "y": 326.5
+      },
+      "to": {
+        "itemId": "PL-020",
+        "x": 2858.456,
+        "y": 563.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1029.65,
+            "y": 326.5
+          },
+          {
+            "x": 1064.364,
+            "y": 327.214
+          },
+          {
+            "x": 1064.364,
+            "y": 572.5
+          },
+          {
+            "x": 2755.274,
+            "y": 572.5
+          },
+          {
+            "x": 2755.274,
+            "y": 539.167
+          },
+          {
+            "x": 2858.456,
+            "y": 563.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:06:policy__shell__slot__band:anchor:2__anchor__helper__PL-020",
+      "role": "helper_slot_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_slot_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:2__anchor",
+        "x": 2577.774,
+        "y": 539.167
+      },
+      "to": {
+        "itemId": "PL-020",
+        "x": 2858.456,
+        "y": 563.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2577.774,
+            "y": 539.167
+          },
+          {
+            "x": 2858.456,
+            "y": 563.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-020__helper__PR-020",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "J-020",
+        "x": 415.182,
+        "y": 84
+      },
+      "to": {
+        "itemId": "PR-020",
+        "x": 529.364,
+        "y": 154
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 415.182,
+            "y": 84
+          },
+          {
+            "x": 426.182,
+            "y": 60
+          },
+          {
+            "x": 426.182,
+            "y": 130
+          },
+          {
+            "x": 529.364,
+            "y": 154
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-020__helper__lane:03:backstage__shell__slot__band:anchor:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "PR-020",
+        "x": 753.364,
+        "y": 154
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:1__anchor",
+        "x": 968.364,
+        "y": 346.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 753.364,
+            "y": 154
+          },
+          {
+            "x": 794.364,
+            "y": 130
+          },
+          {
+            "x": 794.364,
+            "y": 346.167
+          },
+          {
+            "x": 968.364,
+            "y": 346.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:03:backstage__shell__slot__band:anchor:1__anchor__helper__lane:04:support__shell__slot__band:anchor:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:1__anchor",
+        "x": 970.364,
+        "y": 346.5
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:anchor:1__anchor",
+        "x": 1278.546,
+        "y": 314.833
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 970.364,
+            "y": 346.5
+          },
+          {
+            "x": 1114.364,
+            "y": 346.167
+          },
+          {
+            "x": 1114.364,
+            "y": 315.167
+          },
+          {
+            "x": 1278.546,
+            "y": 314.833
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:04:support__shell__slot__band:anchor:1__anchor__helper__SA-020",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:04:support__shell__slot__band:anchor:1__anchor",
+        "x": 1280.546,
+        "y": 314.833
+      },
+      "to": {
+        "itemId": "SA-020",
+        "x": 1505.728,
+        "y": 246
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1280.546,
+            "y": 314.833
+          },
+          {
+            "x": 1422.546,
+            "y": 314.5
+          },
+          {
+            "x": 1422.546,
+            "y": 222
+          },
+          {
+            "x": 1505.728,
+            "y": 246
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-020__helper__lane:06:policy__shell__slot__band:anchor:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "SA-020",
+        "x": 1729.728,
+        "y": 246
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:1__anchor",
+        "x": 1917.91,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1729.728,
+            "y": 246
+          },
+          {
+            "x": 1740.728,
+            "y": 222
+          },
+          {
+            "x": 1740.728,
+            "y": 538.833
+          },
+          {
+            "x": 1917.91,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:01:customer__shell__slot__band:interstitial:1__anchor__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:01:customer__shell__slot__band:interstitial:1__anchor",
+        "x": 642.364,
+        "y": 60.333
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+        "x": 951.764,
+        "y": 303
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 642.364,
+            "y": 60.333
+          },
+          {
+            "x": 814.364,
+            "y": 60.667
+          },
+          {
+            "x": 814.364,
+            "y": 302.5
+          },
+          {
+            "x": 951.764,
+            "y": 303
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor__helper__PR-021",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:02:frontstage__shell__slot__band:interstitial:1__anchor",
+        "x": 953.764,
+        "y": 303
+      },
+      "to": {
+        "itemId": "PR-021",
+        "x": 1167.546,
+        "y": 448.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 953.764,
+            "y": 303
+          },
+          {
+            "x": 1124.364,
+            "y": 303.333
+          },
+          {
+            "x": 1124.364,
+            "y": 424.167
+          },
+          {
+            "x": 1167.546,
+            "y": 448.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-021__helper__lane:04:support__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "PR-021",
+        "x": 1391.546,
+        "y": 448.167
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:interstitial:1__anchor",
+        "x": 1594.528,
+        "y": 437.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1391.546,
+            "y": 448.167
+          },
+          {
+            "x": 1402.546,
+            "y": 424.167
+          },
+          {
+            "x": 1402.546,
+            "y": 437.167
+          },
+          {
+            "x": 1594.528,
+            "y": 437.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:04:support__shell__slot__band:interstitial:1__anchor__helper__SA-021",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:04:support__shell__slot__band:interstitial:1__anchor",
+        "x": 1596.528,
+        "y": 437.167
+      },
+      "to": {
+        "itemId": "SA-021",
+        "x": 1843.91,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1596.528,
+            "y": 437.167
+          },
+          {
+            "x": 1843.91,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-021__helper__lane:06:policy__shell__slot__band:interstitial:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "SA-021",
+        "x": 2067.91,
+        "y": 461.5
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:interstitial:1__anchor",
+        "x": 2237.592,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2067.91,
+            "y": 461.5
+          },
+          {
+            "x": 2078.91,
+            "y": 437.5
+          },
+          {
+            "x": 2078.91,
+            "y": 538.667
+          },
+          {
+            "x": 2237.592,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-021__helper__lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "J-021",
+        "x": 1053.364,
+        "y": 92
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+        "x": 1256.346,
+        "y": 60
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1053.364,
+            "y": 92
+          },
+          {
+            "x": 1256.346,
+            "y": 60
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:02:frontstage__shell__slot__band:anchor:2__anchor__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:02:frontstage__shell__slot__band:anchor:2__anchor",
+        "x": 1258.346,
+        "y": 60
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:2__anchor",
+        "x": 1594.528,
+        "y": 188
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1258.346,
+            "y": 60
+          },
+          {
+            "x": 1402.546,
+            "y": 60.333
+          },
+          {
+            "x": 1402.546,
+            "y": 187.5
+          },
+          {
+            "x": 1594.528,
+            "y": 188
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:03:backstage__shell__slot__band:anchor:2__anchor__helper__PR-022",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:03:backstage__shell__slot__band:anchor:2__anchor",
+        "x": 1596.528,
+        "y": 188
+      },
+      "to": {
+        "itemId": "PR-022",
+        "x": 1843.91,
+        "y": 381.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1596.528,
+            "y": 188
+          },
+          {
+            "x": 1780.728,
+            "y": 188.333
+          },
+          {
+            "x": 1780.728,
+            "y": 357.5
+          },
+          {
+            "x": 1843.91,
+            "y": 381.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-022__helper__SA-022",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "PR-022",
+        "x": 2067.91,
+        "y": 381.5
+      },
+      "to": {
+        "itemId": "SA-022",
+        "x": 2182.092,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2067.91,
+            "y": 381.5
+          },
+          {
+            "x": 2108.91,
+            "y": 357.5
+          },
+          {
+            "x": 2108.91,
+            "y": 437.5
+          },
+          {
+            "x": 2182.092,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-022__helper__lane:06:policy__shell__slot__band:anchor:2__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "SA-022",
+        "x": 2406.092,
+        "y": 461.5
+      },
+      "to": {
+        "itemId": "lane:06:policy__shell__slot__band:anchor:2__anchor",
+        "x": 2575.774,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2406.092,
+            "y": 461.5
+          },
+          {
+            "x": 2427.092,
+            "y": 437.5
+          },
+          {
+            "x": 2427.092,
+            "y": 538.667
+          },
+          {
+            "x": 2575.774,
+            "y": 539.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:01:customer__shell__slot__band:sidecar:1__anchor__helper__lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:01:customer__shell__slot__band:sidecar:1__anchor",
+        "x": 1243.546,
+        "y": 40
+      },
+      "to": {
+        "itemId": "lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1561.228,
+        "y": 59.667
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1243.546,
+            "y": 40
+          },
+          {
+            "x": 1412.546,
+            "y": 40
+          },
+          {
+            "x": 1412.546,
+            "y": 59.167
+          },
+          {
+            "x": 1561.228,
+            "y": 59.667
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:02:frontstage__shell__slot__band:sidecar:1__anchor__helper__lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:02:frontstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1563.228,
+        "y": 59.667
+      },
+      "to": {
+        "itemId": "lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1899.41,
+        "y": 187.667
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1563.228,
+            "y": 59.667
+          },
+          {
+            "x": 1790.728,
+            "y": 59.667
+          },
+          {
+            "x": 1790.728,
+            "y": 187.167
+          },
+          {
+            "x": 1899.41,
+            "y": 187.667
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:03:backstage__shell__slot__band:sidecar:1__anchor__helper__lane:04:support__shell__slot__band:sidecar:1__anchor",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:03:backstage__shell__slot__band:sidecar:1__anchor",
+        "x": 1901.41,
+        "y": 187.667
+      },
+      "to": {
+        "itemId": "lane:04:support__shell__slot__band:sidecar:1__anchor",
+        "x": 2237.592,
+        "y": 326.643
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1901.41,
+            "y": 187.667
+          },
+          {
+            "x": 2078.91,
+            "y": 187.667
+          },
+          {
+            "x": 2078.91,
+            "y": 326.143
+          },
+          {
+            "x": 2237.592,
+            "y": 326.643
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "lane:04:support__shell__slot__band:sidecar:1__anchor__helper__D-020",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "lane:04:support__shell__slot__band:sidecar:1__anchor",
+        "x": 2239.592,
+        "y": 326.643
+      },
+      "to": {
+        "itemId": "D-020",
+        "x": 2520.274,
+        "y": 461.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2239.592,
+            "y": 326.643
+          },
+          {
+            "x": 2447.092,
+            "y": 326.643
+          },
+          {
+            "x": 2447.092,
+            "y": 437.5
+          },
+          {
+            "x": 2520.274,
+            "y": 461.5
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "D-020__helper__PL-020",
+      "role": "helper_lane_order",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_helper",
+        "edge-type-helper_lane_order",
+        "edge-channel-helper"
+      ],
+      "from": {
+        "itemId": "D-020",
+        "x": 2744.274,
+        "y": 461.5
+      },
+      "to": {
+        "itemId": "PL-020",
+        "x": 2858.456,
+        "y": 563.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2744.274,
+            "y": 461.5
+          },
+          {
+            "x": 2765.274,
+            "y": 437.5
+          },
+          {
+            "x": 2765.274,
+            "y": 539.167
+          },
+          {
+            "x": 2858.456,
+            "y": 563.167
+          }
+        ]
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-020__precedes__J-021",
+      "role": "precedes",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-flow"
+      ],
+      "from": {
+        "itemId": "J-020",
+        "portId": "flow_out",
+        "x": 415.182,
+        "y": 84
+      },
+      "to": {
+        "itemId": "J-021",
+        "portId": "flow_in",
+        "x": 885.364,
+        "y": 92
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 415.182,
+            "y": 84
+          },
+          {
+            "x": 436.182,
+            "y": 84
+          },
+          {
+            "x": 436.182,
+            "y": 48.333
+          },
+          {
+            "x": 824.364,
+            "y": 48.333
+          },
+          {
+            "x": 824.364,
+            "y": 92
+          },
+          {
+            "x": 885.364,
+            "y": 92
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-020__realized_by__PR-020",
+      "role": "realized_by",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-support",
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "J-020",
+        "portId": "support_out",
+        "x": 331.182,
+        "y": 108
+      },
+      "to": {
+        "itemId": "PR-020",
+        "portId": "support_in",
+        "x": 641.364,
+        "y": 130
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 331.182,
+            "y": 108
+          },
+          {
+            "x": 331.182,
+            "y": 118
+          },
+          {
+            "x": 641.364,
+            "y": 118
+          },
+          {
+            "x": 641.364,
+            "y": 130
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "realized by"
+        ],
+        "width": 72.588,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 449.979,
+        "y": 84
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-021__realized_by__PR-022",
+      "role": "realized_by",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-support",
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "J-021",
+        "portId": "support_out",
+        "x": 969.364,
+        "y": 124
+      },
+      "to": {
+        "itemId": "PR-022",
+        "portId": "support_in",
+        "x": 1955.91,
+        "y": 357.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 969.364,
+            "y": 124
+          },
+          {
+            "x": 969.364,
+            "y": 292
+          },
+          {
+            "x": 1955.91,
+            "y": 292
+          },
+          {
+            "x": 1955.91,
+            "y": 357.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "realized by"
+        ],
+        "width": 72.588,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 1426.343,
+        "y": 258
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-020__constrained_by__PL-020",
+      "role": "constrained_by",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-constrained_by",
+        "edge-channel-resource_policy",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "PR-020",
+        "portId": "resource_out",
+        "x": 565.364,
+        "y": 178
+      },
+      "to": {
+        "itemId": "PL-020",
+        "portId": "resource_in",
+        "x": 2894.456,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 565.364,
+            "y": 178
+          },
+          {
+            "x": 565.364,
+            "y": 189
+          },
+          {
+            "x": 764.364,
+            "y": 189
+          },
+          {
+            "x": 764.364,
+            "y": 28
+          },
+          {
+            "x": 2088.91,
+            "y": 28
+          },
+          {
+            "x": 2088.91,
+            "y": 281
+          },
+          {
+            "x": 2894.456,
+            "y": 281
+          },
+          {
+            "x": 2894.456,
+            "y": 539.167
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "constrained by"
+        ],
+        "width": 94.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 1379.546,
+        "y": -6
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-020__depends_on__SA-020",
+      "role": "depends_on",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-depends_on",
+        "edge-channel-support"
+      ],
+      "from": {
+        "itemId": "PR-020",
+        "portId": "support_out",
+        "x": 641.364,
+        "y": 178
+      },
+      "to": {
+        "itemId": "SA-020",
+        "portId": "support_in",
+        "x": 1617.728,
+        "y": 222
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 641.364,
+            "y": 178
+          },
+          {
+            "x": 641.364,
+            "y": 199
+          },
+          {
+            "x": 1617.728,
+            "y": 199
+          },
+          {
+            "x": 1617.728,
+            "y": 222
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "depends on"
+        ],
+        "width": 76.482,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 1091.305,
+        "y": 165
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-020__precedes__PR-021",
+      "role": "precedes",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-flow"
+      ],
+      "from": {
+        "itemId": "PR-020",
+        "portId": "flow_out",
+        "x": 753.364,
+        "y": 154
+      },
+      "to": {
+        "itemId": "PR-021",
+        "portId": "flow_in",
+        "x": 1167.546,
+        "y": 448.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 753.364,
+            "y": 154
+          },
+          {
+            "x": 784.364,
+            "y": 154
+          },
+          {
+            "x": 784.364,
+            "y": 448.167
+          },
+          {
+            "x": 1167.546,
+            "y": 448.167
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-021__depends_on__SA-021",
+      "role": "depends_on",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-depends_on",
+        "edge-channel-support"
+      ],
+      "from": {
+        "itemId": "PR-021",
+        "portId": "support_out",
+        "x": 1279.546,
+        "y": 472.167
+      },
+      "to": {
+        "itemId": "SA-021",
+        "portId": "support_in",
+        "x": 1955.91,
+        "y": 437.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1279.546,
+            "y": 472.167
+          },
+          {
+            "x": 1279.546,
+            "y": 494.167
+          },
+          {
+            "x": 1780.728,
+            "y": 494.167
+          },
+          {
+            "x": 1780.728,
+            "y": 425.5
+          },
+          {
+            "x": 1955.91,
+            "y": 425.5
+          },
+          {
+            "x": 1955.91,
+            "y": 437.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "depends on"
+        ],
+        "width": 76.482,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 1491.896,
+        "y": 460.167
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-021__precedes__PR-022",
+      "role": "precedes",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-flow"
+      ],
+      "from": {
+        "itemId": "PR-021",
+        "portId": "flow_out",
+        "x": 1391.546,
+        "y": 448.167
+      },
+      "to": {
+        "itemId": "PR-022",
+        "portId": "flow_in",
+        "x": 1843.91,
+        "y": 381.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1391.546,
+            "y": 448.167
+          },
+          {
+            "x": 1760.728,
+            "y": 448.167
+          },
+          {
+            "x": 1760.728,
+            "y": 381.5
+          },
+          {
+            "x": 1843.91,
+            "y": 381.5
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-022__depends_on__SA-022",
+      "role": "depends_on",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-depends_on",
+        "edge-channel-support"
+      ],
+      "from": {
+        "itemId": "PR-022",
+        "portId": "support_out",
+        "x": 1955.91,
+        "y": 405.5
+      },
+      "to": {
+        "itemId": "SA-022",
+        "portId": "support_in",
+        "x": 2294.092,
+        "y": 437.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1955.91,
+            "y": 405.5
+          },
+          {
+            "x": 1955.91,
+            "y": 416.5
+          },
+          {
+            "x": 2294.092,
+            "y": 416.5
+          },
+          {
+            "x": 2294.092,
+            "y": 437.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "depends on"
+        ],
+        "width": 76.482,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 2086.76,
+        "y": 382.5
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-020__constrained_by__PL-020",
+      "role": "constrained_by",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-constrained_by",
+        "edge-channel-resource_policy",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "SA-020",
+        "portId": "resource_out",
+        "x": 1541.728,
+        "y": 270
+      },
+      "to": {
+        "itemId": "PL-020",
+        "portId": "resource_in",
+        "x": 2894.456,
+        "y": 539.167
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1541.728,
+            "y": 270
+          },
+          {
+            "x": 1541.728,
+            "y": 281
+          },
+          {
+            "x": 2894.456,
+            "y": 281
+          },
+          {
+            "x": 2894.456,
+            "y": 539.167
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "constrained by"
+        ],
+        "width": 94.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 2171.001,
+        "y": 247
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-020__reads_writes__D-020",
+      "role": "reads_writes",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-reads_writes",
+        "edge-channel-resource_policy",
+        "edge-dashed",
+        "edge-bold"
+      ],
+      "from": {
+        "itemId": "SA-020",
+        "portId": "resource_out",
+        "x": 1541.728,
+        "y": 270
+      },
+      "to": {
+        "itemId": "D-020",
+        "portId": "resource_in",
+        "x": 2556.274,
+        "y": 437.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1541.728,
+            "y": 270
+          },
+          {
+            "x": 1541.728,
+            "y": 281
+          },
+          {
+            "x": 2417.092,
+            "y": 281
+          },
+          {
+            "x": 2417.092,
+            "y": 405.5
+          },
+          {
+            "x": 2556.274,
+            "y": 405.5
+          },
+          {
+            "x": 2556.274,
+            "y": 437.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "reads, writes"
+        ],
+        "width": 83.196,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 1937.812,
+        "y": 247
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-021__reads__D-020",
+      "role": "reads",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-reads",
+        "edge-channel-resource_policy",
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "SA-021",
+        "portId": "resource_out",
+        "x": 1879.91,
+        "y": 485.5
+      },
+      "to": {
+        "itemId": "D-020",
+        "portId": "resource_in",
+        "x": 2556.274,
+        "y": 437.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1879.91,
+            "y": 485.5
+          },
+          {
+            "x": 1879.91,
+            "y": 506.167
+          },
+          {
+            "x": 2088.91,
+            "y": 506.167
+          },
+          {
+            "x": 2088.91,
+            "y": 405.5
+          },
+          {
+            "x": 2556.274,
+            "y": 405.5
+          },
+          {
+            "x": 2556.274,
+            "y": 437.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "reads"
+        ],
+        "width": 43.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 2301.001,
+        "y": 371.5
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "SA-022__reads__D-020",
+      "role": "reads",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-reads",
+        "edge-channel-resource_policy",
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "SA-022",
+        "portId": "resource_out",
+        "x": 2218.092,
+        "y": 485.5
+      },
+      "to": {
+        "itemId": "D-020",
+        "portId": "resource_in",
+        "x": 2556.274,
+        "y": 437.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 2218.092,
+            "y": 485.5
+          },
+          {
+            "x": 2218.092,
+            "y": 496.5
+          },
+          {
+            "x": 2417.092,
+            "y": 496.5
+          },
+          {
+            "x": 2417.092,
+            "y": 405.5
+          },
+          {
+            "x": 2556.274,
+            "y": 405.5
+          },
+          {
+            "x": 2556.274,
+            "y": 437.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "reads"
+        ],
+        "width": 43.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 2296.001,
+        "y": 462.5
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "decorations": [
+    {
+      "kind": "text",
+      "id": "lane-customer__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-customer"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 71.5,
+      "text": "customer",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "line",
+      "id": "lane-customer__separator",
+      "classes": [
+        "service_blueprint_separator",
+        "line_of_interaction",
+        "lane-customer"
+      ],
+      "paintGroup": "chrome",
+      "from": {
+        "x": 24,
+        "y": 124
+      },
+      "to": {
+        "x": 3083.456,
+        "y": 124
+      }
+    },
+    {
+      "kind": "text",
+      "id": "lane-frontstage__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-frontstage"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 171.33350000000002,
+      "text": "frontstage",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "line",
+      "id": "lane-frontstage__separator",
+      "classes": [
+        "service_blueprint_separator",
+        "line_of_visibility",
+        "lane-frontstage"
+      ],
+      "paintGroup": "chrome",
+      "from": {
+        "x": 24,
+        "y": 304
+      },
+      "to": {
+        "x": 3083.456,
+        "y": 304
+      }
+    },
+    {
+      "kind": "text",
+      "id": "lane-backstage__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-backstage"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 319.41700000000003,
+      "text": "backstage",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "line",
+      "id": "lane-backstage__separator",
+      "classes": [
+        "service_blueprint_separator",
+        "line_of_internal_interaction",
+        "lane-backstage"
+      ],
+      "paintGroup": "chrome",
+      "from": {
+        "x": 24,
+        "y": 472.167
+      },
+      "to": {
+        "x": 3083.456,
+        "y": 472.167
+      }
+    },
+    {
+      "kind": "text",
+      "id": "lane-support__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-support"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 366,
+      "text": "support",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "lane-system__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-system"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 343.75,
+      "text": "system",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "lane-policy__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-policy"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 552.667,
+      "text": "policy",
+      "textStyleRole": "label"
+    }
+  ],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

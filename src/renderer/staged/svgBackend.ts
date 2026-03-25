@@ -3,6 +3,7 @@ import type {
   PaintGroup,
   Point,
   PositionedContainer,
+  PositionedDecoration,
   PositionedEdge,
   PositionedEdgeLabel,
   PositionedItem,
@@ -475,8 +476,55 @@ function renderEdgeLabel(
   ].join("\n");
 }
 
-function buildStyleLines(theme: RendererTheme): string[] {
+function renderLineDecoration(decoration: Extract<PositionedDecoration, { kind: "line" }>): string {
+  const classList = buildClassList(
+    "scene-decoration",
+    "scene-decoration-line",
+    `paint-${sanitizeToken(decoration.paintGroup)}`,
+    ...decoration.classes.map((className) => sanitizeToken(className))
+  );
+
+  return [
+    `<g id="scene-decoration-${sanitizeToken(decoration.id)}" class="${classList}" data-decoration-id="${escapeXml(decoration.id)}">`,
+    `  <line class="scene-decoration__line" x1="${formatNumber(decoration.from.x)}" y1="${formatNumber(decoration.from.y)}" x2="${formatNumber(decoration.to.x)}" y2="${formatNumber(decoration.to.y)}"/>`,
+    "</g>"
+  ].join("\n");
+}
+
+function renderTextDecoration(
+  decoration: Extract<PositionedDecoration, { kind: "text" }>,
+  diagnostics: RendererDiagnostic[],
+  theme: RendererTheme
+): string {
+  const resolvedRole = resolveTextRoleForBlock("text", decoration.textStyleRole);
+  const style = getTextStyleForBackend(theme, resolvedRole, decoration.id, diagnostics);
+  const classList = buildClassList(
+    "scene-decoration",
+    "scene-decoration-text",
+    `paint-${sanitizeToken(decoration.paintGroup)}`,
+    ...decoration.classes.map((className) => sanitizeToken(className))
+  );
+  const textMarkup = renderTextBlock(
+    decoration.x,
+    decoration.y,
+    [decoration.text],
+    style,
+    style.lineHeight,
+    buildTextClassList(resolvedRole, "text")
+  );
+
+  return [
+    `<g id="scene-decoration-${sanitizeToken(decoration.id)}" class="${classList}" data-decoration-id="${escapeXml(decoration.id)}">`,
+    ...indentLines(textMarkup, 2),
+    "</g>"
+  ].join("\n");
+}
+
+function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[] {
   const { paint } = theme;
+  const hasBoldEdges = scene.edges.some((edge) => edge.classes.some((className) => sanitizeToken(className) === "edge-bold"));
+  const hasLineDecorations = scene.decorations.some((decoration) => decoration.kind === "line");
+  const isServiceBlueprint = scene.viewId === "service_blueprint";
   const lines = [
     `.staged-svg { background: ${paint.canvasBackground}; }`,
     `.paint-layer { isolation: isolate; }`,
@@ -494,12 +542,27 @@ function buildStyleLines(theme: RendererTheme): string[] {
     `.scene-edge__path { fill: none; stroke: ${paint.palette.edge}; stroke-width: ${formatNumber(paint.edgeStrokeWidth)}; }`,
     `.scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }`,
     `.scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }`,
-    `.scene-edge.edge-bold .scene-edge__path { stroke-width: ${formatNumber(paint.edgeStrokeWidth + 1)}; }`,
     `.scene-edge-label__box { fill: ${paint.palette.edgeLabelFill}; stroke: ${paint.palette.edgeLabelStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
     `.scene-marker { fill: ${paint.palette.edge}; }`,
     `.scene-text { fill: ${paint.palette.text}; }`,
     `.scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: ${paint.palette.secondaryText}; }`
   ];
+
+  if (hasBoldEdges) {
+    lines.push(`.scene-edge.edge-bold .scene-edge__path { stroke-width: ${formatNumber(paint.edgeStrokeWidth + 1)}; }`);
+  }
+  if (hasLineDecorations) {
+    lines.push(`.scene-decoration__line { fill: none; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`);
+  }
+  if (isServiceBlueprint) {
+    lines.push(
+      `.view-service_blueprint .service_blueprint_helper { display: none; }`,
+      `.view-service_blueprint .service_blueprint_slot .scene-container__chrome, .view-service_blueprint .service_blueprint_slot .scene-container__header-band { display: none; }`,
+      `.view-service_blueprint .service_blueprint_lane_shell .scene-container__chrome, .view-service_blueprint .service_blueprint_lane_shell .scene-container__header-band { fill: transparent; stroke: transparent; }`,
+      `.view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: ${paint.palette.containerStroke}; stroke-dasharray: 6 4; }`,
+      `.view-service_blueprint .service_blueprint_lane_title .scene-text { fill: ${paint.palette.secondaryText}; }`
+    );
+  }
 
   for (const role of Object.keys(theme.textStyles).sort()) {
     const style = theme.textStyles[role];
@@ -511,7 +574,7 @@ function buildStyleLines(theme: RendererTheme): string[] {
   return lines;
 }
 
-function buildDefs(theme: RendererTheme): Promise<string[]> {
+function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<string[]> {
   return Promise.all([
     buildEmbeddedFontFaceStyleElement({
       fontFamily: theme.fontFamily,
@@ -524,7 +587,7 @@ function buildDefs(theme: RendererTheme): Promise<string[]> {
       defs.push(fontFaceStyle);
     }
 
-    defs.push(`<style><![CDATA[\n${buildStyleLines(theme).join("\n")}\n]]></style>`);
+    defs.push(`<style><![CDATA[\n${buildStyleLines(scene, theme).join("\n")}\n]]></style>`);
     defs.push(...buildArrowMarkerDefs(theme));
 
     return defs;
@@ -557,7 +620,16 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
     }
   }
 
-  const defs = await buildDefs(theme);
+  for (const decoration of scene.decorations) {
+    if (decoration.kind === "line") {
+      groups[decoration.paintGroup].push(renderLineDecoration(decoration));
+      continue;
+    }
+
+    groups[decoration.paintGroup].push(renderTextDecoration(decoration, diagnostics, theme));
+  }
+
+  const defs = await buildDefs(scene, theme);
   const viewWidth = scene.root.width > 0 ? scene.root.width : 1;
   const viewHeight = scene.root.height > 0 ? scene.root.height : 1;
   const svgClasses = buildClassList(

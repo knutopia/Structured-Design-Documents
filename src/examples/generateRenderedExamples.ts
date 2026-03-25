@@ -22,8 +22,6 @@ import {
 } from "./renderedCorpus.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
-const SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE = "renderer.backend.service_blueprint_staged_disabled";
-
 function buildReadmeContent(
   manifestPath: string,
   pairs: Array<{ viewId: string; exampleName: string }>,
@@ -63,9 +61,6 @@ function buildReadmeContent(
   lines.push(
     "Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings."
   );
-  lines.push(
-    "A fail-closed default staged backend may intentionally omit unsuffixed preview files while keeping explicit backend-suffixed legacy preview artifacts committed."
-  );
   lines.push("`simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.");
   lines.push("");
   lines.push("`ia_place_map` visual review checklist:");
@@ -84,6 +79,13 @@ function buildReadmeContent(
   lines.push("- synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope");
   lines.push("- contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement");
   lines.push("- default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed");
+  lines.push("");
+  lines.push("`service_blueprint` visual review checklist:");
+  lines.push("");
+  lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the ELK-authoritative staged renderer");
+  lines.push("- customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order");
+  lines.push("- customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled");
+  lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
   lines.push("");
 
   return lines.join("\n");
@@ -106,19 +108,6 @@ async function main(): Promise<void> {
   }
 
   const outputIndex: Array<{ viewId: string; exampleName: string }> = [];
-
-  const isExpectedFailClosedDefaultPreview = (
-    viewId: string,
-    backendId: string,
-    diagnostics: { code: string; severity: string }[]
-  ): boolean => (
-    viewId === "service_blueprint"
-    && backendId === "staged_service_blueprint_preview"
-    && diagnostics.some((diagnostic) => (
-      diagnostic.severity === "error"
-      && diagnostic.code === SERVICE_BLUEPRINT_STAGED_DISABLED_DIAGNOSTIC_CODE
-    ))
-  );
 
   for (const variant of variants) {
     const view = bundle.views.views.find((candidate) => candidate.id === variant.viewId);
@@ -187,32 +176,21 @@ async function main(): Promise<void> {
       backendId: pngCapability.backendId
     });
 
-    const defaultSvgFailClosed = isExpectedFailClosedDefaultPreview(
-      variant.viewId,
-      svgCapability.backendId,
-      svgResult.diagnostics
-    );
-    const defaultPngFailClosed = isExpectedFailClosedDefaultPreview(
-      variant.viewId,
-      pngCapability.backendId,
-      pngResult.diagnostics
-    );
-
-    if (!defaultSvgFailClosed && (!svgResult.artifact || svgResult.artifact.format !== "svg" || svgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error"))) {
+    if (!svgResult.artifact || svgResult.artifact.format !== "svg" || svgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
       throw new Error(
         `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${svgCapability.backendId}).\n${formatPrettyDiagnostics(svgResult.diagnostics)}`
       );
     }
-    if (!defaultPngFailClosed && (!pngResult.artifact || pngResult.artifact.format !== "png" || pngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error"))) {
+    if (!pngResult.artifact || pngResult.artifact.format !== "png" || pngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
       throw new Error(
         `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${pngCapability.backendId}).\n${formatPrettyDiagnostics(pngResult.diagnostics)}`
       );
     }
 
-    if (!defaultSvgFailClosed && svgResult.artifact?.format === "svg") {
+    if (svgResult.artifact?.format === "svg") {
       await writeFile(outputPaths.svgOutputPath, svgResult.artifact.text, "utf8");
     }
-    if (!defaultPngFailClosed && pngResult.artifact?.format === "png") {
+    if (pngResult.artifact?.format === "png") {
       await writeFile(outputPaths.pngOutputPath, pngResult.artifact.bytes);
     }
 

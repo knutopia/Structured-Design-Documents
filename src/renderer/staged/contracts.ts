@@ -13,6 +13,7 @@ export type LayoutStrategy = "stack" | "grid" | "lanes" | "elk_layered" | "manua
 export type LayoutDirection = "horizontal" | "vertical";
 export type CrossAlignment = "start" | "center" | "stretch";
 export type WidthBand = "chip" | "narrow" | "standard" | "wide";
+export type ElkHierarchyHandling = "include_children";
 export type OverflowPolicyKind =
   | "grow_height"
   | "escalate_width_band"
@@ -33,6 +34,7 @@ export type EdgeLabelPlacement = "segment" | "segment_strict" | "source_contract
 export type LocalRoutePattern = "ia_direct_vertical" | "ia_shared_trunk";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
 export type EdgeMarkerKind = "none" | "arrow";
+export type RouteAuthority = "flexible" | "require_elk";
 
 export const IA_LOCAL_ROUTE_PATTERNS = {
   directVertical: "ia_direct_vertical",
@@ -52,6 +54,11 @@ export interface LayoutIntent {
   gap?: number;
   crossAlignment?: CrossAlignment;
   columns?: number;
+  elk?: {
+    hierarchyHandling?: ElkHierarchyHandling;
+    strict?: boolean;
+    layoutOptions?: Record<string, string>;
+  };
 }
 
 export interface ChromeSpec {
@@ -63,6 +70,11 @@ export interface ChromeSpec {
 export interface WidthPolicy {
   preferred: WidthBand;
   allowed: WidthBand[];
+}
+
+export interface FixedSize {
+  width: number;
+  height: number;
 }
 
 export interface OverflowPolicy {
@@ -101,6 +113,8 @@ export interface RoutingIntent {
   sourcePortRole?: string;
   targetPortRole?: string;
   localPattern?: LocalRoutePattern;
+  authority?: RouteAuthority;
+  elkLayoutOptions?: Record<string, string>;
 }
 
 export interface EdgeLabelSpec {
@@ -136,6 +150,7 @@ export interface SceneNode {
   overflowPolicy: OverflowPolicy;
   content: ContentBlock[];
   ports: PortSpec[];
+  fixedSize?: FixedSize;
 }
 
 export type SceneItem = SceneContainer | SceneNode;
@@ -219,6 +234,7 @@ export interface MeasuredNode {
   overflow: OverflowResult;
   width: number;
   height: number;
+  fixedSize?: FixedSize;
 }
 
 export type MeasuredItem = MeasuredContainer | MeasuredNode;
@@ -296,6 +312,7 @@ export interface PositionedNode {
   y: number;
   width: number;
   height: number;
+  fixedSize?: FixedSize;
 }
 
 export type PositionedItem = PositionedContainer | PositionedNode;
@@ -334,12 +351,35 @@ export interface PositionedEdge {
   paintGroup: PaintGroup;
 }
 
+export interface PositionedLineDecoration {
+  kind: "line";
+  id: string;
+  classes: string[];
+  paintGroup: PaintGroup;
+  from: Point;
+  to: Point;
+}
+
+export interface PositionedTextDecoration {
+  kind: "text";
+  id: string;
+  classes: string[];
+  paintGroup: PaintGroup;
+  x: number;
+  y: number;
+  text: string;
+  textStyleRole: string;
+}
+
+export type PositionedDecoration = PositionedLineDecoration | PositionedTextDecoration;
+
 export interface PositionedScene {
   viewId: string;
   profileId: string;
   themeId: string;
   root: PositionedContainer;
   edges: PositionedEdge[];
+  decorations: PositionedDecoration[];
   diagnostics: RendererDiagnostic[];
   paintOrder: PaintGroup[];
 }

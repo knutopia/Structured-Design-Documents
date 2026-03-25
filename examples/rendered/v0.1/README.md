@@ -27,7 +27,6 @@ Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`
 
 Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with `.dot`, `.mmd`, `.svg`, and `.png` render outputs.
 Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
-A fail-closed default staged backend may intentionally omit unsuffixed preview files while keeping explicit backend-suffixed legacy preview artifacts committed.
 `simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.
 
 `ia_place_map` visual review checklist:
@@ -46,3 +45,10 @@ A fail-closed default staged backend may intentionally omit unsuffixed preview f
 - synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope
 - contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement
 - default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed
+
+`service_blueprint` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts come from the ELK-authoritative staged renderer
+- customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
+- customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled
+- legacy Graphviz preview siblings remain committed for side-by-side comparison

@@ -123,7 +123,7 @@ This allows the bundle to define what matters in the view, while the renderer re
 
 Preview generation remains outside the core renderer contract:
 
-- preview routing is backend-aware, with `staged_ia_place_map_preview` now defaulting `ia_place_map` SVG/PNG previews, `staged_ui_contracts_preview` now defaulting `ui_contracts` SVG/PNG previews, and `legacy_graphviz_preview` still serving the remaining views plus explicit legacy `ia_place_map` and `ui_contracts` preview requests
+- preview routing is backend-aware, with `staged_ia_place_map_preview`, `staged_service_blueprint_preview`, and `staged_ui_contracts_preview` now defaulting those views' SVG/PNG previews, and `legacy_graphviz_preview` still serving the remaining views plus explicit legacy staged-view preview requests
 - `legacy_graphviz_preview` currently uses Graphviz only for DOT-to-SVG layout
 - SVG and PNG artifacts are produced by the CLI preview pipeline
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
@@ -131,7 +131,7 @@ Preview generation remains outside the core renderer contract:
 
 ## Service Blueprint Renderer Reset
 
-- `service_blueprint` staged preview currently fails closed by design while the rejected two-pass `elk_lanes` path is removed.
+- `service_blueprint` staged preview now runs through the ELK-authoritative staged renderer, and the rejected two-pass `elk_lanes` path remains obsolete.
 - The shipped `elkjs` bundle in this repo does not provide `Libavoid`, so the current toolchain does not have a standalone ELK obstacle router available.
 - `ELK Fixed` is not treated as a standalone router, and `interactive` or `semiInteractive` are not treated as a fixed-position rerouting contract.
 - `service_blueprint` may not snap nodes after ELK and then trust the pre-snap or partially-rerouted edge geometry.

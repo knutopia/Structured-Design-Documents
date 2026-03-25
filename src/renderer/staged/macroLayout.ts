@@ -27,6 +27,7 @@ import {
 } from "./diagnostics.js";
 import {
   runElkLayeredLayout,
+  runElkLayeredSubtreeLayout,
   type ElkAdaptedEdge
 } from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
@@ -174,7 +175,8 @@ function clonePositionedNode(node: MeasuredNode): PositionedNode {
     x: 0,
     y: 0,
     width: node.width,
-    height: node.height
+    height: node.height,
+    fixedSize: node.fixedSize
   };
 }
 
@@ -665,11 +667,52 @@ async function layoutItem(
   return layoutContainer(item, context, ownedEdgesByContainer);
 }
 
+function collectSubtreeOwnedEdges(
+  container: MeasuredContainer,
+  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
+): MeasuredEdge[] {
+  const collected = [...(ownedEdgesByContainer.get(container.id) ?? [])];
+
+  for (const child of container.children) {
+    if (child.kind === "container") {
+      collected.push(...collectSubtreeOwnedEdges(child, ownedEdgesByContainer));
+    }
+  }
+
+  return collected;
+}
+
 async function layoutContainer(
   container: MeasuredContainer,
   context: LayoutContext,
   ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
 ): Promise<LayoutItemResult> {
+  if (container.layout.strategy === "elk_layered" && container.layout.elk?.hierarchyHandling === "include_children") {
+    const subtreeEdges = collectSubtreeOwnedEdges(container, ownedEdgesByContainer);
+
+    try {
+      const laidOut = await runElkLayeredSubtreeLayout({
+        root: container,
+        edges: subtreeEdges
+      });
+
+      return {
+        item: laidOut.root,
+        routeHints: laidOut.edgeRoutes
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      context.diagnostics.push(createLayoutDiagnostic(
+        "renderer.layout.elk_failure",
+        `ELK layout failed for container "${container.id}". Falling back to "stack". ${message}`,
+        {
+          targetId: container.id,
+          severity: container.layout.elk?.strict ? "error" : "warn"
+        }
+      ));
+    }
+  }
+
   const childResults: LayoutItemResult[] = [];
   for (const child of container.children) {
     childResults.push(await layoutItem(child, context, ownedEdgesByContainer));
@@ -1148,6 +1191,17 @@ function positionMeasuredEdge(
     );
   }
 
+  if (edge.routing.authority === "require_elk" && !canUseElkRoute) {
+    diagnostics.push(
+      createRoutingDiagnostic(
+        "renderer.routing.required_route_missing",
+        `Edge "${edge.id}" requires ELK-authored routing geometry, but no ELK route sections were returned.`,
+        edge.id,
+        "error"
+      )
+    );
+  }
+
   const baseRoute = canUseElkRoute
     ? buildRouteFromLocalHint(edge, from, to, owner, localHint, diagnostics)
     : localPatternRoute
@@ -1233,6 +1287,7 @@ export async function positionMeasuredScene(measuredScene: MeasuredScene): Promi
     themeId: measuredScene.themeId,
     root,
     edges,
+    decorations: [],
     diagnostics: sortRendererDiagnostics(context.diagnostics),
     paintOrder: [...PAINT_ORDER]
   };

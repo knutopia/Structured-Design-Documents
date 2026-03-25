@@ -26,8 +26,8 @@ That design is no longer allowed. It produced invalid routing and depended on gu
 
 ## Consequences For The Repo
 
-- `staged_service_blueprint_preview` remains the default selected preview backend, but it currently fails closed instead of emitting degraded SVG or PNG artifacts.
-- `legacy_graphviz_preview` remains explicitly available for working `service_blueprint` preview output.
+- `staged_service_blueprint_preview` remains the default selected preview backend and is now implemented through the ELK-authoritative staged renderer described by the updated layout rules.
+- `legacy_graphviz_preview` remains explicitly available for comparison `service_blueprint` preview output.
 - The old two-pass `elk_lanes` guidance is obsolete and must not be used as the basis for new implementation work.
 
 ## Grounding Sources
