@@ -75,4 +75,33 @@ The current migration focus is proving the staged SVG renderer architecture on `
 - Preserve deterministic behavior: stable ordering, vendored font usage, canonical `LF` newlines for stored text artifacts, deterministic measurement and layout, deterministic SVG serialization, and explicit renderer diagnostics for degraded output.
 - Each migration step should land code, tests, and any required documentation updates, not just design notes.
 
+## Quality And Drift Control
+
+- Spec-first for doc-driven work:
+  extract a short list of cited, non-negotiable invariants before planning or coding.
+- Separate sources by role:
+  identify the normative contract, architectural guardrails, and visual exemplar before implementation.
+- If the authority hierarchy is unclear, stop and resolve it before coding.
+
+- Acceptance before snapshots:
+  do not update snapshots, goldens, or rendered corpus artifacts until the cited acceptance invariants are satisfied.
+- Snapshot refresh is evidence capture, not a way to normalize failure.
+- If tests are green but acceptance invariants still fail, report the work as incomplete.
+
+- Proof-case before generalization:
+  for visually complex or migration work, get the explicitly referenced proof case right before broadening shared infrastructure or regenerating wider goldens.
+- Do not generalize from a failing or low-quality proof case.
+
+- Explicit mismatch reporting:
+  after each substantial pass, report satisfied invariants, violated invariants, and whether the output is acceptable.
+- Do not describe output as implemented, complete, successful, materially better, or ready when core invariants still fail.
+
+- Decision traceability:
+  any non-obvious placement, routing, ownership, or fallback decision must be justified against the cited contract, not only against tests or local convenience.
+
+- Stop conditions:
+  stop and surface the problem instead of coding through it when output contradicts cited invariants, when goldens would need updating to hide quality regressions, or when the current strategy is producing structurally wrong output and further tuning is speculative.
+
+- For `service_blueprint` work, also follow the local instructions in `docs/service_blueprint_renderer_implementation/AGENTS.md`.
+
 For completed project milestones and legacy toolchain background, see `docs/Done/project_achievements.md`.

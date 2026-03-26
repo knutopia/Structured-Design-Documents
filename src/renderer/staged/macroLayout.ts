@@ -176,7 +176,9 @@ function clonePositionedNode(node: MeasuredNode): PositionedNode {
     y: 0,
     width: node.width,
     height: node.height,
-    fixedSize: node.fixedSize
+    fixedSize: node.fixedSize,
+    sharedWidthGroup: node.sharedWidthGroup,
+    sharedHeightGroup: node.sharedHeightGroup
   };
 }
 
@@ -770,8 +772,10 @@ async function layoutContainer(
     ports: container.ports.map((port) => cloneMeasuredPort(port)),
     x: 0,
     y: 0,
-    width: Math.max(width, headerWidth),
-    height
+    width: Math.max(width, headerWidth, container.width),
+    height: Math.max(height, container.height),
+    sharedWidthGroup: container.sharedWidthGroup,
+    sharedHeightGroup: container.sharedHeightGroup
   };
 
   positioned.ports = resolveContainerPorts(positioned, context.theme);
@@ -845,7 +849,7 @@ function buildOwnedEdgesByContainer(
   const ownerContainerByEdgeId = new Map<string, string>();
 
   for (const edge of edges) {
-    const ownerId = resolveEdgeOwnerContainerId(edge, index, rootId);
+    const ownerId = edge.ownerContainerId ?? resolveEdgeOwnerContainerId(edge, index, rootId);
     ownerContainerByEdgeId.set(edge.id, ownerId);
     const existing = ownedEdgesByContainer.get(ownerId);
     if (existing) {
@@ -1192,13 +1196,8 @@ function positionMeasuredEdge(
   }
 
   if (edge.routing.authority === "require_elk" && !canUseElkRoute) {
-    diagnostics.push(
-      createRoutingDiagnostic(
-        "renderer.routing.required_route_missing",
-        `Edge "${edge.id}" requires ELK-authored routing geometry, but no ELK route sections were returned.`,
-        edge.id,
-        "error"
-      )
+    throw new Error(
+      `Edge "${edge.id}" requires ELK-authored routing geometry, but no ELK route sections were returned.`
     );
   }
 

@@ -91,20 +91,21 @@ END
 `);
 
     expect(middle.bands.map((band) => band.label)).toEqual(["A1", "I1", "A2", "R*"]);
+    expect(middle.cells).toHaveLength(24);
 
-    const slotByNodeId = new Map(
-      middle.slots.flatMap((slot) => slot.nodeIds.map((nodeId) => [nodeId, slot] as const))
+    const cellByNodeId = new Map(
+      middle.cells.flatMap((cell) => cell.nodeIds.map((nodeId) => [nodeId, cell] as const))
     );
-    expect(slotByNodeId.get("J-020")?.bandLabel).toBe("A1");
-    expect(slotByNodeId.get("PR-020")?.bandLabel).toBe("A1");
-    expect(slotByNodeId.get("SA-020")?.bandLabel).toBe("A1");
-    expect(slotByNodeId.get("PR-021")?.bandLabel).toBe("I1");
-    expect(slotByNodeId.get("SA-021")?.bandLabel).toBe("I1");
-    expect(slotByNodeId.get("J-021")?.bandLabel).toBe("A2");
-    expect(slotByNodeId.get("PR-022")?.bandLabel).toBe("A2");
-    expect(slotByNodeId.get("SA-022")?.bandLabel).toBe("A2");
-    expect(slotByNodeId.get("D-020")?.bandLabel).toBe("R*");
-    expect(slotByNodeId.get("PL-020")?.bandLabel).toBe("R*");
+    expect(cellByNodeId.get("J-020")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("PR-020")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("SA-020")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("PR-021")?.bandLabel).toBe("I1");
+    expect(cellByNodeId.get("SA-021")?.bandLabel).toBe("I1");
+    expect(cellByNodeId.get("J-021")?.bandLabel).toBe("A2");
+    expect(cellByNodeId.get("PR-022")?.bandLabel).toBe("A2");
+    expect(cellByNodeId.get("SA-022")?.bandLabel).toBe("A2");
+    expect(cellByNodeId.get("D-020")?.bandLabel).toBe("R*");
+    expect(cellByNodeId.get("PL-020")?.bandLabel).toBe("R*");
   });
 
   it("falls back to author order when customer steps do not declare PRECEDES", async () => {
@@ -128,14 +129,14 @@ Process PR-101 "Close Case"
 END
 `);
 
-    const slotByNodeId = new Map(
-      middle.slots.flatMap((slot) => slot.nodeIds.map((nodeId) => [nodeId, slot] as const))
+    const cellByNodeId = new Map(
+      middle.cells.flatMap((cell) => cell.nodeIds.map((nodeId) => [nodeId, cell] as const))
     );
 
-    expect(slotByNodeId.get("J-100")?.bandLabel).toBe("A1");
-    expect(slotByNodeId.get("PR-100")?.bandLabel).toBe("A1");
-    expect(slotByNodeId.get("J-101")?.bandLabel).toBe("A2");
-    expect(slotByNodeId.get("PR-101")?.bandLabel).toBe("A2");
+    expect(cellByNodeId.get("J-100")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("PR-100")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("J-101")?.bandLabel).toBe("A2");
+    expect(cellByNodeId.get("PR-101")?.bandLabel).toBe("A2");
   });
 
   it("creates a deterministic degraded action spine when no customer steps exist", async () => {
@@ -160,12 +161,12 @@ END
       "renderer.scene.service_blueprint_degraded_no_steps"
     );
 
-    const slotByNodeId = new Map(
-      middle.slots.flatMap((slot) => slot.nodeIds.map((nodeId) => [nodeId, slot] as const))
+    const cellByNodeId = new Map(
+      middle.cells.flatMap((cell) => cell.nodeIds.map((nodeId) => [nodeId, cell] as const))
     );
-    expect(slotByNodeId.get("PR-200")?.bandLabel).toBe("A1");
-    expect(slotByNodeId.get("SA-200")?.bandLabel).toBe("A3");
-    expect(slotByNodeId.get("PR-201")?.bandLabel).toBe("A2");
+    expect(cellByNodeId.get("PR-200")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("SA-200")?.bandLabel).toBe("A3");
+    expect(cellByNodeId.get("PR-201")?.bandLabel).toBe("A2");
   });
 
   it("assigns disconnected action nodes to per-lane parking bands", async () => {
@@ -185,10 +186,17 @@ Process PR-301 "Offline Audit"
 END
 `);
 
-    const parkingSlot = middle.slots.find((slot) => slot.bandKind === "parking");
-    expect(parkingSlot).toBeDefined();
-    expect(parkingSlot?.laneId).toBe("lane:03:backstage");
-    expect(parkingSlot?.bandLabel).toBe("P1");
-    expect(parkingSlot?.nodeIds).toEqual(["PR-301"]);
+    expect(middle.parkingBands).toEqual([
+      expect.objectContaining({
+        ownerLaneId: "lane:03:backstage",
+        label: "P1"
+      })
+    ]);
+    const parkingCell = middle.cells.find((cell) =>
+      cell.bandKind === "parking" && cell.laneId === "lane:03:backstage"
+    );
+    expect(parkingCell).toBeDefined();
+    expect(parkingCell?.bandLabel).toBe("P1");
+    expect(parkingCell?.nodeIds).toEqual(["PR-301"]);
   });
 });

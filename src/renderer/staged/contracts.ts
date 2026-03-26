@@ -138,6 +138,8 @@ export interface SceneContainer {
   headerContent?: ContentBlock[];
   children: SceneItem[];
   ports: PortSpec[];
+  sharedWidthGroup?: string;
+  sharedHeightGroup?: string;
 }
 
 export interface SceneNode {
@@ -151,6 +153,8 @@ export interface SceneNode {
   content: ContentBlock[];
   ports: PortSpec[];
   fixedSize?: FixedSize;
+  sharedWidthGroup?: string;
+  sharedHeightGroup?: string;
 }
 
 export type SceneItem = SceneContainer | SceneNode;
@@ -164,6 +168,7 @@ export interface SceneEdge {
   routing: RoutingIntent;
   label?: EdgeLabelSpec;
   markers?: EdgeMarkers;
+  ownerContainerId?: string;
 }
 
 export interface RendererScene {
@@ -218,6 +223,8 @@ export interface MeasuredContainer {
   ports: MeasuredPort[];
   width: number;
   height: number;
+  sharedWidthGroup?: string;
+  sharedHeightGroup?: string;
 }
 
 export interface MeasuredNode {
@@ -235,6 +242,8 @@ export interface MeasuredNode {
   width: number;
   height: number;
   fixedSize?: FixedSize;
+  sharedWidthGroup?: string;
+  sharedHeightGroup?: string;
 }
 
 export type MeasuredItem = MeasuredContainer | MeasuredNode;
@@ -263,6 +272,7 @@ export interface MeasuredEdge {
   routing: RoutingIntent;
   label?: MeasuredEdgeLabel;
   markers?: EdgeMarkers;
+  ownerContainerId?: string;
 }
 
 export interface MeasuredScene {
@@ -294,6 +304,8 @@ export interface PositionedContainer {
   y: number;
   width: number;
   height: number;
+  sharedWidthGroup?: string;
+  sharedHeightGroup?: string;
 }
 
 export interface PositionedNode {
@@ -313,6 +325,8 @@ export interface PositionedNode {
   width: number;
   height: number;
   fixedSize?: FixedSize;
+  sharedWidthGroup?: string;
+  sharedHeightGroup?: string;
 }
 
 export type PositionedItem = PositionedContainer | PositionedNode;

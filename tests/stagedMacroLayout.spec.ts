@@ -11,7 +11,7 @@ import type {
 } from "../src/renderer/staged/contracts.js";
 import { runElkFixedPositionRouting } from "../src/renderer/staged/elkAdapter.js";
 import { positionMeasuredScene } from "../src/renderer/staged/macroLayout.js";
-import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import { measureScene, runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 import { buildFixtureScene } from "./stagedRendererFixtures.js";
 
@@ -77,6 +77,40 @@ function buildCardNode(
       }
     ],
     ports
+  };
+}
+
+function buildSharedSizeCell(
+  id: string,
+  title: string,
+  sharedWidthGroup: string,
+  sharedHeightGroup: string
+): SceneContainer {
+  return {
+    kind: "container",
+    id,
+    role: "cell",
+    primitive: "cluster",
+    classes: ["shared_cell"],
+    layout: {
+      strategy: "stack",
+      direction: "vertical",
+      gap: 8
+    },
+    chrome: {
+      padding: {
+        top: 12,
+        right: 12,
+        bottom: 12,
+        left: 12
+      },
+      gutter: 8,
+      headerBandHeight: 0
+    },
+    ports: [],
+    children: [buildCardNode(`${id}__node`, title.length > 12 ? "standard" : "narrow", title)],
+    sharedWidthGroup,
+    sharedHeightGroup
   };
 }
 
@@ -284,6 +318,48 @@ describe("staged macro-layout", () => {
     expect(first).toEqual(expect.objectContaining({ x: 16, y: 16, width: 168, height: 48 }));
     expect(second).toEqual(expect.objectContaining({ x: 194, y: 16, width: 224, height: 48 }));
     expect(third).toEqual(expect.objectContaining({ x: 16, y: 74, width: 96, height: 48 }));
+  });
+
+  it("normalizes shared width and height groups before macro-layout", async () => {
+    const scene = buildRootScene(
+      {
+        strategy: "grid",
+        columns: 2,
+        gap: 10,
+        crossAlignment: "start"
+      },
+      [
+        buildSharedSizeCell("cell-a1", "Short", "col-a", "row-1"),
+        buildSharedSizeCell("cell-b1", "A much longer title", "col-b", "row-1"),
+        buildSharedSizeCell("cell-a2", "Medium title", "col-a", "row-2"),
+        buildSharedSizeCell("cell-b2", "Tiny", "col-b", "row-2")
+      ]
+    );
+
+    const measured = measureScene(scene);
+    const measuredCells = measured.root.children.filter(
+      (child): child is MeasuredScene["root"]["children"][number] & { kind: "container" } => child.kind === "container"
+    );
+    const measuredA1 = measuredCells.find((cell) => cell.id === "cell-a1");
+    const measuredA2 = measuredCells.find((cell) => cell.id === "cell-a2");
+    const measuredB1 = measuredCells.find((cell) => cell.id === "cell-b1");
+    const measuredB2 = measuredCells.find((cell) => cell.id === "cell-b2");
+
+    expect(measuredA1?.width).toBe(measuredA2?.width);
+    expect(measuredB1?.width).toBe(measuredB2?.width);
+    expect(measuredA1?.height).toBe(measuredB1?.height);
+    expect(measuredA2?.height).toBe(measuredB2?.height);
+
+    const positioned = await runStagedRendererPipeline(scene);
+    const positionedA1 = findPositionedItem(positioned.positionedScene.root, "cell-a1");
+    const positionedA2 = findPositionedItem(positioned.positionedScene.root, "cell-a2");
+    const positionedB1 = findPositionedItem(positioned.positionedScene.root, "cell-b1");
+    const positionedB2 = findPositionedItem(positioned.positionedScene.root, "cell-b2");
+
+    expect(positionedA1).toEqual(expect.objectContaining({ width: positionedA2.width }));
+    expect(positionedB1).toEqual(expect.objectContaining({ width: positionedB2.width }));
+    expect(positionedA1).toEqual(expect.objectContaining({ height: positionedB1.height }));
+    expect(positionedA2).toEqual(expect.objectContaining({ height: positionedB2.height }));
   });
 
   it("stretches lane containers to a shared cross-axis width", async () => {

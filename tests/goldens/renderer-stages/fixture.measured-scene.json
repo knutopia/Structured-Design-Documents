@@ -202,8 +202,8 @@
             "y": 0
           }
         ],
-        "width": 0,
-        "height": 0
+        "width": 248,
+        "height": 190
       },
       {
         "kind": "node",
@@ -275,8 +275,8 @@
       }
     ],
     "ports": [],
-    "width": 0,
-    "height": 0
+    "width": 528,
+    "height": 222
   },
   "edges": [
     {

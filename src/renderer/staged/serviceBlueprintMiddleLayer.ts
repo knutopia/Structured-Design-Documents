@@ -12,9 +12,18 @@ export type ServiceBlueprintEdgeChannel = "flow" | "support" | "resource_policy"
 export interface ServiceBlueprintMiddleBand {
   id: string;
   label: string;
-  kind: ServiceBlueprintBandKind;
+  kind: Exclude<ServiceBlueprintBandKind, "parking">;
   order: number;
-  shared: boolean;
+  shared: true;
+}
+
+export interface ServiceBlueprintParkingBand {
+  id: string;
+  label: string;
+  kind: "parking";
+  order: number;
+  ownerLaneShellId: string;
+  ownerLaneId: string;
 }
 
 export interface ServiceBlueprintMiddleLaneShell {
@@ -22,27 +31,28 @@ export interface ServiceBlueprintMiddleLaneShell {
   laneId: string;
   label: string;
   index: number;
-  slotIds: string[];
+  cellIds: string[];
 }
 
-export interface ServiceBlueprintMiddleSlot {
+export interface ServiceBlueprintMiddleCell {
   id: string;
+  bandId: string;
   laneShellId: string;
   laneId: string;
-  bandId: string;
   bandLabel: string;
   bandKind: ServiceBlueprintBandKind;
-  order: number;
-  shared: boolean;
+  rowOrder: number;
+  columnOrder: number;
   nodeIds: string[];
   anchorNodeId: string;
-  representativeNodeId: string;
+  sharedWidthGroup: string;
+  sharedHeightGroup: string;
 }
 
 export interface ServiceBlueprintNodePlacement {
   nodeId: string;
   laneShellId: string;
-  slotId: string;
+  cellId: string;
   bandId: string;
   classification: ServiceBlueprintNodeClassification;
   order: number;
@@ -64,9 +74,9 @@ export interface ServiceBlueprintMiddleEdge {
 export interface ServiceBlueprintMiddleLayerModel {
   bands: ServiceBlueprintMiddleBand[];
   laneShells: ServiceBlueprintMiddleLaneShell[];
-  slots: ServiceBlueprintMiddleSlot[];
+  parkingBands: ServiceBlueprintParkingBand[];
+  cells: ServiceBlueprintMiddleCell[];
   placements: ServiceBlueprintNodePlacement[];
-  bandGuideNodeIds: string[];
   edges: ServiceBlueprintMiddleEdge[];
   diagnostics: RendererDiagnostic[];
 }
@@ -104,10 +114,6 @@ function isActionNode(node: ServiceBlueprintRenderNode | undefined): node is Ser
 
 function isStepNode(node: ServiceBlueprintRenderNode | undefined): node is ServiceBlueprintRenderNode {
   return !!node && node.type === "Step";
-}
-
-function isSidecarNode(node: ServiceBlueprintRenderNode | undefined): node is ServiceBlueprintRenderNode {
-  return !!node && SIDECAR_NODE_TYPES.has(node.type);
 }
 
 function stableTopologicalOrder(
@@ -178,7 +184,7 @@ function buildLaneShells(model: ServiceBlueprintRenderModel): {
     laneId: lane.id,
     label: lane.label,
     index,
-    slotIds: []
+    cellIds: []
   }));
 
   if (model.ungroupedNodeIds.length > 0) {
@@ -193,7 +199,7 @@ function buildLaneShells(model: ServiceBlueprintRenderModel): {
       laneId: "lane:99:ungrouped",
       label: "ungrouped",
       index: laneShells.length,
-      slotIds: []
+      cellIds: []
     });
   }
 
@@ -509,37 +515,85 @@ function resolveEdgeChannel(edge: ServiceBlueprintRenderEdge): ServiceBlueprintE
   }
 }
 
-function buildSlotsAndPlacements(
+function buildParkingBands(
+  model: ServiceBlueprintRenderModel,
+  nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
+  laneShells: readonly ServiceBlueprintMiddleLaneShell[],
+  parkedNodeIds: ReadonlySet<string>,
+  sharedColumnCount: number
+): ServiceBlueprintParkingBand[] {
+  const parkedNodesByLaneShellId = new Map<string, ServiceBlueprintRenderNode[]>();
+  const laneShellByLaneId = new Map(laneShells.map((laneShell) => [laneShell.laneId, laneShell]));
+
+  for (const nodeId of parkedNodeIds) {
+    const node = nodeMap.get(nodeId);
+    if (!node) {
+      continue;
+    }
+
+    const laneId = node.laneId ?? (model.ungroupedNodeIds.includes(node.id) ? "lane:99:ungrouped" : undefined);
+    const laneShell = laneId ? laneShellByLaneId.get(laneId) : undefined;
+    if (!laneShell) {
+      continue;
+    }
+
+    const existing = parkedNodesByLaneShellId.get(laneShell.id) ?? [];
+    existing.push(node);
+    parkedNodesByLaneShellId.set(laneShell.id, existing);
+  }
+
+  return laneShells.flatMap((laneShell) => {
+    const parkedNodes = parkedNodesByLaneShellId.get(laneShell.id);
+    if (!parkedNodes || parkedNodes.length === 0) {
+      return [];
+    }
+
+    return [{
+      id: `band:parking:${laneShell.laneId}:1`,
+      label: "P1",
+      kind: "parking",
+      order: sharedColumnCount,
+      ownerLaneShellId: laneShell.id,
+      ownerLaneId: laneShell.laneId
+    } satisfies ServiceBlueprintParkingBand];
+  }).map((band, index) => ({
+    ...band,
+    order: sharedColumnCount + index
+  }));
+}
+
+function buildCellsAndPlacements(
   model: ServiceBlueprintRenderModel,
   nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
   laneShells: ServiceBlueprintMiddleLaneShell[],
   bands: ServiceBlueprintMiddleBand[],
+  parkingBands: readonly ServiceBlueprintParkingBand[],
   positionByNodeId: ReadonlyMap<string, number>,
   parkedNodeIds: ReadonlySet<string>
 ): {
-  slots: ServiceBlueprintMiddleSlot[];
+  cells: ServiceBlueprintMiddleCell[];
   placements: ServiceBlueprintNodePlacement[];
 } {
+  const orderedColumns = [...bands, ...parkingBands].sort((left, right) => left.order - right.order);
   const sharedBandByPosition = new Map<number, ServiceBlueprintMiddleBand>();
-  const orderedSharedBands = bands.filter((band) => band.shared && band.kind !== "sidecar");
+  const nonSidecarBands = bands.filter((band) => band.kind !== "sidecar");
   [...new Set(positionByNodeId.values())]
     .sort((left, right) => left - right)
     .forEach((position, index) => {
-      const band = orderedSharedBands[index];
+      const band = nonSidecarBands[index];
       if (band) {
         sharedBandByPosition.set(position, band);
       }
     });
+
   const sidecarBand = bands.find((band) => band.kind === "sidecar");
   if (!sidecarBand) {
     throw new Error("Service blueprint middle layer requires a sidecar band.");
   }
 
-  const slots: ServiceBlueprintMiddleSlot[] = [];
-  const placements: ServiceBlueprintNodePlacement[] = [];
-  const parkingNodesByLaneId = new Map<string, ServiceBlueprintRenderNode[]>();
-  const nodesBySharedSlotId = new Map<string, ServiceBlueprintRenderNode[]>();
-  const laneShellByLaneId = new Map(laneShells.map((lane) => [lane.laneId, lane]));
+  const parkingBandByLaneShellId = new Map(parkingBands.map((band) => [band.ownerLaneShellId, band]));
+  const laneShellByLaneId = new Map(laneShells.map((laneShell) => [laneShell.laneId, laneShell]));
+  const nodesByCellId = new Map<string, ServiceBlueprintRenderNode[]>();
 
   for (const node of model.nodes) {
     const laneId = node.laneId ?? (model.ungroupedNodeIds.includes(node.id) ? "lane:99:ungrouped" : undefined);
@@ -547,50 +601,51 @@ function buildSlotsAndPlacements(
     if (!laneShell) {
       continue;
     }
-    const resolvedLaneId = laneShell.laneId;
 
+    let targetBandId: string | undefined;
     if (parkedNodeIds.has(node.id)) {
-      const existing = parkingNodesByLaneId.get(resolvedLaneId) ?? [];
-      existing.push(node);
-      parkingNodesByLaneId.set(resolvedLaneId, existing);
+      targetBandId = parkingBandByLaneShellId.get(laneShell.id)?.id;
+    } else if (classifyNode(node) === "sidecar") {
+      targetBandId = sidecarBand.id;
+    } else {
+      targetBandId = sharedBandByPosition.get(positionByNodeId.get(node.id) ?? -1)?.id;
+    }
+
+    if (!targetBandId) {
       continue;
     }
 
-    const classification = classifyNode(node);
-    const band = classification === "sidecar"
-      ? sidecarBand
-      : sharedBandByPosition.get(positionByNodeId.get(node.id) ?? -1);
-    if (!band) {
-      continue;
-    }
-
-    const slotId = `${laneShell.id}__slot__${band.id}`;
-    const existing = nodesBySharedSlotId.get(slotId) ?? [];
+    const cellId = `${laneShell.id}__cell__${targetBandId}`;
+    const existing = nodesByCellId.get(cellId) ?? [];
     existing.push(node);
-    nodesBySharedSlotId.set(slotId, existing);
+    nodesByCellId.set(cellId, existing);
   }
 
-  for (const laneShell of laneShells) {
-    for (const band of bands) {
-      const slotId = `${laneShell.id}__slot__${band.id}`;
-      const nodeIds = (nodesBySharedSlotId.get(slotId) ?? [])
+  const cells: ServiceBlueprintMiddleCell[] = [];
+  const placements: ServiceBlueprintNodePlacement[] = [];
+
+  for (const column of orderedColumns) {
+    for (const laneShell of laneShells) {
+      const cellId = `${laneShell.id}__cell__${column.id}`;
+      const nodeIds = (nodesByCellId.get(cellId) ?? [])
         .sort(compareNodeOrder)
         .map((node) => node.id);
-      const slot: ServiceBlueprintMiddleSlot = {
-        id: slotId,
+      const cell: ServiceBlueprintMiddleCell = {
+        id: cellId,
+        bandId: column.id,
         laneShellId: laneShell.id,
         laneId: laneShell.laneId,
-        bandId: band.id,
-        bandLabel: band.label,
-        bandKind: band.kind,
-        order: slots.length,
-        shared: true,
+        bandLabel: column.label,
+        bandKind: column.kind,
+        rowOrder: laneShell.index,
+        columnOrder: column.order,
         nodeIds,
-        anchorNodeId: `${slotId}__anchor`,
-        representativeNodeId: nodeIds[0] ?? `${slotId}__anchor`
+        anchorNodeId: `${cellId}__anchor`,
+        sharedWidthGroup: `service_blueprint:column:${column.id}`,
+        sharedHeightGroup: `service_blueprint:row:${laneShell.id}`
       };
-      slots.push(slot);
-      laneShell.slotIds.push(slot.id);
+      cells.push(cell);
+      laneShell.cellIds.push(cell.id);
 
       nodeIds.forEach((nodeId, order) => {
         const node = nodeMap.get(nodeId);
@@ -600,50 +655,17 @@ function buildSlotsAndPlacements(
         placements.push({
           nodeId,
           laneShellId: laneShell.id,
-          slotId: slot.id,
-          bandId: band.id,
+          cellId: cell.id,
+          bandId: column.id,
           classification: classifyNode(node),
           order
         });
       });
     }
-
-    const parkingNodes = (parkingNodesByLaneId.get(laneShell.laneId) ?? []).sort(compareNodeOrder);
-    if (parkingNodes.length === 0) {
-      continue;
-    }
-
-    const bandId = `band:parking:${laneShell.laneId}:1`;
-    const slot: ServiceBlueprintMiddleSlot = {
-      id: `${laneShell.id}__slot__${bandId}`,
-      laneShellId: laneShell.id,
-      laneId: laneShell.laneId,
-      bandId,
-      bandLabel: "P1",
-      bandKind: "parking",
-      order: slots.length,
-      shared: false,
-      nodeIds: parkingNodes.map((node) => node.id),
-      anchorNodeId: `${laneShell.id}__slot__${bandId}__anchor`,
-      representativeNodeId: parkingNodes[0]?.id ?? `${laneShell.id}__slot__${bandId}__anchor`
-    };
-    slots.push(slot);
-    laneShell.slotIds.push(slot.id);
-
-    parkingNodes.forEach((node, order) => {
-      placements.push({
-        nodeId: node.id,
-        laneShellId: laneShell.id,
-        slotId: slot.id,
-        bandId,
-        classification: classifyNode(node),
-        order
-      });
-    });
   }
 
   return {
-    slots,
+    cells,
     placements
   };
 }
@@ -691,70 +713,39 @@ function buildMergedSemanticEdges(
 
 function buildHelperEdges(
   laneShells: readonly ServiceBlueprintMiddleLaneShell[],
-  slotsById: ReadonlyMap<string, ServiceBlueprintMiddleSlot>,
-  bandGuideNodeIds: readonly string[]
+  bands: readonly ServiceBlueprintMiddleBand[],
+  parkingBands: readonly ServiceBlueprintParkingBand[],
+  cellsById: ReadonlyMap<string, ServiceBlueprintMiddleCell>
 ): ServiceBlueprintMiddleEdge[] {
   const edges: ServiceBlueprintMiddleEdge[] = [];
+  const orderedColumns = [...bands, ...parkingBands].sort((left, right) => left.order - right.order);
 
-  for (let index = 1; index < bandGuideNodeIds.length; index += 1) {
-    const from = bandGuideNodeIds[index - 1];
-    const to = bandGuideNodeIds[index];
-    if (!from || !to) {
-      continue;
-    }
-    edges.push({
-      id: `${from}__helper__${to}`,
-      semanticEdgeIds: [],
-      channel: "helper",
-      type: "HELPER_ORDER",
-      from,
-      to,
-      strictRoute: false,
-      hidden: true
-    });
-  }
+  for (const column of orderedColumns) {
+    let previousAnchorId: string | undefined;
 
-  for (const laneShell of laneShells) {
-    let previousSlotAnchorId: string | undefined;
-    for (const slotId of laneShell.slotIds) {
-      const slot = slotsById.get(slotId);
-      if (!slot) {
+    for (const laneShell of laneShells) {
+      const cell = cellsById.get(`${laneShell.id}__cell__${column.id}`);
+      if (!cell) {
         continue;
       }
 
-      if (slot.shared) {
-        const guideNodeId = bandGuideNodeIds.find((candidate) => candidate.endsWith(slot.bandId));
-        if (guideNodeId) {
-          edges.push({
-            id: `${guideNodeId}__helper__${slot.anchorNodeId}`,
-            semanticEdgeIds: [],
-            channel: "helper",
-            type: "HELPER_ALIGN",
-            from: guideNodeId,
-            to: slot.anchorNodeId,
-            strictRoute: false,
-            hidden: true
-          });
-        }
-      }
-
-      if (previousSlotAnchorId) {
+      if (previousAnchorId) {
         edges.push({
-          id: `${previousSlotAnchorId}__helper__${slot.anchorNodeId}`,
+          id: `${previousAnchorId}__helper__${cell.id}`,
           semanticEdgeIds: [],
           channel: "helper",
-          type: "HELPER_SLOT_ORDER",
-          from: previousSlotAnchorId,
-          to: slot.anchorNodeId,
+          type: "HELPER_COLUMN_ORDER",
+          from: previousAnchorId,
+          to: cell.id,
           strictRoute: false,
           hidden: true
         });
       }
-      previousSlotAnchorId = slot.anchorNodeId;
+      previousAnchorId = cell.id;
 
-      const stackIds = slot.nodeIds.length > 0
-        ? [slot.anchorNodeId, ...slot.nodeIds]
-        : [slot.anchorNodeId];
+      const stackIds = cell.nodeIds.length > 0
+        ? [cell.id, ...cell.nodeIds]
+        : [cell.id];
       for (let index = 1; index < stackIds.length; index += 1) {
         const from = stackIds[index - 1];
         const to = stackIds[index];
@@ -765,13 +756,39 @@ function buildHelperEdges(
           id: `${from}__helper__${to}`,
           semanticEdgeIds: [],
           channel: "helper",
-          type: "HELPER_STACK",
+          type: "HELPER_CELL_STACK",
           from,
           to,
           strictRoute: false,
           hidden: true
         });
       }
+    }
+  }
+
+  for (const laneShell of laneShells) {
+    let previousCellId: string | undefined;
+
+    for (const column of orderedColumns) {
+      const cell = cellsById.get(`${laneShell.id}__cell__${column.id}`);
+      if (!cell) {
+        continue;
+      }
+
+      if (previousCellId) {
+        edges.push({
+          id: `${previousCellId}__helper__${cell.id}__row`,
+          semanticEdgeIds: [],
+          channel: "helper",
+          type: "HELPER_ROW_ORDER",
+          from: previousCellId,
+          to: cell.id,
+          strictRoute: false,
+          hidden: true
+        });
+      }
+
+      previousCellId = cell.id;
     }
   }
 
@@ -792,28 +809,32 @@ export function buildServiceBlueprintMiddleLayer(
     anchorPositionSet
   } = deriveActionBandPositions(model, actionNodes, nodeMap, diagnostics);
   const bands = buildBands(positionByNodeId, anchorPositionSet);
-  const { slots, placements } = buildSlotsAndPlacements(
+  const parkingBands = buildParkingBands(
+    model,
+    nodeMap,
+    laneShells,
+    parkedNodeIds,
+    bands.length
+  );
+  const { cells, placements } = buildCellsAndPlacements(
     model,
     nodeMap,
     laneShells,
     bands,
+    parkingBands,
     positionByNodeId,
     parkedNodeIds
   );
-
-  const slotsById = new Map(slots.map((slot) => [slot.id, slot]));
-  const bandGuideNodeIds = bands
-    .filter((band) => band.shared)
-    .map((band) => `guide__${band.id}`);
-  const helperEdges = buildHelperEdges(laneShells, slotsById, bandGuideNodeIds);
+  const cellsById = new Map(cells.map((cell) => [cell.id, cell]));
+  const helperEdges = buildHelperEdges(laneShells, bands, parkingBands, cellsById);
   const semanticEdges = buildMergedSemanticEdges(model.edges);
 
   return {
     bands,
     laneShells,
-    slots,
+    parkingBands,
+    cells,
     placements,
-    bandGuideNodeIds,
     edges: [...helperEdges, ...semanticEdges],
     diagnostics
   };

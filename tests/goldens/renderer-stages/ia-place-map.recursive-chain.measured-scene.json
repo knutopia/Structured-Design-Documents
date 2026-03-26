@@ -403,33 +403,33 @@
                           }
                         ],
                         "ports": [],
-                        "width": 0,
-                        "height": 0
+                        "width": 168,
+                        "height": 48
                       }
                     ],
                     "ports": [],
-                    "width": 0,
-                    "height": 0
+                    "width": 168,
+                    "height": 48
                   }
                 ],
                 "ports": [],
-                "width": 0,
-                "height": 0
+                "width": 168,
+                "height": 128
               }
             ],
             "ports": [],
-            "width": 0,
-            "height": 0
+            "width": 168,
+            "height": 128
           }
         ],
         "ports": [],
-        "width": 0,
-        "height": 0
+        "width": 168,
+        "height": 208
       }
     ],
     "ports": [],
-    "width": 0,
-    "height": 0
+    "width": 216,
+    "height": 256
   },
   "edges": [
     {

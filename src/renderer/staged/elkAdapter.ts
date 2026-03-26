@@ -415,7 +415,7 @@ function createHierarchicalElkPort(port: MeasuredPort, itemId: string, index: nu
 
 function resolveContainerLayoutOptions(container: MeasuredContainer, isRoot: boolean): ElkLayoutOptions {
   const gap = roundMetric(container.layout.gap ?? container.chrome.gutter ?? 12);
-  const layeredDefaults: ElkLayoutOptions = isRoot
+  const layeredDefaults: ElkLayoutOptions = container.layout.strategy === "elk_layered"
     ? {
       "org.eclipse.elk.algorithm": "layered",
       "org.eclipse.elk.direction": resolveElkDirection(container.layout.direction),
@@ -423,7 +423,11 @@ function resolveContainerLayoutOptions(container: MeasuredContainer, isRoot: boo
       "org.eclipse.elk.padding": formatElkPadding(container.chrome),
       "org.eclipse.elk.spacing.nodeNode": String(gap),
       "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(gap),
-      "org.eclipse.elk.layered.mergeEdges": "false"
+      "org.eclipse.elk.considerModelOrder.strategy": "NODES_AND_EDGES",
+      "org.eclipse.elk.layered.crossingMinimization.forceNodeModelOrder": "true",
+      "org.eclipse.elk.layered.considerModelOrder.portModelOrder": "true",
+      "org.eclipse.elk.layered.mergeEdges": "false",
+      "org.eclipse.elk.layered.mergeHierarchyEdges": "false"
     }
     : {
       "org.eclipse.elk.padding": formatElkPadding(container.chrome)
@@ -463,6 +467,10 @@ function createHierarchicalElkNode(item: MeasuredItem, isRoot = false): ElkNode 
 
   return {
     id: item.id,
+    ...(isRoot ? {} : {
+      width: item.width,
+      height: item.height
+    }),
     layoutOptions: resolveContainerLayoutOptions(item, isRoot),
     ...(ports.length > 0 ? { ports } : {}),
     children: item.children.map((child) => createHierarchicalElkNode(child)),
@@ -550,7 +558,9 @@ function buildPositionedSubtree(
       y: frame.y,
       width: frame.width || item.width,
       height: frame.height || item.height,
-      fixedSize: item.fixedSize
+      fixedSize: item.fixedSize,
+      sharedWidthGroup: item.sharedWidthGroup,
+      sharedHeightGroup: item.sharedHeightGroup
     };
   }
 
@@ -586,7 +596,9 @@ function buildPositionedSubtree(
     x: frame.x,
     y: frame.y,
     width: frame.width,
-    height: frame.height
+    height: frame.height,
+    sharedWidthGroup: item.sharedWidthGroup,
+    sharedHeightGroup: item.sharedHeightGroup
   };
 }
 

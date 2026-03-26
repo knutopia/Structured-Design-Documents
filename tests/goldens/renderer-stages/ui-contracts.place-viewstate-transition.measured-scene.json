@@ -330,8 +330,8 @@
                           }
                         ],
                         "ports": [],
-                        "width": 0,
-                        "height": 0
+                        "width": 224,
+                        "height": 48
                       }
                     ],
                     "ports": [
@@ -344,8 +344,8 @@
                         "y": 0
                       }
                     ],
-                    "width": 0,
-                    "height": 0
+                    "width": 248,
+                    "height": 112
                   }
                 ],
                 "ports": [
@@ -372,8 +372,8 @@
                     "y": 0
                   }
                 ],
-                "width": 0,
-                "height": 0
+                "width": 272,
+                "height": 196
               },
               {
                 "kind": "node",
@@ -454,8 +454,8 @@
               }
             ],
             "ports": [],
-            "width": 0,
-            "height": 0
+            "width": 488,
+            "height": 260
           },
           {
             "kind": "container",
@@ -820,13 +820,13 @@
                       }
                     ],
                     "ports": [],
-                    "width": 0,
-                    "height": 0
+                    "width": 384,
+                    "height": 132
                   }
                 ],
                 "ports": [],
-                "width": 0,
-                "height": 0
+                "width": 512,
+                "height": 260
               }
             ],
             "ports": [
@@ -839,8 +839,8 @@
                 "y": 0
               }
             ],
-            "width": 0,
-            "height": 0
+            "width": 536,
+            "height": 324
           }
         ],
         "ports": [
@@ -853,8 +853,8 @@
             "y": 0
           }
         ],
-        "width": 0,
-        "height": 0
+        "width": 1064,
+        "height": 434
       },
       {
         "kind": "container",
@@ -939,13 +939,13 @@
             "y": 0
           }
         ],
-        "width": 0,
-        "height": 0
+        "width": 137.152,
+        "height": 110
       }
     ],
     "ports": [],
-    "width": 0,
-    "height": 0
+    "width": 1112,
+    "height": 620
   },
   "edges": [
     {

@@ -68,8 +68,21 @@ interface ContainerHeaderLayoutResult {
   height: number;
 }
 
+interface MeasuredSize {
+  width: number;
+  height: number;
+}
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
+}
+
+function getMeasuredMainSize(item: MeasuredItem, direction: "horizontal" | "vertical"): number {
+  return direction === "horizontal" ? item.width : item.height;
+}
+
+function getMeasuredCrossSize(item: MeasuredItem, direction: "horizontal" | "vertical"): number {
+  return direction === "horizontal" ? item.height : item.width;
 }
 
 function cloneChromeSpec(chrome: ChromeSpec): ChromeSpec {
@@ -92,6 +105,10 @@ function cloneOverflowPolicy(overflowPolicy: OverflowPolicy): OverflowPolicy {
     kind: overflowPolicy.kind,
     maxLines: overflowPolicy.maxLines
   };
+}
+
+function resolveContainerGap(chrome: ChromeSpec, layout: SceneContainer["layout"]): number {
+  return roundMetric(layout.gap ?? chrome.gutter ?? 0);
 }
 
 function createMeasuredPort(port: PortSpec, x: number, y: number): MeasuredPort {
@@ -725,7 +742,7 @@ function applyNodeOverflowPolicy(
 }
 
 function measureNodePorts(
-  node: SceneNode,
+  node: Pick<SceneNode, "ports"> | Pick<MeasuredNode, "ports">,
   width: number,
   height: number,
   portInset: number
@@ -787,7 +804,9 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
       fixedSize: {
         width,
         height
-      }
+      },
+      sharedWidthGroup: item.sharedWidthGroup,
+      sharedHeightGroup: item.sharedHeightGroup
     };
   }
 
@@ -808,7 +827,9 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
     overflow: overflowStatus,
     width: layout.width,
     height: layout.height,
-    fixedSize: item.fixedSize
+    fixedSize: item.fixedSize,
+    sharedWidthGroup: item.sharedWidthGroup,
+    sharedHeightGroup: item.sharedHeightGroup
   };
 }
 
@@ -816,6 +837,188 @@ function measureContainerPorts(
   container: SceneContainer
 ): MeasuredPort[] {
   return container.ports.map((port) => createMeasuredPort(port, 0, 0));
+}
+
+function resolveHeaderWidth(headerContent: MeasuredContentBlock[], chrome: ChromeSpec): number {
+  if (headerContent.length === 0) {
+    return 0;
+  }
+
+  const maxRight = Math.max(...headerContent.map((block) => block.x + block.width));
+  return roundMetric(maxRight + chrome.padding.right);
+}
+
+function estimateLinearContentSize(
+  children: readonly MeasuredItem[],
+  direction: "horizontal" | "vertical",
+  gap: number
+): MeasuredSize {
+  if (children.length === 0) {
+    return {
+      width: 0,
+      height: 0
+    };
+  }
+
+  const main = roundMetric(
+    children.reduce((sum, child) => sum + getMeasuredMainSize(child, direction), 0)
+    + gap * Math.max(children.length - 1, 0)
+  );
+  const cross = roundMetric(
+    children.reduce((largest, child) => Math.max(largest, getMeasuredCrossSize(child, direction)), 0)
+  );
+
+  return direction === "horizontal"
+    ? { width: main, height: cross }
+    : { width: cross, height: main };
+}
+
+function estimateGridContentSize(
+  children: readonly MeasuredItem[],
+  columns: number | undefined,
+  gap: number
+): MeasuredSize {
+  if (children.length === 0) {
+    return {
+      width: 0,
+      height: 0
+    };
+  }
+
+  const columnCount = Math.max(1, Math.min(columns ?? 1, children.length));
+  const rowCount = Math.ceil(children.length / columnCount);
+  const columnWidths = Array.from({ length: columnCount }, () => 0);
+  const rowHeights = Array.from({ length: rowCount }, () => 0);
+
+  children.forEach((child, index) => {
+    const row = Math.floor(index / columnCount);
+    const column = index % columnCount;
+    columnWidths[column] = Math.max(columnWidths[column] ?? 0, child.width);
+    rowHeights[row] = Math.max(rowHeights[row] ?? 0, child.height);
+  });
+
+  return {
+    width: roundMetric(
+      columnWidths.reduce((sum, value) => sum + value, 0) + gap * Math.max(columnCount - 1, 0)
+    ),
+    height: roundMetric(
+      rowHeights.reduce((sum, value) => sum + value, 0) + gap * Math.max(rowCount - 1, 0)
+    )
+  };
+}
+
+function estimateContainerContentSize(container: MeasuredContainer): MeasuredSize {
+  const gap = resolveContainerGap(container.chrome, container.layout);
+
+  switch (container.layout.strategy) {
+    case "grid":
+      return estimateGridContentSize(container.children, container.layout.columns, gap);
+    case "stack":
+    case "lanes":
+    case "elk_layered":
+      return estimateLinearContentSize(container.children, container.layout.direction ?? "vertical", gap);
+    case "manual":
+      return {
+        width: roundMetric(container.children.reduce((largest, child) => Math.max(largest, child.width), 0)),
+        height: roundMetric(container.children.reduce((largest, child) => Math.max(largest, child.height), 0))
+      };
+    default:
+      return estimateLinearContentSize(container.children, "vertical", gap);
+  }
+}
+
+function resolveMeasuredContainerSize(
+  container: MeasuredContainer
+): MeasuredSize {
+  const contentSize = estimateContainerContentSize(container);
+  const headerWidth = resolveHeaderWidth(container.headerContent, container.chrome);
+
+  return {
+    width: roundMetric(Math.max(
+      headerWidth,
+      container.chrome.padding.left + contentSize.width + container.chrome.padding.right
+    )),
+    height: roundMetric(
+      container.chrome.padding.top
+      + (container.chrome.headerBandHeight ?? 0)
+      + contentSize.height
+      + container.chrome.padding.bottom
+    )
+  };
+}
+
+function collectSharedSizeGroups(
+  item: MeasuredItem,
+  widthGroups: Map<string, number>,
+  heightGroups: Map<string, number>
+): void {
+  if (item.sharedWidthGroup) {
+    widthGroups.set(item.sharedWidthGroup, Math.max(widthGroups.get(item.sharedWidthGroup) ?? 0, item.width));
+  }
+  if (item.sharedHeightGroup) {
+    heightGroups.set(item.sharedHeightGroup, Math.max(heightGroups.get(item.sharedHeightGroup) ?? 0, item.height));
+  }
+
+  if (item.kind === "container") {
+    item.children.forEach((child) => collectSharedSizeGroups(child, widthGroups, heightGroups));
+  }
+}
+
+function resizeMeasuredNode(node: MeasuredNode, context: MeasureContext): void {
+  const primitiveTheme = getNodePrimitiveTheme(context.theme, node.primitive);
+  node.ports = measureNodePorts(node, node.width, node.height, primitiveTheme.portInset);
+}
+
+function applySharedSizeGroups(
+  item: MeasuredItem,
+  widthGroups: ReadonlyMap<string, number>,
+  heightGroups: ReadonlyMap<string, number>,
+  context: MeasureContext
+): void {
+  if (item.sharedWidthGroup) {
+    item.width = roundMetric(Math.max(item.width, widthGroups.get(item.sharedWidthGroup) ?? item.width));
+  }
+  if (item.sharedHeightGroup) {
+    item.height = roundMetric(Math.max(item.height, heightGroups.get(item.sharedHeightGroup) ?? item.height));
+  }
+
+  if (item.kind === "node") {
+    resizeMeasuredNode(item, context);
+    return;
+  }
+
+  item.children.forEach((child) => applySharedSizeGroups(child, widthGroups, heightGroups, context));
+}
+
+function recomputeMeasuredContainerSizes(
+  item: MeasuredItem
+): void {
+  if (item.kind === "node") {
+    return;
+  }
+
+  item.children.forEach((child) => recomputeMeasuredContainerSizes(child));
+  const resolvedSize = resolveMeasuredContainerSize(item);
+  item.width = roundMetric(Math.max(item.width, resolvedSize.width));
+  item.height = roundMetric(Math.max(item.height, resolvedSize.height));
+}
+
+function normalizeMeasuredSceneSharedSizes(
+  scene: MeasuredScene,
+  context: MeasureContext
+): MeasuredScene {
+  const widthGroups = new Map<string, number>();
+  const heightGroups = new Map<string, number>();
+  collectSharedSizeGroups(scene.root, widthGroups, heightGroups);
+
+  if (widthGroups.size === 0 && heightGroups.size === 0) {
+    return scene;
+  }
+
+  applySharedSizeGroups(scene.root, widthGroups, heightGroups, context);
+  recomputeMeasuredContainerSizes(scene.root);
+
+  return scene;
 }
 
 function measureItem(item: SceneItem, context: MeasureContext): MeasuredItem {
@@ -841,8 +1044,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
 
   const headerLayout = measureContainerHeaderContent(context, container, chrome);
   chrome.headerBandHeight = Math.max(chrome.headerBandHeight ?? 0, headerLayout.height);
-
-  return {
+  const measuredContainer: MeasuredContainer = {
     kind: "container",
     id: container.id,
     role: container.role,
@@ -854,8 +1056,15 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     children,
     ports: measureContainerPorts(container),
     width: 0,
-    height: 0
+    height: 0,
+    sharedWidthGroup: container.sharedWidthGroup,
+    sharedHeightGroup: container.sharedHeightGroup
   };
+  const resolvedSize = resolveMeasuredContainerSize(measuredContainer);
+  measuredContainer.width = resolvedSize.width;
+  measuredContainer.height = resolvedSize.height;
+
+  return measuredContainer;
 }
 
 function measureEdgeLabel(
@@ -900,7 +1109,8 @@ function measureEdge(edge: SceneEdge, context: MeasureContext): MeasuredEdge {
       ...edge.routing
     },
     label: edge.label ? measureEdgeLabel(edge.label, context, edge.id) : undefined,
-    markers: edge.markers ? { ...edge.markers } : undefined
+    markers: edge.markers ? { ...edge.markers } : undefined,
+    ownerContainerId: edge.ownerContainerId
   };
 }
 
@@ -921,6 +1131,7 @@ export function measureRendererScene(scene: RendererScene): MeasuredScene {
     diagnostics: []
   };
 
+  normalizeMeasuredSceneSharedSizes(measuredScene, context);
   measuredScene.diagnostics = sortRendererDiagnostics(context.diagnostics);
   return measuredScene;
 }
