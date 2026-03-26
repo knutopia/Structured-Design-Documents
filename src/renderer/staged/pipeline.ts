@@ -4,7 +4,7 @@ import type {
   RendererScene
 } from "./contracts.js";
 import { measureRendererScene } from "./microLayout.js";
-import { positionMeasuredScene } from "./macroLayout.js";
+import { positionMeasuredScene, positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
 
 export interface StagedRendererPipelineResult {
   rendererScene: RendererScene;
@@ -14,6 +14,10 @@ export interface StagedRendererPipelineResult {
 
 export function measureScene(scene: RendererScene): MeasuredScene {
   return measureRendererScene(scene);
+}
+
+export async function positionSceneBeforeRouting(measuredScene: MeasuredScene): Promise<PositionedScene> {
+  return positionMeasuredSceneBeforeRouting(measuredScene);
 }
 
 export async function positionScene(measuredScene: MeasuredScene): Promise<PositionedScene> {

@@ -1,0 +1,207 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+import { compileSource, loadBundle } from "../src/index.js";
+import { projectView } from "../src/projector/projectView.js";
+import type { PositionedDecoration, PositionedItem } from "../src/renderer/staged/contracts.js";
+import {
+  renderServiceBlueprintPreRoutingArtifacts,
+  renderServiceBlueprintStagedSvg
+} from "../src/renderer/staged/serviceBlueprint.js";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
+
+async function resolveServiceBlueprintContext(fileName: string, profileId: string) {
+  const bundle = await loadBundle(manifestPath);
+  const view = bundle.views.views.find((candidate) => candidate.id === "service_blueprint");
+  if (!view) {
+    throw new Error("Could not resolve the service_blueprint view.");
+  }
+
+  const filePath = path.join(repoRoot, "bundle/v0.1/examples", fileName);
+  const input = {
+    path: filePath,
+    text: await readFile(filePath, "utf8")
+  };
+
+  const compiled = compileSource(input, bundle);
+  expect(compiled.diagnostics).toEqual([]);
+  if (!compiled.graph) {
+    throw new Error(`Could not compile ${input.path}.`);
+  }
+
+  const projected = projectView(compiled.graph, bundle, "service_blueprint");
+  expect(projected.diagnostics).toEqual([]);
+  if (!projected.projection) {
+    throw new Error(`Could not project ${input.path} to service_blueprint.`);
+  }
+
+  return {
+    graph: compiled.graph,
+    projection: projected.projection,
+    view
+  };
+}
+
+function findNestedPositionedItem(children: PositionedItem[], id: string): PositionedItem | undefined {
+  for (const child of children) {
+    if (child.id === id) {
+      return child;
+    }
+    if (child.kind === "container") {
+      const nested = findNestedPositionedItem(child.children, id);
+      if (nested) {
+        return nested;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function findNestedPositionedNode(
+  children: PositionedItem[],
+  id: string
+): Extract<PositionedItem, { kind: "node" }> | undefined {
+  const item = findNestedPositionedItem(children, id);
+  return item?.kind === "node" ? item : undefined;
+}
+
+function findRootCells(
+  scene: { root: { children: PositionedItem[] } }
+): Array<Extract<PositionedItem, { kind: "container" }>> {
+  return scene.root.children.filter((child): child is Extract<PositionedItem, { kind: "container" }> =>
+    child.kind === "container" && child.classes.includes("service_blueprint_cell")
+  );
+}
+
+function findCellContainingNode(
+  scene: { root: { children: PositionedItem[] } },
+  nodeId: string
+): Extract<PositionedItem, { kind: "container" }> {
+  const cell = findRootCells(scene).find((candidate) => findNestedPositionedItem(candidate.children, nodeId));
+  if (!cell) {
+    throw new Error(`Could not find service blueprint cell for "${nodeId}".`);
+  }
+  return cell;
+}
+
+function findTextDecoration(
+  decorations: PositionedDecoration[],
+  id: string
+): Extract<PositionedDecoration, { kind: "text" }> {
+  const decoration = decorations.find((candidate) => candidate.kind === "text" && candidate.id === id);
+  if (!decoration || decoration.kind !== "text") {
+    throw new Error(`Could not find text decoration "${id}".`);
+  }
+
+  return decoration;
+}
+
+function assertNodeWithinAssignedCellContentBox(
+  scene: { root: { children: PositionedItem[] } },
+  nodeId: string
+): void {
+  const cell = findCellContainingNode(scene, nodeId);
+  const node = findNestedPositionedNode(cell.children, nodeId);
+  if (!node) {
+    throw new Error(`Could not find positioned node "${nodeId}" inside "${cell.id}".`);
+  }
+
+  const contentLeft = cell.x + cell.chrome.padding.left;
+  const contentTop = cell.y + cell.chrome.padding.top + (cell.chrome.headerBandHeight ?? 0);
+  const contentRight = cell.x + cell.width - cell.chrome.padding.right;
+  const contentBottom = cell.y + cell.height - cell.chrome.padding.bottom;
+
+  expect(node.x).toBeGreaterThanOrEqual(contentLeft);
+  expect(node.y).toBeGreaterThanOrEqual(contentTop);
+  expect(node.x + node.width).toBeLessThanOrEqual(contentRight);
+  expect(node.y + node.height).toBeLessThanOrEqual(contentBottom);
+}
+
+describe("service_blueprint pre-routing artifacts", () => {
+  it("render the fixed grid with decorations and without semantic edges", async () => {
+    const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "recommended");
+    const rendered = await renderServiceBlueprintPreRoutingArtifacts(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+
+    expect(rendered.preRoutingDiagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(rendered.preRoutingPositionedScene.edges).toEqual([]);
+    expect(rendered.preRoutingSvg).toContain("Submit Claim");
+    expect(rendered.preRoutingSvg).toContain("Retention Policy");
+    expect(rendered.preRoutingPng.byteLength).toBeGreaterThan(0);
+
+    const customerTitle = findTextDecoration(rendered.preRoutingPositionedScene.decorations, "lane-customer__title");
+    expect(customerTitle.text).toBe("customer");
+
+    const a1Cells = [
+      findCellContainingNode(rendered.preRoutingPositionedScene, "J-020"),
+      findCellContainingNode(rendered.preRoutingPositionedScene, "PR-020"),
+      findCellContainingNode(rendered.preRoutingPositionedScene, "SA-020"),
+      findCellContainingNode(rendered.preRoutingPositionedScene, "PL-020")
+    ];
+    const i1Cells = [
+      findCellContainingNode(rendered.preRoutingPositionedScene, "PR-021"),
+      findCellContainingNode(rendered.preRoutingPositionedScene, "SA-021")
+    ];
+    const a2Cells = [
+      findCellContainingNode(rendered.preRoutingPositionedScene, "J-021"),
+      findCellContainingNode(rendered.preRoutingPositionedScene, "PR-022"),
+      findCellContainingNode(rendered.preRoutingPositionedScene, "SA-022")
+    ];
+    const resourceCell = findCellContainingNode(rendered.preRoutingPositionedScene, "D-020");
+
+    expect(new Set(a1Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
+    expect(new Set(i1Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
+    expect(new Set(a2Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
+    expect(i1Cells[0]!.x).toBeGreaterThan(a1Cells[0]!.x);
+    expect(a2Cells[0]!.x).toBeGreaterThan(i1Cells[0]!.x);
+    expect(resourceCell.x).toBeGreaterThan(a2Cells[0]!.x);
+
+    [
+      "J-020",
+      "PR-020",
+      "SA-020",
+      "PL-020",
+      "PR-021",
+      "SA-021",
+      "J-021",
+      "PR-022",
+      "SA-022",
+      "D-020"
+    ].forEach((nodeId) => {
+      assertNodeWithinAssignedCellContentBox(rendered.preRoutingPositionedScene, nodeId);
+    });
+  });
+
+  it("succeeds before routing even while the routed staged render still fails the ELK drift gate", async () => {
+    const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "recommended");
+
+    await expect(
+      renderServiceBlueprintPreRoutingArtifacts(
+        context.projection,
+        context.graph,
+        context.view,
+        "recommended"
+      )
+    ).resolves.toEqual(expect.objectContaining({
+      preRoutingSvg: expect.any(String),
+      preRoutingPng: expect.any(Uint8Array)
+    }));
+
+    await expect(
+      renderServiceBlueprintStagedSvg(
+        context.projection,
+        context.graph,
+        context.view,
+        "recommended"
+      )
+    ).rejects.toThrow(/ELK moved fixed service blueprint grid item/);
+  });
+});

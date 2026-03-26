@@ -36,6 +36,17 @@ export interface RenderedCorpusOutputPaths {
   pngOutputPath: string;
 }
 
+export function getRenderedCorpusDebugOutputPath(
+  bundle: Bundle,
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">,
+  debugStem: string,
+  format: PreviewFormat
+): string {
+  const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+  const renderedStem = `${variant.example.name}.${variant.viewId}`;
+  return path.join(outputPaths.profileDir, `${renderedStem}.${debugStem}.${format}`);
+}
+
 function getRepoRoot(bundle: Bundle): string {
   return path.resolve(bundle.rootDir, "..", "..");
 }

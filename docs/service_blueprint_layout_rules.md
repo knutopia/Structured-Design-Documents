@@ -214,10 +214,13 @@ Do not create empty or speculative bands. Interstitial bands must correspond to 
 - default placement is a policy sidecar position, not a primary action slot
 - use one canonical node per policy in a blueprint slice
 - anchor it by first constrained occurrence
+- if every constrained occurrence falls within one semantic band and a band-aligned support placement is
+  clearer than a sidecar, it may occupy that band's policy-row cell instead of a sidecar position
 
 ### 9. Prefer a right-side resource rail for shared sidecars
 
-For shared `DataEntity` and `Policy` nodes, the default layout should use a right-side sidecar rail or sidecar subcolumns rather than mixing them into the main action flow.
+For shared `DataEntity` and `Policy` nodes, the default layout should use a right-side sidecar rail or
+sidecar subcolumns rather than mixing them into the main action flow.
 
 Why:
 
@@ -228,6 +231,8 @@ Why:
 Local exception:
 
 - if a resource is only used within a single band and colocating it clearly improves readability, it may occupy a local sidecar subcolumn adjacent to that band
+- if a policy is only constrained within a single band and a regular band-aligned support cell is clearer
+  than any sidecar treatment, it may occupy that band's policy-row cell instead of a sidecar
 
 ### 10. Orphans and disconnected nodes
 
@@ -287,10 +292,10 @@ Using the current example slice, the semantic banding should look roughly like t
 
 | Band | Role | Preferred contents |
 | --- | --- | --- |
-| `A1` | customer anchor | `J-020`, `PR-020`, `SA-020` |
+| `A1` | customer anchor | `J-020`, `PR-020`, `SA-020`, `PL-020` |
 | `I1` | interstitial | `PR-021`, `SA-021` |
 | `A2` | customer anchor | `J-021`, `PR-022`, `SA-022` |
-| `R*` | sidecar rail | `D-020`, `PL-020` |
+| `R*` | shared right resource column | `D-020` |
 
 Key reading:
 
@@ -298,8 +303,9 @@ Key reading:
 - `PR-020` and `SA-020` belong with that moment
 - `PR-021` and `SA-021` happen after that first moment but before the confirmation moment
 - `J-021` and `PR-022` share the confirmation band
-- `D-020` and `PL-020` support the flow but are not themselves part of the customer-visible
-  storyline
+- `PL-020` is a policy support node aligned to the first service moment because all constrained
+  occurrences in the slice happen in `A1`
+- `D-020` remains a shared right-side resource because it is accessed from multiple moments in the flow
 
 ## Middle-Layer ELK Encoding Contract
 
@@ -363,6 +369,7 @@ The middle layer must materialize the following objects before ELK runs:
 | Operational between-step band | `interstitial band` | one ELK-visible sequencing object inserted between anchor bands | created only for real semantic progression |
 | Disconnected far-right placement | `parking band` | one ELK-visible terminal sequencing object in a lane | preserves main blueprint first while keeping orphans deterministic |
 | Shared resource area | `sidecar rail` | one ELK-visible sidecar region to the right of action bands | structurally distinct from action bands |
+| Band-aligned support exception | `band-aligned support cell` | one ELK-visible regular cell in the policy or support row within a semantic band | used only when a same-band support placement is explicitly justified |
 | Local sidecar exception | `local sidecar subcolumn` | one ELK-visible local sidecar region adjacent to a band | used only when the local exception is explicitly justified |
 | Node placement decision | `semantic node placement` | membership of one node in exactly one lane shell and one band or sidecar region | the middle layer decides this before ELK |
 | Edge family routing intent | `edge channel` / `port role` | explicit source and target attachment roles, and any needed ordering hints | keeps primary flow from fighting with support or sidecar access |
@@ -382,8 +389,10 @@ Before ELK runs, the middle layer must produce these assignments:
 
 - every in-scope node belongs to exactly one lane shell
 - every action-like node belongs to exactly one anchor band, interstitial band, or parking band
-- every sidecar node belongs either to the shared right-side sidecar rail or to an explicitly
-  justified local sidecar subcolumn
+- every support-style non-timeline node belongs to exactly one of:
+  - a band-aligned support cell
+  - the shared right-side sidecar rail
+  - an explicitly justified local sidecar subcolumn
 - disconnected or weakly connected nodes go to parking bands at the far right of their own lane
 - customer-step order defines anchor-band order
 - interstitial bands are created only from real semantic progression and not as speculative
@@ -393,7 +402,9 @@ For current `service_blueprint` semantics:
 
 - `Step`, `Process`, and chronology-participating `SystemAction` nodes are action-like for band
   assignment
-- `DataEntity` and `Policy` nodes are sidecar nodes by default
+- `DataEntity` nodes are shared-resource nodes by default
+- `Policy` nodes are sidecar nodes by default, but may use a band-aligned support cell when their
+  constrained occurrences stay within one semantic band and that placement is clearer
 - `SystemAction` may be placed in a sidecar-like local exception only if a future rule explicitly
   allows it; the default contract keeps it in the action chronology
 
@@ -446,10 +457,10 @@ Using the current example, the middle layer should derive these lane shells:
 
 It should derive these sequencing objects:
 
-- `A1` anchor band: `J-020`, `PR-020`, `SA-020`
+- `A1` anchor band: `J-020`, `PR-020`, `SA-020`, `PL-020`
 - `I1` interstitial band: `PR-021`, `SA-021`
 - `A2` anchor band: `J-021`, `PR-022`, `SA-022`
-- `R*` sidecar rail: `D-020`, `PL-020`
+- `R*` shared right resource column: `D-020`
 
 It should derive these edge-channel and port-role expectations:
 

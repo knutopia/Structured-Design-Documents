@@ -8,6 +8,16 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 3-27-26
+
+-added pre-routing output to debug, found node placement failing
+
+
+## Wed 3-26-26
+
+-new, hard-failing elk based service_blueprint
+-switched to non-elk node layoutm still failing
+
 ## Mon 3-24-26
 
 -completed service_blueprint layout rules

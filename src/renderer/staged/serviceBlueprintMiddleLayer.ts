@@ -5,9 +5,10 @@ import type {
 } from "../serviceBlueprintRenderModel.js";
 import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 
-export type ServiceBlueprintNodeClassification = "action" | "sidecar";
+export type ServiceBlueprintNodeClassification = "action" | "band_support" | "shared_resource";
 export type ServiceBlueprintBandKind = "anchor" | "interstitial" | "sidecar" | "parking";
 export type ServiceBlueprintEdgeChannel = "flow" | "support" | "resource_policy" | "helper";
+export type ServiceBlueprintPlacementMode = "action_band" | "band_aligned_support" | "shared_right_rail" | "parking";
 
 export interface ServiceBlueprintMiddleBand {
   id: string;
@@ -55,6 +56,7 @@ export interface ServiceBlueprintNodePlacement {
   cellId: string;
   bandId: string;
   classification: ServiceBlueprintNodeClassification;
+  placementMode: ServiceBlueprintPlacementMode;
   order: number;
 }
 
@@ -91,7 +93,7 @@ const FIXED_LANE_ORDER = [
 ] as const;
 
 const ACTION_NODE_TYPES = new Set(["Step", "Process", "SystemAction"]);
-const SIDECAR_NODE_TYPES = new Set(["DataEntity", "Policy"]);
+const SHARED_RESOURCE_NODE_TYPES = new Set(["DataEntity"]);
 
 function compareNodeOrder(
   left: Pick<ServiceBlueprintRenderNode, "authorOrder" | "id">,
@@ -102,10 +104,6 @@ function compareNodeOrder(
 
 function createNodeMap(nodes: readonly ServiceBlueprintRenderNode[]): Map<string, ServiceBlueprintRenderNode> {
   return new Map(nodes.map((node) => [node.id, node]));
-}
-
-function classifyNode(node: ServiceBlueprintRenderNode): ServiceBlueprintNodeClassification {
-  return SIDECAR_NODE_TYPES.has(node.type) ? "sidecar" : "action";
 }
 
 function isActionNode(node: ServiceBlueprintRenderNode | undefined): node is ServiceBlueprintRenderNode {
@@ -499,6 +497,25 @@ function buildBands(
   return bands;
 }
 
+function buildSharedBandByPosition(
+  positionByNodeId: ReadonlyMap<string, number>,
+  bands: readonly ServiceBlueprintMiddleBand[]
+): Map<number, ServiceBlueprintMiddleBand> {
+  const sharedBandByPosition = new Map<number, ServiceBlueprintMiddleBand>();
+  const nonSidecarBands = bands.filter((band) => band.kind !== "sidecar");
+
+  [...new Set(positionByNodeId.values())]
+    .sort((left, right) => left - right)
+    .forEach((position, index) => {
+      const band = nonSidecarBands[index];
+      if (band) {
+        sharedBandByPosition.set(position, band);
+      }
+    });
+
+  return sharedBandByPosition;
+}
+
 function resolveEdgeChannel(edge: ServiceBlueprintRenderEdge): ServiceBlueprintEdgeChannel {
   switch (edge.type) {
     case "PRECEDES":
@@ -562,6 +579,89 @@ function buildParkingBands(
   }));
 }
 
+function resolvePlacementMode(
+  node: ServiceBlueprintRenderNode,
+  targetBandId: string | undefined,
+  sharedRightRailBandId: string,
+  parkedNodeIds: ReadonlySet<string>,
+  bandAlignedSupportBandIds: ReadonlySet<string>
+): {
+  classification: ServiceBlueprintNodeClassification;
+  placementMode: ServiceBlueprintPlacementMode;
+} {
+  if (parkedNodeIds.has(node.id)) {
+    return {
+      classification: "action",
+      placementMode: "parking"
+    };
+  }
+
+  if (node.type === "Policy" && targetBandId && bandAlignedSupportBandIds.has(targetBandId)) {
+    return {
+      classification: "band_support",
+      placementMode: "band_aligned_support"
+    };
+  }
+
+  if (SHARED_RESOURCE_NODE_TYPES.has(node.type) || targetBandId === sharedRightRailBandId || node.type === "Policy") {
+    return {
+      classification: "shared_resource",
+      placementMode: "shared_right_rail"
+    };
+  }
+
+  return {
+    classification: "action",
+    placementMode: "action_band"
+  };
+}
+
+function resolveBandAlignedPolicyBandByNodeId(
+  model: ServiceBlueprintRenderModel,
+  nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
+  positionByNodeId: ReadonlyMap<string, number>,
+  sharedBandByPosition: ReadonlyMap<number, ServiceBlueprintMiddleBand>
+): Map<string, string> {
+  const constrainedBandsByPolicyId = new Map<string, Set<string>>();
+
+  for (const edge of model.edges) {
+    if (edge.type !== "CONSTRAINED_BY") {
+      continue;
+    }
+
+    const source = nodeMap.get(edge.from);
+    const target = nodeMap.get(edge.to);
+    if (!isActionNode(source) || !target || target.type !== "Policy") {
+      continue;
+    }
+
+    const sourcePosition = positionByNodeId.get(source.id);
+    const bandId = sourcePosition === undefined
+      ? undefined
+      : sharedBandByPosition.get(sourcePosition)?.id;
+    if (!bandId) {
+      continue;
+    }
+
+    const existing = constrainedBandsByPolicyId.get(target.id) ?? new Set<string>();
+    existing.add(bandId);
+    constrainedBandsByPolicyId.set(target.id, existing);
+  }
+
+  const bandByPolicyId = new Map<string, string>();
+  for (const node of model.nodes) {
+    if (node.type !== "Policy") {
+      continue;
+    }
+    const constrainedBands = [...(constrainedBandsByPolicyId.get(node.id) ?? new Set<string>())];
+    if (constrainedBands.length === 1) {
+      bandByPolicyId.set(node.id, constrainedBands[0]!);
+    }
+  }
+
+  return bandByPolicyId;
+}
+
 function buildCellsAndPlacements(
   model: ServiceBlueprintRenderModel,
   nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
@@ -575,25 +675,28 @@ function buildCellsAndPlacements(
   placements: ServiceBlueprintNodePlacement[];
 } {
   const orderedColumns = [...bands, ...parkingBands].sort((left, right) => left.order - right.order);
-  const sharedBandByPosition = new Map<number, ServiceBlueprintMiddleBand>();
-  const nonSidecarBands = bands.filter((band) => band.kind !== "sidecar");
-  [...new Set(positionByNodeId.values())]
-    .sort((left, right) => left - right)
-    .forEach((position, index) => {
-      const band = nonSidecarBands[index];
-      if (band) {
-        sharedBandByPosition.set(position, band);
-      }
-    });
+  const sharedBandByPosition = buildSharedBandByPosition(positionByNodeId, bands);
 
   const sidecarBand = bands.find((band) => band.kind === "sidecar");
   if (!sidecarBand) {
     throw new Error("Service blueprint middle layer requires a sidecar band.");
   }
 
+  const bandAlignedPolicyBandByNodeId = resolveBandAlignedPolicyBandByNodeId(
+    model,
+    nodeMap,
+    positionByNodeId,
+    sharedBandByPosition
+  );
+  const bandAlignedSupportBandIds = new Set(bandAlignedPolicyBandByNodeId.values());
   const parkingBandByLaneShellId = new Map(parkingBands.map((band) => [band.ownerLaneShellId, band]));
   const laneShellByLaneId = new Map(laneShells.map((laneShell) => [laneShell.laneId, laneShell]));
   const nodesByCellId = new Map<string, ServiceBlueprintRenderNode[]>();
+  const placementByNodeId = new Map<string, {
+    targetBandId: string;
+    classification: ServiceBlueprintNodeClassification;
+    placementMode: ServiceBlueprintPlacementMode;
+  }>();
 
   for (const node of model.nodes) {
     const laneId = node.laneId ?? (model.ungroupedNodeIds.includes(node.id) ? "lane:99:ungrouped" : undefined);
@@ -605,7 +708,9 @@ function buildCellsAndPlacements(
     let targetBandId: string | undefined;
     if (parkedNodeIds.has(node.id)) {
       targetBandId = parkingBandByLaneShellId.get(laneShell.id)?.id;
-    } else if (classifyNode(node) === "sidecar") {
+    } else if (node.type === "Policy") {
+      targetBandId = bandAlignedPolicyBandByNodeId.get(node.id) ?? sidecarBand.id;
+    } else if (SHARED_RESOURCE_NODE_TYPES.has(node.type)) {
       targetBandId = sidecarBand.id;
     } else {
       targetBandId = sharedBandByPosition.get(positionByNodeId.get(node.id) ?? -1)?.id;
@@ -619,6 +724,10 @@ function buildCellsAndPlacements(
     const existing = nodesByCellId.get(cellId) ?? [];
     existing.push(node);
     nodesByCellId.set(cellId, existing);
+    placementByNodeId.set(node.id, {
+      targetBandId,
+      ...resolvePlacementMode(node, targetBandId, sidecarBand.id, parkedNodeIds, bandAlignedSupportBandIds)
+    });
   }
 
   const cells: ServiceBlueprintMiddleCell[] = [];
@@ -641,15 +750,19 @@ function buildCellsAndPlacements(
         columnOrder: column.order,
         nodeIds,
         anchorNodeId: `${cellId}__anchor`,
-        sharedWidthGroup: `service_blueprint:column:${column.id}`,
-        sharedHeightGroup: `service_blueprint:row:${laneShell.id}`
+        sharedWidthGroup: column.kind === "parking"
+          ? "service_blueprint:column:parking"
+          : "service_blueprint:column:semantic",
+        sharedHeightGroup: laneShell.laneId === "lane:99:ungrouped"
+          ? "service_blueprint:row:ungrouped"
+          : "service_blueprint:row:semantic"
       };
       cells.push(cell);
       laneShell.cellIds.push(cell.id);
 
       nodeIds.forEach((nodeId, order) => {
-        const node = nodeMap.get(nodeId);
-        if (!node) {
+        const placement = placementByNodeId.get(nodeId);
+        if (!placement) {
           return;
         }
         placements.push({
@@ -657,7 +770,8 @@ function buildCellsAndPlacements(
           laneShellId: laneShell.id,
           cellId: cell.id,
           bandId: column.id,
-          classification: classifyNode(node),
+          classification: placement.classification,
+          placementMode: placement.placementMode,
           order
         });
       });
@@ -711,90 +825,6 @@ function buildMergedSemanticEdges(
   });
 }
 
-function buildHelperEdges(
-  laneShells: readonly ServiceBlueprintMiddleLaneShell[],
-  bands: readonly ServiceBlueprintMiddleBand[],
-  parkingBands: readonly ServiceBlueprintParkingBand[],
-  cellsById: ReadonlyMap<string, ServiceBlueprintMiddleCell>
-): ServiceBlueprintMiddleEdge[] {
-  const edges: ServiceBlueprintMiddleEdge[] = [];
-  const orderedColumns = [...bands, ...parkingBands].sort((left, right) => left.order - right.order);
-
-  for (const column of orderedColumns) {
-    let previousAnchorId: string | undefined;
-
-    for (const laneShell of laneShells) {
-      const cell = cellsById.get(`${laneShell.id}__cell__${column.id}`);
-      if (!cell) {
-        continue;
-      }
-
-      if (previousAnchorId) {
-        edges.push({
-          id: `${previousAnchorId}__helper__${cell.id}`,
-          semanticEdgeIds: [],
-          channel: "helper",
-          type: "HELPER_COLUMN_ORDER",
-          from: previousAnchorId,
-          to: cell.id,
-          strictRoute: false,
-          hidden: true
-        });
-      }
-      previousAnchorId = cell.id;
-
-      const stackIds = cell.nodeIds.length > 0
-        ? [cell.id, ...cell.nodeIds]
-        : [cell.id];
-      for (let index = 1; index < stackIds.length; index += 1) {
-        const from = stackIds[index - 1];
-        const to = stackIds[index];
-        if (!from || !to) {
-          continue;
-        }
-        edges.push({
-          id: `${from}__helper__${to}`,
-          semanticEdgeIds: [],
-          channel: "helper",
-          type: "HELPER_CELL_STACK",
-          from,
-          to,
-          strictRoute: false,
-          hidden: true
-        });
-      }
-    }
-  }
-
-  for (const laneShell of laneShells) {
-    let previousCellId: string | undefined;
-
-    for (const column of orderedColumns) {
-      const cell = cellsById.get(`${laneShell.id}__cell__${column.id}`);
-      if (!cell) {
-        continue;
-      }
-
-      if (previousCellId) {
-        edges.push({
-          id: `${previousCellId}__helper__${cell.id}__row`,
-          semanticEdgeIds: [],
-          channel: "helper",
-          type: "HELPER_ROW_ORDER",
-          from: previousCellId,
-          to: cell.id,
-          strictRoute: false,
-          hidden: true
-        });
-      }
-
-      previousCellId = cell.id;
-    }
-  }
-
-  return edges;
-}
-
 export function buildServiceBlueprintMiddleLayer(
   model: ServiceBlueprintRenderModel
 ): ServiceBlueprintMiddleLayerModel {
@@ -825,8 +855,6 @@ export function buildServiceBlueprintMiddleLayer(
     positionByNodeId,
     parkedNodeIds
   );
-  const cellsById = new Map(cells.map((cell) => [cell.id, cell]));
-  const helperEdges = buildHelperEdges(laneShells, bands, parkingBands, cellsById);
   const semanticEdges = buildMergedSemanticEdges(model.edges);
 
   return {
@@ -835,7 +863,7 @@ export function buildServiceBlueprintMiddleLayer(
     parkingBands,
     cells,
     placements,
-    edges: [...helperEdges, ...semanticEdges],
+    edges: semanticEdges,
     diagnostics
   };
 }

@@ -26,6 +26,7 @@ import {
   type RendererDiagnostic
 } from "./diagnostics.js";
 import {
+  runElkFixedPositionRouting,
   runElkLayeredLayout,
   runElkLayeredSubtreeLayout,
   type ElkAdaptedEdge
@@ -54,6 +55,13 @@ interface LayoutContext {
   theme: RendererTheme;
   diagnostics: RendererDiagnostic[];
   strategyRegistry: ReadonlyMap<LayoutStrategy, LayoutStrategyHandler>;
+}
+
+interface PositionedRootLayoutResult {
+  root: PositionedContainer;
+  ownerContainerByEdgeId: ReadonlyMap<string, string>;
+  routeHints: ReadonlyMap<string, Point[]>;
+  diagnostics: RendererDiagnostic[];
 }
 
 interface ContainerLayoutResult {
@@ -1141,6 +1149,237 @@ function buildSharedRouteOffsets(edges: readonly MeasuredEdge[]): Map<string, nu
   return offsets;
 }
 
+function isServiceBlueprintCell(item: PositionedItem): item is PositionedContainer {
+  return item.kind === "container" && item.classes.includes("service_blueprint_cell");
+}
+
+function isSemanticPositionedNode(item: PositionedItem): item is PositionedNode {
+  return item.kind === "node" && item.classes.includes("semantic_node");
+}
+
+function collectNestedSemanticNodes(children: PositionedItem[]): PositionedNode[] {
+  const nodes: PositionedNode[] = [];
+
+  for (const child of children) {
+    if (isSemanticPositionedNode(child)) {
+      nodes.push(child);
+      continue;
+    }
+
+    if (child.kind === "container") {
+      nodes.push(...collectNestedSemanticNodes(child.children));
+    }
+  }
+
+  return nodes;
+}
+
+function getServiceBlueprintCellContentBounds(cell: PositionedContainer): {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+} {
+  return {
+    left: roundMetric(cell.x + cell.chrome.padding.left),
+    top: roundMetric(cell.y + cell.chrome.padding.top + (cell.chrome.headerBandHeight ?? 0)),
+    right: roundMetric(cell.x + cell.width - cell.chrome.padding.right),
+    bottom: roundMetric(cell.y + cell.height - cell.chrome.padding.bottom)
+  };
+}
+
+function normalizeServiceBlueprintCellContents(root: PositionedContainer): void {
+  const laneCells = root.children.filter(isServiceBlueprintCell);
+
+  for (const cell of laneCells) {
+    if (cell.children.length === 0) {
+      continue;
+    }
+
+    const contentOrigin = getContentOrigin(cell.chrome);
+    const contentWidth = roundMetric(cell.width - cell.chrome.padding.left - cell.chrome.padding.right);
+    const contentHeight = roundMetric(
+      cell.height - cell.chrome.padding.top - (cell.chrome.headerBandHeight ?? 0) - cell.chrome.padding.bottom
+    );
+    const gap = resolveGap(cell);
+    const totalHeight = roundMetric(
+      cell.children.reduce((sum, child) => sum + child.height, 0) + gap * Math.max(cell.children.length - 1, 0)
+    );
+    let currentY = roundMetric(cell.y + contentOrigin.y + Math.max(0, (contentHeight - totalHeight) / 2));
+
+    for (const child of cell.children) {
+      const targetX = roundMetric(cell.x + contentOrigin.x + Math.max(0, (contentWidth - child.width) / 2));
+      const dx = roundMetric(targetX - child.x);
+      const dy = roundMetric(currentY - child.y);
+      offsetPositionedItem(child, dx, dy);
+      currentY = roundMetric(currentY + child.height + gap);
+    }
+  }
+}
+
+function validateServiceBlueprintCellContents(
+  root: PositionedContainer,
+  diagnostics: RendererDiagnostic[]
+): void {
+  const laneCells = root.children.filter(isServiceBlueprintCell);
+
+  for (const cell of laneCells) {
+    const contentBounds = getServiceBlueprintCellContentBounds(cell);
+
+    for (const node of collectNestedSemanticNodes(cell.children)) {
+      const withinBounds = node.x >= contentBounds.left
+        && node.y >= contentBounds.top
+        && node.x + node.width <= contentBounds.right
+        && node.y + node.height <= contentBounds.bottom;
+
+      if (withinBounds) {
+        continue;
+      }
+
+      const details = [
+        `cell="${cell.id}"`,
+        `cellContentBounds=(${contentBounds.left}, ${contentBounds.top})-(${contentBounds.right}, ${contentBounds.bottom})`,
+        `nodeBounds=(${node.x}, ${node.y})-(${roundMetric(node.x + node.width)}, ${roundMetric(node.y + node.height)})`
+      ].join("; ");
+      diagnostics.push(
+        createLayoutDiagnostic(
+          "renderer.layout.service_blueprint_node_outside_cell",
+          `Service blueprint node "${node.id}" lies outside its assigned grid cell "${cell.id}".`,
+          {
+            targetId: node.id,
+            severity: "error",
+            details
+          }
+        )
+      );
+      throw new Error(`Service blueprint node "${node.id}" lies outside its assigned grid cell "${cell.id}". ${details}`);
+    }
+  }
+}
+
+function buildServiceBlueprintFixedRouteHints(
+  root: PositionedContainer,
+  edges: readonly MeasuredEdge[],
+  index: ReadonlyMap<string, IndexedPositionedItem>,
+  diagnostics: RendererDiagnostic[]
+): Promise<Map<string, Point[]>> {
+  const semanticEdges = edges.filter((edge) => edge.routing.style === "orthogonal");
+  if (semanticEdges.length === 0) {
+    return Promise.resolve(new Map());
+  }
+
+  const itemIds = [...new Set(semanticEdges.flatMap((edge) => [edge.from.itemId, edge.to.itemId]))];
+  const items = itemIds.map((itemId) => {
+    const item = index.get(itemId)?.item;
+    if (!item) {
+      throw new Error(`Could not resolve positioned service blueprint item "${itemId}" for fixed ELK routing.`);
+    }
+    return item;
+  });
+
+  const minX = Math.min(...items.map((item) => item.x));
+  const minY = Math.min(...items.map((item) => item.y));
+  const children = items.map((item) => ({
+    id: item.id,
+    x: roundMetric(item.x - minX),
+    y: roundMetric(item.y - minY),
+    width: item.width,
+    height: item.height,
+    ports: item.ports
+  }));
+
+  const adaptedEdges: ElkAdaptedEdge[] = semanticEdges.map((edge) => {
+    const sourceItem = index.get(edge.from.itemId)?.item;
+    const targetItem = index.get(edge.to.itemId)?.item;
+    if (!sourceItem || !targetItem) {
+      throw new Error(`Could not resolve endpoints for service blueprint edge "${edge.id}".`);
+    }
+
+    const sourcePort = resolvePortOnItem(sourceItem, edge.from, edge.routing.sourcePortRole);
+    const targetPort = resolvePortOnItem(targetItem, edge.to, edge.routing.targetPortRole);
+
+    return {
+      id: edge.id,
+      sourceItemId: edge.from.itemId,
+      targetItemId: edge.to.itemId,
+      sourcePortId: sourcePort?.id,
+      targetPortId: targetPort?.id,
+      layoutOptions: edge.routing.elkLayoutOptions
+    };
+  });
+
+  return runElkFixedPositionRouting({
+    containerId: `${root.id}__service_blueprint_routes`,
+    direction: "horizontal",
+    nodeGap: 24,
+    layerGap: 24,
+    children,
+    edges: adaptedEdges,
+    positionTolerance: 0.5
+  }).then((result) => {
+    const firstChild = children[0];
+    const firstResolved = firstChild ? result.childPositions.get(firstChild.id) : undefined;
+    const globalDx = firstChild && firstResolved ? roundMetric(firstResolved.x - firstChild.x) : 0;
+    const globalDy = firstChild && firstResolved ? roundMetric(firstResolved.y - firstChild.y) : 0;
+    const preservesRelativeGrid = children.every((child) => {
+      const resolved = result.childPositions.get(child.id);
+      if (!resolved) {
+        return false;
+      }
+      return Math.abs((resolved.x - child.x) - globalDx) <= 0.5
+        && Math.abs((resolved.y - child.y) - globalDy) <= 0.5;
+    });
+
+    if (!result.positionsPreserved && !preservesRelativeGrid) {
+      const driftedChild = children.find((child) => {
+        const resolved = result.childPositions.get(child.id);
+        return !resolved
+          || Math.abs((resolved.x - child.x) - globalDx) > 0.5
+          || Math.abs((resolved.y - child.y) - globalDy) > 0.5;
+      });
+      const targetId = driftedChild?.id ?? root.id;
+      const resolved = driftedChild ? result.childPositions.get(driftedChild.id) : undefined;
+      const driftDetail = driftedChild && resolved
+        ? `expected (${driftedChild.x}, ${driftedChild.y}) but ELK returned (${resolved.x}, ${resolved.y}); normalized global delta=(${globalDx}, ${globalDy})`
+        : "ELK did not return a positioned child for the fixed-grid item.";
+      diagnostics.push(
+        createRoutingDiagnostic(
+          "renderer.routing.elk_fixed_position_drift",
+          `ELK moved fixed service blueprint grid item "${targetId}" during the routing pass. The staged artifact is invalid.`,
+          targetId,
+          "error",
+          driftDetail
+        )
+      );
+      throw new Error(`ELK moved fixed service blueprint grid item "${targetId}" during routing: ${driftDetail}`);
+    }
+
+    const routeHints = new Map<string, Point[]>();
+    for (const [edgeId, points] of result.edgeRoutes.entries()) {
+      routeHints.set(edgeId, points.map((point) => ({
+        x: roundMetric(point.x - globalDx + minX),
+        y: roundMetric(point.y - globalDy + minY)
+      })));
+    }
+
+    for (const edge of semanticEdges) {
+      if (edge.routing.authority === "require_elk" && !routeHints.has(edge.id)) {
+        diagnostics.push(
+          createRoutingDiagnostic(
+            "renderer.routing.elk_required_route_missing",
+            `ELK did not return a required service blueprint route for "${edge.id}".`,
+            edge.id,
+            "error"
+          )
+        );
+        throw new Error(`ELK did not return a required service blueprint route for "${edge.id}".`);
+      }
+    }
+
+    return routeHints;
+  });
+}
+
 function positionMeasuredEdge(
   edge: MeasuredEdge,
   root: PositionedContainer,
@@ -1243,7 +1482,7 @@ function positionMeasuredEdge(
   };
 }
 
-export async function positionMeasuredScene(measuredScene: MeasuredScene): Promise<PositionedScene> {
+async function layoutMeasuredSceneRoot(measuredScene: MeasuredScene): Promise<PositionedRootLayoutResult> {
   const context: LayoutContext = {
     theme: getRendererTheme(measuredScene.themeId, "layout"),
     diagnostics: [...measuredScene.diagnostics],
@@ -1264,19 +1503,55 @@ export async function positionMeasuredScene(measuredScene: MeasuredScene): Promi
   }
 
   const root = rootResult.item;
+  if (measuredScene.viewId === "service_blueprint") {
+    normalizeServiceBlueprintCellContents(root);
+    validateServiceBlueprintCellContents(root, context.diagnostics);
+  }
+
+  return {
+    root,
+    ownerContainerByEdgeId,
+    routeHints: new Map(rootResult.routeHints ?? []),
+    diagnostics: context.diagnostics
+  };
+}
+
+export async function positionMeasuredSceneBeforeRouting(measuredScene: MeasuredScene): Promise<PositionedScene> {
+  const laidOut = await layoutMeasuredSceneRoot(measuredScene);
+
+  return {
+    viewId: measuredScene.viewId,
+    profileId: measuredScene.profileId,
+    themeId: measuredScene.themeId,
+    root: laidOut.root,
+    edges: [],
+    decorations: [],
+    diagnostics: sortRendererDiagnostics(laidOut.diagnostics),
+    paintOrder: [...PAINT_ORDER]
+  };
+}
+
+export async function positionMeasuredScene(measuredScene: MeasuredScene): Promise<PositionedScene> {
+  const laidOut = await layoutMeasuredSceneRoot(measuredScene);
+  const root = laidOut.root;
   const index = buildPositionedIndex(root);
+  const serviceBlueprintRouteHints = measuredScene.viewId === "service_blueprint"
+    ? await buildServiceBlueprintFixedRouteHints(root, measuredScene.edges, index, laidOut.diagnostics)
+    : new Map<string, Point[]>();
+  const routeHints = new Map(laidOut.routeHints);
+  mergeRouteHints(routeHints, serviceBlueprintRouteHints);
   const sharedRouteOffsets = buildSharedRouteOffsets(measuredScene.edges);
-  const contractLabelLanes = buildContractLabelLaneAssignments(measuredScene.edges, index, context.diagnostics);
+  const contractLabelLanes = buildContractLabelLaneAssignments(measuredScene.edges, index, laidOut.diagnostics);
   const edges = measuredScene.edges.map((edge) =>
     positionMeasuredEdge(
       edge,
       root,
       index,
-      ownerContainerByEdgeId,
-      rootResult.routeHints,
+      laidOut.ownerContainerByEdgeId,
+      routeHints,
       sharedRouteOffsets,
       contractLabelLanes,
-      context.diagnostics
+      laidOut.diagnostics
     )
   );
 
@@ -1287,7 +1562,7 @@ export async function positionMeasuredScene(measuredScene: MeasuredScene): Promi
     root,
     edges,
     decorations: [],
-    diagnostics: sortRendererDiagnostics(context.diagnostics),
+    diagnostics: sortRendererDiagnostics(laidOut.diagnostics),
     paintOrder: [...PAINT_ORDER]
   };
 }

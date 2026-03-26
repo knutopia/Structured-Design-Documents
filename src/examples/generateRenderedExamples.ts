@@ -5,6 +5,9 @@ import { loadBundle } from "../bundle/loadBundle.js";
 import { assertPreviewBackendAvailable } from "../renderer/previewBackends.js";
 import { renderSourcePreview } from "../renderer/previewWorkflow.js";
 import { renderSource } from "../renderer/renderView.js";
+import { projectView } from "../projector/projectView.js";
+import { compileSource } from "../compiler/compileSource.js";
+import { renderServiceBlueprintPreRoutingArtifacts } from "../renderer/staged/serviceBlueprint.js";
 import {
   getPreviewArtifactCapabilities,
   getPreviewArtifactCapability,
@@ -14,6 +17,7 @@ import {
   discoverCuratedRenderedExamplePairs,
   expandCuratedRenderedExampleVariants,
   getRenderedCorpusExampleDirName,
+  getRenderedCorpusDebugOutputPath,
   getRenderedCorpusProfileDirName,
   getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
@@ -83,6 +87,7 @@ function buildReadmeContent(
   lines.push("`service_blueprint` visual review checklist:");
   lines.push("");
   lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the ELK-authoritative staged renderer");
+  lines.push("- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs");
   lines.push("- customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order");
   lines.push("- customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled");
   lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
@@ -124,6 +129,40 @@ async function main(): Promise<void> {
       path: variant.example.absolutePath,
       text: await readFile(variant.example.absolutePath, "utf8")
     };
+
+    if (variant.viewId === "service_blueprint") {
+      const compiled = compileSource(input, bundle);
+      const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
+      if (compileErrors.length > 0 || !compiled.graph) {
+        throw new Error(
+          `Failed to compile service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
+        );
+      }
+
+      const projected = projectView(compiled.graph, bundle, variant.viewId);
+      const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
+      if (projectionErrors.length > 0 || !projected.projection) {
+        throw new Error(
+          `Failed to project service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
+        );
+      }
+
+      const preRouting = await renderServiceBlueprintPreRoutingArtifacts(
+        projected.projection,
+        compiled.graph,
+        view,
+        variant.profileId
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
+        preRouting.preRoutingSvg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"),
+        preRouting.preRoutingPng
+      );
+    }
 
     const dotResult = renderSource(input, bundle, {
       viewId: variant.viewId,

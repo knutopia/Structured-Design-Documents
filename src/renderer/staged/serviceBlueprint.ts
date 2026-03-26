@@ -7,6 +7,7 @@ import {
   type ServiceBlueprintRenderNode
 } from "../serviceBlueprintRenderModel.js";
 import type {
+  MeasuredScene,
   PositionedDecoration,
   PositionedItem,
   PositionedScene,
@@ -18,13 +19,19 @@ import type {
   SceneNode,
   WidthPolicy
 } from "./contracts.js";
+import type { RendererDiagnostic } from "./diagnostics.js";
 import {
   buildServiceBlueprintMiddleLayer,
   type ServiceBlueprintMiddleCell,
   type ServiceBlueprintMiddleEdge
 } from "./serviceBlueprintMiddleLayer.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
-import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
+import {
+  measureScene,
+  positionSceneBeforeRouting,
+  runStagedRendererPipeline,
+  type StagedRendererPipelineResult
+} from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
@@ -39,7 +46,6 @@ const ROOT_LEFT_GUTTER = 132;
 const COLUMN_GAP = 24;
 const CELL_GAP = 12;
 const CELL_PADDING = 12;
-const CELL_MIN_WIDTH = 224;
 
 interface SceneBuildContext {
   renderNodesById: ReadonlyMap<string, ServiceBlueprintRenderNode>;
@@ -47,6 +53,14 @@ interface SceneBuildContext {
 
 export interface ServiceBlueprintStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
 export interface ServiceBlueprintStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
+export interface ServiceBlueprintPreRoutingArtifactsResult {
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  preRoutingPositionedScene: PositionedScene;
+  preRoutingDiagnostics: RendererDiagnostic[];
+  preRoutingSvg: string;
+  preRoutingPng: Uint8Array;
+}
 
 function sanitizeToken(value: string): string {
   return value
@@ -66,13 +80,6 @@ function buildRootChrome(): SceneContainer["chrome"] {
     },
     gutter: ROOT_GAP,
     headerBandHeight: 0
-  };
-}
-
-function buildHelperWidthPolicy(): WidthPolicy {
-  return {
-    preferred: "chip",
-    allowed: ["chip"]
   };
 }
 
@@ -134,26 +141,6 @@ function buildBlueprintNode(node: ServiceBlueprintRenderNode, extraClasses: stri
   });
 }
 
-function buildSizerNode(id: string, extraClasses: string[] = []): SceneNode {
-  return {
-    kind: "node",
-    id,
-    role: "helper",
-    primitive: "connector_port",
-    classes: ["service_blueprint_helper", "service_blueprint_cell_sizer", ...extraClasses],
-    widthPolicy: buildHelperWidthPolicy(),
-    overflowPolicy: {
-      kind: "grow_height"
-    },
-    content: [],
-    ports: [],
-    fixedSize: {
-      width: CELL_MIN_WIDTH,
-      height: 2
-    }
-  };
-}
-
 function buildLaneClassToken(laneId: string): string {
   return sanitizeToken(laneId.replace(/^lane:\d+:/, ""));
 }
@@ -172,32 +159,9 @@ function buildCellClasses(cell: Pick<ServiceBlueprintMiddleCell, "laneId" | "ban
   ];
 }
 
-function buildElkLayeredOptions(
-  direction: "RIGHT" | "DOWN",
-  gap: number,
-  extraLayoutOptions: Record<string, string> = {}
-): Record<string, string> {
-  return {
-    "org.eclipse.elk.algorithm": "layered",
-    "org.eclipse.elk.direction": direction,
-    "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
-    "org.eclipse.elk.separateConnectedComponents": "false",
-    "org.eclipse.elk.considerModelOrder.strategy": "NODES_AND_EDGES",
-    "org.eclipse.elk.layered.crossingMinimization.forceNodeModelOrder": "true",
-    "org.eclipse.elk.layered.considerModelOrder.portModelOrder": "true",
-    "org.eclipse.elk.layered.nodePlacement.favorStraightEdges": "true",
-    "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(gap),
-    "org.eclipse.elk.spacing.nodeNode": String(gap),
-    "org.eclipse.elk.layered.mergeEdges": "false",
-    "org.eclipse.elk.layered.mergeHierarchyEdges": "false",
-    ...extraLayoutOptions
-  };
-}
-
 function buildCellContainer(
   cell: ServiceBlueprintMiddleCell,
-  context: SceneBuildContext,
-  previousCellId?: string
+  context: SceneBuildContext
 ): SceneContainer {
   const cellClasses = buildCellClasses(cell);
   const semanticNodes = cell.nodeIds
@@ -205,10 +169,7 @@ function buildCellContainer(
     .filter((node): node is ServiceBlueprintRenderNode => node !== undefined)
     .sort((left, right) => left.authorOrder - right.authorOrder || left.id.localeCompare(right.id))
     .map((node) => buildBlueprintNode(node, cellClasses));
-  const children: SceneItem[] = [
-    buildSizerNode(`${cell.id}__sizer`, cellClasses),
-    ...semanticNodes
-  ];
+  const children: SceneItem[] = [...semanticNodes];
 
   return {
     kind: "container",
@@ -219,17 +180,7 @@ function buildCellContainer(
     layout: {
       strategy: "stack",
       direction: "vertical",
-      gap: CELL_GAP,
-      elk: {
-        layoutOptions: {
-          "org.eclipse.elk.partitioning.partition": String(cell.columnOrder),
-          ...(previousCellId
-            ? {
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": previousCellId
-            }
-            : {})
-        }
-      }
+      gap: CELL_GAP
     },
     chrome: {
       padding: {
@@ -422,6 +373,33 @@ function attachServiceBlueprintDecorations(scene: PositionedScene): PositionedSc
   };
 }
 
+async function buildServiceBlueprintPreRoutingPipeline(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<{
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  preRoutingPositionedScene: PositionedScene;
+}> {
+  const rendererScene = buildServiceBlueprintRendererScene(projection, graph, view, profileId, themeId);
+  const measuredScene = measureScene(rendererScene);
+  const preRoutingPositionedScene = attachServiceBlueprintDecorations(
+    await positionSceneBeforeRouting(measuredScene)
+  );
+
+  return {
+    rendererScene,
+    measuredScene,
+    preRoutingPositionedScene: {
+      ...preRoutingPositionedScene,
+      edges: []
+    }
+  };
+}
+
 export function buildServiceBlueprintRendererScene(
   projection: Projection,
   graph: CompiledGraph,
@@ -435,19 +413,14 @@ export function buildServiceBlueprintRendererScene(
   const context: SceneBuildContext = {
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node]))
   };
-  const previousCellByColumnOrder = new Map<number, string>();
   const rootChildren: SceneItem[] = [...middleLayer.cells]
     .sort((left, right) =>
-      left.columnOrder - right.columnOrder
-      || left.rowOrder - right.rowOrder
+      left.rowOrder - right.rowOrder
+      || left.columnOrder - right.columnOrder
       || left.id.localeCompare(right.id)
     )
-    .map((cell) => {
-      const previousCellId = previousCellByColumnOrder.get(cell.columnOrder);
-      const built = buildCellContainer(cell, context, previousCellId);
-      previousCellByColumnOrder.set(cell.columnOrder, cell.id);
-      return built;
-    });
+    .map((cell) => buildCellContainer(cell, context));
+  const columnCount = [...middleLayer.bands, ...middleLayer.parkingBands].length;
 
   return {
     viewId: "service_blueprint",
@@ -456,16 +429,10 @@ export function buildServiceBlueprintRendererScene(
     root: buildDiagramRootContainer({
       viewId: "service_blueprint",
       layout: {
-        strategy: "elk_layered",
-        direction: "horizontal",
+        strategy: "grid",
         gap: COLUMN_GAP,
-        elk: {
-          hierarchyHandling: "include_children",
-          strict: true,
-          layoutOptions: buildElkLayeredOptions("RIGHT", COLUMN_GAP, {
-            "org.eclipse.elk.partitioning.activate": "true"
-          })
-        }
+        columns: columnCount,
+        crossAlignment: "stretch"
       },
       chrome: buildRootChrome(),
       children: rootChildren,
@@ -473,6 +440,33 @@ export function buildServiceBlueprintRendererScene(
     }),
     edges: middleLayer.edges.map((edge) => buildSceneEdge(edge)),
     diagnostics: middleLayer.diagnostics
+  };
+}
+
+export async function renderServiceBlueprintPreRoutingArtifacts(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<ServiceBlueprintPreRoutingArtifactsResult> {
+  const pipeline = await buildServiceBlueprintPreRoutingPipeline(
+    projection,
+    graph,
+    view,
+    profileId,
+    themeId
+  );
+  const [svgRendered, pngRendered] = await Promise.all([
+    renderPositionedSceneToSvg(pipeline.preRoutingPositionedScene),
+    renderPositionedSceneToPng(pipeline.preRoutingPositionedScene)
+  ]);
+
+  return {
+    ...pipeline,
+    preRoutingDiagnostics: pipeline.preRoutingPositionedScene.diagnostics,
+    preRoutingSvg: svgRendered.svg,
+    preRoutingPng: pngRendered.png
   };
 }
 

@@ -39,7 +39,7 @@ async function buildMiddleLayer(sourceText: string) {
 }
 
 describe("service_blueprint middle layer", () => {
-  it("derives A1 / I1 / A2 / R* for the sample slice and assigns sidecars to the shared rail", async () => {
+  it("derives A1 / I1 / A2 / R* for the sample slice and keeps PL-020 in the policy A1 cell", async () => {
     const middle = await buildMiddleLayer(`
 SDD-TEXT 0.1
 
@@ -105,7 +105,17 @@ END
     expect(cellByNodeId.get("PR-022")?.bandLabel).toBe("A2");
     expect(cellByNodeId.get("SA-022")?.bandLabel).toBe("A2");
     expect(cellByNodeId.get("D-020")?.bandLabel).toBe("R*");
-    expect(cellByNodeId.get("PL-020")?.bandLabel).toBe("R*");
+    expect(cellByNodeId.get("PL-020")?.bandLabel).toBe("A1");
+
+    const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
+    expect(placementByNodeId.get("D-020")).toEqual(expect.objectContaining({
+      placementMode: "shared_right_rail",
+      classification: "shared_resource"
+    }));
+    expect(placementByNodeId.get("PL-020")).toEqual(expect.objectContaining({
+      placementMode: "band_aligned_support",
+      classification: "band_support"
+    }));
   });
 
   it("falls back to author order when customer steps do not declare PRECEDES", async () => {

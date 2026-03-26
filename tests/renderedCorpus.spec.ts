@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   discoverCuratedRenderedExamplePairs,
   expandCuratedRenderedExampleVariants,
+  getRenderedCorpusDebugOutputPath,
   getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
   planRenderedCorpusOutputPaths
@@ -178,6 +179,22 @@ describe("rendered example corpus", () => {
       const legacySvg = await readFile(legacySvgPath, "utf8");
       expect(legacySvg).not.toContain('class="staged-svg');
       expect(legacySvg).toContain("<svg");
+
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"));
+    }
+  });
+
+  it("does not add pre-routing corpus siblings for non-service_blueprint staged views", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
+      (variant) => variant.viewId !== "service_blueprint"
+    );
+
+    for (const variant of variants) {
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"))).rejects.toThrow();
     }
   });
 
