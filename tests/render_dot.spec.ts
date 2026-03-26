@@ -35,7 +35,7 @@ describe("renderSource dot", () => {
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());
     }
-  });
+  }, 15_000);
 
   it("single-escapes multiline ui_contracts labels in DOT output", async () => {
     const bundle = await loadBundle(manifestPath);

@@ -445,26 +445,27 @@ function resolveContainerLayoutOptions(container: MeasuredContainer, isRoot: boo
 
 function createHierarchicalElkNode(item: MeasuredItem, isRoot = false): ElkNode {
   if (item.kind === "node") {
+    const ports = item.ports.map((port, index) => createHierarchicalElkPort(port, item.id, index));
     return {
       id: item.id,
       width: item.width,
       height: item.height,
-      layoutOptions: item.ports.length > 0
+      layoutOptions: ports.length > 0
         ? {
           "org.eclipse.elk.portConstraints": "FIXED_POS"
         }
         : undefined,
-      ports: item.ports.map((port, index) => createHierarchicalElkPort(port, item.id, index))
+      ...(ports.length > 0 ? { ports } : {})
     } as unknown as ElkNode;
   }
+
+  const ports = item.ports.map((port, index) => createHierarchicalElkPort(port, item.id, index));
 
   return {
     id: item.id,
     layoutOptions: resolveContainerLayoutOptions(item, isRoot),
-    ports: item.ports.map((port, index) => createHierarchicalElkPort(port, item.id, index)),
+    ...(ports.length > 0 ? { ports } : {}),
     children: item.children.map((child) => createHierarchicalElkNode(child)),
-    width: item.children.length === 0 ? 0 : undefined,
-    height: item.children.length === 0 ? 0 : undefined
   } as unknown as ElkNode;
 }
 
@@ -473,36 +474,40 @@ function createHierarchicalElkGraph(input: ElkHierarchicalLayoutInput): ElkNode 
 
   return {
     ...createHierarchicalElkNode(input.root, true),
-    edges: input.edges.map((edge) => {
-      const sourceItem = index.get(edge.from.itemId);
-      const targetItem = index.get(edge.to.itemId);
-      const sourcePort = sourceItem
-        ? findMeasuredPortByRole(sourceItem, edge.from, edge.routing.sourcePortRole)
-        : undefined;
-      const targetPort = targetItem
-        ? findMeasuredPortByRole(targetItem, edge.to, edge.routing.targetPortRole)
-        : undefined;
+    ...(input.edges.length > 0
+      ? {
+        edges: input.edges.map((edge) => {
+          const sourceItem = index.get(edge.from.itemId);
+          const targetItem = index.get(edge.to.itemId);
+          const sourcePort = sourceItem
+            ? findMeasuredPortByRole(sourceItem, edge.from, edge.routing.sourcePortRole)
+            : undefined;
+          const targetPort = targetItem
+            ? findMeasuredPortByRole(targetItem, edge.to, edge.routing.targetPortRole)
+            : undefined;
 
-      return {
-        id: edge.id,
-        source: edge.from.itemId,
-        target: edge.to.itemId,
-        sourcePort: sourcePort ? `${edge.from.itemId}:${sourcePort.id}` : undefined,
-        targetPort: targetPort ? `${edge.to.itemId}:${targetPort.id}` : undefined,
-        layoutOptions: edge.routing.elkLayoutOptions
-      };
-    })
+          return {
+            id: edge.id,
+            sources: [edge.from.itemId],
+            targets: [edge.to.itemId],
+            sourcePort: sourcePort ? `${edge.from.itemId}:${sourcePort.id}` : undefined,
+            targetPort: targetPort ? `${edge.to.itemId}:${targetPort.id}` : undefined,
+            layoutOptions: edge.routing.elkLayoutOptions
+          };
+        })
+      }
+      : {})
   } as unknown as ElkNode;
 }
 
 function collectAbsoluteNodeFrames(
   node: ElkNode,
-  offsetX: number,
-  offsetY: number,
   frames: Map<string, { x: number; y: number; width: number; height: number }>
 ): void {
-  const absoluteX = roundMetric(offsetX + (node.x ?? 0));
-  const absoluteY = roundMetric(offsetY + (node.y ?? 0));
+  // Hierarchical ELK runs use ROOT-relative JSON coordinates, so descendants
+  // already come back positioned in the root coordinate space.
+  const absoluteX = roundMetric(node.x ?? 0);
+  const absoluteY = roundMetric(node.y ?? 0);
   const width = roundMetric(node.width ?? 0);
   const height = roundMetric(node.height ?? 0);
   frames.set(node.id, {
@@ -513,7 +518,7 @@ function collectAbsoluteNodeFrames(
   });
 
   for (const child of node.children ?? []) {
-    collectAbsoluteNodeFrames(child as ElkNode, absoluteX, absoluteY, frames);
+    collectAbsoluteNodeFrames(child as ElkNode, frames);
   }
 }
 
@@ -637,7 +642,7 @@ export async function runElkLayeredSubtreeLayout(
   const graph = createHierarchicalElkGraph(input);
   const laidOut = await elk.layout(graph as unknown as ElkNode);
   const frames = new Map<string, { x: number; y: number; width: number; height: number }>();
-  collectAbsoluteNodeFrames(laidOut, 0, 0, frames);
+  collectAbsoluteNodeFrames(laidOut, frames);
 
   const root = buildPositionedSubtree(input.root, frames);
   if (root.kind !== "container") {

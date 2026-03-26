@@ -54,13 +54,74 @@ async function loadExampleInput(fileName: string): Promise<{ path: string; text:
   };
 }
 
+function findNestedPositionedItem(children: PositionedItem[], id: string): PositionedItem | undefined {
+  for (const child of children) {
+    if (child.id === id) {
+      return child;
+    }
+    if (child.kind === "container") {
+      const nested = findNestedPositionedItem(child.children, id);
+      if (nested) {
+        return nested;
+      }
+    }
+  }
+
+  return undefined;
+}
+
 function findRootItem(scene: { root: { children: PositionedItem[] } }, id: string): PositionedItem {
-  const item = scene.root.children.find((candidate) => candidate.id === id);
+  const item = findNestedPositionedItem(scene.root.children, id);
   if (!item) {
     throw new Error(`Could not find root item "${id}".`);
   }
 
   return item;
+}
+
+function findRootLaneShells(
+  scene: { root: { children: PositionedItem[] } }
+): Array<Extract<PositionedItem, { kind: "container" }>> {
+  return scene.root.children.filter((child): child is Extract<PositionedItem, { kind: "container" }> =>
+    child.kind === "container" && child.classes.includes("service_blueprint_lane_shell")
+  );
+}
+
+function findNestedRendererItem(
+  children: RendererScene["root"]["children"],
+  id: string
+): RendererScene["root"]["children"][number] | undefined {
+  for (const child of children) {
+    if (child.id === id) {
+      return child;
+    }
+    if (child.kind === "container") {
+      const nested = findNestedRendererItem(child.children, id);
+      if (nested) {
+        return nested;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function findRendererContainersByClass(
+  children: RendererScene["root"]["children"],
+  className: string
+): Array<Extract<RendererScene["root"]["children"][number], { kind: "container" }>> {
+  const matches: Array<Extract<RendererScene["root"]["children"][number], { kind: "container" }>> = [];
+
+  for (const child of children) {
+    if (child.kind === "container") {
+      if (child.classes.includes(className)) {
+        matches.push(child);
+      }
+      matches.push(...findRendererContainersByClass(child.children, className));
+    }
+  }
+
+  return matches;
 }
 
 function findTextDecoration(
@@ -100,11 +161,16 @@ describe("staged service_blueprint", () => {
       strategy: "elk_layered",
       direction: "horizontal"
     }));
-    expect(rendererScene.root.children.slice(0, 4).map((child) => child.id)).toEqual([
-      "guide__band:anchor:1",
-      "guide__band:interstitial:1",
-      "guide__band:anchor:2",
-      "guide__band:sidecar:1"
+    expect(rendererScene.root.layout.elk).toEqual(expect.objectContaining({
+      hierarchyHandling: "include_children"
+    }));
+    expect(findRootLaneShells(rendererScene).map((child) => child.id)).toEqual([
+      "lane:01:customer__shell",
+      "lane:02:frontstage__shell",
+      "lane:03:backstage__shell",
+      "lane:04:support__shell",
+      "lane:05:system__shell",
+      "lane:06:policy__shell"
     ]);
 
     await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", rendererScene);
@@ -165,20 +231,44 @@ describe("staged service_blueprint", () => {
 
     const submitClaim = findRootItem(rendered.positionedScene, "J-020");
     const finalizeClaim = findRootItem(rendered.positionedScene, "J-021");
+    const frontstageAction = findRootItem(rendered.positionedScene, "PR-020");
+    const backstageAction = findRootItem(rendered.positionedScene, "PR-021");
+    const supportAction = findRootItem(rendered.positionedScene, "PR-022");
+    const systemActionA1 = findRootItem(rendered.positionedScene, "SA-020");
+    const systemActionI1 = findRootItem(rendered.positionedScene, "SA-021");
+    const systemActionA2 = findRootItem(rendered.positionedScene, "SA-022");
     const claimRecord = findRootItem(rendered.positionedScene, "D-020");
     const retentionPolicy = findRootItem(rendered.positionedScene, "PL-020");
     if (
       submitClaim.kind !== "node"
       || finalizeClaim.kind !== "node"
+      || frontstageAction.kind !== "node"
+      || backstageAction.kind !== "node"
+      || supportAction.kind !== "node"
+      || systemActionA1.kind !== "node"
+      || systemActionI1.kind !== "node"
+      || systemActionA2.kind !== "node"
       || claimRecord.kind !== "node"
       || retentionPolicy.kind !== "node"
     ) {
-      throw new Error("Expected staged service_blueprint semantic nodes at the root.");
+      throw new Error("Expected staged service_blueprint semantic nodes in the positioned scene.");
     }
 
     expect(finalizeClaim.x).toBeGreaterThan(submitClaim.x);
-    expect(claimRecord.x).toBeGreaterThan(finalizeClaim.x);
-    expect(retentionPolicy.x).toBeGreaterThan(claimRecord.x);
+    expect(backstageAction.x).toBeGreaterThan(frontstageAction.x);
+    expect(systemActionI1.x).toBeGreaterThan(systemActionA1.x);
+    expect(systemActionA2.x).toBeGreaterThan(systemActionI1.x);
+    expect(claimRecord.x).toBeGreaterThan(systemActionA2.x);
+    expect(retentionPolicy.x).toBeGreaterThan(frontstageAction.x);
+
+    expect(findRootLaneShells(rendered.positionedScene).map((laneShell) => laneShell.id)).toEqual([
+      "lane:01:customer__shell",
+      "lane:02:frontstage__shell",
+      "lane:03:backstage__shell",
+      "lane:04:support__shell",
+      "lane:05:system__shell",
+      "lane:06:policy__shell"
+    ]);
 
     const precedesEdges = rendered.positionedScene.edges.filter((edge) => edge.id.includes("__precedes__"));
     expect(precedesEdges).not.toHaveLength(0);
@@ -222,11 +312,25 @@ END
     expect(rendererScene.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
       "renderer.scene.service_blueprint_ungrouped_lane"
     );
-    const ungroupedItems = rendererScene.root.children.filter((child) => child.classes.includes("lane-ungrouped"));
-    expect(ungroupedItems.map((child) => child.id)).toEqual(expect.arrayContaining([
-      "PR-100",
-      "lane:99:ungrouped__shell__slot__band:sidecar:1__anchor"
-    ]));
+    const ungroupedLaneShells = rendererScene.root.children.filter(
+      (child): child is Extract<RendererScene["root"]["children"][number], { kind: "container" }> =>
+        child.kind === "container"
+        && child.classes.includes("service_blueprint_lane_shell")
+        && child.classes.includes("lane-ungrouped")
+    );
+    expect(ungroupedLaneShells.map((child) => child.id)).toEqual([
+      "lane:99:ungrouped__shell"
+    ]);
+    expect(
+      findRendererContainersByClass(rendererScene.root.children, "lane-ungrouped").map((child) => child.id)
+    ).toEqual([
+      "lane:99:ungrouped__shell",
+      "lane:99:ungrouped__shell__slot__band:anchor:1",
+      "lane:99:ungrouped__shell__slot__band:sidecar:1",
+      "lane:99:ungrouped__shell__slot__band:parking:lane:99:ungrouped:1"
+    ]);
+    expect(findNestedRendererItem(rendererScene.root.children, "PR-100")).toBeDefined();
+    expect(findNestedRendererItem(rendererScene.root.children, "lane:99:ungrouped__shell__slot__band:sidecar:1__anchor")).toBeDefined();
   });
 
   it("keeps disconnected scene construction deterministic in lane order", async () => {

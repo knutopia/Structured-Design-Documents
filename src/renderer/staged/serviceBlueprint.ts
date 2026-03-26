@@ -17,7 +17,12 @@ import type {
   SceneNode,
   WidthPolicy
 } from "./contracts.js";
-import { buildServiceBlueprintMiddleLayer, type ServiceBlueprintMiddleEdge } from "./serviceBlueprintMiddleLayer.js";
+import {
+  buildServiceBlueprintMiddleLayer,
+  type ServiceBlueprintMiddleEdge,
+  type ServiceBlueprintMiddleLaneShell,
+  type ServiceBlueprintMiddleSlot
+} from "./serviceBlueprintMiddleLayer.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
@@ -33,6 +38,9 @@ const ROOT_GAP = 24;
 const ROOT_LEFT_GUTTER = 132;
 const LANE_GAP = 18;
 const SLOT_GAP = 24;
+const LANE_SHELL_PADDING = 12;
+const SLOT_PADDING = 12;
+const SLOT_MIN_WIDTH = 224;
 
 interface SceneBuildContext {
   renderNodesById: ReadonlyMap<string, ServiceBlueprintRenderNode>;
@@ -147,29 +155,136 @@ function buildHelperNode(id: string, extraClasses: string[] = []): SceneNode {
   };
 }
 
-function buildPlacedSlotItems(
-  slot: {
-    id: string;
-    laneId: string;
-    bandLabel: string;
-    bandKind: string;
-    nodeIds: string[];
-    anchorNodeId: string;
-    representativeNodeId: string;
-  },
-  context: SceneBuildContext
-): SceneNode[] {
-  const laneToken = sanitizeToken(slot.laneId.replace(/^lane:\d+:/, ""));
+function buildSlotSizerNode(id: string, extraClasses: string[] = []): SceneNode {
+  return {
+    kind: "node",
+    id,
+    role: "helper",
+    primitive: "connector_port",
+    classes: ["service_blueprint_helper", "service_blueprint_slot_sizer", ...extraClasses],
+    widthPolicy: buildHelperWidthPolicy(),
+    overflowPolicy: {
+      kind: "grow_height"
+    },
+    content: [],
+    ports: [],
+    fixedSize: {
+      width: SLOT_MIN_WIDTH,
+      height: 2
+    }
+  };
+}
+
+function buildGuideContainer(guideId: string, bandLabel: string, previousGuideContainerId?: string): SceneContainer {
+  const elkLayoutOptions: Record<string, string> = {
+    "org.eclipse.elk.layered.layering.layerConstraint": "FIRST_SEPARATE"
+  };
+  if (previousGuideContainerId) {
+    elkLayoutOptions["org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf"] = previousGuideContainerId;
+  }
+
+  return {
+    kind: "container",
+    id: `${guideId}__shell`,
+    role: "service_blueprint_band_guide",
+    primitive: "cluster",
+    classes: [
+      "service_blueprint_helper",
+      "service_blueprint_band_guide_shell",
+      `guide-band-${sanitizeToken(bandLabel)}`
+    ],
+    layout: {
+      strategy: "stack",
+      direction: "vertical",
+      gap: 0,
+      elk: {
+        layoutOptions: elkLayoutOptions
+      }
+    },
+    chrome: {
+      padding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      },
+      gutter: 0,
+      headerBandHeight: 0
+    },
+    children: [
+      buildHelperNode(guideId, [
+        "service_blueprint_band_guide",
+        `guide-band-${sanitizeToken(bandLabel)}`
+      ])
+    ],
+    ports: []
+  };
+}
+
+function buildLaneStartGuideContainer(): SceneContainer {
+  return {
+    kind: "container",
+    id: "guide__lane_start__shell",
+    role: "service_blueprint_lane_start_guide",
+    primitive: "cluster",
+    classes: [
+      "service_blueprint_helper",
+      "service_blueprint_lane_start_guide_shell"
+    ],
+    layout: {
+      strategy: "stack",
+      direction: "vertical",
+      gap: 0,
+      elk: {
+        layoutOptions: {
+          "org.eclipse.elk.layered.layering.layerConstraint": "FIRST_SEPARATE"
+        }
+      }
+    },
+    chrome: {
+      padding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      },
+      gutter: 0,
+      headerBandHeight: 0
+    },
+    children: [
+      buildHelperNode("guide__lane_start", [
+        "service_blueprint_lane_start_guide"
+      ])
+    ],
+    ports: []
+  };
+}
+
+function buildLaneClassToken(laneId: string): string {
+  return sanitizeToken(laneId.replace(/^lane:\d+:/, ""));
+}
+
+function buildSlotClasses(slot: Pick<ServiceBlueprintMiddleSlot, "laneId" | "bandLabel" | "bandKind" | "shared">): string[] {
+  const laneToken = buildLaneClassToken(slot.laneId);
   const bandToken = sanitizeToken(slot.bandLabel);
-  const slotClasses = [
+  return [
     `lane-${laneToken}`,
     `band-${bandToken}`,
-    `slot-kind-${sanitizeToken(slot.bandKind)}`
+    `slot-kind-${sanitizeToken(slot.bandKind)}`,
+    slot.shared ? "slot-shared" : "slot-local"
   ];
+}
+
+function buildSlotChildItems(
+  slot: ServiceBlueprintMiddleSlot,
+  context: SceneBuildContext
+): SceneNode[] {
+  const slotClasses = buildSlotClasses(slot);
   const anchor = buildHelperNode(slot.anchorNodeId, [
     "service_blueprint_slot_anchor",
     ...slotClasses
   ]);
+  const sizer = buildSlotSizerNode(`${slot.id}__sizer`, slotClasses);
 
   const nodes = slot.nodeIds
     .map((nodeId) => context.renderNodesById.get(nodeId))
@@ -177,21 +292,120 @@ function buildPlacedSlotItems(
     .sort((left, right) => left.authorOrder - right.authorOrder || left.id.localeCompare(right.id))
     .map((node) => buildBlueprintNode(node, slotClasses));
 
-  if (slot.representativeNodeId === slot.anchorNodeId) {
-    return [anchor, ...nodes];
+  return [anchor, sizer, ...nodes];
+}
+
+function buildElkLayeredOptions(direction: "RIGHT" | "DOWN", gap: number): Record<string, string> {
+  return {
+    "org.eclipse.elk.algorithm": "layered",
+    "org.eclipse.elk.direction": direction,
+    "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
+    "org.eclipse.elk.separateConnectedComponents": "false",
+    "org.eclipse.elk.considerModelOrder.strategy": "NODES_AND_EDGES",
+    "org.eclipse.elk.layered.crossingMinimization.forceNodeModelOrder": "true",
+    "org.eclipse.elk.layered.considerModelOrder.portModelOrder": "true",
+    "org.eclipse.elk.layered.nodePlacement.favorStraightEdges": "true",
+    "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(gap),
+    "org.eclipse.elk.spacing.nodeNode": String(gap),
+    "org.eclipse.elk.layered.mergeEdges": "false",
+    "org.eclipse.elk.layered.mergeHierarchyEdges": "false"
+  };
+}
+
+function buildSlotContainer(slot: ServiceBlueprintMiddleSlot, context: SceneBuildContext): SceneContainer {
+  return {
+    kind: "container",
+    id: slot.id,
+    role: "service_blueprint_slot",
+    primitive: "cluster",
+    classes: [
+      "service_blueprint_slot",
+      ...buildSlotClasses(slot)
+    ],
+    layout: {
+      strategy: "stack",
+      direction: "vertical",
+      gap: 12
+    },
+    chrome: {
+      padding: {
+        top: SLOT_PADDING,
+        right: SLOT_PADDING,
+        bottom: SLOT_PADDING,
+        left: SLOT_PADDING
+      },
+      gutter: 12,
+      headerBandHeight: 0
+    },
+    children: buildSlotChildItems(slot, context),
+    ports: []
+  };
+}
+
+function buildLaneShellContainer(
+  laneShell: ServiceBlueprintMiddleLaneShell,
+  slotsById: ReadonlyMap<string, ServiceBlueprintMiddleSlot>,
+  context: SceneBuildContext,
+  previousLaneShellId?: string
+): SceneContainer {
+  const laneToken = buildLaneClassToken(laneShell.laneId);
+  const elkLayoutOptions: Record<string, string> = {
+    "org.eclipse.elk.layered.layering.layerConstraint": "FIRST_SEPARATE"
+  };
+  if (previousLaneShellId) {
+    elkLayoutOptions["org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf"] = previousLaneShellId;
   }
 
-  return nodes;
+  return {
+    kind: "container",
+    id: laneShell.id,
+    role: "service_blueprint_lane_shell",
+    primitive: "lane",
+    classes: [
+      "service_blueprint_lane_shell",
+      `lane-${laneToken}`
+    ],
+    layout: {
+      strategy: "stack",
+      direction: "horizontal",
+      gap: SLOT_GAP,
+      elk: {
+        layoutOptions: elkLayoutOptions
+      }
+    },
+    chrome: {
+      padding: {
+        top: LANE_SHELL_PADDING,
+        right: LANE_SHELL_PADDING,
+        bottom: LANE_SHELL_PADDING,
+        left: LANE_SHELL_PADDING
+      },
+      gutter: SLOT_GAP,
+      headerBandHeight: 0
+    },
+    children: laneShell.slotIds
+      .map((slotId) => slotsById.get(slotId))
+      .filter((slot): slot is ServiceBlueprintMiddleSlot => slot !== undefined)
+      .map((slot) => buildSlotContainer(slot, context)),
+    ports: []
+  };
 }
 
 function buildRoutingIntent(edge: ServiceBlueprintMiddleEdge): RoutingIntent {
   if (edge.channel === "helper") {
+    const helperPriority = edge.type === "HELPER_ALIGN"
+      || edge.type === "HELPER_ORDER"
+      || edge.type === "HELPER_LANE_START"
+      ? "9"
+      : edge.type === "HELPER_SLOT_ORDER"
+        ? "7"
+        : "3";
     return {
       style: "orthogonal",
       preferAxis: "horizontal",
       authority: "flexible",
       elkLayoutOptions: {
-        "org.eclipse.elk.priority": "1"
+        "org.eclipse.elk.priority": helperPriority
       }
     };
   }
@@ -216,7 +430,7 @@ function buildRoutingIntent(edge: ServiceBlueprintMiddleEdge): RoutingIntent {
         labelPlacement: edge.label ? "segment" : undefined,
         authority: "require_elk",
         elkLayoutOptions: {
-          "org.eclipse.elk.priority": "6"
+          "org.eclipse.elk.priority": "3"
         }
       };
     case "resource_policy":
@@ -227,7 +441,7 @@ function buildRoutingIntent(edge: ServiceBlueprintMiddleEdge): RoutingIntent {
         labelPlacement: edge.label ? "segment" : undefined,
         authority: "require_elk",
         elkLayoutOptions: {
-          "org.eclipse.elk.priority": "4"
+          "org.eclipse.elk.priority": "2"
         }
       };
   }
@@ -289,17 +503,19 @@ function attachServiceBlueprintDecorations(scene: PositionedScene): PositionedSc
     ["lane-backstage", "line_of_internal_interaction"]
   ]);
   const laneBounds = laneOrder.flatMap((laneClass) => {
-    const laneItems = scene.root.children.filter((child) => child.classes.includes(laneClass));
-    if (laneItems.length === 0) {
+    const laneShell = scene.root.children.find((child) =>
+      child.kind === "container"
+      && child.classes.includes("service_blueprint_lane_shell")
+      && child.classes.includes(laneClass)
+    );
+    if (!laneShell || laneShell.kind !== "container") {
       return [];
     }
 
-    const minY = Math.min(...laneItems.map((item) => item.y));
-    const maxY = Math.max(...laneItems.map((item) => item.y + item.height));
     return [{
       laneClass,
-      minY,
-      maxY
+      minY: laneShell.y,
+      maxY: laneShell.y + laneShell.height
     }];
   });
 
@@ -353,15 +569,46 @@ export function buildServiceBlueprintRendererScene(
   const context: SceneBuildContext = {
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node]))
   };
+  const slotsById = new Map(middleLayer.slots.map((slot) => [slot.id, slot]));
+  const laneShellChildren = middleLayer.laneShells.map((laneShell, index, laneShells) =>
+    buildLaneShellContainer(
+      laneShell,
+      slotsById,
+      context,
+      index > 0 ? laneShells[index - 1]?.id : undefined
+    )
+  );
+  const guideNodes = middleLayer.bands
+    .filter((band) => band.shared)
+    .map((band, index, bands) => buildGuideContainer(
+      `guide__${band.id}`,
+      band.label,
+      index > 0 ? `guide__${bands[index - 1]?.id}__shell` : undefined
+    ));
   const rootChildren: SceneItem[] = [
-    ...middleLayer.bands
-      .filter((band) => band.shared)
-      .map((band) => buildHelperNode(`guide__${band.id}`, [
-        "service_blueprint_band_guide",
-        `guide-band-${sanitizeToken(band.label)}`
-      ])),
-    ...middleLayer.slots.flatMap((slot) => buildPlacedSlotItems(slot, context))
+    buildLaneStartGuideContainer(),
+    ...guideNodes,
+    ...laneShellChildren
   ];
+  const laneStartEdges = middleLayer.laneShells.flatMap<ServiceBlueprintMiddleEdge>((laneShell) => {
+    const firstSlot = laneShell.slotIds
+      .map((slotId) => slotsById.get(slotId))
+      .find((slot): slot is ServiceBlueprintMiddleSlot => slot !== undefined);
+    if (!firstSlot) {
+      return [];
+    }
+
+    return [{
+      id: `guide__lane_start__helper__${firstSlot.anchorNodeId}`,
+      semanticEdgeIds: [],
+      channel: "helper",
+      type: "HELPER_LANE_START",
+      from: "guide__lane_start",
+      to: firstSlot.anchorNodeId,
+      strictRoute: false,
+      hidden: true
+    }];
+  });
 
   return {
     viewId: "service_blueprint",
@@ -374,6 +621,7 @@ export function buildServiceBlueprintRendererScene(
         direction: "horizontal",
         gap: LANE_GAP,
         elk: {
+          hierarchyHandling: "include_children",
           strict: true,
           layoutOptions: {
             "org.eclipse.elk.separateConnectedComponents": "false",
@@ -390,7 +638,7 @@ export function buildServiceBlueprintRendererScene(
       children: rootChildren,
       classes: ["service_blueprint"]
     }),
-    edges: middleLayer.edges.map((edge) => buildSceneEdge(edge)),
+    edges: [...laneStartEdges, ...middleLayer.edges].map((edge) => buildSceneEdge(edge)),
     diagnostics: middleLayer.diagnostics
   };
 }

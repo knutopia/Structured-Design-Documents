@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="3023.568" height="616.167" viewBox="0 0 3023.568 616.167" class="staged-svg view-service_blueprint profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="service_blueprint" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="2795" height="1630" viewBox="0 0 2795 1630" class="staged-svg view-service_blueprint profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="service_blueprint" data-profile-id="simple" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -52,428 +52,626 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram service_blueprint service_blueprint" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="3023.568" height="616.167" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="2795" height="1630" rx="18" ry="18"/>
+    </g>
+    <g id="scene-container-guide__lane_start__shell" class="scene-container primitive-cluster role-service_blueprint_lane_start_guide paint-chrome service_blueprint_helper service_blueprint_lane_start_guide_shell" data-item-id="guide__lane_start__shell" data-role="service_blueprint_lane_start_guide">
+      <rect class="scene-container__chrome" x="2340" y="28" width="42" height="50" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-guide__band-anchor-1__shell" class="scene-container primitive-cluster role-service_blueprint_band_guide paint-chrome service_blueprint_helper service_blueprint_band_guide_shell guide-band-a1" data-item-id="guide__band:anchor:1__shell" data-role="service_blueprint_band_guide">
+      <rect class="scene-container__chrome" x="2340" y="96" width="42" height="60" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-guide__band-interstitial-1__shell" class="scene-container primitive-cluster role-service_blueprint_band_guide paint-chrome service_blueprint_helper service_blueprint_band_guide_shell guide-band-i1" data-item-id="guide__band:interstitial:1__shell" data-role="service_blueprint_band_guide">
+      <rect class="scene-container__chrome" x="2064.625" y="174" width="42" height="60" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-guide__band-anchor-2__shell" class="scene-container primitive-cluster role-service_blueprint_band_guide paint-chrome service_blueprint_helper service_blueprint_band_guide_shell guide-band-a2" data-item-id="guide__band:anchor:2__shell" data-role="service_blueprint_band_guide">
+      <rect class="scene-container__chrome" x="2064.625" y="252" width="42" height="60" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-guide__band-sidecar-1__shell" class="scene-container primitive-cluster role-service_blueprint_band_guide paint-chrome service_blueprint_helper service_blueprint_band_guide_shell guide-band-r" data-item-id="guide__band:sidecar:1__shell" data-role="service_blueprint_band_guide">
+      <rect class="scene-container__chrome" x="2025.286" y="330" width="42" height="50" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-01-customer__shell" class="scene-container primitive-lane role-service_blueprint_lane_shell paint-chrome service_blueprint_lane_shell lane-customer" data-item-id="lane:01:customer__shell" data-role="service_blueprint_lane_shell">
+      <rect class="scene-container__chrome" x="323.857" y="398" width="1591" height="178" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-01-customer__shell__slot__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-customer band-a1 slot-kind-anchor slot-shared" data-item-id="lane:01:customer__shell__slot__band:anchor:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="340.857" y="478.333" width="478" height="85.667" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-01-customer__shell__slot__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-customer band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:01:customer__shell__slot__band:interstitial:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="848.857" y="445" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-01-customer__shell__slot__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-customer band-a2 slot-kind-anchor slot-shared" data-item-id="lane:01:customer__shell__slot__band:anchor:2" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1146.857" y="435.333" width="458" height="109.667" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-01-customer__shell__slot__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-customer band-r slot-kind-sidecar slot-shared" data-item-id="lane:01:customer__shell__slot__band:sidecar:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1634.857" y="410" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-02-frontstage__shell" class="scene-container primitive-lane role-service_blueprint_lane_shell paint-chrome service_blueprint_lane_shell lane-frontstage" data-item-id="lane:02:frontstage__shell" data-role="service_blueprint_lane_shell">
+      <rect class="scene-container__chrome" x="396.333" y="594" width="1467" height="176.667" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-02-frontstage__shell__slot__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-frontstage band-a1 slot-kind-anchor slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:anchor:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="413.333" y="651.667" width="544" height="107" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-02-frontstage__shell__slot__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-frontstage band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:interstitial:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="987.333" y="628" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-02-frontstage__shell__slot__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-frontstage band-a2 slot-kind-anchor slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:anchor:2" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1285.333" y="618.333" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-02-frontstage__shell__slot__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-frontstage band-r slot-kind-sidecar slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:sidecar:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1583.333" y="608.667" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell" class="scene-container primitive-lane role-service_blueprint_lane_shell paint-chrome service_blueprint_lane_shell lane-backstage" data-item-id="lane:03:backstage__shell" data-role="service_blueprint_lane_shell">
+      <rect class="scene-container__chrome" x="334" y="788.667" width="1457" height="167" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__slot__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-backstage band-a1 slot-kind-anchor slot-shared" data-item-id="lane:03:backstage__shell__slot__band:anchor:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="351" y="846.333" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__slot__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-backstage band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:03:backstage__shell__slot__band:interstitial:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="649" y="836.667" width="534" height="107" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__slot__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-backstage band-a2 slot-kind-anchor slot-shared" data-item-id="lane:03:backstage__shell__slot__band:anchor:2" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1213" y="811.667" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__slot__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-backstage band-r slot-kind-sidecar slot-shared" data-item-id="lane:03:backstage__shell__slot__band:sidecar:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1511" y="802" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell" class="scene-container primitive-lane role-service_blueprint_lane_shell paint-chrome service_blueprint_lane_shell lane-support" data-item-id="lane:04:support__shell" data-role="service_blueprint_lane_shell">
+      <rect class="scene-container__chrome" x="235.5" y="973.667" width="1457" height="156" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__slot__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-support band-a1 slot-kind-anchor slot-shared" data-item-id="lane:04:support__shell__slot__band:anchor:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="252.5" y="1044" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__slot__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-support band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:04:support__shell__slot__band:interstitial:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="550.5" y="1020.333" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__slot__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-support band-a2 slot-kind-anchor slot-shared" data-item-id="lane:04:support__shell__slot__band:anchor:2" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="858.5" y="1010.667" width="524" height="107" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__slot__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-support band-r slot-kind-sidecar slot-shared" data-item-id="lane:04:support__shell__slot__band:sidecar:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1412.5" y="985.667" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell" class="scene-container primitive-lane role-service_blueprint_lane_shell paint-chrome service_blueprint_lane_shell lane-system" data-item-id="lane:05:system__shell" data-role="service_blueprint_lane_shell">
+      <rect class="scene-container__chrome" x="137" y="1147.667" width="2245" height="284" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__slot__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-system band-a1 slot-kind-anchor slot-shared" data-item-id="lane:05:system__shell__slot__band:anchor:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="154" y="1312.667" width="534" height="107" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__slot__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-system band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:05:system__shell__slot__band:interstitial:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="718" y="1241.667" width="514" height="107" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__slot__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-system band-a2 slot-kind-anchor slot-shared" data-item-id="lane:05:system__shell__slot__band:anchor:2" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1262" y="1170.667" width="514" height="107" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__slot__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-system band-r slot-kind-sidecar slot-shared" data-item-id="lane:05:system__shell__slot__band:sidecar:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1836" y="1282" width="534" height="96" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell" class="scene-container primitive-lane role-service_blueprint_lane_shell paint-chrome service_blueprint_lane_shell lane-policy" data-item-id="lane:06:policy__shell" data-role="service_blueprint_lane_shell">
+      <rect class="scene-container__chrome" x="137" y="1449.667" width="1457" height="152.333" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__slot__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-policy band-a1 slot-kind-anchor slot-shared" data-item-id="lane:06:policy__shell__slot__band:anchor:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="154" y="1520" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__slot__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-policy band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:06:policy__shell__slot__band:interstitial:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="452" y="1496.333" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__slot__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-policy band-a2 slot-kind-anchor slot-shared" data-item-id="lane:06:policy__shell__slot__band:anchor:2" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="750" y="1472.667" width="268" height="48" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__slot__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_slot paint-chrome service_blueprint_slot lane-policy band-r slot-kind-sidecar slot-shared" data-item-id="lane:06:policy__shell__slot__band:sidecar:1" data-role="service_blueprint_slot">
+      <rect class="scene-container__chrome" x="1058" y="1463" width="524" height="74" rx="16" ry="16"/>
     </g>
     <g id="scene-decoration-lane-customer__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_interaction lane-customer" data-decoration-id="lane-customer__separator">
-      <line class="scene-decoration__line" x1="24" y1="124" x2="2995.568" y2="124"/>
+      <line class="scene-decoration__line" x1="24" y1="576" x2="2767" y2="576"/>
     </g>
     <g id="scene-decoration-lane-frontstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_visibility lane-frontstage" data-decoration-id="lane-frontstage__separator">
-      <line class="scene-decoration__line" x1="24" y1="304" x2="2995.568" y2="304"/>
+      <line class="scene-decoration__line" x1="24" y1="770.667" x2="2767" y2="770.667"/>
     </g>
     <g id="scene-decoration-lane-backstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_internal_interaction lane-backstage" data-decoration-id="lane-backstage__separator">
-      <line class="scene-decoration__line" x1="24" y1="472.167" x2="2995.568" y2="472.167"/>
+      <line class="scene-decoration__line" x1="24" y1="955.667" x2="2767" y2="955.667"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
+    <g id="scene-node-guide__lane_start" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_lane_start_guide" data-item-id="guide__lane_start" data-role="helper">
+      <circle class="scene-node__chrome" cx="2341" cy="48.143" r="4"/>
+    </g>
     <g id="scene-node-guide__band-anchor-1" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_band_guide guide-band-a1" data-item-id="guide__band:anchor:1" data-role="helper">
-      <circle class="scene-node__chrome" cx="133" cy="538.75" r="4"/>
+      <circle class="scene-node__chrome" cx="2341" cy="126" r="4"/>
     </g>
     <g id="scene-node-guide__band-interstitial-1" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_band_guide guide-band-i1" data-item-id="guide__band:interstitial:1" data-role="helper">
-      <circle class="scene-node__chrome" cx="382.446" cy="357.5" r="4"/>
+      <circle class="scene-node__chrome" cx="2065.625" cy="204" r="4"/>
     </g>
     <g id="scene-node-guide__band-anchor-2" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_band_guide guide-band-a2" data-item-id="guide__band:anchor:2" data-role="helper">
-      <circle class="scene-node__chrome" cx="702.642" cy="357.25" r="4"/>
+      <circle class="scene-node__chrome" cx="2065.625" cy="282" r="4"/>
     </g>
     <g id="scene-node-guide__band-sidecar-1" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_band_guide guide-band-r" data-item-id="guide__band:sidecar:1" data-role="helper">
-      <circle class="scene-node__chrome" cx="1006.678" cy="326.5" r="4"/>
+      <circle class="scene-node__chrome" cx="2026.286" cy="350.143" r="4"/>
     </g>
-    <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step lane-customer band-a1 slot-kind-anchor" data-item-id="J-020" data-role="step">
-      <rect class="scene-node__chrome" x="236.196" y="60" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-customer band-a1 slot-kind-anchor slot-shared" data-item-id="lane:01:customer__shell__slot__band:anchor:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="484.857" cy="491.333" r="4"/>
     </g>
-    <g id="scene-node-lane-01-customer__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-customer band-i1 slot-kind-interstitial" data-item-id="lane:01:customer__shell__slot__band:interstitial:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="619.392" cy="60.333" r="4"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-anchor-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-customer band-a1 slot-kind-anchor slot-shared" data-item-id="lane:01:customer__shell__slot__band:anchor:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="484.857" cy="513.333" r="4"/>
     </g>
-    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step lane-customer band-a2 slot-kind-anchor" data-item-id="J-021" data-role="step">
-      <rect class="scene-node__chrome" x="863.392" y="60" width="168" height="64" rx="14" ry="14"/>
+    <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step lane-customer band-a1 slot-kind-anchor slot-shared" data-item-id="J-020" data-role="step">
+      <rect class="scene-node__chrome" x="617.857" y="503" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-lane-01-customer__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-customer band-r slot-kind-sidecar" data-item-id="lane:01:customer__shell__slot__band:sidecar:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1209.588" cy="40" r="4"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-customer band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:01:customer__shell__slot__band:interstitial:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="955.857" cy="458" r="4"/>
     </g>
-    <g id="scene-node-pr-020" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process lane-frontstage band-a1 slot-kind-anchor" data-item-id="PR-020" data-role="process">
-      <rect class="scene-node__chrome" x="507.392" y="130" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-interstitial-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-customer band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:01:customer__shell__slot__band:interstitial:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="992.857" cy="480" r="4"/>
     </g>
-    <g id="scene-node-lane-02-frontstage__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-i1 slot-kind-interstitial" data-item-id="lane:02:frontstage__shell__slot__band:interstitial:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="930.792" cy="303" r="4"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-customer band-a2 slot-kind-anchor slot-shared" data-item-id="lane:01:customer__shell__slot__band:anchor:2__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1290.857" cy="448.333" r="4"/>
     </g>
-    <g id="scene-node-lane-02-frontstage__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-a2 slot-kind-anchor" data-item-id="lane:02:frontstage__shell__slot__band:anchor:2__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1224.388" cy="60" r="4"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-anchor-2__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-customer band-a2 slot-kind-anchor slot-shared" data-item-id="lane:01:customer__shell__slot__band:anchor:2__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1290.857" cy="480" r="4"/>
     </g>
-    <g id="scene-node-lane-02-frontstage__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-r slot-kind-sidecar" data-item-id="lane:02:frontstage__shell__slot__band:sidecar:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1518.284" cy="59.667" r="4"/>
+    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step lane-customer band-a2 slot-kind-anchor slot-shared" data-item-id="J-021" data-role="step">
+      <rect class="scene-node__chrome" x="1423.857" y="468" width="168" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-lane-03-backstage__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-a1 slot-kind-anchor" data-item-id="lane:03:backstage__shell__slot__band:anchor:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="947.392" cy="346.5" r="4"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-customer band-r slot-kind-sidecar slot-shared" data-item-id="lane:01:customer__shell__slot__band:sidecar:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1667.857" cy="423" r="4"/>
     </g>
-    <g id="scene-node-pr-021" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process lane-backstage band-i1 slot-kind-interstitial" data-item-id="PR-021" data-role="process">
-      <rect class="scene-node__chrome" x="1134.588" y="424.167" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-01-customer__shell__slot__band-sidecar-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-customer band-r slot-kind-sidecar slot-shared" data-item-id="lane:01:customer__shell__slot__band:sidecar:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1778.857" cy="445" r="4"/>
     </g>
-    <g id="scene-node-lane-03-backstage__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-a2 slot-kind-anchor" data-item-id="lane:03:backstage__shell__slot__band:anchor:2__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1551.584" cy="188" r="4"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-a1 slot-kind-anchor slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:anchor:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="557.333" cy="664.667" r="4"/>
     </g>
-    <g id="scene-node-lane-03-backstage__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-r slot-kind-sidecar" data-item-id="lane:03:backstage__shell__slot__band:sidecar:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1845.48" cy="187.667" r="4"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-anchor-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-frontstage band-a1 slot-kind-anchor slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:anchor:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="557.333" cy="686.667" r="4"/>
     </g>
-    <g id="scene-node-lane-04-support__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-a1 slot-kind-anchor" data-item-id="lane:04:support__shell__slot__band:anchor:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1246.588" cy="314.833" r="4"/>
+    <g id="scene-node-pr-020" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process lane-frontstage band-a1 slot-kind-anchor slot-shared" data-item-id="PR-020" data-role="process">
+      <rect class="scene-node__chrome" x="690.333" y="697.667" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-lane-04-support__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-i1 slot-kind-interstitial" data-item-id="lane:04:support__shell__slot__band:interstitial:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1551.584" cy="437.167" r="4"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:interstitial:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1094.333" cy="641" r="4"/>
     </g>
-    <g id="scene-node-pr-022" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process lane-support band-a2 slot-kind-anchor" data-item-id="PR-022" data-role="process">
-      <rect class="scene-node__chrome" x="1788.98" y="357.5" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-interstitial-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-frontstage band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:interstitial:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1131.333" cy="663" r="4"/>
     </g>
-    <g id="scene-node-lane-04-support__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-r slot-kind-sidecar" data-item-id="lane:04:support__shell__slot__band:sidecar:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="2172.676" cy="326.643" r="4"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-a2 slot-kind-anchor slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:anchor:2__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1392.333" cy="631.333" r="4"/>
     </g>
-    <g id="scene-node-sa-020" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a1 slot-kind-anchor" data-item-id="SA-020" data-role="systemaction">
-      <rect class="scene-node__chrome" x="1461.784" y="222" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-anchor-2__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-frontstage band-a2 slot-kind-anchor slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:anchor:2__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1429.333" cy="653.333" r="4"/>
     </g>
-    <g id="scene-node-sa-021" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction lane-system band-i1 slot-kind-interstitial" data-item-id="SA-021" data-role="systemaction">
-      <rect class="scene-node__chrome" x="1788.98" y="437.5" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-frontstage band-r slot-kind-sidecar slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:sidecar:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1616.333" cy="621.667" r="4"/>
     </g>
-    <g id="scene-node-sa-022" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a2 slot-kind-anchor" data-item-id="SA-022" data-role="systemaction">
-      <rect class="scene-node__chrome" x="2116.176" y="437.5" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-02-frontstage__shell__slot__band-sidecar-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-frontstage band-r slot-kind-sidecar slot-shared" data-item-id="lane:02:frontstage__shell__slot__band:sidecar:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1727.333" cy="643.667" r="4"/>
     </g>
-    <g id="scene-node-d-020" class="scene-node primitive-card role-dataentity paint-nodes semantic_node service_blueprint_node shape-cylinder type-dataentity lane-system band-r slot-kind-sidecar" data-item-id="D-020" data-role="dataentity">
-      <rect class="scene-node__chrome" x="2443.372" y="437.5" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-a1 slot-kind-anchor slot-shared" data-item-id="lane:03:backstage__shell__slot__band:anchor:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="458" cy="859.333" r="4"/>
     </g>
-    <g id="scene-node-lane-06-policy__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-a1 slot-kind-anchor" data-item-id="lane:06:policy__shell__slot__band:anchor:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="1863.98" cy="539.167" r="4"/>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-anchor-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-backstage band-a1 slot-kind-anchor slot-shared" data-item-id="lane:03:backstage__shell__slot__band:anchor:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="495" cy="881.333" r="4"/>
     </g>
-    <g id="scene-node-lane-06-policy__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-i1 slot-kind-interstitial" data-item-id="lane:06:policy__shell__slot__band:interstitial:1__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="2172.676" cy="539.167" r="4"/>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:03:backstage__shell__slot__band:interstitial:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="793" cy="849.667" r="4"/>
     </g>
-    <g id="scene-node-lane-06-policy__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-a2 slot-kind-anchor" data-item-id="lane:06:policy__shell__slot__band:anchor:2__anchor" data-role="helper">
-      <circle class="scene-node__chrome" cx="2499.872" cy="539.167" r="4"/>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-interstitial-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-backstage band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:03:backstage__shell__slot__band:interstitial:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="793" cy="871.667" r="4"/>
     </g>
-    <g id="scene-node-pl-020" class="scene-node primitive-card role-policy paint-nodes semantic_node service_blueprint_node shape-hexagon type-policy lane-policy band-r slot-kind-sidecar" data-item-id="PL-020" data-role="policy">
-      <rect class="scene-node__chrome" x="2770.568" y="539.167" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-pr-021" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process lane-backstage band-i1 slot-kind-interstitial slot-shared" data-item-id="PR-021" data-role="process">
+      <rect class="scene-node__chrome" x="926" y="882.667" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-a2 slot-kind-anchor slot-shared" data-item-id="lane:03:backstage__shell__slot__band:anchor:2__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1320" cy="824.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-anchor-2__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-backstage band-a2 slot-kind-anchor slot-shared" data-item-id="lane:03:backstage__shell__slot__band:anchor:2__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1357" cy="846.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-backstage band-r slot-kind-sidecar slot-shared" data-item-id="lane:03:backstage__shell__slot__band:sidecar:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1544" cy="815" r="4"/>
+    </g>
+    <g id="scene-node-lane-03-backstage__shell__slot__band-sidecar-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-backstage band-r slot-kind-sidecar slot-shared" data-item-id="lane:03:backstage__shell__slot__band:sidecar:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1655" cy="837" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-a1 slot-kind-anchor slot-shared" data-item-id="lane:04:support__shell__slot__band:anchor:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="359.5" cy="1057" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-anchor-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-support band-a1 slot-kind-anchor slot-shared" data-item-id="lane:04:support__shell__slot__band:anchor:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="396.5" cy="1079" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:04:support__shell__slot__band:interstitial:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="657.5" cy="1033.333" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-interstitial-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-support band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:04:support__shell__slot__band:interstitial:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="694.5" cy="1055.333" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-a2 slot-kind-anchor slot-shared" data-item-id="lane:04:support__shell__slot__band:anchor:2__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1002.5" cy="1023.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-anchor-2__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-support band-a2 slot-kind-anchor slot-shared" data-item-id="lane:04:support__shell__slot__band:anchor:2__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1002.5" cy="1045.667" r="4"/>
+    </g>
+    <g id="scene-node-pr-022" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process lane-support band-a2 slot-kind-anchor slot-shared" data-item-id="PR-022" data-role="process">
+      <rect class="scene-node__chrome" x="1145.5" y="1056.667" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-support band-r slot-kind-sidecar slot-shared" data-item-id="lane:04:support__shell__slot__band:sidecar:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1445.5" cy="998.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-04-support__shell__slot__band-sidecar-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-support band-r slot-kind-sidecar slot-shared" data-item-id="lane:04:support__shell__slot__band:sidecar:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1556.5" cy="1020.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-system band-a1 slot-kind-anchor slot-shared" data-item-id="lane:05:system__shell__slot__band:anchor:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="298" cy="1325.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-anchor-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-system band-a1 slot-kind-anchor slot-shared" data-item-id="lane:05:system__shell__slot__band:anchor:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="298" cy="1347.667" r="4"/>
+    </g>
+    <g id="scene-node-sa-020" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a1 slot-kind-anchor slot-shared" data-item-id="SA-020" data-role="systemaction">
+      <rect class="scene-node__chrome" x="431" y="1358.667" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-system band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:05:system__shell__slot__band:interstitial:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="862" cy="1254.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-interstitial-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-system band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:05:system__shell__slot__band:interstitial:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="862" cy="1276.667" r="4"/>
+    </g>
+    <g id="scene-node-sa-021" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction lane-system band-i1 slot-kind-interstitial slot-shared" data-item-id="SA-021" data-role="systemaction">
+      <rect class="scene-node__chrome" x="995" y="1287.667" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-system band-a2 slot-kind-anchor slot-shared" data-item-id="lane:05:system__shell__slot__band:anchor:2__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1406" cy="1183.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-anchor-2__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-system band-a2 slot-kind-anchor slot-shared" data-item-id="lane:05:system__shell__slot__band:anchor:2__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1406" cy="1205.667" r="4"/>
+    </g>
+    <g id="scene-node-sa-022" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a2 slot-kind-anchor slot-shared" data-item-id="SA-022" data-role="systemaction">
+      <rect class="scene-node__chrome" x="1539" y="1216.667" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-system band-r slot-kind-sidecar slot-shared" data-item-id="lane:05:system__shell__slot__band:sidecar:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1943" cy="1317" r="4"/>
+    </g>
+    <g id="scene-node-lane-05-system__shell__slot__band-sidecar-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-system band-r slot-kind-sidecar slot-shared" data-item-id="lane:05:system__shell__slot__band:sidecar:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1980" cy="1295" r="4"/>
+    </g>
+    <g id="scene-node-d-020" class="scene-node primitive-card role-dataentity paint-nodes semantic_node service_blueprint_node shape-cylinder type-dataentity lane-system band-r slot-kind-sidecar slot-shared" data-item-id="D-020" data-role="dataentity">
+      <rect class="scene-node__chrome" x="2133" y="1317" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-anchor-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-a1 slot-kind-anchor slot-shared" data-item-id="lane:06:policy__shell__slot__band:anchor:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="261" cy="1533" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-anchor-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-policy band-a1 slot-kind-anchor slot-shared" data-item-id="lane:06:policy__shell__slot__band:anchor:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="298" cy="1555" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-interstitial-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:06:policy__shell__slot__band:interstitial:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="559" cy="1509.333" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-interstitial-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-policy band-i1 slot-kind-interstitial slot-shared" data-item-id="lane:06:policy__shell__slot__band:interstitial:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="596" cy="1531.333" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-anchor-2__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-a2 slot-kind-anchor slot-shared" data-item-id="lane:06:policy__shell__slot__band:anchor:2__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="857" cy="1485.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-anchor-2__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-policy band-a2 slot-kind-anchor slot-shared" data-item-id="lane:06:policy__shell__slot__band:anchor:2__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="894" cy="1507.667" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-sidecar-1__anchor" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_anchor lane-policy band-r slot-kind-sidecar slot-shared" data-item-id="lane:06:policy__shell__slot__band:sidecar:1__anchor" data-role="helper">
+      <circle class="scene-node__chrome" cx="1165" cy="1476" r="4"/>
+    </g>
+    <g id="scene-node-lane-06-policy__shell__slot__band-sidecar-1__sizer" class="scene-node primitive-connector_port role-helper paint-nodes service_blueprint_helper service_blueprint_slot_sizer lane-policy band-r slot-kind-sidecar slot-shared" data-item-id="lane:06:policy__shell__slot__band:sidecar:1__sizer" data-role="helper">
+      <circle class="scene-node__chrome" cx="1202" cy="1518.667" r="4"/>
+    </g>
+    <g id="scene-node-pl-020" class="scene-node primitive-card role-policy paint-nodes semantic_node service_blueprint_node shape-hexagon type-policy lane-policy band-r slot-kind-sidecar slot-shared" data-item-id="PL-020" data-role="policy">
+      <rect class="scene-node__chrome" x="1345" y="1476" width="224" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step lane-customer band-a1 slot-kind-anchor" data-item-id="J-020" data-role="step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="248.196" y="88">
-          <tspan x="248.196" dy="0">Submit Claim</tspan>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step lane-customer band-a1 slot-kind-anchor slot-shared" data-item-id="J-020" data-role="step">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="629.857" y="531">
+          <tspan x="629.857" dy="0">Submit Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step lane-customer band-a2 slot-kind-anchor" data-item-id="J-021" data-role="step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="875.392" y="88">
-          <tspan x="875.392" dy="0">Receive</tspan>
-          <tspan x="875.392" dy="20">Confirmation</tspan>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step lane-customer band-a2 slot-kind-anchor slot-shared" data-item-id="J-021" data-role="step">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1435.857" y="496">
+          <tspan x="1435.857" dy="0">Receive</tspan>
+          <tspan x="1435.857" dy="20">Confirmation</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process lane-frontstage band-a1 slot-kind-anchor" data-item-id="PR-020" data-role="process">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="519.392" y="158">
-          <tspan x="519.392" dy="0">Validate Claim</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process lane-frontstage band-a1 slot-kind-anchor slot-shared" data-item-id="PR-020" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="702.333" y="725.667">
+          <tspan x="702.333" dy="0">Validate Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process lane-backstage band-i1 slot-kind-interstitial" data-item-id="PR-021" data-role="process">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1146.588" y="452.167">
-          <tspan x="1146.588" dy="0">Review Claim History</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process lane-backstage band-i1 slot-kind-interstitial slot-shared" data-item-id="PR-021" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="938" y="910.667">
+          <tspan x="938" dy="0">Review Claim History</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process lane-support band-a2 slot-kind-anchor" data-item-id="PR-022" data-role="process">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1800.98" y="385.5">
-          <tspan x="1800.98" dy="0">Notify Customer</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process lane-support band-a2 slot-kind-anchor slot-shared" data-item-id="PR-022" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1157.5" y="1084.667">
+          <tspan x="1157.5" dy="0">Notify Customer</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a1 slot-kind-anchor" data-item-id="SA-020" data-role="systemaction">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1473.784" y="250">
-          <tspan x="1473.784" dy="0">Store Claim</tspan>
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a1 slot-kind-anchor slot-shared" data-item-id="SA-020" data-role="systemaction">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="443" y="1386.667">
+          <tspan x="443" dy="0">Store Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction lane-system band-i1 slot-kind-interstitial" data-item-id="SA-021" data-role="systemaction">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1800.98" y="465.5">
-          <tspan x="1800.98" dy="0">Load Claim History</tspan>
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction lane-system band-i1 slot-kind-interstitial slot-shared" data-item-id="SA-021" data-role="systemaction">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1007" y="1315.667">
+          <tspan x="1007" dy="0">Load Claim History</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a2 slot-kind-anchor" data-item-id="SA-022" data-role="systemaction">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2128.176" y="465.5">
-          <tspan x="2128.176" dy="0">Send Email</tspan>
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction lane-system band-a2 slot-kind-anchor slot-shared" data-item-id="SA-022" data-role="systemaction">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1551" y="1244.667">
+          <tspan x="1551" dy="0">Send Email</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-dataentity paint-labels semantic_node service_blueprint_node shape-cylinder type-dataentity lane-system band-r slot-kind-sidecar" data-item-id="D-020" data-role="dataentity">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2455.372" y="465.5">
-          <tspan x="2455.372" dy="0">Claim</tspan>
+    <g class="scene-node primitive-card role-dataentity paint-labels semantic_node service_blueprint_node shape-cylinder type-dataentity lane-system band-r slot-kind-sidecar slot-shared" data-item-id="D-020" data-role="dataentity">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2145" y="1345">
+          <tspan x="2145" dy="0">Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-policy paint-labels semantic_node service_blueprint_node shape-hexagon type-policy lane-policy band-r slot-kind-sidecar" data-item-id="PL-020" data-role="policy">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2782.568" y="567.167">
-          <tspan x="2782.568" dy="0">Retention Policy</tspan>
+    <g class="scene-node primitive-card role-policy paint-labels semantic_node service_blueprint_node shape-hexagon type-policy lane-policy band-r slot-kind-sidecar slot-shared" data-item-id="PL-020" data-role="policy">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1357" y="1504">
+          <tspan x="1357" dy="0">Retention Policy</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-customer__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-customer" data-decoration-id="lane-customer__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="84.5">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="490">
           <tspan x="24" dy="0">customer</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-frontstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-frontstage" data-decoration-id="lane-frontstage__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="184.334">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="685.334">
           <tspan x="24" dy="0">frontstage</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-backstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-backstage" data-decoration-id="lane-backstage__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="332.417">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="875.167">
           <tspan x="24" dy="0">backstage</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-support__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-support" data-decoration-id="lane-support__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="379">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="1054.667">
           <tspan x="24" dy="0">support</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-system__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-system" data-decoration-id="lane-system__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="356.75">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="1292.667">
           <tspan x="24" dy="0">system</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-policy__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-policy" data-decoration-id="lane-policy__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="565.667">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="1528.834">
           <tspan x="24" dy="0">policy</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
+    <g id="scene-edge-guide__lane_start__helper__lane-01-customer__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_start route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_start edge-channel-helper" data-edge-id="guide__lane_start__helper__lane:01:customer__shell__slot__band:anchor:1__anchor" data-role="helper_lane_start">
+      <path class="scene-edge__path" d="M 2340 48.143 L 2352 48.857 L 2352 78 L 2717 78 L 2717 501 L 362.857 501 L 362.857 491.667 L 485.857 491.333"/>
+    </g>
+    <g id="scene-edge-guide__lane_start__helper__lane-02-frontstage__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_start route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_start edge-channel-helper" data-edge-id="guide__lane_start__helper__lane:02:frontstage__shell__slot__band:anchor:1__anchor" data-role="helper_lane_start">
+      <path class="scene-edge__path" d="M 2340 48.143 L 2362 48.571 L 2362 68 L 2727 68 L 2727 674.333 L 435.333 674.333 L 435.333 665 L 558.333 664.667"/>
+    </g>
+    <g id="scene-edge-guide__lane_start__helper__lane-03-backstage__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_start route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_start edge-channel-helper" data-edge-id="guide__lane_start__helper__lane:03:backstage__shell__slot__band:anchor:1__anchor" data-role="helper_lane_start">
+      <path class="scene-edge__path" d="M 2340 48.143 L 2372 48.286 L 2372 58 L 2737 58 L 2737 869 L 373 869 L 373 859.667 L 459 859.333"/>
+    </g>
+    <g id="scene-edge-guide__lane_start__helper__lane-04-support__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_start route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_start edge-channel-helper" data-edge-id="guide__lane_start__helper__lane:04:support__shell__slot__band:anchor:1__anchor" data-role="helper_lane_start">
+      <path class="scene-edge__path" d="M 2340 48.143 L 2747 48 L 2747 1066.667 L 274.5 1066.667 L 274.5 1057.333 L 360.5 1057"/>
+    </g>
+    <g id="scene-edge-guide__lane_start__helper__lane-05-system__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_start route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_start edge-channel-helper" data-edge-id="guide__lane_start__helper__lane:05:system__shell__slot__band:anchor:1__anchor" data-role="helper_lane_start">
+      <path class="scene-edge__path" d="M 2340 48.143 L 2362 47.714 L 2362 38 L 2757 38 L 2757 1335.333 L 176 1335.333 L 176 1326 L 299 1325.667"/>
+    </g>
+    <g id="scene-edge-guide__lane_start__helper__lane-06-policy__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_start route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_start edge-channel-helper" data-edge-id="guide__lane_start__helper__lane:06:policy__shell__slot__band:anchor:1__anchor" data-role="helper_lane_start">
+      <path class="scene-edge__path" d="M 2340 48.143 L 2352 47.429 L 2352 28 L 2767 28 L 2767 1542.667 L 176 1542.667 L 176 1533.333 L 262 1533"/>
+    </g>
     <g id="scene-edge-guide__band-anchor-1__helper__guide__band-interstitial-1" class="scene-edge role-helper_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_order edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__guide__band:interstitial:1" data-role="helper_order">
-      <path class="scene-edge__path" d="M 134 538.75 L 184 539 L 184 357.5 L 381.446 357.5"/>
+      <path class="scene-edge__path" d="M 2340 126 L 2352 126.75 L 2352 156 L 2677 156 L 2677 204 L 2066.625 204"/>
     </g>
     <g id="scene-edge-guide__band-interstitial-1__helper__guide__band-anchor-2" class="scene-edge role-helper_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_order edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__guide__band:anchor:2" data-role="helper_order">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 701.642 357.25"/>
+      <path class="scene-edge__path" d="M 2066.625 204 L 2076.625 204.75 L 2076.625 234 L 2677 234 L 2677 282 L 2066.625 282"/>
     </g>
     <g id="scene-edge-guide__band-anchor-2__helper__guide__band-sidecar-1" class="scene-edge role-helper_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_order edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__guide__band:sidecar:1" data-role="helper_order">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 842.392 357.25 L 842.392 326.5 L 1005.678 326.5"/>
+      <path class="scene-edge__path" d="M 2064.625 282 L 2076.625 282.75 L 2076.625 312 L 2677 312 L 2677 350.143 L 2027.286 350.143"/>
     </g>
-    <g id="scene-edge-guide__band-anchor-1__helper__j-020" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__J-020" data-role="helper_align">
-      <path class="scene-edge__path" d="M 134 538.75 L 144 538 L 144 60 L 236.196 84"/>
+    <g id="scene-edge-guide__band-anchor-1__helper__lane-01-customer__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__lane:01:customer__shell__slot__band:anchor:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2340 126 L 2362 126.5 L 2362 146 L 2707 146 L 2707 491 L 485.857 491.333"/>
+    </g>
+    <g id="scene-edge-lane-01-customer__shell__slot__band-anchor-1__anchor__helper__j-020" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:anchor:1__anchor__helper__J-020" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 485.857 491.333 L 947.714 970 L 947.714 981.333 L 617.857 527"/>
     </g>
     <g id="scene-edge-guide__band-interstitial-1__helper__lane-01-customer__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__lane:01:customer__shell__slot__band:interstitial:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 435.196 356.75 L 435.196 60.667 L 618.392 60.333"/>
+      <path class="scene-edge__path" d="M 2064.625 204 L 2086.625 204.5 L 2086.625 224 L 2697 224 L 2697 457.667 L 956.857 458"/>
     </g>
-    <g id="scene-edge-j-020__helper__lane-01-customer__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="J-020__helper__lane:01:customer__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 404.196 84 L 618.392 60.333"/>
+    <g id="scene-edge-lane-01-customer__shell__slot__band-anchor-1__anchor__helper__lane-01-customer__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:anchor:1__anchor__helper__lane:01:customer__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 485.857 491.333 L 1157.714 889 L 1157.714 865.667 L 1194.714 865.667 L 1194.714 856.333 L 954.857 458"/>
     </g>
-    <g id="scene-edge-guide__band-anchor-2__helper__j-021" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__J-021" data-role="helper_align">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 822.392 356.75 L 822.392 60 L 863.392 92"/>
+    <g id="scene-edge-guide__band-anchor-2__helper__lane-01-customer__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__lane:01:customer__shell__slot__band:anchor:2__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2064.625 282 L 2086.625 282.5 L 2086.625 302 L 2687 302 L 2687 434 L 1131.857 434 L 1131.857 448 L 1291.857 448.333"/>
     </g>
-    <g id="scene-edge-lane-01-customer__shell__slot__band-interstitial-1__anchor__helper__j-021" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:interstitial:1__anchor__helper__J-021" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 620.392 60.333 L 863.392 92"/>
+    <g id="scene-edge-lane-01-customer__shell__slot__band-interstitial-1__anchor__helper__lane-01-customer__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:interstitial:1__anchor__helper__lane:01:customer__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 956.857 458 L 1492.714 856 L 1492.714 846.667 L 1289.857 448.333"/>
+    </g>
+    <g id="scene-edge-lane-01-customer__shell__slot__band-anchor-2__anchor__helper__j-021" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:anchor:2__anchor__helper__J-021" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 1291.857 448.333 L 2559.714 884 L 2559.714 903.333 L 1423.857 500"/>
     </g>
     <g id="scene-edge-guide__band-sidecar-1__helper__lane-01-customer__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__lane:01:customer__shell__slot__band:sidecar:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 1007.678 326.5 L 1052.392 325.786 L 1052.392 40.333 L 1208.588 40"/>
+      <path class="scene-edge__path" d="M 2025.286 350.143 L 2037.286 350.857 L 2037.286 380 L 2677 380 L 2677 422.667 L 1668.857 423"/>
     </g>
-    <g id="scene-edge-j-021__helper__lane-01-customer__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="J-021__helper__lane:01:customer__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1031.392 92 L 1042.392 60 L 1042.392 39.667 L 1208.588 40"/>
+    <g id="scene-edge-lane-01-customer__shell__slot__band-anchor-2__anchor__helper__lane-01-customer__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:anchor:2__anchor__helper__lane:01:customer__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 1291.857 448.333 L 1943.714 846 L 1943.714 830.667 L 1980.714 830.667 L 1980.714 821.333 L 1666.857 423"/>
     </g>
-    <g id="scene-edge-guide__band-anchor-1__helper__pr-020" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__PR-020" data-role="helper_align">
-      <path class="scene-edge__path" d="M 134 538.75 L 154 538.25 L 154 130 L 507.392 154"/>
+    <g id="scene-edge-guide__band-anchor-1__helper__lane-02-frontstage__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__lane:02:frontstage__shell__slot__band:anchor:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2340 126 L 2372 126.25 L 2372 136 L 2627 136 L 2627 664.333 L 558.333 664.667"/>
+    </g>
+    <g id="scene-edge-lane-02-frontstage__shell__slot__band-anchor-1__anchor__helper__pr-020" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:anchor:1__anchor__helper__PR-020" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 558.333 664.667 L 1092.666 1316.667 L 1092.666 1349.334 L 690.333 721.667"/>
     </g>
     <g id="scene-edge-guide__band-interstitial-1__helper__lane-02-frontstage__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 445.196 357 L 445.196 303.5 L 929.792 303"/>
+      <path class="scene-edge__path" d="M 2064.625 204 L 2096.625 204.25 L 2096.625 214 L 2617 214 L 2617 640.667 L 1095.333 641"/>
     </g>
-    <g id="scene-edge-pr-020__helper__lane-02-frontstage__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="PR-020__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 731.392 154 L 782.392 130 L 782.392 303 L 929.792 303"/>
+    <g id="scene-edge-lane-02-frontstage__shell__slot__band-anchor-1__anchor__helper__lane-02-frontstage__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:anchor:1__anchor__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 558.333 664.667 L 1368.666 1258.333 L 1368.666 1244.667 L 1405.666 1244.667 L 1405.666 1235.333 L 1093.333 641"/>
     </g>
     <g id="scene-edge-guide__band-anchor-2__helper__lane-02-frontstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__lane:02:frontstage__shell__slot__band:anchor:2__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 812.392 356.5 L 812.392 48 L 1062.392 48 L 1062.392 59.5 L 1223.388 60"/>
+      <path class="scene-edge__path" d="M 2064.625 282 L 2096.625 282.25 L 2096.625 292 L 2607 292 L 2607 617 L 1270.333 617 L 1270.333 631 L 1393.333 631.333"/>
     </g>
     <g id="scene-edge-lane-02-frontstage__shell__slot__band-interstitial-1__anchor__helper__lane-02-frontstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:interstitial:1__anchor__helper__lane:02:frontstage__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 931.792 303 L 1062.392 302.667 L 1062.392 60.5 L 1223.388 60"/>
+      <path class="scene-edge__path" d="M 1095.333 641 L 1703.666 1235 L 1703.666 1225.667 L 1391.333 631.333"/>
     </g>
     <g id="scene-edge-guide__band-sidecar-1__helper__lane-02-frontstage__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__lane:02:frontstage__shell__slot__band:sidecar:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 1007.678 326.5 L 1072.392 326.071 L 1072.392 177 L 1379.588 177 L 1379.588 60.167 L 1517.284 59.667"/>
+      <path class="scene-edge__path" d="M 2025.286 350.143 L 2047.286 350.571 L 2047.286 370 L 2597 370 L 2597 606 L 1568.333 606 L 1568.333 621.333 L 1617.333 621.667"/>
     </g>
     <g id="scene-edge-lane-02-frontstage__shell__slot__band-anchor-2__anchor__helper__lane-02-frontstage__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:anchor:2__anchor__helper__lane:02:frontstage__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1225.388 60 L 1517.284 59.667"/>
+      <path class="scene-edge__path" d="M 1393.333 631.333 L 2001.666 1225.333 L 2001.666 1216 L 1615.333 621.667"/>
     </g>
     <g id="scene-edge-guide__band-anchor-1__helper__lane-03-backstage__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__lane:03:backstage__shell__slot__band:anchor:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 134 538.75 L 194 539.25 L 194 413.167 L 852.392 413.167 L 852.392 346.833 L 946.392 346.5"/>
+      <path class="scene-edge__path" d="M 2340 126 L 2637 126 L 2637 859 L 459 859.333"/>
     </g>
-    <g id="scene-edge-guide__band-interstitial-1__helper__pr-021" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__PR-021" data-role="helper_align">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 445.196 357.5 L 445.196 424.167 L 1134.588 448.167"/>
+    <g id="scene-edge-guide__band-interstitial-1__helper__lane-03-backstage__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__lane:03:backstage__shell__slot__band:interstitial:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2064.625 204 L 2557 204 L 2557 835.333 L 634 835.333 L 634 849.333 L 794 849.667"/>
     </g>
-    <g id="scene-edge-lane-03-backstage__shell__slot__band-anchor-1__anchor__helper__pr-021" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:anchor:1__anchor__helper__PR-021" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 948.392 346.5 L 1052.392 346.833 L 1052.392 424.167 L 1134.588 448.167"/>
+    <g id="scene-edge-lane-03-backstage__shell__slot__band-anchor-1__anchor__helper__lane-03-backstage__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:anchor:1__anchor__helper__lane:03:backstage__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 459 859.333 L 1005 1648 L 1005 1638.667 L 792 849.667"/>
+    </g>
+    <g id="scene-edge-lane-03-backstage__shell__slot__band-interstitial-1__anchor__helper__pr-021" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:interstitial:1__anchor__helper__PR-021" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 794 849.667 L 1564 1686.667 L 1564 1719.334 L 926 906.667"/>
     </g>
     <g id="scene-edge-guide__band-anchor-2__helper__lane-03-backstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 832.392 357 L 832.392 188 L 1550.584 188"/>
+      <path class="scene-edge__path" d="M 2064.625 282 L 2547 282 L 2547 824.333 L 1321 824.667"/>
     </g>
-    <g id="scene-edge-pr-021__helper__lane-03-backstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="PR-021__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1358.588 448.167 L 1379.588 424.167 L 1379.588 188.5 L 1550.584 188"/>
+    <g id="scene-edge-lane-03-backstage__shell__slot__band-interstitial-1__anchor__helper__lane-03-backstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:interstitial:1__anchor__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 794 849.667 L 1532 1638 L 1532 1623 L 1569 1623 L 1569 1613.667 L 1319 824.667"/>
     </g>
     <g id="scene-edge-guide__band-sidecar-1__helper__lane-03-backstage__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__lane:03:backstage__shell__slot__band:sidecar:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 1007.678 326.5 L 1082.392 326.357 L 1082.392 210 L 1746.784 210 L 1746.784 188.167 L 1844.48 187.667"/>
+      <path class="scene-edge__path" d="M 2025.286 350.143 L 2057.286 350.286 L 2057.286 360 L 2537 360 L 2537 800.667 L 1496 800.667 L 1496 814.667 L 1545 815"/>
     </g>
     <g id="scene-edge-lane-03-backstage__shell__slot__band-anchor-2__anchor__helper__lane-03-backstage__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:anchor:2__anchor__helper__lane:03:backstage__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1552.584 188 L 1844.48 187.667"/>
+      <path class="scene-edge__path" d="M 1321 824.667 L 1867 1613.334 L 1867 1604 L 1543 815"/>
     </g>
     <g id="scene-edge-guide__band-anchor-1__helper__lane-04-support__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__lane:04:support__shell__slot__band:anchor:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 134 538.75 L 174 538.75 L 174 314.5 L 1245.588 314.833"/>
+      <path class="scene-edge__path" d="M 2340 126 L 2372 125.75 L 2372 116 L 2647 116 L 2647 1056.667 L 360.5 1057"/>
     </g>
     <g id="scene-edge-guide__band-interstitial-1__helper__lane-04-support__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__lane:04:support__shell__slot__band:interstitial:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 435.196 357.75 L 435.196 483.167 L 1369.588 483.167 L 1369.588 437.667 L 1550.584 437.167"/>
+      <path class="scene-edge__path" d="M 2064.625 204 L 2096.625 203.75 L 2096.625 194 L 2567 194 L 2567 1033 L 658.5 1033.333"/>
     </g>
     <g id="scene-edge-lane-04-support__shell__slot__band-anchor-1__anchor__helper__lane-04-support__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:anchor:1__anchor__helper__lane:04:support__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1247.588 314.833 L 1389.588 315.167 L 1389.588 436.667 L 1550.584 437.167"/>
+      <path class="scene-edge__path" d="M 360.5 1057 L 771 2030.667 L 771 2016.667 L 808 2016.667 L 808 2007.334 L 656.5 1033.333"/>
     </g>
-    <g id="scene-edge-guide__band-anchor-2__helper__pr-022" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__PR-022" data-role="helper_align">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 1788.98 381.5"/>
+    <g id="scene-edge-guide__band-anchor-2__helper__lane-04-support__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__lane:04:support__shell__slot__band:anchor:2__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2064.625 282 L 2096.625 281.75 L 2096.625 272 L 2497 272 L 2497 1009.333 L 833.5 1009.333 L 833.5 1023.333 L 1003.5 1023.667"/>
     </g>
-    <g id="scene-edge-lane-04-support__shell__slot__band-interstitial-1__anchor__helper__pr-022" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:interstitial:1__anchor__helper__PR-022" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1552.584 437.167 L 1706.784 436.833 L 1706.784 357.5 L 1788.98 381.5"/>
+    <g id="scene-edge-lane-04-support__shell__slot__band-interstitial-1__anchor__helper__lane-04-support__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:interstitial:1__anchor__helper__lane:04:support__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 658.5 1033.333 L 1116 2007 L 1116 1997.667 L 1001.5 1023.667"/>
+    </g>
+    <g id="scene-edge-lane-04-support__shell__slot__band-anchor-2__anchor__helper__pr-022" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:anchor:2__anchor__helper__PR-022" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 1003.5 1023.667 L 1993 2034.667 L 1993 2067.334 L 1145.5 1080.667"/>
     </g>
     <g id="scene-edge-guide__band-sidecar-1__helper__lane-04-support__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__lane:04:support__shell__slot__band:sidecar:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 1007.678 326.5 L 2171.676 326.643"/>
+      <path class="scene-edge__path" d="M 2025.286 350.143 L 2487 350 L 2487 998.333 L 1446.5 998.667"/>
     </g>
-    <g id="scene-edge-pr-022__helper__lane-04-support__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="PR-022__helper__lane:04:support__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 2012.98 381.5 L 2063.98 357.5 L 2063.98 327.143 L 2171.676 326.643"/>
+    <g id="scene-edge-lane-04-support__shell__slot__band-anchor-2__anchor__helper__lane-04-support__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:anchor:2__anchor__helper__lane:04:support__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 1003.5 1023.667 L 1633 1997 L 1633 1982 L 1670 1982 L 1670 1972.667 L 1444.5 998.667"/>
     </g>
-    <g id="scene-edge-guide__band-anchor-1__helper__sa-020" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__SA-020" data-role="helper_align">
-      <path class="scene-edge__path" d="M 134 538.75 L 164 538.5 L 164 222 L 1461.784 246"/>
+    <g id="scene-edge-guide__band-anchor-1__helper__lane-05-system__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__lane:05:system__shell__slot__band:anchor:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2340 126 L 2362 125.5 L 2362 106 L 2657 106 L 2657 1325.333 L 299 1325.667"/>
     </g>
-    <g id="scene-edge-guide__band-interstitial-1__helper__sa-021" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__SA-021" data-role="helper_align">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 425.196 358 L 425.196 505.167 L 1746.784 505.167 L 1746.784 437.5 L 1788.98 461.5"/>
+    <g id="scene-edge-lane-05-system__shell__slot__band-anchor-1__anchor__helper__sa-020" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:anchor:1__anchor__helper__SA-020" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 299 1325.667 L 574 2638.667 L 574 2671.334 L 431 1382.667"/>
     </g>
-    <g id="scene-edge-sa-020__helper__sa-021" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="SA-020__helper__SA-021" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1685.784 246 L 1726.784 222 L 1726.784 437.5 L 1788.98 461.5"/>
+    <g id="scene-edge-guide__band-interstitial-1__helper__lane-05-system__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__lane:05:system__shell__slot__band:interstitial:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2064.625 204 L 2086.625 203.5 L 2086.625 184 L 2577 184 L 2577 1254.333 L 863 1254.667"/>
     </g>
-    <g id="scene-edge-guide__band-anchor-2__helper__sa-022" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__SA-022" data-role="helper_align">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 752.392 357.75 L 752.392 516.167 L 2043.98 516.167 L 2043.98 437.5 L 2116.176 461.5"/>
+    <g id="scene-edge-lane-05-system__shell__slot__band-anchor-1__anchor__helper__lane-05-system__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:anchor:1__anchor__helper__lane:05:system__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 299 1325.667 L 840 2473 L 840 2412 L 877 2412 L 877 2402.667 L 861 1254.667"/>
     </g>
-    <g id="scene-edge-sa-021__helper__sa-022" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="SA-021__helper__SA-022" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 2012.98 461.5 L 2116.176 461.5"/>
+    <g id="scene-edge-lane-05-system__shell__slot__band-interstitial-1__anchor__helper__sa-021" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:interstitial:1__anchor__helper__SA-021" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 863 1254.667 L 1702 2496.667 L 1702 2529.334 L 995 1311.667"/>
     </g>
-    <g id="scene-edge-guide__band-sidecar-1__helper__d-020" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__D-020" data-role="helper_align">
-      <path class="scene-edge__path" d="M 1007.678 326.5 L 1062.392 326.929 L 1062.392 527.167 L 2371.176 527.167 L 2371.176 437.5 L 2443.372 461.5"/>
+    <g id="scene-edge-guide__band-anchor-2__helper__lane-05-system__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__lane:05:system__shell__slot__band:anchor:2__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2064.625 282 L 2086.625 281.5 L 2086.625 262 L 2507 262 L 2507 1183.333 L 1407 1183.667"/>
     </g>
-    <g id="scene-edge-sa-022__helper__d-020" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="SA-022__helper__D-020" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 2340.176 461.5 L 2443.372 461.5"/>
+    <g id="scene-edge-lane-05-system__shell__slot__band-interstitial-1__anchor__helper__lane-05-system__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:interstitial:1__anchor__helper__lane:05:system__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 863 1254.667 L 1384 2402 L 1384 2341 L 1421 2341 L 1421 2331.667 L 1405 1183.667"/>
+    </g>
+    <g id="scene-edge-lane-05-system__shell__slot__band-anchor-2__anchor__helper__sa-022" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:anchor:2__anchor__helper__SA-022" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 1407 1183.667 L 2790 2354.667 L 2790 2387.334 L 1539 1240.667"/>
+    </g>
+    <g id="scene-edge-guide__band-sidecar-1__helper__lane-05-system__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__lane:05:system__shell__slot__band:sidecar:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2025.286 350.143 L 2047.286 349.714 L 2047.286 340 L 2457 340 L 2457 1159.667 L 1821 1159.667 L 1821 1316.667 L 1944 1317"/>
+    </g>
+    <g id="scene-edge-lane-05-system__shell__slot__band-anchor-2__anchor__helper__lane-05-system__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:anchor:2__anchor__helper__lane:05:system__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 1407 1183.667 L 1948 2331 L 1948 2474.334 L 1995 2474.334 L 1995 2465 L 1942 1317"/>
+    </g>
+    <g id="scene-edge-lane-05-system__shell__slot__band-sidecar-1__anchor__helper__d-020" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:05:system__shell__slot__band:sidecar:1__anchor__helper__D-020" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 1944 1317 L 2133 1341"/>
     </g>
     <g id="scene-edge-guide__band-anchor-1__helper__lane-06-policy__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:1__helper__lane:06:policy__shell__slot__band:anchor:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 134 538.75 L 1862.98 539.167"/>
+      <path class="scene-edge__path" d="M 2340 126 L 2352 125.25 L 2352 96 L 2667 96 L 2667 1532.667 L 262 1533"/>
     </g>
     <g id="scene-edge-guide__band-interstitial-1__helper__lane-06-policy__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:interstitial:1__helper__lane:06:policy__shell__slot__band:interstitial:1__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 383.446 357.5 L 415.196 358.25 L 415.196 550.5 L 2023.98 550.5 L 2023.98 539.667 L 2171.676 539.167"/>
+      <path class="scene-edge__path" d="M 2064.625 204 L 2076.625 203.25 L 2076.625 174 L 2587 174 L 2587 1509 L 560 1509.333"/>
     </g>
     <g id="scene-edge-lane-06-policy__shell__slot__band-anchor-1__anchor__helper__lane-06-policy__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:06:policy__shell__slot__band:anchor:1__anchor__helper__lane:06:policy__shell__slot__band:interstitial:1__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 1864.98 539.167 L 2171.676 539.167"/>
+      <path class="scene-edge__path" d="M 262 1533 L 574 2982.667 L 574 2968.667 L 611 2968.667 L 611 2959.334 L 558 1509.333"/>
     </g>
     <g id="scene-edge-guide__band-anchor-2__helper__lane-06-policy__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:anchor:2__helper__lane:06:policy__shell__slot__band:anchor:2__anchor" data-role="helper_align">
-      <path class="scene-edge__path" d="M 703.642 357.25 L 742.392 358 L 742.392 561.5 L 2351.176 561.5 L 2351.176 539.667 L 2498.872 539.167"/>
+      <path class="scene-edge__path" d="M 2064.625 282 L 2076.625 281.25 L 2076.625 252 L 2517 252 L 2517 1485.333 L 858 1485.667"/>
     </g>
     <g id="scene-edge-lane-06-policy__shell__slot__band-interstitial-1__anchor__helper__lane-06-policy__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:06:policy__shell__slot__band:interstitial:1__anchor__helper__lane:06:policy__shell__slot__band:anchor:2__anchor" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 2173.676 539.167 L 2498.872 539.167"/>
+      <path class="scene-edge__path" d="M 560 1509.333 L 872 2959 L 872 2945 L 909 2945 L 909 2935.667 L 856 1485.667"/>
     </g>
-    <g id="scene-edge-guide__band-sidecar-1__helper__pl-020" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__PL-020" data-role="helper_align">
-      <path class="scene-edge__path" d="M 1007.678 326.5 L 1042.392 327.214 L 1042.392 572.5 L 2678.372 572.5 L 2678.372 539.167 L 2770.568 563.167"/>
+    <g id="scene-edge-guide__band-sidecar-1__helper__lane-06-policy__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_align route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_align edge-channel-helper" data-edge-id="guide__band:sidecar:1__helper__lane:06:policy__shell__slot__band:sidecar:1__anchor" data-role="helper_align">
+      <path class="scene-edge__path" d="M 2025.286 350.143 L 2037.286 349.429 L 2037.286 330 L 2467 330 L 2467 1461.667 L 1033 1461.667 L 1033 1475.667 L 1166 1476"/>
     </g>
-    <g id="scene-edge-lane-06-policy__shell__slot__band-anchor-2__anchor__helper__pl-020" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:06:policy__shell__slot__band:anchor:2__anchor__helper__PL-020" data-role="helper_slot_order">
-      <path class="scene-edge__path" d="M 2500.872 539.167 L 2770.568 563.167"/>
+    <g id="scene-edge-lane-06-policy__shell__slot__band-anchor-2__anchor__helper__lane-06-policy__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_slot_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_slot_order edge-channel-helper" data-edge-id="lane:06:policy__shell__slot__band:anchor:2__anchor__helper__lane:06:policy__shell__slot__band:sidecar:1__anchor" data-role="helper_slot_order">
+      <path class="scene-edge__path" d="M 858 1485.667 L 1217 2935.334 L 1217 2926 L 1164 1476"/>
     </g>
-    <g id="scene-edge-j-020__helper__pr-020" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="J-020__helper__PR-020" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 404.196 84 L 415.196 60 L 415.196 130 L 507.392 154"/>
-    </g>
-    <g id="scene-edge-pr-020__helper__lane-03-backstage__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="PR-020__helper__lane:03:backstage__shell__slot__band:anchor:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 731.392 154 L 772.392 130 L 772.392 346.167 L 946.392 346.5"/>
-    </g>
-    <g id="scene-edge-lane-03-backstage__shell__slot__band-anchor-1__anchor__helper__lane-04-support__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:anchor:1__anchor__helper__lane:04:support__shell__slot__band:anchor:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 948.392 346.5 L 1092.392 346.167 L 1092.392 315.167 L 1245.588 314.833"/>
-    </g>
-    <g id="scene-edge-lane-04-support__shell__slot__band-anchor-1__anchor__helper__sa-020" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:anchor:1__anchor__helper__SA-020" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1247.588 314.833 L 1389.588 314.5 L 1389.588 222 L 1461.784 246"/>
-    </g>
-    <g id="scene-edge-sa-020__helper__lane-06-policy__shell__slot__band-anchor-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="SA-020__helper__lane:06:policy__shell__slot__band:anchor:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1685.784 246 L 1696.784 222 L 1696.784 538.833 L 1862.98 539.167"/>
-    </g>
-    <g id="scene-edge-lane-01-customer__shell__slot__band-interstitial-1__anchor__helper__lane-02-frontstage__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:interstitial:1__anchor__helper__lane:02:frontstage__shell__slot__band:interstitial:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 620.392 60.333 L 792.392 60.667 L 792.392 302.5 L 929.792 303"/>
-    </g>
-    <g id="scene-edge-lane-02-frontstage__shell__slot__band-interstitial-1__anchor__helper__pr-021" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:interstitial:1__anchor__helper__PR-021" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 931.792 303 L 1102.392 303.333 L 1102.392 424.167 L 1134.588 448.167"/>
-    </g>
-    <g id="scene-edge-pr-021__helper__lane-04-support__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="PR-021__helper__lane:04:support__shell__slot__band:interstitial:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1358.588 448.167 L 1369.588 424.167 L 1369.588 437.167 L 1550.584 437.167"/>
-    </g>
-    <g id="scene-edge-lane-04-support__shell__slot__band-interstitial-1__anchor__helper__sa-021" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:interstitial:1__anchor__helper__SA-021" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1552.584 437.167 L 1788.98 461.5"/>
-    </g>
-    <g id="scene-edge-sa-021__helper__lane-06-policy__shell__slot__band-interstitial-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="SA-021__helper__lane:06:policy__shell__slot__band:interstitial:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 2012.98 461.5 L 2023.98 437.5 L 2023.98 538.667 L 2171.676 539.167"/>
-    </g>
-    <g id="scene-edge-j-021__helper__lane-02-frontstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="J-021__helper__lane:02:frontstage__shell__slot__band:anchor:2__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1031.392 92 L 1223.388 60"/>
-    </g>
-    <g id="scene-edge-lane-02-frontstage__shell__slot__band-anchor-2__anchor__helper__lane-03-backstage__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:anchor:2__anchor__helper__lane:03:backstage__shell__slot__band:anchor:2__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1225.388 60 L 1369.588 60.333 L 1369.588 187.5 L 1550.584 188"/>
-    </g>
-    <g id="scene-edge-lane-03-backstage__shell__slot__band-anchor-2__anchor__helper__pr-022" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:anchor:2__anchor__helper__PR-022" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1552.584 188 L 1736.784 188.333 L 1736.784 357.5 L 1788.98 381.5"/>
-    </g>
-    <g id="scene-edge-pr-022__helper__sa-022" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="PR-022__helper__SA-022" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 2012.98 381.5 L 2053.98 357.5 L 2053.98 437.5 L 2116.176 461.5"/>
-    </g>
-    <g id="scene-edge-sa-022__helper__lane-06-policy__shell__slot__band-anchor-2__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="SA-022__helper__lane:06:policy__shell__slot__band:anchor:2__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 2340.176 461.5 L 2361.176 437.5 L 2361.176 538.667 L 2498.872 539.167"/>
-    </g>
-    <g id="scene-edge-lane-01-customer__shell__slot__band-sidecar-1__anchor__helper__lane-02-frontstage__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:01:customer__shell__slot__band:sidecar:1__anchor__helper__lane:02:frontstage__shell__slot__band:sidecar:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1210.588 40 L 1379.588 40 L 1379.588 59.167 L 1517.284 59.667"/>
-    </g>
-    <g id="scene-edge-lane-02-frontstage__shell__slot__band-sidecar-1__anchor__helper__lane-03-backstage__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:02:frontstage__shell__slot__band:sidecar:1__anchor__helper__lane:03:backstage__shell__slot__band:sidecar:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1519.284 59.667 L 1746.784 59.667 L 1746.784 187.167 L 1844.48 187.667"/>
-    </g>
-    <g id="scene-edge-lane-03-backstage__shell__slot__band-sidecar-1__anchor__helper__lane-04-support__shell__slot__band-sidecar-1__anchor" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:03:backstage__shell__slot__band:sidecar:1__anchor__helper__lane:04:support__shell__slot__band:sidecar:1__anchor" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 1846.48 187.667 L 2023.98 187.667 L 2023.98 326.143 L 2171.676 326.643"/>
-    </g>
-    <g id="scene-edge-lane-04-support__shell__slot__band-sidecar-1__anchor__helper__d-020" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="lane:04:support__shell__slot__band:sidecar:1__anchor__helper__D-020" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 2173.676 326.643 L 2381.176 326.643 L 2381.176 437.5 L 2443.372 461.5"/>
-    </g>
-    <g id="scene-edge-d-020__helper__pl-020" class="scene-edge role-helper_lane_order route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_lane_order edge-channel-helper" data-edge-id="D-020__helper__PL-020" data-role="helper_lane_order">
-      <path class="scene-edge__path" d="M 2667.372 461.5 L 2688.372 437.5 L 2688.372 539.167 L 2770.568 563.167"/>
+    <g id="scene-edge-lane-06-policy__shell__slot__band-sidecar-1__anchor__helper__pl-020" class="scene-edge role-helper_stack route-orthogonal paint-edges service_blueprint_edge service_blueprint_helper edge-type-helper_stack edge-channel-helper" data-edge-id="lane:06:policy__shell__slot__band:sidecar:1__anchor__helper__PL-020" data-role="helper_stack">
+      <path class="scene-edge__path" d="M 1166 1476 L 1345 1500"/>
     </g>
     <g id="scene-edge-j-020__precedes__j-021" class="scene-edge role-precedes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="J-020__precedes__J-021" data-role="precedes">
-      <path class="scene-edge__path" d="M 404.196 84 L 425.196 84 L 425.196 48.333 L 802.392 48.333 L 802.392 92 L 863.392 92" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 785.857 527 L 1455.714 901 L 1455.714 866 L 1423.857 500" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-020__realized_by__pr-020" class="scene-edge role-realized_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-realized_by edge-channel-support edge-dashed" data-edge-id="J-020__realized_by__PR-020" data-role="realized_by">
-      <path class="scene-edge__path" d="M 320.196 108 L 320.196 118 L 619.392 118 L 619.392 130" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 701.857 551 L 796.857 503 L 796.857 513 L 833.857 513 L 833.857 555 L 2527 555 L 2527 697.667 L 802.333 697.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-021__realized_by__pr-022" class="scene-edge role-realized_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-realized_by edge-channel-support edge-dashed" data-edge-id="J-021__realized_by__PR-022" data-role="realized_by">
-      <path class="scene-edge__path" d="M 947.392 124 L 947.392 292 L 1900.98 292 L 1900.98 357.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1507.857 532 L 2447 468 L 2447 1113 L 843.5 1113 L 843.5 1067.667 L 1124.5 1067.667 L 1124.5 1056.667 L 1257.5 1056.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="PR-020__constrained_by__PL-020" data-role="constrained_by">
-      <path class="scene-edge__path" d="M 543.392 178 L 543.392 189 L 742.392 189 L 742.392 28 L 2033.98 28 L 2033.98 281 L 2806.568 281 L 2806.568 539.167" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 726.333 745.667 L 972.333 697.667 L 972.333 695.667 L 2397 695.667 L 2397 1589 L 1043 1589 L 1043 1506.667 L 1334 1506.667 L 1334 1476 L 1381 1476" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__depends_on__sa-020" class="scene-edge role-depends_on route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-020__depends_on__SA-020" data-role="depends_on">
-      <path class="scene-edge__path" d="M 619.392 178 L 619.392 199 L 1573.784 199 L 1573.784 222" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 802.333 745.667 L 935.333 697.667 L 935.333 707.667 L 972.333 707.667 L 972.333 706.667 L 2407 706.667 L 2407 1358.667 L 543 1358.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__precedes__pr-021" class="scene-edge role-precedes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="PR-020__precedes__PR-021" data-role="precedes">
-      <path class="scene-edge__path" d="M 731.392 154 L 762.392 154 L 762.392 448.167 L 1134.588 448.167" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 914.333 721.667 L 925.333 697.667 L 925.333 717.667 L 2477 717.667 L 2477 904.333 L 634 904.333 L 634 882.667 L 926 906.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-021__depends_on__sa-021" class="scene-edge role-depends_on route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-021__depends_on__SA-021" data-role="depends_on">
-      <path class="scene-edge__path" d="M 1246.588 472.167 L 1246.588 494.167 L 1736.784 494.167 L 1736.784 425.5 L 1900.98 425.5 L 1900.98 437.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1038 930.667 L 1198 882.667 L 1198 881.667 L 2417 881.667 L 2417 1287.667 L 1107 1287.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-021__precedes__pr-022" class="scene-edge role-precedes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="PR-021__precedes__PR-022" data-role="precedes">
-      <path class="scene-edge__path" d="M 1358.588 448.167 L 1716.784 448.167 L 1716.784 381.5 L 1788.98 381.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1150 906.667 L 1161 882.667 L 1161 892.667 L 2437 892.667 L 2437 1102 L 833.5 1102 L 833.5 1056.667 L 1145.5 1080.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-022__depends_on__sa-022" class="scene-edge role-depends_on route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-022__depends_on__SA-022" data-role="depends_on">
-      <path class="scene-edge__path" d="M 1900.98 405.5 L 1900.98 416.5 L 2228.176 416.5 L 2228.176 437.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1257.5 1104.667 L 2427 1056.667 L 2427 1216.667 L 1651 1216.667" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="SA-020__constrained_by__PL-020" data-role="constrained_by">
-      <path class="scene-edge__path" d="M 1497.784 270 L 1497.784 281 L 2806.568 281 L 2806.568 539.167" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 467 1406.667 L 666 1358.667 L 666 1368.667 L 703 1368.667 L 703 1388 L 2407 1388 L 2407 1578 L 1033 1578 L 1033 1495.667 L 1324 1495.667 L 1324 1476 L 1381 1476" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-020__reads_writes__d-020" class="scene-edge role-reads_writes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed edge-bold" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
-      <path class="scene-edge__path" d="M 1497.784 270 L 1497.784 281 L 2351.176 281 L 2351.176 405.5 L 2479.372 405.5 L 2479.372 437.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 467 1406.667 L 2259 2506.334 L 2259 2464.667 L 2169 1317" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-021__reads__d-020" class="scene-edge role-reads route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-021__reads__D-020" data-role="reads">
-      <path class="scene-edge__path" d="M 1824.98 485.5 L 1824.98 506.167 L 2033.98 506.167 L 2033.98 405.5 L 2479.372 405.5 L 2479.372 437.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1031 1335.667 L 1928 2435.334 L 1928 2495.334 L 2249 2495.334 L 2249 2464.667 L 2169 1317" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-022__reads__d-020" class="scene-edge role-reads route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-022__reads__D-020" data-role="reads">
-      <path class="scene-edge__path" d="M 2152.176 485.5 L 2152.176 496.5 L 2351.176 496.5 L 2351.176 405.5 L 2479.372 405.5 L 2479.372 437.5" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1575 1264.667 L 1938 2364.334 L 1938 2484.334 L 2239 2484.334 L 2239 2464.667 L 2169 1317" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-reads_writes service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed edge-bold" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
-      <rect class="scene-edge-label__box" x="1882.882" y="247" width="83.196" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1888.882" y="263">
-          <tspan x="1888.882" dy="0">reads, writes</tspan>
+      <rect class="scene-edge-label__box" x="1321.402" y="1922.5" width="83.196" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1327.402" y="1938.5">
+          <tspan x="1327.402" dy="0">reads, writes</tspan>
         </text>
     </g>
   </g>

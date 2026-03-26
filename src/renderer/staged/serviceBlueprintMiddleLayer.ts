@@ -695,7 +695,6 @@ function buildHelperEdges(
   bandGuideNodeIds: readonly string[]
 ): ServiceBlueprintMiddleEdge[] {
   const edges: ServiceBlueprintMiddleEdge[] = [];
-  const laneOrderById = new Map(laneShells.map((lane) => [lane.laneId, lane.index]));
 
   for (let index = 1; index < bandGuideNodeIds.length; index += 1) {
     const from = bandGuideNodeIds[index - 1];
@@ -727,12 +726,12 @@ function buildHelperEdges(
         const guideNodeId = bandGuideNodeIds.find((candidate) => candidate.endsWith(slot.bandId));
         if (guideNodeId) {
           edges.push({
-            id: `${guideNodeId}__helper__${slot.representativeNodeId}`,
+            id: `${guideNodeId}__helper__${slot.anchorNodeId}`,
             semanticEdgeIds: [],
             channel: "helper",
             type: "HELPER_ALIGN",
             from: guideNodeId,
-            to: slot.representativeNodeId,
+            to: slot.anchorNodeId,
             strictRoute: false,
             hidden: true
           });
@@ -741,20 +740,20 @@ function buildHelperEdges(
 
       if (previousSlotAnchorId) {
         edges.push({
-          id: `${previousSlotAnchorId}__helper__${slot.representativeNodeId}`,
+          id: `${previousSlotAnchorId}__helper__${slot.anchorNodeId}`,
           semanticEdgeIds: [],
           channel: "helper",
           type: "HELPER_SLOT_ORDER",
           from: previousSlotAnchorId,
-          to: slot.representativeNodeId,
+          to: slot.anchorNodeId,
           strictRoute: false,
           hidden: true
         });
       }
-      previousSlotAnchorId = slot.representativeNodeId;
+      previousSlotAnchorId = slot.anchorNodeId;
 
       const stackIds = slot.nodeIds.length > 0
-        ? [...slot.nodeIds]
+        ? [slot.anchorNodeId, ...slot.nodeIds]
         : [slot.anchorNodeId];
       for (let index = 1; index < stackIds.length; index += 1) {
         const from = stackIds[index - 1];
@@ -773,40 +772,6 @@ function buildHelperEdges(
           hidden: true
         });
       }
-    }
-  }
-
-  const sharedSlotsByBandId = new Map<string, ServiceBlueprintMiddleSlot[]>();
-  for (const slot of slotsById.values()) {
-    if (!slot.shared) {
-      continue;
-    }
-    const existing = sharedSlotsByBandId.get(slot.bandId) ?? [];
-    existing.push(slot);
-    sharedSlotsByBandId.set(slot.bandId, existing);
-  }
-
-  for (const slots of sharedSlotsByBandId.values()) {
-    const ordered = [...slots].sort((left, right) =>
-      (laneOrderById.get(left.laneId) ?? Number.MAX_SAFE_INTEGER)
-      - (laneOrderById.get(right.laneId) ?? Number.MAX_SAFE_INTEGER)
-    );
-    for (let index = 1; index < ordered.length; index += 1) {
-      const from = ordered[index - 1];
-      const to = ordered[index];
-      if (!from || !to) {
-        continue;
-      }
-      edges.push({
-        id: `${from.representativeNodeId}__helper__${to.representativeNodeId}`,
-        semanticEdgeIds: [],
-        channel: "helper",
-        type: "HELPER_LANE_ORDER",
-        from: from.representativeNodeId,
-        to: to.representativeNodeId,
-        strictRoute: false,
-        hidden: true
-      });
     }
   }
 
