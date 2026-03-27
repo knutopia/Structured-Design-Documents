@@ -1,4 +1,4 @@
-# Service Blueprint Renderer Reset
+# [Deprecated] Service Blueprint Renderer Reset
 
 This note records the architectural reset for staged `service_blueprint` preview work.
 

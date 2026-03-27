@@ -2,11 +2,18 @@
 
 ## Open Issues
 
+-FIX the sidecar crap in docs/service_blueprint_layout_rules.md
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Fri 3-28-26
+
+-Ripped out elk routing from service_blueprint
+-Ripped elk out of documentation
+-Created second service blueprint reset document
 
 ## Thu 3-27-26
 

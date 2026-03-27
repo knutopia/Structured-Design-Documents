@@ -49,19 +49,14 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 - In this WSL setup, default temp resolution may point at `/mnt/c/TEMP`, which can fail with `EACCES`.
 - `TMPDIR=/tmp` avoids that problem and should be the default for test runs.
 
-## Current Project Goal
+## Current Project Goal: Service Blueprint Rendering
 
-Current renderer migration work should follow:
+The current migration focus is to complete the staged SVG renderer architecture on `service_blueprint`.
 
-- `docs/renderer_migration_master_plan.md`
-- `docs/toolchain/renderer_migration_guidance.md`
-- `docs/Specific Layout Concerns per Diagram Type.md`
+Do also follow the local instructions in `docs/service_blueprint_renderer_implementation/AGENTS.md`.
 
-The current migration focus is proving the staged SVG renderer architecture on `ia_place_map` and `ui_contracts` before expanding to the remaining diagram types.
+## Renderer Constraints
 
-## Renderer Migration Constraints
-
-- Treat `docs/renderer_migration_master_plan.md` as a sequential plan. Work on one explicitly selected step at a time, and do not start later steps early.
 - Preserve parser, compiler, validator, and projection behavior unless the selected migration step explicitly says otherwise.
 - Keep projection as the semantic boundary between graph semantics and rendering technology. Do not push layout, routing, text wrapping, or SVG structure into parsing, compilation, validation, or projection.
 - Keep the staged renderer pipeline explicit: `projection -> RendererScene -> MeasuredScene -> PositionedScene -> SVG -> PNG`.
@@ -70,8 +65,7 @@ The current migration focus is proving the staged SVG renderer architecture on `
 - Preserve `LEGACY` outputs unless the selected migration step explicitly changes that behavior.
 - Make SVG the first-class artifact backend for the new staged path. Keep PNG as rasterization derived from SVG rather than a separate scene renderer.
 - Treat text measurement, text wrapping, width-band policy, overflow policy, theme tokens, layout strategies, routing, and renderer diagnostics as shared renderer infrastructure. If a view exposes a gap, fix the shared layer rather than patching the view with one-off logic.
-- Use ELK only as a macro-layout strategy for eligible scene subgraphs. ELK must not become the renderer scene format or the source of truth for text composition.
-- Limit new staged-renderer proof work to `ia_place_map` and `ui_contracts` until the shared architecture is proven.
+- Avoid the failed-in-practice use of ELK as a macro-layout strategy for eligible scene subgraphs.
 - Preserve deterministic behavior: stable ordering, vendored font usage, canonical `LF` newlines for stored text artifacts, deterministic measurement and layout, deterministic SVG serialization, and explicit renderer diagnostics for degraded output.
 - Each migration step should land code, tests, and any required documentation updates, not just design notes.
 
@@ -101,7 +95,5 @@ The current migration focus is proving the staged SVG renderer architecture on `
 
 - Stop conditions:
   stop and surface the problem instead of coding through it when output contradicts cited invariants, when goldens would need updating to hide quality regressions, or when the current strategy is producing structurally wrong output and further tuning is speculative.
-
-- For `service_blueprint` work, also follow the local instructions in `docs/service_blueprint_renderer_implementation/AGENTS.md`.
 
 For completed project milestones and legacy toolchain background, see `docs/Done/project_achievements.md`.

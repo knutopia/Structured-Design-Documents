@@ -1,8 +1,10 @@
-# Service Blueprint Layout Rules for ELK Input
+# Service Blueprint Layout Rules
 
-Status: working draft
+Status: de-elked
 
-This document is meant to define the layout rules that an ELK-backed `service_blueprint` implementation must honor. Older local `service_blueprint` ELK / architecture notes are intentionally not treated as authoritative here.
+This document is meant to define the layout rules that a `service_blueprint` implementation must honor. 
+
+This document initially targeted Elk for layout and routing. The Elk implementation has failed in practice. The document remains to provide service blueprint relevant information.
 
 ## Purpose
 
@@ -16,7 +18,7 @@ It is a journey-anchored matrix:
 - supporting actions explain how each customer step is delivered
 - data and policy are supporting sidecars, not the main storyline
 
-The goal of these rules is to give future ELK layout code a semantic target before we decide exact graph encoding details.
+The goal of these rules is to provide a semantic target before we decide exact graph encoding details.
 
 ## Grounding Inputs
 
@@ -40,10 +42,6 @@ Current external references:
   https://www.theydo.com/best-practices/the-service-blueprint-template-explained
 - TheyDo, "Service blueprint template"  
   https://www.theydo.com/templates/service-blueprint-template
-- ELK Layered reference  
-  https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html
-- ELK reference index  
-  https://eclipse.dev/elk/reference.html
 
 ## Current SDD Semantics to Honor
 
@@ -214,13 +212,11 @@ Do not create empty or speculative bands. Interstitial bands must correspond to 
 - default placement is a policy sidecar position, not a primary action slot
 - use one canonical node per policy in a blueprint slice
 - anchor it by first constrained occurrence
-- if every constrained occurrence falls within one semantic band and a band-aligned support placement is
-  clearer than a sidecar, it may occupy that band's policy-row cell instead of a sidecar position
+- if every constrained occurrence falls within one semantic band and a band-aligned support placement is clearer than a sidecar, it may occupy that band's policy-row cell instead of a sidecar position
 
 ### 9. Prefer a right-side resource rail for shared sidecars
 
-For shared `DataEntity` and `Policy` nodes, the default layout should use a right-side sidecar rail or
-sidecar subcolumns rather than mixing them into the main action flow.
+For shared `DataEntity` and `Policy` nodes, the default layout should use a right-side sidecar rail or sidecar subcolumns rather than mixing them into the main action flow.
 
 Why:
 
@@ -231,8 +227,7 @@ Why:
 Local exception:
 
 - if a resource is only used within a single band and colocating it clearly improves readability, it may occupy a local sidecar subcolumn adjacent to that band
-- if a policy is only constrained within a single band and a regular band-aligned support cell is clearer
-  than any sidecar treatment, it may occupy that band's policy-row cell instead of a sidecar
+- if a policy is only constrained within a single band and a regular band-aligned support cell is clearer than any sidecar treatment, it may occupy that band's policy-row cell instead of a sidecar
 
 ### 10. Orphans and disconnected nodes
 
@@ -307,259 +302,9 @@ Key reading:
   occurrences in the slice happen in `A1`
 - `D-020` remains a shared right-side resource because it is accessed from multiple moments in the flow
 
-## Middle-Layer ELK Encoding Contract
+## [Deprecated:] Middle-Layer ELK Encoding Contract
 
-This section defines the middle layer between service-blueprint semantics and final ELK layout.
-
-It is the missing translation contract between:
-
-- the semantic rules above
-- the staged-renderer architecture in `docs/toolchain/renderer_migration_guidance.md`
-- the `service_blueprint` reset constraints in
-  `docs/service_blueprint_renderer_implementation/Service Blueprint Renderer Reset.md`
-
-The intent is to make future implementation planning decision-ready without freezing exact ELK JSON
-or exact route choreography.
-
-### Purpose Of The Middle Layer
-
-The middle layer translates service-blueprint semantics into ELK-visible structure before ELK
-computes final geometry.
-
-Its responsibilities are:
-
-- turn semantic lanes into lane shells
-- turn semantic chronology into anchor bands, interstitial bands, sidecar rails, and parking bands
-- turn edge families into explicit edge channels and port roles
-- hand ELK one coherent, deterministic layout problem
-
-The middle layer is renderer-owned, deterministic, and pre-ELK.
-
-It exists specifically to avoid the rejected two-pass pattern of:
-
-- asking ELK for approximate ordering
-- snapping nodes into rigid rows afterward
-- rerouting or repairing edges after the fact
-
-### Ownership Boundary
-
-Ownership is split as follows:
-
-- projection owns semantic scope, included nodes and edges, lane membership inputs, omissions, and
-  author order
-- the middle layer owns derived bands, sidecar-rail decisions, parking-band decisions, ELK-visible
-  containers or partitions, edge channels, port roles, and ordering or priority hints
-- ELK owns final coordinates, final bend points, and final routed sections in one coherent run
-- SVG and backend code consume final geometry and paint it; they must not reinterpret
-  service-blueprint semantics or repair layout decisions after ELK
-
-The middle layer may derive additional structural objects that are not first-class SDD semantics,
-but those objects must remain renderer-internal and must not leak back into projection as fake graph
-semantics.
-
-### ELK-Visible Object Model
-
-The middle layer must materialize the following objects before ELK runs:
-
-| Semantic concept | Middle-layer object | ELK-visible representation | Notes |
-| --- | --- | --- | --- |
-| Whole blueprint | `blueprint root` | one root graph or top-level compound container | owns overall direction, hierarchy handling, and top-level sequencing context |
-| Semantic lane | `lane shell` | one ELK-visible structural container per lane | lanes are structural objects, not post-layout y-snaps |
-| Customer-step band | `anchor band` | one ELK-visible sequencing object in left-to-right order | anchor bands carry the primary service moments |
-| Operational between-step band | `interstitial band` | one ELK-visible sequencing object inserted between anchor bands | created only for real semantic progression |
-| Disconnected far-right placement | `parking band` | one ELK-visible terminal sequencing object in a lane | preserves main blueprint first while keeping orphans deterministic |
-| Shared resource area | `sidecar rail` | one ELK-visible sidecar region to the right of action bands | structurally distinct from action bands |
-| Band-aligned support exception | `band-aligned support cell` | one ELK-visible regular cell in the policy or support row within a semantic band | used only when a same-band support placement is explicitly justified |
-| Local sidecar exception | `local sidecar subcolumn` | one ELK-visible local sidecar region adjacent to a band | used only when the local exception is explicitly justified |
-| Node placement decision | `semantic node placement` | membership of one node in exactly one lane shell and one band or sidecar region | the middle layer decides this before ELK |
-| Edge family routing intent | `edge channel` / `port role` | explicit source and target attachment roles, and any needed ordering hints | keeps primary flow from fighting with support or sidecar access |
-| Meaningful lane boundary | `separator lines` | renderer-painted artifacts derived from final lane-shell geometry | not primary ELK drivers and not a substitute for lane shells |
-
-Important consequences:
-
-- lane shells are required ELK-visible structure
-- anchor bands, interstitial bands, parking bands, and sidecar rails are required ELK-visible
-  sequencing structure, not incidental x-positions that happen to emerge
-- separator lines are painted from resolved lane-shell boundaries after layout; they preserve
-  meaning, but they are not themselves the thing that ELK optimizes
-
-### Normative Encoding Rules
-
-Before ELK runs, the middle layer must produce these assignments:
-
-- every in-scope node belongs to exactly one lane shell
-- every action-like node belongs to exactly one anchor band, interstitial band, or parking band
-- every support-style non-timeline node belongs to exactly one of:
-  - a band-aligned support cell
-  - the shared right-side sidecar rail
-  - an explicitly justified local sidecar subcolumn
-- disconnected or weakly connected nodes go to parking bands at the far right of their own lane
-- customer-step order defines anchor-band order
-- interstitial bands are created only from real semantic progression and not as speculative
-  spacing placeholders
-
-For current `service_blueprint` semantics:
-
-- `Step`, `Process`, and chronology-participating `SystemAction` nodes are action-like for band
-  assignment
-- `DataEntity` nodes are shared-resource nodes by default
-- `Policy` nodes are sidecar nodes by default, but may use a band-aligned support cell when their
-  constrained occurrences stay within one semantic band and that placement is clearer
-- `SystemAction` may be placed in a sidecar-like local exception only if a future rule explicitly
-  allows it; the default contract keeps it in the action chronology
-
-Edge families must be encoded as distinct edge channels with distinct port roles:
-
-- `PRECEDES` uses primary-flow channels
-- `REALIZED_BY` and `DEPENDS_ON` use support channels
-- `READS`, `WRITES`, and `CONSTRAINED_BY` use resource or policy channels
-
-Further rules:
-
-- semantic edges remain distinct in the middle layer even if a later visual treatment lets nearby
-  routes share corridors
-- `READS`, `WRITES`, and `CONSTRAINED_BY` must not collapse into one undifferentiated sidecar edge
-  family before routing
-- band derivation and sidecar placement are middle-layer decisions made before ELK, not something
-  ELK is expected to infer from raw edges alone
-
-### Allowed ELK Mechanism Families
-
-The middle layer may use the following ELK mechanism families as tools:
-
-- hierarchy and compound containers
-- layout partitioning for left-to-right band sequencing
-- model-order preservation
-- in-layer predecessor or successor constraints
-- explicit ports with fixed-side or fixed-order behavior
-- edge-family straightness and shortness priorities
-
-These are allowed tools, not the contract itself.
-
-The contract is semantic and renderer-owned:
-
-- the middle layer decides which lane shell, band, sidecar rail, edge channel, and port role exist
-- implementation may use different ELK option combinations over time as long as the contract above
-  is preserved
-- exact option values, exact tuning, and exact JSON shape are implementation details for the later
-  implementation plan
-
-### Worked Encoding Sketch: `service_blueprint_slice`
-
-Using the current example, the middle layer should derive these lane shells:
-
-- `customer`: `J-020`, `J-021`
-- `frontstage`: `PR-020`
-- `backstage`: `PR-021`
-- `support`: `PR-022`
-- `system`: `SA-020`, `SA-021`, `SA-022`, `D-020`
-- `policy`: `PL-020`
-
-It should derive these sequencing objects:
-
-- `A1` anchor band: `J-020`, `PR-020`, `SA-020`, `PL-020`
-- `I1` interstitial band: `PR-021`, `SA-021`
-- `A2` anchor band: `J-021`, `PR-022`, `SA-022`
-- `R*` shared right resource column: `D-020`
-
-It should derive these edge-channel and port-role expectations:
-
-- `J-020 -> J-021` and `PR-020 -> PR-021 -> PR-022` use primary-flow channels
-- `J-020 REALIZED_BY PR-020` and `J-021 REALIZED_BY PR-022` use support channels with
-  same-band or near-vertical reading
-- `PR-020 DEPENDS_ON SA-020`, `PR-021 DEPENDS_ON SA-021`, and `PR-022 DEPENDS_ON SA-022` use
-  support channels aimed downward into lower lane shells
-- `SA-020 READS D-020`, `SA-020 WRITES D-020`, `SA-021 READS D-020`, `SA-022 READS D-020`, and
-  `PR-020 CONSTRAINED_BY PL-020`, `SA-020 CONSTRAINED_BY PL-020` use resource or policy channels
-  toward the sidecar rail
-
-This sketch is conceptual on purpose.
-
-It defines which ELK-visible structure must exist and which routing intents must be preserved, but
-it does not prescribe full ELK JSON or exact bend points.
-
-### Non-Goals And Prohibited Shortcuts
-
-The middle-layer contract does not require:
-
-- exact column widths
-- exact row heights
-- exact bend-point choreography from the reference SVG or PNG
-- literal ELK JSON in the documentation
-- projection storing final coordinates or final route geometry
-- ELK becoming the renderer scene format
-
-The middle-layer contract explicitly forbids:
-
-- post-layout snapping of nodes into lane rows
-- renderer-side routing fallback on the staged `service_blueprint` path
-- treating semantic lanes or bands as purely cosmetic overlays
-- using the reference design notes as a bend-for-bend routing contract
-
-The reference image and reference design notes remain valuable acceptance exemplars for reading
-structure, edge-family emphasis, and overall visual discipline. They are not a license to re-create
-the rejected handcrafted repair path.
-
-## ELK Input Requirements Derived from These Rules
-
-These are hard constraints derived from the semantic rules above and the middle-layer contract.
-
-They summarize what later implementation work must preserve.
-
-### 16. Lanes and bands must be ELK-visible
-
-If ELK is used for final geometry, lane shells, bands, and any sidecar rail placements must exist
-as ELK-visible structure before layout.
-
-Do not expect ELK to infer blueprint rows, service moments, or sidecar policy from raw edges alone.
-
-### 17. No post-layout snapping contract
-
-Final node placement and final route geometry must come from one coherent layout pass or one
-coherent composed layout system.
-
-The middle-layer decisions above must therefore be encoded before or during ELK layout, not patched
-in afterward.
-
-### 18. Explicit ports by edge family
-
-The ELK input should expose different edge channels and port roles for at least:
-
-- primary flow
-- support dependencies
-- resource / policy sidecar access
-
-Primary chronology must not fight for the same attachment roles as support or sidecar edges.
-
-### 19. Use ELK as a constrained solver, not as the semantic author
-
-The blueprint rules and middle-layer contract in this document define lane order, band meaning,
-sidecar policy, edge channels, and ownership boundaries.
-
-ELK should solve positions and routes within that contract, not invent it.
-
-### 20. Use current ELK features as hints, not as substitutes for semantics
-
-Current ELK mechanism families that may help include:
-
-- model-order preservation
-- explicit ports and orthogonal routing
-- in-layer constraints
-- hierarchy handling
-- layout partitioning for left-to-right band sequencing
-
-Those mechanisms are admissible tools, but none of them replaces explicit middle-layer derivation of
-lane shells, anchor bands, interstitial bands, parking bands, or sidecar rails.
-
-### 21. Labels are secondary
-
-Edge labels such as `depends on`, `reads`, `writes`, and `constrained by` are useful, but they are
-secondary to preserving clean blueprint structure.
-
-If label placement destabilizes geometry, prefer:
-
-- keeping structure readable first
-- placing or refining some labels after the main geometry is known
+Elk has failed.
 
 ## Open Questions for Future SDD Semantics
 
