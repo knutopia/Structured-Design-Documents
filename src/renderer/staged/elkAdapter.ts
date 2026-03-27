@@ -50,6 +50,7 @@ export interface ElkLayeredAdapterInput {
 export interface ElkLayeredAdapterResult {
   contentWidth: number;
   contentHeight: number;
+  childFrames: Map<string, { x: number; y: number; width: number; height: number }>;
   childPositions: Map<string, Point>;
   edgeRoutes: Map<string, Point[]>;
 }
@@ -59,6 +60,8 @@ export interface ElkFixedPositionRoutingInput extends ElkLayeredAdapterInput {
 }
 
 export interface ElkFixedPositionRoutingResult extends ElkLayeredAdapterResult {
+  inputGraphSnapshot: unknown;
+  outputGraphSnapshot: unknown;
   positionsPreserved: boolean;
 }
 
@@ -236,10 +239,15 @@ function createFlatElkGraph(
   } as unknown as ElkNode;
 }
 
+function cloneElkGraphSnapshot(graph: ElkNode): unknown {
+  return structuredClone(graph);
+}
+
 function collectFlatElkLayoutResult(
   input: ElkLayeredAdapterInput,
   laidOut: ElkNode
 ): ElkLayeredAdapterResult {
+  const childFrames = new Map<string, { x: number; y: number; width: number; height: number }>();
   const childPositions = new Map<string, Point>();
 
   for (const child of input.children) {
@@ -247,6 +255,12 @@ function collectFlatElkLayoutResult(
     if (!laidOutChild || !Number.isFinite(laidOutChild.x) || !Number.isFinite(laidOutChild.y)) {
       throw new Error(`ELK did not return finite coordinates for child "${child.id}".`);
     }
+    childFrames.set(child.id, {
+      x: roundMetric(laidOutChild.x ?? 0),
+      y: roundMetric(laidOutChild.y ?? 0),
+      width: roundMetric(laidOutChild.width ?? child.width),
+      height: roundMetric(laidOutChild.height ?? child.height)
+    });
     childPositions.set(child.id, {
       x: roundMetric(laidOutChild.x ?? 0),
       y: roundMetric(laidOutChild.y ?? 0)
@@ -268,6 +282,7 @@ function collectFlatElkLayoutResult(
   return {
     contentWidth: roundMetric(laidOut.width ?? 0),
     contentHeight: roundMetric(laidOut.height ?? 0),
+    childFrames,
     childPositions,
     edgeRoutes
   };
@@ -637,8 +652,10 @@ export async function runElkFixedPositionRouting(
     "org.eclipse.elk.spacing.nodeNode": String(input.nodeGap),
     "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": String(input.layerGap)
   });
+  const inputGraphSnapshot = cloneElkGraphSnapshot(graph);
 
   const laidOut = await elk.layout(graph as unknown as ElkNode);
+  const outputGraphSnapshot = cloneElkGraphSnapshot(laidOut);
   const result = collectFlatElkLayoutResult(input, laidOut);
   const tolerance = input.positionTolerance ?? 0.5;
   const positionsPreserved = input.children.every((child) => {
@@ -653,6 +670,8 @@ export async function runElkFixedPositionRouting(
 
   return {
     ...result,
+    inputGraphSnapshot,
+    outputGraphSnapshot,
     positionsPreserved
   };
 }

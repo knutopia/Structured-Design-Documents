@@ -182,10 +182,17 @@ describe("rendered example corpus", () => {
 
       await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"));
       await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_input", "json"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_output", "json"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_drift_report", "json"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "svg"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "png"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "svg"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "png"));
     }
   });
 
-  it("does not add pre-routing corpus siblings for non-service_blueprint staged views", async () => {
+  it("does not add service_blueprint-only debug corpus siblings for non-service_blueprint staged views", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
@@ -195,6 +202,13 @@ describe("rendered example corpus", () => {
     for (const variant of variants) {
       await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"))).rejects.toThrow();
       await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_input", "json"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_output", "json"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_drift_report", "json"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "svg"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "png"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "svg"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "png"))).rejects.toThrow();
     }
   });
 

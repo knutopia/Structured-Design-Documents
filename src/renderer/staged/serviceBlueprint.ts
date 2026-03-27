@@ -8,8 +8,12 @@ import {
 } from "../serviceBlueprintRenderModel.js";
 import type {
   MeasuredScene,
+  Point,
+  PositionedContainer,
   PositionedDecoration,
+  PositionedEdge,
   PositionedItem,
+  PositionedNode,
   PositionedScene,
   RendererScene,
   RoutingIntent,
@@ -20,6 +24,10 @@ import type {
   WidthPolicy
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
+import {
+  analyzeServiceBlueprintFixedRouting,
+  type ServiceBlueprintFixedRoutingDebugResult
+} from "./macroLayout.js";
 import {
   buildServiceBlueprintMiddleLayer,
   type ServiceBlueprintMiddleCell,
@@ -32,6 +40,7 @@ import {
   runStagedRendererPipeline,
   type StagedRendererPipelineResult
 } from "./pipeline.js";
+import { buildPositionedIndex } from "./routing.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
@@ -62,12 +71,33 @@ export interface ServiceBlueprintPreRoutingArtifactsResult {
   preRoutingPng: Uint8Array;
 }
 
+export interface ServiceBlueprintElkRoutingDebugArtifactsResult {
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  preRoutingPositionedScene: PositionedScene;
+  elkRoutingDiagnostics: RendererDiagnostic[];
+  elkRoutingDebug: ServiceBlueprintFixedRoutingDebugResult;
+  elkRoutingInputJson: string;
+  elkRoutingOutputJson: string;
+  elkDriftReportJson: string;
+  elkRouteOverlayPositionedScene: PositionedScene;
+  elkRouteOverlaySvg: string;
+  elkRouteOverlayPng: Uint8Array;
+  elkReturnedFramesOverlayPositionedScene: PositionedScene;
+  elkReturnedFramesOverlaySvg: string;
+  elkReturnedFramesOverlayPng: Uint8Array;
+}
+
 function sanitizeToken(value: string): string {
   return value
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9_-]+/g, "-")
     .replace(/^-+|-+$/g, "") || "unnamed";
+}
+
+function roundMetric(value: number): number {
+  return Math.round(value * 1000) / 1000;
 }
 
 function buildRootChrome(): SceneContainer["chrome"] {
@@ -373,6 +403,165 @@ function attachServiceBlueprintDecorations(scene: PositionedScene): PositionedSc
   };
 }
 
+function serializeJson(value: unknown): string {
+  return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function buildServiceBlueprintElkDriftReport(
+  analysis: ServiceBlueprintFixedRoutingDebugResult
+): Record<string, unknown> {
+  return {
+    positionsPreserved: analysis.positionsPreserved,
+    preservesRelativeGrid: analysis.preservesRelativeGrid,
+    positionTolerance: analysis.positionTolerance,
+    globalDelta: analysis.globalDelta,
+    firstDriftedChildId: analysis.firstDriftedChildId ?? null,
+    nodes: analysis.nodeDebug.map((node) => ({
+      id: node.id,
+      expectedFrame: node.expectedFrame,
+      returnedFrame: node.returnedFrame,
+      dx: node.dx,
+      dy: node.dy
+    })),
+    edges: analysis.edgeDebug.map((edge) => ({
+      id: edge.id,
+      sourceItemId: edge.sourceItemId,
+      targetItemId: edge.targetItemId,
+      hasReturnedRoute: edge.hasReturnedRoute,
+      returnedRoutePointCount: edge.returnedRoutePointCount
+    }))
+  };
+}
+
+function buildServiceBlueprintDebugRouteEdges(
+  analysis: ServiceBlueprintFixedRoutingDebugResult
+): PositionedEdge[] {
+  return analysis.edgeDebug
+    .filter((edge) => edge.returnedRoute.length >= 2)
+    .map((edge) => ({
+      id: `${edge.id}__elk_route_overlay`,
+      role: "service_blueprint_debug_route",
+      classes: ["service_blueprint_debug_route"],
+      from: {
+        itemId: edge.sourceItemId,
+        x: edge.returnedRoute[0]!.x,
+        y: edge.returnedRoute[0]!.y
+      },
+      to: {
+        itemId: edge.targetItemId,
+        x: edge.returnedRoute[edge.returnedRoute.length - 1]!.x,
+        y: edge.returnedRoute[edge.returnedRoute.length - 1]!.y
+      },
+      route: {
+        style: "orthogonal",
+        points: edge.returnedRoute.map((point) => ({ ...point }))
+      },
+      paintGroup: "edges"
+    }));
+}
+
+function buildServiceBlueprintDebugReturnedFrameNodes(
+  analysis: ServiceBlueprintFixedRoutingDebugResult,
+  preRoutingRoot: PositionedContainer
+): PositionedNode[] {
+  const positionedIndex = buildPositionedIndex(preRoutingRoot);
+
+  return analysis.nodeDebug.flatMap((node) => {
+    if (!node.returnedFrame) {
+      return [];
+    }
+
+    const expected = positionedIndex.get(node.id)?.item;
+    if (!expected || expected.kind !== "node") {
+      return [];
+    }
+
+    return [{
+      kind: "node" as const,
+      id: `${node.id}__elk_returned_frame`,
+      role: "service_blueprint_debug_returned_frame",
+      primitive: expected.primitive,
+      classes: ["service_blueprint_debug_returned_frame"],
+      widthPolicy: expected.widthPolicy,
+      widthBand: expected.widthBand,
+      overflowPolicy: expected.overflowPolicy,
+      content: [],
+      ports: [],
+      overflow: expected.overflow,
+      x: node.returnedFrame.x,
+      y: node.returnedFrame.y,
+      width: node.returnedFrame.width,
+      height: node.returnedFrame.height,
+      fixedSize: expected.fixedSize,
+      sharedWidthGroup: undefined,
+      sharedHeightGroup: undefined
+    }];
+  });
+}
+
+function getCenterOfFrame(frame: { x: number; y: number; width: number; height: number }): Point {
+  return {
+    x: roundMetric(frame.x + frame.width / 2),
+    y: roundMetric(frame.y + frame.height / 2)
+  };
+}
+
+function buildServiceBlueprintDebugDriftVectors(
+  analysis: ServiceBlueprintFixedRoutingDebugResult
+): PositionedDecoration[] {
+  return analysis.nodeDebug.flatMap((node) => {
+    if (!node.returnedFrame || node.dx === null || node.dy === null) {
+      return [];
+    }
+    if (Math.abs(node.dx) <= analysis.positionTolerance && Math.abs(node.dy) <= analysis.positionTolerance) {
+      return [];
+    }
+
+    return [{
+      kind: "line" as const,
+      id: `${node.id}__elk_drift_vector`,
+      classes: ["service_blueprint_debug_drift_vector"],
+      paintGroup: "chrome",
+      from: getCenterOfFrame(node.expectedFrame),
+      to: getCenterOfFrame(node.returnedFrame)
+    }];
+  });
+}
+
+function buildServiceBlueprintRouteOverlayScene(
+  baseScene: PositionedScene,
+  analysis: ServiceBlueprintFixedRoutingDebugResult,
+  diagnostics: RendererDiagnostic[]
+): PositionedScene {
+  return {
+    ...baseScene,
+    edges: buildServiceBlueprintDebugRouteEdges(analysis),
+    diagnostics
+  };
+}
+
+function buildServiceBlueprintReturnedFramesOverlayScene(
+  baseScene: PositionedScene,
+  analysis: ServiceBlueprintFixedRoutingDebugResult,
+  diagnostics: RendererDiagnostic[]
+): PositionedScene {
+  return {
+    ...baseScene,
+    root: {
+      ...baseScene.root,
+      children: [
+        ...baseScene.root.children,
+        ...buildServiceBlueprintDebugReturnedFrameNodes(analysis, baseScene.root)
+      ]
+    },
+    decorations: [
+      ...baseScene.decorations,
+      ...buildServiceBlueprintDebugDriftVectors(analysis)
+    ],
+    diagnostics
+  };
+}
+
 async function buildServiceBlueprintPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
@@ -467,6 +656,59 @@ export async function renderServiceBlueprintPreRoutingArtifacts(
     preRoutingDiagnostics: pipeline.preRoutingPositionedScene.diagnostics,
     preRoutingSvg: svgRendered.svg,
     preRoutingPng: pngRendered.png
+  };
+}
+
+export async function renderServiceBlueprintElkRoutingDebugArtifacts(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<ServiceBlueprintElkRoutingDebugArtifactsResult> {
+  const pipeline = await buildServiceBlueprintPreRoutingPipeline(
+    projection,
+    graph,
+    view,
+    profileId,
+    themeId
+  );
+  const elkRoutingDiagnostics = [...pipeline.preRoutingPositionedScene.diagnostics];
+  const elkRoutingDebug = await analyzeServiceBlueprintFixedRouting(
+    pipeline.preRoutingPositionedScene.root,
+    pipeline.measuredScene.edges,
+    buildPositionedIndex(pipeline.preRoutingPositionedScene.root),
+    elkRoutingDiagnostics,
+    { strict: false }
+  );
+  const elkRouteOverlayPositionedScene = buildServiceBlueprintRouteOverlayScene(
+    pipeline.preRoutingPositionedScene,
+    elkRoutingDebug,
+    elkRoutingDiagnostics
+  );
+  const elkReturnedFramesOverlayPositionedScene = buildServiceBlueprintReturnedFramesOverlayScene(
+    pipeline.preRoutingPositionedScene,
+    elkRoutingDebug,
+    elkRoutingDiagnostics
+  );
+  const [elkRouteOverlayRendered, elkReturnedFramesOverlayRendered] = await Promise.all([
+    renderPositionedSceneToPng(elkRouteOverlayPositionedScene),
+    renderPositionedSceneToPng(elkReturnedFramesOverlayPositionedScene)
+  ]);
+
+  return {
+    ...pipeline,
+    elkRoutingDiagnostics,
+    elkRoutingDebug,
+    elkRoutingInputJson: serializeJson(elkRoutingDebug.inputGraphSnapshot),
+    elkRoutingOutputJson: serializeJson(elkRoutingDebug.outputGraphSnapshot),
+    elkDriftReportJson: serializeJson(buildServiceBlueprintElkDriftReport(elkRoutingDebug)),
+    elkRouteOverlayPositionedScene,
+    elkRouteOverlaySvg: elkRouteOverlayRendered.svg,
+    elkRouteOverlayPng: elkRouteOverlayRendered.png,
+    elkReturnedFramesOverlayPositionedScene,
+    elkReturnedFramesOverlaySvg: elkReturnedFramesOverlayRendered.svg,
+    elkReturnedFramesOverlayPng: elkReturnedFramesOverlayRendered.png
   };
 }
 

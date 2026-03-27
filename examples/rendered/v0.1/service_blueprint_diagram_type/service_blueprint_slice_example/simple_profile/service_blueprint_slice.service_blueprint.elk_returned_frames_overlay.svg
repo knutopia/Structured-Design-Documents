@@ -137,6 +137,33 @@
     <g id="scene-decoration-lane-backstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_internal_interaction lane-backstage" data-decoration-id="lane-backstage__separator">
       <line class="scene-decoration__line" x1="24" y1="340" x2="1196" y2="340"/>
     </g>
+    <g id="scene-decoration-j-021__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="J-021__elk_drift_vector">
+      <line class="scene-decoration__line" x1="800" y1="72" x2="700" y2="72"/>
+    </g>
+    <g id="scene-decoration-pr-020__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="PR-020__elk_drift_vector">
+      <line class="scene-decoration__line" x1="256" y1="184" x2="-22" y2="150"/>
+    </g>
+    <g id="scene-decoration-pr-022__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="PR-022__elk_drift_vector">
+      <line class="scene-decoration__line" x1="800" y1="408" x2="478" y2="150"/>
+    </g>
+    <g id="scene-decoration-pl-020__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="PL-020__elk_drift_vector">
+      <line class="scene-decoration__line" x1="256" y1="632" x2="478" y2="331"/>
+    </g>
+    <g id="scene-decoration-sa-020__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="SA-020__elk_drift_vector">
+      <line class="scene-decoration__line" x1="256" y1="520" x2="228" y2="240"/>
+    </g>
+    <g id="scene-decoration-pr-021__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="PR-021__elk_drift_vector">
+      <line class="scene-decoration__line" x1="528" y1="296" x2="228" y2="150"/>
+    </g>
+    <g id="scene-decoration-sa-021__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="SA-021__elk_drift_vector">
+      <line class="scene-decoration__line" x1="528" y1="520" x2="478" y2="230"/>
+    </g>
+    <g id="scene-decoration-sa-022__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="SA-022__elk_drift_vector">
+      <line class="scene-decoration__line" x1="800" y1="520" x2="728" y2="220"/>
+    </g>
+    <g id="scene-decoration-d-020__elk_drift_vector" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_debug_drift_vector" data-decoration-id="D-020__elk_drift_vector">
+      <line class="scene-decoration__line" x1="1072" y1="520" x2="978" y2="310"/>
+    </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor" data-item-id="J-020" data-role="step">
@@ -168,6 +195,36 @@
     </g>
     <g id="scene-node-pl-020" class="scene-node primitive-card role-policy paint-nodes semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor" data-item-id="PL-020" data-role="policy">
       <rect class="scene-node__chrome" x="144" y="608" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-j-020__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="J-020__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="172" y="48" width="168" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-j-021__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="J-021__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="616" y="40" width="168" height="64" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-pr-020__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="PR-020__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="-134" y="126" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-pr-022__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="PR-022__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="366" y="126" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-pl-020__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="PL-020__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="366" y="307" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-sa-020__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="SA-020__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="116" y="216" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-pr-021__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="PR-021__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="116" y="126" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-sa-021__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="SA-021__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="366" y="206" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-sa-022__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="SA-022__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="616" y="196" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-d-020__elk_returned_frame" class="scene-node primitive-card role-service_blueprint_debug_returned_frame paint-nodes service_blueprint_debug_returned_frame" data-item-id="D-020__elk_returned_frame" data-role="service_blueprint_debug_returned_frame">
+      <rect class="scene-node__chrome" x="866" y="286" width="224" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">

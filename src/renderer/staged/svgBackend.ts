@@ -560,7 +560,10 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
       `.view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }`,
       `.view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }`,
       `.view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: ${paint.palette.containerStroke}; stroke-dasharray: 6 4; }`,
-      `.view-service_blueprint .service_blueprint_lane_title .scene-text { fill: ${paint.palette.secondaryText}; }`
+      `.view-service_blueprint .service_blueprint_lane_title .scene-text { fill: ${paint.palette.secondaryText}; }`,
+      `.view-service_blueprint .service_blueprint_debug_route .scene-edge__path { stroke: #c62828; stroke-width: ${formatNumber(paint.edgeStrokeWidth + 1)}; opacity: 0.9; }`,
+      `.view-service_blueprint .service_blueprint_debug_returned_frame .scene-node__chrome { fill: none; stroke: #c62828; stroke-width: ${formatNumber(paint.strokeWidth + 1)}; stroke-dasharray: 8 6; opacity: 0.85; }`,
+      `.view-service_blueprint .service_blueprint_debug_drift_vector .scene-decoration__line { stroke: #c62828; stroke-width: ${formatNumber(paint.strokeWidth)}; stroke-dasharray: 4 4; opacity: 0.65; }`
     );
   }
 
