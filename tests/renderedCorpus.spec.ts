@@ -182,13 +182,6 @@ describe("rendered example corpus", () => {
 
       await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"));
       await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_input", "json"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_output", "json"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_drift_report", "json"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "svg"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "png"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "svg"));
-      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "png"));
     }
   });
 
@@ -202,13 +195,6 @@ describe("rendered example corpus", () => {
     for (const variant of variants) {
       await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"))).rejects.toThrow();
       await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_input", "json"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_output", "json"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_drift_report", "json"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "svg"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "png"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "svg"))).rejects.toThrow();
-      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "png"))).rejects.toThrow();
     }
   });
 

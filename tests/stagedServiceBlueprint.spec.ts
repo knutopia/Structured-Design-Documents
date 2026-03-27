@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import type { PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
+import type { PositionedEdge, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
 import {
   buildServiceBlueprintRendererScene,
   renderServiceBlueprintStagedSvg
@@ -91,6 +91,14 @@ function findNestedRendererItem(
 
   return undefined;
 }
+
+function findSemanticEdge(edges: PositionedEdge[], id: string): PositionedEdge {
+  const edge = edges.find((candidate) => candidate.id === id);
+  if (!edge) {
+    throw new Error(`Could not find routed edge "${id}".`);
+  }
+  return edge;
+}
 describe("staged service_blueprint", () => {
   it("builds a fixed root grid for service_blueprint_slice instead of using root ELK placement", async () => {
     const context = await resolveServiceBlueprintContext(
@@ -124,19 +132,55 @@ describe("staged service_blueprint", () => {
     ]);
   });
 
-  it("still fails the routed render when ELK drifts the fixed grid", async () => {
+  it("renders the proof case with direct straight connectors using the resolved ports", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
       "recommended"
     );
-    await expect(
-      renderServiceBlueprintStagedSvg(
-        context.projection,
-        context.graph,
-        context.view,
-        "recommended"
-      )
-    ).rejects.toThrow(/ELK moved fixed service blueprint grid item/);
+
+    const rendered = await renderServiceBlueprintStagedSvg(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+
+    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(rendered.svg).toContain("Submit Claim");
+    expect(rendered.svg).toContain("Retention Policy");
+    expect(rendered.svg).toContain("reads, writes");
+
+    for (const edge of rendered.positionedScene.edges.filter((candidate) =>
+      candidate.classes.includes("service_blueprint_semantic_edge")
+    )) {
+      expect(edge.route.style).toBe("straight");
+      expect(edge.route.points).toHaveLength(2);
+      expect(edge.route.points[0]).toEqual({
+        x: edge.from.x,
+        y: edge.from.y
+      });
+      expect(edge.route.points[1]).toEqual({
+        x: edge.to.x,
+        y: edge.to.y
+      });
+    }
+
+    const precedesEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__precedes__J-021");
+    expect(precedesEdge.label).toBeUndefined();
+    const realizedByEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__realized_by__PR-020");
+    expect(realizedByEdge.label?.lines.join(" ")).toContain("realized by");
+
+    const j020 = findNestedPositionedItem(rendered.positionedScene.root.children, "J-020");
+    const j021 = findNestedPositionedItem(rendered.positionedScene.root.children, "J-021");
+    if (!j020 || !j021) {
+      throw new Error("Could not resolve proof-case nodes.");
+    }
+    expect(precedesEdge.from.itemId).toBe("J-020");
+    expect(precedesEdge.to.itemId).toBe("J-021");
+    expect(precedesEdge.from.x).toBe(j020.x + j020.width);
+    expect(precedesEdge.from.y).toBe(j020.y + j020.height / 2);
+    expect(precedesEdge.to.x).toBe(j021.x);
+    expect(precedesEdge.to.y).toBe(j021.y + j021.height / 2);
   });
 
   it("appends a synthetic ungrouped lane shell when projection omits derived lane mapping", async () => {

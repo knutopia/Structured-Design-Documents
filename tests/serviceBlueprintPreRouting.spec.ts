@@ -180,7 +180,7 @@ describe("service_blueprint pre-routing artifacts", () => {
     });
   });
 
-  it("succeeds before routing even while the routed staged render still fails the ELK drift gate", async () => {
+  it("succeeds before routing while the routed staged render adds direct straight connectors", async () => {
     const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "recommended");
 
     await expect(
@@ -202,6 +202,8 @@ describe("service_blueprint pre-routing artifacts", () => {
         context.view,
         "recommended"
       )
-    ).rejects.toThrow(/ELK moved fixed service blueprint grid item/);
+    ).resolves.toEqual(expect.objectContaining({
+      svg: expect.any(String)
+    }));
   });
 });

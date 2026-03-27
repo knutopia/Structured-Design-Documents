@@ -11,7 +11,7 @@
 ## Thu 3-27-26
 
 -added pre-routing output to debug, found node placement failing
-
+-node placement fixed
 
 ## Wed 3-26-26
 

@@ -7,10 +7,7 @@ import { renderSourcePreview } from "../renderer/previewWorkflow.js";
 import { renderSource } from "../renderer/renderView.js";
 import { projectView } from "../projector/projectView.js";
 import { compileSource } from "../compiler/compileSource.js";
-import {
-  renderServiceBlueprintElkRoutingDebugArtifacts,
-  renderServiceBlueprintPreRoutingArtifacts
-} from "../renderer/staged/serviceBlueprint.js";
+import { renderServiceBlueprintPreRoutingArtifacts } from "../renderer/staged/serviceBlueprint.js";
 import {
   getPreviewArtifactCapabilities,
   getPreviewArtifactCapability,
@@ -89,9 +86,8 @@ function buildReadmeContent(
   lines.push("");
   lines.push("`service_blueprint` visual review checklist:");
   lines.push("");
-  lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the ELK-authoritative staged renderer");
+  lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with direct straight connectors");
   lines.push("- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs");
-  lines.push("- additional `.elk_routing_input.json`, `.elk_routing_output.json`, `.elk_drift_report.json`, `.elk_route_overlay.svg/.png`, and `.elk_returned_frames_overlay.svg/.png` siblings capture ELK routing diagnostics when the routed staged render drifts");
   lines.push("- customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order");
   lines.push("- customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled");
   lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
@@ -165,46 +161,6 @@ async function main(): Promise<void> {
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"),
         preRouting.preRoutingPng
-      );
-
-      const elkRoutingDebug = await renderServiceBlueprintElkRoutingDebugArtifacts(
-        projected.projection,
-        compiled.graph,
-        view,
-        variant.profileId
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_input", "json"),
-        elkRoutingDebug.elkRoutingInputJson,
-        "utf8"
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_routing_output", "json"),
-        elkRoutingDebug.elkRoutingOutputJson,
-        "utf8"
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_drift_report", "json"),
-        elkRoutingDebug.elkDriftReportJson,
-        "utf8"
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "svg"),
-        elkRoutingDebug.elkRouteOverlaySvg,
-        "utf8"
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_route_overlay", "png"),
-        elkRoutingDebug.elkRouteOverlayPng
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "svg"),
-        elkRoutingDebug.elkReturnedFramesOverlaySvg,
-        "utf8"
-      );
-      await writeFile(
-        getRenderedCorpusDebugOutputPath(bundle, variant, "elk_returned_frames_overlay", "png"),
-        elkRoutingDebug.elkReturnedFramesOverlayPng
       );
     }
 

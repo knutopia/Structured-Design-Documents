@@ -3,8 +3,6 @@ import path from "node:path";
 import type { Bundle, BundleManifestExample } from "../bundle/types.js";
 import type { PreviewFormat, PreviewRendererBackendId } from "../renderer/renderArtifacts.js";
 
-export type RenderedCorpusDebugFormat = PreviewFormat | "json";
-
 export interface CanonicalBundleExampleFile {
   name: string;
   relativePath: string;
@@ -42,7 +40,7 @@ export function getRenderedCorpusDebugOutputPath(
   bundle: Bundle,
   variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">,
   debugStem: string,
-  format: RenderedCorpusDebugFormat
+  format: PreviewFormat
 ): string {
   const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
   const renderedStem = `${variant.example.name}.${variant.viewId}`;

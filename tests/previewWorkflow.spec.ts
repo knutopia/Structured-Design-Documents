@@ -142,6 +142,8 @@ describe("preview workflow", () => {
     expect(result.artifact.text).toContain('class="staged-svg');
     expect(result.artifact.text).toContain("Submit Claim");
     expect(result.artifact.text).toContain("Retention Policy");
+    expect(result.artifact.text).toContain('class="scene-edge');
+    expect(result.artifact.text).toContain("reads, writes");
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 

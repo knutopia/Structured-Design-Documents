@@ -26,7 +26,6 @@ import {
   type RendererDiagnostic
 } from "./diagnostics.js";
 import {
-  runElkFixedPositionRouting,
   runElkLayeredLayout,
   runElkLayeredSubtreeLayout,
   type ElkAdaptedEdge
@@ -62,37 +61,6 @@ interface PositionedRootLayoutResult {
   ownerContainerByEdgeId: ReadonlyMap<string, string>;
   routeHints: ReadonlyMap<string, Point[]>;
   diagnostics: RendererDiagnostic[];
-}
-
-export interface ServiceBlueprintFixedRoutingNodeDebug {
-  id: string;
-  expectedFrame: { x: number; y: number; width: number; height: number };
-  returnedFrame: { x: number; y: number; width: number; height: number } | null;
-  rawReturnedFrame: { x: number; y: number; width: number; height: number } | null;
-  dx: number | null;
-  dy: number | null;
-}
-
-export interface ServiceBlueprintFixedRoutingEdgeDebug {
-  id: string;
-  sourceItemId: string;
-  targetItemId: string;
-  hasReturnedRoute: boolean;
-  returnedRoutePointCount: number;
-  returnedRoute: Point[];
-}
-
-export interface ServiceBlueprintFixedRoutingDebugResult {
-  inputGraphSnapshot: unknown;
-  outputGraphSnapshot: unknown;
-  positionTolerance: number;
-  positionsPreserved: boolean;
-  preservesRelativeGrid: boolean;
-  globalDelta: Point;
-  firstDriftedChildId?: string;
-  nodeDebug: ServiceBlueprintFixedRoutingNodeDebug[];
-  edgeDebug: ServiceBlueprintFixedRoutingEdgeDebug[];
-  routeHints: Map<string, Point[]>;
 }
 
 interface ContainerLayoutResult {
@@ -1288,214 +1256,6 @@ function validateServiceBlueprintCellContents(
   }
 }
 
-export async function analyzeServiceBlueprintFixedRouting(
-  root: PositionedContainer,
-  edges: readonly MeasuredEdge[],
-  index: ReadonlyMap<string, IndexedPositionedItem>,
-  diagnostics: RendererDiagnostic[],
-  options: { strict: boolean } = { strict: false }
-): Promise<ServiceBlueprintFixedRoutingDebugResult> {
-  const semanticEdges = edges.filter((edge) => edge.routing.style === "orthogonal");
-  if (semanticEdges.length === 0) {
-    return {
-      inputGraphSnapshot: { id: `${root.id}__service_blueprint_routes`, children: [], edges: [] },
-      outputGraphSnapshot: { id: `${root.id}__service_blueprint_routes`, children: [], edges: [] },
-      positionTolerance: 0.5,
-      positionsPreserved: true,
-      preservesRelativeGrid: true,
-      globalDelta: { x: 0, y: 0 },
-      nodeDebug: [],
-      edgeDebug: [],
-      routeHints: new Map()
-    };
-  }
-
-  const itemIds = [...new Set(semanticEdges.flatMap((edge) => [edge.from.itemId, edge.to.itemId]))];
-  const items = itemIds.map((itemId) => {
-    const item = index.get(itemId)?.item;
-    if (!item) {
-      throw new Error(`Could not resolve positioned service blueprint item "${itemId}" for fixed ELK routing.`);
-    }
-    return item;
-  });
-  const itemsById = new Map(items.map((item) => [item.id, item]));
-
-  const minX = Math.min(...items.map((item) => item.x));
-  const minY = Math.min(...items.map((item) => item.y));
-  const children = items.map((item) => ({
-    id: item.id,
-    x: roundMetric(item.x - minX),
-    y: roundMetric(item.y - minY),
-    width: item.width,
-    height: item.height,
-    ports: item.ports
-  }));
-
-  const adaptedEdges: ElkAdaptedEdge[] = semanticEdges.map((edge) => {
-    const sourceItem = index.get(edge.from.itemId)?.item;
-    const targetItem = index.get(edge.to.itemId)?.item;
-    if (!sourceItem || !targetItem) {
-      throw new Error(`Could not resolve endpoints for service blueprint edge "${edge.id}".`);
-    }
-
-    const sourcePort = resolvePortOnItem(sourceItem, edge.from, edge.routing.sourcePortRole);
-    const targetPort = resolvePortOnItem(targetItem, edge.to, edge.routing.targetPortRole);
-
-    return {
-      id: edge.id,
-      sourceItemId: edge.from.itemId,
-      targetItemId: edge.to.itemId,
-      sourcePortId: sourcePort?.id,
-      targetPortId: targetPort?.id,
-      layoutOptions: edge.routing.elkLayoutOptions
-    };
-  });
-
-  const positionTolerance = 0.5;
-  const result = await runElkFixedPositionRouting({
-    containerId: `${root.id}__service_blueprint_routes`,
-    direction: "horizontal",
-    nodeGap: 24,
-    layerGap: 24,
-    children,
-    edges: adaptedEdges,
-    positionTolerance
-  });
-  const firstChild = children[0];
-  const firstResolved = firstChild ? result.childPositions.get(firstChild.id) : undefined;
-  const globalDx = firstChild && firstResolved ? roundMetric(firstResolved.x - firstChild.x) : 0;
-  const globalDy = firstChild && firstResolved ? roundMetric(firstResolved.y - firstChild.y) : 0;
-  const preservesRelativeGrid = children.every((child) => {
-    const resolved = result.childPositions.get(child.id);
-    if (!resolved) {
-      return false;
-    }
-    return Math.abs((resolved.x - child.x) - globalDx) <= positionTolerance
-      && Math.abs((resolved.y - child.y) - globalDy) <= positionTolerance;
-  });
-
-  const driftedChild = !result.positionsPreserved && !preservesRelativeGrid
-    ? children.find((child) => {
-      const resolved = result.childPositions.get(child.id);
-      return !resolved
-        || Math.abs((resolved.x - child.x) - globalDx) > positionTolerance
-        || Math.abs((resolved.y - child.y) - globalDy) > positionTolerance;
-    })
-    : undefined;
-  const routeHints = new Map<string, Point[]>();
-  for (const [edgeId, points] of result.edgeRoutes.entries()) {
-    routeHints.set(edgeId, points.map((point) => ({
-      x: roundMetric(point.x - globalDx + minX),
-      y: roundMetric(point.y - globalDy + minY)
-    })));
-  }
-
-  const nodeDebug = children.map((child) => {
-    const sourceItem = itemsById.get(child.id);
-    const rawReturnedFrame = result.childFrames.get(child.id);
-    const returnedFrame = rawReturnedFrame
-      ? {
-        x: roundMetric(rawReturnedFrame.x - globalDx + minX),
-        y: roundMetric(rawReturnedFrame.y - globalDy + minY),
-        width: rawReturnedFrame.width,
-        height: rawReturnedFrame.height
-      }
-      : null;
-    return {
-      id: child.id,
-      expectedFrame: sourceItem
-        ? {
-          x: sourceItem.x,
-          y: sourceItem.y,
-          width: sourceItem.width,
-          height: sourceItem.height
-        }
-        : {
-          x: roundMetric(child.x + minX),
-          y: roundMetric(child.y + minY),
-          width: child.width,
-          height: child.height
-        },
-      returnedFrame,
-      rawReturnedFrame: rawReturnedFrame ?? null,
-      dx: returnedFrame && sourceItem ? roundMetric(returnedFrame.x - sourceItem.x) : null,
-      dy: returnedFrame && sourceItem ? roundMetric(returnedFrame.y - sourceItem.y) : null
-    };
-  });
-
-  const edgeDebug = semanticEdges.map((edge) => ({
-    id: edge.id,
-    sourceItemId: edge.from.itemId,
-    targetItemId: edge.to.itemId,
-    hasReturnedRoute: routeHints.has(edge.id),
-    returnedRoutePointCount: routeHints.get(edge.id)?.length ?? 0,
-    returnedRoute: routeHints.get(edge.id)?.map((point) => ({ ...point })) ?? []
-  }));
-
-  if (driftedChild) {
-    const resolved = result.childPositions.get(driftedChild.id);
-    const driftDetail = resolved
-      ? `expected (${driftedChild.x}, ${driftedChild.y}) but ELK returned (${resolved.x}, ${resolved.y}); normalized global delta=(${globalDx}, ${globalDy})`
-      : "ELK did not return a positioned child for the fixed-grid item.";
-    diagnostics.push(
-      createRoutingDiagnostic(
-        "renderer.routing.elk_fixed_position_drift",
-        `ELK moved fixed service blueprint grid item "${driftedChild.id}" during the routing pass. The staged artifact is invalid.`,
-        driftedChild.id,
-        "error",
-        driftDetail
-      )
-    );
-    if (options.strict) {
-      throw new Error(`ELK moved fixed service blueprint grid item "${driftedChild.id}" during routing: ${driftDetail}`);
-    }
-  }
-
-  const missingRequiredRoute = semanticEdges.find((edge) =>
-    edge.routing.authority === "require_elk" && !routeHints.has(edge.id)
-  );
-  if (missingRequiredRoute) {
-    diagnostics.push(
-      createRoutingDiagnostic(
-        "renderer.routing.elk_required_route_missing",
-        `ELK did not return a required service blueprint route for "${missingRequiredRoute.id}".`,
-        missingRequiredRoute.id,
-        "error"
-      )
-    );
-    if (options.strict) {
-      throw new Error(`ELK did not return a required service blueprint route for "${missingRequiredRoute.id}".`);
-    }
-  }
-
-  return {
-    inputGraphSnapshot: result.inputGraphSnapshot,
-    outputGraphSnapshot: result.outputGraphSnapshot,
-    positionTolerance,
-    positionsPreserved: result.positionsPreserved,
-    preservesRelativeGrid,
-    globalDelta: {
-      x: globalDx,
-      y: globalDy
-    },
-    firstDriftedChildId: driftedChild?.id,
-    nodeDebug,
-    edgeDebug,
-    routeHints
-  };
-}
-
-function buildServiceBlueprintFixedRouteHints(
-  root: PositionedContainer,
-  edges: readonly MeasuredEdge[],
-  index: ReadonlyMap<string, IndexedPositionedItem>,
-  diagnostics: RendererDiagnostic[]
-): Promise<Map<string, Point[]>> {
-  return analyzeServiceBlueprintFixedRouting(root, edges, index, diagnostics, { strict: true }).then(
-    (result) => result.routeHints
-  );
-}
-
 function positionMeasuredEdge(
   edge: MeasuredEdge,
   root: PositionedContainer,
@@ -1651,11 +1411,7 @@ export async function positionMeasuredScene(measuredScene: MeasuredScene): Promi
   const laidOut = await layoutMeasuredSceneRoot(measuredScene);
   const root = laidOut.root;
   const index = buildPositionedIndex(root);
-  const serviceBlueprintRouteHints = measuredScene.viewId === "service_blueprint"
-    ? await buildServiceBlueprintFixedRouteHints(root, measuredScene.edges, index, laidOut.diagnostics)
-    : new Map<string, Point[]>();
   const routeHints = new Map(laidOut.routeHints);
-  mergeRouteHints(routeHints, serviceBlueprintRouteHints);
   const sharedRouteOffsets = buildSharedRouteOffsets(measuredScene.edges);
   const contractLabelLanes = buildContractLabelLaneAssignments(measuredScene.edges, index, laidOut.diagnostics);
   const edges = measuredScene.edges.map((edge) =>

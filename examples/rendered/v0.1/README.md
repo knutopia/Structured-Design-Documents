@@ -48,9 +48,8 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 
 `service_blueprint` visual review checklist:
 
-- staged unsuffixed `.svg` and `.png` artifacts come from the ELK-authoritative staged renderer
+- staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with direct straight connectors
 - additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs
-- additional `.elk_routing_input.json`, `.elk_routing_output.json`, `.elk_drift_report.json`, `.elk_route_overlay.svg/.png`, and `.elk_returned_frames_overlay.svg/.png` siblings capture ELK routing diagnostics when the routed staged render drifts
 - customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
 - customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled
 - legacy Graphviz preview siblings remain committed for side-by-side comparison
