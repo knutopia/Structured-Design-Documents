@@ -28,6 +28,7 @@
       "gutter": 24,
       "headerBandHeight": 0
     },
+    "headerContent": [],
     "children": [
       {
         "kind": "container",
@@ -56,6 +57,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -81,6 +83,7 @@
                 "wide"
               ]
             },
+            "widthBand": "narrow",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -89,8 +92,16 @@
               {
                 "id": "J-020__content__line_0",
                 "kind": "text",
-                "text": "Submit Claim",
                 "textStyleRole": "title",
+                "lines": [
+                  "Submit Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 100.104,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -98,39 +109,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 168,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 84,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 84,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 172,
+            "y": 48,
+            "width": 168,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 132,
+        "y": 28,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -161,8 +195,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 404,
+        "y": 28,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -193,6 +232,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -218,6 +258,7 @@
                 "wide"
               ]
             },
+            "widthBand": "narrow",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -226,8 +267,17 @@
               {
                 "id": "J-021__content__line_0",
                 "kind": "text",
-                "text": "Receive Confirmation",
                 "textStyleRole": "title",
+                "lines": [
+                  "Receive",
+                  "Confirmation"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 96.368,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -235,39 +285,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 32
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 168,
+                "y": 32
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 84,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 84,
+                "y": 64
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 64
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 716,
+            "y": 40,
+            "width": 168,
+            "height": 64
           }
         ],
         "ports": [],
+        "x": 676,
+        "y": 28,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -298,8 +371,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 948,
+        "y": 28,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -330,6 +408,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -354,6 +433,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -362,8 +442,16 @@
               {
                 "id": "PR-020__content__line_0",
                 "kind": "text",
-                "text": "Validate Claim",
                 "textStyleRole": "title",
+                "lines": [
+                  "Validate Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 107.08,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -371,39 +459,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 144,
+            "y": 160,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 132,
+        "y": 140,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -434,8 +545,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 404,
+        "y": 140,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -466,8 +582,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 676,
+        "y": 140,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -498,8 +619,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 948,
+        "y": 140,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -530,8 +656,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 132,
+        "y": 252,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -562,6 +693,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -586,6 +718,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -594,8 +727,16 @@
               {
                 "id": "PR-021__content__line_0",
                 "kind": "text",
-                "text": "Review Claim History",
                 "textStyleRole": "title",
+                "lines": [
+                  "Review Claim History"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 157.4,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -603,39 +744,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 416,
+            "y": 272,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 404,
+        "y": 252,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -666,8 +830,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 676,
+        "y": 252,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -698,8 +867,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 948,
+        "y": 252,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -730,8 +904,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 132,
+        "y": 364,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -762,8 +941,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 404,
+        "y": 364,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -794,6 +978,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -818,6 +1003,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -826,8 +1012,16 @@
               {
                 "id": "PR-022__content__line_0",
                 "kind": "text",
-                "text": "Notify Customer",
                 "textStyleRole": "title",
+                "lines": [
+                  "Notify Customer"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 122.088,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -835,39 +1029,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 688,
+            "y": 384,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 676,
+        "y": 364,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -898,8 +1115,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 948,
+        "y": 364,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -930,6 +1152,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -955,6 +1178,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -963,8 +1187,16 @@
               {
                 "id": "SA-020__content__line_0",
                 "kind": "text",
-                "text": "Store Claim",
                 "textStyleRole": "title",
+                "lines": [
+                  "Store Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 86.968,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -972,39 +1204,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 144,
+            "y": 496,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 132,
+        "y": 476,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1035,6 +1290,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -1060,6 +1316,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -1068,8 +1325,16 @@
               {
                 "id": "SA-021__content__line_0",
                 "kind": "text",
-                "text": "Load Claim History",
                 "textStyleRole": "title",
+                "lines": [
+                  "Load Claim History"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 140.792,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -1077,39 +1342,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 416,
+            "y": 496,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 404,
+        "y": 476,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1140,6 +1428,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -1165,6 +1454,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -1173,8 +1463,16 @@
               {
                 "id": "SA-022__content__line_0",
                 "kind": "text",
-                "text": "Send Email",
                 "textStyleRole": "title",
+                "lines": [
+                  "Send Email"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 83.744,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -1182,39 +1480,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 688,
+            "y": 496,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 676,
+        "y": 476,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1245,6 +1566,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -1270,6 +1592,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -1278,8 +1601,16 @@
               {
                 "id": "D-020__content__line_0",
                 "kind": "text",
-                "text": "Claim",
                 "textStyleRole": "title",
+                "lines": [
+                  "Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 42.536,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -1287,39 +1618,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 960,
+            "y": 496,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 948,
+        "y": 476,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1350,6 +1704,7 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [
           {
             "kind": "node",
@@ -1374,6 +1729,7 @@
                 "wide"
               ]
             },
+            "widthBand": "standard",
             "overflowPolicy": {
               "kind": "escalate_width_band",
               "maxLines": 2
@@ -1382,8 +1738,16 @@
               {
                 "id": "PL-020__content__line_0",
                 "kind": "text",
-                "text": "Retention Policy",
                 "textStyleRole": "title",
+                "lines": [
+                  "Retention Policy"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 120.536,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
                 "priority": "primary"
               }
             ],
@@ -1391,39 +1755,62 @@
               {
                 "id": "flow_in",
                 "role": "flow_in",
-                "side": "west"
+                "side": "west",
+                "x": 0,
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
-                "side": "east"
+                "side": "east",
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
-                "side": "north"
+                "side": "north",
+                "x": 112,
+                "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
-                "side": "south"
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
                 "role": "resource_in",
                 "side": "north",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 0
               },
               {
                 "id": "resource_out",
                 "role": "resource_out",
                 "side": "south",
-                "offset": 36
+                "offset": 36,
+                "x": 36,
+                "y": 48
               }
-            ]
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 144,
+            "y": 608,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
+        "x": 132,
+        "y": 588,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1454,8 +1841,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 404,
+        "y": 588,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1486,8 +1878,13 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 676,
+        "y": 588,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       },
@@ -1518,13 +1915,22 @@
           "gutter": 12,
           "headerBandHeight": 0
         },
+        "headerContent": [],
         "children": [],
         "ports": [],
+        "x": 948,
+        "y": 588,
+        "width": 248,
+        "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
       }
     ],
-    "ports": []
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 1224,
+    "height": 704
   },
   "edges": [
     {
@@ -1537,21 +1943,122 @@
         "edge-channel-flow"
       ],
       "from": {
-        "itemId": "J-020"
+        "itemId": "J-020",
+        "x": 340,
+        "y": 72
       },
       "to": {
-        "itemId": "J-021"
+        "itemId": "J-021",
+        "x": 716,
+        "y": 72
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "points": [
+          {
+            "x": 340,
+            "y": 72
+          },
+          {
+            "x": 716,
+            "y": 72
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-020__precedes__PR-021",
+      "role": "precedes",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-flow"
+      ],
+      "from": {
+        "itemId": "PR-020",
+        "x": 368,
+        "y": 184
+      },
+      "to": {
+        "itemId": "PR-021",
+        "x": 416,
+        "y": 296
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 368,
+            "y": 184
+          },
+          {
+            "x": 384,
+            "y": 184
+          },
+          {
+            "x": 384,
+            "y": 296
+          },
+          {
+            "x": 416,
+            "y": 296
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "PR-021__precedes__PR-022",
+      "role": "precedes",
+      "classes": [
+        "service_blueprint_edge",
+        "service_blueprint_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-flow"
+      ],
+      "from": {
+        "itemId": "PR-021",
+        "x": 640,
+        "y": 296
+      },
+      "to": {
+        "itemId": "PR-022",
+        "x": 688,
+        "y": 408
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 640,
+            "y": 296
+          },
+          {
+            "x": 656,
+            "y": 296
+          },
+          {
+            "x": 656,
+            "y": 408
+          },
+          {
+            "x": 688,
+            "y": 408
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
     },
     {
       "id": "J-020__realized_by__PR-020",
@@ -1564,26 +2071,32 @@
         "edge-dashed"
       ],
       "from": {
-        "itemId": "J-020"
+        "itemId": "J-020",
+        "x": 256,
+        "y": 96
       },
       "to": {
-        "itemId": "PR-020"
+        "itemId": "PR-020",
+        "x": 256,
+        "y": 160
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "support_out",
-        "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "realized by",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 256,
+            "y": 96
+          },
+          {
+            "x": 256,
+            "y": 160
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "J-021__realized_by__PR-022",
@@ -1596,26 +2109,32 @@
         "edge-dashed"
       ],
       "from": {
-        "itemId": "J-021"
+        "itemId": "J-021",
+        "x": 800,
+        "y": 104
       },
       "to": {
-        "itemId": "PR-022"
+        "itemId": "PR-022",
+        "x": 800,
+        "y": 384
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "support_out",
-        "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "realized by",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 800,
+            "y": 104
+          },
+          {
+            "x": 800,
+            "y": 384
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "PR-020__constrained_by__PL-020",
@@ -1628,26 +2147,32 @@
         "edge-dotted"
       ],
       "from": {
-        "itemId": "PR-020"
+        "itemId": "PR-020",
+        "x": 256,
+        "y": 208
       },
       "to": {
-        "itemId": "PL-020"
+        "itemId": "PL-020",
+        "x": 256,
+        "y": 608
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "resource_out",
-        "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "constrained by",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 256,
+            "y": 208
+          },
+          {
+            "x": 256,
+            "y": 608
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "PR-020__depends_on__SA-020",
@@ -1659,52 +2184,32 @@
         "edge-channel-support"
       ],
       "from": {
-        "itemId": "PR-020"
+        "itemId": "PR-020",
+        "x": 256,
+        "y": 208
       },
       "to": {
-        "itemId": "SA-020"
+        "itemId": "SA-020",
+        "x": 256,
+        "y": 496
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "support_out",
-        "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "depends on",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 256,
+            "y": 208
+          },
+          {
+            "x": 256,
+            "y": 496
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "PR-020__precedes__PR-021",
-      "role": "precedes",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_semantic_edge",
-        "edge-type-precedes",
-        "edge-channel-flow"
-      ],
-      "from": {
-        "itemId": "PR-020"
-      },
-      "to": {
-        "itemId": "PR-021"
-      },
-      "routing": {
-        "style": "straight",
-        "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
-      },
-      "markers": {
-        "end": "arrow"
-      },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "PR-021__depends_on__SA-021",
@@ -1716,52 +2221,32 @@
         "edge-channel-support"
       ],
       "from": {
-        "itemId": "PR-021"
+        "itemId": "PR-021",
+        "x": 528,
+        "y": 320
       },
       "to": {
-        "itemId": "SA-021"
+        "itemId": "SA-021",
+        "x": 528,
+        "y": 496
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "support_out",
-        "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "depends on",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 528,
+            "y": 320
+          },
+          {
+            "x": 528,
+            "y": 496
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "PR-021__precedes__PR-022",
-      "role": "precedes",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_semantic_edge",
-        "edge-type-precedes",
-        "edge-channel-flow"
-      ],
-      "from": {
-        "itemId": "PR-021"
-      },
-      "to": {
-        "itemId": "PR-022"
-      },
-      "routing": {
-        "style": "straight",
-        "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
-      },
-      "markers": {
-        "end": "arrow"
-      },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "PR-022__depends_on__SA-022",
@@ -1773,26 +2258,32 @@
         "edge-channel-support"
       ],
       "from": {
-        "itemId": "PR-022"
+        "itemId": "PR-022",
+        "x": 800,
+        "y": 432
       },
       "to": {
-        "itemId": "SA-022"
+        "itemId": "SA-022",
+        "x": 800,
+        "y": 496
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "support_out",
-        "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "depends on",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 800,
+            "y": 432
+          },
+          {
+            "x": 800,
+            "y": 496
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "SA-020__constrained_by__PL-020",
@@ -1805,26 +2296,32 @@
         "edge-dotted"
       ],
       "from": {
-        "itemId": "SA-020"
+        "itemId": "SA-020",
+        "x": 256,
+        "y": 544
       },
       "to": {
-        "itemId": "PL-020"
+        "itemId": "PL-020",
+        "x": 256,
+        "y": 608
       },
-      "routing": {
+      "route": {
         "style": "straight",
-        "sourcePortRole": "resource_out",
-        "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "constrained by",
-        "textStyleRole": "edge_label"
+        "points": [
+          {
+            "x": 256,
+            "y": 544
+          },
+          {
+            "x": 256,
+            "y": 608
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "SA-020__reads_writes__D-020",
@@ -1838,26 +2335,40 @@
         "edge-bold"
       ],
       "from": {
-        "itemId": "SA-020"
+        "itemId": "SA-020",
+        "x": 256,
+        "y": 544
       },
       "to": {
-        "itemId": "D-020"
+        "itemId": "D-020",
+        "x": 1072,
+        "y": 544
       },
-      "routing": {
-        "style": "straight",
-        "sourcePortRole": "resource_out",
-        "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "reads, writes",
-        "textStyleRole": "edge_label"
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 256,
+            "y": 544
+          },
+          {
+            "x": 256,
+            "y": 560
+          },
+          {
+            "x": 1072,
+            "y": 560
+          },
+          {
+            "x": 1072,
+            "y": 544
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "SA-021__reads__D-020",
@@ -1870,26 +2381,40 @@
         "edge-dashed"
       ],
       "from": {
-        "itemId": "SA-021"
+        "itemId": "SA-021",
+        "x": 528,
+        "y": 544
       },
       "to": {
-        "itemId": "D-020"
+        "itemId": "D-020",
+        "x": 1072,
+        "y": 544
       },
-      "routing": {
-        "style": "straight",
-        "sourcePortRole": "resource_out",
-        "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "reads",
-        "textStyleRole": "edge_label"
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 528,
+            "y": 544
+          },
+          {
+            "x": 528,
+            "y": 560
+          },
+          {
+            "x": 1072,
+            "y": 560
+          },
+          {
+            "x": 1072,
+            "y": 544
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     },
     {
       "id": "SA-022__reads__D-020",
@@ -1902,27 +2427,182 @@
         "edge-dashed"
       ],
       "from": {
-        "itemId": "SA-022"
+        "itemId": "SA-022",
+        "x": 800,
+        "y": 544
       },
       "to": {
-        "itemId": "D-020"
+        "itemId": "D-020",
+        "x": 1072,
+        "y": 544
       },
-      "routing": {
-        "style": "straight",
-        "sourcePortRole": "resource_out",
-        "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
-      },
-      "label": {
-        "text": "reads",
-        "textStyleRole": "edge_label"
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 800,
+            "y": 544
+          },
+          {
+            "x": 800,
+            "y": 560
+          },
+          {
+            "x": 1072,
+            "y": 560
+          },
+          {
+            "x": 1072,
+            "y": 544
+          }
+        ]
       },
       "markers": {
         "end": "arrow"
       },
-      "ownerContainerId": "root"
+      "paintGroup": "edges"
     }
   ],
-  "diagnostics": []
+  "decorations": [
+    {
+      "kind": "text",
+      "id": "lane-customer__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-customer"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 62,
+      "text": "customer",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "line",
+      "id": "lane-customer__separator",
+      "classes": [
+        "service_blueprint_separator",
+        "line_of_interaction",
+        "lane-customer"
+      ],
+      "paintGroup": "chrome",
+      "from": {
+        "x": 24,
+        "y": 116
+      },
+      "to": {
+        "x": 1196,
+        "y": 116
+      }
+    },
+    {
+      "kind": "text",
+      "id": "lane-frontstage__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-frontstage"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 174,
+      "text": "frontstage",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "line",
+      "id": "lane-frontstage__separator",
+      "classes": [
+        "service_blueprint_separator",
+        "line_of_visibility",
+        "lane-frontstage"
+      ],
+      "paintGroup": "chrome",
+      "from": {
+        "x": 24,
+        "y": 228
+      },
+      "to": {
+        "x": 1196,
+        "y": 228
+      }
+    },
+    {
+      "kind": "text",
+      "id": "lane-backstage__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-backstage"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 286,
+      "text": "backstage",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "line",
+      "id": "lane-backstage__separator",
+      "classes": [
+        "service_blueprint_separator",
+        "line_of_internal_interaction",
+        "lane-backstage"
+      ],
+      "paintGroup": "chrome",
+      "from": {
+        "x": 24,
+        "y": 340
+      },
+      "to": {
+        "x": 1196,
+        "y": 340
+      }
+    },
+    {
+      "kind": "text",
+      "id": "lane-support__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-support"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 398,
+      "text": "support",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "lane-system__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-system"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 510,
+      "text": "system",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "lane-policy__title",
+      "classes": [
+        "service_blueprint_lane_title",
+        "lane-policy"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 622,
+      "text": "policy",
+      "textStyleRole": "label"
+    }
+  ],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
 }

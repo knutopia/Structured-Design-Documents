@@ -41,6 +41,7 @@ This deterministic order determines placement of connection points of node edges
 (from [Edge Family Rules](../service_blueprint_layout_rules.md#edge-family-rules))
 
 Within PRECEDES...
+
 - `Step -> Step` has the highest straightness priority
 - `Process -> Process` is secondary chronology and must not pull customer steps out of order
 - forward left-to-right flow is the default
@@ -51,6 +52,7 @@ Within PRECEDES...
 ### 1. Initialize Helper Structures
 
 #### 1.1 Connectors per Edge
+
 Per node edge, per node, track ordered lists of starting_connector_edges and ending_connector_edges.
 
 #### 1.2 Per-Node Gutter Space
@@ -118,6 +120,6 @@ If the required spacing for parallel vertical connector line segments exceeds th
 
 If the required spacing for parallel horizontal connector line segments exceeds the height of a given node-lane-gutter, create vertical space by adding height to the corresponding global-lane-gutter, increasing the height of all node-lane-gutters for the column.
 
-### Position Connector Labels.
+### 5. Position Connector Labels
 
 (...)

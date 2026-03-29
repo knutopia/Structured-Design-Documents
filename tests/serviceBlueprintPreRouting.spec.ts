@@ -7,6 +7,7 @@ import { projectView } from "../src/projector/projectView.js";
 import type { PositionedDecoration, PositionedItem } from "../src/renderer/staged/contracts.js";
 import {
   renderServiceBlueprintPreRoutingArtifacts,
+  renderServiceBlueprintRoutingDebugArtifacts,
   renderServiceBlueprintStagedSvg
 } from "../src/renderer/staged/serviceBlueprint.js";
 
@@ -180,7 +181,7 @@ describe("service_blueprint pre-routing artifacts", () => {
     });
   });
 
-  it("succeeds before routing while the routed staged render adds direct straight connectors", async () => {
+  it("succeeds before routing while later routing stages and the final staged render stay available", async () => {
     const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "recommended");
 
     await expect(
@@ -193,6 +194,20 @@ describe("service_blueprint pre-routing artifacts", () => {
     ).resolves.toEqual(expect.objectContaining({
       preRoutingSvg: expect.any(String),
       preRoutingPng: expect.any(Uint8Array)
+    }));
+
+    await expect(
+      renderServiceBlueprintRoutingDebugArtifacts(
+        context.projection,
+        context.graph,
+        context.view,
+        "recommended"
+      )
+    ).resolves.toEqual(expect.objectContaining({
+      step2Svg: expect.any(String),
+      step2Png: expect.any(Uint8Array),
+      step3Svg: expect.any(String),
+      step3Png: expect.any(Uint8Array)
     }));
 
     await expect(

@@ -23,13 +23,14 @@ import type { RendererDiagnostic } from "./diagnostics.js";
 import {
   buildServiceBlueprintMiddleLayer,
   type ServiceBlueprintMiddleCell,
-  type ServiceBlueprintMiddleEdge
+  type ServiceBlueprintMiddleEdge,
+  type ServiceBlueprintMiddleLayerModel
 } from "./serviceBlueprintMiddleLayer.js";
+import { buildServiceBlueprintRoutingStages } from "./serviceBlueprintRouting.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import {
   measureScene,
   positionSceneBeforeRouting,
-  runStagedRendererPipeline,
   type StagedRendererPipelineResult
 } from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
@@ -51,6 +52,12 @@ interface SceneBuildContext {
   renderNodesById: ReadonlyMap<string, ServiceBlueprintRenderNode>;
 }
 
+interface ServiceBlueprintRenderContext {
+  rendererScene: RendererScene;
+  middleLayer: ServiceBlueprintMiddleLayerModel;
+  authorOrderByNodeId: ReadonlyMap<string, number>;
+}
+
 export interface ServiceBlueprintStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
 export interface ServiceBlueprintStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
 export interface ServiceBlueprintPreRoutingArtifactsResult {
@@ -60,6 +67,18 @@ export interface ServiceBlueprintPreRoutingArtifactsResult {
   preRoutingDiagnostics: RendererDiagnostic[];
   preRoutingSvg: string;
   preRoutingPng: Uint8Array;
+}
+export interface ServiceBlueprintRoutingDebugArtifactsResult {
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  step2PositionedScene: PositionedScene;
+  step2Diagnostics: RendererDiagnostic[];
+  step2Svg: string;
+  step2Png: Uint8Array;
+  step3PositionedScene: PositionedScene;
+  step3Diagnostics: RendererDiagnostic[];
+  step3Svg: string;
+  step3Png: Uint8Array;
 }
 
 function sanitizeToken(value: string): string {
@@ -365,33 +384,30 @@ async function buildServiceBlueprintPreRoutingPipeline(
   profileId: string,
   themeId = "default"
 ): Promise<{
+  context: ServiceBlueprintRenderContext;
   rendererScene: RendererScene;
   measuredScene: MeasuredScene;
-  preRoutingPositionedScene: PositionedScene;
+  basePositionedScene: PositionedScene;
 }> {
-  const rendererScene = buildServiceBlueprintRendererScene(projection, graph, view, profileId, themeId);
-  const measuredScene = measureScene(rendererScene);
-  const preRoutingPositionedScene = attachServiceBlueprintDecorations(
-    await positionSceneBeforeRouting(measuredScene)
-  );
+  const context = buildServiceBlueprintRenderContext(projection, graph, view, profileId, themeId);
+  const measuredScene = measureScene(context.rendererScene);
+  const basePositionedScene = await positionSceneBeforeRouting(measuredScene);
 
   return {
-    rendererScene,
+    context,
+    rendererScene: context.rendererScene,
     measuredScene,
-    preRoutingPositionedScene: {
-      ...preRoutingPositionedScene,
-      edges: []
-    }
+    basePositionedScene
   };
 }
 
-export function buildServiceBlueprintRendererScene(
+function buildServiceBlueprintRenderContext(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
   profileId: string,
   themeId = "default"
-): RendererScene {
+): ServiceBlueprintRenderContext {
   const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
   const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
   const middleLayer = buildServiceBlueprintMiddleLayer(model);
@@ -406,8 +422,7 @@ export function buildServiceBlueprintRendererScene(
     )
     .map((cell) => buildCellContainer(cell, context));
   const columnCount = [...middleLayer.bands, ...middleLayer.parkingBands].length;
-
-  return {
+  const rendererScene: RendererScene = {
     viewId: "service_blueprint",
     profileId,
     themeId,
@@ -426,6 +441,28 @@ export function buildServiceBlueprintRendererScene(
     edges: middleLayer.edges.map((edge) => buildSceneEdge(edge)),
     diagnostics: middleLayer.diagnostics
   };
+
+  return {
+    rendererScene,
+    middleLayer,
+    authorOrderByNodeId: new Map(model.nodes.map((node) => [node.id, node.authorOrder]))
+  };
+}
+
+export function buildServiceBlueprintRendererScene(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): RendererScene {
+  return buildServiceBlueprintRenderContext(
+    projection,
+    graph,
+    view,
+    profileId,
+    themeId
+  ).rendererScene;
 }
 
 export async function renderServiceBlueprintPreRoutingArtifacts(
@@ -442,16 +479,65 @@ export async function renderServiceBlueprintPreRoutingArtifacts(
     profileId,
     themeId
   );
+  const preRoutingPositionedScene = attachServiceBlueprintDecorations({
+    ...pipeline.basePositionedScene,
+    edges: []
+  });
   const [svgRendered, pngRendered] = await Promise.all([
-    renderPositionedSceneToSvg(pipeline.preRoutingPositionedScene),
-    renderPositionedSceneToPng(pipeline.preRoutingPositionedScene)
+    renderPositionedSceneToSvg(preRoutingPositionedScene),
+    renderPositionedSceneToPng(preRoutingPositionedScene)
   ]);
 
   return {
-    ...pipeline,
-    preRoutingDiagnostics: pipeline.preRoutingPositionedScene.diagnostics,
+    rendererScene: pipeline.rendererScene,
+    measuredScene: pipeline.measuredScene,
+    preRoutingPositionedScene,
+    preRoutingDiagnostics: preRoutingPositionedScene.diagnostics,
     preRoutingSvg: svgRendered.svg,
     preRoutingPng: pngRendered.png
+  };
+}
+
+export async function renderServiceBlueprintRoutingDebugArtifacts(
+  projection: Projection,
+  graph: CompiledGraph,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<ServiceBlueprintRoutingDebugArtifactsResult> {
+  const pipeline = await buildServiceBlueprintPreRoutingPipeline(
+    projection,
+    graph,
+    view,
+    profileId,
+    themeId
+  );
+  const routedStages = buildServiceBlueprintRoutingStages(
+    pipeline.basePositionedScene,
+    pipeline.context.rendererScene,
+    pipeline.context.middleLayer,
+    pipeline.context.authorOrderByNodeId
+  );
+  const step2PositionedScene = attachServiceBlueprintDecorations(routedStages.step2.positionedScene);
+  const step3PositionedScene = attachServiceBlueprintDecorations(routedStages.step3.positionedScene);
+  const [step2SvgRendered, step2PngRendered, step3SvgRendered, step3PngRendered] = await Promise.all([
+    renderPositionedSceneToSvg(step2PositionedScene),
+    renderPositionedSceneToPng(step2PositionedScene),
+    renderPositionedSceneToSvg(step3PositionedScene),
+    renderPositionedSceneToPng(step3PositionedScene)
+  ]);
+
+  return {
+    rendererScene: pipeline.rendererScene,
+    measuredScene: pipeline.measuredScene,
+    step2PositionedScene,
+    step2Diagnostics: step2PositionedScene.diagnostics,
+    step2Svg: step2SvgRendered.svg,
+    step2Png: step2PngRendered.png,
+    step3PositionedScene,
+    step3Diagnostics: step3PositionedScene.diagnostics,
+    step3Svg: step3SvgRendered.svg,
+    step3Png: step3PngRendered.png
   };
 }
 
@@ -462,13 +548,25 @@ export async function renderServiceBlueprintStagedSvg(
   profileId: string,
   themeId = "default"
 ): Promise<ServiceBlueprintStagedSvgResult> {
-  const rendererScene = buildServiceBlueprintRendererScene(projection, graph, view, profileId, themeId);
-  const pipeline = await runStagedRendererPipeline(rendererScene);
-  const positionedScene = attachServiceBlueprintDecorations(pipeline.positionedScene);
+  const pipeline = await buildServiceBlueprintPreRoutingPipeline(
+    projection,
+    graph,
+    view,
+    profileId,
+    themeId
+  );
+  const routedStages = buildServiceBlueprintRoutingStages(
+    pipeline.basePositionedScene,
+    pipeline.context.rendererScene,
+    pipeline.context.middleLayer,
+    pipeline.context.authorOrderByNodeId
+  );
+  const positionedScene = attachServiceBlueprintDecorations(routedStages.final.positionedScene);
   const rendered = await renderPositionedSceneToSvg(positionedScene);
 
   return {
-    ...pipeline,
+    rendererScene: pipeline.rendererScene,
+    measuredScene: pipeline.measuredScene,
     positionedScene,
     ...rendered
   };
@@ -481,13 +579,25 @@ export async function renderServiceBlueprintStagedPng(
   profileId: string,
   themeId = "default"
 ): Promise<ServiceBlueprintStagedPngResult> {
-  const rendererScene = buildServiceBlueprintRendererScene(projection, graph, view, profileId, themeId);
-  const pipeline = await runStagedRendererPipeline(rendererScene);
-  const positionedScene = attachServiceBlueprintDecorations(pipeline.positionedScene);
+  const pipeline = await buildServiceBlueprintPreRoutingPipeline(
+    projection,
+    graph,
+    view,
+    profileId,
+    themeId
+  );
+  const routedStages = buildServiceBlueprintRoutingStages(
+    pipeline.basePositionedScene,
+    pipeline.context.rendererScene,
+    pipeline.context.middleLayer,
+    pipeline.context.authorOrderByNodeId
+  );
+  const positionedScene = attachServiceBlueprintDecorations(routedStages.final.positionedScene);
   const rendered = await renderPositionedSceneToPng(positionedScene);
 
   return {
-    ...pipeline,
+    rendererScene: pipeline.rendererScene,
+    measuredScene: pipeline.measuredScene,
     positionedScene,
     ...rendered
   };

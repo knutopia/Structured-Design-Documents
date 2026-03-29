@@ -182,6 +182,10 @@ describe("rendered example corpus", () => {
 
       await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"));
       await access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "png"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "svg"));
+      await access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "png"));
     }
   });
 
@@ -195,6 +199,10 @@ describe("rendered example corpus", () => {
     for (const variant of variants) {
       await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"))).rejects.toThrow();
       await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "png"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "svg"))).rejects.toThrow();
+      await expect(access(getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "png"))).rejects.toThrow();
     }
   });
 

@@ -48,7 +48,10 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 
 `service_blueprint` visual review checklist:
 
-- staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with direct straight connectors
+- staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with service_blueprint-specific routed connectors
 - additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs
+- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement
+- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
 - customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
+- customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and connector labels remain intentionally absent until a later routing step
 - legacy Graphviz preview siblings remain committed for side-by-side comparison

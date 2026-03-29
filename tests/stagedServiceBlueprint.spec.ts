@@ -7,8 +7,17 @@ import { projectView } from "../src/projector/projectView.js";
 import type { PositionedEdge, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
 import {
   buildServiceBlueprintRendererScene,
+  renderServiceBlueprintPreRoutingArtifacts,
+  renderServiceBlueprintRoutingDebugArtifacts,
   renderServiceBlueprintStagedSvg
 } from "../src/renderer/staged/serviceBlueprint.js";
+import { measureScene } from "../src/renderer/staged/pipeline.js";
+import { expectRendererStageSnapshot, expectRendererStageTextSnapshot } from "./rendererStageSnapshotHarness.js";
+import {
+  collectVisibleItemBoxes,
+  expectNoForbiddenDiagnostics,
+  expectNoRouteIntersectionsWithNonEndpointBoxes
+} from "./stagedVisualHarness.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -99,6 +108,14 @@ function findSemanticEdge(edges: PositionedEdge[], id: string): PositionedEdge {
   }
   return edge;
 }
+
+function expectOrthogonalRoute(edge: PositionedEdge): void {
+  for (let index = 1; index < edge.route.points.length; index += 1) {
+    const start = edge.route.points[index - 1]!;
+    const end = edge.route.points[index]!;
+    expect(start.x === end.x || start.y === end.y).toBe(true);
+  }
+}
 describe("staged service_blueprint", () => {
   it("builds a fixed root grid for service_blueprint_slice instead of using root ELK placement", async () => {
     const context = await resolveServiceBlueprintContext(
@@ -132,12 +149,24 @@ describe("staged service_blueprint", () => {
     ]);
   });
 
-  it("renders the proof case with direct straight connectors using the resolved ports", async () => {
+  it("renders routing stages for the proof case with deterministic step-2, step-3, and final service_blueprint routes", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
       "recommended"
     );
 
+    const preRouting = await renderServiceBlueprintPreRoutingArtifacts(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+    const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
@@ -145,31 +174,21 @@ describe("staged service_blueprint", () => {
       "recommended"
     );
 
-    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendered.svg).toContain("Submit Claim");
     expect(rendered.svg).toContain("Retention Policy");
-    expect(rendered.svg).toContain("reads, writes");
+    expect(rendered.svg).not.toContain("reads, writes");
+    expect(routingDebug.step2PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
+    expect(routingDebug.step3PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
 
     for (const edge of rendered.positionedScene.edges.filter((candidate) =>
       candidate.classes.includes("service_blueprint_semantic_edge")
     )) {
-      expect(edge.route.style).toBe("straight");
-      expect(edge.route.points).toHaveLength(2);
-      expect(edge.route.points[0]).toEqual({
-        x: edge.from.x,
-        y: edge.from.y
-      });
-      expect(edge.route.points[1]).toEqual({
-        x: edge.to.x,
-        y: edge.to.y
-      });
+      expect(edge.label).toBeUndefined();
+      expectOrthogonalRoute(edge);
     }
 
     const precedesEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__precedes__J-021");
-    expect(precedesEdge.label).toBeUndefined();
-    const realizedByEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__realized_by__PR-020");
-    expect(realizedByEdge.label?.lines.join(" ")).toContain("realized by");
-
     const j020 = findNestedPositionedItem(rendered.positionedScene.root.children, "J-020");
     const j021 = findNestedPositionedItem(rendered.positionedScene.root.children, "J-021");
     if (!j020 || !j021) {
@@ -181,6 +200,108 @@ describe("staged service_blueprint", () => {
     expect(precedesEdge.from.y).toBe(j020.y + j020.height / 2);
     expect(precedesEdge.to.x).toBe(j021.x);
     expect(precedesEdge.to.y).toBe(j021.y + j021.height / 2);
+    expect(precedesEdge.route.points).toEqual([
+      { x: precedesEdge.from.x, y: precedesEdge.from.y },
+      { x: precedesEdge.to.x, y: precedesEdge.to.y }
+    ]);
+
+    const realizedByEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__realized_by__PR-020");
+    expect(realizedByEdge.route.points).toEqual([
+      { x: realizedByEdge.from.x, y: realizedByEdge.from.y },
+      { x: realizedByEdge.to.x, y: realizedByEdge.to.y }
+    ]);
+    expect(realizedByEdge.from.x).toBe(realizedByEdge.to.x);
+    expect(realizedByEdge.from.y).toBeLessThan(realizedByEdge.to.y);
+
+    const step2ConstrainedBy = findSemanticEdge(
+      routingDebug.step2PositionedScene.edges,
+      "PR-020__constrained_by__PL-020"
+    );
+    const step3ConstrainedBy = findSemanticEdge(
+      routingDebug.step3PositionedScene.edges,
+      "PR-020__constrained_by__PL-020"
+    );
+    const finalConstrainedBy = findSemanticEdge(
+      rendered.positionedScene.edges,
+      "PR-020__constrained_by__PL-020"
+    );
+    expect(step2ConstrainedBy.route.points).toHaveLength(2);
+    expect(step3ConstrainedBy.route.points).toHaveLength(4);
+    expect(step3ConstrainedBy.route.points[1]!.x).toBeGreaterThan(step3ConstrainedBy.route.points[0]!.x);
+    expect(finalConstrainedBy.route.points).toHaveLength(4);
+    expect(finalConstrainedBy.route.points[1]!.x).toBeGreaterThan(step3ConstrainedBy.route.points[1]!.x);
+
+    const finalDependsOn = findSemanticEdge(rendered.positionedScene.edges, "PR-020__depends_on__SA-020");
+    expect(finalDependsOn.route.points).toHaveLength(3);
+    expect(finalDependsOn.route.points[0]!.x).toBe(finalDependsOn.route.points[1]!.x);
+    expect(finalDependsOn.route.points[1]!.y).toBe(finalDependsOn.route.points[2]!.y);
+    expect(finalDependsOn.route.points[0]!.x).not.toBe(finalConstrainedBy.route.points[1]!.x);
+
+    const resourceEdges = [
+      findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020"),
+      findSemanticEdge(rendered.positionedScene.edges, "SA-021__reads__D-020"),
+      findSemanticEdge(rendered.positionedScene.edges, "SA-022__reads__D-020")
+    ];
+    expect(
+      resourceEdges.map((edge) => edge.route.points[1]!.y)
+    ).toEqual([560, 576, 592]);
+
+    expect(rendered.rendererScene.edges.map((edge) => edge.id)).toContain("SA-020__reads_writes__D-020");
+    expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__reads__D-020");
+    expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__writes__D-020");
+
+    expect(routingDebug.step2PositionedScene.root.width).toBe(preRouting.preRoutingPositionedScene.root.width);
+    expect(routingDebug.step2PositionedScene.root.height).toBe(preRouting.preRoutingPositionedScene.root.height);
+    expect(routingDebug.step3PositionedScene.root.width).toBe(preRouting.preRoutingPositionedScene.root.width);
+    expect(routingDebug.step3PositionedScene.root.height).toBe(preRouting.preRoutingPositionedScene.root.height);
+    expect(rendered.positionedScene.root.width).toBeGreaterThan(preRouting.preRoutingPositionedScene.root.width);
+    expect(rendered.positionedScene.root.height).toBeGreaterThan(preRouting.preRoutingPositionedScene.root.height);
+
+    expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, [
+      "renderer.routing.service_blueprint_node_intersection"
+    ]);
+    expectNoRouteIntersectionsWithNonEndpointBoxes(
+      rendered.positionedScene.edges,
+      collectVisibleItemBoxes(rendered.positionedScene.root).filter((box) =>
+        box.itemId !== "root" && !box.itemId.includes("__cell__")
+      )
+    );
+  });
+
+  it("matches staged renderer snapshots for the service_blueprint proof case and routing debug stages", async () => {
+    const context = await resolveServiceBlueprintContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+
+    const rendererScene = buildServiceBlueprintRendererScene(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+    const measuredScene = measureScene(rendererScene);
+    const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+    const rendered = await renderServiceBlueprintStagedSvg(
+      context.projection,
+      context.graph,
+      context.view,
+      "recommended"
+    );
+
+    await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", rendererScene);
+    await expectRendererStageSnapshot("service-blueprint.slice.measured-scene.json", measuredScene);
+    await expectRendererStageSnapshot("service-blueprint.slice.positioned-scene.json", rendered.positionedScene);
+    await expectRendererStageTextSnapshot("service-blueprint.slice.svg", rendered.svg);
+    await expectRendererStageSnapshot("service-blueprint.slice.step-2.positioned-scene.json", routingDebug.step2PositionedScene);
+    await expectRendererStageTextSnapshot("service-blueprint.slice.step-2.svg", routingDebug.step2Svg);
+    await expectRendererStageSnapshot("service-blueprint.slice.step-3.positioned-scene.json", routingDebug.step3PositionedScene);
+    await expectRendererStageTextSnapshot("service-blueprint.slice.step-3.svg", routingDebug.step3Svg);
   });
 
   it("appends a synthetic ungrouped lane shell when projection omits derived lane mapping", async () => {

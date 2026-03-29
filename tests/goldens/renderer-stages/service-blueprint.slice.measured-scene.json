@@ -13,28 +13,10 @@
       "service_blueprint"
     ],
     "layout": {
-      "strategy": "elk_layered",
-      "direction": "horizontal",
+      "strategy": "grid",
       "gap": 24,
-      "elk": {
-        "hierarchyHandling": "include_children",
-        "strict": true,
-        "layoutOptions": {
-          "org.eclipse.elk.algorithm": "layered",
-          "org.eclipse.elk.direction": "RIGHT",
-          "org.eclipse.elk.edgeRouting": "ORTHOGONAL",
-          "org.eclipse.elk.separateConnectedComponents": "false",
-          "org.eclipse.elk.considerModelOrder.strategy": "NODES_AND_EDGES",
-          "org.eclipse.elk.layered.crossingMinimization.forceNodeModelOrder": "true",
-          "org.eclipse.elk.layered.considerModelOrder.portModelOrder": "true",
-          "org.eclipse.elk.layered.nodePlacement.favorStraightEdges": "true",
-          "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": "24",
-          "org.eclipse.elk.spacing.nodeNode": "24",
-          "org.eclipse.elk.layered.mergeEdges": "false",
-          "org.eclipse.elk.layered.mergeHierarchyEdges": "false",
-          "org.eclipse.elk.partitioning.activate": "true"
-        }
-      }
+      "columns": 4,
+      "crossAlignment": "stretch"
     },
     "chrome": {
       "padding": {
@@ -63,12 +45,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "0"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -82,42 +59,6 @@
         },
         "headerContent": [],
         "children": [
-          {
-            "kind": "node",
-            "id": "lane:01:customer__shell__cell__band:anchor:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-customer",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
           {
             "kind": "node",
             "id": "J-020",
@@ -219,594 +160,9 @@
         ],
         "ports": [],
         "width": 248,
-        "height": 102,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:01:customer__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:anchor:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-frontstage",
-          "band-a1",
-          "column-1",
-          "cell-kind-anchor"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "0",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:01:customer__shell__cell__band:anchor:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:02:frontstage__shell__cell__band:anchor:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-frontstage",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
-          {
-            "kind": "node",
-            "id": "PR-020",
-            "role": "process",
-            "primitive": "card",
-            "classes": [
-              "semantic_node",
-              "service_blueprint_node",
-              "shape-box",
-              "type-process",
-              "service_blueprint_cell",
-              "lane-frontstage",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "widthBand": "standard",
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "PR-020__content__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "Validate Claim"
-                ],
-                "x": 12,
-                "y": 12,
-                "width": 107.08,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "flow_in",
-                "role": "flow_in",
-                "side": "west",
-                "x": 0,
-                "y": 24
-              },
-              {
-                "id": "flow_out",
-                "role": "flow_out",
-                "side": "east",
-                "x": 224,
-                "y": 24
-              },
-              {
-                "id": "support_in",
-                "role": "support_in",
-                "side": "north",
-                "x": 112,
-                "y": 0
-              },
-              {
-                "id": "support_out",
-                "role": "support_out",
-                "side": "south",
-                "x": 112,
-                "y": 48
-              },
-              {
-                "id": "resource_in",
-                "role": "resource_in",
-                "side": "north",
-                "offset": 36,
-                "x": 36,
-                "y": 0
-              },
-              {
-                "id": "resource_out",
-                "role": "resource_out",
-                "side": "south",
-                "offset": 36,
-                "x": 36,
-                "y": 48
-              }
-            ],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 48
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:02:frontstage__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:03:backstage__shell__cell__band:anchor:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-backstage",
-          "band-a1",
-          "column-1",
-          "cell-kind-anchor"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "0",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:02:frontstage__shell__cell__band:anchor:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:03:backstage__shell__cell__band:anchor:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-backstage",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:03:backstage__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:04:support__shell__cell__band:anchor:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-support",
-          "band-a1",
-          "column-1",
-          "cell-kind-anchor"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "0",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:03:backstage__shell__cell__band:anchor:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:04:support__shell__cell__band:anchor:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-support",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:04:support__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:05:system__shell__cell__band:anchor:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-system",
-          "band-a1",
-          "column-1",
-          "cell-kind-anchor"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "0",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:04:support__shell__cell__band:anchor:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:05:system__shell__cell__band:anchor:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
-          {
-            "kind": "node",
-            "id": "SA-020",
-            "role": "systemaction",
-            "primitive": "card",
-            "classes": [
-              "semantic_node",
-              "service_blueprint_node",
-              "shape-component",
-              "type-systemaction",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "narrow",
-                "standard",
-                "wide"
-              ]
-            },
-            "widthBand": "standard",
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "SA-020__content__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "Store Claim"
-                ],
-                "x": 12,
-                "y": 12,
-                "width": 86.968,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "flow_in",
-                "role": "flow_in",
-                "side": "west",
-                "x": 0,
-                "y": 24
-              },
-              {
-                "id": "flow_out",
-                "role": "flow_out",
-                "side": "east",
-                "x": 224,
-                "y": 24
-              },
-              {
-                "id": "support_in",
-                "role": "support_in",
-                "side": "north",
-                "x": 112,
-                "y": 0
-              },
-              {
-                "id": "support_out",
-                "role": "support_out",
-                "side": "south",
-                "x": 112,
-                "y": 48
-              },
-              {
-                "id": "resource_in",
-                "role": "resource_in",
-                "side": "north",
-                "offset": 36,
-                "x": 36,
-                "y": 0
-              },
-              {
-                "id": "resource_out",
-                "role": "resource_out",
-                "side": "south",
-                "offset": 36,
-                "x": 36,
-                "y": 48
-              }
-            ],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 48
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:05:system__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:anchor:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-policy",
-          "band-a1",
-          "column-1",
-          "cell-kind-anchor"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "0",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:05:system__shell__cell__band:anchor:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:06:policy__shell__cell__band:anchor:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-policy",
-              "band-a1",
-              "column-1",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:06:policy__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -823,12 +179,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "1"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -841,634 +192,12 @@
           "headerBandHeight": 0
         },
         "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:01:customer__shell__cell__band:interstitial:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-customer",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
+        "children": [],
         "ports": [],
         "width": 248,
-        "height": 102,
-        "sharedWidthGroup": "service_blueprint:column:band:interstitial:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:01:customer__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:interstitial:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-frontstage",
-          "band-i1",
-          "column-2",
-          "cell-kind-interstitial"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "1",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:01:customer__shell__cell__band:interstitial:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:02:frontstage__shell__cell__band:interstitial:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-frontstage",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:interstitial:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:02:frontstage__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:03:backstage__shell__cell__band:interstitial:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-backstage",
-          "band-i1",
-          "column-2",
-          "cell-kind-interstitial"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "1",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:02:frontstage__shell__cell__band:interstitial:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:03:backstage__shell__cell__band:interstitial:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-backstage",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
-          {
-            "kind": "node",
-            "id": "PR-021",
-            "role": "process",
-            "primitive": "card",
-            "classes": [
-              "semantic_node",
-              "service_blueprint_node",
-              "shape-box",
-              "type-process",
-              "service_blueprint_cell",
-              "lane-backstage",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "widthBand": "standard",
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "PR-021__content__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "Review Claim History"
-                ],
-                "x": 12,
-                "y": 12,
-                "width": 157.4,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "flow_in",
-                "role": "flow_in",
-                "side": "west",
-                "x": 0,
-                "y": 24
-              },
-              {
-                "id": "flow_out",
-                "role": "flow_out",
-                "side": "east",
-                "x": 224,
-                "y": 24
-              },
-              {
-                "id": "support_in",
-                "role": "support_in",
-                "side": "north",
-                "x": 112,
-                "y": 0
-              },
-              {
-                "id": "support_out",
-                "role": "support_out",
-                "side": "south",
-                "x": 112,
-                "y": 48
-              },
-              {
-                "id": "resource_in",
-                "role": "resource_in",
-                "side": "north",
-                "offset": 36,
-                "x": 36,
-                "y": 0
-              },
-              {
-                "id": "resource_out",
-                "role": "resource_out",
-                "side": "south",
-                "offset": 36,
-                "x": 36,
-                "y": 48
-              }
-            ],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 48
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:interstitial:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:03:backstage__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:04:support__shell__cell__band:interstitial:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-support",
-          "band-i1",
-          "column-2",
-          "cell-kind-interstitial"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "1",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:03:backstage__shell__cell__band:interstitial:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:04:support__shell__cell__band:interstitial:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-support",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:interstitial:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:04:support__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:05:system__shell__cell__band:interstitial:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-system",
-          "band-i1",
-          "column-2",
-          "cell-kind-interstitial"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "1",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:04:support__shell__cell__band:interstitial:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:05:system__shell__cell__band:interstitial:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
-          {
-            "kind": "node",
-            "id": "SA-021",
-            "role": "systemaction",
-            "primitive": "card",
-            "classes": [
-              "semantic_node",
-              "service_blueprint_node",
-              "shape-component",
-              "type-systemaction",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "narrow",
-                "standard",
-                "wide"
-              ]
-            },
-            "widthBand": "standard",
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "SA-021__content__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "Load Claim History"
-                ],
-                "x": 12,
-                "y": 12,
-                "width": 140.792,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "flow_in",
-                "role": "flow_in",
-                "side": "west",
-                "x": 0,
-                "y": 24
-              },
-              {
-                "id": "flow_out",
-                "role": "flow_out",
-                "side": "east",
-                "x": 224,
-                "y": 24
-              },
-              {
-                "id": "support_in",
-                "role": "support_in",
-                "side": "north",
-                "x": 112,
-                "y": 0
-              },
-              {
-                "id": "support_out",
-                "role": "support_out",
-                "side": "south",
-                "x": 112,
-                "y": 48
-              },
-              {
-                "id": "resource_in",
-                "role": "resource_in",
-                "side": "north",
-                "offset": 36,
-                "x": 36,
-                "y": 0
-              },
-              {
-                "id": "resource_out",
-                "role": "resource_out",
-                "side": "south",
-                "offset": 36,
-                "x": 36,
-                "y": 48
-              }
-            ],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 48
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:interstitial:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:05:system__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:interstitial:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-policy",
-          "band-i1",
-          "column-2",
-          "cell-kind-interstitial"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "1",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:05:system__shell__cell__band:interstitial:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:06:policy__shell__cell__band:interstitial:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-policy",
-              "band-i1",
-              "column-2",
-              "cell-kind-interstitial"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:interstitial:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:06:policy__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -1485,12 +214,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "2"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -1504,42 +228,6 @@
         },
         "headerContent": [],
         "children": [
-          {
-            "kind": "node",
-            "id": "lane:01:customer__shell__cell__band:anchor:2__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-customer",
-              "band-a2",
-              "column-3",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
           {
             "kind": "node",
             "id": "J-021",
@@ -1642,9 +330,212 @@
         ],
         "ports": [],
         "width": 248,
-        "height": 102,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:2",
-        "sharedHeightGroup": "service_blueprint:row:lane:01:customer__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:01:customer__shell__cell__band:sidecar:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-customer",
+          "band-r",
+          "column-4",
+          "cell-kind-sidecar"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:02:frontstage__shell__cell__band:anchor:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-frontstage",
+          "band-a1",
+          "column-1",
+          "cell-kind-anchor"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "PR-020",
+            "role": "process",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "service_blueprint_node",
+              "shape-box",
+              "type-process",
+              "service_blueprint_cell",
+              "lane-frontstage",
+              "band-a1",
+              "column-1",
+              "cell-kind-anchor"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "PR-020__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Validate Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 107.08,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "support_in",
+                "role": "support_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "support_out",
+                "role": "support_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "resource_in",
+                "role": "resource_in",
+                "side": "north",
+                "offset": 36,
+                "x": 36,
+                "y": 0
+              },
+              {
+                "id": "resource_out",
+                "role": "resource_out",
+                "side": "south",
+                "offset": 36,
+                "x": 36,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:02:frontstage__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-frontstage",
+          "band-i1",
+          "column-2",
+          "cell-kind-interstitial"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -1661,13 +552,112 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "2",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:01:customer__shell__cell__band:anchor:2"
-            }
-          }
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:02:frontstage__shell__cell__band:sidecar:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-frontstage",
+          "band-r",
+          "column-4",
+          "cell-kind-sidecar"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:03:backstage__shell__cell__band:anchor:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-backstage",
+          "band-a1",
+          "column-1",
+          "cell-kind-anchor"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:03:backstage__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-backstage",
+          "band-i1",
+          "column-2",
+          "cell-kind-interstitial"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -1683,46 +673,107 @@
         "children": [
           {
             "kind": "node",
-            "id": "lane:02:frontstage__shell__cell__band:anchor:2__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
+            "id": "PR-021",
+            "role": "process",
+            "primitive": "card",
             "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
+              "semantic_node",
+              "service_blueprint_node",
+              "shape-box",
+              "type-process",
               "service_blueprint_cell",
-              "lane-frontstage",
-              "band-a2",
-              "column-3",
-              "cell-kind-anchor"
+              "lane-backstage",
+              "band-i1",
+              "column-2",
+              "cell-kind-interstitial"
             ],
             "widthPolicy": {
-              "preferred": "chip",
+              "preferred": "standard",
               "allowed": [
-                "chip"
+                "standard",
+                "wide"
               ]
             },
-            "widthBand": "chip",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "grow_height"
+              "kind": "escalate_width_band",
+              "maxLines": 2
             },
-            "content": [],
-            "ports": [],
+            "content": [
+              {
+                "id": "PR-021__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Review Claim History"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 157.4,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "support_in",
+                "role": "support_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "support_out",
+                "role": "support_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "resource_in",
+                "role": "resource_in",
+                "side": "north",
+                "offset": 36,
+                "x": 36,
+                "y": 0
+              },
+              {
+                "id": "resource_out",
+                "role": "resource_out",
+                "side": "south",
+                "offset": 36,
+                "x": 36,
+                "y": 48
+              }
+            ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
+            "height": 48
           }
         ],
         "ports": [],
         "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:2",
-        "sharedHeightGroup": "service_blueprint:row:lane:02:frontstage__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -1739,13 +790,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "2",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:02:frontstage__shell__cell__band:anchor:2"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -1758,49 +803,117 @@
           "headerBandHeight": 0
         },
         "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:03:backstage__shell__cell__band:anchor:2__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-backstage",
-              "band-a2",
-              "column-3",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
+        "children": [],
         "ports": [],
         "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:2",
-        "sharedHeightGroup": "service_blueprint:row:lane:03:backstage__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:03:backstage__shell__cell__band:sidecar:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-backstage",
+          "band-r",
+          "column-4",
+          "cell-kind-sidecar"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:04:support__shell__cell__band:anchor:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-support",
+          "band-a1",
+          "column-1",
+          "cell-kind-anchor"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:04:support__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-support",
+          "band-i1",
+          "column-2",
+          "cell-kind-interstitial"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -1817,13 +930,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "2",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:03:backstage__shell__cell__band:anchor:2"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -1837,42 +944,6 @@
         },
         "headerContent": [],
         "children": [
-          {
-            "kind": "node",
-            "id": "lane:04:support__shell__cell__band:anchor:2__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-support",
-              "band-a2",
-              "column-3",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
           {
             "kind": "node",
             "id": "PR-022",
@@ -1973,9 +1044,312 @@
         ],
         "ports": [],
         "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:2",
-        "sharedHeightGroup": "service_blueprint:row:lane:04:support__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:04:support__shell__cell__band:sidecar:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-support",
+          "band-r",
+          "column-4",
+          "cell-kind-sidecar"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:05:system__shell__cell__band:anchor:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-system",
+          "band-a1",
+          "column-1",
+          "cell-kind-anchor"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "SA-020",
+            "role": "systemaction",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "service_blueprint_node",
+              "shape-component",
+              "type-systemaction",
+              "service_blueprint_cell",
+              "lane-system",
+              "band-a1",
+              "column-1",
+              "cell-kind-anchor"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "SA-020__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Store Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 86.968,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "support_in",
+                "role": "support_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "support_out",
+                "role": "support_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "resource_in",
+                "role": "resource_in",
+                "side": "north",
+                "offset": 36,
+                "x": 36,
+                "y": 0
+              },
+              {
+                "id": "resource_out",
+                "role": "resource_out",
+                "side": "south",
+                "offset": 36,
+                "x": 36,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:05:system__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-system",
+          "band-i1",
+          "column-2",
+          "cell-kind-interstitial"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "SA-021",
+            "role": "systemaction",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "service_blueprint_node",
+              "shape-component",
+              "type-systemaction",
+              "service_blueprint_cell",
+              "lane-system",
+              "band-i1",
+              "column-2",
+              "cell-kind-interstitial"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "SA-021__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Load Claim History"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 140.792,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "support_in",
+                "role": "support_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "support_out",
+                "role": "support_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "resource_in",
+                "role": "resource_in",
+                "side": "north",
+                "offset": 36,
+                "x": 36,
+                "y": 0
+              },
+              {
+                "id": "resource_out",
+                "role": "resource_out",
+                "side": "south",
+                "offset": 36,
+                "x": 36,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -1992,13 +1366,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "2",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:04:support__shell__cell__band:anchor:2"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -2012,42 +1380,6 @@
         },
         "headerContent": [],
         "children": [
-          {
-            "kind": "node",
-            "id": "lane:05:system__shell__cell__band:anchor:2__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-a2",
-              "column-3",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
           {
             "kind": "node",
             "id": "SA-022",
@@ -2149,398 +1481,9 @@
         ],
         "ports": [],
         "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:2",
-        "sharedHeightGroup": "service_blueprint:row:lane:05:system__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:anchor:2",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-policy",
-          "band-a2",
-          "column-3",
-          "cell-kind-anchor"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "2",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:05:system__shell__cell__band:anchor:2"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:06:policy__shell__cell__band:anchor:2__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-policy",
-              "band-a2",
-              "column-3",
-              "cell-kind-anchor"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:anchor:2",
-        "sharedHeightGroup": "service_blueprint:row:lane:06:policy__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:01:customer__shell__cell__band:sidecar:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-customer",
-          "band-r",
-          "column-4",
-          "cell-kind-sidecar"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "3"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:01:customer__shell__cell__band:sidecar:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-customer",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 102,
-        "sharedWidthGroup": "service_blueprint:column:band:sidecar:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:01:customer__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:sidecar:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-frontstage",
-          "band-r",
-          "column-4",
-          "cell-kind-sidecar"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "3",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:01:customer__shell__cell__band:sidecar:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:02:frontstage__shell__cell__band:sidecar:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-frontstage",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:sidecar:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:02:frontstage__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:03:backstage__shell__cell__band:sidecar:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-backstage",
-          "band-r",
-          "column-4",
-          "cell-kind-sidecar"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "3",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:02:frontstage__shell__cell__band:sidecar:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:03:backstage__shell__cell__band:sidecar:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-backstage",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:sidecar:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:03:backstage__shell"
-      },
-      {
-        "kind": "container",
-        "id": "lane:04:support__shell__cell__band:sidecar:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-support",
-          "band-r",
-          "column-4",
-          "cell-kind-sidecar"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "3",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:03:backstage__shell__cell__band:sidecar:1"
-            }
-          }
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "lane:04:support__shell__cell__band:sidecar:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-support",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          }
-        ],
-        "ports": [],
-        "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:sidecar:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:04:support__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
@@ -2557,13 +1500,7 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "3",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:04:support__shell__cell__band:sidecar:1"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -2577,42 +1514,6 @@
         },
         "headerContent": [],
         "children": [
-          {
-            "kind": "node",
-            "id": "lane:05:system__shell__cell__band:sidecar:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
           {
             "kind": "node",
             "id": "D-020",
@@ -2714,32 +1615,26 @@
         ],
         "ports": [],
         "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:sidecar:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:05:system__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       },
       {
         "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:sidecar:1",
+        "id": "lane:06:policy__shell__cell__band:anchor:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-policy",
-          "band-r",
-          "column-4",
-          "cell-kind-sidecar"
+          "band-a1",
+          "column-1",
+          "cell-kind-anchor"
         ],
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12,
-          "elk": {
-            "layoutOptions": {
-              "org.eclipse.elk.partitioning.partition": "3",
-              "org.eclipse.elk.layered.crossingMinimization.inLayerSuccOf": "lane:05:system__shell__cell__band:sidecar:1"
-            }
-          }
+          "gap": 12
         },
         "chrome": {
           "padding": {
@@ -2755,42 +1650,6 @@
         "children": [
           {
             "kind": "node",
-            "id": "lane:06:policy__shell__cell__band:sidecar:1__sizer",
-            "role": "helper",
-            "primitive": "connector_port",
-            "classes": [
-              "service_blueprint_helper",
-              "service_blueprint_cell_sizer",
-              "service_blueprint_cell",
-              "lane-policy",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
-            ],
-            "widthPolicy": {
-              "preferred": "chip",
-              "allowed": [
-                "chip"
-              ]
-            },
-            "widthBand": "chip",
-            "overflowPolicy": {
-              "kind": "grow_height"
-            },
-            "content": [],
-            "ports": [],
-            "overflow": {
-              "status": "fits"
-            },
-            "width": 224,
-            "height": 2,
-            "fixedSize": {
-              "width": 224,
-              "height": 2
-            }
-          },
-          {
-            "kind": "node",
             "id": "PL-020",
             "role": "policy",
             "primitive": "card",
@@ -2801,9 +1660,9 @@
               "type-policy",
               "service_blueprint_cell",
               "lane-policy",
-              "band-r",
-              "column-4",
-              "cell-kind-sidecar"
+              "band-a1",
+              "column-1",
+              "cell-kind-anchor"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -2889,1408 +1748,121 @@
         ],
         "ports": [],
         "width": 248,
-        "height": 86,
-        "sharedWidthGroup": "service_blueprint:column:band:sidecar:1",
-        "sharedHeightGroup": "service_blueprint:row:lane:06:policy__shell"
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:06:policy__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-policy",
+          "band-i1",
+          "column-2",
+          "cell-kind-interstitial"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:06:policy__shell__cell__band:anchor:2",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-policy",
+          "band-a2",
+          "column-3",
+          "cell-kind-anchor"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
+        "id": "lane:06:policy__shell__cell__band:sidecar:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-policy",
+          "band-r",
+          "column-4",
+          "cell-kind-sidecar"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
       }
     ],
     "ports": [],
-    "width": 6664,
-    "height": 158
+    "width": 1224,
+    "height": 704
   },
   "edges": [
-    {
-      "id": "lane:01:customer__shell__cell__band:anchor:1__helper__J-020",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "J-020",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:anchor:1__helper__lane:02:frontstage__shell__cell__band:anchor:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:anchor:1__helper__PR-020",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "PR-020",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:anchor:1__helper__lane:03:backstage__shell__cell__band:anchor:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:anchor:1__helper__lane:04:support__shell__cell__band:anchor:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:anchor:1__helper__lane:05:system__shell__cell__band:anchor:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:anchor:1__helper__SA-020",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "SA-020",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:anchor:1__helper__lane:06:policy__shell__cell__band:anchor:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:interstitial:1__helper__lane:02:frontstage__shell__cell__band:interstitial:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:interstitial:1__helper__lane:03:backstage__shell__cell__band:interstitial:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:interstitial:1__helper__PR-021",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "PR-021",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:interstitial:1__helper__lane:04:support__shell__cell__band:interstitial:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:interstitial:1__helper__lane:05:system__shell__cell__band:interstitial:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:interstitial:1__helper__SA-021",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "SA-021",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:interstitial:1__helper__lane:06:policy__shell__cell__band:interstitial:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:anchor:2__helper__J-021",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "J-021",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:anchor:2__helper__lane:02:frontstage__shell__cell__band:anchor:2",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:anchor:2__helper__lane:03:backstage__shell__cell__band:anchor:2",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:anchor:2__helper__lane:04:support__shell__cell__band:anchor:2",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:anchor:2__helper__PR-022",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "PR-022",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:anchor:2__helper__lane:05:system__shell__cell__band:anchor:2",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:anchor:2__helper__SA-022",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "SA-022",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:anchor:2__helper__lane:06:policy__shell__cell__band:anchor:2",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:sidecar:1__helper__lane:02:frontstage__shell__cell__band:sidecar:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:sidecar:1__helper__lane:03:backstage__shell__cell__band:sidecar:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:sidecar:1__helper__lane:04:support__shell__cell__band:sidecar:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:sidecar:1__helper__lane:05:system__shell__cell__band:sidecar:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:sidecar:1__helper__D-020",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "D-020",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:sidecar:1__helper__lane:06:policy__shell__cell__band:sidecar:1",
-      "role": "helper_column_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_column_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "vertical",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:06:policy__shell__cell__band:sidecar:1__helper__PL-020",
-      "role": "helper_cell_stack",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_cell_stack",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:06:policy__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "PL-020",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "30"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:anchor:1__helper__lane:01:customer__shell__cell__band:interstitial:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:01:customer__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:interstitial:1__helper__lane:01:customer__shell__cell__band:anchor:2__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:01:customer__shell__cell__band:anchor:2__helper__lane:01:customer__shell__cell__band:sidecar:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:01:customer__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:01:customer__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:anchor:1__helper__lane:02:frontstage__shell__cell__band:interstitial:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:interstitial:1__helper__lane:02:frontstage__shell__cell__band:anchor:2__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:02:frontstage__shell__cell__band:anchor:2__helper__lane:02:frontstage__shell__cell__band:sidecar:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:02:frontstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:02:frontstage__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:anchor:1__helper__lane:03:backstage__shell__cell__band:interstitial:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:interstitial:1__helper__lane:03:backstage__shell__cell__band:anchor:2__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:03:backstage__shell__cell__band:anchor:2__helper__lane:03:backstage__shell__cell__band:sidecar:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:03:backstage__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:03:backstage__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:anchor:1__helper__lane:04:support__shell__cell__band:interstitial:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:interstitial:1__helper__lane:04:support__shell__cell__band:anchor:2__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:04:support__shell__cell__band:anchor:2__helper__lane:04:support__shell__cell__band:sidecar:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:04:support__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:04:support__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:anchor:1__helper__lane:05:system__shell__cell__band:interstitial:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:interstitial:1__helper__lane:05:system__shell__cell__band:anchor:2__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:05:system__shell__cell__band:anchor:2__helper__lane:05:system__shell__cell__band:sidecar:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:05:system__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:05:system__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:06:policy__shell__cell__band:anchor:1__helper__lane:06:policy__shell__cell__band:interstitial:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:06:policy__shell__cell__band:anchor:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:06:policy__shell__cell__band:interstitial:1__helper__lane:06:policy__shell__cell__band:anchor:2__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:06:policy__shell__cell__band:interstitial:1",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
-    {
-      "id": "lane:06:policy__shell__cell__band:anchor:2__helper__lane:06:policy__shell__cell__band:sidecar:1__row",
-      "role": "helper_row_order",
-      "classes": [
-        "service_blueprint_edge",
-        "service_blueprint_helper",
-        "edge-type-helper_row_order",
-        "edge-channel-helper"
-      ],
-      "from": {
-        "itemId": "lane:06:policy__shell__cell__band:anchor:2",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "lane:06:policy__shell__cell__band:sidecar:1",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "authority": "flexible",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "100"
-        }
-      },
-      "ownerContainerId": "root"
-    },
     {
       "id": "J-020__precedes__J-021",
       "role": "precedes",
@@ -4311,13 +1883,10 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "5"
-        }
+        "authority": "flexible"
       },
       "markers": {
         "end": "arrow"
@@ -4345,14 +1914,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "2"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4389,14 +1955,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "2"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4433,14 +1996,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "1"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4476,14 +2036,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "2"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4519,13 +2076,10 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "5"
-        }
+        "authority": "flexible"
       },
       "markers": {
         "end": "arrow"
@@ -4552,14 +2106,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "2"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4595,13 +2146,10 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "5"
-        }
+        "authority": "flexible"
       },
       "markers": {
         "end": "arrow"
@@ -4628,14 +2176,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "2"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4672,14 +2217,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "1"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4717,14 +2259,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "1"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4761,14 +2300,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "1"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [
@@ -4805,14 +2341,11 @@
         "y": 0
       },
       "routing": {
-        "style": "orthogonal",
+        "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
         "labelPlacement": "segment",
-        "authority": "require_elk",
-        "elkLayoutOptions": {
-          "org.eclipse.elk.priority": "1"
-        }
+        "authority": "flexible"
       },
       "label": {
         "lines": [

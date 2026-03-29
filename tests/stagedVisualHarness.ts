@@ -13,7 +13,7 @@ import type {
 } from "../src/renderer/staged/contracts.js";
 import { buildIaPlaceMapRendererScene } from "../src/renderer/staged/iaPlaceMap.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
-import { buildServiceBlueprintRendererScene } from "../src/renderer/staged/serviceBlueprint.js";
+import { renderServiceBlueprintStagedSvg } from "../src/renderer/staged/serviceBlueprint.js";
 import { buildUiContractsRendererScene } from "../src/renderer/staged/uiContracts.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -61,11 +61,24 @@ export async function renderStagedArtifacts(
     throw new Error(`Could not resolve view "${viewId}".`);
   }
 
+  if (viewId === "service_blueprint") {
+    const rendered = await renderServiceBlueprintStagedSvg(
+      projected.projection!,
+      compiled.graph!,
+      view,
+      profileId
+    );
+
+    return {
+      rendererScene: rendered.rendererScene,
+      measuredScene: rendered.measuredScene,
+      positionedScene: rendered.positionedScene
+    };
+  }
+
   const rendererScene = viewId === "ia_place_map"
     ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, profileId)
-    : viewId === "ui_contracts"
-      ? buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, profileId)
-      : buildServiceBlueprintRendererScene(projected.projection!, compiled.graph!, view, profileId);
+    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, profileId);
 
   return runStagedRendererPipeline(rendererScene);
 }
