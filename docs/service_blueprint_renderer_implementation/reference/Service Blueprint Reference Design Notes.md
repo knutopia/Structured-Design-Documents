@@ -1,4 +1,4 @@
-# Service Blueprint Rendering Structure Guidance
+# Service Blueprint Rendering Design Notes
 
 Meant to guide a matching implementation.
 
@@ -118,7 +118,7 @@ If multiple vertical segments of connectors have to share horizontal space betwe
 
 If multiple horizontal segments of connectors have to share vertical space between rows (e.g. "SA-020 WRITES D-020", "SA-021 READS D-020", "SA-022 READS D-020"), they are offset vertically from one another by fixed_separation_distance. If there is not enough vertical space to accomodate all such adjacent horizontal connector segments between two adjacent rows, (no example), then vertical gutter space is added between the two rows (shifting the second & following rows downwards), sized in multiples of fixed_separation_distance, to make space for the horizontal segments. 
 
-### Routing Connectors Around Nodes
+### Routing Connectors Around Nodes ("Swerving")
 
 When a vertical segment of a connector is blocked by a node that is in its way (e.g. "PR-020 CONSTRAINED_BY PL-020" blocked by SA-02), the connector avoids crossing the obstacle node by use of a horizontal offset to the right (horizontal- then vertical- then horizontal segment). The offset part of the connector keeps a horizontal and vertical distance of fixed_separation_distance (or multiples thereof if other obstacles in place) from the obstacle node.
 
