@@ -5,8 +5,9 @@ This file adds `service_blueprint`-specific discipline on top of the repo-root `
 ## Authority Order
 
 - `../service_blueprint_layout_rules.md` is the normative semantic and middle-layer contract.
-- `Service Blueprint Renderer Reset.md` is the architectural guardrail.
-- `reference/Service Blueprint Reference Design Notes.md` plus the reference SVG and PNG are visual acceptance exemplars, not solver specs.
+- `Second Service Blueprint Renderer Reset.md` is the architectural guardrail.
+- `Service Blueprint Routing Rules.md` is the connector-routing contract for `service_blueprint`. It fills routing detail not specified in the semantic contract, is intentionally derived from and closely aligned with `reference/Service Blueprint Reference Design Notes.md`, and should stay consistent with both the layout rules and the reset.
+- `reference/Service Blueprint Reference Design Notes.md` plus the reference SVG and PNG are the visual acceptance exemplars that the routing rules are meant to operationalize, not replace.
 - If these sources appear to conflict, do not guess. Report the mismatch explicitly.
 
 ## Mandatory Pre-Implementation Extraction

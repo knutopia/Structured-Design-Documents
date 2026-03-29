@@ -1,4 +1,4 @@
-# Service Blueprint Rendering Design Notes
+# Service Blueprint Reference Design Notes
 
 Meant to guide a matching implementation.
 
