@@ -14,14 +14,11 @@ This file adds `service_blueprint`-specific discipline on top of the repo-root `
 - Before planning or coding, extract and cite:
   - the expected shared band schema for the proof case
   - the node-to-band assignments for the proof case
-  - the sidecar-placement justification for each `DataEntity` and `Policy`
   - the edge-family expectations that affect routing readability
-- For `service_blueprint_slice`, explicitly ground `A1`, `I1`, `A2`, and sidecar placement from the docs before implementation starts.
 
 ## Hard Layout Gates
 
 - Do not accept output where semantic bands collapse into node-specific accidental columns.
-- Do not accept sidecar placement that cannot be justified by first write, first read, first constrained occurrence, or the local sidecar exception.
 - Do not claim progress based only on ELK ownership, green tests, or successful artifact generation.
 
 ## Snapshot And Golden Discipline

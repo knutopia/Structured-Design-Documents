@@ -9,11 +9,15 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 3-29-26
+
+-tracked and scrubbed ungrounded 'sidecar' placement rule in service_blueprint docs
+
 ## Fri 3-28-26
 
--Ripped out elk routing from service_blueprint
--Ripped elk out of documentation
--Created second service blueprint reset document
+-ripped out elk routing from service_blueprint
+-ripped elk out of documentation
+-created second service blueprint reset document
 
 ## Thu 3-27-26
 

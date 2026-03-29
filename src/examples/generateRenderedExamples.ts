@@ -89,7 +89,7 @@ function buildReadmeContent(
   lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with direct straight connectors");
   lines.push("- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs");
   lines.push("- customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order");
-  lines.push("- customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled");
+  lines.push("- customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and `PRECEDES` edges remain unlabeled");
   lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
   lines.push("");
 

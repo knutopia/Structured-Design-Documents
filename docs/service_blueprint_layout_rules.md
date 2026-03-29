@@ -16,7 +16,7 @@ It is a journey-anchored matrix:
 - visibility / responsibility runs top to bottom
 - customer actions define the narrative spine
 - supporting actions explain how each customer step is delivered
-- data and policy are supporting sidecars, not the main storyline
+- data and policy are supporting elements in lower support rows, not the main storyline
 
 The goal of these rules is to provide a semantic target before we decide exact graph encoding details.
 
@@ -83,8 +83,9 @@ Across the external references, the consistent structure is:
 4. The customer journey is the anchor, and internal work is organized in relation to it.
 5. Frontstage, backstage, and supporting processes are distinct layers.
 6. Dependencies matter and should be visible.
-7. Many blueprints include a physical evidence / touchpoint layer, but that layer is optional and
-   not currently modeled in SDD.
+7. Some blueprints include optional secondary elements such as physical evidence / touchpoints or
+   policy / regulation context, but those elements vary by blueprint and are not all currently
+   modeled in SDD.
 
 The main implication for layout code is simple:
 
@@ -144,7 +145,7 @@ These lanes participate differently in chronology:
 
 Within `system`, `SystemAction` is action-like. `DataEntity` is resource-like.
 
-That distinction matters for placement. `DataEntity` and `Policy` nodes should not be allowed to consume the same visual role as primary action nodes unless a local exception is explicitly chosen.
+That distinction matters for placement. `DataEntity` and `Policy` nodes should remain visually secondary within their support rows and should not be allowed to consume the same visual role as primary action nodes unless a local readability exception is explicitly chosen.
 
 ### 5. Stable ordering
 
@@ -202,32 +203,34 @@ Do not create empty or speculative bands. Interstitial bands must correspond to 
 #### `DataEntity`
 
 - is not a primary timeline node
-- default placement is a resource sidecar position, not a primary action slot
+- stays in `system` as a support resource, not a primary action node
 - use one canonical node per entity in a blueprint slice
 - anchor it by first write; if there is no write, anchor by first read
+- keep later accesses connected back to that anchored node rather than duplicating the entity across multiple bands
 
 #### `Policy`
 
 - is not a primary timeline node
-- default placement is a policy sidecar position, not a primary action slot
+- stays in `policy` as a support element, not a primary action node
 - use one canonical node per policy in a blueprint slice
 - anchor it by first constrained occurrence
-- if every constrained occurrence falls within one semantic band and a band-aligned support placement is clearer than a sidecar, it may occupy that band's policy-row cell instead of a sidecar position
+- if every constrained occurrence falls within one semantic band, align the policy node to that band; otherwise keep one canonical policy node at its anchored band and route later constraints back to it
 
-### 9. Prefer a right-side resource rail for shared sidecars
+### 9. Keep shared support nodes canonical within support rows
 
-For shared `DataEntity` and `Policy` nodes, the default layout should use a right-side sidecar rail or sidecar subcolumns rather than mixing them into the main action flow.
+Shared `DataEntity` and `Policy` nodes should remain single canonical support nodes in the `system` or `policy` row, aligned to a stable semantic band derived from their anchoring relation rather than moved into a dedicated resource column.
 
 Why:
 
 - it keeps the action narrative readable
+- it preserves the layered structure described by service blueprint sources
 - it prevents data and policy nodes from stealing customer-step columns
-- it turns repeated `READS`, `WRITES`, and `CONSTRAINED_BY` edges into "fan-out to support resources" rather than random graph clutter
+- it turns repeated `READS`, `WRITES`, and `CONSTRAINED_BY` edges into readable links back to stable support nodes rather than random graph clutter
 
 Local exception:
 
-- if a resource is only used within a single band and colocating it clearly improves readability, it may occupy a local sidecar subcolumn adjacent to that band
-- if a policy is only constrained within a single band and a regular band-aligned support cell is clearer than any sidecar treatment, it may occupy that band's policy-row cell instead of a sidecar
+- if a support node shares a band with another node in its row, the renderer may offset it within that same band to preserve readability
+- do not duplicate the same `DataEntity` or `Policy` across multiple bands solely to shorten edges
 
 ### 10. Orphans and disconnected nodes
 
@@ -267,9 +270,9 @@ Disconnected or weakly connected nodes should not destabilize the main blueprint
 
 ### 14. `READS` and `WRITES` are resource access relations
 
-`READS` and `WRITES` connect action nodes to resource sidecars.
+`READS` and `WRITES` connect action nodes to canonical support resources in the `system` row.
 
-- they should usually route from action bands to a sidecar rail or local sidecar subcolumn
+- they should usually route from action bands to the anchored `DataEntity` node while preserving that node's stable band alignment
 - `READS` and `WRITES` on the same entity must stay semantically distinct even if they touch the same target node
 - a single `DataEntity` node should aggregate repeated access from multiple system actions
 
@@ -278,7 +281,7 @@ Disconnected or weakly connected nodes should not destabilize the main blueprint
 `CONSTRAINED_BY` should read as "this action is governed by that policy", not as sequence.
 
 - it should not compete visually with `PRECEDES`
-- it should route toward policy sidecars
+- it should route toward the canonical policy node in the `policy` row
 - repeated constraints to the same policy should converge on one policy node
 
 ## Example: `service_blueprint_slice`
@@ -287,10 +290,9 @@ Using the current example slice, the semantic banding should look roughly like t
 
 | Band | Role | Preferred contents |
 | --- | --- | --- |
-| `A1` | customer anchor | `J-020`, `PR-020`, `SA-020`, `PL-020` |
+| `A1` | customer anchor | `J-020`, `PR-020`, `SA-020`, `D-020`, `PL-020` |
 | `I1` | interstitial | `PR-021`, `SA-021` |
 | `A2` | customer anchor | `J-021`, `PR-022`, `SA-022` |
-| `R*` | shared right resource column | `D-020` |
 
 Key reading:
 
@@ -300,7 +302,7 @@ Key reading:
 - `J-021` and `PR-022` share the confirmation band
 - `PL-020` is a policy support node aligned to the first service moment because all constrained
   occurrences in the slice happen in `A1`
-- `D-020` remains a shared right-side resource because it is accessed from multiple moments in the flow
+- `D-020` is a shared support resource aligned to `A1` because its first write occurs there, and later reads route back to that canonical node
 
 ## [Deprecated:] Middle-Layer ELK Encoding Contract
 
@@ -312,7 +314,7 @@ These do not block the current rules, but they matter:
 
 1. Should SDD eventually model a first-class `Evidence` / `Touchpoint` lane above `customer`?
 2. Should `system` split into separate action and resource sublanes for `SystemAction` and `DataEntity`?
-3. Should `Event` remain out of scope for `service_blueprint`, or become an annotation / sidecar?
+3. Should `Event` remain out of scope for `service_blueprint`, or become an annotation / supporting element?
 4. When a step has multiple `REALIZED_BY` targets across multiple operational lanes, do we need a notion of "primary realization" versus "supporting realization"?
 
 ## Short Version
@@ -322,7 +324,7 @@ The layout target is:
 - fixed semantic rows
 - customer-step anchor columns
 - optional interstitial operational columns
-- sidecar resource rails for data and policy
+- support rows and band-aligned support nodes for data and policy
 - straight primary chronology
 - secondary support and resource routing
 

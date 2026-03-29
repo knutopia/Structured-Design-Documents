@@ -51,5 +51,4 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with direct straight connectors
 - additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs
 - customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
-- customer chronology reads left-to-right, sidecar `DataEntity` and `Policy` nodes stay on the shared right-side rail, and `PRECEDES` edges remain unlabeled
 - legacy Graphviz preview siblings remain committed for side-by-side comparison
