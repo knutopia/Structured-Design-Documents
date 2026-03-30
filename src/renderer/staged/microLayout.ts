@@ -1088,6 +1088,22 @@ function measureEdgeLabel(
   };
 }
 
+export function createEdgeLabelMeasurementService(
+  themeId: string,
+  diagnostics: RendererDiagnostic[]
+): (label: EdgeLabelSpec, targetId: string) => MeasuredEdgeLabel {
+  const resolvedTheme = resolveRendererTheme(themeId);
+  diagnostics.push(...resolvedTheme.diagnostics);
+  const context: MeasureContext = {
+    theme: resolvedTheme.theme,
+    measureText: createTextMeasurementService(resolvedTheme.theme.fontAssets.measurement),
+    diagnostics
+  };
+
+  return (label: EdgeLabelSpec, targetId: string): MeasuredEdgeLabel =>
+    measureEdgeLabel(label, context, targetId);
+}
+
 function measureEdge(edge: SceneEdge, context: MeasureContext): MeasuredEdge {
   return {
     id: edge.id,

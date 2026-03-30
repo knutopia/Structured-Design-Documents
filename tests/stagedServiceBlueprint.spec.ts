@@ -140,6 +140,34 @@ function findSemanticEdge(edges: PositionedEdge[], id: string): PositionedEdge {
   return edge;
 }
 
+function findEdgeLabel(edge: PositionedEdge): NonNullable<PositionedEdge["label"]> {
+  if (!edge.label) {
+    throw new Error(`Expected routed edge "${edge.id}" to have a label.`);
+  }
+  return edge.label;
+}
+
+function findLineDecoration(
+  scene: { decorations: Array<{ kind: string; id: string }> },
+  id: string
+): Extract<(typeof scene)["decorations"][number], { kind: "line" }> {
+  const decoration = scene.decorations.find((candidate) => candidate.kind === "line" && candidate.id === id);
+  if (!decoration || decoration.kind !== "line") {
+    throw new Error(`Could not find line decoration "${id}".`);
+  }
+  return decoration;
+}
+
+function boxesOverlap(
+  left: { x: number; y: number; width: number; height: number },
+  right: { x: number; y: number; width: number; height: number }
+): boolean {
+  return left.x < right.x + right.width
+    && left.x + left.width > right.x
+    && left.y < right.y + right.height
+    && left.y + left.height > right.y;
+}
+
 function expectOrthogonalRoute(edge: PositionedEdge): void {
   for (let index = 1; index < edge.route.points.length; index += 1) {
     const start = edge.route.points[index - 1]!;
@@ -228,15 +256,19 @@ describe("staged service_blueprint", () => {
     expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendered.svg).toContain("Submit Claim");
     expect(rendered.svg).toContain("Retention Policy");
-    expect(rendered.svg).not.toContain("reads, writes");
+    expect(rendered.svg).toContain("reads, writes");
     expect(routingDebug.step2PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
     expect(routingDebug.step3PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
 
     for (const edge of rendered.positionedScene.edges.filter((candidate) =>
       candidate.classes.includes("service_blueprint_semantic_edge")
     )) {
-      expect(edge.label).toBeUndefined();
       expectOrthogonalRoute(edge);
+      if (edge.id.includes("__precedes__")) {
+        expect(edge.label).toBeUndefined();
+      } else {
+        expect(edge.label).toBeDefined();
+      }
     }
 
     const precedesEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__precedes__J-021");
@@ -257,12 +289,16 @@ describe("staged service_blueprint", () => {
     ]);
 
     const realizedByEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__realized_by__PR-020");
+    const realizedByLabel = findEdgeLabel(realizedByEdge);
+    const interactionLine = findLineDecoration(rendered.positionedScene, "lane-customer__separator");
     expect(realizedByEdge.route.points).toEqual([
       { x: realizedByEdge.from.x, y: realizedByEdge.from.y },
       { x: realizedByEdge.to.x, y: realizedByEdge.to.y }
     ]);
     expect(realizedByEdge.from.x).toBe(realizedByEdge.to.x);
     expect(realizedByEdge.from.y).toBeLessThan(realizedByEdge.to.y);
+    expect(realizedByLabel.textStyleRole).toBe("edge_label");
+    expect(realizedByLabel.y + realizedByLabel.height).toBeLessThanOrEqual(interactionLine.from.y - 24);
 
     const step2ConstrainedBy = findSemanticEdge(
       routingDebug.step2PositionedScene.edges,
@@ -305,6 +341,7 @@ describe("staged service_blueprint", () => {
     expect(finalConstrainedBy.route.points[2]!.x - (finalSa020Node.x + finalSa020Node.width)).toBeGreaterThanOrEqual(16);
 
     const finalDependsOn = findSemanticEdge(rendered.positionedScene.edges, "PR-020__depends_on__SA-020");
+    const finalDependsOnLabel = findEdgeLabel(finalDependsOn);
     expect(finalDependsOn.route.points).toEqual([
       { x: finalDependsOn.from.x, y: finalDependsOn.from.y },
       { x: finalDependsOn.to.x, y: finalDependsOn.to.y }
@@ -312,6 +349,7 @@ describe("staged service_blueprint", () => {
     expect(finalDependsOn.from.x).toBe(finalDependsOn.to.x);
     expect(finalDependsOn.from.x).toBeLessThan(finalConstrainedBy.route.points[0]!.x);
     expect(finalConstrainedBy.route.points[1]!.y).toBeLessThan(finalDependsOn.to.y);
+    expect(finalDependsOnLabel.x + finalDependsOnLabel.width).toBeLessThanOrEqual(finalDependsOn.route.points[0]!.x - 12);
 
     const finalStraightDependsOn = findSemanticEdge(
       rendered.positionedScene.edges,
@@ -447,14 +485,17 @@ describe("staged service_blueprint", () => {
       findSemanticEdge(rendered.positionedScene.edges, "SA-021__reads__D-020"),
       findSemanticEdge(rendered.positionedScene.edges, "SA-022__reads__D-020")
     ];
+    const sa021ReadsLabel = findEdgeLabel(resourceEdges[1]!);
     const resourceTrackYs = resourceEdges.map((edge) => edge.route.points[1]!.y);
     expect(new Set(resourceTrackYs).size).toBeGreaterThanOrEqual(2);
     expect(resourceTrackYs.every((y) => y > resourceEdges[0]!.from.y)).toBe(true);
+    expect(sa021ReadsLabel.x).toBeGreaterThan(resourceEdges[1]!.route.points[1]!.x);
 
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).toContain("SA-020__reads_writes__D-020");
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__reads__D-020");
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__writes__D-020");
     expect(findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020").classes).not.toContain("edge-bold");
+    expect(findEdgeLabel(finalReadsWrites).lines.join(" ")).toBe("reads, writes");
 
     expect(routingDebug.step2PositionedScene.root.width).toBe(preRouting.preRoutingPositionedScene.root.width);
     expect(routingDebug.step2PositionedScene.root.height).toBe(preRouting.preRoutingPositionedScene.root.height);
@@ -472,6 +513,21 @@ describe("staged service_blueprint", () => {
         box.itemId !== "root" && !box.itemId.includes("__cell__")
       )
     );
+    const visibleNodeBoxes = collectVisibleItemBoxes(rendered.positionedScene.root).filter((box) =>
+      box.itemId !== "root" && !box.itemId.includes("__cell__")
+    );
+    for (const edge of [
+      realizedByEdge,
+      finalDependsOn,
+      resourceEdges[1]!
+    ]) {
+      const label = findEdgeLabel(edge);
+      expect(
+        visibleNodeBoxes
+          .filter((box) => box.itemId !== edge.from.itemId && box.itemId !== edge.to.itemId)
+          .some((box) => boxesOverlap(label, box))
+      ).toBe(false);
+    }
   });
 
   it("matches staged renderer snapshots for the service_blueprint proof case and routing debug stages", async () => {

@@ -2,7 +2,7 @@
 
 ## Open Issues
 
--FIX the sidecar crap in docs/service_blueprint_layout_rules.md
+-FIX the service_blueprint layout spec mismatch
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
@@ -12,7 +12,9 @@
 ## Mon 3-30-26
 
 -increased swerve routing distance
--cleaned bottom-gutter routing
+-cleaned bottom-gutter routing, various details
+-routing good now
+-placing labels for service_blueprint
 
 ## Sun 3-29-26
 

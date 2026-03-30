@@ -53,5 +53,5 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement
 - additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
 - customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
-- customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and connector labels remain intentionally absent until a later routing step
+- customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and final staged outputs place non-`PRECEDES` connector labels after routing while step debug artifacts stay unlabeled
 - legacy Graphviz preview siblings remain committed for side-by-side comparison

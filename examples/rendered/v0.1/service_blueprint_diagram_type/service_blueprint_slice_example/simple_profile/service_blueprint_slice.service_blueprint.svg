@@ -292,5 +292,11 @@
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
+    <g class="scene-edge-label role-reads_writes service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
+      <rect class="scene-edge-label__box" x="630.402" y="549" width="83.196" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="636.402" y="565">
+          <tspan x="636.402" dy="0">reads, writes</tspan>
+        </text>
+    </g>
   </g>
 </svg>

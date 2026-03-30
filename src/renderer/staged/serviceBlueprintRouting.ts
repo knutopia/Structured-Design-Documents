@@ -1,9 +1,12 @@
 import type {
+  EdgeLabelSpec,
   EdgeMarkers,
+  MeasuredEdgeLabel,
   Point,
   PortSide,
   PositionedContainer,
   PositionedEdge,
+  PositionedEdgeLabel,
   PositionedItem,
   PositionedNode,
   PositionedRoute,
@@ -15,6 +18,7 @@ import {
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
+import { createEdgeLabelMeasurementService } from "./microLayout.js";
 import type {
   ServiceBlueprintMiddleCell,
   ServiceBlueprintMiddleEdge,
@@ -22,9 +26,13 @@ import type {
 } from "./serviceBlueprintMiddleLayer.js";
 
 const FIXED_SEPARATION_DISTANCE = 16;
+const FIXED_LABEL_DISTANCE = 12;
+const FIXED_LABEL_CLEARANCE = FIXED_LABEL_DISTANCE * 2;
 const OBSTACLE_SWERVE_CLEARANCE = 16;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
 const ROOT_PADDING_FALLBACK = 28;
+const SERVICE_BLUEPRINT_SEPARATOR_START_X = 24;
+const SERVICE_BLUEPRINT_SEPARATOR_END_RIGHT_INSET = 28;
 
 type ConnectorPattern =
   | "precedes_same_row"
@@ -142,6 +150,28 @@ interface RouteSegmentDetail extends RouteSegment {
   routeSegmentIndex: number;
   start: Point;
   end: Point;
+}
+
+interface LabelBox {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+interface ConnectorRouteSegmentDetail extends RouteSegmentDetail {
+  connectorId: string;
+}
+
+interface ConnectorMidpointSegment {
+  segment: RouteSegmentDetail;
+  point: Point;
+}
+
+interface HorizontalLineSegment {
+  coordinate: number;
+  spanStart: number;
+  spanEnd: number;
 }
 
 interface GutterRect {
@@ -538,6 +568,164 @@ function getFirstInternalHorizontalCoordinate(route: PositionedRoute): number | 
 
 function sortNumericAscending(values: Iterable<number>): number[] {
   return [...values].sort((left, right) => left - right);
+}
+
+function getRouteSegmentLength(segment: RouteSegmentDetail): number {
+  return segment.orientation === "vertical"
+    ? Math.abs(segment.end.y - segment.start.y)
+    : Math.abs(segment.end.x - segment.start.x);
+}
+
+function getRouteSegmentMidpoint(segment: RouteSegmentDetail): Point {
+  return {
+    x: roundMetric((segment.start.x + segment.end.x) / 2),
+    y: roundMetric((segment.start.y + segment.end.y) / 2)
+  };
+}
+
+function getPointAlongRouteSegment(segment: RouteSegmentDetail, distance: number): Point {
+  if (segment.orientation === "vertical") {
+    const direction = segment.end.y >= segment.start.y ? 1 : -1;
+    return {
+      x: roundMetric(segment.start.x),
+      y: roundMetric(segment.start.y + direction * distance)
+    };
+  }
+
+  const direction = segment.end.x >= segment.start.x ? 1 : -1;
+  return {
+    x: roundMetric(segment.start.x + direction * distance),
+    y: roundMetric(segment.start.y)
+  };
+}
+
+function resolveConnectorMidpointSegment(route: PositionedRoute): ConnectorMidpointSegment | undefined {
+  const details = buildRouteSegmentDetails(route)
+    .filter((segment) => getRouteSegmentLength(segment) > 0.5);
+  if (details.length === 0) {
+    return undefined;
+  }
+
+  const totalLength = details.reduce((sum, segment) => sum + getRouteSegmentLength(segment), 0);
+  const midpointDistance = totalLength / 2;
+  let traversed = 0;
+
+  for (let index = 0; index < details.length; index += 1) {
+    const segment = details[index]!;
+    const segmentLength = getRouteSegmentLength(segment);
+    const boundary = traversed + segmentLength;
+
+    if (midpointDistance < boundary - 0.001) {
+      return {
+        segment,
+        point: getPointAlongRouteSegment(segment, midpointDistance - traversed)
+      };
+    }
+
+    if (Math.abs(midpointDistance - boundary) <= 0.001) {
+      const next = details[index + 1];
+      if (!next) {
+        return {
+          segment,
+          point: getRouteSegmentMidpoint(segment)
+        };
+      }
+
+      const nextLength = getRouteSegmentLength(next);
+      const chosen = nextLength >= segmentLength ? next : segment;
+      return {
+        segment: chosen,
+        point: getRouteSegmentMidpoint(chosen)
+      };
+    }
+
+    traversed = boundary;
+  }
+
+  const last = details[details.length - 1]!;
+  return {
+    segment: last,
+    point: getRouteSegmentMidpoint(last)
+  };
+}
+
+function buildLabelBox(x: number, y: number, width: number, height: number): LabelBox {
+  return {
+    x: roundMetric(x),
+    y: roundMetric(y),
+    width: roundMetric(width),
+    height: roundMetric(height)
+  };
+}
+
+function buildPositionedEdgeLabelFromBox(
+  measuredLabel: MeasuredEdgeLabel,
+  box: LabelBox
+): PositionedEdgeLabel {
+  return {
+    lines: [...measuredLabel.lines],
+    width: measuredLabel.width,
+    height: measuredLabel.height,
+    lineHeight: measuredLabel.lineHeight,
+    textStyleRole: measuredLabel.textStyleRole,
+    x: box.x,
+    y: box.y
+  };
+}
+
+function boxesOverlap(left: LabelBox, right: LabelBox): boolean {
+  return left.x < right.x + right.width - 0.5
+    && left.x + left.width > right.x + 0.5
+    && left.y < right.y + right.height - 0.5
+    && left.y + left.height > right.y + 0.5;
+}
+
+function boxIntersectsNodeBoxes(
+  box: LabelBox,
+  nodeBoxes: ReadonlyArray<{ itemId: string; x: number; y: number; width: number; height: number }>
+): boolean {
+  return nodeBoxes.some((nodeBox) => boxesOverlap(box, nodeBox));
+}
+
+function isLabelBoxWithinScene(scene: PositionedScene, box: LabelBox): boolean {
+  return box.x >= scene.root.x - 0.5
+    && box.y >= scene.root.y - 0.5
+    && box.x + box.width <= scene.root.x + scene.root.width + 0.5
+    && box.y + box.height <= scene.root.y + scene.root.height + 0.5;
+}
+
+function buildConnectorSegmentsById(
+  connectorPlans: readonly ServiceBlueprintConnectorPlan[],
+  routesByConnectorId: ReadonlyMap<string, ConnectorRouteState>
+): Map<string, ConnectorRouteSegmentDetail[]> {
+  return new Map(
+    connectorPlans.map((connector) => {
+      const route = routesByConnectorId.get(connector.id)?.route ?? connector.finalRoute;
+      return [
+        connector.id,
+        buildRouteSegmentDetails(route).map((segment) => ({
+          ...segment,
+          connectorId: connector.id
+        }))
+      ] as const;
+    })
+  );
+}
+
+function buildServiceBlueprintSeparatorSegments(
+  scene: PositionedScene,
+  index: PositionedBlueprintIndex
+): HorizontalLineSegment[] {
+  const endX = Math.max(SERVICE_BLUEPRINT_SEPARATOR_START_X, scene.root.width - SERVICE_BLUEPRINT_SEPARATOR_END_RIGHT_INSET);
+
+  return [0, 1, 2]
+    .map((rowOrder) => index.rowBottomByOrder.get(rowOrder))
+    .filter((value): value is number => value !== undefined)
+    .map((coordinate) => ({
+      coordinate: roundMetric(coordinate),
+      spanStart: SERVICE_BLUEPRINT_SEPARATOR_START_X,
+      spanEnd: roundMetric(endX)
+    }));
 }
 
 function spansOverlap(startA: number, endA: number, startB: number, endB: number): boolean {
@@ -3653,6 +3841,310 @@ function buildPositionedEdges(
   });
 }
 
+function buildCombinedConnectorLabelSpec(
+  connector: ServiceBlueprintConnectorPlan,
+  sceneEdgeLabelById: ReadonlyMap<string, EdgeLabelSpec>
+): EdgeLabelSpec | undefined {
+  const labels: string[] = [];
+  let textStyleRole: string | undefined;
+
+  for (const connectorId of connector.memberConnectorIds) {
+    const label = sceneEdgeLabelById.get(connectorId);
+    const text = label?.text.trim();
+    if (!text) {
+      continue;
+    }
+    if (!textStyleRole) {
+      textStyleRole = label?.textStyleRole;
+    }
+    if (!labels.includes(text)) {
+      labels.push(text);
+    }
+  }
+
+  if (labels.length === 0) {
+    return undefined;
+  }
+
+  return {
+    text: labels.join(", "),
+    textStyleRole: textStyleRole ?? "edge_label"
+  };
+}
+
+function boxIntersectsVerticalSegments(
+  box: LabelBox,
+  connectorId: string,
+  connectorSegmentsById: ReadonlyMap<string, readonly ConnectorRouteSegmentDetail[]>
+): boolean {
+  for (const [candidateConnectorId, segments] of connectorSegmentsById.entries()) {
+    if (candidateConnectorId === connectorId) {
+      continue;
+    }
+    if (segments.some((segment) =>
+      segment.orientation === "vertical"
+      && segment.coordinate >= box.x - 0.5
+      && segment.coordinate <= box.x + box.width + 0.5
+      && spansOverlap(
+        Math.min(segment.start.y, segment.end.y),
+        Math.max(segment.start.y, segment.end.y),
+        box.y,
+        box.y + box.height
+      ))) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function findHorizontalCrossingsForVerticalLabel(
+  box: LabelBox,
+  stemX: number,
+  connectorId: string,
+  connectorSegmentsById: ReadonlyMap<string, readonly ConnectorRouteSegmentDetail[]>,
+  separatorSegments: readonly HorizontalLineSegment[]
+): number[] {
+  const crossings: number[] = [];
+
+  for (const [candidateConnectorId, segments] of connectorSegmentsById.entries()) {
+    if (candidateConnectorId === connectorId) {
+      continue;
+    }
+    for (const segment of segments) {
+      if (segment.orientation !== "horizontal") {
+        continue;
+      }
+      if (segment.coordinate < box.y - FIXED_LABEL_CLEARANCE || segment.coordinate > box.y + box.height + 0.5) {
+        continue;
+      }
+      if (stemX < Math.min(segment.start.x, segment.end.x) - 0.5 || stemX > Math.max(segment.start.x, segment.end.x) + 0.5) {
+        continue;
+      }
+      crossings.push(segment.coordinate);
+    }
+  }
+
+  for (const separator of separatorSegments) {
+    if (separator.coordinate < box.y - FIXED_LABEL_CLEARANCE || separator.coordinate > box.y + box.height + 0.5) {
+      continue;
+    }
+    if (stemX < separator.spanStart - 0.5 || stemX > separator.spanEnd + 0.5) {
+      continue;
+    }
+    crossings.push(separator.coordinate);
+  }
+
+  return sortNumericAscending(crossings);
+}
+
+function isVerticalLabelSideBlocked(
+  box: LabelBox,
+  connectorId: string,
+  connectorSegmentsById: ReadonlyMap<string, readonly ConnectorRouteSegmentDetail[]>,
+  nodeBoxes: ReadonlyArray<{ itemId: string; x: number; y: number; width: number; height: number }>,
+  scene: PositionedScene
+): boolean {
+  return !isLabelBoxWithinScene(scene, box)
+    || boxIntersectsVerticalSegments(box, connectorId, connectorSegmentsById)
+    || boxIntersectsNodeBoxes(box, nodeBoxes);
+}
+
+function isHorizontalLabelBlocked(
+  box: LabelBox,
+  connectorId: string,
+  connectorSegmentsById: ReadonlyMap<string, readonly ConnectorRouteSegmentDetail[]>,
+  nodeBoxes: ReadonlyArray<{ itemId: string; x: number; y: number; width: number; height: number }>,
+  scene: PositionedScene
+): boolean {
+  return !isLabelBoxWithinScene(scene, box)
+    || boxIntersectsVerticalSegments(box, connectorId, connectorSegmentsById)
+    || boxIntersectsNodeBoxes(box, nodeBoxes);
+}
+
+function positionServiceBlueprintConnectorLabel(
+  connector: ServiceBlueprintConnectorPlan,
+  measuredLabel: MeasuredEdgeLabel,
+  route: PositionedRoute,
+  connectorSegmentsById: ReadonlyMap<string, readonly ConnectorRouteSegmentDetail[]>,
+  nodeBoxes: ReadonlyArray<{ itemId: string; x: number; y: number; width: number; height: number }>,
+  separatorSegments: readonly HorizontalLineSegment[],
+  scene: PositionedScene,
+  diagnostics: RendererDiagnostic[]
+): PositionedEdgeLabel | undefined {
+  const midpoint = resolveConnectorMidpointSegment(route);
+  if (!midpoint) {
+    diagnostics.push(
+      createRoutingDiagnostic(
+        "renderer.routing.service_blueprint_edge_label_omitted",
+        `Service blueprint label placement for "${connector.id}" could not resolve a midpoint route segment. Omitting the label.`,
+        connector.id,
+        "info"
+      )
+    );
+    return undefined;
+  }
+
+  if (midpoint.segment.orientation === "vertical") {
+    const rightCandidate = buildLabelBox(
+      midpoint.segment.coordinate + FIXED_LABEL_DISTANCE,
+      midpoint.point.y - measuredLabel.height / 2,
+      measuredLabel.width,
+      measuredLabel.height
+    );
+    const leftCandidate = buildLabelBox(
+      midpoint.segment.coordinate - FIXED_LABEL_DISTANCE - measuredLabel.width,
+      midpoint.point.y - measuredLabel.height / 2,
+      measuredLabel.width,
+      measuredLabel.height
+    );
+    const rightBlocked = isVerticalLabelSideBlocked(
+      rightCandidate,
+      connector.id,
+      connectorSegmentsById,
+      nodeBoxes,
+      scene
+    );
+    const leftBlocked = isVerticalLabelSideBlocked(
+      leftCandidate,
+      connector.id,
+      connectorSegmentsById,
+      nodeBoxes,
+      scene
+    );
+
+    let candidate = rightBlocked && !leftBlocked ? leftCandidate : rightCandidate;
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const crossings = findHorizontalCrossingsForVerticalLabel(
+        candidate,
+        midpoint.segment.coordinate,
+        connector.id,
+        connectorSegmentsById,
+        separatorSegments
+      );
+      if (crossings.length === 0) {
+        break;
+      }
+      candidate = buildLabelBox(
+        candidate.x,
+        Math.min(...crossings) - FIXED_LABEL_CLEARANCE - measuredLabel.height,
+        measuredLabel.width,
+        measuredLabel.height
+      );
+    }
+
+    if (!isLabelBoxWithinScene(scene, candidate)
+      || boxIntersectsVerticalSegments(candidate, connector.id, connectorSegmentsById)
+      || boxIntersectsNodeBoxes(candidate, nodeBoxes)) {
+      diagnostics.push(
+        createRoutingDiagnostic(
+          "renderer.routing.service_blueprint_edge_label_fallback",
+          `Service blueprint label placement for "${connector.id}" could not find a fully unobstructed vertical-label position. Keeping the nearest rule-conformant placement.`,
+          connector.id,
+          "info"
+        )
+      );
+    }
+
+    return buildPositionedEdgeLabelFromBox(measuredLabel, candidate);
+  }
+
+  const initialCandidate = buildLabelBox(
+    midpoint.point.x - measuredLabel.width / 2,
+    midpoint.point.y - measuredLabel.height / 2,
+    measuredLabel.width,
+    measuredLabel.height
+  );
+  let candidate = initialCandidate;
+  let lastInBounds = initialCandidate;
+
+  for (let attempt = 0; attempt < 16; attempt += 1) {
+    if (!isHorizontalLabelBlocked(candidate, connector.id, connectorSegmentsById, nodeBoxes, scene)) {
+      return buildPositionedEdgeLabelFromBox(measuredLabel, candidate);
+    }
+    if (isLabelBoxWithinScene(scene, candidate)) {
+      lastInBounds = candidate;
+    }
+
+    const shifted = buildLabelBox(
+      candidate.x + FIXED_LABEL_CLEARANCE,
+      candidate.y,
+      measuredLabel.width,
+      measuredLabel.height
+    );
+    if (!isLabelBoxWithinScene(scene, shifted)) {
+      break;
+    }
+    candidate = shifted;
+  }
+
+  diagnostics.push(
+    createRoutingDiagnostic(
+      "renderer.routing.service_blueprint_edge_label_fallback",
+      `Service blueprint label placement for "${connector.id}" could not find a fully unobstructed horizontal-label position. Keeping the nearest rule-conformant placement.`,
+      connector.id,
+      "info"
+    )
+  );
+  return buildPositionedEdgeLabelFromBox(measuredLabel, lastInBounds);
+}
+
+function buildFinalPositionedEdgesWithLabels(
+  connectorPlans: readonly ServiceBlueprintConnectorPlan[],
+  routesByConnectorId: ReadonlyMap<string, ConnectorRouteState>,
+  scene: PositionedScene,
+  index: PositionedBlueprintIndex,
+  sceneEdgeLabelById: ReadonlyMap<string, EdgeLabelSpec>,
+  measureLabel: (label: EdgeLabelSpec, targetId: string) => MeasuredEdgeLabel,
+  diagnostics: RendererDiagnostic[]
+): PositionedEdge[] {
+  const connectorSegmentsById = buildConnectorSegmentsById(connectorPlans, routesByConnectorId);
+  const separatorSegments = buildServiceBlueprintSeparatorSegments(scene, index);
+
+  return connectorPlans.map((connector) => {
+    const routeState = routesByConnectorId.get(connector.id);
+    const route = routeState?.route ?? connector.finalRoute;
+    const start = route.points[0]!;
+    const end = route.points[route.points.length - 1]!;
+    const labelSpec = buildCombinedConnectorLabelSpec(connector, sceneEdgeLabelById);
+    const measuredLabel = labelSpec ? measureLabel(labelSpec, connector.id) : undefined;
+    const nonEndpointNodeBoxes = index.allNodeBoxes.filter((box) =>
+      box.itemId !== connector.from && box.itemId !== connector.to
+    );
+
+    return {
+      id: connector.id,
+      role: connector.role,
+      classes: [...connector.classes],
+      from: {
+        itemId: connector.from,
+        x: start.x,
+        y: start.y
+      },
+      to: {
+        itemId: connector.to,
+        x: end.x,
+        y: end.y
+      },
+      route,
+      label: measuredLabel
+        ? positionServiceBlueprintConnectorLabel(
+            connector,
+            measuredLabel,
+            route,
+            connectorSegmentsById,
+            nonEndpointNodeBoxes,
+            separatorSegments,
+            scene,
+            diagnostics
+          )
+        : undefined,
+      markers: connector.markers,
+      paintGroup: "edges"
+    };
+  });
+}
+
 function buildStageScene(
   baseScene: PositionedScene,
   edges: PositionedEdge[],
@@ -3842,7 +4334,21 @@ export function buildServiceBlueprintRoutingStages(
       occupiedGutters
     };
   });
-  const finalEdges = buildPositionedEdges(finalConnectorPlans, finalRouteStates);
+  const sceneEdgeLabelById = new Map(
+    rendererScene.edges.flatMap((edge) =>
+      edge.label ? [[edge.id, edge.label] as const] : []
+    )
+  );
+  const measureLabel = createEdgeLabelMeasurementService(rendererScene.themeId, finalDiagnostics);
+  const finalEdges = buildFinalPositionedEdgesWithLabels(
+    finalConnectorPlans,
+    finalRouteStates,
+    workingScene,
+    workingIndex,
+    sceneEdgeLabelById,
+    measureLabel,
+    finalDiagnostics
+  );
   const offendingEdges = routeIntersectsForbiddenBoxes(finalEdges, workingIndex.allNodeBoxes);
   for (const edgeId of offendingEdges) {
     finalDiagnostics.push(
