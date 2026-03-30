@@ -181,9 +181,15 @@ describe("staged service_blueprint", () => {
   });
 
   it("renders routing stages for the proof case with deterministic step-2, step-3, and final service_blueprint routes", async () => {
-    const context = await resolveServiceBlueprintContext(
+    const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
       "recommended"
+    );
+    const routedStages = buildServiceBlueprintRoutingStages(
+      context.positionedScene,
+      context.rendererScene,
+      context.middleLayer,
+      context.authorOrderByNodeId
     );
 
     const preRouting = await renderServiceBlueprintPreRoutingArtifacts(
@@ -266,16 +272,26 @@ describe("staged service_blueprint", () => {
     expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[0]!.x);
     expect(finalConstrainedBy.route.points).toHaveLength(6);
     expect(finalConstrainedBy.route.points[0]!.x).toBe(finalConstrainedBy.route.points[1]!.x);
-    expect(finalConstrainedBy.route.points[2]!.x).toBeGreaterThan(step3ConstrainedBy.route.points[2]!.x);
+    expect(finalConstrainedBy.route.points[2]!.x).toBe(step3ConstrainedBy.route.points[2]!.x);
     expect(finalConstrainedBy.route.points[4]!.x).toBe(finalConstrainedBy.route.points[5]!.x);
 
     const finalDependsOn = findSemanticEdge(rendered.positionedScene.edges, "PR-020__depends_on__SA-020");
-    expect(finalDependsOn.route.points).toHaveLength(6);
+    expect(finalDependsOn.route.points).toHaveLength(4);
     expect(finalDependsOn.route.points[0]!.x).toBe(finalDependsOn.route.points[1]!.x);
+    expect(finalDependsOn.route.points[1]!.y).toBeGreaterThan(finalDependsOn.route.points[0]!.y);
     expect(finalDependsOn.route.points[1]!.y).toBe(finalDependsOn.route.points[2]!.y);
     expect(finalDependsOn.route.points[2]!.x).toBe(finalDependsOn.route.points[3]!.x);
-    expect(finalDependsOn.route.points[4]!.x).toBe(finalDependsOn.route.points[5]!.x);
-    expect(finalDependsOn.route.points[2]!.x).not.toBe(finalConstrainedBy.route.points[2]!.x);
+    expect(finalDependsOn.route.points[0]!.x).toBeGreaterThan(finalConstrainedBy.route.points[0]!.x);
+
+    const finalStraightDependsOn = findSemanticEdge(
+      rendered.positionedScene.edges,
+      "PR-021__depends_on__SA-021"
+    );
+    expect(finalStraightDependsOn.route.points).toEqual([
+      { x: finalStraightDependsOn.from.x, y: finalStraightDependsOn.from.y },
+      { x: finalStraightDependsOn.to.x, y: finalStraightDependsOn.to.y }
+    ]);
+    expect(finalStraightDependsOn.from.x).toBe(finalStraightDependsOn.to.x);
 
     const finalSaConstrainedBy = findSemanticEdge(rendered.positionedScene.edges, "SA-020__constrained_by__PL-020");
     expect(finalSaConstrainedBy.route.points).toHaveLength(4);
@@ -293,14 +309,52 @@ describe("staged service_blueprint", () => {
     expect(finalSupportPrecedes.route.points).toHaveLength(4);
     expect(finalSupportPrecedes.route.points[2]!.x).toBeLessThan(finalSupportPrecedes.route.points[3]!.x);
 
+    const pr020BottomOccupancy = routedStages.step3.gutterOccupancy.filter((occupancy) =>
+      occupancy.key === "node:PR-020:bottom" && occupancy.axis === "vertical"
+    );
+    expect(
+      pr020BottomOccupancy.map((occupancy) => ({
+        connectorId: occupancy.connectorId,
+        nominalCoordinate: occupancy.nominalCoordinate
+      }))
+    ).toEqual([
+      {
+        connectorId: "PR-020__constrained_by__PL-020",
+        nominalCoordinate: 256
+      },
+      {
+        connectorId: "PR-020__depends_on__SA-020",
+        nominalCoordinate: 256
+      }
+    ]);
+
+    expect(
+      routedStages.final.gutterOccupancy.some((occupancy) =>
+        occupancy.connectorId === "PR-021__precedes__PR-022" && occupancy.key === "node:PR-021:bottom"
+      )
+    ).toBe(false);
+    expect(
+      routedStages.final.gutterOccupancy.filter((occupancy) =>
+        occupancy.connectorId === "PR-021__depends_on__SA-021"
+      )
+    ).toEqual([
+      expect.objectContaining({
+        key: "node:PR-021:bottom",
+        axis: "vertical",
+        nominalCoordinate: 528,
+        spanStart: 320,
+        spanEnd: 364
+      })
+    ]);
+
     const resourceEdges = [
       findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020"),
       findSemanticEdge(rendered.positionedScene.edges, "SA-021__reads__D-020"),
       findSemanticEdge(rendered.positionedScene.edges, "SA-022__reads__D-020")
     ];
-    expect(
-      resourceEdges.map((edge) => edge.route.points[1]!.y)
-    ).toEqual([560, 576, 592]);
+    const resourceTrackYs = resourceEdges.map((edge) => edge.route.points[1]!.y);
+    expect(new Set(resourceTrackYs).size).toBe(resourceEdges.length);
+    expect(resourceTrackYs.every((y) => y > resourceEdges[0]!.from.y)).toBe(true);
 
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).toContain("SA-020__reads_writes__D-020");
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__reads__D-020");

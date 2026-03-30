@@ -84,6 +84,7 @@ Per node per right-gutter, and per node per bottom-gutter, track an ordered list
 
 This data will allow determination of required gutter size based on "occupancy", and will allow predictable relative positioning of adjacent parallel connector segments in a gutter.
 
+
 ### 2. Determine Edges Per Connector
 
 See [Primarily Horizontal PRECEDES Connectors]('reference/Service%20Blueprint%20Reference%20Design%20Notes.md#primarily-horizontal-precedes-connectors')
@@ -111,6 +112,8 @@ As with the preceding steps, follow the Prioritized Connector Sequence when refi
 With all connectors assigned to edges and gutters, look at each connector edge with populated starting_connector_edges and / or ending_connector_edges. Then assign well-spaced coordinates to the connector start / end points per edge.  
 
 #### 4.2 Space Out Parallel Segments Per Gutter Space
+
+“Within a given gutter, only parallel connector segments whose nominal positions overlap compete for spacing; when such competition occurs, higher-priority connectors retain the more canonical track and lower-priority connectors are displaced minimally.”
 
 Adjust the routing per affected connector to remain stable. Within the node gutter immediately adjacent to the given edge, adjust the routing so that parallel connector segments (before "turning to" the final edge-perpendicular segment / after "coming from" the initial edge-perpendicular segment) are well-spaced. 
 
