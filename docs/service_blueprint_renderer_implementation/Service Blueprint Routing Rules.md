@@ -119,6 +119,8 @@ Connection-point order may be optimized to minimize inversions against the adjac
 
 For obstacle-local tracks immediately adjacent to a node being swerved around, connectors attached to that obstacle node own the innermost local tracks; swerving pass-through connectors must use outer tracks.
 
+After local departures and arrivals have been resolved, compact obstacle-local pass-through tracks inward to the nearest free track that preserves obstacle clearance and those attached-connector inner-track claims.
+
 Within a shared node-right-gutter or node-bottom-gutter, solve local departures, local arrivals, and pass-through swerves together as one gutter-local bundle. A connector owns its local stem until that stem ends; other connectors may not bend onto that same local track before then. If the minimum readable local arrangement does not fit, increase the corresponding global-column-gutter or global-lane-gutter.
 
 Adjust the routing per affected connector to remain stable. Within the node gutter immediately adjacent to the given edge, adjust the routing so that parallel connector segments (before "turning to" the final edge-perpendicular segment / after "coming from" the initial edge-perpendicular segment) are well-spaced. 

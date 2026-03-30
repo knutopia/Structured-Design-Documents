@@ -289,12 +289,16 @@ describe("staged service_blueprint", () => {
     expect(step3ConstrainedBy.route.points[3]!.y).toBe(step3ConstrainedBy.route.points[4]!.y);
     expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[5]!.x);
     expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[0]!.x);
+    expect(step3ConstrainedBy.route.points[1]!.y).toBe(464);
+    expect(step3ConstrainedBy.route.points[3]!.y).toBe(592);
     expect(step3Sa020.y - step3ConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(32);
     expect(step3ConstrainedBy.route.points[3]!.y - (step3Sa020.y + step3Sa020.height)).toBeGreaterThanOrEqual(48);
     expect(step3ConstrainedBy.route.points[2]!.x - (step3Sa020.x + step3Sa020.width)).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points).toHaveLength(6);
     expect(finalConstrainedBy.route.points[0]!.x).toBe(finalConstrainedBy.route.points[1]!.x);
+    expect(finalConstrainedBy.route.points[1]!.y).toBe(480);
     expect(finalConstrainedBy.route.points[2]!.x).toBe(step3ConstrainedBy.route.points[2]!.x);
+    expect(finalConstrainedBy.route.points[3]!.y).toBe(576);
     expect(finalConstrainedBy.route.points[4]!.x).toBe(finalConstrainedBy.route.points[5]!.x);
     expect(finalSa020Node.y - finalConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points[3]!.y - (finalSa020Node.y + finalSa020Node.height)).toBeGreaterThanOrEqual(16);
@@ -328,7 +332,9 @@ describe("staged service_blueprint", () => {
     expect(finalSaConstrainedBy.to.x).toBeLessThan(finalConstrainedBy.route.points[5]!.x);
 
     const finalReadsWrites = findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020");
+    expect(finalReadsWrites.route.points[1]!.y).toBe(560);
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
+    expect(finalConstrainedBy.route.points[3]!.y - finalReadsWrites.route.points[1]!.y).toBe(16);
     expect(finalReadsWrites.route.points[1]!.y).toBeGreaterThan(finalSaConstrainedBy.from.y);
 
     const saBottomBundleOccupancy = routedStages.final.gutterOccupancy.filter((occupancy) =>
@@ -336,11 +342,18 @@ describe("staged service_blueprint", () => {
     ).map((occupancy) => ({
       connectorId: occupancy.connectorId,
       nominalCoordinate: occupancy.nominalCoordinate
-    }));
+    })).sort((left, right) =>
+      left.nominalCoordinate - right.nominalCoordinate
+      || left.connectorId.localeCompare(right.connectorId)
+    );
     expect(saBottomBundleOccupancy).toEqual([
       {
         connectorId: "SA-020__reads_writes__D-020",
         nominalCoordinate: finalReadsWrites.route.points[1]!.y
+      },
+      {
+        connectorId: "PR-020__constrained_by__PL-020",
+        nominalCoordinate: finalConstrainedBy.route.points[3]!.y
       }
     ]);
 

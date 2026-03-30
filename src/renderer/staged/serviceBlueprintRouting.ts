@@ -234,6 +234,20 @@ interface EndpointSideOrderOverride {
 
 type EndpointSideOrderOverrides = ReadonlyMap<string, Map<PortSide, EndpointSideOrderOverride>>;
 
+interface PreparedRouteResolution {
+  bundleEndpointCoordinateByEndpointKey: Map<string, number>;
+  preparedSegmentCoordinateBySegmentKey: Map<string, number>;
+  lockedSegmentKeys: Set<string>;
+  requiredColumnExpansions: Record<number, number>;
+  requiredLaneExpansions: Record<number, number>;
+  routeStates: Map<string, ConnectorRouteState>;
+  occupancyResult: {
+    occupancy: ServiceBlueprintGutterOccupancy[];
+    occupancyByConnectorId: Map<string, ServiceBlueprintGutterOccupancy[]>;
+  };
+  connectorPlansWithOccupancy: ServiceBlueprintConnectorPlan[];
+}
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
@@ -1259,8 +1273,39 @@ function getObstacleSideKind(side: PortSide): GutterKind {
   }
 }
 
+function getObstacleSideFromKind(kind: GutterKind): PortSide | undefined {
+  switch (kind) {
+    case "obstacle_north":
+      return "north";
+    case "obstacle_south":
+      return "south";
+    case "obstacle_east":
+      return "east";
+    case "obstacle_west":
+      return "west";
+    default:
+      return undefined;
+  }
+}
+
 function getExpectedEdgeLocalAxis(side: PortSide): GutterAxis {
   return side === "north" || side === "south" ? "horizontal" : "vertical";
+}
+
+function getObstacleLocalBaseCoordinate(
+  node: { x: number; y: number; width: number; height: number },
+  side: PortSide
+): number {
+  switch (side) {
+    case "north":
+      return roundMetric(node.y - OBSTACLE_SWERVE_CLEARANCE);
+    case "south":
+      return roundMetric(node.y + node.height + OBSTACLE_SWERVE_CLEARANCE);
+    case "east":
+      return roundMetric(node.x + node.width + OBSTACLE_SWERVE_CLEARANCE);
+    case "west":
+      return roundMetric(node.x - OBSTACLE_SWERVE_CLEARANCE);
+  }
 }
 
 function buildEdgeLocalEndpointKey(connectorId: string, endpointRole: EndpointRole): string {
@@ -3370,6 +3415,213 @@ function buildPreparedRoutesWithLateEndpointOrdering(
   };
 }
 
+function buildObstacleLocalCompaction(
+  connectorPlans: readonly ServiceBlueprintConnectorPlan[],
+  occupancy: readonly ServiceBlueprintGutterOccupancy[],
+  index: PositionedBlueprintIndex
+): {
+  segmentCoordinateBySegmentKey: Map<string, number>;
+  lockedSegmentKeys: Set<string>;
+} {
+  const connectorPlanById = new Map(connectorPlans.map((connector) => [connector.id, connector] as const));
+  const segmentCoordinateBySegmentKey = new Map<string, number>();
+  const lockedSegmentKeys = new Set<string>();
+  const groups = new Map<string, ServiceBlueprintGutterOccupancy[]>();
+
+  for (const entry of occupancy) {
+    if (!isObstacleLocalKind(entry.kind)) {
+      continue;
+    }
+    const key = `${entry.key}|${entry.axis}`;
+    const existing = groups.get(key) ?? [];
+    existing.push(entry);
+    groups.set(key, existing);
+  }
+
+  const compareMovableEntries = (
+    left: ServiceBlueprintGutterOccupancy,
+    right: ServiceBlueprintGutterOccupancy,
+    baseCoordinate: number
+  ): number => {
+    const leftDistance = Math.abs(left.nominalCoordinate - baseCoordinate);
+    const rightDistance = Math.abs(right.nominalCoordinate - baseCoordinate);
+    const leftConnector = connectorPlanById.get(left.connectorId);
+    const rightConnector = connectorPlanById.get(right.connectorId);
+
+    if (Math.abs(leftDistance - rightDistance) > 0.5) {
+      return leftDistance - rightDistance;
+    }
+    if (!leftConnector || !rightConnector) {
+      return left.connectorId.localeCompare(right.connectorId);
+    }
+    return compareOrderingKey(leftConnector.orderingKey, rightConnector.orderingKey)
+      || left.routeSegmentIndex - right.routeSegmentIndex
+      || left.connectorId.localeCompare(right.connectorId);
+  };
+
+  groups.forEach((group) => {
+    const first = group[0];
+    if (!first?.nodeId) {
+      return;
+    }
+
+    const side = getObstacleSideFromKind(first.kind);
+    const node = index.nodeById.get(first.nodeId)?.node;
+    if (!side || !node) {
+      return;
+    }
+
+    const baseCoordinate = getObstacleLocalBaseCoordinate(node, side);
+    const direction = getOutwardDirectionForSide(side);
+    const visited = new Set<number>();
+    const competesLocally = (
+      left: ServiceBlueprintGutterOccupancy,
+      right: ServiceBlueprintGutterOccupancy
+    ): boolean => spansTouchOrOverlap(left.spanStart, left.spanEnd, right.spanStart, right.spanEnd);
+
+    for (let groupIndex = 0; groupIndex < group.length; groupIndex += 1) {
+      if (visited.has(groupIndex)) {
+        continue;
+      }
+
+      const componentIndices: number[] = [];
+      const queue = [groupIndex];
+      visited.add(groupIndex);
+      while (queue.length > 0) {
+        const currentIndex = queue.shift()!;
+        componentIndices.push(currentIndex);
+        for (let candidateIndex = 0; candidateIndex < group.length; candidateIndex += 1) {
+          if (visited.has(candidateIndex)) {
+            continue;
+          }
+          if (competesLocally(group[currentIndex]!, group[candidateIndex]!)) {
+            visited.add(candidateIndex);
+            queue.push(candidateIndex);
+          }
+        }
+      }
+
+      const component = componentIndices.map((componentIndex) => group[componentIndex]!);
+      const fixedEntries = component.filter((entry) => (entry.ownershipRank ?? 0) === 0);
+      const movableEntries = component
+        .filter((entry) => (entry.ownershipRank ?? 0) > 0)
+        .sort((left, right) => compareMovableEntries(left, right, baseCoordinate));
+
+      if (movableEntries.length === 0) {
+        continue;
+      }
+
+      const occupied = fixedEntries.map((entry) => ({
+        entry,
+        coordinate: entry.nominalCoordinate
+      }));
+
+      for (const entry of movableEntries) {
+        let assignedCoordinate = baseCoordinate;
+        for (const occupiedEntry of occupied) {
+          if (!competesLocally(entry, occupiedEntry.entry)) {
+            continue;
+          }
+
+          if (direction > 0) {
+            if (assignedCoordinate < occupiedEntry.coordinate + FIXED_SEPARATION_DISTANCE) {
+              assignedCoordinate = roundMetric(occupiedEntry.coordinate + FIXED_SEPARATION_DISTANCE);
+            }
+          } else if (assignedCoordinate > occupiedEntry.coordinate - FIXED_SEPARATION_DISTANCE) {
+            assignedCoordinate = roundMetric(occupiedEntry.coordinate - FIXED_SEPARATION_DISTANCE);
+          }
+        }
+
+        const coordinate = roundMetric(assignedCoordinate);
+        segmentCoordinateBySegmentKey.set(
+          buildSegmentDisplacementKey(entry.connectorId, entry.routeSegmentIndex),
+          coordinate
+        );
+        lockedSegmentKeys.add(buildSegmentDisplacementKey(entry.connectorId, entry.routeSegmentIndex));
+        occupied.push({
+          entry,
+          coordinate
+        });
+      }
+    }
+  });
+
+  return {
+    segmentCoordinateBySegmentKey,
+    lockedSegmentKeys
+  };
+}
+
+function buildPreparedRoutesWithObstacleCompaction(
+  connectorPlans: readonly ServiceBlueprintConnectorPlan[],
+  scene: PositionedScene,
+  index: PositionedBlueprintIndex,
+  globalGutterState: ServiceBlueprintGlobalGutterState,
+  bucketsByNodeId: ReadonlyMap<string, ServiceBlueprintNodeEdgeBuckets>
+): {
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>;
+  preparedRoutes: PreparedRouteResolution;
+} {
+  const {
+    endpointOffsetsByNodeId,
+    gutterLocalPrepared
+  } = buildPreparedRoutesWithLateEndpointOrdering(
+    connectorPlans,
+    scene,
+    index,
+    globalGutterState,
+    bucketsByNodeId
+  );
+  const obstacleLocalCompaction = buildObstacleLocalCompaction(
+    gutterLocalPrepared.connectorPlansWithOccupancy,
+    gutterLocalPrepared.occupancyResult.occupancy,
+    index
+  );
+  const preparedSegmentCoordinateBySegmentKey = new Map(
+    gutterLocalPrepared.bundleSegmentCoordinateBySegmentKey
+  );
+  for (const [segmentKey, coordinate] of obstacleLocalCompaction.segmentCoordinateBySegmentKey.entries()) {
+    preparedSegmentCoordinateBySegmentKey.set(segmentKey, coordinate);
+  }
+  const lockedSegmentKeys = new Set<string>(gutterLocalPrepared.lockedBundleSegmentKeys);
+  for (const segmentKey of obstacleLocalCompaction.lockedSegmentKeys) {
+    lockedSegmentKeys.add(segmentKey);
+  }
+
+  const routeStates = buildRouteStatesForConnectors(
+    gutterLocalPrepared.connectorPlansWithOccupancy,
+    index,
+    endpointOffsetsByNodeId,
+    new Map<string, number>(),
+    gutterLocalPrepared.bundleEndpointCoordinateByEndpointKey,
+    preparedSegmentCoordinateBySegmentKey
+  );
+  const occupancyResult = extractGutterOccupancyByConnector(
+    gutterLocalPrepared.connectorPlansWithOccupancy,
+    new Map([...routeStates.entries()].map(([connectorId, state]) => [connectorId, state.route] as const)),
+    scene,
+    index,
+    globalGutterState
+  );
+
+  return {
+    endpointOffsetsByNodeId,
+    preparedRoutes: {
+      bundleEndpointCoordinateByEndpointKey: gutterLocalPrepared.bundleEndpointCoordinateByEndpointKey,
+      preparedSegmentCoordinateBySegmentKey,
+      lockedSegmentKeys,
+      requiredColumnExpansions: gutterLocalPrepared.requiredColumnExpansions,
+      requiredLaneExpansions: gutterLocalPrepared.requiredLaneExpansions,
+      routeStates,
+      occupancyResult,
+      connectorPlansWithOccupancy: gutterLocalPrepared.connectorPlansWithOccupancy.map((connector) => ({
+        ...connector,
+        occupiedGutters: occupancyResult.occupancyByConnectorId.get(connector.id) ?? []
+      }))
+    }
+  };
+}
+
 function buildPositionedEdges(
   connectorPlans: readonly ServiceBlueprintConnectorPlan[],
   routesByConnectorId: ReadonlyMap<string, ConnectorRouteState>
@@ -3481,22 +3733,22 @@ export function buildServiceBlueprintRoutingStages(
   let workingBucketsByNodeId = step3BucketsByNodeId;
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const { gutterLocalPrepared } = buildPreparedRoutesWithLateEndpointOrdering(
+    const { preparedRoutes } = buildPreparedRoutesWithObstacleCompaction(
       workingConnectorPlans,
       workingScene,
       workingIndex,
       workingGlobalGutterState,
       workingBucketsByNodeId
     );
-    const nominalOccupancyResult = gutterLocalPrepared.occupancyResult;
-    const nominalConnectorPlans = gutterLocalPrepared.connectorPlansWithOccupancy;
+    const nominalOccupancyResult = preparedRoutes.occupancyResult;
+    const nominalConnectorPlans = preparedRoutes.connectorPlansWithOccupancy;
     const displacementBySegmentKey = resolveOccupancyDisplacements(
       nominalConnectorPlans,
       nominalOccupancyResult.occupancy,
-      gutterLocalPrepared.lockedBundleSegmentKeys
+      preparedRoutes.lockedSegmentKeys
     );
     const columnExpansions = accumulateExpansions(
-      gutterLocalPrepared.requiredColumnExpansions,
+      preparedRoutes.requiredColumnExpansions,
       resolveRequiredColumnExpansions(
         nominalOccupancyResult.occupancy,
         workingIndex,
@@ -3504,7 +3756,7 @@ export function buildServiceBlueprintRoutingStages(
       )
     );
     const laneExpansions = accumulateExpansions(
-      gutterLocalPrepared.requiredLaneExpansions,
+      preparedRoutes.requiredLaneExpansions,
       resolveRequiredLaneExpansions(
         nominalOccupancyResult.occupancy,
         workingIndex,
@@ -3549,27 +3801,27 @@ export function buildServiceBlueprintRoutingStages(
   const finalBucketsByNodeId = buildNodeEdgeBuckets(finalStep3ConnectorPlans, workingIndex);
   const {
     endpointOffsetsByNodeId: finalEndpointOffsetsByNodeId,
-    gutterLocalPrepared: gutterLocalPreparedFinal
-  } = buildPreparedRoutesWithLateEndpointOrdering(
+    preparedRoutes: preparedRoutesFinal
+  } = buildPreparedRoutesWithObstacleCompaction(
     finalStep3ConnectorPlans,
     workingScene,
     workingIndex,
     workingGlobalGutterState,
     finalBucketsByNodeId
   );
-  const nominalFinalConnectorPlans = gutterLocalPreparedFinal.connectorPlansWithOccupancy;
+  const nominalFinalConnectorPlans = preparedRoutesFinal.connectorPlansWithOccupancy;
   const finalDisplacementBySegmentKey = resolveOccupancyDisplacements(
     nominalFinalConnectorPlans,
-    gutterLocalPreparedFinal.occupancyResult.occupancy,
-    gutterLocalPreparedFinal.lockedBundleSegmentKeys
+    preparedRoutesFinal.occupancyResult.occupancy,
+    preparedRoutesFinal.lockedSegmentKeys
   );
   const finalRouteStates = buildRouteStatesForConnectors(
     nominalFinalConnectorPlans,
     workingIndex,
     finalEndpointOffsetsByNodeId,
     finalDisplacementBySegmentKey,
-    gutterLocalPreparedFinal.bundleEndpointCoordinateByEndpointKey,
-    gutterLocalPreparedFinal.bundleSegmentCoordinateBySegmentKey
+    preparedRoutesFinal.bundleEndpointCoordinateByEndpointKey,
+    preparedRoutesFinal.preparedSegmentCoordinateBySegmentKey
   );
   const finalOccupancyResult = extractGutterOccupancyByConnector(
     nominalFinalConnectorPlans,
