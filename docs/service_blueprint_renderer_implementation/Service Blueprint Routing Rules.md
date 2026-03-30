@@ -115,6 +115,8 @@ With all connectors assigned to edges and gutters, look at each connector edge w
 
 “Within a given gutter, only parallel connector segments whose nominal positions overlap compete for spacing; when such competition occurs, higher-priority connectors retain the more canonical track and lower-priority connectors are displaced minimally.”
 
+For obstacle-local tracks immediately adjacent to a node being swerved around, connectors attached to that obstacle node own the innermost local tracks; swerving pass-through connectors must use outer tracks.
+
 Adjust the routing per affected connector to remain stable. Within the node gutter immediately adjacent to the given edge, adjust the routing so that parallel connector segments (before "turning to" the final edge-perpendicular segment / after "coming from" the initial edge-perpendicular segment) are well-spaced. 
 
 Track these adjustments to the other gutters occupied per connector: per gutter, if encountering overlapping connectors, shift connectors to appear well-spaced, parallel to one another.

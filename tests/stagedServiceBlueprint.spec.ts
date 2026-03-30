@@ -275,8 +275,8 @@ describe("staged service_blueprint", () => {
     expect(step3ConstrainedBy.route.points[3]!.y).toBe(step3ConstrainedBy.route.points[4]!.y);
     expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[5]!.x);
     expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[0]!.x);
-    expect(step3Sa020.y - step3ConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(16);
-    expect(step3ConstrainedBy.route.points[3]!.y - (step3Sa020.y + step3Sa020.height)).toBeGreaterThanOrEqual(16);
+    expect(step3Sa020.y - step3ConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(32);
+    expect(step3ConstrainedBy.route.points[3]!.y - (step3Sa020.y + step3Sa020.height)).toBeGreaterThanOrEqual(48);
     expect(step3ConstrainedBy.route.points[2]!.x - (step3Sa020.x + step3Sa020.width)).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points).toHaveLength(6);
     expect(finalConstrainedBy.route.points[0]!.x).toBe(finalConstrainedBy.route.points[1]!.x);
@@ -293,6 +293,7 @@ describe("staged service_blueprint", () => {
     expect(finalDependsOn.route.points[1]!.y).toBe(finalDependsOn.route.points[2]!.y);
     expect(finalDependsOn.route.points[2]!.x).toBe(finalDependsOn.route.points[3]!.x);
     expect(finalDependsOn.route.points[0]!.x).toBeGreaterThan(finalConstrainedBy.route.points[0]!.x);
+    expect(finalConstrainedBy.route.points[1]!.y).toBeLessThan(finalDependsOn.route.points[1]!.y);
 
     const finalStraightDependsOn = findSemanticEdge(
       rendered.positionedScene.edges,
@@ -308,6 +309,10 @@ describe("staged service_blueprint", () => {
     expect(finalSaConstrainedBy.route.points).toHaveLength(4);
     expect(finalSaConstrainedBy.route.points[0]!.x).toBe(finalSaConstrainedBy.route.points[1]!.x);
     expect(finalSaConstrainedBy.route.points[2]!.x).toBe(finalSaConstrainedBy.route.points[3]!.x);
+
+    const finalReadsWrites = findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020");
+    expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalSaConstrainedBy.route.points[1]!.y);
+    expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
 
     const finalProcessPrecedes = findSemanticEdge(rendered.positionedScene.edges, "PR-020__precedes__PR-021");
     expect(finalProcessPrecedes.route.points).toHaveLength(4);
@@ -358,8 +363,54 @@ describe("staged service_blueprint", () => {
       })
     ]);
 
+    expect(
+      routedStages.final.gutterOccupancy.filter((occupancy) =>
+        occupancy.key === "obstacle:SA-020:north" && occupancy.axis === "horizontal"
+      ).map((occupancy) => ({
+        connectorId: occupancy.connectorId,
+        nominalCoordinate: occupancy.nominalCoordinate,
+        ownershipRank: occupancy.ownershipRank
+      }))
+    ).toEqual(expect.arrayContaining([
+      {
+        connectorId: "PR-020__depends_on__SA-020",
+        nominalCoordinate: finalDependsOn.route.points[1]!.y,
+        ownershipRank: 0
+      },
+      {
+        connectorId: "PR-020__constrained_by__PL-020",
+        nominalCoordinate: finalConstrainedBy.route.points[1]!.y,
+        ownershipRank: 1
+      }
+    ]));
+    expect(
+      routedStages.final.gutterOccupancy.filter((occupancy) =>
+        occupancy.key === "obstacle:SA-020:south" && occupancy.axis === "horizontal"
+      ).map((occupancy) => ({
+        connectorId: occupancy.connectorId,
+        nominalCoordinate: occupancy.nominalCoordinate,
+        ownershipRank: occupancy.ownershipRank
+      }))
+    ).toEqual(expect.arrayContaining([
+      {
+        connectorId: "SA-020__constrained_by__PL-020",
+        nominalCoordinate: finalSaConstrainedBy.route.points[1]!.y,
+        ownershipRank: 0
+      },
+      {
+        connectorId: "SA-020__reads_writes__D-020",
+        nominalCoordinate: finalReadsWrites.route.points[1]!.y,
+        ownershipRank: 0
+      },
+      {
+        connectorId: "PR-020__constrained_by__PL-020",
+        nominalCoordinate: finalConstrainedBy.route.points[3]!.y,
+        ownershipRank: 1
+      }
+    ]));
+
     const resourceEdges = [
-      findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020"),
+      finalReadsWrites,
       findSemanticEdge(rendered.positionedScene.edges, "SA-021__reads__D-020"),
       findSemanticEdge(rendered.positionedScene.edges, "SA-022__reads__D-020")
     ];

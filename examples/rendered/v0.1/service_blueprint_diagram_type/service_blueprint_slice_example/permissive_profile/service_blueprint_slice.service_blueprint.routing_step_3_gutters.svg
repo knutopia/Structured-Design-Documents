@@ -267,7 +267,7 @@
       <path class="scene-edge__path" d="M 800 104 L 800 384" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="PR-020__constrained_by__PL-020" data-role="constrained_by">
-      <path class="scene-edge__path" d="M 256 208 L 256 480 L 384 480 L 384 560 L 256 560 L 256 608" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 256 208 L 256 464 L 384 464 L 384 592 L 256 592 L 256 608" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__depends_on__sa-020" class="scene-edge role-depends_on route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-020__depends_on__SA-020" data-role="depends_on">
       <path class="scene-edge__path" d="M 256 208 L 256 496" marker-end="url(#scene-marker-arrow-end)"/>
