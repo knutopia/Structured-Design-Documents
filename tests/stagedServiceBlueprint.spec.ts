@@ -301,13 +301,13 @@ describe("staged service_blueprint", () => {
     expect(finalConstrainedBy.route.points[2]!.x - (finalSa020Node.x + finalSa020Node.width)).toBeGreaterThanOrEqual(16);
 
     const finalDependsOn = findSemanticEdge(rendered.positionedScene.edges, "PR-020__depends_on__SA-020");
-    expect(finalDependsOn.route.points).toHaveLength(4);
-    expect(finalDependsOn.route.points[0]!.x).toBe(finalDependsOn.route.points[1]!.x);
-    expect(finalDependsOn.route.points[1]!.y).toBeGreaterThan(finalDependsOn.route.points[0]!.y);
-    expect(finalDependsOn.route.points[1]!.y).toBe(finalDependsOn.route.points[2]!.y);
-    expect(finalDependsOn.route.points[2]!.x).toBe(finalDependsOn.route.points[3]!.x);
-    expect(finalDependsOn.route.points[0]!.x).toBeGreaterThan(finalConstrainedBy.route.points[0]!.x);
-    expect(finalConstrainedBy.route.points[1]!.y).toBeLessThan(finalDependsOn.route.points[1]!.y);
+    expect(finalDependsOn.route.points).toEqual([
+      { x: finalDependsOn.from.x, y: finalDependsOn.from.y },
+      { x: finalDependsOn.to.x, y: finalDependsOn.to.y }
+    ]);
+    expect(finalDependsOn.from.x).toBe(finalDependsOn.to.x);
+    expect(finalDependsOn.from.x).toBeLessThan(finalConstrainedBy.route.points[0]!.x);
+    expect(finalConstrainedBy.route.points[1]!.y).toBeLessThan(finalDependsOn.to.y);
 
     const finalStraightDependsOn = findSemanticEdge(
       rendered.positionedScene.edges,
@@ -320,16 +320,16 @@ describe("staged service_blueprint", () => {
     expect(finalStraightDependsOn.from.x).toBe(finalStraightDependsOn.to.x);
 
     const finalSaConstrainedBy = findSemanticEdge(rendered.positionedScene.edges, "SA-020__constrained_by__PL-020");
-    expect(finalSaConstrainedBy.route.points).toHaveLength(4);
-    expect(finalSaConstrainedBy.route.points[0]!.x).toBe(finalSaConstrainedBy.route.points[1]!.x);
-    expect(finalSaConstrainedBy.route.points[2]!.x).toBe(finalSaConstrainedBy.route.points[3]!.x);
+    expect(finalSaConstrainedBy.route.points).toEqual([
+      { x: finalSaConstrainedBy.from.x, y: finalSaConstrainedBy.from.y },
+      { x: finalSaConstrainedBy.to.x, y: finalSaConstrainedBy.to.y }
+    ]);
+    expect(finalSaConstrainedBy.from.x).toBe(finalSaConstrainedBy.to.x);
+    expect(finalSaConstrainedBy.to.x).toBeLessThan(finalConstrainedBy.route.points[5]!.x);
 
     const finalReadsWrites = findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020");
-    expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalSaConstrainedBy.route.points[1]!.y);
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
-    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalSaConstrainedBy.route.points[1]!.y);
-    expect(finalSaConstrainedBy.route.points[1]!.y - finalReadsWrites.route.points[1]!.y).toBeGreaterThanOrEqual(16);
-    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalSaConstrainedBy.route.points[2]!.y);
+    expect(finalReadsWrites.route.points[1]!.y).toBeGreaterThan(finalSaConstrainedBy.from.y);
 
     const saBottomBundleOccupancy = routedStages.final.gutterOccupancy.filter((occupancy) =>
       occupancy.key === "node:SA-020:bottom" && occupancy.axis === "horizontal"
@@ -337,16 +337,12 @@ describe("staged service_blueprint", () => {
       connectorId: occupancy.connectorId,
       nominalCoordinate: occupancy.nominalCoordinate
     }));
-    expect(saBottomBundleOccupancy).toEqual(expect.arrayContaining([
+    expect(saBottomBundleOccupancy).toEqual([
       {
         connectorId: "SA-020__reads_writes__D-020",
         nominalCoordinate: finalReadsWrites.route.points[1]!.y
-      },
-      {
-        connectorId: "SA-020__constrained_by__PL-020",
-        nominalCoordinate: finalSaConstrainedBy.route.points[1]!.y
       }
-    ]));
+    ]);
 
     const finalProcessPrecedes = findSemanticEdge(rendered.positionedScene.edges, "PR-020__precedes__PR-021");
     expect(finalProcessPrecedes.route.points).toHaveLength(4);
@@ -405,18 +401,13 @@ describe("staged service_blueprint", () => {
         nominalCoordinate: occupancy.nominalCoordinate,
         ownershipRank: occupancy.ownershipRank
       }))
-    ).toEqual(expect.arrayContaining([
-      {
-        connectorId: "PR-020__depends_on__SA-020",
-        nominalCoordinate: finalDependsOn.route.points[1]!.y,
-        ownershipRank: 0
-      },
+    ).toEqual([
       {
         connectorId: "PR-020__constrained_by__PL-020",
         nominalCoordinate: finalConstrainedBy.route.points[1]!.y,
         ownershipRank: 1
       }
-    ]));
+    ]);
     expect(
       routedStages.final.gutterOccupancy.filter((occupancy) =>
         occupancy.key === "obstacle:SA-020:south" && occupancy.axis === "horizontal"
@@ -426,11 +417,6 @@ describe("staged service_blueprint", () => {
         ownershipRank: occupancy.ownershipRank
       }))
     ).toEqual(expect.arrayContaining([
-      {
-        connectorId: "SA-020__constrained_by__PL-020",
-        nominalCoordinate: finalSaConstrainedBy.route.points[1]!.y,
-        ownershipRank: 0
-      },
       {
         connectorId: "SA-020__reads_writes__D-020",
         nominalCoordinate: finalReadsWrites.route.points[1]!.y,
@@ -544,8 +530,16 @@ describe("staged service_blueprint", () => {
       routedStages.final.positionedScene.edges,
       "SA-020__constrained_by__PL-020"
     );
-    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalSaConstrainedBy.route.points[1]!.y);
-    expect(finalSaConstrainedBy.route.points[1]!.y - finalReadsWrites.route.points[1]!.y).toBeGreaterThanOrEqual(16);
+    const finalPrConstrainedBy = findSemanticEdge(
+      routedStages.final.positionedScene.edges,
+      "PR-020__constrained_by__PL-020"
+    );
+    expect(finalSaConstrainedBy.route.points).toEqual([
+      { x: finalSaConstrainedBy.from.x, y: finalSaConstrainedBy.from.y },
+      { x: finalSaConstrainedBy.to.x, y: finalSaConstrainedBy.to.y }
+    ]);
+    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalPrConstrainedBy.route.points[3]!.y);
+    expect(finalPrConstrainedBy.route.points[3]!.y - finalReadsWrites.route.points[1]!.y).toBeGreaterThanOrEqual(16);
     expectNoForbiddenDiagnostics(routedStages.final.positionedScene.diagnostics, [
       "renderer.routing.service_blueprint_node_intersection"
     ]);

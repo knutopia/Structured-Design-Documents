@@ -227,8 +227,19 @@ interface GutterLocalBundleResolution {
   requiredLaneExpansions: Record<number, number>;
 }
 
+interface EndpointSideOrderOverride {
+  incomingConnectorIds?: string[];
+  outgoingConnectorIds?: string[];
+}
+
+type EndpointSideOrderOverrides = ReadonlyMap<string, Map<PortSide, EndpointSideOrderOverride>>;
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
+}
+
+function arraysEqual(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
 function buildEmptyBucketLists(): ServiceBlueprintNodeEdgeBucketLists {
@@ -1027,6 +1038,22 @@ function buildNodeEdgeBuckets(
   }
 
   return bucketsByNodeId;
+}
+
+function getOrderedConnectorIds(
+  connectorIds: readonly string[],
+  overrideIds?: readonly string[]
+): string[] {
+  if (!overrideIds || overrideIds.length === 0) {
+    return [...connectorIds];
+  }
+
+  const connectorIdSet = new Set(connectorIds);
+  const ordered = overrideIds.filter((connectorId, index) =>
+    connectorIdSet.has(connectorId) && overrideIds.indexOf(connectorId) === index
+  );
+  const remaining = connectorIds.filter((connectorId) => !ordered.includes(connectorId));
+  return [...ordered, ...remaining];
 }
 
 function getObstacleLocalOwnershipCount(
@@ -2055,13 +2082,15 @@ function buildStep3ConnectorPlansForScene(
 
 function buildEndpointOffsets(
   index: PositionedBlueprintIndex,
-  bucketsByNodeId: ReadonlyMap<string, ServiceBlueprintNodeEdgeBuckets>
+  bucketsByNodeId: ReadonlyMap<string, ServiceBlueprintNodeEdgeBuckets>,
+  sideOrderOverrides: EndpointSideOrderOverrides = new Map<string, Map<PortSide, EndpointSideOrderOverride>>()
 ): ReadonlyMap<string, Map<PortSide, Map<string, number>>> {
   const offsetsByNodeId = new Map<string, Map<PortSide, Map<string, number>>>();
 
   for (const [nodeId, context] of index.nodeById.entries()) {
     const nodeOffsets = new Map<PortSide, Map<string, number>>();
     const buckets = bucketsByNodeId.get(nodeId) ?? buildEmptyNodeEdgeBuckets(nodeId);
+    const nodeOverrides = sideOrderOverrides.get(nodeId);
     const sideLengths: Record<PortSide, number> = {
       north: context.node.width,
       south: context.node.width,
@@ -2071,8 +2100,9 @@ function buildEndpointOffsets(
 
     (["north", "south", "east", "west"] as const).forEach((side) => {
       const sideBuckets = getSideBuckets(buckets, side);
-      const incoming = [...sideBuckets.endingConnectorIds];
-      const outgoing = [...sideBuckets.startingConnectorIds];
+      const sideOverride = nodeOverrides?.get(side);
+      const incoming = getOrderedConnectorIds(sideBuckets.endingConnectorIds, sideOverride?.incomingConnectorIds);
+      const outgoing = getOrderedConnectorIds(sideBuckets.startingConnectorIds, sideOverride?.outgoingConnectorIds);
       const longEnough = sideLengths[side] > 2 * Math.max(0, incoming.length + outgoing.length - 1) * FIXED_SEPARATION_DISTANCE;
       const offsets = new Map<string, number>();
 
@@ -2103,6 +2133,141 @@ function buildEndpointOffsets(
   }
 
   return offsetsByNodeId;
+}
+
+function getPrimaryOrientationForSide(side: PortSide): RouteSegment["orientation"] {
+  return side === "north" || side === "south" ? "vertical" : "horizontal";
+}
+
+function getSecondaryOrientationForSide(side: PortSide): RouteSegment["orientation"] {
+  return getPrimaryOrientationForSide(side) === "vertical" ? "horizontal" : "vertical";
+}
+
+function getPreferredPreparedStemCoordinate(
+  connector: ServiceBlueprintConnectorPlan,
+  route: PositionedRoute,
+  endpointRole: EndpointRole
+): number | undefined {
+  const side = endpointRole === "source" ? connector.sourceSide : connector.targetSide;
+  const primaryOrientation = getPrimaryOrientationForSide(side);
+  const secondaryOrientation = getSecondaryOrientationForSide(side);
+  const segments = buildRouteSegmentDetails(route);
+
+  if (segments.length === 0) {
+    return undefined;
+  }
+
+  if (endpointRole === "source") {
+    const firstTurnIndex = segments.findIndex((segment) => segment.orientation === secondaryOrientation);
+    if (firstTurnIndex >= 0) {
+      for (let segmentIndex = firstTurnIndex + 1; segmentIndex < segments.length; segmentIndex += 1) {
+        const candidate = segments[segmentIndex]!;
+        if (candidate.orientation === primaryOrientation) {
+          return candidate.coordinate;
+        }
+      }
+    }
+
+    return segments.find((segment) => segment.orientation === primaryOrientation)?.coordinate;
+  }
+
+  for (let segmentIndex = segments.length - 1; segmentIndex >= 0; segmentIndex -= 1) {
+    if (segments[segmentIndex]!.orientation !== secondaryOrientation) {
+      continue;
+    }
+    for (let candidateIndex = segmentIndex - 1; candidateIndex >= 0; candidateIndex -= 1) {
+      const candidate = segments[candidateIndex]!;
+      if (candidate.orientation === primaryOrientation) {
+        return candidate.coordinate;
+      }
+    }
+    break;
+  }
+
+  for (let segmentIndex = segments.length - 1; segmentIndex >= 0; segmentIndex -= 1) {
+    const candidate = segments[segmentIndex]!;
+    if (candidate.orientation === primaryOrientation) {
+      return candidate.coordinate;
+    }
+  }
+
+  return undefined;
+}
+
+function buildPreferredEndpointSideOrderOverrides(
+  connectorPlans: readonly ServiceBlueprintConnectorPlan[],
+  bucketsByNodeId: ReadonlyMap<string, ServiceBlueprintNodeEdgeBuckets>,
+  routeStates: ReadonlyMap<string, ConnectorRouteState>
+): EndpointSideOrderOverrides {
+  const connectorPlanById = new Map(connectorPlans.map((connector) => [connector.id, connector] as const));
+  const overrides = new Map<string, Map<PortSide, EndpointSideOrderOverride>>();
+
+  const compareByPriority = (leftId: string, rightId: string): number => {
+    const leftConnector = connectorPlanById.get(leftId);
+    const rightConnector = connectorPlanById.get(rightId);
+    if (!leftConnector || !rightConnector) {
+      return leftId.localeCompare(rightId);
+    }
+    return compareOrderingKey(leftConnector.orderingKey, rightConnector.orderingKey)
+      || leftId.localeCompare(rightId);
+  };
+
+  const compareByPreparedStem = (
+    leftId: string,
+    rightId: string,
+    endpointRole: EndpointRole
+  ): number => {
+    const leftConnector = connectorPlanById.get(leftId);
+    const rightConnector = connectorPlanById.get(rightId);
+    const leftRoute = routeStates.get(leftId)?.route;
+    const rightRoute = routeStates.get(rightId)?.route;
+    const leftCoordinate = leftConnector && leftRoute
+      ? getPreferredPreparedStemCoordinate(leftConnector, leftRoute, endpointRole)
+      : undefined;
+    const rightCoordinate = rightConnector && rightRoute
+      ? getPreferredPreparedStemCoordinate(rightConnector, rightRoute, endpointRole)
+      : undefined;
+
+    if (leftCoordinate !== undefined && rightCoordinate !== undefined && Math.abs(leftCoordinate - rightCoordinate) > 0.5) {
+      return leftCoordinate - rightCoordinate;
+    }
+    if (leftCoordinate !== undefined && rightCoordinate === undefined) {
+      return -1;
+    }
+    if (leftCoordinate === undefined && rightCoordinate !== undefined) {
+      return 1;
+    }
+    return compareByPriority(leftId, rightId);
+  };
+
+  for (const [nodeId, buckets] of bucketsByNodeId.entries()) {
+    for (const side of ["north", "south", "east", "west"] as const) {
+      const sideBuckets = getSideBuckets(buckets, side);
+      const preferredIncoming = [...sideBuckets.endingConnectorIds].sort((leftId, rightId) =>
+        compareByPreparedStem(leftId, rightId, "target")
+      );
+      const preferredOutgoing = [...sideBuckets.startingConnectorIds].sort((leftId, rightId) =>
+        compareByPreparedStem(leftId, rightId, "source")
+      );
+
+      if (arraysEqual(preferredIncoming, sideBuckets.endingConnectorIds)
+        && arraysEqual(preferredOutgoing, sideBuckets.startingConnectorIds)) {
+        continue;
+      }
+
+      let sideOverrides = overrides.get(nodeId);
+      if (!sideOverrides) {
+        sideOverrides = new Map<PortSide, EndpointSideOrderOverride>();
+        overrides.set(nodeId, sideOverrides);
+      }
+      sideOverrides.set(side, {
+        incomingConnectorIds: preferredIncoming,
+        outgoingConnectorIds: preferredOutgoing
+      });
+    }
+  }
+
+  return overrides;
 }
 
 function getSidePointWithOffset(
@@ -3161,6 +3326,50 @@ function buildGutterLocalPreparedRoutes(
   };
 }
 
+function buildPreparedRoutesWithLateEndpointOrdering(
+  connectorPlans: readonly ServiceBlueprintConnectorPlan[],
+  scene: PositionedScene,
+  index: PositionedBlueprintIndex,
+  globalGutterState: ServiceBlueprintGlobalGutterState,
+  bucketsByNodeId: ReadonlyMap<string, ServiceBlueprintNodeEdgeBuckets>
+): {
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>;
+  gutterLocalPrepared: ReturnType<typeof buildGutterLocalPreparedRoutes>;
+} {
+  const initialEndpointOffsetsByNodeId = buildEndpointOffsets(index, bucketsByNodeId);
+  const initialPrepared = buildGutterLocalPreparedRoutes(
+    connectorPlans,
+    scene,
+    index,
+    globalGutterState,
+    initialEndpointOffsetsByNodeId
+  );
+  const preferredSideOrderOverrides = buildPreferredEndpointSideOrderOverrides(
+    connectorPlans,
+    bucketsByNodeId,
+    initialPrepared.routeStates
+  );
+
+  if (preferredSideOrderOverrides.size === 0) {
+    return {
+      endpointOffsetsByNodeId: initialEndpointOffsetsByNodeId,
+      gutterLocalPrepared: initialPrepared
+    };
+  }
+
+  const optimizedEndpointOffsetsByNodeId = buildEndpointOffsets(index, bucketsByNodeId, preferredSideOrderOverrides);
+  return {
+    endpointOffsetsByNodeId: optimizedEndpointOffsetsByNodeId,
+    gutterLocalPrepared: buildGutterLocalPreparedRoutes(
+      connectorPlans,
+      scene,
+      index,
+      globalGutterState,
+      optimizedEndpointOffsetsByNodeId
+    )
+  };
+}
+
 function buildPositionedEdges(
   connectorPlans: readonly ServiceBlueprintConnectorPlan[],
   routesByConnectorId: ReadonlyMap<string, ConnectorRouteState>
@@ -3272,13 +3481,12 @@ export function buildServiceBlueprintRoutingStages(
   let workingBucketsByNodeId = step3BucketsByNodeId;
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const endpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, workingBucketsByNodeId);
-    const gutterLocalPrepared = buildGutterLocalPreparedRoutes(
+    const { gutterLocalPrepared } = buildPreparedRoutesWithLateEndpointOrdering(
       workingConnectorPlans,
       workingScene,
       workingIndex,
       workingGlobalGutterState,
-      endpointOffsetsByNodeId
+      workingBucketsByNodeId
     );
     const nominalOccupancyResult = gutterLocalPrepared.occupancyResult;
     const nominalConnectorPlans = gutterLocalPrepared.connectorPlansWithOccupancy;
@@ -3339,13 +3547,15 @@ export function buildServiceBlueprintRoutingStages(
   );
   const finalStep3ConnectorPlans = finalStep3Build.connectorPlans;
   const finalBucketsByNodeId = buildNodeEdgeBuckets(finalStep3ConnectorPlans, workingIndex);
-  const finalEndpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, finalBucketsByNodeId);
-  const gutterLocalPreparedFinal = buildGutterLocalPreparedRoutes(
+  const {
+    endpointOffsetsByNodeId: finalEndpointOffsetsByNodeId,
+    gutterLocalPrepared: gutterLocalPreparedFinal
+  } = buildPreparedRoutesWithLateEndpointOrdering(
     finalStep3ConnectorPlans,
     workingScene,
     workingIndex,
     workingGlobalGutterState,
-    finalEndpointOffsetsByNodeId
+    finalBucketsByNodeId
   );
   const nominalFinalConnectorPlans = gutterLocalPreparedFinal.connectorPlansWithOccupancy;
   const finalDisplacementBySegmentKey = resolveOccupancyDisplacements(

@@ -111,6 +111,8 @@ As with the preceding steps, follow the Prioritized Connector Sequence when refi
 
 With all connectors assigned to edges and gutters, look at each connector edge with populated starting_connector_edges and / or ending_connector_edges. Then assign well-spaced coordinates to the connector start / end points per edge.  
 
+Connection-point order may be optimized to minimize inversions against the adjacent gutter-local stem order; when no improvement is available, fall back to the deterministic prioritized connector sequence.
+
 #### 4.2 Space Out Parallel Segments Per Gutter Space
 
 “Within a given gutter, only parallel connector segments whose nominal positions overlap compete for spacing; when such competition occurs, higher-priority connectors retain the more canonical track and lower-priority connectors are displaced minimally.”
