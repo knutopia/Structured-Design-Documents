@@ -12,6 +12,7 @@
 ## Mon 3-30-26
 
 -increased swerve routing distance
+-cleaned bottom-gutter routing
 
 ## Sun 3-29-26
 

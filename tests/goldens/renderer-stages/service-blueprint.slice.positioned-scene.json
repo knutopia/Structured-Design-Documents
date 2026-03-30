@@ -1801,14 +1801,14 @@
               "status": "fits"
             },
             "x": 144,
-            "y": 624,
+            "y": 688,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 604,
+        "y": 668,
         "width": 248,
         "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
@@ -1845,7 +1845,7 @@
         "children": [],
         "ports": [],
         "x": 404,
-        "y": 604,
+        "y": 668,
         "width": 248,
         "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
@@ -1882,7 +1882,7 @@
         "children": [],
         "ports": [],
         "x": 676,
-        "y": 604,
+        "y": 668,
         "width": 248,
         "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
@@ -1919,7 +1919,7 @@
         "children": [],
         "ports": [],
         "x": 948,
-        "y": 604,
+        "y": 668,
         "width": 248,
         "height": 88,
         "sharedWidthGroup": "service_blueprint:column:semantic",
@@ -1930,7 +1930,7 @@
     "x": 0,
     "y": 0,
     "width": 1224,
-    "height": 720
+    "height": 784
   },
   "edges": [
     {
@@ -2154,7 +2154,7 @@
       "to": {
         "itemId": "PL-020",
         "x": 256,
-        "y": 624
+        "y": 688
       },
       "route": {
         "style": "orthogonal",
@@ -2181,7 +2181,7 @@
           },
           {
             "x": 256,
-            "y": 624
+            "y": 688
           }
         ]
       },
@@ -2327,7 +2327,7 @@
       "to": {
         "itemId": "PL-020",
         "x": 272,
-        "y": 624
+        "y": 688
       },
       "route": {
         "style": "orthogonal",
@@ -2338,15 +2338,15 @@
           },
           {
             "x": 256,
-            "y": 560
+            "y": 576
           },
           {
             "x": 272,
-            "y": 560
+            "y": 576
           },
           {
             "x": 272,
-            "y": 624
+            "y": 688
           }
         ]
       },
@@ -2623,7 +2623,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 638,
+      "y": 702,
       "text": "policy",
       "textStyleRole": "label"
     }

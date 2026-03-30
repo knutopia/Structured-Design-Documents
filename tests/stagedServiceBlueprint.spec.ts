@@ -147,6 +147,20 @@ function expectOrthogonalRoute(edge: PositionedEdge): void {
     expect(start.x === end.x || start.y === end.y).toBe(true);
   }
 }
+
+function translatePositionedItem(item: PositionedItem, dx: number, dy: number): void {
+  item.x += dx;
+  item.y += dy;
+  if (item.kind === "container") {
+    item.children.forEach((child) => translatePositionedItem(child, dx, dy));
+  }
+}
+
+function recomputeRootBounds(root: { children: PositionedItem[]; width: number; height: number }): void {
+  root.width = Math.max(...root.children.map((child) => child.x + child.width));
+  root.height = Math.max(...root.children.map((child) => child.y + child.height));
+}
+
 describe("staged service_blueprint", () => {
   it("builds a fixed root grid for service_blueprint_slice instead of using root ELK placement", async () => {
     const context = await resolveServiceBlueprintContext(
@@ -313,6 +327,26 @@ describe("staged service_blueprint", () => {
     const finalReadsWrites = findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020");
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalSaConstrainedBy.route.points[1]!.y);
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
+    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalSaConstrainedBy.route.points[1]!.y);
+    expect(finalSaConstrainedBy.route.points[1]!.y - finalReadsWrites.route.points[1]!.y).toBeGreaterThanOrEqual(16);
+    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalSaConstrainedBy.route.points[2]!.y);
+
+    const saBottomBundleOccupancy = routedStages.final.gutterOccupancy.filter((occupancy) =>
+      occupancy.key === "node:SA-020:bottom" && occupancy.axis === "horizontal"
+    ).map((occupancy) => ({
+      connectorId: occupancy.connectorId,
+      nominalCoordinate: occupancy.nominalCoordinate
+    }));
+    expect(saBottomBundleOccupancy).toEqual(expect.arrayContaining([
+      {
+        connectorId: "SA-020__reads_writes__D-020",
+        nominalCoordinate: finalReadsWrites.route.points[1]!.y
+      },
+      {
+        connectorId: "SA-020__constrained_by__PL-020",
+        nominalCoordinate: finalSaConstrainedBy.route.points[1]!.y
+      }
+    ]));
 
     const finalProcessPrecedes = findSemanticEdge(rendered.positionedScene.edges, "PR-020__precedes__PR-021");
     expect(finalProcessPrecedes.route.points).toHaveLength(4);
@@ -475,6 +509,46 @@ describe("staged service_blueprint", () => {
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-2.svg", routingDebug.step2Svg);
     await expectRendererStageSnapshot("service-blueprint.slice.step-3.positioned-scene.json", routingDebug.step3PositionedScene);
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-3.svg", routingDebug.step3Svg);
+  });
+
+  it("expands the lane gutter when a crowded bottom-gutter bundle no longer fits", async () => {
+    const context = await buildServiceBlueprintRoutingContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+    const compressedScene = structuredClone(context.positionedScene);
+    for (const child of compressedScene.root.children) {
+      if (child.kind !== "container") {
+        continue;
+      }
+      if (child.id.startsWith("lane:05:") || child.id.startsWith("lane:06:")) {
+        translatePositionedItem(child, 0, -32);
+      }
+    }
+    recomputeRootBounds(compressedScene.root);
+
+    const routedStages = buildServiceBlueprintRoutingStages(
+      compressedScene,
+      context.rendererScene,
+      context.middleLayer,
+      context.authorOrderByNodeId
+    );
+
+    expect(routedStages.final.globalGutterState.laneExpansions[4]).toBeGreaterThan(0);
+
+    const finalReadsWrites = findSemanticEdge(
+      routedStages.final.positionedScene.edges,
+      "SA-020__reads_writes__D-020"
+    );
+    const finalSaConstrainedBy = findSemanticEdge(
+      routedStages.final.positionedScene.edges,
+      "SA-020__constrained_by__PL-020"
+    );
+    expect(finalReadsWrites.route.points[1]!.y).toBeLessThan(finalSaConstrainedBy.route.points[1]!.y);
+    expect(finalSaConstrainedBy.route.points[1]!.y - finalReadsWrites.route.points[1]!.y).toBeGreaterThanOrEqual(16);
+    expectNoForbiddenDiagnostics(routedStages.final.positionedScene.diagnostics, [
+      "renderer.routing.service_blueprint_node_intersection"
+    ]);
   });
 
   it("merges routing-compatible same-node connectors after side resolution", async () => {
