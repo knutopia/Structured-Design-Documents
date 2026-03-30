@@ -818,7 +818,7 @@ function buildMergedSemanticEdges(
       from: canonical.from,
       to: canonical.to,
       label: mergedReadWrite ? "reads, writes" : canonical.label,
-      style: mergedReadWrite ? "dashed,bold" : canonical.style,
+      style: mergedReadWrite ? "dashed" : canonical.style,
       strictRoute: true,
       hidden: false
     } satisfies ServiceBlueprintMiddleEdge;

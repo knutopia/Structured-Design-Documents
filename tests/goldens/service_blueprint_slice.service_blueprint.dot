@@ -61,7 +61,7 @@ digraph service_blueprint {
   "PR-022" -> "SA-022" [label="depends on", constraint=false];
   "SA-020" -> "PL-020" [label="constrained by", style="dotted", constraint=false];
   "SA-020" -> "D-020" [label="reads", style="dashed", constraint=false];
-  "SA-020" -> "D-020" [label="writes", style="bold", constraint=false];
+  "SA-020" -> "D-020" [label="writes", constraint=false];
   "SA-021" -> "D-020" [label="reads", style="dashed", constraint=false];
   "SA-022" -> "D-020" [label="reads", style="dashed", constraint=false];
 }

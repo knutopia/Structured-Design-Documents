@@ -137,7 +137,6 @@ function edgeDisplay(
         family: "resource",
         displayLabel: "writes",
         ...(showSecondaryEdgeLabels ? { label: "writes" } : {}),
-        style: "bold",
         constraint: false
       };
     case "CONSTRAINED_BY":

@@ -305,6 +305,7 @@ describe("staged service_blueprint", () => {
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).toContain("SA-020__reads_writes__D-020");
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__reads__D-020");
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__writes__D-020");
+    expect(findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020").classes).not.toContain("edge-bold");
 
     expect(routingDebug.step2PositionedScene.root.width).toBe(preRouting.preRoutingPositionedScene.root.width);
     expect(routingDebug.step2PositionedScene.root.height).toBe(preRouting.preRoutingPositionedScene.root.height);

@@ -29,7 +29,6 @@
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
-    .scene-edge.edge-bold .scene-edge__path { stroke-width: 3; }
     .scene-decoration__line { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
     .view-service_blueprint .service_blueprint_helper { display: none; }
     .view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }
@@ -282,7 +281,7 @@
     <g id="scene-edge-sa-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="SA-020__constrained_by__PL-020" data-role="constrained_by">
       <path class="scene-edge__path" d="M 256 544 L 256 608" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-sa-020__reads_writes__d-020" class="scene-edge role-reads_writes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed edge-bold" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
+    <g id="scene-edge-sa-020__reads_writes__d-020" class="scene-edge role-reads_writes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
       <path class="scene-edge__path" d="M 256 544 L 256 560 L 1072 560 L 1072 544" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-021__reads__d-020" class="scene-edge role-reads route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-021__reads__D-020" data-role="reads">

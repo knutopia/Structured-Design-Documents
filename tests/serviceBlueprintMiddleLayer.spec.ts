@@ -120,6 +120,7 @@ END
     const mergedReadWrites = middle.edges.find((edge) => edge.id === "SA-020__reads_writes__D-020");
     expect(mergedReadWrites).toEqual(expect.objectContaining({
       type: "READS_WRITES",
+      style: "dashed",
       semanticEdgeIds: [
         "SA-020__reads__D-020",
         "SA-020__writes__D-020"

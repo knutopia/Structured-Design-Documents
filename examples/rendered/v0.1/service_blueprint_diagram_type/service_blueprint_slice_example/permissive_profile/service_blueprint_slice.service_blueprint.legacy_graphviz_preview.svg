@@ -196,8 +196,8 @@
 <!-- SA&#45;020&#45;&gt;D&#45;020 -->
 <g id="edge25" class="edge">
 <title>SA&#45;020&#45;&gt;D&#45;020</title>
-<path fill="none" stroke="black" stroke-width="2" d="M250.1,-153.06C286.2,-166.82 338.97,-184.62 387,-192 512.75,-211.33 662.03,-170.23 729.99,-148"/>
-<polygon fill="black" stroke="black" stroke-width="2" points="731.42,-151.22 739.8,-144.74 729.21,-144.58 731.42,-151.22"/>
+<path fill="none" stroke="black" d="M250.1,-153.06C286.2,-166.82 338.97,-184.62 387,-192 512.75,-211.33 662.03,-170.23 729.99,-148"/>
+<polygon fill="black" stroke="black" points="731.42,-151.22 739.8,-144.74 729.21,-144.58 731.42,-151.22"/>
 <text text-anchor="middle" x="405" y="-189.8" font-family="Public Sans" font-size="14.00">writes</text>
 </g>
 <!-- SA&#45;020&#45;&gt;PL&#45;020 -->

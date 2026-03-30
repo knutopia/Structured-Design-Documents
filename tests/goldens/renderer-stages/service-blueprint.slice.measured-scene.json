@@ -2245,8 +2245,7 @@
         "service_blueprint_semantic_edge",
         "edge-type-reads_writes",
         "edge-channel-resource_policy",
-        "edge-dashed",
-        "edge-bold"
+        "edge-dashed"
       ],
       "from": {
         "itemId": "SA-020",
