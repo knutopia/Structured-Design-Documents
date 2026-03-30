@@ -176,6 +176,28 @@ function renderTextBlock(
   ].join("\n");
 }
 
+function renderCenteredTextBlock(
+  x: number,
+  y: number,
+  height: number,
+  lines: string[],
+  lineHeight: number,
+  classes: string
+): string {
+  const totalLineHeight = lines.length * lineHeight;
+  const firstLineCenterY = y + (height - totalLineHeight) / 2 + lineHeight / 2;
+  const lineMarkup = lines.map((line, index) => {
+    const dy = index === 0 ? "0" : formatNumber(lineHeight);
+    return `    <tspan x="${formatNumber(x)}" dy="${dy}">${escapeXml(line)}</tspan>`;
+  });
+
+  return [
+    `<text class="${classes}" x="${formatNumber(x)}" y="${formatNumber(firstLineCenterY)}" dominant-baseline="middle">`,
+    ...lineMarkup,
+    "  </text>"
+  ].join("\n");
+}
+
 function renderContainerChrome(
   container: PositionedContainer,
   diagnostics: RendererDiagnostic[],
@@ -451,7 +473,7 @@ function renderEdgeLabel(
   theme: RendererTheme
 ): string {
   const resolvedRole = resolveTextRoleForBlock("edge_label", label.textStyleRole);
-  const style = getTextStyleForBackend(theme, resolvedRole, edge.id, diagnostics);
+  getTextStyleForBackend(theme, resolvedRole, edge.id, diagnostics);
   const labelTheme = getNodePrimitiveTheme(theme, "edge_label");
   const radius = getNodeRadius(theme, "edge_label");
   const classes = buildClassList(
@@ -459,11 +481,11 @@ function renderEdgeLabel(
     `role-${sanitizeToken(edge.role)}`,
     ...edge.classes.map((className) => sanitizeToken(className))
   );
-  const textMarkup = renderTextBlock(
+  const textMarkup = renderCenteredTextBlock(
     label.x + labelTheme.padding.left,
-    label.y + labelTheme.padding.top,
+    label.y,
+    label.height,
     label.lines,
-    style,
     label.lineHeight,
     buildTextClassList(resolvedRole, "edge_label")
   );

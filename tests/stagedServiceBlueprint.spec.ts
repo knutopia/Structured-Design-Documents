@@ -168,6 +168,23 @@ function boxesOverlap(
     && left.y + left.height > right.y;
 }
 
+function measureBoxClearance(
+  left: { x: number; y: number; width: number; height: number },
+  right: { x: number; y: number; width: number; height: number }
+): number {
+  const horizontalGap = Math.max(
+    right.x - (left.x + left.width),
+    left.x - (right.x + right.width),
+    0
+  );
+  const verticalGap = Math.max(
+    right.y - (left.y + left.height),
+    left.y - (right.y + right.height),
+    0
+  );
+  return Math.hypot(horizontalGap, verticalGap);
+}
+
 function expectOrthogonalRoute(edge: PositionedEdge): void {
   for (let index = 1; index < edge.route.points.length; index += 1) {
     const start = edge.route.points[index - 1]!;
@@ -274,8 +291,12 @@ describe("staged service_blueprint", () => {
     const precedesEdge = findSemanticEdge(rendered.positionedScene.edges, "J-020__precedes__J-021");
     const j020 = findNestedPositionedItem(rendered.positionedScene.root.children, "J-020");
     const j021 = findNestedPositionedItem(rendered.positionedScene.root.children, "J-021");
+    const pr020 = findNestedPositionedItem(rendered.positionedScene.root.children, "PR-020");
     if (!j020 || !j021) {
       throw new Error("Could not resolve proof-case nodes.");
+    }
+    if (!pr020) {
+      throw new Error("Could not resolve PR-020 for proof-case label assertions.");
     }
     expect(precedesEdge.from.itemId).toBe("J-020");
     expect(precedesEdge.to.itemId).toBe("J-021");
@@ -298,7 +319,16 @@ describe("staged service_blueprint", () => {
     expect(realizedByEdge.from.x).toBe(realizedByEdge.to.x);
     expect(realizedByEdge.from.y).toBeLessThan(realizedByEdge.to.y);
     expect(realizedByLabel.textStyleRole).toBe("edge_label");
-    expect(realizedByLabel.y + realizedByLabel.height).toBeLessThanOrEqual(interactionLine.from.y - 24);
+    expect(realizedByLabel.x).toBe(realizedByEdge.from.x + 12);
+    expect(realizedByLabel.y).toBeGreaterThanOrEqual(interactionLine.from.y);
+    expect(realizedByLabel.y + realizedByLabel.height).toBeLessThanOrEqual(pr020.y);
+    const realizedByGapAbove = realizedByLabel.y - interactionLine.from.y;
+    const realizedByGapBelow = pr020.y - (realizedByLabel.y + realizedByLabel.height);
+    expect(Math.abs(realizedByGapAbove - realizedByGapBelow)).toBeLessThanOrEqual(1);
+    expect(boxesOverlap(realizedByLabel, j020)).toBe(false);
+    expect(boxesOverlap(realizedByLabel, pr020)).toBe(false);
+    expect(rendered.svg).toContain('block-kind-edge_label"');
+    expect(rendered.svg).toContain('dominant-baseline="middle"');
 
     const step2ConstrainedBy = findSemanticEdge(
       routingDebug.step2PositionedScene.edges,
@@ -331,6 +361,7 @@ describe("staged service_blueprint", () => {
     expect(step3ConstrainedBy.route.points[3]!.y - (step3Sa020.y + step3Sa020.height)).toBeGreaterThanOrEqual(48);
     expect(step3ConstrainedBy.route.points[2]!.x - (step3Sa020.x + step3Sa020.width)).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points).toHaveLength(6);
+    const finalConstrainedByLabel = findEdgeLabel(finalConstrainedBy);
     expect(finalConstrainedBy.route.points[0]!.x).toBe(finalConstrainedBy.route.points[1]!.x);
     expect(finalConstrainedBy.route.points[1]!.y).toBe(480);
     expect(finalConstrainedBy.route.points[2]!.x).toBe(step3ConstrainedBy.route.points[2]!.x);
@@ -339,6 +370,11 @@ describe("staged service_blueprint", () => {
     expect(finalSa020Node.y - finalConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points[3]!.y - (finalSa020Node.y + finalSa020Node.height)).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points[2]!.x - (finalSa020Node.x + finalSa020Node.width)).toBeGreaterThanOrEqual(16);
+    expect(
+      finalConstrainedByLabel.y + finalConstrainedByLabel.height <= finalConstrainedBy.route.points[1]!.y
+      || finalConstrainedByLabel.y >= finalConstrainedBy.route.points[1]!.y
+    ).toBe(true);
+    expect(measureBoxClearance(finalConstrainedByLabel, finalSa020Node)).toBeGreaterThanOrEqual(12);
 
     const finalDependsOn = findSemanticEdge(rendered.positionedScene.edges, "PR-020__depends_on__SA-020");
     const finalDependsOnLabel = findEdgeLabel(finalDependsOn);

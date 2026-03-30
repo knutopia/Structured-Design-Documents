@@ -204,32 +204,32 @@
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-binds_to edge-dotted constraint_edge" data-edge-id="binds_to:C-010-&gt;D-010" data-role="binds_to">
       <rect class="scene-edge-label__box" x="714.424" y="251" width="107.748" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="720.424" y="267">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="720.424" y="262" dominant-baseline="middle">
           <tspan x="720.424" dy="0">binds field status</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-depends_on constraint_edge" data-edge-id="depends_on:C-010-&gt;SA-010" data-role="depends_on">
       <rect class="scene-edge-label__box" x="714.424" y="187" width="76.482" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="720.424" y="203">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="720.424" y="198" dominant-baseline="middle">
           <tspan x="720.424" dy="0">depends on</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-emits edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
       <rect class="scene-edge-label__box" x="73" y="311" width="42.87" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="79" y="327">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="79" y="322" dominant-baseline="middle">
           <tspan x="79" dy="0">emits</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transitions_to edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
       <rect class="scene-edge-label__box" x="1036.424" y="350" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1042.424" y="366">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1042.424" y="361" dominant-baseline="middle">
           <tspan x="1042.424" dy="0">[Submit] {payment_valid} /</tspan>
           <tspan x="1042.424" dy="14">SA-010</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transitions_to free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
       <rect class="scene-edge-label__box" x="334" y="224" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="340" y="240">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="340" y="235" dominant-baseline="middle">
           <tspan x="340" dy="0">[Submit] {payment_valid} /</tspan>
           <tspan x="340" dy="14">SA-010</tspan>
         </text>

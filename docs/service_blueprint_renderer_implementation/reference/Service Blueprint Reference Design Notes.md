@@ -153,7 +153,9 @@ Handling obstructions:
 
 - If there are other vertical connectors immediately to the left and to the right of the to-be-labeled connector, then the label is left in place, and covering the connector to the right is accepted.
 
--If there is any kind of horizontal line crossing the to-be-labeled connector at the vertical label position (a horizontal connector, the "line of interaction", or the "line of visibility"), the label position is shifted up, to sit above the crossing line, offset from the line by 2 x fixed_label_distance. (E.g. "realized by" label on "J-020 REALIZED_BY PR-020" obstructed by "Line of Interaction".)
+- If there is any kind of horizontal line crossing the to-be-labeled connector at the vertical label position (a horizontal connector, the "line of interaction", or the "line of visibility"), first try the normal positions that keep 2 x fixed_label_distance clearance from the crossing.
+
+- If those normal positions do not fit because the label must stay near the connector while also staying clear of nearby nodes, then the label is best-fit within the available vertical gap between the nearest upper blocker and lower blocker. In this compressed-gap case, reduced clearance to the crossing is accepted, but the label does not cross the blocking line and it is not pushed farther outward on the same side.
 
 #### Label Placement for a Horizontal Segment
 
