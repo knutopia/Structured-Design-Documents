@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
+import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { buildServiceBlueprintRenderModel } from "../src/renderer/serviceBlueprintRenderModel.js";
 import type { PositionedEdge, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
 import {
   buildServiceBlueprintRendererScene,
@@ -11,7 +13,9 @@ import {
   renderServiceBlueprintRoutingDebugArtifacts,
   renderServiceBlueprintStagedSvg
 } from "../src/renderer/staged/serviceBlueprint.js";
-import { measureScene } from "../src/renderer/staged/pipeline.js";
+import { measureScene, positionSceneBeforeRouting } from "../src/renderer/staged/pipeline.js";
+import { buildServiceBlueprintMiddleLayer } from "../src/renderer/staged/serviceBlueprintMiddleLayer.js";
+import { buildServiceBlueprintRoutingStages } from "../src/renderer/staged/serviceBlueprintRouting.js";
 import { expectRendererStageSnapshot, expectRendererStageTextSnapshot } from "./rendererStageSnapshotHarness.js";
 import {
   collectVisibleItemBoxes,
@@ -48,6 +52,33 @@ async function resolveServiceBlueprintContext(
     graph: compiled.graph,
     projection: projected.projection,
     view
+  };
+}
+
+async function buildServiceBlueprintRoutingContext(
+  input: { path: string; text: string },
+  profileId: string
+) {
+  const context = await resolveServiceBlueprintContext(input, profileId);
+  const displayPolicy = resolveProfileDisplayPolicy(context.view, profileId);
+  const model = buildServiceBlueprintRenderModel(context.projection, context.graph, displayPolicy);
+  const middleLayer = buildServiceBlueprintMiddleLayer(model);
+  const rendererScene = buildServiceBlueprintRendererScene(
+    context.projection,
+    context.graph,
+    context.view,
+    profileId
+  );
+  const measuredScene = measureScene(rendererScene);
+  const positionedScene = await positionSceneBeforeRouting(measuredScene);
+
+  return {
+    ...context,
+    rendererScene,
+    measuredScene,
+    positionedScene,
+    middleLayer,
+    authorOrderByNodeId: new Map(model.nodes.map((node) => [node.id, node.authorOrder] as const))
   };
 }
 
@@ -226,16 +257,41 @@ describe("staged service_blueprint", () => {
       "PR-020__constrained_by__PL-020"
     );
     expect(step2ConstrainedBy.route.points).toHaveLength(2);
-    expect(step3ConstrainedBy.route.points).toHaveLength(4);
-    expect(step3ConstrainedBy.route.points[1]!.x).toBeGreaterThan(step3ConstrainedBy.route.points[0]!.x);
-    expect(finalConstrainedBy.route.points).toHaveLength(4);
-    expect(finalConstrainedBy.route.points[1]!.x).toBeGreaterThan(step3ConstrainedBy.route.points[1]!.x);
+    expect(step3ConstrainedBy.route.points).toHaveLength(6);
+    expect(step3ConstrainedBy.route.points[0]!.x).toBe(step3ConstrainedBy.route.points[1]!.x);
+    expect(step3ConstrainedBy.route.points[1]!.x).toBeLessThan(step3ConstrainedBy.route.points[2]!.x);
+    expect(step3ConstrainedBy.route.points[2]!.x).toBe(step3ConstrainedBy.route.points[3]!.x);
+    expect(step3ConstrainedBy.route.points[3]!.y).toBe(step3ConstrainedBy.route.points[4]!.y);
+    expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[5]!.x);
+    expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[0]!.x);
+    expect(finalConstrainedBy.route.points).toHaveLength(6);
+    expect(finalConstrainedBy.route.points[0]!.x).toBe(finalConstrainedBy.route.points[1]!.x);
+    expect(finalConstrainedBy.route.points[2]!.x).toBeGreaterThan(step3ConstrainedBy.route.points[2]!.x);
+    expect(finalConstrainedBy.route.points[4]!.x).toBe(finalConstrainedBy.route.points[5]!.x);
 
     const finalDependsOn = findSemanticEdge(rendered.positionedScene.edges, "PR-020__depends_on__SA-020");
-    expect(finalDependsOn.route.points).toHaveLength(3);
+    expect(finalDependsOn.route.points).toHaveLength(6);
     expect(finalDependsOn.route.points[0]!.x).toBe(finalDependsOn.route.points[1]!.x);
     expect(finalDependsOn.route.points[1]!.y).toBe(finalDependsOn.route.points[2]!.y);
-    expect(finalDependsOn.route.points[0]!.x).not.toBe(finalConstrainedBy.route.points[1]!.x);
+    expect(finalDependsOn.route.points[2]!.x).toBe(finalDependsOn.route.points[3]!.x);
+    expect(finalDependsOn.route.points[4]!.x).toBe(finalDependsOn.route.points[5]!.x);
+    expect(finalDependsOn.route.points[2]!.x).not.toBe(finalConstrainedBy.route.points[2]!.x);
+
+    const finalSaConstrainedBy = findSemanticEdge(rendered.positionedScene.edges, "SA-020__constrained_by__PL-020");
+    expect(finalSaConstrainedBy.route.points).toHaveLength(4);
+    expect(finalSaConstrainedBy.route.points[0]!.x).toBe(finalSaConstrainedBy.route.points[1]!.x);
+    expect(finalSaConstrainedBy.route.points[2]!.x).toBe(finalSaConstrainedBy.route.points[3]!.x);
+
+    const finalProcessPrecedes = findSemanticEdge(rendered.positionedScene.edges, "PR-020__precedes__PR-021");
+    expect(finalProcessPrecedes.route.points).toHaveLength(4);
+    expect(finalProcessPrecedes.route.points[0]!.y).toBe(finalProcessPrecedes.route.points[1]!.y);
+    expect(finalProcessPrecedes.route.points[1]!.x).toBe(finalProcessPrecedes.route.points[2]!.x);
+    expect(finalProcessPrecedes.route.points[2]!.y).toBe(finalProcessPrecedes.route.points[3]!.y);
+    expect(finalProcessPrecedes.route.points[2]!.x).toBeLessThan(finalProcessPrecedes.route.points[3]!.x);
+
+    const finalSupportPrecedes = findSemanticEdge(rendered.positionedScene.edges, "PR-021__precedes__PR-022");
+    expect(finalSupportPrecedes.route.points).toHaveLength(4);
+    expect(finalSupportPrecedes.route.points[2]!.x).toBeLessThan(finalSupportPrecedes.route.points[3]!.x);
 
     const resourceEdges = [
       findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020"),
@@ -254,8 +310,8 @@ describe("staged service_blueprint", () => {
     expect(routingDebug.step2PositionedScene.root.height).toBe(preRouting.preRoutingPositionedScene.root.height);
     expect(routingDebug.step3PositionedScene.root.width).toBe(preRouting.preRoutingPositionedScene.root.width);
     expect(routingDebug.step3PositionedScene.root.height).toBe(preRouting.preRoutingPositionedScene.root.height);
-    expect(rendered.positionedScene.root.width).toBeGreaterThan(preRouting.preRoutingPositionedScene.root.width);
-    expect(rendered.positionedScene.root.height).toBeGreaterThan(preRouting.preRoutingPositionedScene.root.height);
+    expect(rendered.positionedScene.root.width).toBeGreaterThanOrEqual(preRouting.preRoutingPositionedScene.root.width);
+    expect(rendered.positionedScene.root.height).toBeGreaterThanOrEqual(preRouting.preRoutingPositionedScene.root.height);
 
     expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, [
       "renderer.routing.service_blueprint_node_intersection"
@@ -302,6 +358,111 @@ describe("staged service_blueprint", () => {
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-2.svg", routingDebug.step2Svg);
     await expectRendererStageSnapshot("service-blueprint.slice.step-3.positioned-scene.json", routingDebug.step3PositionedScene);
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-3.svg", routingDebug.step3Svg);
+  });
+
+  it("merges routing-compatible same-node connectors after side resolution", async () => {
+    const context = await buildServiceBlueprintRoutingContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+    const duplicateMiddleEdge = structuredClone(
+      context.middleLayer.edges.find((edge) => edge.id === "PR-020__depends_on__SA-020")
+    );
+    const duplicateSceneEdge = structuredClone(
+      context.rendererScene.edges.find((edge) => edge.id === "PR-020__depends_on__SA-020")
+    );
+    if (!duplicateMiddleEdge || !duplicateSceneEdge) {
+      throw new Error("Could not resolve the proof-case edge to duplicate.");
+    }
+
+    duplicateMiddleEdge.id = "PR-020__depends_on__SA-020__duplicate";
+    duplicateMiddleEdge.semanticEdgeIds = ["PR-020__depends_on__SA-020__duplicate_semantic"];
+    duplicateSceneEdge.id = duplicateMiddleEdge.id;
+
+    const routed = buildServiceBlueprintRoutingStages(
+      context.positionedScene,
+      {
+        ...context.rendererScene,
+        edges: [...context.rendererScene.edges, duplicateSceneEdge]
+      },
+      {
+        ...context.middleLayer,
+        edges: [...context.middleLayer.edges, duplicateMiddleEdge]
+      },
+      context.authorOrderByNodeId
+    );
+
+    expect(
+      routed.step2.positionedScene.edges.filter((edge) =>
+        edge.from.itemId === "PR-020" && edge.to.itemId === "SA-020"
+      )
+    ).toHaveLength(1);
+    const mergedPlan = routed.step2.connectorPlans.find((plan) => plan.id === "PR-020__depends_on__SA-020");
+    expect(mergedPlan?.memberConnectorIds).toEqual([
+      "PR-020__depends_on__SA-020",
+      "PR-020__depends_on__SA-020__duplicate"
+    ]);
+    expect(mergedPlan?.semanticEdgeIds).toEqual(expect.arrayContaining([
+      "PR-020__depends_on__SA-020",
+      "PR-020__depends_on__SA-020__duplicate_semantic"
+    ]));
+    expect(
+      routed.final.diagnostics.some((diagnostic) =>
+        diagnostic.code === "renderer.routing.service_blueprint_same_node_connector_not_merged"
+      )
+    ).toBe(false);
+  });
+
+  it("keeps incompatible same-node connectors separate and reports that choice explicitly", async () => {
+    const context = await buildServiceBlueprintRoutingContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+    const duplicateMiddleEdge = structuredClone(
+      context.middleLayer.edges.find((edge) => edge.id === "PR-020__constrained_by__PL-020")
+    );
+    const duplicateSceneEdge = structuredClone(
+      context.rendererScene.edges.find((edge) => edge.id === "PR-020__constrained_by__PL-020")
+    );
+    if (!duplicateMiddleEdge || !duplicateSceneEdge) {
+      throw new Error("Could not resolve the proof-case policy edge to duplicate.");
+    }
+
+    duplicateMiddleEdge.id = "PR-020__depends_on__PL-020__synthetic";
+    duplicateMiddleEdge.semanticEdgeIds = ["PR-020__depends_on__PL-020__synthetic"];
+    duplicateMiddleEdge.type = "DEPENDS_ON";
+    duplicateMiddleEdge.channel = "support";
+    duplicateSceneEdge.id = duplicateMiddleEdge.id;
+    duplicateSceneEdge.role = "depends_on";
+    duplicateSceneEdge.classes = [
+      ...duplicateSceneEdge.classes.filter((className) => !className.startsWith("edge-type-") && !className.startsWith("edge-channel-")),
+      "edge-type-depends_on",
+      "edge-channel-support"
+    ];
+
+    const routed = buildServiceBlueprintRoutingStages(
+      context.positionedScene,
+      {
+        ...context.rendererScene,
+        edges: [...context.rendererScene.edges, duplicateSceneEdge]
+      },
+      {
+        ...context.middleLayer,
+        edges: [...context.middleLayer.edges, duplicateMiddleEdge]
+      },
+      context.authorOrderByNodeId
+    );
+
+    expect(
+      routed.step2.positionedScene.edges.filter((edge) =>
+        edge.from.itemId === "PR-020" && edge.to.itemId === "PL-020"
+      )
+    ).toHaveLength(2);
+    expect(
+      routed.final.diagnostics.some((diagnostic) =>
+        diagnostic.code === "renderer.routing.service_blueprint_same_node_connector_not_merged"
+      )
+    ).toBe(true);
   });
 
   it("appends a synthetic ungrouped lane shell when projection omits derived lane mapping", async () => {

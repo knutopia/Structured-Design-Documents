@@ -12,6 +12,8 @@
 ## Sun 3-29-26
 
 -tracked and scrubbed ungrounded 'sidecar' placement rule in service_blueprint docs
+-build detailed service blueprint routing rules
+-implemented routing, rough but reasonably successful
 
 ## Fri 3-28-26
 
