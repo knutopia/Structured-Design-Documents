@@ -267,7 +267,7 @@
       <path class="scene-edge__path" d="M 800 104 L 800 384" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="PR-020__constrained_by__PL-020" data-role="constrained_by">
-      <path class="scene-edge__path" d="M 256 208 L 256 488 L 376 488 L 376 552 L 256 552 L 256 624" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 256 208 L 256 480 L 384 480 L 384 560 L 256 560 L 256 624" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__depends_on__sa-020" class="scene-edge role-depends_on route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-020__depends_on__SA-020" data-role="depends_on">
       <path class="scene-edge__path" d="M 272 208 L 272 480 L 256 480 L 256 496" marker-end="url(#scene-marker-arrow-end)"/>
@@ -282,7 +282,7 @@
       <path class="scene-edge__path" d="M 256 544 L 256 560 L 272 560 L 272 624" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-020__reads_writes__d-020" class="scene-edge role-reads_writes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
-      <path class="scene-edge__path" d="M 272 544 L 272 584 L 1072 584 L 1072 544" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 272 544 L 272 592 L 1072 592 L 1072 544" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-021__reads__d-020" class="scene-edge role-reads route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-021__reads__D-020" data-role="reads">
       <path class="scene-edge__path" d="M 528 544 L 528 576 L 1088 576 L 1088 544" marker-end="url(#scene-marker-arrow-end)"/>

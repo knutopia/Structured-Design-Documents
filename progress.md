@@ -9,6 +9,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 3-30-26
+
+-increased swerve routing distance
+
 ## Sun 3-29-26
 
 -tracked and scrubbed ungrounded 'sidecar' placement rule in service_blueprint docs

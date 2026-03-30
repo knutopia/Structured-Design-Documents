@@ -22,7 +22,8 @@ import type {
 } from "./serviceBlueprintMiddleLayer.js";
 
 const FIXED_SEPARATION_DISTANCE = 16;
-const GUTTER_CLEARANCE = 8;
+const OBSTACLE_SWERVE_CLEARANCE = 16;
+const GUTTER_OVERFLOW_TOLERANCE = 8;
 const ROOT_PADDING_FALLBACK = 28;
 
 type ConnectorPattern =
@@ -1319,7 +1320,10 @@ function resolveLocalVerticalDetourX(
   diagnostics: RendererDiagnostic[]
 ): number {
   const baseX = roundMetric(
-    Math.max(originalX + FIXED_SEPARATION_DISTANCE, obstacle.x + obstacle.width + GUTTER_CLEARANCE)
+    Math.max(
+      originalX + FIXED_SEPARATION_DISTANCE,
+      obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE
+    )
   );
   return resolveVerticalBridgeX(
     baseX,
@@ -1346,7 +1350,10 @@ function resolveLocalHorizontalDetourY(
   diagnostics: RendererDiagnostic[]
 ): number {
   const baseY = roundMetric(
-    Math.max(originalY + FIXED_SEPARATION_DISTANCE, obstacle.y + obstacle.height + GUTTER_CLEARANCE)
+    Math.max(
+      originalY + FIXED_SEPARATION_DISTANCE,
+      obstacle.y + obstacle.height + OBSTACLE_SWERVE_CLEARANCE
+    )
   );
   return resolveHorizontalBridgeY(
     baseY,
@@ -1384,8 +1391,16 @@ function buildVerticalSegmentWithLocalSwerves(
       };
     }
 
-    const encounterY = roundMetric(direction > 0 ? obstacle.y - GUTTER_CLEARANCE : obstacle.y + obstacle.height + GUTTER_CLEARANCE);
-    const exitY = roundMetric(direction > 0 ? obstacle.y + obstacle.height + GUTTER_CLEARANCE : obstacle.y - GUTTER_CLEARANCE);
+    const encounterY = roundMetric(
+      direction > 0
+        ? obstacle.y - OBSTACLE_SWERVE_CLEARANCE
+        : obstacle.y + obstacle.height + OBSTACLE_SWERVE_CLEARANCE
+    );
+    const exitY = roundMetric(
+      direction > 0
+        ? obstacle.y + obstacle.height + OBSTACLE_SWERVE_CLEARANCE
+        : obstacle.y - OBSTACLE_SWERVE_CLEARANCE
+    );
     const bridgeX = resolveLocalVerticalDetourX(cursor.x, encounterY, exitY, obstacle, connector, index, diagnostics);
 
     if (cursor.y !== encounterY) {
@@ -1437,8 +1452,16 @@ function buildHorizontalSegmentWithLocalSwerves(
       };
     }
 
-    const encounterX = roundMetric(movingRight ? obstacle.x - GUTTER_CLEARANCE : obstacle.x + obstacle.width + GUTTER_CLEARANCE);
-    const exitX = roundMetric(movingRight ? obstacle.x + obstacle.width + GUTTER_CLEARANCE : obstacle.x - GUTTER_CLEARANCE);
+    const encounterX = roundMetric(
+      movingRight
+        ? obstacle.x - OBSTACLE_SWERVE_CLEARANCE
+        : obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE
+    );
+    const exitX = roundMetric(
+      movingRight
+        ? obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE
+        : obstacle.x - OBSTACLE_SWERVE_CLEARANCE
+    );
     const bridgeY = resolveLocalHorizontalDetourY(cursor.y, encounterX, exitX, obstacle, connector, index, diagnostics);
 
     if (cursor.x !== encounterX) {
@@ -1852,7 +1875,7 @@ function resolveRequiredColumnExpansions(
       continue;
     }
     const effectiveCoordinate = roundMetric(entry.nominalCoordinate + displacement);
-    const overflow = roundMetric(effectiveCoordinate - (nextColumnLeft - GUTTER_CLEARANCE));
+    const overflow = roundMetric(effectiveCoordinate - (nextColumnLeft - GUTTER_OVERFLOW_TOLERANCE));
     if (overflow > 0) {
       required[entry.columnOrder] = roundUpToSeparationDistance(
         Math.max(required[entry.columnOrder] ?? 0, overflow)
@@ -1882,7 +1905,7 @@ function resolveRequiredLaneExpansions(
       continue;
     }
     const effectiveCoordinate = roundMetric(entry.nominalCoordinate + displacement);
-    const overflow = roundMetric(effectiveCoordinate - (nextRowTop - GUTTER_CLEARANCE));
+    const overflow = roundMetric(effectiveCoordinate - (nextRowTop - GUTTER_OVERFLOW_TOLERANCE));
     if (overflow > 0) {
       required[entry.laneOrder] = roundUpToSeparationDistance(
         Math.max(required[entry.laneOrder] ?? 0, overflow)
