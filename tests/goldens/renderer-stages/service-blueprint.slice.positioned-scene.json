@@ -2093,6 +2093,17 @@
           }
         ]
       },
+      "label": {
+        "lines": [
+          "realized by"
+        ],
+        "width": 72.588,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 268,
+        "y": 127
+      },
       "markers": {
         "end": "arrow"
       },
@@ -2130,6 +2141,17 @@
             "y": 384
           }
         ]
+      },
+      "label": {
+        "lines": [
+          "realized by"
+        ],
+        "width": 72.588,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 812,
+        "y": 252
       },
       "markers": {
         "end": "arrow"
@@ -2185,6 +2207,17 @@
           }
         ]
       },
+      "label": {
+        "lines": [
+          "constrained by"
+        ],
+        "width": 94.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 284,
+        "y": 364
+      },
       "markers": {
         "end": "arrow"
       },
@@ -2221,6 +2254,17 @@
             "y": 496
           }
         ]
+      },
+      "label": {
+        "lines": [
+          "depends on"
+        ],
+        "width": 76.482,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 167.518,
+        "y": 364
       },
       "markers": {
         "end": "arrow"
@@ -2259,6 +2303,17 @@
           }
         ]
       },
+      "label": {
+        "lines": [
+          "depends on"
+        ],
+        "width": 76.482,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 540,
+        "y": 397
+      },
       "markers": {
         "end": "arrow"
       },
@@ -2295,6 +2350,17 @@
             "y": 496
           }
         ]
+      },
+      "label": {
+        "lines": [
+          "depends on"
+        ],
+        "width": 76.482,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 812,
+        "y": 453
       },
       "markers": {
         "end": "arrow"
@@ -2333,6 +2399,17 @@
             "y": 688
           }
         ]
+      },
+      "label": {
+        "lines": [
+          "constrained by"
+        ],
+        "width": 94.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 149.818,
+        "y": 605
       },
       "markers": {
         "end": "arrow"
@@ -2380,6 +2457,17 @@
           }
         ]
       },
+      "label": {
+        "lines": [
+          "reads, writes"
+        ],
+        "width": 83.196,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 630.402,
+        "y": 549
+      },
       "markers": {
         "end": "arrow"
       },
@@ -2426,6 +2514,17 @@
           }
         ]
       },
+      "label": {
+        "lines": [
+          "reads"
+        ],
+        "width": 43.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 810.409,
+        "y": 565
+      },
       "markers": {
         "end": "arrow"
       },
@@ -2471,6 +2570,17 @@
             "y": 544
           }
         ]
+      },
+      "label": {
+        "lines": [
+          "reads"
+        ],
+        "width": 43.182,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 930.409,
+        "y": 581
       },
       "markers": {
         "end": "arrow"

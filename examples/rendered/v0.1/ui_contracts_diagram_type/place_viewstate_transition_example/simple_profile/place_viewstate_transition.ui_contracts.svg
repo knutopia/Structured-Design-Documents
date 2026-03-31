@@ -120,7 +120,7 @@
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-transitions_to free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
       <rect class="scene-edge-label__box" x="254" y="136" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="260" y="152">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="260" y="147" dominant-baseline="middle">
           <tspan x="260" dy="0">[Submit] {payment_valid} /</tspan>
           <tspan x="260" dy="14">SA-010</tspan>
         </text>

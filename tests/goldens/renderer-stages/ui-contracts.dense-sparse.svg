@@ -176,19 +176,19 @@
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-binds_to edge-dotted constraint_edge" data-edge-id="binds_to:C-700-&gt;D-700" data-role="binds_to">
       <rect class="scene-edge-label__box" x="553.778" y="267" width="107.748" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="559.778" y="283">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="559.778" y="278" dominant-baseline="middle">
           <tspan x="559.778" dy="0">binds field status</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-emits edge-dashed constraint_edge" data-edge-id="emits:C-700-&gt;E-700" data-role="emits">
       <rect class="scene-edge-label__box" x="553.778" y="195" width="42.87" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="559.778" y="211">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="559.778" y="206" dominant-baseline="middle">
           <tspan x="559.778" dy="0">emits</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transitions_to free_edge" data-edge-id="transitions_to:VS-700a-&gt;VS-700b" data-role="transitions_to">
       <rect class="scene-edge-label__box" x="230" y="173" width="101.778" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="236" y="189">
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="236" y="184" dominant-baseline="middle">
           <tspan x="236" dy="0">[Submit Review]</tspan>
         </text>
     </g>

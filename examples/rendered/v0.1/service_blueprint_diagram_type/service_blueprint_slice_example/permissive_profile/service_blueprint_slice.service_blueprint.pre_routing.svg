@@ -30,7 +30,6 @@
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
     .scene-decoration__line { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
-    .view-service_blueprint .service_blueprint_helper { display: none; }
     .view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }
     .view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }
     .view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: #94a3b8; stroke-dasharray: 6 4; }

@@ -30,7 +30,6 @@
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
     .scene-decoration__line { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
-    .view-service_blueprint .service_blueprint_helper { display: none; }
     .view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }
     .view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }
     .view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: #94a3b8; stroke-dasharray: 6 4; }
@@ -292,5 +291,65 @@
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
+    <g class="scene-edge-label role-realized_by service_blueprint_edge service_blueprint_semantic_edge edge-type-realized_by edge-channel-support edge-dashed" data-edge-id="J-020__realized_by__PR-020" data-role="realized_by">
+      <rect class="scene-edge-label__box" x="268" y="127" width="72.588" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="138" dominant-baseline="middle">
+          <tspan x="274" dy="0">realized by</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-realized_by service_blueprint_edge service_blueprint_semantic_edge edge-type-realized_by edge-channel-support edge-dashed" data-edge-id="J-021__realized_by__PR-022" data-role="realized_by">
+      <rect class="scene-edge-label__box" x="812" y="252" width="72.588" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="818" y="263" dominant-baseline="middle">
+          <tspan x="818" dy="0">realized by</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-constrained_by service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="PR-020__constrained_by__PL-020" data-role="constrained_by">
+      <rect class="scene-edge-label__box" x="284" y="364" width="94.182" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="290" y="375" dominant-baseline="middle">
+          <tspan x="290" dy="0">constrained by</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-depends_on service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-020__depends_on__SA-020" data-role="depends_on">
+      <rect class="scene-edge-label__box" x="167.518" y="364" width="76.482" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="173.518" y="375" dominant-baseline="middle">
+          <tspan x="173.518" dy="0">depends on</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-depends_on service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-021__depends_on__SA-021" data-role="depends_on">
+      <rect class="scene-edge-label__box" x="540" y="397" width="76.482" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="546" y="408" dominant-baseline="middle">
+          <tspan x="546" dy="0">depends on</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-depends_on service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-022__depends_on__SA-022" data-role="depends_on">
+      <rect class="scene-edge-label__box" x="812" y="453" width="76.482" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="818" y="464" dominant-baseline="middle">
+          <tspan x="818" dy="0">depends on</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-constrained_by service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="SA-020__constrained_by__PL-020" data-role="constrained_by">
+      <rect class="scene-edge-label__box" x="149.818" y="605" width="94.182" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="155.818" y="616" dominant-baseline="middle">
+          <tspan x="155.818" dy="0">constrained by</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-reads_writes service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
+      <rect class="scene-edge-label__box" x="630.402" y="549" width="83.196" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="636.402" y="560" dominant-baseline="middle">
+          <tspan x="636.402" dy="0">reads, writes</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-reads service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-021__reads__D-020" data-role="reads">
+      <rect class="scene-edge-label__box" x="810.409" y="565" width="43.182" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="816.409" y="576" dominant-baseline="middle">
+          <tspan x="816.409" dy="0">reads</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-reads service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-022__reads__D-020" data-role="reads">
+      <rect class="scene-edge-label__box" x="930.409" y="581" width="43.182" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="936.409" y="592" dominant-baseline="middle">
+          <tspan x="936.409" dy="0">reads</tspan>
+        </text>
+    </g>
   </g>
 </svg>
