@@ -2,7 +2,8 @@
 
 ## Open Issues
 
--FIX the sidecar crap in docs/service_blueprint_layout_rules.md
+-remove service_blueprint DOT output
+-remove remaining use of sidecar in service_blueprint
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
 -"render all" CLI ?

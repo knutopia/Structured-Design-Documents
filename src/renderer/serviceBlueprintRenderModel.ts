@@ -8,8 +8,6 @@ export interface ServiceBlueprintRenderNode {
   id: string;
   type: string;
   laneId?: string;
-  laneLabel?: string;
-  laneIndex?: number;
   authorOrder: number;
   shape: string;
   style?: string;
@@ -20,19 +18,14 @@ export interface ServiceBlueprintRenderLane {
   id: string;
   label: string;
   headerId: string;
-  index: number;
   nodeIds: string[];
 }
-
-export type ServiceBlueprintEdgeFamily = "flow" | "support" | "resource";
 
 export interface ServiceBlueprintRenderEdge {
   id: string;
   from: string;
   type: string;
   to: string;
-  family: ServiceBlueprintEdgeFamily;
-  displayLabel?: string;
   label?: string;
   style?: string;
   constraint?: boolean;
@@ -97,19 +90,15 @@ function edgeDisplay(
   type: string,
   showSecondaryEdgeLabels: boolean
 ): Omit<ServiceBlueprintRenderEdge, "id" | "from" | "to"> {
-  const fallbackLabel = type.toLowerCase().replace(/_/g, " ");
   switch (type) {
     case "PRECEDES":
       return {
         type,
-        family: "flow",
         weight: 4
       };
     case "REALIZED_BY":
       return {
         type,
-        family: "support",
-        displayLabel: "realized by",
         ...(showSecondaryEdgeLabels ? { label: "realized by" } : {}),
         style: "dashed",
         constraint: false
@@ -117,16 +106,12 @@ function edgeDisplay(
     case "DEPENDS_ON":
       return {
         type,
-        family: "support",
-        displayLabel: "depends on",
         ...(showSecondaryEdgeLabels ? { label: "depends on" } : {}),
         constraint: false
       };
     case "READS":
       return {
         type,
-        family: "resource",
-        displayLabel: "reads",
         ...(showSecondaryEdgeLabels ? { label: "reads" } : {}),
         style: "dashed",
         constraint: false
@@ -134,16 +119,12 @@ function edgeDisplay(
     case "WRITES":
       return {
         type,
-        family: "resource",
-        displayLabel: "writes",
         ...(showSecondaryEdgeLabels ? { label: "writes" } : {}),
         constraint: false
       };
     case "CONSTRAINED_BY":
       return {
         type,
-        family: "resource",
-        displayLabel: "constrained by",
         ...(showSecondaryEdgeLabels ? { label: "constrained by" } : {}),
         style: "dotted",
         constraint: false
@@ -151,9 +132,7 @@ function edgeDisplay(
     default:
       return {
         type,
-        family: "support",
-        displayLabel: fallbackLabel,
-        ...(type === "PRECEDES" || !showSecondaryEdgeLabels ? {} : { label: fallbackLabel })
+        ...(showSecondaryEdgeLabels ? { label: type.toLowerCase().replace(/_/g, " ") } : {})
       };
   }
 }
@@ -172,16 +151,14 @@ export function buildServiceBlueprintRenderModel(
     projection.nodes.map((node) => node.id)
   );
 
-  const lanes = laneGroups.map<ServiceBlueprintRenderLane>((group, index) => ({
+  const lanes = laneGroups.map<ServiceBlueprintRenderLane>((group) => ({
     id: group.id,
     label: group.label,
     headerId: `${group.id}__header`,
-    index,
     nodeIds: orderNodeIds(graph, group.node_ids)
   }));
   const laneByNodeId = new Map<string, ServiceBlueprintRenderLane>();
-  lanes.forEach((lane, laneIndex) => {
-    lane.index = laneIndex;
+  lanes.forEach((lane) => {
     lane.nodeIds.forEach((nodeId) => {
       laneByNodeId.set(nodeId, lane);
     });
@@ -199,8 +176,6 @@ export function buildServiceBlueprintRenderModel(
       id: node.id,
       type: node.type,
       laneId: lane?.id,
-      laneLabel: lane?.label,
-      laneIndex: lane?.index,
       authorOrder: authorOrderByNodeId.get(node.id) ?? Number.MAX_SAFE_INTEGER,
       shape: display.shape,
       style: display.style,
