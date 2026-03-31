@@ -220,11 +220,6 @@ function buildCellContainer(
 
 function buildRoutingIntent(edge: ServiceBlueprintMiddleEdge): RoutingIntent {
   switch (edge.channel) {
-    case "helper":
-      return {
-        style: "straight",
-        authority: "flexible"
-      };
     case "flow":
       return {
         style: "straight",
@@ -254,7 +249,7 @@ function buildRoutingIntent(edge: ServiceBlueprintMiddleEdge): RoutingIntent {
 function buildEdgeClasses(edge: ServiceBlueprintMiddleEdge): string[] {
   return [
     "service_blueprint_edge",
-    edge.hidden ? "service_blueprint_helper" : "service_blueprint_semantic_edge",
+    "service_blueprint_semantic_edge",
     `edge-type-${sanitizeToken(edge.type)}`,
     `edge-channel-${sanitizeToken(edge.channel)}`,
     ...buildEdgeStyleClasses(edge.style)
@@ -273,17 +268,15 @@ function buildSceneEdge(edge: ServiceBlueprintMiddleEdge): SceneEdge {
       itemId: edge.to
     },
     routing: buildRoutingIntent(edge),
-    label: edge.hidden || !edge.label
+    label: !edge.label
       ? undefined
       : {
         text: edge.label,
         textStyleRole: "edge_label"
       },
-    markers: edge.hidden
-      ? undefined
-      : {
-        end: "arrow"
-      },
+    markers: {
+      end: "arrow"
+    },
     ownerContainerId: "root"
   };
 }

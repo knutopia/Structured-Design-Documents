@@ -7,7 +7,7 @@ import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js
 
 export type ServiceBlueprintNodeClassification = "action" | "band_support" | "shared_resource";
 export type ServiceBlueprintBandKind = "anchor" | "interstitial" | "sidecar" | "parking";
-export type ServiceBlueprintEdgeChannel = "flow" | "support" | "resource_policy" | "helper";
+export type ServiceBlueprintEdgeChannel = "flow" | "support" | "resource_policy";
 export type ServiceBlueprintPlacementMode = "action_band" | "band_aligned_support" | "shared_right_rail" | "parking";
 
 export interface ServiceBlueprintMiddleBand {
@@ -69,8 +69,6 @@ export interface ServiceBlueprintMiddleEdge {
   to: string;
   label?: string;
   style?: string;
-  strictRoute: boolean;
-  hidden: boolean;
 }
 
 export interface ServiceBlueprintMiddleLayerModel {
@@ -818,9 +816,7 @@ function buildMergedSemanticEdges(
       from: canonical.from,
       to: canonical.to,
       label: mergedReadWrite ? "reads, writes" : canonical.label,
-      style: mergedReadWrite ? "dashed" : canonical.style,
-      strictRoute: true,
-      hidden: false
+      style: mergedReadWrite ? "dashed" : canonical.style
     } satisfies ServiceBlueprintMiddleEdge;
   });
 }

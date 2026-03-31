@@ -126,6 +126,16 @@ END
         "SA-020__writes__D-020"
       ]
     }));
+
+    expect([...new Set(middle.edges.map((edge) => edge.channel))].sort()).toEqual([
+      "flow",
+      "resource_policy",
+      "support"
+    ]);
+    for (const edge of middle.edges) {
+      expect(edge).not.toHaveProperty("hidden");
+      expect(edge).not.toHaveProperty("strictRoute");
+    }
   });
 
   it("falls back to author order when customer steps do not declare PRECEDES", async () => {
