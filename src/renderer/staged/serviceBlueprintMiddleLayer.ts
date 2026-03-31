@@ -326,7 +326,7 @@ function deriveActionBandPositions(
     diagnostics.push(
       createSceneDiagnostic(
         "renderer.scene.service_blueprint_degraded_no_steps",
-        "Service blueprint projection did not include customer Step nodes. Deriving a deterministic action spine for degraded ELK layout."
+        "Service blueprint projection did not include customer Step nodes. Deriving a deterministic action spine."
       )
     );
   }

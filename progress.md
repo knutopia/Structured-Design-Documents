@@ -9,6 +9,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 3-31-26
+
+-cleaning up service_blueprint rendering code:
+-removed orphaned styling
+
 ## Mon 3-30-26
 
 -increased swerve routing distance

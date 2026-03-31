@@ -570,7 +570,6 @@ function globalHelpText(): string {
     "",
     "Notes:",
     "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
-    "  `service_blueprint` now renders through the ELK-authoritative staged preview backend by default; `--backend legacy_graphviz_preview` remains available for comparison.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
