@@ -9,6 +9,10 @@ export type ServiceBlueprintNodeClassification = "action" | "band_support" | "sh
 export type ServiceBlueprintBandKind = "anchor" | "interstitial" | "sidecar" | "parking";
 export type ServiceBlueprintEdgeChannel = "flow" | "support" | "resource_policy";
 export type ServiceBlueprintPlacementMode = "action_band" | "band_aligned_support" | "shared_right_rail" | "parking";
+export type ServiceBlueprintLaneSeparatorRole =
+  | "line_of_interaction"
+  | "line_of_visibility"
+  | "line_of_internal_interaction";
 
 export interface ServiceBlueprintMiddleBand {
   id: string;
@@ -33,6 +37,14 @@ export interface ServiceBlueprintMiddleLaneShell {
   label: string;
   index: number;
   cellIds: string[];
+}
+
+export interface ServiceBlueprintLaneGuide {
+  laneShellId: string;
+  laneId: string;
+  label: string;
+  order: number;
+  separatorAfter?: ServiceBlueprintLaneSeparatorRole;
 }
 
 export interface ServiceBlueprintMiddleCell {
@@ -74,6 +86,7 @@ export interface ServiceBlueprintMiddleEdge {
 export interface ServiceBlueprintMiddleLayerModel {
   bands: ServiceBlueprintMiddleBand[];
   laneShells: ServiceBlueprintMiddleLaneShell[];
+  laneGuides: ServiceBlueprintLaneGuide[];
   parkingBands: ServiceBlueprintParkingBand[];
   cells: ServiceBlueprintMiddleCell[];
   placements: ServiceBlueprintNodePlacement[];
@@ -230,6 +243,35 @@ function buildAdjacency(
   }
 
   return adjacency;
+}
+
+function resolveLaneSeparatorRole(
+  laneId: string
+): ServiceBlueprintLaneSeparatorRole | undefined {
+  switch (laneId.replace(/^lane:\d+:/, "")) {
+    case "customer":
+      return "line_of_interaction";
+    case "frontstage":
+      return "line_of_visibility";
+    case "backstage":
+      return "line_of_internal_interaction";
+    default:
+      return undefined;
+  }
+}
+
+function buildLaneGuides(
+  laneShells: readonly ServiceBlueprintMiddleLaneShell[]
+): ServiceBlueprintLaneGuide[] {
+  return laneShells
+    .map((laneShell) => ({
+      laneShellId: laneShell.id,
+      laneId: laneShell.laneId,
+      label: laneShell.label,
+      order: laneShell.index,
+      separatorAfter: resolveLaneSeparatorRole(laneShell.laneId)
+    }))
+    .sort((left, right) => left.order - right.order || left.laneShellId.localeCompare(right.laneShellId));
 }
 
 function findActionComponents(
@@ -852,10 +894,12 @@ export function buildServiceBlueprintMiddleLayer(
     parkedNodeIds
   );
   const semanticEdges = buildMergedSemanticEdges(model.edges);
+  const laneGuides = buildLaneGuides(laneShells);
 
   return {
     bands,
     laneShells,
+    laneGuides,
     parkingBands,
     cells,
     placements,

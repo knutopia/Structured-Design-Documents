@@ -15,6 +15,7 @@ import {
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
+import { decorateServiceBlueprintPositionedScene } from "./serviceBlueprintDecorations.js";
 import type {
   ServiceBlueprintMiddleCell,
   ServiceBlueprintMiddleEdge,
@@ -3655,15 +3656,15 @@ function buildPositionedEdges(
 
 function buildStageScene(
   baseScene: PositionedScene,
+  middleLayer: ServiceBlueprintMiddleLayerModel,
   edges: PositionedEdge[],
   diagnostics: RendererDiagnostic[]
 ): PositionedScene {
-  return {
+  return decorateServiceBlueprintPositionedScene({
     ...clonePositionedScene(baseScene),
     edges,
-    decorations: [],
     diagnostics: sortRendererDiagnostics(diagnostics)
-  };
+  }, middleLayer);
 }
 
 function routeIntersectsForbiddenBoxes(
@@ -3696,6 +3697,7 @@ export function buildServiceBlueprintRoutingStages(
 
   const step2Scene = buildStageScene(
     baseScene,
+    middleLayer,
     buildPositionedEdges(
       connectorPlans,
       new Map(connectorPlans.map((connector) => [connector.id, {
@@ -3721,6 +3723,7 @@ export function buildServiceBlueprintRoutingStages(
   const step3Occupancy = step3Build.occupancy;
   const step3Scene = buildStageScene(
     baseScene,
+    middleLayer,
     buildPositionedEdges(step3ConnectorPlans, step3RouteStates),
     step3Diagnostics
   );
@@ -3855,7 +3858,7 @@ export function buildServiceBlueprintRoutingStages(
     );
   }
 
-  const finalScene = buildStageScene(workingScene, finalEdges, finalDiagnostics);
+  const finalScene = buildStageScene(workingScene, middleLayer, finalEdges, finalDiagnostics);
 
   return {
     step2: {

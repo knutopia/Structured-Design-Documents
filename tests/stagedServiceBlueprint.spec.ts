@@ -6,7 +6,13 @@ import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
 import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
 import { buildServiceBlueprintRenderModel } from "../src/renderer/serviceBlueprintRenderModel.js";
-import type { PositionedEdge, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
+import type {
+  PositionedDecoration,
+  PositionedEdge,
+  PositionedItem,
+  PositionedScene,
+  RendererScene
+} from "../src/renderer/staged/contracts.js";
 import {
   buildServiceBlueprintRendererScene,
   renderServiceBlueprintPreRoutingArtifacts,
@@ -140,6 +146,70 @@ function findSemanticEdge(edges: PositionedEdge[], id: string): PositionedEdge {
   return edge;
 }
 
+function findTextDecoration(
+  decorations: PositionedDecoration[],
+  id: string
+): Extract<PositionedDecoration, { kind: "text" }> {
+  const decoration = decorations.find((candidate) => candidate.kind === "text" && candidate.id === id);
+  if (!decoration || decoration.kind !== "text") {
+    throw new Error(`Could not find text decoration "${id}".`);
+  }
+
+  return decoration;
+}
+
+function findLineDecoration(
+  decorations: PositionedDecoration[],
+  id: string
+): Extract<PositionedDecoration, { kind: "line" }> {
+  const decoration = decorations.find((candidate) => candidate.kind === "line" && candidate.id === id);
+  if (!decoration || decoration.kind !== "line") {
+    throw new Error(`Could not find line decoration "${id}".`);
+  }
+
+  return decoration;
+}
+
+function findLaneCells(
+  scene: PositionedScene,
+  laneClass: string
+): Array<Extract<PositionedItem, { kind: "container" }>> {
+  return findRootCells(scene).filter((cell) => cell.classes.includes(laneClass));
+}
+
+function expectLaneGuideLayout(
+  scene: PositionedScene,
+  laneClass: string,
+  hasSeparator: boolean
+): void {
+  const laneCells = findLaneCells(scene, laneClass);
+  expect(laneCells.length).toBeGreaterThan(0);
+  const minY = Math.min(...laneCells.map((cell) => cell.y));
+  const maxY = Math.max(...laneCells.map((cell) => cell.y + cell.height));
+  const title = findTextDecoration(scene.decorations, `${laneClass}__title`);
+
+  expect(title.text).toBe(laneClass.replace(/^lane-/, ""));
+  expect(title.x).toBe(24);
+  expect(title.y).toBe(minY + Math.max(10, (maxY - minY) / 2 - 10));
+
+  const separatorId = `${laneClass}__separator`;
+  const separator = scene.decorations.find((candidate) => candidate.kind === "line" && candidate.id === separatorId);
+  if (!hasSeparator) {
+    expect(separator).toBeUndefined();
+    return;
+  }
+
+  const resolvedSeparator = findLineDecoration(scene.decorations, separatorId);
+  expect(resolvedSeparator.from).toEqual({
+    x: 24,
+    y: maxY
+  });
+  expect(resolvedSeparator.to).toEqual({
+    x: Math.max(24, scene.root.width - 28),
+    y: maxY
+  });
+}
+
 function expectOrthogonalRoute(edge: PositionedEdge): void {
   for (let index = 1; index < edge.route.points.length; index += 1) {
     const start = edge.route.points[index - 1]!;
@@ -231,6 +301,14 @@ describe("staged service_blueprint", () => {
     expect(rendered.svg).not.toContain("reads, writes");
     expect(routingDebug.step2PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
     expect(routingDebug.step3PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
+
+    [routedStages.step2.positionedScene, routedStages.step3.positionedScene, routedStages.final.positionedScene]
+      .forEach((scene) => {
+        expectLaneGuideLayout(scene, "lane-customer", true);
+        expectLaneGuideLayout(scene, "lane-frontstage", true);
+        expectLaneGuideLayout(scene, "lane-backstage", true);
+        expectLaneGuideLayout(scene, "lane-system", false);
+      });
 
     for (const edge of rendered.positionedScene.edges.filter((candidate) =>
       candidate.classes.includes("service_blueprint_semantic_edge")
@@ -534,6 +612,10 @@ describe("staged service_blueprint", () => {
     );
 
     expect(routedStages.final.globalGutterState.laneExpansions[4]).toBeGreaterThan(0);
+    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-customer", true);
+    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-frontstage", true);
+    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-backstage", true);
+    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-system", false);
 
     const finalReadsWrites = findSemanticEdge(
       routedStages.final.positionedScene.edges,

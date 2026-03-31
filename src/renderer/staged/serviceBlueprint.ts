@@ -8,8 +8,6 @@ import {
 } from "../serviceBlueprintRenderModel.js";
 import type {
   MeasuredScene,
-  PositionedDecoration,
-  PositionedItem,
   PositionedScene,
   RendererScene,
   RoutingIntent,
@@ -26,6 +24,7 @@ import {
   type ServiceBlueprintMiddleEdge,
   type ServiceBlueprintMiddleLayerModel
 } from "./serviceBlueprintMiddleLayer.js";
+import { decorateServiceBlueprintPositionedScene } from "./serviceBlueprintDecorations.js";
 import { buildServiceBlueprintRoutingStages } from "./serviceBlueprintRouting.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import {
@@ -281,95 +280,6 @@ function buildSceneEdge(edge: ServiceBlueprintMiddleEdge): SceneEdge {
   };
 }
 
-function collectPositionedItemsByClass(
-  children: PositionedItem[],
-  className: string
-): Array<Extract<PositionedItem, { kind: "container" }>> {
-  const matches: Array<Extract<PositionedItem, { kind: "container" }>> = [];
-
-  for (const child of children) {
-    if (child.kind !== "container") {
-      continue;
-    }
-    if (child.classes.includes(className)) {
-      matches.push(child);
-    }
-    matches.push(...collectPositionedItemsByClass(child.children, className));
-  }
-
-  return matches;
-}
-
-function attachServiceBlueprintDecorations(scene: PositionedScene): PositionedScene {
-  const decorations: PositionedDecoration[] = [];
-  const labelX = 24;
-  const lineStartX = 24;
-  const lineEndX = Math.max(lineStartX, scene.root.width - 28);
-  const laneOrder = [
-    "lane-customer",
-    "lane-frontstage",
-    "lane-backstage",
-    "lane-support",
-    "lane-system",
-    "lane-policy",
-    "lane-ungrouped"
-  ];
-  const boundaryTargets = new Map<string, string>([
-    ["lane-customer", "line_of_interaction"],
-    ["lane-frontstage", "line_of_visibility"],
-    ["lane-backstage", "line_of_internal_interaction"]
-  ]);
-  const rowEnvelopes = laneOrder.flatMap((laneClass) => {
-    const laneCells = collectPositionedItemsByClass(scene.root.children, laneClass)
-      .filter((item) => item.classes.includes("service_blueprint_cell"));
-    if (laneCells.length === 0) {
-      return [];
-    }
-
-    return [{
-      laneClass,
-      minY: Math.min(...laneCells.map((cell) => cell.y)),
-      maxY: Math.max(...laneCells.map((cell) => cell.y + cell.height))
-    }];
-  });
-
-  rowEnvelopes.forEach((lane) => {
-    decorations.push({
-      kind: "text",
-      id: `${lane.laneClass}__title`,
-      classes: ["service_blueprint_lane_title", lane.laneClass],
-      paintGroup: "labels",
-      x: labelX,
-      y: lane.minY + Math.max(10, (lane.maxY - lane.minY) / 2 - 10),
-      text: lane.laneClass.replace(/^lane-/, ""),
-      textStyleRole: "label"
-    });
-
-    const boundaryRole = boundaryTargets.get(lane.laneClass);
-    if (boundaryRole) {
-      decorations.push({
-        kind: "line",
-        id: `${lane.laneClass}__separator`,
-        classes: ["service_blueprint_separator", boundaryRole, lane.laneClass],
-        paintGroup: "chrome",
-        from: {
-          x: lineStartX,
-          y: lane.maxY
-        },
-        to: {
-          x: lineEndX,
-          y: lane.maxY
-        }
-      });
-    }
-  });
-
-  return {
-    ...scene,
-    decorations
-  };
-}
-
 async function buildServiceBlueprintPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
@@ -384,7 +294,10 @@ async function buildServiceBlueprintPreRoutingPipeline(
 }> {
   const context = buildServiceBlueprintRenderContext(projection, graph, view, profileId, themeId);
   const measuredScene = measureScene(context.rendererScene);
-  const basePositionedScene = await positionSceneBeforeRouting(measuredScene);
+  const basePositionedScene = decorateServiceBlueprintPositionedScene(
+    await positionSceneBeforeRouting(measuredScene),
+    context.middleLayer
+  );
 
   return {
     context,
@@ -472,10 +385,10 @@ export async function renderServiceBlueprintPreRoutingArtifacts(
     profileId,
     themeId
   );
-  const preRoutingPositionedScene = attachServiceBlueprintDecorations({
+  const preRoutingPositionedScene = {
     ...pipeline.basePositionedScene,
     edges: []
-  });
+  };
   const [svgRendered, pngRendered] = await Promise.all([
     renderPositionedSceneToSvg(preRoutingPositionedScene),
     renderPositionedSceneToPng(preRoutingPositionedScene)
@@ -511,8 +424,8 @@ export async function renderServiceBlueprintRoutingDebugArtifacts(
     pipeline.context.middleLayer,
     pipeline.context.authorOrderByNodeId
   );
-  const step2PositionedScene = attachServiceBlueprintDecorations(routedStages.step2.positionedScene);
-  const step3PositionedScene = attachServiceBlueprintDecorations(routedStages.step3.positionedScene);
+  const step2PositionedScene = routedStages.step2.positionedScene;
+  const step3PositionedScene = routedStages.step3.positionedScene;
   const [step2SvgRendered, step2PngRendered, step3SvgRendered, step3PngRendered] = await Promise.all([
     renderPositionedSceneToSvg(step2PositionedScene),
     renderPositionedSceneToPng(step2PositionedScene),
@@ -554,7 +467,7 @@ export async function renderServiceBlueprintStagedSvg(
     pipeline.context.middleLayer,
     pipeline.context.authorOrderByNodeId
   );
-  const positionedScene = attachServiceBlueprintDecorations(routedStages.final.positionedScene);
+  const positionedScene = routedStages.final.positionedScene;
   const rendered = await renderPositionedSceneToSvg(positionedScene);
 
   return {
@@ -585,7 +498,7 @@ export async function renderServiceBlueprintStagedPng(
     pipeline.context.middleLayer,
     pipeline.context.authorOrderByNodeId
   );
-  const positionedScene = attachServiceBlueprintDecorations(routedStages.final.positionedScene);
+  const positionedScene = routedStages.final.positionedScene;
   const rendered = await renderPositionedSceneToPng(positionedScene);
 
   return {
