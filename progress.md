@@ -12,6 +12,7 @@
 
 ## Wed 4-02-26
 
+-tackling service_blueprint layout authority alignment:
 -expanding service_blueprint placement rules to accomodate multi-node per slot handling
 
 ## Tue 3-31-26
