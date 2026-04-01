@@ -1,4 +1,4 @@
-# Service Blueprint Code Cleanup
+# [Done] Service Blueprint Code Cleanup
 
 ## Identified Issues
 
