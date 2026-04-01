@@ -40,7 +40,8 @@
           "lane-customer",
           "band-a1",
           "column-1",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -73,7 +74,8 @@
               "lane-customer",
               "band-a1",
               "column-1",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "narrow",
@@ -178,7 +180,8 @@
           "lane-customer",
           "band-i1",
           "column-2",
-          "cell-kind-interstitial"
+          "cell-kind-interstitial",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -215,7 +218,8 @@
           "lane-customer",
           "band-a2",
           "column-3",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -248,7 +252,8 @@
               "lane-customer",
               "band-a2",
               "column-3",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "narrow",
@@ -346,15 +351,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:01:customer__shell__cell__band:sidecar:1",
+        "id": "lane:01:customer__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-customer",
-          "band-r",
+          "band-a1",
           "column-4",
-          "cell-kind-sidecar"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -391,7 +397,8 @@
           "lane-frontstage",
           "band-a1",
           "column-1",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -424,7 +431,8 @@
               "lane-frontstage",
               "band-a1",
               "column-1",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -528,7 +536,8 @@
           "lane-frontstage",
           "band-i1",
           "column-2",
-          "cell-kind-interstitial"
+          "cell-kind-interstitial",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -565,7 +574,8 @@
           "lane-frontstage",
           "band-a2",
           "column-3",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -594,15 +604,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:sidecar:1",
+        "id": "lane:02:frontstage__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-frontstage",
-          "band-r",
+          "band-a1",
           "column-4",
-          "cell-kind-sidecar"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -639,7 +650,8 @@
           "lane-backstage",
           "band-a1",
           "column-1",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -676,7 +688,8 @@
           "lane-backstage",
           "band-i1",
           "column-2",
-          "cell-kind-interstitial"
+          "cell-kind-interstitial",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -709,7 +722,8 @@
               "lane-backstage",
               "band-i1",
               "column-2",
-              "cell-kind-interstitial"
+              "cell-kind-interstitial",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -813,7 +827,8 @@
           "lane-backstage",
           "band-a2",
           "column-3",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -842,15 +857,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:03:backstage__shell__cell__band:sidecar:1",
+        "id": "lane:03:backstage__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-backstage",
-          "band-r",
+          "band-a1",
           "column-4",
-          "cell-kind-sidecar"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -887,7 +903,8 @@
           "lane-support",
           "band-a1",
           "column-1",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -924,7 +941,8 @@
           "lane-support",
           "band-i1",
           "column-2",
-          "cell-kind-interstitial"
+          "cell-kind-interstitial",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -961,7 +979,8 @@
           "lane-support",
           "band-a2",
           "column-3",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -994,7 +1013,8 @@
               "lane-support",
               "band-a2",
               "column-3",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1090,15 +1110,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:04:support__shell__cell__band:sidecar:1",
+        "id": "lane:04:support__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-support",
-          "band-r",
+          "band-a1",
           "column-4",
-          "cell-kind-sidecar"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -1135,7 +1156,8 @@
           "lane-system",
           "band-a1",
           "column-1",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1168,7 +1190,8 @@
               "lane-system",
               "band-a1",
               "column-1",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1273,7 +1296,8 @@
           "lane-system",
           "band-i1",
           "column-2",
-          "cell-kind-interstitial"
+          "cell-kind-interstitial",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1306,7 +1330,8 @@
               "lane-system",
               "band-i1",
               "column-2",
-              "cell-kind-interstitial"
+              "cell-kind-interstitial",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1411,7 +1436,8 @@
           "lane-system",
           "band-a2",
           "column-3",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1444,7 +1470,8 @@
               "lane-system",
               "band-a2",
               "column-3",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1541,15 +1568,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:05:system__shell__cell__band:sidecar:1",
+        "id": "lane:05:system__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-system",
-          "band-r",
+          "band-a1",
           "column-4",
-          "cell-kind-sidecar"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -1580,9 +1608,10 @@
               "type-dataentity",
               "service_blueprint_cell",
               "lane-system",
-              "band-r",
+              "band-a1",
               "column-4",
-              "cell-kind-sidecar"
+              "cell-kind-anchor",
+              "slot-kind-spill"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1687,7 +1716,8 @@
           "lane-policy",
           "band-a1",
           "column-1",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1720,7 +1750,8 @@
               "lane-policy",
               "band-a1",
               "column-1",
-              "cell-kind-anchor"
+              "cell-kind-anchor",
+              "slot-kind-primary"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1824,7 +1855,8 @@
           "lane-policy",
           "band-i1",
           "column-2",
-          "cell-kind-interstitial"
+          "cell-kind-interstitial",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1861,7 +1893,8 @@
           "lane-policy",
           "band-a2",
           "column-3",
-          "cell-kind-anchor"
+          "cell-kind-anchor",
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1890,15 +1923,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:sidecar:1",
+        "id": "lane:06:policy__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-policy",
-          "band-r",
+          "band-a1",
           "column-4",
-          "cell-kind-sidecar"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",

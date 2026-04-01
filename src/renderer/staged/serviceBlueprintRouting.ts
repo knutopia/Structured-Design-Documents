@@ -121,6 +121,8 @@ interface ConnectorOrderingKey {
   edgeFamilyRank: number;
   precedesSubtypeRank: number;
   sourceLaneOrder: number;
+  sourceBandOrder?: number;
+  sourceSlotOrderWithinBand?: number;
   sourceColumnOrder: number;
   sourceAuthorOrder: number;
   outgoingOrder: number;
@@ -1092,6 +1094,8 @@ function buildConnectorOrderingKey(
     edgeFamilyRank: isPrecedes ? 0 : 1,
     precedesSubtypeRank: isStepPrecedes ? 0 : 1,
     sourceLaneOrder: source.cellMeta.rowOrder,
+    sourceBandOrder: source.cellMeta.bandOrder,
+    sourceSlotOrderWithinBand: source.cellMeta.slotOrderWithinBand,
     sourceColumnOrder: source.cellMeta.columnOrder,
     sourceAuthorOrder: source.authorOrder,
     outgoingOrder,
@@ -1099,11 +1103,20 @@ function buildConnectorOrderingKey(
   };
 }
 
+function resolveOrderingBandOrder(orderingKey: ConnectorOrderingKey): number {
+  return orderingKey.sourceBandOrder ?? orderingKey.sourceColumnOrder;
+}
+
+function resolveOrderingSlotOrder(orderingKey: ConnectorOrderingKey): number {
+  return orderingKey.sourceSlotOrderWithinBand ?? 0;
+}
+
 function compareOrderingKey(left: ConnectorOrderingKey, right: ConnectorOrderingKey): number {
   return left.edgeFamilyRank - right.edgeFamilyRank
     || left.precedesSubtypeRank - right.precedesSubtypeRank
     || left.sourceLaneOrder - right.sourceLaneOrder
-    || left.sourceColumnOrder - right.sourceColumnOrder
+    || resolveOrderingBandOrder(left) - resolveOrderingBandOrder(right)
+    || resolveOrderingSlotOrder(left) - resolveOrderingSlotOrder(right)
     || left.sourceAuthorOrder - right.sourceAuthorOrder
     || left.outgoingOrder - right.outgoingOrder
     || left.destinationStableId.localeCompare(right.destinationStableId);

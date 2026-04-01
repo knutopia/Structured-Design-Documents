@@ -698,6 +698,70 @@ describe("staged service_blueprint", () => {
     }
   });
 
+  it("orders connector plans by semantic band before physical column when the metadata diverges", async () => {
+    const context = await buildServiceBlueprintRoutingContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+    const middleLayer = structuredClone(context.middleLayer);
+    const sa020Cell = middleLayer.cells.find((cell) => cell.nodeIds.includes("SA-020"));
+    const sa022Cell = middleLayer.cells.find((cell) => cell.nodeIds.includes("SA-022"));
+    if (!sa020Cell || !sa022Cell) {
+      throw new Error("Could not resolve the proof-case system-action cells.");
+    }
+
+    sa020Cell.bandOrder = 1;
+    sa022Cell.bandOrder = 0;
+    expect(sa020Cell.columnOrder).toBeLessThan(sa022Cell.columnOrder);
+
+    const routed = buildServiceBlueprintRoutingStages(
+      context.positionedScene,
+      context.rendererScene,
+      middleLayer,
+      context.authorOrderByNodeId
+    );
+    const connectorIds = routed.step2.connectorPlans.map((plan) => plan.id);
+    const sa020Index = connectorIds.indexOf("SA-020__reads_writes__D-020");
+    const sa022Index = connectorIds.indexOf("SA-022__reads__D-020");
+
+    expect(sa020Index).toBeGreaterThanOrEqual(0);
+    expect(sa022Index).toBeGreaterThanOrEqual(0);
+    expect(sa022Index).toBeLessThan(sa020Index);
+  });
+
+  it("orders connector plans by slot order before physical column when the band metadata ties", async () => {
+    const context = await buildServiceBlueprintRoutingContext(
+      await loadExampleInput("service_blueprint_slice.sdd"),
+      "recommended"
+    );
+    const middleLayer = structuredClone(context.middleLayer);
+    const sa020Cell = middleLayer.cells.find((cell) => cell.nodeIds.includes("SA-020"));
+    const sa022Cell = middleLayer.cells.find((cell) => cell.nodeIds.includes("SA-022"));
+    if (!sa020Cell || !sa022Cell) {
+      throw new Error("Could not resolve the proof-case system-action cells.");
+    }
+
+    sa020Cell.bandOrder = 0;
+    sa022Cell.bandOrder = 0;
+    sa020Cell.slotOrderWithinBand = 1;
+    sa022Cell.slotOrderWithinBand = 0;
+    expect(sa020Cell.columnOrder).toBeLessThan(sa022Cell.columnOrder);
+
+    const routed = buildServiceBlueprintRoutingStages(
+      context.positionedScene,
+      context.rendererScene,
+      middleLayer,
+      context.authorOrderByNodeId
+    );
+    const connectorIds = routed.step2.connectorPlans.map((plan) => plan.id);
+    const sa020Index = connectorIds.indexOf("SA-020__reads_writes__D-020");
+    const sa022Index = connectorIds.indexOf("SA-022__reads__D-020");
+
+    expect(sa020Index).toBeGreaterThanOrEqual(0);
+    expect(sa022Index).toBeGreaterThanOrEqual(0);
+    expect(sa022Index).toBeLessThan(sa020Index);
+  });
+
   it("matches staged renderer snapshots for the service_blueprint proof case and routing debug stages", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
