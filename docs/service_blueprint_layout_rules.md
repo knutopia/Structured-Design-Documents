@@ -143,9 +143,14 @@ These lanes participate differently in chronology:
 - action lanes: `customer`, `frontstage`, `backstage`, `support`
 - resource lanes: `system`, `policy`
 
-Within `system`, `SystemAction` is action-like. `DataEntity` is resource-like.
+Within `system`, distinguish two conceptual sublanes for rendering and readability:
 
-That distinction matters for placement. `DataEntity` and `Policy` nodes should remain visually secondary within their support rows and should not be allowed to consume the same visual role as primary action nodes unless a local readability exception is explicitly chosen.
+- `system_action` for `SystemAction`
+- `system_resource` for `DataEntity`
+
+These sublanes share the same chronology bands and do not create new semantic time steps.
+
+That distinction matters for placement. `DataEntity` and `Policy` nodes should remain visually secondary within their support rows or sublanes and should not be allowed to consume the same visual role as primary action nodes unless a local readability exception is explicitly chosen.
 
 ### 5. Stable ordering
 
@@ -196,17 +201,19 @@ Do not create empty or speculative bands. Interstitial bands must correspond to 
 
 #### `SystemAction`
 
+- occupies `system_action`
 - inherits its preferred band from the upstream `Process` that depends on it
 - same-band placement is the default
 - move to the next interstitial band only when needed to express a genuine internal sequence
 
 #### `DataEntity`
 
+- occupies `system_resource`
 - is not a primary timeline node
-- stays in `system` as a support resource, not a primary action node
 - use one canonical node per entity in a blueprint slice
 - anchor it by first write; if there is no write, anchor by first read
 - keep later accesses connected back to that anchored node rather than duplicating the entity across multiple bands
+- do not move the canonical node to a later band merely to shorten later edges
 
 #### `Policy`
 
@@ -218,7 +225,7 @@ Do not create empty or speculative bands. Interstitial bands must correspond to 
 
 ### 9. Keep shared support nodes canonical within support rows
 
-Shared `DataEntity` and `Policy` nodes should remain single canonical support nodes in the `system` or `policy` row, aligned to a stable semantic band derived from their anchoring relation rather than moved into a dedicated resource column.
+Shared `DataEntity` and `Policy` nodes should remain single canonical support nodes in their support rows or sublanes, aligned to a stable semantic band derived from their anchoring relation.
 
 Why:
 
@@ -227,10 +234,25 @@ Why:
 - it prevents data and policy nodes from stealing customer-step columns
 - it turns repeated `READS`, `WRITES`, and `CONSTRAINED_BY` edges into readable links back to stable support nodes rather than random graph clutter
 
-Local exception:
+Physical realization:
 
-- if a support node shares a band with another node in its row, the renderer may offset it within that same band to preserve readability
+- a semantic band is a chronology column, not an arbitrary x-position
+- a renderer may use more than one physical placement slot to realize one semantic band when needed for readability
+- those physical placement slots do not create new semantic bands or new chronology
+- support-node collisions are allowed; they do not make the diagram invalid
+- if multiple support nodes land in the same semantic band and support row or sublane, the renderer should first realize them using stable local packing within that same band
+- if local packing would become unreadable, the renderer may introduce one or more auxiliary spill slots immediately to the right of the owning semantic band
+- an auxiliary spill slot remains semantically attached to its owning band; it is a physical realization aid, not a new chronological step
+- tie-breaking for local packing and spill-slot order should follow:
+  1. anchoring relation
+  2. author order
+  3. stable ID order
 - do not duplicate the same `DataEntity` or `Policy` across multiple bands solely to shorten edges
+
+Authoring guidance:
+
+- authors should prefer simple slices with a readable number of support nodes per band
+- dense support-node collisions should be treated as a readability warning, not as illegal input
 
 ### 10. Orphans and disconnected nodes
 
@@ -270,9 +292,10 @@ Disconnected or weakly connected nodes should not destabilize the main blueprint
 
 ### 14. `READS` and `WRITES` are resource access relations
 
-`READS` and `WRITES` connect action nodes to canonical support resources in the `system` row.
+`READS` and `WRITES` connect action nodes to canonical support resources in the `system_resource` sublane of the `system` support row.
 
 - they should usually route from action bands to the anchored `DataEntity` node while preserving that node's stable band alignment
+- when the renderer realizes that node in an auxiliary spill slot, the connector should still read as targeting the canonical support node owned by the original semantic band
 - `READS` and `WRITES` on the same entity must stay semantically distinct even if they touch the same target node
 - a single `DataEntity` node should aggregate repeated access from multiple system actions
 
@@ -281,7 +304,7 @@ Disconnected or weakly connected nodes should not destabilize the main blueprint
 `CONSTRAINED_BY` should read as "this action is governed by that policy", not as sequence.
 
 - it should not compete visually with `PRECEDES`
-- it should route toward the canonical policy node in the `policy` row
+- it should route toward the canonical policy node in the `policy` row while preserving that node's semantic-band ownership
 - repeated constraints to the same policy should converge on one policy node
 
 ## Example: `service_blueprint_slice`
@@ -290,7 +313,7 @@ Using the current example slice, the semantic banding should look roughly like t
 
 | Band | Role | Preferred contents |
 | --- | --- | --- |
-| `A1` | customer anchor | `J-020`, `PR-020`, `SA-020`, `D-020`, `PL-020` |
+| `A1` | customer anchor | `J-020`, `PR-020`, `SA-020`, canonical `D-020` support anchor, canonical `PL-020` support anchor |
 | `I1` | interstitial | `PR-021`, `SA-021` |
 | `A2` | customer anchor | `J-021`, `PR-022`, `SA-022` |
 
@@ -303,6 +326,7 @@ Key reading:
 - `PL-020` is a policy support node aligned to the first service moment because all constrained
   occurrences in the slice happen in `A1`
 - `D-020` is a shared support resource aligned to `A1` because its first write occurs there, and later reads route back to that canonical node
+- physical realization may use either a primary local support slot in `A1` or an auxiliary spill slot owned by `A1`; neither choice creates a new semantic band
 
 ## [Deprecated:] Middle-Layer ELK Encoding Contract
 
@@ -313,7 +337,7 @@ Elk has failed.
 These do not block the current rules, but they matter:
 
 1. Should SDD eventually model a first-class `Evidence` / `Touchpoint` lane above `customer`?
-2. Should `system` split into separate action and resource sublanes for `SystemAction` and `DataEntity`?
+2. Should `system_action` and `system_resource` eventually become first-class SDD semantics rather than renderer-level concepts?
 3. Should `Event` remain out of scope for `service_blueprint`, or become an annotation / supporting element?
 4. When a step has multiple `REALIZED_BY` targets across multiple operational lanes, do we need a notion of "primary realization" versus "supporting realization"?
 
@@ -321,10 +345,12 @@ These do not block the current rules, but they matter:
 
 The layout target is:
 
-- fixed semantic rows
+- fixed semantic rows, with conceptual support sublanes where needed for readability
 - customer-step anchor columns
 - optional interstitial operational columns
-- support rows and band-aligned support nodes for data and policy
+- band-aligned canonical support nodes for data and policy
+- physical placement slots that may realize one semantic band without creating new chronology
+- local support-node packing first, auxiliary spill slots second
 - straight primary chronology
 - secondary support and resource routing
 

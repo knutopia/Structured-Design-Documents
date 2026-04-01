@@ -2,6 +2,8 @@
 
 Meant to guide a matching implementation.
 
+If this reference note or its older example visual conflicts with the current normative layout rules on support-node realization, the layout rules win.
+
 Files referenced:
 Source: <examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd>
 
@@ -23,7 +25,10 @@ Determined by flow of PRECEDES edges between nodes. (see SDD Source)
 - "Step" nodes (J-020, J-021) live in the "Customer" lane.
 - "Process" nodes (PR-020, PR-021, PR-022)
 - "SystemAction" nodes (SA-020, SA-021, SA-022) and "DataEntity" nodes (D-020) live in the "System" lane.
+  For readability, a renderer may realize that lane using conceptual sublanes such as `system_action` and `system_resource`.
 - "Policy" nodes (PL-020) live in the "Policy" lane.
+
+Support nodes may also be realized in auxiliary spill slots owned by a semantic band when local packing in that band's support row or sublane would become unreadable. Those spill slots are physical placement aids, not new semantic columns.
 
 ## Row, Column, Node Appearance
 

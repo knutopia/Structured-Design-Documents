@@ -2,7 +2,7 @@
 
 This is meant to guide the creation of a connector-routing engine for diagram type service_blueprint. 
 
-Node placement appears stable and is considered *solved* for the context of the current routing work. With nodes placed, the routing of connector lines from one node to another is the remaining challenge.
+Node placement is governed by the current layout rules and should be treated as an input to routing rather than re-decided inside the routing layer. With nodes placed, the routing of connector lines from one node to another is the remaining challenge.
 
 ## Grounding Inputs
 
@@ -23,6 +23,8 @@ Node placement appears stable and is considered *solved* for the context of the 
 
 Please refer to the [Connector Positioning & Appearance]('reference/Service%20Blueprint%20Reference%20Design%20Notes.md#connector-positioning-&-appearance') section.
 
+Auxiliary spill slots used to realize crowded support nodes do not create new chronology. They remain physical placement slots owned by a semantic band, so routing should respect semantic band and row ownership first, then local slot order within that owned band.
+
 ## Connector Hierarchy
 
 Not all connectors are equal (for best human readability.) To reflect this, we route connectors in a prioritized processing order and keep track of what connector "comes first". 
@@ -33,7 +35,7 @@ This deterministic order determines placement of connection points of node edges
 
 1. Handle PRECEDES connections before other types. Amongst PRECEDES connections handle "Step PRECEDES Step" before "Process PRECEDES Process" (see Additional Detail, below.)
 2. Top-down vertical order: based on the lane of originating nodes (in the lanes-columns grid), route connectors starting in higher lanes before connectors starting in lower lanes.
-3. Left-right horizontal order: based on the column of originating nodes (in the lanes-columns grid), route connectors starting in "lower" columns (left) before connectors starting in higher columns (right).
+3. Left-right horizontal order: based first on the owning semantic band of the originating nodes, then on local slot order within that owned band when a band is realized using multiple physical placement slots.
 4. After edge-family, source-lane, and source-column priority, break remaining ties by source order of the originating node, then by source order of the connector among that node’s outgoing connectors. Where a stable final tie-break is still needed, use destination stable ID.
 
 ### Additional Detail
