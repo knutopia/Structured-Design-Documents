@@ -6,9 +6,14 @@ import type {
 import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 
 export type ServiceBlueprintNodeClassification = "action" | "band_support" | "shared_resource";
-export type ServiceBlueprintBandKind = "anchor" | "interstitial" | "sidecar" | "parking";
+export type ServiceBlueprintBandKind = "anchor" | "interstitial" | "parking";
+export type ServiceBlueprintSlotKind = "primary" | "spill" | "parking";
 export type ServiceBlueprintEdgeChannel = "flow" | "support" | "resource_policy";
-export type ServiceBlueprintPlacementMode = "action_band" | "band_aligned_support" | "shared_right_rail" | "parking";
+export type ServiceBlueprintPlacementMode =
+  | "action_band"
+  | "band_primary_support"
+  | "band_spill_support"
+  | "parking";
 export type ServiceBlueprintLaneSeparatorRole =
   | "line_of_interaction"
   | "line_of_visibility"
@@ -18,17 +23,21 @@ export interface ServiceBlueprintMiddleBand {
   id: string;
   label: string;
   kind: Exclude<ServiceBlueprintBandKind, "parking">;
-  order: number;
+  bandOrder: number;
   shared: true;
 }
 
-export interface ServiceBlueprintParkingBand {
+export interface ServiceBlueprintPhysicalColumn {
   id: string;
+  bandId: string;
   label: string;
-  kind: "parking";
-  order: number;
-  ownerLaneShellId: string;
-  ownerLaneId: string;
+  bandKind: ServiceBlueprintBandKind;
+  bandOrder?: number;
+  columnOrder: number;
+  slotKind: ServiceBlueprintSlotKind;
+  slotOrderWithinBand: number;
+  ownerLaneShellId?: string;
+  ownerLaneId?: string;
 }
 
 export interface ServiceBlueprintMiddleLaneShell {
@@ -49,13 +58,17 @@ export interface ServiceBlueprintLaneGuide {
 
 export interface ServiceBlueprintMiddleCell {
   id: string;
+  columnId: string;
   bandId: string;
   laneShellId: string;
   laneId: string;
   bandLabel: string;
   bandKind: ServiceBlueprintBandKind;
+  bandOrder?: number;
   rowOrder: number;
   columnOrder: number;
+  slotKind: ServiceBlueprintSlotKind;
+  slotOrderWithinBand: number;
   nodeIds: string[];
   anchorNodeId: string;
   sharedWidthGroup: string;
@@ -66,9 +79,14 @@ export interface ServiceBlueprintNodePlacement {
   nodeId: string;
   laneShellId: string;
   cellId: string;
+  columnId: string;
   bandId: string;
+  bandOrder?: number;
   classification: ServiceBlueprintNodeClassification;
   placementMode: ServiceBlueprintPlacementMode;
+  columnOrder: number;
+  slotKind: ServiceBlueprintSlotKind;
+  slotOrderWithinBand: number;
   order: number;
 }
 
@@ -85,9 +103,9 @@ export interface ServiceBlueprintMiddleEdge {
 
 export interface ServiceBlueprintMiddleLayerModel {
   bands: ServiceBlueprintMiddleBand[];
+  columns: ServiceBlueprintPhysicalColumn[];
   laneShells: ServiceBlueprintMiddleLaneShell[];
   laneGuides: ServiceBlueprintLaneGuide[];
-  parkingBands: ServiceBlueprintParkingBand[];
   cells: ServiceBlueprintMiddleCell[];
   placements: ServiceBlueprintNodePlacement[];
   edges: ServiceBlueprintMiddleEdge[];
@@ -509,7 +527,7 @@ function buildBands(
         id: `band:anchor:${anchorIndex}`,
         label: `A${anchorIndex}`,
         kind: "anchor",
-        order: bands.length,
+        bandOrder: bands.length,
         shared: true
       });
       anchorIndex += 1;
@@ -520,19 +538,11 @@ function buildBands(
       id: `band:interstitial:${interstitialIndex}`,
       label: `I${interstitialIndex}`,
       kind: "interstitial",
-      order: bands.length,
+      bandOrder: bands.length,
       shared: true
     });
     interstitialIndex += 1;
   }
-
-  bands.push({
-    id: "band:sidecar:1",
-    label: "R*",
-    kind: "sidecar",
-    order: bands.length,
-    shared: true
-  });
 
   return bands;
 }
@@ -542,12 +552,11 @@ function buildSharedBandByPosition(
   bands: readonly ServiceBlueprintMiddleBand[]
 ): Map<number, ServiceBlueprintMiddleBand> {
   const sharedBandByPosition = new Map<number, ServiceBlueprintMiddleBand>();
-  const nonSidecarBands = bands.filter((band) => band.kind !== "sidecar");
 
   [...new Set(positionByNodeId.values())]
     .sort((left, right) => left - right)
     .forEach((position, index) => {
-      const band = nonSidecarBands[index];
+      const band = bands[index];
       if (band) {
         sharedBandByPosition.set(position, band);
       }
@@ -572,13 +581,135 @@ function resolveEdgeChannel(edge: ServiceBlueprintRenderEdge): ServiceBlueprintE
   }
 }
 
-function buildParkingBands(
+function resolveNodeClassification(
+  node: ServiceBlueprintRenderNode
+): ServiceBlueprintNodeClassification {
+  if (ACTION_NODE_TYPES.has(node.type)) {
+    return "action";
+  }
+  if (SHARED_RESOURCE_NODE_TYPES.has(node.type)) {
+    return "shared_resource";
+  }
+  return "band_support";
+}
+
+function resolvePlacementMode(
+  node: ServiceBlueprintRenderNode,
+  slotKind: ServiceBlueprintSlotKind
+): ServiceBlueprintPlacementMode {
+  if (slotKind === "parking") {
+    return "parking";
+  }
+  if (ACTION_NODE_TYPES.has(node.type)) {
+    return "action_band";
+  }
+  return slotKind === "spill" ? "band_spill_support" : "band_primary_support";
+}
+
+interface ServiceBlueprintSupportBandCandidate {
+  bandId: string;
+  bandOrder: number;
+  relationRank: number;
+  sourceAuthorOrder: number;
+  sourceId: string;
+}
+
+function compareSupportBandCandidates(
+  left: ServiceBlueprintSupportBandCandidate,
+  right: ServiceBlueprintSupportBandCandidate
+): number {
+  return left.relationRank - right.relationRank
+    || left.bandOrder - right.bandOrder
+    || left.sourceAuthorOrder - right.sourceAuthorOrder
+    || left.sourceId.localeCompare(right.sourceId);
+}
+
+function resolveSupportBandByNodeId(
+  model: ServiceBlueprintRenderModel,
+  nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
+  positionByNodeId: ReadonlyMap<string, number>,
+  sharedBandByPosition: ReadonlyMap<number, ServiceBlueprintMiddleBand>,
+  targetType: "DataEntity" | "Policy",
+  edgeTypes: ReadonlySet<string>,
+  relationRank: (edgeType: string) => number
+): Map<string, string> {
+  const candidateByNodeId = new Map<string, ServiceBlueprintSupportBandCandidate>();
+
+  for (const edge of model.edges) {
+    if (!edgeTypes.has(edge.type)) {
+      continue;
+    }
+
+    const source = nodeMap.get(edge.from);
+    const target = nodeMap.get(edge.to);
+    if (!isActionNode(source) || !target || target.type !== targetType) {
+      continue;
+    }
+
+    const sourcePosition = positionByNodeId.get(source.id);
+    const band = sourcePosition === undefined
+      ? undefined
+      : sharedBandByPosition.get(sourcePosition);
+    if (!band) {
+      continue;
+    }
+
+    const candidate: ServiceBlueprintSupportBandCandidate = {
+      bandId: band.id,
+      bandOrder: band.bandOrder,
+      relationRank: relationRank(edge.type),
+      sourceAuthorOrder: source.authorOrder,
+      sourceId: source.id
+    };
+    const existing = candidateByNodeId.get(target.id);
+    if (!existing || compareSupportBandCandidates(candidate, existing) < 0) {
+      candidateByNodeId.set(target.id, candidate);
+    }
+  }
+
+  return new Map(
+    [...candidateByNodeId.entries()].map(([nodeId, candidate]) => [nodeId, candidate.bandId] as const)
+  );
+}
+
+function resolveSupportBandByNodeIdForSliceOne(
+  model: ServiceBlueprintRenderModel,
+  nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
+  positionByNodeId: ReadonlyMap<string, number>,
+  sharedBandByPosition: ReadonlyMap<number, ServiceBlueprintMiddleBand>
+): Map<string, string> {
+  const dataEntityBands = resolveSupportBandByNodeId(
+    model,
+    nodeMap,
+    positionByNodeId,
+    sharedBandByPosition,
+    "DataEntity",
+    new Set(["WRITES", "READS"]),
+    (edgeType) => edgeType === "WRITES" ? 0 : 1
+  );
+  const policyBands = resolveSupportBandByNodeId(
+    model,
+    nodeMap,
+    positionByNodeId,
+    sharedBandByPosition,
+    "Policy",
+    new Set(["CONSTRAINED_BY"]),
+    () => 0
+  );
+
+  return new Map([
+    ...dataEntityBands.entries(),
+    ...policyBands.entries()
+  ]);
+}
+
+function buildParkingColumns(
   model: ServiceBlueprintRenderModel,
   nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
   laneShells: readonly ServiceBlueprintMiddleLaneShell[],
   parkedNodeIds: ReadonlySet<string>,
-  sharedColumnCount: number
-): ServiceBlueprintParkingBand[] {
+  startColumnOrder: number
+): ServiceBlueprintPhysicalColumn[] {
   const parkedNodesByLaneShellId = new Map<string, ServiceBlueprintRenderNode[]>();
   const laneShellByLaneId = new Map(laneShells.map((laneShell) => [laneShell.laneId, laneShell]));
 
@@ -607,99 +738,19 @@ function buildParkingBands(
 
     return [{
       id: `band:parking:${laneShell.laneId}:1`,
+      bandId: `band:parking:${laneShell.laneId}:1`,
       label: "P1",
-      kind: "parking",
-      order: sharedColumnCount,
+      bandKind: "parking",
+      columnOrder: startColumnOrder,
+      slotKind: "parking",
+      slotOrderWithinBand: 0,
       ownerLaneShellId: laneShell.id,
       ownerLaneId: laneShell.laneId
-    } satisfies ServiceBlueprintParkingBand];
-  }).map((band, index) => ({
-    ...band,
-    order: sharedColumnCount + index
+    } satisfies ServiceBlueprintPhysicalColumn];
+  }).map((column, index) => ({
+    ...column,
+    columnOrder: startColumnOrder + index
   }));
-}
-
-function resolvePlacementMode(
-  node: ServiceBlueprintRenderNode,
-  targetBandId: string | undefined,
-  sharedRightRailBandId: string,
-  parkedNodeIds: ReadonlySet<string>,
-  bandAlignedSupportBandIds: ReadonlySet<string>
-): {
-  classification: ServiceBlueprintNodeClassification;
-  placementMode: ServiceBlueprintPlacementMode;
-} {
-  if (parkedNodeIds.has(node.id)) {
-    return {
-      classification: "action",
-      placementMode: "parking"
-    };
-  }
-
-  if (node.type === "Policy" && targetBandId && bandAlignedSupportBandIds.has(targetBandId)) {
-    return {
-      classification: "band_support",
-      placementMode: "band_aligned_support"
-    };
-  }
-
-  if (SHARED_RESOURCE_NODE_TYPES.has(node.type) || targetBandId === sharedRightRailBandId || node.type === "Policy") {
-    return {
-      classification: "shared_resource",
-      placementMode: "shared_right_rail"
-    };
-  }
-
-  return {
-    classification: "action",
-    placementMode: "action_band"
-  };
-}
-
-function resolveBandAlignedPolicyBandByNodeId(
-  model: ServiceBlueprintRenderModel,
-  nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
-  positionByNodeId: ReadonlyMap<string, number>,
-  sharedBandByPosition: ReadonlyMap<number, ServiceBlueprintMiddleBand>
-): Map<string, string> {
-  const constrainedBandsByPolicyId = new Map<string, Set<string>>();
-
-  for (const edge of model.edges) {
-    if (edge.type !== "CONSTRAINED_BY") {
-      continue;
-    }
-
-    const source = nodeMap.get(edge.from);
-    const target = nodeMap.get(edge.to);
-    if (!isActionNode(source) || !target || target.type !== "Policy") {
-      continue;
-    }
-
-    const sourcePosition = positionByNodeId.get(source.id);
-    const bandId = sourcePosition === undefined
-      ? undefined
-      : sharedBandByPosition.get(sourcePosition)?.id;
-    if (!bandId) {
-      continue;
-    }
-
-    const existing = constrainedBandsByPolicyId.get(target.id) ?? new Set<string>();
-    existing.add(bandId);
-    constrainedBandsByPolicyId.set(target.id, existing);
-  }
-
-  const bandByPolicyId = new Map<string, string>();
-  for (const node of model.nodes) {
-    if (node.type !== "Policy") {
-      continue;
-    }
-    const constrainedBands = [...(constrainedBandsByPolicyId.get(node.id) ?? new Set<string>())];
-    if (constrainedBands.length === 1) {
-      bandByPolicyId.set(node.id, constrainedBands[0]!);
-    }
-  }
-
-  return bandByPolicyId;
 }
 
 function buildCellsAndPlacements(
@@ -707,35 +758,160 @@ function buildCellsAndPlacements(
   nodeMap: ReadonlyMap<string, ServiceBlueprintRenderNode>,
   laneShells: ServiceBlueprintMiddleLaneShell[],
   bands: ServiceBlueprintMiddleBand[],
-  parkingBands: readonly ServiceBlueprintParkingBand[],
   positionByNodeId: ReadonlyMap<string, number>,
-  parkedNodeIds: ReadonlySet<string>
+  parkedNodeIds: ReadonlySet<string>,
+  diagnostics: RendererDiagnostic[]
 ): {
+  columns: ServiceBlueprintPhysicalColumn[];
   cells: ServiceBlueprintMiddleCell[];
   placements: ServiceBlueprintNodePlacement[];
 } {
-  const orderedColumns = [...bands, ...parkingBands].sort((left, right) => left.order - right.order);
   const sharedBandByPosition = buildSharedBandByPosition(positionByNodeId, bands);
-
-  const sidecarBand = bands.find((band) => band.kind === "sidecar");
-  if (!sidecarBand) {
-    throw new Error("Service blueprint middle layer requires a sidecar band.");
-  }
-
-  const bandAlignedPolicyBandByNodeId = resolveBandAlignedPolicyBandByNodeId(
+  const supportBandByNodeId = resolveSupportBandByNodeIdForSliceOne(
     model,
     nodeMap,
     positionByNodeId,
     sharedBandByPosition
   );
-  const bandAlignedSupportBandIds = new Set(bandAlignedPolicyBandByNodeId.values());
-  const parkingBandByLaneShellId = new Map(parkingBands.map((band) => [band.ownerLaneShellId, band]));
   const laneShellByLaneId = new Map(laneShells.map((laneShell) => [laneShell.laneId, laneShell]));
+  const semanticBandByNodeId = new Map<string, ServiceBlueprintMiddleBand>();
+  for (const node of model.nodes) {
+    if (parkedNodeIds.has(node.id)) {
+      continue;
+    }
+
+    if (ACTION_NODE_TYPES.has(node.type)) {
+      const position = positionByNodeId.get(node.id);
+      const band = position === undefined ? undefined : sharedBandByPosition.get(position);
+      if (band) {
+        semanticBandByNodeId.set(node.id, band);
+      }
+      continue;
+    }
+
+    const bandId = supportBandByNodeId.get(node.id);
+    const band = bandId ? bands.find((candidate) => candidate.id === bandId) : undefined;
+    if (band) {
+      semanticBandByNodeId.set(node.id, band);
+    }
+  }
+
+  const allParkedNodeIds = new Set(parkedNodeIds);
+  for (const node of model.nodes) {
+    if (allParkedNodeIds.has(node.id) || semanticBandByNodeId.has(node.id)) {
+      continue;
+    }
+    allParkedNodeIds.add(node.id);
+    diagnostics.push(
+      createSceneDiagnostic(
+        "renderer.scene.service_blueprint_support_parking_fallback",
+        `Could not derive a semantic support band for "${node.id}". Assigning it to deterministic terminal parking.`,
+        {
+          targetId: node.id,
+          severity: "info"
+        }
+      )
+    );
+  }
+
+  const nodesByLaneBandId = new Map<string, ServiceBlueprintRenderNode[]>();
+  for (const node of model.nodes) {
+    if (allParkedNodeIds.has(node.id)) {
+      continue;
+    }
+
+    const band = semanticBandByNodeId.get(node.id);
+    if (!band) {
+      continue;
+    }
+
+    const laneId = node.laneId ?? (model.ungroupedNodeIds.includes(node.id) ? "lane:99:ungrouped" : undefined);
+    const laneShell = laneId ? laneShellByLaneId.get(laneId) : undefined;
+    if (!laneShell) {
+      continue;
+    }
+
+    const key = `${laneShell.id}::${band.id}`;
+    const existing = nodesByLaneBandId.get(key) ?? [];
+    existing.push(node);
+    nodesByLaneBandId.set(key, existing);
+  }
+
+  const spillCountByBandId = new Map<string, number>();
+  for (const band of bands) {
+    let maxSpillCount = 0;
+    for (const laneShell of laneShells) {
+      const key = `${laneShell.id}::${band.id}`;
+      const nodes = (nodesByLaneBandId.get(key) ?? []).sort(compareNodeOrder);
+      const actionNodes = nodes.filter((node) => ACTION_NODE_TYPES.has(node.type));
+      const supportNodes = nodes.filter((node) => !ACTION_NODE_TYPES.has(node.type));
+      const spillCount = actionNodes.length > 0
+        ? supportNodes.length
+        : Math.max(supportNodes.length - 1, 0);
+      maxSpillCount = Math.max(maxSpillCount, spillCount);
+    }
+    spillCountByBandId.set(band.id, maxSpillCount);
+  }
+
+  const primaryColumns = [...bands]
+    .sort((left, right) => left.bandOrder - right.bandOrder || left.id.localeCompare(right.id))
+    .map<ServiceBlueprintPhysicalColumn>((band) => ({
+      id: band.id,
+      bandId: band.id,
+      label: band.label,
+      bandKind: band.kind,
+      bandOrder: band.bandOrder,
+      columnOrder: band.bandOrder,
+      slotKind: "primary",
+      slotOrderWithinBand: 0
+    }));
+  const spillColumns: ServiceBlueprintPhysicalColumn[] = [];
+  for (const band of primaryColumns) {
+    const spillCount = spillCountByBandId.get(band.bandId) ?? 0;
+    for (let spillIndex = 1; spillIndex <= spillCount; spillIndex += 1) {
+      spillColumns.push({
+        id: `${band.bandId}:spill:${spillIndex}`,
+        bandId: band.bandId,
+        label: band.label,
+        bandKind: band.bandKind,
+        bandOrder: band.bandOrder,
+        columnOrder: primaryColumns.length + spillColumns.length,
+        slotKind: "spill",
+        slotOrderWithinBand: spillIndex
+      });
+    }
+  }
+  const parkingColumns = buildParkingColumns(
+    model,
+    nodeMap,
+    laneShells,
+    allParkedNodeIds,
+    primaryColumns.length + spillColumns.length
+  );
+  const columns = [...primaryColumns, ...spillColumns, ...parkingColumns];
+
+  const primaryColumnByBandId = new Map(primaryColumns.map((column) => [column.bandId, column] as const));
+  const spillColumnsByBandId = new Map<string, ServiceBlueprintPhysicalColumn[]>();
+  for (const column of spillColumns) {
+    const existing = spillColumnsByBandId.get(column.bandId) ?? [];
+    existing.push(column);
+    spillColumnsByBandId.set(column.bandId, existing);
+  }
+  const parkingColumnByLaneShellId = new Map(
+    parkingColumns.flatMap((column) =>
+      column.ownerLaneShellId ? [[column.ownerLaneShellId, column] as const] : []
+    )
+  );
   const nodesByCellId = new Map<string, ServiceBlueprintRenderNode[]>();
   const placementByNodeId = new Map<string, {
     targetBandId: string;
+    targetBandOrder?: number;
+    targetColumnId: string;
+    targetColumnOrder: number;
     classification: ServiceBlueprintNodeClassification;
     placementMode: ServiceBlueprintPlacementMode;
+    slotKind: ServiceBlueprintSlotKind;
+    slotOrderWithinBand: number;
   }>();
 
   for (const node of model.nodes) {
@@ -745,35 +921,86 @@ function buildCellsAndPlacements(
       continue;
     }
 
-    let targetBandId: string | undefined;
-    if (parkedNodeIds.has(node.id)) {
-      targetBandId = parkingBandByLaneShellId.get(laneShell.id)?.id;
-    } else if (node.type === "Policy") {
-      targetBandId = bandAlignedPolicyBandByNodeId.get(node.id) ?? sidecarBand.id;
-    } else if (SHARED_RESOURCE_NODE_TYPES.has(node.type)) {
-      targetBandId = sidecarBand.id;
-    } else {
-      targetBandId = sharedBandByPosition.get(positionByNodeId.get(node.id) ?? -1)?.id;
+    if (allParkedNodeIds.has(node.id)) {
+      const parkingColumn = parkingColumnByLaneShellId.get(laneShell.id);
+      if (!parkingColumn) {
+        continue;
+      }
+      const cellId = `${laneShell.id}__cell__${parkingColumn.id}`;
+      const existing = nodesByCellId.get(cellId) ?? [];
+      existing.push(node);
+      nodesByCellId.set(cellId, existing);
+      placementByNodeId.set(node.id, {
+        targetBandId: parkingColumn.bandId,
+        targetBandOrder: parkingColumn.bandOrder,
+        targetColumnId: parkingColumn.id,
+        targetColumnOrder: parkingColumn.columnOrder,
+        classification: resolveNodeClassification(node),
+        placementMode: resolvePlacementMode(node, parkingColumn.slotKind),
+        slotKind: parkingColumn.slotKind,
+        slotOrderWithinBand: parkingColumn.slotOrderWithinBand
+      });
     }
+  }
 
-    if (!targetBandId) {
+  for (const band of bands) {
+    const primaryColumn = primaryColumnByBandId.get(band.id);
+    if (!primaryColumn) {
       continue;
     }
 
-    const cellId = `${laneShell.id}__cell__${targetBandId}`;
-    const existing = nodesByCellId.get(cellId) ?? [];
-    existing.push(node);
-    nodesByCellId.set(cellId, existing);
-    placementByNodeId.set(node.id, {
-      targetBandId,
-      ...resolvePlacementMode(node, targetBandId, sidecarBand.id, parkedNodeIds, bandAlignedSupportBandIds)
-    });
+    for (const laneShell of laneShells) {
+      const key = `${laneShell.id}::${band.id}`;
+      const nodes = (nodesByLaneBandId.get(key) ?? []).sort(compareNodeOrder);
+      const actionNodes = nodes.filter((node) => ACTION_NODE_TYPES.has(node.type));
+      const supportNodes = nodes.filter((node) => !ACTION_NODE_TYPES.has(node.type));
+      const primaryNodes = actionNodes.length > 0 ? actionNodes : supportNodes.slice(0, 1);
+      const spillNodes = actionNodes.length > 0 ? supportNodes : supportNodes.slice(1);
+
+      for (const node of primaryNodes) {
+        const cellId = `${laneShell.id}__cell__${primaryColumn.id}`;
+        const existing = nodesByCellId.get(cellId) ?? [];
+        existing.push(node);
+        nodesByCellId.set(cellId, existing);
+        placementByNodeId.set(node.id, {
+          targetBandId: band.id,
+          targetBandOrder: band.bandOrder,
+          targetColumnId: primaryColumn.id,
+          targetColumnOrder: primaryColumn.columnOrder,
+          classification: resolveNodeClassification(node),
+          placementMode: resolvePlacementMode(node, primaryColumn.slotKind),
+          slotKind: primaryColumn.slotKind,
+          slotOrderWithinBand: primaryColumn.slotOrderWithinBand
+        });
+      }
+
+      spillNodes.forEach((node, spillIndex) => {
+        const spillColumn = spillColumnsByBandId.get(band.id)?.[spillIndex];
+        if (!spillColumn) {
+          return;
+        }
+        const cellId = `${laneShell.id}__cell__${spillColumn.id}`;
+        const existing = nodesByCellId.get(cellId) ?? [];
+        existing.push(node);
+        nodesByCellId.set(cellId, existing);
+        placementByNodeId.set(node.id, {
+          targetBandId: band.id,
+          targetBandOrder: band.bandOrder,
+          targetColumnId: spillColumn.id,
+          targetColumnOrder: spillColumn.columnOrder,
+          classification: resolveNodeClassification(node),
+          placementMode: resolvePlacementMode(node, spillColumn.slotKind),
+          slotKind: spillColumn.slotKind,
+          slotOrderWithinBand: spillColumn.slotOrderWithinBand
+        });
+      });
+    }
   }
 
   const cells: ServiceBlueprintMiddleCell[] = [];
   const placements: ServiceBlueprintNodePlacement[] = [];
 
-  for (const column of orderedColumns) {
+  for (const column of columns) {
     for (const laneShell of laneShells) {
       const cellId = `${laneShell.id}__cell__${column.id}`;
       const nodeIds = (nodesByCellId.get(cellId) ?? [])
@@ -781,16 +1008,20 @@ function buildCellsAndPlacements(
         .map((node) => node.id);
       const cell: ServiceBlueprintMiddleCell = {
         id: cellId,
-        bandId: column.id,
+        columnId: column.id,
+        bandId: column.bandId,
         laneShellId: laneShell.id,
         laneId: laneShell.laneId,
         bandLabel: column.label,
-        bandKind: column.kind,
+        bandKind: column.bandKind,
+        bandOrder: column.bandOrder,
         rowOrder: laneShell.index,
-        columnOrder: column.order,
+        columnOrder: column.columnOrder,
+        slotKind: column.slotKind,
+        slotOrderWithinBand: column.slotOrderWithinBand,
         nodeIds,
         anchorNodeId: `${cellId}__anchor`,
-        sharedWidthGroup: column.kind === "parking"
+        sharedWidthGroup: column.slotKind === "parking"
           ? "service_blueprint:column:parking"
           : "service_blueprint:column:semantic",
         sharedHeightGroup: laneShell.laneId === "lane:99:ungrouped"
@@ -809,9 +1040,14 @@ function buildCellsAndPlacements(
           nodeId,
           laneShellId: laneShell.id,
           cellId: cell.id,
-          bandId: column.id,
+          columnId: placement.targetColumnId,
+          bandId: placement.targetBandId,
+          bandOrder: placement.targetBandOrder,
           classification: placement.classification,
           placementMode: placement.placementMode,
+          columnOrder: placement.targetColumnOrder,
+          slotKind: placement.slotKind,
+          slotOrderWithinBand: placement.slotOrderWithinBand,
           order
         });
       });
@@ -819,6 +1055,7 @@ function buildCellsAndPlacements(
   }
 
   return {
+    columns,
     cells,
     placements
   };
@@ -877,30 +1114,23 @@ export function buildServiceBlueprintMiddleLayer(
     anchorPositionSet
   } = deriveActionBandPositions(model, actionNodes, nodeMap, diagnostics);
   const bands = buildBands(positionByNodeId, anchorPositionSet);
-  const parkingBands = buildParkingBands(
-    model,
-    nodeMap,
-    laneShells,
-    parkedNodeIds,
-    bands.length
-  );
-  const { cells, placements } = buildCellsAndPlacements(
+  const { columns, cells, placements } = buildCellsAndPlacements(
     model,
     nodeMap,
     laneShells,
     bands,
-    parkingBands,
     positionByNodeId,
-    parkedNodeIds
+    parkedNodeIds,
+    diagnostics
   );
   const semanticEdges = buildMergedSemanticEdges(model.edges);
   const laneGuides = buildLaneGuides(laneShells);
 
   return {
     bands,
+    columns,
     laneShells,
     laneGuides,
-    parkingBands,
     cells,
     placements,
     edges: semanticEdges,

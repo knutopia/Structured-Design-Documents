@@ -48,9 +48,13 @@ export type ServiceBlueprintItemMetadata =
       laneShellId: string;
       bandId: string;
       bandLabel: string;
-      bandKind: "anchor" | "interstitial" | "sidecar" | "parking";
+      bandKind: "anchor" | "interstitial" | "parking";
+      bandOrder?: number;
+      columnId?: string;
       rowOrder: number;
       columnOrder: number;
+      slotKind?: "primary" | "spill" | "parking";
+      slotOrderWithinBand?: number;
     }
   | {
       kind: "semantic_node";

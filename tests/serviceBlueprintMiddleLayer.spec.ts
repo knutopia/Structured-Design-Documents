@@ -39,7 +39,7 @@ async function buildMiddleLayer(sourceText: string) {
 }
 
 describe("service_blueprint middle layer", () => {
-  it("derives A1 / I1 / A2 / R* for the sample slice and keeps PL-020 in the policy A1 cell", async () => {
+  it("anchors proof-case support nodes to A1 and realizes D-020 in an A1 spill slot", async () => {
     const middle = await buildMiddleLayer(`
 SDD-TEXT 0.1
 
@@ -90,7 +90,48 @@ Policy PL-020 "Retention Policy"
 END
 `);
 
-    expect(middle.bands.map((band) => band.label)).toEqual(["A1", "I1", "A2", "R*"]);
+    expect(middle.bands.map((band) => band.label)).toEqual(["A1", "I1", "A2"]);
+    expect(middle.columns.map((column) => ({
+      label: column.label,
+      bandId: column.bandId,
+      bandKind: column.bandKind,
+      columnOrder: column.columnOrder,
+      slotKind: column.slotKind,
+      slotOrderWithinBand: column.slotOrderWithinBand
+    }))).toEqual([
+      {
+        label: "A1",
+        bandId: "band:anchor:1",
+        bandKind: "anchor",
+        columnOrder: 0,
+        slotKind: "primary",
+        slotOrderWithinBand: 0
+      },
+      {
+        label: "I1",
+        bandId: "band:interstitial:1",
+        bandKind: "interstitial",
+        columnOrder: 1,
+        slotKind: "primary",
+        slotOrderWithinBand: 0
+      },
+      {
+        label: "A2",
+        bandId: "band:anchor:2",
+        bandKind: "anchor",
+        columnOrder: 2,
+        slotKind: "primary",
+        slotOrderWithinBand: 0
+      },
+      {
+        label: "A1",
+        bandId: "band:anchor:1",
+        bandKind: "anchor",
+        columnOrder: 3,
+        slotKind: "spill",
+        slotOrderWithinBand: 1
+      }
+    ]);
     expect(middle.cells).toHaveLength(24);
 
     const cellByNodeId = new Map(
@@ -104,17 +145,27 @@ END
     expect(cellByNodeId.get("J-021")?.bandLabel).toBe("A2");
     expect(cellByNodeId.get("PR-022")?.bandLabel).toBe("A2");
     expect(cellByNodeId.get("SA-022")?.bandLabel).toBe("A2");
-    expect(cellByNodeId.get("D-020")?.bandLabel).toBe("R*");
+    expect(cellByNodeId.get("D-020")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("D-020")?.slotKind).toBe("spill");
     expect(cellByNodeId.get("PL-020")?.bandLabel).toBe("A1");
+    expect(cellByNodeId.get("PL-020")?.slotKind).toBe("primary");
 
     const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
     expect(placementByNodeId.get("D-020")).toEqual(expect.objectContaining({
-      placementMode: "shared_right_rail",
-      classification: "shared_resource"
+      bandId: "band:anchor:1",
+      placementMode: "band_spill_support",
+      classification: "shared_resource",
+      columnOrder: 3,
+      slotKind: "spill",
+      slotOrderWithinBand: 1
     }));
     expect(placementByNodeId.get("PL-020")).toEqual(expect.objectContaining({
-      placementMode: "band_aligned_support",
-      classification: "band_support"
+      bandId: "band:anchor:1",
+      placementMode: "band_primary_support",
+      classification: "band_support",
+      columnOrder: 0,
+      slotKind: "primary",
+      slotOrderWithinBand: 0
     }));
 
     const mergedReadWrites = middle.edges.find((edge) => edge.id === "SA-020__reads_writes__D-020");
@@ -216,8 +267,9 @@ Process PR-301 "Offline Audit"
 END
 `);
 
-    expect(middle.parkingBands).toEqual([
+    expect(middle.columns.filter((column) => column.slotKind === "parking")).toEqual([
       expect.objectContaining({
+        id: "band:parking:lane:03:backstage:1",
         ownerLaneId: "lane:03:backstage",
         label: "P1"
       })

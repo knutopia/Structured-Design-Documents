@@ -164,11 +164,15 @@ describe("service_blueprint pre-routing artifacts", () => {
         kind: "cell",
         laneId: "lane:05:system",
         laneShellId: "lane:05:system__shell",
-        bandId: "band:sidecar:1",
-        bandLabel: "R*",
-        bandKind: "sidecar",
+        bandId: "band:anchor:1",
+        bandLabel: "A1",
+        bandKind: "anchor",
+        bandOrder: 0,
+        columnId: "band:anchor:1:spill:1",
         rowOrder: 4,
-        columnOrder: 3
+        columnOrder: 3,
+        slotKind: "spill",
+        slotOrderWithinBand: 1
       }
     });
     expect(findNestedPositionedItem(resourceCell.children, "D-020")?.viewMetadata).toEqual({

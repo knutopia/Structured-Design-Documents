@@ -185,8 +185,12 @@ function buildCellViewMetadata(cell: ServiceBlueprintMiddleCell): ViewMetadata {
       bandId: cell.bandId,
       bandLabel: cell.bandLabel,
       bandKind: cell.bandKind,
+      bandOrder: cell.bandOrder,
+      columnId: cell.columnId,
       rowOrder: cell.rowOrder,
-      columnOrder: cell.columnOrder
+      columnOrder: cell.columnOrder,
+      slotKind: cell.slotKind,
+      slotOrderWithinBand: cell.slotOrderWithinBand
     }
   };
 }
@@ -199,13 +203,16 @@ function buildBandToken(bandLabel: string): string {
   return sanitizeToken(bandLabel);
 }
 
-function buildCellClasses(cell: Pick<ServiceBlueprintMiddleCell, "laneId" | "bandLabel" | "bandKind" | "columnOrder">): string[] {
+function buildCellClasses(
+  cell: Pick<ServiceBlueprintMiddleCell, "laneId" | "bandLabel" | "bandKind" | "columnOrder" | "slotKind">
+): string[] {
   return [
     "service_blueprint_cell",
     `lane-${buildLaneClassToken(cell.laneId)}`,
     `band-${buildBandToken(cell.bandLabel)}`,
     `column-${sanitizeToken(String(cell.columnOrder + 1))}`,
-    `cell-kind-${sanitizeToken(cell.bandKind)}`
+    `cell-kind-${sanitizeToken(cell.bandKind)}`,
+    `slot-kind-${sanitizeToken(cell.slotKind)}`
   ];
 }
 
@@ -367,7 +374,7 @@ function buildServiceBlueprintRenderContext(
       || left.id.localeCompare(right.id)
     )
     .map((cell) => buildCellContainer(cell, context));
-  const columnCount = [...middleLayer.bands, ...middleLayer.parkingBands].length;
+  const columnCount = middleLayer.columns.length;
   const rendererScene: RendererScene = {
     viewId: "service_blueprint",
     profileId,

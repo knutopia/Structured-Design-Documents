@@ -323,8 +323,12 @@ describe("staged service_blueprint", () => {
         bandId: "band:anchor:1",
         bandLabel: "A1",
         bandKind: "anchor",
+        bandOrder: 0,
+        columnId: "band:anchor:1",
         rowOrder: 0,
-        columnOrder: 0
+        columnOrder: 0,
+        slotKind: "primary",
+        slotOrderWithinBand: 0
       }
     });
     expect(customerNode.viewMetadata).toEqual({
@@ -343,13 +347,13 @@ describe("staged service_blueprint", () => {
       "lane:01:customer__shell__cell__band:anchor:1",
       "lane:01:customer__shell__cell__band:interstitial:1",
       "lane:01:customer__shell__cell__band:anchor:2",
-      "lane:01:customer__shell__cell__band:sidecar:1"
+      "lane:01:customer__shell__cell__band:anchor:1:spill:1"
     ]);
     expect(findRootCells(rendererScene).slice(4, 8).map((child) => child.id)).toEqual([
       "lane:02:frontstage__shell__cell__band:anchor:1",
       "lane:02:frontstage__shell__cell__band:interstitial:1",
       "lane:02:frontstage__shell__cell__band:anchor:2",
-      "lane:02:frontstage__shell__cell__band:sidecar:1"
+      "lane:02:frontstage__shell__cell__band:anchor:1:spill:1"
     ]);
   });
 
@@ -922,7 +926,6 @@ END
     );
     expect(ungroupedCells.map((child) => child.id)).toEqual([
       "lane:99:ungrouped__shell__cell__band:anchor:1",
-      "lane:99:ungrouped__shell__cell__band:sidecar:1",
       "lane:99:ungrouped__shell__cell__band:parking:lane:99:ungrouped:1"
     ]);
     expect(findNestedRendererItem(rendererScene.root.children, "PR-100")).toBeDefined();
