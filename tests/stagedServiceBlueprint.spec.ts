@@ -26,6 +26,8 @@ import {
 } from "../src/renderer/staged/macroLayout.js";
 import { buildServiceBlueprintMiddleLayer } from "../src/renderer/staged/serviceBlueprintMiddleLayer.js";
 import { buildServiceBlueprintRoutingStages } from "../src/renderer/staged/serviceBlueprintRouting.js";
+import { createTextMeasurementService } from "../src/renderer/staged/textMeasurement.js";
+import { getRendererTheme } from "../src/renderer/staged/theme.js";
 import { expectRendererStageSnapshot, expectRendererStageTextSnapshot } from "./rendererStageSnapshotHarness.js";
 import {
   collectVisibleItemBoxes,
@@ -221,10 +223,20 @@ function findLaneCells(
   });
 }
 
+function measureSeparatorTitleStartX(scene: PositionedScene, separatorTitleText: string): number {
+  const theme = getRendererTheme(scene.themeId, "measure");
+  const edgeLabelStyle = theme.textStyles.edge_label;
+  const measureText = createTextMeasurementService(theme.fontAssets.measurement);
+  return 24
+    + measureText.measureText(separatorTitleText, edgeLabelStyle)
+    + measureText.measureText(" ", edgeLabelStyle);
+}
+
 function expectLaneGuideLayout(
   scene: PositionedScene,
   laneClass: string,
-  hasSeparator: boolean
+  hasSeparator: boolean,
+  separatorTitleText?: string
 ): void {
   const laneCells = findLaneCells(scene, laneClass);
   expect(laneCells.length).toBeGreaterThan(0);
@@ -238,14 +250,32 @@ function expectLaneGuideLayout(
 
   const separatorId = `${laneClass}__separator`;
   const separator = scene.decorations.find((candidate) => candidate.kind === "line" && candidate.id === separatorId);
+  const separatorTitleId = `${laneClass}__separator_title`;
+  const separatorTitle = scene.decorations.find((candidate) =>
+    candidate.kind === "text" && candidate.id === separatorTitleId
+  );
   if (!hasSeparator) {
     expect(separator).toBeUndefined();
+    expect(separatorTitle).toBeUndefined();
     return;
   }
 
   const resolvedSeparator = findLineDecoration(scene.decorations, separatorId);
+  if (!separatorTitleText) {
+    expect(separatorTitle).toBeUndefined();
+  } else {
+    const resolvedSeparatorTitle = findTextDecoration(scene.decorations, separatorTitleId);
+    const theme = getRendererTheme(scene.themeId, "measure");
+    expect(resolvedSeparatorTitle.text).toBe(separatorTitleText);
+    expect(resolvedSeparatorTitle.textStyleRole).toBe("edge_label");
+    expect(resolvedSeparatorTitle.x).toBe(24);
+    expect(resolvedSeparatorTitle.y).toBe(maxY - theme.textStyles.edge_label.fontSize);
+  }
+
   expect(resolvedSeparator.from).toEqual({
-    x: 24,
+    x: separatorTitleText
+      ? measureSeparatorTitleStartX(scene, separatorTitleText)
+      : 24,
     y: maxY
   });
   expect(resolvedSeparator.to).toEqual({
@@ -418,11 +448,19 @@ describe("staged service_blueprint", () => {
 
     [routedStages.step2.positionedScene, routedStages.step3.positionedScene, routedStages.final.positionedScene]
       .forEach((scene) => {
-        expectLaneGuideLayout(scene, "lane-customer", true);
-        expectLaneGuideLayout(scene, "lane-frontstage", true);
+        expectLaneGuideLayout(scene, "lane-customer", true, "Line of Interaction");
+        expectLaneGuideLayout(scene, "lane-frontstage", true, "Line of Visibility");
         expectLaneGuideLayout(scene, "lane-backstage", true);
         expectLaneGuideLayout(scene, "lane-system", false);
       });
+    const interactionLine = findLineDecoration(rendered.positionedScene.decorations, "lane-customer__separator");
+    const visibilityLine = findLineDecoration(rendered.positionedScene.decorations, "lane-frontstage__separator");
+    expect(rendered.svg).toContain(
+      `<text class="scene-text text-role-edge_label block-kind-text" x="24" y="${interactionLine.from.y}">`
+    );
+    expect(rendered.svg).toContain(
+      `<text class="scene-text text-role-edge_label block-kind-text" x="24" y="${visibilityLine.from.y}">`
+    );
 
     for (const edge of rendered.positionedScene.edges.filter((candidate) =>
       candidate.classes.includes("service_blueprint_semantic_edge")
@@ -460,7 +498,6 @@ describe("staged service_blueprint", () => {
     expect(realizedByEdge.from.x).toBe(realizedByEdge.to.x);
     expect(realizedByEdge.from.y).toBeLessThan(realizedByEdge.to.y);
     const realizedByLabel = findEdgeLabel(realizedByEdge);
-    const interactionLine = findLineDecoration(rendered.positionedScene.decorations, "lane-customer__separator");
     const pr020 = findNestedPositionedItem(rendered.positionedScene.root.children, "PR-020");
     if (!pr020) {
       throw new Error("Could not resolve PR-020 for realized-by label assertions.");
@@ -847,8 +884,8 @@ describe("staged service_blueprint", () => {
       context.authorOrderByNodeId
     );
 
-    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-customer", true);
-    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-frontstage", true);
+    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-customer", true, "Line of Interaction");
+    expectLaneGuideLayout(routedStages.final.positionedScene, "lane-frontstage", true, "Line of Visibility");
     expectLaneGuideLayout(routedStages.final.positionedScene, "lane-backstage", true);
     expectLaneGuideLayout(routedStages.final.positionedScene, "lane-system", false);
 

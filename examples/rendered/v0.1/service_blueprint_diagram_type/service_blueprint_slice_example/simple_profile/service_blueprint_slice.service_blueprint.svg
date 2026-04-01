@@ -33,7 +33,7 @@
     .view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }
     .view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }
     .view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: #94a3b8; stroke-dasharray: 6 4; }
-    .view-service_blueprint .service_blueprint_lane_title .scene-text { fill: #475569; }
+    .view-service_blueprint .service_blueprint_lane_title .scene-text, .view-service_blueprint .service_blueprint_separator_title .scene-text { fill: #475569; }
     .text-role-badge { font-family: 'Public Sans'; font-size: 12px; font-weight: 600; }
     .text-role-edge_label { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; }
     .text-role-label { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
@@ -125,10 +125,10 @@
       <rect class="scene-container__chrome" x="948" y="588" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-decoration-lane-customer__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_interaction lane-customer" data-decoration-id="lane-customer__separator">
-      <line class="scene-decoration__line" x1="24" y1="116" x2="1196" y2="116"/>
+      <line class="scene-decoration__line" x1="127.584" y1="116" x2="1196" y2="116"/>
     </g>
     <g id="scene-decoration-lane-frontstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_visibility lane-frontstage" data-decoration-id="lane-frontstage__separator">
-      <line class="scene-decoration__line" x1="24" y1="228" x2="1196" y2="228"/>
+      <line class="scene-decoration__line" x1="115.236" y1="228" x2="1196" y2="228"/>
     </g>
     <g id="scene-decoration-lane-backstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_internal_interaction lane-backstage" data-decoration-id="lane-backstage__separator">
       <line class="scene-decoration__line" x1="24" y1="340" x2="1196" y2="340"/>
@@ -223,9 +223,19 @@
           <tspan x="24" dy="0">customer</tspan>
         </text>
     </g>
+    <g id="scene-decoration-lane-customer__separator_title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_separator_title line_of_interaction lane-customer" data-decoration-id="lane-customer__separator_title">
+      <text class="scene-text text-role-edge_label block-kind-text" x="24" y="116">
+          <tspan x="24" dy="0">Line of Interaction</tspan>
+        </text>
+    </g>
     <g id="scene-decoration-lane-frontstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-frontstage" data-decoration-id="lane-frontstage__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="187">
           <tspan x="24" dy="0">frontstage</tspan>
+        </text>
+    </g>
+    <g id="scene-decoration-lane-frontstage__separator_title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_separator_title line_of_visibility lane-frontstage" data-decoration-id="lane-frontstage__separator_title">
+      <text class="scene-text text-role-edge_label block-kind-text" x="24" y="228">
+          <tspan x="24" dy="0">Line of Visibility</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-backstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-backstage" data-decoration-id="lane-backstage__title">

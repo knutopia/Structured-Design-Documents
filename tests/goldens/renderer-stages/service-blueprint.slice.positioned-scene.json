@@ -2637,6 +2637,20 @@
       "textStyleRole": "label"
     },
     {
+      "kind": "text",
+      "id": "lane-customer__separator_title",
+      "classes": [
+        "service_blueprint_separator_title",
+        "line_of_interaction",
+        "lane-customer"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 104,
+      "text": "Line of Interaction",
+      "textStyleRole": "edge_label"
+    },
+    {
       "kind": "line",
       "id": "lane-customer__separator",
       "classes": [
@@ -2646,7 +2660,7 @@
       ],
       "paintGroup": "chrome",
       "from": {
-        "x": 24,
+        "x": 127.584,
         "y": 116
       },
       "to": {
@@ -2668,6 +2682,20 @@
       "textStyleRole": "label"
     },
     {
+      "kind": "text",
+      "id": "lane-frontstage__separator_title",
+      "classes": [
+        "service_blueprint_separator_title",
+        "line_of_visibility",
+        "lane-frontstage"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 216,
+      "text": "Line of Visibility",
+      "textStyleRole": "edge_label"
+    },
+    {
       "kind": "line",
       "id": "lane-frontstage__separator",
       "classes": [
@@ -2677,7 +2705,7 @@
       ],
       "paintGroup": "chrome",
       "from": {
-        "x": 24,
+        "x": 115.23599999999999,
         "y": 228
       },
       "to": {

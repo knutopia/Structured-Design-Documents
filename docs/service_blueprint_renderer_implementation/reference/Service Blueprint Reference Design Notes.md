@@ -33,6 +33,7 @@ Support nodes may also be realized in auxiliary spill slots owned by a semantic 
 ## Row, Column, Node Appearance
 
 - Rows and Columns are invisible. (No per-row / per-column containers shown.)
+- The "Line of Interaction" and "Line of Visibility" separators have left-aligned titles in the reference layout. In the staged renderer, those titles should use small non-bold connector-label typography rather than the bold lettering seen in the older reference artwork.
 
 - All rows have the same height. All columns have the same width.
 

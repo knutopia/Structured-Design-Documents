@@ -157,6 +157,9 @@ describe("rendered example corpus", () => {
       const defaultSvg = await readFile(outputPaths.svgOutputPath, "utf8");
       expect(defaultSvg).toContain('class="staged-svg');
       expect(defaultSvg).toContain("Submit Claim");
+      expect(defaultSvg).toContain("Line of Interaction");
+      expect(defaultSvg).toContain("Line of Visibility");
+      expect(defaultSvg).not.toContain("Line of Internal Interaction");
 
       const legacySvgPath = getRenderedCorpusPreviewOutputPath(
         bundle,

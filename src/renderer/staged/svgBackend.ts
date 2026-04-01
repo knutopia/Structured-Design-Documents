@@ -581,7 +581,7 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
       `.view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }`,
       `.view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }`,
       `.view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: ${paint.palette.containerStroke}; stroke-dasharray: 6 4; }`,
-      `.view-service_blueprint .service_blueprint_lane_title .scene-text { fill: ${paint.palette.secondaryText}; }`
+      `.view-service_blueprint .service_blueprint_lane_title .scene-text, .view-service_blueprint .service_blueprint_separator_title .scene-text { fill: ${paint.palette.secondaryText}; }`
     );
   }
 
