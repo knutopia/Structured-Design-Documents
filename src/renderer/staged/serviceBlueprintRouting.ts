@@ -367,11 +367,11 @@ function clonePositionedScene(scene: PositionedScene): PositionedScene {
 }
 
 function isServiceBlueprintCell(item: PositionedItem): item is PositionedContainer {
-  return item.kind === "container" && item.classes.includes("service_blueprint_cell");
+  return item.kind === "container" && item.viewMetadata?.serviceBlueprint?.kind === "cell";
 }
 
 function isSemanticPositionedNode(item: PositionedItem): item is PositionedNode {
-  return item.kind === "node" && item.classes.includes("semantic_node");
+  return item.kind === "node" && item.viewMetadata?.serviceBlueprint?.kind === "semantic_node";
 }
 
 function translatePositionedItem(item: PositionedItem, dx: number, dy: number): void {

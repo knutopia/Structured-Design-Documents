@@ -69,6 +69,25 @@ function findContainerChildIds(
   throw new Error(`Could not find renderer-scene container "${containerId}".`);
 }
 
+function findRendererContainer(scene: RendererScene, id: string): SceneContainer {
+  const queue: Array<SceneContainer | SceneNode> = [scene.root];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current || current.kind !== "container") {
+      continue;
+    }
+
+    if (current.id === id) {
+      return current;
+    }
+
+    queue.push(...current.children);
+  }
+
+  throw new Error(`Could not find renderer-scene container "${id}".`);
+}
+
 function getTerminalSegmentLength(edge: PositionedEdge): number {
   const points = edge.route.points;
   const end = points[points.length - 1];
@@ -414,6 +433,11 @@ describe("staged ui_contracts", () => {
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-010", "P-011"]);
+    expect(findRendererContainer(rendererScene, "P-010").layout).toEqual(expect.objectContaining({
+      strategy: "grid",
+      columns: 2,
+      crossAlignment: "stretch"
+    }));
     expect(findContainerChildIds(rendererScene, "P-010")).toEqual(["view_state_graph:P-010", "C-010"]);
     expect(rendered.svg).not.toContain('class="scene-port');
     expect(rendered.svg).not.toContain("ViewState: Billing Editing");
@@ -470,6 +494,11 @@ describe("staged ui_contracts", () => {
     const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "recommended");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(findRendererContainer(rendererScene, "P-060").layout).toEqual(expect.objectContaining({
+      strategy: "grid",
+      columns: 2,
+      crossAlignment: "stretch"
+    }));
     expect(rendererScene.root.layout).toEqual(expect.objectContaining({
       strategy: "stack",
       direction: "vertical",

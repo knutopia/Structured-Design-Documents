@@ -1,6 +1,7 @@
 import type {
   PositionedContainer,
   PositionedDecoration,
+  PositionedItem,
   PositionedScene
 } from "./contracts.js";
 import type {
@@ -24,14 +25,16 @@ function buildLaneClassToken(guide: Pick<ServiceBlueprintLaneGuide, "label">): s
   return `lane-${sanitizeToken(guide.label)}`;
 }
 
+function isServiceBlueprintCell(item: PositionedItem): item is PositionedContainer {
+  return item.kind === "container" && item.viewMetadata?.serviceBlueprint?.kind === "cell";
+}
+
 function buildPositionedCellMap(
   scene: PositionedScene
 ): ReadonlyMap<string, PositionedContainer> {
   return new Map(
     scene.root.children
-      .filter((child): child is PositionedContainer =>
-        child.kind === "container" && child.classes.includes("service_blueprint_cell")
-      )
+      .filter(isServiceBlueprintCell)
       .map((child) => [child.id, child] as const)
   );
 }

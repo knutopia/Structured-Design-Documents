@@ -1,4 +1,4 @@
-# Service Blueprint Typed Scene Metadata Migration
+# [Done] Service Blueprint Typed Scene Metadata Migration
 
 ## Purpose
 
@@ -115,7 +115,7 @@ Primary files:
 - `src/renderer/staged/microLayout.ts`
 - `src/renderer/staged/macroLayout.ts`
 
-### 2. Populate `service_blueprint` metadata at scene build time
+### [Done] 2. Populate `service_blueprint` metadata at scene build time
 
 When building the `service_blueprint` renderer scene:
 
@@ -126,7 +126,7 @@ Primary file:
 
 - `src/renderer/staged/serviceBlueprint.ts`
 
-### 3. Move blueprint-only post-layout work out of shared layout branching
+### [Done] 3. Move blueprint-only post-layout work out of shared layout branching
 
 Move `service_blueprint`-only post-layout normalization and validation out of
 shared `macroLayout` control flow and into an explicit
@@ -140,7 +140,7 @@ Primary files:
 - `src/renderer/staged/macroLayout.ts`
 - `src/renderer/staged/serviceBlueprint.ts`
 
-### 4. Switch `service_blueprint` structural readers to typed metadata
+### [Done] 4. Switch `service_blueprint` structural readers to typed metadata
 
 Update service-blueprint helpers so structural identification uses typed
 metadata rather than class-token matching.
@@ -157,7 +157,7 @@ Primary files:
 - `src/renderer/staged/serviceBlueprintRouting.ts`
 - `src/renderer/staged/serviceBlueprintDecorations.ts`
 
-### 5. Replace the `ui_contracts` class backdoor with a role-based helper
+### [Done] 5. Replace the `ui_contracts` class backdoor with a role-based helper
 
 Update `ui_contracts` place-layout detection to use a helper such as
 `isTransitionGraphContainer(item)` based on:
@@ -171,7 +171,7 @@ Primary file:
 
 - `src/renderer/staged/uiContracts.ts`
 
-### 6. Remove old structural backdoors after typed behavior is verified
+### [Done] 6. Remove old structural backdoors after typed behavior is verified
 
 Only after the typed path is fully wired and verified:
 

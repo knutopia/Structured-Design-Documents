@@ -1152,11 +1152,11 @@ function buildSharedRouteOffsets(edges: readonly MeasuredEdge[]): Map<string, nu
 }
 
 function isServiceBlueprintCell(item: PositionedItem): item is PositionedContainer {
-  return item.kind === "container" && item.classes.includes("service_blueprint_cell");
+  return item.kind === "container" && item.viewMetadata?.serviceBlueprint?.kind === "cell";
 }
 
 function isSemanticPositionedNode(item: PositionedItem): item is PositionedNode {
-  return item.kind === "node" && item.classes.includes("semantic_node");
+  return item.kind === "node" && item.viewMetadata?.serviceBlueprint?.kind === "semantic_node";
 }
 
 function collectNestedSemanticNodes(children: PositionedItem[]): PositionedNode[] {
@@ -1190,7 +1190,7 @@ function getServiceBlueprintCellContentBounds(cell: PositionedContainer): {
   };
 }
 
-function normalizeServiceBlueprintCellContents(root: PositionedContainer): void {
+export function normalizeServiceBlueprintCellContents(root: PositionedContainer): void {
   const laneCells = root.children.filter(isServiceBlueprintCell);
 
   for (const cell of laneCells) {
@@ -1219,7 +1219,7 @@ function normalizeServiceBlueprintCellContents(root: PositionedContainer): void 
   }
 }
 
-function validateServiceBlueprintCellContents(
+export function validateServiceBlueprintCellContents(
   root: PositionedContainer,
   diagnostics: RendererDiagnostic[]
 ): void {
@@ -1382,10 +1382,6 @@ async function layoutMeasuredSceneRoot(measuredScene: MeasuredScene): Promise<Po
   }
 
   const root = rootResult.item;
-  if (measuredScene.viewId === "service_blueprint") {
-    normalizeServiceBlueprintCellContents(root);
-    validateServiceBlueprintCellContents(root, context.diagnostics);
-  }
 
   return {
     root,
@@ -1395,8 +1391,17 @@ async function layoutMeasuredSceneRoot(measuredScene: MeasuredScene): Promise<Po
   };
 }
 
-export async function positionMeasuredSceneBeforeRouting(measuredScene: MeasuredScene): Promise<PositionedScene> {
+export type PositionedScenePostLayoutStep = (
+  root: PositionedContainer,
+  diagnostics: RendererDiagnostic[]
+) => void;
+
+export async function positionMeasuredSceneBeforeRouting(
+  measuredScene: MeasuredScene,
+  postLayoutStep?: PositionedScenePostLayoutStep
+): Promise<PositionedScene> {
   const laidOut = await layoutMeasuredSceneRoot(measuredScene);
+  postLayoutStep?.(laidOut.root, laidOut.diagnostics);
 
   return {
     viewId: measuredScene.viewId,

@@ -20,6 +20,10 @@ import {
   renderServiceBlueprintStagedSvg
 } from "../src/renderer/staged/serviceBlueprint.js";
 import { measureScene, positionSceneBeforeRouting } from "../src/renderer/staged/pipeline.js";
+import {
+  normalizeServiceBlueprintCellContents,
+  validateServiceBlueprintCellContents
+} from "../src/renderer/staged/macroLayout.js";
 import { buildServiceBlueprintMiddleLayer } from "../src/renderer/staged/serviceBlueprintMiddleLayer.js";
 import { buildServiceBlueprintRoutingStages } from "../src/renderer/staged/serviceBlueprintRouting.js";
 import { expectRendererStageSnapshot, expectRendererStageTextSnapshot } from "./rendererStageSnapshotHarness.js";
@@ -77,6 +81,8 @@ async function buildServiceBlueprintRoutingContext(
   );
   const measuredScene = measureScene(rendererScene);
   const positionedScene = await positionSceneBeforeRouting(measuredScene);
+  normalizeServiceBlueprintCellContents(positionedScene.root);
+  validateServiceBlueprintCellContents(positionedScene.root, positionedScene.diagnostics);
 
   return {
     ...context,
@@ -112,11 +118,26 @@ function findNestedPositionedItem(children: PositionedItem[], id: string): Posit
   return undefined;
 }
 
+function stripViewMetadata<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((entry) => stripViewMetadata(entry)) as T;
+  }
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .filter(([key]) => key !== "viewMetadata")
+      .map(([key, nested]) => [key, stripViewMetadata(nested)] as const)
+  ) as T;
+}
+
 function findRootCells(
   scene: { root: { children: PositionedItem[] } }
 ): Array<Extract<PositionedItem, { kind: "container" }>> {
   return scene.root.children.filter((child): child is Extract<PositionedItem, { kind: "container" }> =>
-    child.kind === "container" && child.classes.includes("service_blueprint_cell")
+    child.kind === "container" && child.viewMetadata?.serviceBlueprint?.kind === "cell"
   );
 }
 function findNestedRendererItem(
@@ -181,7 +202,11 @@ function findLaneCells(
   scene: PositionedScene,
   laneClass: string
 ): Array<Extract<PositionedItem, { kind: "container" }>> {
-  return findRootCells(scene).filter((cell) => cell.classes.includes(laneClass));
+  const laneSuffix = laneClass.replace(/^lane-/, "");
+  return findRootCells(scene).filter((cell) => {
+    const serviceBlueprint = cell.viewMetadata?.serviceBlueprint;
+    return serviceBlueprint?.kind === "cell" && serviceBlueprint.laneId.endsWith(`:${laneSuffix}`);
+  });
 }
 
 function expectLaneGuideLayout(
@@ -278,6 +303,36 @@ describe("staged service_blueprint", () => {
       context.view,
       "recommended"
     );
+    const customerCell = findRootCells(rendererScene).find((cell) =>
+      cell.id === "lane:01:customer__shell__cell__band:anchor:1"
+    );
+    const customerNode = customerCell ? findNestedRendererItem(customerCell.children, "J-020") : undefined;
+
+    if (!customerCell || customerCell.kind !== "container") {
+      throw new Error("Could not resolve the customer proof-case cell.");
+    }
+    if (!customerNode || customerNode.kind !== "node") {
+      throw new Error("Could not resolve the customer proof-case node.");
+    }
+
+    expect(customerCell.viewMetadata).toEqual({
+      serviceBlueprint: {
+        kind: "cell",
+        laneId: "lane:01:customer",
+        laneShellId: "lane:01:customer__shell",
+        bandId: "band:anchor:1",
+        bandLabel: "A1",
+        bandKind: "anchor",
+        rowOrder: 0,
+        columnOrder: 0
+      }
+    });
+    expect(customerNode.viewMetadata).toEqual({
+      serviceBlueprint: {
+        kind: "semantic_node",
+        cellId: "lane:01:customer__shell__cell__band:anchor:1"
+      }
+    });
     expect(rendererScene.root.layout).toEqual(expect.objectContaining({
       strategy: "grid",
       columns: 4,
@@ -661,13 +716,13 @@ describe("staged service_blueprint", () => {
       "recommended"
     );
 
-    await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", rendererScene);
-    await expectRendererStageSnapshot("service-blueprint.slice.measured-scene.json", measuredScene);
-    await expectRendererStageSnapshot("service-blueprint.slice.positioned-scene.json", rendered.positionedScene);
+    await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", stripViewMetadata(rendererScene));
+    await expectRendererStageSnapshot("service-blueprint.slice.measured-scene.json", stripViewMetadata(measuredScene));
+    await expectRendererStageSnapshot("service-blueprint.slice.positioned-scene.json", stripViewMetadata(rendered.positionedScene));
     await expectRendererStageTextSnapshot("service-blueprint.slice.svg", rendered.svg);
-    await expectRendererStageSnapshot("service-blueprint.slice.step-2.positioned-scene.json", routingDebug.step2PositionedScene);
+    await expectRendererStageSnapshot("service-blueprint.slice.step-2.positioned-scene.json", stripViewMetadata(routingDebug.step2PositionedScene));
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-2.svg", routingDebug.step2Svg);
-    await expectRendererStageSnapshot("service-blueprint.slice.step-3.positioned-scene.json", routingDebug.step3PositionedScene);
+    await expectRendererStageSnapshot("service-blueprint.slice.step-3.positioned-scene.json", stripViewMetadata(routingDebug.step3PositionedScene));
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-3.svg", routingDebug.step3Svg);
   });
 
@@ -854,10 +909,12 @@ END
       "renderer.scene.service_blueprint_ungrouped_lane"
     );
     const ungroupedCells = rendererScene.root.children.filter(
-      (child): child is Extract<RendererScene["root"]["children"][number], { kind: "container" }> =>
-        child.kind === "container"
-        && child.classes.includes("service_blueprint_cell")
-        && child.classes.includes("lane-ungrouped")
+      (child): child is Extract<RendererScene["root"]["children"][number], { kind: "container" }> => {
+        const serviceBlueprint = child.kind === "container" ? child.viewMetadata?.serviceBlueprint : undefined;
+        return child.kind === "container"
+          && serviceBlueprint?.kind === "cell"
+          && serviceBlueprint.laneId.endsWith(":ungrouped");
+      }
     );
     expect(ungroupedCells.map((child) => child.id)).toEqual([
       "lane:99:ungrouped__shell__cell__band:anchor:1",

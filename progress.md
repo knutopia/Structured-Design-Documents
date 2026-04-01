@@ -16,6 +16,7 @@
 -removed orphaned styling
 -integrated lane titles and separators into scene contract
 -discovered missing merge for label branch - corrected
+-refactored service_blueprint renderer for structural semantics to no longer depend on  class tokens or `viewId` branches
 
 ## Mon 3-30-26
 

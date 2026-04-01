@@ -15,6 +15,7 @@ import type {
   SceneEdge,
   SceneItem,
   SceneNode,
+  ViewMetadata,
   WidthPolicy
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
@@ -29,9 +30,13 @@ import { buildServiceBlueprintRoutingStages } from "./serviceBlueprintRouting.js
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import {
   measureScene,
-  positionSceneBeforeRouting,
   type StagedRendererPipelineResult
 } from "./pipeline.js";
+import {
+  normalizeServiceBlueprintCellContents,
+  positionMeasuredSceneBeforeRouting,
+  validateServiceBlueprintCellContents
+} from "./macroLayout.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
@@ -148,15 +153,42 @@ function buildNodeClasses(node: ServiceBlueprintRenderNode, extraClasses: string
   ];
 }
 
-function buildBlueprintNode(node: ServiceBlueprintRenderNode, extraClasses: string[] = []): SceneNode {
-  return buildCardNode({
-    id: node.id,
-    role: node.type.toLowerCase(),
-    classes: buildNodeClasses(node, extraClasses),
-    widthPolicy: buildNodeWidthPolicy(node.type),
-    content: buildContentBlocksFromLabelLines(`${node.id}__content`, node.labelLines),
-    ports: buildServiceBlueprintNodePorts()
-  });
+function buildBlueprintNode(
+  node: ServiceBlueprintRenderNode,
+  cell: ServiceBlueprintMiddleCell,
+  extraClasses: string[] = []
+): SceneNode {
+  return {
+    ...buildCardNode({
+      id: node.id,
+      role: node.type.toLowerCase(),
+      classes: buildNodeClasses(node, extraClasses),
+      widthPolicy: buildNodeWidthPolicy(node.type),
+      content: buildContentBlocksFromLabelLines(`${node.id}__content`, node.labelLines),
+      ports: buildServiceBlueprintNodePorts()
+    }),
+    viewMetadata: {
+      serviceBlueprint: {
+        kind: "semantic_node",
+        cellId: cell.id
+      }
+    }
+  };
+}
+
+function buildCellViewMetadata(cell: ServiceBlueprintMiddleCell): ViewMetadata {
+  return {
+    serviceBlueprint: {
+      kind: "cell",
+      laneId: cell.laneId,
+      laneShellId: cell.laneShellId,
+      bandId: cell.bandId,
+      bandLabel: cell.bandLabel,
+      bandKind: cell.bandKind,
+      rowOrder: cell.rowOrder,
+      columnOrder: cell.columnOrder
+    }
+  };
 }
 
 function buildLaneClassToken(laneId: string): string {
@@ -186,7 +218,7 @@ function buildCellContainer(
     .map((nodeId) => context.renderNodesById.get(nodeId))
     .filter((node): node is ServiceBlueprintRenderNode => node !== undefined)
     .sort((left, right) => left.authorOrder - right.authorOrder || left.id.localeCompare(right.id))
-    .map((node) => buildBlueprintNode(node, cellClasses));
+    .map((node) => buildBlueprintNode(node, cell, cellClasses));
   const children: SceneItem[] = [...semanticNodes];
 
   return {
@@ -195,6 +227,7 @@ function buildCellContainer(
     role: "service_blueprint_cell",
     primitive: "cluster",
     classes: cellClasses,
+    viewMetadata: buildCellViewMetadata(cell),
     layout: {
       strategy: "stack",
       direction: "vertical",
@@ -280,6 +313,14 @@ function buildSceneEdge(edge: ServiceBlueprintMiddleEdge): SceneEdge {
   };
 }
 
+function applyServiceBlueprintPostLayoutStep(
+  root: PositionedScene["root"],
+  diagnostics: RendererDiagnostic[]
+): void {
+  normalizeServiceBlueprintCellContents(root);
+  validateServiceBlueprintCellContents(root, diagnostics);
+}
+
 async function buildServiceBlueprintPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
@@ -294,10 +335,9 @@ async function buildServiceBlueprintPreRoutingPipeline(
 }> {
   const context = buildServiceBlueprintRenderContext(projection, graph, view, profileId, themeId);
   const measuredScene = measureScene(context.rendererScene);
-  const basePositionedScene = decorateServiceBlueprintPositionedScene(
-    await positionSceneBeforeRouting(measuredScene),
-    context.middleLayer
-  );
+  const positionedScene = await positionMeasuredSceneBeforeRouting(measuredScene);
+  applyServiceBlueprintPostLayoutStep(positionedScene.root, positionedScene.diagnostics);
+  const basePositionedScene = decorateServiceBlueprintPositionedScene(positionedScene, context.middleLayer);
 
   return {
     context,

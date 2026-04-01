@@ -74,7 +74,7 @@ function findRootCells(
   scene: { root: { children: PositionedItem[] } }
 ): Array<Extract<PositionedItem, { kind: "container" }>> {
   return scene.root.children.filter((child): child is Extract<PositionedItem, { kind: "container" }> =>
-    child.kind === "container" && child.classes.includes("service_blueprint_cell")
+    child.kind === "container" && child.viewMetadata?.serviceBlueprint?.kind === "cell"
   );
 }
 
@@ -157,6 +157,26 @@ describe("service_blueprint pre-routing artifacts", () => {
       findCellContainingNode(rendered.preRoutingPositionedScene, "SA-022")
     ];
     const resourceCell = findCellContainingNode(rendered.preRoutingPositionedScene, "D-020");
+
+    expect(resourceCell.classes).toContain("service_blueprint_cell");
+    expect(resourceCell.viewMetadata).toEqual({
+      serviceBlueprint: {
+        kind: "cell",
+        laneId: "lane:05:system",
+        laneShellId: "lane:05:system__shell",
+        bandId: "band:sidecar:1",
+        bandLabel: "R*",
+        bandKind: "sidecar",
+        rowOrder: 4,
+        columnOrder: 3
+      }
+    });
+    expect(findNestedPositionedItem(resourceCell.children, "D-020")?.viewMetadata).toEqual({
+      serviceBlueprint: {
+        kind: "semantic_node",
+        cellId: resourceCell.id
+      }
+    });
 
     expect(new Set(a1Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
     expect(new Set(i1Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);

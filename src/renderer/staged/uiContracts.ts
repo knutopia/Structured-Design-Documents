@@ -427,13 +427,13 @@ function buildComponentScene(
   return container;
 }
 
+function isTransitionGraphContainer(item: SceneItem): item is SceneContainer {
+  return item.kind === "container" && (item.role === "view_state_graph" || item.role === "state_graph");
+}
+
 function resolvePlaceLayout(children: SceneItem[]): SceneContainer["layout"] {
-  const hasTransitionGraph = children.some(
-    (child) => child.kind === "container" && child.classes.includes("transition_graph")
-  );
-  const hasNonTransitionSibling = children.some(
-    (child) => child.kind !== "container" || !child.classes.includes("transition_graph")
-  );
+  const hasTransitionGraph = children.some(isTransitionGraphContainer);
+  const hasNonTransitionSibling = children.some((child) => !isTransitionGraphContainer(child));
 
   if (hasTransitionGraph && hasNonTransitionSibling) {
     return {
