@@ -14,7 +14,8 @@
 
 -tackling service_blueprint layout authority alignment:
 -expanding service_blueprint placement rules to accomodate multi-node per slot handling
--created Service Blueprint Support Placement Implementation Plan
+-created, executed Service Blueprint Support Placement Implementation Plan
+-revisited to actually achieve adjacent spill columns
 
 ## Tue 3-31-26
 

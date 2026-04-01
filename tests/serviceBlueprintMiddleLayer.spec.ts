@@ -108,10 +108,18 @@ END
         slotOrderWithinBand: 0
       },
       {
+        label: "A1",
+        bandId: "band:anchor:1",
+        bandKind: "anchor",
+        columnOrder: 1,
+        slotKind: "spill",
+        slotOrderWithinBand: 1
+      },
+      {
         label: "I1",
         bandId: "band:interstitial:1",
         bandKind: "interstitial",
-        columnOrder: 1,
+        columnOrder: 2,
         slotKind: "primary",
         slotOrderWithinBand: 0
       },
@@ -119,17 +127,9 @@ END
         label: "A2",
         bandId: "band:anchor:2",
         bandKind: "anchor",
-        columnOrder: 2,
+        columnOrder: 3,
         slotKind: "primary",
         slotOrderWithinBand: 0
-      },
-      {
-        label: "A1",
-        bandId: "band:anchor:1",
-        bandKind: "anchor",
-        columnOrder: 3,
-        slotKind: "spill",
-        slotOrderWithinBand: 1
       }
     ]);
     expect(middle.cells).toHaveLength(24);
@@ -155,7 +155,7 @@ END
       bandId: "band:anchor:1",
       placementMode: "band_spill_support",
       classification: "shared_resource",
-      columnOrder: 3,
+      columnOrder: 1,
       slotKind: "spill",
       slotOrderWithinBand: 1
     }));
@@ -187,6 +187,90 @@ END
       expect(edge).not.toHaveProperty("hidden");
       expect(edge).not.toHaveProperty("strictRoute");
     }
+  });
+
+  it("interleaves spill columns with their owning semantic bands", async () => {
+    const middle = await buildMiddleLayer(`
+SDD-TEXT 0.1
+
+Step J-400 "Start"
+  PRECEDES J-401 "Finish"
+  REALIZED_BY PR-400 "Store Draft"
+END
+
+Step J-401 "Finish"
+  REALIZED_BY PR-401 "Archive Draft"
+END
+
+Process PR-400 "Store Draft"
+  visibility=frontstage
+  DEPENDS_ON SA-400 "Save Draft"
+END
+
+Process PR-401 "Archive Draft"
+  visibility=backstage
+  DEPENDS_ON SA-401 "Archive Draft"
+END
+
+SystemAction SA-400 "Save Draft"
+  WRITES D-400 "Draft"
+END
+
+SystemAction SA-401 "Archive Draft"
+  WRITES D-401 "Archive"
+END
+
+DataEntity D-400 "Draft"
+END
+
+DataEntity D-401 "Archive"
+END
+`);
+
+    expect(middle.bands.map((band) => band.label)).toEqual(["A1", "A2"]);
+    expect(middle.columns.map((column) => ({
+      bandId: column.bandId,
+      columnOrder: column.columnOrder,
+      slotKind: column.slotKind,
+      slotOrderWithinBand: column.slotOrderWithinBand
+    }))).toEqual([
+      {
+        bandId: "band:anchor:1",
+        columnOrder: 0,
+        slotKind: "primary",
+        slotOrderWithinBand: 0
+      },
+      {
+        bandId: "band:anchor:1",
+        columnOrder: 1,
+        slotKind: "spill",
+        slotOrderWithinBand: 1
+      },
+      {
+        bandId: "band:anchor:2",
+        columnOrder: 2,
+        slotKind: "primary",
+        slotOrderWithinBand: 0
+      },
+      {
+        bandId: "band:anchor:2",
+        columnOrder: 3,
+        slotKind: "spill",
+        slotOrderWithinBand: 1
+      }
+    ]);
+
+    const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
+    expect(placementByNodeId.get("D-400")).toEqual(expect.objectContaining({
+      bandId: "band:anchor:1",
+      columnOrder: 1,
+      slotKind: "spill"
+    }));
+    expect(placementByNodeId.get("D-401")).toEqual(expect.objectContaining({
+      bandId: "band:anchor:2",
+      columnOrder: 3,
+      slotKind: "spill"
+    }));
   });
 
   it("falls back to author order when customer steps do not declare PRECEDES", async () => {

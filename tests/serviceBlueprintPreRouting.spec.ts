@@ -89,6 +89,17 @@ function findCellContainingNode(
   return cell;
 }
 
+function getServiceBlueprintCellMetadata(
+  cell: Extract<PositionedItem, { kind: "container" }>
+) {
+  const metadata = cell.viewMetadata?.serviceBlueprint;
+  if (!metadata || metadata.kind !== "cell") {
+    throw new Error(`Expected service blueprint cell metadata for "${cell.id}".`);
+  }
+
+  return metadata;
+}
+
 function findTextDecoration(
   decorations: PositionedDecoration[],
   id: string
@@ -156,25 +167,24 @@ describe("service_blueprint pre-routing artifacts", () => {
       findCellContainingNode(rendered.preRoutingPositionedScene, "PR-022"),
       findCellContainingNode(rendered.preRoutingPositionedScene, "SA-022")
     ];
+    const systemA1PrimaryCell = findCellContainingNode(rendered.preRoutingPositionedScene, "SA-020");
+    const systemI1Cell = findCellContainingNode(rendered.preRoutingPositionedScene, "SA-021");
     const resourceCell = findCellContainingNode(rendered.preRoutingPositionedScene, "D-020");
+    const resourceCellMeta = getServiceBlueprintCellMetadata(resourceCell);
+    const systemA1PrimaryMeta = getServiceBlueprintCellMetadata(systemA1PrimaryCell);
+    const systemI1CellMeta = getServiceBlueprintCellMetadata(systemI1Cell);
 
     expect(resourceCell.classes).toContain("service_blueprint_cell");
-    expect(resourceCell.viewMetadata).toEqual({
-      serviceBlueprint: {
-        kind: "cell",
-        laneId: "lane:05:system",
-        laneShellId: "lane:05:system__shell",
-        bandId: "band:anchor:1",
-        bandLabel: "A1",
-        bandKind: "anchor",
-        bandOrder: 0,
-        columnId: "band:anchor:1:spill:1",
-        rowOrder: 4,
-        columnOrder: 3,
-        slotKind: "spill",
-        slotOrderWithinBand: 1
-      }
-    });
+    expect(resourceCellMeta).toEqual(expect.objectContaining({
+      kind: "cell",
+      laneId: "lane:05:system",
+      laneShellId: "lane:05:system__shell",
+      bandId: "band:anchor:1",
+      bandLabel: "A1",
+      bandKind: "anchor",
+      slotKind: "spill",
+      slotOrderWithinBand: 1
+    }));
     expect(findNestedPositionedItem(resourceCell.children, "D-020")?.viewMetadata).toEqual({
       serviceBlueprint: {
         kind: "semantic_node",
@@ -185,9 +195,11 @@ describe("service_blueprint pre-routing artifacts", () => {
     expect(new Set(a1Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
     expect(new Set(i1Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
     expect(new Set(a2Cells.map((cell) => `${cell.x}:${cell.width}`)).size).toBe(1);
-    expect(i1Cells[0]!.x).toBeGreaterThan(a1Cells[0]!.x);
+    expect(resourceCellMeta.columnOrder).toBe(systemA1PrimaryMeta.columnOrder + 1);
+    expect(systemI1CellMeta.columnOrder).toBe(resourceCellMeta.columnOrder + 1);
+    expect(resourceCell.x).toBeGreaterThan(systemA1PrimaryCell.x);
+    expect(systemI1Cell.x).toBeGreaterThan(resourceCell.x);
     expect(a2Cells[0]!.x).toBeGreaterThan(i1Cells[0]!.x);
-    expect(resourceCell.x).toBeGreaterThan(a2Cells[0]!.x);
 
     [
       "J-020",

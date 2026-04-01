@@ -172,16 +172,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:01:customer__shell__cell__band:interstitial:1",
+        "id": "lane:01:customer__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-customer",
-          "band-i1",
+          "band-a1",
           "column-2",
-          "cell-kind-interstitial",
-          "slot-kind-primary"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -210,6 +210,44 @@
       },
       {
         "kind": "container",
+        "id": "lane:01:customer__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-customer",
+          "band-i1",
+          "column-3",
+          "cell-kind-interstitial",
+          "slot-kind-primary"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 676,
+        "y": 28,
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:01:customer__shell__cell__band:anchor:2",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -217,7 +255,7 @@
           "service_blueprint_cell",
           "lane-customer",
           "band-a2",
-          "column-3",
+          "column-4",
           "cell-kind-anchor",
           "slot-kind-primary"
         ],
@@ -251,7 +289,7 @@
               "service_blueprint_cell",
               "lane-customer",
               "band-a2",
-              "column-3",
+              "column-4",
               "cell-kind-anchor",
               "slot-kind-primary"
             ],
@@ -335,50 +373,12 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 716,
+            "x": 988,
             "y": 40,
             "width": 168,
             "height": 64
           }
         ],
-        "ports": [],
-        "x": 676,
-        "y": 28,
-        "width": 248,
-        "height": 88,
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:01:customer__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-customer",
-          "band-a1",
-          "column-4",
-          "cell-kind-anchor",
-          "slot-kind-spill"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [],
         "ports": [],
         "x": 948,
         "y": 28,
@@ -528,16 +528,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:interstitial:1",
+        "id": "lane:02:frontstage__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-frontstage",
-          "band-i1",
+          "band-a1",
           "column-2",
-          "cell-kind-interstitial",
-          "slot-kind-primary"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -566,15 +566,15 @@
       },
       {
         "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:anchor:2",
+        "id": "lane:02:frontstage__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-frontstage",
-          "band-a2",
+          "band-i1",
           "column-3",
-          "cell-kind-anchor",
+          "cell-kind-interstitial",
           "slot-kind-primary"
         ],
         "layout": {
@@ -604,16 +604,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:anchor:1:spill:1",
+        "id": "lane:02:frontstage__shell__cell__band:anchor:2",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-frontstage",
-          "band-a1",
+          "band-a2",
           "column-4",
           "cell-kind-anchor",
-          "slot-kind-spill"
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -680,6 +680,44 @@
       },
       {
         "kind": "container",
+        "id": "lane:03:backstage__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-backstage",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 404,
+        "y": 252,
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:03:backstage__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -687,7 +725,7 @@
           "service_blueprint_cell",
           "lane-backstage",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -721,7 +759,7 @@
               "service_blueprint_cell",
               "lane-backstage",
               "band-i1",
-              "column-2",
+              "column-3",
               "cell-kind-interstitial",
               "slot-kind-primary"
             ],
@@ -803,14 +841,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 416,
+            "x": 688,
             "y": 272,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 404,
+        "x": 676,
         "y": 252,
         "width": 248,
         "height": 88,
@@ -826,47 +864,9 @@
           "service_blueprint_cell",
           "lane-backstage",
           "band-a2",
-          "column-3",
-          "cell-kind-anchor",
-          "slot-kind-primary"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [],
-        "ports": [],
-        "x": 676,
-        "y": 252,
-        "width": 248,
-        "height": 88,
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:03:backstage__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-backstage",
-          "band-a1",
           "column-4",
           "cell-kind-anchor",
-          "slot-kind-spill"
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -933,16 +933,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:04:support__shell__cell__band:interstitial:1",
+        "id": "lane:04:support__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-support",
-          "band-i1",
+          "band-a1",
           "column-2",
-          "cell-kind-interstitial",
-          "slot-kind-primary"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -971,6 +971,44 @@
       },
       {
         "kind": "container",
+        "id": "lane:04:support__shell__cell__band:interstitial:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-support",
+          "band-i1",
+          "column-3",
+          "cell-kind-interstitial",
+          "slot-kind-primary"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 676,
+        "y": 364,
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:04:support__shell__cell__band:anchor:2",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -978,7 +1016,7 @@
           "service_blueprint_cell",
           "lane-support",
           "band-a2",
-          "column-3",
+          "column-4",
           "cell-kind-anchor",
           "slot-kind-primary"
         ],
@@ -1012,7 +1050,7 @@
               "service_blueprint_cell",
               "lane-support",
               "band-a2",
-              "column-3",
+              "column-4",
               "cell-kind-anchor",
               "slot-kind-primary"
             ],
@@ -1094,50 +1132,12 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 688,
+            "x": 960,
             "y": 384,
             "width": 224,
             "height": 48
           }
         ],
-        "ports": [],
-        "x": 676,
-        "y": 364,
-        "width": 248,
-        "height": 88,
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:04:support__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-support",
-          "band-a1",
-          "column-4",
-          "cell-kind-anchor",
-          "slot-kind-spill"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [],
         "ports": [],
         "x": 948,
         "y": 364,
@@ -1288,6 +1288,146 @@
       },
       {
         "kind": "container",
+        "id": "lane:05:system__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-system",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "D-020",
+            "role": "dataentity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "service_blueprint_node",
+              "shape-cylinder",
+              "type-dataentity",
+              "service_blueprint_cell",
+              "lane-system",
+              "band-a1",
+              "column-2",
+              "cell-kind-anchor",
+              "slot-kind-spill"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "D-020__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Claim"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 42.536,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "support_in",
+                "role": "support_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "support_out",
+                "role": "support_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "resource_in",
+                "role": "resource_in",
+                "side": "north",
+                "offset": 36,
+                "x": 36,
+                "y": 0
+              },
+              {
+                "id": "resource_out",
+                "role": "resource_out",
+                "side": "south",
+                "offset": 36,
+                "x": 36,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 416,
+            "y": 496,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 404,
+        "y": 476,
+        "width": 248,
+        "height": 88,
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:05:system__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -1295,7 +1435,7 @@
           "service_blueprint_cell",
           "lane-system",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -1329,7 +1469,7 @@
               "service_blueprint_cell",
               "lane-system",
               "band-i1",
-              "column-2",
+              "column-3",
               "cell-kind-interstitial",
               "slot-kind-primary"
             ],
@@ -1412,14 +1552,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 416,
+            "x": 688,
             "y": 496,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 404,
+        "x": 676,
         "y": 476,
         "width": 248,
         "height": 88,
@@ -1435,7 +1575,7 @@
           "service_blueprint_cell",
           "lane-system",
           "band-a2",
-          "column-3",
+          "column-4",
           "cell-kind-anchor",
           "slot-kind-primary"
         ],
@@ -1469,7 +1609,7 @@
               "service_blueprint_cell",
               "lane-system",
               "band-a2",
-              "column-3",
+              "column-4",
               "cell-kind-anchor",
               "slot-kind-primary"
             ],
@@ -1497,146 +1637,6 @@
                 "x": 12,
                 "y": 12,
                 "width": 83.744,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "flow_in",
-                "role": "flow_in",
-                "side": "west",
-                "x": 0,
-                "y": 24
-              },
-              {
-                "id": "flow_out",
-                "role": "flow_out",
-                "side": "east",
-                "x": 224,
-                "y": 24
-              },
-              {
-                "id": "support_in",
-                "role": "support_in",
-                "side": "north",
-                "x": 112,
-                "y": 0
-              },
-              {
-                "id": "support_out",
-                "role": "support_out",
-                "side": "south",
-                "x": 112,
-                "y": 48
-              },
-              {
-                "id": "resource_in",
-                "role": "resource_in",
-                "side": "north",
-                "offset": 36,
-                "x": 36,
-                "y": 0
-              },
-              {
-                "id": "resource_out",
-                "role": "resource_out",
-                "side": "south",
-                "offset": 36,
-                "x": 36,
-                "y": 48
-              }
-            ],
-            "overflow": {
-              "status": "fits"
-            },
-            "x": 688,
-            "y": 496,
-            "width": 224,
-            "height": 48
-          }
-        ],
-        "ports": [],
-        "x": 676,
-        "y": 476,
-        "width": 248,
-        "height": 88,
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:05:system__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-system",
-          "band-a1",
-          "column-4",
-          "cell-kind-anchor",
-          "slot-kind-spill"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "headerContent": [],
-        "children": [
-          {
-            "kind": "node",
-            "id": "D-020",
-            "role": "dataentity",
-            "primitive": "card",
-            "classes": [
-              "semantic_node",
-              "service_blueprint_node",
-              "shape-cylinder",
-              "type-dataentity",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-a1",
-              "column-4",
-              "cell-kind-anchor",
-              "slot-kind-spill"
-            ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "narrow",
-                "standard",
-                "wide"
-              ]
-            },
-            "widthBand": "standard",
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "D-020__content__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "Claim"
-                ],
-                "x": 12,
-                "y": 12,
-                "width": 42.536,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -1847,16 +1847,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:interstitial:1",
+        "id": "lane:06:policy__shell__cell__band:anchor:1:spill:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-policy",
-          "band-i1",
+          "band-a1",
           "column-2",
-          "cell-kind-interstitial",
-          "slot-kind-primary"
+          "cell-kind-anchor",
+          "slot-kind-spill"
         ],
         "layout": {
           "strategy": "stack",
@@ -1885,15 +1885,15 @@
       },
       {
         "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:anchor:2",
+        "id": "lane:06:policy__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-policy",
-          "band-a2",
+          "band-i1",
           "column-3",
-          "cell-kind-anchor",
+          "cell-kind-interstitial",
           "slot-kind-primary"
         ],
         "layout": {
@@ -1923,16 +1923,16 @@
       },
       {
         "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:anchor:1:spill:1",
+        "id": "lane:06:policy__shell__cell__band:anchor:2",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
         "classes": [
           "service_blueprint_cell",
           "lane-policy",
-          "band-a1",
+          "band-a2",
           "column-4",
           "cell-kind-anchor",
-          "slot-kind-spill"
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -1983,7 +1983,7 @@
       },
       "to": {
         "itemId": "J-021",
-        "x": 716,
+        "x": 988,
         "y": 72
       },
       "route": {
@@ -1994,7 +1994,7 @@
             "y": 72
           },
           {
-            "x": 716,
+            "x": 988,
             "y": 72
           }
         ]
@@ -2020,7 +2020,7 @@
       },
       "to": {
         "itemId": "PR-021",
-        "x": 416,
+        "x": 688,
         "y": 296
       },
       "route": {
@@ -2039,7 +2039,7 @@
             "y": 296
           },
           {
-            "x": 416,
+            "x": 688,
             "y": 296
           }
         ]
@@ -2060,31 +2060,31 @@
       ],
       "from": {
         "itemId": "PR-021",
-        "x": 640,
+        "x": 912,
         "y": 296
       },
       "to": {
         "itemId": "PR-022",
-        "x": 688,
+        "x": 960,
         "y": 408
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 640,
+            "x": 912,
             "y": 296
           },
           {
-            "x": 656,
+            "x": 928,
             "y": 296
           },
           {
-            "x": 656,
+            "x": 928,
             "y": 408
           },
           {
-            "x": 688,
+            "x": 960,
             "y": 408
           }
         ]
@@ -2144,23 +2144,23 @@
       ],
       "from": {
         "itemId": "J-021",
-        "x": 800,
+        "x": 1072,
         "y": 104
       },
       "to": {
         "itemId": "PR-022",
-        "x": 800,
+        "x": 1072,
         "y": 384
       },
       "route": {
         "style": "straight",
         "points": [
           {
-            "x": 800,
+            "x": 1072,
             "y": 104
           },
           {
-            "x": 800,
+            "x": 1072,
             "y": 384
           }
         ]
@@ -2256,23 +2256,23 @@
       ],
       "from": {
         "itemId": "PR-021",
-        "x": 528,
+        "x": 800,
         "y": 320
       },
       "to": {
         "itemId": "SA-021",
-        "x": 528,
+        "x": 800,
         "y": 496
       },
       "route": {
         "style": "straight",
         "points": [
           {
-            "x": 528,
+            "x": 800,
             "y": 320
           },
           {
-            "x": 528,
+            "x": 800,
             "y": 496
           }
         ]
@@ -2293,23 +2293,23 @@
       ],
       "from": {
         "itemId": "PR-022",
-        "x": 800,
+        "x": 1072,
         "y": 432
       },
       "to": {
         "itemId": "SA-022",
-        "x": 800,
+        "x": 1072,
         "y": 496
       },
       "route": {
         "style": "straight",
         "points": [
           {
-            "x": 800,
+            "x": 1072,
             "y": 432
           },
           {
-            "x": 800,
+            "x": 1072,
             "y": 496
           }
         ]
@@ -2374,7 +2374,7 @@
       },
       "to": {
         "itemId": "D-020",
-        "x": 1072,
+        "x": 528,
         "y": 544
       },
       "route": {
@@ -2389,11 +2389,11 @@
             "y": 560
           },
           {
-            "x": 1072,
+            "x": 528,
             "y": 560
           },
           {
-            "x": 1072,
+            "x": 528,
             "y": 544
           }
         ]
@@ -2415,31 +2415,31 @@
       ],
       "from": {
         "itemId": "SA-021",
-        "x": 528,
+        "x": 800,
         "y": 544
       },
       "to": {
         "itemId": "D-020",
-        "x": 1072,
+        "x": 528,
         "y": 544
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 528,
+            "x": 800,
             "y": 544
           },
           {
+            "x": 800,
+            "y": 560
+          },
+          {
             "x": 528,
             "y": 560
           },
           {
-            "x": 1072,
-            "y": 560
-          },
-          {
-            "x": 1072,
+            "x": 528,
             "y": 544
           }
         ]
@@ -2461,31 +2461,31 @@
       ],
       "from": {
         "itemId": "SA-022",
-        "x": 800,
+        "x": 1072,
         "y": 544
       },
       "to": {
         "itemId": "D-020",
-        "x": 1072,
+        "x": 528,
         "y": 544
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 800,
+            "x": 1072,
             "y": 544
           },
           {
-            "x": 800,
-            "y": 560
-          },
-          {
             "x": 1072,
             "y": 560
           },
           {
-            "x": 1072,
+            "x": 528,
+            "y": 560
+          },
+          {
+            "x": 528,
             "y": 544
           }
         ]

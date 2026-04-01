@@ -853,32 +853,40 @@ function buildCellsAndPlacements(
     spillCountByBandId.set(band.id, maxSpillCount);
   }
 
-  const primaryColumns = [...bands]
-    .sort((left, right) => left.bandOrder - right.bandOrder || left.id.localeCompare(right.id))
-    .map<ServiceBlueprintPhysicalColumn>((band) => ({
+  const primaryColumns: ServiceBlueprintPhysicalColumn[] = [];
+  const spillColumns: ServiceBlueprintPhysicalColumn[] = [];
+  const semanticColumns: ServiceBlueprintPhysicalColumn[] = [];
+  let nextColumnOrder = 0;
+  for (const band of [...bands].sort((left, right) => left.bandOrder - right.bandOrder || left.id.localeCompare(right.id))) {
+    const primaryColumn: ServiceBlueprintPhysicalColumn = {
       id: band.id,
       bandId: band.id,
       label: band.label,
       bandKind: band.kind,
       bandOrder: band.bandOrder,
-      columnOrder: band.bandOrder,
+      columnOrder: nextColumnOrder,
       slotKind: "primary",
       slotOrderWithinBand: 0
-    }));
-  const spillColumns: ServiceBlueprintPhysicalColumn[] = [];
-  for (const band of primaryColumns) {
-    const spillCount = spillCountByBandId.get(band.bandId) ?? 0;
+    };
+    primaryColumns.push(primaryColumn);
+    semanticColumns.push(primaryColumn);
+    nextColumnOrder += 1;
+
+    const spillCount = spillCountByBandId.get(band.id) ?? 0;
     for (let spillIndex = 1; spillIndex <= spillCount; spillIndex += 1) {
-      spillColumns.push({
-        id: `${band.bandId}:spill:${spillIndex}`,
-        bandId: band.bandId,
+      const spillColumn: ServiceBlueprintPhysicalColumn = {
+        id: `${band.id}:spill:${spillIndex}`,
+        bandId: band.id,
         label: band.label,
-        bandKind: band.bandKind,
+        bandKind: band.kind,
         bandOrder: band.bandOrder,
-        columnOrder: primaryColumns.length + spillColumns.length,
+        columnOrder: nextColumnOrder,
         slotKind: "spill",
         slotOrderWithinBand: spillIndex
-      });
+      };
+      spillColumns.push(spillColumn);
+      semanticColumns.push(spillColumn);
+      nextColumnOrder += 1;
     }
   }
   const parkingColumns = buildParkingColumns(
@@ -886,9 +894,9 @@ function buildCellsAndPlacements(
     nodeMap,
     laneShells,
     allParkedNodeIds,
-    primaryColumns.length + spillColumns.length
+    semanticColumns.length
   );
-  const columns = [...primaryColumns, ...spillColumns, ...parkingColumns];
+  const columns = [...semanticColumns, ...parkingColumns];
 
   const primaryColumnByBandId = new Map(primaryColumns.map((column) => [column.bandId, column] as const));
   const spillColumnsByBandId = new Map<string, ServiceBlueprintPhysicalColumn[]>();

@@ -55,73 +55,73 @@
     <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-01-customer__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:01:customer__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="404" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-01-customer__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="676" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="lane:01:customer__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="948" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="140" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-02-frontstage__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:02:frontstage__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="404" y="140" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="676" y="140" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="lane:02:frontstage__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="948" y="140" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="252" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-03-backstage__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:03:backstage__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="404" y="252" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-03-backstage__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="676" y="252" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="lane:03:backstage__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="948" y="252" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-04-support__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="364" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-04-support__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-04-support__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:04:support__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="404" y="364" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-04-support__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-04-support__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="676" y="364" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-04-support__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="lane:04:support__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-04-support__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="948" y="364" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-05-system__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="476" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-05-system__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-05-system__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:05:system__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="404" y="476" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-05-system__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-05-system__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="676" y="476" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-05-system__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="lane:05:system__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-05-system__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="948" y="476" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-06-policy__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="588" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-06-policy__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:06:policy__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="404" y="588" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-06-policy__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="676" y="588" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="lane:06:policy__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="948" y="588" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-decoration-lane-customer__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_interaction lane-customer" data-decoration-id="lane-customer__separator">
@@ -138,28 +138,28 @@
     <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="J-020" data-role="step">
       <rect class="scene-node__chrome" x="172" y="48" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="J-021" data-role="step">
-      <rect class="scene-node__chrome" x="716" y="40" width="168" height="64" rx="14" ry="14"/>
+    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="J-021" data-role="step">
+      <rect class="scene-node__chrome" x="988" y="40" width="168" height="64" rx="14" ry="14"/>
     </g>
     <g id="scene-node-pr-020" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-frontstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PR-020" data-role="process">
       <rect class="scene-node__chrome" x="144" y="160" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-pr-021" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-backstage band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="PR-021" data-role="process">
-      <rect class="scene-node__chrome" x="416" y="272" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-pr-021" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-backstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="PR-021" data-role="process">
+      <rect class="scene-node__chrome" x="688" y="272" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-pr-022" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-support band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="PR-022" data-role="process">
-      <rect class="scene-node__chrome" x="688" y="384" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-pr-022" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-support band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="PR-022" data-role="process">
+      <rect class="scene-node__chrome" x="960" y="384" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-sa-020" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="SA-020" data-role="systemaction">
       <rect class="scene-node__chrome" x="144" y="496" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-sa-021" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="SA-021" data-role="systemaction">
+    <g id="scene-node-d-020" class="scene-node primitive-card role-dataentity paint-nodes semantic_node service_blueprint_node shape-cylinder type-dataentity service_blueprint_cell lane-system band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="D-020" data-role="dataentity">
       <rect class="scene-node__chrome" x="416" y="496" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-sa-022" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="SA-022" data-role="systemaction">
+    <g id="scene-node-sa-021" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="SA-021" data-role="systemaction">
       <rect class="scene-node__chrome" x="688" y="496" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-d-020" class="scene-node primitive-card role-dataentity paint-nodes semantic_node service_blueprint_node shape-cylinder type-dataentity service_blueprint_cell lane-system band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="D-020" data-role="dataentity">
+    <g id="scene-node-sa-022" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="SA-022" data-role="systemaction">
       <rect class="scene-node__chrome" x="960" y="496" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-pl-020" class="scene-node primitive-card role-policy paint-nodes semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PL-020" data-role="policy">
@@ -172,10 +172,10 @@
           <tspan x="184" dy="0">Submit Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="J-021" data-role="step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="728" y="68">
-          <tspan x="728" dy="0">Receive</tspan>
-          <tspan x="728" dy="20">Confirmation</tspan>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="J-021" data-role="step">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1000" y="68">
+          <tspan x="1000" dy="0">Receive</tspan>
+          <tspan x="1000" dy="20">Confirmation</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-frontstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PR-020" data-role="process">
@@ -183,14 +183,14 @@
           <tspan x="156" dy="0">Validate Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-backstage band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="PR-021" data-role="process">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="428" y="300">
-          <tspan x="428" dy="0">Review Claim History</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-backstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="PR-021" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="700" y="300">
+          <tspan x="700" dy="0">Review Claim History</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-support band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="PR-022" data-role="process">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="700" y="412">
-          <tspan x="700" dy="0">Notify Customer</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-support band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="PR-022" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="972" y="412">
+          <tspan x="972" dy="0">Notify Customer</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="SA-020" data-role="systemaction">
@@ -198,19 +198,19 @@
           <tspan x="156" dy="0">Store Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-i1 column-2 cell-kind-interstitial slot-kind-primary" data-item-id="SA-021" data-role="systemaction">
+    <g class="scene-node primitive-card role-dataentity paint-labels semantic_node service_blueprint_node shape-cylinder type-dataentity service_blueprint_cell lane-system band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="D-020" data-role="dataentity">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="428" y="524">
-          <tspan x="428" dy="0">Load Claim History</tspan>
+          <tspan x="428" dy="0">Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a2 column-3 cell-kind-anchor slot-kind-primary" data-item-id="SA-022" data-role="systemaction">
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="SA-021" data-role="systemaction">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="700" y="524">
-          <tspan x="700" dy="0">Send Email</tspan>
+          <tspan x="700" dy="0">Load Claim History</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-dataentity paint-labels semantic_node service_blueprint_node shape-cylinder type-dataentity service_blueprint_cell lane-system band-a1 column-4 cell-kind-anchor slot-kind-spill" data-item-id="D-020" data-role="dataentity">
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="SA-022" data-role="systemaction">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="972" y="524">
-          <tspan x="972" dy="0">Claim</tspan>
+          <tspan x="972" dy="0">Send Email</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-policy paint-labels semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PL-020" data-role="policy">

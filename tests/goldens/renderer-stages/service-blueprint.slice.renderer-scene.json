@@ -138,6 +138,39 @@
       },
       {
         "kind": "container",
+        "id": "lane:01:customer__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-customer",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:01:customer__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -145,7 +178,7 @@
           "service_blueprint_cell",
           "lane-customer",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -178,7 +211,7 @@
           "service_blueprint_cell",
           "lane-customer",
           "band-a2",
-          "column-3",
+          "column-4",
           "cell-kind-anchor",
           "slot-kind-primary"
         ],
@@ -211,7 +244,7 @@
               "service_blueprint_cell",
               "lane-customer",
               "band-a2",
-              "column-3",
+              "column-4",
               "cell-kind-anchor",
               "slot-kind-primary"
             ],
@@ -272,39 +305,6 @@
             ]
           }
         ],
-        "ports": [],
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:01:customer__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-customer",
-          "band-a1",
-          "column-4",
-          "cell-kind-anchor",
-          "slot-kind-spill"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
@@ -417,6 +417,39 @@
       },
       {
         "kind": "container",
+        "id": "lane:02:frontstage__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-frontstage",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:02:frontstage__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -424,7 +457,7 @@
           "service_blueprint_cell",
           "lane-frontstage",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -457,42 +490,9 @@
           "service_blueprint_cell",
           "lane-frontstage",
           "band-a2",
-          "column-3",
-          "cell-kind-anchor",
-          "slot-kind-primary"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "children": [],
-        "ports": [],
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:02:frontstage__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-frontstage",
-          "band-a1",
           "column-4",
           "cell-kind-anchor",
-          "slot-kind-spill"
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -549,6 +549,39 @@
       },
       {
         "kind": "container",
+        "id": "lane:03:backstage__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-backstage",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:03:backstage__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -556,7 +589,7 @@
           "service_blueprint_cell",
           "lane-backstage",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -589,7 +622,7 @@
               "service_blueprint_cell",
               "lane-backstage",
               "band-i1",
-              "column-2",
+              "column-3",
               "cell-kind-interstitial",
               "slot-kind-primary"
             ],
@@ -662,42 +695,9 @@
           "service_blueprint_cell",
           "lane-backstage",
           "band-a2",
-          "column-3",
-          "cell-kind-anchor",
-          "slot-kind-primary"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "children": [],
-        "ports": [],
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:03:backstage__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-backstage",
-          "band-a1",
           "column-4",
           "cell-kind-anchor",
-          "slot-kind-spill"
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",
@@ -754,6 +754,39 @@
       },
       {
         "kind": "container",
+        "id": "lane:04:support__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-support",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:04:support__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -761,7 +794,7 @@
           "service_blueprint_cell",
           "lane-support",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -794,7 +827,7 @@
           "service_blueprint_cell",
           "lane-support",
           "band-a2",
-          "column-3",
+          "column-4",
           "cell-kind-anchor",
           "slot-kind-primary"
         ],
@@ -827,7 +860,7 @@
               "service_blueprint_cell",
               "lane-support",
               "band-a2",
-              "column-3",
+              "column-4",
               "cell-kind-anchor",
               "slot-kind-primary"
             ],
@@ -887,39 +920,6 @@
             ]
           }
         ],
-        "ports": [],
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:04:support__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-support",
-          "band-a1",
-          "column-4",
-          "cell-kind-anchor",
-          "slot-kind-spill"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:semantic"
@@ -1033,6 +1033,113 @@
       },
       {
         "kind": "container",
+        "id": "lane:05:system__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-system",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "D-020",
+            "role": "dataentity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "service_blueprint_node",
+              "shape-cylinder",
+              "type-dataentity",
+              "service_blueprint_cell",
+              "lane-system",
+              "band-a1",
+              "column-2",
+              "cell-kind-anchor",
+              "slot-kind-spill"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "D-020__content__line_0",
+                "kind": "text",
+                "text": "Claim",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "support_in",
+                "role": "support_in",
+                "side": "north"
+              },
+              {
+                "id": "support_out",
+                "role": "support_out",
+                "side": "south"
+              },
+              {
+                "id": "resource_in",
+                "role": "resource_in",
+                "side": "north",
+                "offset": 36
+              },
+              {
+                "id": "resource_out",
+                "role": "resource_out",
+                "side": "south",
+                "offset": 36
+              }
+            ]
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:05:system__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -1040,7 +1147,7 @@
           "service_blueprint_cell",
           "lane-system",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -1073,7 +1180,7 @@
               "service_blueprint_cell",
               "lane-system",
               "band-i1",
-              "column-2",
+              "column-3",
               "cell-kind-interstitial",
               "slot-kind-primary"
             ],
@@ -1147,7 +1254,7 @@
           "service_blueprint_cell",
           "lane-system",
           "band-a2",
-          "column-3",
+          "column-4",
           "cell-kind-anchor",
           "slot-kind-primary"
         ],
@@ -1180,7 +1287,7 @@
               "service_blueprint_cell",
               "lane-system",
               "band-a2",
-              "column-3",
+              "column-4",
               "cell-kind-anchor",
               "slot-kind-primary"
             ],
@@ -1201,113 +1308,6 @@
                 "id": "SA-022__content__line_0",
                 "kind": "text",
                 "text": "Send Email",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "flow_in",
-                "role": "flow_in",
-                "side": "west"
-              },
-              {
-                "id": "flow_out",
-                "role": "flow_out",
-                "side": "east"
-              },
-              {
-                "id": "support_in",
-                "role": "support_in",
-                "side": "north"
-              },
-              {
-                "id": "support_out",
-                "role": "support_out",
-                "side": "south"
-              },
-              {
-                "id": "resource_in",
-                "role": "resource_in",
-                "side": "north",
-                "offset": 36
-              },
-              {
-                "id": "resource_out",
-                "role": "resource_out",
-                "side": "south",
-                "offset": 36
-              }
-            ]
-          }
-        ],
-        "ports": [],
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:05:system__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-system",
-          "band-a1",
-          "column-4",
-          "cell-kind-anchor",
-          "slot-kind-spill"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "children": [
-          {
-            "kind": "node",
-            "id": "D-020",
-            "role": "dataentity",
-            "primitive": "card",
-            "classes": [
-              "semantic_node",
-              "service_blueprint_node",
-              "shape-cylinder",
-              "type-dataentity",
-              "service_blueprint_cell",
-              "lane-system",
-              "band-a1",
-              "column-4",
-              "cell-kind-anchor",
-              "slot-kind-spill"
-            ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "narrow",
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "D-020__content__line_0",
-                "kind": "text",
-                "text": "Claim",
                 "textStyleRole": "title",
                 "priority": "primary"
               }
@@ -1460,6 +1460,39 @@
       },
       {
         "kind": "container",
+        "id": "lane:06:policy__shell__cell__band:anchor:1:spill:1",
+        "role": "service_blueprint_cell",
+        "primitive": "cluster",
+        "classes": [
+          "service_blueprint_cell",
+          "lane-policy",
+          "band-a1",
+          "column-2",
+          "cell-kind-anchor",
+          "slot-kind-spill"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 12
+        },
+        "chrome": {
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 12,
+            "left": 12
+          },
+          "gutter": 12,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "service_blueprint:column:semantic",
+        "sharedHeightGroup": "service_blueprint:row:semantic"
+      },
+      {
+        "kind": "container",
         "id": "lane:06:policy__shell__cell__band:interstitial:1",
         "role": "service_blueprint_cell",
         "primitive": "cluster",
@@ -1467,7 +1500,7 @@
           "service_blueprint_cell",
           "lane-policy",
           "band-i1",
-          "column-2",
+          "column-3",
           "cell-kind-interstitial",
           "slot-kind-primary"
         ],
@@ -1500,42 +1533,9 @@
           "service_blueprint_cell",
           "lane-policy",
           "band-a2",
-          "column-3",
-          "cell-kind-anchor",
-          "slot-kind-primary"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 12
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 12,
-          "headerBandHeight": 0
-        },
-        "children": [],
-        "ports": [],
-        "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
-      },
-      {
-        "kind": "container",
-        "id": "lane:06:policy__shell__cell__band:anchor:1:spill:1",
-        "role": "service_blueprint_cell",
-        "primitive": "cluster",
-        "classes": [
-          "service_blueprint_cell",
-          "lane-policy",
-          "band-a1",
           "column-4",
           "cell-kind-anchor",
-          "slot-kind-spill"
+          "slot-kind-primary"
         ],
         "layout": {
           "strategy": "stack",

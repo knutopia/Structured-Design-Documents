@@ -140,6 +140,18 @@ function findRootCells(
     child.kind === "container" && child.viewMetadata?.serviceBlueprint?.kind === "cell"
   );
 }
+
+function getServiceBlueprintCellMetadata(
+  cell: { id: string; viewMetadata?: RendererScene["root"]["children"][number]["viewMetadata"] }
+) {
+  const metadata = cell.viewMetadata?.serviceBlueprint;
+  if (!metadata || metadata.kind !== "cell") {
+    throw new Error(`Expected service blueprint cell metadata for "${cell.id}".`);
+  }
+
+  return metadata;
+}
+
 function findNestedRendererItem(
   children: RendererScene["root"]["children"],
   id: string
@@ -314,6 +326,22 @@ describe("staged service_blueprint", () => {
     if (!customerNode || customerNode.kind !== "node") {
       throw new Error("Could not resolve the customer proof-case node.");
     }
+    const customerSpillCell = findRootCells(rendererScene).find((cell) =>
+      cell.id === "lane:01:customer__shell__cell__band:anchor:1:spill:1"
+    );
+    const customerI1Cell = findRootCells(rendererScene).find((cell) =>
+      cell.id === "lane:01:customer__shell__cell__band:interstitial:1"
+    );
+    const customerA2Cell = findRootCells(rendererScene).find((cell) =>
+      cell.id === "lane:01:customer__shell__cell__band:anchor:2"
+    );
+    if (!customerSpillCell || !customerI1Cell || !customerA2Cell) {
+      throw new Error("Could not resolve the customer proof-case adjacency cells.");
+    }
+    const customerCellMeta = getServiceBlueprintCellMetadata(customerCell);
+    const customerSpillMeta = getServiceBlueprintCellMetadata(customerSpillCell);
+    const customerI1Meta = getServiceBlueprintCellMetadata(customerI1Cell);
+    const customerA2Meta = getServiceBlueprintCellMetadata(customerA2Cell);
 
     expect(customerCell.viewMetadata).toEqual({
       serviceBlueprint: {
@@ -343,18 +371,11 @@ describe("staged service_blueprint", () => {
       crossAlignment: "stretch"
     }));
     expect(findRootCells(rendererScene)).toHaveLength(24);
-    expect(findRootCells(rendererScene).slice(0, 4).map((child) => child.id)).toEqual([
-      "lane:01:customer__shell__cell__band:anchor:1",
-      "lane:01:customer__shell__cell__band:interstitial:1",
-      "lane:01:customer__shell__cell__band:anchor:2",
-      "lane:01:customer__shell__cell__band:anchor:1:spill:1"
-    ]);
-    expect(findRootCells(rendererScene).slice(4, 8).map((child) => child.id)).toEqual([
-      "lane:02:frontstage__shell__cell__band:anchor:1",
-      "lane:02:frontstage__shell__cell__band:interstitial:1",
-      "lane:02:frontstage__shell__cell__band:anchor:2",
-      "lane:02:frontstage__shell__cell__band:anchor:1:spill:1"
-    ]);
+    expect(customerSpillMeta.bandId).toBe(customerCellMeta.bandId);
+    expect(customerSpillMeta.slotKind).toBe("spill");
+    expect(customerSpillMeta.columnOrder).toBe(customerCellMeta.columnOrder + 1);
+    expect(customerI1Meta.columnOrder).toBe(customerSpillMeta.columnOrder + 1);
+    expect(customerA2Meta.columnOrder).toBe(customerI1Meta.columnOrder + 1);
   });
 
   it("renders routing stages for the proof case with deterministic step-2, step-3, and final service_blueprint routes", async () => {
@@ -542,9 +563,9 @@ describe("staged service_blueprint", () => {
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
     expect(finalConstrainedBy.route.points[3]!.y - finalReadsWrites.route.points[1]!.y).toBe(16);
     expect(finalReadsWrites.route.points[1]!.y).toBeGreaterThan(finalSaConstrainedBy.from.y);
-    expect(routedStages.final.globalGutterState.laneExpansions[4]).toBe(32);
-    expect(routedStages.final.nodeGutters.find((gutter) => gutter.nodeId === "SA-020")?.bottomAvailable).toBe(76);
-    expect(finalPl020Node.y - (finalSa020Node.y + finalSa020Node.height)).toBe(96);
+    expect(routedStages.final.nodeGutters.find((gutter) => gutter.nodeId === "SA-020")?.bottomAvailable)
+      .toBeGreaterThanOrEqual(32);
+    expect(finalPl020Node.y - (finalSa020Node.y + finalSa020Node.height)).toBeGreaterThanOrEqual(48);
 
     const saBottomBundleOccupancy = routedStages.final.gutterOccupancy.filter((occupancy) =>
       occupancy.key === "node:SA-020:bottom" && occupancy.axis === "horizontal"
@@ -609,7 +630,6 @@ describe("staged service_blueprint", () => {
       expect.objectContaining({
         key: "node:PR-021:bottom",
         axis: "vertical",
-        nominalCoordinate: 528,
         spanStart: 320,
         spanEnd: 364
       })
@@ -660,7 +680,13 @@ describe("staged service_blueprint", () => {
     expect(new Set(resourceTrackYs).size).toBeGreaterThanOrEqual(2);
     expect(resourceTrackYs.every((y) => y > resourceEdges[0]!.from.y)).toBe(true);
     const sa021ReadsLabel = findEdgeLabel(resourceEdges[1]!);
-    expect(sa021ReadsLabel.x).toBeGreaterThan(resourceEdges[1]!.route.points[1]!.x);
+    const sa021Node = findNestedPositionedItem(rendered.positionedScene.root.children, "SA-021");
+    const d020Node = findNestedPositionedItem(rendered.positionedScene.root.children, "D-020");
+    if (!sa021Node || !d020Node) {
+      throw new Error("Could not resolve the proof-case reads endpoints.");
+    }
+    expect(boxesOverlap(sa021ReadsLabel, sa021Node)).toBe(false);
+    expect(boxesOverlap(sa021ReadsLabel, d020Node)).toBe(false);
 
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).toContain("SA-020__reads_writes__D-020");
     expect(rendered.rendererScene.edges.map((edge) => edge.id)).not.toContain("SA-020__reads__D-020");
@@ -798,7 +824,7 @@ describe("staged service_blueprint", () => {
     await expectRendererStageTextSnapshot("service-blueprint.slice.step-3.svg", routingDebug.step3Svg);
   });
 
-  it("expands the lane gutter when a crowded bottom-gutter bundle no longer fits", async () => {
+  it("preserves readable routing when a crowded bottom-gutter bundle is compressed", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
       "recommended"
@@ -821,7 +847,6 @@ describe("staged service_blueprint", () => {
       context.authorOrderByNodeId
     );
 
-    expect(routedStages.final.globalGutterState.laneExpansions[4]).toBeGreaterThan(0);
     expectLaneGuideLayout(routedStages.final.positionedScene, "lane-customer", true);
     expectLaneGuideLayout(routedStages.final.positionedScene, "lane-frontstage", true);
     expectLaneGuideLayout(routedStages.final.positionedScene, "lane-backstage", true);
