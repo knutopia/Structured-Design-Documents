@@ -37,6 +37,14 @@ import {
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
+const SERVICE_BLUEPRINT_LANE_TITLE_BY_CLASS = {
+  "lane-customer": "Customer",
+  "lane-frontstage": "Frontstage",
+  "lane-backstage": "Backstage",
+  "lane-support": "Support",
+  "lane-system": "System",
+  "lane-policy": "Policy"
+} as const;
 
 async function resolveServiceBlueprintContext(
   input: { path: string; text: string },
@@ -232,6 +240,19 @@ function measureSeparatorTitleStartX(scene: PositionedScene, separatorTitleText:
     + measureText.measureText(" ", edgeLabelStyle);
 }
 
+function resolveExpectedLaneTitle(laneClass: string): string {
+  return SERVICE_BLUEPRINT_LANE_TITLE_BY_CLASS[
+    laneClass as keyof typeof SERVICE_BLUEPRINT_LANE_TITLE_BY_CLASS
+  ] ?? laneClass.replace(/^lane-/, "");
+}
+
+function expectCapitalizedLaneTitles(scene: PositionedScene): void {
+  Object.entries(SERVICE_BLUEPRINT_LANE_TITLE_BY_CLASS).forEach(([laneClass, expectedTitle]) => {
+    const title = findTextDecoration(scene.decorations, `${laneClass}__title`);
+    expect(title.text).toBe(expectedTitle);
+  });
+}
+
 function expectLaneGuideLayout(
   scene: PositionedScene,
   laneClass: string,
@@ -244,7 +265,7 @@ function expectLaneGuideLayout(
   const maxY = Math.max(...laneCells.map((cell) => cell.y + cell.height));
   const title = findTextDecoration(scene.decorations, `${laneClass}__title`);
 
-  expect(title.text).toBe(laneClass.replace(/^lane-/, ""));
+  expect(title.text).toBe(resolveExpectedLaneTitle(laneClass));
   expect(title.x).toBe(24);
   expect(title.y).toBe(minY + Math.max(10, (maxY - minY) / 2 - 10));
 
@@ -448,6 +469,7 @@ describe("staged service_blueprint", () => {
 
     [routedStages.step2.positionedScene, routedStages.step3.positionedScene, routedStages.final.positionedScene]
       .forEach((scene) => {
+        expectCapitalizedLaneTitles(scene);
         expectLaneGuideLayout(scene, "lane-customer", true, "Line of Interaction");
         expectLaneGuideLayout(scene, "lane-frontstage", true, "Line of Visibility");
         expectLaneGuideLayout(scene, "lane-backstage", true);

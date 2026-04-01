@@ -150,7 +150,7 @@ describe("service_blueprint pre-routing artifacts", () => {
     expect(rendered.preRoutingPng.byteLength).toBeGreaterThan(0);
 
     const customerTitle = findTextDecoration(rendered.preRoutingPositionedScene.decorations, "lane-customer__title");
-    expect(customerTitle.text).toBe("customer");
+    expect(customerTitle.text).toBe("Customer");
 
     const a1Cells = [
       findCellContainingNode(rendered.preRoutingPositionedScene, "J-020"),

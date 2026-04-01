@@ -2507,7 +2507,7 @@
       "paintGroup": "labels",
       "x": 24,
       "y": 62,
-      "text": "customer",
+      "text": "Customer",
       "textStyleRole": "label"
     },
     {
@@ -2552,7 +2552,7 @@
       "paintGroup": "labels",
       "x": 24,
       "y": 174,
-      "text": "frontstage",
+      "text": "Frontstage",
       "textStyleRole": "label"
     },
     {
@@ -2597,7 +2597,7 @@
       "paintGroup": "labels",
       "x": 24,
       "y": 286,
-      "text": "backstage",
+      "text": "Backstage",
       "textStyleRole": "label"
     },
     {
@@ -2628,7 +2628,7 @@
       "paintGroup": "labels",
       "x": 24,
       "y": 398,
-      "text": "support",
+      "text": "Support",
       "textStyleRole": "label"
     },
     {
@@ -2641,7 +2641,7 @@
       "paintGroup": "labels",
       "x": 24,
       "y": 510,
-      "text": "system",
+      "text": "System",
       "textStyleRole": "label"
     },
     {
@@ -2654,7 +2654,7 @@
       "paintGroup": "labels",
       "x": 24,
       "y": 622,
-      "text": "policy",
+      "text": "Policy",
       "textStyleRole": "label"
     }
   ],

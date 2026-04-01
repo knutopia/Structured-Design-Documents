@@ -22,6 +22,15 @@ const SEPARATOR_TITLE_BY_ROLE = {
   line_of_visibility: "Line of Visibility"
 } as const satisfies Partial<Record<NonNullable<ServiceBlueprintLaneGuide["separatorAfter"]>, string>>;
 
+const LANE_TITLE_BY_LABEL = {
+  customer: "Customer",
+  frontstage: "Frontstage",
+  backstage: "Backstage",
+  support: "Support",
+  system: "System",
+  policy: "Policy"
+} as const;
+
 function sanitizeToken(value: string): string {
   return value
     .trim()
@@ -32,6 +41,10 @@ function sanitizeToken(value: string): string {
 
 function buildLaneClassToken(guide: Pick<ServiceBlueprintLaneGuide, "label">): string {
   return `lane-${sanitizeToken(guide.label)}`;
+}
+
+function resolveLaneTitle(label: string): string {
+  return LANE_TITLE_BY_LABEL[label as keyof typeof LANE_TITLE_BY_LABEL] ?? label;
 }
 
 function resolveSeparatorTitle(
@@ -101,7 +114,7 @@ export function buildServiceBlueprintLaneDecorations(
       paintGroup: "labels",
       x: LANE_LABEL_X,
       y: minY + Math.max(10, (maxY - minY) / 2 - 10),
-      text: guide.label,
+      text: resolveLaneTitle(guide.label),
       textStyleRole: "label"
     });
 
