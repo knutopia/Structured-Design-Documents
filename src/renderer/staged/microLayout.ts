@@ -1,3 +1,4 @@
+import { cloneViewMetadata } from "./contracts.js";
 import type {
   ChromeSpec,
   ContentBlock,
@@ -791,6 +792,7 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
       role: item.role,
       primitive: item.primitive,
       classes: [...item.classes],
+      viewMetadata: cloneViewMetadata(item.viewMetadata),
       widthPolicy: cloneWidthPolicy(item.widthPolicy),
       widthBand: item.widthPolicy.preferred,
       overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
@@ -819,6 +821,7 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
     role: item.role,
     primitive: item.primitive,
     classes: [...item.classes],
+    viewMetadata: cloneViewMetadata(item.viewMetadata),
     widthPolicy: cloneWidthPolicy(item.widthPolicy),
     widthBand: layout.widthBand,
     overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
@@ -1050,6 +1053,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     role: container.role,
     primitive: container.primitive,
     classes: [...container.classes],
+    viewMetadata: cloneViewMetadata(container.viewMetadata),
     layout: { ...container.layout },
     chrome,
     headerContent: headerLayout.blocks,

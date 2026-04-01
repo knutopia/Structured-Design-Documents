@@ -1,3 +1,4 @@
+import { cloneViewMetadata } from "./contracts.js";
 import type {
   ChromeSpec,
   EdgeMarkers,
@@ -171,6 +172,7 @@ function clonePositionedNode(node: MeasuredNode): PositionedNode {
     role: node.role,
     primitive: node.primitive,
     classes: [...node.classes],
+    viewMetadata: cloneViewMetadata(node.viewMetadata),
     widthPolicy: cloneWidthPolicy(node.widthPolicy),
     widthBand: node.widthBand,
     overflowPolicy: cloneOverflowPolicy(node.overflowPolicy),
@@ -772,6 +774,7 @@ async function layoutContainer(
     role: container.role,
     primitive: container.primitive,
     classes: [...container.classes],
+    viewMetadata: cloneViewMetadata(container.viewMetadata),
     layout: cloneLayoutIntent(container.layout),
     chrome,
     headerContent: container.headerContent.map((block) => cloneMeasuredContentBlock(block)),

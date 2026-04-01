@@ -730,6 +730,129 @@ describe("staged macro-layout", () => {
     expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.preference_fallback")).toBe(false);
   });
 
+  it("preserves item view metadata through hierarchical ELK subtree positioning", async () => {
+    const top = buildCardNode("metadata-elk-top", "narrow", "Top", [
+      {
+        id: "south",
+        role: "primary_out",
+        side: "south"
+      }
+    ]);
+    const bottom = buildCardNode("metadata-elk-bottom", "narrow", "Bottom", [
+      {
+        id: "north",
+        role: "primary_in",
+        side: "north"
+      }
+    ]);
+    const cellMetadata = {
+      serviceBlueprint: {
+        kind: "cell" as const,
+        laneId: "lane:02:frontstage",
+        laneShellId: "lane:02:frontstage__shell",
+        bandId: "band:anchor:1",
+        bandLabel: "A1",
+        bandKind: "anchor" as const,
+        rowOrder: 1,
+        columnOrder: 0
+      }
+    };
+    const nodeMetadata = {
+      serviceBlueprint: {
+        kind: "semantic_node" as const,
+        cellId: "lane:02:frontstage__shell__cell__band:anchor:1"
+      }
+    };
+
+    top.viewMetadata = nodeMetadata;
+
+    const scene = buildRootScene(
+      {
+        strategy: "stack",
+        direction: "horizontal",
+        gap: 24
+      },
+      [
+        {
+          kind: "container",
+          id: "metadata-elk-zone",
+          role: "elk_group",
+          primitive: "cluster",
+          classes: ["elk_group"],
+          viewMetadata: cellMetadata,
+          layout: {
+            strategy: "elk_layered",
+            direction: "vertical",
+            gap: 20,
+            elk: {
+              hierarchyHandling: "include_children"
+            }
+          },
+          chrome: {
+            padding: {
+              top: 12,
+              right: 12,
+              bottom: 12,
+              left: 12
+            },
+            gutter: 12,
+            headerBandHeight: 0
+          },
+          ports: [],
+          children: [top, bottom]
+        }
+      ],
+      [
+        {
+          id: "metadata-elk-internal",
+          role: "transition",
+          classes: ["internal"],
+          from: {
+            itemId: "metadata-elk-top",
+            portId: "south"
+          },
+          to: {
+            itemId: "metadata-elk-bottom",
+            portId: "north"
+          },
+          routing: {
+            style: "orthogonal",
+            preferAxis: "vertical",
+            sourcePortRole: "primary_out",
+            targetPortRole: "primary_in"
+          }
+        }
+      ]
+    );
+
+    const result = await runStagedRendererPipeline(scene);
+    const measuredElkZone = result.measuredScene.root.children[0];
+    const positionedElkZone = findPositionedItem(result.positionedScene.root, "metadata-elk-zone");
+    const positionedTop = findPositionedItem(result.positionedScene.root, "metadata-elk-top");
+
+    if (!measuredElkZone || measuredElkZone.kind !== "container") {
+      throw new Error("Expected the measured scene to include the hierarchical ELK container.");
+    }
+    if (positionedElkZone.kind !== "container") {
+      throw new Error("Expected the positioned scene to include the hierarchical ELK container.");
+    }
+    if (positionedTop.kind !== "node") {
+      throw new Error("Expected the positioned scene to include the hierarchical ELK node.");
+    }
+
+    expect(measuredElkZone.viewMetadata).toEqual(cellMetadata);
+    expect(positionedElkZone.viewMetadata).toEqual(cellMetadata);
+    expect(positionedTop.viewMetadata).toEqual(nodeMetadata);
+
+    expect(measuredElkZone.viewMetadata).not.toBe(cellMetadata);
+    expect(positionedElkZone.viewMetadata).not.toBe(cellMetadata);
+    expect(positionedTop.viewMetadata).not.toBe(nodeMetadata);
+
+    expect(measuredElkZone.viewMetadata?.serviceBlueprint).not.toBe(cellMetadata.serviceBlueprint);
+    expect(positionedElkZone.viewMetadata?.serviceBlueprint).not.toBe(cellMetadata.serviceBlueprint);
+    expect(positionedTop.viewMetadata?.serviceBlueprint).not.toBe(nodeMetadata.serviceBlueprint);
+  });
+
   it("applies the stronger vertical target-approach rule to manually routed orthogonal edges", async () => {
     const scene = buildRootScene(
       {

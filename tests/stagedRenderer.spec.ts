@@ -109,6 +109,76 @@ describe("staged renderer contracts and harness", () => {
     expect(first).toEqual(second);
   });
 
+  it("preserves item view metadata through measurement and standard positioning", async () => {
+    const scene = buildFixtureScene();
+    const area = scene.root.children[0];
+    if (!area || area.kind !== "container") {
+      throw new Error("Expected the fixture scene to include a nested container.");
+    }
+    const primaryNode = area.children[0];
+    if (!primaryNode || primaryNode.kind !== "node") {
+      throw new Error("Expected the fixture scene to include a nested node.");
+    }
+
+    const areaMetadata = {
+      serviceBlueprint: {
+        kind: "cell" as const,
+        laneId: "lane:01:customer",
+        laneShellId: "lane:01:customer__shell",
+        bandId: "band:anchor:1",
+        bandLabel: "A1",
+        bandKind: "anchor" as const,
+        rowOrder: 0,
+        columnOrder: 0
+      }
+    };
+    const nodeMetadata = {
+      serviceBlueprint: {
+        kind: "semantic_node" as const,
+        cellId: "lane:01:customer__shell__cell__band:anchor:1"
+      }
+    };
+
+    area.viewMetadata = areaMetadata;
+    primaryNode.viewMetadata = nodeMetadata;
+
+    const result = await runStagedRendererPipeline(scene);
+    const measuredArea = result.measuredScene.root.children[0];
+    const positionedArea = result.positionedScene.root.children[0];
+
+    if (!measuredArea || measuredArea.kind !== "container") {
+      throw new Error("Expected the measured fixture scene to include the nested container.");
+    }
+    if (!positionedArea || positionedArea.kind !== "container") {
+      throw new Error("Expected the positioned fixture scene to include the nested container.");
+    }
+
+    const measuredNode = measuredArea.children[0];
+    const positionedNode = positionedArea.children[0];
+
+    if (!measuredNode || measuredNode.kind !== "node") {
+      throw new Error("Expected the measured fixture scene to include the nested node.");
+    }
+    if (!positionedNode || positionedNode.kind !== "node") {
+      throw new Error("Expected the positioned fixture scene to include the nested node.");
+    }
+
+    expect(measuredArea.viewMetadata).toEqual(areaMetadata);
+    expect(positionedArea.viewMetadata).toEqual(areaMetadata);
+    expect(measuredNode.viewMetadata).toEqual(nodeMetadata);
+    expect(positionedNode.viewMetadata).toEqual(nodeMetadata);
+
+    expect(measuredArea.viewMetadata).not.toBe(areaMetadata);
+    expect(positionedArea.viewMetadata).not.toBe(areaMetadata);
+    expect(measuredNode.viewMetadata).not.toBe(nodeMetadata);
+    expect(positionedNode.viewMetadata).not.toBe(nodeMetadata);
+
+    expect(measuredArea.viewMetadata?.serviceBlueprint).not.toBe(areaMetadata.serviceBlueprint);
+    expect(positionedArea.viewMetadata?.serviceBlueprint).not.toBe(areaMetadata.serviceBlueprint);
+    expect(measuredNode.viewMetadata?.serviceBlueprint).not.toBe(nodeMetadata.serviceBlueprint);
+    expect(positionedNode.viewMetadata?.serviceBlueprint).not.toBe(nodeMetadata.serviceBlueprint);
+  });
+
   it("keeps container-port deferral as internal state rather than a surfaced diagnostic", async () => {
     const result = await runStagedRendererPipeline(buildFixtureScene());
     const area = result.positionedScene.root.children[0];

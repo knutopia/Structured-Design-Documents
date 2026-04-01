@@ -104,7 +104,7 @@ existing `role` values instead.
 This migration should land in narrow, behavior-preserving slices, as described here.
 After completing a slice, mark it by prepending [Done] to its title. 
 
-### 1. Preserve metadata through staged contracts
+### [Done] 1. Preserve metadata through staged contracts
 
 Add `viewMetadata` to the staged item contracts and preserve it through
 measurement and positioning without changing behavior.

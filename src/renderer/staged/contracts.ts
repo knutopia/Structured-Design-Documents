@@ -41,6 +41,40 @@ export const IA_LOCAL_ROUTE_PATTERNS = {
   sharedTrunk: "ia_shared_trunk"
 } as const satisfies Record<"directVertical" | "sharedTrunk", LocalRoutePattern>;
 
+export type ServiceBlueprintItemMetadata =
+  | {
+      kind: "cell";
+      laneId: string;
+      laneShellId: string;
+      bandId: string;
+      bandLabel: string;
+      bandKind: "anchor" | "interstitial" | "sidecar" | "parking";
+      rowOrder: number;
+      columnOrder: number;
+    }
+  | {
+      kind: "semantic_node";
+      cellId: string;
+    };
+
+export interface ViewMetadata {
+  serviceBlueprint?: ServiceBlueprintItemMetadata;
+}
+
+export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | undefined {
+  if (viewMetadata === undefined) {
+    return undefined;
+  }
+
+  return viewMetadata.serviceBlueprint
+    ? {
+      serviceBlueprint: {
+        ...viewMetadata.serviceBlueprint
+      }
+    }
+    : {};
+}
+
 export interface BoxSpacing {
   top: number;
   right: number;
@@ -133,6 +167,7 @@ export interface SceneContainer {
   role: string;
   primitive: SceneContainerPrimitive;
   classes: string[];
+  viewMetadata?: ViewMetadata;
   layout: LayoutIntent;
   chrome: ChromeSpec;
   headerContent?: ContentBlock[];
@@ -148,6 +183,7 @@ export interface SceneNode {
   role: string;
   primitive: SceneNodePrimitive;
   classes: string[];
+  viewMetadata?: ViewMetadata;
   widthPolicy: WidthPolicy;
   overflowPolicy: OverflowPolicy;
   content: ContentBlock[];
@@ -216,6 +252,7 @@ export interface MeasuredContainer {
   role: string;
   primitive: SceneContainerPrimitive;
   classes: string[];
+  viewMetadata?: ViewMetadata;
   layout: LayoutIntent;
   chrome: ChromeSpec;
   headerContent: MeasuredContentBlock[];
@@ -233,6 +270,7 @@ export interface MeasuredNode {
   role: string;
   primitive: SceneNodePrimitive;
   classes: string[];
+  viewMetadata?: ViewMetadata;
   widthPolicy: WidthPolicy;
   widthBand: WidthBand;
   overflowPolicy: OverflowPolicy;
@@ -295,6 +333,7 @@ export interface PositionedContainer {
   role: string;
   primitive: SceneContainerPrimitive;
   classes: string[];
+  viewMetadata?: ViewMetadata;
   layout: LayoutIntent;
   chrome: ChromeSpec;
   headerContent: MeasuredContentBlock[];
@@ -314,6 +353,7 @@ export interface PositionedNode {
   role: string;
   primitive: SceneNodePrimitive;
   classes: string[];
+  viewMetadata?: ViewMetadata;
   widthPolicy: WidthPolicy;
   widthBand: WidthBand;
   overflowPolicy: OverflowPolicy;

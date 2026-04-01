@@ -1,4 +1,5 @@
 import ElkConstructor, { type ElkEdgeSection, type ElkNode, type ElkPort } from "elkjs/lib/main.js";
+import { cloneViewMetadata } from "./contracts.js";
 import type {
   ChromeSpec,
   LayoutDirection,
@@ -561,6 +562,7 @@ function buildPositionedSubtree(
       role: item.role,
       primitive: item.primitive,
       classes: [...item.classes],
+      viewMetadata: cloneViewMetadata(item.viewMetadata),
       widthPolicy: cloneWidthPolicy(item.widthPolicy),
       widthBand: item.widthBand,
       overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
@@ -585,6 +587,7 @@ function buildPositionedSubtree(
     role: item.role,
     primitive: item.primitive,
     classes: [...item.classes],
+    viewMetadata: cloneViewMetadata(item.viewMetadata),
     layout: {
       ...item.layout,
       elk: item.layout.elk
