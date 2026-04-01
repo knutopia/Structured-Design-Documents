@@ -2,6 +2,10 @@
 
 This file adds `service_blueprint`-specific discipline on top of the repo-root `AGENTS.md`.
 
+## Current Task: Typed Scene Metadata Migration
+
+As defined in `Service Blueprint Typed Scene Metadata Migration.md` we are undertaking a behavior-preserving refactor of the staged renderer so that `service_blueprint` structural semantics no longer depend on CSS-style class tokens or `viewId` branches inside shared layout and routing logic.
+
 ## Authority Order
 
 - `../service_blueprint_layout_rules.md` is the normative semantic and middle-layer contract.
