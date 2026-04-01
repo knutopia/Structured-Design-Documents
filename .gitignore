@@ -3,4 +3,4 @@ dist/
 .local-tools/
 .DS_Store
 coverage/
-
+.Identifier
