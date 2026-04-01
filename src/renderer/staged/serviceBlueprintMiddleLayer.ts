@@ -1086,12 +1086,17 @@ function buildMergedSemanticEdges(
   }
 
   return [...grouped.values()].map((group) => {
-    const canonical = [...group].sort((left, right) => left.id.localeCompare(right.id))[0]!;
+    const sortedGroup = [...group].sort((left, right) => left.id.localeCompare(right.id));
+    const canonical = sortedGroup[0]!;
     const readWriteTypes = new Set(group.map((edge) => edge.type));
     const mergedReadWrite = readWriteTypes.has("READS")
       && readWriteTypes.has("WRITES")
       && readWriteTypes.size === group.length
       && group.every((edge) => edge.from === canonical.from && edge.to === canonical.to);
+    const labels = sortedGroup.flatMap((edge) => {
+      const label = edge.label?.trim();
+      return label ? [label] : [];
+    }).filter((label, index, allLabels) => allLabels.indexOf(label) === index);
 
     return {
       id: mergedReadWrite
@@ -1102,7 +1107,7 @@ function buildMergedSemanticEdges(
       type: mergedReadWrite ? "READS_WRITES" : canonical.type,
       from: canonical.from,
       to: canonical.to,
-      label: mergedReadWrite ? "reads, writes" : canonical.label,
+      label: mergedReadWrite ? labels.join(", ") || undefined : canonical.label,
       style: mergedReadWrite ? "dashed" : canonical.style
     } satisfies ServiceBlueprintMiddleEdge;
   });

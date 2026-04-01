@@ -148,6 +148,32 @@ describe("preview workflow", () => {
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 
+  it("omits service_blueprint secondary edge labels in simple staged SVG previews", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("service_blueprint_slice.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "service_blueprint",
+      format: "svg",
+      profileId: "simple"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_service_blueprint_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected staged SVG artifact.");
+    }
+
+    expect(result.artifact.text).toContain('class="staged-svg');
+    expect(result.artifact.text).toContain("Submit Claim");
+    expect(result.artifact.text).not.toContain("realized by");
+    expect(result.artifact.text).not.toContain("depends on");
+    expect(result.artifact.text).not.toContain("constrained by");
+    expect(result.artifact.text).not.toContain("reads, writes");
+    expect(result.artifact.text).toContain('class="scene-edge');
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
   it("renders service_blueprint PNG previews through the staged backend by default", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadInput("service_blueprint_slice.sdd");
