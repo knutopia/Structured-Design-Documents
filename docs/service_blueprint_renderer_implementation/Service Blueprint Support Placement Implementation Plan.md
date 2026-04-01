@@ -98,7 +98,9 @@ Runtime interpretation:
 
 ## Implementation Slices
 
-### Slice 1. Separate Semantic Ownership From Physical Realization
+After completing a slice, mark it by prepending [Done] to its title. 
+
+### [Done] Slice 1. Separate Semantic Ownership From Physical Realization
 
 Goals:
 
@@ -192,23 +194,173 @@ Validation gates:
 
 ## Multi-Agent Execution
 
-Use sequential multi-agent execution rather than overlapping parallel edits on
-the core contract.
+Slice 1 is complete. Treat the current support-placement contract as the frozen
+baseline for all remaining work.
 
-Recommended split:
+Execution model:
 
-- the main thread freezes the contract and owns middle-layer changes first
-- worker 1 updates focused middle-layer and pre-routing tests after the
-  contract is stable
-- worker 2 updates routing ordering and only the route assertions made invalid
-  by the new placement
-- worker 3 refreshes snapshots and rendered artifacts last
+- use sequential execution: one coordinator plus at most one coding worker at a
+  time
+- an optional read-only review/check worker may run between slices, but do not
+  run two writing agents at once
+- the coordinator owns slice boundaries, acceptance decisions, and any decision
+  to reopen Slice 1 files
 
-Do not run multiple coding agents concurrently on:
+Frozen baseline:
 
-- `src/renderer/staged/serviceBlueprintMiddleLayer.ts`
-- `src/renderer/staged/serviceBlueprintRouting.ts`
-- `src/renderer/staged/contracts.ts`
+- treat `src/renderer/staged/contracts.ts`,
+  `src/renderer/staged/serviceBlueprintMiddleLayer.ts`, and the Slice 1
+  support-placement metadata path as frozen
+- Slice 2 may read that contract freely but must not change it unless a blocker
+  proves the contract is insufficient
+- if such a blocker appears, stop, document the mismatch, make one narrow
+  coordinator-approved contract patch, then continue; do not let routing grow a
+  placement backdoor
+
+Global rules for remaining slices:
+
+- do not run concurrent coding agents on:
+  - `src/renderer/staged/serviceBlueprintMiddleLayer.ts`
+  - `src/renderer/staged/serviceBlueprintRouting.ts`
+  - `src/renderer/staged/contracts.ts`
+- do not refresh goldens or rendered artifacts before Slice 2 behavioral gates
+  pass
+- preserve routing as a consumer of physical placement; ordering may use
+  semantic band order plus local slot order, but same-row and same-column logic
+  must still come from physical geometry
+- after each slice, the owner must hand off:
+  - files changed
+  - commands run and results
+  - acceptance gates satisfied / violated
+  - unresolved blockers or residual risks
+- do not begin the next slice until the coordinator accepts the current slice
+  handoff
+
+### Slice 2 Owner: Minimal Routing Adaptation
+
+Ownership:
+
+- primary write scope: `src/renderer/staged/serviceBlueprintRouting.ts`
+- secondary write scope only if required by assertions:
+  `tests/serviceBlueprintPreRouting.spec.ts`,
+  `tests/stagedServiceBlueprint.spec.ts`
+- read-only inputs: the frozen Slice 1 metadata and middle-layer outputs
+
+Task:
+
+- adapt connector ordering to use semantic band order first and physical slot
+  order second
+- keep route templates, swerving, gutter allocation, label logic, and merge
+  behavior intact unless a focused failing test proves a narrow follow-on fix is
+  necessary
+- do not reintroduce semantic sidecar logic, CSS-class parsing, or
+  routing-owned placement logic
+
+Required output:
+
+- routing uses `bandOrder` and `slotOrderWithinBand` only for ordering and
+  tie-breaking
+- physical geometry remains the source of same-row and same-column behavior
+- test edits are limited to route assertions invalidated by the new
+  owned-spill model
+
+Focused verification:
+
+- `TMPDIR=/tmp pnpm run build`
+- `TMPDIR=/tmp pnpm exec vitest run tests/serviceBlueprintMiddleLayer.spec.ts`
+- `TMPDIR=/tmp pnpm exec vitest run tests/serviceBlueprintPreRouting.spec.ts`
+- `TMPDIR=/tmp pnpm exec vitest run tests/stagedServiceBlueprint.spec.ts -t "builds a fixed root grid|renders routing stages|expands the lane gutter|merges routing-compatible same-node connectors|keeps incompatible same-node connectors separate|appends a synthetic ungrouped lane shell|keeps disconnected scene construction deterministic"`
+
+Slice 2 gate:
+
+- all focused non-snapshot service-blueprint tests are green
+- no new `renderer.routing.service_blueprint_node_intersection` failures appear
+- no broad routing churn is needed
+- no Slice 1 contract reopening occurred without explicit approval
+
+### Slice 3 Owner: Snapshot And Artifact Refresh
+
+Prerequisite:
+
+- Slice 2 gate is green
+
+Ownership:
+
+- `tests/goldens/renderer-stages/service-blueprint.slice.*`
+- proof-case rendered outputs under
+  `examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/`
+
+Task:
+
+- refresh only the committed stage goldens and rendered proof-case artifacts
+  that now legitimately differ because of the Slice 1 plus Slice 2 model
+- do not mix in unrelated renderer-stage golden churn or unrelated example
+  churn
+
+Verification order:
+
+- confirm the Slice 2 focused suite is still green
+- refresh the eight `service-blueprint.slice.*` stage goldens used by
+  `tests/stagedServiceBlueprint.spec.ts`
+- `TMPDIR=/tmp pnpm exec vitest run tests/stagedServiceBlueprint.spec.ts`
+- `TMPDIR=/tmp pnpm test`
+- `TMPDIR=/tmp pnpm run generate:rendered-examples`
+
+Slice 3 gate:
+
+- the snapshot subtest in `tests/stagedServiceBlueprint.spec.ts` is green
+- the full repo test suite is green
+- generated rendered examples match committed runtime behavior for the proof
+  case
+- artifact churn is limited to service-blueprint outputs justified by the new
+  placement model
+
+### Slice 4 Owner: Cleanup Pass
+
+Prerequisite:
+
+- Slice 3 gate is green
+
+Ownership:
+
+- remaining active-path service-blueprint staged files and tests that still use
+  stale `sidecar` or `shared_right_rail` vocabulary
+
+Task:
+
+- remove only stale terminology that still shapes active staged behavior or
+  assertions
+- keep cleanup narrow; do not rewrite historical problem statements, reference
+  notes, or legacy artifact names whose purpose is to describe the old model
+
+Suggested search seed:
+
+- `rg -n "sidecar|shared_right_rail|band_aligned_support|R\\*" src/renderer/staged tests`
+
+Verification:
+
+- `TMPDIR=/tmp pnpm run build`
+- `TMPDIR=/tmp pnpm exec vitest run tests/serviceBlueprintMiddleLayer.spec.ts tests/serviceBlueprintPreRouting.spec.ts tests/stagedServiceBlueprint.spec.ts`
+- `TMPDIR=/tmp pnpm test`
+
+Slice 4 gate:
+
+- no stale sidecar/right-rail vocabulary remains in the active staged
+  service-blueprint path
+- behavior is unchanged from Slice 3 except for terminology cleanup
+- cleanup does not broaden into unrelated routing, styling, or non-service-
+  blueprint work
+
+Recommended sequence:
+
+1. coordinator freezes the Slice 1 baseline and assigns Slice 2
+2. Slice 2 worker lands routing ordering and focused test updates
+3. optional read-only reviewer checks that Slice 2 stayed within ordering-only
+   scope
+4. Slice 3 worker refreshes stage goldens and proof-case rendered artifacts
+5. optional read-only reviewer checks artifact churn scope
+6. Slice 4 worker removes stale active-path vocabulary and reruns the
+   service-blueprint suite
 
 ## New Thread Handoff
 
