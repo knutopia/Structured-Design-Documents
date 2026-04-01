@@ -1533,6 +1533,38 @@ function buildGutterRects(
   return rects;
 }
 
+function resolveExpandedBundleLimit(
+  rect: GutterRect,
+  index: PositionedBlueprintIndex,
+  globalGutterState: ServiceBlueprintGlobalGutterState
+): number {
+  if (rect.kind === "node_bottom" && rect.laneOrder !== undefined) {
+    const nextRowTop = getNextValue(index.rowTopByOrder, rect.laneOrder);
+    if (nextRowTop !== undefined) {
+      return roundMetric(nextRowTop);
+    }
+    return roundMetric(
+      (index.rowBottomByOrder.get(rect.laneOrder) ?? (rect.y + rect.height))
+      + (globalGutterState.laneExpansions[rect.laneOrder] ?? 0)
+    );
+  }
+
+  if (rect.kind === "node_right" && rect.columnOrder !== undefined) {
+    const nextColumnLeft = getNextValue(index.columnLeftByOrder, rect.columnOrder);
+    if (nextColumnLeft !== undefined) {
+      return roundMetric(nextColumnLeft);
+    }
+    return roundMetric(
+      (index.columnRightByOrder.get(rect.columnOrder) ?? (rect.x + rect.width))
+      + (globalGutterState.columnExpansions[rect.columnOrder] ?? 0)
+    );
+  }
+
+  return rect.kind === "node_bottom"
+    ? roundMetric(rect.y + rect.height)
+    : roundMetric(rect.x + rect.width);
+}
+
 function buildGutterOccupancyForIntersection(
   connectorId: string,
   segment: RouteSegmentDetail,
@@ -3045,7 +3077,7 @@ function buildGutterLocalBundleResolution(
       }
 
       if (rect.kind === "node_bottom" && claim.laneOrder !== undefined) {
-        const availableLimit = roundMetric(rect.y + rect.height);
+        const availableLimit = resolveExpandedBundleLimit(rect, index, globalGutterState);
         const overflow = roundMetric(assignedCoordinate - availableLimit);
         if (overflow > 0) {
           requiredLaneExpansions[claim.laneOrder] = roundUpToSeparationDistance(
@@ -3054,7 +3086,7 @@ function buildGutterLocalBundleResolution(
         }
       }
       if (rect.kind === "node_right" && claim.columnOrder !== undefined) {
-        const availableLimit = roundMetric(rect.x + rect.width);
+        const availableLimit = resolveExpandedBundleLimit(rect, index, globalGutterState);
         const overflow = roundMetric(assignedCoordinate - availableLimit);
         if (overflow > 0) {
           requiredColumnExpansions[claim.columnOrder] = roundUpToSeparationDistance(

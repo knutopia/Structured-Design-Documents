@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1224" height="784" viewBox="0 0 1224 784" class="staged-svg view-service_blueprint profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="service_blueprint" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1224" height="736" viewBox="0 0 1224 736" class="staged-svg view-service_blueprint profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="service_blueprint" data-profile-id="simple" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -50,7 +50,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram service_blueprint service_blueprint" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1224" height="784" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="1224" height="736" rx="18" ry="18"/>
     </g>
     <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor" data-item-id="lane:01:customer__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="28" width="248" height="88" rx="16" ry="16"/>
@@ -113,16 +113,16 @@
       <rect class="scene-container__chrome" x="948" y="476" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-06-policy__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor" data-item-id="lane:06:policy__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
-      <rect class="scene-container__chrome" x="132" y="668" width="248" height="88" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="132" y="620" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-06-policy__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-i1 column-2 cell-kind-interstitial" data-item-id="lane:06:policy__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
-      <rect class="scene-container__chrome" x="404" y="668" width="248" height="88" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="404" y="620" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-06-policy__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a2 column-3 cell-kind-anchor" data-item-id="lane:06:policy__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
-      <rect class="scene-container__chrome" x="676" y="668" width="248" height="88" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="676" y="620" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-container-lane-06-policy__shell__cell__band-sidecar-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-r column-4 cell-kind-sidecar" data-item-id="lane:06:policy__shell__cell__band:sidecar:1" data-role="service_blueprint_cell">
-      <rect class="scene-container__chrome" x="948" y="668" width="248" height="88" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="948" y="620" width="248" height="88" rx="16" ry="16"/>
     </g>
     <g id="scene-decoration-lane-customer__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_interaction lane-customer" data-decoration-id="lane-customer__separator">
       <line class="scene-decoration__line" x1="24" y1="116" x2="1196" y2="116"/>
@@ -163,7 +163,7 @@
       <rect class="scene-node__chrome" x="960" y="496" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-pl-020" class="scene-node primitive-card role-policy paint-nodes semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor" data-item-id="PL-020" data-role="policy">
-      <rect class="scene-node__chrome" x="144" y="688" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="144" y="640" width="224" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -214,7 +214,7 @@
         </text>
     </g>
     <g class="scene-node primitive-card role-policy paint-labels semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor" data-item-id="PL-020" data-role="policy">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="156" y="716">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="156" y="668">
           <tspan x="156" dy="0">Retention Policy</tspan>
         </text>
     </g>
@@ -244,7 +244,7 @@
         </text>
     </g>
     <g id="scene-decoration-lane-policy__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-policy" data-decoration-id="lane-policy__title">
-      <text class="scene-text text-role-label block-kind-text" x="24" y="715">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="667">
           <tspan x="24" dy="0">policy</tspan>
         </text>
     </g>
@@ -266,7 +266,7 @@
       <path class="scene-edge__path" d="M 800 104 L 800 384" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="PR-020__constrained_by__PL-020" data-role="constrained_by">
-      <path class="scene-edge__path" d="M 272 208 L 272 480 L 384 480 L 384 576 L 272 576 L 272 688" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 272 208 L 272 480 L 384 480 L 384 576 L 272 576 L 272 640" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-pr-020__depends_on__sa-020" class="scene-edge role-depends_on route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-020__depends_on__SA-020" data-role="depends_on">
       <path class="scene-edge__path" d="M 256 208 L 256 496" marker-end="url(#scene-marker-arrow-end)"/>
@@ -278,7 +278,7 @@
       <path class="scene-edge__path" d="M 800 432 L 800 496" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="SA-020__constrained_by__PL-020" data-role="constrained_by">
-      <path class="scene-edge__path" d="M 256 544 L 256 688" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 256 544 L 256 640" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-sa-020__reads_writes__d-020" class="scene-edge role-reads_writes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
       <path class="scene-edge__path" d="M 272 544 L 272 560 L 1072 560 L 1072 544" marker-end="url(#scene-marker-arrow-end)"/>

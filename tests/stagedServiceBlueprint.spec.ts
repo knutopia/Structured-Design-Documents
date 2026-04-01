@@ -469,7 +469,8 @@ describe("staged service_blueprint", () => {
     );
     const step3Sa020 = findNestedPositionedItem(routingDebug.step3PositionedScene.root.children, "SA-020");
     const finalSa020Node = findNestedPositionedItem(rendered.positionedScene.root.children, "SA-020");
-    if (!step3Sa020 || !finalSa020Node) {
+    const finalPl020Node = findNestedPositionedItem(rendered.positionedScene.root.children, "PL-020");
+    if (!step3Sa020 || !finalSa020Node || !finalPl020Node) {
       throw new Error("Could not resolve SA-020 for obstacle-clearance assertions.");
     }
     expect(step2ConstrainedBy.route.points).toHaveLength(2);
@@ -537,6 +538,9 @@ describe("staged service_blueprint", () => {
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
     expect(finalConstrainedBy.route.points[3]!.y - finalReadsWrites.route.points[1]!.y).toBe(16);
     expect(finalReadsWrites.route.points[1]!.y).toBeGreaterThan(finalSaConstrainedBy.from.y);
+    expect(routedStages.final.globalGutterState.laneExpansions[4]).toBe(32);
+    expect(routedStages.final.nodeGutters.find((gutter) => gutter.nodeId === "SA-020")?.bottomAvailable).toBe(76);
+    expect(finalPl020Node.y - (finalSa020Node.y + finalSa020Node.height)).toBe(96);
 
     const saBottomBundleOccupancy = routedStages.final.gutterOccupancy.filter((occupancy) =>
       occupancy.key === "node:SA-020:bottom" && occupancy.axis === "horizontal"
