@@ -18,7 +18,7 @@ Node placement is governed by the current layout rules and should be treated as 
 
 ### Guidance: 
 
-- Layout Rules: (does not solve routing): <docs/service_blueprint_layout_rules.md>
+- Layout Rules: (does not solve routing): <docs/service_blueprint_renderer_implementation/service_blueprint_layout_rules.md>
 - Reference design notes, derived from manually routed reference design renderings: <docs/service_blueprint_renderer_implementation/reference/Service%20Blueprint%20Reference%20Design%20Notes.md>
 
 Please refer to the [Connector Positioning & Appearance]('reference/Service%20Blueprint%20Reference%20Design%20Notes.md#connector-positioning-&-appearance') section.
@@ -40,7 +40,7 @@ This deterministic order determines placement of connection points of node edges
 
 ### Additional Detail
 
-(from [Edge Family Rules](../service_blueprint_layout_rules.md#edge-family-rules))
+(from [Edge Family Rules](service_blueprint_layout_rules.md#edge-family-rules))
 
 Within PRECEDES...
 

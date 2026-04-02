@@ -1,4 +1,4 @@
-# Indentation in IA Place Map
+# [Done] Indentation in IA Place Map
 
 This note resolves the earlier ambiguity around IA indentation.
 

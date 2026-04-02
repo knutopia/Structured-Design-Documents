@@ -16,7 +16,8 @@
 -expanding service_blueprint placement rules to accomodate multi-node per slot handling
 -created, executed Service Blueprint Support Placement Implementation Plan
 -revisited to actually achieve adjacent spill columns
--capilalized lane labels, added line labels
+-capitalized lane labels, added line labels
+-analyzed style-logic separation
 
 ## Tue 3-31-26
 

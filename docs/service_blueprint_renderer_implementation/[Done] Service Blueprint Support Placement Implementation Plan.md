@@ -1,4 +1,7 @@
-# Service Blueprint Support Placement Implementation Plan
+# [Done] Service Blueprint Support Placement Implementation Plan
+
+
+..we executed this, it misaligned the support columns, we fixed it in a sub-branch..
 
 ## Purpose
 
@@ -17,7 +20,7 @@ The target is:
 Authority order for this implementation:
 
 - `docs/service_blueprint_renderer_implementation/AGENTS.md`
-- `docs/service_blueprint_layout_rules.md`
+- `docs/service_blueprint_renderer_implementation/service_blueprint_layout_rules.md`
 - `docs/service_blueprint_renderer_implementation/Second Service Blueprint Renderer Reset.md`
 - `docs/service_blueprint_renderer_implementation/Service Blueprint Routing Rules.md`
 

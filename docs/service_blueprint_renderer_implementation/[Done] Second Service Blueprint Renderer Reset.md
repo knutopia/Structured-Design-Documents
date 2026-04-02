@@ -1,4 +1,4 @@
-# Second Service Blueprint Renderer Reset
+# [Done] Second Service Blueprint Renderer Reset
 
 This note exists to record yet another change in direction for implementing rendering of service_blueprint type diagrams.
 
