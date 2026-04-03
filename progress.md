@@ -10,10 +10,14 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 4-03-26
+
+-edited readme intro
+
 ## Thu 4-02-26
 
--editing README.md for github use
--creating CONTRIBUTING.md
+-edited README.md for github use
+-created CONTRIBUTING.md
 
 ## Wed 4-01-26
 

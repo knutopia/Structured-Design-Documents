@@ -1,7 +1,5 @@
 # Improvements for README.md
 
-1. Put “what it is” and “how to try it” above the long rationale. Right now [Readme.md](/home/knut/projects/sdd/Readme.md#L3) does a good job on vision, but it doesn’t help a new visitor get started. Add a short intro, then a `Quick start` section with exact commands such as `pnpm install`, `pnpm run build`, `TMPDIR=/tmp pnpm sdd --help`, and one `sdd show ...` example from the CLI.
-
 2. Add one small SDD example and one rendered output image near the top. For this repo, code samples and images belong in the README. A short snippet from [metric_event_instrumentation.sdd](/home/knut/projects/sdd/bundle/v0.1/examples/metric_event_instrumentation.sdd) plus one rendered PNG/SVG from the committed corpus would make the project immediately legible on GitHub.
 
 3. Link the rendered example corpus directly. You already have a reviewer-friendly gallery in [examples/rendered/v0.1/README.md](/home/knut/projects/sdd/examples/rendered/v0.1/README.md). The root README should surface that instead of forcing visitors to infer what the tool produces.
@@ -21,6 +19,8 @@
 12. Skip badges unless they convey something real. There doesn’t appear to be visible CI metadata in the repo, so I wouldn’t add badge clutter yet. A strong example snippet and one diagram image would help much more.
 
 ## Done:
+
+1. [Done] Put “what it is” and “how to try it” above the long rationale. Right now [Readme.md](/home/knut/projects/sdd/Readme.md#L3) does a good job on vision, but it doesn’t help a new visitor get started. Add a short intro, then a `Quick start` section with exact commands such as `pnpm install`, `pnpm run build`, `TMPDIR=/tmp pnpm sdd --help`, and one `sdd show ...` example from the CLI.
 
 9. [Done] Do a proofreading pass. There are several visible issues in the current file: `Well-Stuctured`, `easy read and to write`, `suitabe`, `typr`, inconsistent `SDD-Text`/`SDDT` casing, and inconsistent list formatting. On GitHub, these small issues reduce credibility more than they do in internal docs.
 

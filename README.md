@@ -1,12 +1,23 @@
 # Readme: Structured Design Documents
 
-This project aims to define a way to capture structure in product design diagrams using a simple language.
+SDD-Text is a compact language for describing software product design as a structured map, so design elements and their relationships are explicit rather than spread across disconnected diagrams and documents. That makes product design structure easier for people, tools, and AI to understand, validate, and render consistently.
 
-That makes such diagrams easy for people (including non-designers) and LLMs to author, maintain, and integrate with.
+Technically, it is a DSL for authoring a structured graph of design information.
 
-This in turn gives LLMs (and design-aware people in the product loop) a way to work with product design in an expressive way, making product design information a first-class citizen in LLM workflows.
+This repository contains the SDD-Text toolchain for compiling, validating, and rendering structured design documents. SDD-Text compiles deterministically into canonical JSON for tooling, while different views of the same unified graph can be rendered as diagrams.
 
-Structured design documents also integrate well, at a node level, with concerns of the larger product creation / product management process (think "jira-issue-to-screen" mapping).
+## Quick Start
+
+These commands install dependencies, build the toolchain, inspect the CLI, and render a sample view:
+
+```bash
+pnpm install
+pnpm run build
+pnpm sdd --help
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
+```
+
+If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
 
 ## A Simple, Well-Structured Language to Express Product Design
 
@@ -40,6 +51,8 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 
 ## Orientation
 
+For tooling, [bundle/v0.1/](bundle/v0.1/) is the machine-readable source of truth. [definitions/v0.1/](definitions/v0.1/) contains explanatory commentary and rationale, and should stay consistent with the bundle.
+
 Original document outlining the idea:
 [Structured Design Artifacts to Advance the Software Product Design Practice](<initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md>)
 
@@ -47,13 +60,12 @@ Core concepts:
 - [Initial Concepts 1: a 6-Diagram Suite v0.1](<initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
 - [Initial Concepts 2: One-page Schema v0.1](<initial_concepts/Initial Concepts2 One-page Schema v0dot1.md>)
 
-
-Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
+Authoring Spec (human-oriented reference): [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
 Other folders:
 
-- [definitions/](definitions/) (/vXXX) houses definitions and rationale for version XXX (currently version 0.1)
-- [bundle/](bundle/) (/vXXX) houses tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are meant to drive tooling (so that encoding of actual language spec is done outside tooling).
+- [bundle/](bundle/) (/vXXX) houses the tight, machine-readable specifications for version XXX (currently version 0.1). These specifications are the source of truth for tooling.
+- [definitions/](definitions/) (/vXXX) houses explanatory definitions and rationale for version XXX (currently version 0.1), and should stay consistent with the bundle.
 
 ## Again, Why?
 
