@@ -89,10 +89,17 @@ Other folders:
 
 - Solid v0.1 SDDT spec.
 - Completed initial compile-validate-render pipeline.
-- Completed usable renderers for IA / Place Map, UI Contract and Service Blueprint
+- Completed usable SVG renderers for IA / Place Map, UI Contract and Service Blueprint
 
 Needs work:
-- Rendering output is not usable yet for Outcome-Opportunity Map, Journey Map and Scenario Flow.
-  - Need to replace Graphviz.
-  - Need to invest time in rendering templates / rules per diagram type.
-- Example Corpus needs to be strenghtend.
+- Outcome-Opportunity Map, Journey Map and Scenario Flow renderers:
+  - no usable SVG renderers yet
+  - poor Graphviz renderers still in place
+- Need to invest time in rendering templates
+- Need to separate styles into CSS files
+- Example Corpus needs to be strenghtend
+- Author user guidance for graph structure, diagram types
+
+Future:
+- LLM integration (MCP)
+- Standalone SDDT file server?
