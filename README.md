@@ -1,16 +1,16 @@
 # Readme: Structured Design Documents
 
-This project aims to define a way to capture structure in product design diagrams, using a simple language. 
+This project aims to define a way to capture structure in product design diagrams using a simple language.
 
-That makes such diagrams easy to author, to maintain and to integrate with, by people (including non-designers) and by LLMs. 
+That makes such diagrams easy for people (including non-designers) and LLMs to author, maintain, and integrate with.
 
 This in turn gives LLMs (and design-aware people in the product loop) a way to work with product design in an expressive way, making product design information a first-class citizen in LLM workflows.
 
-Structured design documents also will integrate well, on a node-level, with concerns of the larger product creation / product management process (think "jira-issue-to-screen" mapping.)
+Structured design documents also integrate well, at a node level, with concerns of the larger product creation / product management process (think "jira-issue-to-screen" mapping).
 
-## A simple, Well-Stuctured Language to Express Product Design
+## A Simple, Well-Structured Language to Express Product Design
 
-This project defines SDD-Text: a compact DSL (Domain-Specific Language) for authoring a typed product/design graph. SDD-text is easy read and to write, for people and for LLMs.
+This project defines SDD-Text: a compact DSL (Domain-Specific Language) for authoring a typed product/design graph. SDD-Text is easy to read and write, for people and for LLMs.
 
 Besides the language definition, the project also contains a basic toolchain to compile, validate and render SDD-Text diagrams.
 
@@ -33,10 +33,10 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
   Source of truth for product structure: what exists, where it lives, and how it connects.
 
 - Scenario Flow:
-  Step-by-step UI-level activities (but *without* collapsing the world into screens)
+  Step-by-step UI-level activities (but *without* collapsing the world into screens).
 
 - UI Contract:
-  UI composition and state changes, per Place (and optionally per component)
+  UI composition and state changes, per Place (and optionally per component).
 
 ## Orientation
 
@@ -57,17 +57,17 @@ Other folders:
 
 ## Again, Why?
 
-- To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly-outdated insulated documents with something that integrates well with overall product process and with future tooling. 
+- To give designers a way to replace well-meaning but hard-to-consume, incomplete, quickly outdated insulated documents with something that integrates well with overall product process and with future tooling.
 
-- To give any product person with a little coding talent a means to create and edit design diagrams (scary to designers but practical)
+- To give any product person with a little coding talent a means to create and edit design diagrams (scary to designers but practical).
 
-- To give product managers and their tools the opportunity to link product issues (epics, stories, tasks, bugs) to specific destinations (places, screens etc) in a "live" product design document
+- To give product managers and their tools the opportunity to link product issues (epics, stories, tasks, bugs) to specific destinations (places, screens, etc.) in a "live" product design document.
 
-- To give LLMs the capability to read design diagrams without burning tokens on deciphering blobs of pixels
+- To give LLMs the capability to read design diagrams without burning tokens on deciphering blobs of pixels.
 
-- To give LLMs the capability to express product design as output (instead of just creating pixel blobs and code blobs)
+- To give LLMs the capability to express product design as output (instead of just creating pixel blobs and code blobs).
 
-- To give graphical UI design tools and diagramming tools the means to maintain semantic content
+- To give graphical UI design tools and diagramming tools the means to maintain semantic content.
 
 - To give LLMs, graphical UI design tools, and diagramming tools a way to interact, API-driven, with a future product design structure source of truth.
 
@@ -75,12 +75,12 @@ Other folders:
 
 ## Current State
 
--Solid v0.1 SDDT spec.
--Completed initial compile-validate-render pipeline
+- Solid v0.1 SDDT spec.
+- Completed initial compile-validate-render pipeline.
+- Completed usable renderers for IA / Place Map, UI Contract and Service Blueprint
 
 Needs work:
--Rendering output is poor. 
-  -Need to replace graphviz with more suitabe engine
-  -Need to invest time in rendering templates / rules per diagram typr
--Examples are mostly low-quality
-  -Need to invest time in example authoring
+- Rendering output is not usable yet for Outcome-Opportunity Map, Journey Map and Scenario Flow.
+  - Need to replace Graphviz.
+  - Need to invest time in rendering templates / rules per diagram type.
+- Example Corpus needs to be strenghtend.

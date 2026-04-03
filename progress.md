@@ -10,7 +10,12 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Wed 4-02-26
+## Thu 4-02-26
+
+-editing README.md for github use
+-creating CONTRIBUTING.md
+
+## Wed 4-01-26
 
 -tackling service_blueprint layout authority alignment:
 -expanding service_blueprint placement rules to accomodate multi-node per slot handling
