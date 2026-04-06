@@ -2,6 +2,8 @@
 
 This directory is generated from the canonical bundle examples and committed as a reviewer-friendly reference corpus.
 
+Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration. Their renderers are not ready for prime time.
+
 Regenerate it with:
 
 ```bash
@@ -12,14 +14,14 @@ Source manifest: `bundle/v0.1/manifest.yaml`
 
 Curated view/example pairs:
 
-- `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
-- `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`
-- `journey_map_diagram_type/outcome_to_ia_trace_example`
+- `outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example`
+- `outcome_opportunity_map_diagram_type [preview_only]/outcome_to_ia_trace_example`
+- `journey_map_diagram_type [preview_only]/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/place_viewstate_transition_example`
 - `ui_contracts_diagram_type/place_viewstate_transition_example`
-- `scenario_flow_diagram_type/scenario_branching_example`
-- `journey_map_diagram_type/service_blueprint_slice_example`
+- `scenario_flow_diagram_type [preview_only]/scenario_branching_example`
+- `journey_map_diagram_type [preview_only]/service_blueprint_slice_example`
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
 - `ui_contracts_diagram_type/ui_state_fallback_example`
 

@@ -36,6 +36,14 @@ export interface RenderedCorpusOutputPaths {
   pngOutputPath: string;
 }
 
+const previewOnlyRenderedCorpusViewIds = new Set([
+  "outcome_opportunity_map",
+  "journey_map",
+  "scenario_flow"
+]);
+
+const previewOnlyRenderedCorpusViewDirSuffix = " [preview_only]";
+
 export function getRenderedCorpusDebugOutputPath(
   bundle: Bundle,
   variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">,
@@ -56,7 +64,14 @@ function getVersionedCorpusDirName(bundle: Bundle): string {
 }
 
 export function getRenderedCorpusViewDirName(viewId: string): string {
-  return `${viewId}_diagram_type`;
+  const baseName = `${viewId}_diagram_type`;
+  return previewOnlyRenderedCorpusViewIds.has(viewId)
+    ? `${baseName}${previewOnlyRenderedCorpusViewDirSuffix}`
+    : baseName;
+}
+
+export function isPreviewOnlyRenderedCorpusView(viewId: string): boolean {
+  return previewOnlyRenderedCorpusViewIds.has(viewId);
 }
 
 export function getRenderedCorpusExampleDirName(exampleName: string): string {

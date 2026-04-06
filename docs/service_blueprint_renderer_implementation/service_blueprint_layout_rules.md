@@ -24,7 +24,7 @@ The goal of these rules is to provide a semantic target before we decide exact g
 
 Local source-of-truth inputs:
 
-- `examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd`
+- `examples/rendered/v0.1/journey_map_diagram_type [preview_only]/service_blueprint_slice_example/service_blueprint_slice.sdd`
 - `bundle/v0.1/core/views.yaml`
 - `definitions/v0.1/endpoint_contracts_semantic_rules_sdd_text_v_0_dot_1.md`
 - `docs/service_blueprint_renderer_implementation/reference/service_blueprint_slice.service_blueprint.tight_routing.png`

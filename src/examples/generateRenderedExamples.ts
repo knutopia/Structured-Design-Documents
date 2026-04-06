@@ -38,6 +38,7 @@ function buildReadmeContent(
     "# Rendered Example Corpus",
     "",
     "This directory is generated from the canonical bundle examples and committed as a reviewer-friendly reference corpus.",
+    "Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.",
     "",
     "Regenerate it with:",
     "",

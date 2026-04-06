@@ -11,7 +11,7 @@ It is intentionally renderer-architecture-agnostic. The question here is not "ho
 
 ## The Example We Are Grounding On
 
-The sample [`service_blueprint_slice.sdd`](/home/knut/projects/sdd/examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd) has:
+The sample [`service_blueprint_slice.sdd`](/home/knut/projects/sdd/examples/rendered/v0.1/journey_map_diagram_type [preview_only]/service_blueprint_slice_example/service_blueprint_slice.sdd) has:
 
 - a primary customer lane: `J-020 -> J-021`
 - operational lanes: `frontstage`, `backstage`, `support`

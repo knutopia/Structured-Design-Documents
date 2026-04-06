@@ -8,6 +8,8 @@ import {
   getRenderedCorpusDebugOutputPath,
   getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
+  getRenderedCorpusViewDirName,
+  isPreviewOnlyRenderedCorpusView,
   planRenderedCorpusOutputPaths
 } from "../src/examples/renderedCorpus.js";
 import { loadBundle } from "../src/index.js";
@@ -16,6 +18,28 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("rendered example corpus", () => {
+  it("labels only preview-only rendered corpus view folders", async () => {
+    expect(isPreviewOnlyRenderedCorpusView("outcome_opportunity_map")).toBe(true);
+    expect(isPreviewOnlyRenderedCorpusView("journey_map")).toBe(true);
+    expect(isPreviewOnlyRenderedCorpusView("scenario_flow")).toBe(true);
+    expect(isPreviewOnlyRenderedCorpusView("ia_place_map")).toBe(false);
+    expect(isPreviewOnlyRenderedCorpusView("ui_contracts")).toBe(false);
+    expect(isPreviewOnlyRenderedCorpusView("service_blueprint")).toBe(false);
+
+    expect(getRenderedCorpusViewDirName("outcome_opportunity_map")).toBe(
+      "outcome_opportunity_map_diagram_type [preview_only]"
+    );
+    expect(getRenderedCorpusViewDirName("journey_map")).toBe(
+      "journey_map_diagram_type [preview_only]"
+    );
+    expect(getRenderedCorpusViewDirName("scenario_flow")).toBe(
+      "scenario_flow_diagram_type [preview_only]"
+    );
+    expect(getRenderedCorpusViewDirName("ia_place_map")).toBe("ia_place_map_diagram_type");
+    expect(getRenderedCorpusViewDirName("ui_contracts")).toBe("ui_contracts_diagram_type");
+    expect(getRenderedCorpusViewDirName("service_blueprint")).toBe("service_blueprint_diagram_type");
+  });
+
   it("contains every committed artifact for each curated render pair", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
@@ -25,7 +49,7 @@ describe("rendered example corpus", () => {
 
     for (const variant of variants) {
       const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
-      expect(path.basename(path.dirname(outputPaths.exampleDir))).toMatch(/_diagram_type$/);
+      expect(path.basename(path.dirname(outputPaths.exampleDir))).toBe(getRenderedCorpusViewDirName(variant.viewId));
       expect(path.basename(outputPaths.exampleDir)).toMatch(/_example$/);
       expect(path.basename(outputPaths.profileDir)).toMatch(/_profile$/);
       await access(outputPaths.sourceOutputPath);
@@ -38,6 +62,16 @@ describe("rendered example corpus", () => {
       const canonicalSource = await readFile(variant.example.absolutePath, "utf8");
       expect(copiedSource).toBe(canonicalSource);
     }
+  });
+
+  it("documents the preview-only rendered corpus label in the generated README", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const readme = await readFile(path.join(getRenderedCorpusRoot(bundle), "README.md"), "utf8");
+
+    expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.");
+    expect(readme).toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
+    expect(readme).toContain("journey_map_diagram_type [preview_only]/service_blueprint_slice_example");
+    expect(readme).toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");
   });
 
   it("keeps committed ui_contracts SVG previews free of visible newline escapes", async () => {

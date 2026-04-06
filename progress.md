@@ -16,6 +16,7 @@
 -improved CLI error "pretty" output further
 -added inline example to readme
 -added separate service blueprint example
+-marked not-ready example folders
 
 ## Sun 4-05-26
 
