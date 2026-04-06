@@ -28,6 +28,13 @@ Full source: [`small_app.sdd`](docs/examples_for_readme/small_app_example/small_
 ```text
 SDD-TEXT 0.1
 
+# small_app.sdd example file
+#
+# Area nodes and Places show up in the ia_place_map diagram.
+# Place nodes, their View States and Components show up in the ui_contracts diagram.
+#
+# This example is built for the "simple" profile, for quick sketches.
+
 Place P-100 "Dashboard"
   description="Global project status and flow entry points"
   primary_nav=true
@@ -65,6 +72,8 @@ Rendered outputs (click to open full size):
   <img src="docs/examples_for_readme/small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
 </a>
 
+See also: [Service Blueprint Slice example](docs/examples_for_readme/service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
+
 ## A Simple, Well-Structured Language to Express Product Design
 
 This project defines SDD-Text: a compact DSL (Domain-Specific Language) for authoring a typed product/design graph. SDD-Text is easy to read and write, for people and for LLMs.
@@ -77,22 +86,22 @@ SDD-Text can create a unified "Product Design Graph", which captures a variety o
 
 ## Diagram Types (Initial Targets)
 
-- Outcome-Opportunity Map:
+- Outcome-Opportunity Map: [Planned]
   Product intent, explicit and traceable: what the product solves, and how to know it works.
 
-- Journey Map:
+- Journey Map: [Planned]
   Experience intent from above: stages and steps, needs, friction, moments of truth.
 
-- Service Blueprint:
+- Service Blueprint: [Available]
   Connects user experience steps to the layers needed to realize it.
 
-- IA (Information Architecture) / Place Map:
+- IA (Information Architecture) / Place Map: [Available]
   Source of truth for product structure: what exists, where it lives, and how it connects.
 
-- Scenario Flow:
+- Scenario Flow: [Planned]
   Step-by-step UI-level activities (but *without* collapsing the world into screens).
 
-- UI Contract:
+- UI Contract: [Available]
   UI composition and state changes, per Place (and optionally per component).
 
 ## Orientation

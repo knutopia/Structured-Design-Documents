@@ -1,5 +1,12 @@
 SDD-TEXT 0.1
 
+# small_app.sdd example file
+#
+# Area nodes and Places show up in the ia_place_map diagram.
+# Place nodes, their View States and Components show up in the ui_contracts diagram.
+#
+# This example is built for the "simple" profile, for quick sketches.
+
 Place P-100 "Dashboard"
   description="Global project status and flow entry points"
   primary_nav=true
