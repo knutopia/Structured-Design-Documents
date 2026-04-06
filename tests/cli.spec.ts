@@ -286,6 +286,10 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
   };
 }
 
+function countOccurrences(text: string, pattern: string): number {
+  return text.split(pattern).length - 1;
+}
+
 describe("CLI wrappers", () => {
   it("dot emits DOT text for a valid example", async () => {
     const { deps, stdout, renderSourceMock } = createDeps();
@@ -701,6 +705,13 @@ describe("CLI wrappers", () => {
             severity: "error",
             message: "validation failed",
             file: "/repo/example.sdd"
+          },
+          {
+            stage: "validate",
+            code: "validate.failed",
+            severity: "error",
+            message: "validation failed",
+            file: "/repo/example.sdd"
           }
         ]
       }))
@@ -717,7 +728,155 @@ describe("CLI wrappers", () => {
 
     expect(result.exitCode).toBe(1);
     expect(deps.renderPreviewArtifact).not.toHaveBeenCalled();
-    expect(stderr.join("")).toContain("validate.failed");
+    const stderrText = stderr.join("");
+    expect(stderrText).toContain("ERROR validate.failed (2 instances) validation failed");
+    expect(countOccurrences(stderrText, "/repo/example.sdd")).toBe(1);
+  });
+
+  it("render supports json diagnostics output", async () => {
+    const { deps, stderr } = createDeps({
+      renderSource: vi.fn((_input, _bundle, options) => ({
+        viewId: options.viewId,
+        format: options.format,
+        text: "flowchart TD",
+        notes: [],
+        diagnostics: [
+          {
+            stage: "validate",
+            code: "validate.warning",
+            severity: "warn",
+            message: "warning text",
+            file: "/repo/example.sdd"
+          }
+        ]
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "render",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "journey_map",
+      "--format",
+      "mermaid",
+      "--diagnostics",
+      "json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).toContain("\"code\": \"validate.warning\"");
+  });
+
+  it("show supports json diagnostics output", async () => {
+    const { deps, stderr } = createDeps({
+      renderSourcePreview: vi.fn(async (_input, _bundle, options) => ({
+        view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
+        capability: {
+          textArtifacts: [],
+          previewArtifacts: [],
+          defaultPreviewFormat: "svg" as const
+        },
+        previewCapability: {
+          format: options.format,
+          backendId: "staged_ia_place_map_preview" as const,
+          backendClass: "staged" as const
+        },
+        artifact: {
+          format: "svg" as const,
+          text: "<svg>staged</svg>"
+        },
+        notes: [],
+        diagnostics: [
+          {
+            stage: "validate",
+            code: "validate.warning",
+            severity: "warn",
+            message: "warning text",
+            file: "/repo/example.sdd"
+          }
+        ]
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--diagnostics",
+      "json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).toContain("\"code\": \"validate.warning\"");
+  });
+
+  it("dot supports json diagnostics output", async () => {
+    const { deps, stderr } = createDeps({
+      renderSource: vi.fn((_input, _bundle, options) => ({
+        viewId: options.viewId,
+        format: options.format,
+        text: "digraph G {}",
+        notes: [],
+        diagnostics: [
+          {
+            stage: "validate",
+            code: "validate.warning",
+            severity: "warn",
+            message: "warning text",
+            file: "/repo/example.sdd"
+          }
+        ]
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "dot",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--diagnostics",
+      "json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).toContain("\"code\": \"validate.warning\"");
+  });
+
+  it("mmd supports json diagnostics output", async () => {
+    const { deps, stderr } = createDeps({
+      renderSource: vi.fn((_input, _bundle, options) => ({
+        viewId: options.viewId,
+        format: options.format,
+        text: "flowchart TD",
+        notes: [],
+        diagnostics: [
+          {
+            stage: "validate",
+            code: "validate.warning",
+            severity: "warn",
+            message: "warning text",
+            file: "/repo/example.sdd"
+          }
+        ]
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "mmd",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--diagnostics",
+      "json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).toContain("\"code\": \"validate.warning\"");
   });
 
   it("rejects mismatched DOT output extensions", async () => {

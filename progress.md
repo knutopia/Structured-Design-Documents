@@ -14,6 +14,7 @@
 
 -created simple example file to include in readme
 -removed empty containers from simple-profile ui_contracts diagram
+-restructured diagnostic pretty CLI output for readability
 
 ## Fri 4-03-26
 

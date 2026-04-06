@@ -325,7 +325,7 @@ async function runValidate(
 async function runRenderText(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile: string; view: string; format: string; out?: string }
+  options: { bundle: string; profile: string; view: string; format: string; out?: string; diagnostics: string }
 ): Promise<{ exitCode: number; text?: string; sourcePath?: string; bundle?: Bundle; view?: ViewSpec }> {
   try {
     const expectedExtension = options.format === "dot" ? "dot" : options.format === "mermaid" ? "mmd" : undefined;
@@ -349,7 +349,7 @@ async function runRenderText(
       format: options.format as TextRenderFormat,
       profileId: options.profile
     });
-    writeDiagnostics(deps, result.diagnostics, "pretty");
+    writeDiagnostics(deps, result.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
     if (!result.text || hasErrors(result.diagnostics)) {
       return { exitCode: hasErrors(result.diagnostics) ? 1 : 0 };
     }
@@ -385,7 +385,7 @@ async function writePreviewOutput(
 async function runDotCommand(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile: string; out?: string; png?: boolean; pngOut?: string }
+  options: { bundle: string; profile: string; out?: string; png?: boolean; pngOut?: string; diagnostics: string }
 ): Promise<number> {
   const pngOutputValidation = validateOutputExtension(options.pngOut, "png", "--png-out");
   if (!pngOutputValidation.valid) {
@@ -398,7 +398,8 @@ async function runDotCommand(
     profile: options.profile,
     view: "ia_place_map",
     format: "dot",
-    out: options.out
+    out: options.out,
+    diagnostics: options.diagnostics
   });
   if (renderResult.exitCode !== 0 || !renderResult.text || !renderResult.sourcePath) {
     return renderResult.exitCode;
@@ -469,6 +470,7 @@ async function runShowCommand(
     out?: string;
     dotOut?: string;
     backend?: string;
+    diagnostics: string;
   }
 ): Promise<number> {
   try {
@@ -520,7 +522,7 @@ async function runShowCommand(
         format: requestedPreviewFormat,
         profileId: options.profile
       });
-      writeDiagnostics(deps, renderResult.diagnostics, "pretty");
+      writeDiagnostics(deps, renderResult.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
       if (!renderResult.artifact || hasErrors(renderResult.diagnostics)) {
         return hasErrors(renderResult.diagnostics) ? 1 : 0;
       }
@@ -648,6 +650,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
     .option("--out <file>", "write rendered output to a file instead of stdout")
+    .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot",
       "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd",
@@ -671,6 +674,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--out <file>", "write DOT output to a file instead of stdout")
     .option("--png", "also write a sibling PNG rendered through the SVG preview pipeline")
     .option("--png-out <file>", "write PNG output to an explicit file path")
+    .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --png",
@@ -688,6 +692,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
     .option("--out <file>", "write Mermaid output to a file instead of stdout")
+    .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd"
@@ -708,12 +713,13 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id", "recommended")
-    .option("--format <format>", "preview format (svg or png)", "svg")
-    .option("--backend <backend>", "preview backend id override")
-    .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")
-    .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
-    .addHelpText("after", examplesBlock([
+      .option("--profile <profile>", "profile id", "recommended")
+      .option("--format <format>", "preview format (svg or png)", "svg")
+      .option("--backend <backend>", "preview backend id override")
+      .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")
+      .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
+      .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
+      .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
