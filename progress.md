@@ -17,6 +17,8 @@
 -added inline example to readme
 -added separate service blueprint example
 -marked not-ready example folders
+-restructured readme further
+-created separate diagram types page
 
 ## Sun 4-05-26
 

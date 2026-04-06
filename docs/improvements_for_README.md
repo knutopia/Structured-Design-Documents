@@ -8,8 +8,6 @@
 
 10. Add a small “Project metadata” footer. I didn’t find `LICENSE`, `CONTRIBUTING`, or `CODE_OF_CONDUCT` files in the repo root, so the README should at least state whether the project is open to contributions, who maintains it, and what the current usage/contribution expectations are.
 
-12. Skip badges unless they convey something real. There doesn’t appear to be visible CI metadata in the repo, so I wouldn’t add badge clutter yet. A strong example snippet and one diagram image would help much more.
-
 ## Done:
 
 1. [Done] Put “what it is” and “how to try it” above the long rationale. Right now [Readme.md](/home/knut/projects/sdd/Readme.md#L3) does a good job on vision, but it doesn’t help a new visitor get started. Add a short intro, then a `Quick start` section with exact commands such as `pnpm install`, `pnpm run build`, `TMPDIR=/tmp pnpm sdd --help`, and one `sdd show ...` example from the CLI.
@@ -28,3 +26,4 @@
 
 3. [Skipped] Link the rendered example corpus directly. You already have a reviewer-friendly gallery in [examples/rendered/v0.1/README.md](/home/knut/projects/sdd/examples/rendered/v0.1/README.md). The root README should surface that instead of forcing visitors to infer what the tool produces.
 
+12. [Skipped] Skip badges unless they convey something real. There doesn’t appear to be visible CI metadata in the repo, so I wouldn’t add badge clutter yet. A strong example snippet and one diagram image would help much more.
