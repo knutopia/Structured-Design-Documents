@@ -15,6 +15,7 @@
 -added small_app_err error output example file
 -improved CLI error "pretty" output further
 -added inline example to readme
+-added separate service blueprint example
 
 ## Sun 4-05-26
 

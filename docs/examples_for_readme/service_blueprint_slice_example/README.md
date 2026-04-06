@@ -2,7 +2,17 @@
 
 This example shows how SDD-Text expresses a service blueprint slice for a simple claim flow. The diagram connects customer-visible steps to frontstage, backstage, support, system, and policy elements in one structured graph. The image below is the `recommended_profile` render from the code-driven example set.
 
-Full source: [service_blueprint_slice.sdd](service_blueprint_slice.sdd)
+Full source: [claim_flow_slice.sdd](claim_flow_slice.sdd)
+
+## Generate the PNG
+
+From this folder, generate a PNG preview with the `show` command:
+
+```bash
+pnpm sdd show claim_flow_slice.sdd --view service_blueprint --format png --out /tmp/claim_flow_slice.service_blueprint.png
+```
+
+This uses the default `recommended` profile and writes the PNG to `/tmp` instead of overwriting the checked-in example image.
 
 ## Source Excerpt
 
@@ -86,8 +96,8 @@ END
 
 ## Rendered Output
 
-<a href="service_blueprint_slice.service_blueprint.png">
-  <img src="service_blueprint_slice.service_blueprint.png" alt="Service blueprint slice (recommended profile)" width="900">
+<a href="claim_flow_slice.service_blueprint.png">
+  <img src="claim_flow_slice.service_blueprint.png" alt="Service blueprint slice (recommended profile)" width="900">
 </a>
 
 ## What To Look For

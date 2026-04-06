@@ -39,8 +39,8 @@ Place P-100 "Dashboard"
   description="Global project status and flow entry points"
   primary_nav=true
   COMPOSED_OF C-100 "Projects Status Summary"
-  COMPOSED_OF C-110 "Priority List of Tasks"
-  COMPOSED_OF C-900 "Global Navigation"
+  COMPOSED_OF C-110 # (Quoted target name hints are optional...)
+  COMPOSED_OF C-900 "Global Navigation" # (...but can improve readability)
 
   + Component C-100 "Projects Status Summary"
     description="At-a-glance view of project statuses"
