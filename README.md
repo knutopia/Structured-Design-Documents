@@ -21,7 +21,7 @@ If you hit temp-directory permission errors in some WSL setups, rerun commands w
 
 ## Example: Small App
 
-Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram is generated.
+Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
 Full source: [`small_app.sdd`](docs/examples_for_readme/small_app_example/small_app.sdd)
 
@@ -56,13 +56,14 @@ Area A-200 "Current Projects"
     CONTAINS VS-210c "Delete Project Confirmation Dialog"
 ```
 
-Rendered IA / Place Map:
+Rendered outputs (click to open full size):
 
-![Small app IA / Place Map](docs/examples_for_readme/small_app_example/small_app_ia_1.png)
-
-Rendered UI Contract:
-
-![Small app UI Contract](docs/examples_for_readme/small_app_example/small_app_uic_1.png)
+<a href="docs/examples_for_readme/small_app_example/small_app_ia_1.png">
+  <img src="docs/examples_for_readme/small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
+</a>
+<a href="docs/examples_for_readme/small_app_example/small_app_uic_1.png">
+  <img src="docs/examples_for_readme/small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
+</a>
 
 ## A Simple, Well-Structured Language to Express Product Design
 

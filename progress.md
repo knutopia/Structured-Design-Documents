@@ -14,6 +14,7 @@
 
 -added small_app_err error output example file
 -improved CLI error "pretty" output further
+-added inline example to readme
 
 ## Sun 4-05-26
 
