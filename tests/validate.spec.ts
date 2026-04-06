@@ -83,4 +83,28 @@ describe("validateGraph", () => {
     expect(validation.errorCount).toBeGreaterThan(0);
     expect(validation.diagnostics.some((diagnostic) => diagnostic.code === "validate.required_props_by_type")).toBe(true);
   });
+
+  it("attaches source spans to referential_integrity diagnostics", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = {
+      path: path.join(repoRoot, "tests/fixtures/invalid/referential_integrity_missing_node.sdd"),
+      text: [
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-999 \"Missing Component\"",
+        "END"
+      ].join("\n")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.graph).toBeDefined();
+    expect(compiled.diagnostics).toEqual([]);
+
+    const validation = validateGraph(compiled.graph!, bundle, "simple");
+    const referentialIntegrity = validation.diagnostics.find((diagnostic) => diagnostic.code === "validate.referential_integrity");
+
+    expect(referentialIntegrity).toBeDefined();
+    expect(referentialIntegrity?.span).toBeDefined();
+    expect(referentialIntegrity?.span?.line).toBe(2);
+    expect(referentialIntegrity?.span?.column).toBe(1);
+  });
 });

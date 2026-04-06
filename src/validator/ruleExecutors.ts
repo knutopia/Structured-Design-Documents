@@ -1,5 +1,5 @@
-import type { CompiledEdge, CompiledNode } from "../compiler/types.js";
-import type { Diagnostic, Severity } from "../types.js";
+import { getCompiledEdgeSourceSpan, type CompiledEdge, type CompiledNode } from "../compiler/types.js";
+import type { Diagnostic, Severity, SourceSpan } from "../types.js";
 import type { RuleExecutor, RuleSource, ValidationContext } from "./types.js";
 
 function createDiagnostic(
@@ -8,7 +8,8 @@ function createDiagnostic(
   code: string,
   message: string,
   ruleId?: string,
-  relatedIds?: string[]
+  relatedIds?: string[],
+  span?: SourceSpan
 ): Diagnostic {
   return {
     stage: "validate",
@@ -16,6 +17,7 @@ function createDiagnostic(
     severity,
     message,
     file: context.file,
+    span,
     ruleId,
     profileId: context.profileId,
     relatedIds
@@ -95,7 +97,8 @@ export const allEdgesEndpointsExist: RuleExecutor = (context, rule, _logic, seve
           `validate.${rule.id}`,
           `Edge '${edge.from} ${edge.type} ${edge.to}' references a missing node`,
           rule.id,
-          [edge.from, edge.to]
+          [edge.from, edge.to],
+          getCompiledEdgeSourceSpan(edge)
         )
       );
     }
@@ -631,4 +634,3 @@ export const ruleExecutors: Record<string, RuleExecutor> = {
   branching_step_marker: branchingStepMarker,
   id_prefix_type_coupling: idPrefixTypeCoupling
 };
-

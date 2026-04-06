@@ -1,0 +1,91 @@
+SDD-TEXT 0.1
+
+Place P-100 "Dashboard"
+  description="Global project status and flow entry points"
+  primary_nav=true
+  access=private
+  COMPOSED_OF C-100 "Projects Status Summary"
+  COMPOSED_OF C-110 "Priority List of Tasks"
+  COMPOSED_OF C-900 "Global Navigation"
+
+  + Component C-100 "Projects Status Summary"
+    description="At-a-glance view of project statuses"
+  END
+  + Component C-110 "Priority List of Tasks"
+    description="What needs to be done"
+  END
+END
+
+Area A-200 "Current Projects"
+  description="Ongoing work"
+  CONTAINS P-210 "Projects Overview"
+  CONTAINS P-220 "Project Detail"
+  CONTAINS P-230 "Create New Project"
+  + Place P-210 "Projects Overview"
+    description="Selectable list of projects with contextual actions"
+    primary_nav=true
+    entry_points=broken
+    CONTAINS C-900 "Global Navigation"
+    CONTAINS VS-210a "List of Projects"
+    CONTAINS VS-210b "Duplicate Project Dialog"
+    CONTAINS VS-210c "Delete Project Confirmation Dialog"
+    COMPOSED_OF C-230 "Contextual Actions for List of Projects"
+    COMPOSED_OF C-220 "Overview Actions"
+    COMPOSED_OF C-900 "Global Navigation" [E-999]
+    NAVIGATES_TO P-220
+    NAVIGATES_TO P-220 "Project"
+    NAVIGATES_TO P-230 "Create New Project"
+    + Component C-220 "Overview Actions"
+      description="Selection-independent actions"
+    END
+  END
+  + Place P-220 "Project"
+    description="Start to finish project details"
+    CONTAINS P-221 "Behavior Details"
+    CONTAINS P-222 "Dataset Details"
+    CONTAINS VS-220a "Overview Tab"
+    CONTAINS VS-220b "Behavior Tab"
+    CONTAINS VS-220c "Dataset Tab"
+    NAVIGATES_TO P-221 "Behavior Details"
+    NAVIGATES_TO P-222 "Dataset Details"
+    + Place P-221 "Behavior Details"
+      NAVIGATES_TO P-220 "Project"
+    END
+    + Place P-222 "Dataset Details"
+      NAVIGATES_TO P-220 "Project"
+    END
+    + ViewState VS-220a "Overview Tab"
+    END
+    + ViewState VS-220b "Behavior Tab"
+    END
+    + ViewState VS-220c "Dataset Tab"
+    END
+  END
+  + Place P-230 "Create New Project"
+    description="Creates a new project through a three-step flow and then opens the created projection"
+    CONTAINS VS-230a "Create New Project Step 1"
+    CONTAINS VS-230b "Create New Project Step 2"
+    CONTAINS VS-230c "Create New Project Step 3"
+    NAVIGATES_TO P-220 "Project"
+    + ViewState VS-230a "Create New Project Step 1"
+      TRANSITIONS_TO VS-231b "Create New Project Step 2"
+    END
+    + ViewState VS-230b "Create New Project Step 2"
+      TRANSITIONS_TO VS-231c "Create New Project Step 3"
+    END
+    + ViewState VS-230c "Create New Project Step 3"
+    END
+  END
+END
+
+Area A-300 "Vault"
+  description="Closed projects for review, backtesting"
+  CONTAINS P-310 "Projects by Period"
+  + Place P-310 "Projects by Period"
+    description="Selectable list of projects with contextual actions"
+    primary_nav=true
+  END
+END
+
+Component C-900 "Global Navigation"
+END

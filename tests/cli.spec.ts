@@ -290,6 +290,8 @@ function countOccurrences(text: string, pattern: string): number {
   return text.split(pattern).length - 1;
 }
 
+const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
+
 describe("CLI wrappers", () => {
   it("dot emits DOT text for a valid example", async () => {
     const { deps, stdout, renderSourceMock } = createDeps();
@@ -729,8 +731,53 @@ describe("CLI wrappers", () => {
     expect(result.exitCode).toBe(1);
     expect(deps.renderPreviewArtifact).not.toHaveBeenCalled();
     const stderrText = stderr.join("");
-    expect(stderrText).toContain("ERROR validate.failed (2 instances) validation failed");
+    expect(stderrText).toContain("ERROR validate.failed (2 instances): validation failed");
     expect(countOccurrences(stderrText, "/repo/example.sdd")).toBe(1);
+    expect(countOccurrences(stderrText, jsonDiagnosticsHint)).toBe(1);
+  });
+
+  it("validate pretty diagnostics include the json hint exactly once", async () => {
+    const { deps, stderr } = createDeps({
+      validateGraph: vi.fn(() => ({
+        diagnostics: [
+          {
+            stage: "validate",
+            code: "validate.warning",
+            severity: "warn",
+            message: "warning text",
+            file: "/repo/example.sdd"
+          }
+        ],
+        errorCount: 0,
+        warningCount: 1
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "validate",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const stderrText = stderr.join("");
+    expect(stderrText).toContain("WARN validate.warning (1 instance): warning text");
+    expect(stderrText).toContain(`\n\n${jsonDiagnosticsHint}\n`);
+    expect(countOccurrences(stderrText, jsonDiagnosticsHint)).toBe(1);
+  });
+
+  it("validate without diagnostics does not print the json hint", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "validate",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).not.toContain(jsonDiagnosticsHint);
   });
 
   it("render supports json diagnostics output", async () => {
@@ -766,7 +813,9 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(stderr.join("")).toContain("\"code\": \"validate.warning\"");
+    const stderrText = stderr.join("");
+    expect(stderrText).toContain("\"code\": \"validate.warning\"");
+    expect(stderrText).not.toContain(jsonDiagnosticsHint);
   });
 
   it("show supports json diagnostics output", async () => {

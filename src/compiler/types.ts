@@ -1,4 +1,4 @@
-import type { Diagnostic } from "../types.js";
+import type { Diagnostic, SourceSpan } from "../types.js";
 
 export interface CompiledNode {
   id: string;
@@ -42,6 +42,18 @@ export interface CompileResult {
 
 const graphSourcePath = new WeakMap<CompiledGraph, string>();
 const graphAuthorOrder = new WeakMap<CompiledGraph, CompiledGraphAuthorOrder>();
+const compiledEdgeSourceSpan = new WeakMap<CompiledEdge, SourceSpan>();
+
+function cloneSourceSpan(span: SourceSpan): SourceSpan {
+  return {
+    line: span.line,
+    column: span.column,
+    endLine: span.endLine,
+    endColumn: span.endColumn,
+    startOffset: span.startOffset,
+    endOffset: span.endOffset
+  };
+}
 
 export function attachGraphSourcePath(graph: CompiledGraph, sourcePath: string): void {
   graphSourcePath.set(graph, sourcePath);
@@ -65,4 +77,13 @@ export function attachGraphAuthorOrder(graph: CompiledGraph, authorOrder: Compil
 
 export function getGraphAuthorOrder(graph: CompiledGraph): CompiledGraphAuthorOrder | undefined {
   return graphAuthorOrder.get(graph);
+}
+
+export function attachCompiledEdgeSourceSpan(edge: CompiledEdge, span: SourceSpan): void {
+  compiledEdgeSourceSpan.set(edge, cloneSourceSpan(span));
+}
+
+export function getCompiledEdgeSourceSpan(edge: CompiledEdge): SourceSpan | undefined {
+  const span = compiledEdgeSourceSpan.get(edge);
+  return span ? cloneSourceSpan(span) : undefined;
 }

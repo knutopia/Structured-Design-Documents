@@ -21,12 +21,47 @@ function formatInstanceCount(count: number): string {
   return `${count} instance${count === 1 ? "" : "s"}`;
 }
 
-function formatLocation(diagnostic: Diagnostic): string {
-  if (!diagnostic.span) {
-    return "<no span>";
+function formatRuleSuffix(code: string, ruleId?: string): string {
+  if (!ruleId) {
+    return "";
   }
 
-  return `${diagnostic.span.line}:${diagnostic.span.column}`;
+  if (code === `validate.${ruleId}`) {
+    return "";
+  }
+
+  return ` [${ruleId}]`;
+}
+
+function formatLocation(diagnostic: Diagnostic): string | undefined {
+  return diagnostic.span ? `${diagnostic.span.line}:${diagnostic.span.column}` : undefined;
+}
+
+function formatBucketDetails(bucket: DiagnosticBucket, sharedMessage?: string): string[] {
+  if (!sharedMessage) {
+    return bucket.diagnostics.map((diagnostic) => {
+      const location = formatLocation(diagnostic);
+      return location ? `    ${location} ${diagnostic.message}` : `    ${diagnostic.message}`;
+    });
+  }
+
+  const lines: string[] = [];
+  let unspannedCount = 0;
+
+  for (const diagnostic of bucket.diagnostics) {
+    const location = formatLocation(diagnostic);
+    if (location) {
+      lines.push(`    ${location}`);
+    } else {
+      unspannedCount += 1;
+    }
+  }
+
+  if (unspannedCount > 0 && unspannedCount < bucket.diagnostics.length) {
+    lines.push(`    ${formatInstanceCount(unspannedCount)} without source location`);
+  }
+
+  return lines;
 }
 
 function groupDiagnostics(diagnostics: Diagnostic[]): FileDiagnostics[] {
@@ -74,17 +109,13 @@ export function formatPrettyDiagnostics(diagnostics: Diagnostic[]): string {
       const lines = [fileGroup.file];
 
       for (const bucket of fileGroup.buckets) {
-        const ruleSuffix = bucket.ruleId ? ` [${bucket.ruleId}]` : "";
+        const ruleSuffix = formatRuleSuffix(bucket.code, bucket.ruleId);
         const sharedMessage = bucket.diagnostics.every((diagnostic) => diagnostic.message === bucket.diagnostics[0]?.message)
           ? bucket.diagnostics[0]?.message
           : undefined;
-        const header = `  ${bucket.severity.toUpperCase()} ${bucket.code}${ruleSuffix} (${formatInstanceCount(bucket.diagnostics.length)})`;
+        const header = `  ${bucket.severity.toUpperCase()} ${bucket.code}${ruleSuffix} (${formatInstanceCount(bucket.diagnostics.length)}):`;
         lines.push(sharedMessage ? `${header} ${sharedMessage}` : header);
-
-        for (const diagnostic of bucket.diagnostics) {
-          const suffix = sharedMessage ? "" : ` ${diagnostic.message}`;
-          lines.push(`    ${formatLocation(diagnostic)}${suffix}`);
-        }
+        lines.push(...formatBucketDetails(bucket, sharedMessage));
       }
 
       return lines.join("\n");

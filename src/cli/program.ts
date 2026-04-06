@@ -38,6 +38,7 @@ import { validateGraph } from "../validator/validateGraph.js";
 import type { ValidationReport } from "../validator/types.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
+const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
 
 type DiagnosticsFormat = "pretty" | "json";
 
@@ -125,7 +126,9 @@ function writeDiagnostics(io: Pick<CliDeps, "stderr">, diagnostics: Diagnostic[]
     return;
   }
 
-  const content = format === "json" ? formatJsonDiagnostics(diagnostics) : formatPrettyDiagnostics(diagnostics);
+  const content = format === "json"
+    ? formatJsonDiagnostics(diagnostics)
+    : `${formatPrettyDiagnostics(diagnostics)}\n\n${jsonDiagnosticsHint}`;
   io.stderr(appendLine(content));
 }
 

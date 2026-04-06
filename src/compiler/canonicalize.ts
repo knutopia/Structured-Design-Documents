@@ -1,4 +1,12 @@
-import { attachGraphAuthorOrder, getGraphAuthorOrder, type CompiledEdge, type CompiledGraph, type CompiledNode } from "./types.js";
+import {
+  attachCompiledEdgeSourceSpan,
+  attachGraphAuthorOrder,
+  getCompiledEdgeSourceSpan,
+  getGraphAuthorOrder,
+  type CompiledEdge,
+  type CompiledGraph,
+  type CompiledNode
+} from "./types.js";
 
 function sortProps<T extends Record<string, string>>(props: T): T {
   const sorted = Object.fromEntries(Object.entries(props).sort(([left], [right]) => left.localeCompare(right)));
@@ -21,10 +29,15 @@ export function canonicalizeNode(node: CompiledNode): CompiledNode {
 }
 
 export function canonicalizeEdge(edge: CompiledEdge): CompiledEdge {
-  return {
+  const canonicalEdge: CompiledEdge = {
     ...edge,
     props: sortProps(edge.props)
   };
+  const sourceSpan = getCompiledEdgeSourceSpan(edge);
+  if (sourceSpan) {
+    attachCompiledEdgeSourceSpan(canonicalEdge, sourceSpan);
+  }
+  return canonicalEdge;
 }
 
 export function canonicalizeGraph(graph: CompiledGraph): CompiledGraph {

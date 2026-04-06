@@ -1,6 +1,7 @@
 import type { ParseDocument, ParseBodyItem, NodeBlock } from "../parser/types.js";
 import type { Diagnostic } from "../types.js";
 import {
+  attachCompiledEdgeSourceSpan,
   attachGraphAuthorOrder,
   type AuthorOrderedEdge,
   type CompiledEdge,
@@ -56,16 +57,20 @@ function collectTopLevelNodeIds(items: ParseDocument["items"]): string[] {
 function collectEdges(block: NodeBlock): CompiledEdge[] {
   return block.bodyItems
     .filter((item): item is Extract<ParseBodyItem, { kind: "EdgeLine" }> => item.kind === "EdgeLine")
-    .map((item) => ({
-      from: block.id,
-      type: item.relType,
-      to: item.to,
-      to_name: item.toName,
-      event: item.event,
-      guard: item.guard,
-      effect: item.effect,
-      props: Object.fromEntries(item.props.map((prop) => [prop.key, prop.rawValue]))
-    }));
+    .map((item) => {
+      const edge: CompiledEdge = {
+        from: block.id,
+        type: item.relType,
+        to: item.to,
+        to_name: item.toName,
+        event: item.event,
+        guard: item.guard,
+        effect: item.effect,
+        props: Object.fromEntries(item.props.map((prop) => [prop.key, prop.rawValue]))
+      };
+      attachCompiledEdgeSourceSpan(edge, item.span);
+      return edge;
+    });
 }
 
 function collectEdgeLineOrder(block: NodeBlock): AuthorOrderedEdge[] {
