@@ -489,6 +489,20 @@ describe("staged ui_contracts", () => {
     await expectRendererStageTextSnapshot("ui-contracts.place-viewstate-transition.svg", rendered.svg);
   });
 
+  it("omits empty place containers from simple staged ui_contracts scenes", async () => {
+    const fixturePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_empty_places.sdd");
+    const { rendererScene, rendered } = await buildUiContractsArtifacts(fixturePath, "simple");
+
+    expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-100", "P-210", "P-220"]);
+    expect(rendered.svg).toContain("Dashboard");
+    expect(rendered.svg).toContain("Projects Overview");
+    expect(rendered.svg).toContain("Project");
+    expect(rendered.svg).not.toContain("Behavior Details");
+    expect(rendered.svg).not.toContain("Dataset Details");
+    expect(rendered.svg).not.toContain("Projects by Period");
+  });
+
   it("builds fallback-to-state structure without a synthetic ViewState graph", async () => {
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/ui_state_fallback.sdd");
     const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "recommended");

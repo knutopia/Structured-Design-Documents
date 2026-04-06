@@ -1,0 +1,39 @@
+SDD-TEXT 0.1
+
+Place P-100 "Dashboard"
+  COMPOSED_OF C-100 "Projects Status Summary"
+END
+
+Component C-100 "Projects Status Summary"
+  EMITS E-100 "Dashboard Loaded"
+END
+
+Event E-100 "Dashboard Loaded"
+END
+
+Place P-210 "Projects Overview"
+  CONTAINS VS-210a "Project List"
+END
+
+ViewState VS-210a "Project List"
+  place_id=P-210
+  data_required=ProjectList
+END
+
+Place P-220 "Project"
+  CONTAINS VS-220a "Overview Tab"
+END
+
+ViewState VS-220a "Overview Tab"
+  place_id=P-220
+  data_required=Project
+END
+
+Place P-221 "Behavior Details"
+END
+
+Place P-222 "Dataset Details"
+END
+
+Place P-310 "Projects by Period"
+END

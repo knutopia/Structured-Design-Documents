@@ -3,7 +3,7 @@ import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
 import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
 import {
-  buildUiContractsRenderModel,
+  buildUiContractsRenderData,
   type UiContractsComponentItem,
   type UiContractsLeafNodeItem,
   type UiContractsRenderEdge,
@@ -673,21 +673,21 @@ export function buildUiContractsRendererScene(
   profileId: string,
   themeId = "default"
 ): RendererScene {
-  const model = buildUiContractsRenderModel(
+  const prepared = buildUiContractsRenderData(
     projection,
     graph,
     resolveProfileDisplayPolicy(view, profileId)
   );
   const context: SceneBuildContext = {
     diagnostics: [],
-    projectionNodesById: new Map(projection.nodes.map((node) => [node.id, node])),
-    renderNodesById: new Map(model.nodes.map((node) => [node.id, node])),
+    projectionNodesById: new Map(prepared.projection.nodes.map((node) => [node.id, node])),
+    renderNodesById: new Map(prepared.model.nodes.map((node) => [node.id, node])),
     endpointSceneIdByModelId: new Map(),
     containerSceneIdBySemanticNodeId: new Map(),
     sceneItemKindById: new Map(),
     renderedLeafNodeIds: new Set()
   };
-  const rootChildren = buildScopedSceneItems(model.rootItems, "root", context);
+  const rootChildren = buildScopedSceneItems(prepared.model.rootItems, "root", context);
 
   return {
     viewId: "ui_contracts",
@@ -704,7 +704,7 @@ export function buildUiContractsRendererScene(
       chrome: buildRootChrome(),
       children: rootChildren
     }),
-    edges: buildSceneEdges(projection, model, context),
+    edges: buildSceneEdges(prepared.projection, prepared.model, context),
     diagnostics: [...context.diagnostics]
   };
 }

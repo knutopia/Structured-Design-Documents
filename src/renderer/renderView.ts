@@ -14,6 +14,7 @@ export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, op
     return {
       format: options.format,
       viewId: options.viewId,
+      notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
@@ -31,14 +32,25 @@ export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, op
     return {
       format: options.format,
       viewId: options.viewId,
+      notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
 
+  const rendered = renderer.render(
+    projected.projection,
+    graph,
+    bundle,
+    view,
+    options.format,
+    options.profileId ?? "recommended"
+  );
+
   return {
     format: options.format,
     viewId: options.viewId,
-    text: renderer.render(projected.projection, graph, bundle, view, options.format, options.profileId ?? "recommended"),
+    text: rendered.text,
+    notes: rendered.notes,
     diagnostics: sortDiagnostics(diagnostics)
   };
 }
@@ -50,6 +62,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     return {
       format: options.format,
       viewId: options.viewId,
+      notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
@@ -60,6 +73,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     return {
       format: options.format,
       viewId: options.viewId,
+      notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
@@ -69,6 +83,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     format: options.format,
     viewId: options.viewId,
     text: rendered.text,
+    notes: rendered.notes,
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])
   };
 }

@@ -102,4 +102,4 @@ Needs work:
 
 Future:
 - LLM integration (MCP)
-- Standalone SDDT file server?
+- Standalone SDDT file server?+

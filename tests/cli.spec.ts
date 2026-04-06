@@ -173,6 +173,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
     viewId: options.viewId,
     format: options.format,
     text: options.format === "dot" ? "digraph G {}" : "flowchart TD",
+    notes: [],
     diagnostics: []
   }));
   const renderPreviewArtifactMock = vi.fn(async (request) => {
@@ -236,6 +237,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
         backendClass: backendId === "legacy_graphviz_preview" ? "legacy" as const : "staged" as const
       },
       artifact,
+      notes: [],
       diagnostics: []
     };
   });
@@ -826,6 +828,80 @@ describe("CLI wrappers", () => {
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/journey.mmd", "flowchart TD");
     expect(stdout.join("")).not.toContain("error");
+  });
+
+  it("prints render notes before the output file announcement", async () => {
+    const coverageNote =
+      "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period.";
+    const { deps, stderr, renderSourceMock } = createDeps();
+    renderSourceMock.mockImplementationOnce((_input, _bundle, options) => ({
+      viewId: options.viewId,
+      format: options.format,
+      text: "digraph G {}",
+      notes: [coverageNote],
+      diagnostics: []
+    }));
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "render",
+      "bundle/v0.1/examples/place_viewstate_transition.sdd",
+      "--view",
+      "ui_contracts",
+      "--format",
+      "dot",
+      "--out",
+      "/tmp/ui-contracts.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const stderrText = stderr.join("");
+    expect(stderrText).toContain(coverageNote);
+    expect(stderrText).toContain("Wrote /tmp/ui-contracts.dot");
+    expect(stderrText.indexOf(coverageNote)).toBeLessThan(stderrText.indexOf("Wrote /tmp/ui-contracts.dot"));
+  });
+
+  it("prints show notes before preview file announcements", async () => {
+    const coverageNote =
+      "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period.";
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    renderSourcePreviewMock.mockImplementationOnce(async (_input, _bundle, options) => ({
+      view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
+      capability: {
+        textArtifacts: [],
+        previewArtifacts: [],
+        defaultPreviewFormat: "svg" as const
+      },
+      previewCapability: {
+        format: options.format,
+        backendId: "staged_ui_contracts_preview",
+        backendClass: "staged" as const
+      },
+      artifact: {
+        format: "svg" as const,
+        text: "<svg>staged</svg>"
+      },
+      notes: [coverageNote],
+      diagnostics: []
+    }));
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/place_viewstate_transition.sdd",
+      "--view",
+      "ui_contracts",
+      "--out",
+      "/tmp/ui-contracts.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const stderrText = stderr.join("");
+    expect(stderrText).toContain(coverageNote);
+    expect(stderrText).toContain("Wrote /tmp/ui-contracts.svg");
+    expect(stderrText.indexOf(coverageNote)).toBeLessThan(stderrText.indexOf("Wrote /tmp/ui-contracts.svg"));
   });
 
   it("help output includes the new commands and guidance", () => {

@@ -129,6 +129,12 @@ function writeDiagnostics(io: Pick<CliDeps, "stderr">, diagnostics: Diagnostic[]
   io.stderr(appendLine(content));
 }
 
+function writeNotes(io: Pick<CliDeps, "stderr">, notes: string[]): void {
+  for (const note of notes) {
+    io.stderr(appendLine(note));
+  }
+}
+
 async function writeTextOutput(
   deps: Pick<CliDeps, "stdout" | "stderr" | "writeTextFile">,
   outputPath: string | undefined,
@@ -348,6 +354,7 @@ async function runRenderText(
       return { exitCode: hasErrors(result.diagnostics) ? 1 : 0 };
     }
 
+    writeNotes(deps, result.notes);
     await writeTextOutput(deps, options.out, result.text);
     return {
       exitCode: 0,
@@ -518,6 +525,7 @@ async function runShowCommand(
         return hasErrors(renderResult.diagnostics) ? 1 : 0;
       }
 
+      writeNotes(deps, renderResult.notes);
       if (options.dotOut) {
         const dotSource = renderResult.artifact.sourceArtifacts?.dot;
         if (!dotSource) {

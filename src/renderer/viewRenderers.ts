@@ -40,13 +40,18 @@ export type {
 } from "./renderArtifacts.js";
 import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
 import { buildServiceBlueprintRenderModel } from "./serviceBlueprintRenderModel.js";
-import { buildUiContractsRenderModel } from "./uiContractsRenderModel.js";
+import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
 
 export interface ViewRenderCapability {
   textArtifacts: TextArtifactCapability[];
   previewArtifacts: PreviewArtifactCapability[];
   defaultPreviewFormat: PreviewFormat;
   defaultPreviewBackends?: Partial<Record<PreviewFormat, PreviewRendererBackendId>>;
+}
+
+interface ViewTextRenderOutput {
+  text: string;
+  notes: string[];
 }
 
 interface ViewTextRenderer {
@@ -58,7 +63,7 @@ interface ViewTextRenderer {
     view: ViewSpec,
     format: TextRenderFormat,
     profileId: string
-  ) => string;
+  ) => ViewTextRenderOutput;
 }
 
 const legacyTextArtifacts: TextArtifactCapability[] = [
@@ -157,10 +162,16 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
     if (format === "dot") {
-      return renderIaPlaceMapDot(model, resolveLegacyDotPreviewStyle(bundle, view));
+      return {
+        text: renderIaPlaceMapDot(model, resolveLegacyDotPreviewStyle(bundle, view)),
+        notes: []
+      };
     }
 
-    return renderIaPlaceMapMermaid(model);
+    return {
+      text: renderIaPlaceMapMermaid(model),
+      notes: []
+    };
   }
 };
 
@@ -176,10 +187,16 @@ const journeyMapRenderer: ViewTextRenderer = {
       displayPolicy
     );
     if (format === "dot") {
-      return renderJourneyMapDot(model, resolveLegacyDotPreviewStyle(bundle, view));
+      return {
+        text: renderJourneyMapDot(model, resolveLegacyDotPreviewStyle(bundle, view)),
+        notes: []
+      };
     }
 
-    return renderJourneyMapMermaid(model);
+    return {
+      text: renderJourneyMapMermaid(model),
+      notes: []
+    };
   }
 };
 
@@ -189,10 +206,16 @@ const outcomeOpportunityMapRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildOutcomeOpportunityMapRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderOutcomeOpportunityMapDot(model, resolveLegacyDotPreviewStyle(bundle, view));
+      return {
+        text: renderOutcomeOpportunityMapDot(model, resolveLegacyDotPreviewStyle(bundle, view)),
+        notes: []
+      };
     }
 
-    return renderOutcomeOpportunityMapMermaid(model);
+    return {
+      text: renderOutcomeOpportunityMapMermaid(model),
+      notes: []
+    };
   }
 };
 
@@ -213,10 +236,16 @@ const serviceBlueprintRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderServiceBlueprintDot(model, resolveLegacyDotPreviewStyle(bundle, view));
+      return {
+        text: renderServiceBlueprintDot(model, resolveLegacyDotPreviewStyle(bundle, view)),
+        notes: []
+      };
     }
 
-    return renderServiceBlueprintMermaid(model);
+    return {
+      text: renderServiceBlueprintMermaid(model),
+      notes: []
+    };
   }
 };
 
@@ -226,10 +255,16 @@ const scenarioFlowRenderer: ViewTextRenderer = {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderScenarioFlowDot(model, resolveLegacyDotPreviewStyle(bundle, view));
+      return {
+        text: renderScenarioFlowDot(model, resolveLegacyDotPreviewStyle(bundle, view)),
+        notes: []
+      };
     }
 
-    return renderScenarioFlowMermaid(model);
+    return {
+      text: renderScenarioFlowMermaid(model),
+      notes: []
+    };
   }
 };
 
@@ -248,12 +283,18 @@ const uiContractsRenderer: ViewTextRenderer = {
   },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
-    const model = buildUiContractsRenderModel(projection, graph, displayPolicy);
+    const prepared = buildUiContractsRenderData(projection, graph, displayPolicy);
     if (format === "dot") {
-      return renderUiContractsDot(model, resolveLegacyDotPreviewStyle(bundle, view));
+      return {
+        text: renderUiContractsDot(prepared.model, resolveLegacyDotPreviewStyle(bundle, view)),
+        notes: prepared.notes
+      };
     }
 
-    return renderUiContractsMermaid(model);
+    return {
+      text: renderUiContractsMermaid(prepared.model),
+      notes: prepared.notes
+    };
   }
 };
 

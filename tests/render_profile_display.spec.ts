@@ -200,6 +200,41 @@ describe("profile-aware render detail", () => {
     }
   });
 
+  it("omits empty ui_contracts place containers in simple and reports a coverage note", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const fixturePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_empty_places.sdd");
+    const input = {
+      path: fixturePath,
+      text: await readFile(fixturePath, "utf8")
+    };
+
+    for (const format of formats) {
+      const simple = renderSource(input, bundle, {
+        viewId: "ui_contracts",
+        format,
+        profileId: "simple"
+      });
+      const permissive = renderSource(input, bundle, {
+        viewId: "ui_contracts",
+        format,
+        profileId: "permissive"
+      });
+
+      expect(simple.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+      expect(permissive.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+      expect(simple.text).not.toContain("Behavior Details");
+      expect(simple.text).not.toContain("Dataset Details");
+      expect(simple.text).not.toContain("Projects by Period");
+      expect(permissive.text).toContain("Behavior Details");
+      expect(permissive.text).toContain("Dataset Details");
+      expect(permissive.text).toContain("Projects by Period");
+      expect(simple.notes).toEqual([
+        "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period."
+      ]);
+      expect(permissive.notes).toEqual([]);
+    }
+  });
+
   it("keeps ui_contracts state groups visible in simple when state is the primary graph", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadExampleInput(bundle.rootDir, "ui_state_fallback");

@@ -4,7 +4,10 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import { buildUiContractsRenderModel } from "../src/renderer/uiContractsRenderModel.js";
+import {
+  buildUiContractsRenderData,
+  buildUiContractsRenderModel
+} from "../src/renderer/uiContractsRenderModel.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -161,6 +164,61 @@ END
     expect(component.orderAnchorId).toBe("C-300");
     expect(component.labelLines).toBeUndefined();
     expect(component.childItems).toEqual([]);
+  });
+
+  it("omits empty place containers in simple and records coverage feedback in source order", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const fixturePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_empty_places.sdd");
+    const input = {
+      path: fixturePath,
+      text: await readFile(fixturePath, "utf8")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+
+    const projected = projectView(compiled.graph!, bundle, "ui_contracts");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+
+    const simple = buildUiContractsRenderData(projected.projection!, compiled.graph!, {
+      omit_empty_place_containers: true,
+      show_view_state_data_required: false,
+      show_secondary_state_groups_when_primary_view_state: false,
+      show_supporting_contract_lane_when_primary_view_state: false
+    });
+    const recommended = buildUiContractsRenderData(projected.projection!, compiled.graph!, {
+      omit_empty_place_containers: false,
+      show_view_state_data_required: true,
+      show_secondary_state_groups_when_primary_view_state: true,
+      show_supporting_contract_lane_when_primary_view_state: true
+    });
+
+    expect(simple.model.rootItems.filter((item) => item.kind === "place").map((item) => item.id)).toEqual([
+      "P-100",
+      "P-210",
+      "P-220"
+    ]);
+    expect(recommended.model.rootItems.filter((item) => item.kind === "place").map((item) => item.id)).toEqual([
+      "P-100",
+      "P-210",
+      "P-220",
+      "P-221",
+      "P-222",
+      "P-310"
+    ]);
+    expect(simple.notes).toEqual([
+      "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period."
+    ]);
+    expect(simple.projection.notes).toContain(simple.notes[0]);
+    expect(simple.projection.derived.view_metadata.ui_contracts_coverage).toEqual({
+      omitted_empty_place_containers: [
+        { id: "P-221", name: "Behavior Details" },
+        { id: "P-222", name: "Dataset Details" },
+        { id: "P-310", name: "Projects by Period" }
+      ]
+    });
+    expect(recommended.notes).toEqual([]);
   });
 
   it("orders component-owned supporting contracts by top-level author order", async () => {

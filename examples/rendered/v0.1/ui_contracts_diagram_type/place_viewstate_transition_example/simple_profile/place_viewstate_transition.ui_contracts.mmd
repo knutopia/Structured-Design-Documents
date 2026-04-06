@@ -8,11 +8,8 @@ flowchart LR
     n_VS_010b("Billing Success")
     n_C_010("Billing Form")
   end
-  subgraph n_P_011[" "]
-    n_P_011__anchor["Confirmation"]
-  end
   n_VS_010a__anchor -->|[Submit] {payment_valid} / SA-010| n_VS_010b
   classDef dashedNode stroke-dasharray: 6 4;
   class n_VS_010b dashedNode;
   classDef containerTitle fill:transparent,stroke:transparent,color:#111;
-  class n_P_010__anchor,n_VS_010a__anchor,n_P_011__anchor containerTitle;
+  class n_P_010__anchor,n_VS_010a__anchor containerTitle;

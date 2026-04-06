@@ -6,6 +6,7 @@ import { projectView } from "../projector/projectView.js";
 import type { Projection } from "../projector/types.js";
 import type { SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
+import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
 import {
   getPreviewBackend,
   renderPreviewArtifact,
@@ -14,6 +15,7 @@ import {
 import { renderCompiledGraphText } from "./renderView.js";
 import type { PreviewFormat, PreviewRendererBackendId } from "./renderArtifacts.js";
 import type { RendererDiagnostic } from "./staged/diagnostics.js";
+import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
 import {
   getPreviewArtifactCapability,
   getViewRenderCapability,
@@ -33,6 +35,7 @@ export interface SourcePreviewRenderResult {
   capability: ViewRenderCapability;
   previewCapability: PreviewArtifactCapability;
   artifact?: PreviewArtifactResult;
+  notes: string[];
   diagnostics: Diagnostic[];
 }
 
@@ -89,12 +92,32 @@ function resolvePreviewCapability(
 function projectCompiledGraph(
   graph: CompiledGraph,
   bundle: Bundle,
-  viewId: string,
+  view: ViewSpec,
+  profileId: string,
   diagnostics: Diagnostic[]
-): Projection | undefined {
-  const projected = projectView(graph, bundle, viewId);
+): { projection?: Projection; notes: string[] } {
+  const projected = projectView(graph, bundle, view.id);
   diagnostics.push(...projected.diagnostics);
-  return projected.projection;
+  if (!projected.projection) {
+    return { notes: [] };
+  }
+
+  if (view.id === "ui_contracts") {
+    const prepared = buildUiContractsRenderData(
+      projected.projection,
+      graph,
+      resolveProfileDisplayPolicy(view, profileId)
+    );
+    return {
+      projection: prepared.projection,
+      notes: prepared.notes
+    };
+  }
+
+  return {
+    projection: projected.projection,
+    notes: []
+  };
 }
 
 export async function renderSourcePreview(
@@ -113,6 +136,7 @@ export async function renderSourcePreview(
       view,
       capability,
       previewCapability,
+      notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
@@ -124,11 +148,13 @@ export async function renderSourcePreview(
       view,
       capability,
       previewCapability,
+      notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
 
   let artifact: PreviewArtifactResult | undefined;
+  let notes: string[] = [];
   if (previewBackend.inputRequirement.kind === "text") {
     const renderResult = renderCompiledGraphText(compileResult.graph, bundle, {
       viewId: options.viewId,
@@ -136,12 +162,14 @@ export async function renderSourcePreview(
       profileId: options.profileId
     });
     diagnostics.push(...renderResult.diagnostics);
+    notes = [...renderResult.notes];
 
     if (!renderResult.text || hasErrors(diagnostics)) {
       return {
         view,
         capability,
         previewCapability,
+        notes,
         diagnostics: sortDiagnostics(diagnostics)
       };
     }
@@ -158,12 +186,14 @@ export async function renderSourcePreview(
       }
     });
   } else {
-    const projection = projectCompiledGraph(compileResult.graph, bundle, options.viewId, diagnostics);
-    if (!projection || hasErrors(diagnostics)) {
+    const prepared = projectCompiledGraph(compileResult.graph, bundle, view, options.profileId, diagnostics);
+    notes = [...prepared.notes];
+    if (!prepared.projection || hasErrors(diagnostics)) {
       return {
         view,
         capability,
         previewCapability,
+        notes,
         diagnostics: sortDiagnostics(diagnostics)
       };
     }
@@ -176,7 +206,7 @@ export async function renderSourcePreview(
       source: {
         kind: "projection",
         graph: compileResult.graph,
-        projection,
+        projection: prepared.projection,
         profileId: options.profileId
       }
     });
@@ -189,6 +219,7 @@ export async function renderSourcePreview(
     capability,
     previewCapability,
     artifact: hasErrors(diagnostics) ? undefined : artifact,
+    notes,
     diagnostics: sortDiagnostics(diagnostics)
   };
 }

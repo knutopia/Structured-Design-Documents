@@ -106,6 +106,18 @@ interface UiContractsDisplayOptions {
   includeViewStateDataRequired: boolean;
   showSecondaryStateGroupsWhenPrimaryViewState: boolean;
   showSupportingContractLaneWhenPrimaryViewState: boolean;
+  omitEmptyPlaceContainers: boolean;
+}
+
+interface UiContractsCoverageItem {
+  id: string;
+  name: string;
+}
+
+export interface UiContractsRenderData {
+  projection: Projection;
+  model: UiContractsRenderModel;
+  notes: string[];
 }
 
 function getTransitionGraphPriorityMetadata(projection: Projection): TransitionGraphPriorityViewMetadata {
@@ -136,7 +148,8 @@ function readUiContractsDisplayOptions(policy: ResolvedProfileDisplayPolicy): Ui
       policy,
       "show_supporting_contract_lane_when_primary_view_state",
       true
-    )
+    ),
+    omitEmptyPlaceContainers: readBooleanProfileDisplaySetting(policy, "omit_empty_place_containers", false)
   };
 }
 
@@ -322,6 +335,41 @@ function buildComponentContainerLabelLines(
   return [`Component: ${graphNodesById.get(componentId)?.name ?? componentId}`];
 }
 
+function formatUiContractsCoverageNote(omittedPlaceItems: UiContractsCoverageItem[]): string {
+  const duplicateNameCounts = omittedPlaceItems.reduce<Map<string, number>>((counts, item) => {
+    counts.set(item.name, (counts.get(item.name) ?? 0) + 1);
+    return counts;
+  }, new Map());
+  const labels = omittedPlaceItems.map((item) =>
+    (duplicateNameCounts.get(item.name) ?? 0) > 1 ? `${item.name} (${item.id})` : item.name
+  );
+
+  return `Omitted empty ui_contracts containers in simple profile: ${labels.join(", ")}.`;
+}
+
+function withUiContractsCoverage(
+  projection: Projection,
+  omittedPlaceItems: UiContractsCoverageItem[],
+  coverageNote: string
+): Projection {
+  return {
+    ...projection,
+    derived: {
+      ...projection.derived,
+      view_metadata: {
+        ...projection.derived.view_metadata,
+        ui_contracts_coverage: {
+          omitted_empty_place_containers: omittedPlaceItems.map((item) => ({
+            id: item.id,
+            name: item.name
+          }))
+        }
+      }
+    },
+    notes: projection.notes.includes(coverageNote) ? projection.notes : [...projection.notes, coverageNote]
+  };
+}
+
 function buildViewStateContainerLabelLines(
   viewStateId: string,
   graphNodesById: Map<string, { name: string; props: Record<string, string> }>,
@@ -443,11 +491,11 @@ function collectSiblingOrderChains(rootItems: UiContractsRootItem[]): string[][]
   return chains;
 }
 
-export function buildUiContractsRenderModel(
+export function buildUiContractsRenderData(
   projection: Projection,
   graph: CompiledGraph,
   displayPolicy: ResolvedProfileDisplayPolicy = {}
-): UiContractsRenderModel {
+): UiContractsRenderData {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectedNodeIds = new Set(projection.nodes.map((node) => node.id));
   const hierarchyEdges = projection.edges.filter((edge) => edge.type === "COMPOSED_OF" || edge.type === "CONTAINS");
@@ -677,9 +725,18 @@ export function buildUiContractsRenderModel(
     .filter((node) => node.type === "Component" && !parentByNodeId.has(node.id))
     .map((node) => node.id);
   const rootItemsByAnchorId = new Map<string, UiContractsRootItem[]>();
+  const omittedEmptyPlaceItems: UiContractsCoverageItem[] = [];
 
-  for (const placeId of rootPlaceIds) {
+  for (const placeId of orderNodeIds(graph, rootPlaceIds)) {
     const item = buildPlaceItem(placeId);
+    if (displayOptions.omitEmptyPlaceContainers && item.childItems.length === 0) {
+      const graphNode = graphNodesById.get(placeId);
+      omittedEmptyPlaceItems.push({
+        id: placeId,
+        name: graphNode?.name ?? placeId
+      });
+      continue;
+    }
     rootItemsByAnchorId.set(placeId, [item]);
   }
   for (const viewStateId of rootViewStateIds) {
@@ -772,6 +829,10 @@ export function buildUiContractsRenderModel(
   };
   collectContainerEndpoints(rootItems);
 
+  const renderedPlaceIds = new Set(
+    rootItems.filter((item): item is UiContractsPlaceItem => item.kind === "place").map((item) => item.id)
+  );
+
   const nodes = projection.nodes
     .filter(
       (node): node is typeof node & { type: UiContractsNodeType } =>
@@ -793,7 +854,7 @@ export function buildUiContractsRenderModel(
     });
   const renderedNodeIds = new Set(nodes.map((node) => node.id));
   const isRenderedEndpoint = (nodeId: string): boolean =>
-    placeIds.has(nodeId) || renderedNodeIds.has(nodeId) || containerEndpointByNodeId.has(nodeId);
+    renderedPlaceIds.has(nodeId) || renderedNodeIds.has(nodeId) || containerEndpointByNodeId.has(nodeId);
   const resolveRenderedEndpointId = (nodeId: string): string => containerEndpointByNodeId.get(nodeId) ?? nodeId;
   const localSupportEdgeKeys = new Set(
     [...ownedSupportNodeIdsByOwnerId.entries()].flatMap(([ownerId, nodeIds]) =>
@@ -831,10 +892,28 @@ export function buildUiContractsRenderModel(
       };
     });
 
+  const coverageNote =
+    omittedEmptyPlaceItems.length > 0 ? formatUiContractsCoverageNote(omittedEmptyPlaceItems) : undefined;
+  const preparedProjection = coverageNote
+    ? withUiContractsCoverage(projection, omittedEmptyPlaceItems, coverageNote)
+    : projection;
+
   return {
-    rootItems,
-    nodes,
-    edges,
-    siblingOrderChains: collectSiblingOrderChains(rootItems)
+    projection: preparedProjection,
+    model: {
+      rootItems,
+      nodes,
+      edges,
+      siblingOrderChains: collectSiblingOrderChains(rootItems)
+    },
+    notes: coverageNote ? [coverageNote] : []
   };
+}
+
+export function buildUiContractsRenderModel(
+  projection: Projection,
+  graph: CompiledGraph,
+  displayPolicy: ResolvedProfileDisplayPolicy = {}
+): UiContractsRenderModel {
+  return buildUiContractsRenderData(projection, graph, displayPolicy).model;
 }

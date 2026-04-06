@@ -123,6 +123,37 @@ describe("preview workflow", () => {
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 
+  it("omits empty ui_contracts place containers in simple staged previews and returns the coverage note", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const fixturePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_empty_places.sdd");
+    const input = {
+      path: fixturePath,
+      text: await readFile(fixturePath, "utf8")
+    };
+
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "ui_contracts",
+      format: "svg",
+      profileId: "simple"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.notes).toEqual([
+      "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period."
+    ]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected staged SVG artifact.");
+    }
+
+    expect(result.artifact.text).not.toContain("Behavior Details");
+    expect(result.artifact.text).not.toContain("Dataset Details");
+    expect(result.artifact.text).not.toContain("Projects by Period");
+    expect(result.artifact.text).toContain("Dashboard");
+    expect(result.artifact.text).toContain("Projects Overview");
+  });
+
   it("renders service_blueprint SVG previews through the staged backend by default", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadInput("service_blueprint_slice.sdd");
