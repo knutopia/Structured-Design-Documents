@@ -19,6 +19,51 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
 
 If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
 
+## Example: Small App
+
+Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram is generated.
+
+Full source: [`small_app.sdd`](docs/examples_for_readme/small_app_example/small_app.sdd)
+
+```text
+SDD-TEXT 0.1
+
+Place P-100 "Dashboard"
+  description="Global project status and flow entry points"
+  primary_nav=true
+  COMPOSED_OF C-100 "Projects Status Summary"
+  COMPOSED_OF C-110 "Priority List of Tasks"
+  COMPOSED_OF C-900 "Global Navigation"
+
+  + Component C-100 "Projects Status Summary"
+    description="At-a-glance view of project statuses"
+  END
+  + Component C-110 "Priority List of Tasks"
+    description="What needs to be done"
+  END
+END
+
+Area A-200 "Current Projects"
+  description="Ongoing work"
+  CONTAINS P-210 "Projects Overview"
+  CONTAINS P-220 "Project Detail"
+  CONTAINS P-230 "Create New Project"
+  + Place P-210 "Projects Overview"
+    description="Selectable list of projects with contextual actions"
+    primary_nav=true
+    CONTAINS VS-210a "List of Projects"
+    CONTAINS VS-210b "Duplicate Project Dialog"
+    CONTAINS VS-210c "Delete Project Confirmation Dialog"
+```
+
+Rendered IA / Place Map:
+
+![Small app IA / Place Map](docs/examples_for_readme/small_app_example/small_app_ia_1.png)
+
+Rendered UI Contract:
+
+![Small app UI Contract](docs/examples_for_readme/small_app_example/small_app_uic_1.png)
+
 ## A Simple, Well-Structured Language to Express Product Design
 
 This project defines SDD-Text: a compact DSL (Domain-Specific Language) for authoring a typed product/design graph. SDD-Text is easy to read and write, for people and for LLMs.

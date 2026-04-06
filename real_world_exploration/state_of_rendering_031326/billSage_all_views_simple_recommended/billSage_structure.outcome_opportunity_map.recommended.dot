@@ -1,6 +1,0 @@
-digraph outcome_opportunity_map {
-  rankdir=LR;
-  graph [fontname="Public Sans", nodesep=0.6, ranksep=1.0];
-  node [fontname="Public Sans"];
-  edge [fontname="Public Sans"];
-}
