@@ -10,7 +10,7 @@ Please do not open a pull request without talking with me first.
 
 At the moment, this repository is not open to unsolicited pull requests, including well-intentioned code, documentation, or structural cleanup changes. If a pull request arrives without prior discussion and agreement, I may close it without review.
 
-Reaching out does not automatically mean that a contribution will be accepted. It only starts a conversation about whether collaboration makes sense for the current state of the project.
+Reaching out does not automatically mean that a contribution will be accepted. It only starts a conversation about whether collaboration makes sense for the current state of the project. I am planning to use an issue-first approach to handling pull requests.
 
 ## Current Policy
 
@@ -20,7 +20,7 @@ For now, contributions are coordination-first, not pull-request-first.
 - Do not assume that a bug report, idea, or email implies approval to start coding.
 - Do not assume that a polished contribution is easier for me to accept than an early conversation. In practice, the opposite is often true.
 
-This is my first repository that may attract outside contributions, and I do not want to create an accidental maintainer commitment around unplanned incoming work.
+This is my first repository that may attract outside contributions.  I do not want to create an accidental maintainer commitment around unplanned incoming work. I also do not want to waste anyone else's time. Thank you for understanding.
 
 ## How To Reach Out
 

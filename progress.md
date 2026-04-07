@@ -9,6 +9,13 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 4-07-26
+
+-further readme improvements
+-removed stray bundle example visuals
+-refined contributors.md
+
+
 ## Mon 4-06-26
 
 -added small_app_err error output example file
