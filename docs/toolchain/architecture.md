@@ -42,7 +42,7 @@ Each stage has a narrow responsibility:
 - `compileSource` flattens authoring blocks into canonical graph JSON, preserves author-order metadata for renderers, and validates the graph against `core/schema.json`.
 - `validateGraph` executes generic validation rules from contracts plus the selected profile.
 - `projectView` resolves the requested bundle view through a shared projector registry and creates a normalized projection envelope for that view.
-- `renderSource` resolves renderable views through a renderer registry and turns their projections into DOT or Mermaid text.
+- `renderSource` resolves renderable views through a renderer registry and turns their projections into internal DOT or Mermaid text artifacts.
 
 ## Internal Forms
 
@@ -58,7 +58,7 @@ The renderer migration now adds internal staged-renderer forms under `src/render
 - `MeasuredScene`, which records intrinsic content sizing and wrapped text without global placement
 - `PositionedScene`, which records absolute placement and routed connector geometry for backend painting
 
-These scene forms are internal contracts only. They are not new CLI outputs, they do not change bundle or projection contracts, and the current DOT, Mermaid, and Graphviz-backed preview flows remain the active execution path.
+These scene forms are internal contracts only. They are not new CLI outputs, they do not change bundle or projection contracts, and the current internal DOT/Mermaid artifact flows plus Graphviz-backed preview flows remain the active execution path.
 
 Step 3 turns `MeasuredScene` into a real micro-layout boundary rather than a placeholder copy:
 
@@ -100,12 +100,12 @@ This keeps the architecture boundary explicit:
 
 That separation matters most for the non-IA views:
 
-- service blueprints derive lane membership in projection, then let the render model translate those derived lane groups into row-oriented DOT structures
+- service blueprints derive lane membership in projection, then let the render model translate those derived lane groups into row-oriented internal DOT structures
 - scenario flows derive decision-node shape and branch-label precedence in projection, then let the render model decide which rendered edges surface those labels
 - ui contracts derive transition-graph priority in projection, then let the render model decide whether `ViewState` remains primary or scoped `State` groups become the effective primary fallback
 - emitters stay intentionally dumb so bundle semantics do not get duplicated across output formats
 
-All bundle-defined v0.1 views are now renderable as DOT and Mermaid text. v0.1 still does not expose a public `sdd project` command, so projection remains an internal contract exercised through tests and renderer inputs.
+All bundle-defined v0.1 views still retain internal DOT and Mermaid text artifacts for tests, corpus generation, and debugging. Public CLI preview support centers on `sdd show`. v0.1 still does not expose a public `sdd project` command, so projection remains an internal contract exercised through tests and renderer inputs.
 
 ## Bundle Ownership
 
@@ -124,9 +124,9 @@ The engine owns:
 - canonical ordering
 - generic rule execution
 - projector and renderer registries
-- output formatting for diagnostics, DOT, and Mermaid emitters
+- output formatting for diagnostics and internal DOT/Mermaid emitters
 
-The CLI owns preview artifact generation on top of those text renderers through a backend-aware preview layer.
+The CLI owns preview artifact generation on top of those internal text renderers and staged preview backends through a backend-aware preview layer.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that future SVG work will build on, while keeping that pipeline separate from the current legacy renderer path until view migration begins.
 
@@ -160,20 +160,21 @@ Profiles are validation overlays, not language variants. The core bundle defines
 
 ## Renderable Views
 
-The current end-to-end renderable set is:
+The current end-to-end renderable set keeps two output layers:
 
-- `ia_place_map` via DOT, Mermaid, and SVG/PNG previews
-- `journey_map` via DOT, Mermaid, and SVG/PNG previews
-- `outcome_opportunity_map` via DOT, Mermaid, and SVG/PNG previews
-- `service_blueprint` via DOT, Mermaid, and SVG/PNG previews
-- `scenario_flow` via DOT, Mermaid, and SVG/PNG previews
-- `ui_contracts` via DOT, Mermaid, and SVG/PNG previews
+- supported preview artifacts: SVG/PNG via `sdd show`
+- retained internal text artifacts: DOT/Mermaid for tests, corpus generation, and debugging
+
+Current CLI preview status by view:
+
+- preview-ready: `ia_place_map`, `ui_contracts`, `service_blueprint`
+- preview-only / not yet usable: `journey_map`, `outcome_opportunity_map`, `scenario_flow`
 
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
 - preview capability is modeled per artifact, with `ia_place_map`, `service_blueprint`, and `ui_contracts` now defaulting SVG and PNG previews to staged backends and the remaining views routing those previews through `legacy_graphviz_preview`
-- Mermaid is a parallel readable text contract, not a layout-parity contract with Graphviz
+- internal DOT/Mermaid text artifacts remain parallel emitters for tests, corpus generation, and debugging, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
 
@@ -190,12 +191,12 @@ Inside the staged renderer, `ui_contracts` still keeps its renderer-stage golden
 
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
-- `renderSource` still returns only DOT or Mermaid text
+- `renderSource` still returns only internal DOT or Mermaid text artifacts
 - `sdd show` resolves preview output through a backend registry; `ia_place_map`, `service_blueprint`, and `ui_contracts` now default to staged preview backends, and the remaining views still default to `legacy_graphviz_preview`
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
-- `sdd show --dot-out` automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
+- `sdd show --dot-out` remains an internal/debug option and automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend still exist in parallel with legacy text and preview outputs; `ia_place_map`, `service_blueprint`, and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
+- the staged renderer contracts and staged SVG backend still exist in parallel with internal text artifacts and legacy preview outputs; `ia_place_map`, `service_blueprint`, and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
 
 ## Determinism
 
@@ -207,7 +208,7 @@ The engine enforces:
 - stable edge ordering
 - stable diagnostic ordering
 - stable projection ordering
-- stable DOT and Mermaid text output
+- stable internal DOT and Mermaid text output
 - stable source-ordered structural rendering for hierarchy views
 - stable bundle-owned preview styling defaults
 - stable staged theme resolution and font-backed measurement
@@ -242,10 +243,10 @@ The test suite uses the bundle examples as conformance fixtures.
 - compile tests assert stable compiled JSON against bundle snapshots after newline normalization
 - validation tests assert zero errors for current manifest examples under `recommended`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
-- render tests assert stable DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
+- render tests assert stable internal DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
 - staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON plus deterministic staged SVG fixtures under `tests/goldens/renderer-stages/` without changing current legacy outputs
 - staged micro-layout tests cover wrapping, width-band escalation, clamping, secondary-area handling, and unknown-theme fallback
-- corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile `.dot`, `.mmd`, `.svg`, and `.png` artifacts
+- corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile internal `.dot`/`.mmd` artifacts alongside `.svg` and `.png` preview artifacts
 - negative fixtures cover syntax, compile, and validation failures
 
 Fixture and golden reads should normalize `CRLF` to `LF` before raw string comparison so mixed contributor environments do not create false negatives. The newline policy still lives in `.gitattributes`; test normalization exists to make assertions platform-tolerant, not to permit committed `CRLF` artifacts.

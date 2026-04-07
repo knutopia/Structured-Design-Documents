@@ -4,12 +4,13 @@
 
 - One root TypeScript package, not a monorepo.
 - One shared engine, not separate tool codebases.
-- Three public commands: `compile`, `validate`, and `render`.
+- Supported public commands: `compile`, `validate`, and `show`.
+- Internal/debug text-rendering commands remain available as `render`, `dot`, and `mmd`.
 - Projection stays internal in v0.1.
 - Only source `.sdd` input is supported in the CLI.
 - Only `ia_place_map` is rendered in v0.1.
-- Renderer outputs text artifacts only: DOT and Mermaid source.
-- Preview artifacts are a CLI concern layered on top of DOT: SVG by default, PNG on demand.
+- Renderer retains internal text artifacts: DOT and Mermaid source.
+- Preview artifacts are a CLI concern, with supported public outputs of SVG by default and PNG on demand; some preview backends still route through DOT internally.
 
 ## Spec-Driven Boundaries
 
@@ -34,7 +35,7 @@ The renderer migration now adds renderer-owned internal forms under `src/rendere
 - `MeasuredScene`
 - `PositionedScene`
 
-These forms are internal-only implementation contracts. They do not change the compiled graph contract, the projection contract, or current CLI outputs, and they exist in parallel with the legacy DOT, Mermaid, and Graphviz-backed preview paths until view migration is ready.
+These forms are internal-only implementation contracts. They do not change the compiled graph contract, the projection contract, or current CLI outputs, and they exist in parallel with the internal DOT/Mermaid text artifacts and Graphviz-backed preview paths until view migration is ready.
 
 The Step 3 measurement boundary is intentionally opinionated:
 
@@ -119,7 +120,7 @@ The renderer uses:
 - the normalized IA projection
 - IA view conventions from the bundle
 
-This allows the bundle to define what matters in the view, while the renderer remains a thin presentation layer over DOT and Mermaid syntax.
+This allows the bundle to define what matters in the view, while the renderer remains a thin presentation layer over the retained internal DOT and Mermaid syntaxes.
 
 Preview generation remains outside the core renderer contract:
 

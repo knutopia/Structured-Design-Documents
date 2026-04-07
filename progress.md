@@ -15,6 +15,7 @@
 -removed stray bundle example visuals
 -refined contributing.md
 -added MIT license and CLA
+-removed DOT/MMD cli options
 
 ## Mon 4-06-26
 

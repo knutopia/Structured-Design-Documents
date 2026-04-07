@@ -13,18 +13,15 @@ Optional local tooling:
 
 - Graphviz, for CLI preview generation and for VS Code extensions or other tools that shell out to `dot`
 
-Graphviz is not required for the core v0.1 build and test flow because the engine renderers emit `.dot` and `.mmd` source files. It is required once you want CLI preview artifacts (`.svg` by default or `.png` on demand) or editor integrations that invoke the Graphviz binary.
+Graphviz is not required for the core v0.1 build and test flow because the engine retains internal `.dot` and `.mmd` text artifacts for tests and debugging. It is required once you want CLI preview artifacts (`.svg` by default or `.png` on demand) or editor integrations that invoke the Graphviz binary.
 
 Projection remains an internal artifact in v0.1. The repo now projects every manifest-declared view through the shared projector path for tests, while CLI rendering and preview commands stay limited to views registered as renderable.
 
 Current renderable views:
 
-- `ia_place_map`: DOT, Mermaid, SVG, PNG
-- `journey_map`: DOT, Mermaid, SVG, PNG
-- `outcome_opportunity_map`: DOT, Mermaid, SVG, PNG
-- `service_blueprint`: DOT, Mermaid, SVG, PNG
-- `scenario_flow`: DOT, Mermaid, SVG, PNG
-- `ui_contracts`: DOT, Mermaid, SVG, PNG
+- Supported preview output via `sdd show`: `ia_place_map`, `ui_contracts`, `service_blueprint`
+- Preview-only / not-yet-usable output via `sdd show`: `journey_map`, `outcome_opportunity_map`, `scenario_flow`
+- Internal `.dot` and `.mmd` text artifacts are retained for all renderable views for tests, corpus generation, and debugging.
 
 Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile. Preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
 
@@ -35,7 +32,7 @@ The CLI preview pipeline is SVG-first:
 - `ui_contracts` now also defaults `sdd show` to the staged preview backend `staged_ui_contracts_preview`, which renders the routed and balanced staged SVG directly and derives PNG from that SVG
 - `service_blueprint` now also defaults `sdd show` to the staged preview backend `staged_service_blueprint_preview`, which renders the ELK-authoritative staged SVG directly and derives PNG from that SVG
 - the remaining views still default to `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
-- legacy Graphviz preview remains selectable for `ia_place_map`, `service_blueprint`, and `ui_contracts` with `--backend legacy_graphviz_preview`, and `--dot-out` automatically chooses a DOT-capable backend when needed
+- legacy Graphviz preview remains selectable for `ia_place_map`, `service_blueprint`, and `ui_contracts` with `--backend legacy_graphviz_preview`, and internal `--dot-out` automatically chooses a DOT-capable backend when needed
 - PNG output is still derived from SVG in both preview paths, and the vendored Public Sans desktop font keeps preview typography independent of user-installed system fonts
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
@@ -103,78 +100,6 @@ Validate an early draft with the low-noise profile:
 pnpm sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple
 ```
 
-Render IA Place Map to DOT:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot
-```
-
-Render IA Place Map to Mermaid:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid
-```
-
-Render Journey Map to DOT:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format dot
-```
-
-Render Journey Map to Mermaid:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid
-```
-
-Render Outcome-Opportunity Map to DOT:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --format dot
-```
-
-Render Outcome-Opportunity Map to Mermaid:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --format mermaid
-```
-
-Render Service Blueprint to DOT:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format dot
-```
-
-Render Service Blueprint to Mermaid:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format mermaid
-```
-
-Render Scenario Flow to DOT:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot
-```
-
-Render Scenario Flow to Mermaid:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format mermaid
-```
-
-Render UI Contracts to DOT:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot
-```
-
-Render UI Contracts to Mermaid:
-
-```bash
-pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format mermaid
-```
-
 Render an SVG preview artifact:
 
 ```bash
@@ -235,11 +160,13 @@ Render a PNG preview artifact:
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out /tmp/outcome.png
 ```
 
-Write render output to a file:
+Write an internal text artifact for debugging:
 
 ```bash
 pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format mermaid --out /tmp/place_viewstate_transition.mmd
 ```
+
+Internal `.dot` and `.mmd` outputs remain available for tests, corpus generation, and debugging, but they are not the supported public preview path. Use `sdd show` for visible artifacts.
 
 Profile guidance lives in [profiles.md](./profiles.md).
 
@@ -260,7 +187,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 
 `bundle/v0.1/core/views.yaml` has three different kinds of downstream view settings:
 
-- `preview_defaults`: shared preview artifact defaults for DOT-backed CLI previews such as fonts and DPI. These affect SVG/PNG generation, not `.sdd` authoring.
+- `preview_defaults`: shared preview artifact defaults for CLI previews, including backends that still route through DOT internally, such as fonts and DPI. These affect SVG/PNG generation, not `.sdd` authoring.
 - `normative_defaults`: descriptive statements about the default semantic reading of a view. They explain how a contributor or projection consumer should interpret the view, but they do not by themselves validate source files or mutate compiled graphs.
 - `renderer_defaults`: machine-readable downstream conventions consumed by projection builders, render-model builders, and preview-style resolution. These can change derived annotations, node groups, view metadata, shapes, labels, lane assignment, preview styling, or profile-specific display density without changing `.sdd` syntax.
 
@@ -296,7 +223,7 @@ Authoring guidance for the newly renderable views:
 2. Add a new emitter beside `dot.ts` and `mermaid.ts`.
 3. Register format support through the render capability registry in `src/renderer/viewRenderers.ts`.
 4. Keep all view semantics in projection and render-model construction, not in the emitter.
-5. Add stable golden tests for the new text output.
+5. Add stable golden tests for the new internal text output.
 
 ## Staged Renderer Notes
 
@@ -322,6 +249,6 @@ Authoring guidance for the newly renderable views:
 2. Add or update example coverage and declare projection snapshots in `bundle/v0.1/manifest.yaml`.
 3. Implement a projection builder in `src/projector/` and register it in `src/projector/viewProjectors.ts`.
 4. Keep bundle semantics in that projection builder, using `renderer_defaults` only for downstream derived data.
-5. Add a render model only if the view will become renderable. Treat DOT as the minimum contract and add Mermaid only when the result stays readable.
-6. Register renderable views in `src/renderer/viewRenderers.ts`; CLI support derives from that registry.
+5. Add a render model only if the view will become renderable. Public CLI support should be expressed through `sdd show`; internal DOT or Mermaid text artifacts are optional and should only be added when they stay useful for tests or debugging.
+6. Register renderable views in `src/renderer/viewRenderers.ts`; CLI preview support derives from that registry.
 7. Add explicit CLI support only after the projection and rendering path is proven by tests. v0.1 still has no public `sdd project` command.

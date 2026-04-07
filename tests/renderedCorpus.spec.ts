@@ -68,7 +68,7 @@ describe("rendered example corpus", () => {
     const bundle = await loadBundle(manifestPath);
     const readme = await readFile(path.join(getRenderedCorpusRoot(bundle), "README.md"), "utf8");
 
-    expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.");
+    expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration. Their renderers are not ready for prime time.");
     expect(readme).toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
     expect(readme).toContain("journey_map_diagram_type [preview_only]/service_blueprint_slice_example");
     expect(readme).toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");

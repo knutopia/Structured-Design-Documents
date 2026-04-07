@@ -1112,30 +1112,74 @@ describe("CLI wrappers", () => {
     expect(stderrText.indexOf(coverageNote)).toBeLessThan(stderrText.indexOf("Wrote /tmp/ui-contracts.svg"));
   });
 
-  it("help output includes the new commands and guidance", () => {
+  it("top-level help emphasizes show and hides internal text commands", () => {
     const { deps, stdout } = createDeps();
     const program = createProgram(deps);
 
     program.outputHelp();
 
     const help = stdout.join("");
-    expect(help).toContain("dot");
-    expect(help).toContain("mmd");
+    expect(help).not.toContain("sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd");
+    expect(help).not.toContain("sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd");
+    expect(help).not.toContain("sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd");
+    expect(help).not.toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
+    expect(help).not.toContain("sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot");
+    expect(help).not.toContain("--dot-out ./outcome.dot");
+    expect(help).not.toMatch(/\n\s+dot\s+/);
+    expect(help).not.toMatch(/\n\s+mmd\s+/);
     expect(help).toContain("show");
     expect(help).toContain("Profiles:");
     expect(help).toContain("simple");
     expect(help).toContain("recommended  strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
-    expect(help).toContain("sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd");
-    expect(help).toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
-    expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out ./blueprint-legacy.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
-    expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
-    expect(help).toContain("sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot");
+    expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
+  });
+
+  it("render help labels DOT and Mermaid output as internal/debug artifacts", () => {
+    const { deps } = createDeps();
+    const program = createProgram(deps);
+    const help = program.commands.find((command) => command.name() === "render")!.helpInformation();
+
+    expect(help).toContain("Internal/debug renderer command.");
+    expect(help).toContain("These text artifacts are retained for tests,");
+    expect(help).toContain("supported SVG/PNG preview");
+    expect(help).toContain("internal text render format (dot or mermaid)");
+  });
+
+  it("dot help labels the command as internal/debug", () => {
+    const { deps } = createDeps();
+    const program = createProgram(deps);
+    const help = program.commands.find((command) => command.name() === "dot")!.helpInformation();
+
+    expect(help).toContain("Internal convenience wrapper");
+    expect(help).toContain("write internal DOT output to a file instead of stdout");
+    expect(help).toContain("supported preview output");
+  });
+
+  it("mmd help labels the command as internal/debug", () => {
+    const { deps } = createDeps();
+    const program = createProgram(deps);
+    const help = program.commands.find((command) => command.name() === "mmd")!.helpInformation();
+
+    expect(help).toContain("Internal convenience wrapper");
+    expect(help).toContain("write internal Mermaid output to a file instead of");
+    expect(help).toContain("stdout");
+    expect(help).toContain("supported preview output");
+  });
+
+  it("show help labels --dot-out as internal/debug", () => {
+    const { deps } = createDeps();
+    const program = createProgram(deps);
+    const help = program.commands.find((command) => command.name() === "show")!.helpInformation();
+
+    expect(help).toContain("internal/debug: also keep the intermediate DOT source");
+    expect(help).toContain("in a file");
+    expect(help).not.toContain("--dot-out ./outcome.dot");
   });
 });

@@ -14,7 +14,7 @@ This document now defines the target renderer architecture in enough detail to g
 - The SDD language remains at `v0.1` with no language expansion during this renderer migration stream.
 - Rendering pipeline work is not versioned yet.
 - Rendering improvements should proceed as incremental git commits until the result is mature enough to justify formal versioning.
-- Existing DOT and Mermaid renderers remain available until replacement paths are proven.
+- Existing internal DOT and Mermaid renderers remain available until replacement paths are proven.
 
 ## Locked Decisions
 
@@ -480,12 +480,12 @@ PNG should remain a rasterization step derived from SVG, not a separate scene re
 
 This preserves one vector truth source and reduces parity bugs.
 
-### DOT and Mermaid remain separate backends
+### DOT and Mermaid remain separate internal backends
 
-Legacy DOT and Mermaid output remain useful as:
+Internal DOT and Mermaid output remain useful as:
 
 - compatibility outputs
-- readable textual artifacts
+- readable textual artifacts for debugging
 - regression references during migration
 
 They should remain separate text backends rather than forcing the new scene contract to mimic either syntax.

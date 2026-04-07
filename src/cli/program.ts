@@ -567,22 +567,15 @@ function globalHelpText(): string {
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
     "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile recommended",
     "  sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple",
-    "  sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot",
-    "  sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd",
-    "  sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd",
-    "  sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot",
-    "  sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
     "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
     "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
-    "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg",
-    "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out ./blueprint-legacy.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
     "",
     "Notes:",
     "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
+    "  Internal DOT and Mermaid text artifacts remain available for tests and debugging via `sdd help render`, `sdd help dot`, and `sdd help mmd`.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -645,11 +638,11 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
 
   program
     .command("render")
-    .summary("Render a specific view to DOT or Mermaid text")
-    .description("Low-level renderer command. Use `sdd dot`, `sdd mmd`, or `sdd show` for the common preview flows.")
+    .summary("Emit internal DOT or Mermaid text artifacts for a specific view")
+    .description("Internal/debug renderer command. These text artifacts are retained for tests, corpus generation, and debugging. Use `sdd show` for supported SVG/PNG preview output.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
-    .requiredOption("--format <format>", "text render format (dot or mermaid)")
+    .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
     .option("--out <file>", "write rendered output to a file instead of stdout")
@@ -668,14 +661,14 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     });
 
   program
-    .command("dot")
-    .summary("Render the ia_place_map view as DOT")
-    .description("Convenience wrapper for `sdd render --view ia_place_map --format dot`.")
+    .command("dot", { hidden: true })
+    .summary("Internal/debug: render the ia_place_map view as DOT")
+    .description("Internal convenience wrapper for `sdd render --view ia_place_map --format dot`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
-    .option("--out <file>", "write DOT output to a file instead of stdout")
-    .option("--png", "also write a sibling PNG rendered through the SVG preview pipeline")
+    .option("--out <file>", "write internal DOT output to a file instead of stdout")
+    .option("--png", "also write a sibling PNG preview rendered through the SVG pipeline")
     .option("--png-out <file>", "write PNG output to an explicit file path")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -688,13 +681,13 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     });
 
   program
-    .command("mmd")
-    .summary("Render the ia_place_map view as Mermaid")
-    .description("Convenience wrapper for `sdd render --view ia_place_map --format mermaid`.")
+    .command("mmd", { hidden: true })
+    .summary("Internal/debug: render the ia_place_map view as Mermaid")
+    .description("Internal convenience wrapper for `sdd render --view ia_place_map --format mermaid`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id", "recommended")
-    .option("--out <file>", "write Mermaid output to a file instead of stdout")
+    .option("--out <file>", "write internal Mermaid output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd",
@@ -720,7 +713,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       .option("--format <format>", "preview format (svg or png)", "svg")
       .option("--backend <backend>", "preview backend id override")
       .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")
-      .option("--dot-out <file>", "also keep the intermediate DOT source in a file")
+      .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source in a file")
       .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
       .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
@@ -732,8 +725,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
       "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg --dot-out ./outcome.dot",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --dot-out ./outcome.dot",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
       "Some bundle-defined views may appear before they become renderable in the CLI."
     ]))
     .action(async (inputPath, options) => {
