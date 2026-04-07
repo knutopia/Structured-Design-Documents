@@ -46,6 +46,25 @@ If we agree to work on something, I will usually want us to align on the followi
 
 That agreement should happen before implementation starts, not after a PR is already written.
 
+## Contributor License Agreement
+
+This repository uses a coordination-first contribution process and also requires written acceptance of the Contributor License Agreement before I will accept or merge outside contributions.
+
+The agreement text is in [CLA.md](CLA.md).
+
+If we decide to collaborate, the expected order is:
+
+- we first agree that the contribution is in scope
+- you read [CLA.md](CLA.md)
+- you send written acceptance by email or another written electronic record that I accept
+- only after that should implementation proceed toward a pull request or patch review
+
+The simplest acceptance sentence is:
+
+> I have read and agree to the Contributor License Agreement in `CLA.md` for my contributions to this repository.
+
+For clarity, a DCO sign-off, commit sign-off, or pull request statement is not a substitute for written acceptance of the CLA unless I explicitly agree otherwise in writing.
+
 ## Project Context
 
 This repository is still evolving, and some parts of it are under active architectural and renderer-migration work. Uncoordinated changes can easily create review burden or cut across decisions that are still in motion.

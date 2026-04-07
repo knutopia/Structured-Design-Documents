@@ -13,8 +13,8 @@
 
 -further readme improvements
 -removed stray bundle example visuals
--refined contributors.md
-
+-refined contributing.md
+-added MIT license and CLA
 
 ## Mon 4-06-26
 
