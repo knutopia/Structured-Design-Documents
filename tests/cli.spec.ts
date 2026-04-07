@@ -1124,7 +1124,12 @@ describe("CLI wrappers", () => {
     expect(help).not.toContain("sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd");
     expect(help).not.toContain("sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot");
     expect(help).not.toContain("sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot");
+    expect(help).not.toContain("sdd help render");
+    expect(help).not.toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
+    expect(help).not.toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg");
+    expect(help).not.toContain("sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --out ./scenario.svg");
     expect(help).not.toContain("--dot-out ./outcome.dot");
+    expect(help).not.toMatch(/\n\s+render\s+/);
     expect(help).not.toMatch(/\n\s+dot\s+/);
     expect(help).not.toMatch(/\n\s+mmd\s+/);
     expect(help).toContain("show");
@@ -1134,10 +1139,9 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
-    expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
-    expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging");
+    expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging.");
     expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
   });
 
@@ -1178,6 +1182,11 @@ describe("CLI wrappers", () => {
     const program = createProgram(deps);
     const help = program.commands.find((command) => command.name() === "show")!.helpInformation();
 
+    expect(help).not.toContain("journey.svg");
+    expect(help).not.toContain("scenario.svg");
+    expect(help).not.toContain("outcome-map.svg");
+    expect(help).toContain("Preferred preview command for renderable views.");
+    expect(help).toContain("staged preview backends by default");
     expect(help).toContain("internal/debug: also keep the intermediate DOT source");
     expect(help).toContain("in a file");
     expect(help).not.toContain("--dot-out ./outcome.dot");

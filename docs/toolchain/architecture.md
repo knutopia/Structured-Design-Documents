@@ -2,11 +2,11 @@
 
 ## Goal
 
-The v0.1 toolchain provides one shared TypeScript engine with three thin CLI commands:
+The v0.1 toolchain provides one shared TypeScript engine with three public thin CLI commands:
 
 - `sdd compile`
 - `sdd validate`
-- `sdd render`
+- `sdd show`
 
 The bundle in `bundle/v0.1/` is the source of truth for language behavior. The engine implements generic interpreters for:
 

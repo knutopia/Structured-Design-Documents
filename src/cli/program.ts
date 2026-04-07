@@ -569,13 +569,12 @@ function globalHelpText(): string {
     "  sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
     "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
     "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
     "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
-    "  Internal DOT and Mermaid text artifacts remain available for tests and debugging via `sdd help render`, `sdd help dot`, and `sdd help mmd`.",
+    "  Internal DOT and Mermaid text artifacts remain available for tests and debugging.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
 }
@@ -637,7 +636,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     });
 
   program
-    .command("render")
+    .command("render", { hidden: true })
     .summary("Emit internal DOT or Mermaid text artifacts for a specific view")
     .description("Internal/debug renderer command. These text artifacts are retained for tests, corpus generation, and debugging. Use `sdd show` for supported SVG/PNG preview output.")
     .argument("<input>", "source .sdd file")
@@ -718,13 +717,10 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
       "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
       "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out ./blueprint-legacy.svg",
-      "sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --out ./scenario.svg",
       "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
       "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-map.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
       "Some bundle-defined views may appear before they become renderable in the CLI."
     ]))
