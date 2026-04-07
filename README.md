@@ -104,20 +104,25 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 ## Current Status
 
-- Solid v0.1 SDDT spec.
+### Working Now
+
+- Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
 - Completed usable staged SVG renderers for IA / Place Map, UI Contract and Service Blueprint
 
-Needs work:
-- Outcome-Opportunity Map, Journey Map and Scenario Flow renderers:
-  - no usable SVG renderers yet
-  - poor Graphviz renderers still in place
-  - examples show non-usable diagrams
-- Need to invest time in rendering templates
-- Need to separate styles into CSS files
-- Example Corpus needs to be strenghtend
-- Author user guidance for graph structure, diagram types
+### Known Limitations
 
-Future:
-- LLM integration (MCP)
-- Standalone SDDT file server?+
+- Outcome-Opportunity Map, Journey Map and Scenario Flow renderers do not produce usable output yet.
+  - examples show non-usable diagrams relying on poor graphviz-based implementation
+- Styling for renderers lives in typescript source, should be in CSS files
+- Example corpus is spotty
+- No "simple" non-technical user guidance available yet
+
+### Current Focus
+
+- Solve renderers for more diagram types
+
+## Planned Additions
+
+- LLM integration (Skills, MCP Server)
+- Possibly standalone SDDT file server?

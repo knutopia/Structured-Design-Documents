@@ -3,7 +3,6 @@
 ## Open Issues
 
 -remove service_blueprint DOT output
--remove remaining use of sidecar in service_blueprint
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
 -"render all" CLI ?
@@ -19,7 +18,7 @@
 -marked not-ready example folders
 -restructured readme further
 -created separate diagram types page
-
+ 
 ## Sun 4-05-26
 
 -created simple example file to include in readme
