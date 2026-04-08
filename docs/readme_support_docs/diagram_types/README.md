@@ -10,7 +10,7 @@ This page collects the current diagram families, their status, and links to avai
 
 - IA (Information Architecture) / Place Map: [Available]
   Source of truth for product structure: what exists, where it lives, and how it connects.
-  Examples: [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/), [place_viewstate_transition_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/), [billSage_simple_structure](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.simple.svg), [billSage_structure](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.recommended.svg)
+  Examples: [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/), [place_viewstate_transition_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/), [billSage_simple_structure](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.simple.svg), [billSage_structure](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.strict.svg)
 
 - UI Contract: [Available]
   UI composition and state changes, per Place (and optionally per component).

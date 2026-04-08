@@ -33,7 +33,7 @@ describe("validateGraph", () => {
     }
   });
 
-  it("validates all manifest examples under the recommended profile with zero errors", async () => {
+  it("validates all manifest examples under the strict profile with zero errors", async () => {
     const bundle = await loadBundle(manifestPath);
 
     for (const example of bundle.manifest.examples) {
@@ -46,14 +46,14 @@ describe("validateGraph", () => {
       expect(compiled.graph).toBeDefined();
       expect(compiled.diagnostics).toEqual([]);
 
-      const validation = validateGraph(compiled.graph!, bundle, "recommended");
+      const validation = validateGraph(compiled.graph!, bundle, "strict");
       expect(validation.errorCount).toBe(0);
     }
   });
 
   it("accepts the BillSage draft example under simple", async () => {
     const bundle = await loadBundle(manifestPath);
-    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_simple_structure.sdd");
+    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_simple_structure.sdd");
     const input = {
       path: examplePath,
       text: await readFile(examplePath, "utf8")
@@ -67,9 +67,9 @@ describe("validateGraph", () => {
     expect(validation.errorCount).toBe(0);
   });
 
-  it("flags the BillSage draft example under recommended for missing governance metadata", async () => {
+  it("flags the BillSage draft example under strict for missing governance metadata", async () => {
     const bundle = await loadBundle(manifestPath);
-    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_simple_structure.sdd");
+    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_simple_structure.sdd");
     const input = {
       path: examplePath,
       text: await readFile(examplePath, "utf8")
@@ -79,7 +79,7 @@ describe("validateGraph", () => {
     expect(compiled.graph).toBeDefined();
     expect(compiled.diagnostics).toEqual([]);
 
-    const validation = validateGraph(compiled.graph!, bundle, "recommended");
+    const validation = validateGraph(compiled.graph!, bundle, "strict");
     expect(validation.errorCount).toBeGreaterThan(0);
     expect(validation.diagnostics.some((diagnostic) => diagnostic.code === "validate.required_props_by_type")).toBe(true);
   });

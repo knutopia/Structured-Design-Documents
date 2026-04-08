@@ -126,3 +126,9 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - LLM integration (Skills, MCP Server)
 - Possibly standalone SDDT file server?
+
+## License And Contributions
+
+- License: this project is available under the [MIT License](LICENSE).
+- Contributing: please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. This repository is currently coordination-first and is not accepting unsolicited pull requests.
+- Contributor License Agreement: accepted outside contributions also require written acceptance of the [CLA](CLA.md) before implementation or merge.

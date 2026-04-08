@@ -1,8 +1,7 @@
 # Rendered Example Corpus
 
 This directory is generated from the canonical bundle examples and committed as a reviewer-friendly reference corpus.
-
-Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration. Their renderers are not ready for prime time.
+Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.
 
 Regenerate it with:
 
@@ -25,11 +24,11 @@ Curated view/example pairs:
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
 - `ui_contracts_diagram_type/ui_state_fallback_example`
 
-Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`, `recommended_profile`.
+Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`, `strict_profile`.
 
 Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with internal `.dot` and `.mmd` text artifacts alongside `.svg` and `.png` preview outputs.
 Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
-`simple_profile` may omit optional overlays for readability; `permissive_profile` and `recommended_profile` keep the fuller render detail.
+`simple_profile` may omit optional overlays for readability; `permissive_profile` and `strict_profile` keep the fuller render detail.
 
 `ia_place_map` visual review checklist:
 

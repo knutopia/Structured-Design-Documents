@@ -68,7 +68,7 @@ describe("rendered example corpus", () => {
     const bundle = await loadBundle(manifestPath);
     const readme = await readFile(path.join(getRenderedCorpusRoot(bundle), "README.md"), "utf8");
 
-    expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration. Their renderers are not ready for prime time.");
+    expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.");
     expect(readme).toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
     expect(readme).toContain("journey_map_diagram_type [preview_only]/service_blueprint_slice_example");
     expect(readme).toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");
@@ -163,19 +163,19 @@ describe("rendered example corpus", () => {
 
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/recommended_profile/ui_state_fallback.ui_contracts_BROKEN.svg"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/strict_profile/ui_state_fallback.ui_contracts_BROKEN.svg"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/recommended_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/recommended_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/recommended_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
     ))).rejects.toThrow();
   });
 

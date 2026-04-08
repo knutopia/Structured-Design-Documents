@@ -26,7 +26,7 @@ However, prose specs alone are not ideal for tool implementation because:
 Therefore, the next step is to extract the prose spec into an **executable spec bundle** (Option A), with:
 
 - A **core** sub-bundle (the minimum normative rules every tool must implement)
-- One or more **profiles** (e.g., “recommended”) that impose stricter governance, conventions, and additional validations without changing the core language.
+- One or more **profiles** (e.g., “strict”) that impose stricter governance, conventions, and additional validations without changing the core language.
 
 This structure enables:
 
@@ -53,7 +53,7 @@ bundle/v0.1/ (existing folder - find it!)
     views.yaml
 
   profiles/
-    recommended.yaml
+    strict.yaml
     permissive.yaml  # optional; can be omitted if redundant
 
   examples/
@@ -119,7 +119,7 @@ A machine-readable schema for normalized **projection snapshot outputs**.
 - does not change `.sdd` authoring or compiled canonical JSON
 - should define a shared envelope so projection snapshots stay consistent across views
 
-### 6) bundle/v0.1/profiles/recommended.yaml
+### 6) bundle/v0.1/profiles/strict.yaml
 
 A stricter governance profile that can be enabled in validation:
 
@@ -229,7 +229,7 @@ Foundational conceptual framework:
 Use this for:
 
 - view definitions and any enforceable conventions
-- deciding what belongs in core/views vs profiles/recommended
+- deciding what belongs in core/views vs profiles/strict
 
 ## G) Initial Concepts2 One-page Schema v0dot1.md
 
@@ -241,7 +241,7 @@ Foundational schema summary:
 
 Use this for:
 
-- profiles/recommended.yaml governance rules
+- profiles/strict.yaml governance rules
 
 ## H) Structured Design Artifacts to Advance the Software Product Design Practice
 
@@ -258,7 +258,7 @@ Use this for:
 
 # Tactical guidance: critical bundle-gating decisions (apply while authoring core + profiles)
 
-The markdown specs are the source of truth, but some areas still require **explicit operationalization** so the bundle artifacts are deterministic and implementable. While generating the bundle, handle the following as *tactical decision points*. If the markdown is explicit, follow it. If it’s ambiguous, apply the suggested default, encode it in the bundle (core or recommended profile as indicated), and document the choice in the final report.
+The markdown specs are the source of truth, but some areas still require **explicit operationalization** so the bundle artifacts are deterministic and implementable. While generating the bundle, handle the following as *tactical decision points*. If the markdown is explicit, follow it. If it’s ambiguous, apply the suggested default, encode it in the bundle (core or strict profile as indicated), and document the choice in the final report.
 
 ## 1) Deterministic typing for `props` values (no silent coercion)
 
@@ -272,7 +272,7 @@ The markdown specs are the source of truth, but some areas still require **expli
 - **Problem:** some documents describe “recommended base fields” (e.g., `owner`, `description`) and per-type required fields; this is governance, not necessarily core DSL.
 - **Bundle guidance:**
   - Keep the **core** permissive and aligned with the canonical IR schema.
-  - Put “required props,” “style rules,” and “org conventions” into `profiles/recommended.yaml`.
+  - Put “required props,” “style rules,” and “org conventions” into `profiles/strict.yaml`.
 
 ## 3) Opportunity ↔ Journey/Step traceability without expanding tokens
 
@@ -293,7 +293,7 @@ The markdown specs are the source of truth, but some areas still require **expli
 - **Problem:** the spec includes both an explicit parent reference (`place_id`) and an explicit containment edge. Implementations need an authoritative rule.
 - **Bundle guidance (suggested):**
   - Treat `place_id` as the **authoritative parent reference**.
-  - In **recommended** profile strict mode, require either:
+  - In the `strict` profile, require either:
     - an explicit `CONTAINS Place → ViewState` edge exists, **or**
     - the compiler materializes a **derived** containment edge (clearly marked as derived so diffs are explainable).
 
@@ -302,7 +302,7 @@ The markdown specs are the source of truth, but some areas still require **expli
 - **Problem:** `[Event]` can be a label or an ID reference; for some relationships it should refer to an `Event` node.
 - **Bundle guidance:**
   - **Core:** permissive—allow labels; optionally warn.
-  - **Recommended:** require `[Event]` to reference an existing `Event` node ID for the relationships where the contracts imply this is the intended direction.
+  - **Strict profile:** require `[Event]` to reference an existing `Event` node ID for the relationships where the contracts imply this is the intended direction.
 
 ## 7) Derived semantics: keep compiled graph literal; derive only in views/render
 
@@ -319,13 +319,13 @@ The markdown specs are the source of truth, but some areas still require **expli
   - Keep **layout** renderer-specific.
   - If a view has explicit conventions (e.g., lanes, grouping, visibility rules), either:
     - put them in `views.yaml` as defaults if you want them normative, or
-    - put them into `profiles/recommended.yaml` as enforceable conventions.
+    - put them into `profiles/strict.yaml` as enforceable conventions.
 
 ## 9) ID prefix ↔ node type enforcement (governance)
 
 - **Problem:** prefix/type coupling improves readability, but it’s not purely structural.
 - **Bundle guidance:**
-  - Put prefix↔type enforcement into `profiles/recommended.yaml` (warn in permissive; error in recommended strict).
+  - Put prefix↔type enforcement into `profiles/strict.yaml` (warn in permissive; error in strict).
 
 ---
 
@@ -333,7 +333,7 @@ The markdown specs are the source of truth, but some areas still require **expli
 
 1. Create the directory/file structure exactly as specified.
 2. Populate `core/*` from the existing v0.1 markdown specs, minimizing interpretation.
-3. Populate `profiles/recommended.yaml` from “Initial Concepts 2” and any explicitly recommended strict rules in endpoint contracts.
+3. Populate `profiles/strict.yaml` from “Initial Concepts 2” and any explicitly recommended strict rules in endpoint contracts.
 4. Create 2–3 examples that are valid per EBNF + authoring spec, and compile cleanly to the JSON Schema.
 5. Create snapshots for compilation and at least one view projection.
 
@@ -354,7 +354,7 @@ After bundle generation:
 
 Specifically:
 
-- Make it clear which rules are “core” vs “recommended profile” governance.
+- Make it clear which rules are “core” vs “strict profile” governance.
 - Ensure vocabulary lists match `core/vocab.yaml`.
 - Ensure endpoint contract tables match `core/contracts.yaml`.
 - Ensure view definitions in prose match `core/views.yaml`.

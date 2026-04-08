@@ -42,7 +42,7 @@ views:
             show_instrumentation_annotations: false
           permissive:
             show_instrumentation_annotations: true
-          recommended:
+          strict:
             show_instrumentation_annotations: true
 
   - id: journey_map
@@ -69,7 +69,7 @@ views:
             show_reference_badges: false
           permissive:
             show_reference_badges: true
-          recommended:
+          strict:
             show_reference_badges: true
 
   - id: service_blueprint
@@ -102,7 +102,7 @@ views:
             show_secondary_edge_labels: false
           permissive:
             show_secondary_edge_labels: true
-          recommended:
+          strict:
             show_secondary_edge_labels: true
 
   - id: ia_place_map
@@ -136,7 +136,7 @@ views:
             show_place_access: true
             show_place_entry_points: true
             show_place_primary_nav: true
-          recommended:
+          strict:
             show_place_route_or_key: true
             show_place_access: true
             show_place_entry_points: true
@@ -165,7 +165,7 @@ views:
             show_branch_labels: false
           permissive:
             show_branch_labels: true
-          recommended:
+          strict:
             show_branch_labels: true
 
   - id: ui_contracts
@@ -206,7 +206,7 @@ views:
             show_secondary_state_groups_when_primary_view_state: true
             show_supporting_contract_lane_when_primary_view_state: true
             omit_empty_place_containers: false
-          recommended:
+          strict:
             show_place_route_or_key: true
             show_place_access: true
             show_place_entry_points: true

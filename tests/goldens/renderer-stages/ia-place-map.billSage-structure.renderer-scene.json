@@ -1,6 +1,6 @@
 {
   "viewId": "ia_place_map",
-  "profileId": "recommended",
+  "profileId": "strict",
   "themeId": "default",
   "root": {
     "kind": "container",

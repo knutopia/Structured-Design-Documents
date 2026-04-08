@@ -26,7 +26,7 @@ The initial TypeScript toolchain is in place at repo root as package `sdd-toolch
 - renderable views: `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`
 - render targets: DOT, Mermaid, SVG, and PNG for all renderable views through the initial toolchain
 - preview path: `sdd show` for the initial DOT-backed SVG and PNG preview artifacts
-- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/recommended_profile`, where `simple_profile` omits lower-priority overlays including place route, access, and entry-point fields
+- committed rendered example corpus: `examples/rendered/v0.1/` with suffixed view/example/profile folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/strict_profile`, where `simple_profile` omits lower-priority overlays including place route, access, and entry-point fields
 
 `bundle/v0.1/core/syntax.yaml` is intentionally compatible with the EBNF grammar. For extraction into `core/syntax.yaml`, it provides human-oriented operational clarifications such as default version behavior, fixed edge-element order, and canonical compilation expectations, while the grammar remains primary for formal parse structure and lexical precision.
 

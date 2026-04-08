@@ -135,12 +135,12 @@ function assertNodeWithinAssignedCellContentBox(
 
 describe("service_blueprint pre-routing artifacts", () => {
   it("render the fixed grid with decorations and without semantic edges", async () => {
-    const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "recommended");
+    const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "strict");
     const rendered = await renderServiceBlueprintPreRoutingArtifacts(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
 
     expect(rendered.preRoutingDiagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -218,14 +218,14 @@ describe("service_blueprint pre-routing artifacts", () => {
   });
 
   it("succeeds before routing while later routing stages and the final staged render stay available", async () => {
-    const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "recommended");
+    const context = await resolveServiceBlueprintContext("service_blueprint_slice.sdd", "strict");
 
     await expect(
       renderServiceBlueprintPreRoutingArtifacts(
         context.projection,
         context.graph,
         context.view,
-        "recommended"
+        "strict"
       )
     ).resolves.toEqual(expect.objectContaining({
       preRoutingSvg: expect.any(String),
@@ -237,7 +237,7 @@ describe("service_blueprint pre-routing artifacts", () => {
         context.projection,
         context.graph,
         context.view,
-        "recommended"
+        "strict"
       )
     ).resolves.toEqual(expect.objectContaining({
       step2Svg: expect.any(String),
@@ -251,7 +251,7 @@ describe("service_blueprint pre-routing artifacts", () => {
         context.projection,
         context.graph,
         context.view,
-        "recommended"
+        "strict"
       )
     ).resolves.toEqual(expect.objectContaining({
       svg: expect.any(String)

@@ -1,6 +1,6 @@
 {
   "viewId": "service_blueprint",
-  "profileId": "recommended",
+  "profileId": "strict",
   "themeId": "default",
   "root": {
     "kind": "container",

@@ -191,7 +191,7 @@ describe("staged ia_place_map", () => {
 
   it("renders outcome_to_ia_trace through the staged SVG path with area headers and navigation arrows", async () => {
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd");
-    const { rendered } = await buildIaArtifacts(examplePath, "recommended");
+    const { rendered } = await buildIaArtifacts(examplePath, "strict");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendered.svg).toContain("Checkout Area");
@@ -407,8 +407,8 @@ describe("staged ia_place_map", () => {
   });
 
   it("matches the reference-style hub and follower geometry for billSage_structure", async () => {
-    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_structure.sdd");
-    const { rendererScene, rendered } = await buildIaArtifacts(examplePath, "recommended");
+    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_structure.sdd");
+    const { rendererScene, rendered } = await buildIaArtifacts(examplePath, "strict");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
 

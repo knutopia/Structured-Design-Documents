@@ -156,7 +156,7 @@ Preview backends now split by view:
 - Public Sans webfont embedding for portable SVG output
 - SVG-to-PNG rasterization with a vendored desktop Public Sans font for image export
 
-Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Projection scope stays profile-agnostic, while render-model builders may use profile-specific display policy to suppress optional overlays in `simple`, including hiding place route/access/entry-point fields while leaving existing `primary_nav` annotations intact. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `recommended` for strict authoring. See [profiles.md](./profiles.md).
+Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Projection scope stays profile-agnostic, while render-model builders may use profile-specific display policy to suppress optional overlays in `simple`, including hiding place route/access/entry-point fields while leaving existing `primary_nav` annotations intact. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `strict` for strict authoring. See [profiles.md](./profiles.md).
 
 ## Renderable Views
 
@@ -234,14 +234,14 @@ Validation runs on compiled graphs only. Profiles change rule selection and seve
 
 - `simple` keeps structural checks strict while omitting completeness rules that add repetition during early modeling
 - `permissive` keeps broad governance feedback active, mostly as warnings
-- `recommended` enforces production-grade completeness and policy expectations
+- `strict` enforces production-grade completeness and policy expectations
 
 ## Testing Strategy
 
 The test suite uses the bundle examples as conformance fixtures.
 
 - compile tests assert stable compiled JSON against bundle snapshots after newline normalization
-- validation tests assert zero errors for current manifest examples under `recommended`
+- validation tests assert zero errors for current manifest examples under `strict`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
 - render tests assert stable internal DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
 - staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON plus deterministic staged SVG fixtures under `tests/goldens/renderer-stages/` without changing current legacy outputs

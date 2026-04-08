@@ -54,7 +54,7 @@ describe("diagnostics", () => {
     const bundle = await loadBundle(manifestPath);
     const compiled = compileSource(await fixtureInput("invalid_place_access.sdd"), bundle);
     expect(compiled.graph).toBeDefined();
-    const validation = validateGraph(compiled.graph!, bundle, "recommended");
+    const validation = validateGraph(compiled.graph!, bundle, "strict");
     expect(validation.diagnostics.some((diagnostic) => diagnostic.code === "validate.place_access_format")).toBe(true);
     expect(formatPrettyDiagnostics(validation.diagnostics)).toContain("validate.place_access_format");
     expect(formatJsonDiagnostics(validation.diagnostics)).toContain("\"validate.place_access_format\"");
@@ -194,14 +194,14 @@ describe("diagnostics", () => {
     const rendered = formatPrettyDiagnostics([
       createDiagnostic({
         code: "validate.unknown_profile",
-        message: "Unknown profile 'strict'",
+        message: "Unknown profile 'recommended'",
         span: undefined
       })
     ]);
 
     expect(rendered).toBe([
       "/repo/example.sdd",
-      "  ERROR validate.unknown_profile (1 instance): Unknown profile 'strict'"
+      "  ERROR validate.unknown_profile (1 instance): Unknown profile 'recommended'"
     ].join("\n"));
     expect(rendered).not.toContain("<no span>");
   });

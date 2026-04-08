@@ -561,12 +561,12 @@ function globalHelpText(): string {
     "Profiles:",
     "  simple       low-noise drafting",
     "  permissive   warning-first completeness",
-    "  recommended  strict governance (default)",
+    "  strict       strict governance (default)",
     "",
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-    "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile recommended",
-    "  sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple",
+    "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict",
+    "  sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
     "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
     "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
@@ -624,12 +624,12 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Compile and validate a source .sdd file against a validation profile.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id", "recommended")
+    .option("--profile <profile>", "profile id", "strict")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive",
-      "sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple"
+      "sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runValidate(deps, inputPath, options));
@@ -643,7 +643,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .requiredOption("--view <view>", "view id")
     .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id", "recommended")
+    .option("--profile <profile>", "profile id", "strict")
     .option("--out <file>", "write rendered output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -665,7 +665,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format dot`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id", "recommended")
+    .option("--profile <profile>", "profile id", "strict")
     .option("--out <file>", "write internal DOT output to a file instead of stdout")
     .option("--png", "also write a sibling PNG preview rendered through the SVG pipeline")
     .option("--png-out <file>", "write PNG output to an explicit file path")
@@ -685,7 +685,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format mermaid`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id", "recommended")
+    .option("--profile <profile>", "profile id", "strict")
     .option("--out <file>", "write internal Mermaid output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -708,7 +708,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-      .option("--profile <profile>", "profile id", "recommended")
+      .option("--profile <profile>", "profile id", "strict")
       .option("--format <format>", "preview format (svg or png)", "svg")
       .option("--backend <backend>", "preview backend id override")
       .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")

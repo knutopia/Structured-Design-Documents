@@ -23,7 +23,7 @@ Current renderable views:
 - Preview-only / not-yet-usable output via `sdd show`: `journey_map`, `outcome_opportunity_map`, `scenario_flow`
 - Internal `.dot` and `.mmd` text artifacts are retained for all renderable views for tests, corpus generation, and debugging.
 
-Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `recommended_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile. Preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
+Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `strict_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile. Preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
 
 The CLI preview pipeline is SVG-first:
 
@@ -97,7 +97,7 @@ pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd
 Validate an early draft with the low-noise profile:
 
 ```bash
-pnpm sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple
+pnpm sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple
 ```
 
 Render an SVG preview artifact:

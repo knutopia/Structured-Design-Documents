@@ -1,6 +1,6 @@
 {
   "viewId": "ui_contracts",
-  "profileId": "recommended",
+  "profileId": "strict",
   "themeId": "default",
   "root": {
     "kind": "container",

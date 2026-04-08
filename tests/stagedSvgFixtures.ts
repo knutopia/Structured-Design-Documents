@@ -3,7 +3,7 @@ import type { PositionedScene } from "../src/renderer/staged/contracts.js";
 export function buildPositionedSvgFixture(themeId = "default"): PositionedScene {
   return {
     viewId: "ia_place_map",
-    profileId: "recommended",
+    profileId: "strict",
     themeId,
     root: {
       kind: "container",

@@ -12,7 +12,7 @@ import { buildFixtureScene } from "./stagedRendererFixtures.js";
 function buildSingleNodeScene(node: SceneNode, themeId = "default"): RendererScene {
   return {
     viewId: "ia_place_map",
-    profileId: "recommended",
+    profileId: "strict",
     themeId,
     root: {
       kind: "container",

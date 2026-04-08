@@ -33,7 +33,7 @@ async function buildMiddleLayer(sourceText: string) {
     throw new Error("Could not project inline service_blueprint source.");
   }
 
-  const displayPolicy = resolveProfileDisplayPolicy(view, "recommended");
+  const displayPolicy = resolveProfileDisplayPolicy(view, "strict");
   const model = buildServiceBlueprintRenderModel(projected.projection, compiled.graph, displayPolicy);
   return buildServiceBlueprintMiddleLayer(model);
 }

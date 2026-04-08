@@ -26,7 +26,7 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
   - Method: operational projection definitions with executable include filters and renderer defaults for resolved view conventions.
 - `bundle/v0.1/profiles/permissive.yaml`
   - Sources: endpoint contract conformance guidance plus governance recommendations from `initial_concepts/Initial Concepts2 One-page Schema v0dot1.md`.
-- `bundle/v0.1/profiles/recommended.yaml`
+- `bundle/v0.1/profiles/strict.yaml`
   - Sources: same as permissive, with strict severity escalation and explicit policy checks.
 - `bundle/v0.1/examples/*.sdd` and `bundle/v0.1/snapshots/*`
   - Source basis: grammar and authoring rules from `definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md` and `definitions/v0.1/ebnf_grammar_sdd_text_v_0_dot_1.md`.
@@ -44,11 +44,11 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
 - Concept docs mention non-canonical relationship aliases.
   - Resolution: aliases recorded under `aliases_informative` in vocab; no additions to canonical relationship token set.
 - Event annotation strictness (`[Event]` as label vs ID).
-  - Resolution: permissive profile allows labels with warning; recommended profile requires Event node ID references for `TRANSITIONS_TO`.
+- Resolution: permissive profile allows labels with warning; strict profile requires Event node ID references for `TRANSITIONS_TO`.
 - Unknown backslash escapes in quoted source strings.
   - Resolution: `core/syntax.yaml` preserves `\\"` and `\\\\` as standardized escapes and treats other backslash sequences as literal characters for v0.1 parser behavior.
 - `ViewState` parentage (`place_id` vs `CONTAINS`).
-  - Resolution: `place_id` treated as authoritative field; recommended profile requires explicit `CONTAINS` or explicitly marked derived containment.
+- Resolution: `place_id` treated as authoritative field; strict profile requires explicit `CONTAINS` or explicitly marked derived containment.
 
 ## Markdown Sync Edits Applied
 

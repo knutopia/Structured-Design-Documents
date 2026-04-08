@@ -2,7 +2,6 @@ id: permissive
 version: "0.1"
 extends: core
 intent: Validate structural correctness and contract compatibility with warning-first governance.
-default_severity_mode: permissive
 
 severity_defaults:
   structural: error

@@ -2,7 +2,6 @@ id: simple
 version: "0.1"
 extends: core
 intent: Low-noise drafting for early diagrams with strict structural validation.
-default_severity_mode: permissive
 
 severity_defaults:
   structural: error

@@ -4,7 +4,6 @@ export interface BundleManifestProfileEntry {
   id: string;
   path: string;
   intent: string;
-  default_severity_mode: string;
 }
 
 export interface BundleManifestExample {
@@ -161,7 +160,6 @@ export interface ProfileConfig {
   version: string;
   extends: string;
   intent: string;
-  default_severity_mode: string;
   severity_defaults?: Record<string, Severity>;
   rules: ProfileRule[];
 }

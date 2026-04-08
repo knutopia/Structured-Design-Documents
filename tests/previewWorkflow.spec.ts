@@ -24,7 +24,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ia_place_map",
       format: "svg",
-      profileId: "recommended"
+      profileId: "strict"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ia_place_map_preview");
@@ -87,7 +87,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ui_contracts",
       format: "svg",
-      profileId: "recommended"
+      profileId: "strict"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
@@ -108,7 +108,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ui_contracts",
       format: "png",
-      profileId: "recommended"
+      profileId: "strict"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
@@ -160,7 +160,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "svg",
-      profileId: "recommended"
+      profileId: "strict"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_service_blueprint_preview");
@@ -211,7 +211,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "png",
-      profileId: "recommended"
+      profileId: "strict"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_service_blueprint_preview");
@@ -232,7 +232,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "svg",
-      profileId: "recommended",
+      profileId: "strict",
       backendId: "legacy_graphviz_preview"
     });
 
@@ -253,7 +253,7 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "png",
-      profileId: "recommended",
+      profileId: "strict",
       backendId: "legacy_graphviz_preview"
     });
 

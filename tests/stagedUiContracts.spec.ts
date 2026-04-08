@@ -299,7 +299,7 @@ function buildSyntheticCrowdedLaneScene(): RendererScene {
 
   return {
     viewId: "ui_contracts",
-    profileId: "recommended",
+    profileId: "strict",
     themeId: "default",
     root: {
       kind: "container",
@@ -427,9 +427,9 @@ function buildSyntheticCrowdedLaneScene(): RendererScene {
 }
 
 describe("staged ui_contracts", () => {
-  it("matches committed staged snapshots for place_viewstate_transition in recommended profile", async () => {
+  it("matches committed staged snapshots for place_viewstate_transition in strict profile", async () => {
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd");
-    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "recommended");
+    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "strict");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-010", "P-011"]);
@@ -505,7 +505,7 @@ describe("staged ui_contracts", () => {
 
   it("builds fallback-to-state structure without a synthetic ViewState graph", async () => {
     const examplePath = path.join(repoRoot, "bundle/v0.1/examples/ui_state_fallback.sdd");
-    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "recommended");
+    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "strict");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(findRendererContainer(rendererScene, "P-060").layout).toEqual(expect.objectContaining({
@@ -590,7 +590,7 @@ END
 Event E-200 "Submit"
 END
 `
-    }, "recommended");
+    }, "strict");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendererScene.root.children.map((child) => child.id)).toEqual(["P-200", "shared_supporting_contracts"]);
@@ -645,7 +645,7 @@ END
 
   it("keeps root places vertically balanced while dense places switch to a place grid", async () => {
     const examplePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_dense_sparse_staged.sdd");
-    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "recommended");
+    const { rendererScene, rendered } = await buildUiContractsArtifacts(examplePath, "strict");
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendererScene.root.layout).toEqual(expect.objectContaining({

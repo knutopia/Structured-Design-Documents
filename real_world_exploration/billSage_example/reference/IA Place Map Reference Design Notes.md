@@ -4,8 +4,8 @@ Meant to guide a matching implementation.
 
 Files referenced:
 Source: <real_world_exploration/billSage_structure.sdd>
-Reference visual as PNG: <real_world_exploration/reference/billSage_structure.ia_place_map.recommended.bottomToLeft_connectors.reference.png>
-Reference visual as SVG: <real_world_exploration/reference/billSage_structure.ia_place_map.recommended.bottomToLeft_connectors.reference.svg>
+Reference visual as PNG: <real_world_exploration/reference/billSage_structure.ia_place_map.strict.bottomToLeft_connectors.reference.png>
+Reference visual as SVG: <real_world_exploration/reference/billSage_structure.ia_place_map.strict.bottomToLeft_connectors.reference.svg>
 
 ## Challenge: Nesting Amongst Sibling Nodes
 

@@ -22,7 +22,7 @@ function buildRootScene(
 ): RendererScene {
   return {
     viewId: "ia_place_map",
-    profileId: "recommended",
+    profileId: "strict",
     themeId: "default",
     root: {
       kind: "container",
@@ -1115,7 +1115,7 @@ describe("staged macro-layout", () => {
   it("keeps malformed elk scene data from crashing the positioned-scene fallback path", async () => {
     const malformedMeasuredScene = {
       viewId: "ia_place_map",
-      profileId: "recommended",
+      profileId: "strict",
       themeId: "default",
       root: {
         kind: "container",

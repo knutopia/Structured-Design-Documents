@@ -1135,14 +1135,14 @@ describe("CLI wrappers", () => {
     expect(help).toContain("show");
     expect(help).toContain("Profiles:");
     expect(help).toContain("simple");
-    expect(help).toContain("recommended  strict governance (default)");
+    expect(help).toContain("strict       strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
     expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging.");
-    expect(help).toContain("sdd validate real_world_exploration/billSage_simple_structure.sdd --profile simple");
+    expect(help).toContain("sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple");
   });
 
   it("render help labels DOT and Mermaid output as internal/debug artifacts", () => {

@@ -16,15 +16,12 @@ profiles:
   - id: simple
     path: profiles/simple.yaml
     intent: Low-noise drafting with strict structural validation.
-    default_severity_mode: permissive
   - id: permissive
     path: profiles/permissive.yaml
     intent: Warning-first governance with strict structural validation.
-    default_severity_mode: permissive
-  - id: recommended
-    path: profiles/recommended.yaml
+  - id: strict
+    path: profiles/strict.yaml
     intent: Strict governance for production-ready authoring.
-    default_severity_mode: strict
 
 examples:
   - path: examples/outcome_to_ia_trace.sdd

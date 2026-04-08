@@ -14,7 +14,7 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
 3. Scope includes both guidance tasks in one plan:
    - Phase A: bundle generation.
    - Phase B: markdown sync edits.
-4. Profiles to deliver: **both** `profiles/recommended.yaml` and `profiles/permissive.yaml`.
+4. Profiles to deliver: **both** `profiles/strict.yaml` and `profiles/permissive.yaml`.
 5. Projection snapshots format: **deterministic JSON projection** (no Mermaid baseline).
 
 ## Deliverables
@@ -23,7 +23,7 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
 3. `bundle/v0.1/core/schema.json`
 4. `bundle/v0.1/core/contracts.yaml`
 5. `bundle/v0.1/core/views.yaml` (typed stub)
-6. `bundle/v0.1/profiles/recommended.yaml`
+6. `bundle/v0.1/profiles/strict.yaml`
 7. `bundle/v0.1/profiles/permissive.yaml`
 8. `bundle/v0.1/examples/*.sdd` (3 examples)
 9. `bundle/v0.1/snapshots/*` (compiled IR + JSON projections)
@@ -37,7 +37,7 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
 1. `manifest.yaml` keys:
    - `bundle_name`, `bundle_version`, `language`, `language_version`
    - `core` with `vocab`, `schema`, `contracts`, `views` relative paths
-   - `profiles` list with `id`, `path`, `intent`, `default_severity_mode`
+   - `profiles` list with `id`, `path`, `intent`
    - `compatibility` with `requires_compiler_min`, `notes`
 2. `core/vocab.yaml` keys:
    - `node_types` array of objects: `token`, `group`, `description`
@@ -55,7 +55,7 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
 5. `profiles/permissive.yaml` keys:
    - `id`, `extends: core`, `severity_defaults`
    - rule overrides to `warn` for governance constraints
-6. `profiles/recommended.yaml` keys:
+6. `profiles/strict.yaml` keys:
    - `id`, `extends: core`, `severity_defaults`
    - explicit governance rules for required props, prefix↔type, event-reference strictness, ViewState parentage checks
 
@@ -75,7 +75,7 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
    - Mark each view `status: stub` with `missing_details` fields.
 6. Build profiles:
    - `permissive.yaml`: syntax+referential integrity baseline; governance mostly warnings.
-   - `recommended.yaml`: required node props, ID prefix↔type coupling, strict event reference where specified, ViewState parentage policy.
+   - `strict.yaml`: required node props, ID prefix↔type coupling, strict event reference where specified, ViewState parentage policy.
 7. Create examples (3 files) with broad coverage:
    - `examples/outcome_to_ia_trace.sdd`
    - `examples/place_viewstate_transition.sdd`
@@ -115,11 +115,11 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
 3. Contract coverage test:
    - every relationship token has an entry in `contracts.yaml` with non-empty allowed endpoints.
 4. Profile severity test:
-   - same invalid model yields warnings in permissive and errors in recommended for governance rules.
+   - same invalid model yields warnings in permissive and errors in strict for governance rules.
 5. Event reference strictness test:
-   - `[Event]` label accepted in permissive, rejected in recommended when ID requirement applies.
+   - `[Event]` label accepted in permissive, rejected in strict when ID requirement applies.
 6. ViewState parentage test:
-   - `place_id` without `CONTAINS` handled per profile rule; recommended must enforce explicit edge or derived marker.
+   - `place_id` without `CONTAINS` handled per profile rule; strict must enforce explicit edge or derived marker.
 7. Determinism test:
    - compiling same `.sdd` twice yields byte-identical `compiled.json`.
 8. Snapshot regression test:
@@ -131,7 +131,7 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
 1. `bundle/v0.1` contains all required files plus 3 examples and snapshots.
 2. `core/views.yaml` is executable for type-filter projection and explicitly marked as stub for missing conventions.
 3. No v0.1 vocab expansion beyond canonical token sets.
-4. Profiles behave differently and intentionally (`permissive` warn-oriented, `recommended` strict governance).
+4. Profiles behave differently and intentionally (`permissive` warn-oriented, `strict` strict governance).
 5. Markdown and bundle semantics are aligned with a concise ambiguity report.
 
 ## Assumptions and Defaults

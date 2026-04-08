@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1436.848" height="620" viewBox="0 0 1436.848 620" class="staged-svg view-ui_contracts profile-recommended theme-default theme-revision-public-sans-v0-1" data-view-id="ui_contracts" data-profile-id="recommended" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1224" height="704" viewBox="0 0 1224 704" class="staged-svg view-service_blueprint profile-strict theme-default theme-revision-public-sans-v0-1" data-view-id="service_blueprint" data-profile-id="strict" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -29,6 +29,11 @@
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
+    .scene-decoration__line { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
+    .view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }
+    .view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }
+    .view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: #94a3b8; stroke-dasharray: 6 4; }
+    .view-service_blueprint .service_blueprint_lane_title .scene-text, .view-service_blueprint .service_blueprint_separator_title .scene-text { fill: #475569; }
     .text-role-badge { font-family: 'Public Sans'; font-size: 12px; font-weight: 600; }
     .text-role-edge_label { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; }
     .text-role-label { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
@@ -44,195 +49,257 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ui_contracts" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1436.848" height="620" rx="18" ry="18"/>
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram service_blueprint service_blueprint" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome" x="0" y="0" width="1224" height="704" rx="18" ry="18"/>
     </g>
-    <g id="scene-container-p-010" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-010" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="24" width="1388.848" height="434" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="24" width="1388.848" height="86" rx="16" ry="16"/>
+    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="132" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-view_state_graph-p-010" class="scene-container primitive-cluster role-view_state_graph paint-chrome synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-010" data-role="view_state_graph">
-      <rect class="scene-container__chrome" x="36" y="122" width="650.424" height="324" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="36" y="122" width="650.424" height="40" rx="16" ry="16"/>
+    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:01:customer__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="404" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-vs-010a" class="scene-container primitive-cluster role-view_state paint-chrome view_state scope chrome-dashed" data-item-id="VS-010a" data-role="view_state">
-      <rect class="scene-container__chrome" x="49" y="174" width="272" height="196" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="49" y="174" width="272" height="60" rx="16" ry="16"/>
+    <g id="scene-container-lane-01-customer__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="676" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-c-011" class="scene-container primitive-cluster role-component paint-chrome component scope" data-item-id="C-011" data-role="component">
-      <rect class="scene-container__chrome" x="61" y="246" width="248" height="112" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="61" y="246" width="248" height="40" rx="16" ry="16"/>
+    <g id="scene-container-lane-01-customer__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="948" y="28" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-c-010" class="scene-container primitive-cluster role-component paint-chrome component scope" data-item-id="C-010" data-role="component">
-      <rect class="scene-container__chrome" x="702.424" y="122" width="698.424" height="324" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="702.424" y="122" width="698.424" height="40" rx="16" ry="16"/>
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="132" y="140" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-secondary_state_group-c-010" class="scene-container primitive-cluster role-state_graph paint-chrome synthetic transition_graph state_graph chrome-dashed" data-item-id="secondary_state_group:C-010" data-role="state_graph">
-      <rect class="scene-container__chrome" x="842.424" y="302" width="546.424" height="132" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="842.424" y="302" width="546.424" height="60" rx="16" ry="16"/>
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:02:frontstage__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="404" y="140" width="248" height="88" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-p-011" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-011" data-role="place">
-      <rect class="scene-container__chrome" x="24" y="486" width="1388.848" height="110" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="486" width="1388.848" height="86" rx="16" ry="16"/>
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="676" y="140" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-02-frontstage__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-frontstage band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:02:frontstage__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="948" y="140" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="132" y="252" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:03:backstage__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="404" y="252" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="676" y="252" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-03-backstage__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-backstage band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:03:backstage__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="948" y="252" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="132" y="364" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:04:support__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="404" y="364" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="676" y="364" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-04-support__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-support band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:04:support__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="948" y="364" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="132" y="476" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:05:system__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="404" y="476" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="676" y="476" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-05-system__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-system band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:05:system__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="948" y="476" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="132" y="588" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-1-spill-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="lane:06:policy__shell__cell__band:anchor:1:spill:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="404" y="588" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__cell__band-interstitial-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:interstitial:1" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="676" y="588" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-lane-06-policy__shell__cell__band-anchor-2" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-policy band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="lane:06:policy__shell__cell__band:anchor:2" data-role="service_blueprint_cell">
+      <rect class="scene-container__chrome" x="948" y="588" width="248" height="88" rx="16" ry="16"/>
+    </g>
+    <g id="scene-decoration-lane-customer__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_interaction lane-customer" data-decoration-id="lane-customer__separator">
+      <line class="scene-decoration__line" x1="127.584" y1="116" x2="1196" y2="116"/>
+    </g>
+    <g id="scene-decoration-lane-frontstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_visibility lane-frontstage" data-decoration-id="lane-frontstage__separator">
+      <line class="scene-decoration__line" x1="115.236" y1="228" x2="1196" y2="228"/>
+    </g>
+    <g id="scene-decoration-lane-backstage__separator" class="scene-decoration scene-decoration-line paint-chrome service_blueprint_separator line_of_internal_interaction lane-backstage" data-decoration-id="lane-backstage__separator">
+      <line class="scene-decoration__line" x1="24" y1="340" x2="1196" y2="340"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-e-010" class="scene-node primitive-card role-event paint-nodes semantic_node shape-oval" data-item-id="E-010" data-role="event">
-      <rect class="scene-node__chrome" x="201" y="298" width="96" height="48" rx="14" ry="14"/>
+    <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="J-020" data-role="step">
+      <rect class="scene-node__chrome" x="172" y="48" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-vs-010b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-010b" data-role="viewstate">
-      <rect class="scene-node__chrome" x="505.424" y="239" width="168" height="66" rx="14" ry="14"/>
+    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="J-021" data-role="step">
+      <rect class="scene-node__chrome" x="988" y="40" width="168" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-sa-010" class="scene-node primitive-card role-systemaction paint-nodes semantic_node shape-component" data-item-id="SA-010" data-role="systemaction">
-      <rect class="scene-node__chrome" x="842.424" y="174" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-pr-020" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-frontstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PR-020" data-role="process">
+      <rect class="scene-node__chrome" x="144" y="160" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-d-010" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shape-cylinder" data-item-id="D-010" data-role="dataentity">
-      <rect class="scene-node__chrome" x="842.424" y="238" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-pr-021" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-backstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="PR-021" data-role="process">
+      <rect class="scene-node__chrome" x="688" y="272" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-st-010a" class="scene-node primitive-card role-state paint-nodes semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010a" data-role="state">
-      <rect class="scene-node__chrome" x="855.424" y="374" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-pr-022" class="scene-node primitive-card role-process paint-nodes semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-support band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="PR-022" data-role="process">
+      <rect class="scene-node__chrome" x="960" y="384" width="224" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-st-010b" class="scene-node primitive-card role-state paint-nodes semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010b" data-role="state">
-      <rect class="scene-node__chrome" x="1207.848" y="374" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-sa-020" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="SA-020" data-role="systemaction">
+      <rect class="scene-node__chrome" x="144" y="496" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-d-020" class="scene-node primitive-card role-dataentity paint-nodes semantic_node service_blueprint_node shape-cylinder type-dataentity service_blueprint_cell lane-system band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="D-020" data-role="dataentity">
+      <rect class="scene-node__chrome" x="416" y="496" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-sa-021" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="SA-021" data-role="systemaction">
+      <rect class="scene-node__chrome" x="688" y="496" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-sa-022" class="scene-node primitive-card role-systemaction paint-nodes semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="SA-022" data-role="systemaction">
+      <rect class="scene-node__chrome" x="960" y="496" width="224" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-pl-020" class="scene-node primitive-card role-policy paint-nodes semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PL-020" data-role="policy">
+      <rect class="scene-node__chrome" x="144" y="608" width="224" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-010" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="50">
-          <tspan x="36" dy="0">Billing</tspan>
-        </text>
-      <text class="scene-text text-role-subtitle block-kind-text block-region-primary" x="36" y="71">
-          <tspan x="36" dy="0">/billing</tspan>
-        </text>
-      <text class="scene-text text-role-badge block-kind-badge_text block-region-primary" x="36" y="90">
-          <tspan x="36" dy="0">auth</tspan>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="J-020" data-role="step">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="184" y="76">
+          <tspan x="184" dy="0">Submit Claim</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-view_state_graph paint-labels synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-010" data-role="view_state_graph">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="148">
-          <tspan x="48" dy="0">ViewState Graph</tspan>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node service_blueprint_node shape-box type-step service_blueprint_cell lane-customer band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="J-021" data-role="step">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1000" y="68">
+          <tspan x="1000" dy="0">Receive</tspan>
+          <tspan x="1000" dy="20">Confirmation</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-view_state paint-labels view_state scope chrome-dashed" data-item-id="VS-010a" data-role="view_state">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="200">
-          <tspan x="61" dy="0">Billing Editing</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="61" y="220">
-          <tspan x="61" dy="0">data: PaymentMethod</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-frontstage band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PR-020" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="156" y="188">
+          <tspan x="156" dy="0">Validate Claim</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-component paint-labels component scope" data-item-id="C-011" data-role="component">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="73" y="272">
-          <tspan x="73" dy="0">Component: Submit Button</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-backstage band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="PR-021" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="700" y="300">
+          <tspan x="700" dy="0">Review Claim History</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-event paint-labels semantic_node shape-oval" data-item-id="E-010" data-role="event">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="213" y="326">
-          <tspan x="213" dy="0">Submit</tspan>
+    <g class="scene-node primitive-card role-process paint-labels semantic_node service_blueprint_node shape-box type-process service_blueprint_cell lane-support band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="PR-022" data-role="process">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="972" y="412">
+          <tspan x="972" dy="0">Notify Customer</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-010b" data-role="viewstate">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="517.424" y="267">
-          <tspan x="517.424" dy="0">Billing Success</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="517.424" y="289">
-          <tspan x="517.424" dy="0">data: Receipt</tspan>
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="SA-020" data-role="systemaction">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="156" y="524">
+          <tspan x="156" dy="0">Store Claim</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-component paint-labels component scope" data-item-id="C-010" data-role="component">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="714.424" y="148">
-          <tspan x="714.424" dy="0">Component: Billing Form</tspan>
+    <g class="scene-node primitive-card role-dataentity paint-labels semantic_node service_blueprint_node shape-cylinder type-dataentity service_blueprint_cell lane-system band-a1 column-2 cell-kind-anchor slot-kind-spill" data-item-id="D-020" data-role="dataentity">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="428" y="524">
+          <tspan x="428" dy="0">Claim</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node shape-component" data-item-id="SA-010" data-role="systemaction">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="854.424" y="202">
-          <tspan x="854.424" dy="0">Save Subscription</tspan>
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-i1 column-3 cell-kind-interstitial slot-kind-primary" data-item-id="SA-021" data-role="systemaction">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="700" y="524">
+          <tspan x="700" dy="0">Load Claim History</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shape-cylinder" data-item-id="D-010" data-role="dataentity">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="854.424" y="266">
-          <tspan x="854.424" dy="0">Subscription</tspan>
+    <g class="scene-node primitive-card role-systemaction paint-labels semantic_node service_blueprint_node shape-component type-systemaction service_blueprint_cell lane-system band-a2 column-4 cell-kind-anchor slot-kind-primary" data-item-id="SA-022" data-role="systemaction">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="972" y="524">
+          <tspan x="972" dy="0">Send Email</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-state_graph paint-labels synthetic transition_graph state_graph chrome-dashed" data-item-id="secondary_state_group:C-010" data-role="state_graph">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="854.424" y="328">
-          <tspan x="854.424" dy="0">State detail: Billing Form</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="854.424" y="348">
-          <tspan x="854.424" dy="0">scope_id=C-010</tspan>
+    <g class="scene-node primitive-card role-policy paint-labels semantic_node service_blueprint_node shape-hexagon type-policy service_blueprint_cell lane-policy band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="PL-020" data-role="policy">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="156" y="636">
+          <tspan x="156" dy="0">Retention Policy</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-state paint-labels semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010a" data-role="state">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="867.424" y="402">
-          <tspan x="867.424" dy="0">Form Ready</tspan>
+    <g id="scene-decoration-lane-customer__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-customer" data-decoration-id="lane-customer__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="75">
+          <tspan x="24" dy="0">Customer</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-state paint-labels semantic_node shape-ellipse chrome-dashed" data-item-id="ST-010b" data-role="state">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1219.848" y="402">
-          <tspan x="1219.848" dy="0">Submitting</tspan>
+    <g id="scene-decoration-lane-customer__separator_title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_separator_title line_of_interaction lane-customer" data-decoration-id="lane-customer__separator_title">
+      <text class="scene-text text-role-edge_label block-kind-text" x="24" y="116">
+          <tspan x="24" dy="0">Line of Interaction</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-011" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="512">
-          <tspan x="36" dy="0">Confirmation</tspan>
+    <g id="scene-decoration-lane-frontstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-frontstage" data-decoration-id="lane-frontstage__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="187">
+          <tspan x="24" dy="0">Frontstage</tspan>
         </text>
-      <text class="scene-text text-role-subtitle block-kind-text block-region-primary" x="36" y="533">
-          <tspan x="36" dy="0">/confirmation</tspan>
+    </g>
+    <g id="scene-decoration-lane-frontstage__separator_title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_separator_title line_of_visibility lane-frontstage" data-decoration-id="lane-frontstage__separator_title">
+      <text class="scene-text text-role-edge_label block-kind-text" x="24" y="228">
+          <tspan x="24" dy="0">Line of Visibility</tspan>
         </text>
-      <text class="scene-text text-role-badge block-kind-badge_text block-region-primary" x="36" y="552">
-          <tspan x="36" dy="0">role:billing_agent</tspan>
+    </g>
+    <g id="scene-decoration-lane-backstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-backstage" data-decoration-id="lane-backstage__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="299">
+          <tspan x="24" dy="0">Backstage</tspan>
+        </text>
+    </g>
+    <g id="scene-decoration-lane-support__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-support" data-decoration-id="lane-support__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="411">
+          <tspan x="24" dy="0">Support</tspan>
+        </text>
+    </g>
+    <g id="scene-decoration-lane-system__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-system" data-decoration-id="lane-system__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="523">
+          <tspan x="24" dy="0">System</tspan>
+        </text>
+    </g>
+    <g id="scene-decoration-lane-policy__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-policy" data-decoration-id="lane-policy__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="635">
+          <tspan x="24" dy="0">Policy</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-binds_to-c-010--d-010" class="scene-edge role-binds_to route-orthogonal paint-edges edge-dotted constraint_edge" data-edge-id="binds_to:C-010-&gt;D-010" data-role="binds_to">
-      <path class="scene-edge__path" d="M 702.424 262 L 842.424 262" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-j-020__precedes__j-021" class="scene-edge role-precedes route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="J-020__precedes__J-021" data-role="precedes">
+      <path class="scene-edge__path" d="M 340 72 L 988 72" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-depends_on-c-010--sa-010" class="scene-edge role-depends_on route-orthogonal paint-edges constraint_edge" data-edge-id="depends_on:C-010-&gt;SA-010" data-role="depends_on">
-      <path class="scene-edge__path" d="M 702.424 198 L 842.424 198" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-pr-020__precedes__pr-021" class="scene-edge role-precedes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="PR-020__precedes__PR-021" data-role="precedes">
+      <path class="scene-edge__path" d="M 368 184 L 384 184 L 384 296 L 688 296" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-emits-c-011--e-010" class="scene-edge role-emits route-orthogonal paint-edges edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
-      <path class="scene-edge__path" d="M 61 322 L 201 322" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-pr-021__precedes__pr-022" class="scene-edge role-precedes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="PR-021__precedes__PR-022" data-role="precedes">
+      <path class="scene-edge__path" d="M 912 296 L 928 296 L 928 408 L 960 408" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-transitions_to-st-010a--st-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 1023.424 398 L 1207.848 398" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-j-020__realized_by__pr-020" class="scene-edge role-realized_by route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-realized_by edge-channel-support edge-dashed" data-edge-id="J-020__realized_by__PR-020" data-role="realized_by">
+      <path class="scene-edge__path" d="M 256 96 L 256 160" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-transitions_to-vs-010a--vs-010b" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 321 272 L 505.424 272" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-j-021__realized_by__pr-022" class="scene-edge role-realized_by route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-realized_by edge-channel-support edge-dashed" data-edge-id="J-021__realized_by__PR-022" data-role="realized_by">
+      <path class="scene-edge__path" d="M 1072 104 L 1072 384" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-pr-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="PR-020__constrained_by__PL-020" data-role="constrained_by">
+      <path class="scene-edge__path" d="M 256 208 L 256 608" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-pr-020__depends_on__sa-020" class="scene-edge role-depends_on route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-020__depends_on__SA-020" data-role="depends_on">
+      <path class="scene-edge__path" d="M 256 208 L 256 496" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-pr-021__depends_on__sa-021" class="scene-edge role-depends_on route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-021__depends_on__SA-021" data-role="depends_on">
+      <path class="scene-edge__path" d="M 800 320 L 800 496" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-pr-022__depends_on__sa-022" class="scene-edge role-depends_on route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-depends_on edge-channel-support" data-edge-id="PR-022__depends_on__SA-022" data-role="depends_on">
+      <path class="scene-edge__path" d="M 1072 432 L 1072 496" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-sa-020__constrained_by__pl-020" class="scene-edge role-constrained_by route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-constrained_by edge-channel-resource_policy edge-dotted" data-edge-id="SA-020__constrained_by__PL-020" data-role="constrained_by">
+      <path class="scene-edge__path" d="M 256 544 L 256 608" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-sa-020__reads_writes__d-020" class="scene-edge role-reads_writes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads_writes edge-channel-resource_policy edge-dashed" data-edge-id="SA-020__reads_writes__D-020" data-role="reads_writes">
+      <path class="scene-edge__path" d="M 256 544 L 256 560 L 528 560 L 528 544" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-sa-021__reads__d-020" class="scene-edge role-reads route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-021__reads__D-020" data-role="reads">
+      <path class="scene-edge__path" d="M 800 544 L 800 560 L 528 560 L 528 544" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-sa-022__reads__d-020" class="scene-edge role-reads route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-reads edge-channel-resource_policy edge-dashed" data-edge-id="SA-022__reads__D-020" data-role="reads">
+      <path class="scene-edge__path" d="M 1072 544 L 1072 560 L 528 560 L 528 544" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
-    <g class="scene-edge-label role-binds_to edge-dotted constraint_edge" data-edge-id="binds_to:C-010-&gt;D-010" data-role="binds_to">
-      <rect class="scene-edge-label__box" x="714.424" y="251" width="107.748" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="720.424" y="262" dominant-baseline="middle">
-          <tspan x="720.424" dy="0">binds field status</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-depends_on constraint_edge" data-edge-id="depends_on:C-010-&gt;SA-010" data-role="depends_on">
-      <rect class="scene-edge-label__box" x="714.424" y="187" width="76.482" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="720.424" y="198" dominant-baseline="middle">
-          <tspan x="720.424" dy="0">depends on</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-emits edge-dashed constraint_edge" data-edge-id="emits:C-011-&gt;E-010" data-role="emits">
-      <rect class="scene-edge-label__box" x="73" y="311" width="42.87" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="79" y="322" dominant-baseline="middle">
-          <tspan x="79" dy="0">emits</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-transitions_to edge-dashed free_edge" data-edge-id="transitions_to:ST-010a-&gt;ST-010b" data-role="transitions_to">
-      <rect class="scene-edge-label__box" x="1036.424" y="350" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1042.424" y="361" dominant-baseline="middle">
-          <tspan x="1042.424" dy="0">[Submit] {payment_valid} /</tspan>
-          <tspan x="1042.424" dy="14">SA-010</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-transitions_to free_edge" data-edge-id="transitions_to:VS-010a-&gt;VS-010b" data-role="transitions_to">
-      <rect class="scene-edge-label__box" x="334" y="224" width="158.424" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="340" y="235" dominant-baseline="middle">
-          <tspan x="340" dy="0">[Submit] {payment_valid} /</tspan>
-          <tspan x="340" dy="14">SA-010</tspan>
-        </text>
-    </g>
   </g>
 </svg>

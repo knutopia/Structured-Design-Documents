@@ -187,7 +187,7 @@ END
       show_secondary_state_groups_when_primary_view_state: false,
       show_supporting_contract_lane_when_primary_view_state: false
     });
-    const recommended = buildUiContractsRenderData(projected.projection!, compiled.graph!, {
+    const strict = buildUiContractsRenderData(projected.projection!, compiled.graph!, {
       omit_empty_place_containers: false,
       show_view_state_data_required: true,
       show_secondary_state_groups_when_primary_view_state: true,
@@ -199,7 +199,7 @@ END
       "P-210",
       "P-220"
     ]);
-    expect(recommended.model.rootItems.filter((item) => item.kind === "place").map((item) => item.id)).toEqual([
+    expect(strict.model.rootItems.filter((item) => item.kind === "place").map((item) => item.id)).toEqual([
       "P-100",
       "P-210",
       "P-220",
@@ -218,7 +218,7 @@ END
         { id: "P-310", name: "Projects by Period" }
       ]
     });
-    expect(recommended.notes).toEqual([]);
+    expect(strict.notes).toEqual([]);
   });
 
   it("orders component-owned supporting contracts by top-level author order", async () => {

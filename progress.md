@@ -9,6 +9,13 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+
+## Wed 4-08-26
+
+-added License And Contributions footer to readme
+-changed "recommended" profile name to "strict"
+-removed dead, definition-only default_severity_mode
+
 ## Tue 4-07-26
 
 -further readme improvements

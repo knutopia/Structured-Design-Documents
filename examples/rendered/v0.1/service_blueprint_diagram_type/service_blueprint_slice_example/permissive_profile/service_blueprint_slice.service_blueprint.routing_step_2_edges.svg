@@ -220,7 +220,7 @@
     </g>
     <g id="scene-decoration-lane-customer__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-customer" data-decoration-id="lane-customer__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="75">
-          <tspan x="24" dy="0">customer</tspan>
+          <tspan x="24" dy="0">Customer</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-customer__separator_title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_separator_title line_of_interaction lane-customer" data-decoration-id="lane-customer__separator_title">
@@ -230,7 +230,7 @@
     </g>
     <g id="scene-decoration-lane-frontstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-frontstage" data-decoration-id="lane-frontstage__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="187">
-          <tspan x="24" dy="0">frontstage</tspan>
+          <tspan x="24" dy="0">Frontstage</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-frontstage__separator_title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_separator_title line_of_visibility lane-frontstage" data-decoration-id="lane-frontstage__separator_title">
@@ -240,22 +240,22 @@
     </g>
     <g id="scene-decoration-lane-backstage__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-backstage" data-decoration-id="lane-backstage__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="299">
-          <tspan x="24" dy="0">backstage</tspan>
+          <tspan x="24" dy="0">Backstage</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-support__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-support" data-decoration-id="lane-support__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="411">
-          <tspan x="24" dy="0">support</tspan>
+          <tspan x="24" dy="0">Support</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-system__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-system" data-decoration-id="lane-system__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="523">
-          <tspan x="24" dy="0">system</tspan>
+          <tspan x="24" dy="0">System</tspan>
         </text>
     </g>
     <g id="scene-decoration-lane-policy__title" class="scene-decoration scene-decoration-text paint-labels service_blueprint_lane_title lane-policy" data-decoration-id="lane-policy__title">
       <text class="scene-text text-role-label block-kind-text" x="24" y="635">
-          <tspan x="24" dy="0">policy</tspan>
+          <tspan x="24" dy="0">Policy</tspan>
         </text>
     </g>
   </g>

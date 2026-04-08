@@ -14,7 +14,7 @@ common_rules:
     severity_by_profile:
       simple: error
       permissive: error
-      recommended: error
+      strict: error
     rule_logic:
       kind: all_edges_endpoints_exist
   - id: relationship_directionality
@@ -22,7 +22,7 @@ common_rules:
     severity_by_profile:
       simple: error
       permissive: error
-      recommended: error
+      strict: error
     rule_logic:
       kind: directed_edges_only
   - id: duplicate_edge_detection
@@ -30,7 +30,7 @@ common_rules:
     severity_by_profile:
       simple: warn
       permissive: warn
-      recommended: warn
+      strict: warn
     rule_logic:
       kind: duplicate_edge_identity
       key_fields: [from, type, to, event, guard, effect, props]
@@ -40,7 +40,7 @@ common_rules:
     severity_by_profile:
       simple: warn
       permissive: warn
-      recommended: warn
+      strict: warn
     rule_logic:
       kind: annotation_semantics_scope
       semantic_relationships: [TRANSITIONS_TO, NAVIGATES_TO, PRECEDES]
@@ -49,7 +49,7 @@ common_rules:
     severity_by_profile:
       simple: warn
       permissive: warn
-      recommended: warn
+      strict: warn
     rule_logic:
       kind: to_name_non_semantic
   - id: no_implicit_inverse_edges
@@ -57,7 +57,7 @@ common_rules:
     severity_by_profile:
       simple: error
       permissive: error
-      recommended: error
+      strict: error
     rule_logic:
       kind: no_inverse_materialization
 
@@ -81,7 +81,7 @@ relationships:
         severity_by_profile:
           simple: warn
           permissive: warn
-          recommended: error
+          strict: error
         rule_logic:
           kind: acyclic_subgraph
           relationship: CONTAINS
@@ -90,7 +90,7 @@ relationships:
         severity_by_profile:
           simple: warn
           permissive: warn
-          recommended: warn
+          strict: warn
         rule_logic:
           kind: max_incoming_edges
           relationship: CONTAINS
@@ -109,7 +109,7 @@ relationships:
         severity_by_profile:
           simple: warn
           permissive: warn
-          recommended: error
+          strict: error
         rule_logic:
           kind: acyclic_subgraph
           relationship: COMPOSED_OF
@@ -129,7 +129,7 @@ relationships:
         severity_by_profile:
           simple: warn
           permissive: warn
-          recommended: warn
+          strict: warn
         rule_logic:
           kind: cyclic_flow_policy
           relationship: PRECEDES
@@ -147,7 +147,7 @@ relationships:
         severity_by_profile:
           simple: info
           permissive: info
-          recommended: info
+          strict: info
         rule_logic:
           kind: optional_annotations
           supports: [event, guard]
@@ -162,7 +162,7 @@ relationships:
         description: Each Outcome should have one or more outgoing MEASURED_BY edges.
         severity_by_profile:
           permissive: warn
-          recommended: error
+          strict: error
         rule_logic:
           kind: min_outgoing_edges_by_type
           from_type: Outcome
@@ -186,7 +186,7 @@ relationships:
         description: Each Initiative should address one or more opportunities.
         severity_by_profile:
           permissive: warn
-          recommended: error
+          strict: error
         rule_logic:
           kind: min_outgoing_edges_by_type
           from_type: Initiative
@@ -222,7 +222,7 @@ relationships:
         description: Every Step should have at least one REALIZED_BY edge.
         severity_by_profile:
           permissive: warn
-          recommended: error
+          strict: error
         rule_logic:
           kind: min_outgoing_edges_by_type
           from_type: Step
@@ -238,10 +238,10 @@ relationships:
         to: State
     constraints:
       - id: transitions_event_reference
-        description: Event annotation should resolve to Event node ID in recommended profile.
+        description: Event annotation should resolve to Event node ID in strict profile.
         severity_by_profile:
           permissive: warn
-          recommended: error
+          strict: error
         rule_logic:
           kind: event_annotation_reference
           relationship: TRANSITIONS_TO
@@ -290,7 +290,7 @@ relationships:
         severity_by_profile:
           simple: warn
           permissive: warn
-          recommended: warn
+          strict: warn
         rule_logic:
           kind: policy_enforcement_coverage
           policy_type: Policy
@@ -322,7 +322,7 @@ relationships:
         severity_by_profile:
           simple: error
           permissive: error
-          recommended: error
+          strict: error
         rule_logic:
           kind: required_edge_property
           relationship: BINDS_TO

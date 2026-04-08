@@ -43,7 +43,7 @@ export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, op
     bundle,
     view,
     options.format,
-    options.profileId ?? "recommended"
+    options.profileId ?? "strict"
   );
 
   return {
@@ -67,7 +67,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     };
   }
 
-  const validation = validateGraph(compileResult.graph, bundle, options.profileId ?? "recommended");
+  const validation = validateGraph(compileResult.graph, bundle, options.profileId ?? "strict");
   diagnostics.push(...validation.diagnostics);
   if (validation.errorCount > 0) {
     return {

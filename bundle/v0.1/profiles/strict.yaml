@@ -1,8 +1,7 @@
-id: recommended
+id: strict
 version: "0.1"
 extends: core
 intent: Enforce strict governance for production-grade authoring and deterministic toolchain behavior.
-default_severity_mode: strict
 
 severity_defaults:
   structural: error

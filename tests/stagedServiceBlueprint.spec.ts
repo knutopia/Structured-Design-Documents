@@ -357,14 +357,14 @@ describe("staged service_blueprint", () => {
   it("builds a fixed root grid for service_blueprint_slice instead of using root ELK placement", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
 
     const rendererScene = buildServiceBlueprintRendererScene(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
     const customerCell = findRootCells(rendererScene).find((cell) =>
       cell.id === "lane:01:customer__shell__cell__band:anchor:1"
@@ -432,7 +432,7 @@ describe("staged service_blueprint", () => {
   it("renders routing stages for the proof case with deterministic step-2, step-3, and final service_blueprint routes", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
     const routedStages = buildServiceBlueprintRoutingStages(
       context.positionedScene,
@@ -445,19 +445,19 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
     const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
 
     expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -786,7 +786,7 @@ describe("staged service_blueprint", () => {
   it("orders connector plans by semantic band before physical column when the metadata diverges", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
     const middleLayer = structuredClone(context.middleLayer);
     const sa020Cell = middleLayer.cells.find((cell) => cell.nodeIds.includes("SA-020"));
@@ -817,7 +817,7 @@ describe("staged service_blueprint", () => {
   it("orders connector plans by slot order before physical column when the band metadata ties", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
     const middleLayer = structuredClone(context.middleLayer);
     const sa020Cell = middleLayer.cells.find((cell) => cell.nodeIds.includes("SA-020"));
@@ -850,27 +850,27 @@ describe("staged service_blueprint", () => {
   it("matches staged renderer snapshots for the service_blueprint proof case and routing debug stages", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
 
     const rendererScene = buildServiceBlueprintRendererScene(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
     const measuredScene = measureScene(rendererScene);
     const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
 
     await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", stripViewMetadata(rendererScene));
@@ -886,7 +886,7 @@ describe("staged service_blueprint", () => {
   it("preserves readable routing when a crowded bottom-gutter bundle is compressed", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
     const compressedScene = structuredClone(context.positionedScene);
     for (const child of compressedScene.root.children) {
@@ -937,7 +937,7 @@ describe("staged service_blueprint", () => {
   it("merges routing-compatible same-node connectors after side resolution", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
     const duplicateMiddleEdge = structuredClone(
       context.middleLayer.edges.find((edge) => edge.id === "PR-020__depends_on__SA-020")
@@ -990,7 +990,7 @@ describe("staged service_blueprint", () => {
   it("keeps incompatible same-node connectors separate and reports that choice explicitly", async () => {
     const context = await buildServiceBlueprintRoutingContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
-      "recommended"
+      "strict"
     );
     const duplicateMiddleEdge = structuredClone(
       context.middleLayer.edges.find((edge) => edge.id === "PR-020__constrained_by__PL-020")
@@ -1052,13 +1052,13 @@ END
     const context = await resolveServiceBlueprintContext({
       path: path.join(repoRoot, "tests/fixtures/render/__inline_service_blueprint_ungrouped__.sdd"),
       text: source.trimStart()
-    }, "recommended");
+    }, "strict");
 
     const rendererScene = buildServiceBlueprintRendererScene(
       context.projection,
       context.graph,
       context.view,
-      "recommended"
+      "strict"
     );
 
     expect(rendererScene.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
@@ -1096,23 +1096,23 @@ END
     const firstContext = await resolveServiceBlueprintContext({
       path: path.join(repoRoot, "tests/fixtures/render/__inline_service_blueprint_disconnected_a__.sdd"),
       text: source.trimStart()
-    }, "recommended");
+    }, "strict");
     const secondContext = await resolveServiceBlueprintContext({
       path: path.join(repoRoot, "tests/fixtures/render/__inline_service_blueprint_disconnected_b__.sdd"),
       text: source.trimStart()
-    }, "recommended");
+    }, "strict");
 
     const firstScene = buildServiceBlueprintRendererScene(
       firstContext.projection,
       firstContext.graph,
       firstContext.view,
-      "recommended"
+      "strict"
     );
     const secondScene = buildServiceBlueprintRendererScene(
       secondContext.projection,
       secondContext.graph,
       secondContext.view,
-      "recommended"
+      "strict"
     );
 
     expect(firstScene).toEqual(secondScene);
