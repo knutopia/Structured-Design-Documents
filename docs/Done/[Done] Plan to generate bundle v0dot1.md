@@ -45,9 +45,9 @@ The `views` artifact will be a **typed projection stub**: executable inclusion/e
    - `closed_vocab: true`
    - `aliases_informative` map for non-canonical terms from concept docs
 3. `core/contracts.yaml` keys:
-   - `conformance_levels`: `permissive`, `strict`
    - `relationships` array; each item has `type`, `meaning`, `allowed_endpoints`, `constraints`
    - `constraints` entries use `id`, `description`, `severity_by_profile`, `rule_logic`
+   - source-doc permissive/strict conformance concepts are operationalized through those per-profile severities plus profile configs, not a separate top-level key
 4. `core/views.yaml` keys:
    - `views` array; each view has `id`, `name`, `status: stub`, `projection`, `conventions`
    - `projection` has `include_node_types`, `include_edge_types`, `hierarchy_edges`, `ordering_edges`

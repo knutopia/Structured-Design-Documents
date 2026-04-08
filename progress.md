@@ -15,6 +15,7 @@
 -added License And Contributions footer to readme
 -changed "recommended" profile name to "strict"
 -removed dead, definition-only default_severity_mode
+-removed dead conformance_levels
 
 ## Tue 4-07-26
 

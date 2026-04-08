@@ -1,13 +1,5 @@
 version: "0.1"
 
-conformance_levels:
-  simple:
-    description: Validate structural integrity and authored property formats while keeping early-draft diagrams low-noise.
-  permissive:
-    description: Validate syntax and references; report governance and contract issues as warnings unless structural failure.
-  strict:
-    description: Enforce all endpoint contracts and strict governance rules.
-
 common_rules:
   - id: referential_integrity
     description: Every edge endpoint must resolve to an existing node ID.

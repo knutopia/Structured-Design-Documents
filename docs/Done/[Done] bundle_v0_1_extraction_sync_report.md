@@ -17,7 +17,7 @@ This report documents how `bundle/v0.1` was generated from v0.1 markdown sources
   - Method: normalized extraction of normative source syntax into a machine-loadable, line-oriented parser contract; canonical token inventories remain referenced from `bundle/v0.1/core/vocab.yaml` to avoid duplication.
 - `bundle/v0.1/core/contracts.yaml`
   - Source: `definitions/v0.1/endpoint_contracts_semantic_rules_sdd_text_v_0_dot_1.md`
-  - Method: endpoint pairs and constraints encoded as machine-loadable rules with profile-aware severities.
+  - Method: endpoint pairs and constraints encoded as machine-loadable rules with profile-aware severities; source-doc conformance-level prose is operationalized through those severities and profile configs rather than a separate top-level field.
 - `bundle/v0.1/core/projection_schema.json`
   - Source: normalized projection contract decisions derived from `bundle/v0.1/core/views.yaml` and the projection snapshots themselves.
   - Method: new downstream-only schema for renderer-facing projection JSON; no source-authoring impact.

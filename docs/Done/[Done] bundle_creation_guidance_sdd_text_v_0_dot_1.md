@@ -99,7 +99,7 @@ A machine-readable version of the endpoint contract rules:
   - allowed `(from_type, to_type)` pairs
   - a short meaning/description
   - additional constraints as rule entries (with IDs and severity levels)
-- Include conformance levels where present (e.g., permissive vs strict) as fields.
+- Preserve source-doc conformance concepts in executable form via per-rule `severity_by_profile` mappings and profile configs; do not duplicate them as an unused top-level field.
 
 ### 5) bundle/v0.1/core/views.yaml
 
