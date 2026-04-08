@@ -288,7 +288,7 @@ on `any`-shaped access or duplicate the YAML structure in ad hoc helper code.
 - the runtime layer is ready to support later interpreter slices without another
   round of structure churn
 
-## Slice 3: Interpreter-Driven Line Classification And Token-Source Lookup
+## [Done] Slice 3: Interpreter-Driven Line Classification And Token-Source Lookup
 
 ### Goal
 

@@ -1,6 +1,7 @@
 import type { Bundle } from "../bundle/types.js";
 import type { Diagnostic } from "../types.js";
 import { classifyLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
+import type { ParserSyntaxRuntime } from "./syntaxRuntime.js";
 import type {
   BlankLine,
   CommentLine,
@@ -395,9 +396,10 @@ function parseBodyLine(
   file: string,
   record: LineRecord,
   bundle: Bundle,
+  runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[]
 ): PropertyLine | EdgeLine | BlankLine | CommentLine | undefined {
-  const classifiedLine = classifyLine(record, bundle);
+  const classifiedLine = classifyLine(record, runtime);
   switch (classifiedLine.kind) {
     case "blank_line":
       return toBlankLine(classifiedLine);
@@ -438,11 +440,12 @@ export function parseNodeBlock(
   records: LineRecord[],
   startIndex: number,
   bundle: Bundle,
+  runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[],
   expectedHeaderKind: "top_node_header" | "nested_node_header"
 ): ParseBlockResult {
   const headerRecord = records[startIndex];
-  const classifiedHeader = classifyLine(headerRecord, bundle);
+  const classifiedHeader = classifyLine(headerRecord, runtime);
   if (classifiedHeader.kind !== expectedHeaderKind) {
     diagnostics.push(
       createDiagnostic(
@@ -472,7 +475,7 @@ export function parseNodeBlock(
   let index = startIndex + 1;
   while (index < records.length) {
     const record = records[index];
-    const classifiedLine = classifyLine(record, bundle);
+    const classifiedLine = classifyLine(record, runtime);
     if (classifiedLine.kind === "end_line") {
       const block: NodeBlock = {
         kind: "NodeBlock",
@@ -495,7 +498,7 @@ export function parseNodeBlock(
     }
 
     if (classifiedLine.kind === "nested_node_header") {
-      const nested = parseNodeBlock(file, records, index, bundle, diagnostics, "nested_node_header");
+      const nested = parseNodeBlock(file, records, index, bundle, runtime, diagnostics, "nested_node_header");
       if (nested.block) {
         bodyItems.push(nested.block);
       }
@@ -516,7 +519,7 @@ export function parseNodeBlock(
       continue;
     }
 
-    const parsedItem = parseBodyLine(file, record, bundle, diagnostics);
+    const parsedItem = parseBodyLine(file, record, bundle, runtime, diagnostics);
     if (parsedItem) {
       bodyItems.push(parsedItem);
     }
@@ -533,4 +536,3 @@ export function parseNodeBlock(
   );
   return { nextIndex: records.length };
 }
-

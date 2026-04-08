@@ -1,5 +1,6 @@
-import type { Bundle } from "../bundle/types.js";
+import type { SyntaxLineClassifierClause, SyntaxLineKindDefinition } from "../bundle/types.js";
 import type { SourceSpan } from "../types.js";
+import { getPattern, getStatement, getTokenSource, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 
 export type ClassifiedLineKind =
   | "blank_line"
@@ -19,6 +20,7 @@ export interface LineRecord {
 
 export interface ClassifiedLine {
   kind: ClassifiedLineKind;
+  lineKindKind: SyntaxLineKindDefinition["kind"] | "unknown";
   content: string;
   span: SourceSpan;
   commentText?: string;
@@ -98,6 +100,16 @@ function firstToken(text: string): string | undefined {
   return text.trimStart().split(/\s+/, 1)[0] || undefined;
 }
 
+function nextTokenAfterPrefix(text: string, prefix?: string): string | undefined {
+  const trimmedStart = text.trimStart();
+  if (trimmedStart === "") {
+    return undefined;
+  }
+
+  const remainder = prefix && trimmedStart.startsWith(prefix) ? trimmedStart.slice(prefix.length) : trimmedStart.slice(1);
+  return firstToken(remainder);
+}
+
 function leadingIdentifierBeforeEquals(text: string, identifierPattern: RegExp): boolean {
   const equalsIndex = text.indexOf("=");
   if (equalsIndex === -1) {
@@ -108,55 +120,223 @@ function leadingIdentifierBeforeEquals(text: string, identifierPattern: RegExp):
   return identifierPattern.test(left);
 }
 
-export function classifyLine(record: LineRecord, bundle: Bundle): ClassifiedLine {
-  const span = makeSpan(record);
-  const trimmed = record.raw.trim();
-  if (trimmed === "") {
-    return { kind: "blank_line", content: "", span };
+function classifierMatches(clause: SyntaxLineClassifierClause, text: string, runtime: ParserSyntaxRuntime): boolean {
+  if ("any_of" in clause) {
+    return clause.any_of.some((candidate) => classifierMatches(candidate, text, runtime));
   }
 
-  if (trimmed.startsWith("#")) {
+  let matched = false;
+  let matches = true;
+  const trimmedText = text.trim();
+  const trimmedStart = text.trimStart();
+
+  if ("trimmed_equals" in clause) {
+    matched = true;
+    matches &&= trimmedText === clause.trimmed_equals;
+  }
+
+  if ("first_non_whitespace" in clause) {
+    matched = true;
+    matches &&= trimmedStart.startsWith(clause.first_non_whitespace);
+  }
+
+  if ("first_token_source" in clause) {
+    matched = true;
+    const token = firstToken(text);
+    matches &&= token !== undefined && getTokenSource(runtime, clause.first_token_source).tokenSet.has(token);
+  }
+
+  if ("next_token_source" in clause) {
+    matched = true;
+    const prefix =
+      "first_non_whitespace" in clause && typeof clause.first_non_whitespace === "string"
+        ? clause.first_non_whitespace
+        : undefined;
+    const token = nextTokenAfterPrefix(text, prefix);
+    matches &&= token !== undefined && getTokenSource(runtime, clause.next_token_source).tokenSet.has(token);
+  }
+
+  if ("leading_identifier_before_equals" in clause) {
+    matched = true;
+    matches &&=
+      clause.leading_identifier_before_equals &&
+      leadingIdentifierBeforeEquals(trimmedText, getPattern(runtime, "lexical.identifier_pattern"));
+  }
+
+  return matched && matches;
+}
+
+function statementNamesForLineKind(lineKind: SyntaxLineKindDefinition): string[] {
+  if (lineKind.statement) {
+    return [lineKind.statement];
+  }
+
+  return lineKind.statements ?? [];
+}
+
+function allowsTrailingComment(lineKind: SyntaxLineKindDefinition, runtime: ParserSyntaxRuntime): boolean {
+  return statementNamesForLineKind(lineKind).some((statementName) =>
+    runtime.trailingCommentAllowedStatements.has(statementName)
+  );
+}
+
+function commentTextForCommentLine(rawLine: string, commentPrefix: string): string {
+  const trimmedStart = rawLine.trimStart();
+  return trimmedStart.startsWith(commentPrefix) ? trimmedStart.slice(commentPrefix.length) : "";
+}
+
+function resolvedLineKind(kind: string): ClassifiedLineKind | undefined {
+  switch (kind) {
+    case "blank_line":
+    case "comment_line":
+    case "end_line":
+    case "top_node_header":
+    case "nested_node_header":
+    case "edge_line":
+    case "property_line":
+      return kind;
+    default:
+      return undefined;
+  }
+}
+
+function classifyMatchedStatement(
+  statementKind: string,
+  lineKindKind: SyntaxLineKindDefinition["kind"],
+  record: LineRecord,
+  span: SourceSpan,
+  content: string,
+  commentText: string | undefined,
+  runtime: ParserSyntaxRuntime
+): ClassifiedLine {
+  const resolvedKind = resolvedLineKind(statementKind);
+  if (!resolvedKind) {
     return {
-      kind: "comment_line",
-      content: "",
+      kind: "unknown",
+      lineKindKind,
+      content,
       span,
-      commentText: trimmed.slice(1)
+      commentText
     };
   }
 
-  const { content, commentText } = stripTrailingComment(record.raw);
-  const contentTrimmed = content.trim();
-
-  if (contentTrimmed === "END") {
-    return { kind: "end_line", content, span, commentText };
+  if (resolvedKind === "blank_line") {
+    return {
+      kind: "blank_line",
+      lineKindKind,
+      content: "",
+      span
+    };
   }
 
-  const nodeTypeTokens = new Set(bundle.vocab.node_types.map((token) => token.token));
-  const relationshipTokens = new Set(bundle.vocab.relationship_types.map((token) => token.token));
-  const identifierPattern = new RegExp(bundle.syntax.lexical.identifier_pattern);
-
-  const trimmedStart = content.trimStart();
-  if (trimmedStart.startsWith("+")) {
-    const withoutPlus = trimmedStart.slice(1).trimStart();
-    const token = firstToken(withoutPlus);
-    if (token && nodeTypeTokens.has(token)) {
-      return { kind: "nested_node_header", content, span, commentText };
-    }
+  if (resolvedKind === "comment_line") {
+    return {
+      kind: "comment_line",
+      lineKindKind,
+      content: "",
+      span,
+      commentText: commentTextForCommentLine(record.raw, runtime.syntax.lexical.comment_prefix)
+    };
   }
 
-  const token = firstToken(content);
-  if (token && nodeTypeTokens.has(token)) {
-    return { kind: "top_node_header", content, span, commentText };
-  }
-
-  if (token && relationshipTokens.has(token)) {
-    return { kind: "edge_line", content, span, commentText };
-  }
-
-  if (leadingIdentifierBeforeEquals(contentTrimmed, identifierPattern)) {
-    return { kind: "property_line", content, span, commentText };
-  }
-
-  return { kind: "unknown", content, span, commentText };
+  return {
+    kind: resolvedKind,
+    lineKindKind,
+    content,
+    span,
+    commentText
+  };
 }
 
+function matchLineKind(
+  record: LineRecord,
+  lineKind: SyntaxLineKindDefinition,
+  runtime: ParserSyntaxRuntime
+): { content: string; commentText?: string; evaluationText: string } | undefined {
+  const rawMatched = classifierMatches(lineKind.classifier, record.raw, runtime);
+  const shouldStripTrailingComment = allowsTrailingComment(lineKind, runtime);
+  const stripped = shouldStripTrailingComment ? stripTrailingComment(record.raw) : undefined;
+  const strippedMatched =
+    shouldStripTrailingComment && stripped ? classifierMatches(lineKind.classifier, stripped.content, runtime) : false;
+
+  if (!rawMatched && !strippedMatched) {
+    return undefined;
+  }
+
+  if (shouldStripTrailingComment && stripped) {
+    return {
+      content: stripped.content,
+      commentText: stripped.commentText,
+      evaluationText: stripped.content
+    };
+  }
+
+  return {
+    content: record.raw.trimEnd(),
+    evaluationText: record.raw
+  };
+}
+
+function resolveMultiStatementKind(
+  lineKind: SyntaxLineKindDefinition,
+  evaluationText: string,
+  runtime: ParserSyntaxRuntime
+): string | undefined {
+  const matchedStatements = statementNamesForLineKind(lineKind).filter((statementName) => {
+    const statement = getStatement(runtime, statementName);
+    return statement.match ? classifierMatches(statement.match, evaluationText, runtime) : false;
+  });
+
+  return matchedStatements.length === 1 ? matchedStatements[0] : undefined;
+}
+
+export function classifyLine(record: LineRecord, runtime: ParserSyntaxRuntime): ClassifiedLine {
+  const span = makeSpan(record);
+
+  for (const lineKind of runtime.lineKindsInPrecedenceOrder) {
+    const matched = matchLineKind(record, lineKind, runtime);
+    if (!matched) {
+      continue;
+    }
+
+    if (lineKind.statement) {
+      return classifyMatchedStatement(
+        lineKind.statement,
+        lineKind.kind,
+        record,
+        span,
+        matched.content,
+        matched.commentText,
+        runtime
+      );
+    }
+
+    const resolvedStatement = resolveMultiStatementKind(lineKind, matched.evaluationText, runtime);
+    if (!resolvedStatement) {
+      return {
+        kind: "unknown",
+        lineKindKind: lineKind.kind,
+        content: matched.content,
+        span,
+        commentText: matched.commentText
+      };
+    }
+
+    return classifyMatchedStatement(
+      resolvedStatement,
+      lineKind.kind,
+      record,
+      span,
+      matched.content,
+      matched.commentText,
+      runtime
+    );
+  }
+
+  return {
+    kind: "unknown",
+    lineKindKind: "unknown",
+    content: record.raw.trimEnd(),
+    span
+  };
+}

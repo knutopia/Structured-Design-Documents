@@ -1,8 +1,9 @@
 import type { Bundle } from "../bundle/types.js";
 import type { Diagnostic, SourceInput, SourceSpan } from "../types.js";
 import { compareDiagnostics } from "../diagnostics/types.js";
-import { classifyLine, type LineRecord } from "./classifyLine.js";
+import { classifyLine, stripTrailingComment, type LineRecord } from "./classifyLine.js";
 import { parseNodeBlock } from "./parseBlock.js";
+import { createParserSyntaxRuntime, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 import type { BlankLine, CommentLine, ParseDocument, ParseResult } from "./types.js";
 
 function buildLineRecords(text: string): LineRecord[] {
@@ -33,8 +34,8 @@ function documentSpan(records: LineRecord[]): SourceSpan {
   };
 }
 
-function toTrivia(record: LineRecord, bundle: Bundle): BlankLine | CommentLine | undefined {
-  const classifiedLine = classifyLine(record, bundle);
+function toTrivia(record: LineRecord, runtime: ParserSyntaxRuntime): BlankLine | CommentLine | undefined {
+  const classifiedLine = classifyLine(record, runtime);
   if (classifiedLine.kind === "blank_line") {
     return {
       kind: "BlankLine",
@@ -82,8 +83,7 @@ function parseVersionDeclaration(
   bundle: Bundle,
   diagnostics: Diagnostic[]
 ): string | undefined {
-  const classifiedLine = classifyLine(record, bundle);
-  const content = classifiedLine.content.trim();
+  const content = stripTrailingComment(record.raw).content.trim();
   const literal = bundle.syntax.document.version_declaration.literal;
   const versionPattern = new RegExp(bundle.syntax.lexical.version_number_pattern);
   if (!content.startsWith(`${literal} `)) {
@@ -114,12 +114,13 @@ function parseVersionDeclaration(
 export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
   const diagnostics: Diagnostic[] = [];
   const records = buildLineRecords(input.text);
+  const runtime = createParserSyntaxRuntime(bundle);
   const items: ParseDocument["items"] = [];
   let index = 0;
   let declaredVersion: string | undefined;
 
   while (index < records.length) {
-    const trivia = toTrivia(records[index], bundle);
+    const trivia = toTrivia(records[index], runtime);
     if (!trivia) {
       break;
     }
@@ -133,7 +134,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
       declaredVersion = maybeVersion;
       index += 1;
       while (index < records.length) {
-        const trivia = toTrivia(records[index], bundle);
+        const trivia = toTrivia(records[index], runtime);
         if (!trivia) {
           break;
         }
@@ -145,9 +146,9 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
 
   while (index < records.length) {
     const record = records[index];
-    const classifiedLine = classifyLine(record, bundle);
+    const classifiedLine = classifyLine(record, runtime);
     if (classifiedLine.kind === "blank_line" || classifiedLine.kind === "comment_line") {
-      const trivia = toTrivia(record, bundle);
+      const trivia = toTrivia(record, runtime);
       if (trivia) {
         items.push(trivia);
       }
@@ -168,7 +169,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
       continue;
     }
 
-    const parsedBlock = parseNodeBlock(input.path, records, index, bundle, diagnostics, "top_node_header");
+    const parsedBlock = parseNodeBlock(input.path, records, index, bundle, runtime, diagnostics, "top_node_header");
     if (parsedBlock.block) {
       items.push(parsedBlock.block);
     }
