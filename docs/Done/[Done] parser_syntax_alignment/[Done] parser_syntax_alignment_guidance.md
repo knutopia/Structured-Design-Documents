@@ -1,4 +1,4 @@
-# Parser / Syntax Alignment Guidance
+# [Done] Parser / Syntax Alignment Guidance
 
 This document is for the thread that will fulfill the parser promise: make `bundle/v0.1/core/syntax.yaml` the actually executable parser contract it is currently described as being.
 

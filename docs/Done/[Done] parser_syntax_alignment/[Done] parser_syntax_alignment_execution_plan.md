@@ -1,4 +1,4 @@
-# Parser Syntax Alignment Execution Plan
+# [Done] Parser Syntax Alignment Execution Plan
 
 ## Purpose
 
