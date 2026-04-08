@@ -1,0 +1,194 @@
+SDD-TEXT 0.1
+
+# small_app_strict.sdd example file
+#
+# Area nodes and Places show up in the ia_place_map diagram.
+# Place nodes, their View States and Components show up in the ui_contracts diagram.
+#
+# This example is based on small_app.sdd, with the strict-profile required metadata filled in.
+
+Place P-100 "Dashboard"
+  owner=Design
+  description="Global project status and flow entry points"
+  surface=web
+  route_or_key=/dashboard
+  access=auth
+  primary_nav=true
+  COMPOSED_OF C-100 "Projects Status Summary"
+  COMPOSED_OF C-110 # (Quoted target name hints are optional...)
+  COMPOSED_OF C-900 "Global Navigation" # (...but can improve readability)
+
+  + Component C-100 "Projects Status Summary"
+    owner=Design
+    description="At-a-glance view of project statuses"
+    responsibility="Summarize active project health and recent movement"
+    inputs=ProjectStatusFeed
+    outputs=ProjectFocusRequested
+  END
+  + Component C-110 "Priority List of Tasks"
+    owner=Design
+    description="What needs to be done"
+    responsibility="Surface the most urgent follow-up work across projects"
+    inputs=PrioritizedTaskQueue
+    outputs=TaskFocusRequested
+  END
+END
+
+Area A-200 "Current Projects"
+  owner=Design
+  description="Ongoing work"
+  scope=active_projects
+  CONTAINS P-210 "Projects Overview"
+  CONTAINS P-220 "Project Detail"
+  CONTAINS P-230 "Create New Project"
+  + Place P-210 "Projects Overview"
+    owner=Design
+    description="Selectable list of projects with contextual actions"
+    surface=web
+    route_or_key=/projects
+    access=auth
+    primary_nav=true
+    CONTAINS VS-210a "List of Projects"
+    CONTAINS VS-210b "Duplicate Project Dialog"
+    CONTAINS VS-210c "Delete Project Confirmation Dialog"
+    COMPOSED_OF C-230 "Contextual Actions for List of Projects"
+    COMPOSED_OF C-220 "Overview Actions"
+    COMPOSED_OF C-900 "Global Navigation"
+    NAVIGATES_TO P-220 "Project"
+    NAVIGATES_TO P-230 "Create New Project"
+    + Component C-220 "Overview Actions"
+      owner=Design
+      description="Selection-independent actions"
+      responsibility="Expose overview-level actions such as create, filter, and refresh"
+      inputs=ProjectsOverviewContext
+      outputs=OverviewActionRequested
+    END
+    + Component C-230 "Contextual Actions for List of Projects"
+      owner=Design
+      description="Open, Duplicate, Recalibrate, Mute, Delete"
+      responsibility="Expose actions for the currently selected project row"
+      inputs=SelectedProjectSummary
+      outputs=ProjectActionRequested
+    END
+    + ViewState VS-210a "Project List"
+      owner=Design
+      description="Default list state with project rows, filters, and summary cues"
+      place_id=P-210
+      data_required=ProjectCollection
+    END
+    + ViewState VS-210b "Duplicate Project Dialog"
+      owner=Design
+      description="Dialog state for copying the currently selected project"
+      place_id=P-210
+      data_required=SelectedProjectSummary
+    END
+    + ViewState VS-210c "Delete Project Confirmation Dialog"
+      owner=Design
+      description="Confirmation state before permanently removing the selected project"
+      place_id=P-210
+      data_required=SelectedProjectSummary
+    END
+  END
+  + Place P-220 "Project"
+    owner=Design
+    description="Start to finish project details"
+    surface=web
+    route_or_key=/projects/:project_id
+    access=auth
+    CONTAINS P-221 "Behavior Details"
+    CONTAINS P-222 "Dataset Details"
+    CONTAINS VS-220a "Overview Tab"
+    CONTAINS VS-220b "Behavior Tab"
+    CONTAINS VS-220c "Dataset Tab"
+    NAVIGATES_TO P-221 "Behavior Details"
+    NAVIGATES_TO P-222 "Dataset Details"
+    + Place P-221 "Behavior Details"
+      owner=Design
+      description="Behavior configuration, results, and tuning for the selected project"
+      surface=web
+      route_or_key=/projects/:project_id/behavior
+      access=auth
+      NAVIGATES_TO P-220 "Project"
+    END
+    + Place P-222 "Dataset Details"
+      owner=Design
+      description="Dataset versions, freshness, and validation details for the selected project"
+      surface=web
+      route_or_key=/projects/:project_id/datasets
+      access=auth
+      NAVIGATES_TO P-220 "Project"
+    END
+    + ViewState VS-220a "Overview Tab"
+      owner=Design
+      description="Overview tab state with summary metrics, ownership, and recent activity"
+      place_id=P-220
+      data_required=ProjectOverview
+    END
+    + ViewState VS-220b "Behavior Tab"
+      owner=Design
+      description="Behavior tab state with rules, parameters, and recent evaluation output"
+      place_id=P-220
+      data_required=BehaviorConfiguration
+    END
+    + ViewState VS-220c "Dataset Tab"
+      owner=Design
+      description="Dataset tab state with connected sources, versions, and quality checks"
+      place_id=P-220
+      data_required=DatasetInventory
+    END
+  END
+  + Place P-230 "Create New Project"
+    owner=Design
+    description="Creates a new project through a three-step flow and then opens the created projection"
+    surface=web
+    route_or_key=/projects/new
+    access=role:project_editor
+    CONTAINS VS-230a "Create New Project Step 1"
+    CONTAINS VS-230b "Create New Project Step 2"
+    CONTAINS VS-230c "Create New Project Step 3"
+    NAVIGATES_TO P-220 "Project"
+    + ViewState VS-230a "Create New Project Step 1"
+      owner=Design
+      description="Step 1 captures the project name, goal, and baseline setup choices"
+      place_id=P-230
+      data_required=ProjectCreationDefaults
+      TRANSITIONS_TO VS-230b "Create New Project Step 2"
+    END
+    + ViewState VS-230b "Create New Project Step 2"
+      owner=Design
+      description="Step 2 configures behavior templates and project-specific operating rules"
+      place_id=P-230
+      data_required=BehaviorTemplateOptions
+      TRANSITIONS_TO VS-230c "Create New Project Step 3"
+    END
+    + ViewState VS-230c "Create New Project Step 3"
+      owner=Design
+      description="Step 3 reviews the new project draft before creation and first open"
+      place_id=P-230
+      data_required=ProjectDraftReview
+    END
+  END
+END
+
+Area A-300 "Vault"
+  owner=Design
+  description="Closed projects for review, backtesting"
+  scope=archived_projects
+  CONTAINS P-310 "Projects by Period"
+  + Place P-310 "Projects by Period"
+    owner=Design
+    description="Selectable list of projects with contextual actions"
+    surface=web
+    route_or_key=/vault
+    access=role:analyst
+    primary_nav=true
+  END
+END
+
+Component C-900 "Global Navigation"
+  owner=DesignSystem
+  description="Primary navigation shared across the application"
+  responsibility="Provide consistent movement between top-level places and areas"
+  inputs=NavigationContext
+  outputs=NavigationRequested
+END

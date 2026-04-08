@@ -18,6 +18,7 @@
 -removed dead conformance_levels
 -identified lazy parser implementation ignoring large parts of syntax.yaml
 -made parser-alignment plan, implemented it
+-added strict-profile example
 
 ## Tue 4-07-26
 
