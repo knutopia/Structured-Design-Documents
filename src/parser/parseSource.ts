@@ -1,9 +1,10 @@
 import type { Bundle } from "../bundle/types.js";
 import type { Diagnostic, SourceInput, SourceSpan } from "../types.js";
 import { compareDiagnostics } from "../diagnostics/types.js";
-import { classifyLine, stripTrailingComment, type LineRecord } from "./classifyLine.js";
+import { classifyLine, type LineRecord } from "./classifyLine.js";
 import { parseNodeBlock } from "./parseBlock.js";
 import { createParserSyntaxRuntime, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import { getCapturePrimary, interpretStatement } from "./statementInterpreter.js";
 import type { BlankLine, CommentLine, ParseDocument, ParseResult } from "./types.js";
 
 function buildLineRecords(text: string): LineRecord[] {
@@ -81,16 +82,24 @@ function parseVersionDeclaration(
   input: SourceInput,
   record: LineRecord,
   bundle: Bundle,
+  runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[]
 ): string | undefined {
-  const content = stripTrailingComment(record.raw).content.trim();
   const literal = bundle.syntax.document.version_declaration.literal;
-  const versionPattern = new RegExp(bundle.syntax.lexical.version_number_pattern);
-  if (!content.startsWith(`${literal} `)) {
+  if (!record.raw.trimStart().startsWith(literal)) {
     return undefined;
   }
-  const version = content.slice(literal.length).trim();
-  if (!versionPattern.test(version)) {
+
+  const parsed = interpretStatement(record.raw, "version_decl", runtime);
+  if (!parsed.ok) {
+    diagnostics.push(
+      createDiagnostic(input, record, "parse.invalid_version_declaration", "Invalid version declaration")
+    );
+    return undefined;
+  }
+
+  const version = getCapturePrimary(parsed.captures, "version_number");
+  if (typeof version !== "string") {
     diagnostics.push(
       createDiagnostic(input, record, "parse.invalid_version_declaration", "Invalid version declaration")
     );
@@ -129,7 +138,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
   }
 
   if (index < records.length) {
-    const maybeVersion = parseVersionDeclaration(input, records[index], bundle, diagnostics);
+    const maybeVersion = parseVersionDeclaration(input, records[index], bundle, runtime, diagnostics);
     if (maybeVersion !== undefined) {
       declaredVersion = maybeVersion;
       index += 1;
@@ -169,7 +178,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
       continue;
     }
 
-    const parsedBlock = parseNodeBlock(input.path, records, index, bundle, runtime, diagnostics, "top_node_header");
+    const parsedBlock = parseNodeBlock(input.path, records, index, runtime, diagnostics, "top_node_header");
     if (parsedBlock.block) {
       items.push(parsedBlock.block);
     }

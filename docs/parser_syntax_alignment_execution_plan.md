@@ -336,7 +336,7 @@ statement mapping, and token-source behavior remain hard-coded in
 - changing a relevant `line_kinds` or `token_sources` entry changes
   classification behavior without changing parser grammar code
 
-## Slice 4: Interpreter-Driven Statement And Atom Parsing
+## [Done] Slice 4: Interpreter-Driven Statement And Atom Parsing
 
 ### Goal
 
