@@ -2,6 +2,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { Bundle, ViewSpec } from "../src/bundle/types.js";
 import { resolveLegacyDotPreviewStyle } from "../src/renderer/previewStyle.js";
+import { createMockSyntaxConfig } from "./mockSyntaxConfig.js";
 
 function createView(rendererDefaults: ViewSpec["conventions"]["renderer_defaults"] = {}): ViewSpec {
   return {
@@ -50,26 +51,7 @@ function createBundle(view: ViewSpec): Bundle {
       node_types: [],
       relationship_types: []
     },
-    syntax: {
-      version: "0.1",
-      artifact: "sdd",
-      lexical: {
-        identifier_pattern: "",
-        id_pattern: "",
-        version_number_pattern: "",
-        bare_value_pattern: ""
-      },
-      document: {
-        version_declaration: {
-          allowed: true,
-          required: false,
-          literal: "SDD",
-          default_effective_version: "0.1",
-          post_parse_supported_versions: ["0.1"]
-        }
-      },
-      line_kinds: []
-    },
+    syntax: createMockSyntaxConfig(),
     schema: {},
     projectionSchema: {},
     contracts: {

@@ -182,7 +182,7 @@ This migration is complete only when all of the following are true:
 5. Interpreter-driven document and block parsing
 6. Hardening, proof tests, and closeout
 
-## Slice 1: Contract-Locking Parser Tests
+## [Done] Slice 1: Contract-Locking Parser Tests
 
 ### Goal
 
@@ -241,7 +241,7 @@ At minimum, add explicit tests for:
   implementation advances
 - valid bundle examples remain covered
 
-## Slice 2: Executable Syntax Runtime Layer
+## [Done] Slice 2: Executable Syntax Runtime Layer
 
 ### Goal
 

@@ -1,4 +1,4 @@
-# Parser Syntax Alignment Slice 1: Contract-Locking Parser Tests
+# [Done] Parser Syntax Alignment Slice 1: Contract-Locking Parser Tests
 
 ## Goal
 
@@ -40,7 +40,7 @@ behavior in this slice.
    - `TMPDIR=/tmp pnpm exec vitest run tests/diagnostics.spec.ts tests/compile.spec.ts`
    - `TMPDIR=/tmp pnpm test`
 
-4. Accept the slice only if:
+4. [Done] Accept the slice only if:
    - every confirmed divergence has a direct parser-facing proof case
    - the new parser-alignment spec fails only on real parser drift
    - manifest examples still parse cleanly
@@ -63,8 +63,7 @@ behavior in this slice.
   the new failures are parser-alignment drift rather than test harness defects.
 - Manifest examples remain parse-clean under the new dedicated spec.
 - No parser production files were changed in this slice.
-- Slice note title is intentionally not marked `[Done]` until the slice is fully
-  accepted.
+- Slice 1 is now formally accepted as a completed test-and-doc harness slice.
 - The master plan heading in
-  `docs/parser_syntax_alignment_execution_plan.md` should remain unchanged until
-  this slice is accepted.
+  `docs/parser_syntax_alignment_execution_plan.md` has been promoted to
+  `[Done]`.

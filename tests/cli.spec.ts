@@ -1,6 +1,7 @@
 import type { Bundle } from "../src/bundle/types.js";
 import { describe, expect, it, vi } from "vitest";
 import { createProgram, runCli, type CliDeps } from "../src/cli/program.js";
+import { createMockSyntaxConfig } from "./mockSyntaxConfig.js";
 
 const bundle: Bundle = {
   rootDir: "/repo/bundle/v0.1",
@@ -31,26 +32,7 @@ const bundle: Bundle = {
     node_types: [],
     relationship_types: []
   },
-  syntax: {
-    version: "0.1",
-    artifact: "sdd",
-    lexical: {
-      identifier_pattern: "",
-      id_pattern: "",
-      version_number_pattern: "",
-      bare_value_pattern: ""
-    },
-    document: {
-      version_declaration: {
-        allowed: true,
-        required: false,
-        literal: "SDD",
-        default_effective_version: "0.1",
-        post_parse_supported_versions: ["0.1"]
-      }
-    },
-    line_kinds: []
-  },
+  syntax: createMockSyntaxConfig(),
   schema: {},
   projectionSchema: {},
   contracts: {
