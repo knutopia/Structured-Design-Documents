@@ -1,6 +1,4 @@
-# Improvements for README.md
-
-10. Add a small “Project metadata” footer. I didn’t find `LICENSE`, `CONTRIBUTING`, or `CODE_OF_CONDUCT` files in the repo root, so the README should at least state whether the project is open to contributions, who maintains it, and what the current usage/contribution expectations are.
+# [Done] Improvements for README.md
 
 ## Done:
 
@@ -19,6 +17,8 @@
 8. [Done] Tighten and simplify the headings. `A simple, Well-Stuctured Language to Express Product Design` in [Readme.md](/home/knut/projects/sdd/Readme.md#L11) is long and has a typo. `Again, Why?` in [Readme.md](/home/knut/projects/sdd/Readme.md#L58) is conversational but not very scannable. Conventional headings like `Overview`, `Why SDD`, `Quick Start`, and `Repository Layout` will work better on GitHub.
 
 9. [Done] Do a proofreading pass. There are several visible issues in the current file: `Well-Stuctured`, `easy read and to write`, `suitabe`, `typr`, inconsistent `SDD-Text`/`SDDT` casing, and inconsistent list formatting. On GitHub, these small issues reduce credibility more than they do in internal docs.
+
+10. [Done] Add a small “Project metadata” footer. I didn’t find `LICENSE`, `CONTRIBUTING`, or `CODE_OF_CONDUCT` files in the repo root, so the README should at least state whether the project is open to contributions, who maintains it, and what the current usage/contribution expectations are.
 
 11. [Done] Consider renaming `Readme.md` to `README.md`. This is mostly a convention/readability improvement, not a blocker, but it’s the standard casing people expect in GitHub repos.
 

@@ -49,11 +49,11 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 - In this WSL setup, default temp resolution may point at `/mnt/c/TEMP`, which can fail with `EACCES`.
 - `TMPDIR=/tmp` avoids that problem and should be the default for test runs.
 
-## Current Project Goal: Service Blueprint Rendering
+## Current Project Goal
 
-The current migration focus is to complete the staged SVG renderer architecture on `service_blueprint`.
+There is drift from the spec-driven pipeline implementation which is our goal to the reality of 
 
-Do also follow the local instructions in `docs/service_blueprint_renderer_implementation/AGENTS.md`.
+The current goal is to address "parser promise drift": make `bundle/v0.1/core/syntax.yaml` the actually executable parser contract it is currently described as being. See `docs/parser_syntax_alignment_guidance.md`
 
 ## Renderer Constraints
 

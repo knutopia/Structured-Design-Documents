@@ -49,3 +49,7 @@ The initial TypeScript toolchain is in place at repo root as package `sdd-toolch
 - `pnpm sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid`
 - `pnpm sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot`
 - `pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg`
+
+## 3. [Done] Created better "staged" rendering pipeline for subset of diagram types
+
+Created staged SVG renderer architecture for `ia_place_map`, `ui_contracts`, `service_blueprint`. This new renderer architecture overcomes the limitations encountered with mermaid, graphviz and elk.
