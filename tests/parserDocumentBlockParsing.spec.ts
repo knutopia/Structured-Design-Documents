@@ -160,6 +160,18 @@ END
     );
   });
 
+  it("uses neutral top-level block diagnostics", () => {
+    expectFailure(parseText("status = active\n"), "parse.expected_top_level_block");
+
+    expectFailure(
+      parseText(`Place P-010 "Billing"
+Place P-020 "Checkout"
+END
+`),
+      "parse.unexpected_top_level_block_header"
+    );
+  });
+
   it("uses block terminator_statement even when the terminator statement is renamed", () => {
     const renamedTerminatorBundle = cloneBundle();
     renamedTerminatorBundle.syntax.statements.finish_line = renamedTerminatorBundle.syntax.statements.end_line;

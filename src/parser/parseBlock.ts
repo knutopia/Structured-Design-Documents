@@ -1,7 +1,7 @@
 import type { SyntaxBlockDefinition, SyntaxEmitFieldValue } from "../bundle/types.js";
 import type { Diagnostic } from "../types.js";
 import { classifyLine, statementKindForClassifiedLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
-import { getBlock, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import { getBlock, getStatement, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 import { getCapturePrimary, interpretStatement } from "./statementInterpreter.js";
 import type {
   BlankLine,
@@ -81,10 +81,6 @@ function asEdgeOptionalText(value: unknown): string | null | undefined {
 
 function asValueKind(value: unknown): ValueKind | undefined {
   return value === "quoted_string" || value === "bare_value" ? value : undefined;
-}
-
-function asHeaderKind(value: unknown): NodeBlock["headerKind"] | undefined {
-  return value === "top_node_header" || value === "nested_node_header" ? value : undefined;
 }
 
 function toEdgeProperty(value: unknown): EdgeProperty | undefined {
@@ -227,7 +223,7 @@ function buildNodeBlockFromSyntax(
     }
   }
 
-  const headerKind = asHeaderKind(emittedFields.header_kind);
+  const headerKind = asString(emittedFields.header_kind);
   const nodeType = asString(emittedFields.node_type);
   const id = asString(emittedFields.id);
   const name = asString(emittedFields.name);
@@ -272,12 +268,12 @@ function parseBodyLine(
   runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[]
 ): PropertyLine | EdgeLine | BlankLine | CommentLine | undefined {
-  switch (statementKind) {
-    case "blank_line":
+  switch (getStatement(runtime, statementKind).emits?.kind) {
+    case "BlankLine":
       return toBlankLine(classifiedLine);
-    case "comment_line":
+    case "CommentLine":
       return toCommentLine(classifiedLine);
-    case "property_line": {
+    case "PropertyLine": {
       const parsed = interpretStatement(record.raw, statementKind, runtime);
       const property = toPropertyLineNode(parsed, classifiedLine);
       if (!property) {
@@ -293,7 +289,7 @@ function parseBodyLine(
       }
       return property;
     }
-    case "edge_line": {
+    case "EdgeLine": {
       const parsed = interpretStatement(record.raw, statementKind, runtime);
       const edge = toEdgeLineNode(parsed, classifiedLine);
       if (!edge) {
@@ -410,7 +406,7 @@ export function parseNodeBlock(
         createDiagnostic(
           file,
           classifiedLine,
-          "parse.unexpected_top_node_header",
+          "parse.unexpected_top_level_block_header",
           "Top-level node header is not allowed inside another node block"
         )
       );

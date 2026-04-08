@@ -454,7 +454,7 @@ block count, and block header/body/terminator rules stayed hard-coded.
 - document-level allowed/required rules are contract-driven rather than
   incidental code behavior
 
-## Slice 6: Hardening, Proof Tests, And Closeout
+## [Done] Slice 6: Hardening, Proof Tests, And Closeout
 
 ### Goal
 

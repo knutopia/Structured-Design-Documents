@@ -3,7 +3,7 @@ import type { Diagnostic, SourceInput, SourceSpan } from "../types.js";
 import { compareDiagnostics } from "../diagnostics/types.js";
 import { classifyLine, statementKindForClassifiedLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
 import { parseNodeBlock } from "./parseBlock.js";
-import { createParserSyntaxRuntime, getBlock, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import { createParserSyntaxRuntime, getBlock, getStatement, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 import { getCapturePrimary, interpretStatement } from "./statementInterpreter.js";
 import type { BlankLine, CommentLine, ParseDocument, ParseResult } from "./types.js";
 
@@ -35,15 +35,24 @@ function documentSpan(records: LineRecord[]): SourceSpan {
   };
 }
 
-function toTriviaFromClassifiedLine(classifiedLine: ClassifiedLine): BlankLine | CommentLine | undefined {
-  if (classifiedLine.kind === "blank_line") {
+function toTriviaFromClassifiedLine(
+  classifiedLine: ClassifiedLine,
+  runtime: ParserSyntaxRuntime,
+  statementKind: string | undefined
+): BlankLine | CommentLine | undefined {
+  if (!statementKind) {
+    return undefined;
+  }
+
+  const emittedKind = getStatement(runtime, statementKind).emits?.kind;
+  if (emittedKind === "BlankLine") {
     return {
       kind: "BlankLine",
       span: classifiedLine.span
     };
   }
 
-  if (classifiedLine.kind === "comment_line") {
+  if (emittedKind === "CommentLine") {
     return {
       kind: "CommentLine",
       rawText: classifiedLine.commentText ?? "",
@@ -65,7 +74,7 @@ function toAllowedDocumentTrivia(
     return undefined;
   }
 
-  return toTriviaFromClassifiedLine(classifiedLine);
+  return toTriviaFromClassifiedLine(classifiedLine, runtime, statementKind);
 }
 
 function createDiagnostic(
@@ -258,7 +267,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
       continue;
     }
 
-    const trivia = toTriviaFromClassifiedLine(classifiedLine);
+    const trivia = toTriviaFromClassifiedLine(classifiedLine, runtime, statementKind);
     if (trivia && statementKind) {
       const allowedStatements =
         topLevelBlockCount === 0
@@ -278,7 +287,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
       createDiagnostic(
         input,
         record,
-        "parse.expected_top_node_header",
+        "parse.expected_top_level_block",
         "Expected a top-level node block"
       )
     );

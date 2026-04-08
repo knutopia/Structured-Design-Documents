@@ -240,7 +240,7 @@ export interface SyntaxStatementDefinition {
   fixed_order?: string[];
   sequence?: SyntaxSequenceItem[];
   match?: SyntaxLineClassifierClause;
-  emits: SyntaxEmitDefinition;
+  emits?: SyntaxEmitDefinition;
 }
 
 export type SyntaxStatementsConfig = Record<string, SyntaxStatementDefinition>;

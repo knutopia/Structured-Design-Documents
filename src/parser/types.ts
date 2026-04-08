@@ -42,7 +42,7 @@ export interface EdgeLine {
 
 export interface NodeBlock {
   kind: "NodeBlock";
-  headerKind: "top_node_header" | "nested_node_header";
+  headerKind: string;
   nodeType: string;
   id: string;
   name: string;
@@ -65,4 +65,3 @@ export interface ParseResult {
   document?: ParseDocument;
   diagnostics: Diagnostic[];
 }
-

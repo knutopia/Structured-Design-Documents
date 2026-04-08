@@ -4,6 +4,7 @@ import type {
   SyntaxBlockDefinition,
   SyntaxChoiceAlternative,
   SyntaxConfig,
+  SyntaxEmitFieldValue,
   SyntaxLineClassifierClause,
   SyntaxLineKindDefinition,
   SyntaxSequenceItem,
@@ -34,6 +35,13 @@ export interface ParserSyntaxRuntime {
   documentLeadingLineKinds: Set<string>;
   documentTrailingLineKinds: Set<string>;
 }
+
+interface CaptureDescriptor {
+  repeated: boolean;
+  emittedFieldNames: Set<string>;
+}
+
+type CaptureDescriptorMap = Map<string, CaptureDescriptor>;
 
 function syntaxError(message: string): Error {
   return new Error(`Invalid parser syntax contract: ${message}`);
@@ -133,6 +141,249 @@ function validateChoiceAlternative(runtime: ParserSyntaxRuntime, alternative: Sy
   }
 }
 
+function mergeCaptureDescriptor(
+  captures: CaptureDescriptorMap,
+  captureName: string,
+  descriptor: CaptureDescriptor
+): void {
+  const existing = captures.get(captureName);
+  if (!existing) {
+    captures.set(captureName, descriptor);
+    return;
+  }
+
+  captures.set(captureName, {
+    repeated: existing.repeated || descriptor.repeated,
+    emittedFieldNames: new Set([...existing.emittedFieldNames, ...descriptor.emittedFieldNames])
+  });
+}
+
+function emittedFieldNames(emits?: { fields?: Record<string, SyntaxEmitFieldValue> }): Set<string> {
+  return new Set(Object.keys(emits?.fields ?? {}));
+}
+
+function atomValueFieldNames(
+  runtime: ParserSyntaxRuntime,
+  atomName: string,
+  cache: Map<string, Set<string>>,
+  activeAtoms: Set<string>
+): Set<string> {
+  if (atomName === "quoted_string") {
+    return new Set();
+  }
+
+  const cached = cache.get(atomName);
+  if (cached) {
+    return cached;
+  }
+
+  if (activeAtoms.has(atomName)) {
+    throw syntaxError(`cyclic atom reference '${atomName}'`);
+  }
+
+  activeAtoms.add(atomName);
+  const atom = getAtom(runtime, atomName);
+  let fields = new Set<string>();
+
+  if ("one_of" in atom) {
+    for (const alternative of atom.one_of) {
+      if (alternative.atom) {
+        fields = new Set([...fields, ...atomValueFieldNames(runtime, alternative.atom, cache, activeAtoms)]);
+      }
+    }
+  } else if ("sequence" in atom) {
+    fields = emittedFieldNames(atom.emits);
+  }
+
+  activeAtoms.delete(atomName);
+  cache.set(atomName, fields);
+  return fields;
+}
+
+function choiceAlternativeFieldNames(
+  runtime: ParserSyntaxRuntime,
+  alternative: SyntaxChoiceAlternative,
+  cache: Map<string, Set<string>>,
+  activeAtoms: Set<string>
+): Set<string> {
+  return alternative.atom ? atomValueFieldNames(runtime, alternative.atom, cache, activeAtoms) : new Set();
+}
+
+function collectSequenceCaptureDescriptors(
+  runtime: ParserSyntaxRuntime,
+  sequence: SyntaxSequenceItem[],
+  captures: CaptureDescriptorMap,
+  atomFieldCache: Map<string, Set<string>>,
+  activeAtoms: Set<string>
+): void {
+  for (const item of sequence) {
+    if ("literal" in item || "whitespace" in item) {
+      continue;
+    }
+
+    if ("optional" in item) {
+      collectSequenceCaptureDescriptors(runtime, item.optional, captures, atomFieldCache, activeAtoms);
+      continue;
+    }
+
+    if ("repeat" in item) {
+      mergeCaptureDescriptor(captures, item.repeat.capture, {
+        repeated: true,
+        emittedFieldNames: atomValueFieldNames(runtime, item.repeat.atom, atomFieldCache, activeAtoms)
+      });
+      continue;
+    }
+
+    if ("pattern_ref" in item || "token_source" in item) {
+      mergeCaptureDescriptor(captures, item.capture, {
+        repeated: false,
+        emittedFieldNames: new Set()
+      });
+      continue;
+    }
+
+    if ("atom" in item) {
+      mergeCaptureDescriptor(captures, item.capture, {
+        repeated: false,
+        emittedFieldNames: atomValueFieldNames(runtime, item.atom, atomFieldCache, activeAtoms)
+      });
+      continue;
+    }
+
+    if ("one_of" in item) {
+      let fields = new Set<string>();
+      for (const alternative of item.one_of) {
+        fields = new Set([...fields, ...choiceAlternativeFieldNames(runtime, alternative, atomFieldCache, activeAtoms)]);
+      }
+      mergeCaptureDescriptor(captures, item.capture, {
+        repeated: false,
+        emittedFieldNames: fields
+      });
+      continue;
+    }
+
+    if ("enclosure" in item) {
+      mergeCaptureDescriptor(captures, item.capture, {
+        repeated: false,
+        emittedFieldNames: atomValueFieldNames(runtime, item.enclosure.inner_atom, atomFieldCache, activeAtoms)
+      });
+    }
+  }
+}
+
+function buildSequenceCaptureDescriptors(
+  runtime: ParserSyntaxRuntime,
+  sequence: SyntaxSequenceItem[] | undefined,
+  atomFieldCache: Map<string, Set<string>>
+): CaptureDescriptorMap {
+  const captures: CaptureDescriptorMap = new Map();
+  if (!sequence) {
+    return captures;
+  }
+
+  collectSequenceCaptureDescriptors(runtime, sequence, captures, atomFieldCache, new Set());
+  return captures;
+}
+
+function validateCaptureFieldReference(
+  fieldValue: string,
+  captures: CaptureDescriptorMap,
+  context: string
+): void {
+  const [captureName, ...path] = fieldValue.split(".");
+  const capture = captures.get(captureName);
+  if (!capture) {
+    throw syntaxError(`invalid emit field reference '${fieldValue}' in ${context}`);
+  }
+
+  if (path.length === 0) {
+    return;
+  }
+
+  if (capture.repeated || path.length !== 1) {
+    throw syntaxError(`invalid emit field reference '${fieldValue}' in ${context}`);
+  }
+
+  const segment = path[0];
+  if (segment === "raw_text" || segment === "value_kind" || capture.emittedFieldNames.has(segment)) {
+    return;
+  }
+
+  throw syntaxError(`invalid emit field reference '${fieldValue}' in ${context}`);
+}
+
+function validateStatementEmitReferences(
+  statementName: string,
+  statement: SyntaxStatementDefinition,
+  captures: CaptureDescriptorMap
+): void {
+  for (const [fieldName, fieldValue] of Object.entries(statement.emits?.fields ?? {})) {
+    if (typeof fieldValue !== "string") {
+      continue;
+    }
+
+    if (fieldValue === "after_comment_prefix" && statement.emits?.kind === "CommentLine") {
+      continue;
+    }
+
+    validateCaptureFieldReference(fieldValue, captures, `statements.${statementName}.emits.fields.${fieldName}`);
+  }
+}
+
+function validateAtomEmitReferences(
+  atomName: string,
+  atom: Extract<SyntaxAtomDefinition, { sequence: SyntaxSequenceItem[]; emits: unknown }>,
+  captures: CaptureDescriptorMap
+): void {
+  for (const [fieldName, fieldValue] of Object.entries(atom.emits.fields ?? {})) {
+    if (typeof fieldValue !== "string") {
+      continue;
+    }
+
+    validateCaptureFieldReference(fieldValue, captures, `atoms.${atomName}.emits.fields.${fieldName}`);
+  }
+}
+
+function validateFixedOrder(
+  statementName: string,
+  statement: SyntaxStatementDefinition,
+  captures: CaptureDescriptorMap
+): void {
+  statement.fixed_order?.forEach((captureName, index) => {
+    if (!captures.has(captureName)) {
+      throw syntaxError(
+        `unknown fixed_order capture '${captureName}' referenced by statements.${statementName}.fixed_order[${index}]`
+      );
+    }
+  });
+}
+
+function validateBlockEmitReferences(
+  runtime: ParserSyntaxRuntime,
+  blockName: string,
+  block: SyntaxBlockDefinition,
+  statementCaptureDescriptors: Map<string, CaptureDescriptorMap>
+): void {
+  const headerCaptures = statementCaptureDescriptors.get(block.header_statement) ?? new Map<string, CaptureDescriptor>();
+
+  for (const [fieldName, fieldValue] of Object.entries(block.emits.fields ?? {})) {
+    if (typeof fieldValue !== "string") {
+      continue;
+    }
+
+    if (fieldValue === "body_items") {
+      continue;
+    }
+
+    const [scope, captureName, ...rest] = fieldValue.split(".");
+    if (scope === "header" && captureName && rest.length === 0 && headerCaptures.has(captureName)) {
+      continue;
+    }
+
+    throw syntaxError(`invalid block emit field reference '${fieldValue}' in blocks.${blockName}.emits.fields.${fieldName}`);
+  }
+}
+
 function validateSequence(runtime: ParserSyntaxRuntime, sequence: SyntaxSequenceItem[], context: string): void {
   sequence.forEach((item, index) => {
     const itemContext = `${context}[${index}]`;
@@ -220,6 +471,8 @@ function validateLineKinds(runtime: ParserSyntaxRuntime): void {
 }
 
 function validateStatements(runtime: ParserSyntaxRuntime): void {
+  const atomFieldCache = new Map<string, Set<string>>();
+
   for (const [statementName, statement] of runtime.statementsByName) {
     const context = `statements.${statementName}`;
 
@@ -227,13 +480,24 @@ function validateStatements(runtime: ParserSyntaxRuntime): void {
       validateClassifier(runtime, statement.match, `${context}.match`);
     }
 
-    if (statement.sequence) {
-      validateSequence(runtime, statement.sequence, `${context}.sequence`);
-    }
+    validateSequence(runtime, statement.sequence ?? [], `${context}.sequence`);
+    const captureDescriptors = buildSequenceCaptureDescriptors(runtime, statement.sequence, atomFieldCache);
+    validateFixedOrder(statementName, statement, captureDescriptors);
+    validateStatementEmitReferences(statementName, statement, captureDescriptors);
   }
 }
 
 function validateBlocks(runtime: ParserSyntaxRuntime): void {
+  const atomFieldCache = new Map<string, Set<string>>();
+  const statementCaptureDescriptors = new Map<string, CaptureDescriptorMap>();
+
+  for (const [statementName, statement] of runtime.statementsByName) {
+    statementCaptureDescriptors.set(
+      statementName,
+      buildSequenceCaptureDescriptors(runtime, statement.sequence, atomFieldCache)
+    );
+  }
+
   for (const [blockName, block] of runtime.blocksByName) {
     const context = `blocks.${blockName}`;
 
@@ -246,10 +510,14 @@ function validateBlocks(runtime: ParserSyntaxRuntime): void {
       }
       throw syntaxError(`unknown block or statement '${itemKind}' referenced by ${context}.body_item_kinds[${index}]`);
     });
+
+    validateBlockEmitReferences(runtime, blockName, block, statementCaptureDescriptors);
   }
 }
 
 function validateAtoms(runtime: ParserSyntaxRuntime): void {
+  const atomFieldCache = new Map<string, Set<string>>();
+
   for (const [atomName, atom] of runtime.atomsByName) {
     const context = `atoms.${atomName}`;
 
@@ -262,6 +530,8 @@ function validateAtoms(runtime: ParserSyntaxRuntime): void {
 
     if ("sequence" in atom) {
       validateSequence(runtime, atom.sequence, `${context}.sequence`);
+      const captureDescriptors = buildSequenceCaptureDescriptors(runtime, atom.sequence, atomFieldCache);
+      validateAtomEmitReferences(atomName, atom, captureDescriptors);
     }
   }
 }

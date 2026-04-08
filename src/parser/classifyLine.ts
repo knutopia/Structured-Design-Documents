@@ -2,15 +2,7 @@ import type { SyntaxLineClassifierClause, SyntaxLineKindDefinition } from "../bu
 import type { SourceSpan } from "../types.js";
 import { getPattern, getStatement, getTokenSource, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 
-export type ClassifiedLineKind =
-  | "blank_line"
-  | "comment_line"
-  | "end_line"
-  | "top_node_header"
-  | "nested_node_header"
-  | "edge_line"
-  | "property_line"
-  | "unknown";
+export type ClassifiedLineKind = string | "unknown";
 
 export interface LineRecord {
   raw: string;
@@ -205,21 +197,6 @@ function commentTextForCommentLine(rawLine: string, commentPrefix: string): stri
   return trimmedStart.startsWith(commentPrefix) ? trimmedStart.slice(commentPrefix.length) : "";
 }
 
-function resolvedLineKind(kind: string): ClassifiedLineKind | undefined {
-  switch (kind) {
-    case "blank_line":
-    case "comment_line":
-    case "end_line":
-    case "top_node_header":
-    case "nested_node_header":
-    case "edge_line":
-    case "property_line":
-      return kind;
-    default:
-      return undefined;
-  }
-}
-
 function classifyMatchedStatement(
   statementKind: string,
   lineKindKind: SyntaxLineKindDefinition["kind"],
@@ -229,29 +206,21 @@ function classifyMatchedStatement(
   commentText: string | undefined,
   runtime: ParserSyntaxRuntime
 ): ClassifiedLine {
-  const resolvedKind = resolvedLineKind(statementKind);
-  if (!resolvedKind) {
-    return {
-      kind: "unknown",
-      lineKindKind,
-      content,
-      span,
-      commentText
-    };
-  }
+  const statement = getStatement(runtime, statementKind);
+  const emittedKind = statement.emits?.kind;
 
-  if (resolvedKind === "blank_line") {
+  if (emittedKind === "BlankLine") {
     return {
-      kind: "blank_line",
+      kind: statementKind,
       lineKindKind,
       content: "",
       span
     };
   }
 
-  if (resolvedKind === "comment_line") {
+  if (emittedKind === "CommentLine") {
     return {
-      kind: "comment_line",
+      kind: statementKind,
       lineKindKind,
       content: "",
       span,
@@ -260,7 +229,7 @@ function classifyMatchedStatement(
   }
 
   return {
-    kind: resolvedKind,
+    kind: statementKind,
     lineKindKind,
     content,
     span,
