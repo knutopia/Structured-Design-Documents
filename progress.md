@@ -16,6 +16,7 @@
 -changed "recommended" profile name to "strict"
 -removed dead, definition-only default_severity_mode
 -removed dead conformance_levels
+-identified lazy parser implementation ignoring large parts of syntax.yaml
 
 ## Tue 4-07-26
 
