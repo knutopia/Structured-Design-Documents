@@ -1,6 +1,7 @@
+import type { SyntaxBlockDefinition, SyntaxEmitFieldValue } from "../bundle/types.js";
 import type { Diagnostic } from "../types.js";
-import { classifyLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
-import type { ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import { classifyLine, statementKindForClassifiedLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
+import { getBlock, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 import { getCapturePrimary, interpretStatement } from "./statementInterpreter.js";
 import type {
   BlankLine,
@@ -16,6 +17,11 @@ import type {
 export interface ParseBlockResult {
   block?: NodeBlock;
   nextIndex: number;
+}
+
+interface BlockEmitContext {
+  header: Record<string, unknown>;
+  body_items: ParseBodyItem[];
 }
 
 function createDiagnostic(
@@ -77,6 +83,10 @@ function asValueKind(value: unknown): ValueKind | undefined {
   return value === "quoted_string" || value === "bare_value" ? value : undefined;
 }
 
+function asHeaderKind(value: unknown): NodeBlock["headerKind"] | undefined {
+  return value === "top_node_header" || value === "nested_node_header" ? value : undefined;
+}
+
 function toEdgeProperty(value: unknown): EdgeProperty | undefined {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
     return undefined;
@@ -98,7 +108,10 @@ function toEdgeProperty(value: unknown): EdgeProperty | undefined {
   };
 }
 
-function toPropertyLineNode(result: ReturnType<typeof interpretStatement>, classifiedLine: ClassifiedLine): PropertyLine | undefined {
+function toPropertyLineNode(
+  result: ReturnType<typeof interpretStatement>,
+  classifiedLine: ClassifiedLine
+): PropertyLine | undefined {
   if (!result.ok) {
     return undefined;
   }
@@ -154,45 +167,118 @@ function toEdgeLineNode(result: ReturnType<typeof interpretStatement>, classifie
   };
 }
 
-function parseHeaderFields(
+function parseHeaderContext(
   record: LineRecord,
-  classifiedLine: ClassifiedLine,
-  runtime: ParserSyntaxRuntime,
-  expectedHeaderKind: "top_node_header" | "nested_node_header"
-): { nodeType?: string; id?: string; name?: string; error?: string } {
-  const parsed = interpretStatement(record.raw, expectedHeaderKind, runtime);
+  headerStatement: string,
+  runtime: ParserSyntaxRuntime
+): { header?: Record<string, unknown>; error?: string } {
+  const parsed = interpretStatement(record.raw, headerStatement, runtime);
   if (!parsed.ok) {
     return { error: parsed.error };
   }
 
-  const nodeType = asString(getCapturePrimary(parsed.captures, "node_type"));
-  const id = asString(getCapturePrimary(parsed.captures, "id"));
-  const name = asString(getCapturePrimary(parsed.captures, "name"));
+  const header = Object.fromEntries(
+    Object.keys(parsed.captures).map((captureName) => [captureName, getCapturePrimary(parsed.captures, captureName)])
+  );
+
+  const nodeType = asString(header.node_type);
+  const id = asString(header.id);
+  const name = asString(header.name);
   if (!nodeType || !id || name === undefined) {
-    return { error: `Invalid ${expectedHeaderKind}` };
+    return { error: `Invalid ${headerStatement}` };
+  }
+
+  return { header };
+}
+
+function resolveBlockEmitFieldValue(context: BlockEmitContext, fieldValue: SyntaxEmitFieldValue): unknown {
+  if (typeof fieldValue !== "string") {
+    return fieldValue.const;
+  }
+
+  let current: unknown = context;
+  for (const segment of fieldValue.split(".")) {
+    if (typeof current !== "object" || current === null || !(segment in current)) {
+      return undefined;
+    }
+    current = (current as Record<string, unknown>)[segment];
+  }
+
+  return current;
+}
+
+function buildNodeBlockFromSyntax(
+  block: SyntaxBlockDefinition,
+  header: Record<string, unknown>,
+  bodyItems: ParseBodyItem[],
+  headerLine: ClassifiedLine,
+  terminatorLine: ClassifiedLine
+): NodeBlock | undefined {
+  const emittedFields = { ...(block.emits.defaults ?? {}) };
+  const context: BlockEmitContext = {
+    header,
+    body_items: bodyItems
+  };
+
+  for (const [fieldName, fieldValue] of Object.entries(block.emits.fields ?? {})) {
+    const resolvedValue = resolveBlockEmitFieldValue(context, fieldValue);
+    if (resolvedValue !== undefined) {
+      emittedFields[fieldName] = resolvedValue;
+    }
+  }
+
+  const headerKind = asHeaderKind(emittedFields.header_kind);
+  const nodeType = asString(emittedFields.node_type);
+  const id = asString(emittedFields.id);
+  const name = asString(emittedFields.name);
+  const emittedBodyItems = emittedFields.body_items;
+
+  if (!headerKind || !nodeType || !id || name === undefined || !Array.isArray(emittedBodyItems)) {
+    return undefined;
   }
 
   return {
+    kind: "NodeBlock",
+    headerKind,
     nodeType,
     id,
-    name
+    name,
+    bodyItems: emittedBodyItems as ParseBodyItem[],
+    headerSpan: headerLine.span,
+    span: {
+      line: headerLine.span.line,
+      column: headerLine.span.column,
+      endLine: terminatorLine.span.endLine,
+      endColumn: terminatorLine.span.endColumn,
+      startOffset: headerLine.span.startOffset,
+      endOffset: terminatorLine.span.endOffset
+    }
   };
+}
+
+function blockNameForHeaderStatement(
+  runtime: ParserSyntaxRuntime,
+  blockNames: string[],
+  statementKind: string
+): string | undefined {
+  return blockNames.find((blockName) => getBlock(runtime, blockName).header_statement === statementKind);
 }
 
 function parseBodyLine(
   file: string,
   record: LineRecord,
+  classifiedLine: ClassifiedLine,
+  statementKind: string,
   runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[]
 ): PropertyLine | EdgeLine | BlankLine | CommentLine | undefined {
-  const classifiedLine = classifyLine(record, runtime);
-  switch (classifiedLine.kind) {
+  switch (statementKind) {
     case "blank_line":
       return toBlankLine(classifiedLine);
     case "comment_line":
       return toCommentLine(classifiedLine);
     case "property_line": {
-      const parsed = interpretStatement(record.raw, "property_line", runtime);
+      const parsed = interpretStatement(record.raw, statementKind, runtime);
       const property = toPropertyLineNode(parsed, classifiedLine);
       if (!property) {
         diagnostics.push(
@@ -208,7 +294,7 @@ function parseBodyLine(
       return property;
     }
     case "edge_line": {
-      const parsed = interpretStatement(record.raw, "edge_line", runtime);
+      const parsed = interpretStatement(record.raw, statementKind, runtime);
       const edge = toEdgeLineNode(parsed, classifiedLine);
       if (!edge) {
         diagnostics.push(
@@ -237,24 +323,33 @@ export function parseNodeBlock(
   startIndex: number,
   runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[],
-  expectedHeaderKind: "top_node_header" | "nested_node_header"
+  blockName: string
 ): ParseBlockResult {
+  const block = getBlock(runtime, blockName);
+  const headerStatement = block.header_statement;
+  const topLevelBlockName = runtime.syntax.document.top_level_block_kind;
+  const topLevelHeaderStatement = getBlock(runtime, topLevelBlockName).header_statement;
+  const allowedBodyStatementKinds = new Set(
+    block.body_item_kinds.filter((itemKind) => runtime.statementsByName.has(itemKind))
+  );
+  const allowedNestedBlockNames = block.body_item_kinds.filter((itemKind) => runtime.blocksByName.has(itemKind));
   const headerRecord = records[startIndex];
   const classifiedHeader = classifyLine(headerRecord, runtime);
-  if (classifiedHeader.kind !== expectedHeaderKind) {
+  const headerStatementKind = statementKindForClassifiedLine(classifiedHeader, runtime);
+  if (headerStatementKind !== headerStatement) {
     diagnostics.push(
       createDiagnostic(
         file,
         classifiedHeader,
         "parse.invalid_node_header",
-        `Expected ${expectedHeaderKind}, found ${classifiedHeader.kind}`
+        `Expected ${headerStatement}, found ${headerStatementKind ?? classifiedHeader.kind}`
       )
     );
     return { nextIndex: startIndex + 1 };
   }
 
-  const parsedHeader = parseHeaderFields(headerRecord, classifiedHeader, runtime, expectedHeaderKind);
-  if (!parsedHeader.nodeType || !parsedHeader.id || parsedHeader.name === undefined) {
+  const parsedHeader = parseHeaderContext(headerRecord, headerStatement, runtime);
+  if (!parsedHeader.header) {
     diagnostics.push(
       createDiagnostic(
         file,
@@ -271,8 +366,10 @@ export function parseNodeBlock(
   while (index < records.length) {
     const record = records[index];
     const classifiedLine = classifyLine(record, runtime);
-    if (classifiedLine.kind === "end_line") {
-      const parsedEndLine = interpretStatement(record.raw, "end_line", runtime);
+    const statementKind = statementKindForClassifiedLine(classifiedLine, runtime);
+
+    if (statementKind === block.terminator_statement) {
+      const parsedEndLine = interpretStatement(record.raw, statementKind, runtime);
       if (!parsedEndLine.ok) {
         diagnostics.push(
           createDiagnostic(file, classifiedLine, "parse.unexpected_line_in_block", parsedEndLine.error)
@@ -281,28 +378,26 @@ export function parseNodeBlock(
         continue;
       }
 
-      const block: NodeBlock = {
-        kind: "NodeBlock",
-        headerKind: expectedHeaderKind,
-        nodeType: parsedHeader.nodeType,
-        id: parsedHeader.id,
-        name: parsedHeader.name,
+      const parsedBlock = buildNodeBlockFromSyntax(
+        block,
+        parsedHeader.header,
         bodyItems,
-        headerSpan: classifiedHeader.span,
-        span: {
-          line: classifiedHeader.span.line,
-          column: classifiedHeader.span.column,
-          endLine: classifiedLine.span.endLine,
-          endColumn: classifiedLine.span.endColumn,
-          startOffset: classifiedHeader.span.startOffset,
-          endOffset: classifiedLine.span.endOffset
-        }
-      };
-      return { block, nextIndex: index + 1 };
+        classifiedHeader,
+        classifiedLine
+      );
+      if (!parsedBlock) {
+        diagnostics.push(
+          createDiagnostic(file, classifiedHeader, "parse.invalid_node_header", "Invalid node block emission")
+        );
+        return { nextIndex: index + 1 };
+      }
+      return { block: parsedBlock, nextIndex: index + 1 };
     }
 
-    if (classifiedLine.kind === "nested_node_header") {
-      const nested = parseNodeBlock(file, records, index, runtime, diagnostics, "nested_node_header");
+    const nestedBlockName =
+      statementKind ? blockNameForHeaderStatement(runtime, allowedNestedBlockNames, statementKind) : undefined;
+    if (nestedBlockName) {
+      const nested = parseNodeBlock(file, records, index, runtime, diagnostics, nestedBlockName);
       if (nested.block) {
         bodyItems.push(nested.block);
       }
@@ -310,7 +405,7 @@ export function parseNodeBlock(
       continue;
     }
 
-    if (classifiedLine.kind === "top_node_header") {
+    if (statementKind === topLevelHeaderStatement && !allowedNestedBlockNames.includes(topLevelBlockName)) {
       diagnostics.push(
         createDiagnostic(
           file,
@@ -323,7 +418,15 @@ export function parseNodeBlock(
       continue;
     }
 
-    const parsedItem = parseBodyLine(file, record, runtime, diagnostics);
+    if (!statementKind || !allowedBodyStatementKinds.has(statementKind)) {
+      diagnostics.push(
+        createDiagnostic(file, classifiedLine, "parse.unexpected_line_in_block", "Unexpected line in node block")
+      );
+      index += 1;
+      continue;
+    }
+
+    const parsedItem = parseBodyLine(file, record, classifiedLine, statementKind, runtime, diagnostics);
     if (parsedItem) {
       bodyItems.push(parsedItem);
     }
@@ -335,7 +438,7 @@ export function parseNodeBlock(
       file,
       classifiedHeader,
       "parse.missing_end",
-      `Node block '${parsedHeader.id}' is missing an END terminator`
+      `Node block '${asString(parsedHeader.header.id) ?? "unknown"}' is missing an END terminator`
     )
   );
   return { nextIndex: records.length };

@@ -174,6 +174,26 @@ function statementNamesForLineKind(lineKind: SyntaxLineKindDefinition): string[]
   return lineKind.statements ?? [];
 }
 
+export function statementKindForClassifiedLine(
+  classifiedLine: ClassifiedLine,
+  runtime: ParserSyntaxRuntime
+): string | undefined {
+  if (classifiedLine.lineKindKind === "unknown") {
+    return classifiedLine.kind === "unknown" ? undefined : classifiedLine.kind;
+  }
+
+  const lineKind = runtime.lineKindsByKind.get(classifiedLine.lineKindKind);
+  if (!lineKind) {
+    return classifiedLine.kind === "unknown" ? undefined : classifiedLine.kind;
+  }
+
+  if (lineKind.statement) {
+    return lineKind.statement;
+  }
+
+  return lineKind.statements?.includes(classifiedLine.kind) ? classifiedLine.kind : undefined;
+}
+
 function allowsTrailingComment(lineKind: SyntaxLineKindDefinition, runtime: ParserSyntaxRuntime): boolean {
   return statementNamesForLineKind(lineKind).some((statementName) =>
     runtime.trailingCommentAllowedStatements.has(statementName)

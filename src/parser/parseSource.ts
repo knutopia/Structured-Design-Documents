@@ -1,9 +1,9 @@
 import type { Bundle } from "../bundle/types.js";
 import type { Diagnostic, SourceInput, SourceSpan } from "../types.js";
 import { compareDiagnostics } from "../diagnostics/types.js";
-import { classifyLine, type LineRecord } from "./classifyLine.js";
+import { classifyLine, statementKindForClassifiedLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
 import { parseNodeBlock } from "./parseBlock.js";
-import { createParserSyntaxRuntime, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import { createParserSyntaxRuntime, getBlock, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
 import { getCapturePrimary, interpretStatement } from "./statementInterpreter.js";
 import type { BlankLine, CommentLine, ParseDocument, ParseResult } from "./types.js";
 
@@ -35,8 +35,7 @@ function documentSpan(records: LineRecord[]): SourceSpan {
   };
 }
 
-function toTrivia(record: LineRecord, runtime: ParserSyntaxRuntime): BlankLine | CommentLine | undefined {
-  const classifiedLine = classifyLine(record, runtime);
+function toTriviaFromClassifiedLine(classifiedLine: ClassifiedLine): BlankLine | CommentLine | undefined {
   if (classifiedLine.kind === "blank_line") {
     return {
       kind: "BlankLine",
@@ -53,6 +52,20 @@ function toTrivia(record: LineRecord, runtime: ParserSyntaxRuntime): BlankLine |
   }
 
   return undefined;
+}
+
+function toAllowedDocumentTrivia(
+  record: LineRecord,
+  runtime: ParserSyntaxRuntime,
+  allowedStatements: Set<string>
+): BlankLine | CommentLine | undefined {
+  const classifiedLine = classifyLine(record, runtime);
+  const statementKind = statementKindForClassifiedLine(classifiedLine, runtime);
+  if (!statementKind || !allowedStatements.has(statementKind)) {
+    return undefined;
+  }
+
+  return toTriviaFromClassifiedLine(classifiedLine);
 }
 
 function createDiagnostic(
@@ -78,24 +91,43 @@ function createDiagnostic(
   };
 }
 
+function createDocumentDiagnostic(
+  input: SourceInput,
+  records: LineRecord[],
+  code: string,
+  message: string
+): Diagnostic {
+  return {
+    stage: "parse",
+    code,
+    severity: "error",
+    message,
+    file: input.path,
+    span: documentSpan(records)
+  };
+}
+
+function isVersionDeclarationCandidate(record: LineRecord, runtime: ParserSyntaxRuntime): boolean {
+  return record.raw.trimStart().startsWith(runtime.syntax.document.version_declaration.literal);
+}
+
 function parseVersionDeclaration(
   input: SourceInput,
   record: LineRecord,
-  bundle: Bundle,
   runtime: ParserSyntaxRuntime,
   diagnostics: Diagnostic[]
-): string | undefined {
-  const literal = bundle.syntax.document.version_declaration.literal;
-  if (!record.raw.trimStart().startsWith(literal)) {
-    return undefined;
+): { consumed: boolean; declaredVersion?: string } {
+  if (!isVersionDeclarationCandidate(record, runtime)) {
+    return { consumed: false };
   }
 
-  const parsed = interpretStatement(record.raw, "version_decl", runtime);
+  const versionConfig = runtime.syntax.document.version_declaration;
+  const parsed = interpretStatement(record.raw, versionConfig.statement_kind, runtime);
   if (!parsed.ok) {
     diagnostics.push(
       createDiagnostic(input, record, "parse.invalid_version_declaration", "Invalid version declaration")
     );
-    return undefined;
+    return { consumed: true };
   }
 
   const version = getCapturePrimary(parsed.captures, "version_number");
@@ -103,10 +135,22 @@ function parseVersionDeclaration(
     diagnostics.push(
       createDiagnostic(input, record, "parse.invalid_version_declaration", "Invalid version declaration")
     );
-    return undefined;
+    return { consumed: true };
   }
 
-  if (!bundle.syntax.document.version_declaration.post_parse_supported_versions.includes(version)) {
+  if (!versionConfig.allowed) {
+    diagnostics.push(
+      createDiagnostic(
+        input,
+        record,
+        "parse.unexpected_version_declaration",
+        "Version declaration is not allowed by the document syntax contract"
+      )
+    );
+    return { consumed: true };
+  }
+
+  if (!versionConfig.post_parse_supported_versions.includes(version)) {
     diagnostics.push(
       createDiagnostic(
         input,
@@ -117,19 +161,46 @@ function parseVersionDeclaration(
     );
   }
 
-  return version;
+  return {
+    consumed: true,
+    declaredVersion: version
+  };
+}
+
+function hasTopLevelBlockAhead(
+  records: LineRecord[],
+  startIndex: number,
+  runtime: ParserSyntaxRuntime,
+  headerStatement: string
+): boolean {
+  for (let index = startIndex; index < records.length; index += 1) {
+    const classifiedLine = classifyLine(records[index], runtime);
+    if (statementKindForClassifiedLine(classifiedLine, runtime) === headerStatement) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
   const diagnostics: Diagnostic[] = [];
   const records = buildLineRecords(input.text);
   const runtime = createParserSyntaxRuntime(bundle);
+  const { document: documentConfig } = runtime.syntax;
+  const topLevelBlockName = documentConfig.top_level_block_kind;
+  const topLevelHeaderStatement = getBlock(runtime, topLevelBlockName).header_statement;
+  const betweenBlockAllowedStatements = new Set([
+    ...runtime.documentLeadingLineKinds,
+    ...runtime.documentTrailingLineKinds
+  ]);
   const items: ParseDocument["items"] = [];
   let index = 0;
   let declaredVersion: string | undefined;
+  let topLevelBlockCount = 0;
 
   while (index < records.length) {
-    const trivia = toTrivia(records[index], runtime);
+    const trivia = toAllowedDocumentTrivia(records[index], runtime, runtime.documentLeadingLineKinds);
     if (!trivia) {
       break;
     }
@@ -138,51 +209,93 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
   }
 
   if (index < records.length) {
-    const maybeVersion = parseVersionDeclaration(input, records[index], bundle, runtime, diagnostics);
-    if (maybeVersion !== undefined) {
-      declaredVersion = maybeVersion;
+    const parsedVersion = parseVersionDeclaration(input, records[index], runtime, diagnostics);
+    if (parsedVersion.consumed) {
+      declaredVersion = parsedVersion.declaredVersion;
       index += 1;
+
       while (index < records.length) {
-        const trivia = toTrivia(records[index], runtime);
+        const trivia = toAllowedDocumentTrivia(records[index], runtime, runtime.documentLeadingLineKinds);
         if (!trivia) {
           break;
         }
         items.push(trivia);
         index += 1;
       }
+    } else if (documentConfig.version_declaration.required) {
+      diagnostics.push(
+        createDocumentDiagnostic(
+          input,
+          records,
+          "parse.missing_version_declaration",
+          "Document is missing the required version declaration"
+        )
+      );
     }
+  } else if (documentConfig.version_declaration.required) {
+    diagnostics.push(
+      createDocumentDiagnostic(
+        input,
+        records,
+        "parse.missing_version_declaration",
+        "Document is missing the required version declaration"
+      )
+    );
   }
 
   while (index < records.length) {
     const record = records[index];
     const classifiedLine = classifyLine(record, runtime);
-    if (classifiedLine.kind === "blank_line" || classifiedLine.kind === "comment_line") {
-      const trivia = toTrivia(record, runtime);
-      if (trivia) {
-        items.push(trivia);
+    const statementKind = statementKindForClassifiedLine(classifiedLine, runtime);
+
+    if (statementKind === topLevelHeaderStatement) {
+      const parsedBlock = parseNodeBlock(input.path, records, index, runtime, diagnostics, topLevelBlockName);
+      if (parsedBlock.block) {
+        items.push(parsedBlock.block);
+        topLevelBlockCount += 1;
       }
-      index += 1;
+      index = parsedBlock.nextIndex;
       continue;
     }
 
-    if (classifiedLine.kind !== "top_node_header") {
-      diagnostics.push(
-        createDiagnostic(
-          input,
-          record,
-          "parse.expected_top_node_header",
-          "Expected a top-level node block"
-        )
-      );
-      index += 1;
-      continue;
+    const trivia = toTriviaFromClassifiedLine(classifiedLine);
+    if (trivia && statementKind) {
+      const allowedStatements =
+        topLevelBlockCount === 0
+          ? runtime.documentLeadingLineKinds
+          : hasTopLevelBlockAhead(records, index + 1, runtime, topLevelHeaderStatement)
+            ? betweenBlockAllowedStatements
+            : runtime.documentTrailingLineKinds;
+
+      if (allowedStatements.has(statementKind)) {
+        items.push(trivia);
+        index += 1;
+        continue;
+      }
     }
 
-    const parsedBlock = parseNodeBlock(input.path, records, index, runtime, diagnostics, "top_node_header");
-    if (parsedBlock.block) {
-      items.push(parsedBlock.block);
-    }
-    index = parsedBlock.nextIndex;
+    diagnostics.push(
+      createDiagnostic(
+        input,
+        record,
+        "parse.expected_top_node_header",
+        "Expected a top-level node block"
+      )
+    );
+    index += 1;
+  }
+
+  if (topLevelBlockCount < documentConfig.minimum_top_level_blocks) {
+    diagnostics.push(
+      createDocumentDiagnostic(
+        input,
+        records,
+        "parse.minimum_top_level_blocks",
+        `Expected at least ${documentConfig.minimum_top_level_blocks} top-level node block${
+          documentConfig.minimum_top_level_blocks === 1 ? "" : "s"
+        }`
+      )
+    );
   }
 
   const errorDiagnostics = diagnostics.filter((diagnostic) => diagnostic.severity === "error");
@@ -195,7 +308,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
   const document: ParseDocument = {
     kind: "Document",
     declaredVersion,
-    effectiveVersion: declaredVersion ?? bundle.syntax.document.version_declaration.default_effective_version,
+    effectiveVersion: declaredVersion ?? documentConfig.version_declaration.default_effective_version,
     items,
     span: documentSpan(records)
   };

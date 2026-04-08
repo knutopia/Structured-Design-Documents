@@ -403,7 +403,7 @@ interpreted syntax data.
 - parse-node output shape remains compatible with compilation unless the syntax
   contract explicitly requires a parser-stage change
 
-## Slice 5: Interpreter-Driven Document And Block Parsing
+## [Done] Slice 5: Interpreter-Driven Document And Block Parsing
 
 ### Goal
 
