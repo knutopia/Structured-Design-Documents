@@ -20,6 +20,7 @@ import {
   renderUiContractsMermaid
 } from "./mermaid.js";
 import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
+import { prepareProjectionForRender } from "./prepareProjectionForRender.js";
 import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
 import { resolveLegacyDotPreviewStyle } from "./previewStyle.js";
 import type {
@@ -40,7 +41,7 @@ export type {
 } from "./renderArtifacts.js";
 import { buildScenarioFlowRenderModel } from "./scenarioFlowRenderModel.js";
 import { buildServiceBlueprintRenderModel } from "./serviceBlueprintRenderModel.js";
-import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
+import { buildUiContractsRenderModel } from "./uiContractsRenderModel.js";
 
 export interface ViewRenderCapability {
   textArtifacts: TextArtifactCapability[];
@@ -282,17 +283,18 @@ const uiContractsRenderer: ViewTextRenderer = {
     }
   },
   render: (projection, graph, bundle, view, format, profileId) => {
+    const prepared = prepareProjectionForRender(view, projection, graph, profileId);
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
-    const prepared = buildUiContractsRenderData(projection, graph, displayPolicy);
+    const model = buildUiContractsRenderModel(prepared.projection, graph, displayPolicy);
     if (format === "dot") {
       return {
-        text: renderUiContractsDot(prepared.model, resolveLegacyDotPreviewStyle(bundle, view)),
+        text: renderUiContractsDot(model, resolveLegacyDotPreviewStyle(bundle, view)),
         notes: prepared.notes
       };
     }
 
     return {
-      text: renderUiContractsMermaid(prepared.model),
+      text: renderUiContractsMermaid(model),
       notes: prepared.notes
     };
   }

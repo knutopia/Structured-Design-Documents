@@ -214,7 +214,7 @@ This milestone is complete only when all of the following are true:
 2. Public service exposure and shared orchestration
 3. Consumer reuse, docs, and closeout
 
-## Checkpoint 1: Boundary Hardening And Contract Locking
+## [Done] Checkpoint 1: Boundary Hardening And Contract Locking
 
 ### Goal
 

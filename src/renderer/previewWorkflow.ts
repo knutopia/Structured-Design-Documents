@@ -6,7 +6,7 @@ import { projectView } from "../projector/projectView.js";
 import type { Projection } from "../projector/types.js";
 import type { SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
-import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
+import { prepareProjectionForRender } from "./prepareProjectionForRender.js";
 import {
   getPreviewBackend,
   renderPreviewArtifact,
@@ -15,7 +15,6 @@ import {
 import { renderCompiledGraphText } from "./renderView.js";
 import type { PreviewFormat, PreviewRendererBackendId } from "./renderArtifacts.js";
 import type { RendererDiagnostic } from "./staged/diagnostics.js";
-import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
 import {
   getPreviewArtifactCapability,
   getViewRenderCapability,
@@ -102,22 +101,7 @@ function projectCompiledGraph(
     return { notes: [] };
   }
 
-  if (view.id === "ui_contracts") {
-    const prepared = buildUiContractsRenderData(
-      projected.projection,
-      graph,
-      resolveProfileDisplayPolicy(view, profileId)
-    );
-    return {
-      projection: prepared.projection,
-      notes: prepared.notes
-    };
-  }
-
-  return {
-    projection: projected.projection,
-    notes: []
-  };
+  return prepareProjectionForRender(view, projected.projection, graph, profileId);
 }
 
 export async function renderSourcePreview(
