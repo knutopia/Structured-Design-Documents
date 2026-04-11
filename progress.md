@@ -14,6 +14,7 @@
 -planned MCP path
 -planned projection service exposure as pre-step for mcp work
 -implemented projection service exposure
+-created mcp server design doc
 
 ## Wed 4-08-26
 
