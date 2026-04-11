@@ -24,7 +24,7 @@ This is my first repository that may attract outside contributions.  I do not wa
 
 ## How To Reach Out
 
-If you are interested in contributing, please email me first at [knutopia@gmail.com](mailto:knutopia@gmail.com).
+If you are interested in contributing, please email me first at [sdd@grafsys.com](mailto:sdd@grafsys.com).
 
 In that note, it helps if you briefly include:
 
