@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document turns `docs/projection_service_exposure_requirements.md` into a
+This document turns `docs/[Done] projection_service_exposure_requirements.md` into a
 detailed execution plan.
 
 It is intentionally written for the "1-thread, 3-checkpoint milestone" shape:
@@ -20,7 +20,7 @@ projection-service drift.
 
 Suggested durable plan-doc path:
 
-- `docs/projection_service_exposure_execution_plan.md`
+- `docs/[Done] projection_service_exposure_execution_plan.md`
 
 ## Planning Model
 
@@ -58,7 +58,7 @@ Concurrency rule:
 
 Authority order for this milestone:
 
-1. `docs/projection_service_exposure_requirements.md`
+1. `docs/[Done] projection_service_exposure_requirements.md`
 2. `bundle/v0.1/core/views.yaml`
 3. `bundle/v0.1/core/projection_schema.json`
 4. `docs/toolchain/architecture.md`
@@ -422,7 +422,7 @@ Stop and surface the issue instead of coding through it if:
 ## Assumptions
 
 - the durable implementation-plan document lives at
-  `docs/projection_service_exposure_execution_plan.md`
+  `docs/[Done] projection_service_exposure_execution_plan.md`
 - the public source-to-projection API returns `ProjectionResult` only
 - any richer result shape needed for render or preview reuse remains internal
 - checkpoint execution stays serial, with one writing thread on projector and
