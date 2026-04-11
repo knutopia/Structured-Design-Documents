@@ -9,14 +9,17 @@ These items were intentionally deferred to keep v0.1 lean and focused on a worki
 
 ## Public Projection Tooling
 
+Projection service exposure is no longer deferred in v0.1. The root package now exports the schema-validated projection service through `projectView(...)` and `projectSource(...)`.
+
+The remaining deferred items in this area are:
+
 - a public `sdd project` command
 - projection-first CLI workflows
 - compiled projection snapshots as a first-class artifact outside tests
 
 ## Renderer Expansion
 
-- views beyond `ia_place_map`
-- image generation via Graphviz or Mermaid CLI
+- high-quality views beyond `ia_place_map`, `ui_contracts`, `service_blueprint`
 - richer styling themes
 - layout tuning options
 
@@ -49,6 +52,6 @@ These items were intentionally deferred to keep v0.1 lean and focused on a worki
 Revisit the lean architecture only if one of these becomes true:
 
 - the bundle introduces new primitives that need stronger internal abstraction
-- multiple views require a shared public projection layer
+- the public projection service needs richer capabilities than the current `projectView(...)` and `projectSource(...)` contract
 - render backends need capabilities that no longer fit the current thin-adapter design
 - typed values become normative in the compiled schema

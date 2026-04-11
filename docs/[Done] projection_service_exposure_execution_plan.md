@@ -1,4 +1,4 @@
-# Projection Service Exposure Execution Plan
+# [Done] Projection Service Exposure Execution Plan
 
 ## Purpose
 
@@ -273,7 +273,7 @@ Run in this order:
 - renderer-owned preparation is explicit and no longer embedded in the public
   projection-service candidate path
 
-## Checkpoint 2: Public Service Exposure And Shared Orchestration
+## [Done] Checkpoint 2: Public Service Exposure And Shared Orchestration
 
 ### Goal
 
@@ -346,7 +346,7 @@ Run in this order:
 - public source-to-projection behavior is shared through one private helper
 - no existing projection or render behavior changes
 
-## Checkpoint 3: Consumer Reuse, Docs, And Closeout
+## [Done] Checkpoint 3: Consumer Reuse, Docs, And Closeout
 
 ### Goal
 

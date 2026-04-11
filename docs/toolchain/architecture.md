@@ -26,7 +26,7 @@ The engine runs this pipeline:
 2. `parseSource`
 3. `compileSource`
 4. `validateGraph`
-5. internal `projectView`
+5. `projectView`
 6. `renderSource`
 
 The staged renderer migration also introduces an internal-only renderer pipeline after projection for staged SVG work:
@@ -41,7 +41,8 @@ Each stage has a narrow responsibility:
 - `parseSource` interprets `syntax.yaml` and produces a source-spanned parse document.
 - `compileSource` flattens authoring blocks into canonical graph JSON, preserves author-order metadata for renderers, and validates the graph against `core/schema.json`.
 - `validateGraph` executes generic validation rules from contracts plus the selected profile.
-- `projectView` resolves the requested bundle view through a shared projector registry and creates a normalized projection envelope for that view.
+- `projectView` resolves the requested bundle view through a shared projector registry and creates the exported normalized projection envelope for that view.
+- `projectSource` provides the exported source-to-projection convenience API by compiling source and then projecting through the same `projectView` boundary.
 - `renderSource` resolves renderable views through a renderer registry and turns their projections into internal DOT or Mermaid text artifacts.
 
 ## Internal Forms
@@ -50,7 +51,7 @@ Lean v0.1 still keeps the public-facing semantic spine small:
 
 - a parse document with source spans
 - a canonical compiled graph with non-serialized author-order metadata attached for renderer use
-- a renderer-facing projection envelope used as the semantic input to rendering
+- an exported projection envelope used as the semantic boundary between graph compilation and rendering
 
 The renderer migration now adds internal staged-renderer forms under `src/renderer/staged/`:
 
@@ -96,6 +97,7 @@ This keeps the architecture boundary explicit:
 
 - bundle semantics belong in projection builders and render-model builders
 - emitters only format already-derived render data
+- `prepareProjectionForRender(...)` remains a renderer-internal layer on top of the public projection contract
 - preview generation remains a CLI concern layered on top of DOT-backed renderers
 
 That separation matters most for the non-IA views:
@@ -105,7 +107,7 @@ That separation matters most for the non-IA views:
 - ui contracts derive transition-graph priority in projection, then let the render model decide whether `ViewState` remains primary or scoped `State` groups become the effective primary fallback
 - emitters stay intentionally dumb so bundle semantics do not get duplicated across output formats
 
-All bundle-defined v0.1 views still retain internal DOT and Mermaid text artifacts for tests, corpus generation, and debugging. Public CLI preview support centers on `sdd show`. v0.1 still does not expose a public `sdd project` command, so projection remains an internal contract exercised through tests and renderer inputs.
+All bundle-defined v0.1 views still retain internal DOT and Mermaid text artifacts for tests, corpus generation, and debugging. Public CLI preview support centers on `sdd show`. v0.1 still does not expose a public `sdd project` command, but projection itself is now a supported exported library contract through `projectView(...)` and `projectSource(...)`.
 
 ## Bundle Ownership
 

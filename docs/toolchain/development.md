@@ -176,7 +176,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 - `src/parser/`: syntax-driven line classification and block parsing
 - `src/compiler/`: graph construction, canonicalization, schema validation
 - `src/validator/`: generic rule execution and profile validation
-- `src/projector/`: internal multi-view projection registry, shared helpers, and per-view builders
+- `src/projector/`: exported projection service entry points, the multi-view projection registry, shared helpers, and per-view builders
 - `src/renderer/`: render capability registry, view render models, emitters, staged renderer contracts and backends, shared SVG artifact helpers, legacy preview backend plumbing, and preview style resolution
 - `src/examples/`: curated render-pair discovery plus rendered-corpus generation helpers
 - `src/diagnostics/`: structured diagnostics and formatting
@@ -252,3 +252,25 @@ Authoring guidance for the newly renderable views:
 5. Add a render model only if the view will become renderable. Public CLI support should be expressed through `sdd show`; internal DOT or Mermaid text artifacts are optional and should only be added when they stay useful for tests or debugging.
 6. Register renderable views in `src/renderer/viewRenderers.ts`; CLI preview support derives from that registry.
 7. Add explicit CLI support only after the projection and rendering path is proven by tests. v0.1 still has no public `sdd project` command.
+
+## Using The Projection Service
+
+Use the root package exports when you need normalized projection data in-process without routing through renderer modules or CLI commands.
+
+Project an already-compiled graph:
+
+```ts
+import { projectView, type ProjectionResult } from "sdd-toolchain";
+
+const result: ProjectionResult = projectView(graph, bundle, "ia_place_map");
+```
+
+Project directly from source input:
+
+```ts
+import { projectSource, type ProjectionResult } from "sdd-toolchain";
+
+const result: ProjectionResult = projectSource(input, bundle, "service_blueprint");
+```
+
+These APIs expose the schema-validated projection contract only. Renderer-owned shaping such as `prepareProjectionForRender(...)` remains internal, and v0.1 still does not expose a public `sdd project` CLI command.

@@ -6,7 +6,7 @@
 - One shared engine, not separate tool codebases.
 - Supported public commands: `compile`, `validate`, and `show`.
 - Internal/debug text-rendering commands remain available as `render`, `dot`, and `mmd`.
-- Projection stays internal in v0.1.
+- Projection is a supported exported library contract in v0.1, but not a public CLI command.
 - Only source `.sdd` input is supported in the CLI.
 - Only `ia_place_map` is rendered in v0.1.
 - Renderer retains internal text artifacts: DOT and Mermaid source.
@@ -27,7 +27,7 @@ The public semantic pipeline stays lean:
 
 - a parse document for syntax-aware compilation and diagnostics
 - a compiled graph for validation
-- an internal projection envelope for rendering
+- an exported projection envelope for downstream consumers and rendering
 
 The renderer migration now adds renderer-owned internal forms under `src/renderer/staged/`:
 
@@ -36,6 +36,12 @@ The renderer migration now adds renderer-owned internal forms under `src/rendere
 - `PositionedScene`
 
 These forms are internal-only implementation contracts. They do not change the compiled graph contract, the projection contract, or current CLI outputs, and they exist in parallel with the internal DOT/Mermaid text artifacts and Graphviz-backed preview paths until view migration is ready.
+
+Renderer-owned projection preparation remains separate from that public projection contract:
+
+- `projectView(...)` and `projectSource(...)` are the public projection APIs
+- `prepareProjectionForRender(...)` is an internal renderer layer used after projection when display-policy shaping is needed
+- staged renderer scene contracts remain internal-only implementation contracts
 
 The Step 3 measurement boundary is intentionally opinionated:
 

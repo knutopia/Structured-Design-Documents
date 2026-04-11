@@ -53,3 +53,19 @@ The initial TypeScript toolchain is in place at repo root as package `sdd-toolch
 ## 3. [Done] Created better "staged" rendering pipeline for subset of diagram types
 
 Created staged SVG renderer architecture for `ia_place_map`, `ui_contracts`, `service_blueprint`. This new renderer architecture overcomes the limitations encountered with mermaid, graphviz and elk.
+
+## 4. [DONE] Exposed projection as a stable in-process TypeScript service
+
+Projection is no longer only an internal renderer input. The root package now exposes:
+
+- `projectView(graph, bundle, viewId)` as the stable graph-to-projection boundary
+- `projectSource(input, bundle, viewId)` as the source-to-projection convenience API
+- the projection result and projection envelope types from the root package boundary
+
+This milestone kept the architectural boundary explicit:
+
+- raw projection remains the schema-validated semantic contract produced by the projector layer
+- renderer-owned shaping remains internal through `prepareProjectionForRender(...)`
+- v0.1 still does not expose a public `sdd project` CLI command
+
+The change also landed the supporting documentation and proof coverage needed to treat projection as a supported library contract for downstream tooling rather than a deep-import-only implementation detail.

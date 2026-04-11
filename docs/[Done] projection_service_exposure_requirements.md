@@ -1,4 +1,4 @@
-# Requirements: Expose a Stable Projection Service 04-10-26
+# [Done] Requirements: Expose a Stable Projection Service 04-10-26
 
 ## Status
 
