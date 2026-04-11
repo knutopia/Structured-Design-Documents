@@ -120,11 +120,12 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 ### Current Focus
 
-- Solve renderers for more diagram types
+- Helper app for LLM integration
 
 ## Planned Additions
 
 - LLM integration (Skills, MCP Server)
+- Solve renderers for more diagram types
 - Possibly standalone SDDT file server?
 
 ## License And Contributions
