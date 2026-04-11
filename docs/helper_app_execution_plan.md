@@ -63,7 +63,7 @@ Locked decisions:
 - keep `sdd-helper` responsible only for argument parsing, stdin request loading, service invocation, and JSON output
 - reuse existing compile, project, validate, and preview exports rather than duplicating orchestration
 
-## Checkpoint 1: Contracts, Workspace, Revisions, Journal
+## [Done] Checkpoint 1: Contracts, Workspace, Revisions, Journal
 
 - add TypeScript contract types for inspect, change sets, helper errors, and helper command args/results
 - implement repo-root path guards and LF-based revisioning
