@@ -32,6 +32,7 @@ import type {
   InsertNodeBlockOp,
   Placement,
   ProjectionResultEntry,
+  StructuralRelationshipType,
   ValueKind
 } from "./contracts.js";
 import {
@@ -54,6 +55,7 @@ import type { AuthoringWorkspace } from "./workspace.js";
 const EMPTY_TEMPLATE_ID = "empty";
 const EMPTY_TEMPLATE_VERSION = "0.1";
 const MINIMUM_TOP_LEVEL_BLOCKS_CODE = "parse.minimum_top_level_blocks";
+const STRUCTURAL_RELATIONSHIP_TYPES = new Set<StructuralRelationshipType>(["CONTAINS", "COMPOSED_OF"]);
 
 type TriviaItem = BlankLine | CommentLine;
 type StructuralModelItem = NodeModel | PropertyModel | EdgeModel;
@@ -701,6 +703,17 @@ function ensurePlacementAnchor(
   return undefined;
 }
 
+function requireAnchorForRelativePlacement(
+  documentPath: DocumentPath,
+  placement: Placement
+): Diagnostic | undefined {
+  if ((placement.mode === "before" || placement.mode === "after") && !placement.anchor_handle) {
+    return placementError(documentPath, "Placement mode 'before' or 'after' requires anchor_handle.");
+  }
+
+  return undefined;
+}
+
 function topLevelInsertIndex(model: DocumentModel, documentPath: DocumentPath, placement: Placement): number | Diagnostic {
   switch (placement.mode) {
     case "first":
@@ -1007,6 +1020,328 @@ function defaultEdgeInsertIndex(parent: NodeModel): number {
   return firstNestedNode === -1 ? 0 : firstNestedNode;
 }
 
+function isStructuralRelationshipType(value: string): value is StructuralRelationshipType {
+  return STRUCTURAL_RELATIONSHIP_TYPES.has(value as StructuralRelationshipType);
+}
+
+function findBodyItemLocation(
+  nodes: NodeModel[],
+  handle: Handle
+): { parent: NodeModel; index: number; item: StructuralModelItem } | undefined {
+  const parent = findBodyParentForHandle(nodes, handle);
+  if (!parent) {
+    return undefined;
+  }
+
+  const item = parent.parent.bodyItems[parent.index];
+  if (!item) {
+    return undefined;
+  }
+
+  return {
+    parent: parent.parent,
+    index: parent.index,
+    item
+  };
+}
+
+function moveArrayItem<T>(items: T[], fromIndex: number, insertIndex: number): number {
+  const [item] = items.splice(fromIndex, 1);
+  const normalizedIndex = insertIndex > fromIndex ? insertIndex - 1 : insertIndex;
+  items.splice(normalizedIndex, 0, item as T);
+  return normalizedIndex;
+}
+
+function structuralStreamBodyIndexes(parent: NodeModel, relType: StructuralRelationshipType): number[] {
+  return parent.bodyItems.flatMap((item, index) =>
+    item.kind === "edge_line" && item.relType === relType ? [index] : []
+  );
+}
+
+function structuralStreamHandles(parent: NodeModel, relType: StructuralRelationshipType): Handle[] {
+  return parent.bodyItems.flatMap((item) =>
+    item.kind === "edge_line" && item.relType === relType && item.handle ? [item.handle] : []
+  );
+}
+
+function bodyStreamHandles(parent: NodeModel): Handle[] {
+  return parent.bodyItems.flatMap((item) => (item.handle ? [item.handle] : []));
+}
+
+function resolveTopLevelNodeIndex(
+  model: DocumentModel,
+  documentPath: DocumentPath,
+  handle: Handle
+): number | Diagnostic {
+  const topLevelIndex = findTopLevelIndex(model, handle);
+  if (topLevelIndex !== -1) {
+    return topLevelIndex;
+  }
+
+  if (findNodeByHandle(model.topLevelNodes, handle)) {
+    return placementError(documentPath, "Top-level node reordering requires a top-level node handle.");
+  }
+
+  return handleError(documentPath, handle);
+}
+
+function applyRepositionTopLevelNode(
+  model: DocumentModel,
+  documentPath: DocumentPath,
+  operation: Extract<ChangeOperation, { kind: "reposition_top_level_node" }>,
+  summary: ChangeSetSummary
+): Diagnostic | undefined {
+  if (operation.placement.stream !== "top_level") {
+    return placementError(documentPath, "Top-level node reordering must target the top-level stream.");
+  }
+  if (operation.placement.parent_handle !== undefined) {
+    return placementError(documentPath, "Top-level node reordering must not specify parent_handle.");
+  }
+
+  const anchorRequirement = requireAnchorForRelativePlacement(documentPath, operation.placement);
+  if (anchorRequirement) {
+    return anchorRequirement;
+  }
+
+  const targetIndex = resolveTopLevelNodeIndex(model, documentPath, operation.node_handle);
+  if (typeof targetIndex !== "number") {
+    return targetIndex;
+  }
+
+  let insertIndex: number;
+  switch (operation.placement.mode) {
+    case "first":
+      insertIndex = 0;
+      break;
+    case "last":
+      insertIndex = model.topLevelNodes.length;
+      break;
+    case "before":
+    case "after": {
+      if (operation.placement.anchor_handle === operation.node_handle) {
+        return placementError(documentPath, "Placement anchor_handle must differ from the target node.");
+      }
+
+      const anchorIndex = resolveTopLevelNodeIndex(model, documentPath, operation.placement.anchor_handle as Handle);
+      if (typeof anchorIndex !== "number") {
+        return anchorIndex;
+      }
+
+      insertIndex = operation.placement.mode === "before" ? anchorIndex : anchorIndex + 1;
+      break;
+    }
+  }
+
+  const newIndex = moveArrayItem(model.topLevelNodes, targetIndex, insertIndex);
+  if (newIndex === targetIndex) {
+    return undefined;
+  }
+
+  summary.ordering_changes.push({
+    kind: "top_level_node",
+    target_handle: operation.node_handle,
+    old_index: targetIndex,
+    new_index: newIndex
+  });
+  return undefined;
+}
+
+function applyRepositionStructuralEdge(
+  model: DocumentModel,
+  documentPath: DocumentPath,
+  operation: Extract<ChangeOperation, { kind: "reposition_structural_edge" }>,
+  summary: ChangeSetSummary
+): Diagnostic | undefined {
+  if (operation.placement.stream !== "body") {
+    return placementError(documentPath, "Structural edge reordering must target the body stream.");
+  }
+  if (!operation.placement.parent_handle) {
+    return placementError(documentPath, "Structural edge reordering requires parent_handle.");
+  }
+
+  const anchorRequirement = requireAnchorForRelativePlacement(documentPath, operation.placement);
+  if (anchorRequirement) {
+    return anchorRequirement;
+  }
+
+  const parent = findNodeByHandle(model.topLevelNodes, operation.placement.parent_handle);
+  if (!parent) {
+    return handleError(documentPath, operation.placement.parent_handle);
+  }
+
+  const targetLocation = findBodyItemLocation(model.topLevelNodes, operation.edge_handle);
+  if (!targetLocation) {
+    return handleError(documentPath, operation.edge_handle);
+  }
+  if (targetLocation.parent.handle !== operation.placement.parent_handle) {
+    return placementError(documentPath, "Structural edge reordering target must belong to placement.parent_handle.");
+  }
+  if (targetLocation.item.kind !== "edge_line") {
+    return placementError(documentPath, "Structural edge reordering requires an edge handle.");
+  }
+  if (!isStructuralRelationshipType(targetLocation.item.relType)) {
+    return placementError(
+      documentPath,
+      "Structural edge reordering only supports CONTAINS and COMPOSED_OF edge handles."
+    );
+  }
+
+  const relType = targetLocation.item.relType;
+  const oldStructuralStream = structuralStreamHandles(parent, relType);
+  const oldIndex = oldStructuralStream.indexOf(operation.edge_handle);
+  if (oldIndex === -1) {
+    return placementError(documentPath, "Structural edge reordering target is not part of the requested parent stream.");
+  }
+
+  let insertIndex: number;
+  switch (operation.placement.mode) {
+    case "first": {
+      const bodyIndexes = structuralStreamBodyIndexes(parent, relType);
+      insertIndex = bodyIndexes[0] ?? targetLocation.index;
+      break;
+    }
+    case "last": {
+      const bodyIndexes = structuralStreamBodyIndexes(parent, relType);
+      const lastBodyIndex = bodyIndexes[bodyIndexes.length - 1];
+      insertIndex = lastBodyIndex === undefined ? targetLocation.index + 1 : lastBodyIndex + 1;
+      break;
+    }
+    case "before":
+    case "after": {
+      if (operation.placement.anchor_handle === operation.edge_handle) {
+        return placementError(documentPath, "Placement anchor_handle must differ from the target edge.");
+      }
+
+      const anchorLocation = findBodyItemLocation(
+        model.topLevelNodes,
+        operation.placement.anchor_handle as Handle
+      );
+      if (!anchorLocation) {
+        return handleError(documentPath, operation.placement.anchor_handle as Handle);
+      }
+      if (anchorLocation.parent.handle !== operation.placement.parent_handle) {
+        return placementError(documentPath, "Structural edge anchor must belong to placement.parent_handle.");
+      }
+      if (anchorLocation.item.kind !== "edge_line" || anchorLocation.item.relType !== relType) {
+        return placementError(
+          documentPath,
+          `Structural edge anchor must be a ${relType} edge in the same parent body stream.`
+        );
+      }
+
+      insertIndex = operation.placement.mode === "before" ? anchorLocation.index : anchorLocation.index + 1;
+      break;
+    }
+  }
+
+  const newBodyIndex = moveArrayItem(parent.bodyItems, targetLocation.index, insertIndex);
+  const newStructuralStream = structuralStreamHandles(parent, relType);
+  const newIndex = newStructuralStream.indexOf(operation.edge_handle);
+  if (newBodyIndex === targetLocation.index || newIndex === oldIndex) {
+    return undefined;
+  }
+
+  summary.ordering_changes.push({
+    kind: "structural_edge",
+    target_handle: operation.edge_handle,
+    parent_handle: operation.placement.parent_handle,
+    old_index: oldIndex,
+    new_index: newIndex
+  });
+  return undefined;
+}
+
+function applyMoveNestedNodeBlock(
+  model: DocumentModel,
+  documentPath: DocumentPath,
+  operation: Extract<ChangeOperation, { kind: "move_nested_node_block" }>,
+  summary: ChangeSetSummary
+): Diagnostic | undefined {
+  if (operation.placement.stream !== "body") {
+    return placementError(documentPath, "Nested node movement must target the body stream.");
+  }
+  if (!operation.placement.parent_handle) {
+    return placementError(documentPath, "Nested node movement requires parent_handle.");
+  }
+
+  const anchorRequirement = requireAnchorForRelativePlacement(documentPath, operation.placement);
+  if (anchorRequirement) {
+    return anchorRequirement;
+  }
+
+  const requestedParent = findNodeByHandle(model.topLevelNodes, operation.placement.parent_handle);
+  if (!requestedParent) {
+    return handleError(documentPath, operation.placement.parent_handle);
+  }
+
+  const topLevelIndex = findTopLevelIndex(model, operation.node_handle);
+  if (topLevelIndex !== -1) {
+    return placementError(documentPath, "Nested node movement requires a nested node block handle.");
+  }
+
+  const targetLocation = findBodyItemLocation(model.topLevelNodes, operation.node_handle);
+  if (!targetLocation) {
+    return handleError(documentPath, operation.node_handle);
+  }
+  if (targetLocation.parent.handle !== operation.placement.parent_handle) {
+    return placementError(documentPath, "Nested node movement target must belong to placement.parent_handle.");
+  }
+  if (targetLocation.item.kind !== "node_block") {
+    return placementError(documentPath, "Nested node movement requires a nested node block handle.");
+  }
+
+  const oldIndex = bodyStreamHandles(requestedParent).indexOf(operation.node_handle);
+  if (oldIndex === -1) {
+    return placementError(documentPath, "Nested node movement target is not part of the requested parent body stream.");
+  }
+
+  let insertIndex: number;
+  switch (operation.placement.mode) {
+    case "first":
+      insertIndex = 0;
+      break;
+    case "last":
+      insertIndex = requestedParent.bodyItems.length;
+      break;
+    case "before":
+    case "after": {
+      if (operation.placement.anchor_handle === operation.node_handle) {
+        return placementError(documentPath, "Placement anchor_handle must differ from the target node.");
+      }
+
+      const anchorLocation = findBodyItemLocation(
+        model.topLevelNodes,
+        operation.placement.anchor_handle as Handle
+      );
+      if (!anchorLocation) {
+        return handleError(documentPath, operation.placement.anchor_handle as Handle);
+      }
+      if (anchorLocation.parent.handle !== operation.placement.parent_handle) {
+        return placementError(documentPath, "Nested node movement anchor must belong to placement.parent_handle.");
+      }
+
+      insertIndex = operation.placement.mode === "before" ? anchorLocation.index : anchorLocation.index + 1;
+      break;
+    }
+  }
+
+  const newIndex = moveArrayItem(requestedParent.bodyItems, targetLocation.index, insertIndex);
+  const reorderedBodyStream = bodyStreamHandles(requestedParent);
+  const newBodyIndex = reorderedBodyStream.indexOf(operation.node_handle);
+  if (newIndex === targetLocation.index || newBodyIndex === oldIndex) {
+    return undefined;
+  }
+
+  summary.ordering_changes.push({
+    kind: "nested_node_block",
+    target_handle: operation.node_handle,
+    parent_handle: operation.placement.parent_handle,
+    old_index: oldIndex,
+    new_index: newBodyIndex
+  });
+  return undefined;
+}
+
 function applyInsertEdgeLine(
   model: DocumentModel,
   documentPath: DocumentPath,
@@ -1107,8 +1442,18 @@ function applyOperation(
       return applyInsertEdgeLine(model, documentPath, operation, summary);
     case "remove_edge_line":
       return applyRemoveEdgeLine(model, documentPath, operation, summary);
+    case "reposition_top_level_node":
+      return applyRepositionTopLevelNode(model, documentPath, operation, summary);
+    case "reposition_structural_edge":
+      return applyRepositionStructuralEdge(model, documentPath, operation, summary);
+    case "move_nested_node_block":
+      return applyMoveNestedNodeBlock(model, documentPath, operation, summary);
     default:
-      return createDiagnostic(documentPath, "sdd.unsupported_operation", `Operation '${operation.kind}' is not implemented in checkpoint 3.`);
+      return createDiagnostic(
+        documentPath,
+        "sdd.unsupported_operation",
+        "Operation is not implemented in checkpoint 4."
+      );
   }
 }
 
