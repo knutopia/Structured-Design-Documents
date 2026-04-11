@@ -23,10 +23,18 @@ export interface JournalInverseApplyChangeSet {
   operations: ChangeOperation[];
 }
 
+export interface JournalInverseRestoreDocument {
+  kind: "restore_document";
+  path: DocumentPath;
+  revision: string;
+  text: string;
+}
+
 export type JournalInverseMetadata =
   | JournalInverseNone
   | JournalInverseDeleteDocument
-  | JournalInverseApplyChangeSet;
+  | JournalInverseApplyChangeSet
+  | JournalInverseRestoreDocument;
 
 export interface PersistedChangeSetRecord {
   kind: "sdd-journal-change-set-record";
@@ -86,6 +94,19 @@ export function createDeleteDocumentInverse(path: DocumentPath): JournalInverseD
   return {
     kind: "delete_document",
     path
+  };
+}
+
+export function createRestoreDocumentInverse(
+  path: DocumentPath,
+  revision: string,
+  text: string
+): JournalInverseRestoreDocument {
+  return {
+    kind: "restore_document",
+    path,
+    revision,
+    text
   };
 }
 

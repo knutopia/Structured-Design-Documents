@@ -25,6 +25,7 @@ import type {
 } from "./contracts.js";
 import { computeDocumentRevision, normalizeTextToLf } from "./revisions.js";
 import type { AuthoringWorkspace } from "./workspace.js";
+import type { SourceSpan } from "../types.js";
 
 type StructuralParseItem = NodeBlock | PropertyLine | EdgeLine;
 type TriviaItem = BlankLine | CommentLine;
@@ -75,18 +76,58 @@ export interface RewriteOwnership {
   byHandle: Map<Handle, OwnedTrivia>;
 }
 
+export interface InspectSourceAccess {
+  text: string;
+  lineOffsets: number[];
+  sliceSpan(span: SourceSpan): string;
+  lineText(lineNumber: number): string;
+}
+
 export interface InspectedDocument {
   kind: "sdd-inspected-document";
   resource: InspectResource;
   document: ParseDocument;
   handleIndex: Map<Handle, InspectTarget>;
   rewriteOwnership: RewriteOwnership;
+  source: InspectSourceAccess;
 }
 
 export type InspectDocumentResult = InspectedDocument | InspectLoadFailure;
 
 function createInspectUri(documentPath: DocumentPath): DocumentUri {
   return `sdd://document/${documentPath}/inspect`;
+}
+
+function buildLineOffsets(text: string): number[] {
+  const offsets = [0];
+  for (let index = 0; index < text.length; index += 1) {
+    if (text[index] === "\n") {
+      offsets.push(index + 1);
+    }
+  }
+  return offsets;
+}
+
+function createInspectSourceAccess(text: string): InspectSourceAccess {
+  const lineOffsets = buildLineOffsets(text);
+
+  return {
+    text,
+    lineOffsets,
+    sliceSpan(span: SourceSpan): string {
+      return text.slice(span.startOffset, span.endOffset);
+    },
+    lineText(lineNumber: number): string {
+      const startOffset = lineOffsets[lineNumber - 1];
+      if (startOffset === undefined) {
+        return "";
+      }
+
+      const nextLineStart = lineOffsets[lineNumber];
+      const endOffset = nextLineStart === undefined ? text.length : nextLineStart - 1;
+      return text.slice(startOffset, endOffset);
+    }
+  };
 }
 
 function createOwnedTrivia(): OwnedTrivia {
@@ -303,7 +344,8 @@ function buildInspectDocument(
   documentPath: DocumentPath,
   revision: DocumentRevision,
   document: ParseDocument,
-  diagnostics: ReturnType<typeof sortDiagnostics>
+  diagnostics: ReturnType<typeof sortDiagnostics>,
+  canonicalText: string
 ): InspectedDocument {
   const resource: InspectResource = {
     kind: "sdd-document-inspect",
@@ -347,7 +389,8 @@ function buildInspectDocument(
     resource,
     document,
     handleIndex: state.handleIndex,
-    rewriteOwnership: state.rewriteOwnership
+    rewriteOwnership: state.rewriteOwnership,
+    source: createInspectSourceAccess(canonicalText)
   };
 }
 
@@ -382,6 +425,7 @@ export async function inspectDocument(
     resolvedDocument.publicPath,
     revision,
     parseResult.document,
-    diagnostics
+    diagnostics,
+    canonicalText
   );
 }

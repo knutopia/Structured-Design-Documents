@@ -216,7 +216,7 @@ export interface InsertEdgeLineOp {
   guard?: string | null;
   effect?: string | null;
   props?: Record<string, string>;
-  placement: Placement;
+  placement?: Placement;
 }
 
 export interface RemoveEdgeLineOp {
