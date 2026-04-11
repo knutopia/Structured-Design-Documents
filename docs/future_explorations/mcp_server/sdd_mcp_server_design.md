@@ -1490,3 +1490,88 @@ This design is intentionally narrow where the repo does not need platform comple
 - no renderer-stage internals as public API
 
 That is the working contract for future SDD MCP and helper-app design in this repository.
+
+## Appendix A. MCP Runtime Notes
+
+This appendix defines the MCP runtime stance for the v0.1 local-first design and complements the domain contracts already defined above.
+
+### A.1 Runtime Profile
+
+This design is a local-context MCP server in the sense described by the generic MCP primer: it exposes repo-local files, bundle metadata, and domain behaviors to a host over MCP.
+
+The server is a protocol adapter over shared SDD domain services, not the domain system itself.
+
+The preferred transport for v0.1 is `stdio`.
+
+Streamable HTTP is out of scope for the v0.1 working contract. That omission is a scoping choice for this design, not a permanent architectural prohibition.
+
+### A.2 Lifecycle And Session Semantics
+
+The server follows normal MCP session lifecycle:
+
+- `initialize`
+- `operation`
+- `shutdown`
+
+The server must not process normal capability calls before successful initialization.
+
+Capability advertisement happens during initialization and defines the effective runtime surface for the session.
+
+This design does not require session-persistent edit state beyond the revision and handle semantics already defined in the main document.
+
+### A.3 Capability Advertisement And Discovery
+
+The server advertises tools, resources and resource templates, and prompts as first-class MCP capabilities.
+
+Resource templates are preferred over pre-enumerating all document-derived URIs.
+
+The v0.1 design expects normal MCP discovery flows:
+
+- tools can be listed and called
+- resources can be listed and read
+- prompts can be listed and materialized
+
+Capability metadata must stay crisp, narrow, and schema-backed, matching the contracts defined in the main body of this document.
+
+### A.4 Explicitly Unsupported Or Deferred MCP Features
+
+The following are not part of the v0.1 working contract:
+
+- resource subscriptions or change notifications
+- prompts or tools that bypass the structured change-set model
+- remote HTTP transport design
+- multi-session collaborative locking
+- background tasks or long-running job orchestration
+
+Omission from v0.1 means "not designed here", not "architecturally impossible".
+
+### A.5 Safety And Host Interaction Notes
+
+The runtime posture inherits the least-privilege path scope, revision checks, handle checks, ambiguity rejection, and structured mutation rules defined in the main document.
+
+Mutating tools are designed for host-mediated authorization or confirmation where the host supports that interaction model.
+
+The server treats model-generated arguments as untrusted input and validates them against tool schemas plus repository and domain policy.
+
+Read-only and mutating capabilities remain clearly separated.
+
+### A.6 Observability And Error Mapping
+
+The runtime should provide structured logs for:
+
+- tool calls
+- resource reads
+- rejected mutations
+- undo attempts
+
+Runtime and protocol failures should be mapped cleanly into MCP errors.
+
+Domain failures should use the structured diagnostic model already defined in the main body of this document.
+
+Support for MCP Inspector or equivalent debugging tooling is expected during development, but this appendix does not define implementation tooling choices.
+
+### A.7 Relationship To The Main Design
+
+The main body of this document remains the authority for SDD-specific schemas, URIs, tools, prompts, helper commands, and mutation semantics.
+
+This appendix only supplies the MCP runtime posture needed to align that domain design with the generic MCP architecture described in the primer.
