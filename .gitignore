@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .local-tools/
+.sdd-state/
 .DS_Store
 coverage/
 .Identifier
