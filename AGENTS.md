@@ -34,6 +34,21 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 - Files in `bundle/v0.1/` are the machine-readable source of truth for tools.
 - Markdown files in `definitions/v0.1/` remain explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
 
+### Bundle Authority
+
+- Rule: markdown explains, bundle governs machine behavior, code executes the bundle.
+- For parser, compiler, validator, projection, and renderer feature work, any machine-behavior convention that belongs to the spec must be represented in `bundle/v0.1/` and consumed from the loaded bundle at runtime.
+- If a feature cannot yet be expressed by the bundle, do not hardcode the feature around that gap. Extend the bundle contract, bundle types, loaders, and generic runtime machinery first, then implement the feature through that path.
+- Do not encode bundle conventions only in TypeScript or tests via literal keyword lists, statement names, regexes, token tables, node kinds, edge kinds, property keys, profile IDs, view IDs, semantic defaults, or feature switches that bypass bundle data.
+- Parser changes must continue to flow through `loadBundle(...)` and `createParserSyntaxRuntime(bundle)`. Do not add ad hoc grammar, token, or statement parsing branches that sidestep the syntax runtime just to make a new feature work.
+- Prefer generic bundle-reading mechanisms over feature-specific branches. If code branches on a current spec identifier, justify why that identifier is architectural code ownership rather than bundle-owned data.
+- A feature is not complete until a reviewer can point to:
+  the bundle file(s) that encode the behavior,
+  the runtime path that consumes those bundle fields, and
+  tests that prove behavior depends on bundle content rather than hidden code defaults.
+- Bundle-only edits should be able to change intended runtime behavior. If changing the relevant bundle data would not change runtime behavior, treat that as a bundle-authority failure.
+- Examples, snapshots, and goldens are downstream evidence only. They may demonstrate behavior, but they do not establish the rule; the bundle does.
+
 ## Test And CLI Commands
 
 - Prefer running Node-based commands from repo root.
@@ -51,9 +66,7 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 
 ## Current Project Goal
 
-There is drift from the spec-driven pipeline implementation which is our goal to the reality of 
-
-The current goal is to address "parser promise drift": make `bundle/v0.1/core/syntax.yaml` the actually executable parser contract it is currently described as being. See `docs/parser_syntax_alignment_guidance.md`
+The current goal is to create a helper-app that assists LLM "Skills" in interacting with SDD documents. The app will share resources with a future SDD MCP server.
 
 ## Renderer Constraints
 
@@ -76,11 +89,14 @@ The current goal is to address "parser promise drift": make `bundle/v0.1/core/sy
 - Separate sources by role:
   identify the normative contract, architectural guardrails, and visual exemplar before implementation.
 - If the authority hierarchy is unclear, stop and resolve it before coding.
+- For parser or spec-driven feature work:
+  cite the exact bundle file(s) that should change, and name the generic runtime entrypoint that is supposed to consume them.
 
 - Acceptance before snapshots:
   do not update snapshots, goldens, or rendered corpus artifacts until the cited acceptance invariants are satisfied.
 - Snapshot refresh is evidence capture, not a way to normalize failure.
 - If tests are green but acceptance invariants still fail, report the work as incomplete.
+- If tests pass only because code duplicated bundle conventions or preserved hidden hardcoded behavior, report the work as incomplete.
 
 - Proof-case before generalization:
   for visually complex or migration work, get the explicitly referenced proof case right before broadening shared infrastructure or regenerating wider goldens.
@@ -95,5 +111,7 @@ The current goal is to address "parser promise drift": make `bundle/v0.1/core/sy
 
 - Stop conditions:
   stop and surface the problem instead of coding through it when output contradicts cited invariants, when goldens would need updating to hide quality regressions, or when the current strategy is producing structurally wrong output and further tuning is speculative.
+- Also stop when a feature appears to require spec behavior that the bundle cannot yet express:
+  extend the bundle contract first instead of silently moving the rule into code.
 
 For completed project milestones and legacy toolchain background, see `docs/Done/project_achievements.md`.

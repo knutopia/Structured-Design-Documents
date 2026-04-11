@@ -54,7 +54,11 @@ The initial TypeScript toolchain is in place at repo root as package `sdd-toolch
 
 Created staged SVG renderer architecture for `ia_place_map`, `ui_contracts`, `service_blueprint`. This new renderer architecture overcomes the limitations encountered with mermaid, graphviz and elk.
 
-## 4. [DONE] Exposed projection as a stable in-process TypeScript service
+## 4. [Done] Addressed "parser promise drift"
+
+Made `bundle/v0.1/core/syntax.yaml` the actually executable parser contract, as it had been promised to be. See @promise `docs/Done/[Done] parser_syntax_alignment`
+
+## 5. [DONE] Exposed projection as a stable in-process TypeScript service
 
 Projection is no longer only an internal renderer input. The root package now exposes:
 
