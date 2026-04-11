@@ -9,6 +9,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 4-11-26
+
+-created helper app execution plan
+
+
 ## Fri 4-10-26
 
 -planned MCP path
