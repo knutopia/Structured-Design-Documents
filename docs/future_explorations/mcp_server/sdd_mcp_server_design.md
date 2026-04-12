@@ -115,6 +115,8 @@ The design prefers stable output, explicit failure, and reproducible behavior ov
 - handles are valid only for the revision that produced them
 - changing document text always creates a new revision token
 - `document_revision` is not a git commit, filesystem mtime, or bundle version
+- a document that does not yet exist has no revision token
+- committed create records therefore use `base_revision: null`
 
 ### 4.3 Handle Semantics
 
@@ -128,6 +130,10 @@ The inspect surface returns handles for:
 - nested node blocks
 - property lines
 - edge lines
+
+Within one document revision, repeated `inspect` reads must return the same handle for the same structural element.
+
+A new document revision establishes a new handle namespace even when some structural elements remain textually unchanged.
 
 If a client needs to mutate structure reliably, it should resolve fresh handles from the current revision before building a change set.
 
@@ -197,7 +203,19 @@ The server/helper must read bundle metadata from the existing repo bundle rather
 
 Undo requires a local change journal. The journal is allowed as a sidecar store, but it is not a new source of truth. The file content remains authoritative; the journal only records change provenance and inverse change sets for committed operations.
 
-The exact on-disk location of the journal is intentionally left implementation-defined in this design. Its public contract is the `change_set` record, not its storage format.
+For v0.1, journal state lives in a repo-local, gitignored sidecar directory rooted at `.sdd-state/`.
+
+- committed change sets must be durably recorded there
+- dry-run change sets may be recorded ephemerally there or kept process-local and may expire
+- the internal file layout and storage format remain implementation-defined
+
+### 5.3 Source Trivia And Rewrite Ownership
+
+Comments and blank lines are preserved by the rewrite layer but are not part of the public inspect or change-set contract.
+
+- public `inspect` remains structural and exposes node blocks, property lines, and edge lines only
+- reposition operations are defined over structural streams, not raw source line numbers
+- the implementation may attach comments and blank lines to nearby structural items internally in order to preserve stable rewrites
 
 ## 6. Resource Model
 
@@ -406,7 +424,9 @@ interface ChangeSetResource {
   kind: "sdd-change-set";
   change_set_id: string;
   path: string;
-  base_revision: string;
+  origin: "apply_change_set" | "undo_change_set" | "create_document";
+  document_effect: "created" | "updated" | "deleted";
+  base_revision: string | null;
   resulting_revision?: string;
   mode: "dry_run" | "commit";
   status: "applied" | "rejected";
@@ -460,7 +480,9 @@ interface ChangeSetResult {
   kind: "sdd-change-set";
   change_set_id: string;
   path: string;
-  base_revision: string;
+  origin: "apply_change_set" | "undo_change_set" | "create_document";
+  document_effect: "created" | "updated" | "deleted";
+  base_revision: string | null;
   resulting_revision?: string;
   mode: "dry_run" | "commit";
   status: "applied" | "rejected";
@@ -486,6 +508,10 @@ interface ChangeSetResult {
 - `mode: "dry_run"` never writes the document.
 - `mode: "commit"` writes the document, records a committed change-set record, and returns `resulting_revision`.
 - If `projection_views` is supplied, the result also includes per-view projection results derived from the post-change text.
+- `apply_change_set` returns `document_effect: "updated"`.
+- `create_document` returns `origin: "create_document"`, `document_effect: "created"`, and `base_revision: null`.
+- `undo_change_set` may return `document_effect: "updated"` or `document_effect: "deleted"`.
+- committed `document_effect: "deleted"` results omit `resulting_revision`.
 
 ### 7.3 Validation Rules
 
@@ -578,6 +604,7 @@ Rules:
 
 - if the property already exists, its value is replaced in place
 - if the property does not exist, a new property line is appended after the last existing property line in that node body
+- if multiple properties with the same key already exist on the target node, the operation is rejected as ambiguous
 
 ### 8.5 `remove_node_property`
 
@@ -811,6 +838,9 @@ Rules:
 - `empty` produces a zero-body skeleton with `SDD-TEXT 0.1` followed by a trailing newline
 - additional template IDs are allowed but are not part of the v0.1 working contract
 - create fails if the target path already exists
+- successful create records a committed change-set record in the same journal used by other committed mutations
+- that record uses `origin: "create_document"`, `document_effect: "created"`, `base_revision: null`, and `undo_eligible: true`
+- undo of a create record is defined as deleting the created file, subject to the normal undo revision precondition
 
 ### 9.4 `sdd.apply_change_set`
 
@@ -861,6 +891,9 @@ Rules:
 
 - only committed, undo-eligible change sets can be undone
 - default `mode` is `"dry_run"`
+- committed undo requires the current document revision to exactly match the target change set's `resulting_revision`
+- if the target record has `document_effect: "created"`, committed undo deletes the file and returns `document_effect: "deleted"` with no `resulting_revision`
+- otherwise committed undo returns `document_effect: "updated"`
 
 ### 9.6 `sdd.render_preview`
 
@@ -1026,8 +1059,78 @@ Design goals:
 - `sdd-helper preview`
 - `sdd-helper git-status`
 - `sdd-helper git-commit`
+- `sdd-helper capabilities`
 
 ### 11.2 Command Contracts
+
+#### 11.2.1 JSON I/O Conventions
+
+```ts
+interface HelperErrorResult {
+  kind: "sdd-helper-error";
+  code: "invalid_args" | "invalid_json" | "runtime_error";
+  message: string;
+}
+```
+
+Rules:
+
+- `sdd-helper` writes exactly one JSON payload to stdout for every successfully interpreted command
+- domain-level rejections are represented in that payload and do not switch the helper into an unstructured error mode
+- malformed arguments, malformed JSON request bodies, and unexpected runtime failures return `HelperErrorResult`
+- `HelperErrorResult` writes to stdout and exits non-zero
+- stderr is reserved for optional crash/debug output and is not part of the public contract
+- bare `sdd-helper` and any invocation containing `--help` return a short JSON help stub and exit zero
+
+#### `sdd-helper [--help]`
+
+Returns a brief JSON stub for discovery.
+
+```ts
+interface HelperHelpStubResult {
+  kind: "sdd-helper-help";
+  helper_name: "sdd-helper";
+  summary: string;
+  note: string;
+  capabilities_command: "sdd-helper capabilities";
+  commands: string[];
+}
+```
+
+The stub is intentionally brief. It should explain that the helper is JSON-first and machine-oriented, and it should point callers at `sdd-helper capabilities` for the full machine-readable contract.
+
+#### `sdd-helper capabilities`
+
+Returns the full machine-readable discovery payload for the helper CLI.
+
+```ts
+interface HelperCapabilitiesResult {
+  kind: "sdd-helper-capabilities";
+  helper_name: "sdd-helper";
+  summary: string;
+  discovery: {
+    bare_invocation: "returns_help_stub";
+    help_flag: "returns_help_stub";
+    canonical_introspection_command: "sdd-helper capabilities";
+  };
+  conventions: {
+    stdout_success: "exactly_one_json_payload";
+    helper_errors: "sdd-helper-error_non_zero_exit";
+    domain_rejections: "structured_payload_exit_zero";
+    path_scope: "repo_relative_sdd_paths";
+  };
+  commands: Array<{
+    name: string;
+    invocation: string;
+    summary: string;
+    mutates_repo_state: "never" | "conditional" | "always";
+    result_kind: string;
+    constraints: string[];
+  }>;
+}
+```
+
+The capabilities payload should be static and self-describing. It should not require repo inspection, bundle loading, or package metadata reads in order to answer the discovery request.
 
 #### `sdd-helper inspect <document_path>`
 
@@ -1088,6 +1191,8 @@ interface HelperGitStatusResult {
 Rules:
 
 - it reports repository status for the supplied `.sdd` paths or all `.sdd` files when no paths are supplied
+- `paths` is the exhaustive `.sdd` reporting scope for the request
+- `status` is the sparse list of actual git status entries within that scope
 - it does not expose arbitrary git plumbing
 
 #### `sdd-helper git-commit --message <message> [<document_path> ...]`
@@ -1198,6 +1303,7 @@ Rule:
 - undo is guaranteed only for committed change sets recorded by the SDD change journal
 - undo is not defined for ad hoc external edits that bypass the journal
 - dry-run change sets are never undo-eligible
+- committed undo is defined only when the current document revision exactly matches the target change set's `resulting_revision`
 
 ### 13.5 Determinism
 
@@ -1292,6 +1398,8 @@ Result excerpt:
 ```json
 {
   "kind": "sdd-change-set",
+  "origin": "apply_change_set",
+  "document_effect": "updated",
   "mode": "dry_run",
   "status": "applied",
   "undo_eligible": false,
@@ -1323,6 +1431,8 @@ The same request with `"mode": "commit"` returns:
   "kind": "sdd-change-set",
   "change_set_id": "chg_01H...",
   "path": "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+  "origin": "apply_change_set",
+  "document_effect": "updated",
   "base_revision": "rev_01H...",
   "resulting_revision": "rev_01J...",
   "mode": "commit",
@@ -1423,6 +1533,8 @@ Result excerpt:
 ```json
 {
   "kind": "sdd-change-set",
+  "origin": "undo_change_set",
+  "document_effect": "updated",
   "mode": "dry_run",
   "status": "applied",
   "undo_eligible": false,
@@ -1575,3 +1687,9 @@ Support for MCP Inspector or equivalent debugging tooling is expected during dev
 The main body of this document remains the authority for SDD-specific schemas, URIs, tools, prompts, helper commands, and mutation semantics.
 
 This appendix only supplies the MCP runtime posture needed to align that domain design with the generic MCP architecture described in the primer.
+
+## Appendix B. Helper-App Execution Plan
+
+Implementation sequencing for the helper-first build is maintained in `docs/helper_app_execution_plan.md`.
+
+That companion document is subordinate to this design. It may refine implementation order, internal module boundaries, and checkpoint structure, but it must not redefine the public contracts, identifier semantics, helper I/O rules, or undo policy established in the main body of this document.

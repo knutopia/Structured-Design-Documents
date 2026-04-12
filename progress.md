@@ -9,12 +9,19 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 4-11-26
+
+-created helper app execution plan
+-implemented plan
+-added discoverability surfaces
+
 ## Fri 4-10-26
 
 -planned MCP path
 -planned projection service exposure as pre-step for mcp work
 -implemented projection service exposure
 -created mcp server design doc
+-updated AGENTS.md
 
 ## Wed 4-08-26
 

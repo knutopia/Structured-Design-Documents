@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "bin": {
-    "sdd": "./dist/cli/main.js"
+    "sdd": "./dist/cli/main.js",
+    "sdd-helper": "./dist/cli/helperMain.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -12,7 +13,8 @@
     "check": "pnpm run test",
     "check:graphviz": "node ./scripts/check-graphviz.mjs",
     "generate:rendered-examples": "TMPDIR=/tmp pnpm run build && node dist/examples/generateRenderedExamples.js",
-    "sdd": "node dist/cli/main.js"
+    "sdd": "node dist/cli/main.js",
+    "sdd-helper": "node dist/cli/helperMain.js"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
