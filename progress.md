@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-documentation for skill, including how to install
 -remove service_blueprint DOT output
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
@@ -14,6 +15,8 @@
 -created sdd-helper documentation page
 -created sdd-cli documentation page
 -updated readme, agents.md
+-created codex skill
+-installed skill
 
 ## Sat 4-11-26
 
