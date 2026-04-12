@@ -12,7 +12,7 @@
 ## Sat 4-11-26
 
 -created helper app execution plan
-
+-implemented plan
 
 ## Fri 4-10-26
 
