@@ -12,6 +12,7 @@
 ## Sun 4-12-26
 
 -created sdd-helper documentation page
+-created sdd-cli documentation page
 
 ## Sat 4-11-26
 
