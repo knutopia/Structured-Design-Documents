@@ -1,4 +1,4 @@
-# Helper App Execution Plan
+# [Done] Helper App Execution Plan
 
 ## Purpose
 
