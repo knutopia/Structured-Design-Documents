@@ -1,6 +1,7 @@
 import { execFile as execFileCallback } from "node:child_process";
 import { promisify } from "node:util";
 import type { DocumentPath, HelperGitCommitResult, HelperGitStatusResult } from "./contracts.js";
+import { collectDocumentPaths } from "./documentPaths.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 
 const execFile = promisify(execFileCallback);
@@ -123,10 +124,19 @@ export async function getGitStatus(
   const entries = parseStatusEntries(stdout).filter((entry) =>
     normalizedPaths.length > 0 ? normalizedPaths.includes(entry.path) : entry.path.endsWith(".sdd")
   );
+  const allPaths =
+    normalizedPaths.length > 0
+      ? normalizedPaths
+      : [
+          ...new Set([
+            ...(await collectDocumentPaths(workspace)),
+            ...entries.map((entry) => entry.path)
+          ])
+        ].sort((left, right) => left.localeCompare(right));
 
   return {
     kind: "sdd-git-status",
-    paths: normalizedPaths.length > 0 ? normalizedPaths : [...new Set(entries.map((entry) => entry.path))],
+    paths: allPaths,
     status: entries
   };
 }

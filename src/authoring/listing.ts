@@ -1,5 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
+import { readFile } from "node:fs/promises";
 import type { Bundle } from "../bundle/types.js";
 import { sortDiagnostics } from "../diagnostics/types.js";
 import { parseSource } from "../parser/parseSource.js";
@@ -13,55 +12,13 @@ import type {
   SearchGraphArgs,
   SearchGraphResult
 } from "./contracts.js";
+import { collectDocumentPaths } from "./documentPaths.js";
 import { computeDocumentRevision, normalizeTextToLf } from "./revisions.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 import { compileSource } from "../compiler/compileSource.js";
 
-const IGNORED_DIRECTORY_NAMES = new Set([".git", ".sdd-state", "node_modules", "dist"]);
-
 function createDocumentUri(documentPath: DocumentPath): DocumentUri {
   return `sdd://document/${documentPath}`;
-}
-
-async function collectDocumentPaths(
-  workspace: AuthoringWorkspace,
-  relativeDirectory = "."
-): Promise<DocumentPath[]> {
-  const startPath = path.join(workspace.repoRoot, relativeDirectory === "." ? "" : relativeDirectory);
-  const discovered: DocumentPath[] = [];
-
-  async function walk(currentPath: string): Promise<void> {
-    let entries;
-    try {
-      entries = await readdir(currentPath, { withFileTypes: true });
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-        return;
-      }
-
-      throw error;
-    }
-
-    for (const entry of entries) {
-      if (entry.isDirectory()) {
-        if (IGNORED_DIRECTORY_NAMES.has(entry.name)) {
-          continue;
-        }
-
-        await walk(path.join(currentPath, entry.name));
-        continue;
-      }
-
-      if (!entry.isFile() || !entry.name.endsWith(".sdd")) {
-        continue;
-      }
-
-      discovered.push(workspace.toPublicPath(path.join(currentPath, entry.name)));
-    }
-  }
-
-  await walk(startPath);
-  return discovered.sort((left, right) => left.localeCompare(right));
 }
 
 export async function listDocuments(

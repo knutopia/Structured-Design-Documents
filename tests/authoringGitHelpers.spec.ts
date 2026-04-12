@@ -1,5 +1,5 @@
 import { execFile as execFileCallback } from "node:child_process";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, unlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -33,31 +33,62 @@ async function writeRepoFile(repoRootPath: string, relativePath: string, content
 }
 
 describe("authoring git helpers", () => {
-  it("reports only .sdd status entries and uses rename destinations", async () => {
+  it("reports all in-scope .sdd paths while keeping status entries sparse and destination-oriented", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       await runGit(tempRepoRoot, ["init", "-q"]);
       await runGit(tempRepoRoot, ["config", "user.email", "test@example.com"]);
       await runGit(tempRepoRoot, ["config", "user.name", "Test User"]);
       await writeRepoFile(tempRepoRoot, "docs/one.sdd", "SDD-TEXT 0.1\nPlace P-001 \"One\"\nEND\n");
+      await writeRepoFile(tempRepoRoot, "docs/clean.sdd", "SDD-TEXT 0.1\nPlace P-010 \"Clean\"\nEND\n");
+      await writeRepoFile(tempRepoRoot, "docs/deleted.sdd", "SDD-TEXT 0.1\nPlace P-020 \"Deleted\"\nEND\n");
       await writeRepoFile(tempRepoRoot, "notes.txt", "hello\n");
-      await runGit(tempRepoRoot, ["add", "docs/one.sdd", "notes.txt"]);
+      await runGit(tempRepoRoot, ["add", "docs/one.sdd", "docs/clean.sdd", "docs/deleted.sdd", "notes.txt"]);
       await runGit(tempRepoRoot, ["commit", "-q", "-m", "init"]);
 
       await runGit(tempRepoRoot, ["mv", "docs/one.sdd", "docs/two.sdd"]);
+      await unlink(path.join(tempRepoRoot, "docs/deleted.sdd"));
       await writeRepoFile(tempRepoRoot, "notes.txt", "changed\n");
 
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const status = await getGitStatus(workspace);
 
       expect(status.kind).toBe("sdd-git-status");
-      expect(status.paths).toEqual(["docs/two.sdd"]);
+      expect(status.paths).toEqual(["docs/clean.sdd", "docs/deleted.sdd", "docs/two.sdd"]);
       expect(status.status).toEqual([
+        {
+          path: "docs/deleted.sdd",
+          index_status: " ",
+          worktree_status: "D"
+        },
         {
           path: "docs/two.sdd",
           index_status: "R",
           worktree_status: " "
         }
       ]);
+    });
+  });
+
+  it("keeps explicit git-status scope unchanged", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      await runGit(tempRepoRoot, ["init", "-q"]);
+      await runGit(tempRepoRoot, ["config", "user.email", "test@example.com"]);
+      await runGit(tempRepoRoot, ["config", "user.name", "Test User"]);
+      await writeRepoFile(tempRepoRoot, "docs/clean.sdd", "SDD-TEXT 0.1\nPlace P-001 \"Clean\"\nEND\n");
+      await writeRepoFile(tempRepoRoot, "docs/changed.sdd", "SDD-TEXT 0.1\nPlace P-002 \"Changed\"\nEND\n");
+      await runGit(tempRepoRoot, ["add", "docs/clean.sdd", "docs/changed.sdd"]);
+      await runGit(tempRepoRoot, ["commit", "-q", "-m", "init"]);
+
+      await writeRepoFile(tempRepoRoot, "docs/changed.sdd", "SDD-TEXT 0.1\nPlace P-002 \"Updated\"\nEND\n");
+
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const status = await getGitStatus(workspace, ["docs/clean.sdd"]);
+
+      expect(status).toEqual({
+        kind: "sdd-git-status",
+        paths: ["docs/clean.sdd"],
+        status: []
+      });
     });
   });
 
