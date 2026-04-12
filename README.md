@@ -94,6 +94,10 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 ### Learn More
 
+- SDD CLI Guide: [SDD CLI User Guide](docs/readme_support_docs/sdd_cli_tools/)
+
+- SDD Helper Guide: [SDD Helper Guide](docs/readme_support_docs/sdd-helper/)
+
 - Authoring Spec (human-oriented reference): [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
 - [Initial Concepts 1: a 6-Diagram Suite v0.1](<initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
@@ -109,6 +113,7 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
 - Completed usable staged SVG renderers for IA / Place Map, UI Contract and Service Blueprint
+- ssd-helper app available to assist agentic skills
 
 ### Known Limitations
 
@@ -120,11 +125,10 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 ### Current Focus
 
-- Helper app for LLM integration
+- LLM integration (Skills, MCP Server)
 
 ## Planned Additions
 
-- LLM integration (Skills, MCP Server)
 - Solve renderers for more diagram types
 - Possibly standalone SDDT file server?
 

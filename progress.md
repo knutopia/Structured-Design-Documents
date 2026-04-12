@@ -13,6 +13,7 @@
 
 -created sdd-helper documentation page
 -created sdd-cli documentation page
+-updated readme, agents.md
 
 ## Sat 4-11-26
 

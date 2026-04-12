@@ -66,7 +66,7 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 
 ## Current Project Goal
 
-The current goal is to create a helper-app that assists LLM "Skills" in interacting with SDD documents. The app will share resources with a future SDD MCP server.
+Having created a helper-app that assists LLM "Skills" in interacting with SDD documents, the current project goal is to create an MCP server to make the same (shared) capabilities available.
 
 ## Renderer Constraints
 
