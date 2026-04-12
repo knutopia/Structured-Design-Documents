@@ -1059,6 +1059,7 @@ Design goals:
 - `sdd-helper preview`
 - `sdd-helper git-status`
 - `sdd-helper git-commit`
+- `sdd-helper capabilities`
 
 ### 11.2 Command Contracts
 
@@ -1079,6 +1080,57 @@ Rules:
 - malformed arguments, malformed JSON request bodies, and unexpected runtime failures return `HelperErrorResult`
 - `HelperErrorResult` writes to stdout and exits non-zero
 - stderr is reserved for optional crash/debug output and is not part of the public contract
+- bare `sdd-helper` and any invocation containing `--help` return a short JSON help stub and exit zero
+
+#### `sdd-helper [--help]`
+
+Returns a brief JSON stub for discovery.
+
+```ts
+interface HelperHelpStubResult {
+  kind: "sdd-helper-help";
+  helper_name: "sdd-helper";
+  summary: string;
+  note: string;
+  capabilities_command: "sdd-helper capabilities";
+  commands: string[];
+}
+```
+
+The stub is intentionally brief. It should explain that the helper is JSON-first and machine-oriented, and it should point callers at `sdd-helper capabilities` for the full machine-readable contract.
+
+#### `sdd-helper capabilities`
+
+Returns the full machine-readable discovery payload for the helper CLI.
+
+```ts
+interface HelperCapabilitiesResult {
+  kind: "sdd-helper-capabilities";
+  helper_name: "sdd-helper";
+  summary: string;
+  discovery: {
+    bare_invocation: "returns_help_stub";
+    help_flag: "returns_help_stub";
+    canonical_introspection_command: "sdd-helper capabilities";
+  };
+  conventions: {
+    stdout_success: "exactly_one_json_payload";
+    helper_errors: "sdd-helper-error_non_zero_exit";
+    domain_rejections: "structured_payload_exit_zero";
+    path_scope: "repo_relative_sdd_paths";
+  };
+  commands: Array<{
+    name: string;
+    invocation: string;
+    summary: string;
+    mutates_repo_state: "never" | "conditional" | "always";
+    result_kind: string;
+    constraints: string[];
+  }>;
+}
+```
+
+The capabilities payload should be static and self-describing. It should not require repo inspection, bundle loading, or package metadata reads in order to answer the discovery request.
 
 #### `sdd-helper inspect <document_path>`
 
@@ -1139,6 +1191,8 @@ interface HelperGitStatusResult {
 Rules:
 
 - it reports repository status for the supplied `.sdd` paths or all `.sdd` files when no paths are supplied
+- `paths` is the exhaustive `.sdd` reporting scope for the request
+- `status` is the sparse list of actual git status entries within that scope
 - it does not expose arbitrary git plumbing
 
 #### `sdd-helper git-commit --message <message> [<document_path> ...]`

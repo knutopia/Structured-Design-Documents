@@ -373,3 +373,59 @@ export interface HelperErrorResult {
   code: "invalid_args" | "invalid_json" | "runtime_error";
   message: string;
 }
+
+export interface HelperHelpStubResult {
+  kind: "sdd-helper-help";
+  helper_name: "sdd-helper";
+  summary: string;
+  note: string;
+  capabilities_command: "sdd-helper capabilities";
+  commands: string[];
+}
+
+export interface HelperCapabilitiesResult {
+  kind: "sdd-helper-capabilities";
+  helper_name: "sdd-helper";
+  summary: string;
+  discovery: {
+    bare_invocation: "returns_help_stub";
+    help_flag: "returns_help_stub";
+    canonical_introspection_command: "sdd-helper capabilities";
+  };
+  conventions: {
+    stdout_success: "exactly_one_json_payload";
+    helper_errors: "sdd-helper-error_non_zero_exit";
+    domain_rejections: "structured_payload_exit_zero";
+    path_scope: "repo_relative_sdd_paths";
+    request_loading: Array<{
+      command: "apply" | "undo";
+      option: "--request";
+      sources: Array<"file_path" | "stdin_dash">;
+      top_level_shape: "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+    }>;
+  };
+  commands: Array<{
+    name: string;
+    invocation: string;
+    summary: string;
+    mutates_repo_state: "never" | "conditional" | "always";
+    arguments: Array<{
+      name: string;
+      required: boolean;
+      description: string;
+    }>;
+    options: Array<{
+      flag: string;
+      required: boolean;
+      description: string;
+      value_name?: string;
+    }>;
+    request_body?: {
+      via_option: "--request";
+      top_level_shape: "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+      source: "file_path_or_stdin_dash";
+    };
+    result_kind: string;
+    constraints: string[];
+  }>;
+}

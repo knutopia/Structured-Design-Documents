@@ -13,6 +13,7 @@
 
 -created helper app execution plan
 -implemented plan
+-added discoverability surfaces
 
 ## Fri 4-10-26
 

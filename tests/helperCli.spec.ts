@@ -192,6 +192,7 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     stdout,
     stderr,
     deps: deps as Partial<HelperCliDeps>,
+    loadBundleMock: deps.loadBundle as ReturnType<typeof vi.fn>,
     inspectDocumentMock,
     searchGraphMock,
     createDocumentMock,
@@ -208,6 +209,69 @@ function parseStdoutPayload(stdout: string[]): unknown {
 }
 
 describe("sdd-helper CLI", () => {
+  it("returns the JSON help stub for bare invocation without loading repo state", async () => {
+    const { deps, stdout, stderr, loadBundleMock } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr).toEqual([]);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-help",
+      helper_name: "sdd-helper",
+      summary: "JSON-first helper CLI for SDD authoring workflows.",
+      note: "This is machine business: the helper is intended primarily for machine and LLM automation, and it returns JSON rather than text help.",
+      capabilities_command: "sdd-helper capabilities",
+      commands: ["inspect", "search", "create", "apply", "undo", "preview", "git-status", "git-commit", "capabilities"]
+    });
+  });
+
+  it("returns the same JSON help stub for --help anywhere in argv", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "create", "--help"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-helper-help",
+      capabilities_command: "sdd-helper capabilities"
+    });
+  });
+
+  it("returns static capabilities JSON for machine discovery", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "capabilities"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-helper-capabilities",
+      helper_name: "sdd-helper",
+      discovery: {
+        bare_invocation: "returns_help_stub",
+        help_flag: "returns_help_stub",
+        canonical_introspection_command: "sdd-helper capabilities"
+      },
+      conventions: {
+        stdout_success: "exactly_one_json_payload",
+        path_scope: "repo_relative_sdd_paths"
+      },
+      commands: expect.arrayContaining([
+        expect.objectContaining({
+          name: "capabilities",
+          result_kind: "sdd-helper-capabilities"
+        }),
+        expect.objectContaining({
+          name: "git-status",
+          constraints: expect.arrayContaining([
+            "The paths field is the exhaustive .sdd reporting scope.",
+            "The status field is the sparse list of actual git status entries for that scope."
+          ])
+        })
+      ])
+    });
+  });
+
   it("writes inspect results as a single JSON payload on stdout", async () => {
     const { deps, stdout, stderr } = createDeps();
     const result = await runHelperCli(["node", "sdd-helper", "inspect", "docs/example.sdd"], deps);

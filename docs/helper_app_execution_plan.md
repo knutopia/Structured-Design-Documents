@@ -154,6 +154,30 @@ Checkpoint report:
 - Violated invariants: none found.
 - Residual risks: `listDocuments(...)` currently exists as shared infrastructure rather than a helper command surface, and parse-invalid files are skipped from list/search result bodies and surfaced through diagnostics rather than a richer partial-document contract.
 
+### Post-Checkpoint 5 Follow-Ups
+
+#### Git-Status Scope Correction
+
+Implemented: aligned `sdd-helper git-status` with the helper design so the no-argument `paths` field now reports the full in-scope `.sdd` scope, while `status` remains the sparse list of actual git entries; the `.sdd` path discovery logic is now shared with the directory services.
+
+Verified with: `TMPDIR=/tmp pnpm exec vitest run tests/authoringGitHelpers.spec.ts tests/helperCli.spec.ts` and `TMPDIR=/tmp pnpm test`.
+
+Checkpoint report:
+- Satisfied invariants: `git-status` remained `.sdd`-scoped, `paths` became the exhaustive reporting scope, `status` stayed sparse and deterministic, deleted `.sdd` paths were preserved through porcelain-only discovery, and explicit-path behavior stayed unchanged.
+- Violated invariants: none found.
+- Residual risks: the helper still exposes git status only through the narrow `.sdd` contract and does not attempt richer git introspection beyond the documented scope.
+
+#### Helper Discovery Surfaces
+
+Implemented: added a JSON `--help` stub and matching bare-invocation discovery response, introduced `sdd-helper capabilities` as the deeper machine-readable discovery surface, and recorded both the discovery contract and `git-status` scope semantics in the helper design documentation.
+
+Verified with: `TMPDIR=/tmp pnpm exec vitest run tests/helperCli.spec.ts tests/authoringGitHelpers.spec.ts` and `TMPDIR=/tmp pnpm test`.
+
+Checkpoint report:
+- Satisfied invariants: helper discovery remained JSON-first, bare invocation and any `--help` usage returned a deterministic stub, `capabilities` exposed a deeper static machine-readable contract without repo inspection, and the new docs/log entries aligned the implementation with the design trail.
+- Violated invariants: none found.
+- Residual risks: the capabilities payload is intentionally static and does not yet advertise repo-specific or bundle-specific dynamic availability beyond the stable command contract.
+
 ## Acceptance Matrix
 
 Implementation acceptance must cover at least one scenario each for:

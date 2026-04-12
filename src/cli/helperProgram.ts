@@ -20,6 +20,7 @@ import { AuthoringPreviewError, renderPreview } from "../authoring/preview.js";
 import { undoChangeSet } from "../authoring/undo.js";
 import { stringifyCanonicalJson } from "../authoring/revisions.js";
 import { createAuthoringWorkspace, WorkspacePathError, type AuthoringWorkspace } from "../authoring/workspace.js";
+import { createHelperCapabilities, createHelperHelpStub, shouldReturnHelperHelp } from "./helperDiscovery.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 
@@ -220,6 +221,10 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       writeErr: () => undefined
     });
 
+  program.command("capabilities").action(() => {
+    writeJson(deps, createHelperCapabilities());
+  });
+
   program
     .command("inspect")
     .argument("<document_path>", "repo-relative .sdd document path")
@@ -362,6 +367,13 @@ export async function runHelperCli(
   overrides: Partial<HelperCliDeps> = {}
 ): Promise<RunHelperCliResult> {
   const deps = withDefaults(overrides);
+  const args = argv.slice(2);
+
+  if (shouldReturnHelperHelp(args)) {
+    writeJson(deps, createHelperHelpStub());
+    return { exitCode: 0 };
+  }
+
   const program = createHelperProgram(deps);
 
   program.exitOverride();
