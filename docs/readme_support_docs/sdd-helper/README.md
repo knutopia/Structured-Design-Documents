@@ -1,0 +1,255 @@
+# SDD Helper
+
+`sdd-helper` is the JSON-first companion CLI for SDD authoring workflows. Its target user is an agentic skill (Codex skill, Claude skill, Gemini skill). It is designed for structured automation, not for interactive terminal narration: successful commands return exactly one JSON payload, and the command surface stays narrow, repo-local, and focused on `.sdd` documents.
+
+This page documents the helper for three audiences:
+
+- SDD users who want to know what the helper is for.
+- LLMs and automation authors who need a human-readable explanation of the helper's capabilities and constraints.
+- Future contributors who need to keep the documentation aligned with the actual helper contract.
+
+`sdd-helper` is not a second version of `sdd`. The main `sdd` CLI is a broader human-oriented toolchain entrypoint for compiling, validating, and rendering. `sdd-helper` is the machine-facing companion surface for inspecting SDD structure, submitting structured change requests, generating previews, and performing narrow `.sdd`-scoped git actions without falling back to raw file editing.
+
+## Quick Orientation
+
+Inside this repository, invoke the helper as `pnpm sdd-helper ...`. If the binary is on your `PATH`, the equivalent `sdd-helper ...` commands work too.
+
+Bare invocation and `--help` both return a short JSON stub rather than text help:
+
+```bash
+pnpm sdd-helper --help
+pnpm sdd-helper
+```
+
+That stub is intentionally brief. It tells callers that the helper is JSON-first and points them at the deeper discovery command:
+
+```bash
+pnpm sdd-helper capabilities
+```
+
+Use `capabilities` when you want the full machine-readable command manifest. Use this page when you want the same surface explained in practical terms.
+
+## Core Operating Conventions
+
+- Successful commands write exactly one JSON payload to `stdout`.
+- Helper-level failures return `sdd-helper-error` and exit non-zero. This covers malformed arguments, malformed JSON request bodies, and runtime failures.
+- Domain-level rejections stay structured. For example, a rejected change set still comes back as a normal JSON result and still exits zero.
+- Public path inputs are repo-relative and `.sdd`-focused.
+- `apply` and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
+- `stderr` is not part of the public helper contract.
+
+## Worked Workflow: Dry-Run Authoring
+
+The helper is especially useful when you want to plan a structural edit without committing it yet.
+
+### 1. Discover the helper surface
+
+```bash
+pnpm sdd-helper capabilities
+```
+
+This returns the static helper manifest: command names, invocation patterns, result kinds, and key constraints.
+
+### 2. Find a target document
+
+If you know the document already, go straight to `inspect`. If you need to locate one first, use `search`:
+
+```bash
+pnpm sdd-helper search --query claim --under bundle/v0.1/examples --limit 5
+```
+
+Search works across compile-valid `.sdd` documents and returns matches plus diagnostics for anything skipped.
+
+### 3. Inspect the document to obtain revision and handle context
+
+```bash
+pnpm sdd-helper inspect <document_path>
+```
+
+The `sdd-document-inspect` result gives you the current document revision plus stable same-revision handles for nodes and body items. Those handles are what later mutation requests refer to.
+
+### 4. Submit an `apply` dry-run request
+
+Create a compact `ApplyChangeSetArgs` request like this:
+
+```json
+{
+  "path": "<document_path>",
+  "base_revision": "<base_revision_from_inspect>",
+  "operations": [
+    {
+      "kind": "set_node_property",
+      "node_handle": "<node_handle_from_inspect>",
+      "key": "description",
+      "value_kind": "quoted_string",
+      "raw_value": "Updated description from helper dry run"
+    }
+  ]
+}
+```
+
+Then submit it:
+
+```bash
+pnpm sdd-helper apply --request request.json
+```
+
+Or, if another tool is generating the JSON:
+
+```bash
+cat request.json | pnpm sdd-helper apply --request -
+```
+
+Because `mode` is omitted, this is a dry run by default.
+
+### 5. Interpret the returned `sdd-change-set`
+
+The returned change-set payload tells you whether the request was applied or rejected, what summary of changes it computed, and what diagnostics it produced. That gives you a structured review point before you decide whether to submit the same request with commit mode.
+
+This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and `git-commit` are documented below, but they are not part of this single example flow.
+
+## Command Reference
+
+### Discovery And Read Workflows
+
+#### `sdd-helper capabilities`
+
+- Purpose: return the full machine-readable helper capability manifest.
+- Use when: you need canonical command discovery, especially from automation or a skill.
+- Invocation: `pnpm sdd-helper capabilities`
+- Key inputs: none.
+- Result kind: `sdd-helper-capabilities`
+- Important constraints: the payload is static and does not require repo inspection or bundle loading.
+- Practical notes: treat this as the surfaced command inventory; if the helper grows or changes, this payload and this page should stay aligned.
+
+#### `sdd-helper inspect <document_path>`
+
+- Purpose: inspect one parseable repo-relative `.sdd` document as structured document data.
+- Use when: you need revision information, node handles, body-item handles, or stable structural reads before making a mutation request.
+- Invocation: `pnpm sdd-helper inspect <document_path>`
+- Key inputs: one repo-relative `.sdd` document path.
+- Result kind: `sdd-document-inspect`
+- Important constraints: the path must resolve to a repo-relative `.sdd` file; parse-invalid documents return `sdd-helper-error` with `code: "runtime_error"`.
+- Practical notes: `inspect` is the usual precursor to `apply`, because its revision and handle data are what keep change requests revision-bound and structured.
+
+#### `sdd-helper search`
+
+- Purpose: search compile-valid graph content across repo-local `.sdd` documents.
+- Use when: you need to find likely documents or nodes before inspecting a specific file.
+- Invocation: `pnpm sdd-helper search --query <query> --node-type <node_type> --node-id <node_id> --under <path> --limit <count>`
+- Key inputs: at least one of `--query`, `--node-type`, or `--node-id`; optional `--under` scope and `--limit`.
+- Result kind: `sdd-search-results`
+- Important constraints: at least one search filter is required; compile-invalid documents are skipped and surfaced through diagnostics.
+- Practical notes: `--query` is a case-insensitive substring search over node id, type, and name; `--under` lets you narrow the search to a repo-relative directory.
+
+### Authoring And Change Management
+
+#### `sdd-helper create <document_path> --template <template_id> [--version <version>]`
+
+- Purpose: create a new `.sdd` document through the shared authoring core.
+- Use when: you want a repo-safe way to bootstrap a new document instead of hand-creating the file.
+- Invocation: `pnpm sdd-helper create <document_path> --template <template_id> [--version <version>]`
+- Key inputs: a repo-relative document path, a required template id, and an optional version.
+- Result kind: `sdd-create-document`
+- Important constraints: the current implementation supports `template_id=empty` and version `0.1`.
+- Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits.
+
+#### `sdd-helper apply --request <file-or-stdin>`
+
+- Purpose: apply or dry-run a structured change-set request.
+- Use when: you want to submit precise structural edits without doing raw text replacement.
+- Invocation: `pnpm sdd-helper apply --request <file-or-stdin>`
+- Key inputs: an `ApplyChangeSetArgs` JSON body loaded from a file path or from stdin via `--request -`.
+- Result kind: `sdd-change-set`
+- Important constraints: dry-run is the default when `mode` is omitted; rejected change sets remain structured and still exit zero.
+- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; dry-run first is the safest default for both humans and LLMs.
+
+#### `sdd-helper undo --request <file-or-stdin>`
+
+- Purpose: undo a committed change set through a structured request.
+- Use when: you need to reverse a helper-managed committed change through the same structured mutation system.
+- Invocation: `pnpm sdd-helper undo --request <file-or-stdin>`
+- Key inputs: an `UndoChangeSetArgs` JSON body loaded from a file path or stdin.
+- Result kind: `sdd-change-set`
+- Important constraints: only committed and undo-eligible change sets can be undone; rejected undo results remain structured and still exit zero.
+- Practical notes: like `apply`, `undo` supports dry-run versus commit behavior, which makes it possible to inspect an undo before carrying it out.
+
+### Preview Generation
+
+#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
+
+- Purpose: render a preview artifact for a repo-relative `.sdd` document.
+- Use when: another tool, UI, or workflow needs preview output directly from the helper surface.
+- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
+- Key inputs: document path, `view`, `profile`, and `format`, with an optional backend override.
+- Result kind: `sdd-preview`
+- Important constraints: if preview generation does not produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`.
+- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. That makes the helper easy to integrate into downstream machine workflows, even though the payloads may be large.
+
+### Narrow Git Workflows
+
+#### `sdd-helper git-status [<document_path> ...]`
+
+- Purpose: inspect narrow `.sdd`-scoped git status.
+- Use when: you want a structured view of SDD-related git changes without exposing general git plumbing.
+- Invocation: `pnpm sdd-helper git-status [<document_path> ...]`
+- Key inputs: optional explicit repo-relative `.sdd` document paths.
+- Result kind: `sdd-git-status`
+- Important constraints: `paths` is the exhaustive `.sdd` reporting scope for the request, while `status` is the sparse list of actual git status entries within that scope.
+- Practical notes: with no arguments, the helper reports the full repo-local `.sdd` scope; with explicit paths, it narrows the scope to those documents only.
+
+#### `sdd-helper git-commit --message <message> <document_path>...`
+
+- Purpose: stage and commit only explicit repo-relative `.sdd` paths.
+- Use when: you want to commit helper-managed document work without sweeping in unrelated files.
+- Invocation: `pnpm sdd-helper git-commit --message <message> <document_path>...`
+- Key inputs: a commit message plus one or more explicit `.sdd` document paths.
+- Result kind: `sdd-git-commit`
+- Important constraints: at least one explicit `.sdd` path is required, and only the supplied `.sdd` paths are staged and committed.
+- Practical notes: this is intentionally narrow. It exists to support helper-centric document workflows, not to replace general-purpose git usage.
+
+## Result Kinds At A Glance
+
+- `sdd-helper-help`: the short JSON help stub returned by bare invocation and `--help`.
+- `sdd-helper-capabilities`: the full static discovery payload for the helper command surface.
+- `sdd-document-inspect`: structured document inspection data, including revision and handles.
+- `sdd-search-results`: cross-document search matches plus diagnostics.
+- `sdd-create-document`: document creation result, including the creation change set.
+- `sdd-change-set`: the structured result for `apply` and `undo`, whether applied or rejected.
+- `sdd-preview`: preview output with embedded SVG text or base64 PNG data.
+- `sdd-git-status`: narrow `.sdd`-scoped git status information.
+- `sdd-git-commit`: the commit result for helper-scoped `.sdd` commits.
+- `sdd-helper-error`: the helper-level error payload for invalid args, invalid JSON, and runtime failures.
+
+## Guidance By Audience
+
+### For SDD Users
+
+- Use `search` to find relevant documents or nodes, then use `inspect` before you plan a structured edit.
+- Prefer `apply` dry-run before `apply` commit, especially when you are generating requests programmatically.
+- Use `preview` when you need a rendered artifact as helper output rather than through the main `sdd` CLI.
+- Use the helper git commands only when you specifically want `.sdd`-scoped behavior.
+
+### For LLMs And Automation
+
+- Start with `capabilities`; it is the canonical discovery surface.
+- Treat JSON as the public interface. Do not expect human-readable CLI text.
+- Keep path inputs repo-relative and `.sdd`-focused.
+- Use `inspect` to obtain current `revision` and stable same-revision handles before constructing mutation requests.
+- Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not interpret or execute the request; a zero-exit rejected change set means the request was understood and rejected within the domain model.
+
+### For Future Contributors
+
+- Keep this page aligned with `pnpm sdd-helper capabilities`, `src/cli/helperDiscovery.ts`, `src/cli/helperProgram.ts`, and `src/authoring/contracts.ts`.
+- When behavior changes, update both the machine-readable discovery surface and this human-readable page.
+- Document current implementation limits explicitly. Do not quietly broaden the docs ahead of the implementation.
+- Preserve the distinction between helper-level error behavior and structured domain-level results.
+
+## Contract Sources
+
+- Helper capability manifest: [`src/cli/helperDiscovery.ts`](../../../src/cli/helperDiscovery.ts)
+- Runtime command wiring: [`src/cli/helperProgram.ts`](../../../src/cli/helperProgram.ts)
+- Shared request and result contracts: [`src/authoring/contracts.ts`](../../../src/authoring/contracts.ts)
+- Helper design intent: [`docs/future_explorations/mcp_server/sdd_mcp_server_design.md`](../../future_explorations/mcp_server/sdd_mcp_server_design.md)
+
+When in doubt, the machine-readable capability payload and the shared contract types govern the command surface. This page exists to explain that surface, not to redefine it.

@@ -9,6 +9,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 4-12-26
+
+-created sdd-helper documentation page
+
 ## Sat 4-11-26
 
 -created helper app execution plan
