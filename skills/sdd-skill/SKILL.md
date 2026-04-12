@@ -1,6 +1,6 @@
 ---
 name: sdd-skill
-description: Use when working with Structured Design Documents in this repository through sdd-helper: search repo-relative .sdd files, inspect structure, create documents, plan and apply structured change sets, render previews, undo helper-managed changes, and perform narrow .sdd-scoped git checks and commits without raw file editing.
+description: "Structured Design Documents: search .sdd files, inspect structure, create documents, edit (plan/apply/undo), render previews,  perform narrow .sdd-scoped git checks & commits."
 ---
 
 # SDD Skill
