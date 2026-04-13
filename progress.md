@@ -13,7 +13,9 @@
 ## Mon 4-13-26
 
 -added examples to skill doc page, but they are problematic
--found template-use bug for helper create
+-found & fixed template-use bug for helper create
+-restored missing skill content
+-created deferred note for template use
 
 ## Sun 4-12-26
 

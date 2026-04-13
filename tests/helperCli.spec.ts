@@ -3,6 +3,7 @@ import type { Bundle } from "../src/bundle/types.js";
 import type {
   ApplyChangeSetArgs,
   ChangeSetResult,
+  CreateDocumentArgs,
   CreateDocumentResult,
   HelperGitCommitResult,
   HelperGitStatusResult,
@@ -342,10 +343,11 @@ describe("sdd-helper CLI", () => {
 
   it("keeps create domain rejections structured and exit-zero", async () => {
     const rejection = createRejectedChangeSet("docs/new.sdd");
+    const createDocument = vi.fn(async (_workspace, _bundle, _args: CreateDocumentArgs) => {
+      throw new AuthoringMutationError("rejected", rejection.diagnostics, rejection);
+    });
     const { deps, stdout } = createDeps({
-      createDocument: vi.fn(async () => {
-        throw new AuthoringMutationError("rejected", rejection.diagnostics, rejection);
-      })
+      createDocument
     });
 
     const result = await runHelperCli([
@@ -354,10 +356,17 @@ describe("sdd-helper CLI", () => {
       "create",
       "docs/new.sdd",
       "--template",
-      "empty"
+      "empty",
+      "--version",
+      "0.1"
     ], deps);
 
     expect(result.exitCode).toBe(0);
+    expect(createDocument).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/new.sdd",
+      template_id: "empty",
+      version: "0.1"
+    });
     expect(parseStdoutPayload(stdout)).toEqual(rejection);
   });
 

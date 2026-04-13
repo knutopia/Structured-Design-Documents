@@ -162,7 +162,7 @@ Using $sdd-skill, undo the last change to the volunteer scheduling SDD and show 
 - It updates the design through the repo's structured SDD workflow instead of brittle free-form rewriting.
 - It asks for a view like Information Architecture or UI Contracts so you can inspect the result visually.
 
-For the technical workflow behind the examples, see [SKILL.md](../../../skills/sdd-skill/SKILL.md) and the [SDD Helper Guide](../sdd-helper/).
+For the technical workflow behind the examples, see the canonical repo skill bundle at [SKILL.md](../../../skills/sdd-skill/SKILL.md), especially [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md), plus the [SDD Helper Guide](../sdd-helper/).
 
 ## Why Use The Skill Before You Start Coding
 

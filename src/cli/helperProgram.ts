@@ -267,7 +267,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .argument("<document_path>", "repo-relative .sdd document path")
     .requiredOption("--template <template_id>", "document template id")
     .option("--version <version>", "document version")
-    .action(async (documentPath: string, options: Pick<CreateDocumentArgs, "template_id" | "version">) => {
+    .action(async (documentPath: string, options: { template: string; version?: CreateDocumentArgs["version"] }) => {
       const { workspace, bundle } = await loadHelperContext(deps);
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
 
@@ -276,8 +276,8 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
           deps,
           await deps.createDocument(workspace, bundle, {
             path: normalizedPath,
-            template_id: options.template_id,
-            version: options.version as CreateDocumentArgs["version"] | undefined
+            template_id: options.template,
+            version: options.version
           })
         );
       } catch (error) {

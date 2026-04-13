@@ -47,6 +47,11 @@ The remaining deferred items in this area are:
 - editor integration
 - richer diagnostic suggestions and fix hints
 
+## Helper Authoring Expansion
+
+- future `sdd-helper create --template ...` expansion remains intentionally deferred beyond the current `template_id=empty` bootstrap path
+- any future template work should preserve helper-first structural authoring and avoid injecting misleading sample semantics; see `docs/Deferred/sdd_helper_future_template_options.md`
+
 ## Future Architectural Review Triggers
 
 Revisit the lean architecture only if one of these becomes true:
