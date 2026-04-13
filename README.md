@@ -94,9 +94,11 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 ### Learn More
 
-- SDD CLI Guide: [SDD CLI User Guide](docs/readme_support_docs/sdd_cli_tools/)
+- SDD Skill Guide (Codex Skill): [SDD Skill Guide](docs/readme_support_docs/sdd-skill/)
 
-- SDD Helper Guide: [SDD Helper Guide](docs/readme_support_docs/sdd-helper/)
+- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](docs/readme_support_docs/sdd_cli_tools/)
+
+- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](docs/readme_support_docs/sdd-helper/)
 
 - Authoring Spec (human-oriented reference): [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 

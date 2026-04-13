@@ -18,6 +18,7 @@
 -created codex skill
 -installed skill
 -clarified skill language
+-added doc page for skill
 
 ## Sat 4-11-26
 
