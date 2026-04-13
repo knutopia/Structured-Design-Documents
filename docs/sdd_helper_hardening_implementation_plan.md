@@ -10,6 +10,8 @@ Create a focused hardening milestone for `sdd-helper` that improves contract rel
 
 This is a hardening plan, not a feature-expansion plan. Scope is limited to confirmed, reproduced helper weaknesses. The goal is to make `sdd-helper` safer as a machine-facing contract for skills and future MCP work, and to make helper failures specific enough that automation can distinguish invalid intermediate authoring state from true environment or runtime failure.
 
+This milestone also includes syncing the future MCP design note where helper hardening changes shared contract wording or preview-failure expectations.
+
 This document is the forward-looking source of truth for the hardening sequence. Historical bug notes remain useful evidence, but this plan governs the next implementation pass.
 
 ## 2. Locked Goals And Boundaries
@@ -114,7 +116,10 @@ The final pass should lock the behavior in tests and documentation.
 
 - add regression tests for each confirmed issue
 - update helper and skill documentation only after hardened behavior is implemented and verified
-- keep skill guidance aligned with the actual helper contract rather than temporary behavior or wrapper workarounds
+- update `docs/future_explorations/mcp_server/sdd_mcp_server_design.md` anywhere helper hardening changes shared contract wording
+- keep skill and MCP guidance aligned with the actual helper contract rather than temporary behavior or wrapper workarounds
+
+The MCP design sync must clarify that helper and MCP share the same domain diagnostics and success-side logical results, while failure mapping may remain surface-specific.
 
 ## 5. Public Contract Changes To Capture
 
@@ -123,6 +128,7 @@ The hardening implementation should explicitly capture these helper-facing chang
 - `HelperErrorResult` should gain optional structured diagnostic detail for applicable helper failures, especially preview failures
 - preview failures caused by invalid intermediate document state should remain `sdd-helper-error` with non-zero exit
 - preview helper errors should distinguish validation-style failures from generic runtime or backend failures strongly enough for a skill to react appropriately
+- the MCP design note must be updated so helper preview success remains aligned with `sdd.render_preview`, while preview failure mapping is described as shared diagnostics plus surface-specific transport or error envelopes
 - malformed request bodies should return `invalid_args` or `invalid_json`, not raw exception text
 - direct helper execution from anywhere inside the repo should be supported
 - rename commits should behave consistently with helper git-status reporting
@@ -132,6 +138,8 @@ The preview error text does not need a fixed literal template in advance, but th
 
 - the message must be more specific than `did not produce an artifact`
 - the structured details must preserve the underlying diagnostics that explain why preview could not complete
+
+This sync is documentation-only unless implementation reveals a true shared-domain contract gap.
 
 ## 6. Proof Tasks And Acceptance
 
@@ -144,12 +152,14 @@ Implementation is not complete until the following proof tasks pass.
 5. A preview attempted too early under `strict` returns a non-zero `sdd-helper-error` with a specific message and structured diagnostics explaining the validation failure.
 6. The same document, once made fully valid under `strict`, previews successfully.
 7. Existing happy-path helper CLI tests still pass after hardening.
+8. `docs/future_explorations/mcp_server/sdd_mcp_server_design.md` is updated to reflect the hardened helper contract, especially preview failure semantics and the distinction between shared diagnostics versus helper-only error envelopes.
 
 Acceptance criteria:
 
 - each confirmed failure mode is reproduced before the fix and prevented after the fix
 - preview failures preserve enough detail for the skill to understand what happened
 - regression tests cover the hardened behavior
+- the MCP design note no longer implies that helper and MCP must share identical failure envelopes where the hardened helper contract keeps transport-specific error mapping
 - docs and skill guidance describe only behavior that now actually works
 
 ## 7. References
@@ -163,6 +173,7 @@ Use these as the current implementation and evidence anchors for the hardening p
 - [`src/authoring/mutations.ts`](../src/authoring/mutations.ts)
 - [`tests/helperCli.spec.ts`](../tests/helperCli.spec.ts)
 - [`tests/authoringGitHelpers.spec.ts`](../tests/authoringGitHelpers.spec.ts)
+- [`docs/future_explorations/mcp_server/sdd_mcp_server_design.md`](./future_explorations/mcp_server/sdd_mcp_server_design.md)
 - [`docs/Done/[Fixed] sdd-helper-create-cli-bug.md`](./Done/%5BFixed%5D%20sdd-helper-create-cli-bug.md)
 
 ## 8. Assumptions And Defaults
