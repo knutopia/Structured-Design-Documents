@@ -10,6 +10,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 4-13-26
+
+-added examples to skill doc page, but they are problematic
+-found template-use bug for helper create
+
 ## Sun 4-12-26
 
 -created sdd-helper documentation page

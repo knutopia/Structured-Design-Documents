@@ -1,0 +1,40 @@
+SDD-TEXT 0.1
+Place P-100 "Dashboard"
+  description="Starting point for volunteers and coordinators"
+  primary_nav=true
+  NAVIGATES_TO P-210 "Open Shifts"
+  NAVIGATES_TO P-230 "My Schedule"
+  NAVIGATES_TO P-310 "Review Requests"
+END
+Area A-200 "Volunteer Scheduling"
+  description="Shift discovery and signup flow"
+  CONTAINS P-210 "Open Shifts"
+  CONTAINS P-220 "Shift Detail"
+  CONTAINS P-230 "My Schedule"
+  + Place P-210 "Open Shifts"
+    description="Browse upcoming shifts by date and role"
+    primary_nav=true
+    NAVIGATES_TO P-220 "Shift Detail"
+  END
+  + Place P-220 "Shift Detail"
+    description="Review one shift and decide whether to sign up"
+    NAVIGATES_TO P-230 "My Schedule"
+  END
+  + Place P-230 "My Schedule"
+    description="See upcoming volunteer commitments"
+  END
+END
+Area A-300 "Admin Review"
+  description="Coordinator review flow for volunteer signups"
+  CONTAINS P-310 "Review Requests"
+  CONTAINS P-320 "Volunteer Detail"
+  + Place P-310 "Review Requests"
+    description="Review new signup requests from volunteers"
+    primary_nav=true
+    NAVIGATES_TO P-320 "Volunteer Detail"
+  END
+  + Place P-320 "Volunteer Detail"
+    description="See one volunteer's signup history and details"
+    NAVIGATES_TO P-310 "Review Requests"
+  END
+END
