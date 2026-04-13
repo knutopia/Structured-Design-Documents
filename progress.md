@@ -17,6 +17,7 @@
 -updated readme, agents.md
 -created codex skill
 -installed skill
+-clarified skill language
 
 ## Sat 4-11-26
 

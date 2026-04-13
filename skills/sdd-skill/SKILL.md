@@ -1,13 +1,13 @@
 ---
 name: sdd-skill
-description: "Structured Design Documents: search .sdd files, inspect structure, create documents, edit (plan/apply/undo), render previews,  perform narrow .sdd-scoped git checks & commits."
+description: "(Structured Design Documents): search .sdd files, inspect structure, create documents, edit (plan/apply/undo), render previews, perform narrow .sdd-scoped git checks & commits."
 ---
 
 # SDD Skill
 
 Use this skill when the current workspace is this SDD repository, or a structurally compatible checkout, and the task involves `.sdd` documents.
 
-This skill is helper-first. For structural SDD authoring, prefer `scripts/run_helper.sh` over raw file editing so the workflow stays revision-bound, handle-based, and aligned to the shared authoring contracts.
+This skill enables working with structured design documents. It uses `scripts/run_helper.sh` as the stable entrypoint to the `sdd-helper` utility instead of raw file editing, so changes stay revision-bound, handle-based, and aligned to the shared authoring contracts.
 
 ## Quick Start
 
@@ -81,6 +81,6 @@ Do not treat helper git commands as a replacement for general Git usage in the r
 
 Read only what you need:
 
-- `references/workflow.md` for the standard helper-first operating sequence
+- `references/workflow.md` for the standard helper-based operating sequence
 - `references/change-set-recipes.md` for common `ChangeOperation` patterns
 - `references/current-helper-gaps.md` for the current limits of the helper surface
