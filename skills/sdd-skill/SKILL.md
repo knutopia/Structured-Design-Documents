@@ -7,13 +7,13 @@ description: "(Structured Design Documents): search .sdd files, inspect structur
 
 Use this skill when the current workspace is this SDD repository, or a structurally compatible checkout, and the task involves `.sdd` documents.
 
-This skill enables working with structured design documents. It uses `scripts/run_helper.sh` as the stable entrypoint to the `sdd-helper` utility instead of raw file editing, so changes stay revision-bound, handle-based, and aligned to the shared authoring contracts.
+This skill enables working with structured design documents. In this repo source tree, the bundled helper wrapper lives at `skills/sdd-skill/scripts/run_helper.sh`. In an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill directory. Use the repo-visible path in this checkout as the stable entrypoint to the `sdd-helper` utility instead of raw file editing, so changes stay revision-bound, handle-based, and aligned to the shared authoring contracts.
 
 ## Quick Start
 
-- Use `scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
-- Use `scripts/run_helper.sh search ...` when the user has not named a target `.sdd` document yet.
-- Use `scripts/run_helper.sh inspect <document_path>` before any edit to obtain fresh `revision` and handle data.
+- Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
+- Use `skills/sdd-skill/scripts/run_helper.sh search ...` when the user has not named a target `.sdd` document yet.
+- Use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` before any edit to obtain fresh `revision` and handle data.
 - Prefer `apply` as a dry run first. Commit only when the user wants the mutation carried out.
 - Use `preview` when rendered confirmation helps verify the change.
 - Use `undo` only for helper-managed committed change sets.

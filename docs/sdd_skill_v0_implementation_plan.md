@@ -97,7 +97,7 @@ Create the following files:
 
 ### 3.3 Wrapper Script
 
-`scripts/run_helper.sh` should be a thin environment-normalization wrapper only. Its responsibilities are:
+The wrapper at `skills/sdd-skill/scripts/run_helper.sh` should be a thin environment-normalization wrapper only. In an installed skill copy, the same file is available as `scripts/run_helper.sh` relative to the installed skill directory. Its responsibilities are:
 
 - use `#!/usr/bin/env bash` and `set -euo pipefail`
 - resolve the repo root without hardcoding an absolute path

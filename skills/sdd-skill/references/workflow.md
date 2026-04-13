@@ -2,14 +2,14 @@
 
 This file gives the concrete helper-first workflow for the `sdd-skill`.
 
-Use `scripts/run_helper.sh` for helper commands so the skill does not depend on shell-specific `TMPDIR` or `nvm` setup.
+In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`; in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder.
 
 ## 1. Confirm The Helper Surface
 
 Use this when you suspect the helper surface may have changed:
 
 ```bash
-scripts/run_helper.sh capabilities
+skills/sdd-skill/scripts/run_helper.sh capabilities
 ```
 
 The result is the canonical JSON command manifest for the helper.
@@ -19,7 +19,7 @@ The result is the canonical JSON command manifest for the helper.
 If the user has not named a document, search first:
 
 ```bash
-scripts/run_helper.sh search --query claim --under bundle/v0.1/examples --limit 5
+skills/sdd-skill/scripts/run_helper.sh search --query claim --under bundle/v0.1/examples --limit 5
 ```
 
 Use the returned paths to choose the most likely document, then inspect that document.
@@ -29,7 +29,7 @@ Use the returned paths to choose the most likely document, then inspect that doc
 Inspect is the normal starting point for edits:
 
 ```bash
-scripts/run_helper.sh inspect bundle/v0.1/examples/outcome_to_ia_trace.sdd
+skills/sdd-skill/scripts/run_helper.sh inspect bundle/v0.1/examples/outcome_to_ia_trace.sdd
 ```
 
 Inspect returns:
@@ -47,7 +47,7 @@ Build change requests from that returned `revision` and those handles. Do not in
 The current helper supports an empty-template create flow:
 
 ```bash
-scripts/run_helper.sh create docs/example.sdd --template empty --version 0.1
+skills/sdd-skill/scripts/run_helper.sh create docs/example.sdd --template empty --version 0.1
 ```
 
 If the new document needs follow-on edits, inspect it first and then proceed with normal `apply` requests.
@@ -79,7 +79,7 @@ Example request shape:
 Submit it with:
 
 ```bash
-scripts/run_helper.sh apply --request /tmp/request.json
+skills/sdd-skill/scripts/run_helper.sh apply --request /tmp/request.json
 ```
 
 Review:
@@ -104,7 +104,7 @@ The skill should not skip straight to commit unless the user clearly wants the r
 Use preview when rendered confirmation is helpful:
 
 ```bash
-scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
+skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
   --view ia_place_map \
   --profile strict \
   --format svg \
@@ -130,7 +130,7 @@ Example request shape:
 Submit it with:
 
 ```bash
-scripts/run_helper.sh undo --request /tmp/undo-request.json
+skills/sdd-skill/scripts/run_helper.sh undo --request /tmp/undo-request.json
 ```
 
 ## 9. Narrow Git Workflows
@@ -140,13 +140,13 @@ Use helper git commands only when the user wants `.sdd`-scoped git behavior.
 Status:
 
 ```bash
-scripts/run_helper.sh git-status bundle/v0.1/examples/outcome_to_ia_trace.sdd
+skills/sdd-skill/scripts/run_helper.sh git-status bundle/v0.1/examples/outcome_to_ia_trace.sdd
 ```
 
 Commit explicit `.sdd` paths:
 
 ```bash
-scripts/run_helper.sh git-commit --message "Update example SDD" \
+skills/sdd-skill/scripts/run_helper.sh git-commit --message "Update example SDD" \
   bundle/v0.1/examples/outcome_to_ia_trace.sdd
 ```
 

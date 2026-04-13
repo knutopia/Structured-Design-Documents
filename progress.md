@@ -16,6 +16,7 @@
 -found & fixed template-use bug for helper create
 -restored missing skill content
 -created deferred note for template use
+-fixed run_helper.sh location documentation drift that the earlier skill content action caused
 
 ## Sun 4-12-26
 

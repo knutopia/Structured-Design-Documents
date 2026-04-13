@@ -46,6 +46,6 @@ The helper is the machine-facing contract for the skill. If the skill teaches co
 
 When in doubt, verify against:
 
-- `scripts/run_helper.sh capabilities`
+- `skills/sdd-skill/scripts/run_helper.sh capabilities`
 - `docs/readme_support_docs/sdd-helper/README.md`
 - `src/authoring/contracts.ts`

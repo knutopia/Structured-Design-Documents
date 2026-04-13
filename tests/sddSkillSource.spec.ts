@@ -21,11 +21,23 @@ describe("canonical sdd-skill source", () => {
 
   it("references only companion skill files that exist in the repo skill tree", async () => {
     const skillMarkdown = await readFile(path.join(skillRoot, "SKILL.md"), "utf8");
+    const workflowMarkdown = await readFile(
+      path.join(skillRoot, "references/workflow.md"),
+      "utf8"
+    );
 
-    expect(skillMarkdown).toContain("scripts/run_helper.sh");
+    expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(skillMarkdown).toContain(
+      "`scripts/run_helper.sh` relative to the installed skill directory"
+    );
     expect(skillMarkdown).toContain("references/workflow.md");
     expect(skillMarkdown).toContain("references/change-set-recipes.md");
     expect(skillMarkdown).toContain("references/current-helper-gaps.md");
+    expect(workflowMarkdown).toContain("In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`;");
+    expect(workflowMarkdown).toContain(
+      "in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder."
+    );
+    expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
 
     await expectExists(path.join(skillRoot, "scripts/run_helper.sh"));
     await expectExists(path.join(skillRoot, "references/workflow.md"));
