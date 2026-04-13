@@ -17,6 +17,8 @@
 -restored missing skill content
 -created deferred note for template use
 -fixed run_helper.sh location documentation drift that the earlier skill content action caused
+-made run_helper.sh executable (!!)
+-created "manual" skill example, encountered preview failure
 
 ## Sun 4-12-26
 
