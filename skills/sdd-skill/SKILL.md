@@ -13,11 +13,12 @@ This skill enables working with structured design documents. In this repo source
 
 - Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
 - Use `skills/sdd-skill/scripts/run_helper.sh search ...` when the user has not named a target `.sdd` document yet.
+- When creating a new `.sdd`, default to the current working directory expressed as a repo-relative path unless the user names or clearly implies another location.
 - Use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` before any edit to obtain fresh `revision` and handle data.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
 - Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough.
-- Use `preview` only after a clean `author` or `apply` dry run under the same target profile. Preview confirms a committed, validated state; it does not decide readiness.
+- Use `sdd show` for saved user-facing preview artifacts, and use `preview` only when you need transient helper preview output after a clean `author` or `apply` dry run under the same target profile.
 - Use `undo` only for helper-managed committed change sets.
 
 ## Default Workflow
@@ -28,12 +29,13 @@ This skill enables working with structured design documents. In this repo source
    get the current `revision`, node handles, and body-item handles before planning a low-level change. For high-level scaffold work, inspect is still the safest default when you need broad context.
 3. Plan:
    choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles. Include `validate_profile` whenever the user wants confirmation under a specific profile, and add `projection_views` when structured semantic confirmation is helpful.
+   When creating a new document, default the target path to the current working directory as a repo-relative `.sdd` path. Honor explicit or clearly implied output locations, and do not infer destinations from examples, walkthroughs, or documentation structure.
 4. Dry run:
    submit `author` or `apply` with omitted `mode` or `mode: "dry_run"` and review the returned status, summary, and diagnostics. If parse or validation errors remain, continue the inspect/author-or-apply cycle and do not preview yet.
 5. Commit:
    if the dry run is acceptable for the target profile and the user wants the change applied, resubmit that validated request with `mode: "commit"`.
 6. Confirm:
-   use `validate` or `project` for persisted-state semantic confirmation, and use `preview` only for the committed revision that already passed a clean dry run under the same profile.
+   use `validate` or `project` for persisted-state semantic confirmation. If the user wants a visible artifact, save it with `TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>` using the same committed, validated state. Use `preview` only for transient helper output or raw artifact confirmation.
 
 ## Edit Safety Rules
 
@@ -67,16 +69,28 @@ Do not promise helper commands that still do not exist today, including `list do
 
 ## When To Preview
 
-Use `preview` when the user needs visible confirmation, especially for:
+Interpret visual-result intent semantically, not only from exact technical terms. Treat requests such as "show it", "render it", "draw it", "make a diagram", "show the information architecture", "show the place map", and similar wording as requests for a saved user-facing preview artifact.
+
+If the user only needs structured semantic output, `project` may be enough and you do not need to force a saved preview artifact.
+
+Use `sdd show` for persisted user-facing preview artifacts, especially for:
 
 - committed states that already passed a clean `apply` dry run under the same profile
 - view-sensitive structural changes
 - renderer-facing proof checks
 - confirming that a change has the intended visible effect
 
-Do not confuse preview with semantic projection or validation. Preview is a render artifact.
-Use `validate` and `project` for standalone persisted-state semantic reads, and use inline `validate_profile` and `projection_views` on `author` or `apply` for pre-commit candidate feedback.
-The preview profile should match the `validate_profile` that gated the document state, and the previewed revision should be the same committed state that passed that dry run.
+For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. Ask one short clarifying question only when multiple views are equally plausible.
+
+Use `preview` when you need transient helper output rather than the default final deliverable, especially for:
+
+- committed states that already passed a clean `apply` dry run under the same profile
+- view-sensitive structural changes
+- renderer-facing proof checks
+- raw artifact access for another tool or workflow
+
+Do not confuse saved previews or helper preview output with semantic projection or validation. Use `validate` and `project` for standalone persisted-state semantic reads, and use inline `validate_profile` and `projection_views` on `author` or `apply` for pre-commit candidate feedback.
+The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename.
 If preview returns `sdd-helper-error`, inspect the message and any attached `diagnostics` before assuming the helper environment is broken.
 
 ## When To Use Helper Git Commands

@@ -17,7 +17,8 @@
 
 -researched template options. conclusion: not yet
 -planned, implemented expanded shared authoring capabilities
-- removed ineffective create --template option
+-removed ineffective create --template option
+-strengthened skill guidance
 
 ## Mon 4-13-26
 

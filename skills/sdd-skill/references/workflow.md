@@ -47,10 +47,12 @@ Build low-level change requests from that returned `revision` and those handles.
 The current helper creates an empty bootstrap document:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh create docs/example.sdd --version 0.1
+skills/sdd-skill/scripts/run_helper.sh create example.sdd --version 0.1
 ```
 
 This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
+
+When the user does not specify a location, default the new document path to the current working directory expressed as a repo-relative `.sdd` path. If the prompt names or clearly implies a location, honor that instead. Do not infer destinations from examples or documentation layout.
 
 If the new document needs follow-on edits, use `author` for common scaffold creation or inspect it first and proceed with low-level `apply` requests.
 
@@ -127,7 +129,21 @@ These commands read the current on-disk document only. They do not inspect dry-r
 
 ## 8. Preview A Result
 
-Use preview only after the last committed revision has already passed a clean dry-run validation under the same profile:
+Interpret requests for a visible result semantically, not only from exact technical words. Phrases such as "show it", "render it", "draw it", "make a diagram", "show the information architecture", and "show the place map" should normally produce a saved user-facing artifact.
+
+If the user wants a saved preview artifact, use `sdd show` after the last committed revision has already passed a clean dry-run validation under the same profile:
+
+```bash
+TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
+  --view ia_place_map \
+  --profile strict
+```
+
+If the user did not request a specific output path, let `sdd show` write beside the `.sdd`. If the prompt names a destination or filename, pass `--out` and honor it.
+
+For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. If multiple views are equally plausible, ask one short clarifying question.
+
+Use helper preview only when you need transient raw artifact output rather than the normal user-facing final deliverable:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -137,8 +153,8 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
   --backend staged_ia_place_map_preview
 ```
 
-Preview is for rendered confirmation, not for structured mutation.
-It is not a substitute for validation. The preview profile should match the `validate_profile` used in the gating dry run, and the previewed revision should be that same committed state.
+`sdd-helper preview` is for transient rendered confirmation, not for structured mutation or the default saved deliverable.
+It is not a substitute for validation. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 9. Undo A Helper-Managed Commit
