@@ -2,7 +2,7 @@
 
 `sdd` is the main command-line entrypoint for working with `.sdd` files in this repository. It is the human-facing CLI for previewing diagrams, validating documents against profiles, and compiling SDD source into canonical JSON.
 
-This is different in tone and purpose from `sdd-helper`. `sdd` is the normal tool for people running straightforward CLI workflows. `sdd-helper` is the JSON-first companion surface for automation and structured mutation flows.
+(This is different from `sdd-helper`. `sdd` is the normal tool for people running straightforward CLI workflows. `sdd-helper` is the JSON-first tool for automation and structured mutation flows.)
 
 ## If You Are New To The Command Line
 

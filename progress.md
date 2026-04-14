@@ -2,8 +2,8 @@
 
 ## Open Issues
 
--teach the skill to create/save a sensible preview (or multiple)
 -re-author Skill doc page with manually created output
+-docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
 -remove service_blueprint DOT output
@@ -19,6 +19,7 @@
 -planned, implemented expanded shared authoring capabilities
 -removed ineffective create --template option
 -strengthened skill guidance
+-fixed show-filename collisions
 
 ## Mon 4-13-26
 

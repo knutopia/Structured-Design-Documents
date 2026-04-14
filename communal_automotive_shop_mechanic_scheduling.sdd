@@ -6,6 +6,7 @@ Place P-100 "Dashboard"
   route_or_key=/dashboard
   access=auth
   primary_nav=true
+  NAVIGATES_TO P-310 "Review Customer Inquiries"
 END
 Area A-200 "Mechanic's Scheduling"
   owner=Ops
@@ -28,6 +29,17 @@ Area A-200 "Mechanic's Scheduling"
     surface=web
     route_or_key=/scheduling/shifts/:shift_id
     access=auth
+    CONTAINS VS-220a "View Shift"
+    CONTAINS VS-220b "Confirm Signup"
+    CONTAINS VS-220c "Signup Success"
+    + ViewState VS-220a "View Shift"
+      TRANSITIONS_TO VS-220b "Confirm Signup"
+    END
+    + ViewState VS-220b "Confirm Signup"
+      TRANSITIONS_TO VS-220c "Signup Success"
+    END
+    + ViewState VS-220c "Signup Success"
+    END
   END
   + Place P-230 "My Schedule"
     owner=Design
@@ -36,5 +48,27 @@ Area A-200 "Mechanic's Scheduling"
     route_or_key=/scheduling/my-schedule
     access=auth
     primary_nav=true
+  END
+END
+Area A-300 "Admin Review"
+  owner=Ops
+  description="Coordinator workspace for reviewing inbound requests and approving volunteer signups"
+  scope=admin_review
+  CONTAINS P-310 "Review Customer Inquiries"
+  CONTAINS P-320 "Volunteer Detail"
+  + Place P-310 "Review Customer Inquiries"
+    owner=Ops
+    description="Coordinator queue for triaging customer inquiries and related volunteer signup requests"
+    surface=web
+    route_or_key=/admin/review-inquiries
+    access=role:coordinator
+    primary_nav=true
+  END
+  + Place P-320 "Volunteer Detail"
+    owner=Ops
+    description="Coordinator detail view for a volunteer signup, qualifications, and approval history"
+    surface=web
+    route_or_key=/admin/volunteers/:volunteer_id
+    access=role:coordinator
   END
 END
