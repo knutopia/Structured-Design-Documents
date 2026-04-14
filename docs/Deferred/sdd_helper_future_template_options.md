@@ -1,5 +1,25 @@
 # Future `create --template` Options
 
+## Two-Tier Future Direction
+
+Future authoring acceleration likely needs two separate layers that should not be conflated: neutral bootstrap templates for starting a document and explicit semantic seed content for known business contexts. Both can help LLM-driven authoring, but they solve different problems and should sit in different parts of the helper and MCP design.
+
+### Tier 1: Neutral Create Templates
+
+`create --template` should remain narrowly about document initialization. The only currently supported concrete template ID is still `empty`, and any future additions in this lane should stay near-empty and semantically neutral. A hypothetical future example such as `neutral_scaffold` could make sense if it remains a bootstrap aid rather than a semantic content seed, but this should not turn into `simple` or `strict` document variants. Profiles remain validation overlays, not template families.
+
+### Tier 2: Domain-Specific Starter Packs
+
+Domain-specific starter packs are a different future idea. They would represent explicit, opt-in semantic seed content for a known business context, such as known reusable components, known places, known policies, or known operational nodes. These starter packs should be modeled as a separate future mechanism from `create --template`, with application happening through normal structured authoring operations or imports so the resulting semantics remain reviewable, revision-bound, dry-runnable, and undoable.
+
+### Why The Split Helps LLM Authoring
+
+- Neutral templates reduce blank-page friction without anchoring the model to the wrong graph.
+- Starter packs help when they encode real organizational knowledge, not generic sample content.
+- Mixing the two would blur bootstrap versus semantics and weaken the helper-first mutation model.
+
+The rest of this note continues to discuss `create --template` specifically. Tier 2 starter packs are a separate future direction rather than an expansion of current helper support.
+
 ## Purpose And Current State
 
 This note records a cautious future direction for `sdd-helper create --template ...`.
@@ -88,3 +108,73 @@ The current helper-first architecture is strongest when a newly created document
 - minimal, neutral, and intentionally aligned with explicit follow-on structured edits
 
 Any future template system that depends on commented examples, seeded business payload, or implicit removal of unused template material would cut against the current revision-bound structural mutation model and would likely weaken document creation rather than strengthen it.
+
+# Follow Up
+
+(kg:)
+
+For our [SKILL.md](skills/sdd-skill/SKILL.md) ( [README.md](docs/readme_support_docs/sdd-skill/README.md) ) and for our future MCP Server ( [sdd_mcp_server_design.md](docs/future_explorations/mcp_server/sdd_mcp_server_design.md) ), what would be a sensible, actually useful, small set of templates ( [sdd_helper_future_template_options.md](docs/Deferred/sdd_helper_future_template_options.md) ) to make available to the ssd-helper app ( [README.md](docs/readme_support_docs/sdd-helper/README.md) ) - possibly a "simple profile template" and a "strict profile template" ? 
+
+Bigger question: Does the nature of templates ACTUALLY help with LLM-driven authoring of SSD documents?
+
+(codex:)
+
+**Recommendation**
+
+I would keep helper-side document templates very small:
+
+- `empty`: keep it as the default, stable path. That is the current contract and implementation already ([sdd_mcp_server_design.md](/home/knut/projects/sdd/docs/future_explorations/mcp_server/sdd_mcp_server_design.md:836), [mutations.ts](/home/knut/projects/sdd/src/authoring/mutations.ts:1501)).
+- `neutral_scaffold`: optional later, but only if it stays near-empty and semantically neutral. Think “parse-valid starter” or “structural shell,” not seeded app content ([sdd_helper_future_template_options.md](/home/knut/projects/sdd/docs/Deferred/sdd_helper_future_template_options.md:27), [sdd_helper_future_template_options.md](/home/knut/projects/sdd/docs/Deferred/sdd_helper_future_template_options.md:62)).
+- `strict_ready_scaffold`: only as a deferred, parameterized template family, not as a fixed template. It should fill required props from the selected profile and caller-provided values, not inject fake nodes or fake business semantics.
+
+I would not make `simple_profile_template` and `strict_profile_template` the main concept. In this repo, profiles are validation overlays, not document variants ([architecture.md](/home/knut/projects/sdd/docs/toolchain/architecture.md:161), [architecture.md](/home/knut/projects/sdd/docs/toolchain/architecture.md:233)), while `--template` is supposed to be document bootstrapping, not a semantic mode switch ([sdd_helper_future_template_options.md](/home/knut/projects/sdd/docs/Deferred/sdd_helper_future_template_options.md:17)).
+
+**Why**
+
+The real difference between “simple” and “strict” is mostly completeness pressure, not document shape. `small_app.sdd` vs `small_app_strict.sdd` shows that strict authoring mostly adds repeated per-node metadata like `owner`, `surface`, `route_or_key`, `access`, `responsibility`, `inputs`, `outputs`, `place_id`, and `data_required` ([small_app.sdd](/home/knut/projects/sdd/docs/readme_support_docs/small_app_example/small_app.sdd:8), [small_app_strict.sdd](/home/knut/projects/sdd/docs/readme_support_docs/small_app_example/small_app_strict.sdd:8), [strict.yaml](/home/knut/projects/sdd/bundle/v0.1/profiles/strict.yaml:37)). That means a strict *document* template is only a weak accelerator. The useful help belongs at node-insertion time, not file-creation time.
+
+So for the future MCP server, the highest-value “template” layer is probably prompt/recipe presets, not create-time document templates. The MCP design already leans that way with `sdd.author_new_document` taking `template_id`, `validate_profile`, and `projection_views` ([sdd_mcp_server_design.md](/home/knut/projects/sdd/docs/future_explorations/mcp_server/sdd_mcp_server_design.md:959)). I’d rather expose presets like `draft_new_document` and `governed_new_document` there than hardcoded simple/strict file templates.
+
+**Do templates actually help LLM-driven authoring?**
+
+A bit, but only in the right place.
+
+- Create-time templates help when they remove neutral setup friction.
+- They hurt when they seed guessed semantics, because that becomes real graph state and can anchor the model in the wrong direction ([sdd_helper_future_template_options.md](/home/knut/projects/sdd/docs/Deferred/sdd_helper_future_template_options.md:44)).
+- The bigger win for LLMs is bundle-driven scaffolding plus validation loops: profile-aware required-property hints, structured `apply` recipes, projection feedback, and example retrieval.
+
+If you want, I can turn this into a concrete proposal for:
+1. helper template IDs,
+2. MCP prompt presets,
+3. a bundle-driven “strict node scaffold” approach that stays aligned with bundle authority.
+
+(kg:)
+
+I suppose there might be room for domain-specific templates that do things like carry nodes for known available components (defined by business context).
+
+(codex:)
+
+Yes, there probably is room for that, but I’d separate it from “templates” in the narrow `create --template` sense.
+
+`create --template` still feels best as bootstrapping only: `empty`, maybe later `neutral_scaffold`. That matches the current direction that templates should stay semantically neutral, while profiles stay validation overlays rather than document variants ([sdd_helper_future_template_options.md](/home/knut/projects/sdd/docs/Deferred/sdd_helper_future_template_options.md:64), [architecture.md](/home/knut/projects/sdd/docs/toolchain/architecture.md:161)).
+
+For the idea you’re describing, I’d use a different concept:
+
+- `starter packs` or `domain packs`: explicit, opt-in semantic seed content for a known business context.
+- `component imports`: selective insertion of known reusable components from a maintained catalog.
+- `context defaults`: owner/surface/access/route conventions that fill common metadata without guessing product structure.
+
+That matters because under the current SDD model, inserted nodes are real semantics immediately, not just hints. So a full “available components” inventory can easily become misleading if most of it is merely possible rather than actually in use. The safe version is: create empty or near-empty, then apply a named pack or import selected components as a normal dry-run change set. That keeps it reviewable, revision-bound, and undoable instead of hiding a lot of semantics inside document creation.
+
+So my updated view is:
+
+- `simple template` and `strict template`: probably not the right primary abstraction.
+- `empty` plus maybe `neutral_scaffold`: good helper/MCP create templates.
+- domain-specific starter packs: potentially very useful, if they are authoritative, small, explicit, and parameterized.
+- full domain catalogs: better exposed as read resources plus selective import, not auto-seeded into every new document.
+
+For LLM-driven authoring, that absolutely can help, but only when it encodes real organizational knowledge. It helps when it removes repeated low-value setup. It hurts when it injects plausible-but-wrong structure that the model then has to edit around.
+
+If you want, I can sketch a concrete 2-tier design:
+1. tiny `create` templates,
+2. separate `starter pack` / `component catalog` mechanism for the future MCP server and helper.

@@ -14,6 +14,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 4-14-26
+
+-researched template options. conclusion: not yet
+-planned expanded shared authoring capabilities
+
 ## Mon 4-13-26
 
 -added examples to skill doc page, but they are problematic
