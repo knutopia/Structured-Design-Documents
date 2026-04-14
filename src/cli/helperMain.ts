@@ -2,4 +2,4 @@
 import { runHelperCli } from "./helperProgram.js";
 
 const { exitCode } = await runHelperCli(process.argv);
-process.exit(exitCode);
+process.exitCode = exitCode;

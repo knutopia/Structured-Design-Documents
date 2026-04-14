@@ -112,6 +112,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
 ```
 
 Preview is for rendered confirmation, not for structured mutation.
+If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 8. Undo A Helper-Managed Commit
 

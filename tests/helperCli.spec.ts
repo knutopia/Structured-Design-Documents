@@ -12,6 +12,7 @@ import type {
   UndoChangeSetArgs
 } from "../src/authoring/contracts.js";
 import { AuthoringMutationError } from "../src/authoring/mutations.js";
+import { AuthoringPreviewError } from "../src/authoring/preview.js";
 import { runHelperCli, type HelperCliDeps } from "../src/cli/helperProgram.js";
 import { createAuthoringWorkspace } from "../src/authoring/workspace.js";
 
@@ -163,6 +164,7 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     stderr: (content: string) => {
       stderr.push(content);
     },
+    findRepoRoot: vi.fn(async (startDir: string) => startDir),
     loadBundle: vi.fn(async () => ({} as Bundle)),
     createWorkspace: createAuthoringWorkspace,
     inspectDocument: inspectDocumentMock,
@@ -446,7 +448,37 @@ describe("sdd-helper CLI", () => {
     expect(parseStdoutPayload(stdout)).toEqual({
       kind: "sdd-helper-error",
       code: "invalid_args",
-      message: "Request body does not match the expected top-level shape."
+      message: "Request body does not match ApplyChangeSetArgs: base_revision must be a string."
+    });
+  });
+
+  it("returns invalid_args for malformed nested apply operations", async () => {
+    const { deps, stdout, applyChangeSetMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        operations: [
+          {
+            kind: "reposition_top_level_node",
+            node_handle: "hdl_node"
+          }
+        ]
+      }))
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/bad-nested-shape.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyChangeSetMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "Request body does not match ApplyChangeSetArgs: operations[0].placement must be an object."
     });
   });
 
@@ -466,6 +498,31 @@ describe("sdd-helper CLI", () => {
     expect(parseStdoutPayload(stdout)).toMatchObject({
       kind: "sdd-change-set",
       origin: "undo_change_set"
+    });
+  });
+
+  it("returns invalid_args for malformed undo options", async () => {
+    const { deps, stdout, undoChangeSetMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        change_set_id: "chg_target_001",
+        mode: "later",
+        validate_profile: "strictish"
+      }))
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "undo",
+      "--request",
+      "/tmp/undo-bad.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(undoChangeSetMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "Request body does not match UndoChangeSetArgs: mode must be one of \"dry_run\" or \"commit\"."
     });
   });
 
@@ -493,10 +550,22 @@ describe("sdd-helper CLI", () => {
     });
   });
 
-  it("returns runtime_error when preview fails before producing an artifact", async () => {
+  it("returns runtime_error with diagnostics when preview fails before producing an artifact", async () => {
+    const diagnostics = [
+      {
+        stage: "validate" as const,
+        code: "validate.required_props_by_type",
+        severity: "error" as const,
+        message: "Node 'P-001' is missing required property 'owner'.",
+        file: "docs/example.sdd"
+      }
+    ];
     const { deps, stdout } = createDeps({
       renderPreview: vi.fn(async () => {
-        throw new Error("Preview did not produce an artifact.");
+        throw new AuthoringPreviewError(
+          "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict): Node 'P-001' is missing required property 'owner'.",
+          diagnostics
+        );
       })
     });
     const result = await runHelperCli([
@@ -516,8 +585,30 @@ describe("sdd-helper CLI", () => {
     expect(parseStdoutPayload(stdout)).toEqual({
       kind: "sdd-helper-error",
       code: "runtime_error",
-      message: "Preview did not produce an artifact."
+      message: "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict): Node 'P-001' is missing required property 'owner'.",
+      diagnostics
     });
+  });
+
+  it("does not load the bundle for git-only commands", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+
+    const statusResult = await runHelperCli(["node", "sdd-helper", "git-status"], deps);
+    expect(statusResult.exitCode).toBe(0);
+
+    stdout.length = 0;
+    const commitResult = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "git-commit",
+      "--message",
+      "Save changes",
+      "docs/example.sdd"
+    ], deps);
+
+    expect(statusResult.exitCode).toBe(0);
+    expect(commitResult.exitCode).toBe(0);
+    expect(loadBundleMock).not.toHaveBeenCalled();
   });
 
   it("supports git-status with and without explicit paths", async () => {

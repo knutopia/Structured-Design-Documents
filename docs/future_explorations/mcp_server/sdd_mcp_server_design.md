@@ -169,6 +169,7 @@ For this design, control-plane edit failures also surface as diagnostics using `
 - `sdd.handle_stale`
 - `sdd.ambiguous_target`
 - `sdd.unsupported_template`
+- `sdd.unsupported_document_version`
 - `sdd.invalid_reposition_target`
 
 ## 5. System Architecture
@@ -1070,6 +1071,7 @@ interface HelperErrorResult {
   kind: "sdd-helper-error";
   code: "invalid_args" | "invalid_json" | "runtime_error";
   message: string;
+  diagnostics?: Diagnostic[];
 }
 ```
 
@@ -1079,6 +1081,7 @@ Rules:
 - domain-level rejections are represented in that payload and do not switch the helper into an unstructured error mode
 - malformed arguments, malformed JSON request bodies, and unexpected runtime failures return `HelperErrorResult`
 - `HelperErrorResult` writes to stdout and exits non-zero
+- helper and MCP should share the same underlying domain diagnostics, but the failure envelope remains surface-specific
 - stderr is reserved for optional crash/debug output and is not part of the public contract
 - bare `sdd-helper` and any invocation containing `--help` return a short JSON help stub and exit zero
 
@@ -1166,7 +1169,14 @@ Output:
 
 #### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
 
-Returns the same logical result as `sdd.render_preview`.
+Success returns the same logical result as `sdd.render_preview`.
+
+If preview cannot produce an artifact, helper preview remains in the helper-error lane:
+
+- the helper returns `HelperErrorResult`
+- the helper message should describe the failing stage or reason class where possible
+- any underlying diagnostics should be preserved on `HelperErrorResult.diagnostics`
+- MCP may map the same underlying diagnostics into an MCP-specific failure envelope rather than reusing the helper envelope verbatim
 
 #### `sdd-helper git-status [<document_path> ...]`
 

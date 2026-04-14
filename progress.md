@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
 -remove service_blueprint DOT output
 -how to enrich the diagram type with deeper content (link?)
@@ -19,7 +20,7 @@
 -fixed run_helper.sh location documentation drift that the earlier skill content action caused
 -made run_helper.sh executable (!!)
 -created "manual" skill example, encountered preview failure
--created helper hardening plan (poor messaging etc)
+-created helper hardening plan (poor messaging etc), executed it
 
 ## Sun 4-12-26
 

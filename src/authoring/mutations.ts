@@ -1512,7 +1512,7 @@ export async function createDocument(
     createCreateDocumentRejection(journal, resolvedPath.publicPath, [
       createDiagnostic(
         resolvedPath.publicPath,
-        "sdd.unsupported_template",
+        "sdd.unsupported_document_version",
         `Unsupported document version '${args.version}'.`
       )
     ]);

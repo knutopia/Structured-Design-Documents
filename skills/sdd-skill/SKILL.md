@@ -40,7 +40,7 @@ This skill enables working with structured design documents. In this repo source
 - Do not construct or parse handles manually.
 - Do not reuse handles across later turns without a fresh `inspect`.
 - Treat `sdd-change-set` with `status: "rejected"` as a domain result to interpret, not as a shell failure.
-- Treat `sdd-helper-error` as an invocation or environment failure that should be fixed before continuing.
+- Treat `sdd-helper-error` as a helper-layer failure that must be classified before continuing. Many cases are invocation or environment problems, but preview can also fail here when the document is still invalid under the requested profile.
 - Keep helper paths repo-relative and `.sdd`-scoped.
 
 ## Supported Helper Surface
@@ -67,6 +67,7 @@ Use `preview` when the user needs visible confirmation, especially for:
 - confirming that a change has the intended visible effect
 
 Do not confuse preview with semantic projection. Preview is a render artifact.
+If preview returns `sdd-helper-error`, inspect the message and any attached `diagnostics` before assuming the helper environment is broken.
 
 ## When To Use Helper Git Commands
 

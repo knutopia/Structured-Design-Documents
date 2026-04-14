@@ -188,7 +188,7 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ],
     result_kind: "sdd-preview",
     constraints: [
-      "The helper returns runtime_error if preview generation does not produce an artifact."
+      "If preview cannot produce an artifact, the helper returns runtime_error with stage-specific messaging and any available diagnostics."
     ]
   },
   {
@@ -233,7 +233,7 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     result_kind: "sdd-git-commit",
     constraints: [
       "At least one explicit .sdd path is required.",
-      "Only the supplied .sdd paths are staged and committed."
+      "Only the supplied .sdd paths and any paired rename sources needed to complete those renames are staged and committed."
     ]
   },
   {

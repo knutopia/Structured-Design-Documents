@@ -17,6 +17,13 @@ export interface AuthoringGitDeps {
   execFile?: typeof execFile;
 }
 
+interface GitStatusEntry {
+  path: DocumentPath;
+  index_status: string;
+  worktree_status: string;
+  rename_source_path?: DocumentPath;
+}
+
 interface GitRunResult {
   stdout: Buffer;
   stderr: Buffer;
@@ -67,8 +74,8 @@ function normalizeExplicitDocumentPaths(
   return [...new Set(paths.map((documentPath) => workspace.normalizeDocumentPath(documentPath)))];
 }
 
-function parseStatusEntries(output: Buffer): HelperGitStatusResult["status"] {
-  const entries: HelperGitStatusResult["status"] = [];
+function parseStatusEntries(output: Buffer): GitStatusEntry[] {
+  const entries: GitStatusEntry[] = [];
   let offset = 0;
 
   while (offset < output.length) {
@@ -87,22 +94,28 @@ function parseStatusEntries(output: Buffer): HelperGitStatusResult["status"] {
     let pathText = record.slice(3);
     offset = recordTerminator + 1;
 
+    let renameSourcePath: string | undefined;
     if (indexStatus === "R" || indexStatus === "C") {
       const sourceTerminator = output.indexOf(0x00, offset);
       if (sourceTerminator === -1) {
         break;
       }
+      renameSourcePath = output.subarray(offset, sourceTerminator).toString("utf8");
       offset = sourceTerminator + 1;
     }
 
     if (pathText.startsWith("\"") && pathText.endsWith("\"")) {
       pathText = JSON.parse(pathText) as string;
     }
+    if (renameSourcePath?.startsWith("\"") && renameSourcePath.endsWith("\"")) {
+      renameSourcePath = JSON.parse(renameSourcePath) as string;
+    }
 
     entries.push({
       path: pathText,
       index_status: indexStatus,
-      worktree_status: worktreeStatus
+      worktree_status: worktreeStatus,
+      rename_source_path: renameSourcePath
     });
   }
 
@@ -137,7 +150,11 @@ export async function getGitStatus(
   return {
     kind: "sdd-git-status",
     paths: allPaths,
-    status: entries
+    status: entries.map(({ path, index_status, worktree_status }) => ({
+      path,
+      index_status,
+      worktree_status
+    }))
   };
 }
 
@@ -153,8 +170,17 @@ export async function gitCommit(
     throw new AuthoringGitError("At least one explicit .sdd path is required for git-commit.");
   }
 
+  const { stdout: statusStdout } = await runGit(workspace, ["status", "--porcelain=1", "-z"], deps);
+  const renameSourcePaths = parseStatusEntries(statusStdout)
+    .filter((entry) => normalizedPaths.includes(entry.path) && entry.rename_source_path)
+    .map((entry) => entry.rename_source_path as DocumentPath);
+  const commitPaths = [...new Set([...normalizedPaths, ...renameSourcePaths])];
+
   await runGit(workspace, ["add", "--", ...normalizedPaths], deps);
-  await runGit(workspace, ["commit", "--message", message, "--", ...normalizedPaths], deps);
+  if (renameSourcePaths.length > 0) {
+    await runGit(workspace, ["rm", "--cached", "--ignore-unmatch", "--quiet", "--", ...renameSourcePaths], deps);
+  }
+  await runGit(workspace, ["commit", "--message", message, "--", ...commitPaths], deps);
   const { stdout } = await runGit(workspace, ["rev-parse", "HEAD"], deps);
 
   return {

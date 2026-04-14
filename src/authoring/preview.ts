@@ -16,6 +16,40 @@ export class AuthoringPreviewError extends Error {
   }
 }
 
+function normalizePreviewFailureStage(stage: Diagnostic["stage"]): string {
+  switch (stage) {
+    case "bundle":
+    case "parse":
+    case "compile":
+      return "compile";
+    case "validate":
+      return "validate";
+    case "project":
+      return "project";
+    case "render":
+      return "render";
+    case "cli":
+      return "cli";
+    default:
+      return stage;
+  }
+}
+
+function buildPreviewFailureMessage(
+  path: string,
+  args: Pick<RenderPreviewArgs, "view_id" | "profile_id">,
+  diagnostics: Diagnostic[]
+): string {
+  const primaryDiagnostic = diagnostics.find((diagnostic) => diagnostic.severity === "error");
+  const context = `'${path}' (view_id=${args.view_id}, profile_id=${args.profile_id})`;
+
+  if (primaryDiagnostic) {
+    return `Preview ${normalizePreviewFailureStage(primaryDiagnostic.stage)} failure for ${context}: ${primaryDiagnostic.message}`;
+  }
+
+  return `Preview failed without artifact output for ${context}.`;
+}
+
 export async function renderPreview(
   workspace: AuthoringWorkspace,
   bundle: Bundle,
@@ -41,7 +75,7 @@ export async function renderPreview(
 
   if (!previewResult.artifact) {
     throw new AuthoringPreviewError(
-      `Preview did not produce an artifact for '${resolvedPath.publicPath}'.`,
+      buildPreviewFailureMessage(resolvedPath.publicPath, args, previewResult.diagnostics),
       previewResult.diagnostics
     );
   }

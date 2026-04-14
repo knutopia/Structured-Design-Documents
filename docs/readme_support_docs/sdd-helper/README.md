@@ -32,9 +32,10 @@ Use `capabilities` when you want the full machine-readable command manifest. Use
 ## Core Operating Conventions
 
 - Successful commands write exactly one JSON payload to `stdout`.
-- Helper-level failures return `sdd-helper-error` and exit non-zero. This covers malformed arguments, malformed JSON request bodies, and runtime failures.
+- Helper-level failures return `sdd-helper-error` and exit non-zero. This covers malformed arguments, malformed JSON request bodies, and runtime failures. Some helper errors, especially preview failures, also include optional `diagnostics`.
 - Domain-level rejections stay structured. For example, a rejected change set still comes back as a normal JSON result and still exits zero.
 - Public path inputs are repo-relative and `.sdd`-focused.
+- Direct helper execution works from anywhere inside the repo checkout; bundle-backed commands resolve the repo root at runtime rather than assuming the current directory is the repo root.
 - `apply` and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
 - `stderr` is not part of the public helper contract.
 
@@ -183,8 +184,8 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
 - Key inputs: document path, `view`, `profile`, and `format`, with an optional backend override.
 - Result kind: `sdd-preview`
-- Important constraints: if preview generation does not produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`.
-- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. That makes the helper easy to integrate into downstream machine workflows, even though the payloads may be large.
+- Important constraints: if preview generation cannot produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
+- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken.
 
 ### Narrow Git Workflows
 
@@ -205,7 +206,7 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - Invocation: `pnpm sdd-helper git-commit --message <message> <document_path>...`
 - Key inputs: a commit message plus one or more explicit `.sdd` document paths.
 - Result kind: `sdd-git-commit`
-- Important constraints: at least one explicit `.sdd` path is required, and only the supplied `.sdd` paths are staged and committed.
+- Important constraints: at least one explicit `.sdd` path is required, and the helper keeps commit scope narrow to the supplied `.sdd` paths plus any paired rename sources needed to complete those renames.
 - Practical notes: this is intentionally narrow. It exists to support helper-centric document workflows, not to replace general-purpose git usage.
 
 ## Result Kinds At A Glance
@@ -219,7 +220,7 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - `sdd-preview`: preview output with embedded SVG text or base64 PNG data.
 - `sdd-git-status`: narrow `.sdd`-scoped git status information.
 - `sdd-git-commit`: the commit result for helper-scoped `.sdd` commits.
-- `sdd-helper-error`: the helper-level error payload for invalid args, invalid JSON, and runtime failures.
+- `sdd-helper-error`: the helper-level error payload for invalid args, invalid JSON, and runtime failures, with optional structured diagnostics.
 
 ## Guidance By Audience
 
@@ -236,7 +237,8 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - Treat JSON as the public interface. Do not expect human-readable CLI text.
 - Keep path inputs repo-relative and `.sdd`-focused.
 - Use `inspect` to obtain current `revision` and stable same-revision handles before constructing mutation requests.
-- Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not interpret or execute the request; a zero-exit rejected change set means the request was understood and rejected within the domain model.
+- Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not complete the request transport or execution path; a zero-exit rejected change set means the request was understood and rejected within the domain model.
+- Do not assume every helper error is a permanent environment failure. Preview can fail in the helper-error lane for an invalid intermediate document state, and those cases should be classified from the helper message plus any attached diagnostics.
 
 ### For Future Contributors
 

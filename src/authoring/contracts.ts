@@ -372,6 +372,7 @@ export interface HelperErrorResult {
   kind: "sdd-helper-error";
   code: "invalid_args" | "invalid_json" | "runtime_error";
   message: string;
+  diagnostics?: Diagnostic[];
 }
 
 export interface HelperHelpStubResult {

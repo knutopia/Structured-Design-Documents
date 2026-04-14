@@ -1,3 +1,4 @@
+import { access } from "node:fs/promises";
 import path from "node:path";
 
 const SDD_EXTENSION = ".sdd";
@@ -33,6 +34,8 @@ export interface AuthoringWorkspace {
   resolveStatePath(relativePath: string): string;
   toPublicPath(absolutePath: string): string;
 }
+
+export type RepoRootExists = (candidatePath: string) => Promise<boolean>;
 
 function assertNonEmptyPath(candidate: string, description: string): void {
   if (candidate.trim().length === 0) {
@@ -79,6 +82,41 @@ function resolveFromBase(basePath: string, relativePath: string, description: st
   const absolutePath = path.resolve(basePath, ...segments);
   assertWithinBase(basePath, absolutePath, description);
   return absolutePath;
+}
+
+async function defaultPathExists(candidatePath: string): Promise<boolean> {
+  try {
+    await access(candidatePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function looksLikeAuthoringRepoRoot(
+  candidatePath: string,
+  pathExists: RepoRootExists = defaultPathExists
+): Promise<boolean> {
+  return (
+    (await pathExists(path.join(candidatePath, "package.json"))) &&
+    (await pathExists(path.join(candidatePath, "bundle/v0.1/manifest.yaml")))
+  );
+}
+
+export async function findAuthoringRepoRoot(
+  startDir: string,
+  pathExists: RepoRootExists = defaultPathExists
+): Promise<string | null> {
+  let currentDir = path.resolve(startDir);
+
+  while (currentDir !== path.dirname(currentDir)) {
+    if (await looksLikeAuthoringRepoRoot(currentDir, pathExists)) {
+      return currentDir;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+
+  return (await looksLikeAuthoringRepoRoot(currentDir, pathExists)) ? currentDir : null;
 }
 
 export function createAuthoringWorkspace(repoRoot: string): AuthoringWorkspace {

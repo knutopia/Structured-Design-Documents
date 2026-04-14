@@ -121,4 +121,29 @@ describe("authoring git helpers", () => {
       expect(statusAfter).not.toContain("docs/example.sdd");
     });
   });
+
+  it("completes rename commits when the explicit path is the rename destination", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      await runGit(tempRepoRoot, ["init", "-q"]);
+      await runGit(tempRepoRoot, ["config", "user.email", "test@example.com"]);
+      await runGit(tempRepoRoot, ["config", "user.name", "Test User"]);
+      await writeRepoFile(tempRepoRoot, "docs/one.sdd", "SDD-TEXT 0.1\nPlace P-001 \"One\"\nEND\n");
+      await runGit(tempRepoRoot, ["add", "docs/one.sdd"]);
+      await runGit(tempRepoRoot, ["commit", "-q", "-m", "init"]);
+
+      await runGit(tempRepoRoot, ["mv", "docs/one.sdd", "docs/two.sdd"]);
+
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const committed = await gitCommit(workspace, "rename sdd", ["docs/two.sdd"]);
+
+      expect(committed.kind).toBe("sdd-git-commit");
+      expect(committed.committed_paths).toEqual(["docs/two.sdd"]);
+
+      const headStatus = await runGit(tempRepoRoot, ["show", "--format=", "--name-status", "HEAD"]);
+      expect(headStatus.trim().split("\n")).toEqual(["R100\tdocs/one.sdd\tdocs/two.sdd"]);
+
+      const statusAfter = await runGit(tempRepoRoot, ["status", "--short"]);
+      expect(statusAfter).toBe("");
+    });
+  });
 });

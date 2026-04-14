@@ -132,6 +132,15 @@ describe("authoring mutations", () => {
         }),
         "sdd.unsupported_template"
       );
+
+      await expectMutationError(
+        createDocument(workspace, bundle, {
+          path: "docs/unsupported-version.sdd",
+          template_id: "empty",
+          version: "0.1.1" as never
+        }),
+        "sdd.unsupported_document_version"
+      );
     });
   });
 

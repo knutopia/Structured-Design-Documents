@@ -1,4 +1,4 @@
-# SDD Helper Hardening Implementation Plan
+# [Done] SSD Helper Hardening Implementation Plan
 
 Status: active implementation plan for hardening the JSON-first `sdd-helper` surface
 
