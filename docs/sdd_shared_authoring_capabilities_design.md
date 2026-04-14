@@ -25,6 +25,8 @@ This design introduces four additive capabilities:
 
 These changes are intentionally narrow. They do not introduce template expansion, starter packs, preview transport changes, raw text editing, or generalized session-state workflows.
 
+In this first slice, the authoring-intent layer is a higher-level shared mutation service that preserves low-level change sets as the normative surgical write surface. It does not introduce candidate-state addressing or chainable dry-run workflows.
+
 ## 2. Observed Authoring Friction
 
 Current helper-first authoring has four recurring inefficiencies:
@@ -34,7 +36,7 @@ Current helper-first authoring has four recurring inefficiencies:
 - Validation and projection reads exist semantically in the shared domain model, but the helper does not expose them as first-class reads. The skill therefore has to overload `apply(... validate_profile/projection_views ...)` for both mutation and feedback.
 - Handle-only targeting is correct at the low level, but it is awkward as the only author-facing targeting model. For common authoring work, an exact `node_id` reference is often the more natural input.
 
-None of these problems justify replacing the low-level change-set contract. They justify adding a higher-level shared authoring layer that compiles into that contract.
+None of these problems justify replacing the low-level change-set contract. They justify adding a higher-level shared authoring layer that preserves that contract as the normative low-level mutation substrate while offering a more efficient shared authoring surface for common work.
 
 ## 3. Non-Negotiable Constraints
 
@@ -47,6 +49,7 @@ The following constraints remain locked:
 - New capabilities must be implemented in the shared domain core first and then surfaced consistently through `sdd-helper` and MCP.
 - All additions must be backward-compatible with the current `create_document`, `apply_change_set`, `undo_change_set`, `inspect`, validation, projection, and preview contracts.
 - Deterministic rejection remains preferred over heuristic convenience.
+- This slice does not add candidate-state addressing, chainable dry-run follow-on edits, or any other request-persistent authoring session state.
 
 ## 4. Capability Design
 
@@ -63,7 +66,7 @@ The initial scope is intentionally narrow:
 - one new shared entrypoint: `applyAuthoringIntent(...)`
 - one initial intent kind: `insert_node_scaffold`
 
-The low-level change-set contract remains normative. Authoring intents are a compilation layer, not a second mutation engine.
+The low-level change-set contract remains normative for surgical control. Authoring intents are a distinct higher-level shared mutation service over the same authoring core. They do not require the public low-level `ChangeOperation[]` contract to grow request-local temporary handles or other helper-only conveniences.
 
 #### Proposed shared types
 
@@ -85,7 +88,7 @@ interface ApplyAuthoringIntentResult {
   mode: ChangeSetMode;
   status: ChangeSetStatus;
   intents: AuthoringIntent[];
-  change_set: ChangeSetResult;
+  change_set: ChangeSetResult; // derived canonical effect record
   created_targets: Array<{
     local_id: string;
     kind: "node" | "edge";
@@ -99,6 +102,7 @@ type AuthoringIntent = InsertNodeScaffoldIntent;
 
 type NodeRef =
   | { by: "handle"; handle: Handle }
+  | { by: "local_id"; local_id: string }
   | { by: "selector"; selector: NodeSelector };
 
 interface NodeSelector {
@@ -122,7 +126,6 @@ interface InsertNodeScaffoldIntent {
       key: string;
       value_kind: ValueKind;
       raw_value: string;
-      local_id?: string;
     }>;
     edges?: Array<{
       local_id: string;
@@ -134,8 +137,7 @@ interface InsertNodeScaffoldIntent {
       effect?: string | null;
       props?: Record<string, string>;
       placement?: {
-        mode: PlacementMode;
-        anchor?: NodeRef;
+        mode: "first" | "last";
       };
     }>;
     children?: InsertNodeScaffoldIntent[];
@@ -145,12 +147,24 @@ interface InsertNodeScaffoldIntent {
 
 #### Behavioral rules
 
-- Every authoring intent resolves all `NodeRef` values against `base_revision` before any low-level operations are compiled.
-- If any selector or handle target cannot be resolved, the entire request is rejected.
-- Authoring intents compile to ordinary low-level `ChangeOperation[]`, then execute through the same rewrite, validation, projection, journal, and undo path as `apply_change_set`.
-- `ApplyAuthoringIntentResult.change_set` is the canonical low-level effect record. Journaled behavior, undo eligibility, and `change_set_id` continue to be owned by that nested `ChangeSetResult`.
-- `insert_node_scaffold` is allowed to compile into multiple primitive operations, but the authoring-intent surface must preserve a deterministic mapping from caller-supplied `local_id` values to created handles.
-- Primitive operations remain the only public mutation substrate used by undo and by any tooling that needs surgical control.
+- `local_id` values must be unique across the entire request, including nested scaffolds and edge entries.
+- Authoring intents execute in request order.
+- Within one `insert_node_scaffold`, behavior is deterministic:
+  - create the node header first
+  - apply properties in listed order
+  - apply edges in listed order
+  - apply children in listed order
+- `NodeRef` resolution follows two scopes:
+  - `{ by: "handle" }` and `{ by: "selector" }` resolve against the persisted document at `base_revision`
+  - `{ by: "local_id" }` resolves only to nodes created earlier in the same request
+- Forward references by `local_id` are rejected. The service never guesses or rewrites author intent to make a forward reference work.
+- If any selector, handle, or `local_id` target cannot be resolved, the entire request is rejected.
+- Authoring intents are applied through the shared authoring core and then emit a derived canonical `change_set` effect record that uses the same rewrite, validation, projection, journal, and undo machinery as other mutations.
+- `ApplyAuthoringIntentResult.change_set` is a service-produced effect record, not the caller-authored contract surface. In the companion MCP/helper design, records created by this surface should use `origin: "apply_authoring_intent"`.
+- `insert_node_scaffold` is allowed to perform multiple internal mutation steps, but the authoring-intent surface must preserve a deterministic mapping from caller-supplied `local_id` values to created handles.
+- For node scaffolds, placement remains intentionally narrow: node placement uses `PlacementMode`, while edge placement inside scaffolds is limited to `first` or `last` and does not attempt full low-level body-item anchor parity in v1.
+- Rejection diagnostics for authoring-intent requests must include intent-local attribution sufficient for repair, including the failing `intent_index`, the relevant `local_id` when present, and field-path context in the emitted diagnostic message and/or related identifiers.
+- Primitive `ChangeOperation[]` remains the only public mutation substrate used by undo and by any tooling that needs surgical control.
 
 #### Surface impacts
 
@@ -187,15 +201,18 @@ The current contracts already allow optional insertion handles in `ChangeSetSumm
 - On any successful `apply_change_set` result, `summary.edge_insertions[].handle` must be populated when the inserted edge exists in the post-change structural model.
 - This requirement applies to both `mode: "dry_run"` and `mode: "commit"`, because both modes compute a post-change result.
 - The TypeScript shape can remain optional for backward compatibility, but the implementation behavior should treat the field as required whenever the handle is deterministically knowable.
-- `ApplyAuthoringIntentResult.created_targets` must provide a stable mapping from caller-supplied `local_id` values to created handles. This mapping is the high-level continuation surface for `author`.
-- Returned handles remain revision-bound. They are valid only for the `resulting_revision` of that result.
+- On successful `author` results, `created_targets` must provide a stable mapping from caller-supplied `local_id` values to created handles whenever those handles are deterministically knowable from the candidate or committed post-change structure.
+- For `mode: "commit"`, returned insertion handles and `created_targets` are the continuation surface for later requests. They remain revision-bound and are valid only for the committed `resulting_revision` of that result.
+- For `mode: "dry_run"`, returned insertion handles and `created_targets` are informational previews of the candidate post-change structure only. They must not be reused in later requests because this slice does not define candidate-state addressing.
 
 #### Surface impacts
 
 Helper impact:
 
-- `sdd-helper apply` results become immediately more useful for chained edits because insertions now return handles wherever possible.
-- `sdd-helper author` returns both the nested `change_set` and `created_targets`, allowing follow-on requests without an automatic `inspect`.
+- `sdd-helper apply` results become immediately more informative because insertions now return handles wherever possible.
+- `sdd-helper author` returns both the nested `change_set` and `created_targets`.
+- Follow-on requests may continue from returned handles after `mode: "commit"` without an automatic `inspect`.
+- Dry-run insertion handles and `created_targets` remain review aids only.
 
 MCP impact:
 
@@ -204,7 +221,8 @@ MCP impact:
 
 Skill impact:
 
-- After `author` or `apply`, the skill may continue from returned handles within the same `resulting_revision`.
+- After committed `author` or committed `apply`, the skill may continue from returned handles within the same `resulting_revision`.
+- Dry-run handles may be inspected for review, but the skill must not reuse them in later requests.
 - A fresh `inspect` remains the fallback when the model has crossed revisions, lost continuation context, or needs broader document structure than the returned result exposes.
 
 ### 4.3 First-Class Author Feedback Surfaces
@@ -222,8 +240,10 @@ No new semantic payload shapes are required. The shared authoring core already d
 - Add shared helper-facing read services that return the same logical payloads as the existing validation and projection resources.
 - `validate` must return the same `ValidationResource` shape already defined by the shared contracts.
 - `project` must return the same `ProjectionResource` shape already defined by the shared contracts.
-- `apply_change_set(... validate_profile/projection_views ...)` remains supported. It continues to be the correct inline confirmation mechanism when the caller wants edit execution and semantic feedback in one request.
-- Direct validation and projection reads do not change revision semantics. They operate on the currently loaded LF-normalized document text and return the current revision in their result payloads.
+- Direct `validate` and `project` reads operate on the current persisted LF-normalized document revision at call time.
+- Direct `validate` and `project` do not read dry-run candidates, helper session state, or candidate results addressed by `change_set_id`.
+- `apply_change_set(... validate_profile/projection_views ...)` remains supported and is the required inline confirmation mechanism when the caller wants pre-commit semantic feedback on a dry run.
+- `applyAuthoringIntent(... validate_profile/projection_views ...)` follows the same rule when the caller wants edit execution and semantic feedback in one request.
 
 #### Surface impacts
 
@@ -237,12 +257,12 @@ MCP impact:
 
 - No new resource types are needed. The existing validation and projection resources remain authoritative.
 - The MCP design should be revised to make it explicit that helper parity now includes direct read mirrors for validation and projection.
-- Prompt guidance should prefer direct validation/projection reads during multi-step review loops when mutation is not needed in the same request.
+- Prompt guidance should prefer direct validation/projection reads when the caller wants semantics for the current persisted document and no mutation is needed in the same request.
 
 Skill impact:
 
-- Update the skill's default workflow to use direct `validate` and `project` during orient and review loops.
-- Keep `apply(... validate_profile/projection_views ...)` as the preferred pattern when a mutation request should return immediate semantic feedback under the same request envelope.
+- Update the skill's default workflow to use direct `validate` and `project` during orient and post-commit review loops.
+- Keep `author/apply(... validate_profile/projection_views ...)` as the preferred pattern when a dry-run or mutation request should return immediate semantic feedback under the same request envelope.
 - Remove the current skill prohibition on standalone validation and projection reads.
 
 ### 4.4 Semantic Target Resolution
@@ -259,10 +279,11 @@ This capability is intentionally limited to high-level authoring. It does not re
 
 - `NodeSelector` supports exactly one kind in the first slice: `{ kind: "node_id"; node_id: string }`.
 - Selectors resolve within the single document identified by `path` and the single revision identified by `base_revision`.
-- Resolution occurs before authoring-intent compilation.
+- Resolution occurs before authoring-intent execution.
 - Exact-match semantics apply. There is no fuzzy matching, substring matching, path matching, or hierarchy-aware lookup in this slice.
 - If zero nodes match the selector, reject the entire request.
 - If multiple nodes match the selector, reject the entire request.
+- Request-local `{ by: "local_id" }` references are a separate authoring-intent mechanism. They resolve only to nodes created earlier in the same request and do not widen selector semantics.
 - Body-item selectors, property selectors, edge selectors, and path-like selectors are explicitly deferred.
 
 #### Diagnostics
@@ -306,6 +327,7 @@ Section 4:
 Section 7:
 
 - Keep `ChangeSetSummary` structurally backward-compatible, but tighten its behavioral contract so insertion handles are populated wherever deterministically knowable.
+- Add `apply_authoring_intent` as an additive `ChangeSetOrigin` value for journaled effect records produced by the high-level authoring surface.
 
 Section 9:
 
@@ -316,7 +338,7 @@ Section 9:
 Section 10:
 
 - Revise prompt guidance so `sdd.author_new_document`, `sdd.extend_document`, and `sdd.repair_document` may prefer `sdd.apply_authoring_intent` for common authoring slices.
-- Revise prompt guidance so prompts may direct callers to use direct validation and projection reads during non-mutating feedback loops.
+- Revise prompt guidance so dry-run authoring loops request inline validation/projection on `author` or `apply`, while direct validation and projection reads remain the correct tool for persisted-document feedback loops.
 
 Section 11:
 
@@ -338,11 +360,12 @@ Quick Start:
 Default Workflow:
 
 - Change the primary workflow from `inspect -> apply dry-run -> commit -> preview if needed`
-- To `inspect -> author/apply dry-run -> validate/project as needed -> commit -> preview if needed`
+- To `inspect -> author/apply dry-run with inline validate/projection as needed -> commit -> validate/project/preview as needed`
 
 Edit Safety Rules:
 
-- Allow continued editing from returned handles within the same `resulting_revision`.
+- Allow continued editing from returned handles only after committed results within the same `resulting_revision`.
+- Treat dry-run handles and `created_targets` as informational only.
 - Keep fresh `inspect` as the fallback when revision context changes or broader structure is needed.
 
 Supported Helper Surface:
@@ -416,6 +439,10 @@ Example request:
           {
             "kind": "insert_node_scaffold",
             "local_id": "component-open-shift-list",
+            "parent": {
+              "by": "local_id",
+              "local_id": "place-open-shifts"
+            },
             "placement": {
               "mode": "last"
             },
@@ -438,15 +465,16 @@ Example request:
 Expected outcome:
 
 - the request resolves `volunteer_scheduling` against `base_revision`
-- the intent compiles into low-level insert/property operations
-- the result returns a canonical nested `change_set`
-- `created_targets` contains handles for `place-open-shifts` and `component-open-shift-list`
+- the request resolves any backward `local_id` references during request evaluation
+- the service applies scaffold semantics through the shared authoring core in deterministic order
+- the result returns a derived canonical nested `change_set`
+- because this example is a `dry_run`, `created_targets` and any returned insertion handles are informational previews of the candidate result only
 
 ### 6.2 Continue editing from returned handles without re-`inspect`
 
 Goal:
 
-- use handles returned by a prior successful authoring result to perform a targeted follow-on edit within the same resulting revision
+- use handles returned by a prior committed authoring result to perform a targeted follow-on edit within the same resulting revision
 
 Example follow-on request:
 
@@ -471,28 +499,30 @@ Example follow-on request:
 Expected outcome:
 
 - no second `inspect` is required solely to recover the handle for the newly created place
-- the returned handle remains valid because the follow-on request uses the exact `resulting_revision` from the prior result
+- the returned handle remains valid because the prior authoring result was committed and the follow-on request uses that exact committed `resulting_revision`
 
 ### 6.3 Run direct validation and projection reads around an authoring loop
 
 Goal:
 
-- read validation and projection without embedding those reads into every mutation request
+- get pre-commit semantic feedback inline, then use standalone validation and projection against the persisted document
 
 Example sequence:
 
 ```bash
-sdd-helper author --request /tmp/author-request.json
+sdd-helper author --request /tmp/author-dry-run.json
+sdd-helper author --request /tmp/author-commit.json
 sdd-helper validate docs/example.sdd --profile strict
 sdd-helper project docs/example.sdd --view ui_contracts
 ```
 
 Expected outcome:
 
-- the authoring request performs the structural edit
-- validation returns `ValidationResource`
-- projection returns `ProjectionResource`
-- the skill can decide whether further edits are needed before preview
+- the dry-run authoring request returns structural feedback plus inline validation/projection results for the candidate change
+- the commit authoring request writes the accepted change
+- standalone validation returns `ValidationResource` for the current persisted document
+- standalone projection returns `ProjectionResource` for the current persisted document
+- the skill can decide whether further edits or preview are needed without assuming standalone reads can inspect dry-run candidates
 
 ### 6.4 Reject ambiguous or missing selector targets deterministically
 
@@ -521,9 +551,13 @@ At minimum, the implemented first slice should satisfy these tests:
 - `sdd-helper validate` returns the same logical shape as `ValidationResource`
 - `sdd-helper project` returns the same logical shape as `ProjectionResource`
 - successful `apply_change_set` insertions populate node and edge handles where deterministically knowable
-- successful `author` results expose `created_targets` mapped by caller-supplied `local_id`
+- successful committed `author` results expose continuation-safe `created_targets` mapped by caller-supplied `local_id`
+- successful dry-run `author` results may expose predicted `created_targets`, but the docs and workflow treat them as informational only
 - selector resolution accepts exact single-match `node_id` references and rejects zero-match or multi-match selectors deterministically
-- `sdd-skill` can execute a normal `inspect -> author/apply -> validate/project -> preview if needed` workflow without promising helper-only semantics or bypassing the shared authoring core
+- `local_id` values are documented as globally unique within the request, backward-only for request-local references, and deterministic in evaluation order
+- scaffold edge placement is explicitly limited to the documented v1 cases
+- authoring-intent rejection diagnostics include intent-local attribution sufficient for repair
+- `sdd-skill` can execute a normal `inspect -> author/apply dry-run with inline validate/projection -> commit -> validate/project/preview if needed` workflow without promising helper-only semantics or bypassing the shared authoring core
 
 ## 8. Explicitly Deferred
 
@@ -534,6 +568,7 @@ This design does not attempt to solve:
 - component catalogs or import systems
 - preview artifact transport redesign
 - raw text subtree replacement
+- candidate-state addressing or chainable dry-run follow-on edits
 - generalized session-state features such as "commit last dry run"
 
 Those topics require separate design work and are intentionally excluded here.
@@ -542,7 +577,7 @@ Those topics require separate design work and are intentionally excluded here.
 
 Implement in this order:
 
-1. standalone helper `validate` and `project`
+1. standalone helper `validate` and `project` as persisted-document reads
 2. guaranteed insertion-handle returns for `apply_change_set`
-3. shared authoring-intent service plus `sdd-helper author` and `sdd.apply_authoring_intent`
+3. shared authoring-intent service plus `sdd-helper author` and `sdd.apply_authoring_intent`, including local-ref resolution, deterministic evaluation order, and intent-local diagnostics
 4. node-only selector resolution inside authoring intents
