@@ -2,6 +2,9 @@
 
 ## Open Issues
 
+-level up "skill abstraction layer"
+-teach the skill to create/save a sensible preview (or multiple)
+-re-author Skill doc page with manually created output
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
 -remove service_blueprint DOT output
@@ -22,6 +25,7 @@
 -created "manual" skill example, encountered preview failure
 -created helper hardening plan (poor messaging etc), executed it
 -added validation gate before preview in skill
+
 ## Sun 4-12-26
 
 -created sdd-helper documentation page
