@@ -394,18 +394,16 @@ function buildInspectDocument(
   };
 }
 
-export async function inspectDocument(
-  workspace: AuthoringWorkspace,
+export function inspectDocumentText(
   bundle: Bundle,
-  documentPath: string
-): Promise<InspectDocumentResult> {
-  const resolvedDocument = workspace.resolveDocumentPath(documentPath);
-  const rawText = await readFile(resolvedDocument.absolutePath, "utf8");
-  const canonicalText = normalizeTextToLf(rawText);
+  documentPath: string,
+  text: string
+): InspectDocumentResult {
+  const canonicalText = normalizeTextToLf(text);
   const revision = computeDocumentRevision(canonicalText);
   const parseResult = parseSource(
     {
-      path: resolvedDocument.publicPath,
+      path: documentPath,
       text: canonicalText
     },
     bundle
@@ -415,17 +413,27 @@ export async function inspectDocument(
   if (!parseResult.document) {
     return {
       kind: "sdd-inspect-load-failure",
-      path: resolvedDocument.publicPath,
+      path: documentPath,
       revision,
       diagnostics
     };
   }
 
   return buildInspectDocument(
-    resolvedDocument.publicPath,
+    documentPath,
     revision,
     parseResult.document,
     diagnostics,
     canonicalText
   );
+}
+
+export async function inspectDocument(
+  workspace: AuthoringWorkspace,
+  bundle: Bundle,
+  documentPath: string
+): Promise<InspectDocumentResult> {
+  const resolvedDocument = workspace.resolveDocumentPath(documentPath);
+  const rawText = await readFile(resolvedDocument.absolutePath, "utf8");
+  return inspectDocumentText(bundle, resolvedDocument.publicPath, rawText);
 }

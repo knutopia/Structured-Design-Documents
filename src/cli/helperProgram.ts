@@ -5,20 +5,27 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 import type { Bundle } from "../bundle/types.js";
 import { loadBundle } from "../bundle/loadBundle.js";
 import type {
+  ApplyAuthoringIntentArgs,
   ApplyChangeSetArgs,
+  AuthoringIntent,
   ChangeOperation,
   ChangeSetResult,
   CreateDocumentArgs,
   HelperErrorResult,
+  NodeRef,
+  ProjectDocumentArgs,
   RenderPreviewArgs,
   SearchGraphArgs,
+  ValidateDocumentArgs,
   UndoChangeSetArgs
 } from "../authoring/contracts.js";
+import { applyAuthoringIntent } from "../authoring/authoringIntents.js";
 import { AuthoringGitError, getGitStatus, gitCommit } from "../authoring/git.js";
 import { inspectDocument } from "../authoring/inspect.js";
 import { listDocuments, searchGraph } from "../authoring/listing.js";
 import { applyChangeSet, AuthoringMutationError, createDocument } from "../authoring/mutations.js";
 import { AuthoringPreviewError, renderPreview } from "../authoring/preview.js";
+import { projectDocument, validateDocument } from "../authoring/readServices.js";
 import { undoChangeSet } from "../authoring/undo.js";
 import { stringifyCanonicalJson } from "../authoring/revisions.js";
 import {
@@ -42,7 +49,10 @@ export interface HelperCliDeps {
   searchGraph: typeof searchGraph;
   createDocument: typeof createDocument;
   applyChangeSet: typeof applyChangeSet;
+  applyAuthoringIntent: typeof applyAuthoringIntent;
   undoChangeSet: typeof undoChangeSet;
+  validateDocument: typeof validateDocument;
+  projectDocument: typeof projectDocument;
   renderPreview: typeof renderPreview;
   getGitStatus: typeof getGitStatus;
   gitCommit: typeof gitCommit;
@@ -85,7 +95,10 @@ function createDefaultDeps(): HelperCliDeps {
     searchGraph,
     createDocument,
     applyChangeSet,
+    applyAuthoringIntent,
     undoChangeSet,
+    validateDocument,
+    projectDocument,
     renderPreview,
     getGitStatus,
     gitCommit,
@@ -323,6 +336,227 @@ function validateApplyChangeSetArgs(value: unknown): string | undefined {
   return undefined;
 }
 
+function validateNodeRef(value: unknown, fieldPath: string, availableNodeLocalIds: ReadonlySet<string>): string | undefined {
+  if (!isRecord(value)) {
+    return `${fieldPath} must be an object.`;
+  }
+  if (value.by === "handle") {
+    return typeof value.handle === "string" ? undefined : `${fieldPath}.handle must be a string.`;
+  }
+  if (value.by === "local_id") {
+    if (typeof value.local_id !== "string") {
+      return `${fieldPath}.local_id must be a string.`;
+    }
+    return availableNodeLocalIds.has(value.local_id)
+      ? undefined
+      : `${fieldPath}.local_id must refer to a node created earlier in the same request.`;
+  }
+  if (value.by === "selector") {
+    if (!isRecord(value.selector)) {
+      return `${fieldPath}.selector must be an object.`;
+    }
+    if (value.selector.kind !== "node_id") {
+      return `${fieldPath}.selector.kind must be "node_id".`;
+    }
+    return typeof value.selector.node_id === "string"
+      ? undefined
+      : `${fieldPath}.selector.node_id must be a string.`;
+  }
+  return `${fieldPath}.by must be one of "handle", "local_id", or "selector".`;
+}
+
+function validateInsertNodeScaffoldIntent(
+  value: unknown,
+  fieldPath: string,
+  seenLocalIds: Set<string>,
+  availableNodeLocalIds: Set<string>
+): string | undefined {
+  if (!isRecord(value)) {
+    return `${fieldPath} must be an object.`;
+  }
+  if (value.kind !== "insert_node_scaffold") {
+    return `${fieldPath}.kind must be "insert_node_scaffold".`;
+  }
+  if (typeof value.local_id !== "string") {
+    return `${fieldPath}.local_id must be a string.`;
+  }
+  if (seenLocalIds.has(value.local_id)) {
+    return `${fieldPath}.local_id must be unique within the request.`;
+  }
+  if (value.parent !== undefined) {
+    const parentError = validateNodeRef(value.parent, `${fieldPath}.parent`, availableNodeLocalIds);
+    if (parentError) {
+      return parentError;
+    }
+  }
+  if (!isRecord(value.placement)) {
+    return `${fieldPath}.placement must be an object.`;
+  }
+  if (!["before", "after", "first", "last"].includes(String(value.placement.mode))) {
+    return `${fieldPath}.placement.mode must be one of "before", "after", "first", or "last".`;
+  }
+  if ((value.placement.mode === "before" || value.placement.mode === "after") && value.placement.anchor === undefined) {
+    return `${fieldPath}.placement.anchor is required for mode "${String(value.placement.mode)}".`;
+  }
+  if ((value.placement.mode === "first" || value.placement.mode === "last") && value.placement.anchor !== undefined) {
+    return `${fieldPath}.placement.anchor is only allowed for mode "before" or "after".`;
+  }
+  if (value.placement.anchor !== undefined) {
+    const anchorError = validateNodeRef(value.placement.anchor, `${fieldPath}.placement.anchor`, availableNodeLocalIds);
+    if (anchorError) {
+      return anchorError;
+    }
+  }
+  if (!isRecord(value.node)) {
+    return `${fieldPath}.node must be an object.`;
+  }
+  if (typeof value.node.node_type !== "string") {
+    return `${fieldPath}.node.node_type must be a string.`;
+  }
+  if (typeof value.node.node_id !== "string") {
+    return `${fieldPath}.node.node_id must be a string.`;
+  }
+  if (typeof value.node.name !== "string") {
+    return `${fieldPath}.node.name must be a string.`;
+  }
+
+  seenLocalIds.add(value.local_id);
+  availableNodeLocalIds.add(value.local_id);
+
+  if (value.node.props !== undefined) {
+    if (!Array.isArray(value.node.props)) {
+      return `${fieldPath}.node.props must be an array when provided.`;
+    }
+    for (const [index, prop] of value.node.props.entries()) {
+      if (!isRecord(prop)) {
+        return `${fieldPath}.node.props[${index}] must be an object.`;
+      }
+      const propPath = `${fieldPath}.node.props[${index}]`;
+      if (typeof prop.key !== "string") {
+        return `${propPath}.key must be a string.`;
+      }
+      const valueKindError = validateValueKind(prop.value_kind, `${propPath}.value_kind`);
+      if (valueKindError) {
+        return valueKindError;
+      }
+      if (typeof prop.raw_value !== "string") {
+        return `${propPath}.raw_value must be a string.`;
+      }
+    }
+  }
+
+  if (value.node.edges !== undefined) {
+    if (!Array.isArray(value.node.edges)) {
+      return `${fieldPath}.node.edges must be an array when provided.`;
+    }
+    for (const [index, edge] of value.node.edges.entries()) {
+      if (!isRecord(edge)) {
+        return `${fieldPath}.node.edges[${index}] must be an object.`;
+      }
+      const edgePath = `${fieldPath}.node.edges[${index}]`;
+      if (typeof edge.local_id !== "string") {
+        return `${edgePath}.local_id must be a string.`;
+      }
+      if (seenLocalIds.has(edge.local_id)) {
+        return `${edgePath}.local_id must be unique within the request.`;
+      }
+      if (typeof edge.rel_type !== "string") {
+        return `${edgePath}.rel_type must be a string.`;
+      }
+      if (typeof edge.to !== "string") {
+        return `${edgePath}.to must be a string.`;
+      }
+      const toNameError = validateOptionalNullableString(edge, "to_name", edgePath);
+      if (toNameError) {
+        return toNameError;
+      }
+      const eventError = validateOptionalNullableString(edge, "event", edgePath);
+      if (eventError) {
+        return eventError;
+      }
+      const guardError = validateOptionalNullableString(edge, "guard", edgePath);
+      if (guardError) {
+        return guardError;
+      }
+      const effectError = validateOptionalNullableString(edge, "effect", edgePath);
+      if (effectError) {
+        return effectError;
+      }
+      if (edge.props !== undefined && !isStringRecord(edge.props)) {
+        return `${edgePath}.props must be an object with string values.`;
+      }
+      if (edge.placement !== undefined) {
+        if (!isRecord(edge.placement)) {
+          return `${edgePath}.placement must be an object when provided.`;
+        }
+        if (edge.placement.mode !== "first" && edge.placement.mode !== "last") {
+          return `${edgePath}.placement.mode must be "first" or "last".`;
+        }
+      }
+      seenLocalIds.add(edge.local_id);
+    }
+  }
+
+  if (value.node.children !== undefined) {
+    if (!Array.isArray(value.node.children)) {
+      return `${fieldPath}.node.children must be an array when provided.`;
+    }
+    for (const [index, child] of value.node.children.entries()) {
+      const childError = validateInsertNodeScaffoldIntent(
+        child,
+        `${fieldPath}.node.children[${index}]`,
+        seenLocalIds,
+        availableNodeLocalIds
+      );
+      if (childError) {
+        return childError;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function validateApplyAuthoringIntentArgs(value: unknown): string | undefined {
+  if (!isRecord(value)) {
+    return "expected an object.";
+  }
+  if (typeof value.path !== "string") {
+    return "path must be a string.";
+  }
+  if (typeof value.base_revision !== "string") {
+    return "base_revision must be a string.";
+  }
+  if (!Array.isArray(value.intents)) {
+    return "intents must be an array.";
+  }
+  const modeError = validateMode(value.mode, "mode");
+  if (modeError) {
+    return modeError;
+  }
+  const validateProfileError = validateProfile(value.validate_profile, "validate_profile");
+  if (validateProfileError) {
+    return validateProfileError;
+  }
+  if (value.projection_views !== undefined && !isStringArray(value.projection_views)) {
+    return "projection_views must be an array of strings when provided.";
+  }
+  const seenLocalIds = new Set<string>();
+  const availableNodeLocalIds = new Set<string>();
+  for (const [index, intent] of value.intents.entries()) {
+    const intentError = validateInsertNodeScaffoldIntent(
+      intent,
+      `intents[${index}]`,
+      seenLocalIds,
+      availableNodeLocalIds
+    );
+    if (intentError) {
+      return intentError;
+    }
+  }
+  return undefined;
+}
+
 function validateUndoChangeSetArgs(value: unknown): string | undefined {
   if (!isRecord(value)) {
     return "expected an object.";
@@ -494,6 +728,21 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     });
 
   program
+    .command("author")
+    .requiredOption("--request <file-or-stdin>", "JSON request source or '-' for stdin")
+    .action(async (options: { request: string }) => {
+      const { workspace, bundle } = await loadBundleContext(deps);
+      const rawRequest = await loadRequestText(deps, options.request);
+      const request = parseJsonRequest<ApplyAuthoringIntentArgs>(
+        rawRequest,
+        "ApplyAuthoringIntentArgs",
+        validateApplyAuthoringIntentArgs
+      );
+      workspace.normalizeDocumentPath(request.path);
+      writeJson(deps, await deps.applyAuthoringIntent(workspace, bundle, request));
+    });
+
+  program
     .command("undo")
     .requiredOption("--request <file-or-stdin>", "JSON request source or '-' for stdin")
     .action(async (options: { request: string }) => {
@@ -501,6 +750,32 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const rawRequest = await loadRequestText(deps, options.request);
       const request = parseJsonRequest<UndoChangeSetArgs>(rawRequest, "UndoChangeSetArgs", validateUndoChangeSetArgs);
       writeJson(deps, await deps.undoChangeSet(workspace, bundle, request));
+    });
+
+  program
+    .command("validate")
+    .argument("<document_path>", "repo-relative .sdd document path")
+    .requiredOption("--profile <profile_id>", "profile id")
+    .action(async (documentPath: string, options: { profile: ValidateDocumentArgs["profile_id"] }) => {
+      const { workspace, bundle } = await loadBundleContext(deps);
+      const normalizedPath = workspace.normalizeDocumentPath(documentPath);
+      writeJson(deps, await deps.validateDocument(workspace, bundle, {
+        path: normalizedPath,
+        profile_id: options.profile
+      }));
+    });
+
+  program
+    .command("project")
+    .argument("<document_path>", "repo-relative .sdd document path")
+    .requiredOption("--view <view_id>", "view id")
+    .action(async (documentPath: string, options: { view: ProjectDocumentArgs["view_id"] }) => {
+      const { workspace, bundle } = await loadBundleContext(deps);
+      const normalizedPath = workspace.normalizeDocumentPath(documentPath);
+      writeJson(deps, await deps.projectDocument(workspace, bundle, {
+        path: normalizedPath,
+        view_id: options.view
+      }));
     });
 
   program

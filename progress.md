@@ -17,7 +17,7 @@
 ## Tue 4-14-26
 
 -researched template options. conclusion: not yet
--planned expanded shared authoring capabilities
+-planned, implemented expanded shared authoring capabilities
 
 ## Mon 4-13-26
 

@@ -192,6 +192,13 @@ describe("authoring mutations", () => {
 
       expect(dryRun.status).toBe("applied");
       expect(dryRun.mode).toBe("dry_run");
+      expect(dryRun.summary.node_insertions).toEqual([
+        {
+          handle: expect.any(String),
+          node_id: "P-001",
+          node_type: "Place"
+        }
+      ]);
       expect(await readTempDocument(tempRepoRoot, "docs/bootstrap.sdd")).toBe("SDD-TEXT 0.1\n");
 
       const committed = await applyChangeSet(workspace, bundle, {
@@ -216,6 +223,7 @@ describe("authoring mutations", () => {
       expect(committed.resulting_revision).toBeDefined();
       expect(committed.summary.node_insertions).toEqual([
         {
+          handle: expect.any(String),
           node_id: "P-001",
           node_type: "Place"
         }
@@ -341,6 +349,64 @@ describe("authoring mutations", () => {
     });
   });
 
+  it("returns revision-bound insertion handles that change when the document revision changes", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const created = await createDocument(workspace, bundle, {
+        path: "docs/revision-bound-handles.sdd",
+        template_id: "empty"
+      });
+
+      const firstInsert = await applyChangeSet(workspace, bundle, {
+        path: "docs/revision-bound-handles.sdd",
+        base_revision: created.revision,
+        mode: "commit",
+        operations: [
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-001",
+            name: "One",
+            placement: {
+              mode: "last",
+              stream: "top_level"
+            }
+          }
+        ]
+      });
+
+      const firstHandle = firstInsert.summary.node_insertions[0]?.handle;
+      expect(firstHandle).toEqual(expect.any(String));
+
+      const secondInsert = await applyChangeSet(workspace, bundle, {
+        path: "docs/revision-bound-handles.sdd",
+        base_revision: firstInsert.resulting_revision!,
+        mode: "commit",
+        operations: [
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-000",
+            name: "Zero",
+            placement: {
+              mode: "first",
+              stream: "top_level"
+            }
+          }
+        ]
+      });
+
+      expect(secondInsert.status).toBe("applied");
+
+      const reInspected = expectInspectedDocument(
+        await inspectDocument(workspace, bundle, "docs/revision-bound-handles.sdd")
+      );
+      const persistedHandle = reInspected.resource.nodes.find((node) => node.node_id === "P-001")?.handle;
+      expect(persistedHandle).toEqual(expect.any(String));
+      expect(persistedHandle).not.toBe(firstHandle);
+    });
+  });
+
   it("rejects ambiguous properties, wrong-kind handles, and stale revisions", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const documentPath = "docs/duplicate-props.sdd";
@@ -440,6 +506,14 @@ describe("authoring mutations", () => {
       });
 
       expect(inserted.status).toBe("applied");
+      expect(inserted.summary.edge_insertions).toEqual([
+        {
+          handle: expect.any(String),
+          parent_handle: expect.any(String),
+          rel_type: "CONTAINS",
+          to: "P-010"
+        }
+      ]);
       expect(await readTempDocument(tempRepoRoot, documentPath)).toBe(
         [
           "SDD-TEXT 0.1",

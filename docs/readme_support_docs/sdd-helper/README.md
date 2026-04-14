@@ -36,10 +36,10 @@ Use `capabilities` when you want the full machine-readable command manifest. Use
 - Domain-level rejections stay structured. For example, a rejected change set still comes back as a normal JSON result and still exits zero.
 - Public path inputs are repo-relative and `.sdd`-focused.
 - Direct helper execution works from anywhere inside the repo checkout; bundle-backed commands resolve the repo root at runtime rather than assuming the current directory is the repo root.
-- `apply` and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
+- `apply`, `author`, and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
 - `stderr` is not part of the public helper contract.
 
-## Worked Workflow: Dry-Run Authoring
+## Worked Workflow: Dry-Run Editing
 
 The helper is especially useful when you want to plan a structural edit without committing it yet.
 
@@ -69,7 +69,9 @@ pnpm sdd-helper inspect <document_path>
 
 The `sdd-document-inspect` result gives you the current document revision plus stable same-revision handles for nodes and body items. Those handles are what later mutation requests refer to.
 
-### 4. Submit an `apply` dry-run request
+### 4. Submit a dry-run request
+
+Use `author` when the task is common scaffold creation or nested structure authoring. Use `apply` when you already know the exact low-level handles and operations you want.
 
 Create a compact `ApplyChangeSetArgs` request like this:
 
@@ -89,7 +91,7 @@ Create a compact `ApplyChangeSetArgs` request like this:
 }
 ```
 
-Then submit it:
+Then submit it through `apply`:
 
 ```bash
 pnpm sdd-helper apply --request request.json
@@ -101,13 +103,13 @@ Or, if another tool is generating the JSON:
 cat request.json | pnpm sdd-helper apply --request -
 ```
 
-Because `mode` is omitted, this is a dry run by default.
+Because `mode` is omitted, this is a dry run by default. The same dry-run default also applies to `author`.
 
 ### 5. Interpret the returned `sdd-change-set`
 
 The returned change-set payload tells you whether the request was applied or rejected, what summary of changes it computed, and what diagnostics it produced. That gives you a structured review point before you decide whether to submit the same request with commit mode.
 
-This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and `git-commit` are documented below, but they are not part of this single example flow.
+If you commit a change and want persisted-state semantic confirmation afterward, use `validate` and `project`. If you need rendered confirmation, use `preview` after the committed revision has already passed the intended validation gate.
 
 ## Command Reference
 
@@ -163,7 +165,17 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - Key inputs: an `ApplyChangeSetArgs` JSON body loaded from a file path or from stdin via `--request -`.
 - Result kind: `sdd-change-set`
 - Important constraints: dry-run is the default when `mode` is omitted; rejected change sets remain structured and still exit zero.
-- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; dry-run first is the safest default for both humans and LLMs.
+- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs.
+
+#### `sdd-helper author --request <file-or-stdin>`
+
+- Purpose: apply or dry-run high-level authoring intents through the shared authoring core.
+- Use when: you want to create or extend common SDD structure without spelling out every low-level `ChangeOperation` by hand.
+- Invocation: `pnpm sdd-helper author --request <file-or-stdin>`
+- Key inputs: an `ApplyAuthoringIntentArgs` JSON body loaded from a file path or from stdin via `--request -`.
+- Result kind: `sdd-authoring-intent-result`
+- Important constraints: dry-run is the default when `mode` is omitted; committed results are the continuation-safe source of `created_targets`; dry-run `created_targets` are informational previews only.
+- Practical notes: the result includes both the high-level `created_targets` mapping and a nested derived `sdd-change-set`; use inline `validate_profile` and `projection_views` here for pre-commit candidate feedback.
 
 #### `sdd-helper undo --request <file-or-stdin>`
 
@@ -174,6 +186,26 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - Result kind: `sdd-change-set`
 - Important constraints: only committed and undo-eligible change sets can be undone; rejected undo results remain structured and still exit zero.
 - Practical notes: like `apply`, `undo` supports dry-run versus commit behavior, which makes it possible to inspect an undo before carrying it out.
+
+#### `sdd-helper validate <document_path> --profile <profile_id>`
+
+- Purpose: return validation diagnostics for the current persisted document revision.
+- Use when: you want structured semantic confirmation of the on-disk document state after a commit or outside a mutation request.
+- Invocation: `pnpm sdd-helper validate <document_path> --profile <profile_id>`
+- Key inputs: a repo-relative document path and a validation profile id.
+- Result kind: `sdd-validation`
+- Important constraints: this reads the current persisted document only; it does not inspect dry-run candidates.
+- Practical notes: use inline `validate_profile` on `apply` or `author` when you need pre-commit candidate feedback.
+
+#### `sdd-helper project <document_path> --view <view_id>`
+
+- Purpose: return a structured projection for the current persisted document revision.
+- Use when: you want the current read-side semantic projection without issuing a write request.
+- Invocation: `pnpm sdd-helper project <document_path> --view <view_id>`
+- Key inputs: a repo-relative document path and a projection view id.
+- Result kind: `sdd-projection`
+- Important constraints: this reads the current persisted document only; it does not inspect dry-run candidates.
+- Practical notes: use inline `projection_views` on `apply` or `author` when you need pre-commit candidate feedback.
 
 ### Preview Generation
 
@@ -216,7 +248,10 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - `sdd-document-inspect`: structured document inspection data, including revision and handles.
 - `sdd-search-results`: cross-document search matches plus diagnostics.
 - `sdd-create-document`: document creation result, including the creation change set.
+- `sdd-authoring-intent-result`: the structured result for `author`, including `created_targets` plus a nested derived change set.
 - `sdd-change-set`: the structured result for `apply` and `undo`, whether applied or rejected.
+- `sdd-validation`: validation diagnostics for the current persisted document revision.
+- `sdd-projection`: projection output for the current persisted document revision.
 - `sdd-preview`: preview output with embedded SVG text or base64 PNG data.
 - `sdd-git-status`: narrow `.sdd`-scoped git status information.
 - `sdd-git-commit`: the commit result for helper-scoped `.sdd` commits.
@@ -227,7 +262,8 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 ### For SDD Users
 
 - Use `search` to find relevant documents or nodes, then use `inspect` before you plan a structured edit.
-- Prefer `apply` dry-run before `apply` commit, especially when you are generating requests programmatically.
+- Prefer `author` or `apply` dry-run before commit, especially when you are generating requests programmatically.
+- Use `validate` and `project` when you need persisted-state semantic reads without wrapping them in a mutation request.
 - Use `preview` when you need a rendered artifact as helper output rather than through the main `sdd` CLI.
 - Use the helper git commands only when you specifically want `.sdd`-scoped behavior.
 
@@ -236,7 +272,9 @@ This workflow stops at dry-run on purpose. `preview`, `undo`, `git-status`, and 
 - Start with `capabilities`; it is the canonical discovery surface.
 - Treat JSON as the public interface. Do not expect human-readable CLI text.
 - Keep path inputs repo-relative and `.sdd`-focused.
-- Use `inspect` to obtain current `revision` and stable same-revision handles before constructing mutation requests.
+- Use `inspect` to obtain current `revision` and stable same-revision handles before constructing low-level mutation requests.
+- Use committed `author` `created_targets` and committed `apply` insertion handles as continuation surfaces for later requests at the returned `resulting_revision`.
+- Treat dry-run insertion handles and dry-run `created_targets` as review aids only.
 - Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not complete the request transport or execution path; a zero-exit rejected change set means the request was understood and rejected within the domain model.
 - Do not assume every helper error is a permanent environment failure. Preview can fail in the helper-error lane for an invalid intermediate document state, and those cases should be classified from the helper message plus any attached diagnostics.
 

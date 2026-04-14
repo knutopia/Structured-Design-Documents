@@ -14,7 +14,11 @@ export type PreviewBackendId =
   | "staged_ia_place_map_preview"
   | "staged_ui_contracts_preview"
   | "staged_service_blueprint_preview";
-export type ChangeSetOrigin = "apply_change_set" | "undo_change_set" | "create_document";
+export type ChangeSetOrigin =
+  | "apply_change_set"
+  | "apply_authoring_intent"
+  | "undo_change_set"
+  | "create_document";
 export type DocumentEffect = "created" | "updated" | "deleted";
 export type ChangeSetMode = "dry_run" | "commit";
 export type ChangeSetStatus = "applied" | "rejected";
@@ -307,6 +311,16 @@ export interface CreateDocumentResult {
   change_set: ChangeSetResult;
 }
 
+export interface ValidateDocumentArgs {
+  path: DocumentPath;
+  profile_id: ProfileId;
+}
+
+export interface ProjectDocumentArgs {
+  path: DocumentPath;
+  view_id: ViewId;
+}
+
 export interface ApplyChangeSetArgs {
   path: DocumentPath;
   base_revision: DocumentRevision;
@@ -314,6 +328,88 @@ export interface ApplyChangeSetArgs {
   operations: ChangeOperation[];
   validate_profile?: ProfileId;
   projection_views?: ViewId[];
+}
+
+export interface NodeSelector {
+  kind: "node_id";
+  node_id: string;
+}
+
+export type NodeRef =
+  | { by: "handle"; handle: Handle }
+  | { by: "local_id"; local_id: string }
+  | { by: "selector"; selector: NodeSelector };
+
+export interface InsertNodeScaffoldIntent {
+  kind: "insert_node_scaffold";
+  local_id: string;
+  parent?: NodeRef;
+  placement: {
+    mode: PlacementMode;
+    anchor?: NodeRef;
+  };
+  node: {
+    node_type: string;
+    node_id: string;
+    name: string;
+    props?: Array<{
+      key: string;
+      value_kind: ValueKind;
+      raw_value: string;
+    }>;
+    edges?: Array<{
+      local_id: string;
+      rel_type: string;
+      to: string;
+      to_name?: string | null;
+      event?: string | null;
+      guard?: string | null;
+      effect?: string | null;
+      props?: Record<string, string>;
+      placement?: {
+        mode: "first" | "last";
+      };
+    }>;
+    children?: InsertNodeScaffoldIntent[];
+  };
+}
+
+export type AuthoringIntent = InsertNodeScaffoldIntent;
+
+export interface ApplyAuthoringIntentArgs {
+  path: DocumentPath;
+  base_revision: DocumentRevision;
+  mode?: ChangeSetMode;
+  intents: AuthoringIntent[];
+  validate_profile?: ProfileId;
+  projection_views?: ViewId[];
+}
+
+export interface AuthoringIntentDiagnostic {
+  intent_index: number;
+  local_id?: string;
+  field_path: string;
+  code: string;
+  message: string;
+}
+
+export interface ApplyAuthoringIntentResult {
+  kind: "sdd-authoring-intent-result";
+  path: DocumentPath;
+  base_revision: DocumentRevision;
+  resulting_revision?: DocumentRevision;
+  mode: ChangeSetMode;
+  status: ChangeSetStatus;
+  intents: AuthoringIntent[];
+  change_set: ChangeSetResult;
+  created_targets: Array<{
+    local_id: string;
+    kind: "node" | "edge";
+    handle: Handle;
+    parent_local_id?: string;
+  }>;
+  diagnostics: Diagnostic[];
+  intent_diagnostics?: AuthoringIntentDiagnostic[];
 }
 
 export interface UndoChangeSetArgs {
@@ -399,10 +495,10 @@ export interface HelperCapabilitiesResult {
     domain_rejections: "structured_payload_exit_zero";
     path_scope: "repo_relative_sdd_paths";
     request_loading: Array<{
-      command: "apply" | "undo";
+      command: "apply" | "author" | "undo";
       option: "--request";
       sources: Array<"file_path" | "stdin_dash">;
-      top_level_shape: "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+      top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
     }>;
   };
   commands: Array<{
@@ -423,7 +519,7 @@ export interface HelperCapabilitiesResult {
     }>;
     request_body?: {
       via_option: "--request";
-      top_level_shape: "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+      top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
       source: "file_path_or_stdin_dash";
     };
     result_kind: string;

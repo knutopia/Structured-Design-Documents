@@ -9,8 +9,11 @@ The current helper exposes:
 - `inspect`
 - `search`
 - `create`
+- `author`
 - `apply`
 - `undo`
+- `validate`
+- `project`
 - `preview`
 - `git-status`
 - `git-commit`
@@ -19,16 +22,16 @@ These are the only helper commands the skill should present as available.
 
 ## Not Exposed As Standalone Helper Commands
 
-The helper does not currently expose standalone commands for:
+The helper still does not currently expose standalone commands for:
 
-- projection readout
-- validation-only readout
 - list-documents discovery
 
 When the skill needs semantic confirmation after a change, it should use:
 
-- `apply` with `validate_profile`
-- `apply` with `projection_views`
+- `author` or `apply` with `validate_profile` for pre-commit candidate validation
+- `author` or `apply` with `projection_views` for pre-commit candidate projection feedback
+- standalone `validate` for current persisted-state validation
+- standalone `project` for current persisted-state projection
 - `preview` when rendered confirmation is more useful than structured data
 
 ## Current Create Limits

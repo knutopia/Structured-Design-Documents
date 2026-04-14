@@ -66,6 +66,22 @@ describe("sdd-helper entrypoint integration", () => {
       kind: "sdd-document-inspect",
       path: documentPath
     });
+
+    const validate = await runHelperEntrypoint(nestedCwd, ["validate", documentPath, "--profile", "strict"]);
+    expect(validate.exitCode).toBe(0);
+    expect(JSON.parse(validate.stdout)).toMatchObject({
+      kind: "sdd-validation",
+      path: documentPath,
+      profile_id: "strict"
+    });
+
+    const project = await runHelperEntrypoint(nestedCwd, ["project", documentPath, "--view", "ia_place_map"]);
+    expect(project.exitCode).toBe(0);
+    expect(JSON.parse(project.stdout)).toMatchObject({
+      kind: "sdd-projection",
+      path: documentPath,
+      view_id: "ia_place_map"
+    });
   });
 
   it("reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid", async () => {

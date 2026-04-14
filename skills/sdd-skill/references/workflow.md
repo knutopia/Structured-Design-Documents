@@ -40,7 +40,7 @@ Inspect returns:
 - top-level order
 - structural-order streams
 
-Build change requests from that returned `revision` and those handles. Do not invent handles.
+Build low-level change requests from that returned `revision` and those handles. Do not invent handles.
 
 ## 4. Create A New Document
 
@@ -52,14 +52,17 @@ skills/sdd-skill/scripts/run_helper.sh create docs/example.sdd --template empty 
 
 This creates a bootstrap document only. A newly created empty-template document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
 
-If the new document needs follow-on edits, inspect it first and then proceed with normal `apply` requests.
+If the new document needs follow-on edits, use `author` for common scaffold creation or inspect it first and proceed with low-level `apply` requests.
 
-## 5. Dry-Run A Change Set
+## 5. Dry-Run A Helper Mutation
 
-Use `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
+Use `author` or `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
 If you intend to preview under a profile later, include the same `validate_profile` here first.
 
-Example request shape:
+Use `author` when the task is mostly scaffold creation or nested structure authoring.
+Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
+
+Example low-level `apply` request shape:
 
 ```json
 {
@@ -91,13 +94,14 @@ Review:
 - `summary`
 - `diagnostics`
 - optional `projection_results`
+- committed-only continuation handles from successful `summary.node_insertions` and `summary.edge_insertions`
 
 A dry run is acceptable for preview gating only when:
 
 - `status` is `applied`
 - the selected `validate_profile` reports no parse or validation errors
 
-If parse or validation errors remain, continue the inspect/apply cycle and do not preview yet.
+If parse or validation errors remain, continue the inspect/author-or-apply cycle and do not preview yet.
 
 ## 6. Commit A Change Set
 
@@ -108,9 +112,20 @@ When the dry run is acceptable for the chosen profile and the user wants the cha
 ```
 
 The skill should not skip straight to commit unless the user clearly wants the real mutation carried out.
-If further edits require fresh handles, inspect the committed result and repeat the dry-run validation gate before previewing.
+If further edits require fresh handles, either use committed `author` `created_targets`, committed `apply` insertion handles, or inspect the committed result and repeat the dry-run validation gate before previewing.
 
-## 7. Preview A Result
+## 7. Validate Or Project A Committed Result
+
+Use persisted-state semantic reads when you want confirmation after commit or when you do not need a mutation request at all:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
+skills/sdd-skill/scripts/run_helper.sh project bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
+```
+
+These commands read the current on-disk document only. They do not inspect dry-run candidates.
+
+## 8. Preview A Result
 
 Use preview only after the last committed revision has already passed a clean dry-run validation under the same profile:
 
@@ -126,7 +141,7 @@ Preview is for rendered confirmation, not for structured mutation.
 It is not a substitute for validation. The preview profile should match the `validate_profile` used in the gating dry run, and the previewed revision should be that same committed state.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
-## 8. Undo A Helper-Managed Commit
+## 9. Undo A Helper-Managed Commit
 
 Undo works from a `change_set_id` returned by a prior committed helper-managed change set.
 
@@ -146,7 +161,7 @@ Submit it with:
 skills/sdd-skill/scripts/run_helper.sh undo --request /tmp/undo-request.json
 ```
 
-## 9. Narrow Git Workflows
+## 10. Narrow Git Workflows
 
 Use helper git commands only when the user wants `.sdd`-scoped git behavior.
 

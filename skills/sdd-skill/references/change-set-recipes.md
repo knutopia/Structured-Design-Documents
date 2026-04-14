@@ -6,6 +6,7 @@ These recipes are workflow guidance only. The helper contract and the shared Typ
 
 ## General Rules
 
+- Prefer `author` for common scaffold creation and nested structure work. Use these recipes when you specifically need low-level `apply` control.
 - Inspect first and use fresh handles from the current `revision`.
 - Prefer dry-run `apply` first.
 - Keep public helper paths repo-relative.

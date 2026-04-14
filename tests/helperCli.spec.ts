@@ -1,14 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Bundle } from "../src/bundle/types.js";
 import type {
+  ApplyAuthoringIntentArgs,
   ApplyChangeSetArgs,
   ChangeSetResult,
   CreateDocumentArgs,
   CreateDocumentResult,
   HelperGitCommitResult,
   HelperGitStatusResult,
+  ProjectionResource,
   RenderPreviewResult,
   SearchGraphResult,
+  ValidationResource,
   UndoChangeSetArgs
 } from "../src/authoring/contracts.js";
 import { AuthoringMutationError } from "../src/authoring/mutations.js";
@@ -118,11 +121,74 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     mode: request.mode ?? "dry_run",
     operations: request.operations
   }));
+  const applyAuthoringIntentMock = vi.fn(async (_workspace, _bundle, request: ApplyAuthoringIntentArgs) => ({
+    kind: "sdd-authoring-intent-result" as const,
+    path: request.path,
+    base_revision: request.base_revision,
+    resulting_revision: "rev_authored",
+    mode: request.mode ?? "dry_run",
+    status: "applied" as const,
+    intents: request.intents,
+    change_set: {
+      ...createRejectedChangeSet(request.path),
+      change_set_id: "chg_author_001",
+      origin: "apply_authoring_intent" as const,
+      base_revision: request.base_revision,
+      mode: request.mode ?? "dry_run",
+      status: "applied" as const,
+      diagnostics: [],
+      resulting_revision: "rev_authored"
+    },
+    created_targets: [
+      {
+        local_id: "place-root",
+        kind: "node" as const,
+        handle: "hdl_created_root"
+      }
+    ],
+    diagnostics: []
+  }));
   const undoChangeSetMock = vi.fn(async (): Promise<ChangeSetResult> => ({
     ...createRejectedChangeSet("docs/example.sdd"),
     change_set_id: "chg_undo_001",
     origin: "undo_change_set",
     document_effect: "updated"
+  }));
+  const validateDocumentMock = vi.fn(async (): Promise<ValidationResource> => ({
+    kind: "sdd-validation",
+    uri: "sdd://document/docs/example.sdd/validation/strict",
+    path: "docs/example.sdd",
+    revision: "rev_validation",
+    profile_id: "strict",
+    report: {
+      error_count: 1,
+      warning_count: 0
+    },
+    diagnostics: []
+  }));
+  const projectDocumentMock = vi.fn(async (): Promise<ProjectionResource> => ({
+    kind: "sdd-projection",
+    uri: "sdd://document/docs/example.sdd/projection/ia_place_map",
+    path: "docs/example.sdd",
+    revision: "rev_projection",
+    view_id: "ia_place_map",
+    projection: {
+      schema: "sdd-text-view-projection",
+      version: "0.1",
+      view_id: "ia_place_map",
+      source_example: "docs/example.sdd",
+      nodes: [],
+      edges: [],
+      derived: {
+        node_annotations: [],
+        edge_annotations: [],
+        node_groups: [],
+        view_metadata: {}
+      },
+      omissions: [],
+      notes: []
+    },
+    diagnostics: []
   }));
   const renderPreviewMock = vi.fn(async (): Promise<RenderPreviewResult> => ({
     kind: "sdd-preview",
@@ -172,7 +238,10 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     searchGraph: searchGraphMock,
     createDocument: createDocumentMock,
     applyChangeSet: applyChangeSetMock,
+    applyAuthoringIntent: applyAuthoringIntentMock,
     undoChangeSet: undoChangeSetMock,
+    validateDocument: validateDocumentMock,
+    projectDocument: projectDocumentMock,
     renderPreview: renderPreviewMock,
     getGitStatus: getGitStatusMock,
     gitCommit: gitCommitMock,
@@ -200,7 +269,10 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     searchGraphMock,
     createDocumentMock,
     applyChangeSetMock,
+    applyAuthoringIntentMock,
     undoChangeSetMock,
+    validateDocumentMock,
+    projectDocumentMock,
     renderPreviewMock,
     getGitStatusMock,
     gitCommitMock
@@ -225,7 +297,7 @@ describe("sdd-helper CLI", () => {
       summary: "JSON-first helper CLI for SDD authoring workflows.",
       note: "This is machine business: the helper is intended primarily for machine and LLM automation, and it returns JSON rather than text help.",
       capabilities_command: "sdd-helper capabilities",
-      commands: ["inspect", "search", "create", "apply", "undo", "preview", "git-status", "git-commit", "capabilities"]
+      commands: ["inspect", "search", "create", "apply", "author", "undo", "validate", "project", "preview", "git-status", "git-commit", "capabilities"]
     });
   });
 
@@ -263,6 +335,18 @@ describe("sdd-helper CLI", () => {
         expect.objectContaining({
           name: "capabilities",
           result_kind: "sdd-helper-capabilities"
+        }),
+        expect.objectContaining({
+          name: "author",
+          result_kind: "sdd-authoring-intent-result"
+        }),
+        expect.objectContaining({
+          name: "validate",
+          result_kind: "sdd-validation"
+        }),
+        expect.objectContaining({
+          name: "project",
+          result_kind: "sdd-projection"
         }),
         expect.objectContaining({
           name: "git-status",
@@ -413,6 +497,98 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("supports author requests from a file and returns structured authoring results", async () => {
+    const { deps, stdout, applyAuthoringIntentMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        intents: [
+          {
+            kind: "insert_node_scaffold",
+            local_id: "place-root",
+            placement: {
+              mode: "last"
+            },
+            node: {
+              node_type: "Place",
+              node_id: "P-001",
+              name: "Root"
+            }
+          }
+        ]
+      }))
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "author",
+      "--request",
+      "/tmp/author.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(applyAuthoringIntentMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/example.sdd",
+      base_revision: "rev_base",
+      intents: [
+        {
+          kind: "insert_node_scaffold",
+          local_id: "place-root",
+          placement: {
+            mode: "last"
+          },
+          node: {
+            node_type: "Place",
+            node_id: "P-001",
+            name: "Root"
+          }
+        }
+      ]
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-authoring-intent-result",
+      status: "applied"
+    });
+  });
+
+  it("returns invalid_args for malformed author requests", async () => {
+    const { deps, stdout, applyAuthoringIntentMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        intents: [
+          {
+            kind: "insert_node_scaffold",
+            local_id: "place-root",
+            placement: {
+              mode: "before"
+            },
+            node: {
+              node_type: "Place",
+              node_id: "P-001",
+              name: "Root"
+            }
+          }
+        ]
+      }))
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "author",
+      "--request",
+      "/tmp/author-bad.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyAuthoringIntentMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "Request body does not match ApplyAuthoringIntentArgs: intents[0].placement.anchor is required for mode \"before\"."
+    });
+  });
+
   it("returns invalid_json for malformed request bodies", async () => {
     const { deps, stdout } = createDeps({
       readTextFile: vi.fn(async () => "{")
@@ -523,6 +699,48 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Request body does not match UndoChangeSetArgs: mode must be one of \"dry_run\" or \"commit\"."
+    });
+  });
+
+  it("returns validate and project payloads directly on stdout", async () => {
+    const { deps, stdout, validateDocumentMock, projectDocumentMock } = createDeps();
+    const validateResult = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "validate",
+      "docs/example.sdd",
+      "--profile",
+      "strict"
+    ], deps);
+
+    expect(validateResult.exitCode).toBe(0);
+    expect(validateDocumentMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/example.sdd",
+      profile_id: "strict"
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-validation",
+      profile_id: "strict"
+    });
+
+    stdout.length = 0;
+    const projectResult = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "project",
+      "docs/example.sdd",
+      "--view",
+      "ia_place_map"
+    ], deps);
+
+    expect(projectResult.exitCode).toBe(0);
+    expect(projectDocumentMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/example.sdd",
+      view_id: "ia_place_map"
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-projection",
+      view_id: "ia_place_map"
     });
   });
 

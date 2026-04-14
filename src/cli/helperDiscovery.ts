@@ -124,6 +124,32 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
+    name: "author",
+    invocation: "sdd-helper author --request <file-or-stdin>",
+    summary: "Apply or dry-run high-level authoring intents through the shared authoring core.",
+    mutates_repo_state: "conditional",
+    arguments: [],
+    options: [
+      {
+        flag: "--request",
+        required: true,
+        value_name: "file-or-stdin",
+        description: "JSON request file path or '-' for stdin."
+      }
+    ],
+    request_body: {
+      via_option: "--request",
+      top_level_shape: "ApplyAuthoringIntentArgs",
+      source: "file_path_or_stdin_dash"
+    },
+    result_kind: "sdd-authoring-intent-result",
+    constraints: [
+      "Dry-run is the default when the request omits mode.",
+      "Committed results expose continuation-safe created_targets for the returned resulting_revision.",
+      "Rejected authoring results stay structured and still exit zero."
+    ]
+  },
+  {
     name: "undo",
     invocation: "sdd-helper undo --request <file-or-stdin>",
     summary: "Undo a committed change set through a structured request.",
@@ -146,6 +172,58 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     constraints: [
       "Only committed and undo-eligible change sets can be undone.",
       "Rejected undo results stay structured and still exit zero."
+    ]
+  },
+  {
+    name: "validate",
+    invocation: "sdd-helper validate <document_path> --profile <profile_id>",
+    summary: "Return validation diagnostics for the current persisted document revision.",
+    mutates_repo_state: "never",
+    arguments: [
+      {
+        name: "document_path",
+        required: true,
+        description: "Repo-relative .sdd document path."
+      }
+    ],
+    options: [
+      {
+        flag: "--profile",
+        required: true,
+        value_name: "profile_id",
+        description: "Validation profile identifier."
+      }
+    ],
+    result_kind: "sdd-validation",
+    constraints: [
+      "Validation reads the current on-disk LF-normalized document revision only.",
+      "Use inline validate_profile on apply/author for pre-commit candidate feedback."
+    ]
+  },
+  {
+    name: "project",
+    invocation: "sdd-helper project <document_path> --view <view_id>",
+    summary: "Return a structured projection for the current persisted document revision.",
+    mutates_repo_state: "never",
+    arguments: [
+      {
+        name: "document_path",
+        required: true,
+        description: "Repo-relative .sdd document path."
+      }
+    ],
+    options: [
+      {
+        flag: "--view",
+        required: true,
+        value_name: "view_id",
+        description: "Projection view identifier."
+      }
+    ],
+    result_kind: "sdd-projection",
+    constraints: [
+      "Projection reads the current on-disk LF-normalized document revision only.",
+      "Use inline projection_views on apply/author for pre-commit candidate feedback."
     ]
   },
   {
@@ -284,6 +362,12 @@ export function createHelperCapabilities(): HelperCapabilitiesResult {
           option: "--request",
           sources: ["file_path", "stdin_dash"],
           top_level_shape: "ApplyChangeSetArgs"
+        },
+        {
+          command: "author",
+          option: "--request",
+          sources: ["file_path", "stdin_dash"],
+          top_level_shape: "ApplyAuthoringIntentArgs"
         },
         {
           command: "undo",

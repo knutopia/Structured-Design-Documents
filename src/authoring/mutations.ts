@@ -1,8 +1,7 @@
+import { createHash } from "node:crypto";
 import { access, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Bundle, SyntaxStatementDefinition } from "../bundle/types.js";
-import { compileSource } from "../compiler/compileSource.js";
-import type { CompiledGraph } from "../compiler/types.js";
 import { sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
 import { stripTrailingComment } from "../parser/classifyLine.js";
 import type {
@@ -31,12 +30,12 @@ import type {
   InsertEdgeLineOp,
   InsertNodeBlockOp,
   Placement,
-  ProjectionResultEntry,
   StructuralRelationshipType,
   ValueKind
 } from "./contracts.js";
+import { evaluateDocumentText, type EvaluatedDocumentText, type EvaluationOptions } from "./evaluation.js";
 import {
-  inspectDocument,
+  inspectDocumentText,
   type InspectLoadFailure,
   type InspectSourceAccess,
   type InspectTarget,
@@ -56,6 +55,7 @@ const EMPTY_TEMPLATE_ID = "empty";
 const EMPTY_TEMPLATE_VERSION = "0.1";
 const MINIMUM_TOP_LEVEL_BLOCKS_CODE = "parse.minimum_top_level_blocks";
 const STRUCTURAL_RELATIONSHIP_TYPES = new Set<StructuralRelationshipType>(["CONTAINS", "COMPOSED_OF"]);
+const TEMP_HANDLE_PREFIX = "tmp_authoring_";
 
 type TriviaItem = BlankLine | CommentLine;
 type StructuralModelItem = NodeModel | PropertyModel | EdgeModel;
@@ -118,12 +118,8 @@ interface EdgeModel extends BaseModelItem {
   lineChanged: boolean;
 }
 
-interface EvaluatedText {
-  revision: DocumentRevision;
-  diagnostics: Diagnostic[];
-  graph?: CompiledGraph;
-  projectionResults?: ProjectionResultEntry[];
-}
+type InternalInsertNodeBlockOp = InsertNodeBlockOp & { __internal_handle?: Handle };
+type InternalInsertEdgeLineOp = InsertEdgeLineOp & { __internal_handle?: Handle };
 
 interface AuthoringSyntax {
   versionLiteral: string;
@@ -144,6 +140,23 @@ export class AuthoringMutationError extends Error {
     this.diagnostics = diagnostics;
     this.changeSet = changeSet;
   }
+}
+
+function createTemporaryHandle(label: string): Handle {
+  const digest = createHash("sha256").update(label, "utf8").digest("hex");
+  return `${TEMP_HANDLE_PREFIX}${digest}`;
+}
+
+function isTemporaryHandle(handle: Handle | undefined): handle is Handle {
+  return typeof handle === "string" && handle.startsWith(TEMP_HANDLE_PREFIX);
+}
+
+function resolveMappedHandle(handle: Handle | undefined, mapping: ReadonlyMap<Handle, Handle>): Handle | undefined {
+  if (!handle) {
+    return undefined;
+  }
+
+  return mapping.get(handle) ?? handle;
 }
 
 function createDocumentUri(documentPath: DocumentPath): string {
@@ -585,7 +598,7 @@ function handleError(documentPath: DocumentPath, handle: string): Diagnostic {
 function createRejectedChangeSet(
   result: ChangeSetResult,
   diagnostics: Diagnostic[],
-  evaluated?: EvaluatedText
+  evaluated?: EvaluatedDocumentText
 ): ChangeSetResult {
   result.status = "rejected";
   result.undo_eligible = false;
@@ -645,48 +658,14 @@ function renderDocumentModel(bundle: Bundle, syntax: AuthoringSyntax, model: Doc
   return rendered.endsWith("\n") ? rendered : `${rendered}\n`;
 }
 
-function evaluateText(
-  bundle: Bundle,
-  documentPath: DocumentPath,
-  text: string,
-  options: Pick<ApplyChangeSetArgs, "validate_profile" | "projection_views">
-): EvaluatedText {
-  const input = {
-    path: documentPath,
-    text
-  };
-  const compileResult = compileSource(input, bundle);
-  const diagnostics = [...compileResult.diagnostics];
-
-  if (options.validate_profile && compileResult.graph) {
-    diagnostics.push(...validateGraph(compileResult.graph, bundle, options.validate_profile).diagnostics);
-  }
-
-  let projectionResults: ProjectionResultEntry[] | undefined;
-  if (options.projection_views && options.projection_views.length > 0) {
-    projectionResults = options.projection_views.map((viewId) => {
-      let projected: ProjectionResult;
-      if (compileResult.graph) {
-        projected = projectView(compileResult.graph, bundle, viewId);
-      } else {
-        projected = {
-          diagnostics: compileResult.diagnostics
-        };
-      }
-
-      return {
-        view_id: viewId,
-        projection: projected.projection,
-        diagnostics: sortDiagnostics(projected.diagnostics)
-      };
-    });
-  }
-
+function createEmptyDocumentModel(bundle: Bundle): DocumentModel {
+  const syntax = createAuthoringSyntax(bundle);
   return {
-    revision: computeDocumentRevision(text),
-    diagnostics: sortDiagnostics(diagnostics),
-    graph: compileResult.graph,
-    projectionResults
+    effectiveVersion: EMPTY_TEMPLATE_VERSION,
+    preVersionTrivia: [],
+    versionLine: `${syntax.versionLiteral} ${EMPTY_TEMPLATE_VERSION}`,
+    topLevelNodes: [],
+    trailingTrivia: []
   };
 }
 
@@ -753,8 +732,10 @@ function bodyInsertIndex(parent: NodeModel, documentPath: DocumentPath, placemen
 }
 
 function createNodeModel(syntax: AuthoringSyntax, depth: number, op: InsertNodeBlockOp): NodeModel {
+  const internalOperation = op as InternalInsertNodeBlockOp;
   return {
     kind: "node_block",
+    handle: internalOperation.__internal_handle,
     leadingTrivia: [],
     headerKind: depth === 0 ? syntax.topHeaderKind : syntax.nestedHeaderKind,
     nodeType: op.node_type,
@@ -768,28 +749,6 @@ function createNodeModel(syntax: AuthoringSyntax, depth: number, op: InsertNodeB
     bodyItems: [],
     bodyTrailingTrivia: []
   };
-}
-
-function buildBootstrapDocument(bundle: Bundle, operations: InsertNodeBlockOp[]): string {
-  const syntax = createAuthoringSyntax(bundle);
-  const model: DocumentModel = {
-    effectiveVersion: EMPTY_TEMPLATE_VERSION,
-    preVersionTrivia: [],
-    versionLine: `${syntax.versionLiteral} ${EMPTY_TEMPLATE_VERSION}`,
-    topLevelNodes: [],
-    trailingTrivia: []
-  };
-
-  for (const operation of operations) {
-    const node = createNodeModel(syntax, 0, operation);
-    if (operation.placement.mode === "first") {
-      model.topLevelNodes.unshift(node);
-    } else {
-      model.topLevelNodes.push(node);
-    }
-  }
-
-  return renderDocumentModel(bundle, syntax, model);
 }
 
 function isBootstrapInsertOperation(operation: ChangeOperation): operation is InsertNodeBlockOp {
@@ -809,6 +768,7 @@ function applyInsertNodeBlock(
   operation: InsertNodeBlockOp,
   summary: ChangeSetSummary
 ): Diagnostic | undefined {
+  const internalOperation = operation as InternalInsertNodeBlockOp;
   if (operation.placement.stream === "top_level") {
     if (operation.placement.parent_handle !== undefined) {
       return placementError(documentPath, "Top-level node insertion must not specify parent_handle.");
@@ -840,6 +800,7 @@ function applyInsertNodeBlock(
   }
 
   summary.node_insertions.push({
+    handle: internalOperation.__internal_handle,
     node_id: operation.node_id,
     node_type: operation.node_type
   });
@@ -1348,6 +1309,7 @@ function applyInsertEdgeLine(
   operation: InsertEdgeLineOp,
   summary: ChangeSetSummary
 ): Diagnostic | undefined {
+  const internalOperation = operation as InternalInsertEdgeLineOp;
   const parent = findNodeByHandle(model.topLevelNodes, operation.parent_handle);
   if (!parent) {
     return handleError(documentPath, operation.parent_handle);
@@ -1373,6 +1335,7 @@ function applyInsertEdgeLine(
 
   parent.bodyItems.splice(insertIndex, 0, {
     kind: "edge_line",
+    handle: internalOperation.__internal_handle,
     leadingTrivia: [],
     relType: operation.rel_type,
     to: operation.to,
@@ -1387,6 +1350,7 @@ function applyInsertEdgeLine(
   });
 
   summary.edge_insertions.push({
+    handle: internalOperation.__internal_handle,
     parent_handle: operation.parent_handle,
     rel_type: operation.rel_type,
     to: operation.to
@@ -1455,6 +1419,358 @@ function applyOperation(
         "Operation is not implemented in checkpoint 4."
       );
   }
+}
+
+function collectTemporaryHandleMappingsFromItems(
+  sourceItems: StructuralModelItem[],
+  candidateItems: StructuralModelItem[],
+  mapping: Map<Handle, Handle>
+): void {
+  const count = Math.min(sourceItems.length, candidateItems.length);
+  for (let index = 0; index < count; index += 1) {
+    const sourceItem = sourceItems[index];
+    const candidateItem = candidateItems[index];
+    if (!sourceItem || !candidateItem || sourceItem.kind !== candidateItem.kind) {
+      continue;
+    }
+
+    if (isTemporaryHandle(sourceItem.handle) && candidateItem.handle) {
+      mapping.set(sourceItem.handle, candidateItem.handle);
+    }
+
+    if (sourceItem.kind === "node_block" && candidateItem.kind === "node_block") {
+      collectTemporaryHandleMappingsFromItems(sourceItem.bodyItems, candidateItem.bodyItems, mapping);
+    }
+  }
+}
+
+function collectTemporaryHandleMappings(
+  model: DocumentModel,
+  candidateInspected: InspectedDocument,
+  bundle: Bundle
+): Map<Handle, Handle> {
+  const mapping = new Map<Handle, Handle>();
+  const candidateModel = buildDocumentModel(candidateInspected, bundle);
+
+  collectTemporaryHandleMappingsFromItems(
+    model.topLevelNodes,
+    candidateModel.topLevelNodes,
+    mapping
+  );
+
+  return mapping;
+}
+
+function remapPlacementHandles(
+  placement: Placement,
+  mapping: ReadonlyMap<Handle, Handle>
+): Placement {
+  return {
+    ...placement,
+    anchor_handle: resolveMappedHandle(placement.anchor_handle, mapping),
+    parent_handle: resolveMappedHandle(placement.parent_handle, mapping)
+  };
+}
+
+export function remapOperationHandles(
+  operations: ChangeOperation[],
+  mapping: ReadonlyMap<Handle, Handle>
+): ChangeOperation[] {
+  return operations.map((operation) => {
+    switch (operation.kind) {
+      case "insert_node_block":
+        return {
+          kind: operation.kind,
+          node_type: operation.node_type,
+          node_id: operation.node_id,
+          name: operation.name,
+          placement: remapPlacementHandles(operation.placement, mapping)
+        };
+      case "delete_node_block":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle
+        };
+      case "set_node_name":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          name: operation.name
+        };
+      case "set_node_property":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          key: operation.key,
+          value_kind: operation.value_kind,
+          raw_value: operation.raw_value
+        };
+      case "remove_node_property":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          key: operation.key
+        };
+      case "insert_edge_line":
+        return {
+          kind: operation.kind,
+          parent_handle: resolveMappedHandle(operation.parent_handle, mapping) ?? operation.parent_handle,
+          rel_type: operation.rel_type,
+          to: operation.to,
+          to_name: operation.to_name,
+          event: operation.event,
+          guard: operation.guard,
+          effect: operation.effect,
+          props: operation.props ? { ...operation.props } : undefined,
+          placement: operation.placement ? remapPlacementHandles(operation.placement, mapping) : undefined
+        };
+      case "remove_edge_line":
+        return {
+          kind: operation.kind,
+          edge_handle: resolveMappedHandle(operation.edge_handle, mapping) ?? operation.edge_handle
+        };
+      case "reposition_top_level_node":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          placement: remapPlacementHandles(operation.placement, mapping)
+        };
+      case "reposition_structural_edge":
+        return {
+          kind: operation.kind,
+          edge_handle: resolveMappedHandle(operation.edge_handle, mapping) ?? operation.edge_handle,
+          placement: remapPlacementHandles(operation.placement, mapping)
+        };
+      case "move_nested_node_block":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          placement: remapPlacementHandles(operation.placement, mapping)
+        };
+    }
+  });
+}
+
+function remapSummaryHandles(
+  summary: ChangeSetSummary,
+  mapping: ReadonlyMap<Handle, Handle>
+): ChangeSetSummary {
+  return {
+    node_insertions: summary.node_insertions.map((entry) => ({
+      ...entry,
+      handle: resolveMappedHandle(entry.handle, mapping)
+    })),
+    node_deletions: summary.node_deletions.map((entry) => ({
+      ...entry,
+      handle: resolveMappedHandle(entry.handle, mapping) ?? entry.handle
+    })),
+    node_renames: summary.node_renames.map((entry) => ({
+      ...entry,
+      handle: resolveMappedHandle(entry.handle, mapping) ?? entry.handle
+    })),
+    property_changes: summary.property_changes.map((entry) => ({
+      ...entry,
+      node_handle: resolveMappedHandle(entry.node_handle, mapping) ?? entry.node_handle
+    })),
+    edge_insertions: summary.edge_insertions.map((entry) => ({
+      ...entry,
+      handle: resolveMappedHandle(entry.handle, mapping),
+      parent_handle: resolveMappedHandle(entry.parent_handle, mapping) ?? entry.parent_handle
+    })),
+    edge_deletions: summary.edge_deletions.map((entry) => ({
+      ...entry,
+      handle: resolveMappedHandle(entry.handle, mapping) ?? entry.handle,
+      parent_handle: resolveMappedHandle(entry.parent_handle, mapping) ?? entry.parent_handle
+    })),
+    ordering_changes: summary.ordering_changes.map((entry) => ({
+      ...entry,
+      target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
+      parent_handle: resolveMappedHandle(entry.parent_handle, mapping)
+    }))
+  };
+}
+
+export interface ExecuteChangeOperationsArgs extends ApplyChangeSetArgs {
+  origin?: ChangeSetResult["origin"];
+  allowEmptyTemplateBootstrap?: boolean;
+}
+
+export interface ExecuteChangeOperationsResult {
+  changeSet: ChangeSetResult;
+  tempHandleMapping: Map<Handle, Handle>;
+}
+
+function prepareOperationsForExecution(
+  changeSetId: string,
+  operations: ChangeOperation[]
+): ChangeOperation[] {
+  return operations.map((operation, index) => {
+    switch (operation.kind) {
+      case "insert_node_block": {
+        const internalOperation = operation as InternalInsertNodeBlockOp;
+        return {
+          ...operation,
+          __internal_handle:
+            internalOperation.__internal_handle ??
+            createTemporaryHandle(`${changeSetId}|node|${index}|${operation.node_id}`)
+        } as ChangeOperation;
+      }
+      case "insert_edge_line": {
+        const internalOperation = operation as InternalInsertEdgeLineOp;
+        return {
+          ...operation,
+          __internal_handle:
+            internalOperation.__internal_handle ??
+            createTemporaryHandle(`${changeSetId}|edge|${index}|${operation.parent_handle}|${operation.rel_type}|${operation.to}`)
+        } as ChangeOperation;
+      }
+      default:
+        return operation;
+    }
+  });
+}
+
+export async function executeChangeOperations(
+  workspace: AuthoringWorkspace,
+  bundle: Bundle,
+  args: ExecuteChangeOperationsArgs,
+  journal = createChangeSetJournal(workspace)
+): Promise<ExecuteChangeOperationsResult> {
+  const resolvedPath = workspace.resolveDocumentPath(args.path);
+  const mode = args.mode ?? "dry_run";
+  const evaluationOptions: EvaluationOptions = {
+    validate_profile: args.validate_profile,
+    projection_views: args.projection_views
+  };
+  const changeSet = createBaseChangeSetResult(
+    journal.createChangeSetId(),
+    resolvedPath.publicPath,
+    args.origin ?? "apply_change_set",
+    "updated",
+    args.base_revision,
+    mode,
+    []
+  );
+  const preparedOperations = prepareOperationsForExecution(changeSet.change_set_id, args.operations);
+  changeSet.operations = remapOperationHandles(preparedOperations, new Map());
+
+  let rawText: string;
+  try {
+    rawText = await readFile(resolvedPath.absolutePath, "utf8");
+  } catch {
+    return {
+      changeSet: createRejectedChangeSet(changeSet, [
+        createDiagnostic(resolvedPath.publicPath, "sdd.document_missing", `Document '${resolvedPath.publicPath}' does not exist.`)
+      ]),
+      tempHandleMapping: new Map()
+    };
+  }
+
+  const canonicalText = normalizeTextToLf(rawText);
+  const currentRevision = computeDocumentRevision(canonicalText);
+  const currentEvaluated = evaluateDocumentText(bundle, resolvedPath.publicPath, canonicalText, evaluationOptions);
+
+  if (currentRevision !== args.base_revision) {
+    const rejected = createRejectedChangeSet(
+      changeSet,
+      [
+        createDiagnostic(
+          resolvedPath.publicPath,
+          "sdd.revision_mismatch",
+          `Document revision '${currentRevision}' does not match base revision '${args.base_revision}'.`
+        )
+      ],
+      currentEvaluated
+    );
+
+    if (mode === "dry_run") {
+      await journal.recordChangeSet(rejected);
+    }
+
+    return {
+      changeSet: rejected,
+      tempHandleMapping: new Map()
+    };
+  }
+
+  const inspected = inspectDocumentText(bundle, resolvedPath.publicPath, canonicalText);
+  const syntax = createAuthoringSyntax(bundle);
+  const summary = createEmptySummary();
+  const model =
+    inspected.kind === "sdd-inspect-load-failure"
+      ? isBootstrapMinimumTopLevelFailure(inspected, canonicalText) &&
+        (args.allowEmptyTemplateBootstrap || preparedOperations.every((operation) => isBootstrapInsertOperation(operation)))
+        ? createEmptyDocumentModel(bundle)
+        : undefined
+      : buildDocumentModel(inspected, bundle);
+
+  if (!model) {
+    const rejected = createRejectedChangeSet(
+      changeSet,
+      [
+        createDiagnostic(
+          resolvedPath.publicPath,
+          "sdd.parse_invalid_for_apply",
+          "Document could not be inspected for apply_change_set."
+        )
+      ],
+      currentEvaluated
+    );
+
+    if (mode === "dry_run") {
+      await journal.recordChangeSet(rejected);
+    }
+
+    return {
+      changeSet: rejected,
+      tempHandleMapping: new Map()
+    };
+  }
+
+  for (const operation of preparedOperations) {
+    const diagnostic = applyOperation(model, syntax, resolvedPath.publicPath, operation, summary);
+    if (diagnostic) {
+      const rejected = createRejectedChangeSet(changeSet, [diagnostic], currentEvaluated);
+      if (mode === "dry_run") {
+        await journal.recordChangeSet(rejected);
+      }
+      return {
+        changeSet: rejected,
+        tempHandleMapping: new Map()
+      };
+    }
+  }
+
+  const candidateText = renderDocumentModel(bundle, syntax, model);
+  const evaluated = evaluateDocumentText(bundle, resolvedPath.publicPath, candidateText, evaluationOptions);
+  const candidateInspected = inspectDocumentText(bundle, resolvedPath.publicPath, candidateText);
+  const tempHandleMapping =
+    candidateInspected.kind === "sdd-inspected-document"
+      ? collectTemporaryHandleMappings(model, candidateInspected, bundle)
+      : new Map<Handle, Handle>();
+
+  changeSet.status = "applied";
+  changeSet.operations = remapOperationHandles(preparedOperations, tempHandleMapping);
+  changeSet.summary = remapSummaryHandles(summary, tempHandleMapping);
+  changeSet.diagnostics = evaluated.diagnostics;
+  changeSet.projection_results = evaluated.projectionResults;
+  changeSet.resulting_revision = evaluated.revision;
+  changeSet.undo_eligible = mode === "commit";
+
+  if (mode === "commit") {
+    await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
+    await writeCanonicalLfText(resolvedPath.absolutePath, candidateText);
+    await journal.recordChangeSet(changeSet, {
+      inverse: createRestoreDocumentInverse(resolvedPath.publicPath, currentRevision, canonicalText)
+    });
+  } else {
+    await journal.recordChangeSet(changeSet);
+  }
+
+  return {
+    changeSet,
+    tempHandleMapping
+  };
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -1531,7 +1847,7 @@ export async function createDocument(
     "commit",
     []
   );
-  const evaluated = evaluateText(bundle, resolvedPath.publicPath, canonicalText, {});
+  const evaluated = evaluateDocumentText(bundle, resolvedPath.publicPath, canonicalText);
   changeSet.status = "applied";
   changeSet.undo_eligible = true;
   changeSet.resulting_revision = evaluated.revision;
@@ -1556,131 +1872,8 @@ export async function applyChangeSet(
   args: ApplyChangeSetArgs,
   journal = createChangeSetJournal(workspace)
 ): Promise<ChangeSetResult> {
-  const resolvedPath = workspace.resolveDocumentPath(args.path);
-  const mode = args.mode ?? "dry_run";
-  const changeSet = createBaseChangeSetResult(
-    journal.createChangeSetId(),
-    resolvedPath.publicPath,
-    "apply_change_set",
-    "updated",
-    args.base_revision,
-    mode,
-    args.operations
-  );
-
-  let rawText: string;
-  try {
-    rawText = await readFile(resolvedPath.absolutePath, "utf8");
-  } catch (error) {
-    return createRejectedChangeSet(changeSet, [
-      createDiagnostic(resolvedPath.publicPath, "sdd.document_missing", `Document '${resolvedPath.publicPath}' does not exist.`)
-    ]);
-  }
-
-  const canonicalText = normalizeTextToLf(rawText);
-  const currentRevision = computeDocumentRevision(canonicalText);
-  const currentEvaluated = evaluateText(bundle, resolvedPath.publicPath, canonicalText, {
-    validate_profile: args.validate_profile,
-    projection_views: args.projection_views
-  });
-
-  if (currentRevision !== args.base_revision) {
-    const rejected = createRejectedChangeSet(
-      changeSet,
-      [
-        createDiagnostic(
-          resolvedPath.publicPath,
-          "sdd.revision_mismatch",
-          `Document revision '${currentRevision}' does not match base revision '${args.base_revision}'.`
-        )
-      ],
-      currentEvaluated
-    );
-
-    if (mode === "dry_run") {
-      await journal.recordChangeSet(rejected);
-    }
-
-    return rejected;
-  }
-
-  const inspected = await inspectDocument(workspace, bundle, resolvedPath.publicPath);
-  const syntax = createAuthoringSyntax(bundle);
-  let candidateText: string;
-  let evaluated = currentEvaluated;
-  let summary = createEmptySummary();
-
-  if (inspected.kind === "sdd-inspect-load-failure") {
-    if (
-      isBootstrapMinimumTopLevelFailure(inspected, canonicalText) &&
-      args.operations.every((operation) => isBootstrapInsertOperation(operation))
-    ) {
-      candidateText = buildBootstrapDocument(
-        bundle,
-        args.operations as InsertNodeBlockOp[]
-      );
-      for (const operation of args.operations as InsertNodeBlockOp[]) {
-        summary.node_insertions.push({
-          node_id: operation.node_id,
-          node_type: operation.node_type
-        });
-      }
-    } else {
-      const rejected = createRejectedChangeSet(
-        changeSet,
-        [
-          createDiagnostic(
-            resolvedPath.publicPath,
-            "sdd.parse_invalid_for_apply",
-            "Document could not be inspected for apply_change_set."
-          )
-        ],
-        currentEvaluated
-      );
-
-      if (mode === "dry_run") {
-        await journal.recordChangeSet(rejected);
-      }
-
-      return rejected;
-    }
-  } else {
-    const model = buildDocumentModel(inspected, bundle);
-    for (const operation of args.operations) {
-      const diagnostic = applyOperation(model, syntax, resolvedPath.publicPath, operation, summary);
-      if (diagnostic) {
-        const rejected = createRejectedChangeSet(changeSet, [diagnostic], currentEvaluated);
-        if (mode === "dry_run") {
-          await journal.recordChangeSet(rejected);
-        }
-        return rejected;
-      }
-    }
-
-    candidateText = renderDocumentModel(bundle, syntax, model);
-  }
-
-  evaluated = evaluateText(bundle, resolvedPath.publicPath, candidateText, {
-    validate_profile: args.validate_profile,
-    projection_views: args.projection_views
-  });
-
-  changeSet.status = "applied";
-  changeSet.summary = summary;
-  changeSet.diagnostics = evaluated.diagnostics;
-  changeSet.projection_results = evaluated.projectionResults;
-  changeSet.resulting_revision = evaluated.revision;
-  changeSet.undo_eligible = mode === "commit";
-
-  if (mode === "commit") {
-    await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
-    await writeCanonicalLfText(resolvedPath.absolutePath, candidateText);
-    await journal.recordChangeSet(changeSet, {
-      inverse: createRestoreDocumentInverse(resolvedPath.publicPath, currentRevision, canonicalText)
-    });
-  } else {
-    await journal.recordChangeSet(changeSet);
-  }
-
-  return changeSet;
+  return (await executeChangeOperations(workspace, bundle, {
+    ...args,
+    origin: "apply_change_set"
+  }, journal)).changeSet;
 }

@@ -19,7 +19,7 @@ This design defines a local-first v0.1 MCP server and a companion command-line h
 
 - consume SDD documents and bundle metadata
 - inspect SDD source structure without raw line editing
-- author and edit `.sdd` documents through structured change sets
+- author and edit `.sdd` documents through structured change sets and high-level authoring intents
 - render previews through the existing repo rendering pipeline
 - undo committed changes recorded by the SDD tooling
 
@@ -425,7 +425,7 @@ interface ChangeSetResource {
   kind: "sdd-change-set";
   change_set_id: string;
   path: string;
-  origin: "apply_change_set" | "undo_change_set" | "create_document";
+  origin: "apply_change_set" | "apply_authoring_intent" | "undo_change_set" | "create_document";
   document_effect: "created" | "updated" | "deleted";
   base_revision: string | null;
   resulting_revision?: string;
@@ -481,7 +481,7 @@ interface ChangeSetResult {
   kind: "sdd-change-set";
   change_set_id: string;
   path: string;
-  origin: "apply_change_set" | "undo_change_set" | "create_document";
+  origin: "apply_change_set" | "apply_authoring_intent" | "undo_change_set" | "create_document";
   document_effect: "created" | "updated" | "deleted";
   base_revision: string | null;
   resulting_revision?: string;
@@ -510,6 +510,7 @@ interface ChangeSetResult {
 - `mode: "commit"` writes the document, records a committed change-set record, and returns `resulting_revision`.
 - If `projection_views` is supplied, the result also includes per-view projection results derived from the post-change text.
 - `apply_change_set` returns `document_effect: "updated"`.
+- `apply_authoring_intent` returns `document_effect: "updated"` and journals committed records with `origin: "apply_authoring_intent"`.
 - `create_document` returns `origin: "create_document"`, `document_effect: "created"`, and `base_revision: null`.
 - `undo_change_set` may return `document_effect: "updated"` or `document_effect: "deleted"`.
 - committed `document_effect: "deleted"` results omit `resulting_revision`.
@@ -870,6 +871,54 @@ Rules:
 - `projection_views` is optional and, when supplied, returns post-change projection results for the requested views
 - stale `base_revision` rejects the entire change set
 
+### 9.4.1 `sdd.apply_authoring_intent`
+
+Purpose: apply a high-level authoring request that expands into deterministic low-level mutations through the shared authoring core.
+
+Arguments:
+
+```ts
+interface ApplyAuthoringIntentArgs {
+  path: string;
+  base_revision: string;
+  mode?: "dry_run" | "commit";
+  intents: AuthoringIntent[];
+  validate_profile?: "simple" | "permissive" | "strict";
+  projection_views?: string[];
+}
+```
+
+Result:
+
+```ts
+interface ApplyAuthoringIntentResult {
+  kind: "sdd-authoring-intent-result";
+  path: string;
+  base_revision: string;
+  resulting_revision?: string;
+  mode: "dry_run" | "commit";
+  status: "applied" | "rejected";
+  intents: AuthoringIntent[];
+  change_set: ChangeSetResult;
+  created_targets: Array<{
+    local_id: string;
+    kind: "node" | "edge";
+    handle: string;
+    parent_local_id?: string;
+  }>;
+  diagnostics: Diagnostic[];
+}
+```
+
+Rules:
+
+- default `mode` is `"dry_run"`
+- the nested `change_set` is a service-produced derived effect record, not the caller-authored contract surface
+- committed `created_targets` are continuation-safe only for the returned `resulting_revision`
+- dry-run `created_targets` are informational previews only
+- selector resolution remains exact-match and parse-backed
+- request-local `local_id` references are backward-only within the same request
+
 ### 9.5 `sdd.undo_change_set`
 
 Purpose: dry-run or commit the inverse of a previously committed change set.
@@ -979,7 +1028,7 @@ interface AuthorNewDocumentPromptArgs {
 Intent:
 
 - create a new SDD document from scratch
-- instruct the model to use `sdd.create_document`, `sdd.apply_change_set`, and optional projection reads
+- instruct the model to use `sdd.create_document`, `sdd.apply_authoring_intent` or `sdd.apply_change_set`, and optional projection reads
 
 ### 10.2 `sdd.extend_document`
 
@@ -997,7 +1046,7 @@ interface ExtendDocumentPromptArgs {
 
 Intent:
 
-- extend an existing document using `inspect`, `apply_change_set`, and optional projection feedback
+- extend an existing document using `inspect`, `apply_authoring_intent` or `apply_change_set`, and optional projection feedback
 
 ### 10.3 `sdd.repair_document`
 
@@ -1592,7 +1641,7 @@ Result excerpt:
 
 ## 15. Final Design Position
 
-The v0.1 SDD MCP server is a local-first MCP surface over the existing repo and bundle. Its read-side public semantic contract is projection. Its write-side public authoring contract is a revision-bound, handle-based change-set model grounded in source structure and source order.
+The v0.1 SDD MCP server is a local-first MCP surface over the existing repo and bundle. Its read-side public semantic contract is projection. Its write-side public authoring contract is a revision-bound, handle-based change-set model grounded in source structure and source order, with an additive high-level authoring-intent surface for common scaffold creation.
 
 The helper app is a companion surface over that same model, not a separate system and not a runtime dependency of the MCP server.
 
