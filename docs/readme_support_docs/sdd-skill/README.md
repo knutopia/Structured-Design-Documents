@@ -77,49 +77,46 @@ Once the first structure exists, the next steps can stay conversational. For exa
 ### Add An Admin Review Area
 
 ```text
-Using $sdd-skill, update the volunteer scheduling SDD.
-
-Add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail".
+Using $sdd-skill, add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail".
 Connect it from the Dashboard.
 
 Show the IA again. Use the simple profile for it.
 ```
 
-Full source: [volunteer_scheduling_v2_admin.sdd](examples/volunteer_scheduling_v2_admin.sdd)
+Full source: [communal_automotive_shop_mechanic_scheduling_2.sdd](examples/communal_automotive_shop_mechanic_scheduling_2.sdd)
 
 Trimmed excerpt:
 
 ```text
 Area A-300 "Admin Review"
-  description="Coordinator review flow for volunteer signups"
-  CONTAINS P-310 "Review Requests"
+  owner=Ops
+  description="Coordinator workspace for reviewing inbound requests and approving volunteer signups"
+  scope=admin_review
+  CONTAINS P-310 "Review Customer Inquiries"
   CONTAINS P-320 "Volunteer Detail"
-  + Place P-310 "Review Requests"
-    description="Review new signup requests from volunteers"
-    primary_nav=true
-    NAVIGATES_TO P-320 "Volunteer Detail"
+  + Place P-310 "Review Customer Inquiries"
+    owner=Ops
+    description="Coordinator queue for triaging customer inquiries and related volunteer signup requests"
   END
-  + Place P-320 "Volunteer Detail"
-    description="See one volunteer's signup history and details"
 ```
 
 Rendered output from the admin-area follow-up:
 
-<a href="examples/volunteer_scheduling_v2_admin_ia.png">
-  <img src="examples/volunteer_scheduling_v2_admin_ia.png" alt="Volunteer scheduling app IA after adding the admin review area" height="230">
+<a href="examples/communal_automotive_shop_mechanic_scheduling_2.svg">
+  <img src="examples/communal_automotive_shop_mechanic_scheduling_2" alt="Scheduling app IA after adding the admin review area" height="230">
 </a>
+
+Note: because the prompt asked to use the simple profile for the IA, the diagram shows less detail.
 
 ### Add A Signup Flow And Show The UI Contracts
 
 ```text
-Using $sdd-skill, update the volunteer scheduling SDD.
-
-In Shift Detail, add a simple signup flow with these view states:
+Using $sdd-skill, add a simple signup flow in Shift Detail, with these view states:
 - View Shift
 - Confirm Signup
 - Signup Success
 
-Show the UI contracts.
+Show the UI contracts. (simple profile)
 ```
 
 Full source: [volunteer_scheduling_v3_ui_contracts.sdd](examples/volunteer_scheduling_v3_ui_contracts.sdd)
