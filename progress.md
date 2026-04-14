@@ -21,7 +21,7 @@
 -made run_helper.sh executable (!!)
 -created "manual" skill example, encountered preview failure
 -created helper hardening plan (poor messaging etc), executed it
-
+-added validation gate before preview in skill
 ## Sun 4-12-26
 
 -created sdd-helper documentation page

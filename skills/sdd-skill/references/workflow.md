@@ -50,11 +50,14 @@ The current helper supports an empty-template create flow:
 skills/sdd-skill/scripts/run_helper.sh create docs/example.sdd --template empty --version 0.1
 ```
 
+This creates a bootstrap document only. A newly created empty-template document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
+
 If the new document needs follow-on edits, inspect it first and then proceed with normal `apply` requests.
 
 ## 5. Dry-Run A Change Set
 
 Use `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
+If you intend to preview under a profile later, include the same `validate_profile` here first.
 
 Example request shape:
 
@@ -89,19 +92,27 @@ Review:
 - `diagnostics`
 - optional `projection_results`
 
+A dry run is acceptable for preview gating only when:
+
+- `status` is `applied`
+- the selected `validate_profile` reports no parse or validation errors
+
+If parse or validation errors remain, continue the inspect/apply cycle and do not preview yet.
+
 ## 6. Commit A Change Set
 
-When the dry run is acceptable and the user wants the change applied, resubmit the same request with:
+When the dry run is acceptable for the chosen profile and the user wants the change applied, resubmit the same validated request with:
 
 ```json
 "mode": "commit"
 ```
 
 The skill should not skip straight to commit unless the user clearly wants the real mutation carried out.
+If further edits require fresh handles, inspect the committed result and repeat the dry-run validation gate before previewing.
 
 ## 7. Preview A Result
 
-Use preview when rendered confirmation is helpful:
+Use preview only after the last committed revision has already passed a clean dry-run validation under the same profile:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -112,6 +123,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
 ```
 
 Preview is for rendered confirmation, not for structured mutation.
+It is not a substitute for validation. The preview profile should match the `validate_profile` used in the gating dry run, and the previewed revision should be that same committed state.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 8. Undo A Helper-Managed Commit

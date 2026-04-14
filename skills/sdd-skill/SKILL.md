@@ -15,7 +15,7 @@ This skill enables working with structured design documents. In this repo source
 - Use `skills/sdd-skill/scripts/run_helper.sh search ...` when the user has not named a target `.sdd` document yet.
 - Use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` before any edit to obtain fresh `revision` and handle data.
 - Prefer `apply` as a dry run first. Commit only when the user wants the mutation carried out.
-- Use `preview` when rendered confirmation helps verify the change.
+- Use `preview` only after a clean `apply` dry run under the same target profile. Preview confirms a committed, validated state; it does not decide readiness.
 - Use `undo` only for helper-managed committed change sets.
 
 ## Default Workflow
@@ -25,13 +25,13 @@ This skill enables working with structured design documents. In this repo source
 2. Inspect:
    get the current `revision`, node handles, and body-item handles before planning a change.
 3. Plan:
-   build an `ApplyChangeSetArgs` request from fresh handles. Use `validate_profile` and `projection_views` when semantic confirmation is helpful.
+   build an `ApplyChangeSetArgs` request from fresh handles. Include `validate_profile` whenever the user wants confirmation under a specific profile, and add `projection_views` when structured semantic confirmation is helpful.
 4. Dry run:
-   submit `apply` with omitted `mode` or `mode: "dry_run"` and review the returned summary and diagnostics.
+   submit `apply` with omitted `mode` or `mode: "dry_run"` and review the returned status, summary, and diagnostics. If parse or validation errors remain, continue the inspect/apply cycle and do not preview yet.
 5. Commit:
-   if the dry run is acceptable and the user wants the change applied, resubmit with `mode: "commit"`.
+   if the dry run is acceptable for the target profile and the user wants the change applied, resubmit that validated request with `mode: "commit"`.
 6. Confirm:
-   use `preview` when a rendered view is the clearest proof that the change did what was intended.
+   use `preview` only for the committed revision that already passed a clean dry run under the same profile.
 
 ## Edit Safety Rules
 
@@ -39,8 +39,9 @@ This skill enables working with structured design documents. In this repo source
 - Treat helper JSON result kinds as the public interface.
 - Do not construct or parse handles manually.
 - Do not reuse handles across later turns without a fresh `inspect`.
+- Intermediate revisions are allowed during multi-pass helper authoring when fresh handles are needed. Treat them as staging checkpoints only; do not preview them or describe them as ready until the target profile is clean.
 - Treat `sdd-change-set` with `status: "rejected"` as a domain result to interpret, not as a shell failure.
-- Treat `sdd-helper-error` as a helper-layer failure that must be classified before continuing. Many cases are invocation or environment problems, but preview can also fail here when the document is still invalid under the requested profile.
+- Treat `sdd-helper-error` as a helper-layer failure that must be classified before continuing. Many cases are invocation or environment problems, but preview can also fail here when the document is still invalid or incomplete under the requested profile.
 - Keep helper paths repo-relative and `.sdd`-scoped.
 
 ## Supported Helper Surface
@@ -62,11 +63,13 @@ Do not promise standalone helper commands that do not exist today, including `pr
 
 Use `preview` when the user needs visible confirmation, especially for:
 
+- committed states that already passed a clean `apply` dry run under the same profile
 - view-sensitive structural changes
 - renderer-facing proof checks
 - confirming that a change has the intended visible effect
 
-Do not confuse preview with semantic projection. Preview is a render artifact.
+Do not confuse preview with semantic projection or validation. Preview is a render artifact.
+The preview profile should match the `validate_profile` that gated the document state, and the previewed revision should be the same committed state that passed that dry run.
 If preview returns `sdd-helper-error`, inspect the message and any attached `diagnostics` before assuming the helper environment is broken.
 
 ## When To Use Helper Git Commands
