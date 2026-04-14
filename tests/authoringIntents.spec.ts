@@ -49,12 +49,11 @@ function expectInspectedDocument(result: Awaited<ReturnType<typeof inspectDocume
 }
 
 describe("authoring intents", () => {
-  it("bootstraps empty-template documents via author and returns derived operations plus created targets", async () => {
+  it("bootstraps newly created empty documents via author and returns derived operations plus created targets", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const created = await createDocument(workspace, bundle, {
-        path: "docs/author-bootstrap.sdd",
-        template_id: "empty"
+        path: "docs/author-bootstrap.sdd"
       });
 
       const result = await applyAuthoringIntent(workspace, bundle, {
@@ -121,8 +120,7 @@ describe("authoring intents", () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const created = await createDocument(workspace, bundle, {
-        path: "docs/author-continue.sdd",
-        template_id: "empty"
+        path: "docs/author-continue.sdd"
       });
 
       const authored = await applyAuthoringIntent(workspace, bundle, {
@@ -196,8 +194,7 @@ describe("authoring intents", () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const created = await createDocument(workspace, bundle, {
-        path: "docs/author-invalid.sdd",
-        template_id: "empty"
+        path: "docs/author-invalid.sdd"
       });
 
       const duplicate = await applyAuthoringIntent(workspace, bundle, {
@@ -357,8 +354,7 @@ describe("authoring intents", () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const created = await createDocument(workspace, bundle, {
-        path: "docs/author-edge-placement.sdd",
-        template_id: "empty"
+        path: "docs/author-edge-placement.sdd"
       });
 
       const result = await applyAuthoringIntent(workspace, bundle, {

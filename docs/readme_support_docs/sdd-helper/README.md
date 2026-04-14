@@ -147,14 +147,14 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 
 ### Authoring And Change Management
 
-#### `sdd-helper create <document_path> --template <template_id> [--version <version>]`
+#### `sdd-helper create <document_path> [--version <version>]`
 
 - Purpose: create a new `.sdd` document through the shared authoring core.
 - Use when: you want a repo-safe way to bootstrap a new document instead of hand-creating the file.
-- Invocation: `pnpm sdd-helper create <document_path> --template <template_id> [--version <version>]`
-- Key inputs: a repo-relative document path, a required template id, and an optional version.
+- Invocation: `pnpm sdd-helper create <document_path> [--version <version>]`
+- Key inputs: a repo-relative document path and an optional version.
 - Result kind: `sdd-create-document`
-- Important constraints: the current implementation supports `template_id=empty` and version `0.1`.
+- Important constraints: create always bootstraps an empty document skeleton; the current implementation supports version `0.1`.
 - Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits.
 
 #### `sdd-helper apply --request <file-or-stdin>`

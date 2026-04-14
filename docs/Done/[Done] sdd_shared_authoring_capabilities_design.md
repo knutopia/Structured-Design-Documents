@@ -1,4 +1,4 @@
-# Shared Authoring Capabilities Design
+# [Done] Shared Authoring Capabilities Design
 
 Status: active near-future design for leveling up shared SDD authoring capabilities
 

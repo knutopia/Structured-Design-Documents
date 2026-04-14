@@ -341,6 +341,22 @@ describe("sdd-helper CLI", () => {
           result_kind: "sdd-authoring-intent-result"
         }),
         expect.objectContaining({
+          name: "create",
+          invocation: "sdd-helper create <document_path> [--version <version>]",
+          options: [
+            {
+              flag: "--version",
+              required: false,
+              value_name: "version",
+              description: "Document language version."
+            }
+          ],
+          constraints: expect.arrayContaining([
+            "Create always bootstraps an empty document skeleton.",
+            "Current implementation supports version 0.1."
+          ])
+        }),
+        expect.objectContaining({
           name: "validate",
           result_kind: "sdd-validation"
         }),
@@ -441,8 +457,6 @@ describe("sdd-helper CLI", () => {
       "sdd-helper",
       "create",
       "docs/new.sdd",
-      "--template",
-      "empty",
       "--version",
       "0.1"
     ], deps);
@@ -450,10 +464,28 @@ describe("sdd-helper CLI", () => {
     expect(result.exitCode).toBe(0);
     expect(createDocument).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
       path: "docs/new.sdd",
-      template_id: "empty",
       version: "0.1"
     });
     expect(parseStdoutPayload(stdout)).toEqual(rejection);
+  });
+
+  it("returns invalid_args for legacy create template flags", async () => {
+    const { deps, stdout } = createDeps();
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "create",
+      "docs/new.sdd",
+      "--template",
+      "empty"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "error: unknown option '--template'"
+    });
   });
 
   it("supports apply requests from a file and domain rejections remain structured", async () => {

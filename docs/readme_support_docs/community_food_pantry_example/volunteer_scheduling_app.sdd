@@ -1,0 +1,45 @@
+SDD-TEXT 0.1
+Place P-100 "Dashboard"
+  owner=PantryOps
+  description="Starting point for volunteers and coordinators to see staffing coverage, urgent gaps, and upcoming pantry activity"
+  surface=web
+  route_or_key=/dashboard
+  access=auth
+  primary_nav=true
+  NAVIGATES_TO P-210 "Open Shifts"
+  NAVIGATES_TO P-230 "My Schedule"
+END
+Area A-200 "Volunteer Scheduling"
+  owner=PantryOps
+  description="Scheduling workspace for browsing open pantry shifts, reviewing details, and tracking volunteer commitments"
+  scope=volunteer_scheduling
+  CONTAINS P-210 "Open Shifts"
+  CONTAINS P-220 "Shift Detail"
+  CONTAINS P-230 "My Schedule"
+  + Place P-210 "Open Shifts"
+    owner=PantryOps
+    description="Browse upcoming shifts that still need volunteers, filtered by date, role, and pantry location"
+    surface=web
+    route_or_key=/scheduling/open-shifts
+    access=auth
+    primary_nav=true
+    NAVIGATES_TO P-220 "Shift Detail"
+  END
+  + Place P-220 "Shift Detail"
+    owner=PantryOps
+    description="Review one shift's time, tasks, training requirements, and signup status before volunteering"
+    surface=web
+    route_or_key=/scheduling/shifts/:shift_id
+    access=auth
+    NAVIGATES_TO P-230 "My Schedule"
+  END
+  + Place P-230 "My Schedule"
+    owner=PantryOps
+    description="View accepted shifts, upcoming commitments, and any schedule changes that need attention"
+    surface=web
+    route_or_key=/scheduling/my-schedule
+    access=auth
+    primary_nav=true
+    NAVIGATES_TO P-220 "Shift Detail"
+  END
+END

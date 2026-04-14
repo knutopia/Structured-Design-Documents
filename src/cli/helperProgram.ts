@@ -696,9 +696,8 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   program
     .command("create")
     .argument("<document_path>", "repo-relative .sdd document path")
-    .requiredOption("--template <template_id>", "document template id")
     .option("--version <version>", "document version")
-    .action(async (documentPath: string, options: { template: string; version?: CreateDocumentArgs["version"] }) => {
+    .action(async (documentPath: string, options: { version?: CreateDocumentArgs["version"] }) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
 
@@ -707,7 +706,6 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
           deps,
           await deps.createDocument(workspace, bundle, {
             path: normalizedPath,
-            template_id: options.template,
             version: options.version
           })
         );
@@ -834,6 +832,13 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   return program;
 }
 
+function applyExitOverride(command: Command): void {
+  command.exitOverride();
+  for (const subcommand of command.commands) {
+    applyExitOverride(subcommand);
+  }
+}
+
 export async function runHelperCli(
   argv: string[] = process.argv,
   overrides: Partial<HelperCliDeps> = {}
@@ -847,8 +852,7 @@ export async function runHelperCli(
   }
 
   const program = createHelperProgram(deps);
-
-  program.exitOverride();
+  applyExitOverride(program);
 
   try {
     await program.parseAsync(argv);

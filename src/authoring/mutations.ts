@@ -51,7 +51,6 @@ import {
 import { computeDocumentRevision, normalizeTextToLf, writeCanonicalLfText } from "./revisions.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 
-const EMPTY_TEMPLATE_ID = "empty";
 const EMPTY_TEMPLATE_VERSION = "0.1";
 const MINIMUM_TOP_LEVEL_BLOCKS_CODE = "parse.minimum_top_level_blocks";
 const STRUCTURAL_RELATIONSHIP_TYPES = new Set<StructuralRelationshipType>(["CONTAINS", "COMPOSED_OF"]);
@@ -610,13 +609,13 @@ function createRejectedChangeSet(
 
 function isBootstrapMinimumTopLevelFailure(result: InspectLoadFailure, text: string): boolean {
   return (
-    text === emptyTemplateText() &&
+    text === emptyDocumentText() &&
     result.diagnostics.length > 0 &&
     result.diagnostics.every((diagnostic) => diagnostic.code === MINIMUM_TOP_LEVEL_BLOCKS_CODE)
   );
 }
 
-function emptyTemplateText(): string {
+function emptyDocumentText(): string {
   return `SDD-TEXT ${EMPTY_TEMPLATE_VERSION}\n`;
 }
 
@@ -1814,16 +1813,6 @@ export async function createDocument(
     ]);
   }
 
-  if (args.template_id !== EMPTY_TEMPLATE_ID) {
-    createCreateDocumentRejection(journal, resolvedPath.publicPath, [
-      createDiagnostic(
-        resolvedPath.publicPath,
-        "sdd.unsupported_template",
-        `Unsupported template '${args.template_id}'.`
-      )
-    ]);
-  }
-
   if ((args.version ?? EMPTY_TEMPLATE_VERSION) !== EMPTY_TEMPLATE_VERSION) {
     createCreateDocumentRejection(journal, resolvedPath.publicPath, [
       createDiagnostic(
@@ -1834,7 +1823,7 @@ export async function createDocument(
     ]);
   }
 
-  const canonicalText = emptyTemplateText();
+  const canonicalText = emptyDocumentText();
   await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
   await writeCanonicalLfText(resolvedPath.absolutePath, canonicalText);
 

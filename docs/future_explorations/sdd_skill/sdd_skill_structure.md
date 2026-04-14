@@ -168,7 +168,7 @@ Examples:
 - no standalone helper command for projection readout
 - no standalone helper command for validation-only readout
 - no surfaced helper `list` command in the current CLI
-- document creation currently supports only `template_id=empty`
+- document creation currently always bootstraps an empty document
 
 ### 4.5 `scripts/run_helper.sh`
 
@@ -254,7 +254,7 @@ If the user does not name a document:
 
 For a new SDD document:
 
-1. call `sdd-helper create <path> --template empty --version 0.1`
+1. call `sdd-helper create <path> --version 0.1`
 2. inspect the created path if follow-on edits are needed
 3. apply follow-on change sets normally
 
@@ -314,7 +314,7 @@ The current helper is strong enough for a useful first skill, but the skill shou
 - standalone helper `project` command
 - standalone helper `validate` command
 - standalone helper `list documents` command
-- richer document templates beyond the current empty template
+- richer bootstrap or starter-pack flows beyond the current empty create path
 
 Where the skill needs semantic confirmation after mutation, it should prefer:
 

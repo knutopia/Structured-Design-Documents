@@ -49,8 +49,8 @@ The remaining deferred items in this area are:
 
 ## Helper Authoring Expansion
 
-- future `sdd-helper create --template ...` expansion remains intentionally deferred beyond the current `template_id=empty` bootstrap path
-- any future template work should preserve helper-first structural authoring and avoid injecting misleading sample semantics; see `docs/Deferred/sdd_helper_future_template_options.md`
+- future richer create-time bootstrapping remains intentionally deferred beyond the current empty bootstrap path
+- any future starter-pack or bootstrap work should preserve helper-first structural authoring and avoid injecting misleading sample semantics; see `docs/Deferred/sdd_helper_future_template_options.md`
 
 ## Future Architectural Review Triggers
 

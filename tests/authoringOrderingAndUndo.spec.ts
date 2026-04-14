@@ -633,8 +633,7 @@ describe("authoring ordering and undo", () => {
       });
 
       const created = await createDocument(workspace, bundle, {
-        path: documentPath,
-        template_id: "empty"
+        path: documentPath
       }, journal);
 
       const dryRunUndo = await undoChangeSet(workspace, bundle, {

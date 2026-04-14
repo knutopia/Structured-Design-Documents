@@ -168,7 +168,6 @@ For this design, control-plane edit failures also surface as diagnostics using `
 - `sdd.revision_mismatch`
 - `sdd.handle_stale`
 - `sdd.ambiguous_target`
-- `sdd.unsupported_template`
 - `sdd.unsupported_document_version`
 - `sdd.invalid_reposition_target`
 
@@ -817,7 +816,6 @@ Arguments:
 ```ts
 interface CreateDocumentArgs {
   path: string;
-  template_id: string;
   version?: "0.1";
 }
 ```
@@ -836,9 +834,7 @@ interface CreateDocumentResult {
 
 Rules:
 
-- v0.1 requires support for `template_id = "empty"`
-- `empty` produces a zero-body skeleton with `SDD-TEXT 0.1` followed by a trailing newline
-- additional template IDs are allowed but are not part of the v0.1 working contract
+- create always produces a zero-body skeleton with `SDD-TEXT 0.1` followed by a trailing newline
 - create fails if the target path already exists
 - successful create records a committed change-set record in the same journal used by other committed mutations
 - that record uses `origin: "create_document"`, `document_effect: "created"`, `base_revision: null`, and `undo_eligible: true`
@@ -1019,7 +1015,6 @@ Arguments:
 interface AuthorNewDocumentPromptArgs {
   target_path: string;
   goal: string;
-  template_id?: string;
   validate_profile?: "simple" | "permissive" | "strict";
   projection_views?: string[];
 }
@@ -1192,7 +1187,7 @@ Returns the same payload as the MCP `inspect` resource.
 
 Accepts the same filters as `sdd.search_graph` and returns the same payload shape.
 
-#### `sdd-helper create <document_path> --template <template_id> [--version 0.1]`
+#### `sdd-helper create <document_path> [--version 0.1]`
 
 Returns the same logical result as `sdd.create_document`.
 

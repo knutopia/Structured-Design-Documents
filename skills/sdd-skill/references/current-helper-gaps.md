@@ -38,10 +38,10 @@ When the skill needs semantic confirmation after a change, it should use:
 
 The current `create` flow is intentionally narrow:
 
-- `template_id=empty` is the documented supported template
+- create always bootstraps an empty document skeleton
 - version `0.1` is the documented supported version
 
-The skill should not promise richer templates until the helper actually exposes them.
+The skill should not promise richer bootstrap or starter-pack flows until the helper actually exposes them.
 
 ## Why This Matters
 

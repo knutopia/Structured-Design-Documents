@@ -44,13 +44,13 @@ Build low-level change requests from that returned `revision` and those handles.
 
 ## 4. Create A New Document
 
-The current helper supports an empty-template create flow:
+The current helper creates an empty bootstrap document:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh create docs/example.sdd --template empty --version 0.1
+skills/sdd-skill/scripts/run_helper.sh create docs/example.sdd --version 0.1
 ```
 
-This creates a bootstrap document only. A newly created empty-template document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
+This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
 
 If the new document needs follow-on edits, use `author` for common scaffold creation or inspect it first and proceed with low-level `apply` requests.
 

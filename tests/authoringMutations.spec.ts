@@ -88,8 +88,7 @@ describe("authoring mutations", () => {
       });
 
       const result = await createDocument(workspace, bundle, {
-        path: "docs/new.sdd",
-        template_id: "empty"
+        path: "docs/new.sdd"
       }, journal);
 
       expect(result.kind).toBe("sdd-create-document");
@@ -111,15 +110,14 @@ describe("authoring mutations", () => {
     });
   });
 
-  it("rejects existing create targets and unsupported templates with structured diagnostics", async () => {
+  it("rejects existing create targets and unsupported versions with structured diagnostics", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       await writeTempDocument(tempRepoRoot, "docs/existing.sdd", "SDD-TEXT 0.1\n");
 
       const existingError = await expectMutationError(
         createDocument(workspace, bundle, {
-          path: "docs/existing.sdd",
-          template_id: "empty"
+          path: "docs/existing.sdd"
         }),
         "sdd.document_exists"
       );
@@ -127,16 +125,7 @@ describe("authoring mutations", () => {
 
       await expectMutationError(
         createDocument(workspace, bundle, {
-          path: "docs/unsupported.sdd",
-          template_id: "starter"
-        }),
-        "sdd.unsupported_template"
-      );
-
-      await expectMutationError(
-        createDocument(workspace, bundle, {
           path: "docs/unsupported-version.sdd",
-          template_id: "empty",
           version: "0.1.1" as never
         }),
         "sdd.unsupported_document_version"
@@ -144,7 +133,7 @@ describe("authoring mutations", () => {
     });
   });
 
-  it("bootstraps the first top-level insert on the empty template and rejects other parse-invalid edits", async () => {
+  it("bootstraps the first top-level insert on a newly created empty document and rejects other parse-invalid edits", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const journal = createChangeSetJournal(workspace, {
@@ -154,8 +143,7 @@ describe("authoring mutations", () => {
         })()
       });
       const created = await createDocument(workspace, bundle, {
-        path: "docs/bootstrap.sdd",
-        template_id: "empty"
+        path: "docs/bootstrap.sdd"
       }, journal);
 
       const rejected = await applyChangeSet(workspace, bundle, {
@@ -353,8 +341,7 @@ describe("authoring mutations", () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const created = await createDocument(workspace, bundle, {
-        path: "docs/revision-bound-handles.sdd",
-        template_id: "empty"
+        path: "docs/revision-bound-handles.sdd"
       });
 
       const firstInsert = await applyChangeSet(workspace, bundle, {

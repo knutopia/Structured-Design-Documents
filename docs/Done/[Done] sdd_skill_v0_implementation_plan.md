@@ -1,4 +1,4 @@
-# SDD Skill V0 Implementation Plan
+# [Done] SDD Skill V0 Implementation Plan
 
 Status: active implementation plan for the first installable `sdd-skill`
 

@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--level up "skill abstraction layer"
 -teach the skill to create/save a sensible preview (or multiple)
 -re-author Skill doc page with manually created output
 -generalizing the skill beyond this repository layout
@@ -18,6 +17,7 @@
 
 -researched template options. conclusion: not yet
 -planned, implemented expanded shared authoring capabilities
+- removed ineffective create --template option
 
 ## Mon 4-13-26
 

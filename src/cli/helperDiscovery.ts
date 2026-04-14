@@ -68,7 +68,7 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
   },
   {
     name: "create",
-    invocation: "sdd-helper create <document_path> --template <template_id> [--version <version>]",
+    invocation: "sdd-helper create <document_path> [--version <version>]",
     summary: "Create a new .sdd document through the authoring core.",
     mutates_repo_state: "always",
     arguments: [
@@ -80,12 +80,6 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ],
     options: [
       {
-        flag: "--template",
-        required: true,
-        value_name: "template_id",
-        description: "Document template identifier."
-      },
-      {
         flag: "--version",
         required: false,
         value_name: "version",
@@ -94,7 +88,7 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ],
     result_kind: "sdd-create-document",
     constraints: [
-      "Current implementation supports template_id=empty.",
+      "Create always bootstraps an empty document skeleton.",
       "Current implementation supports version 0.1."
     ]
   },

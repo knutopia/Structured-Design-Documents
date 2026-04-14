@@ -299,7 +299,6 @@ export interface SearchGraphResult {
 
 export interface CreateDocumentArgs {
   path: DocumentPath;
-  template_id: string;
   version?: "0.1";
 }
 
