@@ -1,70 +1,74 @@
 # SDD Skill Guide
 
-If you have an app idea in mind, you do not need to start by writing code. You can start by describing the app in plain language.
+The SDD Skill is the simple way to work with structured design documents.
 
-The SDD Skill helps turn that description into a structured design document. From there, it can show the app map, or information architecture: the main screens or places in the app and how they connect.
+## Use Case: Start With An App Idea
 
-## Start With An App Idea
+If you have an app idea in mind, you can start by describing the app in plain language.
 
-You can start with a request like this:
+The SDD Skill helps turn that description into a structured design document.
+
+Here is an example prompt:
 
 ```text
-Using $sdd-skill, imagine a volunteer scheduling app for a community food pantry.
+Use $Sdd Skill to design a mechanic's scheduling app for a communal automotive shop.     
 
-Create a new SDD for it. Include:
+Create a new SDD for it and show the information architecture as a simple diagram. Include: 
 - Dashboard
-- a Volunteer Scheduling area
-- Open Shifts
-- Shift Detail
-- My Schedule
-
-Put the scheduling screens under the Volunteer Scheduling area and show the information architecture.
+- a Mechanic's Scheduling area with Open Shifts, Shift Detail, My Schedule
 ```
+That is enough to get started. You do not need to know SDD syntax first (although the syntax is quite simple.)
 
-That is enough to get started. You do not need to know SDD syntax first.
+## Output
 
-In plain language, the information architecture is the map of the app: the main places people can go, what those places are for, and how they connect.
+The prompt generates the SDD file (Structured Design Document) and the information architecture diagram.
 
-## A Real Example
-
-This guide uses a checked-in volunteer scheduling example that matches the prompt above.
-
-Full source: [volunteer_scheduling_v1.sdd](examples/volunteer_scheduling_v1.sdd)
+SDD full source: [communal_automotive_shop_mechanic_scheduling.sdd](examples/communal_automotive_shop_mechanic_scheduling.sdd)
 
 Trimmed excerpt:
 
 ```text
 SDD-TEXT 0.1
 Place P-100 "Dashboard"
-  description="Starting point for volunteers and coordinators"
+  owner=Design
+  description="Shop-wide overview of today's work, staffing, and bay readiness"
+  surface=web
+  route_or_key=/dashboard
+  access=auth
   primary_nav=true
-  NAVIGATES_TO P-210 "Open Shifts"
-  NAVIGATES_TO P-230 "My Schedule"
 END
-Area A-200 "Volunteer Scheduling"
-  description="Shift discovery and signup flow"
+Area A-200 "Mechanic's Scheduling"
+  owner=Ops
+  description="Mechanic-facing scheduling space for claiming shifts, reviewing shift details, and tracking assigned work"
+  scope=mechanic_scheduling
   CONTAINS P-210 "Open Shifts"
   CONTAINS P-220 "Shift Detail"
   CONTAINS P-230 "My Schedule"
+  + Place P-210 "Open Shifts"
+    owner=Design
+    description="Browsable list of unclaimed repair shifts across shared bays and specialties"
+    surface=web
+    route_or_key=/scheduling/open-shifts
+    access=auth
+    primary_nav=true
+  END
 ```
 
-Rendered output from that first prompt:
+Information architecture from that first prompt:
 
-<a href="examples/volunteer_scheduling_v1_ia.png">
-  <img src="examples/volunteer_scheduling_v1_ia.png" alt="Volunteer scheduling app IA after the first prompt" height="230">
+<a href="examples/communal_automotive_shop_mechanic_scheduling.svg">
+  <img src="communal_automotive_shop_mechanic_scheduling.svg" alt="Scheduling app IA after the first prompt" height="230">
 </a>
 
 ## What This Gives You
 
-Instead of a vague app idea, you now have a structured design starting point.
+Instead of a vague app idea, you now have a structured design starting point, before anything is baked into code.
 
 - A named structure for the app, with places and relationships the model can reason about.
 - A visible app map that makes the overall shape easier to review.
 - A concrete starting point for follow-up refinement before you move into implementation.
 
-The skill uses the repo's safer structured SDD workflow instead of relying on ad hoc text editing.
-
-For this guide, the full source and rendered outputs stay linked so you can inspect the actual `.sdd` and the actual diagrams without turning this page into a giant dump.
+The skill uses editing tools that allow it to read, write and check SDD documents quickly and reliably.
 
 ## Good Follow-Up Requests
 
@@ -75,11 +79,10 @@ Once the first structure exists, the next steps can stay conversational. For exa
 ```text
 Using $sdd-skill, update the volunteer scheduling SDD.
 
-Add an Admin Review area for coordinators who approve volunteer signups. Include:
-- Review Requests
-- Volunteer Detail
+Add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail".
+Connect it from the Dashboard.
 
-Connect it from the Dashboard and show the information architecture again.
+Show the IA again. Use the simple profile for it.
 ```
 
 Full source: [volunteer_scheduling_v2_admin.sdd](examples/volunteer_scheduling_v2_admin.sdd)
