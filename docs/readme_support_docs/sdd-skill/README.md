@@ -57,7 +57,7 @@ Area A-200 "Mechanic's Scheduling"
 Information architecture from that first prompt:
 
 <a href="examples/communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg">
-  <img src="communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg" alt="Scheduling app IA after the first prompt" height="230">
+  <img src="examples/communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg" alt="Scheduling app IA after the first prompt" height="230">
 </a>
 
 ## What This Creates
@@ -68,7 +68,7 @@ Instead of a vague app idea, you now have a structured design starting point, be
 - A visible app map that makes the overall shape easier to review.
 - A concrete starting point for follow-up refinement before you move into implementation.
 
-The skill uses editing tools that allow it to read, write and check SDD documents quickly and reliably.
+Behind the scenes, the skill uses editing tools that allow it to read, write and check SDD documents quickly and reliably.
 
 ## Follow-Up Request
 
@@ -83,7 +83,7 @@ Connect it from the Dashboard.
 Show the IA again. Use the simple profile for it.
 ```
 
-Full source: [communal_automotive_shop_mechanic_scheduling_2.sdd](examples/communal_automotive_shop_mechanic_scheduling_2.sdd)
+Full source: [communal_automotive_shop_mechanic_scheduling2.sdd](examples/communal_automotive_shop_mechanic_scheduling_2.sdd)
 
 Trimmed excerpt:
 
@@ -102,8 +102,8 @@ Area A-300 "Admin Review"
 
 Rendered output from the admin-area follow-up:
 
-<a href="communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg">
-  <img src="communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple" alt="Scheduling app IA after adding the admin review area" height="230">
+<a href="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg">
+  <img src="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple" alt="Scheduling app IA after adding the admin review area" height="230">
 </a>
 
 Note: because the prompt asked to use the simple profile for the IA, the diagram shows less detail.
