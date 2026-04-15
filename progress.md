@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--make thumbnails show in Skill page
 -fix show filename collisions
 -re-author Skill doc page with manually created output
 -docs page with SDD structure, node types

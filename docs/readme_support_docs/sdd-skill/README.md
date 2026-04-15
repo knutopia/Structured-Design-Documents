@@ -83,7 +83,7 @@ Connect it from the Dashboard.
 Show the IA again. Use the simple profile for it.
 ```
 
-Full source: [communal_automotive_shop_mechanic_scheduling2.sdd](examples/communal_automotive_shop_mechanic_scheduling_2.sdd)
+Full source: [communal_automotive_shop_mechanic_scheduling2.sdd](examples/communal_automotive_shop_mechanic_scheduling2.sdd)
 
 Trimmed excerpt:
 
@@ -103,7 +103,7 @@ Area A-300 "Admin Review"
 Rendered output from the admin-area follow-up:
 
 <a href="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg">
-  <img src="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple" alt="Scheduling app IA after adding the admin review area" height="230">
+  <img src="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg" alt="Scheduling app IA after adding the admin review area" height="230">
 </a>
 
 Note: because the prompt asked to use the simple profile for the IA, the diagram shows less detail.
