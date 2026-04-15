@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-fix show filename collisions
 -re-author Skill doc page with manually created output
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
@@ -19,7 +20,8 @@
 -planned, implemented expanded shared authoring capabilities
 -removed ineffective create --template option
 -strengthened skill guidance
--fixed show-filename collisions
+-planned to fix show-filename collisions
+-manually curated examples for Skill (incomplete)
 
 ## Mon 4-13-26
 

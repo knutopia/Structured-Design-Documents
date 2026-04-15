@@ -56,11 +56,11 @@ Area A-200 "Mechanic's Scheduling"
 
 Information architecture from that first prompt:
 
-<a href="examples/communal_automotive_shop_mechanic_scheduling.svg">
-  <img src="communal_automotive_shop_mechanic_scheduling.svg" alt="Scheduling app IA after the first prompt" height="230">
+<a href="examples/communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg">
+  <img src="communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg" alt="Scheduling app IA after the first prompt" height="230">
 </a>
 
-## What This Gives You
+## What This Creates
 
 Instead of a vague app idea, you now have a structured design starting point, before anything is baked into code.
 
@@ -70,7 +70,7 @@ Instead of a vague app idea, you now have a structured design starting point, be
 
 The skill uses editing tools that allow it to read, write and check SDD documents quickly and reliably.
 
-## Good Follow-Up Requests
+## Follow-Up Request
 
 Once the first structure exists, the next steps can stay conversational. For example:
 
@@ -102,8 +102,8 @@ Area A-300 "Admin Review"
 
 Rendered output from the admin-area follow-up:
 
-<a href="examples/communal_automotive_shop_mechanic_scheduling_2.svg">
-  <img src="examples/communal_automotive_shop_mechanic_scheduling_2" alt="Scheduling app IA after adding the admin review area" height="230">
+<a href="communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg">
+  <img src="communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple" alt="Scheduling app IA after adding the admin review area" height="230">
 </a>
 
 Note: because the prompt asked to use the simple profile for the IA, the diagram shows less detail.
@@ -119,14 +119,17 @@ Using $sdd-skill, add a simple signup flow in Shift Detail, with these view stat
 Show the UI contracts. (simple profile)
 ```
 
-Full source: [volunteer_scheduling_v3_ui_contracts.sdd](examples/volunteer_scheduling_v3_ui_contracts.sdd)
+Full source: [communal_automotive_shop_mechanic_scheduling3.sdd](examples/communal_automotive_shop_mechanic_scheduling3.sdd)
 
-Trimmed excerpt:
+Trimmed excerpt, showing the added viewStates within Shift Detail:
 
 ```text
-  + Place P-220 "Shift Detail"
-    description="Review one shift and decide whether to sign up"
-    NAVIGATES_TO P-230 "My Schedule"
++ Place P-220 "Shift Detail"
+    owner=Design
+    description="Detailed view of a specific shift with bay, skill, and tool requirements"
+    surface=web
+    route_or_key=/scheduling/shifts/:shift_id
+    access=auth
     CONTAINS VS-220a "View Shift"
     CONTAINS VS-220b "Confirm Signup"
     CONTAINS VS-220c "Signup Success"
@@ -135,14 +138,20 @@ Trimmed excerpt:
     END
     + ViewState VS-220b "Confirm Signup"
       TRANSITIONS_TO VS-220c "Signup Success"
+    END
+    + ViewState VS-220c "Signup Success"
+    END
+  END
 ```
 
-Rendered output from the UI-contract follow-up:
+Rendered output from the UI-contract follow-up, showing the viewState sequence:
 
-<a href="examples/volunteer_scheduling_v3_ui_contracts.png">
-  <img src="examples/volunteer_scheduling_v3_ui_contracts.png" alt="Volunteer scheduling app UI contracts for the shift signup flow" height="230">
+<a href="examples/communal_automotive_shop_mechanic_scheduling3.ui_contracts.simple.svg">
+  <img src="examples/communal_automotive_shop_mechanic_scheduling3.ui_contracts.simple.svg" alt="Scheduling app UI contracts for the shift signup flow" height="230">
 </a>
 
+
+## EDITS PENDING:
 The same style also works for smaller follow-ups:
 
 ```text
