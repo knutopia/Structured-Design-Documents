@@ -108,6 +108,8 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](<initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md>)
 
+- [Strategic Potential of SDD in the Product Lifecycle](<docs/readme_support_docs/strategic_potential/README.md>)
+
 ## Current Status
 
 ### Working Now

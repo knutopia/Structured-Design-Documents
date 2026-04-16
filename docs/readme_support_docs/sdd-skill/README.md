@@ -151,18 +151,39 @@ Rendered output from the UI-contract follow-up, showing the viewState sequence:
 </a>
 
 
-## EDITS PENDING:
+### Simple Follow-Up Edit
 The same style also works for smaller follow-ups:
 
 ```text
-Using $sdd-skill, update the volunteer scheduling SDD.
-
-Rename "Open Shifts" to "Available Shifts" and show the information architecture again.
+Using $sdd-skill, rename "Open Shifts" to "Available Shifts" and show the information architecture again.
 ```
+
+(Of course a simple edit like this - or technically any edit - could also be done as a manual search-and-replace operation in am IDE text editor.)
+
+### Undo
+
+The skill allows undo:
 
 ```text
 Using $sdd-skill, undo the last change to the volunteer scheduling SDD and show the information architecture again.
 ```
+
+(Undo is currently limited to a single step.)
+
+### Manual View Command
+
+When you want to see a current diagram, you can ask the skill for it:
+
+```text
+Using $sdd-skill, show the information architecture.
+```
+
+The skill then calls the sdd-show command. You could also call the show command directly in a terminal, without using the skill:
+
+```bash
+####TODO
+```
+
 
 ## What Happens Behind The Scenes
 
@@ -178,3 +199,7 @@ For the technical workflow behind the examples, see the canonical repo skill bun
 If you begin coding from a one-line request, the model has to invent the product structure at the same time it is generating implementation details. That often leads to avoidable churn.
 
 With an SDD capturing the app design first, you give the coding model a real structure to work from. That is a much better starting point than asking an LLM to "make an app" and hoping it invents a good product shape on its own.
+
+## Note: SDD During the Product Lifecycle
+
+The example shown here shows a from-scratch workflow. It is exciting to envision, design and build a product from scratch. It is also, in practical terms, rare. Most actual work in a product business is concerned with changing, improving, and growing an existing product over a long period of time. In that situation, [SDD can make a strategic difference](../strategic_potential/README.md).
