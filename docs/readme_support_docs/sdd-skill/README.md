@@ -23,7 +23,7 @@ That is enough to get started. You do not need to know SDD syntax first (althoug
 
 The prompt generates the SDD file (Structured Design Document) and the information architecture diagram.
 
-SDD full source: [communal_automotive_shop_mechanic_scheduling.sdd](examples/communal_automotive_shop_mechanic_scheduling.sdd)
+SDD full source: [shop_sched_exploration.sdd](examples/shop_sched_exploration.sdd)
 
 Trimmed excerpt:
 
@@ -56,8 +56,8 @@ Area A-200 "Mechanic's Scheduling"
 
 Information architecture from that first prompt:
 
-<a href="examples/communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg">
-  <img src="examples/communal_automotive_shop_mechanic_scheduling.ia_place_map.strict.svg" alt="Scheduling app IA after the first prompt" height="230">
+<a href="examples/shop_sched_exploration.ia_place_map.strict.svg">
+  <img src="examples/shop_sched_exploration.ia_place_map.strict.svg" alt="Scheduling app IA after the first prompt" height="230">
 </a>
 
 ## What This Creates
@@ -83,7 +83,7 @@ Connect it from the Dashboard.
 Show the IA again. Use the simple profile for it.
 ```
 
-Full source: [communal_automotive_shop_mechanic_scheduling2.sdd](examples/communal_automotive_shop_mechanic_scheduling2.sdd)
+Full source: [shop_sched_exploration_2.sdd](examples/shop_sched_exploration_2.sdd)
 
 Trimmed excerpt:
 
@@ -102,8 +102,8 @@ Area A-300 "Admin Review"
 
 Rendered output from the admin-area follow-up:
 
-<a href="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg">
-  <img src="examples/communal_automotive_shop_mechanic_scheduling2.ia_place_map.simple.svg" alt="Scheduling app IA after adding the admin review area" height="230">
+<a href="examples/shop_sched_exploration_2.ia_place_map.simple.svg">
+  <img src="examples/shop_sched_exploration_2.ia_place_map.simple.svg" alt="Scheduling app IA after adding the admin review area" height="230">
 </a>
 
 Note: because the prompt asked to use the simple profile for the IA, the diagram shows less detail.
@@ -119,7 +119,7 @@ Using $sdd-skill, add a simple signup flow in Shift Detail, with these view stat
 Show the UI contracts. (simple profile)
 ```
 
-Full source: [communal_automotive_shop_mechanic_scheduling3.sdd](examples/communal_automotive_shop_mechanic_scheduling3.sdd)
+Full source: [shop_sched_exploration_3.sdd](examples/shop_sched_exploration_3.sdd)
 
 Trimmed excerpt, showing the added viewStates within Shift Detail:
 
@@ -146,8 +146,8 @@ Trimmed excerpt, showing the added viewStates within Shift Detail:
 
 Rendered output from the UI-contract follow-up, showing the viewState sequence:
 
-<a href="examples/communal_automotive_shop_mechanic_scheduling3.ui_contracts.simple.svg">
-  <img src="examples/communal_automotive_shop_mechanic_scheduling3.ui_contracts.simple.svg" alt="Scheduling app UI contracts for the shift signup flow" height="230">
+<a href="examples/shop_sched_exploration_3.ui_contracts.simple.svg">
+  <img src="examples/shop_sched_exploration_3.ui_contracts.simple.svg" alt="Scheduling app UI contracts for the shift signup flow" height="230">
 </a>
 
 

@@ -18,6 +18,7 @@
 -pushed Skill examples page forward
 -added strategic potential note
 -fixed show filename collisions
+-renamed prompt examples
 
 ## Tue 4-14-26
 
