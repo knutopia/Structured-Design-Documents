@@ -10,7 +10,7 @@ You do not need to learn the whole terminal to use this page. You can copy and p
 
 - When you see `<input>`, it means “the path to your `.sdd` file”.
 - When you use `--out`, you are choosing where the generated file should be written.
-- If you omit `--out` with `sdd show`, the preview file is written beside the input file.
+- If you omit `--out` with `sdd show`, the preview file is written beside the input file as `<source>.<view>.<profile>[.<backend>].<format>`.
 
 If you want a visual result quickly, start with the next section and use the commands as written.
 
@@ -76,7 +76,7 @@ If you only remember one command from this page, make it `sdd show`.
 
 By default, the profile is `strict`, but for getting started you should usually add `--profile simple`.
 
-If you omit `--out`, `sdd show` writes the preview beside the input file. If you want the output somewhere specific, provide `--out`.
+If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<profile>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 
 Examples:
 

@@ -139,7 +139,7 @@ TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
   --profile strict
 ```
 
-If the user did not request a specific output path, let `sdd show` write beside the `.sdd`. If the prompt names a destination or filename, pass `--out` and honor it.
+If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it.
 
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. If multiple views are equally plausible, ask one short clarifying question.
 

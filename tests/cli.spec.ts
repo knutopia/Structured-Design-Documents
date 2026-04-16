@@ -147,6 +147,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
   renderSourceMock: ReturnType<typeof vi.fn>;
   renderSourcePreviewMock: ReturnType<typeof vi.fn>;
   renderPreviewArtifactMock: ReturnType<typeof vi.fn>;
+  writeTextFileMock: ReturnType<typeof vi.fn>;
   writeBinaryFileMock: ReturnType<typeof vi.fn>;
 } {
   const stdout: string[] = [];
@@ -223,6 +224,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       diagnostics: []
     };
   });
+  const writeTextFileMock = vi.fn(async () => undefined);
   const writeBinaryFileMock = vi.fn(async () => undefined);
 
   return {
@@ -231,6 +233,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
     renderSourceMock,
     renderSourcePreviewMock,
     renderPreviewArtifactMock,
+    writeTextFileMock,
     writeBinaryFileMock,
     deps: {
       loadBundle: vi.fn(async () => bundle),
@@ -254,7 +257,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       })),
       renderSource: renderSourceMock,
       renderSourcePreview: renderSourcePreviewMock,
-      writeTextFile: vi.fn(async () => undefined),
+      writeTextFile: writeTextFileMock,
       writeBinaryFile: writeBinaryFileMock,
       renderPreviewArtifact: renderPreviewArtifactMock,
       stdout: (content: string) => {
@@ -299,7 +302,7 @@ describe("CLI wrappers", () => {
     });
   });
 
-  it("show derives a sibling SVG path by default", async () => {
+  it("show derives a sibling SVG path with view and profile by default", async () => {
     const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([
       "node",
@@ -317,10 +320,92 @@ describe("CLI wrappers", () => {
       backendId: "staged_ia_place_map_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith(
-      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.svg",
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg",
       "<svg>staged</svg>"
     );
-    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.svg");
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg");
+  });
+
+  it("show derives different default output paths for different views of the same source", async () => {
+    const { deps, writeTextFileMock } = createDeps();
+
+    const iaResult = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map"
+    ], deps);
+    const journeyResult = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "journey_map"
+    ], deps);
+
+    expect(iaResult.exitCode).toBe(0);
+    expect(journeyResult.exitCode).toBe(0);
+    expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg");
+    expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.journey_map.strict.svg");
+    expect(writeTextFileMock.mock.calls[0]?.[0]).not.toBe(writeTextFileMock.mock.calls[1]?.[0]);
+  });
+
+  it("show derives different default output paths for different profiles of the same source and view", async () => {
+    const { deps, writeTextFileMock } = createDeps();
+
+    const strictResult = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map"
+    ], deps);
+    const simpleResult = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--profile",
+      "simple"
+    ], deps);
+
+    expect(strictResult.exitCode).toBe(0);
+    expect(simpleResult.exitCode).toBe(0);
+    expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg");
+    expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.simple.svg");
+    expect(writeTextFileMock.mock.calls[0]?.[0]).not.toBe(writeTextFileMock.mock.calls[1]?.[0]);
+  });
+
+  it("show appends an explicit backend override to the default output path", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "ia_place_map",
+      "--backend",
+      "legacy_graphviz_preview"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "ia_place_map",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith(
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.legacy_graphviz_preview.svg",
+      "<svg>embedded</svg>"
+    );
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.legacy_graphviz_preview.svg");
   });
 
   it("show respects an explicit SVG output path", async () => {

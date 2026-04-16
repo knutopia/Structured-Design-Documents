@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--fix show filename collisions
 -re-author Skill doc page with manually created output
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
@@ -18,6 +17,7 @@
 
 -pushed Skill examples page forward
 -added strategic potential note
+-fixed show filename collisions
 
 ## Tue 4-14-26
 

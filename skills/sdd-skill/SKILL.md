@@ -90,7 +90,7 @@ Use `preview` when you need transient helper output rather than the default fina
 - raw artifact access for another tool or workflow
 
 Do not confuse saved previews or helper preview output with semantic projection or validation. Use `validate` and `project` for standalone persisted-state semantic reads, and use inline `validate_profile` and `projection_views` on `author` or `apply` for pre-commit candidate feedback.
-The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename.
+The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename; `sdd show` will use `<source>.<view>.<profile>[.<backend>].<format>` for the default sibling filename.
 If preview returns `sdd-helper-error`, inspect the message and any attached `diagnostics` before assuming the helper environment is broken.
 
 ## When To Use Helper Git Commands

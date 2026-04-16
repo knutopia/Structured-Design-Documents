@@ -167,6 +167,23 @@ function replaceExtension(filePath: string, extension: string): string {
   return path.join(parsed.dir, `${parsed.name}.${extension}`);
 }
 
+function buildShowPreviewOutputPath(
+  filePath: string,
+  options: {
+    viewId: string;
+    profileId: string;
+    format: PreviewFormat;
+    backendId?: PreviewRendererBackendId;
+  }
+): string {
+  const parsed = path.parse(path.resolve(filePath));
+  const stemParts = [parsed.name, options.viewId, options.profileId];
+  if (options.backendId) {
+    stemParts.push(options.backendId);
+  }
+  return path.join(parsed.dir, `${stemParts.join(".")}.${options.format}`);
+}
+
 function validateOutputExtension(outputPath: string | undefined, expectedExtension: string, optionName: string): OutputValidationResult {
   if (!outputPath) {
     return { valid: true };
@@ -517,7 +534,12 @@ async function runShowCommand(
       }
     }
 
-    const previewPath = options.out ?? replaceExtension(input.path, requestedPreviewFormat);
+    const previewPath = options.out ?? buildShowPreviewOutputPath(input.path, {
+      viewId: options.view,
+      profileId: options.profile,
+      format: requestedPreviewFormat,
+      backendId: requestedBackendId ? previewCapability.backendId : undefined
+    });
     try {
       const renderResult = await deps.renderSourcePreview(input, bundle, {
         backendId: previewCapability.backendId,
@@ -711,7 +733,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       .option("--profile <profile>", "profile id", "strict")
       .option("--format <format>", "preview format (svg or png)", "svg")
       .option("--backend <backend>", "preview backend id override")
-      .option("--out <file>", "write the preview artifact to a file; defaults to a sibling file beside the input")
+      .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<profile>[.<backend>].<format> beside the input")
       .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source in a file")
       .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
       .addHelpText("after", examplesBlock([
