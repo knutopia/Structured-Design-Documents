@@ -1,0 +1,27 @@
+SDD-TEXT 0.1
+Place P-100 "Dashboard"
+  description="Daily overview for mechanics and shop coordinators."
+  primary_nav=true
+  NAVIGATES_TO P-210 "Open Shifts"
+  NAVIGATES_TO P-230 "My Schedule"
+END
+Area A-200 "Mechanic Scheduling"
+  description="Scheduling workspace for the communal automotive shop."
+  CONTAINS P-210 "Open Shifts"
+  CONTAINS P-220 "Shift Detail"
+  CONTAINS P-230 "My Schedule"
+  + Place P-210 "Open Shifts"
+    description="Browse unclaimed repair and maintenance shifts."
+    NAVIGATES_TO P-220 "Shift Detail"
+  END
+  + Place P-220 "Shift Detail"
+    description="Inspect the shift, required tools, and assigned bay."
+    NAVIGATES_TO P-210 "Open Shifts"
+    NAVIGATES_TO P-230 "My Schedule"
+  END
+  + Place P-230 "My Schedule"
+    description="See upcoming shop time, swaps, and confirmed assignments."
+    primary_nav=true
+    NAVIGATES_TO P-220 "Shift Detail"
+  END
+END

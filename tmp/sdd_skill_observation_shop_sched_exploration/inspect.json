@@ -1,0 +1,5 @@
+{
+  "kind": "sdd-helper-error",
+  "code": "runtime_error",
+  "message": "Document 'shop_sched_exploration.sdd' is not parseable for inspect."
+}

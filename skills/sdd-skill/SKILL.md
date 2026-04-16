@@ -12,29 +12,37 @@ This skill enables working with structured design documents. In this repo source
 ## Quick Start
 
 - Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
-- Use `skills/sdd-skill/scripts/run_helper.sh search ...` when the user has not named a target `.sdd` document yet.
-- When creating a new `.sdd`, default to the current working directory expressed as a repo-relative path unless the user names or clearly implies another location.
-- Use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` before any edit to obtain fresh `revision` and handle data.
+- First classify the task as: create a new document, edit an existing document, or read/preview an existing document.
+- For a new `.sdd`, choose the repo-relative path directly. Default to the current working directory unless the user names or clearly implies another location.
+- Use `skills/sdd-skill/scripts/run_helper.sh search ...` only to locate an existing target `.sdd` document or node when the user has not named it yet.
+- For existing-document edits, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain fresh `revision` and handle data before handle-based changes.
+- For fresh-document bootstrap work, use `create` first and continue from the returned `revision`; immediate `inspect` is not the normal first step because the empty bootstrap may still be parse-invalid.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
 - Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough.
 - Use `sdd show` for saved user-facing preview artifacts, and use `preview` only when you need transient helper preview output after a clean `author` or `apply` dry run under the same target profile.
 - Use `undo` only for helper-managed committed change sets.
+- For new-document authoring, do not search repo `.sdd` examples to infer syntax or structure unless the user explicitly asks for comparison or example reuse.
+- Local contract/code lookup is acceptable when needed to understand helper request shapes or runtime constraints.
 
 ## Default Workflow
 
-1. Orient:
-   use `search` only if the target document is unknown; otherwise go straight to `inspect`.
-2. Inspect:
-   get the current `revision`, node handles, and body-item handles before planning a low-level change. For high-level scaffold work, inspect is still the safest default when you need broad context.
-3. Plan:
-   choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles. Include `validate_profile` whenever the user wants confirmation under a specific profile, and add `projection_views` when structured semantic confirmation is helpful.
-   When creating a new document, default the target path to the current working directory as a repo-relative `.sdd` path. Honor explicit or clearly implied output locations, and do not infer destinations from examples, walkthroughs, or documentation structure.
-4. Dry run:
-   submit `author` or `apply` with omitted `mode` or `mode: "dry_run"` and review the returned status, summary, and diagnostics. If parse or validation errors remain, continue the inspect/author-or-apply cycle and do not preview yet.
-5. Commit:
+1. Identify the task kind:
+   decide whether the user wants to create a new document, edit an existing document, or read/preview an existing document. Do not start with `search` or `inspect` until that branch is clear.
+2. Create a new document:
+   choose the repo-relative output path directly, defaulting to the current working directory unless the prompt names or clearly implies another location. Do not use `search` to pick a filename or to hunt examples, and do not infer the destination from examples, walkthroughs, or documentation layout.
+   run `create`, then use the returned `revision` as the continuation surface. Prefer `author` for first-pass scaffold creation. Immediate `inspect` is not the normal next step because the empty bootstrap document may still be parse-invalid.
+3. Edit an existing document:
+   if the target existing `.sdd` is unknown, use `search` to locate it. Once the target is known, use `inspect` to obtain the current `revision`, node handles, and body-item handles before planning handle-based changes.
+   choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles.
+4. Read, validate, or preview an existing document:
+   if the document is already named, do not `search`. Use `validate`, `project`, `sdd show`, or `preview` as appropriate without forcing an edit-oriented `inspect` step.
+5. Dry run mutations:
+   submit `author` or `apply` with omitted `mode` or `mode: "dry_run"` and review the returned status, summary, and diagnostics. Include `validate_profile` whenever the user wants confirmation under a specific profile, and add `projection_views` when structured semantic confirmation is helpful.
+   if parse or validation errors remain, continue the create/author-or-inspect/author-or-apply cycle and do not preview yet.
+6. Commit and confirm:
    if the dry run is acceptable for the target profile and the user wants the change applied, resubmit that validated request with `mode: "commit"`.
-6. Confirm:
+   if follow-on edits need fresh handles after commit, use committed continuation handles when available or re-`inspect` the committed result.
    use `validate` or `project` for persisted-state semantic confirmation. If the user wants a visible artifact, save it with `TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>` using the same committed, validated state. Use `preview` only for transient helper output or raw artifact confirmation.
 
 ## Edit Safety Rules
@@ -48,6 +56,7 @@ This skill enables working with structured design documents. In this repo source
 - Treat `sdd-change-set` with `status: "rejected"` as a domain result to interpret, not as a shell failure.
 - Treat `sdd-helper-error` as a helper-layer failure that must be classified before continuing. Many cases are invocation or environment problems, but preview can also fail here when the document is still invalid or incomplete under the requested profile.
 - Keep helper paths repo-relative and `.sdd`-scoped.
+- For new-document authoring, do not use repo `.sdd` examples as a shortcut for syntax or structure inference unless the user explicitly asks for comparison or example reuse.
 
 ## Supported Helper Surface
 

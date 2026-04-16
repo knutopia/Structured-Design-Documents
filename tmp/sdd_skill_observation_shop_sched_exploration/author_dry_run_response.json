@@ -1,0 +1,763 @@
+{
+  "kind": "sdd-authoring-intent-result",
+  "path": "shop_sched_exploration.sdd",
+  "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+  "resulting_revision": "rev_2049491bbf13d20c555855cee2d5bc67e127074f4ecdf5d8ec9cbb0905d988ff",
+  "mode": "dry_run",
+  "status": "applied",
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place-dashboard",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-100",
+        "name": "Dashboard",
+        "props": [
+          {
+            "key": "description",
+            "value_kind": "quoted_string",
+            "raw_value": "Daily overview for mechanics and shop coordinators."
+          },
+          {
+            "key": "primary_nav",
+            "value_kind": "bare_value",
+            "raw_value": "true"
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "edge-dashboard-open-shifts",
+            "rel_type": "NAVIGATES_TO",
+            "to": "P-210",
+            "to_name": "Open Shifts",
+            "placement": {
+              "mode": "last"
+            }
+          },
+          {
+            "local_id": "edge-dashboard-my-schedule",
+            "rel_type": "NAVIGATES_TO",
+            "to": "P-230",
+            "to_name": "My Schedule",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area-mechanic-scheduling",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-200",
+        "name": "Mechanic Scheduling",
+        "props": [
+          {
+            "key": "description",
+            "value_kind": "quoted_string",
+            "raw_value": "Scheduling workspace for the communal automotive shop."
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "edge-area-open-shifts",
+            "rel_type": "CONTAINS",
+            "to": "P-210",
+            "to_name": "Open Shifts",
+            "placement": {
+              "mode": "last"
+            }
+          },
+          {
+            "local_id": "edge-area-shift-detail",
+            "rel_type": "CONTAINS",
+            "to": "P-220",
+            "to_name": "Shift Detail",
+            "placement": {
+              "mode": "last"
+            }
+          },
+          {
+            "local_id": "edge-area-my-schedule",
+            "rel_type": "CONTAINS",
+            "to": "P-230",
+            "to_name": "My Schedule",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ],
+        "children": [
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place-open-shifts",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "P-210",
+              "name": "Open Shifts",
+              "props": [
+                {
+                  "key": "description",
+                  "value_kind": "quoted_string",
+                  "raw_value": "Browse unclaimed repair and maintenance shifts."
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge-open-shifts-detail",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-220",
+                  "to_name": "Shift Detail",
+                  "placement": {
+                    "mode": "last"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place-shift-detail",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "P-220",
+              "name": "Shift Detail",
+              "props": [
+                {
+                  "key": "description",
+                  "value_kind": "quoted_string",
+                  "raw_value": "Inspect the shift, required tools, and assigned bay."
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge-shift-detail-open-shifts",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-210",
+                  "to_name": "Open Shifts",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge-shift-detail-my-schedule",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-230",
+                  "to_name": "My Schedule",
+                  "placement": {
+                    "mode": "last"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place-my-schedule",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "P-230",
+              "name": "My Schedule",
+              "props": [
+                {
+                  "key": "description",
+                  "value_kind": "quoted_string",
+                  "raw_value": "See upcoming shop time, swaps, and confirmed assignments."
+                },
+                {
+                  "key": "primary_nav",
+                  "value_kind": "bare_value",
+                  "raw_value": "true"
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge-my-schedule-shift-detail",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-220",
+                  "to_name": "Shift Detail",
+                  "placement": {
+                    "mode": "last"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "change_set": {
+    "kind": "sdd-change-set",
+    "change_set_id": "chg_31ab78eb-b690-48a1-a1c1-92ab5d19b1e5",
+    "path": "shop_sched_exploration.sdd",
+    "origin": "apply_authoring_intent",
+    "document_effect": "updated",
+    "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+    "mode": "dry_run",
+    "status": "applied",
+    "undo_eligible": false,
+    "operations": [
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-100",
+        "name": "Dashboard",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+        "key": "description",
+        "value_kind": "quoted_string",
+        "raw_value": "Daily overview for mechanics and shop coordinators."
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+        "key": "primary_nav",
+        "value_kind": "bare_value",
+        "raw_value": "true"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-210",
+        "to_name": "Open Shifts",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-230",
+        "to_name": "My Schedule",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Area",
+        "node_id": "A-200",
+        "name": "Mechanic Scheduling",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+        "key": "description",
+        "value_kind": "quoted_string",
+        "raw_value": "Scheduling workspace for the communal automotive shop."
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+        "rel_type": "CONTAINS",
+        "to": "P-210",
+        "to_name": "Open Shifts",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+        "rel_type": "CONTAINS",
+        "to": "P-220",
+        "to_name": "Shift Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+        "rel_type": "CONTAINS",
+        "to": "P-230",
+        "to_name": "My Schedule",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-210",
+        "name": "Open Shifts",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92",
+        "key": "description",
+        "value_kind": "quoted_string",
+        "raw_value": "Browse unclaimed repair and maintenance shifts."
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-220",
+        "to_name": "Shift Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-220",
+        "name": "Shift Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+        "key": "description",
+        "value_kind": "quoted_string",
+        "raw_value": "Inspect the shift, required tools, and assigned bay."
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-210",
+        "to_name": "Open Shifts",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-230",
+        "to_name": "My Schedule",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-230",
+        "name": "My Schedule",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+        "key": "description",
+        "value_kind": "quoted_string",
+        "raw_value": "See upcoming shop time, swaps, and confirmed assignments."
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+        "key": "primary_nav",
+        "value_kind": "bare_value",
+        "raw_value": "true"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-220",
+        "to_name": "Shift Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd"
+        }
+      }
+    ],
+    "summary": {
+      "node_insertions": [
+        {
+          "handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+          "node_id": "P-100",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+          "node_id": "A-200",
+          "node_type": "Area"
+        },
+        {
+          "handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92",
+          "node_id": "P-210",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+          "node_id": "P-220",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+          "node_id": "P-230",
+          "node_type": "Place"
+        }
+      ],
+      "node_deletions": [],
+      "node_renames": [],
+      "property_changes": [
+        {
+          "node_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+          "key": "description",
+          "to": "Daily overview for mechanics and shop coordinators."
+        },
+        {
+          "node_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+          "key": "primary_nav",
+          "to": "true"
+        },
+        {
+          "node_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+          "key": "description",
+          "to": "Scheduling workspace for the communal automotive shop."
+        },
+        {
+          "node_handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92",
+          "key": "description",
+          "to": "Browse unclaimed repair and maintenance shifts."
+        },
+        {
+          "node_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+          "key": "description",
+          "to": "Inspect the shift, required tools, and assigned bay."
+        },
+        {
+          "node_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+          "key": "description",
+          "to": "See upcoming shop time, swaps, and confirmed assignments."
+        },
+        {
+          "node_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+          "key": "primary_nav",
+          "to": "true"
+        }
+      ],
+      "edge_insertions": [
+        {
+          "handle": "hdl_0f23f58c7421758e77b20ad9cf4457038e0b4065a8d366a399d337b28af23acd",
+          "parent_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-210"
+        },
+        {
+          "handle": "hdl_8a5cb5b6d7017b900a988b4e33eca23ee989019bc475f1eba16f25e3e377e587",
+          "parent_handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-230"
+        },
+        {
+          "handle": "hdl_b3c36897d7fe8d544f477a3dc22460787f1a98842c2d092f5ab055b028ac3bf0",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+          "rel_type": "CONTAINS",
+          "to": "P-210"
+        },
+        {
+          "handle": "hdl_570fb91210b12f8d700ec5e0563433b43bfe8cc2451147e9d8865f43e2c8452b",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+          "rel_type": "CONTAINS",
+          "to": "P-220"
+        },
+        {
+          "handle": "hdl_d10c412f2e163b6bff2cf928c5752aad316921c85cf44ac15148311b8d75dcb2",
+          "parent_handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765",
+          "rel_type": "CONTAINS",
+          "to": "P-230"
+        },
+        {
+          "handle": "hdl_4b2b11621e1f437dad81361ff1707f969c42a111f8d4c2317e5e8dc91f375802",
+          "parent_handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-220"
+        },
+        {
+          "handle": "hdl_762b7114f669845e238dd525ded388bea525d9bdec746b10842f45f5d913b916",
+          "parent_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-210"
+        },
+        {
+          "handle": "hdl_5e4b2b57f58fc028c524a29cd28872b8d094b3839bffc49960cd3a1d7c52b1e3",
+          "parent_handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-230"
+        },
+        {
+          "handle": "hdl_978032b62f330738ee558d303a8fb5ed425b00df533d4a09aa812ad4e029f523",
+          "parent_handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-220"
+        }
+      ],
+      "edge_deletions": [],
+      "ordering_changes": []
+    },
+    "diagnostics": [],
+    "projection_results": [
+      {
+        "view_id": "ia_place_map",
+        "projection": {
+          "schema": "sdd-text-view-projection",
+          "version": "0.1",
+          "view_id": "ia_place_map",
+          "source_example": "shop_sched_exploration",
+          "nodes": [
+            {
+              "id": "A-200",
+              "type": "Area",
+              "name": "Mechanic Scheduling"
+            },
+            {
+              "id": "P-100",
+              "type": "Place",
+              "name": "Dashboard"
+            },
+            {
+              "id": "P-210",
+              "type": "Place",
+              "name": "Open Shifts"
+            },
+            {
+              "id": "P-220",
+              "type": "Place",
+              "name": "Shift Detail"
+            },
+            {
+              "id": "P-230",
+              "type": "Place",
+              "name": "My Schedule"
+            }
+          ],
+          "edges": [
+            {
+              "from": "A-200",
+              "type": "CONTAINS",
+              "to": "P-210"
+            },
+            {
+              "from": "A-200",
+              "type": "CONTAINS",
+              "to": "P-220"
+            },
+            {
+              "from": "A-200",
+              "type": "CONTAINS",
+              "to": "P-230"
+            },
+            {
+              "from": "P-100",
+              "type": "NAVIGATES_TO",
+              "to": "P-210"
+            },
+            {
+              "from": "P-100",
+              "type": "NAVIGATES_TO",
+              "to": "P-230"
+            },
+            {
+              "from": "P-210",
+              "type": "NAVIGATES_TO",
+              "to": "P-220"
+            },
+            {
+              "from": "P-220",
+              "type": "NAVIGATES_TO",
+              "to": "P-210"
+            },
+            {
+              "from": "P-220",
+              "type": "NAVIGATES_TO",
+              "to": "P-230"
+            },
+            {
+              "from": "P-230",
+              "type": "NAVIGATES_TO",
+              "to": "P-220"
+            }
+          ],
+          "derived": {
+            "node_annotations": [
+              {
+                "node_id": "P-100",
+                "display": {
+                  "metadata": [
+                    {
+                      "key": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              {
+                "node_id": "P-230",
+                "display": {
+                  "metadata": [
+                    {
+                      "key": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                }
+              }
+            ],
+            "edge_annotations": [],
+            "node_groups": [],
+            "view_metadata": {}
+          },
+          "omissions": [],
+          "notes": [
+            "Place route, access, and entry metadata are available as node annotations for profile-aware rendering."
+          ]
+        },
+        "diagnostics": []
+      }
+    ],
+    "resulting_revision": "rev_2049491bbf13d20c555855cee2d5bc67e127074f4ecdf5d8ec9cbb0905d988ff"
+  },
+  "created_targets": [
+    {
+      "local_id": "place-dashboard",
+      "kind": "node",
+      "handle": "hdl_6c6b0912eb5c7ab58d4bdedf11c5957f12eeac45b82ee7edf56f66196d7bb0ad"
+    },
+    {
+      "local_id": "edge-dashboard-open-shifts",
+      "kind": "edge",
+      "handle": "hdl_0f23f58c7421758e77b20ad9cf4457038e0b4065a8d366a399d337b28af23acd",
+      "parent_local_id": "place-dashboard"
+    },
+    {
+      "local_id": "edge-dashboard-my-schedule",
+      "kind": "edge",
+      "handle": "hdl_8a5cb5b6d7017b900a988b4e33eca23ee989019bc475f1eba16f25e3e377e587",
+      "parent_local_id": "place-dashboard"
+    },
+    {
+      "local_id": "area-mechanic-scheduling",
+      "kind": "node",
+      "handle": "hdl_7762665e4d6432aa6e3e2e413d9a29254fd96c26beb3530ccba15591573a5765"
+    },
+    {
+      "local_id": "edge-area-open-shifts",
+      "kind": "edge",
+      "handle": "hdl_b3c36897d7fe8d544f477a3dc22460787f1a98842c2d092f5ab055b028ac3bf0",
+      "parent_local_id": "area-mechanic-scheduling"
+    },
+    {
+      "local_id": "edge-area-shift-detail",
+      "kind": "edge",
+      "handle": "hdl_570fb91210b12f8d700ec5e0563433b43bfe8cc2451147e9d8865f43e2c8452b",
+      "parent_local_id": "area-mechanic-scheduling"
+    },
+    {
+      "local_id": "edge-area-my-schedule",
+      "kind": "edge",
+      "handle": "hdl_d10c412f2e163b6bff2cf928c5752aad316921c85cf44ac15148311b8d75dcb2",
+      "parent_local_id": "area-mechanic-scheduling"
+    },
+    {
+      "local_id": "place-open-shifts",
+      "kind": "node",
+      "handle": "hdl_e8da52b699c1dd4c65ac418757aee8026857bcefd10e44d42bcb96ad677cad92",
+      "parent_local_id": "area-mechanic-scheduling"
+    },
+    {
+      "local_id": "edge-open-shifts-detail",
+      "kind": "edge",
+      "handle": "hdl_4b2b11621e1f437dad81361ff1707f969c42a111f8d4c2317e5e8dc91f375802",
+      "parent_local_id": "place-open-shifts"
+    },
+    {
+      "local_id": "place-shift-detail",
+      "kind": "node",
+      "handle": "hdl_3ce9badf19198ed8d58bd0c5b3e354cefd277cc59916c7be8236eed42845a6a7",
+      "parent_local_id": "area-mechanic-scheduling"
+    },
+    {
+      "local_id": "edge-shift-detail-open-shifts",
+      "kind": "edge",
+      "handle": "hdl_762b7114f669845e238dd525ded388bea525d9bdec746b10842f45f5d913b916",
+      "parent_local_id": "place-shift-detail"
+    },
+    {
+      "local_id": "edge-shift-detail-my-schedule",
+      "kind": "edge",
+      "handle": "hdl_5e4b2b57f58fc028c524a29cd28872b8d094b3839bffc49960cd3a1d7c52b1e3",
+      "parent_local_id": "place-shift-detail"
+    },
+    {
+      "local_id": "place-my-schedule",
+      "kind": "node",
+      "handle": "hdl_e24f905ad0e0d2c245b5789b1eeb59c46d992b001edcaeb419f58e8b1dedf9cd",
+      "parent_local_id": "area-mechanic-scheduling"
+    },
+    {
+      "local_id": "edge-my-schedule-shift-detail",
+      "kind": "edge",
+      "handle": "hdl_978032b62f330738ee558d303a8fb5ed425b00df533d4a09aa812ad4e029f523",
+      "parent_local_id": "place-my-schedule"
+    }
+  ],
+  "diagnostics": []
+}

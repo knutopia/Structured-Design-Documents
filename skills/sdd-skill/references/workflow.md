@@ -14,19 +14,45 @@ skills/sdd-skill/scripts/run_helper.sh capabilities
 
 The result is the canonical JSON command manifest for the helper.
 
-## 2. Find A Target Document
+## 2. Choose The Task Kind
 
-If the user has not named a document, search first:
+Start by classifying the request as one of:
+
+- create a new document
+- edit an existing document
+- read, validate, or preview an existing document
+
+Use the matching branch below instead of forcing every request through one linear search/inspect path.
+
+## 3. Create A New Document
+
+Choose the repo-relative output path directly. When the user does not specify a location, default the new document path to the current working directory expressed as a repo-relative `.sdd` path. If the prompt names or clearly implies a location, honor that instead. Do not infer destinations from examples or documentation layout.
+
+For new-document authoring, do not use `search` to pick a filename or to hunt repo `.sdd` examples. Only use repo `.sdd` examples when the user explicitly asks for comparison or example reuse. Local contract/code lookup is still acceptable when you need to understand helper request shapes or runtime constraints.
+
+The current helper creates an empty bootstrap document:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh create example.sdd --version 0.1
+```
+
+This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
+
+Use the `revision` returned by `create` as the continuation surface for the next mutation request. Immediate `inspect` is not the normal next step after `create`, because the empty bootstrap may still be parse-invalid.
+
+For first-pass scaffold creation, prefer `author`. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
+
+## 4. Edit An Existing Document
+
+If the target existing `.sdd` document is unknown, search first:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh search --query claim --under bundle/v0.1/examples --limit 5
 ```
 
-Use the returned paths to choose the most likely document, then inspect that document.
+Use the returned paths to choose the most likely existing document, then inspect that document.
 
-## 3. Inspect Before Editing
-
-Inspect is the normal starting point for edits:
+Inspect is the normal starting point for existing-document edits:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh inspect bundle/v0.1/examples/outcome_to_ia_trace.sdd
@@ -42,27 +68,33 @@ Inspect returns:
 
 Build low-level change requests from that returned `revision` and those handles. Do not invent handles.
 
-## 4. Create A New Document
+Use `author` when the task is mostly scaffold creation or nested structure authoring. Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
 
-The current helper creates an empty bootstrap document:
+## 5. Read, Validate, Or Preview An Existing Document
+
+If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`.
+
+Use persisted-state semantic reads when you want confirmation without issuing a mutation request:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh create example.sdd --version 0.1
+skills/sdd-skill/scripts/run_helper.sh validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
+skills/sdd-skill/scripts/run_helper.sh project bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
 ```
 
-This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
+If the user wants a saved preview artifact, use `sdd show` after the relevant committed revision has already passed a clean dry-run validation under the same profile:
 
-When the user does not specify a location, default the new document path to the current working directory expressed as a repo-relative `.sdd` path. If the prompt names or clearly implies a location, honor that instead. Do not infer destinations from examples or documentation layout.
+```bash
+TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
+  --view ia_place_map \
+  --profile strict
+```
 
-If the new document needs follow-on edits, use `author` for common scaffold creation or inspect it first and proceed with low-level `apply` requests.
+If the user wants transient raw artifact output instead, use helper `preview`.
 
-## 5. Dry-Run A Helper Mutation
+## 6. Dry-Run A Helper Mutation
 
 Use `author` or `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
 If you intend to preview under a profile later, include the same `validate_profile` here first.
-
-Use `author` when the task is mostly scaffold creation or nested structure authoring.
-Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
 
 Example low-level `apply` request shape:
 
@@ -103,9 +135,9 @@ A dry run is acceptable for preview gating only when:
 - `status` is `applied`
 - the selected `validate_profile` reports no parse or validation errors
 
-If parse or validation errors remain, continue the inspect/author-or-apply cycle and do not preview yet.
+If parse or validation errors remain, continue the relevant create/author-or-inspect/author-or-apply cycle and do not preview yet.
 
-## 6. Commit A Change Set
+## 7. Commit A Change Set
 
 When the dry run is acceptable for the chosen profile and the user wants the change applied, resubmit the same validated request with:
 
@@ -116,7 +148,7 @@ When the dry run is acceptable for the chosen profile and the user wants the cha
 The skill should not skip straight to commit unless the user clearly wants the real mutation carried out.
 If further edits require fresh handles, either use committed `author` `created_targets`, committed `apply` insertion handles, or inspect the committed result and repeat the dry-run validation gate before previewing.
 
-## 7. Validate Or Project A Committed Result
+## 8. Validate Or Project A Committed Result
 
 Use persisted-state semantic reads when you want confirmation after commit or when you do not need a mutation request at all:
 
@@ -127,7 +159,7 @@ skills/sdd-skill/scripts/run_helper.sh project bundle/v0.1/examples/outcome_to_i
 
 These commands read the current on-disk document only. They do not inspect dry-run candidates.
 
-## 8. Preview A Result
+## 9. Preview A Result
 
 Interpret requests for a visible result semantically, not only from exact technical words. Phrases such as "show it", "render it", "draw it", "make a diagram", "show the information architecture", and "show the place map" should normally produce a saved user-facing artifact.
 
@@ -157,7 +189,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
 It is not a substitute for validation. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
-## 9. Undo A Helper-Managed Commit
+## 10. Undo A Helper-Managed Commit
 
 Undo works from a `change_set_id` returned by a prior committed helper-managed change set.
 
@@ -177,7 +209,7 @@ Submit it with:
 skills/sdd-skill/scripts/run_helper.sh undo --request /tmp/undo-request.json
 ```
 
-## 10. Narrow Git Workflows
+## 11. Narrow Git Workflows
 
 Use helper git commands only when the user wants `.sdd`-scoped git behavior.
 
@@ -195,3 +227,13 @@ skills/sdd-skill/scripts/run_helper.sh git-commit --message "Update example SDD"
 ```
 
 These commands are intentionally narrow. They do not replace general-purpose Git work.
+
+## 12. Guide Follow-Up Inventory
+
+When later revising `docs/readme_support_docs/sdd-skill/README.md`, align it to this task-kind-first workflow:
+
+- make the "start with an app idea" section clearly read as create-new-document flow rather than search-first flow
+- make omitted filenames read as direct path/name selection, not document/example search
+- make the follow-up edit examples explicitly read as existing-document edit flows
+- split any wording that still implies one linear workflow for both creation and editing
+- review example artifact references later for consistency with the current `sdd show` default naming convention and chosen profile wording

@@ -11,13 +11,13 @@ The SDD Skill helps turn that description into a structured design document.
 Here is an example prompt:
 
 ```text
-Use $Sdd Skill to design a mechanic's scheduling app for a communal automotive shop.     
+Use [$sdd-skill](/mnt/c/Users/Knut/.codex/skills/sdd-skill/SKILL.md) to design a mechanic's scheduling app for a communal automotive shop.      
 
-Create a new SDD for it and show the information architecture as a simple diagram. Include: 
+Create a new SDD ("shop_sched_exploration") for it and show the information architecture as a simple diagram. Include:   
 - Dashboard
 - a Mechanic's Scheduling area with Open Shifts, Shift Detail, My Schedule
 ```
-That is enough to get started. You do not need to know SDD syntax first (although the syntax is quite simple.)
+That is enough to get started. You do not need to know SDD syntax first (although the syntax is quite simple.) You could omit the filename. The skill would choose a name then.
 
 ## Output
 
