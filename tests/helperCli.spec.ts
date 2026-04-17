@@ -52,6 +52,52 @@ function createRejectedChangeSet(path: string): ChangeSetResult {
   };
 }
 
+function createContractResolutionBundle(): Bundle {
+  return {
+    manifest: {
+      bundle_name: "sdd-text-spec-bundle",
+      bundle_version: "0.1",
+      profiles: [
+        {
+          id: "simple",
+          path: "profiles/simple.yaml",
+          intent: "Low-noise drafting with strict structural validation."
+        },
+        {
+          id: "permissive",
+          path: "profiles/permissive.yaml",
+          intent: "Warning-first governance with strict structural validation."
+        },
+        {
+          id: "strict",
+          path: "profiles/strict.yaml",
+          intent: "Strict governance for production-ready authoring."
+        }
+      ]
+    },
+    views: {
+      version: "0.1",
+      views: [
+        {
+          id: "journey_map",
+          name: "Journey Map",
+          status: "operational"
+        },
+        {
+          id: "ia_place_map",
+          name: "IA Place Map",
+          status: "operational"
+        },
+        {
+          id: "ui_contracts",
+          name: "UI Contracts",
+          status: "operational"
+        }
+      ]
+    }
+  } as Bundle;
+}
+
 function createDeps(overrides: Partial<HelperCliDeps> = {}) {
   const stdout: string[] = [];
   const stderr: string[] = [];
@@ -356,13 +402,21 @@ describe("sdd-helper CLI", () => {
         }),
         expect.objectContaining({
           name: "contract",
-          invocation: "sdd-helper contract <subject_id>",
+          invocation: "sdd-helper contract <subject_id> [--resolve bundle]",
           result_kind: "sdd-contract-subject-detail",
           subject_id: "helper.command.contract",
           input_shape_id: "shared.shape.helper_contract_args",
           output_shape_id: "shared.shape.contract_subject_detail",
           has_deep_introspection: true,
-          detail_modes: ["static"]
+          detail_modes: ["static", "bundle_resolved"],
+          options: [
+            {
+              flag: "--resolve",
+              required: false,
+              value_name: "mode",
+              description: "Optional resolution mode. Supported value: bundle."
+            }
+          ]
         }),
         expect.objectContaining({
           name: "author",
@@ -397,7 +451,8 @@ describe("sdd-helper CLI", () => {
         expect.objectContaining({
           name: "project",
           result_kind: "sdd-projection",
-          subject_id: "helper.command.project"
+          subject_id: "helper.command.project",
+          detail_modes: ["static", "bundle_resolved"]
         }),
         expect.objectContaining({
           name: "preview",
@@ -406,7 +461,7 @@ describe("sdd-helper CLI", () => {
           input_shape_id: "shared.shape.render_preview_args",
           output_shape_id: "shared.shape.render_preview_result",
           has_deep_introspection: true,
-          detail_modes: ["static"]
+          detail_modes: ["static", "bundle_resolved"]
         }),
         expect.objectContaining({
           name: "validate",
@@ -415,7 +470,7 @@ describe("sdd-helper CLI", () => {
           input_shape_id: "shared.shape.validate_document_args",
           output_shape_id: "shared.shape.validation_resource",
           has_deep_introspection: true,
-          detail_modes: ["static"]
+          detail_modes: ["static", "bundle_resolved"]
         }),
         expect.objectContaining({
           name: "git-status",
@@ -503,6 +558,150 @@ describe("sdd-helper CLI", () => {
           "shared.binding.render_preview.profile_id"
         ]
       }
+    });
+  });
+
+  it("loads bundle state only when bundle resolution is requested", async () => {
+    const loadBundle = vi.fn(async () => createContractResolutionBundle());
+    const { deps, stdout, loadBundleMock } = createDeps({
+      loadBundle
+    });
+
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.preview", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(0);
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.preview"
+      },
+      bindings: [
+        {
+          binding_id: "shared.binding.render_preview.view_id",
+          resolved_values: [
+            {
+              value: "journey_map",
+              label: "Journey Map",
+              metadata: {
+                status: "operational"
+              }
+            },
+            {
+              value: "ia_place_map",
+              label: "IA Place Map",
+              metadata: {
+                status: "operational"
+              }
+            },
+            {
+              value: "ui_contracts",
+              label: "UI Contracts",
+              metadata: {
+                status: "operational"
+              }
+            }
+          ]
+        },
+        {
+          binding_id: "shared.binding.render_preview.profile_id",
+          resolved_values: [
+            {
+              value: "simple",
+              metadata: {
+                intent: "Low-noise drafting with strict structural validation."
+              }
+            },
+            {
+              value: "permissive",
+              metadata: {
+                intent: "Warning-first governance with strict structural validation."
+              }
+            },
+            {
+              value: "strict",
+              metadata: {
+                intent: "Strict governance for production-ready authoring."
+              }
+            }
+          ]
+        }
+      ],
+      resolution: {
+        mode: "bundle_resolved",
+        bundle_name: "sdd-text-spec-bundle",
+        bundle_version: "0.1"
+      }
+    });
+  });
+
+  it("resolves project and validate bindings independently", async () => {
+    const { deps, stdout } = createDeps({
+      loadBundle: vi.fn(async () => createContractResolutionBundle())
+    });
+
+    const validateResult = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.validate", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(validateResult.exitCode).toBe(0);
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      subject: {
+        subject_id: "helper.command.validate"
+      },
+      bindings: [
+        {
+          binding_id: "shared.binding.validate_document.profile_id",
+          resolved_values: [
+            { value: "simple" },
+            { value: "permissive" },
+            { value: "strict" }
+          ]
+        }
+      ]
+    });
+
+    stdout.length = 0;
+    const projectResult = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.project", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(projectResult.exitCode).toBe(0);
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      subject: {
+        subject_id: "helper.command.project"
+      },
+      bindings: [
+        {
+          binding_id: "shared.binding.project_document.view_id",
+          resolved_values: [
+            { value: "journey_map" },
+            { value: "ia_place_map" },
+            { value: "ui_contracts" }
+          ]
+        }
+      ]
+    });
+  });
+
+  it("returns invalid_args for unsupported contract resolution modes", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.preview", "--resolve", "invalid"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "Unsupported --resolve mode 'invalid'. The only supported value is 'bundle'."
     });
   });
 

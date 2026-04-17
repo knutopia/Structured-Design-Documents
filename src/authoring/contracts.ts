@@ -548,6 +548,7 @@ export interface HelperCapabilitiesResult {
 
 export interface HelperContractArgs {
   subject_id: ContractSubjectId;
+  resolve?: "bundle";
 }
 
 export type ContractSubjectId =
@@ -630,6 +631,12 @@ export interface ContractConstraintSpec {
   summary: string;
 }
 
+export interface ContractResolvedAllowedValue {
+  value: string;
+  label?: string;
+  metadata?: Record<string, unknown>;
+}
+
 export interface ContractBindingSpec {
   binding_id: ContractBindingId;
   applies_to_shape_id: ContractShapeId;
@@ -642,6 +649,7 @@ export interface ContractBindingSpec {
   static_behavior: "reference_only";
   bundle_resolved_behavior: "expand_values";
   summary: string;
+  resolved_values?: ContractResolvedAllowedValue[];
 }
 
 export interface ContractContinuationSpec {

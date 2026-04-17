@@ -305,7 +305,7 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   },
   {
     subject_id: "helper.command.contract",
-    invocation: "sdd-helper contract <subject_id>",
+    invocation: "sdd-helper contract <subject_id> [--resolve bundle]",
     arguments: [
       {
         name: "subject_id",
@@ -313,11 +313,18 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         description: "Shared contract subject id."
       }
     ],
-    options: [],
+    options: [
+      {
+        flag: "--resolve",
+        required: false,
+        value_name: "mode",
+        description: "Optional resolution mode. Supported value: bundle."
+      }
+    ],
     result_kind: "sdd-contract-subject-detail",
     constraints: [
       "The subject_id must match a subject exposed through sdd-helper capabilities.",
-      "Gate 2 exposes static detail only; bundle-resolved introspection is not available yet."
+      "Static detail is the default; use --resolve bundle to expand bundle-owned allowed values on demand."
     ]
   },
   {

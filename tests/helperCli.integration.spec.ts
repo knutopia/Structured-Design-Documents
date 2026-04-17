@@ -84,6 +84,63 @@ describe("sdd-helper entrypoint integration", () => {
     });
   });
 
+  it("returns static and bundle-resolved contract detail from nested repo directories", async () => {
+    const nestedCwd = path.join(repoRoot, "src");
+
+    const staticContract = await runHelperEntrypoint(nestedCwd, ["contract", "helper.command.preview"]);
+    expect(staticContract.exitCode).toBe(0);
+    expect(JSON.parse(staticContract.stdout)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.preview"
+      },
+      resolution: {
+        mode: "static",
+        unresolved_binding_ids: [
+          "shared.binding.render_preview.view_id",
+          "shared.binding.render_preview.profile_id"
+        ]
+      }
+    });
+
+    const resolvedContract = await runHelperEntrypoint(nestedCwd, [
+      "contract",
+      "helper.command.preview",
+      "--resolve",
+      "bundle"
+    ]);
+    expect(resolvedContract.exitCode).toBe(0);
+    expect(JSON.parse(resolvedContract.stdout)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.preview"
+      },
+      resolution: {
+        mode: "bundle_resolved",
+        bundle_name: "sdd-text-spec-bundle",
+        bundle_version: "0.1"
+      },
+      bindings: expect.arrayContaining([
+        expect.objectContaining({
+          binding_id: "shared.binding.render_preview.view_id",
+          resolved_values: expect.arrayContaining([
+            expect.objectContaining({
+              value: "ia_place_map"
+            })
+          ])
+        }),
+        expect.objectContaining({
+          binding_id: "shared.binding.render_preview.profile_id",
+          resolved_values: expect.arrayContaining([
+            expect.objectContaining({
+              value: "strict"
+            })
+          ])
+        })
+      ])
+    });
+  });
+
   it("reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid", async () => {
     await withRepoTempDir(async (tempDir) => {
       const documentAbsolutePath = path.join(tempDir, "preview_incomplete.sdd");

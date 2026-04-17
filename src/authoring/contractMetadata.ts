@@ -814,6 +814,15 @@ const contractConstraintSpecSchema = objectSchema(
   ["constraint_id", "applies_to_shape_id", "kind", "parameters", "summary"]
 );
 
+const contractResolvedAllowedValueSchema = objectSchema(
+  {
+    value: stringSchema(),
+    label: stringSchema(),
+    metadata: objectSchema({}, [], true)
+  },
+  ["value"]
+);
+
 const contractBindingSpecSchema = objectSchema(
   {
     binding_id: stringSchema(),
@@ -829,7 +838,8 @@ const contractBindingSpecSchema = objectSchema(
     ),
     static_behavior: stringSchema(["reference_only"]),
     bundle_resolved_behavior: stringSchema(["expand_values"]),
-    summary: stringSchema()
+    summary: stringSchema(),
+    resolved_values: arraySchema(contractResolvedAllowedValueSchema)
   },
   [
     "binding_id",
@@ -1134,7 +1144,8 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     schema_format: "json_schema_2020_12",
     schema: objectSchema(
       {
-        subject_id: stringSchema()
+        subject_id: stringSchema(),
+        resolve: stringSchema(["bundle"])
       },
       ["subject_id"]
     ),
@@ -1231,7 +1242,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "never",
     input_shape_id: "shared.shape.validate_document_args",
     output_shape_id: "shared.shape.validation_resource",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
     has_deep_introspection: true
   },
   {
@@ -1243,7 +1254,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "never",
     input_shape_id: "shared.shape.project_document_args",
     output_shape_id: "shared.shape.projection_resource",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
     has_deep_introspection: true
   },
   {
@@ -1255,7 +1266,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "never",
     input_shape_id: "shared.shape.render_preview_args",
     output_shape_id: "shared.shape.render_preview_result",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
     has_deep_introspection: true
   },
   {
@@ -1291,7 +1302,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "never",
     input_shape_id: "shared.shape.helper_contract_args",
     output_shape_id: "shared.shape.contract_subject_detail",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
     has_deep_introspection: true
   },
   {

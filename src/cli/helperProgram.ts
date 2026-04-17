@@ -13,6 +13,7 @@ import type {
   ContractSubjectId,
   CreateDocumentArgs,
   HelperErrorResult,
+  HelperContractArgs,
   NodeRef,
   ProjectDocumentArgs,
   RenderPreviewArgs,
@@ -22,6 +23,7 @@ import type {
 } from "../authoring/contracts.js";
 import { applyAuthoringIntent } from "../authoring/authoringIntents.js";
 import { getContractSubjectDetail } from "../authoring/contractMetadata.js";
+import { getBundleResolvedContractSubjectDetail } from "../authoring/contractResolution.js";
 import { AuthoringGitError, getGitStatus, gitCommit } from "../authoring/git.js";
 import { inspectDocument } from "../authoring/inspect.js";
 import { listDocuments, searchGraph } from "../authoring/listing.js";
@@ -661,16 +663,31 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   program
     .command("contract")
     .argument("<subject_id>", "shared contract subject id")
-    .action((subjectId: string) => {
-      const detail = getContractSubjectDetail(subjectId as ContractSubjectId);
-      if (!detail) {
+    .option("--resolve <mode>", "resolution mode")
+    .action(async (subjectId: string, options: { resolve?: HelperContractArgs["resolve"] | string }) => {
+      if (options.resolve !== undefined && options.resolve !== "bundle") {
+        throw new HelperCliError(
+          "invalid_args",
+          `Unsupported --resolve mode '${options.resolve}'. The only supported value is 'bundle'.`
+        );
+      }
+
+      const contractSubjectId = subjectId as ContractSubjectId;
+      const staticDetail = getContractSubjectDetail(contractSubjectId);
+      if (!staticDetail) {
         throw new HelperCliError(
           "invalid_args",
           `Unknown contract subject_id '${subjectId}'. Use 'sdd-helper capabilities' to discover valid subjects.`
         );
       }
 
-      writeJson(deps, detail);
+      if (options.resolve === "bundle") {
+        const { bundle } = await loadBundleContext(deps);
+        writeJson(deps, getBundleResolvedContractSubjectDetail(contractSubjectId, bundle) ?? staticDetail);
+        return;
+      }
+
+      writeJson(deps, staticDetail);
     });
 
   program
