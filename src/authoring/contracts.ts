@@ -85,6 +85,10 @@ export interface InspectResource {
   diagnostics: Diagnostic[];
 }
 
+export interface InspectDocumentArgs {
+  path: DocumentPath;
+}
+
 export interface ParseResource {
   kind: "sdd-parse";
   uri: DocumentUri;
@@ -447,6 +451,15 @@ export interface RenderPreviewResult {
   diagnostics: Diagnostic[];
 }
 
+export interface HelperGitStatusArgs {
+  paths?: DocumentPath[];
+}
+
+export interface HelperGitCommitArgs {
+  message: string;
+  paths: DocumentPath[];
+}
+
 export interface HelperGitStatusResult {
   kind: "sdd-git-status";
   paths: DocumentPath[];
@@ -524,4 +537,115 @@ export interface HelperCapabilitiesResult {
     result_kind: string;
     constraints: string[];
   }>;
+}
+
+export type ContractSubjectId =
+  | `helper.command.${string}`
+  | `mcp.tool.${string}`
+  | `mcp.resource.${string}`
+  | `mcp.prompt.${string}`;
+
+export type ContractShapeId = `shared.shape.${string}`;
+export type ContractConstraintId = `shared.constraint.${string}`;
+export type ContractBindingId = `shared.binding.${string}`;
+export type ContractContinuationId = `shared.continuation.${string}`;
+
+export type ContractSchemaFormat = "json_schema_2020_12";
+export type ContractResolutionMode = "static" | "bundle_resolved";
+export type ContractStability = "stable" | "experimental" | "deprecated";
+export type ContractSurfaceKind = "helper_command" | "mcp_tool" | "mcp_resource" | "mcp_prompt";
+
+export interface ContractIndex {
+  kind: "sdd-contract-index";
+  contract_version: "0.1";
+  summary: string;
+  subjects: ContractSubjectDescriptor[];
+  shapes: ContractShapeDescriptor[];
+}
+
+export interface ContractSubjectDescriptor {
+  subject_id: ContractSubjectId;
+  surface_kind: ContractSurfaceKind;
+  surface_name: string;
+  summary: string;
+  stability: ContractStability;
+  mutates_repo_state?: "never" | "conditional" | "always";
+  input_shape_id?: ContractShapeId;
+  output_shape_id?: ContractShapeId;
+  detail_modes: ContractResolutionMode[];
+  has_deep_introspection: true;
+}
+
+export interface ContractSubjectDetail {
+  kind: "sdd-contract-subject-detail";
+  subject: ContractSubjectDescriptor;
+  input_shape?: ContractShapeDescriptor;
+  output_shape?: ContractShapeDescriptor;
+  constraints: ContractConstraintSpec[];
+  bindings: ContractBindingSpec[];
+  continuation: ContractContinuationSpec[];
+  examples?: ContractExampleSpec[];
+  resolution: {
+    mode: ContractResolutionMode;
+    bundle_name?: string;
+    bundle_version?: string;
+    unresolved_binding_ids?: ContractBindingId[];
+  };
+}
+
+export interface ContractShapeDescriptor {
+  shape_id: ContractShapeId;
+  summary: string;
+  schema_format: ContractSchemaFormat;
+  schema: object;
+  stability: ContractStability;
+}
+
+export interface ContractConstraintSpec {
+  constraint_id: ContractConstraintId;
+  applies_to_shape_id: ContractShapeId;
+  applies_to_json_pointers?: string[];
+  kind:
+    | "required_if"
+    | "forbidden_if"
+    | "unique_within_request"
+    | "must_reference_earlier_local_id"
+    | "same_revision_handle"
+    | "commit_safe_continuation"
+    | "dry_run_informational_only";
+  parameters: Record<string, unknown>;
+  summary: string;
+}
+
+export interface ContractBindingSpec {
+  binding_id: ContractBindingId;
+  applies_to_shape_id: ContractShapeId;
+  applies_to_json_pointer: string;
+  kind: "bundle_value_set";
+  bundle_source: {
+    artifact: "manifest_profiles" | "views_yaml" | "vocab_node_types" | "vocab_relationship_types";
+    selector: string;
+  };
+  static_behavior: "reference_only";
+  bundle_resolved_behavior: "expand_values";
+  summary: string;
+}
+
+export interface ContractContinuationSpec {
+  continuation_id: ContractContinuationId;
+  applies_to_subject_id: ContractSubjectId;
+  kind:
+    | "result_revision_is_required_next_base_revision"
+    | "commit_handles_are_safe_continuation_surfaces"
+    | "dry_run_handles_are_informational_only"
+    | "create_revision_is_bootstrap_continuation_surface"
+    | "inspect_may_fail_on_empty_bootstrap";
+  summary: string;
+  parameters?: Record<string, unknown>;
+}
+
+export interface ContractExampleSpec {
+  title: string;
+  when_to_include: "explicit_request_only" | "essential_only";
+  payload: unknown;
 }
