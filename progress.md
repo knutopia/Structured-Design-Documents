@@ -2,9 +2,6 @@
 
 ## Open Issues
 
--helper discovery only exposes the top-level request type name, not the full nested authoring schema: helperDiscovery.ts (line 121).
--guide explicitness-pass (workflow.md line 231)
--re-author Skill doc page with manually created output
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
@@ -22,7 +19,7 @@
 -fixed show filename collisions
 -renamed prompt examples
 -sharpened skill workflow rules by intent
--planned, implemented machine readable contract for helper
+-planned, implemented machine readable contract for helper (except gate 5 for MCP server later)
 
 ## Tue 4-14-26
 

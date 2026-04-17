@@ -6,6 +6,12 @@ Audience: maintainers and future contributors designing SDD-aware LLM tooling fo
 
 This document is the default design authority for future SDD MCP and helper-app discussions unless a later document explicitly supersedes it.
 
+Related follow-on design and implementation references:
+
+- The shared machine-readable contract architecture is defined in [sdd_machine_readable_contract_layer_design.md](./sdd_machine_readable_contract_layer_design.md).
+- The helper-first implementation sequence and current status are tracked in [sdd_machine_readable_contract_layer_implementation_plan.md](./sdd_machine_readable_contract_layer_implementation_plan.md).
+- MCP consumption of the shared contract layer remains the pending Gate 5 follow-on from that implementation plan.
+
 ## 1. Purpose And Scope
 
 This repository already has the core semantic pipeline for SDD:
@@ -1197,6 +1203,8 @@ The implemented helper surface now distinguishes:
 - `contract --resolve bundle` for opt-in expansion of active bundle-owned allowed values such as `view_id` and `profile_id`
 
 This is still helper-first, not MCP implementation work. The note is recording the current helper contract shape so later MCP work can mirror it rather than inventing a second discovery model.
+
+For the dedicated shared-contract architecture and the remaining MCP-consumption follow-on, see [sdd_machine_readable_contract_layer_design.md](./sdd_machine_readable_contract_layer_design.md) and Gate 5 in [sdd_machine_readable_contract_layer_implementation_plan.md](./sdd_machine_readable_contract_layer_implementation_plan.md).
 
 #### `sdd-helper inspect <document_path>`
 
