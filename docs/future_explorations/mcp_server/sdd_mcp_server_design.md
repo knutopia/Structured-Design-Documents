@@ -1171,6 +1171,11 @@ interface HelperCapabilitiesResult {
     invocation: string;
     summary: string;
     mutates_repo_state: "never" | "conditional" | "always";
+    subject_id: string;
+    input_shape_id?: string;
+    output_shape_id?: string;
+    has_deep_introspection: true;
+    detail_modes?: Array<"static" | "bundle_resolved">;
     result_kind: string;
     constraints: string[];
   }>;
@@ -1178,6 +1183,20 @@ interface HelperCapabilitiesResult {
 ```
 
 The capabilities payload should be static and self-describing. It should not require repo inspection, bundle loading, or package metadata reads in order to answer the discovery request.
+
+It is intentionally still the thin orientation surface, not the whole machine-readable story. Its job is to tell callers which helper subjects exist and how to fetch deeper detail without inlining full nested schemas or resolved bundle-owned values.
+
+#### `sdd-helper contract <subject_id> [--resolve bundle]`
+
+Returns deep helper contract detail for one subject.
+
+The implemented helper surface now distinguishes:
+
+- `capabilities` for static lightweight discovery
+- `contract` for full subject detail in `static` mode
+- `contract --resolve bundle` for opt-in expansion of active bundle-owned allowed values such as `view_id` and `profile_id`
+
+This is still helper-first, not MCP implementation work. The note is recording the current helper contract shape so later MCP work can mirror it rather than inventing a second discovery model.
 
 #### `sdd-helper inspect <document_path>`
 

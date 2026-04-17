@@ -1,6 +1,8 @@
 # SDD Shared Machine-Readable Contract Layer Implementation Plan
 
-Status: active gated implementation plan for the shared helper-first contract rollout
+Gated implementation plan for the shared helper-first contract rollout
+
+Status: implemented except gate 5 which is pending MCP Server Implementation
 
 Audience: maintainers implementing the shared domain-core contract layer, `sdd-helper`, `sdd-skill`, and later MCP-server consumption
 
@@ -85,15 +87,15 @@ This is the key scope decision for the plan. The shared layer must be architecte
 
 The implementation should proceed through these gates:
 
-1. Gate 1: Shared domain-core contract foundation
-2. Gate 2: Helper deep introspection and lightweight discovery integration in `static` mode
-3. Gate 3: Bundle-resolved introspection for bundle-bound fields
-4. Gate 4: Helper and skill guidance integration
+1. [Done] Gate 1: Shared domain-core contract foundation
+2. [Done] Gate 2: Helper deep introspection and lightweight discovery integration in `static` mode
+3. [Done] Gate 3: Bundle-resolved introspection for bundle-bound fields
+4. [Done] Gate 4: Helper and skill guidance integration
 5. Gate 5: MCP consumption follow-on once MCP server implementation begins
 
 Gate 5 is intentionally deferred. Gates 1 through 4 define the current helper-first milestone.
 
-## 6. Gate 1: Shared Domain-Core Contract Foundation
+## 6. [Done] Gate 1: Shared Domain-Core Contract Foundation
 
 ### Goal
 
@@ -160,7 +162,7 @@ Stop this gate if:
 - the proposed structure cannot represent the required constraint or continuation categories cleanly
 - helper CLI changes become necessary before the shared layer is internally settled
 
-## 7. Gate 2: Helper Deep Introspection And Lightweight Discovery Integration
+## 7. [Done] Gate 2: Helper Deep Introspection And Lightweight Discovery Integration
 
 ### Goal
 
@@ -223,7 +225,7 @@ Stop this gate if:
 - helper discovery loses its static/no-bundle-load behavior
 - the `contract` command cannot describe the highest-value authoring flows well enough to replace routine code lookup
 
-## 8. Gate 3: Bundle-Resolved Introspection
+## 8. [Done] Gate 3: Bundle-Resolved Introspection
 
 ### Goal
 
@@ -280,7 +282,7 @@ Stop this gate if:
 - resolved mode changes structural schema definitions rather than only expanding bindings
 - the helper can no longer answer simple discovery without bundle loading
 
-## 9. Gate 4: Helper And Skill Guidance Integration
+## 9. [Done] Gate 4: Helper And Skill Guidance Integration
 
 ### Goal
 

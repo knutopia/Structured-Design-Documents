@@ -27,6 +27,7 @@ describe("canonical sdd-skill source", () => {
     );
 
     expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
     expect(skillMarkdown).toContain(
       "`scripts/run_helper.sh` relative to the installed skill directory"
     );
@@ -38,6 +39,9 @@ describe("canonical sdd-skill source", () => {
       "in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder."
     );
     expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
+    expect(workflowMarkdown).toContain("--resolve bundle");
+    expect(workflowMarkdown).toContain("capabilities -> contract -> code/docs only if still insufficient");
 
     await expectExists(path.join(skillRoot, "scripts/run_helper.sh"));
     await expectExists(path.join(skillRoot, "references/workflow.md"));

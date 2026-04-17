@@ -12,18 +12,19 @@ This skill enables working with structured design documents. In this repo source
 ## Quick Start
 
 - Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
+- Use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` when you need full request or result shape detail, semantic constraints, continuation rules, or bundle-binding metadata for one helper command.
 - First classify the task as: create a new document, edit an existing document, or read/preview an existing document.
 - For a new `.sdd`, choose the repo-relative path directly. Default to the current working directory unless the user names or clearly implies another location.
 - Use `skills/sdd-skill/scripts/run_helper.sh search ...` only to locate an existing target `.sdd` document or node when the user has not named it yet.
 - For existing-document edits, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain fresh `revision` and handle data before handle-based changes.
-- For fresh-document bootstrap work, use `create` first and continue from the returned `revision`; immediate `inspect` is not the normal first step because the empty bootstrap may still be parse-invalid.
+- For fresh-document bootstrap work, use `create` first and continue from the returned `revision`; use `skills/sdd-skill/scripts/run_helper.sh contract helper.command.create` when you need the bootstrap continuation caveats explicitly. Immediate `inspect` is not the normal first step because the empty bootstrap may still be parse-invalid.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
-- Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough.
+- Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough; use `contract --resolve bundle` only when you need active bundle-owned `view_id` or `profile_id` values first.
 - Use `sdd show` for saved user-facing preview artifacts, and use `preview` only when you need transient helper preview output after a clean `author` or `apply` dry run under the same target profile.
 - Use `undo` only for helper-managed committed change sets.
 - For new-document authoring, do not search repo `.sdd` examples to infer syntax or structure unless the user explicitly asks for comparison or example reuse.
-- Local contract/code lookup is acceptable when needed to understand helper request shapes or runtime constraints.
+- Use the fallback order `capabilities -> contract -> code/docs only if still insufficient`.
 
 ## Default Workflow
 
@@ -31,12 +32,12 @@ This skill enables working with structured design documents. In this repo source
    decide whether the user wants to create a new document, edit an existing document, or read/preview an existing document. Do not start with `search` or `inspect` until that branch is clear.
 2. Create a new document:
    choose the repo-relative output path directly, defaulting to the current working directory unless the prompt names or clearly implies another location. Do not use `search` to pick a filename or to hunt examples, and do not infer the destination from examples, walkthroughs, or documentation layout.
-   run `create`, then use the returned `revision` as the continuation surface. Prefer `author` for first-pass scaffold creation. Immediate `inspect` is not the normal next step because the empty bootstrap document may still be parse-invalid.
+   run `create`, then use the returned `revision` as the continuation surface. Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` when the bootstrap continuation rules matter for the next step. Immediate `inspect` is not the normal next step because the empty bootstrap document may still be parse-invalid.
 3. Edit an existing document:
    if the target existing `.sdd` is unknown, use `search` to locate it. Once the target is known, use `inspect` to obtain the current `revision`, node handles, and body-item handles before planning handle-based changes.
-   choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles.
+   choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles. Use `contract` in static mode before composing nested `author`, `apply`, or `undo` JSON when request-shape detail, semantic constraints, or continuation rules matter.
 4. Read, validate, or preview an existing document:
-   if the document is already named, do not `search`. Use `validate`, `project`, `sdd show`, or `preview` as appropriate without forcing an edit-oriented `inspect` step.
+   if the document is already named, do not `search`. Use `validate`, `project`, `sdd show`, or `preview` as appropriate without forcing an edit-oriented `inspect` step. Use `contract --resolve bundle` only when the relevant `view_id` or `profile_id` is not already known.
 5. Dry run mutations:
    submit `author` or `apply` with omitted `mode` or `mode: "dry_run"` and review the returned status, summary, and diagnostics. Include `validate_profile` whenever the user wants confirmation under a specific profile, and add `projection_views` when structured semantic confirmation is helpful.
    if parse or validation errors remain, continue the create/author-or-inspect/author-or-apply cycle and do not preview yet.
@@ -49,6 +50,7 @@ This skill enables working with structured design documents. In this repo source
 
 - Do not hand-edit `.sdd` structure when the helper supports the operation.
 - Treat helper JSON result kinds as the public interface.
+- Treat `capabilities` as the thin discovery surface and `contract` as the deep contract surface.
 - Do not construct or parse handles manually.
 - Do not reuse handles across later turns without a fresh `inspect`.
 - Committed `author` `created_targets` and committed `apply` insertion handles are safe continuation surfaces for the returned `resulting_revision`. Dry-run handles and dry-run `created_targets` are informational only.
@@ -57,11 +59,15 @@ This skill enables working with structured design documents. In this repo source
 - Treat `sdd-helper-error` as a helper-layer failure that must be classified before continuing. Many cases are invocation or environment problems, but preview can also fail here when the document is still invalid or incomplete under the requested profile.
 - Keep helper paths repo-relative and `.sdd`-scoped.
 - For new-document authoring, do not use repo `.sdd` examples as a shortcut for syntax or structure inference unless the user explicitly asks for comparison or example reuse.
+- Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when `capabilities` and `contract` already provide it.
+- Code/docs lookup remains acceptable only for implementation questions, contract/runtime mismatch debugging, or genuine helper gaps.
 
 ## Supported Helper Surface
 
 This skill should refer only to the currently available helper commands:
 
+- `capabilities`
+- `contract`
 - `inspect`
 - `search`
 - `create`

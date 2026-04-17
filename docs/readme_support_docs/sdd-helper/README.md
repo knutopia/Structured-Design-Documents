@@ -27,7 +27,14 @@ That stub is intentionally brief. It tells callers that the helper is JSON-first
 pnpm sdd-helper capabilities
 ```
 
-Use `capabilities` when you want the full machine-readable command manifest. Use this page when you want the same surface explained in practical terms.
+Use `capabilities` for lightweight discovery: command names, invocation patterns, result kinds, and pointers to deeper contract detail. Use `contract` when you need the full nested request or result shape, semantic constraints, continuation semantics, or bundle-binding metadata for one subject:
+
+```bash
+pnpm sdd-helper contract helper.command.author
+pnpm sdd-helper contract helper.command.preview --resolve bundle
+```
+
+Use this page when you want the same surface explained in practical terms.
 
 ## Core Operating Conventions
 
@@ -49,7 +56,13 @@ The helper is especially useful when you want to plan a structural edit without 
 pnpm sdd-helper capabilities
 ```
 
-This returns the static helper manifest: command names, invocation patterns, result kinds, and key constraints.
+This returns the static helper manifest: command names, invocation patterns, result kinds, key constraints, and the subject and shape ids needed to fetch deeper detail.
+
+If the next step requires nested request-shape detail, semantic constraints, or continuation rules, fetch deep contract detail for that specific subject before composing JSON:
+
+```bash
+pnpm sdd-helper contract helper.command.apply
+```
 
 ### 2. Find a target document
 
@@ -97,10 +110,10 @@ Then submit it through `apply`:
 pnpm sdd-helper apply --request request.json
 ```
 
-Or, if another tool is generating the JSON:
+If another tool is generating the JSON stream directly, stdin is still supported:
 
 ```bash
-cat request.json | pnpm sdd-helper apply --request -
+pnpm sdd-helper apply --request -
 ```
 
 Because `mode` is omitted, this is a dry run by default. The same dry-run default also applies to `author`.
@@ -124,6 +137,32 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 - Result kind: `sdd-helper-capabilities`
 - Important constraints: the payload is static and does not require repo inspection or bundle loading.
 - Practical notes: treat this as the surfaced command inventory; if the helper grows or changes, this payload and this page should stay aligned.
+
+```ts
+interface HelperCapabilitiesResultCommand {
+  name: string;
+  invocation: string;
+  summary: string;
+  mutates_repo_state: "never" | "conditional" | "always";
+  subject_id: string;
+  input_shape_id?: string;
+  output_shape_id?: string;
+  has_deep_introspection: true;
+  detail_modes?: Array<"static" | "bundle_resolved">;
+  result_kind: string;
+  constraints: string[];
+}
+```
+
+#### `sdd-helper contract <subject_id> [--resolve bundle]`
+
+- Purpose: return full shared contract detail for one helper subject.
+- Use when: you need the full input or output shape, semantic constraints, continuation rules, or bundle-binding metadata for a specific helper command.
+- Invocation: `pnpm sdd-helper contract <subject_id> [--resolve bundle]`
+- Key inputs: one helper `subject_id`, plus optional `--resolve bundle`.
+- Result kind: `sdd-contract-subject-detail`
+- Important constraints: static detail is the default and does not require bundle loading; `--resolve bundle` is opt-in and expands only bundle-bound allowed values such as `view_id` and `profile_id`.
+- Practical notes: use `capabilities` first to discover the command and its `subject_id`, then use `contract` only for the specific subject that needs deep detail.
 
 #### `sdd-helper inspect <document_path>`
 
@@ -195,7 +234,7 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 - Key inputs: a repo-relative document path and a validation profile id.
 - Result kind: `sdd-validation`
 - Important constraints: this reads the current persisted document only; it does not inspect dry-run candidates.
-- Practical notes: use inline `validate_profile` on `apply` or `author` when you need pre-commit candidate feedback.
+- Practical notes: use inline `validate_profile` on `apply` or `author` when you need pre-commit candidate feedback. If a caller needs the active bundle-owned `profile_id` values first, use `pnpm sdd-helper contract helper.command.validate --resolve bundle`.
 
 #### `sdd-helper project <document_path> --view <view_id>`
 
@@ -205,7 +244,7 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 - Key inputs: a repo-relative document path and a projection view id.
 - Result kind: `sdd-projection`
 - Important constraints: this reads the current persisted document only; it does not inspect dry-run candidates.
-- Practical notes: use inline `projection_views` on `apply` or `author` when you need pre-commit candidate feedback.
+- Practical notes: use inline `projection_views` on `apply` or `author` when you need pre-commit candidate feedback. If a caller needs the active bundle-owned `view_id` values first, use `pnpm sdd-helper contract helper.command.project --resolve bundle`.
 
 ### Preview Generation
 
@@ -217,7 +256,7 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 - Key inputs: document path, `view`, `profile`, and `format`, with an optional backend override.
 - Result kind: `sdd-preview`
 - Important constraints: if preview generation cannot produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
-- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken.
+- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
 
 ### Narrow Git Workflows
 
@@ -245,6 +284,7 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 
 - `sdd-helper-help`: the short JSON help stub returned by bare invocation and `--help`.
 - `sdd-helper-capabilities`: the full static discovery payload for the helper command surface.
+- `sdd-contract-subject-detail`: deep static or bundle-resolved contract detail for one helper subject.
 - `sdd-document-inspect`: structured document inspection data, including revision and handles.
 - `sdd-search-results`: cross-document search matches plus diagnostics.
 - `sdd-create-document`: document creation result, including the creation change set.
@@ -270,6 +310,8 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 ### For LLMs And Automation
 
 - Start with `capabilities`; it is the canonical discovery surface.
+- Use `contract` when you need nested request-shape detail, semantic constraints, continuation semantics, or binding metadata for one subject.
+- Use `contract --resolve bundle` only when you need active bundle-owned values such as `view_id` or `profile_id`.
 - Treat JSON as the public interface. Do not expect human-readable CLI text.
 - Keep path inputs repo-relative and `.sdd`-focused.
 - Use `inspect` to obtain current `revision` and stable same-revision handles before constructing low-level mutation requests.
@@ -277,10 +319,12 @@ If you commit a change and want persisted-state semantic confirmation afterward,
 - Treat dry-run insertion handles and dry-run `created_targets` as review aids only.
 - Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not complete the request transport or execution path; a zero-exit rejected change set means the request was understood and rejected within the domain model.
 - Do not assume every helper error is a permanent environment failure. Preview can fail in the helper-error lane for an invalid intermediate document state, and those cases should be classified from the helper message plus any attached diagnostics.
+- Treat the fallback order as `capabilities -> contract -> code/docs only if still insufficient`. Do not inspect code, tests, or repo `.sdd` examples for normal request-shape knowledge when helper contract introspection already provides it.
 
 ### For Future Contributors
 
 - Keep this page aligned with `pnpm sdd-helper capabilities`, `src/cli/helperDiscovery.ts`, `src/cli/helperProgram.ts`, and `src/authoring/contracts.ts`.
+- Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface; keep both aligned to the implemented helper behavior.
 - When behavior changes, update both the machine-readable discovery surface and this human-readable page.
 - Document current implementation limits explicitly. Do not quietly broaden the docs ahead of the implementation.
 - Preserve the distinction between helper-level error behavior and structured domain-level results.

@@ -14,6 +14,15 @@ skills/sdd-skill/scripts/run_helper.sh capabilities
 
 The result is the canonical JSON command manifest for the helper.
 
+Use deep helper introspection only when the current task needs it:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
+```
+
+Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
+
 ## 2. Choose The Task Kind
 
 Start by classifying the request as one of:
@@ -28,7 +37,7 @@ Use the matching branch below instead of forcing every request through one linea
 
 Choose the repo-relative output path directly. When the user does not specify a location, default the new document path to the current working directory expressed as a repo-relative `.sdd` path. If the prompt names or clearly implies a location, honor that instead. Do not infer destinations from examples or documentation layout.
 
-For new-document authoring, do not use `search` to pick a filename or to hunt repo `.sdd` examples. Only use repo `.sdd` examples when the user explicitly asks for comparison or example reuse. Local contract/code lookup is still acceptable when you need to understand helper request shapes or runtime constraints.
+For new-document authoring, do not use `search` to pick a filename or to hunt repo `.sdd` examples. Only use repo `.sdd` examples when the user explicitly asks for comparison or example reuse.
 
 The current helper creates an empty bootstrap document:
 
@@ -39,6 +48,12 @@ skills/sdd-skill/scripts/run_helper.sh create example.sdd --version 0.1
 This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
 
 Use the `revision` returned by `create` as the continuation surface for the next mutation request. Immediate `inspect` is not the normal next step after `create`, because the empty bootstrap may still be parse-invalid.
+
+If the bootstrap continuation rule matters for planning the next step, fetch the subject detail explicitly:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.create
+```
 
 For first-pass scaffold creation, prefer `author`. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
 
@@ -70,6 +85,14 @@ Build low-level change requests from that returned `revision` and those handles.
 
 Use `author` when the task is mostly scaffold creation or nested structure authoring. Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
 
+Before composing complex nested `author`, `apply`, or `undo` JSON, fetch the current subject detail in static mode rather than spelunking code or tests for normal request-shape knowledge:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.apply
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.undo
+```
+
 ## 5. Read, Validate, Or Preview An Existing Document
 
 If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`.
@@ -79,6 +102,14 @@ Use persisted-state semantic reads when you want confirmation without issuing a 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
 skills/sdd-skill/scripts/run_helper.sh project bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
+```
+
+If the relevant `view_id` or `profile_id` is not already known, resolve the active bundle-owned values first:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.validate --resolve bundle
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.project --resolve bundle
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
 ```
 
 If the user wants a saved preview artifact, use `sdd show` after the relevant committed revision has already passed a clean dry-run validation under the same profile:
@@ -95,6 +126,8 @@ If the user wants transient raw artifact output instead, use helper `preview`.
 
 Use `author` or `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
 If you intend to preview under a profile later, include the same `validate_profile` here first.
+
+If you need nested request-shape detail, semantic constraints, or continuation rules before composing the mutation payload, fetch the static subject detail with `contract` first.
 
 Example low-level `apply` request shape:
 
@@ -175,6 +208,8 @@ If the user did not request a specific output path, let `sdd show` write beside 
 
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. If multiple views are equally plausible, ask one short clarifying question.
 
+If the relevant `view_id` or `profile_id` is unknown, resolve the active bundle-owned values first with `contract --resolve bundle` before choosing arguments for `preview` or `sdd show`.
+
 Use helper preview only when you need transient raw artifact output rather than the normal user-facing final deliverable:
 
 ```bash
@@ -228,7 +263,25 @@ skills/sdd-skill/scripts/run_helper.sh git-commit --message "Update example SDD"
 
 These commands are intentionally narrow. They do not replace general-purpose Git work.
 
-## 12. Guide Follow-Up Inventory
+## 12. Retrieval Policy
+
+Use `capabilities` for helper orientation and command discovery.
+
+Use `contract` in static mode when:
+
+- composing nested `author`, `apply`, or `undo` JSON
+- checking semantic constraints that are not safely inferable from top-level discovery
+- checking continuation rules such as bootstrap revision handling or dry-run versus committed continuation surfaces
+
+Use `contract --resolve bundle` only when:
+
+- the task needs active bundle-owned values for `view_id` or `profile_id`
+- the relevant values are not already known from the user request or current workflow context
+
+Treat the fallback order as `capabilities -> contract -> code/docs only if still insufficient`.
+Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when helper contract introspection already provides it.
+
+## 13. Guide Follow-Up Inventory
 
 When later revising `docs/readme_support_docs/sdd-skill/README.md`, align it to this task-kind-first workflow:
 
