@@ -959,6 +959,7 @@ interface RenderPreviewArgs {
   view_id: string;
   profile_id: "simple" | "permissive" | "strict";
   format: "svg" | "png";
+  display_copy_name?: string;
   backend_id?:
     | "legacy_graphviz_preview"
     | "staged_ia_place_map_preview"
@@ -977,6 +978,7 @@ interface RenderPreviewResult {
   view_id: string;
   profile_id: "simple" | "permissive" | "strict";
   backend_id: string;
+  display_copy_path?: string;
   artifact:
     | {
         format: "svg";
@@ -1006,6 +1008,8 @@ Rules:
 
 - incompatible `backend_id` and `view_id` combinations fail
 - preview is a tool output, not a persistent resource
+- when `display_copy_name` is provided, it must be a basename whose extension matches `format`
+- `display_copy_path`, when present, is an ephemeral temp-path convenience rather than the canonical preview artifact path
 
 ## 10. Prompt Model
 
@@ -1238,7 +1242,7 @@ Output:
 
 - `ChangeSetResult`
 
-#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
+#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]`
 
 Success returns the same logical result as `sdd.render_preview`.
 
@@ -1248,6 +1252,7 @@ If preview cannot produce an artifact, helper preview remains in the helper-erro
 - the helper message should describe the failing stage or reason class where possible
 - any underlying diagnostics should be preserved on `HelperErrorResult.diagnostics`
 - MCP may map the same underlying diagnostics into an MCP-specific failure envelope rather than reusing the helper envelope verbatim
+- when `--display-copy-name` is provided, the helper may additionally materialize an ephemeral display copy under `/tmp/unique-previews/...` and return that absolute `display_copy_path`
 
 #### `sdd-helper git-status [<document_path> ...]`
 

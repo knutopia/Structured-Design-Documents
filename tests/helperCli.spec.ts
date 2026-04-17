@@ -456,12 +456,21 @@ describe("sdd-helper CLI", () => {
         }),
         expect.objectContaining({
           name: "preview",
+          invocation:
+            "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]",
           result_kind: "sdd-preview",
           subject_id: "helper.command.preview",
           input_shape_id: "shared.shape.render_preview_args",
           output_shape_id: "shared.shape.render_preview_result",
           has_deep_introspection: true,
-          detail_modes: ["static", "bundle_resolved"]
+          detail_modes: ["static", "bundle_resolved"],
+          mutates_repo_state: "never",
+          options: expect.arrayContaining([
+            expect.objectContaining({
+              flag: "--display-copy-name",
+              value_name: "basename"
+            })
+          ])
         }),
         expect.objectContaining({
           name: "validate",
@@ -1141,6 +1150,106 @@ describe("sdd-helper CLI", () => {
       artifact: {
         format: "svg"
       }
+    });
+  });
+
+  it("forwards display-copy-name to preview and returns display_copy_path when requested", async () => {
+    const renderPreview = vi.fn(async (): Promise<RenderPreviewResult> => ({
+      kind: "sdd-preview",
+      path: "docs/example.sdd",
+      revision: "rev_preview",
+      view_id: "ia_place_map",
+      profile_id: "strict",
+      backend_id: "staged_ia_place_map_preview",
+      artifact: {
+        format: "svg",
+        mime_type: "image/svg+xml",
+        text: "<svg>preview</svg>"
+      },
+      display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
+      notes: [],
+      diagnostics: []
+    }));
+    const { deps, stdout } = createDeps({ renderPreview });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "preview",
+      "docs/example.sdd",
+      "--view",
+      "ia_place_map",
+      "--profile",
+      "strict",
+      "--format",
+      "svg",
+      "--display-copy-name",
+      "example.ia_place_map.strict.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderPreview).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/example.sdd",
+      view_id: "ia_place_map",
+      profile_id: "strict",
+      format: "svg",
+      backend_id: undefined,
+      display_copy_name: "example.ia_place_map.strict.svg"
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-preview",
+      display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
+    });
+  });
+
+  it("rejects preview display-copy names with path separators", async () => {
+    const { deps, stdout, renderPreviewMock } = createDeps();
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "preview",
+      "docs/example.sdd",
+      "--view",
+      "ia_place_map",
+      "--profile",
+      "strict",
+      "--format",
+      "svg",
+      "--display-copy-name",
+      "../example.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(renderPreviewMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "display_copy_name must be a basename without path separators."
+    });
+  });
+
+  it("rejects preview display-copy names whose extension does not match the format", async () => {
+    const { deps, stdout, renderPreviewMock } = createDeps();
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "preview",
+      "docs/example.sdd",
+      "--view",
+      "ia_place_map",
+      "--profile",
+      "strict",
+      "--format",
+      "svg",
+      "--display-copy-name",
+      "example.png"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(renderPreviewMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "display_copy_name must end with '.svg' to match format 'svg'."
     });
   });
 

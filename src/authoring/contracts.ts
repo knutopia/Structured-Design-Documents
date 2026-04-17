@@ -427,6 +427,7 @@ export interface RenderPreviewArgs {
   profile_id: ProfileId;
   format: "svg" | "png";
   backend_id?: PreviewBackendId;
+  display_copy_name?: string;
 }
 
 export interface RenderPreviewResult {
@@ -447,6 +448,7 @@ export interface RenderPreviewResult {
         mime_type: "image/png";
         base64: string;
       };
+  display_copy_path?: string;
   notes: string[];
   diagnostics: Diagnostic[];
 }

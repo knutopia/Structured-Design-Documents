@@ -122,6 +122,18 @@ TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
   --profile strict
 ```
 
+If the response will embed that preview inline in chat, derive the saved artifact basename and request a display copy with helper `preview`:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
+  --view ia_place_map \
+  --profile strict \
+  --format svg \
+  --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
+```
+
+Use the saved sibling artifact for file links and the returned `display_copy_path` for the Markdown image. This rationale is deliberate: the sibling file is the canonical artifact, while the temp copy under `/tmp/unique-previews` exists only because chat may cache local image content by absolute path.
+
 If the user wants transient raw artifact output instead, use helper `preview`.
 
 ## 6. Dry-Run A Helper Mutation
@@ -210,11 +222,23 @@ TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
 
 If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it.
 
+If the response will also embed the preview inline in chat, derive the basename from the actual saved artifact path and request a temp display copy:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
+  --view ia_place_map \
+  --profile strict \
+  --format svg \
+  --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
+```
+
+Use the canonical sibling file for file links and the returned `display_copy_path` for the Markdown image. Keep the rationale visible in your reasoning: the temp copy under `/tmp/unique-previews` is only a presentation workaround for chat path caching, while the sibling artifact remains the real preview identity.
+
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. If multiple views are equally plausible, ask one short clarifying question.
 
 If the relevant `view_id` or `profile_id` is unknown, resolve the active bundle-owned values first with `contract --resolve bundle` before choosing arguments for `preview` or `sdd show`.
 
-Use helper preview only when you need transient raw artifact output rather than the normal user-facing final deliverable:
+Use helper preview when you need transient raw artifact output or a chat-safe display copy rather than the normal saved deliverable:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -225,7 +249,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
 ```
 
 `sdd-helper preview` is for transient rendered confirmation, not for structured mutation or the default saved deliverable.
-It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state whose projection already reflected the intended semantics.
+It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state whose projection already reflected the intended semantics. If `--display-copy-name` is used, treat the returned `display_copy_path` as a temp presentation path only, not as the canonical preview artifact path.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 10. Undo A Helper-Managed Commit

@@ -29,6 +29,7 @@ import { inspectDocument } from "../authoring/inspect.js";
 import { listDocuments, searchGraph } from "../authoring/listing.js";
 import { applyChangeSet, AuthoringMutationError, createDocument } from "../authoring/mutations.js";
 import { AuthoringPreviewError, renderPreview } from "../authoring/preview.js";
+import { PreviewMaterializationError, validateDisplayCopyName } from "../authoring/previewMaterialization.js";
 import { projectDocument, validateDocument } from "../authoring/readServices.js";
 import { undoChangeSet } from "../authoring/undo.js";
 import { stringifyCanonicalJson } from "../authoring/revisions.js";
@@ -636,6 +637,10 @@ function classifyHelperError(error: unknown): HelperCliError {
     return new HelperCliError("runtime_error", error.message, error.diagnostics);
   }
 
+  if (error instanceof PreviewMaterializationError) {
+    return new HelperCliError("invalid_args", error.message);
+  }
+
   return new HelperCliError(
     "runtime_error",
     error instanceof Error ? error.message : String(error)
@@ -817,6 +822,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .requiredOption("--profile <profile_id>", "profile id")
     .requiredOption("--format <format>", "preview format")
     .option("--backend <backend_id>", "preview backend id")
+    .option("--display-copy-name <basename>", "optional display-copy basename for a temp preview file")
     .action(async (
       documentPath: string,
       options: {
@@ -824,10 +830,17 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
         profile: RenderPreviewArgs["profile_id"];
         format: RenderPreviewArgs["format"];
         backend?: RenderPreviewArgs["backend_id"];
+        displayCopyName?: RenderPreviewArgs["display_copy_name"];
       }
     ) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
+      if (options.displayCopyName !== undefined) {
+        const validationError = validateDisplayCopyName(options.displayCopyName, options.format);
+        if (validationError) {
+          throw new HelperCliError("invalid_args", validationError);
+        }
+      }
       writeJson(
         deps,
         await deps.renderPreview(workspace, bundle, {
@@ -835,7 +848,8 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
           view_id: options.view,
           profile_id: options.profile,
           format: options.format,
-          backend_id: options.backend
+          backend_id: options.backend,
+          display_copy_name: options.displayCopyName
         })
       );
     });

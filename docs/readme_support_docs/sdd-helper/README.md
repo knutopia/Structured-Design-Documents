@@ -248,15 +248,15 @@ interface HelperCapabilitiesResultCommand {
 
 ### Preview Generation
 
-#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
+#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]`
 
 - Purpose: render a preview artifact for a repo-relative `.sdd` document.
 - Use when: another tool, UI, or workflow needs preview output directly from the helper surface.
-- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
-- Key inputs: document path, `view`, `profile`, and `format`, with an optional backend override.
+- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]`
+- Key inputs: document path, `view`, `profile`, and `format`, with optional `backend` and `display-copy-name`.
 - Result kind: `sdd-preview`
-- Important constraints: if preview generation cannot produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
-- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
+- Important constraints: if preview generation cannot produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics. When `--display-copy-name` is provided, it must be a basename without path separators or `..`, and its extension must match `--format`.
+- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. When `--display-copy-name` is present, the helper also writes an ephemeral display copy under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>` and returns `display_copy_path`. That temp path is a presentation convenience, not the canonical preview artifact path. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
 
 ### Narrow Git Workflows
 

@@ -6,6 +6,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import type { Bundle } from "../src/bundle/types.js";
 import { listDocuments, searchGraph } from "../src/authoring/listing.js";
 import { renderPreview } from "../src/authoring/preview.js";
+import { DEFAULT_PREVIEW_DISPLAY_COPY_ROOT } from "../src/authoring/previewMaterialization.js";
 import { createAuthoringWorkspace } from "../src/authoring/workspace.js";
 import { loadBundle } from "../src/index.js";
 
@@ -109,12 +110,18 @@ describe("authoring directory services", () => {
         path: "docs/outcome_to_ia_trace.sdd",
         view_id: "ia_place_map",
         profile_id: "strict",
-        format: "svg"
+        format: "svg",
+        display_copy_name: "outcome_to_ia_trace.ia_place_map.strict.svg"
       });
       expect(svgResult.kind).toBe("sdd-preview");
       expect(svgResult.artifact.format).toBe("svg");
       expect(svgResult.artifact.mime_type).toBe("image/svg+xml");
       expect(svgResult.artifact.text.startsWith("<svg")).toBe(true);
+      expect(svgResult.display_copy_path?.startsWith(`${DEFAULT_PREVIEW_DISPLAY_COPY_ROOT}/`)).toBe(true);
+      expect(path.basename(svgResult.display_copy_path ?? "")).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
+      if (svgResult.display_copy_path) {
+        await rm(path.dirname(svgResult.display_copy_path), { recursive: true, force: true });
+      }
 
       const pngResult = await renderPreview(workspace, bundle, {
         path: "docs/outcome_to_ia_trace.sdd",
@@ -125,6 +132,7 @@ describe("authoring directory services", () => {
       expect(pngResult.artifact.format).toBe("png");
       expect(pngResult.artifact.mime_type).toBe("image/png");
       expect(Buffer.from(pngResult.artifact.base64, "base64").subarray(0, 4).toString("hex")).toBe("89504e47");
+      expect(pngResult.display_copy_path).toBeUndefined();
     });
   });
 });

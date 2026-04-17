@@ -42,6 +42,12 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
     expect(workflowMarkdown).toContain("--resolve bundle");
     expect(workflowMarkdown).toContain("capabilities -> contract -> code/docs only if still insufficient");
+    expect(skillMarkdown).toContain("/tmp/unique-previews");
+    expect(skillMarkdown).toContain("--display-copy-name");
+    expect(skillMarkdown).toContain("chat may cache local images by absolute path");
+    expect(workflowMarkdown).toContain("/tmp/unique-previews");
+    expect(workflowMarkdown).toContain("--display-copy-name");
+    expect(workflowMarkdown).toContain("Use the canonical sibling file for file links");
 
     await expectExists(path.join(skillRoot, "scripts/run_helper.sh"));
     await expectExists(path.join(skillRoot, "references/workflow.md"));

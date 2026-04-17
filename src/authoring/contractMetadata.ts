@@ -619,6 +619,7 @@ const renderPreviewResultSchema = objectSchema(
     view_id: stringSchema(),
     profile_id: stringSchema(),
     backend_id: stringSchema(),
+    display_copy_path: stringSchema(),
     artifact: {
       oneOf: [
         objectSchema(
@@ -1079,7 +1080,8 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
         view_id: stringSchema(),
         profile_id: stringSchema(),
         format: stringSchema(["svg", "png"]),
-        backend_id: stringSchema()
+        backend_id: stringSchema(),
+        display_copy_name: stringSchema()
       },
       ["path", "view_id", "profile_id", "format"]
     ),

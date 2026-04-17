@@ -79,6 +79,20 @@ describe("authoring contract metadata", () => {
       "shared.binding.render_preview.view_id",
       "shared.binding.render_preview.profile_id"
     ]);
+    expect(previewDetail?.input_shape?.schema).toMatchObject({
+      properties: {
+        display_copy_name: {
+          type: "string"
+        }
+      }
+    });
+    expect(previewDetail?.output_shape?.schema).toMatchObject({
+      properties: {
+        display_copy_path: {
+          type: "string"
+        }
+      }
+    });
 
     expect(validateDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
       "shared.binding.validate_document.profile_id"

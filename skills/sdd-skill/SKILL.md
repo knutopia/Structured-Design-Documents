@@ -23,7 +23,7 @@ This skill enables working with structured design documents. In this repo source
 - Express structural, flow, navigation, and similar graph semantics through the bundle-defined mechanism. Treat nesting as authoring adjacency only unless the active language version explicitly defines an implication rule.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
 - Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough; use `contract --resolve bundle` only when you need active bundle-owned `view_id` or `profile_id` values first.
-- Use `sdd show` for saved user-facing preview artifacts, and use `preview` only when you need transient helper preview output after a clean `author` or `apply` dry run under the same target profile.
+- Use `sdd show` for saved user-facing preview artifacts. If you will embed that preview inline in chat, follow the saved render with `preview --display-copy-name <saved-basename>` so the Markdown image can use a temp display copy under `/tmp/unique-previews` while the sibling artifact remains the canonical file.
 - Use `undo` only for helper-managed committed change sets.
 - For new-document authoring, do not search repo `.sdd` examples to infer syntax or structure unless the user explicitly asks for comparison or example reuse.
 - Use the fallback order `capabilities -> contract -> code/docs only if still insufficient`.
@@ -46,7 +46,7 @@ This skill enables working with structured design documents. In this repo source
 6. Commit and confirm:
    if the dry run is acceptable for the target profile and the user wants the change applied, resubmit that validated request with `mode: "commit"`.
    if follow-on edits need fresh handles after commit, use committed continuation handles when available or re-`inspect` the committed result.
-   use `validate` or `project` for persisted-state semantic confirmation. If the user wants a visible artifact, save it with `TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>` using the same committed, validated state. Use `preview` only for transient helper output or raw artifact confirmation.
+   use `validate` or `project` for persisted-state semantic confirmation. If the user wants a visible artifact, save it with `TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>` using the same committed, validated state. If the response will also embed the image inline in chat, derive the saved artifact basename and call `preview --display-copy-name <that-basename>` so the file link stays canonical while the Markdown image uses the temp display copy. Use `preview` otherwise only for transient helper output or raw artifact confirmation.
 
 ## Edit Safety Rules
 
@@ -102,15 +102,16 @@ Use `sdd show` for persisted user-facing preview artifacts, especially for:
 
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. Ask one short clarifying question only when multiple views are equally plausible.
 
-Use `preview` when you need transient helper output rather than the default final deliverable, especially for:
+Use `preview` when you need transient helper output or a chat-safe display copy rather than the default final deliverable, especially for:
 
 - committed states that already passed a clean `apply` dry run under the same profile
 - view-sensitive structural changes
 - renderer-facing proof checks
 - raw artifact access for another tool or workflow
+- inline chat image display after `sdd show` already wrote the canonical preview beside the `.sdd`
 
 Do not confuse saved previews or helper preview output with semantic projection or validation. Use `validate` and `project` for standalone persisted-state semantic reads, and use inline `validate_profile` and `projection_views` on `author` or `apply` for pre-commit candidate feedback.
-The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename; `sdd show` will use `<source>.<view>.<profile>[.<backend>].<format>` for the default sibling filename.
+The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename; `sdd show` will use `<source>.<view>.<profile>[.<backend>].<format>` for the default sibling filename. If you need an inline chat image, keep that sibling file as the canonical artifact and use `preview --display-copy-name <saved-basename>` only to get a temp display path under `/tmp/unique-previews`. The rationale is visible on purpose: chat may cache local images by absolute path, but the artifact identity should remain stable.
 If preview returns `sdd-helper-error`, inspect the message and any attached `diagnostics` before assuming the helper environment is broken.
 
 ## When To Use Helper Git Commands
