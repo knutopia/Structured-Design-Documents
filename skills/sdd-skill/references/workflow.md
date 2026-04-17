@@ -122,7 +122,22 @@ TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
   --profile strict
 ```
 
-If the response will embed that preview inline in chat, derive the saved artifact basename and request a display copy with helper `preview`:
+Use one of these branches and stop after the one that matches the final response:
+
+File-link-only branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- stop there; do not create a display copy
+
+Inline-image branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- derive the saved artifact basename and request a display copy with helper `preview`
+- use the returned `display_copy_path` as the Markdown image source in the final response
+
+Inline-image command:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -132,7 +147,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
   --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
 ```
 
-Use the saved sibling artifact for file links and the returned `display_copy_path` for the Markdown image. This rationale is deliberate: the sibling file is the canonical artifact, while the temp copy under `/tmp/unique-previews` exists only because chat may cache local image content by absolute path.
+Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline. Do not present `display_copy_path` as the real saved artifact. The saved sibling artifact is the canonical file for file links, while the temp copy under `/tmp/unique-previews` is only a presentation workaround because chat may cache local image content by absolute path.
 
 If the user wants transient raw artifact output instead, use helper `preview`.
 
@@ -222,7 +237,22 @@ TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
 
 If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it.
 
-If the response will also embed the preview inline in chat, derive the basename from the actual saved artifact path and request a temp display copy:
+Use one of these branches and stop after the one that matches the final response:
+
+File-link-only branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- stop there; do not create a display copy
+
+Inline-image branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- derive the basename from the actual saved artifact path and request a temp display copy
+- use the returned `display_copy_path` as the Markdown image source in the final response
+
+Inline-image command:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -232,7 +262,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
   --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
 ```
 
-Use the canonical sibling file for file links and the returned `display_copy_path` for the Markdown image. Keep the rationale visible in your reasoning: the temp copy under `/tmp/unique-previews` is only a presentation workaround for chat path caching, while the sibling artifact remains the real preview identity.
+Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline. Do not present `display_copy_path` as the real saved artifact. Use the canonical sibling file for file links and the returned `display_copy_path` for the Markdown image. The temp copy under `/tmp/unique-previews` is only a presentation workaround for chat path caching, while the sibling artifact remains the real preview identity.
 
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. If multiple views are equally plausible, ask one short clarifying question.
 

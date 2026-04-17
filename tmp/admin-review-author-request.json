@@ -1,0 +1,113 @@
+{
+  "path": "shop_sched_exploration.sdd",
+  "base_revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
+  "mode": "commit",
+  "validate_profile": "simple",
+  "projection_views": ["ia_place_map"],
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "admin_review_area",
+      "placement": {
+        "mode": "after",
+        "anchor": {
+          "by": "selector",
+          "selector": {
+            "kind": "node_id",
+            "node_id": "A-100"
+          }
+        }
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-110",
+        "name": "Admin Review",
+        "edges": [
+          {
+            "local_id": "admin_review_area_contains_root",
+            "rel_type": "CONTAINS",
+            "to": "P-140",
+            "to_name": "Admin Review"
+          },
+          {
+            "local_id": "admin_review_area_contains_inquiries",
+            "rel_type": "CONTAINS",
+            "to": "P-150",
+            "to_name": "Review Customer Inquiries"
+          },
+          {
+            "local_id": "admin_review_area_contains_volunteer",
+            "rel_type": "CONTAINS",
+            "to": "P-160",
+            "to_name": "Volunteer Detail"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "admin_review_place",
+      "placement": {
+        "mode": "after",
+        "anchor": {
+          "by": "selector",
+          "selector": {
+            "kind": "node_id",
+            "node_id": "P-130"
+          }
+        }
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-140",
+        "name": "Admin Review",
+        "edges": [
+          {
+            "local_id": "admin_review_to_inquiries",
+            "rel_type": "NAVIGATES_TO",
+            "to": "P-150",
+            "to_name": "Review Customer Inquiries"
+          },
+          {
+            "local_id": "admin_review_to_volunteer_detail",
+            "rel_type": "NAVIGATES_TO",
+            "to": "P-160",
+            "to_name": "Volunteer Detail"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "review_customer_inquiries_place",
+      "placement": {
+        "mode": "after",
+        "anchor": {
+          "by": "local_id",
+          "local_id": "admin_review_place"
+        }
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-150",
+        "name": "Review Customer Inquiries"
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "volunteer_detail_place",
+      "placement": {
+        "mode": "after",
+        "anchor": {
+          "by": "local_id",
+          "local_id": "review_customer_inquiries_place"
+        }
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-160",
+        "name": "Volunteer Detail"
+      }
+    }
+  ]
+}

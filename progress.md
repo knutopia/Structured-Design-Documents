@@ -18,6 +18,7 @@
 -skill doc updates to match new helper contract
 -added semantic guidance to skill
 -added chat-safe previews for skill
+-tightened preview guidance after finding shortfalls
 
 ## Thu 4-16-26
 
