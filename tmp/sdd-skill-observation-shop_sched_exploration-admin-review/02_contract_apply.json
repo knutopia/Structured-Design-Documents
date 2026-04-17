@@ -1,0 +1,1432 @@
+{
+  "kind": "sdd-contract-subject-detail",
+  "subject": {
+    "subject_id": "helper.command.apply",
+    "surface_kind": "helper_command",
+    "surface_name": "apply",
+    "summary": "Apply or dry-run a structured change set request.",
+    "stability": "stable",
+    "mutates_repo_state": "conditional",
+    "input_shape_id": "shared.shape.apply_change_set_args",
+    "output_shape_id": "shared.shape.apply_change_set_result",
+    "detail_modes": [
+      "static"
+    ],
+    "has_deep_introspection": true
+  },
+  "input_shape": {
+    "shape_id": "shared.shape.apply_change_set_args",
+    "summary": "Structured low-level mutation request payload.",
+    "schema_format": "json_schema_2020_12",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "base_revision": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "dry_run",
+            "commit"
+          ]
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "insert_node_block"
+                    ]
+                  },
+                  "node_type": {
+                    "type": "string"
+                  },
+                  "node_id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_type",
+                  "node_id",
+                  "name",
+                  "placement"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "delete_node_block"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "set_node_name"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "name"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "set_node_property"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value_kind": {
+                    "type": "string",
+                    "enum": [
+                      "quoted_string",
+                      "bare_value"
+                    ]
+                  },
+                  "raw_value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "key",
+                  "value_kind",
+                  "raw_value"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "remove_node_property"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "key"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "insert_edge_line"
+                    ]
+                  },
+                  "parent_handle": {
+                    "type": "string"
+                  },
+                  "rel_type": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "to_name": {
+                    "type": "string"
+                  },
+                  "event": {
+                    "type": "string"
+                  },
+                  "guard": {
+                    "type": "string"
+                  },
+                  "effect": {
+                    "type": "string"
+                  },
+                  "props": {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "parent_handle",
+                  "rel_type",
+                  "to"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "remove_edge_line"
+                    ]
+                  },
+                  "edge_handle": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "edge_handle"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "reposition_top_level_node"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "placement"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "reposition_structural_edge"
+                    ]
+                  },
+                  "edge_handle": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "edge_handle",
+                  "placement"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "move_nested_node_block"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "placement"
+                ]
+              }
+            ]
+          }
+        },
+        "validate_profile": {
+          "type": "string"
+        },
+        "projection_views": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "base_revision",
+        "operations"
+      ]
+    },
+    "stability": "stable"
+  },
+  "output_shape": {
+    "shape_id": "shared.shape.apply_change_set_result",
+    "summary": "Low-level mutation result payload.",
+    "schema_format": "json_schema_2020_12",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "sdd-change-set"
+          ]
+        },
+        "change_set_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "apply_change_set",
+            "apply_authoring_intent",
+            "undo_change_set",
+            "create_document"
+          ]
+        },
+        "document_effect": {
+          "type": "string",
+          "enum": [
+            "created",
+            "updated",
+            "deleted"
+          ]
+        },
+        "base_revision": {
+          "type": "string"
+        },
+        "resulting_revision": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "dry_run",
+            "commit"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "applied",
+            "rejected"
+          ]
+        },
+        "undo_eligible": {
+          "type": "boolean"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "insert_node_block"
+                    ]
+                  },
+                  "node_type": {
+                    "type": "string"
+                  },
+                  "node_id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_type",
+                  "node_id",
+                  "name",
+                  "placement"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "delete_node_block"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "set_node_name"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "name"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "set_node_property"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value_kind": {
+                    "type": "string",
+                    "enum": [
+                      "quoted_string",
+                      "bare_value"
+                    ]
+                  },
+                  "raw_value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "key",
+                  "value_kind",
+                  "raw_value"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "remove_node_property"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "key"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "insert_edge_line"
+                    ]
+                  },
+                  "parent_handle": {
+                    "type": "string"
+                  },
+                  "rel_type": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "to_name": {
+                    "type": "string"
+                  },
+                  "event": {
+                    "type": "string"
+                  },
+                  "guard": {
+                    "type": "string"
+                  },
+                  "effect": {
+                    "type": "string"
+                  },
+                  "props": {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "parent_handle",
+                  "rel_type",
+                  "to"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "remove_edge_line"
+                    ]
+                  },
+                  "edge_handle": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "edge_handle"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "reposition_top_level_node"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "placement"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "reposition_structural_edge"
+                    ]
+                  },
+                  "edge_handle": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "edge_handle",
+                  "placement"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "move_nested_node_block"
+                    ]
+                  },
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "placement": {
+                    "type": "object",
+                    "properties": {
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "before",
+                          "after",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      "stream": {
+                        "type": "string",
+                        "enum": [
+                          "top_level",
+                          "body"
+                        ]
+                      },
+                      "anchor_handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode",
+                      "stream"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "node_handle",
+                  "placement"
+                ]
+              }
+            ]
+          }
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "node_insertions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "handle": {
+                    "type": "string"
+                  },
+                  "node_id": {
+                    "type": "string"
+                  },
+                  "node_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "node_id",
+                  "node_type"
+                ]
+              }
+            },
+            "node_deletions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "handle": {
+                    "type": "string"
+                  },
+                  "node_id": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "handle"
+                ]
+              }
+            },
+            "node_renames": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "handle": {
+                    "type": "string"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "handle",
+                  "from",
+                  "to"
+                ]
+              }
+            },
+            "property_changes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "node_handle": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "node_handle",
+                  "key"
+                ]
+              }
+            },
+            "edge_insertions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "handle": {
+                    "type": "string"
+                  },
+                  "parent_handle": {
+                    "type": "string"
+                  },
+                  "rel_type": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "parent_handle",
+                  "rel_type",
+                  "to"
+                ]
+              }
+            },
+            "edge_deletions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "handle": {
+                    "type": "string"
+                  },
+                  "parent_handle": {
+                    "type": "string"
+                  },
+                  "rel_type": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "handle",
+                  "parent_handle",
+                  "rel_type",
+                  "to"
+                ]
+              }
+            },
+            "ordering_changes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "top_level_node",
+                      "structural_edge",
+                      "nested_node_block"
+                    ]
+                  },
+                  "target_handle": {
+                    "type": "string"
+                  },
+                  "parent_handle": {
+                    "type": "string"
+                  },
+                  "old_index": {
+                    "type": "integer"
+                  },
+                  "new_index": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "target_handle",
+                  "old_index",
+                  "new_index"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "node_insertions",
+            "node_deletions",
+            "node_renames",
+            "property_changes",
+            "edge_insertions",
+            "edge_deletions",
+            "ordering_changes"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stage": {
+                "type": "string",
+                "enum": [
+                  "bundle",
+                  "parse",
+                  "compile",
+                  "validate",
+                  "project",
+                  "render",
+                  "cli"
+                ]
+              },
+              "code": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "error",
+                  "warn",
+                  "info"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "span": {
+                "type": "object",
+                "properties": {
+                  "line": {
+                    "type": "number"
+                  },
+                  "column": {
+                    "type": "number"
+                  },
+                  "endLine": {
+                    "type": "number"
+                  },
+                  "endColumn": {
+                    "type": "number"
+                  },
+                  "startOffset": {
+                    "type": "number"
+                  },
+                  "endOffset": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "line",
+                  "column",
+                  "endLine",
+                  "endColumn",
+                  "startOffset",
+                  "endOffset"
+                ]
+              },
+              "ruleId": {
+                "type": "string"
+              },
+              "profileId": {
+                "type": "string"
+              },
+              "relatedIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "stage",
+              "code",
+              "severity",
+              "message",
+              "file"
+            ]
+          }
+        },
+        "projection_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "view_id": {
+                "type": "string"
+              },
+              "projection": {},
+              "diagnostics": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "stage": {
+                      "type": "string",
+                      "enum": [
+                        "bundle",
+                        "parse",
+                        "compile",
+                        "validate",
+                        "project",
+                        "render",
+                        "cli"
+                      ]
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": [
+                        "error",
+                        "warn",
+                        "info"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "file": {
+                      "type": "string"
+                    },
+                    "span": {
+                      "type": "object",
+                      "properties": {
+                        "line": {
+                          "type": "number"
+                        },
+                        "column": {
+                          "type": "number"
+                        },
+                        "endLine": {
+                          "type": "number"
+                        },
+                        "endColumn": {
+                          "type": "number"
+                        },
+                        "startOffset": {
+                          "type": "number"
+                        },
+                        "endOffset": {
+                          "type": "number"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "line",
+                        "column",
+                        "endLine",
+                        "endColumn",
+                        "startOffset",
+                        "endOffset"
+                      ]
+                    },
+                    "ruleId": {
+                      "type": "string"
+                    },
+                    "profileId": {
+                      "type": "string"
+                    },
+                    "relatedIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "stage",
+                    "code",
+                    "severity",
+                    "message",
+                    "file"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "view_id",
+              "diagnostics"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "change_set_id",
+        "path",
+        "origin",
+        "document_effect",
+        "mode",
+        "status",
+        "undo_eligible",
+        "operations",
+        "summary",
+        "diagnostics"
+      ]
+    },
+    "stability": "stable"
+  },
+  "constraints": [
+    {
+      "constraint_id": "shared.constraint.apply_change_set.handles_are_revision_bound",
+      "applies_to_shape_id": "shared.shape.apply_change_set_args",
+      "applies_to_json_pointers": [
+        "/operations/*/node_handle",
+        "/operations/*/edge_handle",
+        "/operations/*/parent_handle",
+        "/operations/*/placement/anchor_handle"
+      ],
+      "kind": "same_revision_handle",
+      "parameters": {
+        "base_revision_pointer": "/base_revision"
+      },
+      "summary": "All handles in a low-level change-set request are valid only for the supplied base_revision."
+    },
+    {
+      "constraint_id": "shared.constraint.apply_change_set.commit_handles_are_continuation_safe",
+      "applies_to_shape_id": "shared.shape.apply_change_set_result",
+      "applies_to_json_pointers": [
+        "/summary/node_insertions/*/handle",
+        "/summary/edge_insertions/*/handle"
+      ],
+      "kind": "commit_safe_continuation",
+      "parameters": {
+        "safe_when": {
+          "mode": "commit",
+          "status": "applied"
+        },
+        "revision_pointer": "/resulting_revision"
+      },
+      "summary": "Committed insertion handles from apply results are safe continuation surfaces only for the returned resulting_revision."
+    },
+    {
+      "constraint_id": "shared.constraint.apply_change_set.dry_run_handles_are_informational_only",
+      "applies_to_shape_id": "shared.shape.apply_change_set_result",
+      "applies_to_json_pointers": [
+        "/summary/node_insertions/*/handle",
+        "/summary/edge_insertions/*/handle"
+      ],
+      "kind": "dry_run_informational_only",
+      "parameters": {
+        "informational_when": {
+          "mode": "dry_run"
+        }
+      },
+      "summary": "Dry-run insertion handles from apply results are informational only and must not be reused in later requests."
+    }
+  ],
+  "bindings": [],
+  "continuation": [
+    {
+      "continuation_id": "shared.continuation.apply_change_set.resulting_revision_next_base_revision",
+      "applies_to_subject_id": "helper.command.apply",
+      "kind": "result_revision_is_required_next_base_revision",
+      "summary": "When apply returns a resulting_revision, that revision is the next valid base_revision for follow-on work."
+    },
+    {
+      "continuation_id": "shared.continuation.apply_change_set.commit_handles_safe",
+      "applies_to_subject_id": "helper.command.apply",
+      "kind": "commit_handles_are_safe_continuation_surfaces",
+      "summary": "Committed insertion handles from apply are safe continuation surfaces only for the returned resulting_revision."
+    },
+    {
+      "continuation_id": "shared.continuation.apply_change_set.dry_run_handles_informational",
+      "applies_to_subject_id": "helper.command.apply",
+      "kind": "dry_run_handles_are_informational_only",
+      "summary": "Dry-run insertion handles from apply are informational only and must not be reused in later requests."
+    }
+  ],
+  "resolution": {
+    "mode": "static"
+  }
+}

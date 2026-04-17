@@ -1,0 +1,88 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/shop_sched_exploration.sdd/projection/ia_place_map",
+  "path": "shop_sched_exploration.sdd",
+  "revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
+  "view_id": "ia_place_map",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ia_place_map",
+    "source_example": "shop_sched_exploration",
+    "nodes": [
+      {
+        "id": "A-100",
+        "type": "Area",
+        "name": "Mechanic's Scheduling"
+      },
+      {
+        "id": "P-100",
+        "type": "Place",
+        "name": "Dashboard"
+      },
+      {
+        "id": "P-110",
+        "type": "Place",
+        "name": "Open Shifts"
+      },
+      {
+        "id": "P-120",
+        "type": "Place",
+        "name": "Shift Detail"
+      },
+      {
+        "id": "P-130",
+        "type": "Place",
+        "name": "My Schedule"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A-100",
+        "type": "CONTAINS",
+        "to": "P-110"
+      },
+      {
+        "from": "A-100",
+        "type": "CONTAINS",
+        "to": "P-120"
+      },
+      {
+        "from": "A-100",
+        "type": "CONTAINS",
+        "to": "P-130"
+      },
+      {
+        "from": "P-100",
+        "type": "NAVIGATES_TO",
+        "to": "P-110"
+      },
+      {
+        "from": "P-100",
+        "type": "NAVIGATES_TO",
+        "to": "P-130"
+      },
+      {
+        "from": "P-110",
+        "type": "NAVIGATES_TO",
+        "to": "P-120"
+      },
+      {
+        "from": "P-130",
+        "type": "NAVIGATES_TO",
+        "to": "P-120"
+      }
+    ],
+    "derived": {
+      "node_annotations": [],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {}
+    },
+    "omissions": [],
+    "notes": [
+      "Hierarchy for IA view is driven by CONTAINS."
+    ]
+  },
+  "diagnostics": []
+}

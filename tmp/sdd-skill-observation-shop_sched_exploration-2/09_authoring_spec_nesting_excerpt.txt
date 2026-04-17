@@ -1,0 +1,19 @@
+```text
++ <NodeType> <ID> "<Name>"
+```
+
+Nested nodes MUST end with their own `END`. They are logically independent nodes; the `+` only indicates nesting for authoring and does not itself imply a relationship.
+
+If you want the nesting to imply containment, you MUST still specify it explicitly via `CONTAINS` or `COMPOSED_OF`.
+
+---
+- Typical examples are `CONTAINS` and `COMPOSED_OF` when a view uses them as structural hierarchy.
+- For nodes that are top-level in a rendered view, order follows top-level node declaration order after view filtering.
+- Nesting placement of `+` blocks does NOT define sibling order. Only explicit hierarchy edges do.
+- `PRECEDES` and `TRANSITIONS_TO` remain the source of flow/state ordering; they are not replaced by hierarchy-edge source order.
+
+In other words, as an author of SDD,
+
+- If you want sibling order in a structural view, write `CONTAINS` and `COMPOSED_OF` lines in that order.
+- Do not rely on nested `+` block placement for ordering; nesting groups authoring context only.
+- Use `PRECEDES` and `TRANSITIONS_TO` for actual flow/state order, not for sibling arrangement.

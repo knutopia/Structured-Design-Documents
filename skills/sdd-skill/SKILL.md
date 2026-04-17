@@ -19,6 +19,8 @@ This skill enables working with structured design documents. In this repo source
 - For existing-document edits, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain fresh `revision` and handle data before handle-based changes.
 - For fresh-document bootstrap work, use `create` first and continue from the returned `revision`; use `skills/sdd-skill/scripts/run_helper.sh contract helper.command.create` when you need the bootstrap continuation caveats explicitly. Immediate `inspect` is not the normal first step because the empty bootstrap may still be parse-invalid.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
+- Before composing `author` or `apply` requests for node-to-node structure that should matter to validation, projection, or rendering, determine the bundle-defined semantic relationship rather than assuming nesting is sufficient.
+- Express structural, flow, navigation, and similar graph semantics through the bundle-defined mechanism. Treat nesting as authoring adjacency only unless the active language version explicitly defines an implication rule.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
 - Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough; use `contract --resolve bundle` only when you need active bundle-owned `view_id` or `profile_id` values first.
 - Use `sdd show` for saved user-facing preview artifacts, and use `preview` only when you need transient helper preview output after a clean `author` or `apply` dry run under the same target profile.
@@ -32,15 +34,15 @@ This skill enables working with structured design documents. In this repo source
    decide whether the user wants to create a new document, edit an existing document, or read/preview an existing document. Do not start with `search` or `inspect` until that branch is clear.
 2. Create a new document:
    choose the repo-relative output path directly, defaulting to the current working directory unless the prompt names or clearly implies another location. Do not use `search` to pick a filename or to hunt examples, and do not infer the destination from examples, walkthroughs, or documentation layout.
-   run `create`, then use the returned `revision` as the continuation surface. Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` when the bootstrap continuation rules matter for the next step. Immediate `inspect` is not the normal next step because the empty bootstrap document may still be parse-invalid.
+   run `create`, then use the returned `revision` as the continuation surface. Prefer `author` for first-pass scaffold creation. Before composing the request, determine whether the intended result requires explicit semantic relationships and author them through the bundle-defined mechanism rather than relying on nesting alone. Use `contract helper.command.create` when the bootstrap continuation rules matter for the next step. Immediate `inspect` is not the normal next step because the empty bootstrap document may still be parse-invalid.
 3. Edit an existing document:
    if the target existing `.sdd` is unknown, use `search` to locate it. Once the target is known, use `inspect` to obtain the current `revision`, node handles, and body-item handles before planning handle-based changes.
-   choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles. Use `contract` in static mode before composing nested `author`, `apply`, or `undo` JSON when request-shape detail, semantic constraints, or continuation rules matter.
+   choose `ApplyAuthoringIntentArgs` when the task is mostly creating or extending common structure; choose `ApplyChangeSetArgs` when you need exact low-level control from fresh handles. Before composing the request, determine whether view-relevant structure, ordering, navigation, or other graph meaning must be expressed explicitly rather than through nesting alone. Use `contract` in static mode before composing nested `author`, `apply`, or `undo` JSON when request-shape detail, semantic constraints, or continuation rules matter.
 4. Read, validate, or preview an existing document:
    if the document is already named, do not `search`. Use `validate`, `project`, `sdd show`, or `preview` as appropriate without forcing an edit-oriented `inspect` step. Use `contract --resolve bundle` only when the relevant `view_id` or `profile_id` is not already known.
 5. Dry run mutations:
    submit `author` or `apply` with omitted `mode` or `mode: "dry_run"` and review the returned status, summary, and diagnostics. Include `validate_profile` whenever the user wants confirmation under a specific profile, and add `projection_views` when structured semantic confirmation is helpful.
-   if parse or validation errors remain, continue the create/author-or-inspect/author-or-apply cycle and do not preview yet.
+   if parse or validation errors remain, or if the selected projection does not reflect the intended semantic structure for a view-sensitive change, continue the create/author-or-inspect/author-or-apply cycle and do not preview yet.
 6. Commit and confirm:
    if the dry run is acceptable for the target profile and the user wants the change applied, resubmit that validated request with `mode: "commit"`.
    if follow-on edits need fresh handles after commit, use committed continuation handles when available or re-`inspect` the committed result.
@@ -55,12 +57,15 @@ This skill enables working with structured design documents. In this repo source
 - Do not reuse handles across later turns without a fresh `inspect`.
 - Committed `author` `created_targets` and committed `apply` insertion handles are safe continuation surfaces for the returned `resulting_revision`. Dry-run handles and dry-run `created_targets` are informational only.
 - Intermediate revisions are allowed during multi-pass helper authoring when fresh handles are needed. Treat them as staging checkpoints only; do not preview them or describe them as ready until the target profile is clean.
+- Do not assume nested scaffold `children` or nested `+` blocks create containment, composition, ordering, navigation, or any other semantic relationship. Nesting is an authoring affordance, not a semantic relationship.
+- When a change is view-sensitive or semantically structural, confirm the bundle-defined relationship first and author that explicit relationship rather than relying on nesting alone.
 - Treat `sdd-change-set` with `status: "rejected"` as a domain result to interpret, not as a shell failure.
 - Treat `sdd-helper-error` as a helper-layer failure that must be classified before continuing. Many cases are invocation or environment problems, but preview can also fail here when the document is still invalid or incomplete under the requested profile.
 - Keep helper paths repo-relative and `.sdd`-scoped.
 - For new-document authoring, do not use repo `.sdd` examples as a shortcut for syntax or structure inference unless the user explicitly asks for comparison or example reuse.
 - Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when `capabilities` and `contract` already provide it.
-- Code/docs lookup remains acceptable only for implementation questions, contract/runtime mismatch debugging, or genuine helper gaps.
+- If helper discovery and contract data are insufficient to determine the semantic relationship needed for a change, fall back to authoritative bundle/spec docs before examples, while preserving the rule that the bundle governs machine behavior.
+- Code/docs lookup remains acceptable only for implementation questions, contract/runtime mismatch debugging, genuine helper gaps, or authoritative bundle/spec reads needed to resolve semantics.
 
 ## Supported Helper Surface
 
@@ -124,3 +129,5 @@ Read only what you need:
 - `references/workflow.md` for the standard helper-based operating sequence
 - `references/change-set-recipes.md` for common `ChangeOperation` patterns
 - `references/current-helper-gaps.md` for the current limits of the helper surface
+- `bundle/v0.1/core/contracts.yaml` and `bundle/v0.1/core/views.yaml` when you must resolve bundle-owned semantic relationships for a specific task
+- `definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md` when you need the normative nesting-versus-semantics authoring rule

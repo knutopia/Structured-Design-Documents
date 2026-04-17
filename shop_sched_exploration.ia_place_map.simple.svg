@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="334" viewBox="0 0 512 334" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="808" height="316" viewBox="0 0 808 316" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-1" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -45,25 +45,35 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="512" height="334" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="808" height="316" rx="18" ry="18"/>
+    </g>
+    <g id="scene-container-a-100" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-100" data-role="area">
+      <rect class="scene-container__chrome" x="240" y="24" width="248" height="268" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="240" y="24" width="248" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-a-200" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-200" data-role="area">
-      <rect class="scene-container__chrome" x="240" y="24" width="248" height="286" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="240" y="24" width="248" height="40" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="536" y="24" width="248" height="216" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="536" y="24" width="248" height="40" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-p-100" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-100" data-role="place">
-      <rect class="scene-node__chrome" x="24" y="24" width="168" height="66" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="24" y="24" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-210" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-210" data-role="place">
+    <g id="scene-node-p-110" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-110" data-role="place">
       <rect class="scene-node__chrome" x="256" y="80" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-220" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-220" data-role="place">
+    <g id="scene-node-p-120" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-120" data-role="place">
       <rect class="scene-node__chrome" x="304" y="160" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-230" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-230" data-role="place">
-      <rect class="scene-node__chrome" x="256" y="228" width="168" height="66" rx="14" ry="14"/>
+    <g id="scene-node-p-130" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-130" data-role="place">
+      <rect class="scene-node__chrome" x="256" y="228" width="168" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-p-210" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-210" data-role="place">
+      <rect class="scene-node__chrome" x="552" y="80" width="168" height="64" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-p-220" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-220" data-role="place">
+      <rect class="scene-node__chrome" x="600" y="176" width="168" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -71,37 +81,50 @@
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="52">
           <tspan x="36" dy="0">Dashboard</tspan>
         </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="36" y="74">
-          <tspan x="36" dy="0">primary_nav: true</tspan>
-        </text>
     </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-200" data-role="area">
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-100" data-role="area">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="256" y="50">
-          <tspan x="256" dy="0">Mechanic Scheduling</tspan>
+          <tspan x="256" dy="0">Mechanic's Scheduling</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-210" data-role="place">
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-110" data-role="place">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="268" y="108">
           <tspan x="268" dy="0">Open Shifts</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-220" data-role="place">
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-120" data-role="place">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="316" y="188">
           <tspan x="316" dy="0">Shift Detail</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-230" data-role="place">
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-130" data-role="place">
       <text class="scene-text text-role-title block-kind-text block-region-primary" x="268" y="256">
           <tspan x="268" dy="0">My Schedule</tspan>
         </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="268" y="278">
-          <tspan x="268" dy="0">primary_nav: true</tspan>
+    </g>
+    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-200" data-role="area">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="552" y="50">
+          <tspan x="552" dy="0">Admin Review</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-210" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="564" y="108">
+          <tspan x="564" dy="0">Review Customer</tspan>
+          <tspan x="564" dy="20">Inquiries</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-220" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="612" y="204">
+          <tspan x="612" dy="0">Volunteer Detail</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-p-210__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-210__nav__P-220" data-role="navigation">
+    <g id="scene-edge-p-110__nav__p-120" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-110__nav__P-120" data-role="navigation">
       <path class="scene-edge__path" d="M 280 128 L 280 184 L 304 184" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-p-210__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-210__nav__P-220" data-role="navigation">
+      <path class="scene-edge__path" d="M 576 144 L 576 200 L 600 200" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

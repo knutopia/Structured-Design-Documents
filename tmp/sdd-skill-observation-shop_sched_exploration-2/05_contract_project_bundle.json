@@ -1,0 +1,234 @@
+{
+  "kind": "sdd-contract-subject-detail",
+  "subject": {
+    "subject_id": "helper.command.project",
+    "surface_kind": "helper_command",
+    "surface_name": "project",
+    "summary": "Return a structured projection for the current persisted document revision.",
+    "stability": "stable",
+    "mutates_repo_state": "never",
+    "input_shape_id": "shared.shape.project_document_args",
+    "output_shape_id": "shared.shape.projection_resource",
+    "detail_modes": [
+      "static",
+      "bundle_resolved"
+    ],
+    "has_deep_introspection": true
+  },
+  "input_shape": {
+    "shape_id": "shared.shape.project_document_args",
+    "summary": "Project-document request payload.",
+    "schema_format": "json_schema_2020_12",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "view_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "view_id"
+      ]
+    },
+    "stability": "stable"
+  },
+  "output_shape": {
+    "shape_id": "shared.shape.projection_resource",
+    "summary": "Projection resource payload.",
+    "schema_format": "json_schema_2020_12",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "sdd-projection"
+          ]
+        },
+        "uri": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "view_id": {
+          "type": "string"
+        },
+        "projection": {},
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stage": {
+                "type": "string",
+                "enum": [
+                  "bundle",
+                  "parse",
+                  "compile",
+                  "validate",
+                  "project",
+                  "render",
+                  "cli"
+                ]
+              },
+              "code": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "error",
+                  "warn",
+                  "info"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "span": {
+                "type": "object",
+                "properties": {
+                  "line": {
+                    "type": "number"
+                  },
+                  "column": {
+                    "type": "number"
+                  },
+                  "endLine": {
+                    "type": "number"
+                  },
+                  "endColumn": {
+                    "type": "number"
+                  },
+                  "startOffset": {
+                    "type": "number"
+                  },
+                  "endOffset": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "line",
+                  "column",
+                  "endLine",
+                  "endColumn",
+                  "startOffset",
+                  "endOffset"
+                ]
+              },
+              "ruleId": {
+                "type": "string"
+              },
+              "profileId": {
+                "type": "string"
+              },
+              "relatedIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "stage",
+              "code",
+              "severity",
+              "message",
+              "file"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "uri",
+        "path",
+        "revision",
+        "view_id",
+        "diagnostics"
+      ]
+    },
+    "stability": "stable"
+  },
+  "constraints": [],
+  "bindings": [
+    {
+      "binding_id": "shared.binding.project_document.view_id",
+      "applies_to_shape_id": "shared.shape.project_document_args",
+      "applies_to_json_pointer": "/view_id",
+      "kind": "bundle_value_set",
+      "bundle_source": {
+        "artifact": "views_yaml",
+        "selector": "views"
+      },
+      "static_behavior": "reference_only",
+      "bundle_resolved_behavior": "expand_values",
+      "summary": "view_id is bundle-owned and must be resolved from the active bundle views list.",
+      "resolved_values": [
+        {
+          "value": "outcome_opportunity_map",
+          "label": "Outcome-Opportunity Map",
+          "metadata": {
+            "status": "operational"
+          }
+        },
+        {
+          "value": "journey_map",
+          "label": "Journey Map",
+          "metadata": {
+            "status": "operational"
+          }
+        },
+        {
+          "value": "service_blueprint",
+          "label": "Service Blueprint",
+          "metadata": {
+            "status": "operational"
+          }
+        },
+        {
+          "value": "ia_place_map",
+          "label": "IA Place Map",
+          "metadata": {
+            "status": "operational"
+          }
+        },
+        {
+          "value": "scenario_flow",
+          "label": "Scenario Flow",
+          "metadata": {
+            "status": "operational"
+          }
+        },
+        {
+          "value": "ui_contracts",
+          "label": "UI Contracts",
+          "metadata": {
+            "status": "operational"
+          }
+        }
+      ]
+    }
+  ],
+  "continuation": [],
+  "resolution": {
+    "mode": "bundle_resolved",
+    "bundle_name": "sdd-text-spec-bundle",
+    "bundle_version": "0.1"
+  }
+}

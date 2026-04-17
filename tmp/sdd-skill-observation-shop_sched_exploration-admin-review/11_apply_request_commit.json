@@ -1,0 +1,21 @@
+{
+  "path": "shop_sched_exploration.sdd",
+  "base_revision": "rev_c5ebf2aee9e132ee4e27a6c8a23a0e0421c750e3ae9c8372c4d4840859a580b0",
+  "mode": "commit",
+  "validate_profile": "simple",
+  "projection_views": ["ia_place_map"],
+  "operations": [
+    {
+      "kind": "insert_edge_line",
+      "parent_handle": "hdl_e11811deefdb049a4ddf66dd06012fac941104a05c8d01f3527f0780fe14acd1",
+      "rel_type": "NAVIGATES_TO",
+      "to": "P-210",
+      "to_name": "Review Customer Inquiries",
+      "placement": {
+        "mode": "last",
+        "stream": "body",
+        "parent_handle": "hdl_e11811deefdb049a4ddf66dd06012fac941104a05c8d01f3527f0780fe14acd1"
+      }
+    }
+  ]
+}

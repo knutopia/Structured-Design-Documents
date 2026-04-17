@@ -2,4 +2,3 @@
 > sdd-toolchain@0.1.0 sdd /home/knut/projects/sdd
 > node dist/cli/main.js show shop_sched_exploration.sdd --view ia_place_map --profile simple
 
-Wrote /home/knut/projects/sdd/shop_sched_exploration.ia_place_map.simple.svg

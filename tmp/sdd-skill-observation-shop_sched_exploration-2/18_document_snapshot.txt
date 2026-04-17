@@ -2,7 +2,6 @@ SDD-TEXT 0.1
 Place P-100 "Dashboard"
   NAVIGATES_TO P-110 "Open Shifts"
   NAVIGATES_TO P-130 "My Schedule"
-  NAVIGATES_TO P-210 "Review Customer Inquiries"
 END
 Area A-100 "Mechanic's Scheduling"
   CONTAINS P-110 "Open Shifts"
@@ -16,13 +15,4 @@ Place P-120 "Shift Detail"
 END
 Place P-130 "My Schedule"
   NAVIGATES_TO P-120 "Shift Detail"
-END
-Area A-200 "Admin Review"
-  CONTAINS P-210 "Review Customer Inquiries"
-  CONTAINS P-220 "Volunteer Detail"
-END
-Place P-210 "Review Customer Inquiries"
-  NAVIGATES_TO P-220 "Volunteer Detail"
-END
-Place P-220 "Volunteer Detail"
 END

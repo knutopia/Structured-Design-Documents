@@ -1,0 +1,164 @@
+{
+  "kind": "sdd-change-set",
+  "change_set_id": "chg_927a6ee9-ec86-462f-89ae-34f7c8dcf89e",
+  "path": "shop_sched_exploration.sdd",
+  "origin": "apply_change_set",
+  "document_effect": "updated",
+  "base_revision": "rev_c5ebf2aee9e132ee4e27a6c8a23a0e0421c750e3ae9c8372c4d4840859a580b0",
+  "mode": "commit",
+  "status": "applied",
+  "undo_eligible": true,
+  "operations": [
+    {
+      "kind": "insert_edge_line",
+      "parent_handle": "hdl_e11811deefdb049a4ddf66dd06012fac941104a05c8d01f3527f0780fe14acd1",
+      "rel_type": "NAVIGATES_TO",
+      "to": "P-210",
+      "to_name": "Review Customer Inquiries",
+      "placement": {
+        "mode": "last",
+        "stream": "body",
+        "parent_handle": "hdl_e11811deefdb049a4ddf66dd06012fac941104a05c8d01f3527f0780fe14acd1"
+      }
+    }
+  ],
+  "summary": {
+    "node_insertions": [],
+    "node_deletions": [],
+    "node_renames": [],
+    "property_changes": [],
+    "edge_insertions": [
+      {
+        "handle": "hdl_b7e28e4b02a3528d57c7ad71321494f7930b67549d6824d2e961c0b654067fb9",
+        "parent_handle": "hdl_e11811deefdb049a4ddf66dd06012fac941104a05c8d01f3527f0780fe14acd1",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-210"
+      }
+    ],
+    "edge_deletions": [],
+    "ordering_changes": []
+  },
+  "diagnostics": [],
+  "projection_results": [
+    {
+      "view_id": "ia_place_map",
+      "projection": {
+        "schema": "sdd-text-view-projection",
+        "version": "0.1",
+        "view_id": "ia_place_map",
+        "source_example": "shop_sched_exploration",
+        "nodes": [
+          {
+            "id": "A-100",
+            "type": "Area",
+            "name": "Mechanic's Scheduling"
+          },
+          {
+            "id": "A-200",
+            "type": "Area",
+            "name": "Admin Review"
+          },
+          {
+            "id": "P-100",
+            "type": "Place",
+            "name": "Dashboard"
+          },
+          {
+            "id": "P-110",
+            "type": "Place",
+            "name": "Open Shifts"
+          },
+          {
+            "id": "P-120",
+            "type": "Place",
+            "name": "Shift Detail"
+          },
+          {
+            "id": "P-130",
+            "type": "Place",
+            "name": "My Schedule"
+          },
+          {
+            "id": "P-210",
+            "type": "Place",
+            "name": "Review Customer Inquiries"
+          },
+          {
+            "id": "P-220",
+            "type": "Place",
+            "name": "Volunteer Detail"
+          }
+        ],
+        "edges": [
+          {
+            "from": "A-100",
+            "type": "CONTAINS",
+            "to": "P-110"
+          },
+          {
+            "from": "A-100",
+            "type": "CONTAINS",
+            "to": "P-120"
+          },
+          {
+            "from": "A-100",
+            "type": "CONTAINS",
+            "to": "P-130"
+          },
+          {
+            "from": "A-200",
+            "type": "CONTAINS",
+            "to": "P-210"
+          },
+          {
+            "from": "A-200",
+            "type": "CONTAINS",
+            "to": "P-220"
+          },
+          {
+            "from": "P-100",
+            "type": "NAVIGATES_TO",
+            "to": "P-110"
+          },
+          {
+            "from": "P-100",
+            "type": "NAVIGATES_TO",
+            "to": "P-130"
+          },
+          {
+            "from": "P-100",
+            "type": "NAVIGATES_TO",
+            "to": "P-210"
+          },
+          {
+            "from": "P-110",
+            "type": "NAVIGATES_TO",
+            "to": "P-120"
+          },
+          {
+            "from": "P-130",
+            "type": "NAVIGATES_TO",
+            "to": "P-120"
+          },
+          {
+            "from": "P-210",
+            "type": "NAVIGATES_TO",
+            "to": "P-220"
+          }
+        ],
+        "derived": {
+          "node_annotations": [],
+          "edge_annotations": [],
+          "node_groups": [],
+          "view_metadata": {}
+        },
+        "omissions": [],
+        "notes": [
+          "Hierarchy for IA view is driven by CONTAINS."
+        ]
+      },
+      "diagnostics": []
+    }
+  ],
+  "resulting_revision": "rev_823cab9c409a230ce7a485558cfb40be8d0e94d74f0fff82dc1f46e56ab53a9d"
+}

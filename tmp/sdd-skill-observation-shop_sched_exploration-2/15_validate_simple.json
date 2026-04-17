@@ -2,7 +2,7 @@
   "kind": "sdd-validation",
   "uri": "sdd://document/shop_sched_exploration.sdd/validation/simple",
   "path": "shop_sched_exploration.sdd",
-  "revision": "rev_2049491bbf13d20c555855cee2d5bc67e127074f4ecdf5d8ec9cbb0905d988ff",
+  "revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
   "profile_id": "simple",
   "report": {
     "error_count": 0,

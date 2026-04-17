@@ -5,7 +5,7 @@
   "revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
   "change_set": {
     "kind": "sdd-change-set",
-    "change_set_id": "chg_244d7dbb-fdf9-4af5-884d-6cf769fcefb5",
+    "change_set_id": "chg_cf645dfc-4b77-48ac-b9b8-c755361ea510",
     "path": "shop_sched_exploration.sdd",
     "origin": "create_document",
     "document_effect": "created",

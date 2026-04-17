@@ -1,0 +1,225 @@
+{
+  "kind": "sdd-contract-subject-detail",
+  "subject": {
+    "subject_id": "helper.command.validate",
+    "surface_kind": "helper_command",
+    "surface_name": "validate",
+    "summary": "Return validation diagnostics for the current persisted document revision.",
+    "stability": "stable",
+    "mutates_repo_state": "never",
+    "input_shape_id": "shared.shape.validate_document_args",
+    "output_shape_id": "shared.shape.validation_resource",
+    "detail_modes": [
+      "static",
+      "bundle_resolved"
+    ],
+    "has_deep_introspection": true
+  },
+  "input_shape": {
+    "shape_id": "shared.shape.validate_document_args",
+    "summary": "Validate-document request payload.",
+    "schema_format": "json_schema_2020_12",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "profile_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "profile_id"
+      ]
+    },
+    "stability": "stable"
+  },
+  "output_shape": {
+    "shape_id": "shared.shape.validation_resource",
+    "summary": "Validation resource payload.",
+    "schema_format": "json_schema_2020_12",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "sdd-validation"
+          ]
+        },
+        "uri": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "profile_id": {
+          "type": "string"
+        },
+        "report": {
+          "type": "object",
+          "properties": {
+            "error_count": {
+              "type": "integer"
+            },
+            "warning_count": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "error_count",
+            "warning_count"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stage": {
+                "type": "string",
+                "enum": [
+                  "bundle",
+                  "parse",
+                  "compile",
+                  "validate",
+                  "project",
+                  "render",
+                  "cli"
+                ]
+              },
+              "code": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "error",
+                  "warn",
+                  "info"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "span": {
+                "type": "object",
+                "properties": {
+                  "line": {
+                    "type": "number"
+                  },
+                  "column": {
+                    "type": "number"
+                  },
+                  "endLine": {
+                    "type": "number"
+                  },
+                  "endColumn": {
+                    "type": "number"
+                  },
+                  "startOffset": {
+                    "type": "number"
+                  },
+                  "endOffset": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "line",
+                  "column",
+                  "endLine",
+                  "endColumn",
+                  "startOffset",
+                  "endOffset"
+                ]
+              },
+              "ruleId": {
+                "type": "string"
+              },
+              "profileId": {
+                "type": "string"
+              },
+              "relatedIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "stage",
+              "code",
+              "severity",
+              "message",
+              "file"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "uri",
+        "path",
+        "revision",
+        "profile_id",
+        "diagnostics"
+      ]
+    },
+    "stability": "stable"
+  },
+  "constraints": [],
+  "bindings": [
+    {
+      "binding_id": "shared.binding.validate_document.profile_id",
+      "applies_to_shape_id": "shared.shape.validate_document_args",
+      "applies_to_json_pointer": "/profile_id",
+      "kind": "bundle_value_set",
+      "bundle_source": {
+        "artifact": "manifest_profiles",
+        "selector": "profiles"
+      },
+      "static_behavior": "reference_only",
+      "bundle_resolved_behavior": "expand_values",
+      "summary": "profile_id is bundle-owned and must be resolved from the active bundle profiles list.",
+      "resolved_values": [
+        {
+          "value": "simple",
+          "metadata": {
+            "intent": "Low-noise drafting with strict structural validation."
+          }
+        },
+        {
+          "value": "permissive",
+          "metadata": {
+            "intent": "Warning-first governance with strict structural validation."
+          }
+        },
+        {
+          "value": "strict",
+          "metadata": {
+            "intent": "Strict governance for production-ready authoring."
+          }
+        }
+      ]
+    }
+  ],
+  "continuation": [],
+  "resolution": {
+    "mode": "bundle_resolved",
+    "bundle_name": "sdd-text-spec-bundle",
+    "bundle_version": "0.1"
+  }
+}

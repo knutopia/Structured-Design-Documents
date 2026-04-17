@@ -1,0 +1,354 @@
+{
+  "kind": "sdd-authoring-intent-result",
+  "path": "shop_sched_exploration.sdd",
+  "base_revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
+  "resulting_revision": "rev_c5ebf2aee9e132ee4e27a6c8a23a0e0421c750e3ae9c8372c4d4840859a580b0",
+  "mode": "dry_run",
+  "status": "applied",
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area-admin-review",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-200",
+        "name": "Admin Review",
+        "edges": [
+          {
+            "local_id": "contains-review-customer-inquiries",
+            "rel_type": "CONTAINS",
+            "to": "P-210",
+            "to_name": "Review Customer Inquiries",
+            "placement": {
+              "mode": "last"
+            }
+          },
+          {
+            "local_id": "contains-volunteer-detail",
+            "rel_type": "CONTAINS",
+            "to": "P-220",
+            "to_name": "Volunteer Detail",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place-review-customer-inquiries",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-210",
+        "name": "Review Customer Inquiries",
+        "edges": [
+          {
+            "local_id": "nav-review-to-volunteer-detail",
+            "rel_type": "NAVIGATES_TO",
+            "to": "P-220",
+            "to_name": "Volunteer Detail",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place-volunteer-detail",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-220",
+        "name": "Volunteer Detail"
+      }
+    }
+  ],
+  "change_set": {
+    "kind": "sdd-change-set",
+    "change_set_id": "chg_b4627f4e-b195-47dd-96c7-ee0c88f12c3b",
+    "path": "shop_sched_exploration.sdd",
+    "origin": "apply_authoring_intent",
+    "document_effect": "updated",
+    "base_revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
+    "mode": "dry_run",
+    "status": "applied",
+    "undo_eligible": false,
+    "operations": [
+      {
+        "kind": "insert_node_block",
+        "node_type": "Area",
+        "node_id": "A-200",
+        "name": "Admin Review",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb",
+        "rel_type": "CONTAINS",
+        "to": "P-210",
+        "to_name": "Review Customer Inquiries",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb",
+        "rel_type": "CONTAINS",
+        "to": "P-220",
+        "to_name": "Volunteer Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-210",
+        "name": "Review Customer Inquiries",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_39caa961fd48b3bb37f97b7f715772a42e497ea483a9b6be047ad78a988410c2",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-220",
+        "to_name": "Volunteer Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_39caa961fd48b3bb37f97b7f715772a42e497ea483a9b6be047ad78a988410c2"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-220",
+        "name": "Volunteer Detail",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      }
+    ],
+    "summary": {
+      "node_insertions": [
+        {
+          "handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb",
+          "node_id": "A-200",
+          "node_type": "Area"
+        },
+        {
+          "handle": "hdl_39caa961fd48b3bb37f97b7f715772a42e497ea483a9b6be047ad78a988410c2",
+          "node_id": "P-210",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_68f7336bd4877508eb2515af6a80b7c35f37bdd80152ddfd632a01e7c99a24fd",
+          "node_id": "P-220",
+          "node_type": "Place"
+        }
+      ],
+      "node_deletions": [],
+      "node_renames": [],
+      "property_changes": [],
+      "edge_insertions": [
+        {
+          "handle": "hdl_2f201993bbc2c505e0670817960f8608839cf799aa89a7ff27366b2961a8964b",
+          "parent_handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb",
+          "rel_type": "CONTAINS",
+          "to": "P-210"
+        },
+        {
+          "handle": "hdl_389349acb2f4a48e97f64deccec2928da59f0c43103512d48677cd4544ddba4f",
+          "parent_handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb",
+          "rel_type": "CONTAINS",
+          "to": "P-220"
+        },
+        {
+          "handle": "hdl_2f9df74d829159a3d44251890b1306702d9d8823685664d4b94071a8a8438981",
+          "parent_handle": "hdl_39caa961fd48b3bb37f97b7f715772a42e497ea483a9b6be047ad78a988410c2",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-220"
+        }
+      ],
+      "edge_deletions": [],
+      "ordering_changes": []
+    },
+    "diagnostics": [],
+    "projection_results": [
+      {
+        "view_id": "ia_place_map",
+        "projection": {
+          "schema": "sdd-text-view-projection",
+          "version": "0.1",
+          "view_id": "ia_place_map",
+          "source_example": "shop_sched_exploration",
+          "nodes": [
+            {
+              "id": "A-100",
+              "type": "Area",
+              "name": "Mechanic's Scheduling"
+            },
+            {
+              "id": "A-200",
+              "type": "Area",
+              "name": "Admin Review"
+            },
+            {
+              "id": "P-100",
+              "type": "Place",
+              "name": "Dashboard"
+            },
+            {
+              "id": "P-110",
+              "type": "Place",
+              "name": "Open Shifts"
+            },
+            {
+              "id": "P-120",
+              "type": "Place",
+              "name": "Shift Detail"
+            },
+            {
+              "id": "P-130",
+              "type": "Place",
+              "name": "My Schedule"
+            },
+            {
+              "id": "P-210",
+              "type": "Place",
+              "name": "Review Customer Inquiries"
+            },
+            {
+              "id": "P-220",
+              "type": "Place",
+              "name": "Volunteer Detail"
+            }
+          ],
+          "edges": [
+            {
+              "from": "A-100",
+              "type": "CONTAINS",
+              "to": "P-110"
+            },
+            {
+              "from": "A-100",
+              "type": "CONTAINS",
+              "to": "P-120"
+            },
+            {
+              "from": "A-100",
+              "type": "CONTAINS",
+              "to": "P-130"
+            },
+            {
+              "from": "A-200",
+              "type": "CONTAINS",
+              "to": "P-210"
+            },
+            {
+              "from": "A-200",
+              "type": "CONTAINS",
+              "to": "P-220"
+            },
+            {
+              "from": "P-100",
+              "type": "NAVIGATES_TO",
+              "to": "P-110"
+            },
+            {
+              "from": "P-100",
+              "type": "NAVIGATES_TO",
+              "to": "P-130"
+            },
+            {
+              "from": "P-110",
+              "type": "NAVIGATES_TO",
+              "to": "P-120"
+            },
+            {
+              "from": "P-130",
+              "type": "NAVIGATES_TO",
+              "to": "P-120"
+            },
+            {
+              "from": "P-210",
+              "type": "NAVIGATES_TO",
+              "to": "P-220"
+            }
+          ],
+          "derived": {
+            "node_annotations": [],
+            "edge_annotations": [],
+            "node_groups": [],
+            "view_metadata": {}
+          },
+          "omissions": [],
+          "notes": [
+            "Hierarchy for IA view is driven by CONTAINS."
+          ]
+        },
+        "diagnostics": []
+      }
+    ],
+    "resulting_revision": "rev_c5ebf2aee9e132ee4e27a6c8a23a0e0421c750e3ae9c8372c4d4840859a580b0"
+  },
+  "created_targets": [
+    {
+      "local_id": "area-admin-review",
+      "kind": "node",
+      "handle": "hdl_f6f47e6a646ca60e030576cb638591e32a516aff12d6b98008f69494769f58cb"
+    },
+    {
+      "local_id": "contains-review-customer-inquiries",
+      "kind": "edge",
+      "handle": "hdl_2f201993bbc2c505e0670817960f8608839cf799aa89a7ff27366b2961a8964b",
+      "parent_local_id": "area-admin-review"
+    },
+    {
+      "local_id": "contains-volunteer-detail",
+      "kind": "edge",
+      "handle": "hdl_389349acb2f4a48e97f64deccec2928da59f0c43103512d48677cd4544ddba4f",
+      "parent_local_id": "area-admin-review"
+    },
+    {
+      "local_id": "place-review-customer-inquiries",
+      "kind": "node",
+      "handle": "hdl_39caa961fd48b3bb37f97b7f715772a42e497ea483a9b6be047ad78a988410c2"
+    },
+    {
+      "local_id": "nav-review-to-volunteer-detail",
+      "kind": "edge",
+      "handle": "hdl_2f9df74d829159a3d44251890b1306702d9d8823685664d4b94071a8a8438981",
+      "parent_local_id": "place-review-customer-inquiries"
+    },
+    {
+      "local_id": "place-volunteer-detail",
+      "kind": "node",
+      "handle": "hdl_68f7336bd4877508eb2515af6a80b7c35f37bdd80152ddfd632a01e7c99a24fd"
+    }
+  ],
+  "diagnostics": []
+}

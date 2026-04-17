@@ -1,0 +1,75 @@
+{
+  "path": "shop_sched_exploration.sdd",
+  "base_revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
+  "validate_profile": "simple",
+  "projection_views": ["ia_place_map"],
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area-admin-review",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-200",
+        "name": "Admin Review",
+        "edges": [
+          {
+            "local_id": "contains-review-customer-inquiries",
+            "rel_type": "CONTAINS",
+            "to": "P-210",
+            "to_name": "Review Customer Inquiries",
+            "placement": {
+              "mode": "last"
+            }
+          },
+          {
+            "local_id": "contains-volunteer-detail",
+            "rel_type": "CONTAINS",
+            "to": "P-220",
+            "to_name": "Volunteer Detail",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place-review-customer-inquiries",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-210",
+        "name": "Review Customer Inquiries",
+        "edges": [
+          {
+            "local_id": "nav-review-to-volunteer-detail",
+            "rel_type": "NAVIGATES_TO",
+            "to": "P-220",
+            "to_name": "Volunteer Detail",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place-volunteer-detail",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "P-220",
+        "name": "Volunteer Detail"
+      }
+    }
+  ]
+}

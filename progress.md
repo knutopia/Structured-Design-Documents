@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-recheck manual examples, re-run skill
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
@@ -11,6 +12,11 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Fri 4-17-26
+
+-skill doc updates to match new helper contract
+-added semantic guidance to skill
 
 ## Thu 4-16-26
 

@@ -1,0 +1,12 @@
+{
+  "kind": "sdd-validation",
+  "uri": "sdd://document/shop_sched_exploration.sdd/validation/simple",
+  "path": "shop_sched_exploration.sdd",
+  "revision": "rev_823cab9c409a230ce7a485558cfb40be8d0e94d74f0fff82dc1f46e56ab53a9d",
+  "profile_id": "simple",
+  "report": {
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "diagnostics": []
+}

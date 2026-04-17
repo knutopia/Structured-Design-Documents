@@ -55,7 +55,7 @@ If the bootstrap continuation rule matters for planning the next step, fetch the
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.create
 ```
 
-For first-pass scaffold creation, prefer `author`. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
+For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires explicit semantic relationships for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics; author the bundle-defined relationship explicitly when the intended outcome depends on it. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
 
 ## 4. Edit An Existing Document
 
@@ -84,6 +84,8 @@ Inspect returns:
 Build low-level change requests from that returned `revision` and those handles. Do not invent handles.
 
 Use `author` when the task is mostly scaffold creation or nested structure authoring. Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
+
+Before composing either request, determine whether the intended result depends on explicit semantic relationships rather than nesting alone. Nesting is an authoring affordance, not a semantic relationship. When the change should affect hierarchy, flow, navigation, ordering, or other projected meaning, resolve the bundle-defined relationship first and author it explicitly.
 
 Before composing complex nested `author`, `apply`, or `undo` JSON, fetch the current subject detail in static mode rather than spelunking code or tests for normal request-shape knowledge:
 
@@ -128,6 +130,7 @@ Use `author` or `apply` as a dry run by default. Omit `mode` or set `mode` to `"
 If you intend to preview under a profile later, include the same `validate_profile` here first.
 
 If you need nested request-shape detail, semantic constraints, or continuation rules before composing the mutation payload, fetch the static subject detail with `contract` first.
+If helper discovery and contract detail are still insufficient to determine the needed semantic relationship, read the authoritative bundle/spec material before relying on examples.
 
 Example low-level `apply` request shape:
 
@@ -167,8 +170,9 @@ A dry run is acceptable for preview gating only when:
 
 - `status` is `applied`
 - the selected `validate_profile` reports no parse or validation errors
+- for view-sensitive structural work, the relevant `projection_results` reflect the intended semantic hierarchy, flow, navigation, or ordering rather than only a structurally valid request
 
-If parse or validation errors remain, continue the relevant create/author-or-inspect/author-or-apply cycle and do not preview yet.
+If parse or validation errors remain, or if the selected projection does not reflect the intended semantic structure, continue the relevant create/author-or-inspect/author-or-apply cycle and do not preview yet.
 
 ## 7. Commit A Change Set
 
@@ -196,7 +200,7 @@ These commands read the current on-disk document only. They do not inspect dry-r
 
 Interpret requests for a visible result semantically, not only from exact technical words. Phrases such as "show it", "render it", "draw it", "make a diagram", "show the information architecture", and "show the place map" should normally produce a saved user-facing artifact.
 
-If the user wants a saved preview artifact, use `sdd show` after the last committed revision has already passed a clean dry-run validation under the same profile:
+If the user wants a saved preview artifact, use `sdd show` after the last committed revision has already passed a clean dry-run validation under the same profile and the gating dry run confirmed the intended semantics through projection:
 
 ```bash
 TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -221,7 +225,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
 ```
 
 `sdd-helper preview` is for transient rendered confirmation, not for structured mutation or the default saved deliverable.
-It is not a substitute for validation. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state.
+It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state whose projection already reflected the intended semantics.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 10. Undo A Helper-Managed Commit

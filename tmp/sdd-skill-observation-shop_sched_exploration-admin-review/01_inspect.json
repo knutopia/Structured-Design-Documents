@@ -1,0 +1,193 @@
+{
+  "kind": "sdd-document-inspect",
+  "uri": "sdd://document/shop_sched_exploration.sdd/inspect",
+  "path": "shop_sched_exploration.sdd",
+  "revision": "rev_7219da4ee92314e45ce5ac7f7bccf7b25d55fdab076a599cb1a36c162faaa363",
+  "effective_version": "0.1",
+  "top_level_order": [
+    "hdl_5b9a5d0a177906b281c94c3efcacbe489716b3bf15f8267a518f6c702e069250",
+    "hdl_6a9c19bd8525030fa7b60f7b7996461d4f5625eb27fe43934d6f05fe4adae764",
+    "hdl_0b73036371b8efaa579dae6563df8f59796a0223c77f0a0aee0838f36cee8b9c",
+    "hdl_fafce08e1ed479a2fc2752e38662fd3745c12655c9246cfdda27ba03e6adcf91",
+    "hdl_03c3feb78e4a52d2e1fb72e99c2e2e701f9ff7d736515f3c7d16842f73940d77"
+  ],
+  "nodes": [
+    {
+      "handle": "hdl_5b9a5d0a177906b281c94c3efcacbe489716b3bf15f8267a518f6c702e069250",
+      "node_type": "Place",
+      "node_id": "P-100",
+      "name": "Dashboard",
+      "parent_handle": null,
+      "body_stream": [
+        "hdl_5e44a3125e88861535d316dc24de60fa810a6eb606b1dca90d845ec5e82f29a8",
+        "hdl_21821610c9a7cce1064233a2eb1c78b2a92d5c5ce0f79e5d891b7ab432b8563b"
+      ],
+      "structural_order_streams": {}
+    },
+    {
+      "handle": "hdl_6a9c19bd8525030fa7b60f7b7996461d4f5625eb27fe43934d6f05fe4adae764",
+      "node_type": "Area",
+      "node_id": "A-100",
+      "name": "Mechanic's Scheduling",
+      "parent_handle": null,
+      "body_stream": [
+        "hdl_dd03e86168bb2b314bc5d370ea4a77d6c37b277919728b0b7f0170d22d4b719c",
+        "hdl_e9959fe504d8eb31ba5a9311ada41d0f3e6e4b2436834de55ce0bc3a0c5324ec",
+        "hdl_0906c9ab848c141f85bf5bd5da0cfdcc759f01319d6ab3fe1414cb2e3bb994fd"
+      ],
+      "structural_order_streams": {
+        "CONTAINS": [
+          "hdl_dd03e86168bb2b314bc5d370ea4a77d6c37b277919728b0b7f0170d22d4b719c",
+          "hdl_e9959fe504d8eb31ba5a9311ada41d0f3e6e4b2436834de55ce0bc3a0c5324ec",
+          "hdl_0906c9ab848c141f85bf5bd5da0cfdcc759f01319d6ab3fe1414cb2e3bb994fd"
+        ]
+      }
+    },
+    {
+      "handle": "hdl_0b73036371b8efaa579dae6563df8f59796a0223c77f0a0aee0838f36cee8b9c",
+      "node_type": "Place",
+      "node_id": "P-110",
+      "name": "Open Shifts",
+      "parent_handle": null,
+      "body_stream": [
+        "hdl_8aa9008455d8cd16bcdd364f03c00317c985f84165c07ca3df6e60ad59493cb2"
+      ],
+      "structural_order_streams": {}
+    },
+    {
+      "handle": "hdl_fafce08e1ed479a2fc2752e38662fd3745c12655c9246cfdda27ba03e6adcf91",
+      "node_type": "Place",
+      "node_id": "P-120",
+      "name": "Shift Detail",
+      "parent_handle": null,
+      "body_stream": [],
+      "structural_order_streams": {}
+    },
+    {
+      "handle": "hdl_03c3feb78e4a52d2e1fb72e99c2e2e701f9ff7d736515f3c7d16842f73940d77",
+      "node_type": "Place",
+      "node_id": "P-130",
+      "name": "My Schedule",
+      "parent_handle": null,
+      "body_stream": [
+        "hdl_0e3a9af0be0a8e9f6f548cb3411629c39596203faa71a33a49af90e4ddc46052"
+      ],
+      "structural_order_streams": {}
+    }
+  ],
+  "body_items": [
+    {
+      "handle": "hdl_5e44a3125e88861535d316dc24de60fa810a6eb606b1dca90d845ec5e82f29a8",
+      "kind": "edge_line",
+      "parent_handle": "hdl_5b9a5d0a177906b281c94c3efcacbe489716b3bf15f8267a518f6c702e069250",
+      "order_index": 0,
+      "edge": {
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-110",
+        "to_name": "Open Shifts",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": null
+      }
+    },
+    {
+      "handle": "hdl_21821610c9a7cce1064233a2eb1c78b2a92d5c5ce0f79e5d891b7ab432b8563b",
+      "kind": "edge_line",
+      "parent_handle": "hdl_5b9a5d0a177906b281c94c3efcacbe489716b3bf15f8267a518f6c702e069250",
+      "order_index": 1,
+      "edge": {
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-130",
+        "to_name": "My Schedule",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": null
+      }
+    },
+    {
+      "handle": "hdl_dd03e86168bb2b314bc5d370ea4a77d6c37b277919728b0b7f0170d22d4b719c",
+      "kind": "edge_line",
+      "parent_handle": "hdl_6a9c19bd8525030fa7b60f7b7996461d4f5625eb27fe43934d6f05fe4adae764",
+      "order_index": 0,
+      "edge": {
+        "rel_type": "CONTAINS",
+        "to": "P-110",
+        "to_name": "Open Shifts",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": 0
+      }
+    },
+    {
+      "handle": "hdl_e9959fe504d8eb31ba5a9311ada41d0f3e6e4b2436834de55ce0bc3a0c5324ec",
+      "kind": "edge_line",
+      "parent_handle": "hdl_6a9c19bd8525030fa7b60f7b7996461d4f5625eb27fe43934d6f05fe4adae764",
+      "order_index": 1,
+      "edge": {
+        "rel_type": "CONTAINS",
+        "to": "P-120",
+        "to_name": "Shift Detail",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": 1
+      }
+    },
+    {
+      "handle": "hdl_0906c9ab848c141f85bf5bd5da0cfdcc759f01319d6ab3fe1414cb2e3bb994fd",
+      "kind": "edge_line",
+      "parent_handle": "hdl_6a9c19bd8525030fa7b60f7b7996461d4f5625eb27fe43934d6f05fe4adae764",
+      "order_index": 2,
+      "edge": {
+        "rel_type": "CONTAINS",
+        "to": "P-130",
+        "to_name": "My Schedule",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": 2
+      }
+    },
+    {
+      "handle": "hdl_8aa9008455d8cd16bcdd364f03c00317c985f84165c07ca3df6e60ad59493cb2",
+      "kind": "edge_line",
+      "parent_handle": "hdl_0b73036371b8efaa579dae6563df8f59796a0223c77f0a0aee0838f36cee8b9c",
+      "order_index": 0,
+      "edge": {
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-120",
+        "to_name": "Shift Detail",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": null
+      }
+    },
+    {
+      "handle": "hdl_0e3a9af0be0a8e9f6f548cb3411629c39596203faa71a33a49af90e4ddc46052",
+      "kind": "edge_line",
+      "parent_handle": "hdl_03c3feb78e4a52d2e1fb72e99c2e2e701f9ff7d736515f3c7d16842f73940d77",
+      "order_index": 0,
+      "edge": {
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-120",
+        "to_name": "Shift Detail",
+        "event": null,
+        "guard": null,
+        "effect": null,
+        "props": {},
+        "structural_order_index": null
+      }
+    }
+  ],
+  "diagnostics": []
+}

@@ -1,0 +1,55 @@
+relationships:
+  - type: CONTAINS
+    meaning: Hierarchical containment or grouping for IA, journey structure, and UI hierarchy.
+    allowed_endpoints:
+      - from: Stage
+        to: Step
+      - from: Area
+        to: Place
+      - from: Place
+        to: Place
+      - from: Place
+        to: ViewState
+      - from: Component
+        to: Component
+    constraints:
+      - id: contains_acyclic
+        description: Containment should be acyclic.
+        severity_by_profile:
+          simple: warn
+          permissive: warn
+          strict: error
+        rule_logic:
+          kind: acyclic_subgraph
+          relationship: CONTAINS
+      - id: contains_single_parent_recommended
+        description: Node should have at most one structural parent via CONTAINS.
+        severity_by_profile:
+          simple: warn
+          permissive: warn
+          strict: warn
+        rule_logic:
+          kind: max_incoming_edges
+          relationship: CONTAINS
+          max_incoming: 1
+
+  - type: COMPOSED_OF
+    meaning: Composition relationship for UI assembly.
+    allowed_endpoints:
+      - from: Place
+        to: Component
+      - from: ViewState
+        to: Component
+    constraints:
+      - id: composed_of_acyclic
+        description: Composition should be acyclic.
+        severity_by_profile:
+          simple: warn
+          permissive: warn
+          strict: error
+        rule_logic:
+          kind: acyclic_subgraph
+          relationship: COMPOSED_OF
+
+  - type: PRECEDES
+    meaning: Temporal ordering in scenario, process, or state sequence.
