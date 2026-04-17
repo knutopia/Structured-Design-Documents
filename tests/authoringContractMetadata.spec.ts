@@ -23,6 +23,7 @@ describe("authoring contract metadata", () => {
       "helper.command.preview",
       "helper.command.git-status",
       "helper.command.git-commit",
+      "helper.command.contract",
       "helper.command.capabilities"
     ]);
   });

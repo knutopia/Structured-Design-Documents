@@ -10,6 +10,7 @@ import type {
   AuthoringIntent,
   ChangeOperation,
   ChangeSetResult,
+  ContractSubjectId,
   CreateDocumentArgs,
   HelperErrorResult,
   NodeRef,
@@ -20,6 +21,7 @@ import type {
   UndoChangeSetArgs
 } from "../authoring/contracts.js";
 import { applyAuthoringIntent } from "../authoring/authoringIntents.js";
+import { getContractSubjectDetail } from "../authoring/contractMetadata.js";
 import { AuthoringGitError, getGitStatus, gitCommit } from "../authoring/git.js";
 import { inspectDocument } from "../authoring/inspect.js";
 import { listDocuments, searchGraph } from "../authoring/listing.js";
@@ -655,6 +657,21 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   program.command("capabilities").action(() => {
     writeJson(deps, createHelperCapabilities());
   });
+
+  program
+    .command("contract")
+    .argument("<subject_id>", "shared contract subject id")
+    .action((subjectId: string) => {
+      const detail = getContractSubjectDetail(subjectId as ContractSubjectId);
+      if (!detail) {
+        throw new HelperCliError(
+          "invalid_args",
+          `Unknown contract subject_id '${subjectId}'. Use 'sdd-helper capabilities' to discover valid subjects.`
+        );
+      }
+
+      writeJson(deps, detail);
+    });
 
   program
     .command("inspect")

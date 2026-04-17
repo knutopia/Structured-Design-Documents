@@ -492,6 +492,36 @@ export interface HelperHelpStubResult {
   commands: string[];
 }
 
+export interface HelperCapabilitiesResultCommand {
+  name: string;
+  invocation: string;
+  summary: string;
+  mutates_repo_state: "never" | "conditional" | "always";
+  arguments: Array<{
+    name: string;
+    required: boolean;
+    description: string;
+  }>;
+  options: Array<{
+    flag: string;
+    required: boolean;
+    description: string;
+    value_name?: string;
+  }>;
+  request_body?: {
+    via_option: "--request";
+    top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+    source: "file_path_or_stdin_dash";
+  };
+  result_kind: string;
+  constraints: string[];
+  subject_id: ContractSubjectId;
+  input_shape_id?: ContractShapeId;
+  output_shape_id?: ContractShapeId;
+  has_deep_introspection: true;
+  detail_modes?: ContractResolutionMode[];
+}
+
 export interface HelperCapabilitiesResult {
   kind: "sdd-helper-capabilities";
   helper_name: "sdd-helper";
@@ -513,30 +543,11 @@ export interface HelperCapabilitiesResult {
       top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
     }>;
   };
-  commands: Array<{
-    name: string;
-    invocation: string;
-    summary: string;
-    mutates_repo_state: "never" | "conditional" | "always";
-    arguments: Array<{
-      name: string;
-      required: boolean;
-      description: string;
-    }>;
-    options: Array<{
-      flag: string;
-      required: boolean;
-      description: string;
-      value_name?: string;
-    }>;
-    request_body?: {
-      via_option: "--request";
-      top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
-      source: "file_path_or_stdin_dash";
-    };
-    result_kind: string;
-    constraints: string[];
-  }>;
+  commands: HelperCapabilitiesResultCommand[];
+}
+
+export interface HelperContractArgs {
+  subject_id: ContractSubjectId;
 }
 
 export type ContractSubjectId =
@@ -592,6 +603,8 @@ export interface ContractSubjectDetail {
     unresolved_binding_ids?: ContractBindingId[];
   };
 }
+
+export interface HelperContractDetailResult extends ContractSubjectDetail {}
 
 export interface ContractShapeDescriptor {
   shape_id: ContractShapeId;

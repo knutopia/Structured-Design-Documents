@@ -1,13 +1,26 @@
-import type { HelperCapabilitiesResult, HelperHelpStubResult } from "../authoring/contracts.js";
+import type {
+  ContractSubjectDescriptor,
+  ContractSubjectId,
+  HelperCapabilitiesResult,
+  HelperCapabilitiesResultCommand,
+  HelperHelpStubResult
+} from "../authoring/contracts.js";
+import { getContractSubjectDescriptor } from "../authoring/contractMetadata.js";
 
-type HelperCommandCapabilities = HelperCapabilitiesResult["commands"][number];
+interface HelperCommandPresentation {
+  subject_id: ContractSubjectId;
+  invocation: string;
+  arguments: HelperCapabilitiesResultCommand["arguments"];
+  options: HelperCapabilitiesResultCommand["options"];
+  request_body?: HelperCapabilitiesResultCommand["request_body"];
+  result_kind: HelperCapabilitiesResultCommand["result_kind"];
+  constraints: HelperCapabilitiesResultCommand["constraints"];
+}
 
-const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
+const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   {
-    name: "inspect",
+    subject_id: "helper.command.inspect",
     invocation: "sdd-helper inspect <document_path>",
-    summary: "Return the inspect payload for a parseable repo-relative .sdd document.",
-    mutates_repo_state: "never",
     arguments: [
       {
         name: "document_path",
@@ -23,10 +36,9 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "search",
-    invocation: "sdd-helper search --query <query> --node-type <node_type> --node-id <node_id> --under <path> --limit <count>",
-    summary: "Search compile-valid graph content across repo-local .sdd documents.",
-    mutates_repo_state: "never",
+    subject_id: "helper.command.search",
+    invocation:
+      "sdd-helper search --query <query> --node-type <node_type> --node-id <node_id> --under <path> --limit <count>",
     arguments: [],
     options: [
       {
@@ -67,10 +79,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "create",
+    subject_id: "helper.command.create",
     invocation: "sdd-helper create <document_path> [--version <version>]",
-    summary: "Create a new .sdd document through the authoring core.",
-    mutates_repo_state: "always",
     arguments: [
       {
         name: "document_path",
@@ -93,10 +103,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "apply",
+    subject_id: "helper.command.apply",
     invocation: "sdd-helper apply --request <file-or-stdin>",
-    summary: "Apply or dry-run a structured change set request.",
-    mutates_repo_state: "conditional",
     arguments: [],
     options: [
       {
@@ -118,10 +126,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "author",
+    subject_id: "helper.command.author",
     invocation: "sdd-helper author --request <file-or-stdin>",
-    summary: "Apply or dry-run high-level authoring intents through the shared authoring core.",
-    mutates_repo_state: "conditional",
     arguments: [],
     options: [
       {
@@ -144,10 +150,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "undo",
+    subject_id: "helper.command.undo",
     invocation: "sdd-helper undo --request <file-or-stdin>",
-    summary: "Undo a committed change set through a structured request.",
-    mutates_repo_state: "conditional",
     arguments: [],
     options: [
       {
@@ -169,10 +173,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "validate",
+    subject_id: "helper.command.validate",
     invocation: "sdd-helper validate <document_path> --profile <profile_id>",
-    summary: "Return validation diagnostics for the current persisted document revision.",
-    mutates_repo_state: "never",
     arguments: [
       {
         name: "document_path",
@@ -195,10 +197,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "project",
+    subject_id: "helper.command.project",
     invocation: "sdd-helper project <document_path> --view <view_id>",
-    summary: "Return a structured projection for the current persisted document revision.",
-    mutates_repo_state: "never",
     arguments: [
       {
         name: "document_path",
@@ -221,10 +221,9 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "preview",
-    invocation: "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]",
-    summary: "Render a preview artifact for a repo-relative .sdd document.",
-    mutates_repo_state: "never",
+    subject_id: "helper.command.preview",
+    invocation:
+      "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]",
     arguments: [
       {
         name: "document_path",
@@ -264,10 +263,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "git-status",
+    subject_id: "helper.command.git-status",
     invocation: "sdd-helper git-status [<document_path> ...]",
-    summary: "Inspect narrow .sdd-scoped git status for explicit paths or all repo-local .sdd files.",
-    mutates_repo_state: "never",
     arguments: [
       {
         name: "document_path",
@@ -283,10 +280,8 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "git-commit",
+    subject_id: "helper.command.git-commit",
     invocation: "sdd-helper git-commit --message <message> <document_path>...",
-    summary: "Stage and commit only explicit repo-relative .sdd paths.",
-    mutates_repo_state: "always",
     arguments: [
       {
         name: "document_path",
@@ -309,10 +304,25 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
     ]
   },
   {
-    name: "capabilities",
+    subject_id: "helper.command.contract",
+    invocation: "sdd-helper contract <subject_id>",
+    arguments: [
+      {
+        name: "subject_id",
+        required: true,
+        description: "Shared contract subject id."
+      }
+    ],
+    options: [],
+    result_kind: "sdd-contract-subject-detail",
+    constraints: [
+      "The subject_id must match a subject exposed through sdd-helper capabilities.",
+      "Gate 2 exposes static detail only; bundle-resolved introspection is not available yet."
+    ]
+  },
+  {
+    subject_id: "helper.command.capabilities",
     invocation: "sdd-helper capabilities",
-    summary: "Return the full machine-readable helper capability manifest.",
-    mutates_repo_state: "never",
     arguments: [],
     options: [],
     result_kind: "sdd-helper-capabilities",
@@ -320,7 +330,39 @@ const COMMAND_CAPABILITIES: HelperCommandCapabilities[] = [
       "This payload is static and does not require repo inspection or bundle loading."
     ]
   }
-];
+] as const;
+
+function requireDescriptor(subjectId: ContractSubjectId): ContractSubjectDescriptor {
+  const descriptor = getContractSubjectDescriptor(subjectId);
+  if (!descriptor) {
+    throw new Error(`Missing helper contract subject descriptor for '${subjectId}'.`);
+  }
+  return descriptor;
+}
+
+function mergeCommandCapabilities(presentation: HelperCommandPresentation): HelperCapabilitiesResultCommand {
+  const descriptor = requireDescriptor(presentation.subject_id);
+  return {
+    name: descriptor.surface_name,
+    invocation: presentation.invocation,
+    summary: descriptor.summary,
+    mutates_repo_state: descriptor.mutates_repo_state ?? "never",
+    arguments: presentation.arguments,
+    options: presentation.options,
+    request_body: presentation.request_body,
+    result_kind: presentation.result_kind,
+    constraints: presentation.constraints,
+    subject_id: descriptor.subject_id,
+    input_shape_id: descriptor.input_shape_id,
+    output_shape_id: descriptor.output_shape_id,
+    has_deep_introspection: descriptor.has_deep_introspection,
+    detail_modes: descriptor.detail_modes
+  };
+}
+
+const COMMAND_CAPABILITIES: readonly HelperCapabilitiesResultCommand[] = COMMAND_PRESENTATIONS.map(
+  mergeCommandCapabilities
+);
 
 const COMMAND_NAMES = COMMAND_CAPABILITIES.map((command) => command.name);
 
@@ -371,7 +413,7 @@ export function createHelperCapabilities(): HelperCapabilitiesResult {
         }
       ]
     },
-    commands: COMMAND_CAPABILITIES
+    commands: [...COMMAND_CAPABILITIES]
   };
 }
 

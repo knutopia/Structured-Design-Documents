@@ -297,7 +297,21 @@ describe("sdd-helper CLI", () => {
       summary: "JSON-first helper CLI for SDD authoring workflows.",
       note: "This is machine business: the helper is intended primarily for machine and LLM automation, and it returns JSON rather than text help.",
       capabilities_command: "sdd-helper capabilities",
-      commands: ["inspect", "search", "create", "apply", "author", "undo", "validate", "project", "preview", "git-status", "git-commit", "capabilities"]
+      commands: [
+        "inspect",
+        "search",
+        "create",
+        "apply",
+        "author",
+        "undo",
+        "validate",
+        "project",
+        "preview",
+        "git-status",
+        "git-commit",
+        "contract",
+        "capabilities"
+      ]
     });
   });
 
@@ -334,15 +348,39 @@ describe("sdd-helper CLI", () => {
       commands: expect.arrayContaining([
         expect.objectContaining({
           name: "capabilities",
-          result_kind: "sdd-helper-capabilities"
+          result_kind: "sdd-helper-capabilities",
+          subject_id: "helper.command.capabilities",
+          output_shape_id: "shared.shape.helper_capabilities_result",
+          has_deep_introspection: true,
+          detail_modes: ["static"]
+        }),
+        expect.objectContaining({
+          name: "contract",
+          invocation: "sdd-helper contract <subject_id>",
+          result_kind: "sdd-contract-subject-detail",
+          subject_id: "helper.command.contract",
+          input_shape_id: "shared.shape.helper_contract_args",
+          output_shape_id: "shared.shape.contract_subject_detail",
+          has_deep_introspection: true,
+          detail_modes: ["static"]
         }),
         expect.objectContaining({
           name: "author",
-          result_kind: "sdd-authoring-intent-result"
+          result_kind: "sdd-authoring-intent-result",
+          subject_id: "helper.command.author",
+          input_shape_id: "shared.shape.apply_authoring_intent_args",
+          output_shape_id: "shared.shape.apply_authoring_intent_result",
+          has_deep_introspection: true,
+          detail_modes: ["static"]
         }),
         expect.objectContaining({
           name: "create",
           invocation: "sdd-helper create <document_path> [--version <version>]",
+          subject_id: "helper.command.create",
+          input_shape_id: "shared.shape.create_document_args",
+          output_shape_id: "shared.shape.create_document_result",
+          has_deep_introspection: true,
+          detail_modes: ["static"],
           options: [
             {
               flag: "--version",
@@ -357,12 +395,27 @@ describe("sdd-helper CLI", () => {
           ])
         }),
         expect.objectContaining({
-          name: "validate",
-          result_kind: "sdd-validation"
+          name: "project",
+          result_kind: "sdd-projection",
+          subject_id: "helper.command.project"
         }),
         expect.objectContaining({
-          name: "project",
-          result_kind: "sdd-projection"
+          name: "preview",
+          result_kind: "sdd-preview",
+          subject_id: "helper.command.preview",
+          input_shape_id: "shared.shape.render_preview_args",
+          output_shape_id: "shared.shape.render_preview_result",
+          has_deep_introspection: true,
+          detail_modes: ["static"]
+        }),
+        expect.objectContaining({
+          name: "validate",
+          result_kind: "sdd-validation",
+          subject_id: "helper.command.validate",
+          input_shape_id: "shared.shape.validate_document_args",
+          output_shape_id: "shared.shape.validation_resource",
+          has_deep_introspection: true,
+          detail_modes: ["static"]
         }),
         expect.objectContaining({
           name: "git-status",
@@ -372,6 +425,98 @@ describe("sdd-helper CLI", () => {
           ])
         })
       ])
+    });
+  });
+
+  it("returns static contract detail without loading bundle state", async () => {
+    const { deps, stdout, stderr, loadBundleMock } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "contract", "helper.command.author"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr).toEqual([]);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.author",
+        input_shape_id: "shared.shape.apply_authoring_intent_args",
+        output_shape_id: "shared.shape.apply_authoring_intent_result"
+      },
+      input_shape: {
+        shape_id: "shared.shape.apply_authoring_intent_args"
+      },
+      output_shape: {
+        shape_id: "shared.shape.apply_authoring_intent_result"
+      },
+      resolution: {
+        mode: "static"
+      }
+    });
+  });
+
+  it("returns create bootstrap continuation semantics through contract detail", async () => {
+    const { deps, stdout } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "contract", "helper.command.create"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.create"
+      },
+      continuation: [
+        {
+          kind: "create_revision_is_bootstrap_continuation_surface"
+        },
+        {
+          kind: "inspect_may_fail_on_empty_bootstrap"
+        }
+      ],
+      resolution: {
+        mode: "static"
+      }
+    });
+  });
+
+  it("returns unresolved binding references in static contract detail", async () => {
+    const { deps, stdout } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "contract", "helper.command.preview"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.preview"
+      },
+      bindings: [
+        {
+          binding_id: "shared.binding.render_preview.view_id"
+        },
+        {
+          binding_id: "shared.binding.render_preview.profile_id"
+        }
+      ],
+      resolution: {
+        mode: "static",
+        unresolved_binding_ids: [
+          "shared.binding.render_preview.view_id",
+          "shared.binding.render_preview.profile_id"
+        ]
+      }
+    });
+  });
+
+  it("returns invalid_args for unknown contract subjects", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "contract", "helper.command.unknown"], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message:
+        "Unknown contract subject_id 'helper.command.unknown'. Use 'sdd-helper capabilities' to discover valid subjects."
     });
   });
 

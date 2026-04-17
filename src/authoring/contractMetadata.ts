@@ -708,9 +708,25 @@ const helperCapabilitiesCommandSchema = objectSchema(
       ["via_option", "top_level_shape", "source"]
     ),
     result_kind: stringSchema(),
-    constraints: stringArraySchema
+    constraints: stringArraySchema,
+    subject_id: stringSchema(),
+    input_shape_id: stringSchema(),
+    output_shape_id: stringSchema(),
+    has_deep_introspection: booleanSchema(),
+    detail_modes: arraySchema(stringSchema(["static", "bundle_resolved"]))
   },
-  ["name", "invocation", "summary", "mutates_repo_state", "arguments", "options", "result_kind", "constraints"]
+  [
+    "name",
+    "invocation",
+    "summary",
+    "mutates_repo_state",
+    "arguments",
+    "options",
+    "result_kind",
+    "constraints",
+    "subject_id",
+    "has_deep_introspection"
+  ]
 );
 
 const helperCapabilitiesResultSchema = objectSchema(
@@ -749,6 +765,131 @@ const helperCapabilitiesResultSchema = objectSchema(
     commands: arraySchema(helperCapabilitiesCommandSchema)
   },
   ["kind", "helper_name", "summary", "discovery", "conventions", "commands"]
+);
+
+const contractSubjectDescriptorSchema = objectSchema(
+  {
+    subject_id: stringSchema(),
+    surface_kind: stringSchema(["helper_command", "mcp_tool", "mcp_resource", "mcp_prompt"]),
+    surface_name: stringSchema(),
+    summary: stringSchema(),
+    stability: stringSchema(["stable", "experimental", "deprecated"]),
+    mutates_repo_state: stringSchema(["never", "conditional", "always"]),
+    input_shape_id: stringSchema(),
+    output_shape_id: stringSchema(),
+    detail_modes: arraySchema(stringSchema(["static", "bundle_resolved"])),
+    has_deep_introspection: booleanSchema()
+  },
+  ["subject_id", "surface_kind", "surface_name", "summary", "stability", "detail_modes", "has_deep_introspection"]
+);
+
+const contractShapeDescriptorSchema = objectSchema(
+  {
+    shape_id: stringSchema(),
+    summary: stringSchema(),
+    schema_format: stringSchema(["json_schema_2020_12"]),
+    schema: anySchema,
+    stability: stringSchema(["stable", "experimental", "deprecated"])
+  },
+  ["shape_id", "summary", "schema_format", "schema", "stability"]
+);
+
+const contractConstraintSpecSchema = objectSchema(
+  {
+    constraint_id: stringSchema(),
+    applies_to_shape_id: stringSchema(),
+    applies_to_json_pointers: stringArraySchema,
+    kind: stringSchema([
+      "required_if",
+      "forbidden_if",
+      "unique_within_request",
+      "must_reference_earlier_local_id",
+      "same_revision_handle",
+      "commit_safe_continuation",
+      "dry_run_informational_only"
+    ]),
+    parameters: anySchema,
+    summary: stringSchema()
+  },
+  ["constraint_id", "applies_to_shape_id", "kind", "parameters", "summary"]
+);
+
+const contractBindingSpecSchema = objectSchema(
+  {
+    binding_id: stringSchema(),
+    applies_to_shape_id: stringSchema(),
+    applies_to_json_pointer: stringSchema(),
+    kind: stringSchema(["bundle_value_set"]),
+    bundle_source: objectSchema(
+      {
+        artifact: stringSchema(["manifest_profiles", "views_yaml", "vocab_node_types", "vocab_relationship_types"]),
+        selector: stringSchema()
+      },
+      ["artifact", "selector"]
+    ),
+    static_behavior: stringSchema(["reference_only"]),
+    bundle_resolved_behavior: stringSchema(["expand_values"]),
+    summary: stringSchema()
+  },
+  [
+    "binding_id",
+    "applies_to_shape_id",
+    "applies_to_json_pointer",
+    "kind",
+    "bundle_source",
+    "static_behavior",
+    "bundle_resolved_behavior",
+    "summary"
+  ]
+);
+
+const contractContinuationSpecSchema = objectSchema(
+  {
+    continuation_id: stringSchema(),
+    applies_to_subject_id: stringSchema(),
+    kind: stringSchema([
+      "result_revision_is_required_next_base_revision",
+      "commit_handles_are_safe_continuation_surfaces",
+      "dry_run_handles_are_informational_only",
+      "create_revision_is_bootstrap_continuation_surface",
+      "inspect_may_fail_on_empty_bootstrap"
+    ]),
+    summary: stringSchema(),
+    parameters: anySchema
+  },
+  ["continuation_id", "applies_to_subject_id", "kind", "summary"]
+);
+
+const contractExampleSpecSchema = objectSchema(
+  {
+    title: stringSchema(),
+    when_to_include: stringSchema(["explicit_request_only", "essential_only"]),
+    payload: anySchema
+  },
+  ["title", "when_to_include", "payload"]
+);
+
+const contractSubjectDetailSchema = objectSchema(
+  {
+    kind: stringSchema(["sdd-contract-subject-detail"]),
+    subject: contractSubjectDescriptorSchema,
+    input_shape: contractShapeDescriptorSchema,
+    output_shape: contractShapeDescriptorSchema,
+    constraints: arraySchema(contractConstraintSpecSchema),
+    bindings: arraySchema(contractBindingSpecSchema),
+    continuation: arraySchema(contractContinuationSpecSchema),
+    examples: arraySchema(contractExampleSpecSchema),
+    resolution: objectSchema(
+      {
+        mode: stringSchema(["static", "bundle_resolved"]),
+        bundle_name: stringSchema(),
+        bundle_version: stringSchema(),
+        unresolved_binding_ids: stringArraySchema
+      },
+      ["mode"]
+    )
+  },
+  ["kind", "subject", "constraints", "bindings", "continuation", "resolution"]
 );
 
 const SHAPES: readonly ContractShapeDescriptor[] = [
@@ -986,6 +1127,25 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     schema_format: "json_schema_2020_12",
     schema: helperCapabilitiesResultSchema,
     stability: "stable"
+  },
+  {
+    shape_id: "shared.shape.helper_contract_args",
+    summary: "Input payload for helper contract introspection.",
+    schema_format: "json_schema_2020_12",
+    schema: objectSchema(
+      {
+        subject_id: stringSchema()
+      },
+      ["subject_id"]
+    ),
+    stability: "stable"
+  },
+  {
+    shape_id: "shared.shape.contract_subject_detail",
+    summary: "Deep static contract detail for one helper or MCP subject.",
+    schema_format: "json_schema_2020_12",
+    schema: contractSubjectDetailSchema,
+    stability: "stable"
   }
 ] as const;
 
@@ -1119,6 +1279,18 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "always",
     input_shape_id: "shared.shape.helper_git_commit_args",
     output_shape_id: "shared.shape.helper_git_commit_result",
+    detail_modes: ["static"],
+    has_deep_introspection: true
+  },
+  {
+    subject_id: "helper.command.contract",
+    surface_kind: "helper_command",
+    surface_name: "contract",
+    summary: "Return full shared contract detail for one helper subject.",
+    stability: "stable",
+    mutates_repo_state: "never",
+    input_shape_id: "shared.shape.helper_contract_args",
+    output_shape_id: "shared.shape.contract_subject_detail",
     detail_modes: ["static"],
     has_deep_introspection: true
   },
