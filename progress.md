@@ -22,6 +22,7 @@
 -fixed show filename collisions
 -renamed prompt examples
 -sharpened skill workflow rules by intent
+-planned machine readable contract for helper
 
 ## Tue 4-14-26
 
