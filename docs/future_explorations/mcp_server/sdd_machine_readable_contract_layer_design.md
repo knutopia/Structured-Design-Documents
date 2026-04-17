@@ -626,11 +626,131 @@ This is the intended trade:
 - deep detail stays available when needed
 - the shared contract layer still becomes the real machine-readable authority
 
-## 10. Review Scenarios
+## 10. Skill Operating Instructions Integration
+
+The `sdd-skill` is an existing helper-first client of the shared SDD domain capabilities. Once the shared contract layer exists, the skill's operating instructions must be updated to consume that richer contract surface deliberately.
+
+This is not a separate architecture. The skill remains:
+
+- a runtime consumer of the helper surface
+- a consumer of the helper's contract discovery and introspection output
+- non-authoritative for nested request schemas, semantic constraints, continuation semantics, and bundle-bound value sets
+
+The skill must not become a second place where those contracts are manually restated and allowed to drift.
+
+### 10.1 Skill Position In The Architecture
+
+The design stance is:
+
+- the shared contract layer is the machine-readable authority
+- the helper is the CLI adapter that exposes that authority to the skill
+- the skill is the operating-instructions layer that decides when to call `capabilities`, when to call `contract`, and how to use the returned contract data safely
+
+This means the skill should become more contract-aware, not more schema-owning.
+
+### 10.2 Required Changes To The Skill's Operating Instructions
+
+The skill documentation should be revised so its normal decision flow is:
+
+1. use `sdd-helper capabilities` for lightweight command orientation when the current helper surface may matter
+2. use `sdd-helper contract <subject_id>` when the task requires full nested request or result shape detail, semantic constraints, continuation semantics, or bundle-binding metadata
+3. use `sdd-helper contract <subject_id> --resolve bundle` when the task requires active bundle-resolved values for bundle-bound fields such as `view_id` or `profile_id`
+
+The skill's documented helper surface should be updated to include:
+
+- `capabilities`
+- `contract`
+
+The skill's quick-start and workflow guidance should explicitly treat `contract` as the preferred source for:
+
+- composing `author` requests
+- composing `apply` requests when structural or semantic rule detail matters
+- composing `undo` requests when continuation or result-shape detail matters
+- understanding `create` bootstrap semantics
+- resolving bundle-bound preview or render arguments
+
+### 10.3 Skill Retrieval Policy
+
+The skill should adopt the following retrieval policy.
+
+Use `capabilities` by default for:
+
+- command inventory
+- high-level orientation
+- confirming whether a helper command exists
+
+Use `contract` in `static` mode when:
+
+- the skill is about to compose nested JSON for `author`, `apply`, or `undo`
+- the skill needs semantic constraints that are not safely inferable from top-level discovery
+- the skill needs continuation metadata such as dry-run versus commit-safe handles
+- the skill needs create-bootstrap caveats before planning the next step
+
+Use `contract` in `bundle_resolved` mode when:
+
+- the skill needs actual active values for bundle-bound fields
+- the skill wants to validate or propose `view_id` or `profile_id` values against the active bundle
+
+Do not call `contract` by default for:
+
+- simple `search`
+- simple `inspect`
+- simple `validate`
+- simple `project`
+- plain `sdd show` flows where the required `view_id` and `profile_id` are already known
+
+This preserves the progressive-disclosure model on the skill side as well as the helper side.
+
+### 10.4 Anti-Spelunking Rule For The Skill
+
+Once the richer contract layer exists, the skill's operating instructions should state a firmer fallback hierarchy:
+
+1. use `capabilities` for lightweight discovery
+2. use `contract` for deep contract detail
+3. only if those surfaces remain insufficient, consult code or prose documentation for gaps
+
+The skill should not inspect TypeScript contracts, validation logic, tests, or repo `.sdd` examples merely to recover nested helper request shape or normal continuation rules when the helper contract surfaces already provide that information.
+
+This does not ban code lookup entirely. Contract/code lookup remains acceptable when:
+
+- the helper contract surface is incomplete
+- the user is explicitly asking about implementation details
+- the task is debugging a contract/runtime mismatch
+
+### 10.5 Skill Documentation Boundaries
+
+The skill documentation should describe:
+
+- task-kind-first workflow
+- when to use `capabilities`
+- when to use `contract`
+- how to choose between `static` and `bundle_resolved`
+- how to treat continuation metadata safely
+
+The skill documentation should not duplicate:
+
+- full nested request schemas
+- full nested result schemas
+- expanded bundle-owned enums
+- long lists of semantic constraints that are now available through deep introspection
+
+Those belong in the shared contract layer and helper introspection output, not in hand-maintained skill prose.
+
+### 10.6 Canonical Skill Guidance And Sync Expectation
+
+Because the skill may exist both in the repository and as an installed local copy, this design adopts the following guidance stance:
+
+- the repository skill documentation is the canonical authored guidance
+- installed skill copies should be refreshed from that canonical guidance rather than independently evolved
+- the shared contract layer reduces drift risk further by moving detailed machine-readable contract knowledge out of the skill text and into helper-exposed introspection
+
+The result is that the skill stays concise and operational while the shared contract layer remains the deep authority.
+
+## 11. Review Scenarios
 
 The design is only acceptable if it cleanly supports the following scenarios.
 
-### 10.1 Skill Authoring With Deep Introspection
+### 11.1 Skill Authoring With Deep Introspection
 
 A skill calls `sdd-helper capabilities`, finds `helper.command.author`, reads its `subject_id`, then calls `sdd-helper contract helper.command.author`.
 
@@ -642,7 +762,7 @@ The returned subject detail gives the skill:
 
 The skill no longer needs to inspect TypeScript source just to build a valid request.
 
-### 10.2 Fresh-Document Bootstrap
+### 11.2 Fresh-Document Bootstrap
 
 A client inspects the `helper.command.create` subject detail and learns:
 
@@ -651,13 +771,13 @@ A client inspects the `helper.command.create` subject detail and learns:
 
 That allows the client to choose `create -> author` instead of assuming `create -> inspect -> author`.
 
-### 10.3 Bundle-Bound Value Resolution
+### 11.3 Bundle-Bound Value Resolution
 
 A client inspects `helper.command.preview` in `static` mode and sees that `view_id` and `profile_id` are bundle-bound refs rather than hardcoded enums.
 
 When it needs concrete allowed values, it requests `bundle_resolved` detail and receives the active bundle-derived values.
 
-### 10.4 Structural Schema Versus Semantic Constraints
+### 11.4 Structural Schema Versus Semantic Constraints
 
 A client learns from one subject detail that:
 
@@ -666,7 +786,7 @@ A client learns from one subject detail that:
 
 That distinction prevents the false assumption that every rule must be inferred from plain structural schema.
 
-### 10.5 Continuation Safety
+### 11.5 Continuation Safety
 
 A client learns from continuation metadata that:
 
@@ -675,11 +795,11 @@ A client learns from continuation metadata that:
 
 This lets the client continue helper workflows safely without over-generalizing dry-run results.
 
-### 10.6 Compact Discovery
+### 11.6 Compact Discovery
 
 A client doing simple orientation still uses `sdd-helper capabilities` and gets a compact, static payload. It does not pay the token or parsing cost of full authoring schemas unless it explicitly asks for them.
 
-## 11. Compatibility And Migration Stance
+## 12. Compatibility And Migration Stance
 
 This design is additive.
 
@@ -692,7 +812,7 @@ Locked compatibility decisions:
 
 The implementation may add new domain-core contract types and one new helper introspection command, but it must not break existing helper clients that only know the current `capabilities` payload.
 
-## 12. Explicitly Rejected Alternatives
+## 13. Explicitly Rejected Alternatives
 
 The following alternatives are rejected by this design:
 
@@ -705,7 +825,7 @@ The following alternatives are rejected by this design:
 - **Require a public MCP contract resource in the first slice**
   - rejected because internal consumption from the shared contract layer is sufficient for v1
 
-## 13. Required Future Revisions To `sdd_mcp_server_design.md`
+## 14. Required Future Revisions To `sdd_mcp_server_design.md`
 
 Once this design is implemented, `sdd_mcp_server_design.md` should be revised in these specific ways:
 
@@ -717,7 +837,7 @@ Once this design is implemented, `sdd_mcp_server_design.md` should be revised in
 
 Those revisions are documentation follow-on work. They are not part of this design document's implementation scope.
 
-## 14. Out Of Scope
+## 15. Out Of Scope
 
 This design does not include:
 
@@ -728,7 +848,7 @@ This design does not include:
 - renderer-stage public APIs
 - a public MCP contract resource in the first slice
 
-## 15. Closing Position
+## 16. Closing Position
 
 The correct place to add tooling-contract depth is the shared domain core, not the top-level helper discovery payload alone.
 
