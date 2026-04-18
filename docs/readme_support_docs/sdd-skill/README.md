@@ -11,7 +11,7 @@ The SDD Skill helps turn that description into a structured design document.
 Here is an example prompt:
 
 ```text
-Use [$sdd-skill](/mnt/c/Users/Knut/.codex/skills/sdd-skill/SKILL.md) to design a mechanic's scheduling app for a communal automotive shop.      
+Use $Sdd Skill to design a mechanic's scheduling app for a communal automotive shop.      
 
 Create a new SDD ("shop_sched_exploration") for it and show the information architecture as a simple diagram. Include:   
 - Dashboard
@@ -28,36 +28,29 @@ SDD full source: [shop_sched_exploration.sdd](examples/shop_sched_exploration.sd
 Trimmed excerpt:
 
 ```text
-SDD-TEXT 0.1
 Place P-100 "Dashboard"
-  owner=Design
-  description="Shop-wide overview of today's work, staffing, and bay readiness"
-  surface=web
-  route_or_key=/dashboard
-  access=auth
-  primary_nav=true
+  NAVIGATES_TO P-110 "Open Shifts"
+  NAVIGATES_TO P-130 "My Schedule"
 END
-Area A-200 "Mechanic's Scheduling"
-  owner=Ops
-  description="Mechanic-facing scheduling space for claiming shifts, reviewing shift details, and tracking assigned work"
-  scope=mechanic_scheduling
-  CONTAINS P-210 "Open Shifts"
-  CONTAINS P-220 "Shift Detail"
-  CONTAINS P-230 "My Schedule"
-  + Place P-210 "Open Shifts"
-    owner=Design
-    description="Browsable list of unclaimed repair shifts across shared bays and specialties"
-    surface=web
-    route_or_key=/scheduling/open-shifts
-    access=auth
-    primary_nav=true
-  END
+Area A-100 "Mechanic's Scheduling"
+  CONTAINS P-110 "Open Shifts"
+  CONTAINS P-120 "Shift Detail"
+  CONTAINS P-130 "My Schedule"
+END
+Place P-110 "Open Shifts"
+  NAVIGATES_TO P-120 "Shift Detail"
+END
+Place P-120 "Shift Detail"
+END
+Place P-130 "My Schedule"
+  NAVIGATES_TO P-120 "Shift Detail"
+END
 ```
 
 Information architecture from that first prompt:
 
-<a href="examples/shop_sched_exploration.ia_place_map.strict.svg">
-  <img src="examples/shop_sched_exploration.ia_place_map.strict.svg" alt="Scheduling app IA after the first prompt" height="230">
+<a href="examples/shop_sched_exploration.ia_place_map.simple.svg">
+  <img src="examples/shop_sched_exploration.ia_place_map.simple.svg" alt="Scheduling app IA after the first prompt" height="230">
 </a>
 
 ## What This Creates
@@ -77,10 +70,10 @@ Once the first structure exists, the next steps can stay conversational. For exa
 ### Add An Admin Review Area
 
 ```text
-Using $sdd-skill, add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail".
+Using $Sdd Skill , add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail". 
 Connect it from the Dashboard.
 
-Show the IA again. Use the simple profile for it.
+DO Show the IA again.
 ```
 
 Full source: [shop_sched_exploration_2.sdd](examples/shop_sched_exploration_2.sdd)
@@ -89,15 +82,19 @@ Trimmed excerpt:
 
 ```text
 Area A-300 "Admin Review"
-  owner=Ops
-  description="Coordinator workspace for reviewing inbound requests and approving volunteer signups"
-  scope=admin_review
+  CONTAINS P-300 "Admin Review"
   CONTAINS P-310 "Review Customer Inquiries"
   CONTAINS P-320 "Volunteer Detail"
-  + Place P-310 "Review Customer Inquiries"
-    owner=Ops
-    description="Coordinator queue for triaging customer inquiries and related volunteer signup requests"
-  END
+END
+# (...)
+Place P-300 "Admin Review"
+  NAVIGATES_TO P-310 "Review Customer Inquiries"
+  NAVIGATES_TO P-320 "Volunteer Detail"
+END
+Place P-310 "Review Customer Inquiries"
+END
+Place P-320 "Volunteer Detail"
+END
 ```
 
 Rendered output from the admin-area follow-up:
@@ -111,12 +108,12 @@ Note: because the prompt asked to use the simple profile for the IA, the diagram
 ### Add A Signup Flow And Show The UI Contracts
 
 ```text
-Using $sdd-skill, add a simple signup flow in Shift Detail, with these view states:
+Using $Sdd Skill, add a simple signup flow in Shift Detail, with these view states: 
 - View Shift
 - Confirm Signup
 - Signup Success
 
-Show the UI contracts. (simple profile)
+Show the UI contracts.
 ```
 
 Full source: [shop_sched_exploration_3.sdd](examples/shop_sched_exploration_3.sdd)
@@ -124,24 +121,19 @@ Full source: [shop_sched_exploration_3.sdd](examples/shop_sched_exploration_3.sd
 Trimmed excerpt, showing the added viewStates within Shift Detail:
 
 ```text
-+ Place P-220 "Shift Detail"
-    owner=Design
-    description="Detailed view of a specific shift with bay, skill, and tool requirements"
-    surface=web
-    route_or_key=/scheduling/shifts/:shift_id
-    access=auth
-    CONTAINS VS-220a "View Shift"
-    CONTAINS VS-220b "Confirm Signup"
-    CONTAINS VS-220c "Signup Success"
-    + ViewState VS-220a "View Shift"
-      TRANSITIONS_TO VS-220b "Confirm Signup"
-    END
-    + ViewState VS-220b "Confirm Signup"
-      TRANSITIONS_TO VS-220c "Signup Success"
-    END
-    + ViewState VS-220c "Signup Success"
-    END
+Place P-120 "Shift Detail"
+  CONTAINS VS-220a "View Shift"
+  CONTAINS VS-220b "Confirm Signup"
+  CONTAINS VS-220c "Signup Success"
+  + ViewState VS-220a "View Shift"
+    TRANSITIONS_TO VS-220b "Confirm Signup"
   END
+  + ViewState VS-220b "Confirm Signup"
+    TRANSITIONS_TO VS-220c "Signup Success"
+  END
+  + ViewState VS-220c "Signup Success"
+  END
+END
 ```
 
 Rendered output from the UI-contract follow-up, showing the viewState sequence:
@@ -152,21 +144,79 @@ Rendered output from the UI-contract follow-up, showing the viewState sequence:
 
 
 ### Simple Follow-Up Edit
+
 The same style also works for smaller follow-ups:
 
 ```text
-Using $sdd-skill, rename "Open Shifts" to "Available Shifts" and show the information architecture again.
+Using $Sdd Skill, rename "Open Shifts" to "Available Shifts" and show the information architecture again.
 ```
 
 (Of course a simple edit like this - or technically any edit - could also be done as a manual search-and-replace operation in am IDE text editor.)
+
+### Adding Descriptions
+
+The *description* field is not mandatory when using the *simple* profile, but it helps with making the SDD file scannable.
+
+```text
+Using $Sdd Skill please add descriptions.
+```
+
+Full source: [shop_sched_exploration_5.sdd](examples/shop_sched_exploration_5.sdd)
+
+Trimmed excerpt:
+
+```text
+SDD-TEXT 0.1
+Place P-100 "Dashboard"
+  description="Home overview with entry points to scheduling and coordinator review workflows."
+  NAVIGATES_TO P-110 "Available Shifts"
+  NAVIGATES_TO P-130 "My Schedule"
+  NAVIGATES_TO P-300 "Admin Review"
+END
+Area A-100 "Mechanic's Scheduling"
+  description="Scheduling area for browsing open work slots, reviewing shift details, and managing commitments."
+  CONTAINS P-110 "Available Shifts"
+  CONTAINS P-120 "Shift Detail"
+  CONTAINS P-130 "My Schedule"
+END
+Area A-300 "Admin Review"
+  description="Coordinator workspace for triaging inquiries and approving volunteer signups."
+  CONTAINS P-300 "Admin Review"
+  CONTAINS P-310 "Review Customer Inquiries"
+  CONTAINS P-320 "Volunteer Detail"
+END
+```
 
 ### Undo
 
 The skill allows undo:
 
 ```text
-Using $sdd-skill, undo the last change to the volunteer scheduling SDD and show the information architecture again.
+Using $sdd-skill, undo the descriptions.
 ```
+
+"And, they are gone:" [shop_sched_exploration_6.sdd](examples/shop_sched_exploration_6.sdd)
+
+Trimmed excerpt:
+
+```text
+SDD-TEXT 0.1
+Place P-100 "Dashboard"
+  NAVIGATES_TO P-110 "Available Shifts"
+  NAVIGATES_TO P-130 "My Schedule"
+  NAVIGATES_TO P-300 "Admin Review"
+END
+Area A-100 "Mechanic's Scheduling"
+  CONTAINS P-110 "Available Shifts"
+  CONTAINS P-120 "Shift Detail"
+  CONTAINS P-130 "My Schedule"
+END
+Area A-300 "Admin Review"
+  CONTAINS P-300 "Admin Review"
+  CONTAINS P-310 "Review Customer Inquiries"
+  CONTAINS P-320 "Volunteer Detail"
+END
+...
 
 (Undo is currently limited to a single step.)
 
@@ -181,8 +231,13 @@ Using $sdd-skill, show the information architecture.
 The skill then calls the sdd-show command. You could also call the show command directly in a terminal, without using the skill:
 
 ```bash
-####TODO
+pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
+
+Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
+
+<a href="examples/shop_sched_exploration_IA_as_a.png">
+  <img src="examples/shop_sched_exploration_IA_as_a.png" alt="CLI show generated IA diagram as a png" height="230">
 
 ## What Happens Behind The Scenes
 
@@ -194,10 +249,16 @@ For the technical workflow behind the examples, see the canonical repo skill bun
 
 ## Why Use The Skill Before You Start Coding
 
+By capturing the structural design design first, you create a real structure that a coding model (or a visual design creation model) can work from. That is a much stronger foundation than asking an LLM to "make an app" and hoping it invents a good product shape that meets your structural design ideas. Once code is written, it wants to stay in place. Changes take effort, come with risk and blast radius and token burn.
+
+If you use an LLM to code in a professional context, implementation is often driven by detailed requirements and technical design documents. Those inputs can be weak on structural design and user experience. By bringing an SDD into the mix, design enters the chat.
+
+Once code is written, every structural design refinement is a heavy operation that 
+
 If you begin coding from a one-line request, the model has to invent the product structure at the same time it is generating implementation details. That often leads to avoidable churn.
 
-With an SDD capturing the app design first, you give the coding model a real structure to work from. That is a much better starting point than asking an LLM to "make an app" and hoping it invents a good product shape on its own.
-
 ## Note: SDD During the Product Lifecycle
+
+The examples here focus on simple information architecture and a bit of state handling. SDD provides means to go into greater detail, with flows, nested components and service blueprints. SDD also provides means to capture more abstract *drivers* of design, with journeys and opportunity maps. The goal is to create an opportunity to create a full picture of structural design - which is helpful for delivering on the design promise.
 
 The example shown here shows a from-scratch workflow. It is exciting to envision, design and build a product from scratch. It is also, in practical terms, rare. Most actual work in a product business is concerned with changing, improving, and growing an existing product over a long period of time. In that situation, [SDD can make a strategic difference](../strategic_potential/README.md).

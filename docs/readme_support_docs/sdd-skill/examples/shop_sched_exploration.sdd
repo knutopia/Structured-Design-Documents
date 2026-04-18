@@ -1,0 +1,18 @@
+SDD-TEXT 0.1
+Place P-100 "Dashboard"
+  NAVIGATES_TO P-110 "Open Shifts"
+  NAVIGATES_TO P-130 "My Schedule"
+END
+Area A-100 "Mechanic's Scheduling"
+  CONTAINS P-110 "Open Shifts"
+  CONTAINS P-120 "Shift Detail"
+  CONTAINS P-130 "My Schedule"
+END
+Place P-110 "Open Shifts"
+  NAVIGATES_TO P-120 "Shift Detail"
+END
+Place P-120 "Shift Detail"
+END
+Place P-130 "My Schedule"
+  NAVIGATES_TO P-120 "Shift Detail"
+END
