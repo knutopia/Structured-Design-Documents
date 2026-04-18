@@ -128,15 +128,15 @@ File-link-only branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- stop there; do not create a display copy
+- stop there; do not call helper `preview`
 
 Inline-image branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- derive the saved artifact basename and request a display copy with helper `preview`
-- rely on the preview response metadata before the inline payload; `display_copy_path`, `notes`, and `diagnostics` appear before `artifact`, and `artifact` is serialized last
-- use the returned `display_copy_path` as the Markdown image source in the final response
+- call helper `preview` with the same document, view, profile, and format
+- use the returned `artifact_path` as the Markdown image source in the final response
+- keep the saved sibling artifact as the canonical file link
 
 Inline-image command:
 
@@ -144,13 +144,12 @@ Inline-image command:
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
   --view ia_place_map \
   --profile strict \
-  --format svg \
-  --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
+  --format svg
 ```
 
-Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline. Preview success payloads intentionally place `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and serialize `artifact` last so metadata remains visible if the payload is truncated in transport. Do not present `display_copy_path` as the real saved artifact. The saved sibling artifact is the canonical file for file links, while the temp copy under `/tmp/unique-previews` is only a presentation workaround because chat may cache local image content by absolute path.
+Helper `preview` returns `artifact_path`, an ephemeral absolute temp path under `/tmp/unique-previews` with a unique parent directory per invocation. Preview success payloads do not include inline SVG text or base64 PNG data. Do not present `artifact_path` as the real saved artifact. The saved sibling artifact is the canonical file for file links, while `artifact_path` is only a presentation/workflow path because chat may cache local image content by absolute path.
 
-If the user wants transient raw artifact output instead, use helper `preview`.
+If the user wants transient raw artifact output instead, use helper `preview` and consume the file at `artifact_path`.
 
 ## 6. Dry-Run A Helper Mutation
 
@@ -267,14 +266,15 @@ File-link-only branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- stop there; do not create a display copy
+- stop there; do not call helper `preview`
 
 Inline-image branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- derive the basename from the actual saved artifact path and request a temp display copy
-- use the returned `display_copy_path` as the Markdown image source in the final response
+- call helper `preview` with the same document, view, profile, and format
+- use the returned `artifact_path` as the Markdown image source in the final response
+- keep the saved sibling artifact as the canonical file link
 
 Inline-image command:
 
@@ -282,17 +282,16 @@ Inline-image command:
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
   --view ia_place_map \
   --profile strict \
-  --format svg \
-  --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
+  --format svg
 ```
 
-Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline. Do not present `display_copy_path` as the real saved artifact. Use the canonical sibling file for file links and the returned `display_copy_path` for the Markdown image. The temp copy under `/tmp/unique-previews` is only a presentation workaround for chat path caching, while the sibling artifact remains the real preview identity.
+Do not present `artifact_path` as the real saved artifact. Use the canonical sibling file for file links and the returned `artifact_path` for the Markdown image. The temp preview artifact under `/tmp/unique-previews` is only a presentation/workflow path for chat path caching and transient consumers, while the sibling artifact remains the real preview identity.
 
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. If multiple views are equally plausible, ask one short clarifying question.
 
 If the relevant `view_id` or `profile_id` is unknown, resolve the active bundle-owned values first with `contract --resolve bundle` before choosing arguments for `preview` or `sdd show`.
 
-Use helper preview when you need transient raw artifact output or a chat-safe display copy rather than the normal saved deliverable:
+Use helper preview when you need transient raw artifact output or a chat-safe artifact path rather than the normal saved deliverable:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_ia_trace.sdd \
@@ -303,7 +302,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
 ```
 
 `sdd-helper preview` is for transient rendered confirmation, not for structured mutation or the default saved deliverable.
-It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state whose projection already reflected the intended semantics. If `--display-copy-name` is used, treat the returned `display_copy_path` as a temp presentation path only, not as the canonical preview artifact path.
+It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the `validate_profile` used in the gating dry run, and the rendered output should come from that same committed state whose projection already reflected the intended semantics. Treat the returned `artifact_path` as a temp presentation/workflow path only, not as the canonical preview artifact path.
 If preview returns `sdd-helper-error`, read the helper message and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 10. Undo A Helper-Managed Commit

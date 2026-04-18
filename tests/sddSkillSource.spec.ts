@@ -43,36 +43,36 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("--resolve bundle");
     expect(workflowMarkdown).toContain("capabilities -> contract -> code/docs only if still insufficient");
     expect(skillMarkdown).toContain("/tmp/unique-previews");
-    expect(skillMarkdown).toContain("--display-copy-name");
+    expect(skillMarkdown).toContain("artifact_path");
     expect(skillMarkdown).toContain("Preview decision rules:");
     expect(skillMarkdown).toContain(
-      "If the final response will not embed an inline image, do not create a display copy."
+      "If the final response will embed an inline image, call helper `preview` and use the returned `artifact_path` as the Markdown image source."
     );
     expect(skillMarkdown).toContain(
-      "Preview success payloads place `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload"
+      "Preview success payloads expose `format`, `mime_type`, and `artifact_path`; they do not include inline SVG text or base64 PNG data."
     );
     expect(skillMarkdown).toContain(
-      "If a display copy is created, the final response must use `display_copy_path` as the Markdown image source."
+      "Canonical file links always point at the saved sibling artifact from `sdd show`; the temp `artifact_path` is never the canonical artifact."
     );
     expect(skillMarkdown).toContain(
-      "Canonical file links always point at the saved sibling artifact from `sdd show`;"
+      "helper gives each preview invocation a unique parent directory"
     );
-    expect(skillMarkdown).toContain("chat may cache local images by absolute path");
+    expect(skillMarkdown).toContain("Chat may cache local images by absolute path");
     expect(workflowMarkdown).toContain("/tmp/unique-previews");
-    expect(workflowMarkdown).toContain("--display-copy-name");
+    expect(workflowMarkdown).toContain("artifact_path");
     expect(workflowMarkdown).toContain("Use one of these branches and stop after the one that matches the final response:");
-    expect(workflowMarkdown).toContain("stop there; do not create a display copy");
+    expect(workflowMarkdown).toContain("stop there; do not call helper `preview`");
     expect(workflowMarkdown).toContain(
-      "display_copy_path`, `notes`, and `diagnostics` appear before `artifact`, and `artifact` is serialized last"
+      "Preview success payloads do not include inline SVG text or base64 PNG data."
     );
     expect(workflowMarkdown).toContain(
-      "Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline."
+      "use the returned `artifact_path` as the Markdown image source in the final response"
     );
     expect(workflowMarkdown).toContain(
-      "serialize `artifact` last so metadata remains visible if the payload is truncated in transport"
+      "consume the file at `artifact_path`"
     );
     expect(workflowMarkdown).toContain(
-      "Do not present `display_copy_path` as the real saved artifact."
+      "Do not present `artifact_path` as the real saved artifact."
     );
     expect(workflowMarkdown).toContain("Use the canonical sibling file for file links");
 

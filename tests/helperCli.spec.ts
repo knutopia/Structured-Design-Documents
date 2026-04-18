@@ -243,13 +243,11 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     view_id: "ia_place_map",
     profile_id: "strict",
     backend_id: "staged_ia_place_map_preview",
+    format: "svg",
+    mime_type: "image/svg+xml",
+    artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
     notes: [],
-    diagnostics: [],
-    artifact: {
-      format: "svg",
-      mime_type: "image/svg+xml",
-      text: "<svg>preview</svg>"
-    }
+    diagnostics: []
   }));
   const getGitStatusMock = vi.fn(async (): Promise<HelperGitStatusResult> => ({
     kind: "sdd-git-status",
@@ -461,7 +459,7 @@ describe("sdd-helper CLI", () => {
         expect.objectContaining({
           name: "preview",
           invocation:
-            "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]",
+            "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]",
           result_kind: "sdd-preview",
           subject_id: "helper.command.preview",
           input_shape_id: "shared.shape.render_preview_args",
@@ -469,11 +467,13 @@ describe("sdd-helper CLI", () => {
           has_deep_introspection: true,
           detail_modes: ["static", "bundle_resolved"],
           mutates_repo_state: "never",
-          options: expect.arrayContaining([
+          options: expect.not.arrayContaining([
             expect.objectContaining({
-              flag: "--display-copy-name",
-              value_name: "basename"
+              flag: "--display-copy-name"
             })
+          ]),
+          constraints: expect.arrayContaining([
+            "Preview responses do not include inline SVG text or base64 PNG data."
           ])
         }),
         expect.objectContaining({
@@ -1151,13 +1151,13 @@ describe("sdd-helper CLI", () => {
     expect(result.exitCode).toBe(0);
     expect(parseStdoutPayload(stdout)).toMatchObject({
       kind: "sdd-preview",
-      artifact: {
-        format: "svg"
-      }
+      format: "svg",
+      mime_type: "image/svg+xml",
+      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
     });
   });
 
-  it("forwards display-copy-name to preview and returns display_copy_path when requested", async () => {
+  it("forwards preview args and serializes artifact_path in the lightweight success payload", async () => {
     const renderPreview = vi.fn(async (): Promise<RenderPreviewResult> => ({
       kind: "sdd-preview",
       path: "docs/example.sdd",
@@ -1165,16 +1165,60 @@ describe("sdd-helper CLI", () => {
       view_id: "ia_place_map",
       profile_id: "strict",
       backend_id: "staged_ia_place_map_preview",
-      display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
+      format: "svg",
+      mime_type: "image/svg+xml",
+      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
       notes: [],
-      diagnostics: [],
-      artifact: {
-        format: "svg",
-        mime_type: "image/svg+xml",
-        text: "<svg>preview</svg>"
-      }
+      diagnostics: []
     }));
     const { deps, stdout } = createDeps({ renderPreview });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "preview",
+      "docs/example.sdd",
+      "--view",
+      "ia_place_map",
+      "--profile",
+      "strict",
+      "--format",
+      "svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderPreview).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/example.sdd",
+      view_id: "ia_place_map",
+      profile_id: "strict",
+      format: "svg",
+      backend_id: undefined
+    });
+    const payload = parseStdoutPayload(stdout) as Record<string, unknown>;
+    expect(payload).toMatchObject({
+      kind: "sdd-preview",
+      format: "svg",
+      mime_type: "image/svg+xml",
+      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
+    });
+    expect(payload).not.toHaveProperty("artifact");
+    expect(payload).not.toHaveProperty("display_copy_path");
+    expect(getTopLevelJsonKeyOrder(stdout.join(""))).toEqual([
+      "kind",
+      "path",
+      "revision",
+      "view_id",
+      "profile_id",
+      "backend_id",
+      "format",
+      "mime_type",
+      "artifact_path",
+      "notes",
+      "diagnostics"
+    ]);
+  });
+
+  it("rejects the removed preview display-copy option", async () => {
+    const { deps, stdout, renderPreviewMock } = createDeps();
     const result = await runHelperCli([
       "node",
       "sdd-helper",
@@ -1190,82 +1234,12 @@ describe("sdd-helper CLI", () => {
       "example.ia_place_map.strict.svg"
     ], deps);
 
-    expect(result.exitCode).toBe(0);
-    expect(renderPreview).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
-      path: "docs/example.sdd",
-      view_id: "ia_place_map",
-      profile_id: "strict",
-      format: "svg",
-      backend_id: undefined,
-      display_copy_name: "example.ia_place_map.strict.svg"
-    });
+    expect(result.exitCode).toBe(1);
+    expect(renderPreviewMock).not.toHaveBeenCalled();
     expect(parseStdoutPayload(stdout)).toMatchObject({
-      kind: "sdd-preview",
-      display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
-    });
-    expect(getTopLevelJsonKeyOrder(stdout.join(""))).toEqual([
-      "kind",
-      "path",
-      "revision",
-      "view_id",
-      "profile_id",
-      "backend_id",
-      "display_copy_path",
-      "notes",
-      "diagnostics",
-      "artifact"
-    ]);
-  });
-
-  it("rejects preview display-copy names with path separators", async () => {
-    const { deps, stdout, renderPreviewMock } = createDeps();
-    const result = await runHelperCli([
-      "node",
-      "sdd-helper",
-      "preview",
-      "docs/example.sdd",
-      "--view",
-      "ia_place_map",
-      "--profile",
-      "strict",
-      "--format",
-      "svg",
-      "--display-copy-name",
-      "../example.svg"
-    ], deps);
-
-    expect(result.exitCode).toBe(1);
-    expect(renderPreviewMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
       kind: "sdd-helper-error",
       code: "invalid_args",
-      message: "display_copy_name must be a basename without path separators."
-    });
-  });
-
-  it("rejects preview display-copy names whose extension does not match the format", async () => {
-    const { deps, stdout, renderPreviewMock } = createDeps();
-    const result = await runHelperCli([
-      "node",
-      "sdd-helper",
-      "preview",
-      "docs/example.sdd",
-      "--view",
-      "ia_place_map",
-      "--profile",
-      "strict",
-      "--format",
-      "svg",
-      "--display-copy-name",
-      "example.png"
-    ], deps);
-
-    expect(result.exitCode).toBe(1);
-    expect(renderPreviewMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
-      kind: "sdd-helper-error",
-      code: "invalid_args",
-      message: "display_copy_name must end with '.svg' to match format 'svg'."
+      message: expect.stringContaining("unknown option '--display-copy-name'")
     });
   });
 

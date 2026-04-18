@@ -248,15 +248,15 @@ interface HelperCapabilitiesResultCommand {
 
 ### Preview Generation
 
-#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]`
+#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
 
 - Purpose: render a preview artifact for a repo-relative `.sdd` document.
 - Use when: another tool, UI, or workflow needs preview output directly from the helper surface.
-- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]`
-- Key inputs: document path, `view`, `profile`, and `format`, with optional `backend` and `display-copy-name`.
+- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
+- Key inputs: document path, `view`, `profile`, and `format`, with optional `backend`.
 - Result kind: `sdd-preview`
-- Important constraints: if preview generation cannot produce an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics. When `--display-copy-name` is provided, it must be a basename without path separators or `..`, and its extension must match `--format`.
-- Practical notes: SVG artifacts are returned as text; PNG artifacts are returned as base64. Successful preview responses serialize `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and emit `artifact` last, so metadata remains visible if a large payload is truncated in transport. When `--display-copy-name` is present, the helper also writes an ephemeral display copy under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>` and returns `display_copy_path`. That temp path is a presentation convenience, not the canonical preview artifact path. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
+- Important constraints: if preview generation cannot produce or materialize an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
+- Practical notes: SVG and PNG previews are materialized to a helper-owned temp file and returned through `artifact_path`; the helper no longer returns inline SVG text or base64 PNG data. `artifact_path` is an absolute, ephemeral local path under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>`, with a unique parent directory for every successful preview invocation and a basename matching the `sdd show` default naming convention. This temp path is for immediate tool/UI consumption and is not the canonical saved preview artifact. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
 
 ### Narrow Git Workflows
 
@@ -292,7 +292,7 @@ interface HelperCapabilitiesResultCommand {
 - `sdd-change-set`: the structured result for `apply` and `undo`, whether applied or rejected.
 - `sdd-validation`: validation diagnostics for the current persisted document revision.
 - `sdd-projection`: projection output for the current persisted document revision.
-- `sdd-preview`: preview output with embedded SVG text or base64 PNG data.
+- `sdd-preview`: preview metadata plus an ephemeral local `artifact_path` for the materialized SVG or PNG file.
 - `sdd-git-status`: narrow `.sdd`-scoped git status information.
 - `sdd-git-commit`: the commit result for helper-scoped `.sdd` commits.
 - `sdd-helper-error`: the helper-level error payload for invalid args, invalid JSON, and runtime failures, with optional structured diagnostics.

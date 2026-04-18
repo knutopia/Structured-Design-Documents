@@ -223,7 +223,7 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   {
     subject_id: "helper.command.preview",
     invocation:
-      "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]",
+      "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]",
     arguments: [
       {
         name: "document_path",
@@ -255,20 +255,14 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         required: false,
         value_name: "backend_id",
         description: "Optional preview backend override."
-      },
-      {
-        flag: "--display-copy-name",
-        required: false,
-        value_name: "basename",
-        description: "Optional basename for an ephemeral display copy under /tmp/unique-previews."
       }
     ],
     result_kind: "sdd-preview",
     constraints: [
       "If preview cannot produce an artifact, the helper returns runtime_error with stage-specific messaging and any available diagnostics.",
-      "When --display-copy-name is provided, it must be a basename whose extension matches --format.",
-      "display_copy_path, when present, is an ephemeral temp-path convenience rather than the canonical preview artifact path.",
-      "Successful preview responses serialize metadata fields before the inline artifact payload and emit artifact last."
+      "Successful preview responses materialize the rendered SVG or PNG to a helper-owned temp file and return artifact_path.",
+      "artifact_path is an absolute, ephemeral local path under /tmp/unique-previews with a unique parent directory per preview invocation.",
+      "Preview responses do not include inline SVG text or base64 PNG data."
     ]
   },
   {

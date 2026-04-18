@@ -427,7 +427,6 @@ export interface RenderPreviewArgs {
   profile_id: ProfileId;
   format: "svg" | "png";
   backend_id?: PreviewBackendId;
-  display_copy_name?: string;
 }
 
 export interface RenderPreviewResult {
@@ -437,20 +436,11 @@ export interface RenderPreviewResult {
   view_id: ViewId;
   profile_id: ProfileId;
   backend_id: PreviewBackendId | string;
-  display_copy_path?: string;
+  format: "svg" | "png";
+  mime_type: "image/svg+xml" | "image/png";
+  artifact_path: string;
   notes: string[];
   diagnostics: Diagnostic[];
-  artifact:
-    | {
-        format: "svg";
-        mime_type: "image/svg+xml";
-        text: string;
-      }
-    | {
-        format: "png";
-        mime_type: "image/png";
-        base64: string;
-      };
 }
 
 export interface HelperGitStatusArgs {

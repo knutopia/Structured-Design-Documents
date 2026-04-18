@@ -1,12 +1,10 @@
 import { readFile } from "node:fs/promises";
 import type { Bundle } from "../bundle/types.js";
 import type { Diagnostic } from "../diagnostics/types.js";
+import { buildPreviewArtifactBasename } from "../previewArtifactPaths.js";
 import { renderSourcePreview } from "../renderer/previewWorkflow.js";
 import type { RenderPreviewArgs, RenderPreviewResult } from "./contracts.js";
-import {
-  materializePreviewDisplayCopy,
-  PreviewMaterializationError
-} from "./previewMaterialization.js";
+import { materializePreviewArtifact } from "./previewMaterialization.js";
 import { computeDocumentRevision, normalizeTextToLf } from "./revisions.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 
@@ -84,33 +82,26 @@ export async function renderPreview(
     );
   }
 
-  const artifact: RenderPreviewResult["artifact"] =
-    previewResult.artifact.format === "svg"
-      ? {
-          format: "svg",
-          mime_type: "image/svg+xml",
-          text: previewResult.artifact.text
-        }
-      : {
-          format: "png",
-          mime_type: "image/png",
-          base64: Buffer.from(previewResult.artifact.bytes).toString("base64")
-        };
-
-  let displayCopyPath: string | undefined;
-  if (args.display_copy_name !== undefined) {
-    try {
-      displayCopyPath = await materializePreviewDisplayCopy(artifact, args.display_copy_name);
-    } catch (error) {
-      if (error instanceof PreviewMaterializationError) {
-        throw error;
-      }
-      throw new AuthoringPreviewError(
-        `Preview materialization failure for '${resolvedPath.publicPath}' (view_id=${args.view_id}, profile_id=${args.profile_id}): ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      );
-    }
+  const format = previewResult.artifact.format;
+  const mimeType: RenderPreviewResult["mime_type"] =
+    format === "svg" ? "image/svg+xml" : "image/png";
+  let artifactPath: string;
+  try {
+    artifactPath = await materializePreviewArtifact(
+      previewResult.artifact,
+      buildPreviewArtifactBasename(resolvedPath.publicPath, {
+        viewId: args.view_id,
+        profileId: args.profile_id,
+        format,
+        backendId: args.backend_id ? previewResult.previewCapability.backendId : undefined
+      })
+    );
+  } catch (error) {
+    throw new AuthoringPreviewError(
+      `Preview materialization failure for '${resolvedPath.publicPath}' (view_id=${args.view_id}, profile_id=${args.profile_id}): ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 
   return {
@@ -120,9 +111,10 @@ export async function renderPreview(
     view_id: args.view_id,
     profile_id: args.profile_id,
     backend_id: previewResult.previewCapability.backendId,
-    ...(displayCopyPath !== undefined ? { display_copy_path: displayCopyPath } : {}),
+    format,
+    mime_type: mimeType,
+    artifact_path: artifactPath,
     notes: previewResult.notes,
-    diagnostics: previewResult.diagnostics,
-    artifact
+    diagnostics: previewResult.diagnostics
   };
 }

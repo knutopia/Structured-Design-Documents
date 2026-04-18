@@ -619,31 +619,13 @@ const renderPreviewResultSchema = objectSchema(
     view_id: stringSchema(),
     profile_id: stringSchema(),
     backend_id: stringSchema(),
-    display_copy_path: stringSchema(),
+    format: stringSchema(["svg", "png"]),
+    mime_type: stringSchema(["image/svg+xml", "image/png"]),
+    artifact_path: stringSchema(),
     notes: stringArraySchema,
-    diagnostics: arraySchema(diagnosticSchema),
-    artifact: {
-      oneOf: [
-        objectSchema(
-          {
-            format: stringSchema(["svg"]),
-            mime_type: stringSchema(["image/svg+xml"]),
-            text: stringSchema()
-          },
-          ["format", "mime_type", "text"]
-        ),
-        objectSchema(
-          {
-            format: stringSchema(["png"]),
-            mime_type: stringSchema(["image/png"]),
-            base64: stringSchema()
-          },
-          ["format", "mime_type", "base64"]
-        )
-      ]
-    }
+    diagnostics: arraySchema(diagnosticSchema)
   },
-  ["kind", "path", "revision", "view_id", "profile_id", "backend_id", "notes", "diagnostics", "artifact"]
+  ["kind", "path", "revision", "view_id", "profile_id", "backend_id", "format", "mime_type", "artifact_path", "notes", "diagnostics"]
 );
 
 const helperGitStatusResultSchema = objectSchema(
@@ -1080,8 +1062,7 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
         view_id: stringSchema(),
         profile_id: stringSchema(),
         format: stringSchema(["svg", "png"]),
-        backend_id: stringSchema(),
-        display_copy_name: stringSchema()
+        backend_id: stringSchema()
       },
       ["path", "view_id", "profile_id", "format"]
     ),

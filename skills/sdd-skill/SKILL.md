@@ -24,7 +24,7 @@ This skill enables working with structured design documents. In this repo source
 - Do not let "nesting is not semantic" drift into "avoid nesting". When a child has one clear structural parent and is not meant for reuse, prefer source that keeps the explicit edge and also nests the child block under that parent for readability.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
 - Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough; use `contract --resolve bundle` only when you need active bundle-owned `view_id` or `profile_id` values first.
-- Use `sdd show` for saved user-facing preview artifacts. Use `preview --display-copy-name <saved-basename>` only if the final chat response will embed the image inline. Preview success payloads intentionally serialize `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and emit `artifact` last, so metadata remains visible if a large SVG or base64 payload is truncated in transport. If the final response will not embed an inline image, do not create a display copy. If a display copy is created, the final response must use `display_copy_path` as the Markdown image source while the sibling `sdd show` artifact remains the canonical file.
+- Use `sdd show` for saved user-facing preview artifacts. Use helper `preview` when the final chat response needs a unique temp image path or another tool needs transient rendered output. Preview success payloads do not include inline SVG text or base64 PNG data; they return `artifact_path`, an ephemeral absolute path under `/tmp/unique-previews` whose parent directory is unique per invocation. If the final response embeds an inline image, use `artifact_path` as the Markdown image source while the sibling `sdd show` artifact remains the canonical file.
 - Use `undo` only for helper-managed committed change sets.
 - For new-document authoring, do not search repo `.sdd` examples to infer syntax or structure unless the user explicitly asks for comparison or example reuse.
 - Use the fallback order `capabilities -> contract -> code/docs only if still insufficient`.
@@ -47,7 +47,7 @@ This skill enables working with structured design documents. In this repo source
 6. Commit and confirm:
    if the dry run is acceptable for the target profile and the user wants the change applied, resubmit that validated request with `mode: "commit"`.
    if follow-on edits need fresh handles after commit, use committed continuation handles when available or re-`inspect` the committed result.
-   use `validate` or `project` for persisted-state semantic confirmation. If the user wants a visible artifact, save it with `TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>` using the same committed, validated state. If the final response will also embed the image inline in chat, derive the saved artifact basename and call `preview --display-copy-name <that-basename>`. If the final response will not embed an inline image, stop after `sdd show` and do not create a display copy. If a display copy is created, the final response must use `display_copy_path` as the Markdown image source while the file link stays canonical. Use raw `preview` otherwise only for transient helper output or raw artifact confirmation.
+   use `validate` or `project` for persisted-state semantic confirmation. If the user wants a visible artifact, save it with `TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>` using the same committed, validated state. If the final response will also embed the image inline in chat, call helper `preview` with the same document, view, profile, and format, then use the returned `artifact_path` as the Markdown image source while the file link stays canonical. Use helper `preview` otherwise only for transient helper output or raw artifact confirmation.
 
 ## Edit Safety Rules
 
@@ -104,7 +104,7 @@ Use `sdd show` for persisted user-facing preview artifacts, especially for:
 
 For app areas, pages, navigation, or information architecture, default to `ia_place_map` when no other view is implied. Ask one short clarifying question only when multiple views are equally plausible.
 
-Use `preview` when you need transient helper output or a chat-safe display copy rather than the default final deliverable, especially for:
+Use `preview` when you need transient helper output or a chat-safe unique artifact path rather than the default final deliverable, especially for:
 
 - committed states that already passed a clean `apply` dry run under the same profile
 - view-sensitive structural changes
@@ -116,14 +116,12 @@ Do not confuse saved previews or helper preview output with semantic projection 
 Preview decision rules:
 
 - If the user wants a visible preview artifact, use `sdd show`.
-- Use `preview --display-copy-name <saved-basename>` only if the final chat response will embed the image inline.
-- If the final response will not embed an inline image, do not create a display copy.
-- Preview success payloads place `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and emit `artifact` last so transport truncation does not hide the metadata.
-- If a display copy is created, the final response must use `display_copy_path` as the Markdown image source.
-- Canonical file links always point at the saved sibling artifact from `sdd show`; the temp display copy is never the canonical artifact.
-- Raw `preview` without `--display-copy-name` remains allowed only for transient helper output or raw artifact workflows.
+- If the final response will embed an inline image, call helper `preview` and use the returned `artifact_path` as the Markdown image source.
+- Preview success payloads expose `format`, `mime_type`, and `artifact_path`; they do not include inline SVG text or base64 PNG data.
+- Canonical file links always point at the saved sibling artifact from `sdd show`; the temp `artifact_path` is never the canonical artifact.
+- Raw helper `preview` remains allowed only for transient helper output, chat-safe image embedding, or raw artifact workflows that can read the returned file.
 
-The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename; `sdd show` will use `<source>.<view>.<profile>[.<backend>].<format>` for the default sibling filename. If you need an inline chat image, keep that sibling file as the canonical artifact and use `preview --display-copy-name <saved-basename>` only to get a temp display path under `/tmp/unique-previews`. chat may cache local images by absolute path, but the artifact identity should remain stable.
+The profile for `sdd show` or `preview` should match the `validate_profile` that gated the document state, and the rendered output should come from that same committed state. Save the preview beside the `.sdd` by default unless the user requested a specific output path or filename; `sdd show` will use `<source>.<view>.<profile>[.<backend>].<format>` for the default sibling filename. If you need an inline chat image, keep that sibling file as the canonical artifact and use helper `preview` only to get a temp `artifact_path` under `/tmp/unique-previews`. Chat may cache local images by absolute path, but the helper gives each preview invocation a unique parent directory so repeated renders remain display-safe.
 If preview returns `sdd-helper-error`, inspect the message and any attached `diagnostics` before assuming the helper environment is broken.
 
 ## When To Use Helper Git Commands

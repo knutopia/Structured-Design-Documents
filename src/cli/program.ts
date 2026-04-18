@@ -33,6 +33,7 @@ import {
   type TextRenderFormat,
   type ViewRenderCapability
 } from "../renderer/viewRenderers.js";
+import { buildShowPreviewOutputPath } from "../previewArtifactPaths.js";
 import type { Diagnostic, RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import type { ValidationReport } from "../validator/types.js";
@@ -165,23 +166,6 @@ function appendInstallHint(message: string, backendId: PreviewRendererBackendId)
 function replaceExtension(filePath: string, extension: string): string {
   const parsed = path.parse(path.resolve(filePath));
   return path.join(parsed.dir, `${parsed.name}.${extension}`);
-}
-
-function buildShowPreviewOutputPath(
-  filePath: string,
-  options: {
-    viewId: string;
-    profileId: string;
-    format: PreviewFormat;
-    backendId?: PreviewRendererBackendId;
-  }
-): string {
-  const parsed = path.parse(path.resolve(filePath));
-  const stemParts = [parsed.name, options.viewId, options.profileId];
-  if (options.backendId) {
-    stemParts.push(options.backendId);
-  }
-  return path.join(parsed.dir, `${stemParts.join(".")}.${options.format}`);
 }
 
 function validateOutputExtension(outputPath: string | undefined, expectedExtension: string, optionName: string): OutputValidationResult {

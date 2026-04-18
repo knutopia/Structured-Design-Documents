@@ -18,6 +18,7 @@
 -revising skill examples
 -ran into a chat-safe preview bug roadblock
 -re-ordered preview response payload to handle truncation better
+-refactored preview response to use path / uri and external file
 
 ## Fri 4-17-26
 

@@ -79,23 +79,31 @@ describe("authoring contract metadata", () => {
       "shared.binding.render_preview.view_id",
       "shared.binding.render_preview.profile_id"
     ]);
-    expect(previewDetail?.input_shape?.schema).toMatchObject({
-      properties: {
-        display_copy_name: {
-          type: "string"
-        }
-      }
-    });
+    expect(
+      ((previewDetail?.input_shape?.schema as { properties?: Record<string, unknown> })?.properties ?? {})
+    ).not.toHaveProperty("display_copy_name");
     expect(previewDetail?.output_shape?.schema).toMatchObject({
       properties: {
-        display_copy_path: {
+        format: {
+          type: "string",
+          enum: ["svg", "png"]
+        },
+        mime_type: {
+          type: "string",
+          enum: ["image/svg+xml", "image/png"]
+        },
+        artifact_path: {
           type: "string"
         }
       }
     });
+    const previewOutputProperties =
+      ((previewDetail?.output_shape?.schema as { properties?: Record<string, unknown> })?.properties ?? {});
+    expect(previewOutputProperties).not.toHaveProperty("display_copy_path");
+    expect(previewOutputProperties).not.toHaveProperty("artifact");
     expect(
       Object.keys(
-        ((previewDetail?.output_shape?.schema as { properties?: Record<string, unknown> })?.properties ?? {})
+        previewOutputProperties
       )
     ).toEqual([
       "kind",
@@ -104,10 +112,11 @@ describe("authoring contract metadata", () => {
       "view_id",
       "profile_id",
       "backend_id",
-      "display_copy_path",
+      "format",
+      "mime_type",
+      "artifact_path",
       "notes",
-      "diagnostics",
-      "artifact"
+      "diagnostics"
     ]);
 
     expect(validateDetail?.bindings.map((binding) => binding.binding_id)).toEqual([

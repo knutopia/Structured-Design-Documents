@@ -177,6 +177,17 @@ For this design, control-plane edit failures also surface as diagnostics using `
 - `sdd.unsupported_document_version`
 - `sdd.invalid_reposition_target`
 
+### 4.5 Preview Artifact Locators
+
+Preview output currently uses `artifact_path`, not `artifact_uri`.
+
+- `artifact_path` is an absolute local filesystem path to a helper/server-owned temporary artifact.
+- `artifact_path` assumes the client and preview producer share the same filesystem context.
+- `artifact_path` is ephemeral, unique per preview invocation, and not the canonical saved artifact.
+- `artifact_uri` is reserved for a future MCP retrieval contract where the server owns a dereferenceable resource identifier.
+- A future `artifact_uri` must define retrieval semantics, lifetime rules, and whether the backing bytes live on disk, in memory, or behind another resource layer.
+- Do not expose a custom `artifact_uri` until that resolver/resource design exists.
+
 ## 5. System Architecture
 
 The SDD MCP server and helper app sit on top of one shared domain core:
@@ -959,7 +970,6 @@ interface RenderPreviewArgs {
   view_id: string;
   profile_id: "simple" | "permissive" | "strict";
   format: "svg" | "png";
-  display_copy_name?: string;
   backend_id?:
     | "legacy_graphviz_preview"
     | "staged_ia_place_map_preview"
@@ -978,20 +988,11 @@ interface RenderPreviewResult {
   view_id: string;
   profile_id: "simple" | "permissive" | "strict";
   backend_id: string;
-  display_copy_path?: string;
+  format: "svg" | "png";
+  mime_type: "image/svg+xml" | "image/png";
+  artifact_path: string;
   notes: string[];
   diagnostics: Diagnostic[];
-  artifact:
-    | {
-        format: "svg";
-        mime_type: "image/svg+xml";
-        text: string;
-      }
-    | {
-        format: "png";
-        mime_type: "image/png";
-        base64: string;
-      };
 }
 ```
 
@@ -1008,9 +1009,12 @@ Rules:
 
 - incompatible `backend_id` and `view_id` combinations fail
 - preview is a tool output, not a persistent resource
-- when `display_copy_name` is provided, it must be a basename whose extension matches `format`
-- `display_copy_path`, when present, is an ephemeral temp-path convenience rather than the canonical preview artifact path
-- transport-oriented preview responses serialize `display_copy_path`, `notes`, and `diagnostics` before the inline payload and emit `artifact` last
+- success responses materialize SVG or PNG bytes to `artifact_path` and do not include inline SVG text or base64 PNG data
+- `artifact_path` is an absolute local path under `/tmp/unique-previews/<unique-dir>/<basename>`
+- the parent directory is unique for every successful preview invocation, even when inputs and bytes are identical
+- the basename follows the same convention as `sdd show`: `<source>.<view>.<profile>[.<backend>].<format>`
+- `artifact_path` is ephemeral and not the canonical saved artifact; use `sdd show` or an explicit copy/promotion step for durable user-facing files
+- future MCP work may replace or supplement `artifact_path` with `artifact_uri` only after a resource resolver contract exists
 
 ## 10. Prompt Model
 
@@ -1243,7 +1247,7 @@ Output:
 
 - `ChangeSetResult`
 
-#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>] [--display-copy-name <basename>]`
+#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
 
 Success returns the same logical result as `sdd.render_preview`.
 
@@ -1253,8 +1257,9 @@ If preview cannot produce an artifact, helper preview remains in the helper-erro
 - the helper message should describe the failing stage or reason class where possible
 - any underlying diagnostics should be preserved on `HelperErrorResult.diagnostics`
 - MCP may map the same underlying diagnostics into an MCP-specific failure envelope rather than reusing the helper envelope verbatim
-- when `--display-copy-name` is provided, the helper may additionally materialize an ephemeral display copy under `/tmp/unique-previews/...` and return that absolute `display_copy_path`
-- success responses keep `display_copy_path`, `notes`, and `diagnostics` ahead of the inline payload and serialize `artifact` last so metadata survives truncated transports
+- success responses always materialize the rendered preview to a helper-owned temp file and return `artifact_path`
+- helper preview does not return inline SVG text or base64 PNG data
+- `artifact_path` is local, ephemeral, and unique per invocation; it is not the canonical saved preview artifact
 
 #### `sdd-helper git-status [<document_path> ...]`
 
@@ -1658,13 +1663,11 @@ Result excerpt:
   "kind": "sdd-preview",
   "view_id": "ui_contracts",
   "backend_id": "staged_ui_contracts_preview",
+  "format": "svg",
+  "mime_type": "image/svg+xml",
+  "artifact_path": "/tmp/unique-previews/20260418-abc123/example.ui_contracts.strict.svg",
   "notes": [],
-  "diagnostics": [],
-  "artifact": {
-    "format": "svg",
-    "mime_type": "image/svg+xml",
-    "text": "<svg ..."
-  }
+  "diagnostics": []
 }
 ```
 
