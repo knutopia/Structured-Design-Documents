@@ -142,6 +142,46 @@ Rendered output from the UI-contract follow-up, showing the viewState sequence:
   <img src="examples/shop_sched_exploration_3.ui_contracts.simple.svg" alt="Scheduling app UI contracts for the shift signup flow" height="230">
 </a>
 
+### Preferred Source Style
+
+The walkthrough files in `examples/` record the actual step-by-step skill outcomes that were produced at the time. The preferred steady-state source style is slightly stronger:
+
+- keep explicit semantic edges such as `CONTAINS` and `TRANSITIONS_TO`
+- also nest singly-owned child blocks under their clear parent for human readability
+
+That means the recommended source style is not "nesting instead of edges". It is "explicit edges for machine meaning, plus nesting for readable local grouping."
+
+For example, an area/place section is ideally written more like this:
+
+```text
+Area A-100 "Mechanic's Scheduling"
+  CONTAINS P-110 "Available Shifts"
+  CONTAINS P-120 "Shift Detail"
+  CONTAINS P-130 "My Schedule"
+  + Place P-110 "Available Shifts"
+    NAVIGATES_TO P-120 "Shift Detail"
+  END
+  + Place P-120 "Shift Detail"
+    CONTAINS VS-220a "View Shift"
+    CONTAINS VS-220b "Confirm Signup"
+    CONTAINS VS-220c "Signup Success"
+    + ViewState VS-220a "View Shift"
+      TRANSITIONS_TO VS-220b "Confirm Signup"
+    END
+    + ViewState VS-220b "Confirm Signup"
+      TRANSITIONS_TO VS-220c "Signup Success"
+    END
+    + ViewState VS-220c "Signup Success"
+    END
+  END
+  + Place P-130 "My Schedule"
+    NAVIGATES_TO P-120 "Shift Detail"
+  END
+END
+```
+
+This style keeps the strong explicit-relationship practice introduced during the helper hardening work, while preserving the source readability that many people want from SDD files.
+
 
 ### Simple Follow-Up Edit
 

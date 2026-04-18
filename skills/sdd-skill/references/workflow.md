@@ -55,7 +55,7 @@ If the bootstrap continuation rule matters for planning the next step, fetch the
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.create
 ```
 
-For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires explicit semantic relationships for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics; author the bundle-defined relationship explicitly when the intended outcome depends on it. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
+For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires explicit semantic relationships for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics; author the bundle-defined relationship explicitly when the intended outcome depends on it. When a created child has one clear structural parent and no reuse intent, prefer source output that also nests the child block under that parent for readability. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
 
 ## 4. Edit An Existing Document
 
@@ -85,7 +85,7 @@ Build low-level change requests from that returned `revision` and those handles.
 
 Use `author` when the task is mostly scaffold creation or nested structure authoring. Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
 
-Before composing either request, determine whether the intended result depends on explicit semantic relationships rather than nesting alone. Nesting is an authoring affordance, not a semantic relationship. When the change should affect hierarchy, flow, navigation, ordering, or other projected meaning, resolve the bundle-defined relationship first and author it explicitly.
+Before composing either request, determine whether the intended result depends on explicit semantic relationships rather than nesting alone. Nesting is an authoring affordance, not a semantic relationship. When the change should affect hierarchy, flow, navigation, ordering, or other projected meaning, resolve the bundle-defined relationship first and author it explicitly. Keep the explicit relationship either way, but when a child has one clear structural parent and no reuse intent, also prefer readable source that nests the child block under that parent.
 
 Before composing complex nested `author`, `apply`, or `undo` JSON, fetch the current subject detail in static mode rather than spelunking code or tests for normal request-shape knowledge:
 
@@ -200,6 +200,29 @@ A dry run is acceptable for preview gating only when:
 - for view-sensitive structural work, the relevant `projection_results` reflect the intended semantic hierarchy, flow, navigation, or ordering rather than only a structurally valid request
 
 If parse or validation errors remain, or if the selected projection does not reflect the intended semantic structure, continue the relevant create/author-or-inspect/author-or-apply cycle and do not preview yet.
+
+## 6.1 Keep Explicit Edges And Readable Nesting
+
+Treat semantic correctness and source readability as two separate concerns that should usually both be satisfied:
+
+- semantic truth comes from the explicit edge such as `CONTAINS`, `COMPOSED_OF`, or `TRANSITIONS_TO`
+- readable local grouping comes from nesting the child block under the parent when that child has one clear structural parent and is not being reused elsewhere
+
+For common singly-owned structure such as `Area -> Place` or `Place -> ViewState`, prefer both:
+
+```text
+Area A-100 "Scheduling"
+  CONTAINS P-110 "Available Shifts"
+  + Place P-110 "Available Shifts"
+  END
+END
+```
+
+Preferred helper stance:
+
+- use `author` nested `children` for first-pass scaffold creation when the child should appear nested in the final source
+- when using low-level `apply`, still add the explicit relationship line and prefer nested block placement under the parent instead of leaving the child top-level when a single local parent is the intended readable layout
+- keep children top-level when reuse, multiple structural parents, or cross-cutting placement would make nesting misleading
 
 ## 7. Commit A Change Set
 

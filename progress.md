@@ -19,6 +19,7 @@
 -added semantic guidance to skill
 -added chat-safe previews for skill
 -tightened preview guidance after finding shortfalls
+-added nesting emphasis to skill guidance after nesting disappeared
 
 ## Thu 4-16-26
 

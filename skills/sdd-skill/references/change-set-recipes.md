@@ -11,6 +11,7 @@ These recipes are workflow guidance only. The helper contract and the shared Typ
 - Prefer dry-run `apply` first.
 - Keep public helper paths repo-relative.
 - When an operation can affect semantics, include `validate_profile` and optionally `projection_views`.
+- Keep the semantic edge explicit even when you also want readable nested source. For singly-owned children, prefer both the explicit relationship line and nested block placement.
 
 ## Rename A Node
 
@@ -78,6 +79,45 @@ Use:
 ```
 
 Choose the `placement` that matches the desired top-level order.
+
+## Insert A Nested Child Block For Readability
+
+Intent: insert a child node as a nested `+` block under a parent body stream while still authoring the explicit semantic edge separately.
+
+Use:
+
+```json
+{
+  "kind": "insert_node_block",
+  "node_type": "Place",
+  "node_id": "P-210",
+  "name": "Projects Overview",
+  "placement": {
+    "mode": "last",
+    "stream": "body",
+    "parent_handle": "<area-handle>"
+  }
+}
+```
+
+Pair that with an explicit relationship line such as:
+
+```json
+{
+  "kind": "insert_edge_line",
+  "parent_handle": "<area-handle>",
+  "rel_type": "CONTAINS",
+  "to": "P-210",
+  "to_name": "Projects Overview",
+  "placement": {
+    "mode": "last",
+    "stream": "body",
+    "parent_handle": "<area-handle>"
+  }
+}
+```
+
+Use this pattern when the child has one clear structural parent and is not intended for reuse elsewhere in the source.
 
 ## Delete A Node
 
