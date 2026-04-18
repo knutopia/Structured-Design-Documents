@@ -16,6 +16,7 @@
 ## Sat 4-18-26
 
 -revising skill examples
+-ran into a chat-safe preview bug roadblock
 
 ## Fri 4-17-26
 
