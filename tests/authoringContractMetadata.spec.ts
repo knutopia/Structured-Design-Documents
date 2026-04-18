@@ -93,6 +93,22 @@ describe("authoring contract metadata", () => {
         }
       }
     });
+    expect(
+      Object.keys(
+        ((previewDetail?.output_shape?.schema as { properties?: Record<string, unknown> })?.properties ?? {})
+      )
+    ).toEqual([
+      "kind",
+      "path",
+      "revision",
+      "view_id",
+      "profile_id",
+      "backend_id",
+      "display_copy_path",
+      "notes",
+      "diagnostics",
+      "artifact"
+    ]);
 
     expect(validateDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
       "shared.binding.validate_document.profile_id"

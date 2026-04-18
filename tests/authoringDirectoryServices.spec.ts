@@ -114,6 +114,18 @@ describe("authoring directory services", () => {
         display_copy_name: "outcome_to_ia_trace.ia_place_map.strict.svg"
       });
       expect(svgResult.kind).toBe("sdd-preview");
+      expect(Object.keys(svgResult)).toEqual([
+        "kind",
+        "path",
+        "revision",
+        "view_id",
+        "profile_id",
+        "backend_id",
+        "display_copy_path",
+        "notes",
+        "diagnostics",
+        "artifact"
+      ]);
       expect(svgResult.artifact.format).toBe("svg");
       expect(svgResult.artifact.mime_type).toBe("image/svg+xml");
       expect(svgResult.artifact.text.startsWith("<svg")).toBe(true);
@@ -129,6 +141,17 @@ describe("authoring directory services", () => {
         profile_id: "strict",
         format: "png"
       });
+      expect(Object.keys(pngResult)).toEqual([
+        "kind",
+        "path",
+        "revision",
+        "view_id",
+        "profile_id",
+        "backend_id",
+        "notes",
+        "diagnostics",
+        "artifact"
+      ]);
       expect(pngResult.artifact.format).toBe("png");
       expect(pngResult.artifact.mime_type).toBe("image/png");
       expect(Buffer.from(pngResult.artifact.base64, "base64").subarray(0, 4).toString("hex")).toBe("89504e47");

@@ -979,6 +979,8 @@ interface RenderPreviewResult {
   profile_id: "simple" | "permissive" | "strict";
   backend_id: string;
   display_copy_path?: string;
+  notes: string[];
+  diagnostics: Diagnostic[];
   artifact:
     | {
         format: "svg";
@@ -990,8 +992,6 @@ interface RenderPreviewResult {
         mime_type: "image/png";
         base64: string;
       };
-  notes: string[];
-  diagnostics: Diagnostic[];
 }
 ```
 
@@ -1010,6 +1010,7 @@ Rules:
 - preview is a tool output, not a persistent resource
 - when `display_copy_name` is provided, it must be a basename whose extension matches `format`
 - `display_copy_path`, when present, is an ephemeral temp-path convenience rather than the canonical preview artifact path
+- transport-oriented preview responses serialize `display_copy_path`, `notes`, and `diagnostics` before the inline payload and emit `artifact` last
 
 ## 10. Prompt Model
 
@@ -1253,6 +1254,7 @@ If preview cannot produce an artifact, helper preview remains in the helper-erro
 - any underlying diagnostics should be preserved on `HelperErrorResult.diagnostics`
 - MCP may map the same underlying diagnostics into an MCP-specific failure envelope rather than reusing the helper envelope verbatim
 - when `--display-copy-name` is provided, the helper may additionally materialize an ephemeral display copy under `/tmp/unique-previews/...` and return that absolute `display_copy_path`
+- success responses keep `display_copy_path`, `notes`, and `diagnostics` ahead of the inline payload and serialize `artifact` last so metadata survives truncated transports
 
 #### `sdd-helper git-status [<document_path> ...]`
 
@@ -1656,13 +1658,13 @@ Result excerpt:
   "kind": "sdd-preview",
   "view_id": "ui_contracts",
   "backend_id": "staged_ui_contracts_preview",
+  "notes": [],
+  "diagnostics": [],
   "artifact": {
     "format": "svg",
     "mime_type": "image/svg+xml",
     "text": "<svg ..."
-  },
-  "notes": [],
-  "diagnostics": []
+  }
 }
 ```
 

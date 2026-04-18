@@ -49,6 +49,9 @@ describe("canonical sdd-skill source", () => {
       "If the final response will not embed an inline image, do not create a display copy."
     );
     expect(skillMarkdown).toContain(
+      "Preview success payloads place `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload"
+    );
+    expect(skillMarkdown).toContain(
       "If a display copy is created, the final response must use `display_copy_path` as the Markdown image source."
     );
     expect(skillMarkdown).toContain(
@@ -60,7 +63,13 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("Use one of these branches and stop after the one that matches the final response:");
     expect(workflowMarkdown).toContain("stop there; do not create a display copy");
     expect(workflowMarkdown).toContain(
+      "display_copy_path`, `notes`, and `diagnostics` appear before `artifact`, and `artifact` is serialized last"
+    );
+    expect(workflowMarkdown).toContain(
       "Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline."
+    );
+    expect(workflowMarkdown).toContain(
+      "serialize `artifact` last so metadata remains visible if the payload is truncated in transport"
     );
     expect(workflowMarkdown).toContain(
       "Do not present `display_copy_path` as the real saved artifact."

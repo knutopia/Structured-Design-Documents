@@ -437,6 +437,9 @@ export interface RenderPreviewResult {
   view_id: ViewId;
   profile_id: ProfileId;
   backend_id: PreviewBackendId | string;
+  display_copy_path?: string;
+  notes: string[];
+  diagnostics: Diagnostic[];
   artifact:
     | {
         format: "svg";
@@ -448,9 +451,6 @@ export interface RenderPreviewResult {
         mime_type: "image/png";
         base64: string;
       };
-  display_copy_path?: string;
-  notes: string[];
-  diagnostics: Diagnostic[];
 }
 
 export interface HelperGitStatusArgs {

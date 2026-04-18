@@ -24,7 +24,7 @@ This skill enables working with structured design documents. In this repo source
 - Do not let "nesting is not semantic" drift into "avoid nesting". When a child has one clear structural parent and is not meant for reuse, prefer source that keeps the explicit edge and also nests the child block under that parent for readability.
 - Dry-run `author` or `apply` first. Commit only when the user wants the mutation carried out.
 - Use `validate` and `project` for persisted-state semantic reads after commit or when a standalone read is enough; use `contract --resolve bundle` only when you need active bundle-owned `view_id` or `profile_id` values first.
-- Use `sdd show` for saved user-facing preview artifacts. Use `preview --display-copy-name <saved-basename>` only if the final chat response will embed the image inline. If the final response will not embed an inline image, do not create a display copy. If a display copy is created, the final response must use `display_copy_path` as the Markdown image source while the sibling `sdd show` artifact remains the canonical file.
+- Use `sdd show` for saved user-facing preview artifacts. Use `preview --display-copy-name <saved-basename>` only if the final chat response will embed the image inline. Preview success payloads intentionally serialize `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and emit `artifact` last, so metadata remains visible if a large SVG or base64 payload is truncated in transport. If the final response will not embed an inline image, do not create a display copy. If a display copy is created, the final response must use `display_copy_path` as the Markdown image source while the sibling `sdd show` artifact remains the canonical file.
 - Use `undo` only for helper-managed committed change sets.
 - For new-document authoring, do not search repo `.sdd` examples to infer syntax or structure unless the user explicitly asks for comparison or example reuse.
 - Use the fallback order `capabilities -> contract -> code/docs only if still insufficient`.
@@ -118,6 +118,7 @@ Preview decision rules:
 - If the user wants a visible preview artifact, use `sdd show`.
 - Use `preview --display-copy-name <saved-basename>` only if the final chat response will embed the image inline.
 - If the final response will not embed an inline image, do not create a display copy.
+- Preview success payloads place `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and emit `artifact` last so transport truncation does not hide the metadata.
 - If a display copy is created, the final response must use `display_copy_path` as the Markdown image source.
 - Canonical file links always point at the saved sibling artifact from `sdd show`; the temp display copy is never the canonical artifact.
 - Raw `preview` without `--display-copy-name` remains allowed only for transient helper output or raw artifact workflows.

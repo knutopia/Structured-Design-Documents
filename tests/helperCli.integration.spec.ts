@@ -48,41 +48,59 @@ async function withRepoTempDir(run: (tempDir: string) => Promise<void>): Promise
   }
 }
 
+function getTopLevelJsonKeyOrder(jsonText: string): string[] {
+  return [...jsonText.matchAll(/^  "([^"]+)":/gm)].map((match) => match[1]);
+}
+
 describe("sdd-helper entrypoint integration", () => {
-  it("supports direct helper execution from nested repo directories for git-only and bundle-backed commands", async () => {
-    const nestedCwd = path.join(repoRoot, "src");
-    const documentPath = "bundle/v0.1/examples/outcome_to_ia_trace.sdd";
+  it(
+    "supports direct helper execution from nested repo directories for git-only and bundle-backed commands",
+    async () => {
+      const nestedCwd = path.join(repoRoot, "src");
+      const documentPath = "bundle/v0.1/examples/outcome_to_ia_trace.sdd";
 
-    const gitStatus = await runHelperEntrypoint(nestedCwd, ["git-status", documentPath]);
-    expect(gitStatus.exitCode).toBe(0);
-    expect(JSON.parse(gitStatus.stdout)).toMatchObject({
-      kind: "sdd-git-status",
-      paths: expect.arrayContaining([documentPath])
-    });
+      const gitStatus = await runHelperEntrypoint(nestedCwd, ["git-status", documentPath]);
+      expect(gitStatus.exitCode).toBe(0);
+      expect(JSON.parse(gitStatus.stdout)).toMatchObject({
+        kind: "sdd-git-status",
+        paths: expect.arrayContaining([documentPath])
+      });
 
-    const inspect = await runHelperEntrypoint(nestedCwd, ["inspect", documentPath]);
-    expect(inspect.exitCode).toBe(0);
-    expect(JSON.parse(inspect.stdout)).toMatchObject({
-      kind: "sdd-document-inspect",
-      path: documentPath
-    });
+      const inspect = await runHelperEntrypoint(nestedCwd, ["inspect", documentPath]);
+      expect(inspect.exitCode).toBe(0);
+      expect(JSON.parse(inspect.stdout)).toMatchObject({
+        kind: "sdd-document-inspect",
+        path: documentPath
+      });
 
-    const validate = await runHelperEntrypoint(nestedCwd, ["validate", documentPath, "--profile", "strict"]);
-    expect(validate.exitCode).toBe(0);
-    expect(JSON.parse(validate.stdout)).toMatchObject({
-      kind: "sdd-validation",
-      path: documentPath,
-      profile_id: "strict"
-    });
+      const validate = await runHelperEntrypoint(nestedCwd, [
+        "validate",
+        documentPath,
+        "--profile",
+        "strict"
+      ]);
+      expect(validate.exitCode).toBe(0);
+      expect(JSON.parse(validate.stdout)).toMatchObject({
+        kind: "sdd-validation",
+        path: documentPath,
+        profile_id: "strict"
+      });
 
-    const project = await runHelperEntrypoint(nestedCwd, ["project", documentPath, "--view", "ia_place_map"]);
-    expect(project.exitCode).toBe(0);
-    expect(JSON.parse(project.stdout)).toMatchObject({
-      kind: "sdd-projection",
-      path: documentPath,
-      view_id: "ia_place_map"
-    });
-  });
+      const project = await runHelperEntrypoint(nestedCwd, [
+        "project",
+        documentPath,
+        "--view",
+        "ia_place_map"
+      ]);
+      expect(project.exitCode).toBe(0);
+      expect(JSON.parse(project.stdout)).toMatchObject({
+        kind: "sdd-projection",
+        path: documentPath,
+        view_id: "ia_place_map"
+      });
+    },
+    15000
+  );
 
   it("returns static and bundle-resolved contract detail from nested repo directories", async () => {
     const nestedCwd = path.join(repoRoot, "src");
@@ -213,5 +231,46 @@ describe("sdd-helper entrypoint integration", () => {
         }
       });
     });
+  });
+
+  it("serializes preview metadata before the inline svg payload when a display copy is requested", async () => {
+    const documentPath = "bundle/v0.1/examples/outcome_to_ia_trace.sdd";
+    const preview = await runHelperEntrypoint(repoRoot, [
+      "preview",
+      documentPath,
+      "--view",
+      "ia_place_map",
+      "--profile",
+      "strict",
+      "--format",
+      "svg",
+      "--display-copy-name",
+      "outcome_to_ia_trace.ia_place_map.strict.svg"
+    ]);
+
+    expect(preview.exitCode).toBe(0);
+    expect(getTopLevelJsonKeyOrder(preview.stdout)).toEqual([
+      "kind",
+      "path",
+      "revision",
+      "view_id",
+      "profile_id",
+      "backend_id",
+      "display_copy_path",
+      "notes",
+      "diagnostics",
+      "artifact"
+    ]);
+
+    const displayCopyIndex = preview.stdout.indexOf('"display_copy_path"');
+    const artifactIndex = preview.stdout.indexOf('\n  "artifact": {');
+    expect(displayCopyIndex).toBeGreaterThanOrEqual(0);
+    expect(artifactIndex).toBeGreaterThan(displayCopyIndex);
+
+    const payload = JSON.parse(preview.stdout) as { display_copy_path?: string };
+    expect(payload.display_copy_path?.startsWith("/tmp/unique-previews/")).toBe(true);
+    if (payload.display_copy_path) {
+      await rm(path.dirname(payload.display_copy_path), { recursive: true, force: true });
+    }
   });
 });

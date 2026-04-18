@@ -120,9 +120,9 @@ export async function renderPreview(
     view_id: args.view_id,
     profile_id: args.profile_id,
     backend_id: previewResult.previewCapability.backendId,
-    artifact,
-    display_copy_path: displayCopyPath,
+    ...(displayCopyPath !== undefined ? { display_copy_path: displayCopyPath } : {}),
     notes: previewResult.notes,
-    diagnostics: previewResult.diagnostics
+    diagnostics: previewResult.diagnostics,
+    artifact
   };
 }

@@ -620,6 +620,8 @@ const renderPreviewResultSchema = objectSchema(
     profile_id: stringSchema(),
     backend_id: stringSchema(),
     display_copy_path: stringSchema(),
+    notes: stringArraySchema,
+    diagnostics: arraySchema(diagnosticSchema),
     artifact: {
       oneOf: [
         objectSchema(
@@ -639,11 +641,9 @@ const renderPreviewResultSchema = objectSchema(
           ["format", "mime_type", "base64"]
         )
       ]
-    },
-    notes: stringArraySchema,
-    diagnostics: arraySchema(diagnosticSchema)
+    }
   },
-  ["kind", "path", "revision", "view_id", "profile_id", "backend_id", "artifact", "notes", "diagnostics"]
+  ["kind", "path", "revision", "view_id", "profile_id", "backend_id", "notes", "diagnostics", "artifact"]
 );
 
 const helperGitStatusResultSchema = objectSchema(

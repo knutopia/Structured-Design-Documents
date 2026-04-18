@@ -135,6 +135,7 @@ Inline-image branch:
 - run `sdd show`
 - link the saved sibling artifact in the response
 - derive the saved artifact basename and request a display copy with helper `preview`
+- rely on the preview response metadata before the inline payload; `display_copy_path`, `notes`, and `diagnostics` appear before `artifact`, and `artifact` is serialized last
 - use the returned `display_copy_path` as the Markdown image source in the final response
 
 Inline-image command:
@@ -147,7 +148,7 @@ skills/sdd-skill/scripts/run_helper.sh preview bundle/v0.1/examples/outcome_to_i
   --display-copy-name outcome_to_ia_trace.ia_place_map.strict.svg
 ```
 
-Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline. Do not present `display_copy_path` as the real saved artifact. The saved sibling artifact is the canonical file for file links, while the temp copy under `/tmp/unique-previews` is only a presentation workaround because chat may cache local image content by absolute path.
+Do not call `preview --display-copy-name` unless the final response will actually embed the preview inline. Preview success payloads intentionally place `display_copy_path`, `notes`, and `diagnostics` before the inline `artifact` payload and serialize `artifact` last so metadata remains visible if the payload is truncated in transport. Do not present `display_copy_path` as the real saved artifact. The saved sibling artifact is the canonical file for file links, while the temp copy under `/tmp/unique-previews` is only a presentation workaround because chat may cache local image content by absolute path.
 
 If the user wants transient raw artifact output instead, use helper `preview`.
 

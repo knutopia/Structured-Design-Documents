@@ -243,13 +243,13 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     view_id: "ia_place_map",
     profile_id: "strict",
     backend_id: "staged_ia_place_map_preview",
+    notes: [],
+    diagnostics: [],
     artifact: {
       format: "svg",
       mime_type: "image/svg+xml",
       text: "<svg>preview</svg>"
-    },
-    notes: [],
-    diagnostics: []
+    }
   }));
   const getGitStatusMock = vi.fn(async (): Promise<HelperGitStatusResult> => ({
     kind: "sdd-git-status",
@@ -327,6 +327,10 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
 
 function parseStdoutPayload(stdout: string[]): unknown {
   return JSON.parse(stdout.join(""));
+}
+
+function getTopLevelJsonKeyOrder(jsonText: string): string[] {
+  return [...jsonText.matchAll(/^  "([^"]+)":/gm)].map((match) => match[1]);
 }
 
 describe("sdd-helper CLI", () => {
@@ -1161,14 +1165,14 @@ describe("sdd-helper CLI", () => {
       view_id: "ia_place_map",
       profile_id: "strict",
       backend_id: "staged_ia_place_map_preview",
+      display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
+      notes: [],
+      diagnostics: [],
       artifact: {
         format: "svg",
         mime_type: "image/svg+xml",
         text: "<svg>preview</svg>"
-      },
-      display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
-      notes: [],
-      diagnostics: []
+      }
     }));
     const { deps, stdout } = createDeps({ renderPreview });
     const result = await runHelperCli([
@@ -1199,6 +1203,18 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-preview",
       display_copy_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
     });
+    expect(getTopLevelJsonKeyOrder(stdout.join(""))).toEqual([
+      "kind",
+      "path",
+      "revision",
+      "view_id",
+      "profile_id",
+      "backend_id",
+      "display_copy_path",
+      "notes",
+      "diagnostics",
+      "artifact"
+    ]);
   });
 
   it("rejects preview display-copy names with path separators", async () => {

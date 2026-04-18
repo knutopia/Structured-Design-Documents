@@ -267,7 +267,8 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
     constraints: [
       "If preview cannot produce an artifact, the helper returns runtime_error with stage-specific messaging and any available diagnostics.",
       "When --display-copy-name is provided, it must be a basename whose extension matches --format.",
-      "display_copy_path, when present, is an ephemeral temp-path convenience rather than the canonical preview artifact path."
+      "display_copy_path, when present, is an ephemeral temp-path convenience rather than the canonical preview artifact path.",
+      "Successful preview responses serialize metadata fields before the inline artifact payload and emit artifact last."
     ]
   },
   {
