@@ -16,6 +16,7 @@
 ## Sun 4-19-26
 
 - added request-loading contract detail + skill guidance
+- created skill ops reliability design, bad codex laziness
 
 ## Sat 4-18-26
 
