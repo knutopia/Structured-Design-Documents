@@ -17,6 +17,7 @@
 
 - added request-loading contract detail + skill guidance
 - created skill ops reliability design, bad codex laziness
+- created gated plan
 
 ## Sat 4-18-26
 
