@@ -52,13 +52,13 @@ Confirm the current repository still matches the design document before changing
 - inspect current `src/authoring/authoringIntents.ts`
 - inspect current `src/authoring/preview.ts`
 - run the targeted current tests before implementation:
-  - `TMPDIR=/tmp pnpm test -- tests/helperCli.spec.ts`
-  - `TMPDIR=/tmp pnpm test -- tests/authoringContractMetadata.spec.ts`
-  - `TMPDIR=/tmp pnpm test -- tests/sddSkillSource.spec.ts`
+  - `TMPDIR=/tmp pnpm exec vitest run tests/helperCli.spec.ts`
+  - `TMPDIR=/tmp pnpm exec vitest run tests/authoringContractMetadata.spec.ts`
+  - `TMPDIR=/tmp pnpm exec vitest run tests/sddSkillSource.spec.ts`
 
 ### Required Note
 
-Confirm whether the targeted test command syntax works in the current repo. If it does not, use the repo-supported Vitest invocation and record the exact command in the gate notes before proceeding.
+The verified repo-supported targeted Vitest invocation is `TMPDIR=/tmp pnpm exec vitest run <spec-file>`. Do not use `TMPDIR=/tmp pnpm test -- <spec-file>` for targeted Gate 0 checks; in the current repo that form exits successfully but runs the full suite instead of only the requested spec.
 
 ### Acceptance Criteria
 
@@ -448,4 +448,3 @@ Stop closeout if:
 - `tests/helperCli.spec.ts`
 - `tests/authoringContractMetadata.spec.ts`
 - `tests/sddSkillSource.spec.ts`
-
