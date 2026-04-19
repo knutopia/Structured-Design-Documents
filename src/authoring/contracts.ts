@@ -23,6 +23,26 @@ export type DocumentEffect = "created" | "updated" | "deleted";
 export type ChangeSetMode = "dry_run" | "commit";
 export type ChangeSetStatus = "applied" | "rejected";
 
+export interface AuthoringOutcomeAssessment {
+  kind: "sdd-authoring-outcome-assessment";
+  outcome: "acceptable" | "blocked" | "review_required";
+  layer:
+    | "transport"
+    | "request_shape"
+    | "domain_rejection"
+    | "candidate_diagnostics"
+    | "persisted_validation"
+    | "projection"
+    | "render"
+    | "success";
+  can_commit: boolean;
+  can_render: boolean;
+  should_stop: boolean;
+  next_action: string;
+  blocking_diagnostics: Diagnostic[];
+  summary: string;
+}
+
 export interface DocumentResource {
   kind: "sdd-document";
   uri: DocumentUri;
