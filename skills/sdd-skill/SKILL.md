@@ -13,6 +13,7 @@ This skill enables working with structured design documents. In this repo source
 
 - Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
 - Use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` when you need full request or result shape detail, semantic constraints, continuation rules, or bundle-binding metadata for one helper command.
+- For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command.
 - First classify the task as: create a new document, edit an existing document, or read/preview an existing document.
 - For a new `.sdd`, choose the repo-relative path directly. Default to the current working directory unless the user names or clearly implies another location.
 - Use `skills/sdd-skill/scripts/run_helper.sh search ...` only to locate an existing target `.sdd` document or node when the user has not named it yet.

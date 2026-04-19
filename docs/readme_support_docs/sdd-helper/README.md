@@ -196,6 +196,8 @@ interface HelperCapabilitiesResultCommand {
 - Important constraints: create always bootstraps an empty document skeleton; the current implementation supports version `0.1`.
 - Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits.
 
+For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSON request from stdin until EOF. Empty stdin is parsed as an empty JSON body and returns `sdd-helper-error` with `code: "invalid_json"` and message `Unexpected end of JSON input`.
+
 #### `sdd-helper apply --request <file-or-stdin>`
 
 - Purpose: apply or dry-run a structured change-set request.

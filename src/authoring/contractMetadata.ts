@@ -7,7 +7,8 @@ import type {
   ContractShapeId,
   ContractSubjectDescriptor,
   ContractSubjectDetail,
-  ContractSubjectId
+  ContractSubjectId,
+  HelperRequestBodySpec
 } from "./contracts.js";
 
 type JsonSchema = object;
@@ -655,6 +656,29 @@ const helperGitCommitResultSchema = objectSchema(
   ["kind", "committed_paths", "commit_sha"]
 );
 
+const helperRequestBodySpecSchema = objectSchema(
+  {
+    via_option: stringSchema(["--request"]),
+    top_level_shape: stringSchema(["ApplyAuthoringIntentArgs", "ApplyChangeSetArgs", "UndoChangeSetArgs"]),
+    source: stringSchema(["file_path_or_stdin_dash"]),
+    stdin_dash: objectSchema(
+      {
+        read_mode: stringSchema(["read_all_stdin_until_eof"]),
+        empty_input_error: objectSchema(
+          {
+            kind: stringSchema(["sdd-helper-error"]),
+            code: stringSchema(["invalid_json"]),
+            message: stringSchema(["Unexpected end of JSON input"])
+          },
+          ["kind", "code", "message"]
+        )
+      },
+      ["read_mode", "empty_input_error"]
+    )
+  },
+  ["via_option", "top_level_shape", "source", "stdin_dash"]
+);
+
 const helperCapabilitiesCommandSchema = objectSchema(
   {
     name: stringSchema(),
@@ -682,14 +706,7 @@ const helperCapabilitiesCommandSchema = objectSchema(
         ["flag", "required", "description"]
       )
     ),
-    request_body: objectSchema(
-      {
-        via_option: stringSchema(["--request"]),
-        top_level_shape: stringSchema(["ApplyAuthoringIntentArgs", "ApplyChangeSetArgs", "UndoChangeSetArgs"]),
-        source: stringSchema(["file_path_or_stdin_dash"])
-      },
-      ["via_option", "top_level_shape", "source"]
-    ),
+    request_body: helperRequestBodySpecSchema,
     result_kind: stringSchema(),
     constraints: stringArraySchema,
     subject_id: stringSchema(),
@@ -868,6 +885,7 @@ const contractSubjectDetailSchema = objectSchema(
     subject: contractSubjectDescriptorSchema,
     input_shape: contractShapeDescriptorSchema,
     output_shape: contractShapeDescriptorSchema,
+    request_body: helperRequestBodySpecSchema,
     constraints: arraySchema(contractConstraintSpecSchema),
     bindings: arraySchema(contractBindingSpecSchema),
     continuation: arraySchema(contractContinuationSpecSchema),
@@ -1301,6 +1319,28 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
   }
 ] as const;
 
+function createRequestBodySpec(topLevelShape: HelperRequestBodySpec["top_level_shape"]): HelperRequestBodySpec {
+  return {
+    via_option: "--request",
+    top_level_shape: topLevelShape,
+    source: "file_path_or_stdin_dash",
+    stdin_dash: {
+      read_mode: "read_all_stdin_until_eof",
+      empty_input_error: {
+        kind: "sdd-helper-error",
+        code: "invalid_json",
+        message: "Unexpected end of JSON input"
+      }
+    }
+  };
+}
+
+const REQUEST_BODIES = new Map<ContractSubjectId, HelperRequestBodySpec>([
+  ["helper.command.apply", createRequestBodySpec("ApplyChangeSetArgs")],
+  ["helper.command.author", createRequestBodySpec("ApplyAuthoringIntentArgs")],
+  ["helper.command.undo", createRequestBodySpec("UndoChangeSetArgs")]
+]);
+
 const CONSTRAINTS: readonly ContractConstraintSpec[] = [
   {
     constraint_id: "shared.constraint.authoring_intent.anchor_required_for_before_after",
@@ -1557,6 +1597,11 @@ export function getContractSubjectDescriptor(subjectId: ContractSubjectId): Cont
   return subject ? cloneValue(subject) : undefined;
 }
 
+export function getContractSubjectRequestBody(subjectId: ContractSubjectId): HelperRequestBodySpec | undefined {
+  const requestBody = REQUEST_BODIES.get(subjectId);
+  return requestBody ? cloneValue(requestBody) : undefined;
+}
+
 export function getContractSubjectDetail(subjectId: ContractSubjectId): ContractSubjectDetail | undefined {
   const subject = SUBJECT_BY_ID.get(subjectId);
   if (!subject) {
@@ -1576,12 +1621,14 @@ export function getContractSubjectDetail(subjectId: ContractSubjectId): Contract
   const constraints = CONSTRAINTS.filter((constraint) => applicableShapeIds.has(constraint.applies_to_shape_id));
   const bindings = BINDINGS.filter((binding) => applicableShapeIds.has(binding.applies_to_shape_id));
   const continuation = CONTINUATIONS.filter((entry) => entry.applies_to_subject_id === subjectId);
+  const requestBody = REQUEST_BODIES.get(subjectId);
 
   return cloneValue({
     kind: "sdd-contract-subject-detail",
     subject,
     input_shape: inputShape,
     output_shape: outputShape,
+    request_body: requestBody,
     constraints,
     bindings,
     continuation,

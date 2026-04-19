@@ -427,7 +427,20 @@ describe("sdd-helper CLI", () => {
           input_shape_id: "shared.shape.apply_authoring_intent_args",
           output_shape_id: "shared.shape.apply_authoring_intent_result",
           has_deep_introspection: true,
-          detail_modes: ["static"]
+          detail_modes: ["static"],
+          request_body: {
+            via_option: "--request",
+            top_level_shape: "ApplyAuthoringIntentArgs",
+            source: "file_path_or_stdin_dash",
+            stdin_dash: {
+              read_mode: "read_all_stdin_until_eof",
+              empty_input_error: {
+                kind: "sdd-helper-error",
+                code: "invalid_json",
+                message: "Unexpected end of JSON input"
+              }
+            }
+          }
         }),
         expect.objectContaining({
           name: "create",
@@ -994,6 +1007,27 @@ describe("sdd-helper CLI", () => {
     expect(parseStdoutPayload(stdout)).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_json"
+    });
+  });
+
+  it("returns invalid_json for empty author stdin request bodies", async () => {
+    const { deps, stdout, applyAuthoringIntentMock } = createDeps({
+      readStdin: vi.fn(async () => "")
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "author",
+      "--request",
+      "-"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyAuthoringIntentMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toEqual({
+      kind: "sdd-helper-error",
+      code: "invalid_json",
+      message: "Unexpected end of JSON input"
     });
   });
 

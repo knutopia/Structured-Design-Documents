@@ -231,6 +231,7 @@ interface ContractSubjectDetail {
   subject: ContractSubjectDescriptor;
   input_shape?: ContractShapeDescriptor;
   output_shape?: ContractShapeDescriptor;
+  request_body?: HelperRequestBodySpec;
   constraints: ContractConstraintSpec[];
   bindings: ContractBindingSpec[];
   continuation: ContractContinuationSpec[];
@@ -240,6 +241,20 @@ interface ContractSubjectDetail {
     bundle_name?: string;
     bundle_version?: string;
     unresolved_binding_ids?: ContractBindingId[];
+  };
+}
+
+interface HelperRequestBodySpec {
+  via_option: "--request";
+  top_level_shape: string;
+  source: "file_path_or_stdin_dash";
+  stdin_dash: {
+    read_mode: "read_all_stdin_until_eof";
+    empty_input_error: {
+      kind: "sdd-helper-error";
+      code: "invalid_json";
+      message: "Unexpected end of JSON input";
+    };
   };
 }
 
@@ -461,11 +476,7 @@ interface HelperCapabilitiesResultCommand {
   mutates_repo_state: "never" | "conditional" | "always";
   arguments: Array<...>;
   options: Array<...>;
-  request_body?: {
-    via_option: "--request";
-    top_level_shape: string;
-    source: "file_path_or_stdin_dash";
-  };
+  request_body?: HelperRequestBodySpec;
   result_kind: string;
   constraints: string[];
 

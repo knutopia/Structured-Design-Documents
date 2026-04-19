@@ -13,6 +13,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 4-19-26
+
+- added request-loading contract detail + skill guidance
+
 ## Sat 4-18-26
 
 -revising skill examples

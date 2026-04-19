@@ -29,6 +29,9 @@ describe("canonical sdd-skill source", () => {
     expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
     expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
     expect(skillMarkdown).toContain(
+      "For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command."
+    );
+    expect(skillMarkdown).toContain(
       "`scripts/run_helper.sh` relative to the installed skill directory"
     );
     expect(skillMarkdown).toContain("references/workflow.md");

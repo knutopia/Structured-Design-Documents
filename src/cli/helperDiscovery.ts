@@ -5,14 +5,13 @@ import type {
   HelperCapabilitiesResultCommand,
   HelperHelpStubResult
 } from "../authoring/contracts.js";
-import { getContractSubjectDescriptor } from "../authoring/contractMetadata.js";
+import { getContractSubjectDescriptor, getContractSubjectRequestBody } from "../authoring/contractMetadata.js";
 
 interface HelperCommandPresentation {
   subject_id: ContractSubjectId;
   invocation: string;
   arguments: HelperCapabilitiesResultCommand["arguments"];
   options: HelperCapabilitiesResultCommand["options"];
-  request_body?: HelperCapabilitiesResultCommand["request_body"];
   result_kind: HelperCapabilitiesResultCommand["result_kind"];
   constraints: HelperCapabilitiesResultCommand["constraints"];
 }
@@ -114,11 +113,6 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         description: "JSON request file path or '-' for stdin."
       }
     ],
-    request_body: {
-      via_option: "--request",
-      top_level_shape: "ApplyChangeSetArgs",
-      source: "file_path_or_stdin_dash"
-    },
     result_kind: "sdd-change-set",
     constraints: [
       "Dry-run is the default when the request omits mode.",
@@ -137,11 +131,6 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         description: "JSON request file path or '-' for stdin."
       }
     ],
-    request_body: {
-      via_option: "--request",
-      top_level_shape: "ApplyAuthoringIntentArgs",
-      source: "file_path_or_stdin_dash"
-    },
     result_kind: "sdd-authoring-intent-result",
     constraints: [
       "Dry-run is the default when the request omits mode.",
@@ -161,11 +150,6 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         description: "JSON request file path or '-' for stdin."
       }
     ],
-    request_body: {
-      via_option: "--request",
-      top_level_shape: "UndoChangeSetArgs",
-      source: "file_path_or_stdin_dash"
-    },
     result_kind: "sdd-change-set",
     constraints: [
       "Only committed and undo-eligible change sets can be undone.",
@@ -359,7 +343,7 @@ function mergeCommandCapabilities(presentation: HelperCommandPresentation): Help
     mutates_repo_state: descriptor.mutates_repo_state ?? "never",
     arguments: presentation.arguments,
     options: presentation.options,
-    request_body: presentation.request_body,
+    request_body: getContractSubjectRequestBody(presentation.subject_id),
     result_kind: presentation.result_kind,
     constraints: presentation.constraints,
     subject_id: descriptor.subject_id,

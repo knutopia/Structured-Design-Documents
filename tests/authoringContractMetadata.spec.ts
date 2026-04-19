@@ -66,6 +66,38 @@ describe("authoring contract metadata", () => {
     ]);
   });
 
+  it("exposes request body stdin semantics for helper request-loading commands", () => {
+    const applyDetail = getContractSubjectDetail("helper.command.apply");
+    const authorDetail = getContractSubjectDetail("helper.command.author");
+    const undoDetail = getContractSubjectDetail("helper.command.undo");
+
+    expect(applyDetail?.request_body).toMatchObject({
+      via_option: "--request",
+      top_level_shape: "ApplyChangeSetArgs",
+      source: "file_path_or_stdin_dash",
+      stdin_dash: {
+        read_mode: "read_all_stdin_until_eof",
+        empty_input_error: {
+          kind: "sdd-helper-error",
+          code: "invalid_json",
+          message: "Unexpected end of JSON input"
+        }
+      }
+    });
+    expect(authorDetail?.request_body).toMatchObject({
+      via_option: "--request",
+      top_level_shape: "ApplyAuthoringIntentArgs",
+      source: "file_path_or_stdin_dash",
+      stdin_dash: applyDetail?.request_body?.stdin_dash
+    });
+    expect(undoDetail?.request_body).toMatchObject({
+      via_option: "--request",
+      top_level_shape: "UndoChangeSetArgs",
+      source: "file_path_or_stdin_dash",
+      stdin_dash: applyDetail?.request_body?.stdin_dash
+    });
+  });
+
   it("exposes static bundle-binding references for preview, validate, and project inputs", () => {
     const previewDetail = getContractSubjectDetail("helper.command.preview");
     const validateDetail = getContractSubjectDetail("helper.command.validate");

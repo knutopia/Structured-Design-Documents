@@ -475,6 +475,20 @@ export interface HelperErrorResult {
   diagnostics?: Diagnostic[];
 }
 
+export interface HelperRequestBodySpec {
+  via_option: "--request";
+  top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+  source: "file_path_or_stdin_dash";
+  stdin_dash: {
+    read_mode: "read_all_stdin_until_eof";
+    empty_input_error: {
+      kind: "sdd-helper-error";
+      code: "invalid_json";
+      message: "Unexpected end of JSON input";
+    };
+  };
+}
+
 export interface HelperHelpStubResult {
   kind: "sdd-helper-help";
   helper_name: "sdd-helper";
@@ -500,11 +514,7 @@ export interface HelperCapabilitiesResultCommand {
     description: string;
     value_name?: string;
   }>;
-  request_body?: {
-    via_option: "--request";
-    top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
-    source: "file_path_or_stdin_dash";
-  };
+  request_body?: HelperRequestBodySpec;
   result_kind: string;
   constraints: string[];
   subject_id: ContractSubjectId;
@@ -585,6 +595,7 @@ export interface ContractSubjectDetail {
   subject: ContractSubjectDescriptor;
   input_shape?: ContractShapeDescriptor;
   output_shape?: ContractShapeDescriptor;
+  request_body?: HelperRequestBodySpec;
   constraints: ContractConstraintSpec[];
   bindings: ContractBindingSpec[];
   continuation: ContractContinuationSpec[];
