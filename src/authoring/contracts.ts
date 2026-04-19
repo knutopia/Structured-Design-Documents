@@ -138,6 +138,7 @@ export interface ValidationResource {
     warning_count: number;
   };
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export interface ProjectionResource {
@@ -148,6 +149,7 @@ export interface ProjectionResource {
   view_id: ViewId;
   projection?: unknown;
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export type PlacementMode = "before" | "after" | "first" | "last";
@@ -197,6 +199,7 @@ export interface ChangeSetResult {
   summary: ChangeSetSummary;
   diagnostics: Diagnostic[];
   projection_results?: ProjectionResultEntry[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export type ChangeSetResource = ChangeSetResult;
@@ -332,6 +335,7 @@ export interface CreateDocumentResult {
   uri: DocumentUri;
   revision: DocumentRevision;
   change_set: ChangeSetResult;
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export interface ValidateDocumentArgs {
@@ -433,6 +437,7 @@ export interface ApplyAuthoringIntentResult {
   }>;
   diagnostics: Diagnostic[];
   intent_diagnostics?: AuthoringIntentDiagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export interface UndoChangeSetArgs {
@@ -461,6 +466,7 @@ export interface RenderPreviewResult {
   artifact_path: string;
   notes: string[];
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export interface HelperGitStatusArgs {
@@ -493,6 +499,7 @@ export interface HelperErrorResult {
   code: "invalid_args" | "invalid_json" | "runtime_error";
   message: string;
   diagnostics?: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 
 export interface HelperRequestBodySpec {

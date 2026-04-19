@@ -3,6 +3,7 @@ import type { Bundle } from "../src/bundle/types.js";
 import type {
   ApplyAuthoringIntentArgs,
   ApplyChangeSetArgs,
+  AuthoringOutcomeAssessment,
   ChangeSetResult,
   CreateDocumentArgs,
   CreateDocumentResult,
@@ -329,6 +330,13 @@ function parseStdoutPayload(stdout: string[]): unknown {
 
 function getTopLevelJsonKeyOrder(jsonText: string): string[] {
   return [...jsonText.matchAll(/^  "([^"]+)":/gm)].map((match) => match[1]);
+}
+
+function expectAssessment(payload: unknown, expected: Partial<AuthoringOutcomeAssessment>): void {
+  expect((payload as { assessment?: unknown }).assessment).toMatchObject({
+    kind: "sdd-authoring-outcome-assessment",
+    ...expected
+  });
 }
 
 describe("sdd-helper CLI", () => {
@@ -724,10 +732,18 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(loadBundleMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Unsupported --resolve mode 'invalid'. The only supported value is 'bundle'."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -737,11 +753,19 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(loadBundleMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message:
         "Unknown contract subject_id 'helper.command.unknown'. Use 'sdd-helper capabilities' to discover valid subjects."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -769,10 +793,18 @@ describe("sdd-helper CLI", () => {
 
     const result = await runHelperCli(["node", "sdd-helper", "inspect", "docs/example.sdd"], deps);
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "runtime_error",
       message: "Document 'docs/example.sdd' is not parseable for inspect."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "transport",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -781,10 +813,18 @@ describe("sdd-helper CLI", () => {
     const result = await runHelperCli(["node", "sdd-helper", "search"], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "At least one of --query, --node-type, or --node-id is required."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -813,6 +853,102 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("returns create payloads with a top-level assessment", async () => {
+    const { deps, stdout, createDocumentMock } = createDeps();
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "create",
+      "docs/new.sdd",
+      "--version",
+      "0.1"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(createDocumentMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/new.sdd",
+      version: "0.1"
+    });
+    const payload = parseStdoutPayload(stdout) as CreateDocumentResult;
+    expect(payload).toMatchObject({
+      kind: "sdd-create-document",
+      path: "docs/new.sdd",
+      uri: "sdd://document/docs/new.sdd",
+      revision: "rev_new",
+      change_set: {
+        kind: "sdd-change-set",
+        status: "applied",
+        mode: "commit"
+      }
+    });
+    expect(payload.change_set).not.toHaveProperty("assessment");
+    expectAssessment(payload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: false,
+      can_render: true,
+      should_stop: false
+    });
+  });
+
+  it("returns create bootstrap assessments without mutating nested change sets", async () => {
+    const createDocument = vi.fn(async (): Promise<CreateDocumentResult> => ({
+      kind: "sdd-create-document",
+      path: "docs/new.sdd",
+      uri: "sdd://document/docs/new.sdd",
+      revision: "rev_new",
+      change_set: {
+        ...createRejectedChangeSet("docs/new.sdd"),
+        origin: "create_document",
+        document_effect: "created",
+        base_revision: null,
+        mode: "commit",
+        status: "applied",
+        diagnostics: [
+          {
+            stage: "parse",
+            code: "parse.minimum_top_level_blocks",
+            severity: "error",
+            message: "Document must contain at least one top-level block.",
+            file: "docs/new.sdd"
+          }
+        ],
+        resulting_revision: "rev_new"
+      }
+    }));
+    const { deps, stdout } = createDeps({ createDocument });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "create",
+      "docs/new.sdd",
+      "--version",
+      "0.1"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const payload = parseStdoutPayload(stdout) as CreateDocumentResult;
+    expect(payload).toMatchObject({
+      kind: "sdd-create-document",
+      change_set: {
+        diagnostics: [
+          {
+            code: "parse.minimum_top_level_blocks"
+          }
+        ]
+      }
+    });
+    expect(payload.change_set).not.toHaveProperty("assessment");
+    expectAssessment(payload, {
+      outcome: "review_required",
+      layer: "success",
+      can_commit: false,
+      can_render: false,
+      should_stop: false,
+      blocking_diagnostics: []
+    });
+  });
+
   it("keeps create domain rejections structured and exit-zero", async () => {
     const rejection = createRejectedChangeSet("docs/new.sdd");
     const createDocument = vi.fn(async (_workspace, _bundle, _args: CreateDocumentArgs) => {
@@ -836,7 +972,15 @@ describe("sdd-helper CLI", () => {
       path: "docs/new.sdd",
       version: "0.1"
     });
-    expect(parseStdoutPayload(stdout)).toEqual(rejection);
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject(rejection);
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "domain_rejection",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
+    });
   });
 
   it("returns invalid_args for legacy create template flags", async () => {
@@ -851,10 +995,18 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "error: unknown option '--template'"
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -874,14 +1026,22 @@ describe("sdd-helper CLI", () => {
       base_revision: "rev_base",
       operations: []
     });
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-change-set",
       status: "rejected"
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "domain_rejection",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
   it("supports apply requests from stdin", async () => {
-    const { deps, applyChangeSetMock } = createDeps();
+    const { deps, stdout, applyChangeSetMock } = createDeps();
     const result = await runHelperCli([
       "node",
       "sdd-helper",
@@ -896,6 +1056,194 @@ describe("sdd-helper CLI", () => {
       base_revision: "rev_base",
       operations: [],
       mode: "commit"
+    });
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-change-set",
+      status: "rejected"
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "domain_rejection",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
+    });
+  });
+
+  it("returns candidate diagnostics assessment for applied dry-run diagnostics", async () => {
+    const diagnostic = {
+      stage: "validate" as const,
+      code: "validate.required_props_by_type",
+      severity: "error" as const,
+      message: "Node 'P-001' is missing required property 'owner'.",
+      file: "docs/example.sdd"
+    };
+    const applyChangeSet = vi.fn(async (_workspace, _bundle, request: ApplyChangeSetArgs): Promise<ChangeSetResult> => ({
+      ...createRejectedChangeSet(request.path),
+      change_set_id: "chg_apply_diagnostic",
+      path: request.path,
+      base_revision: request.base_revision,
+      resulting_revision: "rev_candidate",
+      mode: "dry_run",
+      status: "applied",
+      operations: request.operations,
+      diagnostics: [diagnostic]
+    }));
+    const { deps, stdout } = createDeps({ applyChangeSet });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/request.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-change-set",
+      status: "applied",
+      diagnostics: [diagnostic]
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "candidate_diagnostics",
+      can_commit: false,
+      can_render: false,
+      should_stop: true,
+      blocking_diagnostics: [diagnostic]
+    });
+  });
+
+  it("returns candidate diagnostics assessment for nested projection diagnostics", async () => {
+    const diagnostic = {
+      stage: "project" as const,
+      code: "project.unresolved_reference",
+      severity: "error" as const,
+      message: "Projection could not resolve a reference.",
+      file: "docs/example.sdd"
+    };
+    const applyChangeSet = vi.fn(async (_workspace, _bundle, request: ApplyChangeSetArgs): Promise<ChangeSetResult> => ({
+      ...createRejectedChangeSet(request.path),
+      change_set_id: "chg_apply_projection_diagnostic",
+      path: request.path,
+      base_revision: request.base_revision,
+      resulting_revision: "rev_candidate",
+      mode: "dry_run",
+      status: "applied",
+      operations: request.operations,
+      diagnostics: [],
+      projection_results: [
+        {
+          view_id: "ia_place_map",
+          diagnostics: [diagnostic]
+        }
+      ]
+    }));
+    const { deps, stdout } = createDeps({ applyChangeSet });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/request.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-change-set",
+      status: "applied",
+      projection_results: [
+        {
+          view_id: "ia_place_map",
+          diagnostics: [diagnostic]
+        }
+      ]
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "candidate_diagnostics",
+      can_commit: false,
+      can_render: false,
+      should_stop: true,
+      blocking_diagnostics: [diagnostic]
+    });
+  });
+
+  it("returns commit-eligible assessment for clean applied dry runs", async () => {
+    const applyChangeSet = vi.fn(async (_workspace, _bundle, request: ApplyChangeSetArgs): Promise<ChangeSetResult> => ({
+      ...createRejectedChangeSet(request.path),
+      change_set_id: "chg_apply_clean_dry_run",
+      path: request.path,
+      base_revision: request.base_revision,
+      resulting_revision: "rev_candidate",
+      mode: "dry_run",
+      status: "applied",
+      operations: request.operations,
+      diagnostics: []
+    }));
+    const { deps, stdout } = createDeps({ applyChangeSet });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/request.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-change-set",
+      status: "applied",
+      mode: "dry_run"
+    });
+    expectAssessment(payload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: true,
+      can_render: false,
+      should_stop: false
+    });
+  });
+
+  it("returns render-eligible assessment for clean committed mutations", async () => {
+    const applyChangeSet = vi.fn(async (_workspace, _bundle, request: ApplyChangeSetArgs): Promise<ChangeSetResult> => ({
+      ...createRejectedChangeSet(request.path),
+      change_set_id: "chg_apply_clean_commit",
+      path: request.path,
+      base_revision: request.base_revision,
+      resulting_revision: "rev_committed",
+      mode: request.mode ?? "dry_run",
+      status: "applied",
+      undo_eligible: true,
+      operations: request.operations,
+      diagnostics: []
+    }));
+    const { deps, stdout } = createDeps({ applyChangeSet });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "-"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-change-set",
+      status: "applied",
+      mode: "commit"
+    });
+    expectAssessment(payload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: false,
+      can_render: true,
+      should_stop: false
     });
   });
 
@@ -947,9 +1295,20 @@ describe("sdd-helper CLI", () => {
         }
       ]
     });
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout) as {
+      change_set?: { assessment?: unknown };
+    };
+    expect(payload).toMatchObject({
       kind: "sdd-authoring-intent-result",
       status: "applied"
+    });
+    expect(payload.change_set).not.toHaveProperty("assessment");
+    expectAssessment(payload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: true,
+      can_render: false,
+      should_stop: false
     });
   });
 
@@ -984,10 +1343,18 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(applyAuthoringIntentMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Request body does not match ApplyAuthoringIntentArgs: intents[0].placement.anchor is required for mode \"before\"."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1004,9 +1371,17 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_json"
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1024,10 +1399,18 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(applyAuthoringIntentMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_json",
       message: "Unexpected end of JSON input"
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "transport",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1044,10 +1427,18 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Request body does not match ApplyChangeSetArgs: base_revision must be a string."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1074,10 +1465,18 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(applyChangeSetMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Request body does not match ApplyChangeSetArgs: operations[0].placement must be an object."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1094,9 +1493,17 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-change-set",
       origin: "undo_change_set"
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "domain_rejection",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1118,10 +1525,18 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(undoChangeSetMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Request body does not match UndoChangeSetArgs: mode must be one of \"dry_run\" or \"commit\"."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1141,9 +1556,17 @@ describe("sdd-helper CLI", () => {
       path: "docs/example.sdd",
       profile_id: "strict"
     });
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const validationPayload = parseStdoutPayload(stdout);
+    expect(validationPayload).toMatchObject({
       kind: "sdd-validation",
       profile_id: "strict"
+    });
+    expectAssessment(validationPayload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: false,
+      can_render: true,
+      should_stop: false
     });
 
     stdout.length = 0;
@@ -1161,9 +1584,17 @@ describe("sdd-helper CLI", () => {
       path: "docs/example.sdd",
       view_id: "ia_place_map"
     });
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const projectionPayload = parseStdoutPayload(stdout);
+    expect(projectionPayload).toMatchObject({
       kind: "sdd-projection",
       view_id: "ia_place_map"
+    });
+    expectAssessment(projectionPayload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: false,
+      can_render: true,
+      should_stop: false
     });
   });
 
@@ -1183,11 +1614,19 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-preview",
       format: "svg",
       mime_type: "image/svg+xml",
       artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
+    });
+    expectAssessment(payload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: false,
+      can_render: true,
+      should_stop: false
     });
   });
 
@@ -1234,6 +1673,13 @@ describe("sdd-helper CLI", () => {
       mime_type: "image/svg+xml",
       artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
     });
+    expectAssessment(payload, {
+      outcome: "acceptable",
+      layer: "success",
+      can_commit: false,
+      can_render: true,
+      should_stop: false
+    });
     expect(payload).not.toHaveProperty("artifact");
     expect(payload).not.toHaveProperty("display_copy_path");
     expect(getTopLevelJsonKeyOrder(stdout.join(""))).toEqual([
@@ -1247,7 +1693,8 @@ describe("sdd-helper CLI", () => {
       "mime_type",
       "artifact_path",
       "notes",
-      "diagnostics"
+      "diagnostics",
+      "assessment"
     ]);
   });
 
@@ -1270,10 +1717,18 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(1);
     expect(renderPreviewMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: expect.stringContaining("unknown option '--display-copy-name'")
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 
@@ -1309,11 +1764,20 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "runtime_error",
       message: "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict): Node 'P-001' is missing required property 'owner'.",
       diagnostics
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "persisted_validation",
+      can_commit: false,
+      can_render: false,
+      should_stop: true,
+      blocking_diagnostics: diagnostics
     });
   });
 
@@ -1369,10 +1833,18 @@ describe("sdd-helper CLI", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(parseStdoutPayload(stdout)).toEqual({
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "git-commit requires at least one explicit .sdd path."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
     });
   });
 

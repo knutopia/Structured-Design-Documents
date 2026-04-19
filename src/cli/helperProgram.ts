@@ -7,6 +7,7 @@ import { loadBundle } from "../bundle/loadBundle.js";
 import type {
   ApplyAuthoringIntentArgs,
   ApplyChangeSetArgs,
+  AuthoringOutcomeAssessment,
   AuthoringIntent,
   ChangeOperation,
   ChangeSetResult,
@@ -24,6 +25,12 @@ import type {
 import { applyAuthoringIntent } from "../authoring/authoringIntents.js";
 import { getContractSubjectDetail } from "../authoring/contractMetadata.js";
 import { getBundleResolvedContractSubjectDetail } from "../authoring/contractResolution.js";
+import {
+  assessAuthoringOutcome,
+  assessHelperError,
+  type AssessableAuthoringOutcome,
+  type HelperErrorAssessmentContext
+} from "../authoring/outcomeAssessment.js";
 import { AuthoringGitError, getGitStatus, gitCommit } from "../authoring/git.js";
 import { inspectDocument } from "../authoring/inspect.js";
 import { listDocuments, searchGraph } from "../authoring/listing.js";
@@ -72,13 +79,22 @@ export interface RunHelperCliResult {
 class HelperCliError extends Error {
   readonly code: HelperErrorResult["code"];
   readonly diagnostics?: Diagnostic[];
+  readonly assessmentContext?: HelperErrorAssessmentContext;
 
-  constructor(code: HelperErrorResult["code"], message: string, diagnostics?: Diagnostic[]) {
+  constructor(
+    code: HelperErrorResult["code"],
+    message: string,
+    diagnostics?: Diagnostic[],
+    assessmentContext?: HelperErrorAssessmentContext
+  ) {
     super(message);
     this.name = "HelperCliError";
     this.code = code;
     if (diagnostics && diagnostics.length > 0) {
       this.diagnostics = diagnostics;
+    }
+    if (assessmentContext) {
+      this.assessmentContext = assessmentContext;
     }
   }
 }
@@ -128,20 +144,35 @@ function withDefaults(overrides: Partial<HelperCliDeps> = {}): HelperCliDeps {
 function helperErrorResult(
   code: HelperErrorResult["code"],
   message: string,
-  diagnostics?: Diagnostic[]
+  diagnostics?: Diagnostic[],
+  assessmentContext?: HelperErrorAssessmentContext
 ): HelperErrorResult {
-  return diagnostics && diagnostics.length > 0
-    ? {
-        kind: "sdd-helper-error",
-        code,
-        message,
-        diagnostics
-      }
-    : {
-    kind: "sdd-helper-error",
-    code,
-    message
-      };
+  const result: HelperErrorResult =
+    diagnostics && diagnostics.length > 0
+      ? {
+          kind: "sdd-helper-error",
+          code,
+          message,
+          diagnostics
+        }
+      : {
+          kind: "sdd-helper-error",
+          code,
+          message
+        };
+  return {
+    ...result,
+    assessment: assessHelperError(result, assessmentContext)
+  };
+}
+
+function withAssessment<T extends AssessableAuthoringOutcome>(
+  payload: T
+): T & { assessment: AuthoringOutcomeAssessment } {
+  return {
+    ...payload,
+    assessment: assessAuthoringOutcome(payload)
+  };
 }
 
 function writeJson(deps: Pick<HelperCliDeps, "stdout">, payload: unknown): void {
@@ -165,7 +196,22 @@ async function loadRequestText(
 
 type RequestValidator = (value: unknown) => string | undefined;
 
-function parseJsonRequest<T>(rawText: string, requestName: string, validate: RequestValidator): T {
+function createRequestAssessmentContext(
+  requestSource: string,
+  rawText: string
+): HelperErrorAssessmentContext {
+  return {
+    request_source: requestSource === "-" ? "stdin_dash" : "file_path",
+    request_body_empty: rawText.length === 0
+  };
+}
+
+function parseJsonRequest<T>(
+  rawText: string,
+  requestName: string,
+  validate: RequestValidator,
+  assessmentContext: HelperErrorAssessmentContext
+): T {
   let parsed: unknown;
 
   try {
@@ -173,13 +219,20 @@ function parseJsonRequest<T>(rawText: string, requestName: string, validate: Req
   } catch (error) {
     throw new HelperCliError(
       "invalid_json",
-      error instanceof Error ? error.message : "Request body is not valid JSON."
+      error instanceof Error ? error.message : "Request body is not valid JSON.",
+      undefined,
+      assessmentContext
     );
   }
 
   const validationError = validate(parsed);
   if (validationError) {
-    throw new HelperCliError("invalid_args", `Request body does not match ${requestName}: ${validationError}`);
+    throw new HelperCliError(
+      "invalid_args",
+      `Request body does not match ${requestName}: ${validationError}`,
+      undefined,
+      assessmentContext
+    );
   }
 
   return parsed as T;
@@ -741,12 +794,13 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
 
       try {
+        const result = await deps.createDocument(workspace, bundle, {
+          path: normalizedPath,
+          version: options.version
+        });
         writeJson(
           deps,
-          await deps.createDocument(workspace, bundle, {
-            path: normalizedPath,
-            version: options.version
-          })
+          withAssessment(result)
         );
       } catch (error) {
         rethrowDomainCreateRejection(error);
@@ -759,9 +813,15 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .action(async (options: { request: string }) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const rawRequest = await loadRequestText(deps, options.request);
-      const request = parseJsonRequest<ApplyChangeSetArgs>(rawRequest, "ApplyChangeSetArgs", validateApplyChangeSetArgs);
+      const assessmentContext = createRequestAssessmentContext(options.request, rawRequest);
+      const request = parseJsonRequest<ApplyChangeSetArgs>(
+        rawRequest,
+        "ApplyChangeSetArgs",
+        validateApplyChangeSetArgs,
+        assessmentContext
+      );
       workspace.normalizeDocumentPath(request.path);
-      writeJson(deps, await deps.applyChangeSet(workspace, bundle, request));
+      writeJson(deps, withAssessment(await deps.applyChangeSet(workspace, bundle, request)));
     });
 
   program
@@ -770,13 +830,15 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .action(async (options: { request: string }) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const rawRequest = await loadRequestText(deps, options.request);
+      const assessmentContext = createRequestAssessmentContext(options.request, rawRequest);
       const request = parseJsonRequest<ApplyAuthoringIntentArgs>(
         rawRequest,
         "ApplyAuthoringIntentArgs",
-        validateApplyAuthoringIntentArgs
+        validateApplyAuthoringIntentArgs,
+        assessmentContext
       );
       workspace.normalizeDocumentPath(request.path);
-      writeJson(deps, await deps.applyAuthoringIntent(workspace, bundle, request));
+      writeJson(deps, withAssessment(await deps.applyAuthoringIntent(workspace, bundle, request)));
     });
 
   program
@@ -785,8 +847,14 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .action(async (options: { request: string }) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const rawRequest = await loadRequestText(deps, options.request);
-      const request = parseJsonRequest<UndoChangeSetArgs>(rawRequest, "UndoChangeSetArgs", validateUndoChangeSetArgs);
-      writeJson(deps, await deps.undoChangeSet(workspace, bundle, request));
+      const assessmentContext = createRequestAssessmentContext(options.request, rawRequest);
+      const request = parseJsonRequest<UndoChangeSetArgs>(
+        rawRequest,
+        "UndoChangeSetArgs",
+        validateUndoChangeSetArgs,
+        assessmentContext
+      );
+      writeJson(deps, withAssessment(await deps.undoChangeSet(workspace, bundle, request)));
     });
 
   program
@@ -796,10 +864,11 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .action(async (documentPath: string, options: { profile: ValidateDocumentArgs["profile_id"] }) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
-      writeJson(deps, await deps.validateDocument(workspace, bundle, {
+      const result = await deps.validateDocument(workspace, bundle, {
         path: normalizedPath,
         profile_id: options.profile
-      }));
+      });
+      writeJson(deps, withAssessment(result));
     });
 
   program
@@ -809,10 +878,11 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .action(async (documentPath: string, options: { view: ProjectDocumentArgs["view_id"] }) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
-      writeJson(deps, await deps.projectDocument(workspace, bundle, {
+      const result = await deps.projectDocument(workspace, bundle, {
         path: normalizedPath,
         view_id: options.view
-      }));
+      });
+      writeJson(deps, withAssessment(result));
     });
 
   program
@@ -833,15 +903,16 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     ) => {
       const { workspace, bundle } = await loadBundleContext(deps);
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
+      const result = await deps.renderPreview(workspace, bundle, {
+        path: normalizedPath,
+        view_id: options.view,
+        profile_id: options.profile,
+        format: options.format,
+        backend_id: options.backend
+      });
       writeJson(
         deps,
-        await deps.renderPreview(workspace, bundle, {
-          path: normalizedPath,
-          view_id: options.view,
-          profile_id: options.profile,
-          format: options.format,
-          backend_id: options.backend
-        })
+        withAssessment(result)
       );
     });
 
@@ -898,12 +969,20 @@ export async function runHelperCli(
     return { exitCode: 0 };
   } catch (error) {
     if (error instanceof AuthoringMutationError && error.changeSet) {
-      writeJson(deps, error.changeSet);
+      writeJson(deps, withAssessment(error.changeSet));
       return { exitCode: 0 };
     }
 
     const helperError = classifyHelperError(error);
-    writeJson(deps, helperErrorResult(helperError.code, helperError.message, helperError.diagnostics));
+    writeJson(
+      deps,
+      helperErrorResult(
+        helperError.code,
+        helperError.message,
+        helperError.diagnostics,
+        helperError.assessmentContext
+      )
+    );
     return { exitCode: 1 };
   }
 }
