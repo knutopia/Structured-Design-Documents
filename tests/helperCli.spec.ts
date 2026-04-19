@@ -389,7 +389,8 @@ describe("sdd-helper CLI", () => {
 
     expect(result.exitCode).toBe(0);
     expect(loadBundleMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout) as { commands?: Array<Record<string, unknown>> };
+    expect(payload).toMatchObject({
       kind: "sdd-helper-capabilities",
       helper_name: "sdd-helper",
       discovery: {
@@ -515,6 +516,11 @@ describe("sdd-helper CLI", () => {
         })
       ])
     });
+    const authorCommand = payload.commands?.find((command) => command.name === "author");
+    expect(authorCommand).toBeDefined();
+    expect(authorCommand).not.toHaveProperty("schema");
+    expect(authorCommand).not.toHaveProperty("output_shape");
+    expect(JSON.stringify(payload)).not.toContain("sdd-authoring-outcome-assessment");
   });
 
   it("returns static contract detail without loading bundle state", async () => {
@@ -524,7 +530,15 @@ describe("sdd-helper CLI", () => {
     expect(result.exitCode).toBe(0);
     expect(stderr).toEqual([]);
     expect(loadBundleMock).not.toHaveBeenCalled();
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout) as {
+      output_shape?: {
+        schema?: {
+          properties?: Record<string, unknown>;
+          required?: string[];
+        };
+      };
+    };
+    expect(payload).toMatchObject({
       kind: "sdd-contract-subject-detail",
       subject: {
         subject_id: "helper.command.author",
@@ -541,6 +555,51 @@ describe("sdd-helper CLI", () => {
         mode: "static"
       }
     });
+    expect(payload.output_shape?.schema?.properties?.assessment).toMatchObject({
+      type: "object",
+      properties: {
+        kind: {
+          enum: ["sdd-authoring-outcome-assessment"]
+        }
+      }
+    });
+    expect(payload.output_shape?.schema?.required ?? []).not.toContain("assessment");
+  });
+
+  it("returns apply contract detail with optional assessment schema", async () => {
+    const { deps, stdout, stderr, loadBundleMock } = createDeps();
+    const result = await runHelperCli(["node", "sdd-helper", "contract", "helper.command.apply"], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr).toEqual([]);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    const payload = parseStdoutPayload(stdout) as {
+      output_shape?: {
+        schema?: {
+          properties?: Record<string, unknown>;
+          required?: string[];
+        };
+      };
+    };
+    expect(payload).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.apply",
+        output_shape_id: "shared.shape.apply_change_set_result"
+      },
+      output_shape: {
+        shape_id: "shared.shape.apply_change_set_result"
+      }
+    });
+    expect(payload.output_shape?.schema?.properties?.assessment).toMatchObject({
+      type: "object",
+      properties: {
+        layer: {
+          enum: expect.arrayContaining(["domain_rejection", "candidate_diagnostics", "success"])
+        }
+      }
+    });
+    expect(payload.output_shape?.schema?.required ?? []).not.toContain("assessment");
   });
 
   it("returns create bootstrap continuation semantics through contract detail", async () => {

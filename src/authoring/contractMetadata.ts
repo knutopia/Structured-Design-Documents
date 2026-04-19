@@ -83,6 +83,40 @@ const diagnosticSchema = objectSchema(
   ["stage", "code", "severity", "message", "file"]
 );
 
+const authoringOutcomeAssessmentSchema = objectSchema(
+  {
+    kind: stringSchema(["sdd-authoring-outcome-assessment"]),
+    outcome: stringSchema(["acceptable", "blocked", "review_required"]),
+    layer: stringSchema([
+      "transport",
+      "request_shape",
+      "domain_rejection",
+      "candidate_diagnostics",
+      "persisted_validation",
+      "projection",
+      "render",
+      "success"
+    ]),
+    can_commit: booleanSchema(),
+    can_render: booleanSchema(),
+    should_stop: booleanSchema(),
+    next_action: stringSchema(),
+    blocking_diagnostics: arraySchema(diagnosticSchema),
+    summary: stringSchema()
+  },
+  [
+    "kind",
+    "outcome",
+    "layer",
+    "can_commit",
+    "can_render",
+    "should_stop",
+    "next_action",
+    "blocking_diagnostics",
+    "summary"
+  ]
+);
+
 const placementSchema = objectSchema(
   {
     mode: stringSchema(["before", "after", "first", "last"]),
@@ -319,7 +353,8 @@ const changeSetResultSchema = objectSchema(
     operations: arraySchema(changeOperationSchema),
     summary: changeSetSummarySchema,
     diagnostics: arraySchema(diagnosticSchema),
-    projection_results: arraySchema(projectionResultEntrySchema)
+    projection_results: arraySchema(projectionResultEntrySchema),
+    assessment: authoringOutcomeAssessmentSchema
   },
   [
     "kind",
@@ -472,7 +507,8 @@ const applyAuthoringIntentResultSchema = objectSchema(
     change_set: changeSetResultSchema,
     created_targets: arraySchema(createdTargetSchema),
     diagnostics: arraySchema(diagnosticSchema),
-    intent_diagnostics: arraySchema(authoringIntentDiagnosticSchema)
+    intent_diagnostics: arraySchema(authoringIntentDiagnosticSchema),
+    assessment: authoringOutcomeAssessmentSchema
   },
   ["kind", "path", "base_revision", "mode", "status", "intents", "change_set", "created_targets", "diagnostics"]
 );
@@ -575,7 +611,8 @@ const createDocumentResultSchema = objectSchema(
     path: stringSchema(),
     uri: stringSchema(),
     revision: stringSchema(),
-    change_set: changeSetResultSchema
+    change_set: changeSetResultSchema,
+    assessment: authoringOutcomeAssessmentSchema
   },
   ["kind", "path", "uri", "revision", "change_set"]
 );
@@ -594,7 +631,8 @@ const validationResourceSchema = objectSchema(
       },
       ["error_count", "warning_count"]
     ),
-    diagnostics: arraySchema(diagnosticSchema)
+    diagnostics: arraySchema(diagnosticSchema),
+    assessment: authoringOutcomeAssessmentSchema
   },
   ["kind", "uri", "path", "revision", "profile_id", "diagnostics"]
 );
@@ -607,7 +645,8 @@ const projectionResourceSchema = objectSchema(
     revision: stringSchema(),
     view_id: stringSchema(),
     projection: anySchema,
-    diagnostics: arraySchema(diagnosticSchema)
+    diagnostics: arraySchema(diagnosticSchema),
+    assessment: authoringOutcomeAssessmentSchema
   },
   ["kind", "uri", "path", "revision", "view_id", "diagnostics"]
 );
@@ -624,9 +663,33 @@ const renderPreviewResultSchema = objectSchema(
     mime_type: stringSchema(["image/svg+xml", "image/png"]),
     artifact_path: stringSchema(),
     notes: stringArraySchema,
-    diagnostics: arraySchema(diagnosticSchema)
+    diagnostics: arraySchema(diagnosticSchema),
+    assessment: authoringOutcomeAssessmentSchema
   },
-  ["kind", "path", "revision", "view_id", "profile_id", "backend_id", "format", "mime_type", "artifact_path", "notes", "diagnostics"]
+  [
+    "kind",
+    "path",
+    "revision",
+    "view_id",
+    "profile_id",
+    "backend_id",
+    "format",
+    "mime_type",
+    "artifact_path",
+    "notes",
+    "diagnostics"
+  ]
+);
+
+const helperErrorResultSchema = objectSchema(
+  {
+    kind: stringSchema(["sdd-helper-error"]),
+    code: stringSchema(["invalid_args", "invalid_json", "runtime_error"]),
+    message: stringSchema(),
+    diagnostics: arraySchema(diagnosticSchema),
+    assessment: authoringOutcomeAssessmentSchema
+  },
+  ["kind", "code", "message"]
 );
 
 const helperGitStatusResultSchema = objectSchema(
@@ -942,6 +1005,13 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     stability: "stable"
   },
   {
+    shape_id: "shared.shape.authoring_outcome_assessment",
+    summary: "Shared assessment attached to authoring helper outcomes.",
+    schema_format: "json_schema_2020_12",
+    schema: authoringOutcomeAssessmentSchema,
+    stability: "stable"
+  },
+  {
     shape_id: "shared.shape.create_document_args",
     summary: "Create-document request payload.",
     schema_format: "json_schema_2020_12",
@@ -1130,6 +1200,13 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     summary: "Helper git-commit result payload.",
     schema_format: "json_schema_2020_12",
     schema: helperGitCommitResultSchema,
+    stability: "stable"
+  },
+  {
+    shape_id: "shared.shape.helper_error_result",
+    summary: "Helper-layer error payload returned on non-zero helper exits.",
+    schema_format: "json_schema_2020_12",
+    schema: helperErrorResultSchema,
     stability: "stable"
   },
   {

@@ -4,6 +4,55 @@ import {
   getContractSubjectDescriptor,
   getContractSubjectDetail
 } from "../src/authoring/contractMetadata.js";
+import type { ContractShapeId, ContractSubjectId } from "../src/authoring/contracts.js";
+
+type JsonSchemaObject = {
+  properties?: Record<string, unknown>;
+  required?: string[];
+};
+
+const ASSESSMENT_REQUIRED_FIELDS = [
+  "kind",
+  "outcome",
+  "layer",
+  "can_commit",
+  "can_render",
+  "should_stop",
+  "next_action",
+  "blocking_diagnostics",
+  "summary"
+];
+
+const ASSESSMENT_LAYER_VALUES = [
+  "transport",
+  "request_shape",
+  "domain_rejection",
+  "candidate_diagnostics",
+  "persisted_validation",
+  "projection",
+  "render",
+  "success"
+];
+
+function getShapeSchema(shapeId: ContractShapeId): JsonSchemaObject {
+  const shape = createContractIndex().shapes.find((candidate) => candidate.shape_id === shapeId);
+  expect(shape).toBeDefined();
+  return shape!.schema as JsonSchemaObject;
+}
+
+function expectOptionalAssessment(schema: JsonSchemaObject): void {
+  expect(schema.properties?.assessment).toMatchObject({
+    type: "object",
+    properties: {
+      kind: {
+        type: "string",
+        enum: ["sdd-authoring-outcome-assessment"]
+      }
+    },
+    required: ASSESSMENT_REQUIRED_FIELDS
+  });
+  expect(schema.required ?? []).not.toContain("assessment");
+}
 
 describe("authoring contract metadata", () => {
   it("returns all current helper command subject ids in stable order", () => {
@@ -26,6 +75,111 @@ describe("authoring contract metadata", () => {
       "helper.command.contract",
       "helper.command.capabilities"
     ]);
+  });
+
+  it("exposes the shared authoring outcome assessment shape", () => {
+    const schema = getShapeSchema("shared.shape.authoring_outcome_assessment");
+
+    expect(schema).toMatchObject({
+      type: "object",
+      additionalProperties: false,
+      required: ASSESSMENT_REQUIRED_FIELDS,
+      properties: {
+        kind: {
+          type: "string",
+          enum: ["sdd-authoring-outcome-assessment"]
+        },
+        outcome: {
+          type: "string",
+          enum: ["acceptable", "blocked", "review_required"]
+        },
+        layer: {
+          type: "string",
+          enum: ASSESSMENT_LAYER_VALUES
+        },
+        can_commit: {
+          type: "boolean"
+        },
+        can_render: {
+          type: "boolean"
+        },
+        should_stop: {
+          type: "boolean"
+        },
+        next_action: {
+          type: "string"
+        },
+        blocking_diagnostics: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              severity: {
+                type: "string",
+                enum: ["error", "warn", "info"]
+              }
+            }
+          }
+        },
+        summary: {
+          type: "string"
+        }
+      }
+    });
+  });
+
+  it("marks assessment optional on assessment-bearing result schemas", () => {
+    const shapeIds: ContractShapeId[] = [
+      "shared.shape.create_document_result",
+      "shared.shape.apply_change_set_result",
+      "shared.shape.apply_authoring_intent_result",
+      "shared.shape.undo_change_set_result",
+      "shared.shape.validation_resource",
+      "shared.shape.projection_resource",
+      "shared.shape.render_preview_result"
+    ];
+
+    for (const shapeId of shapeIds) {
+      expectOptionalAssessment(getShapeSchema(shapeId));
+    }
+  });
+
+  it("exposes helper error result schema with optional diagnostics and assessment", () => {
+    const schema = getShapeSchema("shared.shape.helper_error_result");
+
+    expect(schema).toMatchObject({
+      type: "object",
+      additionalProperties: false,
+      required: ["kind", "code", "message"],
+      properties: {
+        kind: {
+          type: "string",
+          enum: ["sdd-helper-error"]
+        },
+        code: {
+          type: "string",
+          enum: ["invalid_args", "invalid_json", "runtime_error"]
+        },
+        message: {
+          type: "string"
+        },
+        diagnostics: {
+          type: "array"
+        }
+      }
+    });
+    expectOptionalAssessment(schema);
+    expect(schema.required ?? []).not.toContain("diagnostics");
+  });
+
+  it("exposes optional assessment through author and apply deep introspection", () => {
+    const subjectIds: ContractSubjectId[] = ["helper.command.author", "helper.command.apply"];
+
+    for (const subjectId of subjectIds) {
+      const detail = getContractSubjectDetail(subjectId);
+      expect(detail).toBeDefined();
+      expectOptionalAssessment(detail!.output_shape!.schema as JsonSchemaObject);
+    }
   });
 
   it("returns author detail with static shapes, constraints, and continuation metadata", () => {
@@ -148,7 +302,8 @@ describe("authoring contract metadata", () => {
       "mime_type",
       "artifact_path",
       "notes",
-      "diagnostics"
+      "diagnostics",
+      "assessment"
     ]);
 
     expect(validateDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
