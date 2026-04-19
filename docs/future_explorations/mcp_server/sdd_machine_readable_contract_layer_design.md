@@ -1,6 +1,6 @@
 # SDD Shared Machine-Readable Contract Layer Design
 
-Status: focused addendum for shared helper/MCP contract metadata
+Status: focused addendum for shared helper/MCP contract metadata, partially implemented for helper deep introspection
 
 Audience: maintainers extending the shared SDD domain core, `sdd-helper`, `sdd-skill`, and the future MCP server
 
@@ -10,7 +10,7 @@ Authority:
 
 - This document complements and proposes additive revisions to [sdd_mcp_server_design.md](./sdd_mcp_server_design.md).
 - It does not replace the current MCP/helper design note as the overall design authority for helper-app and MCP behavior.
-- Until implementation lands and the referenced design note is revised, the current helper and MCP-facing contracts remain authoritative for runtime behavior.
+- The helper-side shared contract layer is implemented for current helper subjects, including assessment shape metadata. Future MCP adapter consumption remains pending.
 - For SDD language semantics, bundle files under `bundle/v0.1/` remain authoritative. This document defines tooling-contract metadata, not bundle semantics.
 
 ## 1. Summary
@@ -19,13 +19,15 @@ The current helper discovery surface is intentionally static and compact. That i
 
 Today, a client can discover that `author` exists and that it accepts `ApplyAuthoringIntentArgs`, but it cannot discover the nested request shape, semantic constraints, continuation rules, or bundle-bound value semantics without reading TypeScript contracts, validation logic, or prose documentation.
 
-This design introduces a shared machine-readable contract layer in the domain core with three layers:
+This design defines a shared machine-readable contract layer in the domain core with three layers:
 
 1. a shared contract layer that defines reusable machine-readable subject and shape metadata for helper and MCP
 2. a lightweight discovery layer that stays compact and static
 3. a deep on-demand introspection layer that returns full schema detail only when the client asks for it
 
 This is intentionally a tooling-contract design, not a language-spec design. It does not move helper or MCP contract metadata into the bundle, and it does not change bundle authority over language behavior, views, or profiles.
+
+The implemented helper-side layer now includes `shared.shape.authoring_outcome_assessment` and optional `assessment` properties on relevant helper result schemas. Full assessment schema detail is available through `sdd-helper contract <subject_id>` and remains intentionally absent from the lightweight `sdd-helper capabilities` payload.
 
 ## 2. Observed Problem
 
@@ -34,6 +36,7 @@ Current helper and future MCP work share one domain model, but the machine-reada
 - helper discovery is strong at command inventory and weak at nested request/result detail
 - structural schema detail is implicit in TypeScript types rather than surfaced as machine-readable contract data
 - semantic rules such as `local_id` ordering, uniqueness, continuation validity, and bundle-bound value semantics live in validation logic or prose rather than a shared contract layer
+- workflow assessment semantics need a shared shape so helper and future MCP consumers can interpret authoring outcomes without skill-owned heuristics
 - the future MCP adapter would otherwise need to duplicate subject descriptions, schema generation, and constraint wording that logically belong in the shared domain core
 
 The repo already treats machine-readable artifacts as first-class when they govern behavior. The same principle should apply here: helper and MCP contract metadata should live in one shared domain contract layer rather than being hand-maintained independently in adapter code.
@@ -63,7 +66,7 @@ Bundle files govern SDD language and bundle-owned downstream semantics. The shar
 The split is:
 
 - bundle-owned: language versioning, syntax, vocabulary, graph schema, view definitions, profiles, and any value sets that are semantically defined by those artifacts
-- shared contract layer-owned: helper/MCP subject inventory, request/result schema metadata, semantic constraint metadata, continuation metadata, bundle-binding references, stability metadata, and discovery/introspection shapes
+- shared contract layer-owned: helper/MCP subject inventory, request/result schema metadata, assessment shape metadata, semantic constraint metadata, continuation metadata, bundle-binding references, stability metadata, and discovery/introspection shapes
 
 This prevents adapter-only contracts from becoming the accidental source of truth for either language behavior or tool semantics.
 
@@ -135,6 +138,7 @@ The shared contract layer is the transport-agnostic machine-readable contract re
 
 - what helper commands, MCP tools, MCP resources, and MCP prompts exist as machine subjects
 - which structural schemas they use
+- which shared assessment schemas are attached to result and error payloads
 - which semantic constraints apply beyond JSON Schema
 - which fields are bound to bundle-owned value sources
 - what continuation semantics apply to returned data
@@ -318,6 +322,13 @@ interface ContractExampleSpec {
 
 These types are the design contract for the shared layer. The later implementation may factor them differently internally, but it must preserve the same semantics and field responsibilities.
 
+The current helper-side implementation includes these assessment-related shape conventions:
+
+- `shared.shape.authoring_outcome_assessment` describes `AuthoringOutcomeAssessment`, including `outcome`, `layer`, `can_commit`, `can_render`, `should_stop`, `next_action`, `blocking_diagnostics`, and `summary`.
+- Relevant helper result schemas include optional `assessment` properties that reference the same shape semantics.
+- `shared.shape.helper_error_result` describes `sdd-helper-error` with optional `diagnostics` and optional `assessment`.
+- `assessment` is optional in schemas so existing clients can continue consuming the older payload fields and `kind` values.
+
 ## 6.5 JSON Schema Responsibility
 
 JSON Schema is used for structural shape only:
@@ -328,6 +339,7 @@ JSON Schema is used for structural shape only:
 - simple enums that are adapter-owned rather than bundle-owned
 - nullability
 - nested request/result structure
+- optional assessment fields on result and error payloads
 
 The shared contract layer must not try to encode every semantic rule in JSON Schema. When a rule is semantically important but awkward or misleading to force into structural schema, it belongs in explicit `ContractConstraintSpec` records instead.
 
@@ -491,6 +503,8 @@ interface HelperCapabilitiesResultCommand {
 
 This is intentionally still light. The current fields remain useful for human-readable and machine-readable quick orientation. The new fields merely tell the client how to fetch deeper detail.
 
+Assessment metadata follows the same progressive-disclosure rule: `capabilities` exposes only shape IDs and deep-introspection availability, while `contract` exposes the optional `assessment` property and the full `shared.shape.authoring_outcome_assessment` schema.
+
 ## 7.3 Explicit Rejection: No Huge Capabilities Payload
 
 The design explicitly rejects the following for `sdd-helper capabilities`:
@@ -596,6 +610,7 @@ The payload must include:
 
 - full subject metadata
 - referenced input/output shape schemas
+- optional `assessment` properties on result schemas where the helper emits shared assessment
 - semantic constraint specs
 - continuation semantics
 - bundle-binding specs
@@ -617,6 +632,7 @@ The design requirement is:
 - do not shell out from MCP to `sdd-helper contract`
 - do not maintain separate MCP-only schema definitions for the same domain subjects
 - use the shared layer to generate MCP-facing input-schema-backed tool/resource/prompt metadata where protocol features support that
+- use the same `AuthoringOutcomeAssessment` semantics from shared code for MCP-facing outcome guidance, while keeping MCP transport and protocol failures surface-specific
 
 This design does not require a public MCP contract endpoint in the first slice. If future protocol needs prove that a public contract resource is useful, it must reuse the same shared subject-detail shape rather than inventing a second deep-introspection contract.
 
@@ -821,7 +837,7 @@ Locked compatibility decisions:
 - do not redesign the bundle to carry helper/MCP contract metadata
 - do not replace the current MCP/helper design note yet
 
-The implementation may add new domain-core contract types and one new helper introspection command, but it must not break existing helper clients that only know the current `capabilities` payload.
+The implementation has added shared domain-core contract types and the helper introspection command, while preserving existing helper clients that only know the current `capabilities` payload.
 
 ## 13. Explicitly Rejected Alternatives
 
@@ -836,17 +852,18 @@ The following alternatives are rejected by this design:
 - **Require a public MCP contract resource in the first slice**
   - rejected because internal consumption from the shared contract layer is sufficient for v1
 
-## 14. Required Future Revisions To `sdd_mcp_server_design.md`
+## 14. Sync Status For `sdd_mcp_server_design.md`
 
-Once this design is implemented, `sdd_mcp_server_design.md` should be revised in these specific ways:
+The helper-side shared contract layer is now reflected in `sdd_mcp_server_design.md` in these ways:
 
 - update the helper discovery section so `HelperCapabilitiesResult` includes additive contract-pointer fields such as `subject_id`, `input_shape_id`, `output_shape_id`, and deep-introspection availability
 - add the helper deep-introspection command `sdd-helper contract <subject_id> [--resolve bundle]`
 - clarify that helper discovery remains intentionally static and thin, while deep schema detail comes from on-demand contract introspection
 - clarify that MCP tool/resource/prompt metadata is generated from the shared contract layer rather than hand-maintained separately in adapter code
 - clarify that bundle-owned value sets remain bundle-bound references in the shared contract layer and are resolved only in bundle-resolved introspection mode
+- document shared `AuthoringOutcomeAssessment` as implemented for helper exposure and intended for future MCP direct consumption from shared code
 
-Those revisions are documentation follow-on work. They are not part of this design document's implementation scope.
+Live MCP adapter consumption remains a future implementation step.
 
 ## 15. Out Of Scope
 

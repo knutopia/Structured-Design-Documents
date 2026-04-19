@@ -80,7 +80,8 @@ The MCP server and helper app are sibling surfaces over the same shared SDD doma
 
 - The MCP server does not shell out to the helper app at runtime.
 - The helper app does not define a separate data model.
-- Both surfaces use the same inspect model, change-set model, revision model, ordering model, and diagnostic model.
+- Both surfaces use the same inspect model, change-set model, revision model, ordering model, diagnostic model, and outcome assessment semantics.
+- `sdd-helper` now exposes shared outcome assessment on relevant payloads; future MCP work should call the same shared assessment code directly rather than inheriting helper-specific stdin, stdout, or process exit behavior.
 
 ### 3.3 Structured Mutation, Not Raw Text Editing
 
@@ -177,7 +178,35 @@ For this design, control-plane edit failures also surface as diagnostics using `
 - `sdd.unsupported_document_version`
 - `sdd.invalid_reposition_target`
 
-### 4.5 Preview Artifact Locators
+### 4.5 Outcome Assessment
+
+Helper and future MCP consumers share one assessment model for operational workflow decisions.
+
+```ts
+interface AuthoringOutcomeAssessment {
+  kind: "sdd-authoring-outcome-assessment";
+  outcome: "acceptable" | "blocked" | "review_required";
+  layer:
+    | "transport"
+    | "request_shape"
+    | "domain_rejection"
+    | "candidate_diagnostics"
+    | "persisted_validation"
+    | "projection"
+    | "render"
+    | "success";
+  can_commit: boolean;
+  can_render: boolean;
+  should_stop: boolean;
+  next_action: string;
+  blocking_diagnostics: Diagnostic[];
+  summary: string;
+}
+```
+
+For the helper app, assessment is additive and appears as an optional `assessment` field on relevant result and error payloads. It does not change helper `kind` values or exit-code behavior. Future MCP exposure should use the same shared assessment semantics from shared code, while keeping MCP-specific failure envelopes where protocol rules require them.
+
+### 4.6 Preview Artifact Locators
 
 Preview output currently uses `artifact_path`, not `artifact_uri`.
 
@@ -409,6 +438,7 @@ interface ValidationResource {
     warning_count: number;
   };
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -427,6 +457,7 @@ interface ProjectionResource {
   view_id: string;
   projection?: unknown;
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -451,6 +482,7 @@ interface ChangeSetResource {
   operations: ChangeOperation[];
   summary: ChangeSetSummary;
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -512,6 +544,7 @@ interface ChangeSetResult {
     projection?: unknown;
     diagnostics: Diagnostic[];
   }>;
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -846,6 +879,7 @@ interface CreateDocumentResult {
   uri: string;
   revision: string;
   change_set: ChangeSetResult;
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -920,6 +954,7 @@ interface ApplyAuthoringIntentResult {
     parent_local_id?: string;
   }>;
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -993,6 +1028,7 @@ interface RenderPreviewResult {
   artifact_path: string;
   notes: string[];
   diagnostics: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -1131,6 +1167,7 @@ interface HelperErrorResult {
   code: "invalid_args" | "invalid_json" | "runtime_error";
   message: string;
   diagnostics?: Diagnostic[];
+  assessment?: AuthoringOutcomeAssessment;
 }
 ```
 
@@ -1140,7 +1177,7 @@ Rules:
 - domain-level rejections are represented in that payload and do not switch the helper into an unstructured error mode
 - malformed arguments, malformed JSON request bodies, and unexpected runtime failures return `HelperErrorResult`
 - `HelperErrorResult` writes to stdout and exits non-zero
-- helper and MCP should share the same underlying domain diagnostics, but the failure envelope remains surface-specific
+- helper and MCP should share the same underlying domain diagnostics and outcome assessment semantics, but the failure envelope remains surface-specific
 - stderr is reserved for optional crash/debug output and is not part of the public contract
 - bare `sdd-helper` and any invocation containing `--help` return a short JSON help stub and exit zero
 
@@ -1213,6 +1250,8 @@ The implemented helper surface now distinguishes:
 
 This is still helper-first, not MCP implementation work. The note is recording the current helper contract shape so later MCP work can mirror it rather than inventing a second discovery model.
 
+Deep helper contract metadata now exposes `shared.shape.authoring_outcome_assessment` and optional `assessment` properties on relevant helper result schemas. `capabilities` remains the thin orientation surface and does not inline that full nested schema.
+
 For the dedicated shared-contract architecture and the remaining MCP-consumption follow-on, see [sdd_machine_readable_contract_layer_design.md](./sdd_machine_readable_contract_layer_design.md) and Gate 5 in [sdd_machine_readable_contract_layer_implementation_plan.md](./sdd_machine_readable_contract_layer_implementation_plan.md).
 
 #### `sdd-helper inspect <document_path>`
@@ -1236,6 +1275,7 @@ Input:
 Output:
 
 - `ChangeSetResult`
+- The result may include optional `assessment` from shared assessment code.
 
 #### `sdd-helper undo --request <file-or-stdin>`
 
@@ -1246,6 +1286,7 @@ Input:
 Output:
 
 - `ChangeSetResult`
+- The result may include optional `assessment` from shared assessment code.
 
 #### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
 
@@ -1256,6 +1297,7 @@ If preview cannot produce an artifact, helper preview remains in the helper-erro
 - the helper returns `HelperErrorResult`
 - the helper message should describe the failing stage or reason class where possible
 - any underlying diagnostics should be preserved on `HelperErrorResult.diagnostics`
+- any attached `assessment` should be used to distinguish persisted validation, projection, render, request-shape, and transport failures
 - MCP may map the same underlying diagnostics into an MCP-specific failure envelope rather than reusing the helper envelope verbatim
 - success responses always materialize the rendered preview to a helper-owned temp file and return `artifact_path`
 - helper preview does not return inline SVG text or base64 PNG data

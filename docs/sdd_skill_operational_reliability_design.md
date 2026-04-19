@@ -1,18 +1,18 @@
 # SDD Skill Operational Reliability Design
 
-Status: proposed design foundation
+Status: design foundation, partially implemented through Gates 1-3
 
 Audience: maintainers improving `sdd-skill`, `sdd-helper`, shared SDD authoring services, and the future SDD MCP server
 
 Purpose: define how to make agent use of SDD tooling reliable by reducing prose-only operational burden, keeping `sdd-skill` focused on routing and hard stops, and adding shared outcome assessment for helper and MCP consumers.
 
-This document is a design foundation, not a gate-by-gate implementation plan. It does not supersede the current MCP/helper design, helper documentation, skill documentation, machine-readable contract design, or runtime contracts until the proposed behavior is implemented and the relevant authority documents are updated.
+This document is a design foundation, not a gate-by-gate implementation plan. The shared assessment model, helper exposure, and contract metadata exposure described here are implemented in shared code and `sdd-helper` documentation as of Gates 1-4. Skill restructuring, live MCP adapter behavior, and end-to-end closeout remain future gates.
 
 ## 1. Purpose And Status
 
 The current helper-first architecture gives agents a structured way to create, inspect, edit, validate, project, preview, undo, and narrowly commit `.sdd` documents. The recent helper-use failure does not show that this architecture should be replaced. It shows that the agent operating layer still depends too heavily on a model following prose instructions across transport details, result interpretation, and multi-step sequencing.
 
-This design keeps the existing shared authoring substrate and improves the reliability boundary around it. Correctness-critical interpretation should become shared, machine-readable behavior that both `sdd-helper` and the future MCP server can expose. `sdd-skill` should become a smaller branch selector and operating guide that delegates acceptance judgment to shared assessment data instead of encoding that judgment only in prose.
+This design keeps the existing shared authoring substrate and improves the reliability boundary around it. Correctness-critical interpretation is now shared, machine-readable behavior exposed by `sdd-helper` and intended for the future MCP server. `sdd-skill` should become a smaller branch selector and operating guide that delegates acceptance judgment to shared assessment data instead of encoding that judgment only in prose.
 
 ## 2. Ground Truth
 
@@ -59,7 +59,7 @@ The current `sdd-skill` is correct to prefer helper-backed authoring and to avoi
 - whether returned handles are informational dry-run handles or continuation-safe committed handles
 - whether a document is in an intentional empty bootstrap state after creation
 
-Adding more prose to `SKILL.md` is not sufficient. Prose can remind an agent to be careful, but it cannot make result interpretation deterministic. Correctness-critical judgments must be represented by shared code and surfaced as data.
+Adding more prose to `SKILL.md` is not sufficient. Prose can remind an agent to be careful, but it cannot make result interpretation deterministic. Gates 1-3 represent correctness-critical judgments in shared code, expose them on helper payloads, and describe them through machine-readable contract metadata.
 
 Known sharp edges that the design must address:
 
@@ -89,11 +89,11 @@ The top-level skill should become smaller. Its job should be to classify the use
 
 ## 5. Shared Outcome Assessment Design
 
-Introduce an additive shared assessment concept named `AuthoringOutcomeAssessment`.
+The additive shared assessment concept is named `AuthoringOutcomeAssessment`.
 
-`AuthoringOutcomeAssessment` is produced from existing helper/domain result envelopes and diagnostics. It is not produced by agent-side heuristics. The assessment logic lives in shared code consumed by `sdd-helper` and the future MCP server. `sdd-skill` reads the assessment and follows its decision fields.
+`AuthoringOutcomeAssessment` is produced from existing helper/domain result envelopes and diagnostics. It is not produced by agent-side heuristics. The assessment logic lives in shared code consumed by `sdd-helper` and intended for the future MCP server. `sdd-skill` reads the assessment and follows its decision fields.
 
-Required semantic shape:
+Implemented semantic shape:
 
 ```ts
 interface AuthoringOutcomeAssessment {
@@ -117,7 +117,7 @@ interface AuthoringOutcomeAssessment {
 }
 ```
 
-The exact TypeScript naming may change during implementation only if an existing repo-local naming pattern is discovered and applied consistently. The semantics in this section are locked by this design.
+The TypeScript interface and helper-exposed field are implemented under this name.
 
 Field semantics:
 
@@ -144,8 +144,8 @@ Assessment rules:
 Adapter exposure:
 
 - Existing helper result shapes remain backward-compatible.
-- Assessment exposure is additive. Implementation may add an assessment field to relevant helper/MCP results or return a companion assessment object, but both adapters must expose the same assessment semantics from shared code.
-- The machine-readable contract layer should describe the assessment shape and continuation implications once it is implemented.
+- Assessment exposure is additive. `sdd-helper` adds optional `assessment` fields to relevant result payloads and helper errors without changing existing `kind` values, existing fields, or exit-code behavior. Future MCP exposure should use the same assessment semantics from shared code.
+- The machine-readable contract layer describes `shared.shape.authoring_outcome_assessment` and optional `assessment` properties on relevant helper result schemas through deep introspection.
 
 ## 6. Skill Restructuring Design
 
@@ -170,7 +170,7 @@ Hard stops that remain in top-level `SKILL.md`:
 - Use the returned `create` revision for fresh-document bootstrap follow-on authoring instead of immediately forcing `inspect`.
 - Dry-run before commit.
 - Do not render before clean committed validation.
-- Defer acceptance judgment to shared assessment once available.
+- Defer acceptance judgment to shared assessment.
 
 Skill guidance must not duplicate bundle vocabulary, endpoint rules, profile lists, view lists, parser grammar, or node ID syntax as normative skill-owned behavior. When a task needs bundle-owned values, the skill should direct the agent to use helper contract introspection with bundle resolution or other shared bundle-backed surfaces.
 
@@ -185,7 +185,7 @@ Skill guidance must not duplicate bundle vocabulary, endpoint rules, profile lis
 - stdout JSON behavior
 - exit codes for helper-level failures
 
-`sdd-helper` must not become the unique authority for result acceptance. It should expose shared assessment semantics produced by shared code.
+`sdd-helper` must not become the unique authority for result acceptance. It exposes shared assessment semantics produced by shared code.
 
 The future MCP server remains a sibling adapter. It must call shared SDD domain services directly and must not shell out to `sdd-helper`. It should expose the same assessment semantics without inheriting helper-specific stdin, stdout, or process exit behavior.
 
@@ -198,7 +198,7 @@ Shared domain code owns:
 - continuation-safe versus informational handles
 - relationship between existing result envelopes and next workflow steps
 
-The shared machine-readable contract layer should describe new assessment payloads and any adapter exposure rules. The bundle remains the authority for SDD language behavior, vocabulary, relationships, views, and profiles.
+The shared machine-readable contract layer describes the implemented assessment payload shape and adapter exposure rules. The bundle remains the authority for SDD language behavior, vocabulary, relationships, views, and profiles.
 
 ## 8. Acceptance Scenarios
 
@@ -232,6 +232,5 @@ This document is complete only when:
 - it defines `AuthoringOutcomeAssessment` with all required fields
 - it includes the acceptance scenarios
 - it does not describe speculative repo structure as current fact
-- it keeps proposed behavior clearly marked as proposed design
+- it distinguishes implemented Gates 1-4 behavior from future skill and MCP gates
 - it changes no code and no tracked non-doc behavior
-

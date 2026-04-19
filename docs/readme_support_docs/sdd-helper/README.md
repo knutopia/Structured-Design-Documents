@@ -41,10 +41,26 @@ Use this page when you want the same surface explained in practical terms.
 - Successful commands write exactly one JSON payload to `stdout`.
 - Helper-level failures return `sdd-helper-error` and exit non-zero. This covers malformed arguments, malformed JSON request bodies, and runtime failures. Some helper errors, especially preview failures, also include optional `diagnostics`.
 - Domain-level rejections stay structured. For example, a rejected change set still comes back as a normal JSON result and still exits zero.
+- Relevant success payloads and `sdd-helper-error` payloads may include optional `assessment` data for workflow decisions.
 - Public path inputs are repo-relative and `.sdd`-focused.
 - Direct helper execution works from anywhere inside the repo checkout; bundle-backed commands resolve the repo root at runtime rather than assuming the current directory is the repo root.
 - `apply`, `author`, and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
 - `stderr` is not part of the public helper contract.
+
+## Outcome Assessment
+
+`sdd-helper` attaches optional `assessment` data to authoring, validation, projection, preview, and helper-error payloads. This field is additive: it does not replace existing fields, change any `kind` value, or change helper exit-code behavior. Structured domain rejections still exit zero, while `sdd-helper-error` still exits non-zero.
+
+The assessment shape is identified by `kind: "sdd-authoring-outcome-assessment"`. Callers should use these fields for workflow decisions:
+
+- `outcome`: the top-level judgment, such as `acceptable`, `review_required`, or `blocked`.
+- `layer`: the first layer that determines the judgment, such as `transport`, `request_shape`, `domain_rejection`, `candidate_diagnostics`, `persisted_validation`, `projection`, `render`, or `success`.
+- `can_commit` and `can_render`: whether the assessed result is eligible for the next commit or render step.
+- `should_stop`: whether the caller must stop before continuing the workflow.
+- `next_action`: the recommended immediate follow-on action.
+- `blocking_diagnostics`: the error-severity diagnostics that block the next workflow step.
+
+For request-loading commands, request files remain the safest default. `--request -` remains valid only when the JSON body is actually supplied on stdin in the same command; empty stdin is classified by assessment as a transport-layer failure.
 
 ## Worked Workflow: Dry-Run Editing
 
@@ -120,7 +136,7 @@ Because `mode` is omitted, this is a dry run by default. The same dry-run defaul
 
 ### 5. Interpret the returned `sdd-change-set`
 
-The returned change-set payload tells you whether the request was applied or rejected, what summary of changes it computed, and what diagnostics it produced. That gives you a structured review point before you decide whether to submit the same request with commit mode.
+The returned change-set payload tells you whether the request was applied or rejected, what summary of changes it computed, what diagnostics it produced, and what assessment it carries. Use `assessment.can_commit`, `assessment.should_stop`, and `assessment.next_action` as the primary workflow signal before deciding whether to submit the same request with commit mode.
 
 If you commit a change and want persisted-state semantic confirmation afterward, use `validate` and `project`. If you need rendered confirmation, use `preview` after the committed revision has already passed the intended validation gate.
 
@@ -297,7 +313,8 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 - `sdd-preview`: preview metadata plus an ephemeral local `artifact_path` for the materialized SVG or PNG file.
 - `sdd-git-status`: narrow `.sdd`-scoped git status information.
 - `sdd-git-commit`: the commit result for helper-scoped `.sdd` commits.
-- `sdd-helper-error`: the helper-level error payload for invalid args, invalid JSON, and runtime failures, with optional structured diagnostics.
+- `sdd-helper-error`: the helper-level error payload for invalid args, invalid JSON, and runtime failures, with optional structured diagnostics and optional assessment.
+- `sdd-authoring-outcome-assessment`: optional workflow assessment attached to relevant helper result payloads.
 
 ## Guidance By Audience
 
@@ -319,8 +336,9 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 - Use `inspect` to obtain current `revision` and stable same-revision handles before constructing low-level mutation requests.
 - Use committed `author` `created_targets` and committed `apply` insertion handles as continuation surfaces for later requests at the returned `resulting_revision`.
 - Treat dry-run insertion handles and dry-run `created_targets` as review aids only.
+- Prefer the returned `assessment` fields over status-only inference when deciding whether to commit, render, stop, or continue.
 - Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not complete the request transport or execution path; a zero-exit rejected change set means the request was understood and rejected within the domain model.
-- Do not assume every helper error is a permanent environment failure. Preview can fail in the helper-error lane for an invalid intermediate document state, and those cases should be classified from the helper message plus any attached diagnostics.
+- Do not assume every helper error is a permanent environment failure. Preview can fail in the helper-error lane for an invalid intermediate document state, and those cases should be classified from the helper message, assessment, and any attached diagnostics.
 - Treat the fallback order as `capabilities -> contract -> code/docs only if still insufficient`. Do not inspect code, tests, or repo `.sdd` examples for normal request-shape knowledge when helper contract introspection already provides it.
 
 ### For Future Contributors
@@ -336,6 +354,7 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 - Helper capability manifest: [`src/cli/helperDiscovery.ts`](../../../src/cli/helperDiscovery.ts)
 - Runtime command wiring: [`src/cli/helperProgram.ts`](../../../src/cli/helperProgram.ts)
 - Shared request and result contracts: [`src/authoring/contracts.ts`](../../../src/authoring/contracts.ts)
+- Shared outcome assessment: [`src/authoring/outcomeAssessment.ts`](../../../src/authoring/outcomeAssessment.ts)
 - Helper design intent: [`docs/future_explorations/mcp_server/sdd_mcp_server_design.md`](../../future_explorations/mcp_server/sdd_mcp_server_design.md)
 
 When in doubt, the machine-readable capability payload and the shared contract types govern the command surface. This page exists to explain that surface, not to redefine it.
