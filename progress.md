@@ -13,11 +13,16 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 4-20-26
+
+-fighting failing skill after refactor
+-resolved confirmation issue by updating codex twice
+
 ## Sun 4-19-26
 
-- added request-loading contract detail + skill guidance
-- created skill ops reliability design, bad codex laziness
-- created, executed gated plan
+-added request-loading contract detail + skill guidance
+-created skill ops reliability design, bad codex laziness
+- reated, executed gated plan
 
 ## Sat 4-18-26
 

@@ -1,4 +1,4 @@
-# SDD Skill Operational Reliability Implementation Plan
+# [Done] SDD Skill Operational Reliability Implementation Plan
 
 Status: implemented through Gate 6 end-to-end proof
 

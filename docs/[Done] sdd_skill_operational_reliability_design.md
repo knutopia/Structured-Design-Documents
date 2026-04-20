@@ -1,4 +1,4 @@
-# SDD Skill Operational Reliability Design
+# [Done] SDD Skill Operational Reliability Design
 
 Status: design foundation, partially implemented through Gates 1-3
 
