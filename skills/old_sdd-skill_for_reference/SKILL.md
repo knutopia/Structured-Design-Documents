@@ -1,0 +1,106 @@
+---
+name: sdd-skill
+description: "(Structured Design Documents): search .sdd files, inspect structure, create documents, edit (plan/apply/undo), render previews, perform narrow .sdd-scoped git checks & commits."
+---
+
+# SDD Skill
+
+Use this skill when the current workspace is this SDD repository, or a structurally compatible checkout, and the task involves `.sdd` documents.
+
+This skill enables working with structured design documents. In this repo source tree, the bundled helper wrapper lives at `skills/sdd-skill/scripts/run_helper.sh`. In an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill directory. Use the repo-visible path in this checkout as the stable entrypoint to the `sdd-helper` utility instead of raw file editing, so changes stay revision-bound, handle-based, and aligned to the shared authoring contracts.
+
+## Start Here
+
+- Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
+- Use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` when you need full request or result shape detail, semantic constraints, continuation rules, or bundle-binding metadata for one helper command.
+- For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command.
+- Use the fallback order `capabilities -> contract -> code/docs only if still insufficient`.
+- First choose one branch: create a new document; edit an existing document; read, validate, project, or render an existing document; diagnose helper failure; or use helper git commands.
+
+## Branch Selector
+
+### Create New Document
+
+- Choose the repo-relative `.sdd` path directly. Default to the current working directory unless the user names or clearly implies another location.
+- Do not search repo `.sdd` examples to pick a filename, infer syntax, or infer structure unless the user explicitly asks for comparison or example reuse.
+- Run `create`, then continue from the returned `revision`; immediate `inspect` is not the normal next step because the empty bootstrap may still be parse-invalid.
+- Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` or `contract helper.command.author` when bootstrap continuation or request-shape detail matters.
+
+### Edit Existing Document
+
+- If the target `.sdd` is unknown, use `skills/sdd-skill/scripts/run_helper.sh search ...` only to locate the existing document or node.
+- Once the target is known, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain the current `revision`, handles, and order data before handle-based changes.
+- Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
+- Determine any needed bundle-defined relationship through helper contract/bundle-backed surfaces before composing view-sensitive structure. Do not rely on nested source layout as semantic proof.
+- Dry-run `author` or `apply` first. Commit only when `assessment.can_commit` is true and the user wants the real mutation.
+
+### Read, Validate, Project, Or Render Existing Document
+
+- If the document is already named, do not force a search or edit-oriented inspect step.
+- Use `validate` and `project` for persisted-state semantic reads.
+- Use `contract --resolve bundle` only when active bundle-owned values such as `<view_id>` or `<profile_id>` are needed and not already known.
+- Use `sdd show` for saved user-facing preview artifacts.
+- Use helper `preview` only for transient helper output, raw artifact access, or a chat-safe `artifact_path` for inline image display.
+- Render only from a committed persisted state whose returned assessment says `assessment.can_render` is true.
+
+### Diagnose Helper Failure
+
+- Treat `sdd-change-set` rejections as structured domain results, not shell failures.
+- Treat `sdd-helper-error` as a helper-layer result that must be classified before continuing.
+- Read `assessment.layer`, `assessment.should_stop`, `assessment.next_action`, and `assessment.blocking_diagnostics` before deciding whether to retry, revise the request, report a blocker, or inspect environment state.
+- Preview can fail in the helper-error lane when the document is invalid or incomplete under the requested profile; do not assume every preview helper error is an environment failure.
+
+### Use Helper Git Commands
+
+- Use helper git commands only for narrow `.sdd`-scoped workflows.
+- Use `git-status` to inspect SDD-local git state.
+- Use `git-commit` to commit only explicit `.sdd` paths.
+- Do not treat helper git commands as a replacement for general-purpose Git work in the repo.
+
+## Hard Stops
+
+- Do not hand-edit `.sdd` structure when the helper supports the operation.
+- Use request files by default for helper commands whose contract reports a JSON body through `--request`.
+- Use `--request -` only when JSON is piped in the same shell command.
+- Inspect before handle-based edits to existing documents.
+- Use the `revision` returned by `create` for fresh-document bootstrap follow-on authoring.
+- Dry-run mutations before commit.
+- Do not render before clean committed validation and persisted-state assessment.
+- Defer acceptance judgment to shared `assessment`.
+- Use `assessment.should_stop`, `assessment.next_action`, and `assessment.blocking_diagnostics` for stop/report decisions.
+- Commit only when dry-run `assessment.can_commit` is true and the user wants a real mutation.
+- Render only when persisted-state `assessment.can_render` is true.
+- Do not treat result `status` as the acceptance gate.
+- If an expected `assessment` is missing from a relevant helper payload, stop and verify helper/contract surface instead of reimplementing acceptance logic in the skill.
+- Do not construct or parse handles manually.
+- Do not reuse handles across later turns without a fresh `inspect` or committed continuation handle for the returned `resulting_revision`.
+- Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when `capabilities` and `contract` already provide it.
+
+## Supported Helper Surface
+
+This skill should refer only to the currently available helper commands:
+
+- `capabilities`
+- `contract`
+- `inspect`
+- `search`
+- `create`
+- `author`
+- `apply`
+- `undo`
+- `validate`
+- `project`
+- `preview`
+- `git-status`
+- `git-commit`
+
+Do not promise helper commands that still do not exist today, including `list documents`.
+
+## Reference Map
+
+Read only what you need:
+
+- `references/workflow.md` for the standard assessment-first helper workflow, preview branches, and helper-error diagnosis
+- `references/change-set-recipes.md` for common `ChangeOperation` patterns
+- `references/current-helper-gaps.md` for the current limits of the helper surface
+- authoritative bundle/spec material only when helper discovery and contract data are insufficient to resolve bundle-owned semantics

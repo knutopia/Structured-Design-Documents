@@ -1,0 +1,402 @@
+# SDD Skill Workflow
+
+This file gives the concrete helper-first workflow for the `sdd-skill`.
+
+In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`; in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder.
+
+## 1. Confirm The Helper Surface
+
+Use this when you suspect the helper surface may have changed:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh capabilities
+```
+
+The result is the canonical JSON command manifest for the helper.
+
+Use deep helper introspection only when the current task needs it:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
+```
+
+Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
+
+## 2. Choose The Task Kind
+
+Start by classifying the request as one of:
+
+- create a new document
+- edit an existing document
+- read, validate, project, or render an existing document
+- diagnose helper failure
+- use helper git commands
+
+Use the matching branch below instead of forcing every request through one linear search/inspect path.
+
+## 3. Read Outcome Assessment
+
+Relevant helper success payloads and `sdd-helper-error` payloads may include `assessment`. Treat that shared assessment as the workflow gate.
+
+Use:
+
+- `assessment.should_stop` to decide whether the current branch must stop before continuing
+- `assessment.next_action` as the immediate repair, retry, report, or continuation instruction
+- `assessment.blocking_diagnostics` as the error-severity diagnostics to surface when blocked
+- `assessment.can_commit` to decide whether a dry-run mutation is eligible for commit
+- `assessment.can_render` to decide whether the persisted state is eligible for rendering
+
+Use `status`, `summary`, `diagnostics`, and `projection_results` as supporting detail for review and explanation. Do not treat result `status` as the acceptance gate.
+
+If an expected assessment is missing from a relevant helper payload, stop and verify helper capability or contract detail before continuing. Do not recreate assessment rules in the skill prose.
+
+## 4. Create A New Document
+
+Choose the repo-relative output path directly. When the user does not specify a location, default the new document path to the current working directory expressed as a repo-relative `.sdd` path. If the prompt names or clearly implies a location, honor that instead. Do not infer destinations from examples or documentation layout.
+
+For new-document authoring, do not use `search` to pick a filename or to hunt repo `.sdd` examples. Only use repo `.sdd` examples when the user explicitly asks for comparison or example reuse.
+
+The current helper creates an empty bootstrap document:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh create <document_path> --version 0.1
+```
+
+This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
+
+Use the `revision` returned by `create` as the continuation surface for the next mutation request. Immediate `inspect` is not the normal next step after `create`, because the empty bootstrap may still be parse-invalid. If the returned `assessment.next_action` gives a more specific bootstrap instruction, follow it.
+
+If the bootstrap continuation rule matters for planning the next step, fetch the subject detail explicitly:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.create
+```
+
+For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires a bundle-defined relationship for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
+
+## 5. Edit An Existing Document
+
+If the target existing `.sdd` document is unknown, search first:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh search --query <query> --under <repo_relative_directory> --limit <count>
+```
+
+Use the returned paths to choose the most likely existing document, then inspect that document.
+
+Inspect is the normal starting point for existing-document edits:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh inspect <document_path>
+```
+
+Inspect returns:
+
+- the current `revision`
+- node handles
+- body-item handles
+- top-level order
+- structural-order streams
+
+Build low-level change requests from that returned `revision` and those handles. Do not invent handles.
+
+Use `author` when the task is mostly scaffold creation or nested structure authoring. Use `apply` when you need exact low-level `ChangeOperation` control from current handles.
+
+Before composing either request, determine whether the intended result depends on a bundle-defined relationship rather than nesting alone. Nesting is an authoring affordance, not semantic proof. When the change should affect projected meaning, resolve the bundle-defined relationship first and author it explicitly.
+
+Before composing complex nested `author`, `apply`, or `undo` JSON, fetch the current subject detail in static mode rather than spelunking code or tests for normal request-shape knowledge:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.apply
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.undo
+```
+
+## 6. Read, Validate, Project, Or Render An Existing Document
+
+If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`.
+
+Use persisted-state semantic reads when you want confirmation without issuing a mutation request:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh validate <document_path> --profile <profile_id>
+skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
+```
+
+Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state preview work.
+
+If the relevant `view_id` or `profile_id` is not already known, resolve the active bundle-owned values first:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.validate --resolve bundle
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.project --resolve bundle
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
+```
+
+If the user wants a saved preview artifact from this branch, use `sdd show` only after the relevant committed persisted state returns `assessment.can_render` for the requested profile and view:
+
+```bash
+TMPDIR=/tmp pnpm sdd show <document_path> \
+  --view <view_id> \
+  --profile <profile_id>
+```
+
+Use one of these branches and stop after the one that matches the final response:
+
+File-link-only branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- stop there; do not call helper `preview`
+
+Inline-image branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- call helper `preview` with the same document, view, profile, and format
+- use the returned `artifact_path` as the Markdown image source in the final response
+- keep the saved sibling artifact as the canonical file link
+
+Inline-image command:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
+  --view <view_id> \
+  --profile <profile_id> \
+  --format <format>
+```
+
+Helper `preview` returns `artifact_path`, an ephemeral absolute temp path under `/tmp/unique-previews` with a unique parent directory per invocation. Preview success payloads do not include inline SVG text or base64 PNG data. Do not present `artifact_path` as the real saved artifact. The saved sibling artifact is the canonical file for file links, while `artifact_path` is only a presentation/workflow path because chat may cache local image content by absolute path.
+
+If the user wants transient raw artifact output instead, use helper `preview` and consume the file at `artifact_path`.
+
+## 7. Dry-Run A Helper Mutation
+
+Use `author` or `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
+If you intend to preview under a profile later, include the same `validate_profile` here first.
+
+If you need nested request-shape detail, semantic constraints, or continuation rules before composing the mutation payload, fetch the static subject detail with `contract` first.
+If helper discovery and contract detail are still insufficient to determine the needed semantic relationship, read the authoritative bundle/spec material before relying on examples.
+
+Example low-level `apply` request shape:
+
+```json
+{
+  "path": "<document_path>",
+  "base_revision": "<revision-from-inspect>",
+  "operations": [
+    {
+      "kind": "set_node_property",
+      "node_handle": "<node-handle-from-inspect>",
+      "key": "description",
+      "value_kind": "quoted_string",
+      "raw_value": "Updated description from dry run"
+    }
+  ],
+  "validate_profile": "<profile_id>",
+  "projection_views": ["<view_id>"]
+}
+```
+
+Submit it with:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh apply --request <request_file>
+```
+
+Review assessment first:
+
+- if `assessment.should_stop` is true, stop and follow `assessment.next_action`
+- if `assessment.blocking_diagnostics` is non-empty, report those diagnostics as the blocker
+- if `assessment.can_commit` is false, do not submit the same request with commit mode
+- if `assessment.can_commit` is true and the user wants the real mutation, the request is commit-eligible
+
+Then use supporting fields for explanation and review:
+
+- `status`
+- `summary`
+- `diagnostics`
+- optional `projection_results`
+- committed-only continuation handles from successful `summary.node_insertions` and `summary.edge_insertions`
+
+Use `projection_results` to review whether the result matches the user's intended structure, not to replace assessment-based acceptance. If the result is structurally valid but does not match the user's intent, revise and dry-run again.
+
+## 8. Keep Bundle Semantics And Readable Source Separate
+
+Treat semantic correctness and source readability as separate concerns:
+
+- semantic truth comes from the bundle-defined relationship or other bundle-owned mechanism
+- readable local grouping comes from nesting a child block under a local parent when that layout is not misleading
+- nested source layout by itself is not semantic proof
+
+Preferred helper stance:
+
+- use `author` nested `children` for first-pass scaffold creation when a nested source layout is intended
+- when using low-level `apply`, author the bundle-defined relationship explicitly when the intended result depends on it
+- keep children top-level when reuse, multiple semantic parents, or cross-cutting placement would make nesting misleading
+
+Resolve bundle-owned relationship names, endpoint rules, view IDs, and profile IDs through `contract --resolve bundle` or authoritative bundle/spec material when helper contract detail is insufficient.
+
+## 9. Commit A Change Set
+
+When dry-run `assessment.can_commit` is true and the user wants the change applied, resubmit the same request with:
+
+```json
+"mode": "commit"
+```
+
+The skill should not skip straight to commit unless the user clearly wants the real mutation carried out.
+Read the committed result assessment. If further edits require fresh handles, either use committed `author` `created_targets`, committed `apply` insertion handles, or inspect the committed result and repeat the dry-run assessment gate before previewing.
+
+## 10. Validate Or Project A Committed Result
+
+Use persisted-state semantic reads when you want confirmation after commit or when you do not need a mutation request at all:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh validate <document_path> --profile <profile_id>
+skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
+```
+
+These commands read the current on-disk document only. They do not inspect dry-run candidates. Use their returned assessment to decide whether the persisted state is blocked, needs review, or can be rendered.
+
+## 11. Preview A Result
+
+Interpret requests for a visible result semantically, not only from exact technical words. Phrases such as "show it", "render it", "draw it", "make a diagram", "show the information architecture", and "show the place map" should normally produce a saved user-facing artifact.
+
+If the user wants a saved preview artifact, use `sdd show` after the last committed persisted-state assessment has `assessment.can_render` set to true:
+
+```bash
+TMPDIR=/tmp pnpm sdd show <document_path> \
+  --view <view_id> \
+  --profile <profile_id>
+```
+
+If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it.
+
+Use one of these branches and stop after the one that matches the final response:
+
+File-link-only branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- stop there; do not call helper `preview`
+
+Inline-image branch:
+
+- run `sdd show`
+- link the saved sibling artifact in the response
+- call helper `preview` with the same document, view, profile, and format
+- use the returned `artifact_path` as the Markdown image source in the final response
+- keep the saved sibling artifact as the canonical file link
+
+Inline-image command:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
+  --view <view_id> \
+  --profile <profile_id> \
+  --format <format>
+```
+
+Do not present `artifact_path` as the real saved artifact. Use the canonical sibling file for file links and the returned `artifact_path` for the Markdown image. The temp preview artifact under `/tmp/unique-previews` is only a presentation/workflow path for chat path caching and transient consumers, while the sibling artifact remains the real preview identity.
+
+If the relevant `view_id` or `profile_id` is unknown, resolve the active bundle-owned values first with `contract --resolve bundle` before choosing arguments for `preview` or `sdd show`.
+
+Use helper preview when you need transient raw artifact output or a chat-safe artifact path rather than the normal saved deliverable:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
+  --view <view_id> \
+  --profile <profile_id> \
+  --format <format> \
+  --backend <backend_id>
+```
+
+`sdd-helper preview` is for transient rendered confirmation, not for structured mutation or the default saved deliverable.
+It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the profile used in the persisted-state assessment gate, and the rendered output should come from that same committed state. Treat the returned `artifact_path` as a temp presentation/workflow path only, not as the canonical preview artifact path.
+If preview returns `sdd-helper-error`, read `assessment.layer`, `assessment.next_action`, and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
+
+## 12. Undo A Helper-Managed Commit
+
+Undo works from a `change_set_id` returned by a prior committed helper-managed change set.
+
+Example request shape:
+
+```json
+{
+  "change_set_id": "<change-set-id>",
+  "mode": "dry_run",
+  "validate_profile": "<profile_id>"
+}
+```
+
+Submit it with:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh undo --request <request_file>
+```
+
+Read the undo dry-run assessment before committing an undo. Commit only when `assessment.can_commit` is true and the user wants the undo applied.
+
+## 13. Diagnose Helper Failure
+
+When a command returns `sdd-helper-error`, do not immediately treat it as an environment failure.
+
+Use:
+
+- `assessment.layer` to identify the failing layer
+- `assessment.should_stop` to decide whether the branch must stop
+- `assessment.next_action` to choose the immediate follow-up
+- `assessment.blocking_diagnostics` to report concrete blockers
+
+Malformed arguments, malformed JSON, and empty stdin are helper/request-boundary failures. Structured domain rejections remain normal JSON results and should be read through their own assessment. Preview can also fail in the helper-error lane when the document is not valid or renderable for the requested profile.
+
+For request-loading commands, request files remain the safest default. Use `--request -` only when the JSON body is piped in the same shell command; empty stdin should be treated as a transport-layer helper failure.
+
+## 14. Narrow Git Workflows
+
+Use helper git commands only when the user wants `.sdd`-scoped git behavior.
+
+Status:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh git-status <document_path>
+```
+
+Commit explicit `.sdd` paths:
+
+```bash
+skills/sdd-skill/scripts/run_helper.sh git-commit --message "Update example SDD" \
+  <document_path>
+```
+
+These commands are intentionally narrow. They do not replace general-purpose Git work.
+
+## 15. Retrieval Policy
+
+Use `capabilities` for helper orientation and command discovery.
+
+Use `contract` in static mode when:
+
+- composing nested `author`, `apply`, or `undo` JSON
+- checking semantic constraints that are not safely inferable from top-level discovery
+- checking continuation rules such as bootstrap revision handling or dry-run versus committed continuation surfaces
+
+Use `contract --resolve bundle` only when:
+
+- the task needs active bundle-owned values for `view_id` or `profile_id`
+- the relevant values are not already known from the user request or current workflow context
+
+Treat the fallback order as `capabilities -> contract -> code/docs only if still insufficient`.
+Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when helper contract introspection already provides it.
+
+## 16. Guide Follow-Up Inventory
+
+When later revising `docs/readme_support_docs/sdd-skill/README.md`, align it to this task-kind-first workflow:
+
+- make the "start with an app idea" section clearly read as create-new-document flow rather than search-first flow
+- make omitted filenames read as direct path/name selection, not document/example search
+- make the follow-up edit examples explicitly read as existing-document edit flows
+- split any wording that still implies one linear workflow for both creation and editing
+- review example artifact references later for consistency with the current `sdd show` default naming convention and chosen profile wording

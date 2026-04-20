@@ -17,6 +17,7 @@
 
 -fighting failing skill after refactor
 -resolved confirmation issue by updating codex twice
+-restored pre-refactor skill for reference
 
 ## Sun 4-19-26
 
