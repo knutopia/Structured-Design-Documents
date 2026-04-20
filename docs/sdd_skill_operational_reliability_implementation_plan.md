@@ -1,6 +1,6 @@
 # SDD Skill Operational Reliability Implementation Plan
 
-Status: proposed gated implementation plan
+Status: implemented through Gate 6 end-to-end proof
 
 Audience: maintainers implementing shared outcome assessment, helper exposure, skill restructuring, and future MCP-aligned reliability behavior
 
@@ -375,6 +375,10 @@ Stop this gate if:
 
 Run focused proof scenarios after all implementation gates.
 
+### Closeout Status
+
+Implemented. The focused built-entrypoint proof lives in `tests/helperCli.integration.spec.ts` and verifies the required helper assessment scenarios, helper discovery, deep contract introspection, preview failure classification, and successful preview assessment.
+
 ### Required Scenarios
 
 - empty stdin to `author --request -` returns `sdd-helper-error` with assessment layer `transport`
@@ -446,5 +450,6 @@ Stop closeout if:
 - `src/authoring/authoringIntents.ts`
 - `src/authoring/preview.ts`
 - `tests/helperCli.spec.ts`
+- `tests/helperCli.integration.spec.ts`
 - `tests/authoringContractMetadata.spec.ts`
 - `tests/sddSkillSource.spec.ts`
