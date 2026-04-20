@@ -18,6 +18,7 @@
 -fighting failing skill after refactor
 -resolved confirmation issue by updating codex twice
 -restored pre-refactor skill for reference
+-created another skill-ops improvement design doc
 
 ## Sun 4-19-26
 
