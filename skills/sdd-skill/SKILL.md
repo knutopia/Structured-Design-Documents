@@ -11,10 +11,12 @@ This skill enables working with structured design documents. In this repo source
 
 ## Start Here
 
-- Use `skills/sdd-skill/scripts/run_helper.sh capabilities` if you need to confirm the current helper surface.
-- Use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` when you need full request or result shape detail, semantic constraints, continuation rules, or bundle-binding metadata for one helper command.
+- Helper discovery is the helper-command authority: use `skills/sdd-skill/scripts/run_helper.sh capabilities` to confirm which helper commands exist.
+- Helper contract detail is the helper request/result authority: use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command.
+- SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.
+- Shared `assessment` answers whether to stop, continue, commit, or render.
+- Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery.
 - For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command.
-- Use the fallback order `capabilities -> contract -> code/docs only if still insufficient`.
 - First choose one branch: create a new document; edit an existing document; read, validate, project, or render an existing document; diagnose helper failure; or use helper git commands.
 
 ## Branch Selector
@@ -103,4 +105,4 @@ Read only what you need:
 - `references/workflow.md` for the standard assessment-first helper workflow, preview branches, and helper-error diagnosis
 - `references/change-set-recipes.md` for common `ChangeOperation` patterns
 - `references/current-helper-gaps.md` for the current limits of the helper surface
-- authoritative bundle/spec material only when helper discovery and contract data are insufficient to resolve bundle-owned semantics
+- `bundle/v0.1/manifest.yaml` plus active core bundle files when the task needs SDD-language semantics

@@ -34,6 +34,8 @@ pnpm sdd-helper contract helper.command.author
 pnpm sdd-helper contract helper.command.preview --resolve bundle
 ```
 
+`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings; it is still helper contract detail, not the general SDD language authority.
+
 Use this page when you want the same surface explained in practical terms.
 
 ## Core Operating Conventions
@@ -46,6 +48,19 @@ Use this page when you want the same surface explained in practical terms.
 - Direct helper execution works from anywhere inside the repo checkout; bundle-backed commands resolve the repo root at runtime rather than assuming the current directory is the repo root.
 - `apply`, `author`, and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
 - `stderr` is not part of the public helper contract.
+
+## Authority Routing
+
+Helper mechanics are not SDD language authority. Use the helper surfaces for helper behavior, and route language questions to the active bundle:
+
+- Use helper discovery for helper mechanics: which commands exist, how they are invoked, and what result kind each command returns.
+- Use helper `contract <subject_id>` for deep helper request and result shape, continuation semantics, constraints, and helper-specific bundle bindings.
+- Use `contract --resolve bundle` when a helper command needs active bundle-owned `view_id` or `profile_id` values exposed through its contract bindings.
+- Use `bundle/v0.1/` files for SDD language semantics such as syntax, vocabulary, endpoint rules, profile behavior, and view behavior.
+- Use docs to explain a surface or investigate a mismatch.
+- Use implementation code for implementation debugging, not normal helper request-shape recovery.
+
+The helper README explains the implemented helper surface. It does not redefine SDD language rules, and it should not duplicate bundle-owned language facts.
 
 ## Outcome Assessment
 
@@ -61,6 +76,19 @@ The assessment shape is identified by `kind: "sdd-authoring-outcome-assessment"`
 - `blocking_diagnostics`: the error-severity diagnostics that block the next workflow step.
 
 For request-loading commands, request files remain the safest default. `--request -` remains valid only when the JSON body is actually supplied on stdin in the same command; empty stdin is classified by assessment as a transport-layer failure.
+
+## Layer Boundaries
+
+Keep these layers distinct when diagnosing a result:
+
+- Domain rejections are structured helper success payloads, such as rejected change sets, and exit zero.
+- Helper errors are `sdd-helper-error` payloads and exit non-zero when the helper cannot complete request transport, request parsing, argument validation, or runtime execution.
+- Diagnostics are structured evidence attached to results or helper errors; error-severity diagnostics may become `assessment.blocking_diagnostics`.
+- Persisted validation reads the on-disk document state and reports validation diagnostics through `validate`.
+- Projection reads the on-disk document state and reports projection output or projection diagnostics through `project`.
+- Render failures happen in preview generation or materialization and may surface as helper errors with render-stage diagnostics.
+
+Use `assessment.layer`, `assessment.should_stop`, `assessment.next_action`, and `assessment.blocking_diagnostics` to decide whether to retry, revise a request, report a blocker, validate, project, render, or stop.
 
 ## Worked Workflow: Dry-Run Editing
 
@@ -138,7 +166,7 @@ Because `mode` is omitted, this is a dry run by default. The same dry-run defaul
 
 The returned change-set payload tells you whether the request was applied or rejected, what summary of changes it computed, what diagnostics it produced, and what assessment it carries. Use `assessment.can_commit`, `assessment.should_stop`, and `assessment.next_action` as the primary workflow signal before deciding whether to submit the same request with commit mode.
 
-If you commit a change and want persisted-state semantic confirmation afterward, use `validate` and `project`. If you need rendered confirmation, use `preview` after the committed revision has already passed the intended validation gate.
+If you commit a change and want persisted-state semantic confirmation afterward, use `validate` and `project`. If you need transient rendered confirmation from the helper surface, use `preview` after the committed revision has already passed the intended validation gate. If you need a durable user-facing artifact, use `sdd show` instead.
 
 ## Command Reference
 
@@ -276,6 +304,14 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 - Important constraints: if preview generation cannot produce or materialize an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
 - Practical notes: SVG and PNG previews are materialized to a helper-owned temp file and returned through `artifact_path`; the helper no longer returns inline SVG text or base64 PNG data. `artifact_path` is an absolute, ephemeral local path under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>`, with a unique parent directory for every successful preview invocation and a basename matching the `sdd show` default naming convention. This temp path is for immediate tool/UI consumption and is not the canonical saved preview artifact. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
 
+When a durable user-facing SVG or PNG is needed, use the main CLI saved-artifact path instead:
+
+```bash
+TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>
+```
+
+Helper `preview` artifact paths are transient helper output and are not saved artifacts.
+
 ### Narrow Git Workflows
 
 #### `sdd-helper git-status [<document_path> ...]`
@@ -323,7 +359,8 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 - Use `search` to find relevant documents or nodes, then use `inspect` before you plan a structured edit.
 - Prefer `author` or `apply` dry-run before commit, especially when you are generating requests programmatically.
 - Use `validate` and `project` when you need persisted-state semantic reads without wrapping them in a mutation request.
-- Use `preview` when you need a rendered artifact as helper output rather than through the main `sdd` CLI.
+- Use `sdd show` when a durable user-facing preview artifact is needed.
+- Use `preview` when you need transient rendered output as helper output rather than a saved artifact.
 - Use the helper git commands only when you specifically want `.sdd`-scoped behavior.
 
 ### For LLMs And Automation
@@ -331,15 +368,17 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 - Start with `capabilities`; it is the canonical discovery surface.
 - Use `contract` when you need nested request-shape detail, semantic constraints, continuation semantics, or binding metadata for one subject.
 - Use `contract --resolve bundle` only when you need active bundle-owned values such as `view_id` or `profile_id`.
+- Use bundle files, not helper mechanics, for SDD language semantics.
 - Treat JSON as the public interface. Do not expect human-readable CLI text.
 - Keep path inputs repo-relative and `.sdd`-focused.
+- Prefer request files for `--request`; use `--request -` only when the JSON body is supplied on stdin in the same command.
 - Use `inspect` to obtain current `revision` and stable same-revision handles before constructing low-level mutation requests.
 - Use committed `author` `created_targets` and committed `apply` insertion handles as continuation surfaces for later requests at the returned `resulting_revision`.
 - Treat dry-run insertion handles and dry-run `created_targets` as review aids only.
 - Prefer the returned `assessment` fields over status-only inference when deciding whether to commit, render, stop, or continue.
 - Distinguish helper errors from structured domain rejections: non-zero `sdd-helper-error` means the helper could not complete the request transport or execution path; a zero-exit rejected change set means the request was understood and rejected within the domain model.
 - Do not assume every helper error is a permanent environment failure. Preview can fail in the helper-error lane for an invalid intermediate document state, and those cases should be classified from the helper message, assessment, and any attached diagnostics.
-- Treat the fallback order as `capabilities -> contract -> code/docs only if still insufficient`. Do not inspect code, tests, or repo `.sdd` examples for normal request-shape knowledge when helper contract introspection already provides it.
+- Use helper discovery for helper mechanics, bundle files for SDD language, docs for explanation or mismatch investigation, and implementation code for implementation debugging. Do not inspect code, tests, or repo `.sdd` examples for normal request-shape knowledge when helper contract introspection already provides it.
 
 ### For Future Contributors
 

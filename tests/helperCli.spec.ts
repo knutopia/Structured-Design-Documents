@@ -53,28 +53,30 @@ function createRejectedChangeSet(path: string): ChangeSetResult {
   };
 }
 
-function createContractResolutionBundle(): Bundle {
+function createContractResolutionBundle(
+  profiles: Array<{ id: string; path: string; intent: string }> = [
+    {
+      id: "simple",
+      path: "profiles/simple.yaml",
+      intent: "Low-noise drafting with strict structural validation."
+    },
+    {
+      id: "permissive",
+      path: "profiles/permissive.yaml",
+      intent: "Warning-first governance with strict structural validation."
+    },
+    {
+      id: "strict",
+      path: "profiles/strict.yaml",
+      intent: "Strict governance for production-ready authoring."
+    }
+  ]
+): Bundle {
   return {
     manifest: {
       bundle_name: "sdd-text-spec-bundle",
       bundle_version: "0.1",
-      profiles: [
-        {
-          id: "simple",
-          path: "profiles/simple.yaml",
-          intent: "Low-noise drafting with strict structural validation."
-        },
-        {
-          id: "permissive",
-          path: "profiles/permissive.yaml",
-          intent: "Warning-first governance with strict structural validation."
-        },
-        {
-          id: "strict",
-          path: "profiles/strict.yaml",
-          intent: "Strict governance for production-ready authoring."
-        }
-      ]
+      profiles
     },
     views: {
       version: "0.1",
@@ -276,7 +278,7 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
       stderr.push(content);
     },
     findRepoRoot: vi.fn(async (startDir: string) => startDir),
-    loadBundle: vi.fn(async () => ({} as Bundle)),
+    loadBundle: vi.fn(async () => createContractResolutionBundle()),
     createWorkspace: createAuthoringWorkspace,
     inspectDocument: inspectDocumentMock,
     listDocuments: vi.fn(),
@@ -1130,6 +1132,36 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it.each(["simple", "permissive", "strict"])(
+    "accepts apply validate_profile %s from the active bundle manifest",
+    async (profile) => {
+      const { deps, applyChangeSetMock } = createDeps({
+        readTextFile: vi.fn(async () => JSON.stringify({
+          path: "docs/example.sdd",
+          base_revision: "rev_base",
+          validate_profile: profile,
+          operations: []
+        }))
+      });
+
+      const result = await runHelperCli([
+        "node",
+        "sdd-helper",
+        "apply",
+        "--request",
+        "/tmp/request.json"
+      ], deps);
+
+      expect(result.exitCode).toBe(0);
+      expect(applyChangeSetMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        validate_profile: profile,
+        operations: []
+      });
+    }
+  );
+
   it("returns candidate diagnostics assessment for applied dry-run diagnostics", async () => {
     const diagnostic = {
       stage: "validate" as const,
@@ -1371,6 +1403,111 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("accepts author validate_profile values from a non-default active bundle manifest", async () => {
+    const draftProfile = {
+      id: "draft",
+      path: "profiles/draft.yaml",
+      intent: "Draft validation profile."
+    };
+    const { deps, stdout, applyAuthoringIntentMock } = createDeps({
+      loadBundle: vi.fn(async () => createContractResolutionBundle([draftProfile])),
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        validate_profile: "draft",
+        intents: [
+          {
+            kind: "insert_node_scaffold",
+            local_id: "place-root",
+            placement: {
+              mode: "last"
+            },
+            node: {
+              node_type: "Place",
+              node_id: "P-001",
+              name: "Root"
+            }
+          }
+        ]
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "author",
+      "--request",
+      "/tmp/author-draft.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(applyAuthoringIntentMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "docs/example.sdd",
+      base_revision: "rev_base",
+      validate_profile: "draft",
+      intents: [
+        {
+          kind: "insert_node_scaffold",
+          local_id: "place-root",
+          placement: {
+            mode: "last"
+          },
+          node: {
+            node_type: "Place",
+            node_id: "P-001",
+            name: "Root"
+          }
+        }
+      ]
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-authoring-intent-result",
+      status: "applied"
+    });
+  });
+
+  it("rejects apply validate_profile values absent from a non-default active bundle manifest", async () => {
+    const { deps, stdout, applyChangeSetMock } = createDeps({
+      loadBundle: vi.fn(async () => createContractResolutionBundle([
+        {
+          id: "draft",
+          path: "profiles/draft.yaml",
+          intent: "Draft validation profile."
+        }
+      ])),
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        validate_profile: "strict",
+        operations: []
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/apply-strict.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyChangeSetMock).not.toHaveBeenCalled();
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "Request body does not match ApplyChangeSetArgs: validate_profile must be one of \"draft\"."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
+    });
+  });
+
   it("returns invalid_args for malformed author requests", async () => {
     const { deps, stdout, applyAuthoringIntentMock } = createDeps({
       readTextFile: vi.fn(async () => JSON.stringify({
@@ -1563,6 +1700,36 @@ describe("sdd-helper CLI", () => {
       can_commit: false,
       can_render: false,
       should_stop: true
+    });
+  });
+
+  it("accepts undo validate_profile values from a non-default active bundle manifest", async () => {
+    const { deps, undoChangeSetMock } = createDeps({
+      loadBundle: vi.fn(async () => createContractResolutionBundle([
+        {
+          id: "draft",
+          path: "profiles/draft.yaml",
+          intent: "Draft validation profile."
+        }
+      ])),
+      readTextFile: vi.fn(async () => JSON.stringify({
+        change_set_id: "chg_target_001",
+        validate_profile: "draft"
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "undo",
+      "--request",
+      "/tmp/undo-draft.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(undoChangeSetMock).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      change_set_id: "chg_target_001",
+      validate_profile: "draft"
     });
   });
 

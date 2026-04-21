@@ -259,13 +259,22 @@ function validateMode(value: unknown, fieldPath: string): string | undefined {
     : `${fieldPath} must be one of "dry_run" or "commit".`;
 }
 
-function validateProfile(value: unknown, fieldPath: string): string | undefined {
+function formatQuotedList(values: readonly string[]): string {
+  return values.map((entry) => `"${entry}"`).join(", ");
+}
+
+function validateProfile(value: unknown, fieldPath: string, bundle: Bundle): string | undefined {
   if (value === undefined) {
     return undefined;
   }
-  return value === "simple" || value === "permissive" || value === "strict"
+  if (typeof value !== "string") {
+    return `${fieldPath} must be a string.`;
+  }
+
+  const profileIds = bundle.manifest.profiles.map((profile) => profile.id);
+  return profileIds.includes(value)
     ? undefined
-    : `${fieldPath} must be one of "simple", "permissive", or "strict".`;
+    : `${fieldPath} must be one of ${formatQuotedList(profileIds)}.`;
 }
 
 function validateValueKind(value: unknown, fieldPath: string): string | undefined {
@@ -361,7 +370,7 @@ function validateChangeOperation(value: unknown, fieldPath: string): string | un
   }
 }
 
-function validateApplyChangeSetArgs(value: unknown): string | undefined {
+function validateApplyChangeSetArgs(value: unknown, bundle: Bundle): string | undefined {
   if (!isRecord(value)) {
     return "expected an object.";
   }
@@ -378,7 +387,7 @@ function validateApplyChangeSetArgs(value: unknown): string | undefined {
   if (modeError) {
     return modeError;
   }
-  const validateProfileError = validateProfile(value.validate_profile, "validate_profile");
+  const validateProfileError = validateProfile(value.validate_profile, "validate_profile", bundle);
   if (validateProfileError) {
     return validateProfileError;
   }
@@ -575,7 +584,7 @@ function validateInsertNodeScaffoldIntent(
   return undefined;
 }
 
-function validateApplyAuthoringIntentArgs(value: unknown): string | undefined {
+function validateApplyAuthoringIntentArgs(value: unknown, bundle: Bundle): string | undefined {
   if (!isRecord(value)) {
     return "expected an object.";
   }
@@ -592,7 +601,7 @@ function validateApplyAuthoringIntentArgs(value: unknown): string | undefined {
   if (modeError) {
     return modeError;
   }
-  const validateProfileError = validateProfile(value.validate_profile, "validate_profile");
+  const validateProfileError = validateProfile(value.validate_profile, "validate_profile", bundle);
   if (validateProfileError) {
     return validateProfileError;
   }
@@ -615,7 +624,7 @@ function validateApplyAuthoringIntentArgs(value: unknown): string | undefined {
   return undefined;
 }
 
-function validateUndoChangeSetArgs(value: unknown): string | undefined {
+function validateUndoChangeSetArgs(value: unknown, bundle: Bundle): string | undefined {
   if (!isRecord(value)) {
     return "expected an object.";
   }
@@ -626,7 +635,7 @@ function validateUndoChangeSetArgs(value: unknown): string | undefined {
   if (modeError) {
     return modeError;
   }
-  return validateProfile(value.validate_profile, "validate_profile");
+  return validateProfile(value.validate_profile, "validate_profile", bundle);
 }
 
 async function loadWorkspaceContext(
@@ -817,7 +826,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const request = parseJsonRequest<ApplyChangeSetArgs>(
         rawRequest,
         "ApplyChangeSetArgs",
-        validateApplyChangeSetArgs,
+        (value) => validateApplyChangeSetArgs(value, bundle),
         assessmentContext
       );
       workspace.normalizeDocumentPath(request.path);
@@ -834,7 +843,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const request = parseJsonRequest<ApplyAuthoringIntentArgs>(
         rawRequest,
         "ApplyAuthoringIntentArgs",
-        validateApplyAuthoringIntentArgs,
+        (value) => validateApplyAuthoringIntentArgs(value, bundle),
         assessmentContext
       );
       workspace.normalizeDocumentPath(request.path);
@@ -851,7 +860,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const request = parseJsonRequest<UndoChangeSetArgs>(
         rawRequest,
         "UndoChangeSetArgs",
-        validateUndoChangeSetArgs,
+        (value) => validateUndoChangeSetArgs(value, bundle),
         assessmentContext
       );
       writeJson(deps, withAssessment(await deps.undoChangeSet(workspace, bundle, request)));

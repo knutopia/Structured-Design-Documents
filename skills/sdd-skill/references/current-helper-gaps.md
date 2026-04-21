@@ -9,16 +9,21 @@ The current helper exposes:
 - `inspect`
 - `search`
 - `create`
-- `author`
 - `apply`
+- `author`
 - `undo`
 - `validate`
 - `project`
 - `preview`
 - `git-status`
 - `git-commit`
+- `contract`
+- `capabilities`
 
 These are the only helper commands the skill should present as available.
+`capabilities` and `contract` are introspection commands for helper discovery and
+helper contract detail; they do not add new standalone SDD document-authoring
+semantics.
 
 ## Not Exposed As Standalone Helper Commands
 

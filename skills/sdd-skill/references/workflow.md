@@ -35,7 +35,30 @@ Start by classifying the request as one of:
 
 Use the matching branch below instead of forcing every request through one linear search/inspect path.
 
-## 3. Read Outcome Assessment
+## 3. Targeted Bundle Reading And Language Authority
+
+Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
+
+Do not turn this into a broad preflight for every task. Read only the bundle files that answer the current semantic question:
+
+- read `bundle/v0.1/manifest.yaml` first for fresh authoring or when active core files need confirmation
+- read `bundle/v0.1/core/syntax.yaml` for node IDs, node headers, edge lines, property lines, nesting, and source syntax
+- read `bundle/v0.1/core/vocab.yaml` for node and relationship token selection
+- read `bundle/v0.1/core/contracts.yaml` for relationship endpoint validity
+- read `bundle/v0.1/core/views.yaml` for projection scope, hierarchy edges, ordering edges, view-specific annotations, and rendered-view behavior
+- read profile files only when profile behavior is needed beyond profile IDs exposed by helper contract resolution
+
+Prompt words are input language. Bundle vocabulary and contracts decide SDD language. A user word that resembles a node or relationship token still needs token selection from `vocab.yaml` and endpoint validation from `contracts.yaml` before it becomes authored source.
+
+Nesting is source organization and readability. Explicit bundle-defined relationships carry graph semantics. Nesting alone does not establish graph semantics.
+
+Projection checks and rendered views are checks and presentation boundaries; they do not replace graph authoring targets. If projection output shows that intended meaning is absent, revise the graph using bundle-authorized syntax, vocabulary, contracts, and view semantics, then check again.
+
+Examples, snapshots, and goldens are downstream evidence only. Do not inspect `.sdd` examples to infer language rules; use them only for comparison, regression investigation, or user-requested reuse after bundle authority is known.
+
+`contract --resolve bundle` expands active helper-exposed values such as `view_id` and `profile_id` for commands that declare those bundle bindings. It does not replace the bundle files as the general authority for node or relationship vocabulary, relationship endpoint rules, source syntax, or view behavior.
+
+## 4. Read Outcome Assessment
 
 Relevant helper success payloads and `sdd-helper-error` payloads may include `assessment`. Treat that shared assessment as the workflow gate.
 
@@ -51,7 +74,7 @@ Use `status`, `summary`, `diagnostics`, and `projection_results` as supporting d
 
 If an expected assessment is missing from a relevant helper payload, stop and verify helper capability or contract detail before continuing. Do not recreate assessment rules in the skill prose.
 
-## 4. Create A New Document
+## 5. Create A New Document
 
 Choose the repo-relative output path directly. When the user does not specify a location, default the new document path to the current working directory expressed as a repo-relative `.sdd` path. If the prompt names or clearly implies a location, honor that instead. Do not infer destinations from examples or documentation layout.
 
@@ -75,7 +98,7 @@ skills/sdd-skill/scripts/run_helper.sh contract helper.command.create
 
 For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires a bundle-defined relationship for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
 
-## 5. Edit An Existing Document
+## 6. Edit An Existing Document
 
 If the target existing `.sdd` document is unknown, search first:
 
@@ -113,7 +136,7 @@ skills/sdd-skill/scripts/run_helper.sh contract helper.command.apply
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.undo
 ```
 
-## 6. Read, Validate, Project, Or Render An Existing Document
+## 7. Read, Validate, Project, Or Render An Existing Document
 
 If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`.
 
@@ -126,7 +149,7 @@ skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
 
 Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state preview work.
 
-If the relevant `view_id` or `profile_id` is not already known, resolve the active bundle-owned values first:
+If the relevant `view_id` or `profile_id` is not already known, use `contract --resolve bundle` to expand the active helper-exposed values before choosing command arguments:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.validate --resolve bundle
@@ -171,13 +194,13 @@ Helper `preview` returns `artifact_path`, an ephemeral absolute temp path under 
 
 If the user wants transient raw artifact output instead, use helper `preview` and consume the file at `artifact_path`.
 
-## 7. Dry-Run A Helper Mutation
+## 8. Dry-Run A Helper Mutation
 
 Use `author` or `apply` as a dry run by default. Omit `mode` or set `mode` to `"dry_run"`.
 If you intend to preview under a profile later, include the same `validate_profile` here first.
 
-If you need nested request-shape detail, semantic constraints, or continuation rules before composing the mutation payload, fetch the static subject detail with `contract` first.
-If helper discovery and contract detail are still insufficient to determine the needed semantic relationship, read the authoritative bundle/spec material before relying on examples.
+If you need nested request-shape detail, helper constraints, or continuation rules before composing the mutation payload, fetch the static subject detail with `contract` first.
+If the mutation depends on SDD language semantics, read the targeted bundle files in section 3 before choosing node tokens, relationship tokens, endpoint pairs, source syntax, profile behavior, or view behavior.
 
 Example low-level `apply` request shape:
 
@@ -222,7 +245,7 @@ Then use supporting fields for explanation and review:
 
 Use `projection_results` to review whether the result matches the user's intended structure, not to replace assessment-based acceptance. If the result is structurally valid but does not match the user's intent, revise and dry-run again.
 
-## 8. Keep Bundle Semantics And Readable Source Separate
+## 9. Keep Bundle Semantics And Readable Source Separate
 
 Treat semantic correctness and source readability as separate concerns:
 
@@ -236,9 +259,9 @@ Preferred helper stance:
 - when using low-level `apply`, author the bundle-defined relationship explicitly when the intended result depends on it
 - keep children top-level when reuse, multiple semantic parents, or cross-cutting placement would make nesting misleading
 
-Resolve bundle-owned relationship names, endpoint rules, view IDs, and profile IDs through `contract --resolve bundle` or authoritative bundle/spec material when helper contract detail is insufficient.
+Use `contract --resolve bundle` for active helper-exposed `view_id` and `profile_id` values. Use the targeted bundle files in section 3 for bundle-owned relationship names, node tokens, endpoint rules, source syntax, profile behavior, and view semantics.
 
-## 9. Commit A Change Set
+## 10. Commit A Change Set
 
 When dry-run `assessment.can_commit` is true and the user wants the change applied, resubmit the same request with:
 
@@ -249,7 +272,7 @@ When dry-run `assessment.can_commit` is true and the user wants the change appli
 The skill should not skip straight to commit unless the user clearly wants the real mutation carried out.
 Read the committed result assessment. If further edits require fresh handles, either use committed `author` `created_targets`, committed `apply` insertion handles, or inspect the committed result and repeat the dry-run assessment gate before previewing.
 
-## 10. Validate Or Project A Committed Result
+## 11. Validate Or Project A Committed Result
 
 Use persisted-state semantic reads when you want confirmation after commit or when you do not need a mutation request at all:
 
@@ -260,9 +283,9 @@ skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
 
 These commands read the current on-disk document only. They do not inspect dry-run candidates. Use their returned assessment to decide whether the persisted state is blocked, needs review, or can be rendered.
 
-## 11. Preview A Result
+## 12. Preview A Result
 
-Interpret requests for a visible result semantically, not only from exact technical words. Phrases such as "show it", "render it", "draw it", "make a diagram", "show the information architecture", and "show the place map" should normally produce a saved user-facing artifact.
+Interpret requests for a visible result semantically, not only from exact technical words. General requests such as "show it", "render it", "draw it", or "make a diagram" should normally produce a saved user-facing artifact.
 
 If the user wants a saved preview artifact, use `sdd show` after the last committed persisted-state assessment has `assessment.can_render` set to true:
 
@@ -301,7 +324,7 @@ skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
 
 Do not present `artifact_path` as the real saved artifact. Use the canonical sibling file for file links and the returned `artifact_path` for the Markdown image. The temp preview artifact under `/tmp/unique-previews` is only a presentation/workflow path for chat path caching and transient consumers, while the sibling artifact remains the real preview identity.
 
-If the relevant `view_id` or `profile_id` is unknown, resolve the active bundle-owned values first with `contract --resolve bundle` before choosing arguments for `preview` or `sdd show`.
+If the relevant `view_id` or `profile_id` is unknown, use `contract --resolve bundle` to expand the active helper-exposed values before choosing arguments for `preview` or `sdd show`. Read `views.yaml` or profile files when you need behavior beyond the IDs.
 
 Use helper preview when you need transient raw artifact output or a chat-safe artifact path rather than the normal saved deliverable:
 
@@ -317,7 +340,7 @@ skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
 It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the profile used in the persisted-state assessment gate, and the rendered output should come from that same committed state. Treat the returned `artifact_path` as a temp presentation/workflow path only, not as the canonical preview artifact path.
 If preview returns `sdd-helper-error`, read `assessment.layer`, `assessment.next_action`, and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
-## 12. Undo A Helper-Managed Commit
+## 13. Undo A Helper-Managed Commit
 
 Undo works from a `change_set_id` returned by a prior committed helper-managed change set.
 
@@ -339,7 +362,7 @@ skills/sdd-skill/scripts/run_helper.sh undo --request <request_file>
 
 Read the undo dry-run assessment before committing an undo. Commit only when `assessment.can_commit` is true and the user wants the undo applied.
 
-## 13. Diagnose Helper Failure
+## 14. Diagnose Helper Failure
 
 When a command returns `sdd-helper-error`, do not immediately treat it as an environment failure.
 
@@ -354,7 +377,7 @@ Malformed arguments, malformed JSON, and empty stdin are helper/request-boundary
 
 For request-loading commands, request files remain the safest default. Use `--request -` only when the JSON body is piped in the same shell command; empty stdin should be treated as a transport-layer helper failure.
 
-## 14. Narrow Git Workflows
+## 15. Narrow Git Workflows
 
 Use helper git commands only when the user wants `.sdd`-scoped git behavior.
 
@@ -373,25 +396,26 @@ skills/sdd-skill/scripts/run_helper.sh git-commit --message "Update example SDD"
 
 These commands are intentionally narrow. They do not replace general-purpose Git work.
 
-## 15. Retrieval Policy
+## 16. Retrieval Policy
 
 Use `capabilities` for helper orientation and command discovery.
 
 Use `contract` in static mode when:
 
 - composing nested `author`, `apply`, or `undo` JSON
-- checking semantic constraints that are not safely inferable from top-level discovery
+- checking helper constraints that are not safely inferable from top-level discovery
 - checking continuation rules such as bootstrap revision handling or dry-run versus committed continuation surfaces
 
 Use `contract --resolve bundle` only when:
 
-- the task needs active bundle-owned values for `view_id` or `profile_id`
+- the task needs active helper-exposed values for `view_id` or `profile_id`
 - the relevant values are not already known from the user request or current workflow context
 
-Treat the fallback order as `capabilities -> contract -> code/docs only if still insufficient`.
-Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when helper contract introspection already provides it.
+Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery. Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when helper contract introspection already provides it.
 
-## 16. Guide Follow-Up Inventory
+For SDD language questions, use the targeted bundle files in section 3 instead of treating helper discovery, tests, implementation literals, examples, snapshots, or goldens as language authority.
+
+## 17. Guide Follow-Up Inventory
 
 When later revising `docs/readme_support_docs/sdd-skill/README.md`, align it to this task-kind-first workflow:
 

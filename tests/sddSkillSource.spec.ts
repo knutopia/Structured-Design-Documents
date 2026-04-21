@@ -2,12 +2,68 @@ import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { createHelperCapabilities } from "../src/cli/helperDiscovery.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const skillRoot = path.join(repoRoot, "skills/sdd-skill");
+const helperReadmePath = path.join(repoRoot, "docs/readme_support_docs/sdd-helper/README.md");
 
 async function expectExists(targetPath: string): Promise<void> {
   await expect(access(targetPath)).resolves.toBeUndefined();
+}
+
+function extractSupportedHelperCommands(markdown: string): string[] {
+  const start = markdown.indexOf("The current helper exposes:");
+  expect(start).toBeGreaterThanOrEqual(0);
+  const listBlock = markdown.slice(start).split("\n\n")[1] ?? "";
+  return Array.from(listBlock.matchAll(/^- `([^`]+)`$/gm), (match) => match[1]);
+}
+
+function extractHelperReadmeCommandNames(markdown: string): string[] {
+  return Array.from(
+    new Set(Array.from(markdown.matchAll(/^#### `sdd-helper ([^`\s]+)/gm), (match) => match[1]))
+  );
+}
+
+type SkillSourceMarkdown = {
+  skillMarkdown: string;
+  workflowMarkdown: string;
+  recipeMarkdown: string;
+  helperGapsMarkdown: string;
+};
+
+async function readSkillSourceMarkdown(): Promise<SkillSourceMarkdown> {
+  const [skillMarkdown, workflowMarkdown, recipeMarkdown, helperGapsMarkdown] =
+    await Promise.all([
+      readFile(path.join(skillRoot, "SKILL.md"), "utf8"),
+      readFile(path.join(skillRoot, "references/workflow.md"), "utf8"),
+      readFile(path.join(skillRoot, "references/change-set-recipes.md"), "utf8"),
+      readFile(path.join(skillRoot, "references/current-helper-gaps.md"), "utf8"),
+    ]);
+
+  return { skillMarkdown, workflowMarkdown, recipeMarkdown, helperGapsMarkdown };
+}
+
+function extractMarkdownSection(markdown: string, heading: string): string {
+  const lines = markdown.split(/\r?\n/);
+  const startIndex = lines.findIndex((line) => line.trim() === heading);
+  expect(startIndex).toBeGreaterThanOrEqual(0);
+
+  const level = heading.match(/^#+/)?.[0].length;
+  expect(level).toBeGreaterThan(0);
+
+  const terminator = new RegExp(`^#{1,${level}}\\s+`);
+  const endIndex = lines.findIndex(
+    (line, index) => index > startIndex && terminator.test(line)
+  );
+
+  return lines.slice(startIndex + 1, endIndex === -1 ? undefined : endIndex).join("\n");
+}
+
+function expectNoLegacyGenericFallback(markdown: string): void {
+  expect(markdown).not.toMatch(/capabilities\s*(?:->|=>|then)\s*contract\s*(?:->|=>|then)\s*(?:code|docs)/i);
+  expect(markdown).not.toMatch(/code\/docs only if still insufficient/i);
+  expect(markdown).not.toMatch(/only if still insufficient/i);
 }
 
 describe("canonical sdd-skill source", () => {
@@ -19,17 +75,239 @@ describe("canonical sdd-skill source", () => {
     await expectExists(path.join(skillRoot, "scripts/run_helper.sh"));
   });
 
+  it("keeps the helper gap inventory aligned with helper capabilities", async () => {
+    const helperGapsMarkdown = await readFile(
+      path.join(skillRoot, "references/current-helper-gaps.md"),
+      "utf8"
+    );
+    const documentedCommands = extractSupportedHelperCommands(helperGapsMarkdown);
+    const capabilityCommands = createHelperCapabilities().commands.map((command) => command.name);
+
+    expect(documentedCommands).toEqual(capabilityCommands);
+    expect(helperGapsMarkdown).toContain(
+      "`capabilities` and `contract` are introspection commands"
+    );
+  });
+
+  it("keeps the helper README aligned with helper authority routing", async () => {
+    const helperReadme = await readFile(helperReadmePath, "utf8");
+    const documentedCommands = extractHelperReadmeCommandNames(helperReadme).sort();
+    const capabilityCommands = createHelperCapabilities().commands.map((command) => command.name).sort();
+
+    expect(documentedCommands).toEqual(capabilityCommands);
+    expect(helperReadme).toContain("`sdd-helper` is the JSON-first companion CLI");
+    expect(helperReadme).toContain("Successful commands write exactly one JSON payload to `stdout`.");
+    expect(helperReadme).toContain("`capabilities` is helper command discovery and remains static");
+    expect(helperReadme).toContain("`contract` is deep helper contract detail");
+    expect(helperReadme).toContain(
+      "`contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values"
+    );
+    expect(helperReadme).toContain("Helper mechanics are not SDD language authority");
+    expect(helperReadme).toContain("Use `bundle/v0.1/` files for SDD language semantics");
+    expect(helperReadme).toContain("Use docs to explain a surface or investigate a mismatch.");
+    expect(helperReadme).toContain(
+      "Use implementation code for implementation debugging, not normal helper request-shape recovery."
+    );
+    expect(helperReadme).toContain("For request-loading commands, request files remain the safest default.");
+    expect(helperReadme).toContain("Domain rejections are structured helper success payloads");
+    expect(helperReadme).toContain("Helper errors are `sdd-helper-error` payloads");
+    expect(helperReadme).toContain("Diagnostics are structured evidence");
+    expect(helperReadme).toContain("Persisted validation reads the on-disk document state");
+    expect(helperReadme).toContain("Projection reads the on-disk document state");
+    expect(helperReadme).toContain("Render failures happen in preview generation or materialization");
+    expect(helperReadme).toContain(
+      "Use `assessment.layer`, `assessment.should_stop`, `assessment.next_action`, and `assessment.blocking_diagnostics`"
+    );
+    expect(helperReadme).toContain(
+      "Helper `preview` artifact paths are transient helper output and are not saved artifacts."
+    );
+    expect(helperReadme).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>");
+    expect(helperReadme).toContain(
+      "Use helper discovery for helper mechanics, bundle files for SDD language, docs for explanation or mismatch investigation, and implementation code for implementation debugging."
+    );
+    expect(helperReadme).not.toContain("capabilities -> contract -> code/docs only if still insufficient");
+  });
+
+  it("locks the top-level authority selectors", async () => {
+    const { skillMarkdown } = await readSkillSourceMarkdown();
+    const startHere = extractMarkdownSection(skillMarkdown, "## Start Here");
+
+    expect(startHere).toContain("Helper discovery is the helper-command authority");
+    expect(startHere).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(startHere).toContain("which helper commands exist");
+    expect(startHere).toContain("Helper contract detail is the helper request/result authority");
+    expect(startHere).toContain("skills/sdd-skill/scripts/run_helper.sh contract <subject_id>");
+    expect(startHere).toContain("exact request shape, result shape, continuation semantics");
+    expect(startHere).toContain(
+      "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"
+    );
+    expect(startHere).toContain("bundle/v0.1/core/syntax.yaml");
+    expect(startHere).toContain("bundle/v0.1/core/vocab.yaml");
+    expect(startHere).toContain("bundle/v0.1/core/contracts.yaml");
+    expect(startHere).toContain("bundle/v0.1/core/views.yaml");
+    expect(startHere).toContain(
+      "Shared `assessment` answers whether to stop, continue, commit, or render."
+    );
+    expectNoLegacyGenericFallback(startHere);
+  });
+
+  it("keeps authoring targeted instead of too ceremonial or too thin", async () => {
+    const { workflowMarkdown } = await readSkillSourceMarkdown();
+    const bundleSection = extractMarkdownSection(
+      workflowMarkdown,
+      "## 3. Targeted Bundle Reading And Language Authority"
+    );
+    const createSection = extractMarkdownSection(workflowMarkdown, "## 5. Create A New Document");
+    const readSection = extractMarkdownSection(
+      workflowMarkdown,
+      "## 7. Read, Validate, Project, Or Render An Existing Document"
+    );
+    const mutationSection = extractMarkdownSection(
+      workflowMarkdown,
+      "## 8. Dry-Run A Helper Mutation"
+    );
+
+    expect(bundleSection).toContain(
+      "Use helper `capabilities` and helper `contract` for helper mechanics"
+    );
+    expect(bundleSection).toContain("Use the active bundle files for SDD language semantics");
+    expect(bundleSection).toContain("Do not turn this into a broad preflight for every task.");
+    expect(bundleSection).toContain("Read only the bundle files that answer the current semantic question");
+    expect(bundleSection).toContain("read `bundle/v0.1/manifest.yaml` first for fresh authoring");
+    expect(bundleSection).toContain("read `bundle/v0.1/core/syntax.yaml`");
+    expect(bundleSection).toContain("read `bundle/v0.1/core/vocab.yaml`");
+    expect(bundleSection).toContain("read `bundle/v0.1/core/contracts.yaml`");
+    expect(bundleSection).toContain("read `bundle/v0.1/core/views.yaml`");
+    expect(createSection).toContain("For new-document authoring, do not use `search`");
+    expect(createSection).toContain("Immediate `inspect` is not the normal next step after `create`");
+    expect(createSection).toContain("Use the `revision` returned by `create`");
+    expect(createSection).toContain("determine whether the intended result requires a bundle-defined relationship");
+    expect(readSection).toContain(
+      "If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`."
+    );
+    expect(readSection).toContain(
+      "Use persisted-state semantic reads when you want confirmation without issuing a mutation request"
+    );
+    expect(mutationSection).toContain(
+      "If the mutation depends on SDD language semantics, read the targeted bundle files in section 3"
+    );
+  });
+
+  it("preserves request-file defaults and assessment gates", async () => {
+    const { skillMarkdown, workflowMarkdown } = await readSkillSourceMarkdown();
+    const hardStops = extractMarkdownSection(skillMarkdown, "## Hard Stops");
+    const assessmentSection = extractMarkdownSection(workflowMarkdown, "## 4. Read Outcome Assessment");
+    const failureSection = extractMarkdownSection(workflowMarkdown, "## 14. Diagnose Helper Failure");
+
+    expect(hardStops).toContain(
+      "Use request files by default for helper commands whose contract reports a JSON body through `--request`."
+    );
+    expect(hardStops).toContain("Use `--request -` only when JSON is piped in the same shell command.");
+    expect(failureSection).toContain("For request-loading commands, request files remain the safest default.");
+    expect(failureSection).toContain(
+      "Use `--request -` only when the JSON body is piped in the same shell command"
+    );
+    expect(assessmentSection).toContain("`assessment.should_stop`");
+    expect(assessmentSection).toContain("`assessment.can_commit`");
+    expect(assessmentSection).toContain("`assessment.can_render`");
+    expect(assessmentSection).toContain("Do not treat result `status` as the acceptance gate.");
+    expect(`${skillMarkdown}\n${workflowMarkdown}`).not.toMatch(
+      /status alone|infer acceptance from status|dry run is acceptable.*status/is
+    );
+  });
+
+  it("keeps saved artifacts on sdd show and helper preview transient", async () => {
+    const { skillMarkdown, workflowMarkdown } = await readSkillSourceMarkdown();
+    const renderBranch = extractMarkdownSection(
+      skillMarkdown,
+      "### Read, Validate, Project, Or Render Existing Document"
+    );
+    const previewSection = extractMarkdownSection(workflowMarkdown, "## 12. Preview A Result");
+
+    expect(renderBranch).toContain("Use `sdd show` for saved user-facing preview artifacts.");
+    expect(renderBranch).toContain("Use helper `preview` only for transient helper output");
+    expect(previewSection).toContain("If the user wants a saved preview artifact, use `sdd show`");
+    expect(previewSection).toContain("TMPDIR=/tmp pnpm sdd show <document_path>");
+    expect(previewSection).toContain("run `sdd show`");
+    expect(previewSection).toContain("link the saved sibling artifact");
+    expect(previewSection).toContain("Do not present `artifact_path` as the real saved artifact.");
+    expect(previewSection).toContain("Use helper preview when you need transient raw artifact output");
+    expect(previewSection).toContain(
+      "Treat the returned `artifact_path` as a temp presentation/workflow path only"
+    );
+  });
+
+  it("rejects prompt-specific rules, examples-as-authority, and bundle-owned value drift", async () => {
+    const { skillMarkdown, workflowMarkdown, recipeMarkdown, helperGapsMarkdown } =
+      await readSkillSourceMarkdown();
+    const allSkillDocs = [
+      skillMarkdown,
+      workflowMarkdown,
+      recipeMarkdown,
+      helperGapsMarkdown,
+    ].join("\n");
+    const normativeSkillDocs = [skillMarkdown, workflowMarkdown, helperGapsMarkdown].join("\n");
+
+    expect(allSkillDocs).not.toMatch(/show the information architecture|show the place map/i);
+    expect(workflowMarkdown).toContain("Examples, snapshots, and goldens are downstream evidence only.");
+    expect(workflowMarkdown).toContain("Do not inspect `.sdd` examples to infer language rules");
+    expect(allSkillDocs).not.toMatch(
+      /\b(?:examples|snapshots|goldens)\s+(?:are|remain)\s+(?:the\s+)?(?:language\s+)?(?:authority|authoritative|source of truth|normative)/i
+    );
+    expect(normativeSkillDocs).not.toContain("--view ia_place_map");
+    expect(normativeSkillDocs).not.toContain("--profile strict");
+    expect(normativeSkillDocs).not.toContain("CONTAINS");
+    expect(normativeSkillDocs).not.toContain("COMPOSED_OF");
+    expect(normativeSkillDocs).not.toContain("TRANSITIONS_TO");
+    expect(normativeSkillDocs).not.toMatch(/\b[A-Z][A-Za-z]+ -> [A-Z][A-Za-z]+\b/);
+    expect(normativeSkillDocs).not.toMatch(/\^\[A-Z]\{1,3}/);
+    expect(recipeMarkdown).toContain("illustrative placeholders");
+    expect(recipeMarkdown).toContain("choose real SDD language values from the active bundle files");
+    expect(recipeMarkdown).not.toMatch(
+      /(?:valid|supported)\s+(?:relationships|profiles|views)\s+are|must use `?(?:CONTAINS|COMPOSED_OF|ia_place_map|strict)/i
+    );
+    expectNoLegacyGenericFallback(allSkillDocs);
+  });
+
   it("references only companion skill files that exist in the repo skill tree", async () => {
     const skillMarkdown = await readFile(path.join(skillRoot, "SKILL.md"), "utf8");
     const workflowMarkdown = await readFile(
       path.join(skillRoot, "references/workflow.md"),
       "utf8"
     );
+    const recipeMarkdown = await readFile(
+      path.join(skillRoot, "references/change-set-recipes.md"),
+      "utf8"
+    );
     const skillAndWorkflow = `${skillMarkdown}\n${workflowMarkdown}`;
 
     expect(skillMarkdown.split(/\r?\n/).length).toBeLessThanOrEqual(120);
+    expect(skillMarkdown).toContain("Helper discovery is the helper-command authority");
     expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(skillMarkdown).toContain(
+      "Helper contract detail is the helper request/result authority"
+    );
     expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
+    expect(skillMarkdown).toContain(
+      "exact request shape, result shape, continuation semantics, helper constraints"
+    );
+    expect(skillMarkdown).toContain(
+      "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"
+    );
+    expect(skillMarkdown).toContain("bundle/v0.1/core/syntax.yaml");
+    expect(skillMarkdown).toContain("bundle/v0.1/core/vocab.yaml");
+    expect(skillMarkdown).toContain("bundle/v0.1/core/contracts.yaml");
+    expect(skillMarkdown).toContain("bundle/v0.1/core/views.yaml");
+    expect(skillMarkdown).toContain(
+      "Shared `assessment` answers whether to stop, continue, commit, or render."
+    );
+    expect(skillMarkdown).toContain("Use docs to explain a surface or investigate a mismatch.");
+    expect(skillMarkdown).toContain(
+      "Use implementation code for implementation debugging, not normal helper request-shape recovery."
+    );
+    expect(skillMarkdown).not.toContain(
+      "capabilities -> contract -> code/docs only if still insufficient"
+    );
     expect(skillMarkdown).toContain(
       "For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command."
     );
@@ -69,8 +347,50 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
     expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
     expect(workflowMarkdown).toContain("--resolve bundle");
-    expect(workflowMarkdown).toContain("capabilities -> contract -> code/docs only if still insufficient");
-    expect(workflowMarkdown).toContain("## 3. Read Outcome Assessment");
+    expect(workflowMarkdown).toContain("## 3. Targeted Bundle Reading And Language Authority");
+    expect(workflowMarkdown).toContain(
+      "Use helper `capabilities` and helper `contract` for helper mechanics"
+    );
+    expect(workflowMarkdown).toContain("Use the active bundle files for SDD language semantics");
+    expect(workflowMarkdown).toContain(
+      "read `bundle/v0.1/manifest.yaml` first for fresh authoring"
+    );
+    expect(workflowMarkdown).toContain(
+      "read `bundle/v0.1/core/syntax.yaml` for node IDs, node headers, edge lines, property lines, nesting, and source syntax"
+    );
+    expect(workflowMarkdown).toContain(
+      "read `bundle/v0.1/core/vocab.yaml` for node and relationship token selection"
+    );
+    expect(workflowMarkdown).toContain(
+      "read `bundle/v0.1/core/contracts.yaml` for relationship endpoint validity"
+    );
+    expect(workflowMarkdown).toContain(
+      "read `bundle/v0.1/core/views.yaml` for projection scope, hierarchy edges, ordering edges, view-specific annotations, and rendered-view behavior"
+    );
+    expect(workflowMarkdown).toContain(
+      "read profile files only when profile behavior is needed beyond profile IDs exposed by helper contract resolution"
+    );
+    expect(workflowMarkdown).toContain(
+      "Prompt words are input language. Bundle vocabulary and contracts decide SDD language."
+    );
+    expect(workflowMarkdown).toContain("Nesting alone does not establish graph semantics.");
+    expect(workflowMarkdown).toContain(
+      "Projection checks and rendered views are checks and presentation boundaries; they do not replace graph authoring targets."
+    );
+    expect(workflowMarkdown).toContain("Examples, snapshots, and goldens are downstream evidence only.");
+    expect(workflowMarkdown).toContain("Do not inspect `.sdd` examples to infer language rules");
+    expect(workflowMarkdown).toContain(
+      "`contract --resolve bundle` expands active helper-exposed values such as `view_id` and `profile_id`"
+    );
+    expect(workflowMarkdown).toContain("It does not replace the bundle files as the general authority");
+    expect(workflowMarkdown).not.toContain(
+      "capabilities -> contract -> code/docs only if still insufficient"
+    );
+    expect(workflowMarkdown).not.toContain("authoritative bundle/spec material");
+    expect(recipeMarkdown).toContain("workflow guidance only for helper operation shape");
+    expect(recipeMarkdown).toContain("illustrative placeholders");
+    expect(recipeMarkdown).toContain("choose real SDD language values from the active bundle files");
+    expect(workflowMarkdown).toContain("## 4. Read Outcome Assessment");
     expect(workflowMarkdown).toContain("Use `status`, `summary`, `diagnostics`, and `projection_results` as supporting detail for review and explanation. Do not treat result `status` as the acceptance gate.");
     expect(workflowMarkdown).toContain("Review assessment first:");
     expect(workflowMarkdown).toContain("if `assessment.should_stop` is true, stop and follow `assessment.next_action`");
