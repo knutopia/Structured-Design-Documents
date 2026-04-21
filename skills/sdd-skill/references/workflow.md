@@ -149,7 +149,7 @@ skills/sdd-skill/scripts/run_helper.sh validate <document_path> --profile <profi
 skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
 ```
 
-Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state preview work.
+Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state diagram artifact work.
 
 If the relevant `view_id` or `profile_id` is not already known, use `contract --resolve bundle` to expand the active helper-exposed values before choosing command arguments:
 
@@ -159,13 +159,15 @@ skills/sdd-skill/scripts/run_helper.sh contract helper.command.project --resolve
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
 ```
 
-If the user wants a saved preview artifact from this branch, use `sdd show` only after the relevant committed persisted state returns `assessment.can_render` for the requested profile and view:
+For normal human-facing diagram requests, produce a durable saved file. Use `sdd show` only after the relevant committed persisted state returns `assessment.can_render` for the requested profile and view:
 
 ```bash
 TMPDIR=/tmp pnpm sdd show <document_path> \
   --view <view_id> \
   --profile <profile_id>
 ```
+
+If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
 
 Use one of these branches and stop after the one that matches the final response:
 
@@ -285,11 +287,11 @@ skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
 
 These commands read the current on-disk document only. They do not inspect dry-run candidates. Use their returned assessment to decide whether the persisted state is blocked, needs review, or can be rendered.
 
-## 12. Preview A Result
+## 12. Produce A Diagram Artifact
 
-Interpret requests for a visible result semantically, not only from exact technical words. General requests such as "show it", "render it", "draw it", or "make a diagram" should normally produce a saved user-facing artifact.
+Interpret requests for a visible result semantically, not only from exact technical words. General requests such as "create a diagram", "make a diagram", "generate a diagram", "render it", "draw it", "show it", "display it", or "view it" produce a saved user-facing diagram artifact by default. A helper preview is a display aid; it is not the deliverable unless the user explicitly asks for preview-only, inline-only, or transient helper output.
 
-If the user wants a saved preview artifact, use `sdd show` after the last committed persisted-state assessment has `assessment.can_render` set to true:
+Use `sdd show` after the last committed persisted-state assessment has `assessment.can_render` set to true:
 
 ```bash
 TMPDIR=/tmp pnpm sdd show <document_path> \
@@ -297,7 +299,9 @@ TMPDIR=/tmp pnpm sdd show <document_path> \
   --profile <profile_id>
 ```
 
-If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it.
+If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
+
+If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering. A preview matches only when it came from the same document, committed revision, view, profile, format, and backend in the same workflow context. If matching metadata is unavailable, use `sdd show` instead of copying. The default durable path still stays beside the `.sdd`.
 
 Use one of these branches and stop after the one that matches the final response:
 
@@ -328,7 +332,7 @@ Do not present `artifact_path` as the real saved artifact. Use the canonical sib
 
 If the relevant `view_id` or `profile_id` is unknown, use `contract --resolve bundle` to expand the active helper-exposed values before choosing arguments for `preview` or `sdd show`. Read `views.yaml` or profile files when you need behavior beyond the IDs.
 
-Use helper preview when you need transient raw artifact output or a chat-safe artifact path rather than the normal saved deliverable:
+Use helper preview alone only when the user explicitly asks for preview-only, inline-only, transient raw artifact output, or a chat-safe artifact path rather than the normal saved deliverable:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh preview <document_path> \

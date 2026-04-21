@@ -41,8 +41,10 @@ This skill enables working with structured design documents. In this repo source
 - If the document is already named, do not force a search or edit-oriented inspect step.
 - Use `validate` and `project` for persisted-state semantic reads.
 - Use `contract --resolve bundle` only when active bundle-owned values such as `<view_id>` or `<profile_id>` are needed and not already known.
-- Use `sdd show` for saved user-facing preview artifacts.
+- For create, make, generate, render, draw, show, display, or view diagram requests, produce a saved file artifact by default.
+- Use `sdd show` for saved user-facing diagram artifacts.
 - Use helper `preview` only for transient helper output, raw artifact access, or a chat-safe `artifact_path` for inline image display.
+- If no output path is specified, save beside the `.sdd`; do not invent a new output directory.
 - Render only from a committed persisted state whose returned assessment says `assessment.can_render` is true.
 
 ### Diagnose Helper Failure
@@ -68,6 +70,8 @@ This skill enables working with structured design documents. In this repo source
 - Use the `revision` returned by `create` for fresh-document bootstrap follow-on authoring.
 - Dry-run mutations before commit.
 - Do not render before clean committed validation and persisted-state assessment.
+- Do not finish a diagram/render request with only helper `preview` output unless the user explicitly requested preview-only or inline-only output.
+- Save diagram/render outputs beside the `.sdd` by default; create no new output directory unless the user explicitly requested that directory.
 - Defer acceptance judgment to shared `assessment`.
 - Use `assessment.should_stop`, `assessment.next_action`, and `assessment.blocking_diagnostics` for stop/report decisions.
 - Commit only when dry-run `assessment.can_commit` is true and the user wants a real mutation.

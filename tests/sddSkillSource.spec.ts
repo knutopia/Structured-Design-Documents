@@ -219,22 +219,32 @@ describe("canonical sdd-skill source", () => {
     );
   });
 
-  it("keeps saved artifacts on sdd show and helper preview transient", async () => {
+  it("makes diagram requests produce durable files by default and keeps helper preview transient", async () => {
     const { skillMarkdown, workflowMarkdown } = await readSkillSourceMarkdown();
     const renderBranch = extractMarkdownSection(
       skillMarkdown,
       "### Read, Validate, Project, Or Render Existing Document"
     );
-    const previewSection = extractMarkdownSection(workflowMarkdown, "## 12. Preview A Result");
+    const previewSection = extractMarkdownSection(workflowMarkdown, "## 12. Produce A Diagram Artifact");
 
-    expect(renderBranch).toContain("Use `sdd show` for saved user-facing preview artifacts.");
+    expect(renderBranch).toContain("For create, make, generate, render, draw, show, display, or view diagram requests, produce a saved file artifact by default.");
+    expect(renderBranch).toContain("Use `sdd show` for saved user-facing diagram artifacts.");
     expect(renderBranch).toContain("Use helper `preview` only for transient helper output");
-    expect(previewSection).toContain("If the user wants a saved preview artifact, use `sdd show`");
+    expect(renderBranch).toContain("If no output path is specified, save beside the `.sdd`; do not invent a new output directory.");
+    expect(`${skillMarkdown}\n${workflowMarkdown}`).toContain("Do not finish a diagram/render request with only helper `preview` output unless the user explicitly requested preview-only or inline-only output.");
+    expect(previewSection).toContain('General requests such as "create a diagram", "make a diagram", "generate a diagram", "render it", "draw it", "show it", "display it", or "view it" produce a saved user-facing diagram artifact by default.');
+    expect(previewSection).toContain("A helper preview is a display aid; it is not the deliverable unless the user explicitly asks for preview-only, inline-only, or transient helper output.");
+    expect(previewSection).toContain("Use `sdd show` after the last committed persisted-state assessment has `assessment.can_render` set to true:");
     expect(previewSection).toContain("TMPDIR=/tmp pnpm sdd show <document_path>");
+    expect(previewSection).toContain("If the user did not request a specific output path, let `sdd show` write beside the `.sdd`");
+    expect(previewSection).toContain("Do not create a new output directory unless the user explicitly named that directory in the requested output path.");
+    expect(previewSection).toContain("If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering.");
+    expect(previewSection).toContain("A preview matches only when it came from the same document, committed revision, view, profile, format, and backend in the same workflow context.");
+    expect(previewSection).toContain("If matching metadata is unavailable, use `sdd show` instead of copying.");
     expect(previewSection).toContain("run `sdd show`");
     expect(previewSection).toContain("link the saved sibling artifact");
     expect(previewSection).toContain("Do not present `artifact_path` as the real saved artifact.");
-    expect(previewSection).toContain("Use helper preview when you need transient raw artifact output");
+    expect(previewSection).toContain("Use helper preview alone only when the user explicitly asks for preview-only, inline-only, transient raw artifact output");
     expect(previewSection).toContain(
       "Treat the returned `artifact_path` as a temp presentation/workflow path only"
     );
@@ -411,7 +421,7 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("if `assessment.should_stop` is true, stop and follow `assessment.next_action`");
     expect(workflowMarkdown).toContain("if `assessment.blocking_diagnostics` is non-empty, report those diagnostics as the blocker");
     expect(workflowMarkdown).toContain("if `assessment.can_commit` is true and the user wants the real mutation, the request is commit-eligible");
-    expect(workflowMarkdown).toContain("Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state preview work.");
+    expect(workflowMarkdown).toContain("Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state diagram artifact work.");
     expect(workflowMarkdown).toContain("/tmp/unique-previews");
     expect(workflowMarkdown).toContain("artifact_path");
     expect(workflowMarkdown).toContain("Use one of these branches and stop after the one that matches the final response:");
@@ -423,7 +433,7 @@ describe("canonical sdd-skill source", () => {
       "use the returned `artifact_path` as the Markdown image source in the final response"
     );
     expect(workflowMarkdown).toContain(
-      "consume the file at `artifact_path`"
+      "copy that artifact to the durable output path instead of rerendering"
     );
     expect(workflowMarkdown).toContain(
       "Do not present `artifact_path` as the real saved artifact."

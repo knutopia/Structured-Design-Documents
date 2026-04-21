@@ -20,6 +20,8 @@
 -restored pre-refactor skill for reference
 -created another skill-ops improvement design doc
 -created, executed matching plan
+-skill now better behaved, still artifact creation issues
+-refined further
 
 ## Sun 4-19-26
 
