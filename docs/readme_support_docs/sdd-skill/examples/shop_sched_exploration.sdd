@@ -1,0 +1,28 @@
+SDD-TEXT 0.1
+Place P-010 "Dashboard"
+  route_or_key="/dashboard"
+  primary_nav="true"
+  NAVIGATES_TO P-020
+  NAVIGATES_TO P-040
+END
+Area A-010 "Mechanic's Scheduling"
+  CONTAINS P-020
+  CONTAINS P-030
+  CONTAINS P-040
+  + Place P-020 "Open Shifts"
+    route_or_key="/mechanic/shifts/open"
+    access="role:mechanic"
+    primary_nav="true"
+    NAVIGATES_TO P-030
+  END
+  + Place P-030 "Shift Detail"
+    route_or_key="/mechanic/shifts/:shiftId"
+    access="role:mechanic"
+  END
+  + Place P-040 "My Schedule"
+    route_or_key="/mechanic/schedule"
+    access="role:mechanic"
+    primary_nav="true"
+    NAVIGATES_TO P-030
+  END
+END

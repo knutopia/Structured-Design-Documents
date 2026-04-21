@@ -1,0 +1,65 @@
+SDD-TEXT 0.1
+Place P-010 "Dashboard"
+  route_or_key="/dashboard"
+  primary_nav="true"
+  description="At-a-glance landing page for shop members, mechanics, and coordinators."
+  NAVIGATES_TO P-020
+  NAVIGATES_TO P-040
+  NAVIGATES_TO P-050
+END
+Area A-010 "Mechanic's Scheduling"
+  description="Mechanic workspace for finding open shop shifts and managing accepted shifts."
+  CONTAINS P-020
+  CONTAINS P-030
+  CONTAINS P-040
+  + Place P-020 "Open Shifts"
+    route_or_key="/mechanic/shifts/open"
+    access="role:mechanic"
+    primary_nav="true"
+    description="Browse available volunteer mechanic shifts and choose a shift to inspect."
+    NAVIGATES_TO P-030
+  END
+  + Place P-030 "Shift Detail"
+    route_or_key="/mechanic/shifts/:shiftId"
+    access="role:mechanic"
+    description="Inspect a shift's bay, time window, vehicle context, and signup status."
+    CONTAINS VS-010
+    CONTAINS VS-020
+    CONTAINS VS-030
+    + ViewState VS-010 "View Shift"
+      description="Default shift-detail state for reviewing shift requirements and starting signup."
+      TRANSITIONS_TO VS-020
+    END
+    + ViewState VS-020 "Confirm Signup"
+      description="Confirmation state for reviewing commitment details before signing up."
+      TRANSITIONS_TO VS-030
+    END
+    + ViewState VS-030 "Signup Success"
+      description="Success state confirming the mechanic has signed up for the shift."
+    END
+  END
+  + Place P-040 "My Schedule"
+    route_or_key="/mechanic/schedule"
+    access="role:mechanic"
+    primary_nav="true"
+    description="Review the mechanic's upcoming commitments and shift history."
+    NAVIGATES_TO P-030
+  END
+END
+Area A-020 "Admin Review"
+  description="Coordinator workspace for reviewing customer inquiries and approving volunteer signups."
+  CONTAINS P-050
+  CONTAINS P-060
+  + Place P-050 "Review Customer Inquiries"
+    route_or_key="/admin/inquiries"
+    access="role:coordinator"
+    primary_nav="true"
+    description="Queue for customer inquiries and volunteer signup requests awaiting coordinator review."
+    NAVIGATES_TO P-060
+  END
+  + Place P-060 "Volunteer Detail"
+    route_or_key="/admin/volunteers/:volunteerId"
+    access="role:coordinator"
+    description="Approval workspace for reviewing a volunteer's profile, availability, and signup decision."
+  END
+END
