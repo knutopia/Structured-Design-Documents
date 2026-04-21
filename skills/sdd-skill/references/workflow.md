@@ -259,9 +259,16 @@ Treat semantic correctness and source readability as separate concerns:
 
 Preferred helper stance:
 
-- use `author` nested `children` for first-pass scaffold creation when a nested source layout is intended
+- use `author` nested `children` by default for first-pass scaffold creation when a child has one clear local parent
 - when using low-level `apply`, author the bundle-defined relationship explicitly when the intended result depends on it
 - keep children top-level when reuse, multiple semantic parents, or cross-cutting placement would make nesting misleading
+
+Readable source pass:
+
+- choose node and edge semantics from bundle authority
+- author explicit semantic edges
+- nest singly-owned children under the local parent for readability
+- keep top-level placement when reuse, multiple semantic parents, cross-cutting placement, or misleading nesting makes local nesting inappropriate
 
 Use `contract --resolve bundle` for active helper-exposed `view_id` and `profile_id` values. Use the targeted bundle files in section 3 for bundle-owned relationship names, node tokens, endpoint rules, source syntax, profile behavior, and view semantics.
 

@@ -27,6 +27,7 @@ This skill enables working with structured design documents. In this repo source
 - Do not search repo `.sdd` examples to pick a filename, infer syntax, or infer structure unless the user explicitly asks for comparison or example reuse.
 - Run `create`, then continue from the returned `revision`; immediate `inspect` is not the normal next step because the empty bootstrap may still be parse-invalid.
 - Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` or `contract helper.command.author` when bootstrap continuation or request-shape detail matters.
+- Do not let "nesting is not semantic" become "avoid nesting". For child nodes with one clear local parent and no reuse or cross-cutting placement intent, prefer both the explicit semantic edge and nested source placement under the parent for readability.
 
 ### Edit Existing Document
 
@@ -34,6 +35,7 @@ This skill enables working with structured design documents. In this repo source
 - Once the target is known, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain the current `revision`, handles, and order data before handle-based changes.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
 - Determine any needed bundle-defined relationship from the active bundle files before composing view-sensitive structure. Do not rely on nested source layout as semantic proof.
+- Keep child nodes top-level only when nesting would mislead, such as reuse, multiple semantic parents, cross-cutting placement, or unclear ownership.
 - Dry-run `author` or `apply` first. Commit only when `assessment.can_commit` is true and the user wants the real mutation.
 
 ### Read, Validate, Project, Or Render Existing Document

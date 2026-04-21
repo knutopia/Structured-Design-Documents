@@ -152,7 +152,7 @@ describe("canonical sdd-skill source", () => {
   });
 
   it("keeps authoring targeted instead of too ceremonial or too thin", async () => {
-    const { workflowMarkdown } = await readSkillSourceMarkdown();
+    const { skillMarkdown, workflowMarkdown } = await readSkillSourceMarkdown();
     const bundleSection = extractMarkdownSection(
       workflowMarkdown,
       "## 3. Targeted Bundle Reading And Language Authority"
@@ -185,6 +185,16 @@ describe("canonical sdd-skill source", () => {
     expect(createSection).toContain("Immediate `inspect` is not the normal next step after `create`");
     expect(createSection).toContain("Use the `revision` returned by `create`");
     expect(createSection).toContain("determine whether the intended result requires a bundle-defined relationship");
+    expect(skillMarkdown).toContain('Do not let "nesting is not semantic" become "avoid nesting".');
+    expect(skillMarkdown).toContain("prefer both the explicit semantic edge and nested source placement under the parent for readability");
+    expect(skillMarkdown).toContain("Keep child nodes top-level only when nesting would mislead, such as reuse, multiple semantic parents, cross-cutting placement, or unclear ownership.");
+    expect(workflowMarkdown).toContain("use `author` nested `children` by default for first-pass scaffold creation when a child has one clear local parent");
+    expect(workflowMarkdown).toContain("Readable source pass:");
+    expect(workflowMarkdown).toContain("choose node and edge semantics from bundle authority");
+    expect(workflowMarkdown).toContain("author explicit semantic edges");
+    expect(workflowMarkdown).toContain("nest singly-owned children under the local parent for readability");
+    expect(workflowMarkdown).toContain("keep top-level placement when reuse, multiple semantic parents, cross-cutting placement, or misleading nesting makes local nesting inappropriate");
+    expect(workflowMarkdown).toContain("nested source layout by itself is not semantic proof");
     expect(readSection).toContain(
       "If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`."
     );
