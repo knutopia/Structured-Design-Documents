@@ -16,6 +16,7 @@
 ## Tue 4-21-26
 
 -found & addressed skill nesting recession
+-found & addressed skill source sequencing regression
 
 ## Mon 4-20-26
 

@@ -100,7 +100,7 @@ Use:
 }
 ```
 
-Pair that with an explicit relationship line such as:
+Pair that with an explicit relationship line before nested child blocks. Prefer omitting `placement` so helper default edge insertion places the edge after properties and existing edges, and before the first nested node:
 
 ```json
 {
@@ -108,14 +108,11 @@ Pair that with an explicit relationship line such as:
   "parent_handle": "<area-handle>",
   "rel_type": "CONTAINS",
   "to": "P-210",
-  "to_name": "Projects Overview",
-  "placement": {
-    "mode": "last",
-    "stream": "body",
-    "parent_handle": "<area-handle>"
-  }
+  "to_name": "Projects Overview"
 }
 ```
+
+If explicit placement is needed, place the relationship line before the first nested child block or after the previous semantic edge line, not at the end of the parent body.
 
 Use this pattern when the child has one clear structural parent and is not intended for reuse elsewhere in the source.
 

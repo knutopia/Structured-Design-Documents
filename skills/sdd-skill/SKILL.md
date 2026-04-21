@@ -28,6 +28,7 @@ This skill enables working with structured design documents. In this repo source
 - Run `create`, then continue from the returned `revision`; immediate `inspect` is not the normal next step because the empty bootstrap may still be parse-invalid.
 - Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` or `contract helper.command.author` when bootstrap continuation or request-shape detail matters.
 - Do not let "nesting is not semantic" become "avoid nesting". For child nodes with one clear local parent and no reuse or cross-cutting placement intent, prefer both the explicit semantic edge and nested source placement under the parent for readability.
+- When nesting child nodes under a parent, keep the parent's semantic edge lines above nested child blocks. Prefer body order: properties, semantic edge lines, nested child blocks. Do not place relationship lines after the nested blocks they introduce.
 
 ### Edit Existing Document
 

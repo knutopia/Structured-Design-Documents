@@ -187,13 +187,19 @@ describe("canonical sdd-skill source", () => {
     expect(createSection).toContain("determine whether the intended result requires a bundle-defined relationship");
     expect(skillMarkdown).toContain('Do not let "nesting is not semantic" become "avoid nesting".');
     expect(skillMarkdown).toContain("prefer both the explicit semantic edge and nested source placement under the parent for readability");
+    expect(skillMarkdown).toContain("Prefer body order: properties, semantic edge lines, nested child blocks.");
+    expect(skillMarkdown).toContain("Do not place relationship lines after the nested blocks they introduce.");
     expect(skillMarkdown).toContain("Keep child nodes top-level only when nesting would mislead, such as reuse, multiple semantic parents, cross-cutting placement, or unclear ownership.");
     expect(workflowMarkdown).toContain("use `author` nested `children` by default for first-pass scaffold creation when a child has one clear local parent");
     expect(workflowMarkdown).toContain("Readable source pass:");
     expect(workflowMarkdown).toContain("choose node and edge semantics from bundle authority");
     expect(workflowMarkdown).toContain("author explicit semantic edges");
+    expect(workflowMarkdown).toContain("order node body items as properties, semantic edge lines, then nested child blocks");
     expect(workflowMarkdown).toContain("nest singly-owned children under the local parent for readability");
     expect(workflowMarkdown).toContain("keep top-level placement when reuse, multiple semantic parents, cross-cutting placement, or misleading nesting makes local nesting inappropriate");
+    expect(workflowMarkdown).toContain("put parent-child edges in the parent's `node.edges` and nested child blocks in `node.children`");
+    expect(workflowMarkdown).toContain("For low-level `apply`, insert semantic edge lines before nested child blocks.");
+    expect(workflowMarkdown).toContain('Do not use `placement.mode: "last"` for semantic edge lines that introduce or describe nested child blocks.');
     expect(workflowMarkdown).toContain("nested source layout by itself is not semantic proof");
     expect(readSection).toContain(
       "If the document is already named and the user only needs a read, validation, projection, or preview result, do not `search`."
@@ -286,6 +292,14 @@ describe("canonical sdd-skill source", () => {
     expect(normativeSkillDocs).not.toMatch(/\^\[A-Z]\{1,3}/);
     expect(recipeMarkdown).toContain("illustrative placeholders");
     expect(recipeMarkdown).toContain("choose real SDD language values from the active bundle files");
+    expect(recipeMarkdown).toContain("Pair that with an explicit relationship line before nested child blocks.");
+    expect(recipeMarkdown).toContain("Prefer omitting `placement` so helper default edge insertion places the edge after properties and existing edges, and before the first nested node");
+    expect(recipeMarkdown).toContain("If explicit placement is needed, place the relationship line before the first nested child block or after the previous semantic edge line, not at the end of the parent body.");
+    const nestedChildRecipe = extractMarkdownSection(
+      recipeMarkdown,
+      "## Insert A Nested Child Block For Readability"
+    );
+    expect(nestedChildRecipe).not.toMatch(/"kind": "insert_edge_line"[\s\S]*?"placement": \{[\s\S]*?"mode": "last"[\s\S]*?\}/);
     expect(recipeMarkdown).not.toMatch(
       /(?:valid|supported)\s+(?:relationships|profiles|views)\s+are|must use `?(?:CONTAINS|COMPOSED_OF|ia_place_map|strict)/i
     );

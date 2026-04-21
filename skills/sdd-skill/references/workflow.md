@@ -267,8 +267,11 @@ Readable source pass:
 
 - choose node and edge semantics from bundle authority
 - author explicit semantic edges
+- order node body items as properties, semantic edge lines, then nested child blocks
 - nest singly-owned children under the local parent for readability
 - keep top-level placement when reuse, multiple semantic parents, cross-cutting placement, or misleading nesting makes local nesting inappropriate
+
+For `author`, put parent-child edges in the parent's `node.edges` and nested child blocks in `node.children`; helper authoring compiles edges before children. For low-level `apply`, insert semantic edge lines before nested child blocks. Do not use `placement.mode: "last"` for semantic edge lines that introduce or describe nested child blocks.
 
 Use `contract --resolve bundle` for active helper-exposed `view_id` and `profile_id` values. Use the targeted bundle files in section 3 for bundle-owned relationship names, node tokens, endpoint rules, source syntax, profile behavior, and view semantics.
 
