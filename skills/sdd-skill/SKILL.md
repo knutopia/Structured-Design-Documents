@@ -33,7 +33,7 @@ This skill enables working with structured design documents. In this repo source
 - If the target `.sdd` is unknown, use `skills/sdd-skill/scripts/run_helper.sh search ...` only to locate the existing document or node.
 - Once the target is known, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain the current `revision`, handles, and order data before handle-based changes.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
-- Determine any needed bundle-defined relationship through helper contract/bundle-backed surfaces before composing view-sensitive structure. Do not rely on nested source layout as semantic proof.
+- Determine any needed bundle-defined relationship from the active bundle files before composing view-sensitive structure. Do not rely on nested source layout as semantic proof.
 - Dry-run `author` or `apply` first. Commit only when `assessment.can_commit` is true and the user wants the real mutation.
 
 ### Read, Validate, Project, Or Render Existing Document

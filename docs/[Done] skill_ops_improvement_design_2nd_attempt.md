@@ -1,4 +1,4 @@
-# SDD Skill Authority Model And Authoring Reliability Architecture
+# [Done] SDD Skill Authority Model And Authoring Reliability Architecture
 
 Status: proposed architecture foundation
 

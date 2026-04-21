@@ -39,6 +39,8 @@ Use the matching branch below instead of forcing every request through one linea
 
 Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
 
+For implementation audits of bundle authority, the parser path loads bundle data with `loadBundle(...)` and consumes syntax through `createParserSyntaxRuntime(bundle)`. This is evidence of the runtime path, not a normal authoring fallback for helper request shapes.
+
 Do not turn this into a broad preflight for every task. Read only the bundle files that answer the current semantic question:
 
 - read `bundle/v0.1/manifest.yaml` first for fresh authoring or when active core files need confirmation

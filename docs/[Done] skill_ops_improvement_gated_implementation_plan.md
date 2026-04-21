@@ -1,4 +1,4 @@
-# SDD Skill Authority Model Gated Implementation Plan
+# [Done] SDD Skill Authority Model Gated Implementation Plan
 
 Status: proposed gated implementation plan for `docs/skill_ops_improvement_design_2nd_attempt.md`
 

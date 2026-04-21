@@ -171,6 +171,9 @@ describe("canonical sdd-skill source", () => {
       "Use helper `capabilities` and helper `contract` for helper mechanics"
     );
     expect(bundleSection).toContain("Use the active bundle files for SDD language semantics");
+    expect(bundleSection).toContain("loads bundle data with `loadBundle(...)`");
+    expect(bundleSection).toContain("consumes syntax through `createParserSyntaxRuntime(bundle)`");
+    expect(bundleSection).toContain("not a normal authoring fallback for helper request shapes");
     expect(bundleSection).toContain("Do not turn this into a broad preflight for every task.");
     expect(bundleSection).toContain("Read only the bundle files that answer the current semantic question");
     expect(bundleSection).toContain("read `bundle/v0.1/manifest.yaml` first for fresh authoring");
@@ -294,6 +297,11 @@ describe("canonical sdd-skill source", () => {
     expect(skillMarkdown).toContain(
       "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"
     );
+    expect(skillMarkdown).toContain(
+      "Determine any needed bundle-defined relationship from the active bundle files"
+    );
+    expect(skillMarkdown).not.toContain("relationship through helper contract");
+    expect(skillMarkdown).not.toContain("helper contract/bundle-backed surfaces");
     expect(skillMarkdown).toContain("bundle/v0.1/core/syntax.yaml");
     expect(skillMarkdown).toContain("bundle/v0.1/core/vocab.yaml");
     expect(skillMarkdown).toContain("bundle/v0.1/core/contracts.yaml");
@@ -352,6 +360,13 @@ describe("canonical sdd-skill source", () => {
       "Use helper `capabilities` and helper `contract` for helper mechanics"
     );
     expect(workflowMarkdown).toContain("Use the active bundle files for SDD language semantics");
+    expect(workflowMarkdown).toContain("loads bundle data with `loadBundle(...)`");
+    expect(workflowMarkdown).toContain(
+      "consumes syntax through `createParserSyntaxRuntime(bundle)`"
+    );
+    expect(workflowMarkdown).toContain(
+      "not a normal authoring fallback for helper request shapes"
+    );
     expect(workflowMarkdown).toContain(
       "read `bundle/v0.1/manifest.yaml` first for fresh authoring"
     );
