@@ -16,6 +16,7 @@
 ## Wed
 
 -repo docs language clarity edits
+-small de-ifyouwanting
 
 ## Tue 4-21-26
 

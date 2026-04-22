@@ -361,7 +361,3 @@ These are the “must-have” mapping edges that prevent drift:
 **When to create a state machine**
 
 * Non-trivial transitions, retries, async effects, cancellation, optimistic updates, or bugs keep recurring.
-
----
-
-If you want this to be operational (not just conceptual), the next useful deliverable is a **one-page “schema”** you can hand to designers/PM/engineers: node types, required properties per type, allowed edges per type, and naming/ID conventions. I can draft that as a compact spec you can drop into your repo/wiki.

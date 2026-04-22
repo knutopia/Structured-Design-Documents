@@ -188,6 +188,3 @@ Required: `policy_owner` (Legal/Risk/Product/etc.), `enforcement_point` (where a
 * **Scenario Flow:** `J` + subset `P/VS` with `PRECEDES, REALIZED_BY, NAVIGATES_TO`, where branching Steps use `kind=decision`
 * **UI Contracts:** `P/VS/C` and optionally `ST/E` with `COMPOSED_OF, TRANSITIONS_TO, EMITS, BINDS_TO`, with `ViewState` primary and `State` nested by `scope_id`
 
----
-
-If you want, I can also provide a **machine-checkable JSON Schema** version of this (node + edge validation), but the above is the “handable” one-pager teams can follow without tooling.
