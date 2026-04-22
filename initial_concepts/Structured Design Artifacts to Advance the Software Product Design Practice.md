@@ -1,9 +1,12 @@
 # **Structured Design Artifacts to Advance the Software Product Design Practice**
 
-Change history:  
+Change history:
+v0.4 added SDD-Repo note
 v0.3 changed SDML to SDD-Text   
 v0.2 …changed surface-level approach  
 v0.1 initial draft
+
+This is the original concept, written before the creation of the [SDD project](../).
 
 # *Introduction*
 
