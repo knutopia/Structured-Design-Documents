@@ -201,20 +201,20 @@ Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 - The skill recognizes the follow-up prompts as *edit an existing document* requests." For each request, it looks at the current structure before making changes, so each follow-up builds on the actual document. The follow-up requests for diagrams are recognized as *read, validate, or preview an existing document* again.
 - All the edits are made through a structured workflow provided by the sdd-helper tool, instead of brittle free-form rewriting. The tool explains its capabilities to the skill when the skill asks. The tool and the skill speak json to one another, which is easy to use for the LLM.
 
-For the technical workflow behind the examples, see the canonical repo skill bundle at [SKILL.md](../../../skills/sdd-skill/SKILL.md), especially [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md), plus the [SDD Helper Guide](../sdd-helper/).
+For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used byt the skill.
 
-## Why Use The Skill Before You Start Coding
+## Go Beyond the Skill
 
-By capturing the structural design design first, you create a real structure that a coding model (or a visual design creation model) can work from. That is a much stronger foundation than asking an LLM to "make an app" and hoping it invents a good product shape that meets your structural design ideas. Once code is written, it wants to stay in place. Changes take effort, come with risk and blast radius and token burn.
+The skill empowers an LLM to respond to user's natural-language prompts, allowing a user to work with SSD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
 
-If you use an LLM to code in a professional context, implementation is often driven by detailed requirements and technical design documents. Those inputs can be weak on structural design and user experience. By bringing an SDD into the mix, design enters the chat.
+## Design Sovereignity
 
-Once code is written, every structural design refinement is a heavy operation that 
+By capturing the structural design design before generating code, you create a real structure that a coding model (or a visual design creation model) can work from. That is a much stronger foundation than asking an LLM to "make an app" and hoping it invents a good product shape that meets your structural design ideas. Once code is written, it wants to stay in place. Changes take effort and create risk, blast radius and token burn.
 
-If you begin coding from a one-line request, the model has to invent the product structure at the same time it is generating implementation details. That often leads to avoidable churn.
+If you use an LLM to code in a professional context, implementation is often driven by detailed requirements and technical design documents. Those inputs can be weak on structural design and user experience. By bringing an SDD into the mix, design enters the chat. Tell your LLM to use the skill to maintain and expand a strutural design as part of a normal development cycle and use the SDD as input for code generation.  
 
 ## Note: SDD During the Product Lifecycle
 
-The examples here focus on simple information architecture and a bit of state handling. SDD provides means to go into greater detail, with flows, nested components and service blueprints. SDD also provides means to capture more abstract *drivers* of design, with journeys and opportunity maps. The goal is to create an opportunity to create a full picture of structural design - which is helpful for delivering on the design promise.
+The examples above focus on simple information architecture and a bit of state handling. SDD provides means to go into greater detail, with flows, nested components and service blueprints. SDD also provides means to capture more abstract *drivers* of design, with journeys and opportunity maps. The goal is to create an opportunity to create a full picture of structural design - which is helpful for delivering on the design promise.
 
 The example shown here shows a from-scratch workflow. It is exciting to envision, design and build a product from scratch. It is also, in practical terms, rare. Most actual work in a product business is concerned with changing, improving, and growing an existing product over a long period of time. In that situation, [SDD can make a strategic difference](../strategic_potential/README.md).
