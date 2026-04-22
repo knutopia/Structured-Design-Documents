@@ -6,7 +6,7 @@ v0.3 changed SDML to SDD-Text
 v0.2 …changed surface-level approach  
 v0.1 initial draft
 
-This is the original concept, written before the creation of the [SDD project](../).
+This is the original concept, written before the creation of the [SDD project](https://github.com/knutopia/Structured-Design-Documents).
 
 # *Introduction*
 
