@@ -100,7 +100,7 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](docs/readme_support_docs/sdd-helper/)
 
-- Authoring Spec (human-oriented reference): [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
+- Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
 - [Initial Concepts 1: a 6-Diagram Suite v0.1](<initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
 
