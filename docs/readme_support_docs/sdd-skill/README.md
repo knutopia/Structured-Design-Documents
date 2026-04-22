@@ -207,13 +207,7 @@ For the technical workflow behind the examples, see the canonical repo skill bun
 
 The skill empowers an LLM to respond to user's natural-language prompts, allowing a user to work with SSD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
 
-## Design Sovereignity
-
-By capturing the structural design design before generating code, you create a real structure that a coding model (or a visual design creation model) can work from. That is a much stronger foundation than asking an LLM to "make an app" and hoping it invents a good product shape that meets your structural design ideas. Once code is written, it wants to stay in place. Changes take effort and create risk, blast radius and token burn.
-
-If you use an LLM to code in a professional context, implementation is often driven by detailed requirements and technical design documents. Those inputs can be weak on structural design and user experience. By bringing an SDD into the mix, design enters the chat. Tell your LLM to use the skill to maintain and expand a strutural design as part of a normal development cycle and use the SDD as input for code generation.  
-
-## Note: SDD During the Product Lifecycle
+## SDD During the Product Lifecycle
 
 The examples above focus on simple information architecture and a bit of state handling. SDD provides means to go into greater detail, with flows, nested components and service blueprints. SDD also provides means to capture more abstract *drivers* of design, with journeys and opportunity maps. The goal is to create an opportunity to create a full picture of structural design - which is helpful for delivering on the design promise.
 
