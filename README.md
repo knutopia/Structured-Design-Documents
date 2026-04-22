@@ -117,7 +117,7 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
 - Completed usable staged SVG renderers for IA / Place Map, UI Contract and Service Blueprint
-- ssd-helper app available to assist agentic skills
+- sdd-helper app available to assist agentic skills
 
 ### Known Limitations
 

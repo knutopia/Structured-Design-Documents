@@ -1,6 +1,6 @@
 # SDD in the Product Lifecycle: Strategically Aligned Design and Design Souvereignity for Implementation
 
-As an element in the software product lifecycle, SSD can provide two benefits: design souvereignity and strategic alignment.
+As an element in the software product lifecycle, SDD can provide two benefits: design souvereignity and strategic alignment.
 
 ## 1. Design Sovereignity for Development
 
@@ -8,7 +8,7 @@ This is the more "tactical" value of SDD. Software implementation is driven by r
 
 By capturing structural design design before writing / generating code, you create a real structure that a coding model (or a visual design creation model, or a developer) can work from. That is a much stronger foundation than asking an LLM to "implement these requirements" and hoping it invents a good product shape that meets your structural design ideas. Once code is written, it wants to stay in place. Changes take effort and create risk, blast radius and token burn.
 
-SSD allows us to be ahead of implementation with structural design, and (because SSD is maintainable and open) to stay ahead: we can maintain design sovereignity. LLMs will become better designers or design-helpers. Once they do, we can have better conversations with them about design, without writing code, by using SSD.
+SDD allows us to be ahead of implementation with structural design, and (because SDD is maintainable and open) to stay ahead: we can maintain design sovereignity. LLMs will become better designers or design-helpers. Once they do, we can have better conversations with them about design, without writing code, by using SDD.
 
 ## 2. Strategically Aligned Design for the Product Lifecycle
 
