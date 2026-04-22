@@ -1,12 +1,12 @@
 # SDD CLI Tools
 
-`sdd` is the main command-line entrypoint for working with `.sdd` files in this repository. It is the human-facing CLI for previewing diagrams, validating documents against profiles, and compiling SDD source into canonical JSON.
+The command-line tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It validates documents against profiles, compiles documents into canonical JSON, and generates diagrams. 
 
 (This is different from `sdd-helper`. `sdd` is the normal tool for people running straightforward CLI workflows. `sdd-helper` is the JSON-first tool for automation and structured mutation flows.)
 
 ## If You Are New To The Command Line
 
-You do not need to learn the whole terminal to use this page. You can copy and paste the example commands exactly.
+You do not need to learn the whole terminal to use the `sdd` CLI tool. You can copy and paste the example commands exactly.
 
 - When you see `<input>`, it means “the path to your `.sdd` file”.
 - When you use `--out`, you are choosing where the generated file should be written.
@@ -23,7 +23,7 @@ Start with the `simple` profile. The CLI default is `strict`, but `simple` is th
 SVG quick-start:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple
+`sdd` is 
 ```
 
 PNG quick-start:
@@ -55,7 +55,7 @@ For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.m
 
 ## Public Commands At A Glance
 
-This page focuses on the three public commands most people need:
+This page focuses on the three public subcommands most people need:
 
 - `sdd show <input> --view <view>`
 - `sdd validate <input>`
