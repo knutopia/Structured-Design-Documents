@@ -1,8 +1,8 @@
 # Strategic Potential of SDD for the Product Lifecycle
 
-It is exciting to envision, design and build a product from scratch. Most actual work in a product business is concerned with changing, improving, and growing an existing product. 
+Design work in a product business is concerned with changing, improving, and growing an existing product. In this work, the creative ideal of envisioning something great meets the realities of business goals and constraints.
 
-When working on an existing product, new designs are still valuable, and they still happen, within tightly-defined contexts. The value of a new design is often found in its relationship to what already exists. Traditionally, design documentation is not well equipped to deal with this reality.
+When working on an existing product, design *is* valuable, but its value is often driven by its relationship to what already exists. Traditionally, design documentation is not well equipped to deal with this reality. Design documentation tends to be stand-alone, separated from the tooling and documents that the non-designers on the product team use.
 
 Since product design is not the only input that drives actual product development, design drift is a common occurence, resulting in a status quo where the shipped product looks and behaves differently from what is designed. That, in turn, makes design less valuable as an input for product decisons. This potential friction is countered by good process, clear communication and mutual respect between the product contributors. SDD can help.
 
