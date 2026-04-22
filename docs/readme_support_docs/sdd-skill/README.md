@@ -2,6 +2,8 @@
 
 The SDD Skill provides a simple way to work with structured design documents. The skill understands the SDD grammar and provides valid, consistent output. The SDD Skill is an alternative to manually authoring and editing SDD documents, which is also possible.
 
+The current SDD Skill is written for Codex.
+
 ## Use Case: Start With An App Idea
 
 If you have an app idea in mind, you can start by describing the app in plain language.

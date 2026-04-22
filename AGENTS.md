@@ -64,9 +64,9 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 - In this WSL setup, default temp resolution may point at `/mnt/c/TEMP`, which can fail with `EACCES`.
 - `TMPDIR=/tmp` avoids that problem and should be the default for test runs.
 
-## Current Project Goal
+## Current Project Goal: LLM-Integration for SSD
 
-Having created a helper-app that assists LLM "Skills" in interacting with SDD documents, the current project goal is to create an MCP server to make the same (shared) capabilities available.
+To enable LLM workflow integration with SSD, we recently created a (Codex-) Skill, a helper-app that assists the skill, and shared authoring infrastructure that supports the helper app and the future future MCP server. The current project goal is to create a SSD MCP server.
 
 ## Renderer Constraints
 

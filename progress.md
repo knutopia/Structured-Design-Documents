@@ -13,10 +13,15 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed
+
+-repo docs language clarity edits
+
 ## Tue 4-21-26
 
 -found & addressed skill nesting recession
 -found & addressed skill source sequencing regression
+-reintroduced skill guide page with examples
 
 ## Mon 4-20-26
 
