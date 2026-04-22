@@ -188,13 +188,29 @@ interface HelperCapabilitiesResultCommand {
   invocation: string;
   summary: string;
   mutates_repo_state: "never" | "conditional" | "always";
+  arguments: Array<{
+    name: string;
+    required: boolean;
+    description: string;
+  }>;
+  options: Array<{
+    flag: string;
+    required: boolean;
+    description: string;
+    value_name?: string;
+  }>;
+  request_body?: {
+    via_option: "--request";
+    top_level_shape: "ApplyAuthoringIntentArgs" | "ApplyChangeSetArgs" | "UndoChangeSetArgs";
+    source: "file_path_or_stdin_dash";
+  };
+  result_kind: string;
+  constraints: string[];
   subject_id: string;
   input_shape_id?: string;
   output_shape_id?: string;
   has_deep_introspection: true;
   detail_modes?: Array<"static" | "bundle_resolved">;
-  result_kind: string;
-  constraints: string[];
 }
 ```
 
@@ -236,11 +252,11 @@ interface HelperCapabilitiesResultCommand {
 - Use when: you want a repo-safe way to bootstrap a new document instead of hand-creating the file.
 - Invocation: `pnpm sdd-helper create <document_path> [--version <version>]`
 - Key inputs: a repo-relative document path and an optional version.
-- Result kind: `sdd-create-document`
+- Result kind: successful creates return `sdd-create-document`; create domain rejections return a structured `sdd-change-set` and still exit zero.
 - Important constraints: create always bootstraps an empty document skeleton; the current implementation supports version `0.1`.
-- Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits.
+- Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits. The empty bootstrap document can carry parse diagnostics and may not be inspectable until initial content is authored. Use the returned create `revision` as the continuation surface for the first follow-on `author` or `apply` request; this is helper workflow behavior, not SDD language authority.
 
-For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSON request from stdin until EOF. Empty stdin is parsed as an empty JSON body and returns `sdd-helper-error` with `code: "invalid_json"` and message `Unexpected end of JSON input`.
+For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSON request from stdin until EOF. Empty stdin fails JSON parsing and returns `sdd-helper-error` with `code: "invalid_json"` and message `Unexpected end of JSON input`.
 
 #### `sdd-helper apply --request <file-or-stdin>`
 
@@ -343,7 +359,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 - `sdd-search-results`: cross-document search matches plus diagnostics.
 - `sdd-create-document`: document creation result, including the creation change set.
 - `sdd-authoring-intent-result`: the structured result for `author`, including `created_targets` plus a nested derived change set.
-- `sdd-change-set`: the structured result for `apply` and `undo`, whether applied or rejected.
+- `sdd-change-set`: the structured result for `apply` and `undo`, whether applied or rejected, and for create domain rejections.
 - `sdd-validation`: validation diagnostics for the current persisted document revision.
 - `sdd-projection`: projection output for the current persisted document revision.
 - `sdd-preview`: preview metadata plus an ephemeral local `artifact_path` for the materialized SVG or PNG file.

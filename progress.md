@@ -17,6 +17,7 @@
 
 -repo docs language clarity edits
 -small de-ifyouwanting
+-caught up sdd-helper readme
 
 ## Tue 4-21-26
 
