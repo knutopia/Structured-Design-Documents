@@ -187,7 +187,7 @@ Using $sdd-skill, show the information architecture.
 The skill then calls the sdd-show command. You could also call the show command directly in a terminal, without using the skill:
 
 ```bash
-pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
+$pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
 
 Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
