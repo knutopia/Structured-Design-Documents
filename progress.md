@@ -18,6 +18,7 @@
 -repo docs language clarity edits
 -small de-ifyouwanting
 -caught up sdd-helper readme
+-improving strategic potential doc
 
 ## Tue 4-21-26
 
