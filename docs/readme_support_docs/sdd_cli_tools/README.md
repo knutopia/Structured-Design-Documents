@@ -32,6 +32,8 @@ PNG quick-start:
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
 ```
 
+(Inside this repository, use `pnpm sdd ...`; if the binary is on your `PATH`, the equivalent `sdd ...` commands work too.)
+
 What to expect:
 
 - `sdd show` is the preferred preview command.
