@@ -2,7 +2,9 @@
 
 ## Open Issues
 
--recheck manual examples, re-run skill
+-install pnpm, node into install guidance
+-skill installation guidance
+-what to do about "pnpm sdd" when help just says "sdd"
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
@@ -17,6 +19,7 @@
 
 -strategic potential now usable
 -spellchecking
+-updated Quick Start and package.json
 
 ## Wed 4-22-26
 

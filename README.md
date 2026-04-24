@@ -20,16 +20,22 @@ Because rendering is separate from the source model, tools that work with design
 
 ## Quick Start
 
-These commands install dependencies, build the toolchain, inspect the CLI, and render a sample view:
+Prerequisites: [Git](https://github.com/git/git), [Node.js 22 LTS](https://github.com/nodejs/node), and [pnpm](https://github.com/pnpm/pnpm). Install Node.js 22 first; `pnpm` will be activated via Corepack in the steps below.
 
 ```bash
+git clone https://github.com/knutopia/Structured-Design-Documents.git
+cd Structured-Design-Documents
+corepack enable
 pnpm install
 pnpm run build
 pnpm sdd --help
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
 ```
 
-If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
+Notes:
+
+- `corepack enable` activates the repo-pinned `pnpm` version declared in `package.json`.
+- If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. For more environment details, see [docs/toolchain/development.md](/home/knut/projects/sdd/docs/toolchain/development.md). See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
 
 ## Example: Small App
 
