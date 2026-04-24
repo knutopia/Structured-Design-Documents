@@ -2,7 +2,13 @@
 
 The SDD Skill provides a simple way to work with structured design documents. The skill understands the SDD grammar and provides valid, consistent output. The SDD Skill is an alternative to manually authoring and editing SDD documents, which is also possible.
 
-The current SDD Skill is written for Codex.
+The current SDD Skill is written for Codex. The same skill content may also work in other compatible hosts. 
+
+## Install
+
+For Codex, install it by copying [skills/sdd-skill](../../../skills/sdd-skill/) to `$CODEX_HOME/skills/sdd-skill`. A typical Codex location is `~/.codex/skills/sdd-skill`.
+
+After copying the folder, restart Codex so it discovers the skill. Then continue with the example prompts below.
 
 ## Use Case: Start With An App Idea
 

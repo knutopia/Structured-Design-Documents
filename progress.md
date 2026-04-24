@@ -2,8 +2,6 @@
 
 ## Open Issues
 
--install pnpm, node into install guidance
--skill installation guidance
 -what to do about "pnpm sdd" when help just says "sdd"
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
@@ -20,6 +18,7 @@
 -strategic potential now usable
 -spellchecking
 -updated Quick Start and package.json
+-skill installation guidance
 
 ## Wed 4-22-26
 
