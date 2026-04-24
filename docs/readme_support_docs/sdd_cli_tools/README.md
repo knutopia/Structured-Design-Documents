@@ -23,7 +23,7 @@ Start with the `simple` profile. The CLI default is `strict`, but `simple` is th
 SVG quick-start:
 
 ```bash
-`sdd` is 
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --out ./outcome.svg
 ```
 
 PNG quick-start:

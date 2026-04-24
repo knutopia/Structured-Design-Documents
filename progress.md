@@ -16,6 +16,7 @@
 ## Fri-24-26
 
 -strategic potential now usable
+-spellchecking
 
 ## Wed 4-22-26
 

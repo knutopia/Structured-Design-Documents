@@ -72,7 +72,7 @@ Once the first structure exists, the next steps can stay conversational. For exa
 ### Add An Admin Review Area
 
 ```text
-Using $Sdd Skill , add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail".
+Using $sdd skill, add an Admin Review area for coordinators who approve volunteer signups. Include "Review Customer Inquiries" and "Volunteer Detail".
 Connect to it from the Dashboard.
 
 Also add descriptions. Update the IA.
@@ -110,10 +110,10 @@ Rendered output from the admin-area follow-up:
 
 ### Add A Signup Flow And Show The UI Contracts
 
-SDDs can capture of states and view states to express progressions. Let's add a sign-up flow.
+SDDs can capture states and view states to express progressions. Let's add a sign-up flow.
 
 ```text
-Using $Sdd Skill, add a simple signup flow in Shift Detail, with these view states: 
+Using $sdd skill, add a simple signup flow in Shift Detail, with these view states:
 - View Shift
 - Confirm Signup
 - Signup Success
@@ -158,7 +158,7 @@ Rendered output from the UI-contract follow-up, showing the viewState sequence:
 The same style also works for smaller follow-ups:
 
 ```text
-Using $Sdd Skill, rename "Open Shifts" to "Available Shifts" and update the IA diagram.
+Using $sdd skill, rename "Open Shifts" to "Available Shifts" and update the IA diagram.
 ```
 
 Trimmed excerpt:
@@ -186,7 +186,7 @@ When you want to see a current diagram for an existing SDD file, you can ask the
 Using $sdd-skill, show the information architecture.
 ```
 
-The skill then calls the sdd-show command. You could also call the show command directly in a terminal, without using the skill:
+The skill then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
 
 ```console
 bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
@@ -195,19 +195,20 @@ Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
 
 <a href="examples/shop_sched_exploration_4_IA_as_a.png">
-  <img src="examples/shop_sched_exploration_4_IA_as_a.png" alt="CLI show generated IA diagram as a png" height="230">
+  <img src="examples/shop_sched_exploration_4_IA_as_a.png" alt="CLI show generated IA diagram as a PNG" height="230">
+</a>
 
 ## What Happens Behind The Scenes
 
 - The skill recognizes the initial prompt as a *create new document* request. It creates the new, empty `.sdd` document, using the filename in the prompt. It translates the prompt's ask into an app structure (this is the core of the LLM work) and then follows SDD rules to create nodes and connections. It then writes this content into the document. The skill also recognizes the request for the IA diagram as a *read, validate, or preview an existing document* request and executes it.
-- The skill recognizes the follow-up prompts as *edit an existing document* requests." For each request, it looks at the current structure before making changes, so each follow-up builds on the actual document. The follow-up requests for diagrams are recognized as *read, validate, or preview an existing document* again.
-- All the edits are made through a structured workflow provided by the sdd-helper tool, instead of brittle free-form rewriting. The tool explains its capabilities to the skill when the skill asks. The tool and the skill speak json to one another, which is easy to use for the LLM.
+- The skill recognizes the follow-up prompts as *edit an existing document* requests. For each request, it looks at the current structure before making changes, so each follow-up builds on the actual document. The follow-up requests for diagrams are recognized as *read, validate, or preview an existing document* again.
+- All the edits are made through a structured workflow provided by the sdd-helper tool, instead of brittle free-form rewriting. The tool explains its capabilities to the skill when the skill asks. The tool and the skill speak JSON to one another, which is easy to use for the LLM.
 
-For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used byt the skill.
+For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used by the skill.
 
 ## Go Beyond the Skill
 
-The skill empowers an LLM to respond to user's natural-language prompts, allowing a user to work with SDD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
+The skill empowers an LLM to respond to users' natural-language prompts, allowing a user to work with SDD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
 
 ## SDD During the Product Lifecycle
 

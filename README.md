@@ -1,4 +1,4 @@
-# Readme: Structured Design Documents
+# README: Structured Design Documents
 
 SDD-Text is a compact language for describing software product design as a structured map. SDD-Text is easy to read and write, for people and for LLMs.
 
@@ -90,7 +90,7 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - [bundle/v0.1/](bundle/v0.1/) houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling.
 
-- [definitions/v0.1/](definitions/v0.1/) houses explanatory definitions and rationale for version XXX (currently version 0.1), and should stay consistent with the bundle.
+- [definitions/v0.1/](definitions/v0.1/) houses explanatory definitions and rationale for version 0.1 and should stay consistent with the bundle.
 
 ### Learn More
 
@@ -122,8 +122,8 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 ### Known Limitations
 
 - Outcome-Opportunity Map, Journey Map and Scenario Flow renderers do not produce usable output yet.
-  - examples show non-usable diagrams relying on poor graphviz-based implementation
-- Styling for renderers lives in typescript source, should be in CSS files
+  - examples show unusable diagrams relying on poor Graphviz-based implementation
+- Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty
 - No "simple" non-technical user guidance available yet
 

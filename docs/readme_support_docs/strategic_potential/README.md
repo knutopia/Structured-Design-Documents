@@ -4,7 +4,7 @@
 
 ## Product Design Graph
 
-SDD captures the structural elements of a design and their relationships in a unified **product design graph**. The range of the graph covers high-level *why* (outcomes) all the way to low-level *how* (UI contracts), with everything linked together. From an SDD document that contains a range of content, different [diagrams]{../diagram_types/README.md} can be rendered to show a specific perspective.
+SDD captures the structural elements of a design and their relationships in a unified **product design graph**. The range of the graph covers high-level *why* (outcomes) all the way to low-level *how* (UI contracts), with everything linked together. From an SDD document that contains a range of content, different [diagrams](../diagram_types/README.md) can be rendered to show a specific perspective.
 
 The product graph can raise product quality: 
 
@@ -15,7 +15,7 @@ Because SDD is text-based, validated, and incrementally editable, keeping the gr
 
 ## Product Lifecycle
 
-Product processes everywhere are getting reshaped by the presence of LLMs. Generally, they involves strategy, tactical preparation, implementation, and analysis. Design process plugs into product process. 
+Product processes everywhere are getting reshaped by the presence of LLMs. Generally, they involve strategy, tactical preparation, implementation, and analysis. Design process plugs into product process.
 
 SDD is process-agnostic. It does not come with a process recipe. SDD is built on the belief that a deliberate, clear, shared view of design structure is beneficial.
 
@@ -59,7 +59,7 @@ LLM integration tooling:
 - Not tested: Skill use in Claude
 - Not yet available: MCP server
 
-This is a new project. Version 0.1 is meant to provide a useful starting point for the language definition and its tooling. The language defintion is intentionally separated from tooling code, so that either can evolve.
+This is a new project. Version 0.1 is meant to provide a useful starting point for the language definition and its tooling. The definition is intentionally separated from tooling code, so that either can evolve.
 
 ## What SDD Is Not
 
@@ -70,4 +70,3 @@ SDD is not:
 - a mature platform yet
 
 ...but it may be useful when treated as an opportunity.
-
