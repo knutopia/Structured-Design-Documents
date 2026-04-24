@@ -13,7 +13,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Wed
+## Fri-24-26
+
+-strategic potential now usable
+
+## Wed 4-22-26
 
 -repo docs language clarity edits
 -small de-ifyouwanting
