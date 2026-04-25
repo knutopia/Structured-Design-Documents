@@ -29,7 +29,7 @@ corepack enable
 pnpm install
 pnpm run build
 pnpm sdd --help
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out my_first_ia.svg
+pnpm sdd show docs/readme_support_docs/small_app_example/small_app.sdd --view ia_place_map --out my_first_ia.svg
 ```
 
 Notes:
