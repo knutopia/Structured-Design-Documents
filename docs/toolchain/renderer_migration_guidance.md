@@ -345,7 +345,7 @@ This allows hybrid layouts:
 
 - a service blueprint root may use `lanes`
 - a journey phase strip may use `grid`
-- a scenario branch cluster may use `elk_layered`
+- a scenario branch cluster should use custom staged lane/grid placement with branch tracks
 - an IA root may use `elk_layered` while area interiors use `stack`
 
 This is a feature, not an inconsistency. Different diagram regions have different structural needs.
@@ -551,7 +551,7 @@ Recommended bias by view:
 - `service_blueprint`: if ELK is used, let `ELK Layered` own final node placement and final routing in the same run; do not snap lane rows after layout and do not rely on renderer-side routing fallback
 - `journey_map`: prefer lane or strip layout for phases, with routing support for cross-phase references
 - `ia_place_map`: use hierarchical containers, explicit ports, and manual hub/follower grouping; let owned child scopes and follower scopes grow parent geometry bottom-up, then route only local structure connectors with deterministic direct-vertical and shared-trunk patterns
-- `scenario_flow`: likely benefits most from `elk_layered` plus explicit decision-node port policy
+- `scenario_flow`: use the active scenario-flow design's custom staged lane-and-band layout with explicit branch tracks and decision-node port policy; do not use Elk or any other external layout engine for staged placement or routing
 - `outcome_opportunity_map`: may mix semantic lanes with ELK-managed routing between lane-contained nodes
 - `ui_contracts`: likely benefits from manual scoped containers, reserved gutter space plus dedicated label lanes for container-origin contract edges, and selective ELK use for transition routing
 

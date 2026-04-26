@@ -1,5 +1,5 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
-import type { CompiledGraph } from "../compiler/types.js";
+import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
 import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
@@ -8,6 +8,8 @@ type ScenarioLaneId = "step" | "place" | "view_state";
 
 export interface ScenarioFlowRenderNode {
   id: string;
+  type: string;
+  authorOrder: number;
   shape: string;
   style?: string;
   labelLines: string[];
@@ -21,9 +23,14 @@ export interface ScenarioFlowRenderLane {
 }
 
 export interface ScenarioFlowRenderEdge {
+  id: string;
   from: string;
+  type: string;
   to: string;
   label?: string;
+  branchLabel?: string;
+  branchLabelSource?: string;
+  authorOrder: number;
   style?: string;
   constraint?: boolean;
   weight?: number;
@@ -48,6 +55,40 @@ const laneSpecs: Array<{ id: ScenarioLaneId; label: string; type: string }> = [
 
 function orderNodeIds(graph: CompiledGraph, nodeIds: string[]): string[] {
   return getTopLevelNodeIdsInAuthorOrder(graph, nodeIds);
+}
+
+function buildAuthorOrderByNodeId(graph: CompiledGraph, projectedNodeIds: readonly string[]): Map<string, number> {
+  return new Map(
+    orderNodeIds(graph, [...projectedNodeIds]).map((nodeId, index) => [nodeId, index])
+  );
+}
+
+function buildAuthorOrderByEdgeKey(graph: CompiledGraph): Map<string, number> {
+  const graphAuthorOrder = getGraphAuthorOrder(graph);
+  const orderByKey = new Map<string, number>();
+  let nextOrder = 0;
+
+  if (graphAuthorOrder) {
+    for (const [from, edges] of graphAuthorOrder.edgeLineOrderByParentId.entries()) {
+      for (const edge of edges) {
+        const key = `${from}->${edge.type}->${edge.to}`;
+        if (!orderByKey.has(key)) {
+          orderByKey.set(key, nextOrder);
+        }
+        nextOrder += 1;
+      }
+    }
+  }
+
+  for (const edge of graph.edges) {
+    const key = `${edge.from}->${edge.type}->${edge.to}`;
+    if (!orderByKey.has(key)) {
+      orderByKey.set(key, nextOrder);
+      nextOrder += 1;
+    }
+  }
+
+  return orderByKey;
 }
 
 function edgeAnnotationKey(from: string, to: string): string {
@@ -80,7 +121,7 @@ function nodeDisplay(type: string, shapeOverride?: string): Pick<ScenarioFlowRen
   }
 }
 
-function edgeDisplay(type: string, label?: string): Omit<ScenarioFlowRenderEdge, "from" | "to"> {
+function edgeDisplay(type: string, label?: string): Pick<ScenarioFlowRenderEdge, "label" | "style" | "constraint" | "weight"> {
   switch (type) {
     case "PRECEDES":
       return {
@@ -122,6 +163,11 @@ export function buildScenarioFlowRenderModel(
 ): ScenarioFlowRenderModel {
   const displayOptions = readScenarioFlowDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
+  const authorOrderByNodeId = buildAuthorOrderByNodeId(
+    graph,
+    projection.nodes.map((node) => node.id)
+  );
+  const authorOrderByEdgeKey = buildAuthorOrderByEdgeKey(graph);
   const nodeAnnotationsById = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
   );
@@ -155,6 +201,8 @@ export function buildScenarioFlowRenderModel(
     const display = nodeDisplay(node.type, annotation?.display?.shape);
     return {
       id: node.id,
+      type: node.type,
+      authorOrder: authorOrderByNodeId.get(node.id) ?? Number.MAX_SAFE_INTEGER,
       shape: display.shape,
       style: display.style,
       labelLines: [projectionNodesById.get(node.id)?.name ?? node.name]
@@ -162,13 +210,17 @@ export function buildScenarioFlowRenderModel(
   });
 
   const edges = projection.edges.map<ScenarioFlowRenderEdge>((edge) => {
-    const branchLabel = displayOptions.showBranchLabels
-      ? edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to))?.display_label
-      : undefined;
+    const branchAnnotation = edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to));
+    const branchLabel = branchAnnotation?.display_label;
     return {
+      id: `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`,
       from: edge.from,
+      type: edge.type,
       to: edge.to,
-      ...edgeDisplay(edge.type, branchLabel)
+      ...edgeDisplay(edge.type, displayOptions.showBranchLabels ? branchLabel : undefined),
+      branchLabel,
+      branchLabelSource: branchAnnotation?.label_source,
+      authorOrder: authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`) ?? Number.MAX_SAFE_INTEGER
     };
   });
 

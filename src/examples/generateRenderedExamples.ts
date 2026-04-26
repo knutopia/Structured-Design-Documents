@@ -12,6 +12,10 @@ import {
   renderServiceBlueprintRoutingDebugArtifacts
 } from "../renderer/staged/serviceBlueprint.js";
 import {
+  renderScenarioFlowPreRoutingArtifacts,
+  renderScenarioFlowRoutingDebugArtifacts
+} from "../renderer/staged/scenarioFlow.js";
+import {
   getPreviewArtifactCapabilities,
   getPreviewArtifactCapability,
   getViewRenderCapability
@@ -98,6 +102,14 @@ function buildReadmeContent(
   lines.push("- customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and connector labels remain intentionally absent until a later routing step");
   lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
   lines.push("");
+  lines.push("`scenario_flow` visual review checklist:");
+  lines.push("");
+  lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the custom staged scenario-flow renderer");
+  lines.push("- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the lane grid before any edge routing runs");
+  lines.push("- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement");
+  lines.push("- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement");
+  lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
+  lines.push("");
 
   return lines.join("\n");
 }
@@ -170,6 +182,65 @@ async function main(): Promise<void> {
       );
 
       const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
+        projected.projection,
+        compiled.graph,
+        view,
+        variant.profileId
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
+        routingDebug.step2Svg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "png"),
+        routingDebug.step2Png
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "svg"),
+        routingDebug.step3Svg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "png"),
+        routingDebug.step3Png
+      );
+    }
+
+    if (variant.viewId === "scenario_flow") {
+      const compiled = compileSource(input, bundle);
+      const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
+      if (compileErrors.length > 0 || !compiled.graph) {
+        throw new Error(
+          `Failed to compile scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
+        );
+      }
+
+      const projected = projectView(compiled.graph, bundle, variant.viewId);
+      const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
+      if (projectionErrors.length > 0 || !projected.projection) {
+        throw new Error(
+          `Failed to project scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
+        );
+      }
+
+      const preRouting = await renderScenarioFlowPreRoutingArtifacts(
+        projected.projection,
+        compiled.graph,
+        view,
+        variant.profileId
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
+        preRouting.preRoutingSvg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"),
+        preRouting.preRoutingPng
+      );
+
+      const routingDebug = await renderScenarioFlowRoutingDebugArtifacts(
         projected.projection,
         compiled.graph,
         view,

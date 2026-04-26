@@ -1,0 +1,3270 @@
+{
+  "viewId": "scenario_flow",
+  "profileId": "strict",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "scenario_flow",
+      "scenario_flow"
+    ],
+    "layout": {
+      "strategy": "grid",
+      "gap": 24,
+      "columns": 4,
+      "crossAlignment": "stretch"
+    },
+    "chrome": {
+      "padding": {
+        "top": 28,
+        "right": 28,
+        "bottom": 28,
+        "left": 132
+      },
+      "gutter": 24,
+      "headerBandHeight": 0
+    },
+    "children": [
+      {
+        "kind": "container",
+        "id": "step__cell__band:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 0,
+            "columnOrder": 0
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-030",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-diamond",
+              "type-step"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-030__content__line_0",
+                "kind": "text",
+                "text": "Choose Fulfillment",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:1",
+                "trackId": "band:1__track:0",
+                "cellId": "step__cell__band:1__track:0",
+                "placementRole": "spine_step"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:2__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 0,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-031",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-031__content__line_0",
+                "kind": "text",
+                "text": "Enter Delivery Address",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:2",
+                "trackId": "band:2__track:0",
+                "cellId": "step__cell__band:2__track:0",
+                "placementRole": "spine_step"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:3__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-linear",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "linear",
+            "bandOrder": 2,
+            "trackId": "band:3__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 0,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-033",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-diamond",
+              "type-step"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-033__content__line_0",
+                "kind": "text",
+                "text": "Choose Contact Method",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:3",
+                "trackId": "band:3__track:0",
+                "cellId": "step__cell__band:3__track:0",
+                "placementRole": "spine_step"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:4__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "branch_target",
+            "bandOrder": 3,
+            "trackId": "band:4__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 0,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-034",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-034__content__line_0",
+                "kind": "text",
+                "text": "Confirm Email Notification",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:4",
+                "trackId": "band:4__track:0",
+                "cellId": "step__cell__band:4__track:0",
+                "placementRole": "spine_step"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:1__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__placeholder_track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 1,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:2__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 1,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-032",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-branch_step",
+              "shape-box",
+              "type-step"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-032__content__line_0",
+                "kind": "text",
+                "text": "Choose Pickup Store",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:2",
+                "trackId": "band:2__track:1",
+                "cellId": "step__cell__band:2__track:1",
+                "placementRole": "branch_step"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:3__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-linear",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "linear",
+            "bandOrder": 2,
+            "trackId": "band:3__placeholder_track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 1,
+            "columnOrder": 2,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:4__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "branch_target",
+            "bandOrder": 3,
+            "trackId": "band:4__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 1,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-035",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-branch_step",
+              "shape-box",
+              "type-step"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-035__content__line_0",
+                "kind": "text",
+                "text": "Review Pickup Instructions",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:4",
+                "trackId": "band:4__track:1",
+                "cellId": "step__cell__band:4__track:1",
+                "placementRole": "branch_step"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "place__cell__band:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c1",
+          "band-kind-entry",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 2,
+            "columnOrder": 0
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-030",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-place",
+              "scenario-flow-role-realized_place",
+              "shape-box",
+              "type-place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-030__content__line_0",
+                "kind": "text",
+                "text": "Fulfillment",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "place",
+                "bandId": "band:1",
+                "trackId": "band:1__track:0",
+                "cellId": "place__cell__band:1__track:0",
+                "placementRole": "realized_place"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__cell__band:2__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 2,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-031",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-place",
+              "scenario-flow-role-realized_place",
+              "shape-box",
+              "type-place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-031__content__line_0",
+                "kind": "text",
+                "text": "Delivery Address",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "place",
+                "bandId": "band:2",
+                "trackId": "band:2__track:0",
+                "cellId": "place__cell__band:2__track:0",
+                "placementRole": "realized_place"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__cell__band:3__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c3",
+          "band-kind-linear",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "linear",
+            "bandOrder": 2,
+            "trackId": "band:3__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 2,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-033",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-place",
+              "scenario-flow-role-realized_place",
+              "shape-box",
+              "type-place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-033__content__line_0",
+                "kind": "text",
+                "text": "Contact Method",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "place",
+                "bandId": "band:3",
+                "trackId": "band:3__track:0",
+                "cellId": "place__cell__band:3__track:0",
+                "placementRole": "realized_place"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__cell__band:4__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c4",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "branch_target",
+            "bandOrder": 3,
+            "trackId": "band:4__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 2,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-034",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-place",
+              "scenario-flow-role-realized_place",
+              "shape-box",
+              "type-place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-034__content__line_0",
+                "kind": "text",
+                "text": "Email Confirmation",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "place",
+                "bandId": "band:4",
+                "trackId": "band:4__track:0",
+                "cellId": "place__cell__band:4__track:0",
+                "placementRole": "realized_place"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__placeholder_cell__band:1__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c1",
+          "band-kind-entry",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__placeholder_track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 3,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__cell__band:2__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 3,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-032",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-place",
+              "scenario-flow-role-realized_place",
+              "shape-box",
+              "type-place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-032__content__line_0",
+                "kind": "text",
+                "text": "Pickup Store",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "place",
+                "bandId": "band:2",
+                "trackId": "band:2__track:1",
+                "cellId": "place__cell__band:2__track:1",
+                "placementRole": "realized_place"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__placeholder_cell__band:3__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c3",
+          "band-kind-linear",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "linear",
+            "bandOrder": 2,
+            "trackId": "band:3__placeholder_track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 3,
+            "columnOrder": 2,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "place__cell__band:4__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-place",
+          "band-c4",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "place",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "branch_target",
+            "bandOrder": 3,
+            "trackId": "band:4__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 3,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "P-035",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-place",
+              "scenario-flow-role-realized_place",
+              "shape-box",
+              "type-place"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "P-035__content__line_0",
+                "kind": "text",
+                "text": "Pickup Instructions",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "place",
+                "bandId": "band:4",
+                "trackId": "band:4__track:1",
+                "cellId": "place__cell__band:4__track:1",
+                "placementRole": "realized_place"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:place"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__cell__band:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c1",
+          "band-kind-entry",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 4,
+            "columnOrder": 0
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "VS-030a",
+            "role": "viewstate",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-view_state",
+              "scenario-flow-role-realized_view_state",
+              "shape-box",
+              "type-viewstate",
+              "chrome-dashed"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "VS-030a__content__line_0",
+                "kind": "text",
+                "text": "Fulfillment Choice",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "view_state",
+                "bandId": "band:1",
+                "trackId": "band:1__track:0",
+                "cellId": "view_state__cell__band:1__track:0",
+                "placementRole": "realized_view_state"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__cell__band:2__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 4,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "VS-031a",
+            "role": "viewstate",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-view_state",
+              "scenario-flow-role-realized_view_state",
+              "shape-box",
+              "type-viewstate",
+              "chrome-dashed"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "VS-031a__content__line_0",
+                "kind": "text",
+                "text": "Delivery Address Form",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "view_state",
+                "bandId": "band:2",
+                "trackId": "band:2__track:0",
+                "cellId": "view_state__cell__band:2__track:0",
+                "placementRole": "realized_view_state"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__cell__band:3__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c3",
+          "band-kind-linear",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "linear",
+            "bandOrder": 2,
+            "trackId": "band:3__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 4,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "VS-033a",
+            "role": "viewstate",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-view_state",
+              "scenario-flow-role-realized_view_state",
+              "shape-box",
+              "type-viewstate",
+              "chrome-dashed"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "VS-033a__content__line_0",
+                "kind": "text",
+                "text": "Contact Method Choice",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "view_state",
+                "bandId": "band:3",
+                "trackId": "band:3__track:0",
+                "cellId": "view_state__cell__band:3__track:0",
+                "placementRole": "realized_view_state"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__cell__band:4__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c4",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "branch_target",
+            "bandOrder": 3,
+            "trackId": "band:4__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "rowOrder": 4,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "VS-034a",
+            "role": "viewstate",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-view_state",
+              "scenario-flow-role-realized_view_state",
+              "shape-box",
+              "type-viewstate",
+              "chrome-dashed"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "VS-034a__content__line_0",
+                "kind": "text",
+                "text": "Email Confirmation State",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "view_state",
+                "bandId": "band:4",
+                "trackId": "band:4__track:0",
+                "cellId": "view_state__cell__band:4__track:0",
+                "placementRole": "realized_view_state"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__placeholder_cell__band:1__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c1",
+          "band-kind-entry",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__placeholder_track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 5,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__cell__band:2__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 5,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "VS-032a",
+            "role": "viewstate",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-view_state",
+              "scenario-flow-role-realized_view_state",
+              "shape-box",
+              "type-viewstate",
+              "chrome-dashed"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "VS-032a__content__line_0",
+                "kind": "text",
+                "text": "Pickup Store Selector",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "view_state",
+                "bandId": "band:2",
+                "trackId": "band:2__track:1",
+                "cellId": "view_state__cell__band:2__track:1",
+                "placementRole": "realized_view_state"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__placeholder_cell__band:3__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c3",
+          "band-kind-linear",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "linear",
+            "bandOrder": 2,
+            "trackId": "band:3__placeholder_track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 5,
+            "columnOrder": 2,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      },
+      {
+        "kind": "container",
+        "id": "view_state__cell__band:4__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-view_state",
+          "band-c4",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "view_state",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "branch_target",
+            "bandOrder": 3,
+            "trackId": "band:4__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "rowOrder": 5,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "VS-035a",
+            "role": "viewstate",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-view_state",
+              "scenario-flow-role-realized_view_state",
+              "shape-box",
+              "type-viewstate",
+              "chrome-dashed"
+            ],
+            "widthPolicy": {
+              "preferred": "narrow",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "VS-035a__content__line_0",
+                "kind": "text",
+                "text": "Pickup Instructions State",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west"
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east"
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west"
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east"
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north"
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south"
+              }
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "view_state",
+                "bandId": "band:4",
+                "trackId": "band:4__track:1",
+                "cellId": "view_state__cell__band:4__track:1",
+                "placementRole": "realized_view_state"
+              }
+            }
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:view_state"
+      }
+    ],
+    "ports": []
+  },
+  "edges": [
+    {
+      "id": "J-030__precedes__J-031",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-030"
+      },
+      "to": {
+        "itemId": "J-031"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "flow_out",
+        "targetPortRole": "flow_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "delivery_selected",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-030__precedes__J-032",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-030"
+      },
+      "to": {
+        "itemId": "J-032"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "flow_out",
+        "targetPortRole": "flow_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "pickup_selected",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-030__realized_by__P-030",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-030"
+      },
+      "to": {
+        "itemId": "P-030"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-030__realized_by__VS-030a",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-030"
+      },
+      "to": {
+        "itemId": "VS-030a"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-031__precedes__J-033",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-031"
+      },
+      "to": {
+        "itemId": "J-033"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "flow_out",
+        "targetPortRole": "flow_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-031__realized_by__P-031",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-031"
+      },
+      "to": {
+        "itemId": "P-031"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-031__realized_by__VS-031a",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-031"
+      },
+      "to": {
+        "itemId": "VS-031a"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-032__realized_by__P-032",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-032"
+      },
+      "to": {
+        "itemId": "P-032"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-032__realized_by__VS-032a",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-032"
+      },
+      "to": {
+        "itemId": "VS-032a"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-033__precedes__J-034",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-033"
+      },
+      "to": {
+        "itemId": "J-034"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "flow_out",
+        "targetPortRole": "flow_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "E-032",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-033__precedes__J-035",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-033"
+      },
+      "to": {
+        "itemId": "J-035"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "flow_out",
+        "targetPortRole": "flow_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "Review Pickup Instructions",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-033__realized_by__P-033",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-033"
+      },
+      "to": {
+        "itemId": "P-033"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-033__realized_by__VS-033a",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-033"
+      },
+      "to": {
+        "itemId": "VS-033a"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-034__realized_by__P-034",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-034"
+      },
+      "to": {
+        "itemId": "P-034"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-034__realized_by__VS-034a",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-034"
+      },
+      "to": {
+        "itemId": "VS-034a"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-035__realized_by__P-035",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-035"
+      },
+      "to": {
+        "itemId": "P-035"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "J-035__realized_by__VS-035a",
+      "role": "realized_by",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-realized_by",
+        "edge-channel-realization",
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "J-035"
+      },
+      "to": {
+        "itemId": "VS-035a"
+      },
+      "routing": {
+        "style": "straight",
+        "sourcePortRole": "realization_out",
+        "targetPortRole": "realization_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "P-030__navigates_to__P-031",
+      "role": "navigates_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-navigates_to",
+        "edge-channel-place_navigation"
+      ],
+      "from": {
+        "itemId": "P-030"
+      },
+      "to": {
+        "itemId": "P-031"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "P-030__navigates_to__P-032",
+      "role": "navigates_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-navigates_to",
+        "edge-channel-place_navigation"
+      ],
+      "from": {
+        "itemId": "P-030"
+      },
+      "to": {
+        "itemId": "P-032"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "P-033__navigates_to__P-034",
+      "role": "navigates_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-navigates_to",
+        "edge-channel-place_navigation"
+      ],
+      "from": {
+        "itemId": "P-033"
+      },
+      "to": {
+        "itemId": "P-034"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "P-033__navigates_to__P-035",
+      "role": "navigates_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-navigates_to",
+        "edge-channel-place_navigation"
+      ],
+      "from": {
+        "itemId": "P-033"
+      },
+      "to": {
+        "itemId": "P-035"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "VS-030a__transitions_to__VS-031a",
+      "role": "transitions_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-transitions_to",
+        "edge-channel-view_transition"
+      ],
+      "from": {
+        "itemId": "VS-030a"
+      },
+      "to": {
+        "itemId": "VS-031a"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "VS-030a__transitions_to__VS-032a",
+      "role": "transitions_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-transitions_to",
+        "edge-channel-view_transition"
+      ],
+      "from": {
+        "itemId": "VS-030a"
+      },
+      "to": {
+        "itemId": "VS-032a"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "VS-033a__transitions_to__VS-034a",
+      "role": "transitions_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-transitions_to",
+        "edge-channel-view_transition"
+      ],
+      "from": {
+        "itemId": "VS-033a"
+      },
+      "to": {
+        "itemId": "VS-034a"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "VS-033a__transitions_to__VS-035a",
+      "role": "transitions_to",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-transitions_to",
+        "edge-channel-view_transition"
+      ],
+      "from": {
+        "itemId": "VS-033a"
+      },
+      "to": {
+        "itemId": "VS-035a"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "mirror_out",
+        "targetPortRole": "mirror_in",
+        "authority": "flexible"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    }
+  ],
+  "diagnostics": []
+}

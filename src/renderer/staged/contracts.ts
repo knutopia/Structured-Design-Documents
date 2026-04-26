@@ -61,8 +61,33 @@ export type ServiceBlueprintItemMetadata =
       cellId: string;
     };
 
+export type ScenarioFlowItemMetadata =
+  | {
+      kind: "cell";
+      laneId: "step" | "place" | "view_state";
+      bandId: string;
+      bandLabel: string;
+      bandKind: "entry" | "linear" | "branch_target" | "join" | "parking";
+      bandOrder: number;
+      trackId: string;
+      trackLabel: string;
+      trackOrder: number;
+      rowOrder: number;
+      columnOrder: number;
+      placeholder?: boolean;
+    }
+  | {
+      kind: "semantic_node";
+      laneId: "step" | "place" | "view_state";
+      bandId: string;
+      trackId: string;
+      cellId: string;
+      placementRole: "spine_step" | "branch_step" | "realized_place" | "realized_view_state" | "parking";
+    };
+
 export interface ViewMetadata {
   serviceBlueprint?: ServiceBlueprintItemMetadata;
+  scenarioFlow?: ScenarioFlowItemMetadata;
 }
 
 export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | undefined {
@@ -70,13 +95,22 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
     return undefined;
   }
 
-  return viewMetadata.serviceBlueprint
-    ? {
-      serviceBlueprint: {
-        ...viewMetadata.serviceBlueprint
+  return {
+    ...(viewMetadata.serviceBlueprint
+      ? {
+        serviceBlueprint: {
+          ...viewMetadata.serviceBlueprint
+        }
       }
-    }
-    : {};
+      : {}),
+    ...(viewMetadata.scenarioFlow
+      ? {
+        scenarioFlow: {
+          ...viewMetadata.scenarioFlow
+        }
+      }
+      : {})
+  };
 }
 
 export interface BoxSpacing {

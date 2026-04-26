@@ -59,7 +59,7 @@ The renderer migration now adds internal staged-renderer forms under `src/render
 - `MeasuredScene`, which records intrinsic content sizing and wrapped text without global placement
 - `PositionedScene`, which records absolute placement and routed connector geometry for backend painting
 
-These scene forms are internal contracts only. They are not new CLI outputs, they do not change bundle or projection contracts, and the current internal DOT/Mermaid artifact flows plus Graphviz-backed preview flows remain the active execution path.
+These scene forms are internal contracts only. They are not new CLI outputs, and they do not change bundle or projection contracts. Internal DOT/Mermaid artifact flows remain available, Graphviz-backed preview remains selectable where preserved, and migrated views now use staged preview backends through the CLI preview layer.
 
 Step 3 turns `MeasuredScene` into a real micro-layout boundary rather than a placeholder copy:
 
@@ -69,11 +69,11 @@ Step 3 turns `MeasuredScene` into a real micro-layout boundary rather than a pla
 - measured nodes now carry wrapped lines, local content block frames, local port offsets, and explicit overflow outcomes
 - container child measurement is recursive, but container bounds and container-port offsets remain deferred until the macro-layout step
 
-Step 4 adds the first staged artifact backend on top of those contracts:
+The staged artifact backend sits on top of those contracts:
 
 - `src/renderer/staged/svgBackend.ts` renders hand-authored `PositionedScene` fixtures to deterministic SVG with shared paint-group ordering, class hooks, embedded font CSS, and marker definitions
 - staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
-- preview routing is still unchanged; no CLI path selects the staged backend yet
+- backend-aware preview routing selects staged backends for accepted migrated views while keeping legacy backends selectable where preserved
 
 The staged macro-layout boundary now owns both manual placement and the first shared routed edge behaviors:
 
@@ -130,7 +130,7 @@ The engine owns:
 
 The CLI owns preview artifact generation on top of those internal text renderers and staged preview backends through a backend-aware preview layer.
 
-The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that future SVG work will build on, while keeping that pipeline separate from the current legacy renderer path until view migration begins.
+The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 
 Within that staged pipeline, renderer-owned measurement infrastructure is now shared rather than view-specific:
 
@@ -151,7 +151,8 @@ Preview backends now split by view:
 - `staged_ia_place_map_preview` is the default preview backend for `ia_place_map`; it owns staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
 - `staged_ui_contracts_preview` is the default preview backend for `ui_contracts`; it owns the routed and balanced staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
 - `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, ELK-authoritative staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
-- `legacy_graphviz_preview` remains the default preview backend for the remaining views and remains selectable for `ia_place_map`, `service_blueprint`, and `ui_contracts`; it owns:
+- `staged_scenario_flow_preview` is the default selected preview backend for `scenario_flow`; it owns the accepted custom staged lane-and-routing SVG emission and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
+- `legacy_graphviz_preview` remains the default preview backend for the remaining views and remains selectable for `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`; it owns:
 
 - Graphviz-driven DOT-to-SVG layout
 - shared preview-style resolution from `views.yaml`
@@ -169,13 +170,13 @@ The current end-to-end renderable set keeps two output layers:
 
 Current CLI preview status by view:
 
-- preview-ready: `ia_place_map`, `ui_contracts`, `service_blueprint`
-- preview-only / not yet usable: `journey_map`, `outcome_opportunity_map`, `scenario_flow`
+- preview-ready: `ia_place_map`, `ui_contracts`, `service_blueprint`, `scenario_flow`
+- preview-only / not yet usable: `journey_map`, `outcome_opportunity_map`
 
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
-- preview capability is modeled per artifact, with `ia_place_map`, `service_blueprint`, and `ui_contracts` now defaulting SVG and PNG previews to staged backends and the remaining views routing those previews through `legacy_graphviz_preview`
+- preview capability is modeled per artifact, with `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now defaulting SVG and PNG previews to staged backends and the remaining views routing those previews through `legacy_graphviz_preview`
 - internal DOT/Mermaid text artifacts remain parallel emitters for tests, corpus generation, and debugging, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
@@ -188,17 +189,18 @@ The per-view render models keep semantics centralized:
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter and inside the staged scene builder
 - inside the staged renderer, `ia_place_map` now uses manual hub/follower grouping and bottom-up owned-scope sizing: explicit containment creates owned child scope, forward local navigation may create same-scope follower scope, and local structure connectors use deterministic direct-vertical or shared-trunk routing without IA-specific ELK fallback
 - inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges, assigns those edges to an invisible label lane inside that gutter, and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
+- inside the staged renderer, `scenario_flow` now uses a custom lane-and-band layout with staged branch routing and debug corpus artifacts for pre-routing, edge-side selection, and gutter occupancy
 
-Inside the staged renderer, `ui_contracts` still keeps its renderer-stage goldens as internal contract coverage, but the routed and balanced staged path now also serves the public `staged_ui_contracts_preview` backend.
+Inside the staged renderer, `ui_contracts` and `scenario_flow` still keep renderer-stage goldens as internal contract coverage, but their accepted staged paths now also serve their public staged preview backends.
 
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only internal DOT or Mermaid text artifacts
-- `sdd show` resolves preview output through a backend registry; `ia_place_map`, `service_blueprint`, and `ui_contracts` now default to staged preview backends, and the remaining views still default to `legacy_graphviz_preview`
+- `sdd show` resolves preview output through a backend registry; `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now default to staged preview backends, and the remaining views still default to `legacy_graphviz_preview`
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
 - `sdd show --dot-out` remains an internal/debug option and automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend still exist in parallel with internal text artifacts and legacy preview outputs; `ia_place_map`, `service_blueprint`, and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
+- the staged renderer contracts and staged SVG backend still exist in parallel with internal text artifacts and legacy preview outputs; `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
 
 ## Determinism
 

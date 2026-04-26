@@ -21,7 +21,7 @@ describe("rendered example corpus", () => {
   it("labels only preview-only rendered corpus view folders", async () => {
     expect(isPreviewOnlyRenderedCorpusView("outcome_opportunity_map")).toBe(true);
     expect(isPreviewOnlyRenderedCorpusView("journey_map")).toBe(true);
-    expect(isPreviewOnlyRenderedCorpusView("scenario_flow")).toBe(true);
+    expect(isPreviewOnlyRenderedCorpusView("scenario_flow")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("ia_place_map")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("ui_contracts")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("service_blueprint")).toBe(false);
@@ -32,9 +32,7 @@ describe("rendered example corpus", () => {
     expect(getRenderedCorpusViewDirName("journey_map")).toBe(
       "journey_map_diagram_type [preview_only]"
     );
-    expect(getRenderedCorpusViewDirName("scenario_flow")).toBe(
-      "scenario_flow_diagram_type [preview_only]"
-    );
+    expect(getRenderedCorpusViewDirName("scenario_flow")).toBe("scenario_flow_diagram_type");
     expect(getRenderedCorpusViewDirName("ia_place_map")).toBe("ia_place_map_diagram_type");
     expect(getRenderedCorpusViewDirName("ui_contracts")).toBe("ui_contracts_diagram_type");
     expect(getRenderedCorpusViewDirName("service_blueprint")).toBe("service_blueprint_diagram_type");
@@ -71,7 +69,8 @@ describe("rendered example corpus", () => {
     expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.");
     expect(readme).toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
     expect(readme).toContain("journey_map_diagram_type [preview_only]/service_blueprint_slice_example");
-    expect(readme).toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");
+    expect(readme).toContain("scenario_flow_diagram_type/scenario_branching_example");
+    expect(readme).not.toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");
   });
 
   it("keeps committed ui_contracts SVG previews free of visible newline escapes", async () => {
@@ -226,11 +225,58 @@ describe("rendered example corpus", () => {
     }
   });
 
-  it("does not add service_blueprint-only debug corpus siblings for non-service_blueprint staged views", async () => {
+  it("keeps staged scenario_flow previews as the default corpus artifacts while preserving legacy and debug siblings", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
-      (variant) => variant.viewId !== "service_blueprint"
+      (variant) => variant.viewId === "scenario_flow"
+    );
+
+    expect(variants.length).toBeGreaterThan(0);
+
+    for (const variant of variants) {
+      const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+      const defaultSvg = await readFile(outputPaths.svgOutputPath, "utf8");
+      expect(defaultSvg).toContain('class="staged-svg');
+
+      const legacySvgPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "svg",
+        "legacy_graphviz_preview",
+        "staged_scenario_flow_preview"
+      );
+      const legacyPngPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "png",
+        "legacy_graphviz_preview",
+        "staged_scenario_flow_preview"
+      );
+
+      await access(legacySvgPath);
+      await access(legacyPngPath);
+
+      const legacySvg = await readFile(legacySvgPath, "utf8");
+      expect(legacySvg).not.toContain('class="staged-svg');
+
+      for (const debugStem of ["pre_routing", "routing_step_2_edges", "routing_step_3_gutters"]) {
+        const debugSvgPath = getRenderedCorpusDebugOutputPath(bundle, variant, debugStem, "svg");
+        const debugPngPath = getRenderedCorpusDebugOutputPath(bundle, variant, debugStem, "png");
+        await access(debugSvgPath);
+        await access(debugPngPath);
+
+        const debugSvg = await readFile(debugSvgPath, "utf8");
+        expect(debugSvg).toContain('class="staged-svg');
+      }
+    }
+  });
+
+  it("does not add routed debug corpus siblings for views without staged routing debug artifacts", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
+      (variant) => variant.viewId !== "service_blueprint" && variant.viewId !== "scenario_flow"
     );
 
     for (const variant of variants) {

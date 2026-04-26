@@ -20,6 +20,10 @@ import {
   renderIaPlaceMapStagedSvg
 } from "./staged/iaPlaceMap.js";
 import {
+  renderScenarioFlowStagedPng,
+  renderScenarioFlowStagedSvg
+} from "./staged/scenarioFlow.js";
+import {
   renderUiContractsStagedPng,
   renderUiContractsStagedSvg
 } from "./staged/uiContracts.js";
@@ -31,6 +35,7 @@ import {
 export const STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID = "staged_ia_place_map_preview";
 export const STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID = "staged_ui_contracts_preview";
 export const STAGED_SERVICE_BLUEPRINT_PREVIEW_BACKEND_ID = "staged_service_blueprint_preview";
+export const STAGED_SCENARIO_FLOW_PREVIEW_BACKEND_ID = "staged_scenario_flow_preview";
 
 export type PreviewArtifactSource =
   | {
@@ -213,6 +218,12 @@ const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor
     viewId: "service_blueprint",
     renderSvg: renderServiceBlueprintStagedSvg,
     renderPng: renderServiceBlueprintStagedPng
+  }),
+  [STAGED_SCENARIO_FLOW_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
+    id: STAGED_SCENARIO_FLOW_PREVIEW_BACKEND_ID,
+    viewId: "scenario_flow",
+    renderSvg: renderScenarioFlowStagedSvg,
+    renderPng: renderScenarioFlowStagedPng
   })
 };
 

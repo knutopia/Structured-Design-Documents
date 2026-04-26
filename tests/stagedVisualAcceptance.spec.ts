@@ -27,6 +27,13 @@ const FORBIDDEN_DIAGNOSTICS = [
   "renderer.routing.edge_label_segment_fallback"
 ] as const;
 
+const SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS = [
+  "renderer.routing.scenario_flow_unresolved_port",
+  "renderer.routing.unresolved_port",
+  "renderer.routing.scenario_flow_node_intersection",
+  "renderer.routing.scenario_flow_label_fallback"
+] as const;
+
 function getVisibleNodeBoxes(root: Awaited<ReturnType<typeof renderStagedArtifacts>>["positionedScene"]["root"]) {
   return collectVisibleItemBoxes(root).filter((box) => {
     const item = findPositionedItem(root, box.itemId);
@@ -133,5 +140,34 @@ describe("staged visual acceptance", () => {
 
       expect(testCase.outputArtifactPath).toContain(".png");
     }
+  });
+
+  it("keeps the scenario_flow proof case free of forbidden diagnostics, node-crossing routes, and label collisions", async () => {
+    const rendered = await renderStagedArtifacts(
+      path.join(repoRoot, "bundle/v0.1/examples/scenario_branching.sdd"),
+      "scenario_flow",
+      "strict"
+    );
+
+    expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS);
+
+    const semanticEdges = rendered.positionedScene.edges.filter((edge) =>
+      edge.classes.includes("scenario_flow_semantic_edge")
+    );
+    expect(semanticEdges.length).toBeGreaterThan(0);
+
+    const nodeBoxes = getVisibleNodeBoxes(rendered.positionedScene.root);
+    const labelBoxes = collectEdgeLabelBoxes(semanticEdges);
+
+    expect(labelBoxes.map((label) => label.edgeId)).toEqual([
+      "J-030__precedes__J-031",
+      "J-030__precedes__J-032",
+      "J-033__precedes__J-034",
+      "J-033__precedes__J-035"
+    ]);
+    expectNoRouteIntersectionsWithNonEndpointBoxes(semanticEdges, nodeBoxes);
+    expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
+    expectLabelsDoNotOverlapEachOther(labelBoxes);
   });
 });

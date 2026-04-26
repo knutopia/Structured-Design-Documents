@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--what to do about "pnpm sdd" when help just says "sdd"
 -docs page with SDD structure, node types
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
@@ -13,7 +12,12 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Fri-24-26
+## Sat 4-25-26
+
+-planned scenario_flow
+-implemented (raw)
+
+## Fri 4-24-26
 
 -strategic potential now usable
 -spellchecking

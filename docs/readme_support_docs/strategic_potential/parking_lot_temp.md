@@ -38,7 +38,7 @@ We (designers, but also other people like product managers and developers) can u
 
 Product decisions that are grounded will be better product decisions than those made based on a vague understanding that mixes "what we want" with "what we assume we might have."
 
-This area is currently supported most directly by **IA / Place Map** and **UI Contracts**, with **Scenario Flow** intended to deepen the model for step-by-step activity.
+This area is currently supported most directly by **IA / Place Map**, **UI Contracts**, and **Scenario Flow** for step-by-step activity.
 
 ### Goal-Driven Alignment: Does This Serve the Intended Outcome?
 
@@ -46,7 +46,9 @@ Product decisions should align with goals. SDD provides the (future) **Outcome-O
 
 ### Structure-Driven Alignment: Does This Fit the Product Shape and User Journey?
 
-Product decisions are best made with a structural perspective in mind, not by solving isolated details. SDD provides **Journey Map**, (future) **Scenario Flow** and **Service Blueprint** to capture structure (along with **IA Place Map** and **UI Contracts**.)
+Product decisions are best made with a structural perspective in mind, not by solving isolated details. SDD provides **Scenario Flow** and **Service Blueprint** to capture structure, along with **IA Place Map** and **UI Contracts**.
+
+**Journey Map** is still planned.
 
 ### Implementation Alignment: Can Builders and Agents Act From the Same Structure?
 
@@ -81,4 +83,3 @@ During product delivery activities,
 SDD in Ongoing Product Work
 SDD as Implementation Context
 Current Capability and Limit
-

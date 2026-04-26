@@ -19,7 +19,7 @@ Curated view/example pairs:
 - `ia_place_map_diagram_type/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/place_viewstate_transition_example`
 - `ui_contracts_diagram_type/place_viewstate_transition_example`
-- `scenario_flow_diagram_type [preview_only]/scenario_branching_example`
+- `scenario_flow_diagram_type/scenario_branching_example`
 - `journey_map_diagram_type [preview_only]/service_blueprint_slice_example`
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
 - `ui_contracts_diagram_type/ui_state_fallback_example`
@@ -55,4 +55,12 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
 - customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
 - customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and connector labels remain intentionally absent until a later routing step
+- legacy Graphviz preview siblings remain committed for side-by-side comparison
+
+`scenario_flow` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts come from the custom staged scenario-flow renderer
+- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the lane grid before any edge routing runs
+- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement
+- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
 - legacy Graphviz preview siblings remain committed for side-by-side comparison

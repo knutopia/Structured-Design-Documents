@@ -186,7 +186,9 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
           ? "staged_ui_contracts_preview"
           : options.viewId === "service_blueprint"
             ? "staged_service_blueprint_preview"
-          : "legacy_graphviz_preview");
+            : options.viewId === "scenario_flow"
+              ? "staged_scenario_flow_preview"
+              : "legacy_graphviz_preview");
     const artifact = options.format === "svg"
       ? {
         format: "svg" as const,
@@ -592,7 +594,7 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/blueprint-legacy.svg");
   });
 
-  it("show supports scenario_flow previews through the legacy backend", async () => {
+  it("show defaults scenario_flow previews to the staged backend", async () => {
     const { deps, renderSourcePreviewMock, stderr } = createDeps();
     const result = await runCli([
       "node",
@@ -609,10 +611,60 @@ describe("CLI wrappers", () => {
     expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "scenario_flow",
       format: "svg",
+      backendId: "staged_scenario_flow_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/scenario.svg", "<svg>staged</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/scenario.svg");
+  });
+
+  it("show allows scenario_flow to opt back into the legacy preview backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/scenario_branching.sdd",
+      "--view",
+      "scenario_flow",
+      "--backend",
+      "legacy_graphviz_preview",
+      "--out",
+      "/tmp/scenario-legacy.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "scenario_flow",
+      format: "svg",
       backendId: "legacy_graphviz_preview"
     });
-    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/scenario.svg", "<svg>embedded</svg>");
-    expect(stderr.join("")).toContain("Wrote /tmp/scenario.svg");
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/scenario-legacy.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/scenario-legacy.svg");
+  });
+
+  it("show writes scenario_flow --dot-out by auto-selecting the legacy backend", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/scenario_branching.sdd",
+      "--view",
+      "scenario_flow",
+      "--out",
+      "/tmp/scenario.svg",
+      "--dot-out",
+      "/tmp/scenario.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "scenario_flow",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/scenario.dot", "digraph G {}");
+    expect(stderr.join("")).toContain("Wrote /tmp/scenario.dot");
   });
 
   it("show defaults ui_contracts previews to the staged backend", async () => {

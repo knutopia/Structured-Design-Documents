@@ -137,6 +137,19 @@ const stagedServiceBlueprintPreviewArtifacts: PreviewArtifactCapability[] = [
   }
 ];
 
+const stagedScenarioFlowPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "staged_scenario_flow_preview",
+    backendClass: "staged"
+  },
+  {
+    format: "png",
+    backendId: "staged_scenario_flow_preview",
+    backendClass: "staged"
+  }
+];
+
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
     textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
@@ -251,7 +264,18 @@ const serviceBlueprintRenderer: ViewTextRenderer = {
 };
 
 const scenarioFlowRenderer: ViewTextRenderer = {
-  capability: dotAndMermaidPreviewCapability(),
+  capability: {
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: [
+      ...stagedScenarioFlowPreviewArtifacts.map((artifact) => ({ ...artifact })),
+      ...legacyPreviewArtifacts.map((artifact) => ({ ...artifact }))
+    ],
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: {
+      svg: "staged_scenario_flow_preview",
+      png: "staged_scenario_flow_preview"
+    }
+  },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);

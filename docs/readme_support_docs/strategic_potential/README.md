@@ -47,8 +47,8 @@ This can be critical while more people generate more code with LLMs: product pro
 ## Current Capability and Future Surface
 
 Rendered views:
-- Current usable views: IA / Place Map, UI Contracts, Service Blueprint.
-- Not yet available: Outcome-Opportunity Map, Journey Map, Scenario Flow.
+- Current usable views: IA / Place Map, UI Contracts, Service Blueprint, Scenario Flow.
+- Not yet available: Outcome-Opportunity Map, Journey Map.
 
 Core language:
 - v0.1 language definition provides a usable set of node types and edge (connection) types

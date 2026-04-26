@@ -38,8 +38,7 @@ export interface RenderedCorpusOutputPaths {
 
 const previewOnlyRenderedCorpusViewIds = new Set([
   "outcome_opportunity_map",
-  "journey_map",
-  "scenario_flow"
+  "journey_map"
 ]);
 
 const previewOnlyRenderedCorpusViewDirSuffix = " [preview_only]";

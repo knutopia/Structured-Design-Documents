@@ -16,6 +16,10 @@ This page collects the current diagram families, their status, and links to avai
   UI composition and state changes, per Place (and optionally per component).
   Examples: [place_viewstate_transition_example](../../../examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/), [ui_state_fallback_example](../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/)
 
+- Scenario Flow: [Available]
+  Step-by-step UI-level activities (but *without* collapsing the world into screens).
+  Example: [scenario_branching_example](../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/)
+
 ## Planned
 
 - Outcome-Opportunity Map: [Planned]
@@ -23,6 +27,3 @@ This page collects the current diagram families, their status, and links to avai
 
 - Journey Map: [Planned]
   Experience intent from above: stages and steps, needs, friction, moments of truth.
-
-- Scenario Flow: [Planned]
-  Step-by-step UI-level activities (but *without* collapsing the world into screens).

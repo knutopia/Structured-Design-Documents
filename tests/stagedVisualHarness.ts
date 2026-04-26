@@ -13,6 +13,7 @@ import type {
 } from "../src/renderer/staged/contracts.js";
 import { buildIaPlaceMapRendererScene } from "../src/renderer/staged/iaPlaceMap.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import { renderScenarioFlowStagedSvg } from "../src/renderer/staged/scenarioFlow.js";
 import { renderServiceBlueprintStagedSvg } from "../src/renderer/staged/serviceBlueprint.js";
 import { buildUiContractsRendererScene } from "../src/renderer/staged/uiContracts.js";
 
@@ -44,7 +45,7 @@ export interface EdgeLabelBox extends Rect {
 
 export async function renderStagedArtifacts(
   sourcePath: string,
-  viewId: "ia_place_map" | "service_blueprint" | "ui_contracts",
+  viewId: "ia_place_map" | "service_blueprint" | "scenario_flow" | "ui_contracts",
   profileId: string
 ): Promise<RenderedStagedArtifacts> {
   const bundle = await loadBundle(manifestPath);
@@ -63,6 +64,21 @@ export async function renderStagedArtifacts(
 
   if (viewId === "service_blueprint") {
     const rendered = await renderServiceBlueprintStagedSvg(
+      projected.projection!,
+      compiled.graph!,
+      view,
+      profileId
+    );
+
+    return {
+      rendererScene: rendered.rendererScene,
+      measuredScene: rendered.measuredScene,
+      positionedScene: rendered.positionedScene
+    };
+  }
+
+  if (viewId === "scenario_flow") {
+    const rendered = await renderScenarioFlowStagedSvg(
       projected.projection!,
       compiled.graph!,
       view,
