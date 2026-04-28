@@ -18,7 +18,6 @@ import {
   expectNoRouteIntersectionsWithNonEndpointBoxes,
   expectRoutesDoNotEnterEndpointBoxes,
   expectSameOrientationSegmentsSeparated,
-  findPositionedItem,
   getEdgeById
 } from "./stagedVisualHarness.js";
 
@@ -110,6 +109,17 @@ function expectVerticalSwerveRoute(edge: PositionedEdge): void {
   expect(edge.route.points[0]?.x).toBe(edge.route.points.at(-1)?.x);
 }
 
+function maxExpansion(expansions: Record<number, number>): number {
+  return Math.max(0, ...Object.values(expansions));
+}
+
+function maxVerticalSegmentX(edge: PositionedEdge): number {
+  const xCoordinates = routeSegments(edge)
+    .filter((segment) => segment.orientation === "vertical")
+    .map((segment) => segment.start.x);
+  return Math.max(...xCoordinates);
+}
+
 describe("scenario_flow staged routing", () => {
   it("routes proof-case connectors through explicit scenario-flow ports with deterministic priority", async () => {
     const context = await resolveScenarioFlowContext("scenario_branching.sdd");
@@ -189,6 +199,27 @@ describe("scenario_flow staged routing", () => {
 
     expectVerticalSwerveRoute(getEdgeById(rendered.positionedScene.edges, "J-030__realized_by__VS-030a"));
     expectVerticalSwerveRoute(getEdgeById(rendered.positionedScene.edges, "J-032__realized_by__P-032"));
+
+    const j030VsOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
+      entry.connectorId === "J-030__realized_by__VS-030a"
+    );
+    const obstacleEastOccupancy = j030VsOccupancy.find((entry) => entry.key === "obstacle:P-030:east");
+    expect(obstacleEastOccupancy).toEqual(expect.objectContaining({
+      kind: "obstacle_east"
+    }));
+    expect(j030VsOccupancy.some((entry) =>
+      entry.kind === "column" && entry.routeSegmentIndex === obstacleEastOccupancy?.routeSegmentIndex
+    )).toBe(false);
+
+    const j030Vs030a = getEdgeById(rendered.positionedScene.edges, "J-030__realized_by__VS-030a");
+    const p030P032 = getEdgeById(rendered.positionedScene.edges, "P-030__navigates_to__P-032");
+    expect(maxVerticalSegmentX(j030Vs030a)).toBeLessThan(maxVerticalSegmentX(p030P032));
+    expect(maxExpansion(rendered.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(64);
+    expect(maxExpansion(rendered.routingStages.globalGutterState.laneExpansions)).toBeLessThanOrEqual(64);
+    expect(rendered.routingStages.finalPositionedScene.root.width)
+      .toBeLessThanOrEqual(rendered.routingStages.step3PositionedScene.root.width + 128);
+    expect(rendered.routingStages.finalPositionedScene.root.height)
+      .toBeLessThanOrEqual(rendered.routingStages.step3PositionedScene.root.height + 160);
   });
 
   it("routes mirror connectors at lower priority than Step flow without crossing proof-case nodes", async () => {
@@ -269,12 +300,12 @@ describe("scenario_flow staged routing", () => {
     expect(debug.routingStages.nodeGutters.some((gutter) =>
       gutter.nodeId === "J-030" && gutter.rightAvailable > 0 && gutter.bottomAvailable > 0
     )).toBe(true);
-    expect(Object.values(debug.routingStages.globalGutterState.columnExpansions).some((value) => value > 0)).toBe(true);
-    expect(Object.values(debug.routingStages.globalGutterState.laneExpansions).some((value) => value > 0)).toBe(true);
-    expect(findPositionedItem(debug.routingStages.finalPositionedScene.root, "J-031").x)
-      .toBeGreaterThan(findPositionedItem(debug.preRoutingPositionedScene.root, "J-031").x);
-    expect(findPositionedItem(debug.routingStages.finalPositionedScene.root, "P-030").y)
-      .toBeGreaterThan(findPositionedItem(debug.preRoutingPositionedScene.root, "P-030").y);
+    expect(maxExpansion(debug.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(64);
+    expect(maxExpansion(debug.routingStages.globalGutterState.laneExpansions)).toBeLessThanOrEqual(64);
+    expect(debug.routingStages.finalPositionedScene.root.width)
+      .toBeLessThanOrEqual(debug.routingStages.step3PositionedScene.root.width + 128);
+    expect(debug.routingStages.finalPositionedScene.root.height)
+      .toBeLessThanOrEqual(debug.routingStages.step3PositionedScene.root.height + 160);
     expect(debug.routingStages.gutterOccupancy.some((entry) =>
       entry.key === "node:J-030:right"
       && entry.kind === "node_right"
