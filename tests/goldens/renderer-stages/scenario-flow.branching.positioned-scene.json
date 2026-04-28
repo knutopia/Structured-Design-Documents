@@ -1231,14 +1231,14 @@
               "status": "fits"
             },
             "x": 142,
-            "y": 270,
+            "y": 254,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 260,
+        "y": 244,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -1389,14 +1389,14 @@
               "status": "fits"
             },
             "x": 410,
-            "y": 270,
+            "y": 254,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 400,
-        "y": 260,
+        "y": 244,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -1547,14 +1547,14 @@
               "status": "fits"
             },
             "x": 678,
-            "y": 270,
+            "y": 254,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 668,
-        "y": 260,
+        "y": 244,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -1705,14 +1705,14 @@
               "status": "fits"
             },
             "x": 946,
-            "y": 270,
+            "y": 254,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 936,
-        "y": 260,
+        "y": 244,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -1766,7 +1766,7 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 352,
+        "y": 336,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
@@ -1917,14 +1917,14 @@
               "status": "fits"
             },
             "x": 410,
-            "y": 362,
+            "y": 346,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 400,
-        "y": 352,
+        "y": 336,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -1978,7 +1978,7 @@
         "children": [],
         "ports": [],
         "x": 668,
-        "y": 352,
+        "y": 336,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
@@ -2129,14 +2129,14 @@
               "status": "fits"
             },
             "x": 946,
-            "y": 362,
+            "y": 346,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 936,
-        "y": 352,
+        "y": 336,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2288,14 +2288,14 @@
               "status": "fits"
             },
             "x": 142,
-            "y": 454,
+            "y": 438,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 444,
+        "y": 428,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2448,14 +2448,14 @@
               "status": "fits"
             },
             "x": 410,
-            "y": 454,
+            "y": 438,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 400,
-        "y": 444,
+        "y": 428,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2608,14 +2608,14 @@
               "status": "fits"
             },
             "x": 678,
-            "y": 454,
+            "y": 438,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 668,
-        "y": 444,
+        "y": 428,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2768,14 +2768,14 @@
               "status": "fits"
             },
             "x": 946,
-            "y": 454,
+            "y": 438,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 936,
-        "y": 444,
+        "y": 428,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2829,7 +2829,7 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 552,
+        "y": 536,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
@@ -2982,14 +2982,14 @@
               "status": "fits"
             },
             "x": 410,
-            "y": 562,
+            "y": 546,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 400,
-        "y": 552,
+        "y": 536,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -3043,7 +3043,7 @@
         "children": [],
         "ports": [],
         "x": 668,
-        "y": 552,
+        "y": 536,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
@@ -3196,14 +3196,14 @@
               "status": "fits"
             },
             "x": 946,
-            "y": 562,
+            "y": 546,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 936,
-        "y": 552,
+        "y": 536,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -3214,7 +3214,7 @@
     "x": 0,
     "y": 0,
     "width": 1232,
-    "height": 664
+    "height": 648
   },
   "edges": [
     {
@@ -3485,24 +3485,24 @@
         "itemId": "P-030",
         "portId": "mirror_out",
         "x": 310,
-        "y": 294
+        "y": 278
       },
       "to": {
         "itemId": "P-031",
         "portId": "mirror_in",
         "x": 410,
-        "y": 294
+        "y": 278
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 294
+            "y": 278
           },
           {
             "x": 410,
-            "y": 294
+            "y": 278
           }
         ]
       },
@@ -3524,32 +3524,32 @@
         "itemId": "P-030",
         "portId": "mirror_out",
         "x": 310,
-        "y": 310
+        "y": 294
       },
       "to": {
         "itemId": "P-032",
         "portId": "mirror_in",
         "x": 410,
-        "y": 386
+        "y": 370
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 310
+            "y": 294
           },
           {
             "x": 378,
-            "y": 310
+            "y": 294
           },
           {
             "x": 378,
-            "y": 386
+            "y": 370
           },
           {
             "x": 410,
-            "y": 386
+            "y": 370
           }
         ]
       },
@@ -3571,24 +3571,24 @@
         "itemId": "P-033",
         "portId": "mirror_out",
         "x": 846,
-        "y": 294
+        "y": 278
       },
       "to": {
         "itemId": "P-034",
         "portId": "mirror_in",
         "x": 946,
-        "y": 294
+        "y": 278
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 846,
-            "y": 294
+            "y": 278
           },
           {
             "x": 946,
-            "y": 294
+            "y": 278
           }
         ]
       },
@@ -3610,32 +3610,32 @@
         "itemId": "P-033",
         "portId": "mirror_out",
         "x": 846,
-        "y": 310
+        "y": 294
       },
       "to": {
         "itemId": "P-035",
         "portId": "mirror_in",
         "x": 946,
-        "y": 386
+        "y": 370
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 846,
-            "y": 310
+            "y": 294
           },
           {
             "x": 914,
-            "y": 310
+            "y": 294
           },
           {
             "x": 914,
-            "y": 386
+            "y": 370
           },
           {
             "x": 946,
-            "y": 386
+            "y": 370
           }
         ]
       },
@@ -3657,24 +3657,24 @@
         "itemId": "VS-030a",
         "portId": "mirror_out",
         "x": 310,
-        "y": 478
+        "y": 462
       },
       "to": {
         "itemId": "VS-031a",
         "portId": "mirror_in",
         "x": 410,
-        "y": 478
+        "y": 462
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 478
+            "y": 462
           },
           {
             "x": 410,
-            "y": 478
+            "y": 462
           }
         ]
       },
@@ -3696,32 +3696,32 @@
         "itemId": "VS-030a",
         "portId": "mirror_out",
         "x": 310,
-        "y": 494
+        "y": 478
       },
       "to": {
         "itemId": "VS-032a",
         "portId": "mirror_in",
         "x": 410,
-        "y": 594
+        "y": 578
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 494
+            "y": 478
           },
           {
             "x": 378,
-            "y": 494
+            "y": 478
           },
           {
             "x": 378,
-            "y": 594
+            "y": 578
           },
           {
             "x": 410,
-            "y": 594
+            "y": 578
           }
         ]
       },
@@ -3743,24 +3743,24 @@
         "itemId": "VS-033a",
         "portId": "mirror_out",
         "x": 846,
-        "y": 486
+        "y": 470
       },
       "to": {
         "itemId": "VS-034a",
         "portId": "mirror_in",
         "x": 946,
-        "y": 486
+        "y": 470
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 846,
-            "y": 486
+            "y": 470
           },
           {
             "x": 946,
-            "y": 486
+            "y": 470
           }
         ]
       },
@@ -3782,32 +3782,32 @@
         "itemId": "VS-033a",
         "portId": "mirror_out",
         "x": 846,
-        "y": 502
+        "y": 486
       },
       "to": {
         "itemId": "VS-035a",
         "portId": "mirror_in",
         "x": 946,
-        "y": 594
+        "y": 578
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 846,
-            "y": 502
+            "y": 486
           },
           {
             "x": 914,
-            "y": 502
+            "y": 486
           },
           {
             "x": 914,
-            "y": 594
+            "y": 578
           },
           {
             "x": 946,
-            "y": 594
+            "y": 578
           }
         ]
       },
@@ -3836,7 +3836,7 @@
         "itemId": "P-030",
         "portId": "realization_in",
         "x": 254,
-        "y": 270
+        "y": 254
       },
       "route": {
         "style": "orthogonal",
@@ -3847,7 +3847,7 @@
           },
           {
             "x": 254,
-            "y": 270
+            "y": 254
           }
         ]
       },
@@ -3869,41 +3869,33 @@
       "from": {
         "itemId": "J-030",
         "portId": "realization_out",
-        "x": 270,
+        "x": 328,
         "y": 86
       },
       "to": {
         "itemId": "VS-030a",
         "portId": "realization_in",
         "x": 270,
-        "y": 454
+        "y": 438
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 270,
+            "x": 328,
             "y": 86
           },
           {
-            "x": 270,
-            "y": 252
-          },
-          {
             "x": 328,
-            "y": 252
-          },
-          {
-            "x": 328,
-            "y": 336
+            "y": 320
           },
           {
             "x": 270,
-            "y": 336
+            "y": 320
           },
           {
             "x": 270,
-            "y": 454
+            "y": 438
           }
         ]
       },
@@ -3932,7 +3924,7 @@
         "itemId": "P-031",
         "portId": "realization_in",
         "x": 522,
-        "y": 270
+        "y": 254
       },
       "route": {
         "style": "orthogonal",
@@ -3959,7 +3951,7 @@
           },
           {
             "x": 522,
-            "y": 270
+            "y": 254
           }
         ]
       },
@@ -3988,7 +3980,7 @@
         "itemId": "VS-031a",
         "portId": "realization_in",
         "x": 538,
-        "y": 454
+        "y": 438
       },
       "route": {
         "style": "orthogonal",
@@ -4007,15 +3999,15 @@
           },
           {
             "x": 668,
-            "y": 428
+            "y": 412
           },
           {
             "x": 538,
-            "y": 428
+            "y": 412
           },
           {
             "x": 538,
-            "y": 454
+            "y": 438
           }
         ]
       },
@@ -4037,41 +4029,33 @@
       "from": {
         "itemId": "J-032",
         "portId": "realization_out",
-        "x": 554,
+        "x": 596,
         "y": 194
       },
       "to": {
         "itemId": "P-032",
         "portId": "realization_in",
         "x": 554,
-        "y": 362
+        "y": 346
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 554,
+            "x": 596,
             "y": 194
           },
           {
-            "x": 554,
-            "y": 252
-          },
-          {
             "x": 596,
-            "y": 252
-          },
-          {
-            "x": 596,
-            "y": 336
+            "y": 320
           },
           {
             "x": 554,
-            "y": 336
+            "y": 320
           },
           {
             "x": 554,
-            "y": 362
+            "y": 346
           }
         ]
       },
@@ -4093,41 +4077,33 @@
       "from": {
         "itemId": "J-032",
         "portId": "realization_out",
-        "x": 570,
+        "x": 612,
         "y": 194
       },
       "to": {
         "itemId": "VS-032a",
         "portId": "realization_in",
         "x": 570,
-        "y": 562
+        "y": 546
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 570,
+            "x": 612,
             "y": 194
           },
           {
-            "x": 570,
-            "y": 236
-          },
-          {
             "x": 612,
-            "y": 236
-          },
-          {
-            "x": 612,
-            "y": 536
+            "y": 520
           },
           {
             "x": 570,
-            "y": 536
+            "y": 520
           },
           {
             "x": 570,
-            "y": 562
+            "y": 546
           }
         ]
       },
@@ -4156,7 +4132,7 @@
         "itemId": "P-033",
         "portId": "realization_in",
         "x": 790,
-        "y": 270
+        "y": 254
       },
       "route": {
         "style": "orthogonal",
@@ -4167,7 +4143,7 @@
           },
           {
             "x": 790,
-            "y": 270
+            "y": 254
           }
         ]
       },
@@ -4189,41 +4165,33 @@
       "from": {
         "itemId": "J-033",
         "portId": "realization_out",
-        "x": 806,
+        "x": 864,
         "y": 86
       },
       "to": {
         "itemId": "VS-033a",
         "portId": "realization_in",
         "x": 806,
-        "y": 454
+        "y": 438
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 806,
+            "x": 864,
             "y": 86
           },
           {
-            "x": 806,
-            "y": 252
-          },
-          {
             "x": 864,
-            "y": 252
-          },
-          {
-            "x": 864,
-            "y": 336
+            "y": 320
           },
           {
             "x": 806,
-            "y": 336
+            "y": 320
           },
           {
             "x": 806,
-            "y": 454
+            "y": 438
           }
         ]
       },
@@ -4252,7 +4220,7 @@
         "itemId": "P-034",
         "portId": "realization_in",
         "x": 1058,
-        "y": 270
+        "y": 254
       },
       "route": {
         "style": "orthogonal",
@@ -4279,7 +4247,7 @@
           },
           {
             "x": 1058,
-            "y": 270
+            "y": 254
           }
         ]
       },
@@ -4308,7 +4276,7 @@
         "itemId": "VS-034a",
         "portId": "realization_in",
         "x": 1074,
-        "y": 454
+        "y": 438
       },
       "route": {
         "style": "orthogonal",
@@ -4327,15 +4295,15 @@
           },
           {
             "x": 1204,
-            "y": 428
+            "y": 412
           },
           {
             "x": 1074,
-            "y": 428
+            "y": 412
           },
           {
             "x": 1074,
-            "y": 454
+            "y": 438
           }
         ]
       },
@@ -4357,41 +4325,33 @@
       "from": {
         "itemId": "J-035",
         "portId": "realization_out",
-        "x": 1090,
+        "x": 1132,
         "y": 194
       },
       "to": {
         "itemId": "P-035",
         "portId": "realization_in",
         "x": 1090,
-        "y": 362
+        "y": 346
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1090,
+            "x": 1132,
             "y": 194
           },
           {
-            "x": 1090,
-            "y": 252
-          },
-          {
             "x": 1132,
-            "y": 252
-          },
-          {
-            "x": 1132,
-            "y": 336
+            "y": 320
           },
           {
             "x": 1090,
-            "y": 336
+            "y": 320
           },
           {
             "x": 1090,
-            "y": 362
+            "y": 346
           }
         ]
       },
@@ -4413,41 +4373,33 @@
       "from": {
         "itemId": "J-035",
         "portId": "realization_out",
-        "x": 1106,
+        "x": 1148,
         "y": 194
       },
       "to": {
         "itemId": "VS-035a",
         "portId": "realization_in",
         "x": 1106,
-        "y": 562
+        "y": 546
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1106,
+            "x": 1148,
             "y": 194
           },
           {
-            "x": 1106,
-            "y": 236
-          },
-          {
             "x": 1148,
-            "y": 236
-          },
-          {
-            "x": 1148,
-            "y": 536
+            "y": 520
           },
           {
             "x": 1106,
-            "y": 536
+            "y": 520
           },
           {
             "x": 1106,
-            "y": 562
+            "y": 546
           }
         ]
       },
@@ -4497,7 +4449,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 330,
+      "y": 314,
       "text": "Places",
       "textStyleRole": "label"
     },
@@ -4511,11 +4463,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 24,
-        "y": 420
+        "y": 404
       },
       "to": {
         "x": 1204,
-        "y": 420
+        "y": 404
       }
     },
     {
@@ -4527,7 +4479,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 530,
+      "y": 514,
       "text": "View States",
       "textStyleRole": "label"
     }

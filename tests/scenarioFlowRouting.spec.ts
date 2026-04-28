@@ -113,7 +113,6 @@ function expectVerticalSwerveRoute(edge: PositionedEdge): void {
   expect(segments[0]?.orientation).toBe("vertical");
   expect(segments[0]?.length).toBeGreaterThan(16);
   expect(segments.some((segment) => segment.orientation === "horizontal")).toBe(true);
-  expect(edge.route.points[0]?.x).toBe(edge.route.points.at(-1)?.x);
 }
 
 function maxExpansion(expansions: Record<number, number>): number {
@@ -150,14 +149,29 @@ function getFirstHorizontalSegment(edge: PositionedEdge): ReturnType<typeof rout
   return segment;
 }
 
-function getSingleBypassSegment(edge: PositionedEdge): ReturnType<typeof routeSegments>[number] {
-  const trackX = edge.route.points[0]?.x;
+function getSingleBypassSegmentSpanningNodes(
+  edge: PositionedEdge,
+  boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
+  blockerIds: readonly string[]
+): ReturnType<typeof routeSegments>[number] {
+  const blockers = blockerIds.map((blockerId) => {
+    const blocker = boxesById.get(blockerId);
+    if (!blocker) {
+      throw new Error(`Could not find blocker "${blockerId}".`);
+    }
+    return blocker;
+  });
   const bypassSegments = routeSegments(edge)
-    .filter((segment) =>
-      segment.orientation === "vertical"
-      && trackX !== undefined
-      && Math.abs(segment.start.x - trackX) > 0.5
-    );
+    .filter((segment) => {
+      const bypassTop = Math.min(segment.start.y, segment.end.y);
+      const bypassBottom = Math.max(segment.start.y, segment.end.y);
+      return segment.orientation === "vertical"
+        && blockers.every((blocker) =>
+          segment.start.x > blocker.x + blocker.width
+          && bypassTop <= blocker.y + 0.5
+          && bypassBottom >= blocker.y + blocker.height - 0.5
+        );
+    });
   expect(bypassSegments.length).toBe(1);
   return bypassSegments[0]!;
 }
@@ -167,21 +181,44 @@ function expectSingleBypassSpanningNodes(
   boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
   blockerIds: readonly string[]
 ): number {
-  const bypass = getSingleBypassSegment(edge);
-  const bypassTop = Math.min(bypass.start.y, bypass.end.y);
-  const bypassBottom = Math.max(bypass.start.y, bypass.end.y);
-
-  for (const blockerId of blockerIds) {
-    const blocker = boxesById.get(blockerId);
-    if (!blocker) {
-      throw new Error(`Could not find blocker "${blockerId}".`);
-    }
-    expect(bypass.start.x).toBeGreaterThan(blocker.x + blocker.width);
-    expect(bypassTop).toBeLessThanOrEqual(blocker.y + 0.5);
-    expect(bypassBottom).toBeGreaterThanOrEqual(blocker.y + blocker.height - 0.5);
-  }
-
+  const bypass = getSingleBypassSegmentSpanningNodes(edge, boxesById, blockerIds);
   return bypass.start.x;
+}
+
+function expectCollapsedSourceEdgeEntry(
+  edge: PositionedEdge,
+  boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
+  sourceId: string,
+  blockerIds: readonly string[]
+): number {
+  const source = boxesById.get(sourceId);
+  if (!source) {
+    throw new Error(`Could not find source "${sourceId}".`);
+  }
+  const bypass = getSingleBypassSegmentSpanningNodes(edge, boxesById, blockerIds);
+  const firstHorizontal = getFirstHorizontalSegment(edge);
+  expect(bypass.segmentIndex).toBe(0);
+  expect(edge.from.x).toBe(bypass.start.x);
+  expect(edge.route.points[0]).toEqual({
+    x: bypass.start.x,
+    y: source.y + source.height
+  });
+  expect(bypass.start.x).toBeGreaterThanOrEqual(source.x);
+  expect(bypass.start.x).toBeLessThanOrEqual(source.x + source.width);
+  expect(firstHorizontal.start.x).toBeGreaterThan(firstHorizontal.end.x);
+  return bypass.start.x;
+}
+
+function expectUncollapsedSourceEdgeEntry(
+  edge: PositionedEdge,
+  boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
+  blockerIds: readonly string[]
+): void {
+  const bypass = getSingleBypassSegmentSpanningNodes(edge, boxesById, blockerIds);
+  const firstHorizontal = getFirstHorizontalSegment(edge);
+  expect(bypass.segmentIndex).toBeGreaterThan(0);
+  expect(edge.from.x).not.toBe(bypass.start.x);
+  expect(firstHorizontal.start.x).toBeLessThan(firstHorizontal.end.x);
 }
 
 describe("scenario_flow staged routing", () => {
@@ -305,6 +342,10 @@ describe("scenario_flow staged routing", () => {
     const wideCX = expectSingleBypassSpanningNodes(wideC, boxesById, ["J-032", "P-031", "P-032"]);
     expect(localAX).toBeLessThan(wideBX);
     expect(wideBX).toBeLessThan(wideCX);
+    expectCollapsedSourceEdgeEntry(localA, boxesById, "J-032", ["P-031"]);
+    expectCollapsedSourceEdgeEntry(wideB, boxesById, "J-032", ["P-031", "P-032", "VS-031a"]);
+    expectUncollapsedSourceEdgeEntry(wideC, boxesById, ["J-032", "P-031", "P-032"]);
+    expect(wideB.from.x - localA.from.x).toBeGreaterThanOrEqual(FIXED_SEPARATION_DISTANCE);
 
     const localD = getEdgeById(rendered.positionedScene.edges, "J-035__realized_by__P-035");
     const wideE = getEdgeById(rendered.positionedScene.edges, "J-035__realized_by__VS-035a");
@@ -314,8 +355,16 @@ describe("scenario_flow staged routing", () => {
     const wideFX = expectSingleBypassSpanningNodes(wideF, boxesById, ["J-035", "P-034", "P-035"]);
     expect(localDX).toBeLessThan(wideEX);
     expect(wideEX).toBeLessThan(wideFX);
+    expectCollapsedSourceEdgeEntry(localD, boxesById, "J-035", ["P-034"]);
+    expectCollapsedSourceEdgeEntry(wideE, boxesById, "J-035", ["P-034", "P-035", "VS-034a"]);
+    expectUncollapsedSourceEdgeEntry(wideF, boxesById, ["J-035", "P-034", "P-035"]);
+    expect(wideE.from.x - localD.from.x).toBeGreaterThanOrEqual(FIXED_SEPARATION_DISTANCE);
 
-    const wideBSegmentIndex = getSingleBypassSegment(wideB).segmentIndex;
+    const wideBSegmentIndex = getSingleBypassSegmentSpanningNodes(
+      wideB,
+      boxesById,
+      ["P-031", "P-032", "VS-031a"]
+    ).segmentIndex;
     const wideBOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
       entry.connectorId === "J-032__realized_by__VS-032a"
       && entry.routeSegmentIndex === wideBSegmentIndex

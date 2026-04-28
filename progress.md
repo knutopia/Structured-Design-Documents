@@ -16,6 +16,7 @@
 
 -third iteration fix, and a fourth one for wide swerve routing
 -fifth iteration for swerve spacing
+-sixth for swerve turn reduction
 
 ## Mon 5-27-26
 

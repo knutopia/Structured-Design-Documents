@@ -2200,6 +2200,17 @@ interface ScenarioFlowObstacleLocalGroupClaim {
   spanEnd: number;
 }
 
+interface ScenarioFlowSourceEdgeCollapseCandidate {
+  plan: ScenarioFlowConnectorPlan;
+  sourceNodeId: string;
+  sourceSide: PortSide;
+  originalStartX: number;
+  proposedStartX: number;
+  entrySegmentIndex: number;
+  bypassSegmentIndex: number;
+  collapsedRoute: PositionedRoute;
+}
+
 function buildObstacleLocalClaimKey(entry: ScenarioFlowGutterOccupancy): string {
   if (entry.swerveGroupId) {
     return [
@@ -2517,6 +2528,214 @@ function applyObstacleLocalCompaction(
     requiredColumnExpansions: compaction.requiredColumnExpansions,
     requiredLaneExpansions: compaction.requiredLaneExpansions
   };
+}
+
+function routeBeginsWithRightwardVerticalSwerve(route: PositionedRoute): {
+  sourcePoint: Point;
+  entryPoint: Point;
+  bypassEntryPoint: Point;
+  bypassExitPoint: Point;
+} | undefined {
+  if (route.points.length < 4) {
+    return undefined;
+  }
+
+  const sourcePoint = route.points[0]!;
+  const entryPoint = route.points[1]!;
+  const bypassEntryPoint = route.points[2]!;
+  const bypassExitPoint = route.points[3]!;
+  const startsVertical = Math.abs(sourcePoint.x - entryPoint.x) <= EPSILON
+    && entryPoint.y - sourcePoint.y > EPSILON;
+  const turnsRight = Math.abs(entryPoint.y - bypassEntryPoint.y) <= EPSILON
+    && bypassEntryPoint.x - entryPoint.x >= FIXED_SEPARATION_DISTANCE - EPSILON;
+  const bypassesVertical = Math.abs(bypassEntryPoint.x - bypassExitPoint.x) <= EPSILON
+    && bypassExitPoint.y - bypassEntryPoint.y > EPSILON;
+
+  return startsVertical && turnsRight && bypassesVertical
+    ? {
+      sourcePoint,
+      entryPoint,
+      bypassEntryPoint,
+      bypassExitPoint
+    }
+    : undefined;
+}
+
+function buildSourceEdgeCollapseCandidate(
+  plan: ScenarioFlowConnectorPlan,
+  route: PositionedRoute,
+  index: ScenarioFlowPositionedIndex
+): ScenarioFlowSourceEdgeCollapseCandidate | undefined {
+  if (plan.pattern !== "realization_vertical" || plan.sourceSide !== "south" || plan.targetSide !== "north") {
+    return undefined;
+  }
+
+  const source = index.nodeById.get(plan.from);
+  if (!source) {
+    return undefined;
+  }
+
+  const swerve = routeBeginsWithRightwardVerticalSwerve(route);
+  if (!swerve) {
+    return undefined;
+  }
+
+  const sourceBottom = roundMetric(source.node.y + source.node.height);
+  if (Math.abs(swerve.sourcePoint.y - sourceBottom) > EPSILON) {
+    return undefined;
+  }
+
+  if (
+    swerve.bypassEntryPoint.x < source.node.x - EPSILON
+    || swerve.bypassEntryPoint.x > source.node.x + source.node.width + EPSILON
+  ) {
+    return undefined;
+  }
+
+  const extendedBypass = {
+    start: {
+      x: swerve.bypassEntryPoint.x,
+      y: swerve.sourcePoint.y
+    },
+    end: swerve.bypassExitPoint
+  };
+  if (getNonEndpointBoxes(plan, index).some((box) =>
+    segmentIntersectsBox(extendedBypass.start, extendedBypass.end, box, {
+      ignoreStart: true,
+      ignoreEnd: true
+    })
+  )) {
+    return undefined;
+  }
+
+  return {
+    plan,
+    sourceNodeId: plan.from,
+    sourceSide: plan.sourceSide,
+    originalStartX: swerve.sourcePoint.x,
+    proposedStartX: swerve.bypassEntryPoint.x,
+    entrySegmentIndex: 1,
+    bypassSegmentIndex: 2,
+    collapsedRoute: buildRoute([
+      extendedBypass.start,
+      swerve.bypassExitPoint,
+      ...route.points.slice(4)
+    ], route.style)
+  };
+}
+
+function sourceEdgeCollapseGroupIsSafe(
+  groupPlans: readonly ScenarioFlowConnectorPlan[],
+  candidateByConnectorId: ReadonlyMap<string, ScenarioFlowSourceEdgeCollapseCandidate>,
+  routeSelector: (plan: ScenarioFlowConnectorPlan) => PositionedRoute
+): boolean {
+  const current = groupPlans
+    .map((plan) => ({
+      connectorId: plan.id,
+      x: routeSelector(plan).points[0]?.x
+    }))
+    .filter((entry): entry is { connectorId: string; x: number } => entry.x !== undefined)
+    .sort((left, right) => left.x - right.x || left.connectorId.localeCompare(right.connectorId));
+
+  const proposed = groupPlans
+    .map((plan) => {
+      const candidate = candidateByConnectorId.get(plan.id);
+      return {
+        connectorId: plan.id,
+        x: candidate?.proposedStartX ?? routeSelector(plan).points[0]?.x
+      };
+    })
+    .filter((entry): entry is { connectorId: string; x: number } => entry.x !== undefined)
+    .sort((left, right) => left.x - right.x || left.connectorId.localeCompare(right.connectorId));
+
+  if (current.length !== proposed.length) {
+    return false;
+  }
+
+  for (let index = 0; index < current.length; index += 1) {
+    if (current[index]?.connectorId !== proposed[index]?.connectorId) {
+      return false;
+    }
+  }
+
+  for (let index = 1; index < proposed.length; index += 1) {
+    const previous = proposed[index - 1]!;
+    const next = proposed[index]!;
+    if (next.x - previous.x < FIXED_SEPARATION_DISTANCE - EPSILON) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function remapSourceEdgeCollapseObstacleOccupancy(
+  entries: readonly ScenarioFlowGutterOccupancy[],
+  candidate: ScenarioFlowSourceEdgeCollapseCandidate
+): ScenarioFlowGutterOccupancy[] {
+  return entries.flatMap((entry) => {
+    if (
+      entry.routeSegmentIndex === candidate.entrySegmentIndex
+      && entry.axis === "horizontal"
+      && isObstacleLocalKind(entry.kind)
+    ) {
+      return [];
+    }
+
+    let routeSegmentIndex = entry.routeSegmentIndex;
+    if (entry.routeSegmentIndex === candidate.bypassSegmentIndex) {
+      routeSegmentIndex = 0;
+    } else if (entry.routeSegmentIndex > candidate.bypassSegmentIndex) {
+      routeSegmentIndex = entry.routeSegmentIndex - candidate.bypassSegmentIndex;
+    }
+
+    return [updateSegmentCoordinate({
+      ...entry,
+      routeSegmentIndex
+    }, candidate.collapsedRoute)];
+  });
+}
+
+function applySourceEdgeSwerveEntryCollapse(
+  plans: readonly ScenarioFlowConnectorPlan[],
+  obstacleOccupancyByConnectorId: Map<string, ScenarioFlowGutterOccupancy[]>,
+  index: ScenarioFlowPositionedIndex,
+  routeSelector: (plan: ScenarioFlowConnectorPlan) => PositionedRoute,
+  routeSetter: (plan: ScenarioFlowConnectorPlan, route: PositionedRoute) => void
+): void {
+  const candidateByConnectorId = new Map<string, ScenarioFlowSourceEdgeCollapseCandidate>();
+  const candidateGroups = new Map<string, ScenarioFlowSourceEdgeCollapseCandidate[]>();
+
+  for (const plan of plans) {
+    const candidate = buildSourceEdgeCollapseCandidate(plan, routeSelector(plan), index);
+    if (!candidate) {
+      continue;
+    }
+    candidateByConnectorId.set(plan.id, candidate);
+    const groupKey = `${candidate.sourceNodeId}:${candidate.sourceSide}`;
+    const group = candidateGroups.get(groupKey) ?? [];
+    group.push(candidate);
+    candidateGroups.set(groupKey, group);
+  }
+
+  for (const [groupKey, candidates] of candidateGroups.entries()) {
+    const [sourceNodeId, sourceSide] = groupKey.split(":");
+    const groupPlans = plans.filter((plan) => plan.from === sourceNodeId && plan.sourceSide === sourceSide);
+    if (!sourceEdgeCollapseGroupIsSafe(groupPlans, candidateByConnectorId, routeSelector)) {
+      continue;
+    }
+
+    for (const candidate of candidates) {
+      routeSetter(candidate.plan, candidate.collapsedRoute);
+      obstacleOccupancyByConnectorId.set(
+        candidate.plan.id,
+        remapSourceEdgeCollapseObstacleOccupancy(
+          obstacleOccupancyByConnectorId.get(candidate.plan.id) ?? [],
+          candidate
+        )
+      );
+    }
+  }
 }
 
 function isBundleLocalOccupancy(entry: ScenarioFlowGutterOccupancy): boolean {
@@ -2995,6 +3214,22 @@ function buildPreparedRoutes(
       obstacleOccupancyByConnectorId
     );
   }
+  applySourceEdgeSwerveEntryCollapse(
+    plans,
+    obstacleOccupancyByConnectorId,
+    index,
+    (plan) => plan.finalRoute,
+    (plan, route) => {
+      plan.finalRoute = route;
+    }
+  );
+  occupancyResult = buildOccupancyByConnector(
+    plans,
+    (plan) => plan.finalRoute,
+    gutterRects,
+    index,
+    obstacleOccupancyByConnectorId
+  );
   for (const plan of plans) {
     plan.occupiedGutters = occupancyResult.occupancyByConnectorId.get(plan.id) ?? [];
   }
@@ -3096,6 +3331,23 @@ function buildStep3Routes(
       obstacleOccupancyByConnectorId
     );
   }
+  applySourceEdgeSwerveEntryCollapse(
+    plans,
+    obstacleOccupancyByConnectorId,
+    index,
+    (plan) => plan.step3Route,
+    (plan, route) => {
+      plan.step3Route = route;
+      plan.finalRoute = route;
+    }
+  );
+  occupancyResult = buildOccupancyByConnector(
+    plans,
+    (plan) => plan.step3Route,
+    gutterRects,
+    index,
+    obstacleOccupancyByConnectorId
+  );
   for (const plan of plans) {
     plan.occupiedGutters = occupancyResult.occupancyByConnectorId.get(plan.id) ?? [];
   }
