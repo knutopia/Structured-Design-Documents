@@ -96,6 +96,14 @@ interface ScenarioFlowGutterRect {
   laneOrder?: number;
 }
 
+interface ScenarioFlowSwerveMetadata {
+  swerveGroupId: string;
+  swerveBlockerCount: number;
+  swerveTraversalStart: number;
+  swerveSpanStart: number;
+  swerveSpanEnd: number;
+}
+
 interface ScenarioFlowResolvedEndpoint {
   itemId: string;
   portId: string;
@@ -145,6 +153,11 @@ export interface ScenarioFlowGutterOccupancy {
   laneOrder?: number;
   ownershipRank?: number;
   locked?: boolean;
+  swerveGroupId?: string;
+  swerveBlockerCount?: number;
+  swerveTraversalStart?: number;
+  swerveSpanStart?: number;
+  swerveSpanEnd?: number;
 }
 
 export interface ScenarioFlowConnectorPlan {
@@ -1030,7 +1043,8 @@ function buildObstacleOccupancy(
   coordinate: number,
   spanStart: number,
   spanEnd: number,
-  routeSegmentIndex: number
+  routeSegmentIndex: number,
+  swerveMetadata?: ScenarioFlowSwerveMetadata
 ): ScenarioFlowGutterOccupancy {
   return {
     connectorId,
@@ -1043,7 +1057,8 @@ function buildObstacleOccupancy(
     routeSegmentIndex,
     nodeId: box.itemId,
     side,
-    ownershipRank: 1
+    ownershipRank: 1,
+    ...swerveMetadata
   };
 }
 
@@ -1233,6 +1248,138 @@ function resolveLocalHorizontalDetourY(
   );
 }
 
+function buildVerticalSwerveGroupId(
+  plan: ScenarioFlowConnectorPlan,
+  start: Point,
+  end: Point,
+  obstacles: readonly ScenarioFlowBox[]
+): string {
+  return [
+    plan.id,
+    "vertical",
+    roundMetric(start.x),
+    roundMetric(start.y),
+    roundMetric(end.y),
+    obstacles.map((obstacle) => obstacle.itemId).join(",")
+  ].join(":");
+}
+
+function buildVerticalSwerveMetadata(
+  plan: ScenarioFlowConnectorPlan,
+  start: Point,
+  end: Point,
+  obstacles: readonly ScenarioFlowBox[]
+): ScenarioFlowSwerveMetadata {
+  const direction = start.y <= end.y ? 1 : -1;
+  const first = obstacles[0]!;
+  const traversalStart = direction > 0
+    ? roundMetric(first.y - start.y)
+    : roundMetric(start.y - (first.y + first.height));
+  return {
+    swerveGroupId: buildVerticalSwerveGroupId(plan, start, end, obstacles),
+    swerveBlockerCount: obstacles.length,
+    swerveTraversalStart: traversalStart,
+    swerveSpanStart: roundMetric(Math.min(...obstacles.map((obstacle) => obstacle.y))),
+    swerveSpanEnd: roundMetric(Math.max(...obstacles.map((obstacle) => obstacle.y + obstacle.height)))
+  };
+}
+
+function buildWideVerticalSegmentWithLocalSwerve(
+  start: Point,
+  end: Point,
+  obstacles: readonly ScenarioFlowBox[],
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex
+): {
+  points: Point[];
+  occupancy: ScenarioFlowGutterOccupancy[];
+} {
+  const points: Point[] = [start];
+  const occupancy: ScenarioFlowGutterOccupancy[] = [];
+  const direction = start.y <= end.y ? 1 : -1;
+  const firstObstacle = obstacles[0]!;
+  const lastObstacle = obstacles[obstacles.length - 1]!;
+  const rawEncounterY = roundMetric(
+    direction > 0
+      ? firstObstacle.y - OBSTACLE_SWERVE_CLEARANCE
+      : firstObstacle.y + firstObstacle.height + OBSTACLE_SWERVE_CLEARANCE
+  );
+  const encounterY = direction > 0
+    ? roundMetric(clampMetric(rawEncounterY, start.y, firstObstacle.y - EPSILON))
+    : roundMetric(clampMetric(rawEncounterY, firstObstacle.y + firstObstacle.height + EPSILON, start.y));
+  const rawExitY = roundMetric(
+    direction > 0
+      ? lastObstacle.y + lastObstacle.height + OBSTACLE_SWERVE_CLEARANCE
+      : lastObstacle.y - OBSTACLE_SWERVE_CLEARANCE
+  );
+  const exitY = direction > 0
+    ? roundMetric(Math.max(encounterY + EPSILON, rawExitY))
+    : roundMetric(Math.min(encounterY - EPSILON, rawExitY));
+  const baseBridgeX = roundMetric(Math.max(
+    start.x + FIXED_SEPARATION_DISTANCE,
+    ...obstacles.map((obstacle) => obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE)
+  ));
+  const bridgeX = resolveVerticalBridgeX(
+    baseBridgeX,
+    plan,
+    index,
+    (candidateBridgeX) => [
+      { x: start.x, y: encounterY },
+      { x: candidateBridgeX, y: encounterY },
+      { x: candidateBridgeX, y: exitY },
+      { x: start.x, y: exitY }
+    ]
+  );
+  const metadata = buildVerticalSwerveMetadata(plan, start, end, obstacles);
+
+  appendRoutePoint(points, { x: start.x, y: encounterY });
+  const encounterSegmentIndex = Math.max(0, points.length - 1);
+  appendRoutePoint(points, { x: bridgeX, y: encounterY });
+  const detourSegmentIndex = Math.max(0, points.length - 1);
+  appendRoutePoint(points, { x: bridgeX, y: exitY });
+  const exitSegmentIndex = Math.max(0, points.length - 1);
+  appendRoutePoint(points, { x: start.x, y: exitY });
+  appendRoutePoint(points, { x: start.x, y: end.y });
+
+  occupancy.push(buildObstacleOccupancy(
+    plan.id,
+    firstObstacle,
+    direction > 0 ? "north" : "south",
+    "horizontal",
+    encounterY,
+    start.x,
+    bridgeX,
+    encounterSegmentIndex,
+    metadata
+  ));
+  for (const obstacle of obstacles) {
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      bridgeX < obstacle.x ? "west" : "east",
+      "vertical",
+      bridgeX,
+      encounterY,
+      exitY,
+      detourSegmentIndex,
+      metadata
+    ));
+  }
+  occupancy.push(buildObstacleOccupancy(
+    plan.id,
+    lastObstacle,
+    direction > 0 ? "south" : "north",
+    "horizontal",
+    exitY,
+    start.x,
+    bridgeX,
+    exitSegmentIndex,
+    metadata
+  ));
+
+  return { points, occupancy };
+}
+
 function buildVerticalSegmentWithLocalSwerves(
   start: Point,
   end: Point,
@@ -1246,11 +1393,20 @@ function buildVerticalSegmentWithLocalSwerves(
   const points: Point[] = [start];
   const occupancy: ScenarioFlowGutterOccupancy[] = [];
   const direction = start.y <= end.y ? 1 : -1;
+  const nonEndpointBoxes = getNonEndpointBoxes(plan, index);
+
+  if (plan.pattern === "realization_vertical") {
+    const directObstacles = findIntersectingBoxesAlongSegment(start, end, nonEndpointBoxes);
+    if (directObstacles.length > 1) {
+      return buildWideVerticalSegmentWithLocalSwerve(start, end, directObstacles, plan, index);
+    }
+  }
+
   let cursor = start;
 
   for (let attempt = 0; attempt < 16; attempt += 1) {
     const projectedEnd = { x: cursor.x, y: end.y };
-    const obstacle = findIntersectingBoxesAlongSegment(cursor, projectedEnd, getNonEndpointBoxes(plan, index))[0];
+    const obstacle = findIntersectingBoxesAlongSegment(cursor, projectedEnd, nonEndpointBoxes)[0];
     if (!obstacle) {
       appendRoutePoint(points, projectedEnd);
       return { points, occupancy };
@@ -1271,6 +1427,9 @@ function buildVerticalSegmentWithLocalSwerves(
     );
     const bridgeX = resolveLocalVerticalDetourX(cursor.x, encounterY, exitY, obstacle, plan, index);
     const returnX = resolveVerticalSwerveReturnX(cursor.x, 0, plan, index);
+    const swerveMetadata = plan.pattern === "realization_vertical"
+      ? buildVerticalSwerveMetadata(plan, cursor, projectedEnd, [obstacle])
+      : undefined;
 
     appendRoutePoint(points, { x: cursor.x, y: encounterY });
     const encounterSegmentIndex = Math.max(0, points.length - 1);
@@ -1287,7 +1446,8 @@ function buildVerticalSegmentWithLocalSwerves(
       encounterY,
       cursor.x,
       bridgeX,
-      encounterSegmentIndex
+      encounterSegmentIndex,
+      swerveMetadata
     ));
     occupancy.push(buildObstacleOccupancy(
       plan.id,
@@ -1297,7 +1457,8 @@ function buildVerticalSegmentWithLocalSwerves(
       bridgeX,
       encounterY,
       exitY,
-      detourSegmentIndex
+      detourSegmentIndex,
+      swerveMetadata
     ));
     occupancy.push(buildObstacleOccupancy(
       plan.id,
@@ -1307,7 +1468,8 @@ function buildVerticalSegmentWithLocalSwerves(
       exitY,
       returnX,
       bridgeX,
-      exitSegmentIndex
+      exitSegmentIndex,
+      swerveMetadata
     ));
 
     cursor = {
@@ -1926,6 +2088,151 @@ function collectObstacleCompactionOverflow(
   }
 }
 
+interface ScenarioFlowObstacleLocalClaim {
+  key: string;
+  segmentKey: string;
+  connectorId: string;
+  routeSegmentIndex: number;
+  axis: ScenarioFlowGutterAxis;
+  entries: ScenarioFlowGutterOccupancy[];
+}
+
+interface ScenarioFlowObstacleLocalGroupClaim {
+  claim: ScenarioFlowObstacleLocalClaim;
+  entries: ScenarioFlowGutterOccupancy[];
+  spanStart: number;
+  spanEnd: number;
+}
+
+function buildObstacleLocalClaimKey(entry: ScenarioFlowGutterOccupancy): string {
+  if (entry.swerveGroupId) {
+    return [
+      entry.connectorId,
+      "swerve",
+      entry.swerveGroupId,
+      entry.axis,
+      entry.routeSegmentIndex
+    ].join(":");
+  }
+  return buildSegmentCoordinateKey(entry.connectorId, entry.routeSegmentIndex);
+}
+
+function getObstacleLocalClaimSpan(entries: readonly ScenarioFlowGutterOccupancy[]): {
+  spanStart: number;
+  spanEnd: number;
+} {
+  return {
+    spanStart: roundMetric(Math.min(...entries.map((entry) => entry.spanStart))),
+    spanEnd: roundMetric(Math.max(...entries.map((entry) => entry.spanEnd)))
+  };
+}
+
+function getObstacleLocalClaimBlockerCount(claim: ScenarioFlowObstacleLocalClaim): number {
+  return Math.max(1, ...claim.entries.map((entry) => entry.swerveBlockerCount ?? 1));
+}
+
+function getObstacleLocalClaimTraversalStart(claim: ScenarioFlowObstacleLocalClaim): number | undefined {
+  const starts = claim.entries
+    .map((entry) => entry.swerveTraversalStart)
+    .filter((start): start is number => start !== undefined);
+  return starts.length > 0 ? Math.min(...starts) : undefined;
+}
+
+function getObstacleLocalClaimClusterStart(claim: ScenarioFlowObstacleLocalClaim): number | undefined {
+  const starts = claim.entries
+    .map((entry) => entry.swerveSpanStart)
+    .filter((start): start is number => start !== undefined);
+  return starts.length > 0 ? Math.min(...starts) : undefined;
+}
+
+function hasObstacleLocalClaimSwerveMetadata(claim: ScenarioFlowObstacleLocalClaim): boolean {
+  return claim.entries.some((entry) => entry.swerveGroupId !== undefined);
+}
+
+function resolveObstacleLocalClaimBaseCoordinate(
+  claim: ScenarioFlowObstacleLocalClaim,
+  boxById: ReadonlyMap<string, ScenarioFlowBox>,
+  fallbackCoordinate: number
+): number {
+  const coordinates = claim.entries
+    .map((entry) => {
+      const side = getObstacleSideFromKind(entry.kind);
+      const box = entry.nodeId ? boxById.get(entry.nodeId) : undefined;
+      return side && box ? getObstacleLocalBaseCoordinate(box, side) : undefined;
+    })
+    .filter((coordinate): coordinate is number => coordinate !== undefined);
+
+  if (coordinates.length === 0) {
+    return fallbackCoordinate;
+  }
+
+  const firstSide = getObstacleSideFromKind(claim.entries[0]?.kind ?? "obstacle_east");
+  const direction = firstSide ? getOutwardDirectionForSide(firstSide) : 1;
+  return roundMetric(direction > 0 ? Math.max(...coordinates) : Math.min(...coordinates));
+}
+
+function compareObstacleLocalGroupClaims(
+  left: ScenarioFlowObstacleLocalGroupClaim,
+  right: ScenarioFlowObstacleLocalGroupClaim,
+  planById: ReadonlyMap<string, ScenarioFlowConnectorPlan>,
+  baseCoordinate: number
+): number {
+  const leftHasSwerve = hasObstacleLocalClaimSwerveMetadata(left.claim);
+  const rightHasSwerve = hasObstacleLocalClaimSwerveMetadata(right.claim);
+
+  if (leftHasSwerve || rightHasSwerve) {
+    const blockerCountDelta = getObstacleLocalClaimBlockerCount(left.claim)
+      - getObstacleLocalClaimBlockerCount(right.claim);
+    if (blockerCountDelta !== 0) {
+      return blockerCountDelta;
+    }
+
+    const leftTraversalStart = getObstacleLocalClaimTraversalStart(left.claim);
+    const rightTraversalStart = getObstacleLocalClaimTraversalStart(right.claim);
+    if (leftTraversalStart !== undefined && rightTraversalStart !== undefined) {
+      const traversalDelta = rightTraversalStart - leftTraversalStart;
+      if (Math.abs(traversalDelta) > EPSILON) {
+        return traversalDelta;
+      }
+    } else if (leftTraversalStart !== undefined || rightTraversalStart !== undefined) {
+      return leftTraversalStart !== undefined ? -1 : 1;
+    }
+
+    const leftClusterStart = getObstacleLocalClaimClusterStart(left.claim);
+    const rightClusterStart = getObstacleLocalClaimClusterStart(right.claim);
+    if (leftClusterStart !== undefined && rightClusterStart !== undefined) {
+      const clusterDelta = rightClusterStart - leftClusterStart;
+      if (Math.abs(clusterDelta) > EPSILON) {
+        return clusterDelta;
+      }
+    } else if (leftClusterStart !== undefined || rightClusterStart !== undefined) {
+      return leftClusterStart !== undefined ? -1 : 1;
+    }
+  } else {
+    const leftDistance = Math.min(...left.entries.map((entry) => Math.abs(entry.nominalCoordinate - baseCoordinate)));
+    const rightDistance = Math.min(...right.entries.map((entry) => Math.abs(entry.nominalCoordinate - baseCoordinate)));
+    if (Math.abs(leftDistance - rightDistance) > EPSILON) {
+      return leftDistance - rightDistance;
+    }
+  }
+
+  const leftPlan = planById.get(left.claim.connectorId);
+  const rightPlan = planById.get(right.claim.connectorId);
+  if (leftPlan && rightPlan) {
+    return compareConnectorPlans(leftPlan, rightPlan)
+      || Math.min(...left.entries.map((entry) => entry.ownershipRank ?? 99))
+        - Math.min(...right.entries.map((entry) => entry.ownershipRank ?? 99))
+      || left.claim.routeSegmentIndex - right.claim.routeSegmentIndex
+      || left.claim.key.localeCompare(right.claim.key);
+  }
+
+  return left.claim.connectorId.localeCompare(right.claim.connectorId)
+    || Math.min(...left.entries.map((entry) => entry.ownershipRank ?? 99))
+      - Math.min(...right.entries.map((entry) => entry.ownershipRank ?? 99))
+    || left.claim.routeSegmentIndex - right.claim.routeSegmentIndex
+    || left.claim.key.localeCompare(right.claim.key);
+}
+
 function buildObstacleLocalCompaction(
   plans: readonly ScenarioFlowConnectorPlan[],
   occupancy: readonly ScenarioFlowGutterOccupancy[],
@@ -1939,8 +2246,10 @@ function buildObstacleLocalCompaction(
   const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
   const boxById = new Map(index.nodeBoxes.map((box) => [box.itemId, box] as const));
   const grouped = new Map<string, ScenarioFlowGutterOccupancy[]>();
+  const claimByKey = new Map<string, ScenarioFlowObstacleLocalClaim>();
   const segmentCoordinateBySegmentKey = new Map<string, number>();
   const lockedSegmentKeys = new Set<string>();
+  const coordinateByClaimKey = new Map<string, number>();
   const requiredColumnExpansions: Record<number, number> = {};
   const requiredLaneExpansions: Record<number, number> = {};
 
@@ -1952,6 +2261,18 @@ function buildObstacleLocalCompaction(
     const existing = grouped.get(key) ?? [];
     existing.push(entry);
     grouped.set(key, existing);
+
+    const claimKey = buildObstacleLocalClaimKey(entry);
+    const claim = claimByKey.get(claimKey) ?? {
+      key: claimKey,
+      segmentKey: buildSegmentCoordinateKey(entry.connectorId, entry.routeSegmentIndex),
+      connectorId: entry.connectorId,
+      routeSegmentIndex: entry.routeSegmentIndex,
+      axis: entry.axis,
+      entries: []
+    };
+    claim.entries.push(entry);
+    claimByKey.set(claimKey, claim);
   }
 
   grouped.forEach((group) => {
@@ -1967,29 +2288,41 @@ function buildObstacleLocalCompaction(
 
     const baseCoordinate = getObstacleLocalBaseCoordinate(box, side);
     const direction = getOutwardDirectionForSide(side);
-    const occupied: Array<{ entry: ScenarioFlowGutterOccupancy; coordinate: number }> = [];
-    const sorted = [...group].sort((left, right) => {
-      const leftDistance = Math.abs(left.nominalCoordinate - baseCoordinate);
-      const rightDistance = Math.abs(right.nominalCoordinate - baseCoordinate);
-      const leftPlan = planById.get(left.connectorId);
-      const rightPlan = planById.get(right.connectorId);
-      if (Math.abs(leftDistance - rightDistance) > EPSILON) {
-        return leftDistance - rightDistance;
+    const groupClaimByKey = new Map<string, ScenarioFlowObstacleLocalGroupClaim>();
+    for (const entry of group) {
+      const claim = claimByKey.get(buildObstacleLocalClaimKey(entry));
+      if (!claim) {
+        continue;
       }
-      if (leftPlan && rightPlan) {
-        return compareConnectorPlans(leftPlan, rightPlan)
-          || (left.ownershipRank ?? 99) - (right.ownershipRank ?? 99)
-          || left.routeSegmentIndex - right.routeSegmentIndex;
-      }
-      return left.connectorId.localeCompare(right.connectorId)
-        || (left.ownershipRank ?? 99) - (right.ownershipRank ?? 99)
-        || left.routeSegmentIndex - right.routeSegmentIndex;
-    });
+      const groupClaim = groupClaimByKey.get(claim.key) ?? {
+        claim,
+        entries: [],
+        spanStart: 0,
+        spanEnd: 0
+      };
+      groupClaim.entries.push(entry);
+      const span = getObstacleLocalClaimSpan(groupClaim.entries);
+      groupClaim.spanStart = span.spanStart;
+      groupClaim.spanEnd = span.spanEnd;
+      groupClaimByKey.set(claim.key, groupClaim);
+    }
 
-    for (const entry of sorted) {
-      let coordinate = baseCoordinate;
+    const occupied: Array<{
+      claim: ScenarioFlowObstacleLocalGroupClaim;
+      coordinate: number;
+    }> = [];
+    const sorted = [...groupClaimByKey.values()]
+      .sort((left, right) => compareObstacleLocalGroupClaims(left, right, planById, baseCoordinate));
+
+    for (const groupClaim of sorted) {
+      let coordinate = resolveObstacleLocalClaimBaseCoordinate(groupClaim.claim, boxById, baseCoordinate);
       for (const occupiedEntry of occupied) {
-        if (!spansTouchOrOverlap(entry.spanStart, entry.spanEnd, occupiedEntry.entry.spanStart, occupiedEntry.entry.spanEnd)) {
+        if (!spansTouchOrOverlap(
+          groupClaim.spanStart,
+          groupClaim.spanEnd,
+          occupiedEntry.claim.spanStart,
+          occupiedEntry.claim.spanEnd
+        )) {
           continue;
         }
         if (direction > 0) {
@@ -1999,9 +2332,34 @@ function buildObstacleLocalCompaction(
         }
       }
       coordinate = roundMetric(coordinate);
-      const segmentKey = buildSegmentCoordinateKey(entry.connectorId, entry.routeSegmentIndex);
-      segmentCoordinateBySegmentKey.set(segmentKey, coordinate);
-      lockedSegmentKeys.add(segmentKey);
+      const existing = coordinateByClaimKey.get(groupClaim.claim.key);
+      const resolvedCoordinate = existing === undefined
+        ? coordinate
+        : direction > 0
+          ? Math.max(existing, coordinate)
+          : Math.min(existing, coordinate);
+      coordinateByClaimKey.set(groupClaim.claim.key, roundMetric(resolvedCoordinate));
+      occupied.push({ claim: groupClaim, coordinate: roundMetric(resolvedCoordinate) });
+      occupied.sort((left, right) => left.coordinate - right.coordinate);
+    }
+  });
+
+  for (const claim of claimByKey.values()) {
+    const coordinate = coordinateByClaimKey.get(claim.key);
+    if (coordinate === undefined) {
+      continue;
+    }
+    segmentCoordinateBySegmentKey.set(claim.segmentKey, coordinate);
+    lockedSegmentKeys.add(claim.segmentKey);
+    for (const entry of claim.entries) {
+      if (!entry.nodeId) {
+        continue;
+      }
+      const side = getObstacleSideFromKind(entry.kind);
+      const box = boxById.get(entry.nodeId);
+      if (!side || !box) {
+        continue;
+      }
       collectObstacleCompactionOverflow(
         entry,
         coordinate,
@@ -2011,10 +2369,8 @@ function buildObstacleLocalCompaction(
         requiredColumnExpansions,
         requiredLaneExpansions
       );
-      occupied.push({ entry, coordinate });
-      occupied.sort((left, right) => left.coordinate - right.coordinate);
     }
-  });
+  }
 
   return {
     segmentCoordinateBySegmentKey,

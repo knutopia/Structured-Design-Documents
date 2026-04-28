@@ -64,12 +64,14 @@ function routeSegments(edge: PositionedEdge): Array<{
   end: { x: number; y: number };
   orientation: "horizontal" | "vertical";
   length: number;
+  segmentIndex: number;
 }> {
   const segments: Array<{
     start: { x: number; y: number };
     end: { x: number; y: number };
     orientation: "horizontal" | "vertical";
     length: number;
+    segmentIndex: number;
   }> = [];
 
   for (let index = 1; index < edge.route.points.length; index += 1) {
@@ -80,14 +82,16 @@ function routeSegments(edge: PositionedEdge): Array<{
         start,
         end,
         orientation: "vertical",
-        length: Math.abs(end.y - start.y)
+        length: Math.abs(end.y - start.y),
+        segmentIndex: index - 1
       });
     } else if (Math.abs(start.y - end.y) <= 0.5) {
       segments.push({
         start,
         end,
         orientation: "horizontal",
-        length: Math.abs(end.x - start.x)
+        length: Math.abs(end.x - start.x),
+        segmentIndex: index - 1
       });
     }
   }
@@ -118,6 +122,40 @@ function maxVerticalSegmentX(edge: PositionedEdge): number {
     .filter((segment) => segment.orientation === "vertical")
     .map((segment) => segment.start.x);
   return Math.max(...xCoordinates);
+}
+
+function getSingleBypassSegment(edge: PositionedEdge): ReturnType<typeof routeSegments>[number] {
+  const trackX = edge.route.points[0]?.x;
+  const bypassSegments = routeSegments(edge)
+    .filter((segment) =>
+      segment.orientation === "vertical"
+      && trackX !== undefined
+      && Math.abs(segment.start.x - trackX) > 0.5
+    );
+  expect(bypassSegments.length).toBe(1);
+  return bypassSegments[0]!;
+}
+
+function expectSingleBypassSpanningNodes(
+  edge: PositionedEdge,
+  boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
+  blockerIds: readonly string[]
+): number {
+  const bypass = getSingleBypassSegment(edge);
+  const bypassTop = Math.min(bypass.start.y, bypass.end.y);
+  const bypassBottom = Math.max(bypass.start.y, bypass.end.y);
+
+  for (const blockerId of blockerIds) {
+    const blocker = boxesById.get(blockerId);
+    if (!blocker) {
+      throw new Error(`Could not find blocker "${blockerId}".`);
+    }
+    expect(bypass.start.x).toBeGreaterThan(blocker.x + blocker.width);
+    expect(bypassTop).toBeLessThanOrEqual(blocker.y + 0.5);
+    expect(bypassBottom).toBeGreaterThanOrEqual(blocker.y + blocker.height - 0.5);
+  }
+
+  return bypass.start.x;
 }
 
 describe("scenario_flow staged routing", () => {
@@ -222,6 +260,51 @@ describe("scenario_flow staged routing", () => {
       .toBeLessThanOrEqual(rendered.routingStages.step3PositionedScene.root.height + 160);
   });
 
+  it("groups consecutive same-column realization blockers into ordered wide swerves", async () => {
+    const context = await resolveScenarioFlowContext("scenario_branching.sdd");
+    const rendered = await renderScenarioFlowStagedSvg(
+      context.projection,
+      context.graph,
+      context.view,
+      "strict"
+    );
+    const boxesById = new Map(collectVisibleItemBoxes(rendered.positionedScene.root)
+      .map((box) => [box.itemId, box] as const));
+
+    const localA = getEdgeById(rendered.positionedScene.edges, "J-032__realized_by__P-032");
+    const wideB = getEdgeById(rendered.positionedScene.edges, "J-032__realized_by__VS-032a");
+    const wideC = getEdgeById(rendered.positionedScene.edges, "J-031__realized_by__VS-031a");
+    const localAX = expectSingleBypassSpanningNodes(localA, boxesById, ["P-031"]);
+    const wideBX = expectSingleBypassSpanningNodes(wideB, boxesById, ["P-031", "P-032", "VS-031a"]);
+    const wideCX = expectSingleBypassSpanningNodes(wideC, boxesById, ["J-032", "P-031", "P-032"]);
+    expect(localAX).toBeLessThan(wideBX);
+    expect(wideBX).toBeLessThan(wideCX);
+
+    const localD = getEdgeById(rendered.positionedScene.edges, "J-035__realized_by__P-035");
+    const wideE = getEdgeById(rendered.positionedScene.edges, "J-035__realized_by__VS-035a");
+    const wideF = getEdgeById(rendered.positionedScene.edges, "J-034__realized_by__VS-034a");
+    const localDX = expectSingleBypassSpanningNodes(localD, boxesById, ["P-034"]);
+    const wideEX = expectSingleBypassSpanningNodes(wideE, boxesById, ["P-034", "P-035", "VS-034a"]);
+    const wideFX = expectSingleBypassSpanningNodes(wideF, boxesById, ["J-035", "P-034", "P-035"]);
+    expect(localDX).toBeLessThan(wideEX);
+    expect(wideEX).toBeLessThan(wideFX);
+
+    const wideBSegmentIndex = getSingleBypassSegment(wideB).segmentIndex;
+    const wideBOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
+      entry.connectorId === "J-032__realized_by__VS-032a"
+      && entry.routeSegmentIndex === wideBSegmentIndex
+    );
+    expect(wideBOccupancy.some((entry) => entry.kind === "column")).toBe(false);
+    expect(new Set(wideBOccupancy
+      .filter((entry) => entry.kind === "obstacle_east")
+      .map((entry) => entry.swerveGroupId)).size).toBe(1);
+    expect(wideBOccupancy.filter((entry) => entry.kind === "obstacle_east")).toEqual(expect.arrayContaining([
+      expect.objectContaining({ key: "obstacle:P-031:east", swerveBlockerCount: 3 }),
+      expect.objectContaining({ key: "obstacle:P-032:east", swerveBlockerCount: 3 }),
+      expect.objectContaining({ key: "obstacle:VS-031a:east", swerveBlockerCount: 3 })
+    ]));
+  });
+
   it("routes mirror connectors at lower priority than Step flow without crossing proof-case nodes", async () => {
     const context = await resolveScenarioFlowContext("scenario_branching.sdd");
     const rendered = await renderScenarioFlowStagedSvg(
@@ -306,6 +389,25 @@ describe("scenario_flow staged routing", () => {
       .toBeLessThanOrEqual(debug.routingStages.step3PositionedScene.root.width + 128);
     expect(debug.routingStages.finalPositionedScene.root.height)
       .toBeLessThanOrEqual(debug.routingStages.step3PositionedScene.root.height + 160);
+    const step3BoxesById = new Map(collectVisibleItemBoxes(debug.step3PositionedScene.root)
+      .map((box) => [box.itemId, box] as const));
+    const step3LocalX = expectSingleBypassSpanningNodes(
+      getEdgeById(debug.step3PositionedScene.edges, "J-032__realized_by__P-032"),
+      step3BoxesById,
+      ["P-031"]
+    );
+    const step3WideX = expectSingleBypassSpanningNodes(
+      getEdgeById(debug.step3PositionedScene.edges, "J-032__realized_by__VS-032a"),
+      step3BoxesById,
+      ["P-031", "P-032", "VS-031a"]
+    );
+    const step3EarlierWideX = expectSingleBypassSpanningNodes(
+      getEdgeById(debug.step3PositionedScene.edges, "J-031__realized_by__VS-031a"),
+      step3BoxesById,
+      ["J-032", "P-031", "P-032"]
+    );
+    expect(step3LocalX).toBeLessThan(step3WideX);
+    expect(step3WideX).toBeLessThan(step3EarlierWideX);
     expect(debug.routingStages.gutterOccupancy.some((entry) =>
       entry.key === "node:J-030:right"
       && entry.kind === "node_right"
