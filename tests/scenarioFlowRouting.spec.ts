@@ -8,7 +8,7 @@ import {
   renderScenarioFlowRoutingDebugArtifacts,
   renderScenarioFlowStagedSvg
 } from "../src/renderer/staged/scenarioFlow.js";
-import type { PositionedEdge } from "../src/renderer/staged/contracts.js";
+import type { PositionedEdge, PositionedScene } from "../src/renderer/staged/contracts.js";
 import {
   collectEdgeLabelBoxes,
   collectVisibleItemBoxes,
@@ -23,6 +23,9 @@ import {
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
+const FIXED_SEPARATION_DISTANCE = 16;
+const OBSTACLE_SWERVE_CLEARANCE = 18;
+const ROOT_RIGHT_GUTTER = 28;
 
 async function resolveScenarioFlowContext(fileName: string) {
   const bundle = await loadBundle(manifestPath);
@@ -122,6 +125,29 @@ function maxVerticalSegmentX(edge: PositionedEdge): number {
     .filter((segment) => segment.orientation === "vertical")
     .map((segment) => segment.start.x);
   return Math.max(...xCoordinates);
+}
+
+function maxRouteX(scene: PositionedScene): number {
+  return Math.max(0, ...scene.edges.flatMap((edge) => [
+    ...edge.route.points.map((point) => point.x),
+    ...(edge.label ? [edge.label.x + edge.label.width] : [])
+  ]));
+}
+
+function getLaneSeparatorEndX(scene: PositionedScene, separatorId: string): number {
+  const separator = scene.decorations.find((decoration) => decoration.kind === "line" && decoration.id === separatorId);
+  if (!separator || separator.kind !== "line") {
+    throw new Error(`Could not find lane separator "${separatorId}".`);
+  }
+  return separator.to.x;
+}
+
+function getFirstHorizontalSegment(edge: PositionedEdge): ReturnType<typeof routeSegments>[number] {
+  const segment = routeSegments(edge).find((candidate) => candidate.orientation === "horizontal");
+  if (!segment) {
+    throw new Error(`Edge "${edge.id}" does not have a horizontal segment.`);
+  }
+  return segment;
 }
 
 function getSingleBypassSegment(edge: PositionedEdge): ReturnType<typeof routeSegments>[number] {
@@ -303,6 +329,15 @@ describe("scenario_flow staged routing", () => {
       expect.objectContaining({ key: "obstacle:P-032:east", swerveBlockerCount: 3 }),
       expect.objectContaining({ key: "obstacle:VS-031a:east", swerveBlockerCount: 3 })
     ]));
+
+    const j032 = boxesById.get("J-032");
+    const j035 = boxesById.get("J-035");
+    if (!j032 || !j035) {
+      throw new Error("Could not resolve proof-case step blockers.");
+    }
+    expect(j032.y - getFirstHorizontalSegment(wideC).start.y).toBeGreaterThanOrEqual(OBSTACLE_SWERVE_CLEARANCE);
+    expect(j035.y - getFirstHorizontalSegment(getEdgeById(rendered.positionedScene.edges, "J-034__realized_by__P-034")).start.y)
+      .toBeGreaterThanOrEqual(OBSTACLE_SWERVE_CLEARANCE);
   });
 
   it("routes mirror connectors at lower priority than Step flow without crossing proof-case nodes", async () => {
@@ -322,6 +357,19 @@ describe("scenario_flow staged routing", () => {
     expect(transitionIndex).toBeGreaterThan(navigationIndex);
     expect(getEdgeById(rendered.positionedScene.edges, "P-030__navigates_to__P-031").from.portId).toBe("mirror_out");
     expect(getEdgeById(rendered.positionedScene.edges, "VS-030a__transitions_to__VS-031a").from.portId).toBe("mirror_out");
+
+    const directTransition = getEdgeById(rendered.positionedScene.edges, "VS-030a__transitions_to__VS-031a");
+    const directTransitionSegments = routeSegments(directTransition);
+    expect(directTransitionSegments.length).toBe(1);
+    expect(directTransitionSegments[0]?.orientation).toBe("horizontal");
+    const branchedTransition = getEdgeById(rendered.positionedScene.edges, "VS-030a__transitions_to__VS-032a");
+    expect(Math.abs(directTransitionSegments[0]!.start.y - routeSegments(branchedTransition)[0]!.start.y))
+      .toBeGreaterThanOrEqual(FIXED_SEPARATION_DISTANCE);
+
+    const routeRight = maxRouteX(rendered.positionedScene);
+    expect(rendered.positionedScene.root.width - routeRight).toBeGreaterThanOrEqual(ROOT_RIGHT_GUTTER);
+    expect(getLaneSeparatorEndX(rendered.positionedScene, "lane-step__separator")).toBeGreaterThanOrEqual(routeRight);
+    expect(getLaneSeparatorEndX(rendered.positionedScene, "lane-place__separator")).toBeGreaterThanOrEqual(routeRight);
 
     const boxes = collectVisibleItemBoxes(rendered.positionedScene.root)
       .filter((box) => box.itemId !== "root");

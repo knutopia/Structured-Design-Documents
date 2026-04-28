@@ -278,9 +278,18 @@ function translatePositionedItem(item: PositionedItem, dx: number, dy: number): 
   }
 }
 
-function updateRootSize(root: PositionedContainer): void {
-  const maxRight = Math.max(0, ...root.children.map((child) => child.x + child.width));
-  const maxBottom = Math.max(0, ...root.children.map((child) => child.y + child.height));
+function updateRootSize(
+  root: PositionedContainer,
+  extraExtents: { maxRight?: number; maxBottom?: number } = {}
+): void {
+  const maxRight = Math.max(
+    extraExtents.maxRight ?? 0,
+    ...root.children.map((child) => child.x + child.width)
+  );
+  const maxBottom = Math.max(
+    extraExtents.maxBottom ?? 0,
+    ...root.children.map((child) => child.y + child.height)
+  );
   root.width = roundMetric(maxRight + Math.max(root.chrome.padding.right, ROOT_PADDING_FALLBACK));
   root.height = roundMetric(maxBottom + Math.max(root.chrome.padding.bottom, ROOT_PADDING_FALLBACK));
 }
@@ -807,6 +816,14 @@ function getEndpointOffset(
   return endpointOffsetsByNodeId.get(nodeId)?.get(side)?.get(connectorId) ?? 0;
 }
 
+function countEndpointOffsets(
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>,
+  nodeId: string,
+  side: PortSide
+): number {
+  return endpointOffsetsByNodeId.get(nodeId)?.get(side)?.size ?? 0;
+}
+
 function buildSegmentCoordinateKey(connectorId: string, routeSegmentIndex: number): string {
   return `${connectorId}::segment:${routeSegmentIndex}`;
 }
@@ -860,6 +877,51 @@ function clampEndpointSegmentCoordinate(
   return roundMetric(clampMetric(value, min, max));
 }
 
+function resolveAdjacentHorizontalSharedY(
+  plan: ScenarioFlowConnectorPlan,
+  source: IndexedScenarioFlowNode,
+  target: IndexedScenarioFlowNode,
+  sourcePoint: Point,
+  targetPoint: Point,
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>,
+  index: ScenarioFlowPositionedIndex
+): number | undefined {
+  if (
+    plan.channel === "realization"
+    || plan.sourceSide !== "east"
+    || plan.targetSide !== "west"
+    || !source.cell
+    || !target.cell
+    || source.cell.rowOrder !== target.cell.rowOrder
+    || source.cell.columnOrder >= target.cell.columnOrder
+  ) {
+    return undefined;
+  }
+
+  const overlapTop = roundMetric(Math.max(source.node.y, target.node.y));
+  const overlapBottom = roundMetric(Math.min(source.node.y + source.node.height, target.node.y + target.node.height));
+  if (overlapBottom - overlapTop <= EPSILON) {
+    return undefined;
+  }
+
+  const sourceSideCount = countEndpointOffsets(endpointOffsetsByNodeId, plan.from, plan.sourceSide);
+  const targetSideCount = countEndpointOffsets(endpointOffsetsByNodeId, plan.to, plan.targetSide);
+  const preferredY = sourceSideCount > 1 && targetSideCount <= 1 ? sourcePoint.y : targetPoint.y;
+  const sharedY = roundMetric(clampMetric(preferredY, overlapTop, overlapBottom));
+  const preferredWasClamped = Math.abs(sharedY - preferredY) > EPSILON;
+  if (preferredWasClamped && (sourceSideCount > 1 || targetSideCount > 1)) {
+    return undefined;
+  }
+
+  const directStart = { x: source.node.x + source.node.width, y: sharedY };
+  const directEnd = { x: target.node.x, y: sharedY };
+  if (findIntersectingBoxesAlongSegment(directStart, directEnd, getNonEndpointBoxes(plan, index)).length > 0) {
+    return undefined;
+  }
+
+  return sharedY;
+}
+
 function buildTemplateRoute(
   plan: ScenarioFlowConnectorPlan,
   index: ScenarioFlowPositionedIndex,
@@ -885,6 +947,22 @@ function buildTemplateRoute(
   const sourceStub = moveOutward(sourcePoint, plan.sourceSide, FIXED_SEPARATION_DISTANCE);
   const targetStub = moveOutward(targetPoint, plan.targetSide, FIXED_SEPARATION_DISTANCE);
   const points: Point[] = [sourcePoint, sourceStub];
+
+  const adjacentHorizontalY = resolveAdjacentHorizontalSharedY(
+    plan,
+    source,
+    target,
+    sourcePoint,
+    targetPoint,
+    endpointOffsetsByNodeId,
+    index
+  );
+  if (adjacentHorizontalY !== undefined) {
+    return buildRoute([
+      { x: sourcePoint.x, y: adjacentHorizontalY },
+      { x: targetPoint.x, y: adjacentHorizontalY }
+    ], "orthogonal");
+  }
 
   if (plan.pattern === "realization_vertical") {
     const trackOffset = source.cell ? source.cell.rowOrder * FIXED_SEPARATION_DISTANCE * 2 : 0;
@@ -2028,28 +2106,46 @@ function collectObstacleCompactionOverflow(
     );
 
     if (side === "north") {
+      const obstacleClearanceCoordinate = roundMetric(box.y - OBSTACLE_SWERVE_CLEARANCE);
+      if (coordinate > obstacleClearanceCoordinate + EPSILON) {
+        recordRequiredExpansion(
+          requiredLaneExpansions,
+          resolvePreviousRowOrder(index, box.y),
+          coordinate - obstacleClearanceCoordinate
+        );
+      }
+
       const minAllowed = Math.max(
         -Infinity,
         ...overlappingBoxes
           .filter((candidate) => candidate.y + candidate.height <= box.y + EPSILON)
           .map((candidate) => candidate.y + candidate.height)
       );
-      if (Number.isFinite(minAllowed) && coordinate < minAllowed - EPSILON) {
+      if (Number.isFinite(minAllowed) && coordinate < minAllowed + OBSTACLE_SWERVE_CLEARANCE - EPSILON) {
         recordRequiredExpansion(
           requiredLaneExpansions,
           resolvePreviousRowOrder(index, box.y),
-          minAllowed - coordinate
+          minAllowed + OBSTACLE_SWERVE_CLEARANCE - coordinate
         );
       }
     } else if (side === "south") {
+      const obstacleClearanceCoordinate = roundMetric(box.y + box.height + OBSTACLE_SWERVE_CLEARANCE);
+      if (coordinate < obstacleClearanceCoordinate - EPSILON) {
+        recordRequiredExpansion(requiredLaneExpansions, cell?.rowOrder, obstacleClearanceCoordinate - coordinate);
+      }
+
       const maxAllowed = Math.min(
         Infinity,
         ...overlappingBoxes
           .filter((candidate) => candidate.y >= box.y + box.height - EPSILON)
           .map((candidate) => candidate.y)
       );
-      if (Number.isFinite(maxAllowed) && coordinate > maxAllowed + EPSILON) {
-        recordRequiredExpansion(requiredLaneExpansions, cell?.rowOrder, coordinate - maxAllowed);
+      if (Number.isFinite(maxAllowed) && coordinate > maxAllowed - OBSTACLE_SWERVE_CLEARANCE + EPSILON) {
+        recordRequiredExpansion(
+          requiredLaneExpansions,
+          cell?.rowOrder,
+          coordinate - (maxAllowed - OBSTACLE_SWERVE_CLEARANCE)
+        );
       }
     }
   }
@@ -2425,6 +2521,12 @@ function applyObstacleLocalCompaction(
 
 function isBundleLocalOccupancy(entry: ScenarioFlowGutterOccupancy): boolean {
   return entry.kind === "node_bottom" && entry.axis === "horizontal" && entry.endpointRole === undefined;
+}
+
+function buildLockedObstacleSegmentKeySet(occupancy: readonly ScenarioFlowGutterOccupancy[]): Set<string> {
+  return new Set(occupancy
+    .filter((entry) => entry.locked && isObstacleLocalKind(entry.kind))
+    .map((entry) => buildSegmentCoordinateKey(entry.connectorId, entry.routeSegmentIndex)));
 }
 
 function resolveObstacleBoundaryClampCoordinates(
@@ -2850,9 +2952,13 @@ function buildPreparedRoutes(
     index,
     obstacleOccupancyByConnectorId
   );
+  const lockedObstacleSegmentKeys = buildLockedObstacleSegmentKeySet(occupancyResult.occupancy);
   const bundleLocalCoordinates = resolveOccupancyCoordinates(
     plans,
-    occupancyResult.occupancy.filter(isBundleLocalOccupancy)
+    occupancyResult.occupancy.filter((entry) =>
+      isBundleLocalOccupancy(entry)
+      && !lockedObstacleSegmentKeys.has(buildSegmentCoordinateKey(entry.connectorId, entry.routeSegmentIndex))
+    )
   );
   if (bundleLocalCoordinates.size > 0) {
     for (const plan of plans) {
@@ -2943,9 +3049,13 @@ function buildStep3Routes(
     index,
     obstacleOccupancyByConnectorId
   );
+  const lockedObstacleSegmentKeys = buildLockedObstacleSegmentKeySet(occupancyResult.occupancy);
   const bundleLocalCoordinates = resolveOccupancyCoordinates(
     plans,
-    occupancyResult.occupancy.filter(isBundleLocalOccupancy)
+    occupancyResult.occupancy.filter((entry) =>
+      isBundleLocalOccupancy(entry)
+      && !lockedObstacleSegmentKeys.has(buildSegmentCoordinateKey(entry.connectorId, entry.routeSegmentIndex))
+    )
   );
   if (bundleLocalCoordinates.size > 0) {
     for (const plan of plans) {
@@ -3124,13 +3234,51 @@ function buildPositionedEdges(
   });
 }
 
+function collectPositionedEdgeExtents(edges: readonly PositionedEdge[]): {
+  maxRight: number;
+  maxBottom: number;
+} {
+  let maxRight = 0;
+  let maxBottom = 0;
+
+  for (const edge of edges) {
+    for (const point of edge.route.points) {
+      maxRight = Math.max(maxRight, point.x);
+      maxBottom = Math.max(maxBottom, point.y);
+    }
+    if (edge.label) {
+      maxRight = Math.max(maxRight, edge.label.x + edge.label.width);
+      maxBottom = Math.max(maxBottom, edge.label.y + edge.label.height);
+    }
+  }
+
+  return {
+    maxRight: roundMetric(maxRight),
+    maxBottom: roundMetric(maxBottom)
+  };
+}
+
 function withEdgesAndDiagnostics(
   scene: PositionedScene,
   edges: PositionedEdge[],
-  diagnostics: RendererDiagnostic[]
+  diagnostics: RendererDiagnostic[],
+  middleLayer?: Pick<ScenarioFlowMiddleLayerModel, "laneGuides">
 ): PositionedScene {
+  const withEdges = clonePositionedScene(scene);
+  updateRootSize(withEdges.root, collectPositionedEdgeExtents(edges));
+  const decorated = middleLayer
+    ? decorateScenarioFlowPositionedScene({
+      ...withEdges,
+      edges,
+      decorations: []
+    }, middleLayer)
+    : {
+      ...withEdges,
+      edges
+    };
+
   return {
-    ...scene,
+    ...decorated,
     edges,
     diagnostics: sortRendererDiagnostics([...scene.diagnostics, ...diagnostics])
   };
@@ -3172,7 +3320,8 @@ export function buildScenarioFlowRoutingStages(
   const step2PositionedScene = withEdgesAndDiagnostics(
     positionedScene,
     buildPositionedEdges(step2Plans, (plan) => plan.step2Route),
-    diagnostics
+    diagnostics,
+    middleLayer
   );
   const step3Prepared = buildStep3Routes(
     connectorPlans,
@@ -3185,7 +3334,8 @@ export function buildScenarioFlowRoutingStages(
   const step3PositionedScene = withEdgesAndDiagnostics(
     positionedScene,
     buildPositionedEdges(step3Prepared.connectorPlans, (plan) => plan.step3Route),
-    diagnostics
+    diagnostics,
+    middleLayer
   );
 
   let workingScene = positionedScene;
@@ -3293,7 +3443,8 @@ export function buildScenarioFlowRoutingStages(
   const finalPositionedScene = withEdgesAndDiagnostics(
     workingScene,
     buildPositionedEdges(finalPrepared.connectorPlans, (plan) => plan.finalRoute, labelsByPlanId),
-    finalDiagnostics
+    finalDiagnostics,
+    middleLayer
   );
   const finalBucketsByNodeId = buildNodeEdgeBuckets(finalPrepared.connectorPlans, workingIndex);
 

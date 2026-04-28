@@ -252,7 +252,7 @@
       <path class="scene-edge__path" d="M 846 262 L 914 262 L 914 338 L 946 338" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-030a__transitions_to__vs-031a" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-030a__transitions_to__VS-031a" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 310 430 L 378 430 L 378 438 L 410 438" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 310 430 L 410 430" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-030a__transitions_to__vs-032a" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-030a__transitions_to__VS-032a" data-role="transitions_to">
       <path class="scene-edge__path" d="M 310 446 L 378 446 L 378 546 L 410 546" marker-end="url(#scene-marker-arrow-end)"/>
