@@ -1,4 +1,4 @@
-# Scenario Flow Staged Renderer Design
+# [Done] Scenario Flow Staged Renderer Design
 
 Status: active design reference for future implementation
 
@@ -386,6 +386,8 @@ Scenario-specific gutter behavior:
 - Place and ViewState mirror edges may be displaced farther from the node centerline
 - realization edges should use vertical corridors between lanes and should not obscure lane labels
 - cross-track branch bridges should prefer shared band gutters over arbitrary detours
+
+Implemented parity note: scenario-flow routing reaches service-blueprint sophistication parity only when final routes are produced through exterior endpoint offsets, keyed node/edge/lane/column/obstacle occupancy, deterministic occupancy displacement, and iterative global row/column gutter expansion. Snapshot updates are valid only after those mechanics prove that endpoint interiors are not crossed and overlapping same-orientation segments are separated by at least `16px`.
 
 ### 9.4 Labels
 

@@ -16,6 +16,9 @@ import {
   expectLabelsDoNotOverlapEachOther,
   expectNoForbiddenDiagnostics,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
+  expectRoutesDoNotEnterEndpointBoxes,
+  expectSameOrientationSegmentsSeparated,
+  findPositionedItem,
   getEdgeById
 } from "./stagedVisualHarness.js";
 
@@ -114,6 +117,8 @@ describe("scenario_flow staged routing", () => {
     const boxes = collectVisibleItemBoxes(rendered.positionedScene.root)
       .filter((box) => box.itemId !== "root");
     expectNoRouteIntersectionsWithNonEndpointBoxes(rendered.positionedScene.edges, boxes);
+    expectRoutesDoNotEnterEndpointBoxes(rendered.positionedScene.edges, boxes);
+    expectSameOrientationSegmentsSeparated(rendered.positionedScene.edges);
   });
 
   it("places branch labels for strict and permissive profiles and hides them for simple", async () => {
@@ -164,8 +169,22 @@ describe("scenario_flow staged routing", () => {
     expect(debug.step2PositionedScene.edges.length).toBeGreaterThan(0);
     expect(debug.step3PositionedScene.edges.length).toBeGreaterThan(0);
     expect(debug.routingStages.gutterOccupancy.length).toBeGreaterThan(0);
-    expect(debug.routingStages.nodeEdgeBuckets.some((bucket) =>
-      bucket.nodeId === "J-030" && bucket.side === "east" && bucket.startingConnectorIds.length > 0
+    const j030Buckets = debug.routingStages.nodeEdgeBuckets.find((bucket) => bucket.nodeId === "J-030");
+    expect(j030Buckets?.east.startingConnectorIds.length).toBeGreaterThan(0);
+    expect(debug.routingStages.nodeGutters.some((gutter) =>
+      gutter.nodeId === "J-030" && gutter.rightAvailable > 0 && gutter.bottomAvailable > 0
+    )).toBe(true);
+    expect(Object.values(debug.routingStages.globalGutterState.columnExpansions).some((value) => value > 0)).toBe(true);
+    expect(Object.values(debug.routingStages.globalGutterState.laneExpansions).some((value) => value > 0)).toBe(true);
+    expect(findPositionedItem(debug.routingStages.finalPositionedScene.root, "J-031").x)
+      .toBeGreaterThan(findPositionedItem(debug.preRoutingPositionedScene.root, "J-031").x);
+    expect(findPositionedItem(debug.routingStages.finalPositionedScene.root, "P-030").y)
+      .toBeGreaterThan(findPositionedItem(debug.preRoutingPositionedScene.root, "P-030").y);
+    expect(debug.routingStages.gutterOccupancy.some((entry) =>
+      entry.key === "node:J-030:right"
+      && entry.kind === "node_right"
+      && entry.columnOrder !== undefined
+      && entry.routeSegmentIndex !== undefined
     )).toBe(true);
     expect(debug.step2Svg).toContain("scenario_flow_semantic_edge");
     expect(debug.step3Svg).toContain("scenario_flow_semantic_edge");

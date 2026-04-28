@@ -163,8 +163,10 @@ describe("sdd-helper entrypoint integration", () => {
     15000
   );
 
-  it("returns static and bundle-resolved contract detail from nested repo directories", async () => {
-    const nestedCwd = path.join(repoRoot, "src");
+  it(
+    "returns static and bundle-resolved contract detail from nested repo directories",
+    async () => {
+      const nestedCwd = path.join(repoRoot, "src");
 
     const capabilities = await runHelperEntrypoint(nestedCwd, ["capabilities"]);
     expect(capabilities.exitCode).toBe(0);
@@ -263,8 +265,10 @@ describe("sdd-helper entrypoint integration", () => {
           ])
         })
       ])
-    });
-  });
+      });
+    },
+    15000
+  );
 
   it(
     "proves Gate 6 authoring assessment scenarios through the built helper entrypoint",

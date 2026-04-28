@@ -12,6 +12,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 5-27-26
+
+-planned, built fix for scenario_flow stages shortcomings, partial success
+
 ## Sat 4-25-26
 
 -planned scenario_flow

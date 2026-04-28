@@ -9,7 +9,9 @@ import {
   expectLabelsDoNotOverlapBoxes,
   expectNoForbiddenDiagnostics,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
+  expectRoutesDoNotEnterEndpointBoxes,
   expectRoutesDoNotCrossLabels,
+  expectSameOrientationSegmentsSeparated,
   findPositionedItem,
   getEdgeById,
   getPenultimatePoint,
@@ -167,6 +169,8 @@ describe("staged visual acceptance", () => {
       "J-033__precedes__J-035"
     ]);
     expectNoRouteIntersectionsWithNonEndpointBoxes(semanticEdges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(semanticEdges, nodeBoxes);
+    expectSameOrientationSegmentsSeparated(semanticEdges);
     expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
     expectLabelsDoNotOverlapEachOther(labelBoxes);
   });

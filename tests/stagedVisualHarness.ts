@@ -307,6 +307,91 @@ export function expectNoRouteIntersectionsWithNonEndpointBoxes(
   }
 }
 
+export function expectRoutesDoNotEnterEndpointBoxes(
+  edges: readonly PositionedEdge[],
+  boxes: ReadonlyArray<Rect & { itemId: string }>
+): void {
+  const boxById = new Map(boxes.map((box) => [box.itemId, box] as const));
+  for (const edge of edges) {
+    const sourceBox = boxById.get(edge.from.itemId);
+    const targetBox = boxById.get(edge.to.itemId);
+    if (sourceBox) {
+      expect(routeIntersectsRect(edge.route, sourceBox, { ignoreStart: true })).toBe(false);
+    }
+    if (targetBox) {
+      expect(routeIntersectsRect(edge.route, targetBox, { ignoreEnd: true })).toBe(false);
+    }
+  }
+}
+
+interface AxisAlignedSegment {
+  edgeId: string;
+  segmentIndex: number;
+  axis: "horizontal" | "vertical";
+  coordinate: number;
+  spanStart: number;
+  spanEnd: number;
+}
+
+function collectAxisAlignedSegments(edge: PositionedEdge): AxisAlignedSegment[] {
+  const segments: AxisAlignedSegment[] = [];
+  for (let index = 1; index < edge.route.points.length; index += 1) {
+    const start = edge.route.points[index - 1]!;
+    const end = edge.route.points[index]!;
+    if (Math.hypot(start.x - end.x, start.y - end.y) <= EPSILON) {
+      continue;
+    }
+    if (Math.abs(start.y - end.y) <= EPSILON) {
+      segments.push({
+        edgeId: edge.id,
+        segmentIndex: index - 1,
+        axis: "horizontal",
+        coordinate: start.y,
+        spanStart: Math.min(start.x, end.x),
+        spanEnd: Math.max(start.x, end.x)
+      });
+    } else if (Math.abs(start.x - end.x) <= EPSILON) {
+      segments.push({
+        edgeId: edge.id,
+        segmentIndex: index - 1,
+        axis: "vertical",
+        coordinate: start.x,
+        spanStart: Math.min(start.y, end.y),
+        spanEnd: Math.max(start.y, end.y)
+      });
+    }
+  }
+  return segments;
+}
+
+export function expectSameOrientationSegmentsSeparated(
+  edges: readonly PositionedEdge[],
+  minSeparation = 16
+): void {
+  const segments = edges.flatMap(collectAxisAlignedSegments);
+  for (let index = 0; index < segments.length; index += 1) {
+    for (let otherIndex = index + 1; otherIndex < segments.length; otherIndex += 1) {
+      const first = segments[index]!;
+      const second = segments[otherIndex]!;
+      if (first.edgeId === second.edgeId || first.axis !== second.axis) {
+        continue;
+      }
+      const overlap = Math.min(first.spanEnd, second.spanEnd) - Math.max(first.spanStart, second.spanStart);
+      if (overlap <= EPSILON) {
+        continue;
+      }
+      expect(Math.abs(first.coordinate - second.coordinate), [
+        first.edgeId,
+        `segment ${first.segmentIndex}`,
+        second.edgeId,
+        `segment ${second.segmentIndex}`,
+        first.axis,
+        `overlap ${overlap}`
+      ].join(" ")).toBeGreaterThanOrEqual(minSeparation - EPSILON);
+    }
+  }
+}
+
 export function expectLabelsDoNotOverlapHeaders(
   labels: readonly EdgeLabelBox[],
   headers: readonly HeaderBox[]

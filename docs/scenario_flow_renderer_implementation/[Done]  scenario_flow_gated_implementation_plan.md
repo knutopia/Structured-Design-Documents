@@ -1,4 +1,4 @@
-# Scenario Flow Staged Renderer Gated Implementation Plan
+# [Done] Scenario Flow Staged Renderer Gated Implementation Plan
 
 Status: active gated implementation plan for `docs/scenario_flow_renderer_implementation/scenario_flow_renderer_design.md`
 
