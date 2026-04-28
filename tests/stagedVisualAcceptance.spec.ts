@@ -33,7 +33,9 @@ const SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS = [
   "renderer.routing.scenario_flow_unresolved_port",
   "renderer.routing.unresolved_port",
   "renderer.routing.scenario_flow_node_intersection",
-  "renderer.routing.scenario_flow_label_fallback"
+  "renderer.routing.scenario_flow_label_fallback",
+  "renderer.routing.scenario_flow_edge_label_omitted",
+  "renderer.routing.scenario_flow_edge_label_fallback"
 ] as const;
 
 function getVisibleNodeBoxes(root: Awaited<ReturnType<typeof renderStagedArtifacts>>["positionedScene"]["root"]) {
@@ -173,5 +175,6 @@ describe("staged visual acceptance", () => {
     expectSameOrientationSegmentsSeparated(semanticEdges);
     expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
     expectLabelsDoNotOverlapEachOther(labelBoxes);
+    expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
   });
 });

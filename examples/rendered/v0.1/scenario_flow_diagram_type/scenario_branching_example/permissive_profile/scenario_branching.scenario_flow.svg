@@ -302,27 +302,27 @@
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-precedes scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-030__precedes__J-031" data-role="precedes">
-      <rect class="scene-edge-label__box" x="333.085" y="86" width="109.83" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="339.085" y="97" dominant-baseline="middle">
-          <tspan x="339.085" dy="0">delivery_selected</tspan>
+      <rect class="scene-edge-label__box" x="405.085" y="86" width="109.83" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="411.085" y="97" dominant-baseline="middle">
+          <tspan x="411.085" dy="0">delivery_selected</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-precedes scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-030__precedes__J-032" data-role="precedes">
-      <rect class="scene-edge-label__box" x="404" y="113" width="103.272" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="410" y="124" dominant-baseline="middle">
-          <tspan x="410" dy="0">pickup_selected</tspan>
+      <rect class="scene-edge-label__box" x="406" y="116" width="103.272" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="412" y="127" dominant-baseline="middle">
+          <tspan x="412" dy="0">pickup_selected</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-precedes scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-033__precedes__J-034" data-role="precedes">
-      <rect class="scene-edge-label__box" x="901.143" y="86" width="45.714" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="907.143" y="97" dominant-baseline="middle">
-          <tspan x="907.143" dy="0">E-032</tspan>
+      <rect class="scene-edge-label__box" x="877.143" y="86" width="45.714" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="883.143" y="97" dominant-baseline="middle">
+          <tspan x="883.143" dy="0">E-032</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-precedes scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-033__precedes__J-035" data-role="precedes">
-      <rect class="scene-edge-label__box" x="940" y="113" width="161.376" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="946" y="124" dominant-baseline="middle">
-          <tspan x="946" dy="0">Review Pickup Instructions</tspan>
+      <rect class="scene-edge-label__box" x="942" y="8" width="161.376" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="948" y="19" dominant-baseline="middle">
+          <tspan x="948" dy="0">Review Pickup Instructions</tspan>
         </text>
     </g>
   </g>

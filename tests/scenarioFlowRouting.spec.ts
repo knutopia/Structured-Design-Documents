@@ -17,8 +17,10 @@ import {
   expectNoForbiddenDiagnostics,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
   expectRoutesDoNotEnterEndpointBoxes,
+  expectRoutesDoNotCrossLabels,
   expectSameOrientationSegmentsSeparated,
-  getEdgeById
+  getEdgeById,
+  routeIntersectsRect
 } from "./stagedVisualHarness.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -141,6 +143,62 @@ function getLaneSeparatorEndX(scene: PositionedScene, separatorId: string): numb
   return separator.to.x;
 }
 
+function expectLabelsDoNotCrossLaneSeparators(scene: PositionedScene): void {
+  const labels = collectEdgeLabelBoxes(scene.edges);
+  const separators = scene.decorations.filter((decoration) =>
+    decoration.kind === "line"
+    && decoration.classes.includes("scenario_flow_lane_separator")
+    && Math.abs(decoration.from.y - decoration.to.y) <= 0.5
+  );
+
+  for (const label of labels) {
+    for (const separator of separators) {
+      if (separator.kind !== "line") {
+        continue;
+      }
+      const y = separator.from.y;
+      const spanStart = Math.min(separator.from.x, separator.to.x);
+      const spanEnd = Math.max(separator.from.x, separator.to.x);
+      const verticalOverlap = y > label.y + 0.5 && y < label.y + label.height - 0.5;
+      const horizontalOverlap = Math.min(spanEnd, label.x + label.width) - Math.max(spanStart, label.x) > 0.5;
+      expect(verticalOverlap && horizontalOverlap).toBe(false);
+    }
+  }
+}
+
+function getLabelBox(scene: PositionedScene, edgeId: string): ReturnType<typeof collectEdgeLabelBoxes>[number] {
+  const label = collectEdgeLabelBoxes(scene.edges).find((candidate) => candidate.edgeId === edgeId);
+  if (!label) {
+    throw new Error(`Could not find label for edge "${edgeId}".`);
+  }
+  return label;
+}
+
+function expectRouteDoesNotCrossLabel(scene: PositionedScene, routeEdgeId: string, labelEdgeId: string): void {
+  const edge = getEdgeById(scene.edges, routeEdgeId);
+  expect(routeIntersectsRect(edge.route, getLabelBox(scene, labelEdgeId))).toBe(false);
+}
+
+function collectLabelSnapshot(scene: PositionedScene): Array<{
+  edgeId: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  lines: string[];
+}> {
+  return scene.edges
+    .filter((edge) => edge.label)
+    .map((edge) => ({
+      edgeId: edge.id,
+      x: edge.label!.x,
+      y: edge.label!.y,
+      width: edge.label!.width,
+      height: edge.label!.height,
+      lines: [...edge.label!.lines]
+    }));
+}
+
 function getFirstHorizontalSegment(edge: PositionedEdge): ReturnType<typeof routeSegments>[number] {
   const segment = routeSegments(edge).find((candidate) => candidate.orientation === "horizontal");
   if (!segment) {
@@ -235,7 +293,9 @@ describe("scenario_flow staged routing", () => {
       "renderer.routing.scenario_flow_unresolved_port",
       "renderer.routing.unresolved_port",
       "renderer.routing.scenario_flow_node_intersection",
-      "renderer.routing.scenario_flow_label_fallback"
+      "renderer.routing.scenario_flow_label_fallback",
+      "renderer.routing.scenario_flow_edge_label_omitted",
+      "renderer.routing.scenario_flow_edge_label_fallback"
     ]);
 
     const firstPrecedes = getEdgeById(rendered.positionedScene.edges, "J-030__precedes__J-031");
@@ -456,11 +516,28 @@ describe("scenario_flow staged routing", () => {
     ]);
     expect(permissive.positionedScene.edges.filter((edge) => edge.label).length).toBe(4);
     expect(simple.positionedScene.edges.filter((edge) => edge.label)).toEqual([]);
+    expectNoForbiddenDiagnostics(strict.diagnostics, [
+      "renderer.routing.scenario_flow_edge_label_omitted",
+      "renderer.routing.scenario_flow_edge_label_fallback"
+    ]);
 
     const labels = collectEdgeLabelBoxes(strict.positionedScene.edges);
     const boxes = collectVisibleItemBoxes(strict.positionedScene.root).filter((box) => box.itemId !== "root");
     expectLabelsDoNotOverlapBoxes(labels, boxes);
     expectLabelsDoNotOverlapEachOther(labels);
+    expectRoutesDoNotCrossLabels(strict.positionedScene.edges, labels);
+    expectLabelsDoNotCrossLaneSeparators(strict.positionedScene);
+    expectRouteDoesNotCrossLabel(strict.positionedScene, "J-030__precedes__J-032", "J-030__precedes__J-031");
+    expectRouteDoesNotCrossLabel(strict.positionedScene, "J-033__precedes__J-035", "J-033__precedes__J-034");
+    expectRouteDoesNotCrossLabel(strict.positionedScene, "J-034__realized_by__P-034", "J-033__precedes__J-035");
+
+    const repeated = await renderScenarioFlowStagedSvg(
+      context.projection,
+      context.graph,
+      context.view,
+      "strict"
+    );
+    expect(collectLabelSnapshot(repeated.positionedScene)).toEqual(collectLabelSnapshot(strict.positionedScene));
   });
 
   it("returns step-2 and step-3 routing debug scenes, SVG, and PNG bytes", async () => {

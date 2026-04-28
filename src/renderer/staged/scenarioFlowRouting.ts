@@ -15,6 +15,12 @@ import type {
   RoutingStyle,
   ScenarioFlowItemMetadata
 } from "./contracts.js";
+import {
+  buildConnectorRouteSegmentsById,
+  positionConnectorLabel,
+  type BlockingBox,
+  type HorizontalLineSegment
+} from "./connectorLabelPlacement.js";
 import { createRoutingDiagnostic, sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
 import { collapseRoutePoints } from "./routing.js";
 import { decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
@@ -224,8 +230,6 @@ const FIXED_SEPARATION_DISTANCE = 16;
 const OBSTACLE_SWERVE_CLEARANCE = 18;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
 const MAX_FINAL_ROUTING_ATTEMPTS = 8;
-const LABEL_OFFSET = 10;
-const LABEL_CANDIDATE_STEP = 14;
 const ROOT_PADDING_FALLBACK = 28;
 const EPSILON = 0.5;
 
@@ -3361,56 +3365,63 @@ function buildStep3Routes(
   };
 }
 
-function boxIntersectsBox(left: ScenarioFlowBox, right: ScenarioFlowBox): boolean {
-  return left.x < right.x + right.width - EPSILON
-    && left.x + left.width > right.x + EPSILON
-    && left.y < right.y + right.height - EPSILON
-    && left.y + left.height > right.y + EPSILON;
+function collectScenarioFlowSeparatorSegments(
+  scene: PositionedScene,
+  middleLayer: Pick<ScenarioFlowMiddleLayerModel, "laneGuides">
+): HorizontalLineSegment[] {
+  return decorateScenarioFlowPositionedScene({
+    ...scene,
+    edges: [],
+    decorations: []
+  }, middleLayer).decorations
+    .flatMap((decoration) => {
+      if (decoration.kind !== "line"
+        || !decoration.classes.includes("scenario_flow_lane_separator")
+        || Math.abs(decoration.from.y - decoration.to.y) > EPSILON) {
+        return [];
+      }
+
+      return [{
+        coordinate: roundMetric(decoration.from.y),
+        spanStart: roundMetric(Math.min(decoration.from.x, decoration.to.x)),
+        spanEnd: roundMetric(Math.max(decoration.from.x, decoration.to.x))
+      }];
+    });
 }
 
-function buildLabelCandidates(
-  label: NonNullable<MeasuredEdge["label"]>,
-  route: PositionedRoute
-): PositionedEdgeLabel[] {
-  const candidates: PositionedEdgeLabel[] = [];
-  for (let index = 1; index < route.points.length; index += 1) {
-    const start = route.points[index - 1]!;
-    const end = route.points[index]!;
-    const length = Math.hypot(end.x - start.x, end.y - start.y);
-    if (length < 8) {
-      continue;
-    }
-    const mid = {
-      x: roundMetric((start.x + end.x) / 2),
-      y: roundMetric((start.y + end.y) / 2)
-    };
-    const horizontal = Math.abs(start.y - end.y) <= EPSILON;
-    const offsets = [LABEL_OFFSET, LABEL_OFFSET + LABEL_CANDIDATE_STEP, -(LABEL_OFFSET + label.height), -(LABEL_OFFSET + LABEL_CANDIDATE_STEP + label.height)];
-    for (const offset of offsets) {
-      candidates.push({
-        lines: [...label.lines],
-        width: label.width,
-        height: label.height,
-        lineHeight: label.lineHeight,
-        textStyleRole: label.textStyleRole,
-        x: horizontal ? roundMetric(mid.x - label.width / 2) : roundMetric(mid.x + offset),
-        y: horizontal ? roundMetric(mid.y + offset) : roundMetric(mid.y - label.height / 2)
-      });
-    }
-  }
-  return candidates;
+function buildRouteAwareLabelPlacementScene(
+  plans: readonly ScenarioFlowConnectorPlan[],
+  scene: PositionedScene,
+  middleLayer: Pick<ScenarioFlowMiddleLayerModel, "laneGuides">
+): PositionedScene {
+  const routeAwareScene = clonePositionedScene(scene);
+  const unlabeledEdges = buildPositionedEdges(plans, (plan) => plan.finalRoute);
+  updateRootSize(routeAwareScene.root, collectPositionedEdgeExtents(unlabeledEdges));
+  return decorateScenarioFlowPositionedScene({
+    ...routeAwareScene,
+    edges: [],
+    decorations: []
+  }, middleLayer);
 }
 
 function placeLabels(
   plans: readonly ScenarioFlowConnectorPlan[],
   scene: PositionedScene,
+  middleLayer: Pick<ScenarioFlowMiddleLayerModel, "laneGuides">,
   diagnostics: RendererDiagnostic[]
 ): Map<string, PositionedEdgeLabel> {
   const labelsByPlanId = new Map<string, PositionedEdgeLabel>();
-  const placedBoxes: ScenarioFlowBox[] = [];
+  const placedBoxes: BlockingBox[] = [];
+  const placementScene = buildRouteAwareLabelPlacementScene(plans, scene, middleLayer);
+  const connectorSegmentsById = buildConnectorRouteSegmentsById(
+    plans,
+    (plan) => plan.id,
+    (plan) => plan.finalRoute
+  );
+  const separatorSegments = collectScenarioFlowSeparatorSegments(placementScene, middleLayer);
   const forbiddenBoxes = flattenItems(scene.root)
     .filter(isPositionedNode)
-    .map((node) => ({
+    .map((node): BlockingBox => ({
       itemId: node.id,
       x: node.x,
       y: node.y,
@@ -3422,24 +3433,31 @@ function placeLabels(
     if (!plan.label) {
       continue;
     }
-    const candidates = buildLabelCandidates(plan.label, plan.finalRoute);
-    const selected = candidates.find((candidate) => {
-      const box = {
-        itemId: plan.id,
-        x: candidate.x,
-        y: candidate.y,
-        width: candidate.width,
-        height: candidate.height
-      };
-      return ![...forbiddenBoxes, ...placedBoxes].some((blocked) => boxIntersectsBox(box, blocked));
+    const selected = positionConnectorLabel({
+      connectorId: plan.id,
+      measuredLabel: plan.label,
+      route: plan.finalRoute,
+      connectorSegmentsById,
+      blockedBoxes: [...forbiddenBoxes, ...placedBoxes],
+      separatorSegments,
+      scene: placementScene,
+      diagnostics,
+      connectorBlockMode: "all_segments",
+      separatorBlockMode: "box",
+      horizontalPlacementMode: "scenario_side_offsets",
+      diagnosticsPolicy: {
+        omittedCode: "renderer.routing.scenario_flow_edge_label_omitted",
+        fallbackCode: "renderer.routing.scenario_flow_edge_label_fallback",
+        severity: "info",
+        noAnchorMessage: (connectorId) =>
+          `Scenario-flow label placement for "${connectorId}" could not resolve a route anchor. Omitting the label.`,
+        noCandidateMessage: (connectorId) =>
+          `Scenario-flow label placement for "${connectorId}" could not produce a label candidate. Omitting the label.`,
+        fallbackMessage: (connectorId) =>
+          `Scenario-flow label placement for "${connectorId}" could not find a fully unobstructed label position. Keeping the nearest rule-conformant placement.`
+      }
     });
     if (!selected) {
-      diagnostics.push(createRoutingDiagnostic(
-        "renderer.routing.scenario_flow_label_fallback",
-        `Could not place branch label for scenario-flow edge "${plan.id}" without an overlap. Omitting the label.`,
-        plan.id,
-        "warn"
-      ));
       continue;
     }
     labelsByPlanId.set(plan.id, selected);
@@ -3691,7 +3709,7 @@ export function buildScenarioFlowRoutingStages(
 
   const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
   emitFinalIntersectionDiagnostics(finalPrepared.connectorPlans, workingIndex.nodeBoxes, finalDiagnostics);
-  const labelsByPlanId = placeLabels(finalPrepared.connectorPlans, workingScene, finalDiagnostics);
+  const labelsByPlanId = placeLabels(finalPrepared.connectorPlans, workingScene, middleLayer, finalDiagnostics);
   const finalPositionedScene = withEdgesAndDiagnostics(
     workingScene,
     buildPositionedEdges(finalPrepared.connectorPlans, (plan) => plan.finalRoute, labelsByPlanId),
