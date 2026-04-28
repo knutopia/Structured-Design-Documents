@@ -147,14 +147,14 @@ describe("scenario_flow middle layer", () => {
         bandId: "band:2",
         label: "T0",
         originatingDecisionNodeId: "J-030",
-        branchLabel: "delivery_selected",
+        branchLabel: "delivery selected",
         branchLabelSource: "guard"
       },
       {
         bandId: "band:2",
         label: "T1",
         originatingDecisionNodeId: "J-030",
-        branchLabel: "pickup_selected",
+        branchLabel: "pickup selected",
         branchLabelSource: "guard"
       },
       {
@@ -168,14 +168,14 @@ describe("scenario_flow middle layer", () => {
         bandId: "band:4",
         label: "T0",
         originatingDecisionNodeId: "J-033",
-        branchLabel: "E-032",
+        branchLabel: "e-032",
         branchLabelSource: "event"
       },
       {
         bandId: "band:4",
         label: "T1",
         originatingDecisionNodeId: "J-033",
-        branchLabel: "Review Pickup Instructions",
+        branchLabel: "review pickup instructions",
         branchLabelSource: "to_name"
       }
     ]);
@@ -193,7 +193,7 @@ describe("scenario_flow middle layer", () => {
     expect(middle.edges.find((edge) => edge.id === "J-030__precedes__J-031")).toEqual(expect.objectContaining({
       channel: "step_flow",
       type: "PRECEDES",
-      branchLabel: "delivery_selected",
+      branchLabel: "delivery selected",
       branchLabelSource: "guard"
     }));
     expect(middle.edges.find((edge) => edge.id === "P-030__navigates_to__P-031")).toEqual(expect.objectContaining({

@@ -95,6 +95,11 @@ function edgeAnnotationKey(from: string, to: string): string {
   return `${from}->${to}`;
 }
 
+function normalizeBranchLabelDisplay(label: string | undefined): string | undefined {
+  const normalized = label?.trim().toLowerCase().replace(/_/g, " ");
+  return normalized ? normalized : undefined;
+}
+
 function nodeDisplay(type: string, shapeOverride?: string): Pick<ScenarioFlowRenderNode, "shape" | "style"> {
   if (shapeOverride) {
     return {
@@ -211,7 +216,7 @@ export function buildScenarioFlowRenderModel(
 
   const edges = projection.edges.map<ScenarioFlowRenderEdge>((edge) => {
     const branchAnnotation = edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to));
-    const branchLabel = branchAnnotation?.display_label;
+    const branchLabel = normalizeBranchLabelDisplay(branchAnnotation?.display_label);
     return {
       id: `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`,
       from: edge.from,

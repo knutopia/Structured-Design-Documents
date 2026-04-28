@@ -1046,21 +1046,21 @@ function buildScenarioHorizontalLabelSearchCandidates(
   }
 
   const yCandidates: Array<{ y: number; tierRank: number }> = [];
+  yCandidates.push({
+    y: roundMetric(anchorPoint.y - measuredLabel.height / 2),
+    tierRank: 0
+  });
   for (let attempt = 0; attempt <= 6; attempt += 1) {
     const extra = attempt * FIXED_LABEL_CLEARANCE;
     yCandidates.push({
       y: roundMetric(segment.coordinate + FIXED_LABEL_CLEARANCE + extra),
-      tierRank: attempt * 2
+      tierRank: attempt * 2 + 1
     });
     yCandidates.push({
       y: roundMetric(segment.coordinate - FIXED_LABEL_CLEARANCE - measuredLabel.height - extra),
-      tierRank: attempt * 2 + 1
+      tierRank: attempt * 2 + 2
     });
   }
-  yCandidates.push({
-    y: roundMetric(anchorPoint.y - measuredLabel.height / 2),
-    tierRank: 100
-  });
 
   const seen = new Set<string>();
   const candidates: HorizontalLabelPlacementCandidate[] = [];

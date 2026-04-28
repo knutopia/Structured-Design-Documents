@@ -7,6 +7,7 @@ import {
   expectLabelsDoNotOverlapEachOther,
   expectLabelsDoNotOverlapHeaders,
   expectLabelsDoNotOverlapBoxes,
+  expectLabelsHaveMinimumBoxClearance,
   expectNoForbiddenDiagnostics,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
   expectRoutesDoNotEnterEndpointBoxes,
@@ -37,6 +38,7 @@ const SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS = [
   "renderer.routing.scenario_flow_edge_label_omitted",
   "renderer.routing.scenario_flow_edge_label_fallback"
 ] as const;
+const SCENARIO_FLOW_LABEL_CLEARANCE = 12;
 
 function getVisibleNodeBoxes(root: Awaited<ReturnType<typeof renderStagedArtifacts>>["positionedScene"]["root"]) {
   return collectVisibleItemBoxes(root).filter((box) => {
@@ -174,6 +176,7 @@ describe("staged visual acceptance", () => {
     expectRoutesDoNotEnterEndpointBoxes(semanticEdges, nodeBoxes);
     expectSameOrientationSegmentsSeparated(semanticEdges);
     expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
+    expectLabelsHaveMinimumBoxClearance(labelBoxes, nodeBoxes, SCENARIO_FLOW_LABEL_CLEARANCE);
     expectLabelsDoNotOverlapEachOther(labelBoxes);
     expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
   });

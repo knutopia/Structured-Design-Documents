@@ -17,6 +17,7 @@ import type {
 } from "./contracts.js";
 import {
   buildConnectorRouteSegmentsById,
+  FIXED_LABEL_DISTANCE,
   positionConnectorLabel,
   type BlockingBox,
   type HorizontalLineSegment
@@ -2951,6 +2952,46 @@ function resolveRequiredEndpointGapExpansions(
   return { columnExpansions, laneExpansions };
 }
 
+function resolveRequiredLabelColumnExpansions(
+  plans: readonly ScenarioFlowConnectorPlan[],
+  index: ScenarioFlowPositionedIndex
+): Record<number, number> {
+  const columnExpansions: Record<number, number> = {};
+
+  for (const plan of plans) {
+    if (
+      plan.channel !== "step_flow"
+      || !plan.label
+      || plan.sourceSide !== "east"
+      || plan.targetSide !== "west"
+    ) {
+      continue;
+    }
+
+    const source = index.nodeById.get(plan.from);
+    const target = index.nodeById.get(plan.to);
+    if (!source || !target) {
+      continue;
+    }
+    const sourceCell = index.cellById.get(source.placement.cellId);
+    const targetCell = index.cellById.get(target.placement.cellId);
+    if (!sourceCell || !targetCell || targetCell.columnOrder <= sourceCell.columnOrder) {
+      continue;
+    }
+
+    const available = roundMetric(target.node.x - (source.node.x + source.node.width));
+    const required = roundMetric(plan.label.width + FIXED_LABEL_DISTANCE * 2);
+    const overflow = roundMetric(required - available);
+    if (overflow > 0) {
+      columnExpansions[sourceCell.columnOrder] = roundUpToSeparationDistance(
+        Math.max(columnExpansions[sourceCell.columnOrder] ?? 0, overflow)
+      );
+    }
+  }
+
+  return columnExpansions;
+}
+
 function resolveRequiredColumnExpansions(
   occupancy: readonly ScenarioFlowGutterOccupancy[],
   index: ScenarioFlowPositionedIndex,
@@ -3419,6 +3460,13 @@ function placeLabels(
     (plan) => plan.finalRoute
   );
   const separatorSegments = collectScenarioFlowSeparatorSegments(placementScene, middleLayer);
+  const inflateBox = (box: BlockingBox): BlockingBox => ({
+    itemId: box.itemId,
+    x: roundMetric(box.x - FIXED_LABEL_DISTANCE),
+    y: roundMetric(box.y - FIXED_LABEL_DISTANCE),
+    width: roundMetric(box.width + FIXED_LABEL_DISTANCE * 2),
+    height: roundMetric(box.height + FIXED_LABEL_DISTANCE * 2)
+  });
   const forbiddenBoxes = flattenItems(scene.root)
     .filter(isPositionedNode)
     .map((node): BlockingBox => ({
@@ -3427,7 +3475,8 @@ function placeLabels(
       y: node.y,
       width: node.width,
       height: node.height
-    }));
+    }))
+    .map(inflateBox);
 
   for (const plan of plans) {
     if (!plan.label) {
@@ -3461,13 +3510,13 @@ function placeLabels(
       continue;
     }
     labelsByPlanId.set(plan.id, selected);
-    placedBoxes.push({
+    placedBoxes.push(inflateBox({
       itemId: plan.id,
       x: selected.x,
       y: selected.y,
       width: selected.width,
       height: selected.height
-    });
+    }));
   }
 
   return labelsByPlanId;
@@ -3626,13 +3675,20 @@ export function buildScenarioFlowRoutingStages(
     );
     const segmentCoordinates = resolveOccupancyCoordinates(nominalPrepared.connectorPlans, nominalPrepared.occupancy);
     const endpointGapExpansions = resolveRequiredEndpointGapExpansions(nominalPrepared.connectorPlans, workingIndex);
+    const labelColumnExpansions = resolveRequiredLabelColumnExpansions(
+      nominalPrepared.connectorPlans,
+      workingIndex
+    );
     const localSeparationExpansions = resolveRequiredLocalSegmentSeparationExpansions(
       nominalPrepared.occupancy,
       workingIndex
     );
     const columnExpansions = accumulateExpansions(
       accumulateExpansions(
-        accumulateExpansions(endpointGapExpansions.columnExpansions, nominalPrepared.requiredColumnExpansions),
+        accumulateExpansions(
+          accumulateExpansions(endpointGapExpansions.columnExpansions, labelColumnExpansions),
+          nominalPrepared.requiredColumnExpansions
+        ),
         localSeparationExpansions.columnExpansions
       ),
       resolveRequiredColumnExpansions(

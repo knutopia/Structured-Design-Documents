@@ -160,8 +160,8 @@ describe("profile-aware render detail", () => {
       expect(simple.text).not.toContain("delivery_selected");
       expect(simple.text).not.toContain("pickup_selected");
       expect(simple.text).not.toContain("E-032");
-      expect(permissive.text).toContain("delivery_selected");
-      expect(permissive.text).toContain("E-032");
+      expect(permissive.text).toContain("delivery selected");
+      expect(permissive.text).toContain("e-032");
     }
   });
 

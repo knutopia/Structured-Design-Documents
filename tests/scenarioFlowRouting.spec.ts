@@ -12,6 +12,7 @@ import type { PositionedEdge, PositionedScene } from "../src/renderer/staged/con
 import {
   collectEdgeLabelBoxes,
   collectVisibleItemBoxes,
+  expectLabelsHaveMinimumBoxClearance,
   expectLabelsDoNotOverlapBoxes,
   expectLabelsDoNotOverlapEachOther,
   expectNoForbiddenDiagnostics,
@@ -20,6 +21,7 @@ import {
   expectRoutesDoNotCrossLabels,
   expectSameOrientationSegmentsSeparated,
   getEdgeById,
+  rectClearance,
   routeIntersectsRect
 } from "./stagedVisualHarness.js";
 
@@ -28,6 +30,7 @@ const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const FIXED_SEPARATION_DISTANCE = 16;
 const OBSTACLE_SWERVE_CLEARANCE = 18;
 const ROOT_RIGHT_GUTTER = 28;
+const LABEL_CLEARANCE = 12;
 
 async function resolveScenarioFlowContext(fileName: string) {
   const bundle = await loadBundle(manifestPath);
@@ -197,6 +200,34 @@ function collectLabelSnapshot(scene: PositionedScene): Array<{
       height: edge.label!.height,
       lines: [...edge.label!.lines]
     }));
+}
+
+function labelTextByEdgeId(scene: PositionedScene): Record<string, string> {
+  return Object.fromEntries(
+    scene.edges
+      .filter((edge) => edge.label)
+      .map((edge) => [edge.id, edge.label!.lines.join(" ")] as const)
+  );
+}
+
+function expectHorizontalLabelFitsBetweenNodes(
+  scene: PositionedScene,
+  edgeId: string,
+  sourceId: string,
+  targetId: string
+): void {
+  const boxesById = new Map(collectVisibleItemBoxes(scene.root).map((box) => [box.itemId, box] as const));
+  const source = boxesById.get(sourceId);
+  const target = boxesById.get(targetId);
+  const label = getLabelBox(scene, edgeId);
+  if (!source || !target) {
+    throw new Error(`Could not resolve "${sourceId}" or "${targetId}".`);
+  }
+
+  expect(label.x - (source.x + source.width)).toBeGreaterThanOrEqual(LABEL_CLEARANCE - 0.5);
+  expect(target.x - (label.x + label.width)).toBeGreaterThanOrEqual(LABEL_CLEARANCE - 0.5);
+  expect(target.x - (source.x + source.width)).toBeGreaterThanOrEqual(label.width + LABEL_CLEARANCE * 2 - 0.5);
+  expect(routeIntersectsRect(getEdgeById(scene.edges, edgeId).route, label)).toBe(true);
 }
 
 function getFirstHorizontalSegment(edge: PositionedEdge): ReturnType<typeof routeSegments>[number] {
@@ -375,10 +406,14 @@ describe("scenario_flow staged routing", () => {
     const j030Vs030a = getEdgeById(rendered.positionedScene.edges, "J-030__realized_by__VS-030a");
     const p030P032 = getEdgeById(rendered.positionedScene.edges, "P-030__navigates_to__P-032");
     expect(maxVerticalSegmentX(j030Vs030a)).toBeLessThan(maxVerticalSegmentX(p030P032));
-    expect(maxExpansion(rendered.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(64);
+    expect(maxExpansion(rendered.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(160);
     expect(maxExpansion(rendered.routingStages.globalGutterState.laneExpansions)).toBeLessThanOrEqual(64);
     expect(rendered.routingStages.finalPositionedScene.root.width)
-      .toBeLessThanOrEqual(rendered.routingStages.step3PositionedScene.root.width + 128);
+      .toBeLessThanOrEqual(
+        rendered.routingStages.step3PositionedScene.root.width
+        + Object.values(rendered.routingStages.globalGutterState.columnExpansions).reduce((sum, value) => sum + value, 0)
+        + 128
+      );
     expect(rendered.routingStages.finalPositionedScene.root.height)
       .toBeLessThanOrEqual(rendered.routingStages.step3PositionedScene.root.height + 160);
   });
@@ -516,6 +551,12 @@ describe("scenario_flow staged routing", () => {
     ]);
     expect(permissive.positionedScene.edges.filter((edge) => edge.label).length).toBe(4);
     expect(simple.positionedScene.edges.filter((edge) => edge.label)).toEqual([]);
+    expect(labelTextByEdgeId(strict.positionedScene)).toEqual({
+      "J-030__precedes__J-031": "delivery selected",
+      "J-030__precedes__J-032": "pickup selected",
+      "J-033__precedes__J-034": "e-032",
+      "J-033__precedes__J-035": "review pickup instructions"
+    });
     expectNoForbiddenDiagnostics(strict.diagnostics, [
       "renderer.routing.scenario_flow_edge_label_omitted",
       "renderer.routing.scenario_flow_edge_label_fallback"
@@ -524,9 +565,17 @@ describe("scenario_flow staged routing", () => {
     const labels = collectEdgeLabelBoxes(strict.positionedScene.edges);
     const boxes = collectVisibleItemBoxes(strict.positionedScene.root).filter((box) => box.itemId !== "root");
     expectLabelsDoNotOverlapBoxes(labels, boxes);
+    expectLabelsHaveMinimumBoxClearance(labels, boxes, LABEL_CLEARANCE);
     expectLabelsDoNotOverlapEachOther(labels);
     expectRoutesDoNotCrossLabels(strict.positionedScene.edges, labels);
     expectLabelsDoNotCrossLaneSeparators(strict.positionedScene);
+    expectHorizontalLabelFitsBetweenNodes(strict.positionedScene, "J-030__precedes__J-031", "J-030", "J-031");
+    expectHorizontalLabelFitsBetweenNodes(strict.positionedScene, "J-033__precedes__J-034", "J-033", "J-034");
+    expect(rectClearance(
+      getLabelBox(strict.positionedScene, "J-030__precedes__J-031"),
+      getLabelBox(strict.positionedScene, "J-030__precedes__J-032")
+    )).toBeGreaterThanOrEqual(LABEL_CLEARANCE - 0.5);
+    expect(getLabelBox(strict.positionedScene, "J-033__precedes__J-035").y).toBeGreaterThan(80);
     expectRouteDoesNotCrossLabel(strict.positionedScene, "J-030__precedes__J-032", "J-030__precedes__J-031");
     expectRouteDoesNotCrossLabel(strict.positionedScene, "J-033__precedes__J-035", "J-033__precedes__J-034");
     expectRouteDoesNotCrossLabel(strict.positionedScene, "J-034__realized_by__P-034", "J-033__precedes__J-035");
@@ -557,10 +606,16 @@ describe("scenario_flow staged routing", () => {
     expect(debug.routingStages.nodeGutters.some((gutter) =>
       gutter.nodeId === "J-030" && gutter.rightAvailable > 0 && gutter.bottomAvailable > 0
     )).toBe(true);
-    expect(maxExpansion(debug.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(64);
+    expect(debug.routingStages.globalGutterState.columnExpansions[0]).toBeGreaterThanOrEqual(80);
+    expect(debug.routingStages.globalGutterState.columnExpansions[2]).toBeGreaterThanOrEqual(128);
+    expect(maxExpansion(debug.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(160);
     expect(maxExpansion(debug.routingStages.globalGutterState.laneExpansions)).toBeLessThanOrEqual(64);
     expect(debug.routingStages.finalPositionedScene.root.width)
-      .toBeLessThanOrEqual(debug.routingStages.step3PositionedScene.root.width + 128);
+      .toBeLessThanOrEqual(
+        debug.routingStages.step3PositionedScene.root.width
+        + Object.values(debug.routingStages.globalGutterState.columnExpansions).reduce((sum, value) => sum + value, 0)
+        + 128
+      );
     expect(debug.routingStages.finalPositionedScene.root.height)
       .toBeLessThanOrEqual(debug.routingStages.step3PositionedScene.root.height + 160);
     const step3BoxesById = new Map(collectVisibleItemBoxes(debug.step3PositionedScene.root)

@@ -194,6 +194,20 @@ export function rectsOverlap(a: Rect, b: Rect, epsilon = EPSILON): boolean {
     && a.y + a.height > b.y + epsilon;
 }
 
+export function rectClearance(a: Rect, b: Rect): number {
+  const horizontalGap = Math.max(
+    b.x - (a.x + a.width),
+    a.x - (b.x + b.width),
+    0
+  );
+  const verticalGap = Math.max(
+    b.y - (a.y + a.height),
+    a.y - (b.y + b.height),
+    0
+  );
+  return Math.hypot(horizontalGap, verticalGap);
+}
+
 export function getTerminalSegment(edge: PositionedEdge): { start: { x: number; y: number }; end: { x: number; y: number } } {
   const points = edge.route.points;
   const end = points[points.length - 1];
@@ -414,6 +428,23 @@ export function expectLabelsDoNotOverlapBoxes(
         continue;
       }
       expect(rectsOverlap(label, box)).toBe(false);
+    }
+  }
+}
+
+export function expectLabelsHaveMinimumBoxClearance(
+  labels: readonly EdgeLabelBox[],
+  boxes: ReadonlyArray<Rect & { itemId: string }>,
+  minClearance: number,
+  allowedItemIds = new Set<string>()
+): void {
+  for (const label of labels) {
+    for (const box of boxes) {
+      if (allowedItemIds.has(box.itemId)) {
+        continue;
+      }
+      expect(rectClearance(label, box), `${label.edgeId} vs ${box.itemId}`)
+        .toBeGreaterThanOrEqual(minClearance - EPSILON);
     }
   }
 }

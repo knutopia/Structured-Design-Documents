@@ -23,8 +23,8 @@ flowchart TB
     n_VS_034a("Email Confirmation State")
     n_VS_035a("Pickup Instructions State")
   end
-  n_J_030 -->|delivery_selected| n_J_031
-  n_J_030 -->|pickup_selected| n_J_032
+  n_J_030 -->|delivery selected| n_J_031
+  n_J_030 -->|pickup selected| n_J_032
   n_J_030 --> n_P_030
   n_J_030 --> n_VS_030a
   n_J_031 --> n_J_033
@@ -32,8 +32,8 @@ flowchart TB
   n_J_031 --> n_VS_031a
   n_J_032 --> n_P_032
   n_J_032 --> n_VS_032a
-  n_J_033 -->|E-032| n_J_034
-  n_J_033 -->|Review Pickup Instructions| n_J_035
+  n_J_033 -->|e-032| n_J_034
+  n_J_033 -->|review pickup instructions| n_J_035
   n_J_033 --> n_P_033
   n_J_033 --> n_VS_033a
   n_J_034 --> n_P_034

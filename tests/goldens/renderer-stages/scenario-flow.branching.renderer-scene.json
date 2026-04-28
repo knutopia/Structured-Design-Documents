@@ -2606,7 +2606,7 @@
         "authority": "flexible"
       },
       "label": {
-        "text": "delivery_selected",
+        "text": "delivery selected",
         "textStyleRole": "edge_label"
       },
       "markers": {
@@ -2637,7 +2637,7 @@
         "authority": "flexible"
       },
       "label": {
-        "text": "pickup_selected",
+        "text": "pickup selected",
         "textStyleRole": "edge_label"
       },
       "markers": {
@@ -2856,7 +2856,7 @@
         "authority": "flexible"
       },
       "label": {
-        "text": "E-032",
+        "text": "e-032",
         "textStyleRole": "edge_label"
       },
       "markers": {
@@ -2887,7 +2887,7 @@
         "authority": "flexible"
       },
       "label": {
-        "text": "Review Pickup Instructions",
+        "text": "review pickup instructions",
         "textStyleRole": "edge_label"
       },
       "markers": {

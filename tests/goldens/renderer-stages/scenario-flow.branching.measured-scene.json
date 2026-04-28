@@ -3159,9 +3159,9 @@
       },
       "label": {
         "lines": [
-          "delivery_selected"
+          "delivery selected"
         ],
-        "width": 109.83,
+        "width": 107.094,
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label"
@@ -3199,9 +3199,9 @@
       },
       "label": {
         "lines": [
-          "pickup_selected"
+          "pickup selected"
         ],
-        "width": 103.272,
+        "width": 99.9,
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label"
@@ -3455,9 +3455,9 @@
       },
       "label": {
         "lines": [
-          "E-032"
+          "e-032"
         ],
-        "width": 45.714,
+        "width": 45.426,
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label"
@@ -3495,9 +3495,9 @@
       },
       "label": {
         "lines": [
-          "Review Pickup Instructions"
+          "review pickup instructions"
         ],
-        "width": 161.376,
+        "width": 157.212,
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label"

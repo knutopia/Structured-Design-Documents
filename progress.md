@@ -18,6 +18,7 @@
 -fifth iteration for swerve spacing
 -sixth for swerve turn reduction
 -seventh for label placement parity
+-eighth for label gutter space
 
 ## Mon 5-27-26
 
