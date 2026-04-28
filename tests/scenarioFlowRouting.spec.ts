@@ -60,6 +60,56 @@ function edgeIds(edges: readonly PositionedEdge[]): string[] {
   return edges.map((edge) => edge.id);
 }
 
+function routeSegments(edge: PositionedEdge): Array<{
+  start: { x: number; y: number };
+  end: { x: number; y: number };
+  orientation: "horizontal" | "vertical";
+  length: number;
+}> {
+  const segments: Array<{
+    start: { x: number; y: number };
+    end: { x: number; y: number };
+    orientation: "horizontal" | "vertical";
+    length: number;
+  }> = [];
+
+  for (let index = 1; index < edge.route.points.length; index += 1) {
+    const start = edge.route.points[index - 1]!;
+    const end = edge.route.points[index]!;
+    if (Math.abs(start.x - end.x) <= 0.5) {
+      segments.push({
+        start,
+        end,
+        orientation: "vertical",
+        length: Math.abs(end.y - start.y)
+      });
+    } else if (Math.abs(start.y - end.y) <= 0.5) {
+      segments.push({
+        start,
+        end,
+        orientation: "horizontal",
+        length: Math.abs(end.x - start.x)
+      });
+    }
+  }
+
+  return segments.filter((segment) => segment.length > 0.5);
+}
+
+function expectDirectVerticalRoute(edge: PositionedEdge): void {
+  const segments = routeSegments(edge);
+  expect(segments.length).toBe(1);
+  expect(segments[0]?.orientation).toBe("vertical");
+}
+
+function expectVerticalSwerveRoute(edge: PositionedEdge): void {
+  const segments = routeSegments(edge);
+  expect(segments[0]?.orientation).toBe("vertical");
+  expect(segments[0]?.length).toBeGreaterThan(16);
+  expect(segments.some((segment) => segment.orientation === "horizontal")).toBe(true);
+  expect(edge.route.points[0]?.x).toBe(edge.route.points.at(-1)?.x);
+}
+
 describe("scenario_flow staged routing", () => {
   it("routes proof-case connectors through explicit scenario-flow ports with deterministic priority", async () => {
     const context = await resolveScenarioFlowContext("scenario_branching.sdd");
@@ -93,7 +143,52 @@ describe("scenario_flow staged routing", () => {
     expect(firstPrecedes.classes).toContain("edge-channel-step_flow");
     expect(firstRealization.classes).toContain("edge-channel-realization");
     expect(firstRealization.classes).toContain("edge-dotted");
-    expect(firstPrecedes.route.points.length).toBeLessThan(firstRealization.route.points.length);
+    expect(rendered.routingStages.connectorPlans.find((plan) => plan.id === firstRealization.id)?.pattern)
+      .toBe("realization_vertical");
+    expectDirectVerticalRoute(firstRealization);
+  });
+
+  it("keeps same-column realization routing vertical and swerves only around blockers", async () => {
+    const context = await resolveScenarioFlowContext("scenario_branching.sdd");
+    const rendered = await renderScenarioFlowStagedSvg(
+      context.projection,
+      context.graph,
+      context.view,
+      "strict"
+    );
+
+    expect(rendered.routingStages.connectorPlans
+      .filter((plan) => plan.channel === "realization")
+      .map((plan) => plan.pattern)).toEqual(
+        rendered.routingStages.connectorPlans
+          .filter((plan) => plan.channel === "realization")
+          .map(() => "realization_vertical")
+      );
+
+    const direct = getEdgeById(rendered.positionedScene.edges, "J-030__realized_by__P-030");
+    expectDirectVerticalRoute(direct);
+    expect(rendered.routingStages.gutterOccupancy).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        connectorId: "J-030__realized_by__P-030",
+        key: "node:J-030:bottom",
+        kind: "node_bottom",
+        endpointRole: "source",
+        locked: true
+      }),
+      expect.objectContaining({
+        connectorId: "J-030__realized_by__P-030",
+        key: "edge:P-030:north:target",
+        kind: "edge_local",
+        endpointRole: "target",
+        locked: true
+      })
+    ]));
+    expect(rendered.routingStages.gutterOccupancy.some((entry) =>
+      entry.connectorId === "J-030__realized_by__P-030" && entry.kind === "column"
+    )).toBe(false);
+
+    expectVerticalSwerveRoute(getEdgeById(rendered.positionedScene.edges, "J-030__realized_by__VS-030a"));
+    expectVerticalSwerveRoute(getEdgeById(rendered.positionedScene.edges, "J-032__realized_by__P-032"));
   });
 
   it("routes mirror connectors at lower priority than Step flow without crossing proof-case nodes", async () => {

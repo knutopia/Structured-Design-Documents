@@ -53,6 +53,7 @@ type PositionedScenarioFlowCell = PositionedContainer & {
 interface IndexedScenarioFlowNode {
   node: PositionedNode;
   placement: ScenarioFlowNodePlacement;
+  cell?: IndexedScenarioFlowCell;
   portsByRole: ReadonlyMap<string, MeasuredPort>;
 }
 
@@ -129,6 +130,7 @@ export interface ScenarioFlowGutterOccupancy {
   columnOrder?: number;
   laneOrder?: number;
   ownershipRank?: number;
+  locked?: boolean;
 }
 
 export interface ScenarioFlowConnectorPlan {
@@ -305,6 +307,7 @@ function buildIndex(
     nodeById.set(item.id, {
       node: item,
       placement,
+      cell: cellById.get(placement.cellId),
       portsByRole: new Map(item.ports.map((port) => [port.role, port] as const))
     });
   }
@@ -396,6 +399,31 @@ function resolveRealizationCorridorX(
   return roundMetric(right + FIXED_SEPARATION_DISTANCE + connectorIndex * 4);
 }
 
+function clampMetric(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+function getHorizontalOverlap(
+  source: PositionedNode,
+  target: PositionedNode
+): { left: number; right: number } | undefined {
+  const left = roundMetric(Math.max(source.x, target.x));
+  const right = roundMetric(Math.min(source.x + source.width, target.x + target.width));
+  return right - left > EPSILON ? { left, right } : undefined;
+}
+
+function resolveVerticalTrackX(
+  source: PositionedNode,
+  target: PositionedNode,
+  preferredX: number
+): number | undefined {
+  const overlap = getHorizontalOverlap(source, target);
+  if (!overlap) {
+    return undefined;
+  }
+  return roundMetric(clampMetric(preferredX, overlap.left, overlap.right));
+}
+
 function moveOutward(point: Point, side: PortSide, distance: number): Point {
   switch (side) {
     case "north":
@@ -436,7 +464,10 @@ function determinePattern(
   }
 
   if (edge.channel === "realization") {
-    return Math.abs(source.node.x + source.node.width / 2 - (target.node.x + target.node.width / 2)) <= EPSILON
+    return source.cell
+      && target.cell
+      && source.cell.columnOrder === target.cell.columnOrder
+      && getHorizontalOverlap(source.node, target.node)
       ? "realization_vertical"
       : "realization_corridor";
   }
@@ -656,6 +687,55 @@ function buildSegmentCoordinateKey(connectorId: string, routeSegmentIndex: numbe
   return `${connectorId}::segment:${routeSegmentIndex}`;
 }
 
+function clampEndpointSegmentCoordinate(
+  value: number,
+  fallbackValue: number,
+  orientation: ScenarioFlowGutterAxis,
+  segmentIndex: number,
+  lastSegmentIndex: number,
+  plan?: ScenarioFlowConnectorPlan,
+  index?: ScenarioFlowPositionedIndex
+): number {
+  if (!plan || !index) {
+    return roundMetric(value);
+  }
+
+  let min = -Infinity;
+  let max = Infinity;
+  const addSideConstraint = (nodeId: string, side: PortSide): void => {
+    const node = index.nodeById.get(nodeId)?.node;
+    if (!node) {
+      return;
+    }
+    if (orientation === "vertical" && (side === "north" || side === "south")) {
+      min = Math.max(min, node.x);
+      max = Math.min(max, node.x + node.width);
+    }
+    if (orientation === "horizontal" && (side === "east" || side === "west")) {
+      min = Math.max(min, node.y);
+      max = Math.min(max, node.y + node.height);
+    }
+  };
+
+  if (segmentIndex === 0) {
+    addSideConstraint(plan.from, plan.sourceSide);
+  }
+  if (segmentIndex === lastSegmentIndex) {
+    addSideConstraint(plan.to, plan.targetSide);
+  }
+
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    return roundMetric(value);
+  }
+  if (min > max) {
+    return roundMetric(value);
+  }
+  if (value < min - EPSILON || value > max + EPSILON) {
+    return roundMetric(fallbackValue);
+  }
+  return roundMetric(clampMetric(value, min, max));
+}
+
 function buildTemplateRoute(
   plan: ScenarioFlowConnectorPlan,
   index: ScenarioFlowPositionedIndex,
@@ -682,9 +762,14 @@ function buildTemplateRoute(
   const targetStub = moveOutward(targetPoint, plan.targetSide, FIXED_SEPARATION_DISTANCE);
   const points: Point[] = [sourcePoint, sourceStub];
 
-  if (plan.pattern === "realization_vertical" && Math.abs(sourceStub.x - targetStub.x) <= EPSILON) {
-    points.push(targetStub, targetPoint);
-    return applySegmentCoordinates(buildRoute(points, "orthogonal"), plan.id, segmentCoordinateByKey);
+  if (plan.pattern === "realization_vertical") {
+    const trackX = resolveVerticalTrackX(source.node, target.node, sourcePoint.x);
+    if (trackX !== undefined) {
+      return buildRoute([
+        { x: trackX, y: sourcePoint.y },
+        { x: trackX, y: targetPoint.y }
+      ], "orthogonal");
+    }
   }
 
   if (plan.pattern === "realization_corridor" || plan.pattern === "parking_fallback") {
@@ -696,7 +781,7 @@ function buildTemplateRoute(
       targetStub,
       targetPoint
     );
-    return applySegmentCoordinates(buildRoute(points, "orthogonal"), plan.id, segmentCoordinateByKey);
+    return applySegmentCoordinates(buildRoute(points, "orthogonal"), plan.id, segmentCoordinateByKey, plan, index);
   }
 
   const bridgeX = resolveForwardBridgeX(source, target, sourceStub, targetStub, index);
@@ -711,39 +796,48 @@ function buildTemplateRoute(
     );
   }
 
-  return applySegmentCoordinates(buildRoute(points, "orthogonal"), plan.id, segmentCoordinateByKey);
+  return applySegmentCoordinates(buildRoute(points, "orthogonal"), plan.id, segmentCoordinateByKey, plan, index);
 }
 
 function applySegmentCoordinates(
   route: PositionedRoute,
   connectorId: string,
-  segmentCoordinateByKey: ReadonlyMap<string, number>
+  segmentCoordinateByKey: ReadonlyMap<string, number>,
+  plan?: ScenarioFlowConnectorPlan,
+  index?: ScenarioFlowPositionedIndex
 ): PositionedRoute {
-  if (segmentCoordinateByKey.size === 0 || route.points.length < 3) {
+  if (segmentCoordinateByKey.size === 0 || route.points.length < 2) {
     return route;
   }
 
   const points = route.points.map((point) => ({ ...point }));
-  for (let index = 1; index < points.length - 3; index += 1) {
-    const assignedCoordinate = segmentCoordinateByKey.get(buildSegmentCoordinateKey(connectorId, index));
+  for (let pointIndex = 0; pointIndex < points.length - 1; pointIndex += 1) {
+    const assignedCoordinate = segmentCoordinateByKey.get(buildSegmentCoordinateKey(connectorId, pointIndex));
     if (assignedCoordinate === undefined) {
       continue;
     }
-    const start = points[index]!;
-    const end = points[index + 1]!;
+    const start = points[pointIndex]!;
+    const end = points[pointIndex + 1]!;
     if (Math.abs(start.y - end.y) <= EPSILON) {
-      start.y = assignedCoordinate;
-      end.y = assignedCoordinate;
+      const y = clampEndpointSegmentCoordinate(assignedCoordinate, start.y, "horizontal", pointIndex, points.length - 2, plan, index);
+      start.y = y;
+      end.y = y;
     } else if (Math.abs(start.x - end.x) <= EPSILON) {
-      start.x = assignedCoordinate;
-      end.x = assignedCoordinate;
+      const x = clampEndpointSegmentCoordinate(assignedCoordinate, start.x, "vertical", pointIndex, points.length - 2, plan, index);
+      start.x = x;
+      end.x = x;
     }
   }
 
   return buildRoute(points, route.style);
 }
 
-function segmentIntersectsBox(start: Point, end: Point, box: ScenarioFlowBox): boolean {
+function segmentIntersectsBox(
+  start: Point,
+  end: Point,
+  box: ScenarioFlowBox,
+  options: { ignoreStart?: boolean; ignoreEnd?: boolean } = {}
+): boolean {
   if (Math.abs(start.x - end.x) <= EPSILON) {
     const x = start.x;
     if (x <= box.x + EPSILON || x >= box.x + box.width - EPSILON) {
@@ -751,7 +845,9 @@ function segmentIntersectsBox(start: Point, end: Point, box: ScenarioFlowBox): b
     }
     const low = Math.min(start.y, end.y);
     const high = Math.max(start.y, end.y);
-    return low < box.y + box.height - EPSILON && high > box.y + EPSILON;
+    const clippedLow = options.ignoreStart ? low + EPSILON : low;
+    const clippedHigh = options.ignoreEnd ? high - EPSILON : high;
+    return clippedLow < box.y + box.height - EPSILON && clippedHigh > box.y + EPSILON;
   }
 
   if (Math.abs(start.y - end.y) <= EPSILON) {
@@ -761,10 +857,34 @@ function segmentIntersectsBox(start: Point, end: Point, box: ScenarioFlowBox): b
     }
     const low = Math.min(start.x, end.x);
     const high = Math.max(start.x, end.x);
-    return low < box.x + box.width - EPSILON && high > box.x + EPSILON;
+    const clippedLow = options.ignoreStart ? low + EPSILON : low;
+    const clippedHigh = options.ignoreEnd ? high - EPSILON : high;
+    return clippedLow < box.x + box.width - EPSILON && clippedHigh > box.x + EPSILON;
   }
 
   return false;
+}
+
+function collectIntersectingBoxes(
+  points: readonly Point[],
+  boxes: readonly ScenarioFlowBox[]
+): ScenarioFlowBox[] {
+  const intersections: ScenarioFlowBox[] = [];
+
+  for (let index = 1; index < points.length; index += 1) {
+    const start = points[index - 1]!;
+    const end = points[index]!;
+    for (const box of boxes) {
+      if (segmentIntersectsBox(start, end, box, {
+        ignoreStart: index === 1,
+        ignoreEnd: index === points.length - 1
+      })) {
+        intersections.push(box);
+      }
+    }
+  }
+
+  return intersections;
 }
 
 function findRouteIntersection(route: PositionedRoute, boxes: readonly ScenarioFlowBox[]): {
@@ -815,91 +935,424 @@ function buildObstacleOccupancy(
   };
 }
 
-function swerveRouteAroundIntersection(
-  route: PositionedRoute,
-  intersection: NonNullable<ReturnType<typeof findRouteIntersection>>,
-  connectorId: string
-): {
-  route: PositionedRoute;
-  occupancy: ScenarioFlowGutterOccupancy;
-} {
-  const points = [...route.points];
-  const { start, end, box, segmentIndex } = intersection;
+function appendRoutePoint(points: Point[], point: Point): void {
+  const rounded = {
+    x: roundMetric(point.x),
+    y: roundMetric(point.y)
+  };
+  const previous = points.at(-1);
+  if (previous && Math.abs(previous.x - rounded.x) <= EPSILON && Math.abs(previous.y - rounded.y) <= EPSILON) {
+    return;
+  }
+  points.push(rounded);
+}
 
-  if (Math.abs(start.y - end.y) <= EPSILON) {
-    const aboveY = roundMetric(box.y - OBSTACLE_SWERVE_CLEARANCE);
-    const belowY = roundMetric(box.y + box.height + OBSTACLE_SWERVE_CLEARANCE);
-    const detourY = Math.abs(start.y - aboveY) <= Math.abs(start.y - belowY) ? aboveY : belowY;
-    const detourSide: PortSide = detourY < box.y ? "north" : "south";
-    const before = { x: roundMetric(start.x < end.x ? box.x - OBSTACLE_SWERVE_CLEARANCE : box.x + box.width + OBSTACLE_SWERVE_CLEARANCE), y: start.y };
-    const after = { x: before.x, y: detourY };
-    const exit = { x: roundMetric(start.x < end.x ? box.x + box.width + OBSTACLE_SWERVE_CLEARANCE : box.x - OBSTACLE_SWERVE_CLEARANCE), y: detourY };
-    const rejoin = { x: exit.x, y: end.y };
-    points.splice(segmentIndex + 1, 0, before, after, exit, rejoin);
-    return {
-      route: buildRoute(points, route.style),
-      occupancy: buildObstacleOccupancy(
-        connectorId,
-        box,
-        detourSide,
-        "horizontal",
-        detourY,
-        after.x,
-        exit.x,
-        segmentIndex
-      )
+function getNonEndpointBoxes(
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex
+): ScenarioFlowBox[] {
+  return index.nodeBoxes.filter((box) => box.itemId !== plan.from && box.itemId !== plan.to);
+}
+
+function findIntersectingBoxesAlongSegment(
+  start: Point,
+  end: Point,
+  boxes: readonly ScenarioFlowBox[]
+): ScenarioFlowBox[] {
+  const intersections = boxes.filter((box) => segmentIntersectsBox(start, end, box, {
+    ignoreStart: true,
+    ignoreEnd: true
+  }));
+
+  if (Math.abs(start.x - end.x) <= EPSILON) {
+    const direction = start.y <= end.y ? 1 : -1;
+    return intersections.sort((left, right) => {
+      const leftMetric = direction > 0 ? left.y : left.y + left.height;
+      const rightMetric = direction > 0 ? right.y : right.y + right.height;
+      return direction > 0 ? leftMetric - rightMetric : rightMetric - leftMetric;
+    });
+  }
+
+  const direction = start.x <= end.x ? 1 : -1;
+  return intersections.sort((left, right) => {
+    const leftMetric = direction > 0 ? left.x : left.x + left.width;
+    const rightMetric = direction > 0 ? right.x : right.x + right.width;
+    return direction > 0 ? leftMetric - rightMetric : rightMetric - leftMetric;
+  });
+}
+
+function getObstacleLocalOwnershipCount(
+  bucketsByNodeId: ReadonlyMap<string, ScenarioFlowNodeEdgeBuckets>,
+  nodeId: string,
+  side: PortSide
+): number {
+  const buckets = bucketsByNodeId.get(nodeId);
+  if (!buckets) {
+    return 0;
+  }
+  const sideBuckets = getSideBuckets(buckets, side);
+  return sideBuckets.startingConnectorIds.length + sideBuckets.endingConnectorIds.length;
+}
+
+function resolveVerticalBridgeX(
+  baseX: number,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex,
+  pointsBuilder: (bridgeX: number) => Point[]
+): number {
+  let bridgeX = baseX;
+
+  for (let attempt = 0; attempt < 16; attempt += 1) {
+    const boxes = collectIntersectingBoxes(pointsBuilder(bridgeX), getNonEndpointBoxes(plan, index));
+    if (boxes.length === 0) {
+      return bridgeX;
+    }
+
+    bridgeX = roundMetric(Math.max(
+      bridgeX + FIXED_SEPARATION_DISTANCE,
+      ...boxes.map((box) => box.x + box.width + FIXED_SEPARATION_DISTANCE)
+    ));
+  }
+
+  return bridgeX;
+}
+
+function resolveHorizontalBridgeY(
+  baseY: number,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex,
+  pointsBuilder: (bridgeY: number) => Point[]
+): number {
+  let bridgeY = baseY;
+
+  for (let attempt = 0; attempt < 16; attempt += 1) {
+    const boxes = collectIntersectingBoxes(pointsBuilder(bridgeY), getNonEndpointBoxes(plan, index));
+    if (boxes.length === 0) {
+      return bridgeY;
+    }
+
+    bridgeY = roundMetric(Math.max(
+      bridgeY + FIXED_SEPARATION_DISTANCE,
+      ...boxes.map((box) => box.y + box.height + FIXED_SEPARATION_DISTANCE)
+    ));
+  }
+
+  return bridgeY;
+}
+
+function resolveLocalVerticalDetourX(
+  originalX: number,
+  encounterY: number,
+  exitY: number,
+  obstacle: ScenarioFlowBox,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex
+): number {
+  const baseX = roundMetric(Math.max(
+    originalX + FIXED_SEPARATION_DISTANCE,
+    obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE
+  ));
+  return resolveVerticalBridgeX(
+    baseX,
+    plan,
+    index,
+    (candidateBridgeX) => [
+      { x: originalX, y: encounterY },
+      { x: candidateBridgeX, y: encounterY },
+      { x: candidateBridgeX, y: exitY },
+      { x: originalX, y: exitY }
+    ]
+  );
+}
+
+function resolveVerticalSwerveReturnX(
+  originalX: number,
+  ownershipCount: number,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex
+): number {
+  if (plan.pattern !== "realization_vertical" || ownershipCount <= 0) {
+    return originalX;
+  }
+
+  const source = index.nodeById.get(plan.from);
+  const target = index.nodeById.get(plan.to);
+  const overlap = source && target ? getHorizontalOverlap(source.node, target.node) : undefined;
+  if (!overlap) {
+    return originalX;
+  }
+
+  const offset = ownershipCount * FIXED_SEPARATION_DISTANCE;
+  const leftCandidate = roundMetric(clampMetric(originalX - offset, overlap.left, overlap.right));
+  if (Math.abs(leftCandidate - originalX) >= FIXED_SEPARATION_DISTANCE - EPSILON) {
+    return leftCandidate;
+  }
+
+  const rightCandidate = roundMetric(clampMetric(originalX + offset, overlap.left, overlap.right));
+  if (Math.abs(rightCandidate - originalX) >= FIXED_SEPARATION_DISTANCE - EPSILON) {
+    return rightCandidate;
+  }
+
+  return originalX;
+}
+
+function resolveLocalHorizontalDetourY(
+  originalY: number,
+  encounterX: number,
+  exitX: number,
+  obstacle: ScenarioFlowBox,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex
+): number {
+  const baseY = roundMetric(Math.max(
+    originalY + FIXED_SEPARATION_DISTANCE,
+    obstacle.y + obstacle.height + OBSTACLE_SWERVE_CLEARANCE
+  ));
+  return resolveHorizontalBridgeY(
+    baseY,
+    plan,
+    index,
+    (candidateBridgeY) => [
+      { x: encounterX, y: originalY },
+      { x: encounterX, y: candidateBridgeY },
+      { x: exitX, y: candidateBridgeY },
+      { x: exitX, y: originalY }
+    ]
+  );
+}
+
+function buildVerticalSegmentWithLocalSwerves(
+  start: Point,
+  end: Point,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex,
+  bucketsByNodeId: ReadonlyMap<string, ScenarioFlowNodeEdgeBuckets>
+): {
+  points: Point[];
+  occupancy: ScenarioFlowGutterOccupancy[];
+} {
+  const points: Point[] = [start];
+  const occupancy: ScenarioFlowGutterOccupancy[] = [];
+  const direction = start.y <= end.y ? 1 : -1;
+  let cursor = start;
+
+  for (let attempt = 0; attempt < 16; attempt += 1) {
+    const projectedEnd = { x: cursor.x, y: end.y };
+    const obstacle = findIntersectingBoxesAlongSegment(cursor, projectedEnd, getNonEndpointBoxes(plan, index))[0];
+    if (!obstacle) {
+      appendRoutePoint(points, projectedEnd);
+      return { points, occupancy };
+    }
+
+    const northOwnershipCount = getObstacleLocalOwnershipCount(bucketsByNodeId, obstacle.itemId, "north");
+    const southOwnershipCount = getObstacleLocalOwnershipCount(bucketsByNodeId, obstacle.itemId, "south");
+    const encounterY = roundMetric(
+      direction > 0
+        ? obstacle.y - OBSTACLE_SWERVE_CLEARANCE - northOwnershipCount * FIXED_SEPARATION_DISTANCE
+        : obstacle.y + obstacle.height + OBSTACLE_SWERVE_CLEARANCE + southOwnershipCount * FIXED_SEPARATION_DISTANCE
+    );
+    const exitY = roundMetric(
+      direction > 0
+        ? obstacle.y + obstacle.height + OBSTACLE_SWERVE_CLEARANCE + southOwnershipCount * FIXED_SEPARATION_DISTANCE
+        : obstacle.y - OBSTACLE_SWERVE_CLEARANCE - northOwnershipCount * FIXED_SEPARATION_DISTANCE
+    );
+    const bridgeX = resolveLocalVerticalDetourX(cursor.x, encounterY, exitY, obstacle, plan, index);
+    const returnX = resolveVerticalSwerveReturnX(
+      cursor.x,
+      direction > 0 ? southOwnershipCount : northOwnershipCount,
+      plan,
+      index
+    );
+
+    appendRoutePoint(points, { x: cursor.x, y: encounterY });
+    const encounterSegmentIndex = Math.max(0, points.length - 1);
+    appendRoutePoint(points, { x: bridgeX, y: encounterY });
+    const detourSegmentIndex = Math.max(0, points.length - 1);
+    appendRoutePoint(points, { x: bridgeX, y: exitY });
+    const exitSegmentIndex = Math.max(0, points.length - 1);
+    appendRoutePoint(points, { x: returnX, y: exitY });
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      direction > 0 ? "north" : "south",
+      "horizontal",
+      encounterY,
+      cursor.x,
+      bridgeX,
+      encounterSegmentIndex
+    ));
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      bridgeX < obstacle.x ? "west" : "east",
+      "vertical",
+      bridgeX,
+      encounterY,
+      exitY,
+      detourSegmentIndex
+    ));
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      direction > 0 ? "south" : "north",
+      "horizontal",
+      exitY,
+      returnX,
+      bridgeX,
+      exitSegmentIndex
+    ));
+
+    cursor = {
+      x: returnX,
+      y: exitY
     };
   }
 
-  const leftX = roundMetric(box.x - OBSTACLE_SWERVE_CLEARANCE);
-  const rightX = roundMetric(box.x + box.width + OBSTACLE_SWERVE_CLEARANCE);
-  const detourX = Math.abs(start.x - leftX) <= Math.abs(start.x - rightX) ? leftX : rightX;
-  const detourSide: PortSide = detourX < box.x ? "west" : "east";
-  const before = { x: start.x, y: roundMetric(start.y < end.y ? box.y - OBSTACLE_SWERVE_CLEARANCE : box.y + box.height + OBSTACLE_SWERVE_CLEARANCE) };
-  const after = { x: detourX, y: before.y };
-  const exit = { x: detourX, y: roundMetric(start.y < end.y ? box.y + box.height + OBSTACLE_SWERVE_CLEARANCE : box.y - OBSTACLE_SWERVE_CLEARANCE) };
-  const rejoin = { x: end.x, y: exit.y };
-  points.splice(segmentIndex + 1, 0, before, after, exit, rejoin);
-  return {
-    route: buildRoute(points, route.style),
-    occupancy: buildObstacleOccupancy(
-      connectorId,
-      box,
-      detourSide,
+  appendRoutePoint(points, { x: cursor.x, y: end.y });
+  return { points, occupancy };
+}
+
+function buildHorizontalSegmentWithLocalSwerves(
+  start: Point,
+  end: Point,
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex,
+  bucketsByNodeId: ReadonlyMap<string, ScenarioFlowNodeEdgeBuckets>
+): {
+  points: Point[];
+  occupancy: ScenarioFlowGutterOccupancy[];
+} {
+  const points: Point[] = [start];
+  const occupancy: ScenarioFlowGutterOccupancy[] = [];
+  const movingRight = start.x <= end.x;
+  let cursor = start;
+
+  for (let attempt = 0; attempt < 16; attempt += 1) {
+    const obstacle = findIntersectingBoxesAlongSegment(cursor, end, getNonEndpointBoxes(plan, index))[0];
+    if (!obstacle) {
+      appendRoutePoint(points, end);
+      return { points, occupancy };
+    }
+
+    const westOwnershipCount = getObstacleLocalOwnershipCount(bucketsByNodeId, obstacle.itemId, "west");
+    const eastOwnershipCount = getObstacleLocalOwnershipCount(bucketsByNodeId, obstacle.itemId, "east");
+    const encounterX = roundMetric(
+      movingRight
+        ? obstacle.x - OBSTACLE_SWERVE_CLEARANCE - westOwnershipCount * FIXED_SEPARATION_DISTANCE
+        : obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE + eastOwnershipCount * FIXED_SEPARATION_DISTANCE
+    );
+    const exitX = roundMetric(
+      movingRight
+        ? obstacle.x + obstacle.width + OBSTACLE_SWERVE_CLEARANCE + eastOwnershipCount * FIXED_SEPARATION_DISTANCE
+        : obstacle.x - OBSTACLE_SWERVE_CLEARANCE - westOwnershipCount * FIXED_SEPARATION_DISTANCE
+    );
+    const bridgeY = resolveLocalHorizontalDetourY(cursor.y, encounterX, exitX, obstacle, plan, index);
+
+    appendRoutePoint(points, { x: encounterX, y: cursor.y });
+    const encounterSegmentIndex = Math.max(0, points.length - 1);
+    appendRoutePoint(points, { x: encounterX, y: bridgeY });
+    const detourSegmentIndex = Math.max(0, points.length - 1);
+    appendRoutePoint(points, { x: exitX, y: bridgeY });
+    const exitSegmentIndex = Math.max(0, points.length - 1);
+    appendRoutePoint(points, { x: exitX, y: cursor.y });
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      movingRight ? "west" : "east",
       "vertical",
-      detourX,
-      after.y,
-      exit.y,
-      segmentIndex
-    )
+      encounterX,
+      cursor.y,
+      bridgeY,
+      encounterSegmentIndex
+    ));
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      bridgeY < obstacle.y ? "north" : "south",
+      "horizontal",
+      bridgeY,
+      encounterX,
+      exitX,
+      detourSegmentIndex
+    ));
+    occupancy.push(buildObstacleOccupancy(
+      plan.id,
+      obstacle,
+      movingRight ? "east" : "west",
+      "vertical",
+      exitX,
+      cursor.y,
+      bridgeY,
+      exitSegmentIndex
+    ));
+
+    cursor = {
+      x: exitX,
+      y: cursor.y
+    };
+  }
+
+  appendRoutePoint(points, end);
+  return { points, occupancy };
+}
+
+function updateSegmentCoordinate(
+  occupancy: ScenarioFlowGutterOccupancy,
+  route: PositionedRoute
+): ScenarioFlowGutterOccupancy {
+  const start = route.points[occupancy.routeSegmentIndex];
+  const end = route.points[occupancy.routeSegmentIndex + 1];
+  if (!start || !end) {
+    return occupancy;
+  }
+  const horizontal = Math.abs(start.y - end.y) <= EPSILON;
+  const vertical = Math.abs(start.x - end.x) <= EPSILON;
+  if (!horizontal && !vertical) {
+    return occupancy;
+  }
+  return {
+    ...occupancy,
+    nominalCoordinate: roundMetric(horizontal ? start.y : start.x),
+    spanStart: roundMetric(horizontal ? Math.min(start.x, end.x) : Math.min(start.y, end.y)),
+    spanEnd: roundMetric(horizontal ? Math.max(start.x, end.x) : Math.max(start.y, end.y))
   };
 }
 
 function refineRouteAgainstObstacles(
   route: PositionedRoute,
   plan: ScenarioFlowConnectorPlan,
-  nodeBoxes: readonly ScenarioFlowBox[]
+  index: ScenarioFlowPositionedIndex,
+  bucketsByNodeId: ReadonlyMap<string, ScenarioFlowNodeEdgeBuckets>
 ): {
   route: PositionedRoute;
   occupancy: ScenarioFlowGutterOccupancy[];
 } {
-  const blockingBoxes = nodeBoxes.filter((box) => box.itemId !== plan.from && box.itemId !== plan.to);
-  let refinedRoute = route;
+  const points: Point[] = [];
   const occupancy: ScenarioFlowGutterOccupancy[] = [];
 
-  for (let pass = 0; pass < 6; pass += 1) {
-    const intersection = findRouteIntersection(refinedRoute, blockingBoxes);
-    if (!intersection) {
-      break;
+  for (let indexPoint = 1; indexPoint < route.points.length; indexPoint += 1) {
+    const start = route.points[indexPoint - 1]!;
+    const end = route.points[indexPoint]!;
+    const offset = points.length === 0 ? 0 : points.length - 1;
+    const refined = Math.abs(start.x - end.x) <= EPSILON
+      ? buildVerticalSegmentWithLocalSwerves(start, end, plan, index, bucketsByNodeId)
+      : buildHorizontalSegmentWithLocalSwerves(start, end, plan, index, bucketsByNodeId);
+
+    if (points.length === 0) {
+      points.push(...refined.points);
+    } else {
+      points.push(...refined.points.slice(1));
     }
-    const refined = swerveRouteAroundIntersection(refinedRoute, intersection, plan.id);
-    refinedRoute = refined.route;
-    occupancy.push(refined.occupancy);
+    occupancy.push(...refined.occupancy.map((entry) => ({
+      ...entry,
+      routeSegmentIndex: entry.routeSegmentIndex + offset
+    })));
   }
 
+  const refinedRoute = buildRoute(points, route.style);
   return {
     route: refinedRoute,
-    occupancy
+    occupancy: occupancy.map((entry) => updateSegmentCoordinate(entry, refinedRoute))
   };
 }
 
@@ -925,6 +1378,45 @@ function resolveLaneOrderForY(index: ScenarioFlowPositionedIndex, y: number, fal
     }
   }
   return fallbackOrder;
+}
+
+function buildEndpointOccupancy(
+  plan: ScenarioFlowConnectorPlan,
+  endpointRole: EndpointRole,
+  segmentIndex: number,
+  axis: ScenarioFlowGutterAxis,
+  nominalCoordinate: number,
+  spanStart: number,
+  spanEnd: number,
+  cell?: IndexedScenarioFlowCell,
+  locked = false
+): ScenarioFlowGutterOccupancy {
+  const sourceEndpoint = endpointRole === "source";
+  const nodeId = sourceEndpoint ? plan.from : plan.to;
+  const side = sourceEndpoint ? plan.sourceSide : plan.targetSide;
+  const nodeRight = sourceEndpoint && side === "east";
+  const nodeBottom = sourceEndpoint && side === "south";
+  return {
+    connectorId: plan.id,
+    key: nodeRight
+      ? `node:${nodeId}:right`
+      : nodeBottom
+        ? `node:${nodeId}:bottom`
+        : `edge:${nodeId}:${side}:${endpointRole}`,
+    axis,
+    kind: nodeRight ? "node_right" : nodeBottom ? "node_bottom" : "edge_local",
+    nodeId,
+    side,
+    endpointRole,
+    nominalCoordinate,
+    spanStart,
+    spanEnd,
+    routeSegmentIndex: segmentIndex,
+    columnOrder: cell?.columnOrder,
+    laneOrder: cell?.rowOrder,
+    ownershipRank: 0,
+    locked
+  };
 }
 
 function buildGenericOccupancy(
@@ -956,63 +1448,47 @@ function buildGenericOccupancy(
       continue;
     }
 
-    if (first || last) {
-      const endpointRole: EndpointRole = first ? "source" : "target";
-      const nodeId = first ? plan.from : plan.to;
-      const side = first ? plan.sourceSide : plan.targetSide;
-      const cell = first ? sourceCell : targetCell;
-      const nodeRight = first && side === "east";
-      const nodeBottom = first && side === "south";
-      occupancy.push({
-        connectorId: plan.id,
-        key: nodeRight
-          ? `node:${nodeId}:right`
-          : nodeBottom
-            ? `node:${nodeId}:bottom`
-            : `edge:${nodeId}:${side}:${endpointRole}`,
-        axis,
-        kind: nodeRight ? "node_right" : nodeBottom ? "node_bottom" : "edge_local",
-        nodeId,
-        side,
-        endpointRole,
-        nominalCoordinate,
-        spanStart,
-        spanEnd,
-        routeSegmentIndex: segmentIndex,
-        columnOrder: cell?.columnOrder,
-        laneOrder: cell?.rowOrder,
-        ownershipRank: 0
-      });
+    if (first && last) {
+      occupancy.push(
+        buildEndpointOccupancy(
+          plan,
+          "source",
+          segmentIndex,
+          axis,
+          nominalCoordinate,
+          spanStart,
+          spanEnd,
+          sourceCell,
+          true
+        ),
+        buildEndpointOccupancy(
+          plan,
+          "target",
+          segmentIndex,
+          axis,
+          nominalCoordinate,
+          spanStart,
+          spanEnd,
+          targetCell,
+          true
+        )
+      );
       continue;
     }
 
-    if (segmentIndex === 1 || segmentIndex === route.points.length - 3) {
-      const endpointRole: EndpointRole = segmentIndex === 1 ? "source" : "target";
-      const nodeId = endpointRole === "source" ? plan.from : plan.to;
-      const side = endpointRole === "source" ? plan.sourceSide : plan.targetSide;
-      const cell = endpointRole === "source" ? sourceCell : targetCell;
-      const nodeRight = endpointRole === "source" && side === "east";
-      const nodeBottom = endpointRole === "source" && side === "south";
-      occupancy.push({
-        connectorId: plan.id,
-        key: nodeRight
-          ? `node:${nodeId}:right`
-          : nodeBottom
-            ? `node:${nodeId}:bottom`
-            : `edge:${nodeId}:${side}:${endpointRole}`,
-        axis,
-        kind: nodeRight ? "node_right" : nodeBottom ? "node_bottom" : "edge_local",
-        nodeId,
-        side,
+    if (first || last) {
+      const endpointRole: EndpointRole = first ? "source" : "target";
+      const cell = first ? sourceCell : targetCell;
+      occupancy.push(buildEndpointOccupancy(
+        plan,
         endpointRole,
+        segmentIndex,
+        axis,
         nominalCoordinate,
         spanStart,
         spanEnd,
-        routeSegmentIndex: segmentIndex,
-        columnOrder: cell?.columnOrder,
-        laneOrder: cell?.rowOrder,
-        ownershipRank: 0
-      });
+        cell
+      ));
       continue;
     }
 
@@ -1087,8 +1563,12 @@ function spansTouchOrOverlap(startA: number, endA: number, startB: number, endB:
 }
 
 function isDisplaceableOccupancy(entry: ScenarioFlowGutterOccupancy): boolean {
+  if (entry.locked) {
+    return false;
+  }
   return entry.kind === "node_right"
     || entry.kind === "node_bottom"
+    || (entry.kind === "edge_local" && entry.axis === "vertical")
     || entry.kind === "column"
     || entry.kind === "lane"
     || entry.kind === "obstacle_north"
@@ -1261,7 +1741,7 @@ function resolveRequiredColumnExpansions(
   const required: Record<number, number> = {};
 
   for (const entry of occupancy) {
-    if (entry.axis !== "vertical" || entry.columnOrder === undefined) {
+    if (entry.locked || entry.axis !== "vertical" || entry.columnOrder === undefined) {
       continue;
     }
     const nextColumnLeft = getNextValue(index.columnLeftByOrder, entry.columnOrder);
@@ -1287,7 +1767,7 @@ function resolveRequiredLaneExpansions(
   const required: Record<number, number> = {};
 
   for (const entry of occupancy) {
-    if (entry.axis !== "horizontal" || entry.laneOrder === undefined) {
+    if (entry.locked || entry.axis !== "horizontal" || entry.laneOrder === undefined) {
       continue;
     }
     const nextRowTop = getNextValue(index.rowTopByOrder, entry.laneOrder);
@@ -1379,6 +1859,7 @@ function buildPreparedRoutes(
   connectorPlans: readonly ScenarioFlowConnectorPlan[],
   index: ScenarioFlowPositionedIndex,
   endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>,
+  bucketsByNodeId: ReadonlyMap<string, ScenarioFlowNodeEdgeBuckets>,
   segmentCoordinateByKey: ReadonlyMap<string, number> = new Map<string, number>()
 ): PreparedScenarioFlowRoutes {
   const plans: ScenarioFlowConnectorPlan[] = connectorPlans.map((plan) => ({
@@ -1389,17 +1870,21 @@ function buildPreparedRoutes(
 
   for (const plan of plans) {
     plan.step2Route = buildTemplateRoute(plan, index, endpointOffsetsByNodeId);
-    const refined = refineRouteAgainstObstacles(plan.step2Route, plan, index.nodeBoxes);
+    const refined = refineRouteAgainstObstacles(plan.step2Route, plan, index, bucketsByNodeId);
     plan.step3Route = refined.route;
     const finalRefined = segmentCoordinateByKey.size === 0
       ? refined
       : refineRouteAgainstObstacles(
         buildTemplateRoute(plan, index, endpointOffsetsByNodeId, segmentCoordinateByKey),
         plan,
-        index.nodeBoxes
+        index,
+        bucketsByNodeId
       );
-    plan.finalRoute = finalRefined.route;
-    obstacleOccupancyByConnectorId.set(plan.id, finalRefined.occupancy);
+    plan.finalRoute = applySegmentCoordinates(finalRefined.route, plan.id, segmentCoordinateByKey, plan, index);
+    obstacleOccupancyByConnectorId.set(
+      plan.id,
+      finalRefined.occupancy.map((entry) => updateSegmentCoordinate(entry, plan.finalRoute))
+    );
   }
 
   const occupancyResult = buildOccupancyByConnector(
@@ -1422,7 +1907,8 @@ function buildPreparedRoutes(
 function buildStep3Routes(
   connectorPlans: readonly ScenarioFlowConnectorPlan[],
   index: ScenarioFlowPositionedIndex,
-  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>,
+  bucketsByNodeId: ReadonlyMap<string, ScenarioFlowNodeEdgeBuckets>
 ): PreparedScenarioFlowRoutes {
   const plans: ScenarioFlowConnectorPlan[] = connectorPlans.map((plan) => ({
     ...plan,
@@ -1432,7 +1918,7 @@ function buildStep3Routes(
 
   for (const plan of plans) {
     plan.step2Route = buildTemplateRoute(plan, index, endpointOffsetsByNodeId);
-    const refined = refineRouteAgainstObstacles(plan.step2Route, plan, index.nodeBoxes);
+    const refined = refineRouteAgainstObstacles(plan.step2Route, plan, index, bucketsByNodeId);
     plan.step3Route = refined.route;
     plan.finalRoute = refined.route;
     obstacleOccupancyByConnectorId.set(plan.id, refined.occupancy);
@@ -1630,7 +2116,7 @@ export function buildScenarioFlowRoutingStages(
     buildPositionedEdges(step2Plans, (plan) => plan.step2Route),
     diagnostics
   );
-  const step3Prepared = buildStep3Routes(connectorPlans, baseIndex, baseEndpointOffsetsByNodeId);
+  const step3Prepared = buildStep3Routes(connectorPlans, baseIndex, baseEndpointOffsetsByNodeId, baseBucketsByNodeId);
   const step3PositionedScene = withEdgesAndDiagnostics(
     positionedScene,
     buildPositionedEdges(step3Prepared.connectorPlans, (plan) => plan.step3Route),
@@ -1645,7 +2131,7 @@ export function buildScenarioFlowRoutingStages(
   for (let attempt = 0; attempt < MAX_FINAL_ROUTING_ATTEMPTS; attempt += 1) {
     const bucketsByNodeId = buildNodeEdgeBuckets(connectorPlans, workingIndex);
     const endpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, bucketsByNodeId);
-    const nominalPrepared = buildStep3Routes(connectorPlans, workingIndex, endpointOffsetsByNodeId);
+    const nominalPrepared = buildStep3Routes(connectorPlans, workingIndex, endpointOffsetsByNodeId, bucketsByNodeId);
     const segmentCoordinates = resolveOccupancyCoordinates(nominalPrepared.connectorPlans, nominalPrepared.occupancy);
     const endpointGapExpansions = resolveRequiredEndpointGapExpansions(nominalPrepared.connectorPlans, workingIndex);
     const columnExpansions = accumulateExpansions(
@@ -1658,7 +2144,7 @@ export function buildScenarioFlowRoutingStages(
     );
 
     if (!hasNonZeroExpansion(columnExpansions) && !hasNonZeroExpansion(laneExpansions)) {
-      finalPrepared = buildPreparedRoutes(connectorPlans, workingIndex, endpointOffsetsByNodeId, segmentCoordinates);
+      finalPrepared = buildPreparedRoutes(connectorPlans, workingIndex, endpointOffsetsByNodeId, bucketsByNodeId, segmentCoordinates);
       break;
     }
 
@@ -1672,9 +2158,9 @@ export function buildScenarioFlowRoutingStages(
     if (attempt === MAX_FINAL_ROUTING_ATTEMPTS - 1) {
       const finalBucketsByNodeId = buildNodeEdgeBuckets(connectorPlans, workingIndex);
       const finalEndpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, finalBucketsByNodeId);
-      const nominal = buildStep3Routes(connectorPlans, workingIndex, finalEndpointOffsetsByNodeId);
+      const nominal = buildStep3Routes(connectorPlans, workingIndex, finalEndpointOffsetsByNodeId, finalBucketsByNodeId);
       const finalSegmentCoordinates = resolveOccupancyCoordinates(nominal.connectorPlans, nominal.occupancy);
-      finalPrepared = buildPreparedRoutes(connectorPlans, workingIndex, finalEndpointOffsetsByNodeId, finalSegmentCoordinates);
+      finalPrepared = buildPreparedRoutes(connectorPlans, workingIndex, finalEndpointOffsetsByNodeId, finalBucketsByNodeId, finalSegmentCoordinates);
     }
   }
 

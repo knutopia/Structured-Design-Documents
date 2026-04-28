@@ -15,6 +15,7 @@
 ## Mon 5-27-26
 
 -planned, built fix for scenario_flow stages shortcomings, partial success
+-second fix iteration, 2 steps forward, 1 step back
 
 ## Sat 4-25-26
 
