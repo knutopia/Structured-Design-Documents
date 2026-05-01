@@ -579,7 +579,7 @@ function globalHelpText(): string {
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
-    "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
+    "  `show` defaults to SVG preview output. `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
     "  Internal DOT and Mermaid text artifacts remain available for tests and debugging.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");

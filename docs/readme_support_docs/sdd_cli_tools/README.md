@@ -85,6 +85,7 @@ Examples:
 ```bash
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple
 pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --profile simple --out ./blueprint.svg
+pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
 pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
 ```
@@ -128,13 +129,14 @@ pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.js
 
 ## Supported Preview Views
 
-The only preview-ready views in the CLI today are:
+The preview-ready views in the CLI today are:
 
 - `ia_place_map`
 - `ui_contracts`
 - `service_blueprint`
+- `scenario_flow`
 
-These are the views you should expect to work with `sdd show`. Other bundle-defined views may exist, but they are not preview-ready in the CLI yet.
+These are the views you should expect to work with `sdd show`. Other bundle-defined views may exist, but they are not polished preview-ready views in the CLI yet.
 
 ## Suggested Starter Flows
 

@@ -226,6 +226,49 @@ describe("preview workflow", () => {
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 
+  it("renders scenario_flow SVG previews through the staged backend by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("scenario_branching.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "scenario_flow",
+      format: "svg",
+      profileId: "strict"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_scenario_flow_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected staged SVG artifact.");
+    }
+
+    expect(result.artifact.text).toContain('class="staged-svg');
+    expect(result.artifact.text).toContain("Choose Fulfillment");
+    expect(result.artifact.text).toContain('class="scene-edge');
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders scenario_flow PNG previews through the staged backend by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("scenario_branching.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "scenario_flow",
+      format: "png",
+      profileId: "strict"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_scenario_flow_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("png");
+    if (!result.artifact || result.artifact.format !== "png") {
+      throw new Error("Expected staged PNG artifact.");
+    }
+
+    expect(Array.from(result.artifact.bytes.slice(0, PNG_SIGNATURE.length))).toEqual(PNG_SIGNATURE);
+    expect(result.artifact.bytes.length).toBeGreaterThan(32);
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
   it("renders service_blueprint SVG previews through the explicit legacy backend", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadInput("service_blueprint_slice.sdd");

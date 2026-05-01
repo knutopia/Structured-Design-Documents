@@ -4,9 +4,9 @@ SDD-Text is a compact language for describing software product design as a struc
 
 SDD-Text makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
 
-Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, and Service Blueprint views. See [Diagram Types](docs/readme_support_docs/diagram_types/).
+Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](docs/readme_support_docs/diagram_types/).
 
-This repository contains a spec bundle that is meant to evolve, and the SDD-Text toolchain for compiling, validating, and rendering structured design documents. It validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
+This repository contains the spec bundle defining the language. The bundle is meant to evolve, to improve the language. The repository also contains a toolchain that validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
 
 Because rendering is separate from the source model, tools that work with design structure do not need graphical capabilities, while rendering tools can focus solely on presentation.
 
@@ -122,12 +122,12 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
-- Completed usable staged SVG renderers for IA / Place Map, UI Contract and Service Blueprint
+- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations
 
-- Outcome-Opportunity Map, Journey Map and Scenario Flow renderers do not produce usable output yet.
+- Outcome-Opportunity Map and Journey Map renderers do not produce usable output yet.
   - examples show unusable diagrams relying on poor Graphviz-based implementation
 - Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty

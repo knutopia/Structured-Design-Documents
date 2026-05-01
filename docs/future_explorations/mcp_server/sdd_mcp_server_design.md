@@ -1009,7 +1009,8 @@ interface RenderPreviewArgs {
     | "legacy_graphviz_preview"
     | "staged_ia_place_map_preview"
     | "staged_ui_contracts_preview"
-    | "staged_service_blueprint_preview";
+    | "staged_service_blueprint_preview"
+    | "staged_scenario_flow_preview";
 }
 ```
 
@@ -1037,9 +1038,9 @@ Default backend resolution:
 - `ia_place_map` -> `staged_ia_place_map_preview`
 - `ui_contracts` -> `staged_ui_contracts_preview`
 - `service_blueprint` -> `staged_service_blueprint_preview`
+- `scenario_flow` -> `staged_scenario_flow_preview`
 - `journey_map` -> `legacy_graphviz_preview`
 - `outcome_opportunity_map` -> `legacy_graphviz_preview`
-- `scenario_flow` -> `legacy_graphviz_preview`
 
 Rules:
 

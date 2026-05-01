@@ -12,7 +12,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Tue 5-27
+## Fri 5-01
+
+-updated docs / tests to catch up with scenario_flow staged renderer
+
+## Tue 4-27
 
 -third iteration fix, and a fourth one for wide swerve routing
 -fifth iteration for swerve spacing
@@ -20,7 +24,7 @@
 -seventh for label placement parity
 -eighth for label gutter space
 
-## Mon 5-27-26
+## Mon 4-27-26
 
 -planned, built fix for scenario_flow stages shortcomings, partial success
 -second fix iteration, 2 steps forward, 1 step back

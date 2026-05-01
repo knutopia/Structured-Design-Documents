@@ -13,7 +13,8 @@ export type PreviewBackendId =
   | "legacy_graphviz_preview"
   | "staged_ia_place_map_preview"
   | "staged_ui_contracts_preview"
-  | "staged_service_blueprint_preview";
+  | "staged_service_blueprint_preview"
+  | "staged_scenario_flow_preview";
 export type ChangeSetOrigin =
   | "apply_change_set"
   | "apply_authoring_intent"

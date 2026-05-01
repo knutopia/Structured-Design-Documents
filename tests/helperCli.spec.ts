@@ -10,6 +10,7 @@ import type {
   HelperGitCommitResult,
   HelperGitStatusResult,
   ProjectionResource,
+  RenderPreviewArgs,
   RenderPreviewResult,
   SearchGraphResult,
   ValidationResource,
@@ -1922,6 +1923,53 @@ describe("sdd-helper CLI", () => {
       "diagnostics",
       "assessment"
     ]);
+  });
+
+  it("forwards explicit scenario_flow staged preview backend requests", async () => {
+    const explicitBackend = "staged_scenario_flow_preview" satisfies NonNullable<RenderPreviewArgs["backend_id"]>;
+    const renderPreview = vi.fn(async (): Promise<RenderPreviewResult> => ({
+      kind: "sdd-preview",
+      path: "bundle/v0.1/examples/scenario_branching.sdd",
+      revision: "rev_preview",
+      view_id: "scenario_flow",
+      profile_id: "simple",
+      backend_id: explicitBackend,
+      format: "svg",
+      mime_type: "image/svg+xml",
+      artifact_path: "/tmp/unique-previews/20260417-foo/scenario_branching.scenario_flow.simple.staged_scenario_flow_preview.svg",
+      notes: [],
+      diagnostics: []
+    }));
+    const { deps, stdout } = createDeps({ renderPreview });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "preview",
+      "bundle/v0.1/examples/scenario_branching.sdd",
+      "--view",
+      "scenario_flow",
+      "--profile",
+      "simple",
+      "--format",
+      "svg",
+      "--backend",
+      explicitBackend
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderPreview).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "bundle/v0.1/examples/scenario_branching.sdd",
+      view_id: "scenario_flow",
+      profile_id: "simple",
+      format: "svg",
+      backend_id: explicitBackend
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-preview",
+      view_id: "scenario_flow",
+      backend_id: "staged_scenario_flow_preview",
+      artifact_path: "/tmp/unique-previews/20260417-foo/scenario_branching.scenario_flow.simple.staged_scenario_flow_preview.svg"
+    });
   });
 
   it("rejects the removed preview display-copy option", async () => {
