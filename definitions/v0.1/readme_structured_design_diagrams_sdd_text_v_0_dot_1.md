@@ -50,42 +50,65 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
 
 1. **Outcome–Opportunity Map**
    - Answers: *Why are we doing this? How will we measure success?*
-   - Uses: `Outcome`, `Metric`, `Opportunity`, `Initiative`
+   - Uses: 
+      - `Outcome` (`MEASURED_BY`)
+      - `Metric` (`INSTRUMENTED_AT`)
+      - `Opportunity` (`SUPPORTS`)
+      - `Initiative` (`ADDRESSES`, `IMPLEMENTED_BY`)
    - `INSTRUMENTED_AT` context may render as grouped metric annotations when targets are outside the view scope, with experience targets separated from event targets.
 
 2. **Journey Map**
    - Answers: *What steps happen over time, from the user’s perspective?*
-   - Uses: `Stage`, `Step` (`CONTAINS`, `PRECEDES`)
+   - Uses: 
+      - `Stage` (`CONTAINS`)
+      - `Step` (`PRECEDES`)
    - `Stage CONTAINS Step` defines the stage/step hierarchy when stages are present.
    - Opportunity traceability is rendered from `Step.props.opportunity_refs`, not a separate v0.1 relationship, and typically appears as inline step badges.
 
 3. **Service Blueprint**
    - Answers: *What frontstage/backstage/system/policy work delivers each step?*
-   - Uses: `Step`, `Process`, `SystemAction`, `Policy`, `DataEntity`
+   - Uses: 
+      - `Step` (`REALIZED_BY`, `PRECEDES`)
+      - `Process` (`DEPENDS_ON`, `CONSTRAINED_BY`, `PRECEDES`)
+      - `SystemAction` (`READS`, `WRITES`, `CONSTRAINED_BY`)
+      - `Policy`
+      - `DataEntity`
    - Lanes derive from `Process.visibility` plus node-type defaults for system and policy.
    - Canonical `Process.visibility` values are `frontstage`, `backstage`, and `support`; legacy `customer-visible` and `not-visible` are downstream compatibility aliases for `frontstage` and `backstage`.
 
 4. **IA / Place Map**
    - Answers: *What are the places in the product and how do they connect?*
-   - Uses: `Area`, `Place` (`CONTAINS`, `NAVIGATES_TO`)
+   - Uses: 
+      - `Area` (`CONTAINS`)
+      - `Place` (`CONTAINS`, `NAVIGATES_TO`)
    - `route_or_key`, `access`, and optional entry metadata render as node annotations.
 
 5. **Scenario Flow**
    - Answers: *How does a scenario traverse Steps and Places?*
-   - Uses: `Step`, `Place`, optional `ViewState`
+   - Uses: 
+      - `Step` (`PRECEDES`, `REALIZED_BY`)
+      - `Place` (`NAVIGATES_TO`)
+      - `ViewState` (`TRANSITIONS_TO`)
    - Branch points are modeled as `Step.props.kind=decision`.
    - Branch labels prefer guard text, then event id, then the target node name when neither guard nor event is present.
 
 6. **UI Contracts**
    - Answers: *What states and components exist within a Place, and how do they transition?*
-   - Uses: `Place`, `ViewState`, `Component`, optional `State`, `Event`
+   - Uses: 
+      - `Place` (`COMPOSED_OF`, `CONTAINS`)
+      - `ViewState` (`COMPOSED_OF`, `TRANSITIONS_TO`, `EMITS`, `DEPENDS_ON`)
+      - `Component` (`CONTAINS`, `EMITS`, `BINDS_TO`, `DEPENDS_ON`)
+      - `State` (`TRANSITIONS_TO`); 
+      - `Event`
+      - `DataEntity`
+      - `SystemAction` (`EMITS`)
    - `ViewState` is the primary graph; `State` is scoped secondary detail.
    - Use `State.scope_id` to bind state detail to the owning `Place` or `Component`.
    - If a slice has no `ViewState` nodes, grouped `State` transitions become the effective primary graph for this view.
 
 ---
 
-## Design principle: Step ≠ Screen
+## Design rinciple: Step ≠ Screen
 
 SDD-Text avoids conflating “what happens” with “where it happens.”
 

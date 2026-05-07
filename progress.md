@@ -12,6 +12,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 5-06
+
+-clarified edges per node in specifications readme
+
 ## Fri 5-01
 
 -updated docs / tests to catch up with scenario_flow staged renderer
