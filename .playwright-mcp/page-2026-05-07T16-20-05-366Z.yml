@@ -1,0 +1,148 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - paragraph [ref=e6]:
+          - link "Graf Systems" [ref=e7] [cursor=pointer]:
+            - /url: https://grafsys.com/
+        - paragraph [ref=e8]: Solutions & Design
+    - main [ref=e11]:
+      - article [ref=e12]:
+        - 'heading "Behind the Scenes: Tech, Structures and Process" [level=1] [ref=e14]'
+        - generic [ref=e15]:
+          - paragraph [ref=e16]:
+            - emphasis [ref=e17]: …in the Email Classifier Solution Project
+          - heading "DistilBERT Transformer" [level=2] [ref=e18]
+          - paragraph [ref=e19]: "The classification model is a DistilBERT transformer. DistilBERT is a condensed version of the Google’s BERT transformer. DistilBERT, with 66 million parameters, is a fraction of the size of large GPT models: GPT-4 and Grok4 at (estimated) 1.7 trillion parameters are 25.000 times larger than DistilBERT. And yet, DistilBERT performs well for text classification tasks and can do so while running locally on a relatively ordinary PC."
+          - heading "Training Pipeline" [level=2] [ref=e20]
+          - figure [ref=e21]:
+            - iframe [ref=e23]:
+              - region "Video Player" [ref=f6e2]:
+                - text: 
+                - dialog "Modal Window" [ref=f6e4]:
+                  - paragraph [ref=f6e5]: This is a modal window.
+                  - document [ref=f6e6]:
+                    - generic [ref=f6e7]: Loading…
+          - paragraph [ref=e24]: The training pipeline is written in Python with PyTorch, consisting of command line utilities to encode training data and to do actual training runs. A dictionary file defines categories and subcategories, configuring training heads accordingly. Training runs are parameter-driven. A training config file contains hyperparameters to optimize. A number of common training optimization techniques are available to use. Performance metrics and realtime parameters are logged extensively for analysis. A training run tracks a best model epoch and creates per-epoch visualizations. Best-model checkpoints are saved with rich state data to allow for fine-tuning later.
+          - heading "Utility App" [level=2] [ref=e25]
+          - paragraph [ref=e26]: The utility app provides means to run evaluations, to check and track model performance, to organize samples, to collect data for future training runs, and to curate routing rules.
+          - figure "Utility App Core Flow" [ref=e27]:
+            - generic [ref=e28]: Utility App Core Flow
+          - heading "Samples, Queue, Batches" [level=3] [ref=e29]
+          - paragraph [ref=e30]:
+            - text: When an
+            - emphasis [ref=e31]: email
+            - text: comes into the app, it becomes a
+            - emphasis [ref=e32]: sample
+            - text: . The app uses batches to allow the user to organize samples. The
+            - emphasis [ref=e33]: queue
+            - text: is a special batch that contains all the samples that are ready to be processed by the model. The app performs
+            - emphasis [ref=e34]: evaluation runs
+            - text: ", handing the samples in the queue to the inference pipeline, where the model evaluates the samples, assigning classifications. The evaluated samples are moved to an evaluation batch, where routing rules can be applied, to determine whom to send the email to."
+          - figure "Utility App Core Flow & Sample Batch Management" [ref=e35]:
+            - generic [ref=e36]: Utility App Core Flow & Sample Batch Management
+          - heading "Validation & Manual Review" [level=3] [ref=e37]
+          - paragraph [ref=e38]:
+            - text: Samples come with or without
+            - emphasis [ref=e39]: validation data,
+            - text: "to check if the model classifies a sample correctly. Samples in production (actual emails written by people) do not have validation data. Samples that are LLM-generated using the training-data generation process, and manually authored samples, have validation data. When a model evaluates a sample with validation data, its performance is captured: did it get it right?"
+          - paragraph [ref=e40]:
+            - text: Any sample
+            - emphasis [ref=e41]: without
+            - text: validation data that is evaluated (classified) by the model can be manually reviewed. The reviewer approves the model’s evaluation of the sample or assigns corrections. The manual review then provides validation data for future model training.
+          - paragraph [ref=e42]: Model performance is accumulated and tracked across all evaluated samples with validation data and with manual review data.
+          - heading "Utility App Tech Stack" [level=3] [ref=e43]
+          - paragraph [ref=e44]: The user-facing utility app is python using SQLite, Vite, React and PyTorch to run inference. To allow room to grow, the app has abstraction layers to replace SQLite with a more sophisticated database and to replace locally-run inference with an API-driven solution. The front end uses Ant Design with a token-based design system.
+          - heading "“Crawl” State" [level=3] [ref=e45]
+          - paragraph [ref=e46]:
+            - text: In the
+            - emphasis [ref=e47]: crawl
+            - text: of the app, there is no integration with external email systems yet, but the API is ready for an integration with a workflow automation system like N8N, which connects to email systems. In a large-scale production deployment, a dedicated data ingestion bridge to connect to an email server may be more advisable.
+          - figure "Training run model performance visualizations" [ref=e48]:
+            - figure [ref=e49]:
+              - link [ref=e50] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.25.43-pm.png
+            - figure [ref=e51]:
+              - link [ref=e52] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.24.57-pm.png
+            - figure [ref=e53]:
+              - link [ref=e54] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.22.58-pm.png
+            - figure [ref=e55]:
+              - link [ref=e56] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.22.26-pm.png
+            - figure [ref=e57]:
+              - link [ref=e58] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.25.16-pm.png
+            - figure [ref=e59]:
+              - link [ref=e60] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.25.58-pm.png
+            - figure [ref=e61]:
+              - link [ref=e62] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.23.43-pm.png
+            - figure [ref=e63]:
+              - link [ref=e64] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.24.31-pm.png
+            - figure [ref=e65]:
+              - link [ref=e66] [cursor=pointer]:
+                - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/screen-shot-2025-08-11-at-5.24.08-pm.png
+            - generic [ref=e67]: Training run model performance visualizations
+          - heading "Process" [level=2] [ref=e68]
+          - paragraph [ref=e69]: I use Cursor, Claude, Claude Code and other LLM tools to inform technology choices, toe explore architecture options, to build, and to generate training data.
+          - paragraph [ref=e70]: The project complexity is well beyond “vibe coding scale”. I follow a “one-person product organization” approach, relying on documentation-driven process, step-by-step implementation and testing. I start with notebook sketches, write PRDs, design documents (some just by myself, some in dialog with an LLM), architecture documents, plans, and then prompts.
+          - figure "Utility app showing sample pool in dark mode, responsive layout" [ref=e71]:
+            - link [ref=e72] [cursor=pointer]:
+              - /url: https://knutopia.wordpress.com/wp-content/uploads/2025/08/utility-app-sample-pool-w-inspector-responsive-dark-2.png
+            - generic [ref=e73]: Utility app showing sample pool in dark mode, responsive layout
+          - heading "React & Ant Design" [level=3] [ref=e74]
+          - paragraph [ref=e75]: For the front end, I chose React (as opposed to something more modern) since LLMs are well-trained on it. This was helpful both for prototyping screens and for the actual implementation. Ant Design is a great design system to use because it comes with robust enterprise grade features, such as flexible tables, which can otherwise be hard to deal with. Ant Design also offers a sophisticated design token system to keep CSS clean and simple.
+          - heading "UX Design Process" [level=3] [ref=e76]
+          - paragraph [ref=e77]: "To design the UX, I bypassed sketching in Figma. After doing paper sketches and taking notes, I iterated on a PRD document and on a feature-by-feature UX specification supported by sample .json data files. These documents informed a series of prototypes in Cursor. A prototype then served as a reference for implementation. The implementation always gets refined too: nothing like running code to experience and optimize flow. Eventually it is good."
+          - paragraph [ref=e78]: I also explored doing actual sketches with Figma’s First Draft feature and with Google Stitch, but did not like being stuck with dead-end drawings. These tools also had a harder time creating results with appropriate amount of detail and structure. Figma Make could have been another option, but I just stuck with my default tools to get the job done.
+          - paragraph [ref=e79]: "For what it’s worth: this page is 100% human-written."
+          - generic [ref=e80]:
+            - heading "Contact Us:" [level=2] [ref=e82]:
+              - strong [ref=e83]: Contact Us
+              - text: ":"
+            - 'form "Behind the Scenes: Tech, Structures and Process" [ref=e86]':
+              - generic [ref=e87]:
+                - generic [ref=e88]:
+                  - generic [ref=e89]: Name(required)
+                  - textbox "Name" [ref=e90]
+                  - img [ref=e91]
+                - generic [ref=e95]:
+                  - generic [ref=e96]: Email(required)
+                  - textbox "Email" [ref=e97]
+                  - img [ref=e98]
+                - generic [ref=e102]:
+                  - generic [ref=e103]: Institution
+                  - textbox "Institution" [ref=e104]
+                  - img [ref=e105]
+                - group "Interest" [ref=e110]:
+                  - generic [ref=e111]: Interest
+                  - generic [ref=e112]:
+                    - generic [ref=e113]:
+                      - checkbox "I would like to learn more about Email Classifier Solution" [ref=e114]
+                      - generic [ref=e115]: I would like to learn more about Email Classifier Solution
+                    - generic [ref=e116]:
+                      - checkbox "I would like to talk to you about something else" [ref=e117]
+                      - generic [ref=e118]: I would like to talk to you about something else
+                  - img [ref=e119]
+                - generic [ref=e123]:
+                  - generic [ref=e124]: Message
+                  - textbox "Message" [ref=e125]
+                  - img [ref=e126]
+                - button "Contact Us" [ref=e131] [cursor=pointer]
+    - contentinfo [ref=e132]:
+      - generic [ref=e133]:
+        - link "Graf Systems" [ref=e134] [cursor=pointer]:
+          - /url: https://grafsys.com/
+        - text: ","
+        - link "Create a website or blog at WordPress.com" [ref=e135] [cursor=pointer]:
+          - /url: https://wordpress.com/?ref=footer_custom_svg
+          - img "Create a website or blog at WordPress.com" [ref=e136]
+  - list [ref=e139]:
+    - listitem [ref=e140] [cursor=pointer]:
+      - img [ref=e141]

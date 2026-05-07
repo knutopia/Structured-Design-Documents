@@ -1,0 +1,110 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - paragraph [ref=e6]:
+          - link "Graf Systems" [ref=e7] [cursor=pointer]:
+            - /url: https://grafsys.com/
+        - paragraph [ref=e8]: Solutions & Design
+    - main [ref=e11]:
+      - article [ref=e12]:
+        - heading "Related Links" [level=1] [ref=e14]
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: "Related Useful Links (not affiliated with the project):"
+          - paragraph [ref=e17]: (no affiliation)
+          - list [ref=e18]:
+            - listitem [ref=e19]:
+              - text: "Straits Research:"
+              - link "Museum Management Software Market Size & Outlook 2025-2033" [ref=e20] [cursor=pointer]:
+                - /url: https://straitsresearch.com/report/museum-management-software-market
+              - text: (Pay-to-download, but good free overview)
+            - listitem [ref=e21]:
+              - text: "Catherine Breslin:"
+              - link "What is a parameter?" [ref=e22] [cursor=pointer]:
+                - /url: https://catherinebreslin.medium.com/what-is-a-parameter-3d4b7736c81d
+              - text: (Medium)
+            - listitem [ref=e23]:
+              - text: "The Educative Team:"
+              - link "Cost of fine-tuning an LLM" [ref=e24] [cursor=pointer]:
+                - /url: https://learningdaily.dev/what-is-the-cost-of-fine-tuning-llms-f5801c00b06d
+              - text: (Medium)
+            - listitem [ref=e25]:
+              - text: "Josh Starmer:"
+              - link "StatQuest" [ref=e26] [cursor=pointer]:
+                - /url: https://statquest.org/
+              - text: and the YouTube channel
+              - link "StatQuest with Josh Starmer" [ref=e27] [cursor=pointer]:
+                - /url: https://www.youtube.com/c/joshstarmer
+              - text: are great resources to learn about Machine Learning.
+            - listitem [ref=e28]:
+              - text: "Language Model Size Comparison:"
+              - link "https://claude.ai/public/artifacts/85e19d29-624a-4f44-bb3f-8aca72ac7366" [ref=e29] [cursor=pointer]:
+                - /url: https://claude.ai/public/artifacts/85e19d29-624a-4f44-bb3f-8aca72ac7366
+              - text: (Claude Artifact)
+            - listitem [ref=e30]:
+              - text: "Stephen Wolfram:"
+              - list [ref=e31]:
+                - listitem [ref=e32]:
+                  - link "What is ChatGPT doing and why does it work?" [ref=e33] [cursor=pointer]:
+                    - /url: https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/
+                - listitem [ref=e34]:
+                  - link "How to Think Computationally about AI, the Universe and Everything" [ref=e35] [cursor=pointer]:
+                    - /url: https://writings.stephenwolfram.com/2023/10/how-to-think-computationally-about-ai-the-universe-and-everything/
+            - listitem [ref=e36]:
+              - text: "Dwarkesh Patel:"
+              - list [ref=e37]:
+                - listitem [ref=e38]:
+                  - link "Richard Sutton – Father of RL thinks LLMs are a dead end" [ref=e39] [cursor=pointer]:
+                    - /url: https://www.youtube.com/watch?v=21EYKqUsPfg
+                  - text: (Youtube)
+                - listitem [ref=e40]:
+                  - link "Some thoughts on the Sutton interview" [ref=e41] [cursor=pointer]:
+                    - /url: https://www.youtube.com/watch?v=u3HBJVjpXuw
+                  - text: (Youtube)
+          - generic [ref=e42]:
+            - heading "Contact Us:" [level=2] [ref=e44]:
+              - strong [ref=e45]: Contact Us
+              - text: ":"
+            - form "Related Links" [ref=e48]:
+              - generic [ref=e49]:
+                - generic [ref=e50]:
+                  - generic [ref=e51]: Name(required)
+                  - textbox "Name" [ref=e52]
+                  - img [ref=e53]
+                - generic [ref=e57]:
+                  - generic [ref=e58]: Email(required)
+                  - textbox "Email" [ref=e59]
+                  - img [ref=e60]
+                - generic [ref=e64]:
+                  - generic [ref=e65]: Institution
+                  - textbox "Institution" [ref=e66]
+                  - img [ref=e67]
+                - group "Interest" [ref=e72]:
+                  - generic [ref=e73]: Interest
+                  - generic [ref=e74]:
+                    - generic [ref=e75]:
+                      - checkbox "I would like to learn more about Email Classifier Solution" [ref=e76]
+                      - generic [ref=e77]: I would like to learn more about Email Classifier Solution
+                    - generic [ref=e78]:
+                      - checkbox "I would like to talk to you about something else" [ref=e79]
+                      - generic [ref=e80]: I would like to talk to you about something else
+                  - img [ref=e81]
+                - generic [ref=e85]:
+                  - generic [ref=e86]: Message
+                  - textbox "Message" [ref=e87]
+                  - img [ref=e88]
+                - button "Contact Us" [ref=e93] [cursor=pointer]
+          - paragraph
+    - contentinfo [ref=e94]:
+      - generic [ref=e95]:
+        - link "Graf Systems" [ref=e96] [cursor=pointer]:
+          - /url: https://grafsys.com/
+        - text: ","
+        - link "Create a website or blog at WordPress.com" [ref=e97] [cursor=pointer]:
+          - /url: https://wordpress.com/?ref=footer_custom_svg
+          - img "Create a website or blog at WordPress.com" [ref=e98]
+  - list [ref=e101]:
+    - listitem [ref=e102] [cursor=pointer]:
+      - img [ref=e103]

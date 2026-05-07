@@ -1,0 +1,49 @@
+SDD-TEXT 0.1
+Area GS-001 "Graf Systems site"
+  url="https://grafsys.com/"
+  title="Graf Systems - Solutions & Design"
+  CONTAINS GS-002
+END
+Place GS-002 "Homepage"
+  url="https://grafsys.com/"
+  observed_title="Graf Systems - Solutions & Design"
+  observed_text="Solutions & Design by Knut Graf"
+  CONTAINS GS-003
+  COMPOSED_OF GS-004
+  COMPOSED_OF GS-005
+  COMPOSED_OF GS-006
+  COMPOSED_OF GS-009
+  NAVIGATES_TO GS-002
+END
+ViewState GS-003 "Observed homepage state"
+  responsive_structure="Desktop and mobile snapshots expose the same accessibility structure."
+END
+Component GS-004 "Skip to content link"
+  label="Skip to content"
+  href="#content"
+END
+Component GS-005 "Logo image"
+  accessible_name="Graf Systems"
+END
+Component GS-006 "Main article"
+  CONTAINS GS-007
+  CONTAINS GS-008
+END
+Component GS-007 "H1 Graf Systems"
+  text="Graf Systems"
+END
+Component GS-008 "Solutions and design text"
+  text="Solutions & Design by Knut Graf"
+END
+Component GS-009 "Footer"
+  CONTAINS GS-010
+  CONTAINS GS-011
+END
+Component GS-010 "Footer home link"
+  label="Graf Systems"
+  href="https://grafsys.com/"
+END
+Component GS-011 "WordPress attribution link"
+  label="Create a website or blog at WordPress.com"
+  href="https://wordpress.com/?ref=footer_custom_svg"
+END

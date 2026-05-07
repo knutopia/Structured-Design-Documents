@@ -1,0 +1,97 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - paragraph [ref=e6]:
+          - link "Graf Systems" [ref=e7] [cursor=pointer]:
+            - /url: https://grafsys.com/
+        - paragraph [ref=e8]: Solutions & Design
+    - main [ref=e11]:
+      - article [ref=e12]:
+        - 'heading "Email Classifier Solution: Overview" [level=1] [ref=e14]'
+        - generic [ref=e15]:
+          - paragraph [ref=e16]:
+            - text: A
+            - emphasis [ref=e17]: work-in-progress
+            - text: machine learning project that classifies emails being sent to a museum, identifying topics, visitor segments and urgency, as criteria to provide internal routing to the right people to respond.
+          - heading "Inbox Management" [level=2] [ref=e18]
+          - paragraph [ref=e19]: "A visitor, a future visitor, or just anyone with a request, sends an email to a catch-all email address. Those emails need to be read, and forwarded to the right person to respond to: someone in the right department, someone who knows the field, someone who understands what the sender needs, someone who understands the right tone."
+          - blockquote [ref=e20]:
+            - paragraph [ref=e21]: Inbox management is an important task that is never done.
+          - paragraph [ref=e22]: "This inbox management is a task that is never done, and it requires frequent attention. It is important: a good, timely email response is a core part of an organization’s relationship with the public."
+          - heading "Automating Inbox Management" [level=2] [ref=e23]
+          - paragraph [ref=e24]: "So, lets automate inbox management: classify an incoming email along meaningful dimensions. Then apply rules that route the email to somebody to respond. Each routing rule says “for this kind of request, this person is the best to respond.” The rule matches an incoming email with someone to handle it. The email is forwarded automatically. The right person can send a timely and relevant response, creating a good customer relationship."
+          - figure "Core Flow" [ref=e25]:
+            - generic [ref=e26]: Core Flow
+          - paragraph [ref=e27]: "The system frees up the people who did inbox management to focus on other things. Inbox management happens reliably and automatically. It’s transparent: the people receiving and responding do not have to learn any new technology."
+          - blockquote [ref=e28]:
+            - paragraph [ref=e29]: Email is forwarded automatically. The right person can send a timely and relevant response, creating a good customer relationship.
+          - paragraph [ref=e30]: "Behind the scenes, a steward (or administrator) keeps an eye on the automation: monitoring that classification works, curating the routing rules, and if needed, training the model."
+          - heading "Utility App" [level=3] [ref=e31]
+          - paragraph [ref=e32]: To facilitate this, the project offers a utility app that provides performance monitoring, workflow management, rule editing, and training data handling. For the early stage of the project, the app also provides experimentation with different models, running inference, checking performance metrics, correcting results, and keeping track of samples. The utility app interfaces with the inference pipeline, which does the actual classifying of samples by a model.
+          - figure [ref=e33]:
+            - figure "Sample pool" [ref=e34]:
+              - generic [ref=e35] [cursor=pointer]: Sample pool
+            - figure "Routing rules" [ref=e36]:
+              - generic [ref=e37] [cursor=pointer]: Routing rules
+            - figure "Processing samples in the queue" [ref=e38]:
+              - generic [ref=e39] [cursor=pointer]: Processing samples in the queue
+            - figure "Processed samples with routing" [ref=e40]:
+              - generic [ref=e41] [cursor=pointer]: Processed samples with routing
+          - paragraph [ref=e42]: Behind the scenes, a training pipeline is a command line tool to do model training runs, using json files for parameters and visualizations to show training outcomes and model performance, to allow parameter optimization.
+          - heading "Classification Dimensions & Routing Rules" [level=3] [ref=e43]
+          - paragraph [ref=e44]: "For each email, the model identifies a visitor segment, a category, a subcategory within the category, and an urgency level. Those classification results serve as input to routing rules, which route the email to the right person. The rules are defined manually: no AI decides who the right person its."
+          - paragraph [ref=e45]: If the existing classification dimensions don’t match the needs of an organization, they can be changed, and the model can be retrained on new ones. This could be done, for example, to recognize requests about specific collections.
+          - paragraph [ref=e46]:
+            - text: A trained model gets the classification right
+            - emphasis [ref=e47]: very often,
+            - text: but not
+            - emphasis [ref=e48]: always.
+            - text: Often enough to be useful, for sure. But language is subjective, so there is room for some error. When an email is classified wrong, a correction can be applied manually. Corrections can be collected over time, and the model can be trained with them to get better.
+          - paragraph [ref=e49]: "For what it’s worth: this page is 100% human-written."
+          - generic [ref=e50]:
+            - heading "Contact Us:" [level=2] [ref=e52]:
+              - strong [ref=e53]: Contact Us
+              - text: ":"
+            - 'form "Email Classifier Solution: Overview" [ref=e56]':
+              - generic [ref=e57]:
+                - generic [ref=e58]:
+                  - generic [ref=e59]: Name(required)
+                  - textbox "Name" [ref=e60]
+                  - img [ref=e61]
+                - generic [ref=e65]:
+                  - generic [ref=e66]: Email(required)
+                  - textbox "Email" [ref=e67]
+                  - img [ref=e68]
+                - generic [ref=e72]:
+                  - generic [ref=e73]: Institution
+                  - textbox "Institution" [ref=e74]
+                  - img [ref=e75]
+                - group "Interest" [ref=e80]:
+                  - generic [ref=e81]: Interest
+                  - generic [ref=e82]:
+                    - generic [ref=e83]:
+                      - checkbox "I would like to learn more about Email Classifier Solution" [ref=e84]
+                      - generic [ref=e85]: I would like to learn more about Email Classifier Solution
+                    - generic [ref=e86]:
+                      - checkbox "I would like to talk to you about something else" [ref=e87]
+                      - generic [ref=e88]: I would like to talk to you about something else
+                  - img [ref=e89]
+                - generic [ref=e93]:
+                  - generic [ref=e94]: Message
+                  - textbox "Message" [ref=e95]
+                  - img [ref=e96]
+                - button "Contact Us" [ref=e101] [cursor=pointer]
+    - contentinfo [ref=e102]:
+      - generic [ref=e103]:
+        - link "Graf Systems" [ref=e104] [cursor=pointer]:
+          - /url: https://grafsys.com/
+        - text: ","
+        - link "Create a website or blog at WordPress.com" [ref=e105] [cursor=pointer]:
+          - /url: https://wordpress.com/?ref=footer_custom_svg
+          - img "Create a website or blog at WordPress.com" [ref=e106]
+  - list [ref=e109]:
+    - listitem [ref=e110] [cursor=pointer]:
+      - img [ref=e111]

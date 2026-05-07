@@ -1,0 +1,77 @@
+SDD-TEXT 0.1
+Area A-001 "Graf Systems public site"
+  source_url="https://grafsys.com/"
+  source_title="Graf Systems - Solutions & Design"
+  evidence_scope="Shared desktop and mobile accessibility snapshots for homepage only"
+  CONTAINS P-001 "Homepage"
+  + Place P-001 "Homepage"
+    route_or_key="/"
+    url="https://grafsys.com/"
+    page_title="Graf Systems - Solutions & Design"
+    observed_same_structure="Desktop and mobile snapshots expose the same accessibility structure"
+    boundary="No additional same-site navigation pages were visible"
+    CONTAINS VS-001 "Default homepage view"
+    NAVIGATES_TO P-001 "Homepage" [E-002] observed_link_label="Graf Systems" observed_url=https://grafsys.com/
+    + ViewState VS-001 "Default homepage view"
+      evidence="Skip link, main article, H1, logo image, tagline paragraph, footer home link, and WordPress attribution link"
+      COMPOSED_OF C-001 "Skip to content link"
+      COMPOSED_OF C-002 "Main article"
+      COMPOSED_OF C-006 "Site footer"
+      + Component C-001 "Skip to content link"
+        label="Skip to content"
+        href="#content"
+        classification="in-page skip link"
+        EMITS E-001 "Activate skip to content"
+      END
+      + Component C-002 "Main article"
+        role="main article"
+        CONTAINS C-003 "H1 Graf Systems"
+        CONTAINS C-004 "Logo image"
+        CONTAINS C-005 "Tagline paragraph"
+        + Component C-003 "H1 Graf Systems"
+          text="Graf Systems"
+          level=1
+        END
+        + Component C-004 "Logo image"
+          accessible_name="Graf Systems"
+        END
+        + Component C-005 "Tagline paragraph"
+          text="Solutions & Design by Knut Graf"
+        END
+      END
+      + Component C-006 "Site footer"
+        role="contentinfo"
+        CONTAINS C-007 "Footer home link"
+        CONTAINS C-008 "WordPress attribution link"
+        + Component C-007 "Footer home link"
+          label="Graf Systems"
+          href="https://grafsys.com/"
+          classification="same-site home link"
+          EMITS E-002 "Activate footer home link"
+        END
+        + Component C-008 "WordPress attribution link"
+          label="Create a website or blog at WordPress.com"
+          href="https://wordpress.com/?ref=footer_custom_svg"
+          classification="external attribution link"
+          EMITS E-003 "Activate WordPress attribution link"
+          CONTAINS C-009 "WordPress attribution image"
+          + Component C-009 "WordPress attribution image"
+            accessible_name="Create a website or blog at WordPress.com"
+          END
+        END
+      END
+    END
+  END
+END
+Event E-001 "Activate skip to content"
+  source_component="Skip to content link"
+  target="#content"
+END
+Event E-002 "Activate footer home link"
+  source_component="Footer home link"
+  target_url="https://grafsys.com/"
+END
+Event E-003 "Activate WordPress attribution link"
+  source_component="WordPress attribution link"
+  target_url="https://wordpress.com/?ref=footer_custom_svg"
+END

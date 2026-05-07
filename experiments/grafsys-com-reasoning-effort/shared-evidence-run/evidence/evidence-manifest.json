@@ -1,0 +1,65 @@
+{
+  "status": "captured",
+  "source": "Playwright MCP safe tools",
+  "prohibited_tool_used": false,
+  "site": "https://grafsys.com",
+  "captured_at": "2026-05-07",
+  "tools_used": [
+    {
+      "tool": "browser_navigate",
+      "target": "https://grafsys.com",
+      "result": "success",
+      "notes": "Navigation returned after a long delay."
+    },
+    {
+      "tool": "browser_snapshot",
+      "target": "homepage desktop",
+      "result": "success",
+      "file": "homepage.desktop.snapshot.md"
+    },
+    {
+      "tool": "browser_resize",
+      "target": "390x844",
+      "result": "success",
+      "notes": "Resize returned after a long delay."
+    },
+    {
+      "tool": "browser_snapshot",
+      "target": "homepage mobile",
+      "result": "success",
+      "file": "homepage.mobile.snapshot.md"
+    }
+  ],
+  "pages": [
+    {
+      "id": "homepage",
+      "url": "https://grafsys.com/",
+      "title": "Graf Systems - Solutions & Design",
+      "desktop_snapshot": "homepage.desktop.snapshot.md",
+      "mobile_snapshot": "homepage.mobile.snapshot.md"
+    }
+  ],
+  "visible_links": [
+    {
+      "label": "Skip to content",
+      "url": "#content",
+      "classification": "in-page skip link"
+    },
+    {
+      "label": "Graf Systems",
+      "url": "https://grafsys.com/",
+      "classification": "same-site home link"
+    },
+    {
+      "label": "Create a website or blog at WordPress.com",
+      "url": "https://wordpress.com/?ref=footer_custom_svg",
+      "classification": "external attribution link"
+    }
+  ],
+  "deviations": [
+    "Only one same-site page was visible in the captured accessibility tree.",
+    "No screenshot artifact was captured because the currently exposed Playwright MCP surface did not include browser_take_screenshot.",
+    "Playwright navigation and resize succeeded but were slow."
+  ]
+}
+

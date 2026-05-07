@@ -1,0 +1,100 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/shared-evidence-run/low/grafsys.sdd/projection/ia_place_map",
+  "path": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/low/grafsys.sdd",
+  "revision": "rev_5e40dbecf2b7861d546cf51387d48fbadfda0a59e73d74ab8bf2d2cf6426050a",
+  "view_id": "ia_place_map",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ia_place_map",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "GS-001",
+        "type": "Area",
+        "name": "Graf Systems site"
+      },
+      {
+        "id": "GS-002",
+        "type": "Place",
+        "name": "Homepage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "GS-001",
+        "type": "CONTAINS",
+        "to": "GS-002"
+      },
+      {
+        "from": "GS-002",
+        "type": "NAVIGATES_TO",
+        "to": "GS-002"
+      }
+    ],
+    "derived": {
+      "node_annotations": [],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {}
+    },
+    "omissions": [
+      {
+        "kind": "edge",
+        "from": "GS-002",
+        "type": "COMPOSED_OF",
+        "to": "GS-004",
+        "reason": "relationship_not_in_scope",
+        "detail": "COMPOSED_OF is outside the ia_place_map edge scope."
+      },
+      {
+        "kind": "edge",
+        "from": "GS-002",
+        "type": "COMPOSED_OF",
+        "to": "GS-005",
+        "reason": "relationship_not_in_scope",
+        "detail": "COMPOSED_OF is outside the ia_place_map edge scope."
+      },
+      {
+        "kind": "edge",
+        "from": "GS-002",
+        "type": "COMPOSED_OF",
+        "to": "GS-006",
+        "reason": "relationship_not_in_scope",
+        "detail": "COMPOSED_OF is outside the ia_place_map edge scope."
+      },
+      {
+        "kind": "edge",
+        "from": "GS-002",
+        "type": "COMPOSED_OF",
+        "to": "GS-009",
+        "reason": "relationship_not_in_scope",
+        "detail": "COMPOSED_OF is outside the ia_place_map edge scope."
+      },
+      {
+        "kind": "edge",
+        "from": "GS-002",
+        "type": "CONTAINS",
+        "to": "GS-003",
+        "reason": "endpoint_out_of_scope",
+        "detail": "Target node type ViewState is outside the ia_place_map node scope."
+      }
+    ],
+    "notes": [
+      "Hierarchy for IA view is driven by CONTAINS."
+    ]
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

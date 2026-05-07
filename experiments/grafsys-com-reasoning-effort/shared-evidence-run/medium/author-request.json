@@ -1,0 +1,473 @@
+{
+  "path": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+  "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+  "mode": "dry_run",
+  "validate_profile": "simple",
+  "projection_views": [
+    "ia_place_map",
+    "ui_contracts"
+  ],
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area_public_site",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-001",
+        "name": "Graf Systems public site",
+        "props": [
+          {
+            "key": "source_url",
+            "value_kind": "quoted_string",
+            "raw_value": "https://grafsys.com/"
+          },
+          {
+            "key": "evidence_boundary",
+            "value_kind": "quoted_string",
+            "raw_value": "Only the homepage was visible in desktop and mobile accessibility snapshots."
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "edge_public_site_contains_homepage",
+            "rel_type": "CONTAINS",
+            "to": "P-001",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ],
+        "children": [
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place_homepage",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "P-001",
+              "name": "Homepage",
+              "props": [
+                {
+                  "key": "route_or_key",
+                  "value_kind": "quoted_string",
+                  "raw_value": "https://grafsys.com/"
+                },
+                {
+                  "key": "page_title",
+                  "value_kind": "quoted_string",
+                  "raw_value": "Graf Systems - Solutions & Design"
+                },
+                {
+                  "key": "access",
+                  "value_kind": "quoted_string",
+                  "raw_value": "public"
+                },
+                {
+                  "key": "primary_nav",
+                  "value_kind": "quoted_string",
+                  "raw_value": "none observed"
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge_homepage_contains_default_state",
+                  "rel_type": "CONTAINS",
+                  "to": "VS-001",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_composed_of_skip_link",
+                  "rel_type": "COMPOSED_OF",
+                  "to": "C-001",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_composed_of_main_article",
+                  "rel_type": "COMPOSED_OF",
+                  "to": "C-002",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_composed_of_footer",
+                  "rel_type": "COMPOSED_OF",
+                  "to": "C-003",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_home_link_self_navigation",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-001",
+                  "event": "E-002",
+                  "placement": {
+                    "mode": "last"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "viewstate_homepage_default",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "ViewState",
+                    "node_id": "VS-001",
+                    "name": "Default responsive homepage",
+                    "props": [
+                      {
+                        "key": "observed_viewports",
+                        "value_kind": "quoted_string",
+                        "raw_value": "desktop and 390x844 mobile expose the same accessibility structure"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_default_composed_of_skip_link",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-001",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_default_composed_of_main_article",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-002",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_default_composed_of_footer",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-003",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_default_home_link_returns_homepage",
+                        "rel_type": "TRANSITIONS_TO",
+                        "to": "VS-001",
+                        "event": "E-002",
+                        "effect": "same-site home link targets https://grafsys.com/",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "component_skip_to_content_link",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Component",
+                    "node_id": "C-001",
+                    "name": "Skip to content link",
+                    "props": [
+                      {
+                        "key": "label",
+                        "value_kind": "quoted_string",
+                        "raw_value": "Skip to content"
+                      },
+                      {
+                        "key": "target",
+                        "value_kind": "quoted_string",
+                        "raw_value": "#content"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_skip_link_emits_activate_skip",
+                        "rel_type": "EMITS",
+                        "to": "E-001",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "component_main_article",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Component",
+                    "node_id": "C-002",
+                    "name": "Main article",
+                    "props": [
+                      {
+                        "key": "landmark",
+                        "value_kind": "quoted_string",
+                        "raw_value": "main article"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_main_article_contains_heading",
+                        "rel_type": "CONTAINS",
+                        "to": "C-004",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_main_article_contains_logo",
+                        "rel_type": "CONTAINS",
+                        "to": "C-005",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_main_article_contains_tagline",
+                        "rel_type": "CONTAINS",
+                        "to": "C-006",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_site_heading",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-004",
+                          "name": "H1 Graf Systems",
+                          "props": [
+                            {
+                              "key": "text",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Graf Systems"
+                            },
+                            {
+                              "key": "heading_level",
+                              "value_kind": "bare_value",
+                              "raw_value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_logo_image",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-005",
+                          "name": "Logo image",
+                          "props": [
+                            {
+                              "key": "accessible_name",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Graf Systems"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_tagline_text",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-006",
+                          "name": "Solutions and design text",
+                          "props": [
+                            {
+                              "key": "text",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Solutions & Design by Knut Graf"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "component_site_footer",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Component",
+                    "node_id": "C-003",
+                    "name": "Footer",
+                    "props": [
+                      {
+                        "key": "landmark",
+                        "value_kind": "quoted_string",
+                        "raw_value": "contentinfo"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_footer_contains_home_link",
+                        "rel_type": "CONTAINS",
+                        "to": "C-007",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_footer_contains_wordpress_link",
+                        "rel_type": "CONTAINS",
+                        "to": "C-008",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_footer_home_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-007",
+                          "name": "Footer home link",
+                          "props": [
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Graf Systems"
+                            },
+                            {
+                              "key": "href",
+                              "value_kind": "quoted_string",
+                              "raw_value": "https://grafsys.com/"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_footer_home_link_emits_activate_home",
+                              "rel_type": "EMITS",
+                              "to": "E-002",
+                              "placement": {
+                                "mode": "last"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_wordpress_attribution_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-008",
+                          "name": "WordPress attribution link",
+                          "props": [
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Create a website or blog at WordPress.com"
+                            },
+                            {
+                              "key": "href",
+                              "value_kind": "quoted_string",
+                              "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+                            },
+                            {
+                              "key": "classification",
+                              "value_kind": "quoted_string",
+                              "raw_value": "external attribution link"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_wordpress_link_emits_activate_wordpress",
+                              "rel_type": "EMITS",
+                              "to": "E-003",
+                              "placement": {
+                                "mode": "last"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "event_activate_skip_to_content",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Event",
+                    "node_id": "E-001",
+                    "name": "Activate skip to content"
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "event_activate_home_link",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Event",
+                    "node_id": "E-002",
+                    "name": "Activate footer home link"
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "event_activate_wordpress_attribution",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Event",
+                    "node_id": "E-003",
+                    "name": "Activate WordPress attribution link"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

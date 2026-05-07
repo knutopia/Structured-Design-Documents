@@ -12,9 +12,18 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 5-07
+
+-patched Corepack tmp dir for skill
+-debugged Playwright installation
+-testing skill across thinking levels
+-exposed ssh key to non-interactive shells so codex can use git
+-diagnosing skill failures
+
 ## Wed 5-06
 
 -clarified edges per node in specifications readme
+-installed Playwright MCP
 
 ## Fri 5-01
 

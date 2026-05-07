@@ -1,0 +1,1403 @@
+{
+  "kind": "sdd-authoring-intent-result",
+  "path": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+  "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+  "resulting_revision": "rev_edea3d0791c71898c926780210a45cae3f352df281c5abfcb5c02cb468b62281",
+  "mode": "dry_run",
+  "status": "applied",
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area_public_site",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-001",
+        "name": "Graf Systems public site",
+        "props": [
+          {
+            "key": "source_url",
+            "value_kind": "quoted_string",
+            "raw_value": "https://grafsys.com/"
+          },
+          {
+            "key": "evidence_boundary",
+            "value_kind": "quoted_string",
+            "raw_value": "Only the homepage was visible in desktop and mobile accessibility snapshots."
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "edge_public_site_contains_homepage",
+            "rel_type": "CONTAINS",
+            "to": "P-001",
+            "placement": {
+              "mode": "last"
+            }
+          }
+        ],
+        "children": [
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place_homepage",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "P-001",
+              "name": "Homepage",
+              "props": [
+                {
+                  "key": "route_or_key",
+                  "value_kind": "quoted_string",
+                  "raw_value": "https://grafsys.com/"
+                },
+                {
+                  "key": "page_title",
+                  "value_kind": "quoted_string",
+                  "raw_value": "Graf Systems - Solutions & Design"
+                },
+                {
+                  "key": "access",
+                  "value_kind": "quoted_string",
+                  "raw_value": "public"
+                },
+                {
+                  "key": "primary_nav",
+                  "value_kind": "quoted_string",
+                  "raw_value": "none observed"
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge_homepage_contains_default_state",
+                  "rel_type": "CONTAINS",
+                  "to": "VS-001",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_composed_of_skip_link",
+                  "rel_type": "COMPOSED_OF",
+                  "to": "C-001",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_composed_of_main_article",
+                  "rel_type": "COMPOSED_OF",
+                  "to": "C-002",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_composed_of_footer",
+                  "rel_type": "COMPOSED_OF",
+                  "to": "C-003",
+                  "placement": {
+                    "mode": "last"
+                  }
+                },
+                {
+                  "local_id": "edge_homepage_home_link_self_navigation",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-001",
+                  "event": "E-002",
+                  "placement": {
+                    "mode": "last"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "viewstate_homepage_default",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "ViewState",
+                    "node_id": "VS-001",
+                    "name": "Default responsive homepage",
+                    "props": [
+                      {
+                        "key": "observed_viewports",
+                        "value_kind": "quoted_string",
+                        "raw_value": "desktop and 390x844 mobile expose the same accessibility structure"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_default_composed_of_skip_link",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-001",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_default_composed_of_main_article",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-002",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_default_composed_of_footer",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-003",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_default_home_link_returns_homepage",
+                        "rel_type": "TRANSITIONS_TO",
+                        "to": "VS-001",
+                        "event": "E-002",
+                        "effect": "same-site home link targets https://grafsys.com/",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "component_skip_to_content_link",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Component",
+                    "node_id": "C-001",
+                    "name": "Skip to content link",
+                    "props": [
+                      {
+                        "key": "label",
+                        "value_kind": "quoted_string",
+                        "raw_value": "Skip to content"
+                      },
+                      {
+                        "key": "target",
+                        "value_kind": "quoted_string",
+                        "raw_value": "#content"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_skip_link_emits_activate_skip",
+                        "rel_type": "EMITS",
+                        "to": "E-001",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "component_main_article",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Component",
+                    "node_id": "C-002",
+                    "name": "Main article",
+                    "props": [
+                      {
+                        "key": "landmark",
+                        "value_kind": "quoted_string",
+                        "raw_value": "main article"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_main_article_contains_heading",
+                        "rel_type": "CONTAINS",
+                        "to": "C-004",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_main_article_contains_logo",
+                        "rel_type": "CONTAINS",
+                        "to": "C-005",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_main_article_contains_tagline",
+                        "rel_type": "CONTAINS",
+                        "to": "C-006",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_site_heading",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-004",
+                          "name": "H1 Graf Systems",
+                          "props": [
+                            {
+                              "key": "text",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Graf Systems"
+                            },
+                            {
+                              "key": "heading_level",
+                              "value_kind": "bare_value",
+                              "raw_value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_logo_image",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-005",
+                          "name": "Logo image",
+                          "props": [
+                            {
+                              "key": "accessible_name",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Graf Systems"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_tagline_text",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-006",
+                          "name": "Solutions and design text",
+                          "props": [
+                            {
+                              "key": "text",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Solutions & Design by Knut Graf"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "component_site_footer",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Component",
+                    "node_id": "C-003",
+                    "name": "Footer",
+                    "props": [
+                      {
+                        "key": "landmark",
+                        "value_kind": "quoted_string",
+                        "raw_value": "contentinfo"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_footer_contains_home_link",
+                        "rel_type": "CONTAINS",
+                        "to": "C-007",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      },
+                      {
+                        "local_id": "edge_footer_contains_wordpress_link",
+                        "rel_type": "CONTAINS",
+                        "to": "C-008",
+                        "placement": {
+                          "mode": "last"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_footer_home_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-007",
+                          "name": "Footer home link",
+                          "props": [
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Graf Systems"
+                            },
+                            {
+                              "key": "href",
+                              "value_kind": "quoted_string",
+                              "raw_value": "https://grafsys.com/"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_footer_home_link_emits_activate_home",
+                              "rel_type": "EMITS",
+                              "to": "E-002",
+                              "placement": {
+                                "mode": "last"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_wordpress_attribution_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-008",
+                          "name": "WordPress attribution link",
+                          "props": [
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Create a website or blog at WordPress.com"
+                            },
+                            {
+                              "key": "href",
+                              "value_kind": "quoted_string",
+                              "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+                            },
+                            {
+                              "key": "classification",
+                              "value_kind": "quoted_string",
+                              "raw_value": "external attribution link"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_wordpress_link_emits_activate_wordpress",
+                              "rel_type": "EMITS",
+                              "to": "E-003",
+                              "placement": {
+                                "mode": "last"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "event_activate_skip_to_content",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Event",
+                    "node_id": "E-001",
+                    "name": "Activate skip to content"
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "event_activate_home_link",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Event",
+                    "node_id": "E-002",
+                    "name": "Activate footer home link"
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "event_activate_wordpress_attribution",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Event",
+                    "node_id": "E-003",
+                    "name": "Activate WordPress attribution link"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "change_set": {
+    "kind": "sdd-change-set",
+    "change_set_id": "chg_09b84230-a8c8-41f6-9d7a-dde5c19c3889",
+    "path": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+    "origin": "apply_authoring_intent",
+    "document_effect": "updated",
+    "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+    "mode": "dry_run",
+    "status": "applied",
+    "undo_eligible": false,
+    "operations": [
+      {
+        "kind": "insert_node_block",
+        "node_type": "Area",
+        "node_id": "A-001",
+        "name": "Graf Systems public site",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+        "key": "source_url",
+        "value_kind": "quoted_string",
+        "raw_value": "https://grafsys.com/"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+        "key": "evidence_boundary",
+        "value_kind": "quoted_string",
+        "raw_value": "Only the homepage was visible in desktop and mobile accessibility snapshots."
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+        "rel_type": "CONTAINS",
+        "to": "P-001",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "P-001",
+        "name": "Homepage",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "key": "route_or_key",
+        "value_kind": "quoted_string",
+        "raw_value": "https://grafsys.com/"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "key": "page_title",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems - Solutions & Design"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "key": "access",
+        "value_kind": "quoted_string",
+        "raw_value": "public"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "key": "primary_nav",
+        "value_kind": "quoted_string",
+        "raw_value": "none observed"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "rel_type": "CONTAINS",
+        "to": "VS-001",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "rel_type": "COMPOSED_OF",
+        "to": "C-001",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "rel_type": "COMPOSED_OF",
+        "to": "C-002",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "rel_type": "COMPOSED_OF",
+        "to": "C-003",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+        "rel_type": "NAVIGATES_TO",
+        "to": "P-001",
+        "event": "E-002",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "ViewState",
+        "node_id": "VS-001",
+        "name": "Default responsive homepage",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+        "key": "observed_viewports",
+        "value_kind": "quoted_string",
+        "raw_value": "desktop and 390x844 mobile expose the same accessibility structure"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+        "rel_type": "COMPOSED_OF",
+        "to": "C-001",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+        "rel_type": "COMPOSED_OF",
+        "to": "C-002",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+        "rel_type": "COMPOSED_OF",
+        "to": "C-003",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+        "rel_type": "TRANSITIONS_TO",
+        "to": "VS-001",
+        "event": "E-002",
+        "effect": "same-site home link targets https://grafsys.com/",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-001",
+        "name": "Skip to content link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+        "key": "label",
+        "value_kind": "quoted_string",
+        "raw_value": "Skip to content"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+        "key": "target",
+        "value_kind": "quoted_string",
+        "raw_value": "#content"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+        "rel_type": "EMITS",
+        "to": "E-001",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-002",
+        "name": "Main article",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+        "key": "landmark",
+        "value_kind": "quoted_string",
+        "raw_value": "main article"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+        "rel_type": "CONTAINS",
+        "to": "C-004",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+        "rel_type": "CONTAINS",
+        "to": "C-005",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+        "rel_type": "CONTAINS",
+        "to": "C-006",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-004",
+        "name": "H1 Graf Systems",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_b31bf996c3079faeda1e29395b42277c0173baa7004755c106d7912b54e0c567",
+        "key": "text",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_b31bf996c3079faeda1e29395b42277c0173baa7004755c106d7912b54e0c567",
+        "key": "heading_level",
+        "value_kind": "bare_value",
+        "raw_value": "1"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-005",
+        "name": "Logo image",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_8ad5e79e7a9986c9978a61eb7dd7d4fb3903e1e602432e9e956e419e9b92d283",
+        "key": "accessible_name",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-006",
+        "name": "Solutions and design text",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_bb4eedc023a0ce7fb5438255c1474767a262c210b78fb39cd9942fd088570e08",
+        "key": "text",
+        "value_kind": "quoted_string",
+        "raw_value": "Solutions & Design by Knut Graf"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-003",
+        "name": "Footer",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+        "key": "landmark",
+        "value_kind": "quoted_string",
+        "raw_value": "contentinfo"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+        "rel_type": "CONTAINS",
+        "to": "C-007",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a"
+        }
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+        "rel_type": "CONTAINS",
+        "to": "C-008",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-007",
+        "name": "Footer home link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+        "key": "label",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+        "key": "href",
+        "value_kind": "quoted_string",
+        "raw_value": "https://grafsys.com/"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+        "rel_type": "EMITS",
+        "to": "E-002",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "C-008",
+        "name": "WordPress attribution link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+        "key": "label",
+        "value_kind": "quoted_string",
+        "raw_value": "Create a website or blog at WordPress.com"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+        "key": "href",
+        "value_kind": "quoted_string",
+        "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+        "key": "classification",
+        "value_kind": "quoted_string",
+        "raw_value": "external attribution link"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+        "rel_type": "EMITS",
+        "to": "E-003",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Event",
+        "node_id": "E-001",
+        "name": "Activate skip to content",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Event",
+        "node_id": "E-002",
+        "name": "Activate footer home link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Event",
+        "node_id": "E-003",
+        "name": "Activate WordPress attribution link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf"
+        }
+      }
+    ],
+    "summary": {
+      "node_insertions": [
+        {
+          "handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+          "node_id": "A-001",
+          "node_type": "Area"
+        },
+        {
+          "handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "node_id": "P-001",
+          "node_type": "Place"
+        },
+        {
+          "handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+          "node_id": "VS-001",
+          "node_type": "ViewState"
+        },
+        {
+          "handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+          "node_id": "C-001",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+          "node_id": "C-002",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_b31bf996c3079faeda1e29395b42277c0173baa7004755c106d7912b54e0c567",
+          "node_id": "C-004",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_8ad5e79e7a9986c9978a61eb7dd7d4fb3903e1e602432e9e956e419e9b92d283",
+          "node_id": "C-005",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_bb4eedc023a0ce7fb5438255c1474767a262c210b78fb39cd9942fd088570e08",
+          "node_id": "C-006",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+          "node_id": "C-003",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+          "node_id": "C-007",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+          "node_id": "C-008",
+          "node_type": "Component"
+        },
+        {
+          "handle": "tmp_authoring_c527188a8644806e7e7254e07a07c89a52f28be6f28d5b2506f2f16862642aa8",
+          "node_id": "E-001",
+          "node_type": "Event"
+        },
+        {
+          "handle": "tmp_authoring_7c18cd6a84154dff12ef7bf6a0f5bd99ae6ea6243982b9d1e2d267911d67eea0",
+          "node_id": "E-002",
+          "node_type": "Event"
+        },
+        {
+          "handle": "tmp_authoring_dc011f5b74b85ad49f53a34e406dcfd8269bfb1a6a26297a5bf72b44cea3b183",
+          "node_id": "E-003",
+          "node_type": "Event"
+        }
+      ],
+      "node_deletions": [],
+      "node_renames": [],
+      "property_changes": [
+        {
+          "node_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+          "key": "source_url",
+          "to": "https://grafsys.com/"
+        },
+        {
+          "node_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+          "key": "evidence_boundary",
+          "to": "Only the homepage was visible in desktop and mobile accessibility snapshots."
+        },
+        {
+          "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "key": "route_or_key",
+          "to": "https://grafsys.com/"
+        },
+        {
+          "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "key": "page_title",
+          "to": "Graf Systems - Solutions & Design"
+        },
+        {
+          "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "key": "access",
+          "to": "public"
+        },
+        {
+          "node_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "key": "primary_nav",
+          "to": "none observed"
+        },
+        {
+          "node_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+          "key": "observed_viewports",
+          "to": "desktop and 390x844 mobile expose the same accessibility structure"
+        },
+        {
+          "node_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+          "key": "label",
+          "to": "Skip to content"
+        },
+        {
+          "node_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+          "key": "target",
+          "to": "#content"
+        },
+        {
+          "node_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+          "key": "landmark",
+          "to": "main article"
+        },
+        {
+          "node_handle": "tmp_authoring_b31bf996c3079faeda1e29395b42277c0173baa7004755c106d7912b54e0c567",
+          "key": "text",
+          "to": "Graf Systems"
+        },
+        {
+          "node_handle": "tmp_authoring_b31bf996c3079faeda1e29395b42277c0173baa7004755c106d7912b54e0c567",
+          "key": "heading_level",
+          "to": "1"
+        },
+        {
+          "node_handle": "tmp_authoring_8ad5e79e7a9986c9978a61eb7dd7d4fb3903e1e602432e9e956e419e9b92d283",
+          "key": "accessible_name",
+          "to": "Graf Systems"
+        },
+        {
+          "node_handle": "tmp_authoring_bb4eedc023a0ce7fb5438255c1474767a262c210b78fb39cd9942fd088570e08",
+          "key": "text",
+          "to": "Solutions & Design by Knut Graf"
+        },
+        {
+          "node_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+          "key": "landmark",
+          "to": "contentinfo"
+        },
+        {
+          "node_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+          "key": "label",
+          "to": "Graf Systems"
+        },
+        {
+          "node_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+          "key": "href",
+          "to": "https://grafsys.com/"
+        },
+        {
+          "node_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+          "key": "label",
+          "to": "Create a website or blog at WordPress.com"
+        },
+        {
+          "node_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+          "key": "href",
+          "to": "https://wordpress.com/?ref=footer_custom_svg"
+        },
+        {
+          "node_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+          "key": "classification",
+          "to": "external attribution link"
+        }
+      ],
+      "edge_insertions": [
+        {
+          "handle": "tmp_authoring_eba226d3c3de27f27b4141ba25321a7dd8e6a2c03e8062b6b6e843ef343ab19c",
+          "parent_handle": "tmp_authoring_4f002d3c1906c3e4d73c2119d0ad21d513a2c4cd74c1a84e3fadba23d9fd302a",
+          "rel_type": "CONTAINS",
+          "to": "P-001"
+        },
+        {
+          "handle": "tmp_authoring_60132f04e2c86bd8bc2fe59c0e8ecc3f2bf3dcfa608c1ae7a65354051b79e4e5",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "rel_type": "CONTAINS",
+          "to": "VS-001"
+        },
+        {
+          "handle": "tmp_authoring_585f8f325583a0745be2bc37299fa99fe054de4ca1ab6ebe4b7729db716e8fab",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "rel_type": "COMPOSED_OF",
+          "to": "C-001"
+        },
+        {
+          "handle": "tmp_authoring_f621c64ebb6d6a91467325fb4ae6445a8abace0cd3de49c3e61837970c20239f",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "rel_type": "COMPOSED_OF",
+          "to": "C-002"
+        },
+        {
+          "handle": "tmp_authoring_0a103992b762a02681193c98bf6961754d3844f867c4a231b22322868a752515",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "rel_type": "COMPOSED_OF",
+          "to": "C-003"
+        },
+        {
+          "handle": "tmp_authoring_4ba7e12c2116cbddace4704ac4cdef936ff766d8851d373150cec469003d72d3",
+          "parent_handle": "tmp_authoring_d02e49894144fe8f2aa9dc571ea77f4a411a39b57012c53cf420bfe23894e6bf",
+          "rel_type": "NAVIGATES_TO",
+          "to": "P-001"
+        },
+        {
+          "handle": "tmp_authoring_f1e0bbf83d4076dca531467d6d0d1e477c3a9c8ee7eb7a3687844bbc2352d5e6",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+          "rel_type": "COMPOSED_OF",
+          "to": "C-001"
+        },
+        {
+          "handle": "tmp_authoring_e9c3ff85c0e187e82b8501ad85d7f9e756896fa652c3ff66fc32f5d9e68be16a",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+          "rel_type": "COMPOSED_OF",
+          "to": "C-002"
+        },
+        {
+          "handle": "tmp_authoring_2f6622e4d3ab97aafb6cde0ce25983470143606705f84411ffab4208e32ebeae",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+          "rel_type": "COMPOSED_OF",
+          "to": "C-003"
+        },
+        {
+          "handle": "tmp_authoring_a99490cff56cec88365d8e2277f1af9fe8893052e7e3b766c90d1a9cc16c63f5",
+          "parent_handle": "tmp_authoring_0f0d8e1bb611fbf4b6b5c516c3a5948b2dd8433cab9947aadf7c022c978564c8",
+          "rel_type": "TRANSITIONS_TO",
+          "to": "VS-001"
+        },
+        {
+          "handle": "tmp_authoring_c5c829324c5048935280c6d176fc88f927546c8432bce44ae745c6fc14d79446",
+          "parent_handle": "tmp_authoring_b63b613f788e19195b7a3e357bfe6c9654d604f70260ebd53b76dc85440e91a8",
+          "rel_type": "EMITS",
+          "to": "E-001"
+        },
+        {
+          "handle": "tmp_authoring_153081a12576bd8900d1e14273f3a16014a7823e9c012ff4fa201959b3ca3378",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+          "rel_type": "CONTAINS",
+          "to": "C-004"
+        },
+        {
+          "handle": "tmp_authoring_1e20d6aced24a061a15a7bd9d9a8d601e6aca2d2eba566a08c512376fce3286f",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+          "rel_type": "CONTAINS",
+          "to": "C-005"
+        },
+        {
+          "handle": "tmp_authoring_8e6e3c609e4e629bc122e487a76543d4edb5c55d32190f1e7e6a8634f2a2fba8",
+          "parent_handle": "tmp_authoring_57c3b6de8cd62368338e58f1c8d5b2d57e4a63837f89535be6bb5fc7b675e370",
+          "rel_type": "CONTAINS",
+          "to": "C-006"
+        },
+        {
+          "handle": "tmp_authoring_982410770b3ca470ebd12256b2e14cd3a1cb248d2d085f8c79d8ecc967f9bdd2",
+          "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+          "rel_type": "CONTAINS",
+          "to": "C-007"
+        },
+        {
+          "handle": "tmp_authoring_49c91516d58d896e8ffa6055282c461c4dcfd2ddf1b9a7870cc537b4ae3837a4",
+          "parent_handle": "tmp_authoring_483c11beb1348a6daea99d676d203593c6c606d72420a4d6eb26cc176069812a",
+          "rel_type": "CONTAINS",
+          "to": "C-008"
+        },
+        {
+          "handle": "tmp_authoring_39e61e44cb22fc421c747b96ecc9b03b4173a000dff3b0fd714ee91d0923a99d",
+          "parent_handle": "tmp_authoring_a602aa33d43ae1b04c629febdb95be8b5917462c4ea4c8b70b87674dcd38e874",
+          "rel_type": "EMITS",
+          "to": "E-002"
+        },
+        {
+          "handle": "tmp_authoring_b11fd287d8319ae9e138deb06d64fa9b63ac5b417f914e8642fbc996fa8df3c0",
+          "parent_handle": "tmp_authoring_c6f9b9cf7c345f0a32eab6c4477d8752c01235b3c10c24951c51c533dbbb3ac9",
+          "rel_type": "EMITS",
+          "to": "E-003"
+        }
+      ],
+      "edge_deletions": [],
+      "ordering_changes": []
+    },
+    "diagnostics": [
+      {
+        "stage": "parse",
+        "code": "parse.invalid_edge_line",
+        "severity": "error",
+        "message": "Invalid edge_line syntax",
+        "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+        "span": {
+          "line": 21,
+          "column": 1,
+          "endLine": 21,
+          "endColumn": 87,
+          "startOffset": 709,
+          "endOffset": 795
+        }
+      }
+    ],
+    "projection_results": [
+      {
+        "view_id": "ia_place_map",
+        "diagnostics": [
+          {
+            "stage": "parse",
+            "code": "parse.invalid_edge_line",
+            "severity": "error",
+            "message": "Invalid edge_line syntax",
+            "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+            "span": {
+              "line": 21,
+              "column": 1,
+              "endLine": 21,
+              "endColumn": 87,
+              "startOffset": 709,
+              "endOffset": 795
+            }
+          }
+        ]
+      },
+      {
+        "view_id": "ui_contracts",
+        "diagnostics": [
+          {
+            "stage": "parse",
+            "code": "parse.invalid_edge_line",
+            "severity": "error",
+            "message": "Invalid edge_line syntax",
+            "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+            "span": {
+              "line": 21,
+              "column": 1,
+              "endLine": 21,
+              "endColumn": 87,
+              "startOffset": 709,
+              "endOffset": 795
+            }
+          }
+        ]
+      }
+    ],
+    "resulting_revision": "rev_edea3d0791c71898c926780210a45cae3f352df281c5abfcb5c02cb468b62281"
+  },
+  "created_targets": [],
+  "diagnostics": [
+    {
+      "stage": "parse",
+      "code": "parse.invalid_edge_line",
+      "severity": "error",
+      "message": "Invalid edge_line syntax",
+      "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "endLine": 21,
+        "endColumn": 87,
+        "startOffset": 709,
+        "endOffset": 795
+      }
+    }
+  ],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "blocked",
+    "layer": "candidate_diagnostics",
+    "can_commit": false,
+    "can_render": false,
+    "should_stop": true,
+    "next_action": "Fix the candidate diagnostics before commit or render.",
+    "blocking_diagnostics": [
+      {
+        "stage": "parse",
+        "code": "parse.invalid_edge_line",
+        "severity": "error",
+        "message": "Invalid edge_line syntax",
+        "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+        "span": {
+          "line": 21,
+          "column": 1,
+          "endLine": 21,
+          "endColumn": 87,
+          "startOffset": 709,
+          "endOffset": 795
+        }
+      },
+      {
+        "stage": "parse",
+        "code": "parse.invalid_edge_line",
+        "severity": "error",
+        "message": "Invalid edge_line syntax",
+        "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+        "span": {
+          "line": 21,
+          "column": 1,
+          "endLine": 21,
+          "endColumn": 87,
+          "startOffset": 709,
+          "endOffset": 795
+        }
+      },
+      {
+        "stage": "parse",
+        "code": "parse.invalid_edge_line",
+        "severity": "error",
+        "message": "Invalid edge_line syntax",
+        "file": "experiments/grafsys-com-reasoning-effort/shared-evidence-run/medium/grafsys.sdd",
+        "span": {
+          "line": 21,
+          "column": 1,
+          "endLine": 21,
+          "endColumn": 87,
+          "startOffset": 709,
+          "endOffset": 795
+        }
+      }
+    ],
+    "summary": "The applied candidate has blocking diagnostics."
+  }
+}
