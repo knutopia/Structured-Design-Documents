@@ -41,7 +41,7 @@ else
 fi
 
 export TMPDIR="/tmp"
-export COREPACK_HOME="${COREPACK_HOME:-$HOME/.cache/node/corepack}"
+export COREPACK_HOME="${COREPACK_HOME:-$HOME/.cache/corepack}"
 
 if ! command -v node >/dev/null 2>&1 || ! command -v pnpm >/dev/null 2>&1; then
   if [[ -f "$HOME/.nvm/nvm.sh" ]]; then

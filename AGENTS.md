@@ -4,6 +4,7 @@
 
 - This repository is typically worked on inside WSL.
 - Non-interactive login shells should have `node` (version 22 LTS) and `pnpm` available via `nvm` from `~/.profile`.
+- For WSL/Corepack stability, non-interactive shells should have `COREPACK_HOME=$HOME/.cache/corepack`; use `scripts/setup-corepack.sh` for repo Corepack setup issues.
 - If a shell still does not see `node` or `pnpm`, use:
   `source ~/.nvm/nvm.sh && <command>`
 

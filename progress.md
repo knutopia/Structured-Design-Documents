@@ -22,6 +22,7 @@
 -updated skill to point to installed helper wrapper instead of local
 -added docs/skill/README.md
 -sdd-helper partial-write fix
+-corepack install fix
 
 ## Thu 5-07
 

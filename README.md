@@ -25,7 +25,8 @@ Prerequisites: [Git](https://github.com/git/git), [Node.js 22 LTS](https://githu
 ```bash
 git clone https://github.com/knutopia/Structured-Design-Documents.git
 cd Structured-Design-Documents
-corepack enable
+scripts/setup-corepack.sh       # Mac, WSL, Linux
+# .\scripts\setup-corepack.ps1  # on Windows, use this instead (in Powershell)
 pnpm install
 pnpm run build
 pnpm sdd --help
@@ -34,7 +35,8 @@ pnpm sdd show docs/readme_support_docs/small_app_example/small_app.sdd --profile
 
 Notes:
 
-- `corepack enable` activates the repo-pinned `pnpm` version declared in `package.json`.
+- The setup scripts activate the repo-pinned `pnpm` version declared in `package.json`.
+- In WSL, if future shells route Corepack through `/mnt/c/...`, run `scripts/setup-corepack.sh --write-profile` or add `export COREPACK_HOME="$HOME/.cache/corepack"` to `~/.profile`.
 - If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. For more environment details, see [docs/toolchain/development.md](/home/knut/projects/sdd/docs/toolchain/development.md). See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
 
 ## Example: Small App
