@@ -1,4 +1,3 @@
-import { writeSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
@@ -54,6 +53,7 @@ import {
 } from "../authoring/workspace.js";
 import type { Diagnostic } from "../diagnostics/types.js";
 import { createHelperCapabilities, createHelperHelpStub, shouldReturnHelperHelp } from "./helperDiscovery.js";
+import { writeAllSync } from "./writeAllSync.js";
 
 export interface HelperCliDeps {
   cwd: () => string;
@@ -109,10 +109,10 @@ function createDefaultDeps(): HelperCliDeps {
   return {
     cwd: () => process.cwd(),
     stdout: (content) => {
-      writeSync(process.stdout.fd, content);
+      writeAllSync(process.stdout.fd, content);
     },
     stderr: (content) => {
-      writeSync(process.stderr.fd, content);
+      writeAllSync(process.stderr.fd, content);
     },
     findRepoRoot: findAuthoringRepoRoot,
     loadBundle,

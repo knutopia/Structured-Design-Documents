@@ -214,6 +214,24 @@ describe("sdd-helper entrypoint integration", () => {
       }
     });
 
+    const resolvedAuthorContract = await runHelperEntrypoint(nestedCwd, [
+      "contract",
+      "helper.command.author",
+      "--resolve",
+      "bundle"
+    ]);
+    expect(resolvedAuthorContract.exitCode).toBe(0);
+    expect(resolvedAuthorContract.stdout.length).toBeGreaterThan(65_536);
+    expect(parseJsonPayload(resolvedAuthorContract)).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.author"
+      },
+      authoring_format_card: {
+        card_id: "sdd.v0_1.author_json_quick_format"
+      }
+    });
+
     const staticContract = await runHelperEntrypoint(nestedCwd, ["contract", "helper.command.preview"]);
     expect(staticContract.exitCode).toBe(0);
     expect(JSON.parse(staticContract.stdout)).toMatchObject({
@@ -646,103 +664,107 @@ describe("sdd-helper entrypoint integration", () => {
     });
   });
 
-  it("returns unique materialized artifact paths for svg and png preview output", async () => {
-    const documentPath = "bundle/v0.1/examples/outcome_to_ia_trace.sdd";
-    const svgPreview = await runHelperEntrypoint(repoRoot, [
-      "preview",
-      documentPath,
-      "--view",
-      "ia_place_map",
-      "--profile",
-      "strict",
-      "--format",
-      "svg"
-    ]);
-    const secondSvgPreview = await runHelperEntrypoint(repoRoot, [
-      "preview",
-      documentPath,
-      "--view",
-      "ia_place_map",
-      "--profile",
-      "strict",
-      "--format",
-      "svg"
-    ]);
-    const pngPreview = await runHelperEntrypoint(repoRoot, [
-      "preview",
-      documentPath,
-      "--view",
-      "ia_place_map",
-      "--profile",
-      "strict",
-      "--format",
-      "png"
-    ]);
+  it(
+    "returns unique materialized artifact paths for svg and png preview output",
+    async () => {
+      const documentPath = "bundle/v0.1/examples/outcome_to_ia_trace.sdd";
+      const svgPreview = await runHelperEntrypoint(repoRoot, [
+        "preview",
+        documentPath,
+        "--view",
+        "ia_place_map",
+        "--profile",
+        "strict",
+        "--format",
+        "svg"
+      ]);
+      const secondSvgPreview = await runHelperEntrypoint(repoRoot, [
+        "preview",
+        documentPath,
+        "--view",
+        "ia_place_map",
+        "--profile",
+        "strict",
+        "--format",
+        "svg"
+      ]);
+      const pngPreview = await runHelperEntrypoint(repoRoot, [
+        "preview",
+        documentPath,
+        "--view",
+        "ia_place_map",
+        "--profile",
+        "strict",
+        "--format",
+        "png"
+      ]);
 
-    expect(svgPreview.exitCode).toBe(0);
-    expect(secondSvgPreview.exitCode).toBe(0);
-    expect(pngPreview.exitCode).toBe(0);
-    expect(getTopLevelJsonKeyOrder(svgPreview.stdout)).toEqual([
-      "kind",
-      "path",
-      "revision",
-      "view_id",
-      "profile_id",
-      "backend_id",
-      "format",
-      "mime_type",
-      "artifact_path",
-      "notes",
-      "diagnostics",
-      "assessment"
-    ]);
+      expect(svgPreview.exitCode).toBe(0);
+      expect(secondSvgPreview.exitCode).toBe(0);
+      expect(pngPreview.exitCode).toBe(0);
+      expect(getTopLevelJsonKeyOrder(svgPreview.stdout)).toEqual([
+        "kind",
+        "path",
+        "revision",
+        "view_id",
+        "profile_id",
+        "backend_id",
+        "format",
+        "mime_type",
+        "artifact_path",
+        "notes",
+        "diagnostics",
+        "assessment"
+      ]);
 
-    const svgPayload = JSON.parse(svgPreview.stdout) as Record<string, unknown>;
-    const secondSvgPayload = JSON.parse(secondSvgPreview.stdout) as Record<string, unknown>;
-    const pngPayload = JSON.parse(pngPreview.stdout) as Record<string, unknown>;
-    for (const payload of [svgPayload, secondSvgPayload, pngPayload]) {
-      expect(payload).not.toHaveProperty("artifact");
-      expect(payload).not.toHaveProperty("display_copy_path");
-      expect((payload.artifact_path as string).startsWith("/tmp/unique-previews/")).toBe(true);
-    }
+      const svgPayload = JSON.parse(svgPreview.stdout) as Record<string, unknown>;
+      const secondSvgPayload = JSON.parse(secondSvgPreview.stdout) as Record<string, unknown>;
+      const pngPayload = JSON.parse(pngPreview.stdout) as Record<string, unknown>;
+      for (const payload of [svgPayload, secondSvgPayload, pngPayload]) {
+        expect(payload).not.toHaveProperty("artifact");
+        expect(payload).not.toHaveProperty("display_copy_path");
+        expect((payload.artifact_path as string).startsWith("/tmp/unique-previews/")).toBe(true);
+      }
 
-    const svgPath = svgPayload.artifact_path as string;
-    const secondSvgPath = secondSvgPayload.artifact_path as string;
-    const pngPath = pngPayload.artifact_path as string;
-    try {
-      expect(path.basename(svgPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
-      expect(path.basename(secondSvgPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
-      expect(path.dirname(svgPath)).not.toBe(path.dirname(secondSvgPath));
-      expect(svgPayload).toMatchObject({
-        format: "svg",
-        mime_type: "image/svg+xml"
-      });
-      expectAssessment(svgPayload, {
-        outcome: "acceptable",
-        layer: "success",
-        can_commit: false,
-        can_render: true,
-        should_stop: false
-      });
-      expect(await readFile(svgPath, "utf8")).toContain("<svg");
+      const svgPath = svgPayload.artifact_path as string;
+      const secondSvgPath = secondSvgPayload.artifact_path as string;
+      const pngPath = pngPayload.artifact_path as string;
+      try {
+        expect(path.basename(svgPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
+        expect(path.basename(secondSvgPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
+        expect(path.dirname(svgPath)).not.toBe(path.dirname(secondSvgPath));
+        expect(svgPayload).toMatchObject({
+          format: "svg",
+          mime_type: "image/svg+xml"
+        });
+        expectAssessment(svgPayload, {
+          outcome: "acceptable",
+          layer: "success",
+          can_commit: false,
+          can_render: true,
+          should_stop: false
+        });
+        expect(await readFile(svgPath, "utf8")).toContain("<svg");
 
-      expect(path.basename(pngPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.png");
-      expect(pngPayload).toMatchObject({
-        format: "png",
-        mime_type: "image/png"
-      });
-      expectAssessment(pngPayload, {
-        outcome: "acceptable",
-        layer: "success",
-        can_commit: false,
-        can_render: true,
-        should_stop: false
-      });
-      expect((await readFile(pngPath)).subarray(0, 4).toString("hex")).toBe("89504e47");
-    } finally {
-      await rm(path.dirname(svgPath), { recursive: true, force: true });
-      await rm(path.dirname(secondSvgPath), { recursive: true, force: true });
-      await rm(path.dirname(pngPath), { recursive: true, force: true });
-    }
-  });
+        expect(path.basename(pngPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.png");
+        expect(pngPayload).toMatchObject({
+          format: "png",
+          mime_type: "image/png"
+        });
+        expectAssessment(pngPayload, {
+          outcome: "acceptable",
+          layer: "success",
+          can_commit: false,
+          can_render: true,
+          should_stop: false
+        });
+        expect((await readFile(pngPath)).subarray(0, 4).toString("hex")).toBe("89504e47");
+      } finally {
+        await rm(path.dirname(svgPath), { recursive: true, force: true });
+        await rm(path.dirname(secondSvgPath), { recursive: true, force: true });
+        await rm(path.dirname(pngPath), { recursive: true, force: true });
+      }
+    },
+    15000
+  );
 });
