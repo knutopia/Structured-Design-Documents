@@ -221,7 +221,7 @@ interface HelperCapabilitiesResultCommand {
 - Invocation: `pnpm sdd-helper contract <subject_id> [--resolve bundle]`
 - Key inputs: one helper `subject_id`, plus optional `--resolve bundle`.
 - Result kind: `sdd-contract-subject-detail`
-- Important constraints: static detail is the default and does not require bundle loading; `--resolve bundle` is opt-in and expands only bundle-bound allowed values such as `view_id` and `profile_id`.
+- Important constraints: static detail is the default and does not require bundle loading; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id` and `profile_id`. For `helper.command.author`, resolved detail also includes `authoring_format_card`, a compact bundle-derived guide for author JSON formatting.
 - Practical notes: use `capabilities` first to discover the command and its `subject_id`, then use `contract` only for the specific subject that needs deep detail.
 
 #### `sdd-helper inspect <document_path>`
@@ -257,6 +257,14 @@ interface HelperCapabilitiesResultCommand {
 - Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits. The empty bootstrap document can carry parse diagnostics and may not be inspectable until initial content is authored. Use the returned create `revision` as the continuation surface for the first follow-on `author` or `apply` request; this is helper workflow behavior, not SDD language authority.
 
 For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSON request from stdin until EOF. Empty stdin fails JSON parsing and returns `sdd-helper-error` with `code: "invalid_json"` and message `Unexpected end of JSON input`.
+
+For first-pass `author` JSON, prefer:
+
+```bash
+pnpm sdd-helper contract helper.command.author --resolve bundle
+```
+
+Read the returned `authoring_format_card` before composing IDs, edge targets, events, or effects. It is intentionally smaller than `syntax.yaml`: it summarizes the active bundle's SDD node id pattern, event/effect atom forms, and the JSON escaping needed when an effect or event is prose. `capabilities` remains static and does not inline this card.
 
 #### `sdd-helper apply --request <file-or-stdin>`
 

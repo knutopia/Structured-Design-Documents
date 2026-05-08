@@ -102,6 +102,8 @@ describe("canonical sdd-skill source", () => {
     expect(helperReadme).toContain(
       "`contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values"
     );
+    expect(helperReadme).toContain("authoring_format_card");
+    expect(helperReadme).toContain("capabilities` remains static and does not inline this card");
     expect(helperReadme).toContain("Helper mechanics are not SDD language authority");
     expect(helperReadme).toContain("Use `bundle/v0.1/` files for SDD language semantics");
     expect(helperReadme).toContain("Use docs to explain a surface or investigate a mismatch.");
@@ -138,6 +140,8 @@ describe("canonical sdd-skill source", () => {
     expect(startHere).toContain("Helper contract detail is the helper request/result authority");
     expect(startHere).toContain("skills/sdd-skill/scripts/run_helper.sh contract <subject_id>");
     expect(startHere).toContain("exact request shape, result shape, continuation semantics");
+    expect(startHere).toContain("contract helper.command.author --resolve bundle");
+    expect(startHere).toContain("authoring_format_card");
     expect(startHere).toContain(
       "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"
     );
@@ -389,6 +393,7 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
     expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
     expect(workflowMarkdown).toContain("--resolve bundle");
+    expect(workflowMarkdown).toContain("authoring_format_card");
     expect(workflowMarkdown).toContain("## 3. Targeted Bundle Reading And Language Authority");
     expect(workflowMarkdown).toContain(
       "Use helper `capabilities` and helper `contract` for helper mechanics"

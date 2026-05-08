@@ -5,6 +5,7 @@ import type {
   ContractSubjectDetail,
   ContractSubjectId
 } from "./contracts.js";
+import { createAuthoringFormatCard } from "./authoringFormat.js";
 import { getContractSubjectDetail } from "./contractMetadata.js";
 
 function expectSelector(binding: ContractBindingSpec, expectedSelector: string): void {
@@ -64,6 +65,9 @@ export function getBundleResolvedContractSubjectDetail(
     bundle_name: bundle.manifest.bundle_name,
     bundle_version: bundle.manifest.bundle_version
   };
+  if (subjectId === "helper.command.author") {
+    detail.authoring_format_card = createAuthoringFormatCard(bundle);
+  }
 
   return detail;
 }

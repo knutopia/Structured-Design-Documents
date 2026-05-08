@@ -2,7 +2,9 @@
 
 ## Open Issues
 
--docs page with SDD structure, node types
+-effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
+-Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
+
 -generalizing the skill beyond this repository layout
 -documentation for skill, including how to install
 -remove service_blueprint DOT output
@@ -18,7 +20,7 @@
 -debugged Playwright installation
 -testing skill across thinking levels
 -exposed ssh key to non-interactive shells so codex can use git
--diagnosing skill failures
+-another helper hardening
 
 ## Wed 5-06
 

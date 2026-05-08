@@ -942,6 +942,40 @@ const contractExampleSpecSchema = objectSchema(
   ["title", "when_to_include", "payload"]
 );
 
+const contractFieldFormatHintSchema = objectSchema(
+  {
+    hint_id: stringSchema(),
+    applies_to_shape_id: stringSchema(),
+    applies_to_json_pointers: stringArraySchema,
+    source: stringSchema(),
+    accepted_pattern: stringSchema(),
+    accepted_forms: stringArraySchema,
+    examples: stringArraySchema,
+    json_examples: arraySchema(
+      objectSchema(
+        {
+          json: stringSchema(),
+          renders: stringSchema()
+        },
+        ["json", "renders"]
+      )
+    ),
+    concise: stringSchema()
+  },
+  ["hint_id", "applies_to_shape_id", "applies_to_json_pointers", "source", "concise"]
+);
+
+const contractAuthoringFormatCardSchema = objectSchema(
+  {
+    card_id: stringSchema(),
+    summary: stringSchema(),
+    source: stringSchema(),
+    lines: stringArraySchema,
+    field_hints: arraySchema(contractFieldFormatHintSchema)
+  },
+  ["card_id", "summary", "source", "lines", "field_hints"]
+);
+
 const contractSubjectDetailSchema = objectSchema(
   {
     kind: stringSchema(["sdd-contract-subject-detail"]),
@@ -953,6 +987,7 @@ const contractSubjectDetailSchema = objectSchema(
     bindings: arraySchema(contractBindingSpecSchema),
     continuation: arraySchema(contractContinuationSpecSchema),
     examples: arraySchema(contractExampleSpecSchema),
+    authoring_format_card: contractAuthoringFormatCardSchema,
     resolution: objectSchema(
       {
         mode: stringSchema(["static", "bundle_resolved"]),
@@ -1296,7 +1331,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "conditional",
     input_shape_id: "shared.shape.apply_authoring_intent_args",
     output_shape_id: "shared.shape.apply_authoring_intent_result",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
     has_deep_introspection: true
   },
   {

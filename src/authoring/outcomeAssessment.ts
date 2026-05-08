@@ -136,6 +136,7 @@ export function assessHelperError(
   }
 
   if (error.code === "invalid_json" || error.code === "invalid_args") {
+    const blockingDiagnostics = errorDiagnostics(error.diagnostics ?? []);
     return createAssessment({
       outcome: "blocked",
       layer: "request_shape",
@@ -143,6 +144,7 @@ export function assessHelperError(
       can_render: false,
       should_stop: true,
       next_action: "Fix the helper request shape and resubmit it.",
+      blocking_diagnostics: blockingDiagnostics,
       summary: "The helper request could not be parsed or did not match the expected request shape."
     });
   }

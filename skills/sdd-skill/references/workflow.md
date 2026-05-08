@@ -18,10 +18,12 @@ Use deep helper introspection only when the current task needs it:
 
 ```bash
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --resolve bundle
 skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
 ```
 
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
+Before composing the first `author` request in a task, prefer the resolved author contract and read its `authoring_format_card`; it gives the compact bundle-derived JSON formatting details for IDs and raw event/effect atoms without requiring a full `syntax.yaml` read.
 
 ## 2. Choose The Task Kind
 
@@ -38,6 +40,7 @@ Use the matching branch below instead of forcing every request through one linea
 ## 3. Targeted Bundle Reading And Language Authority
 
 Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
+For routine author request formatting, use `contract helper.command.author --resolve bundle` and its `authoring_format_card` first. Read `bundle/v0.1/core/syntax.yaml` only when the card is absent or the task needs deeper language semantics than request formatting.
 
 For implementation audits of bundle authority, the parser path loads bundle data with `loadBundle(...)` and consumes syntax through `createParserSyntaxRuntime(bundle)`. This is evidence of the runtime path, not a normal authoring fallback for helper request shapes.
 

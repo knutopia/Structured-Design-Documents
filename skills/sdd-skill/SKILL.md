@@ -13,6 +13,7 @@ This skill enables working with structured design documents. In this repo source
 
 - Helper discovery is the helper-command authority: use `skills/sdd-skill/scripts/run_helper.sh capabilities` to confirm which helper commands exist.
 - Helper contract detail is the helper request/result authority: use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command.
+- Before composing the first `author` request in a task, use `skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
 - SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.
 - Shared `assessment` answers whether to stop, continue, commit, or render.
 - Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery.

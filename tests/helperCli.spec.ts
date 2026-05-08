@@ -77,7 +77,48 @@ function createContractResolutionBundle(
     manifest: {
       bundle_name: "sdd-text-spec-bundle",
       bundle_version: "0.1",
+      language: "sdd-text",
+      language_version: "0.1",
+      core: {
+        vocab: "core/vocab.yaml",
+        syntax: "core/syntax.yaml",
+        schema: "core/schema.json",
+        contracts: "core/contracts.yaml",
+        projection_schema: "core/projection_schema.json",
+        views: "core/views.yaml"
+      },
       profiles
+    },
+    syntax: {
+      lexical: {
+        id_pattern: "^[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?$",
+        identifier_pattern: "^[A-Za-z_][A-Za-z0-9_./:-]*$",
+        quoted_string: {
+          delimiter: "\"",
+          multiline: false,
+          standardized_escapes: [
+            { literal: "\\\"", value: "\"" },
+            { literal: "\\", value: "\\" }
+          ],
+          other_backslash_sequences: "literal"
+        }
+      },
+      atoms: {
+        event_atom: {
+          one_of: [
+            { pattern_ref: "lexical.id_pattern" },
+            { pattern_ref: "lexical.identifier_pattern" },
+            { atom: "quoted_string" }
+          ]
+        },
+        effect_atom: {
+          one_of: [
+            { pattern_ref: "lexical.id_pattern" },
+            { pattern_ref: "lexical.identifier_pattern" },
+            { atom: "quoted_string" }
+          ]
+        }
+      }
     },
     views: {
       version: "0.1",
@@ -439,7 +480,7 @@ describe("sdd-helper CLI", () => {
           input_shape_id: "shared.shape.apply_authoring_intent_args",
           output_shape_id: "shared.shape.apply_authoring_intent_result",
           has_deep_introspection: true,
-          detail_modes: ["static"],
+          detail_modes: ["static", "bundle_resolved"],
           request_body: {
             via_option: "--request",
             top_level_shape: "ApplyAuthoringIntentArgs",
@@ -524,6 +565,7 @@ describe("sdd-helper CLI", () => {
     expect(authorCommand).not.toHaveProperty("schema");
     expect(authorCommand).not.toHaveProperty("output_shape");
     expect(JSON.stringify(payload)).not.toContain("sdd-authoring-outcome-assessment");
+    expect(JSON.stringify(payload)).not.toContain("authoring_format_card");
   });
 
   it("returns static contract detail without loading bundle state", async () => {
@@ -567,6 +609,7 @@ describe("sdd-helper CLI", () => {
       }
     });
     expect(payload.output_shape?.schema?.required ?? []).not.toContain("assessment");
+    expect(payload).not.toHaveProperty("authoring_format_card");
   });
 
   it("returns apply contract detail with optional assessment schema", async () => {
@@ -730,6 +773,75 @@ describe("sdd-helper CLI", () => {
         mode: "bundle_resolved",
         bundle_name: "sdd-text-spec-bundle",
         bundle_version: "0.1"
+      }
+    });
+  });
+
+  it("returns a bundle-derived authoring format card only for resolved author contract detail", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps({
+      loadBundle: vi.fn(async () => createContractResolutionBundle())
+    });
+
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.author", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(0);
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.author"
+      },
+      resolution: {
+        mode: "bundle_resolved"
+      },
+      authoring_format_card: {
+        card_id: "sdd.v0_1.author_json_quick_format",
+        field_hints: expect.arrayContaining([
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.node_id",
+            accepted_pattern: "^[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?$",
+            source: "bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.effect_atom",
+            accepted_forms: ["id_pattern", "identifier_pattern", "quoted_string"],
+            json_examples: expect.arrayContaining([
+              {
+                json: "\"side effect\"",
+                renders: "/ \"side effect\""
+              }
+            ])
+          })
+        ])
+      }
+    });
+  });
+
+  it("reflects active bundle syntax changes in resolved author format card", async () => {
+    const alteredBundle = createContractResolutionBundle();
+    alteredBundle.syntax.lexical.id_pattern = "^[A-Z]+_[0-9]+$";
+    const { deps, stdout } = createDeps({
+      loadBundle: vi.fn(async () => alteredBundle)
+    });
+
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.author", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(0);
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      authoring_format_card: {
+        field_hints: expect.arrayContaining([
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.node_id",
+            accepted_pattern: "^[A-Z]+_[0-9]+$"
+          })
+        ])
       }
     });
   });
@@ -1555,6 +1667,174 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("returns structured diagnostics for invalid author node ids", async () => {
+    const { deps, stdout, applyAuthoringIntentMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        intents: [
+          {
+            kind: "insert_node_scaffold",
+            local_id: "place_root",
+            placement: {
+              mode: "last"
+            },
+            node: {
+              node_type: "Place",
+              node_id: "place_root",
+              name: "Root"
+            }
+          }
+        ]
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "author",
+      "--request",
+      "/tmp/author-invalid-id.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyAuthoringIntentMock).not.toHaveBeenCalled();
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      diagnostics: [
+        {
+          stage: "cli",
+          code: "helper.request.invalid_sdd_id",
+          file: "/tmp/author-invalid-id.json",
+          relatedIds: expect.arrayContaining([
+            "json_pointer:/intents/0/node/node_id",
+            "field_path:intents[0].node.node_id",
+            "bundle_source:bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
+          ])
+        }
+      ],
+      assessment: {
+        blocking_diagnostics: [
+          expect.objectContaining({
+            code: "helper.request.invalid_sdd_id"
+          })
+        ]
+      }
+    });
+  });
+
+  it("returns repair guidance for invalid author edge effects", async () => {
+    const { deps, stdout, applyAuthoringIntentMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        intents: [
+          {
+            kind: "insert_node_scaffold",
+            local_id: "place_root",
+            placement: {
+              mode: "last"
+            },
+            node: {
+              node_type: "Place",
+              node_id: "P-001",
+              name: "Root",
+              edges: [
+                {
+                  local_id: "edge_to_next",
+                  rel_type: "TRANSITIONS_TO",
+                  to: "P-002",
+                  effect: "side effect"
+                }
+              ]
+            }
+          }
+        ]
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "author",
+      "--request",
+      "/tmp/author-invalid-effect.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyAuthoringIntentMock).not.toHaveBeenCalled();
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      diagnostics: [
+        {
+          code: "helper.request.invalid_sdd_atom",
+          message: expect.stringContaining("For prose, use JSON value \"\\\"side effect\\\"\"."),
+          relatedIds: expect.arrayContaining([
+            "json_pointer:/intents/0/node/edges/0/effect",
+            "field_path:intents[0].node.edges[0].effect",
+            "bundle_source:bundle/v0.1/core/syntax.yaml#/atoms/effect_atom"
+          ])
+        }
+      ],
+      assessment: {
+        blocking_diagnostics: [
+          expect.objectContaining({
+            code: "helper.request.invalid_sdd_atom"
+          })
+        ]
+      }
+    });
+  });
+
+  it.each(["SA-010", "emitMetric", "\"side effect\""])(
+    "accepts author edge effect atom %s",
+    async (effect) => {
+      const { deps, applyAuthoringIntentMock } = createDeps({
+        readTextFile: vi.fn(async () => JSON.stringify({
+          path: "docs/example.sdd",
+          base_revision: "rev_base",
+          intents: [
+            {
+              kind: "insert_node_scaffold",
+              local_id: "place_root",
+              placement: {
+                mode: "last"
+              },
+              node: {
+                node_type: "Place",
+                node_id: "P-001",
+                name: "Root",
+                edges: [
+                  {
+                    local_id: "edge_to_next",
+                    rel_type: "TRANSITIONS_TO",
+                    to: "P-002",
+                    effect
+                  }
+                ]
+              }
+            }
+          ]
+        }))
+      });
+
+      const result = await runHelperCli([
+        "node",
+        "sdd-helper",
+        "author",
+        "--request",
+        "/tmp/author-valid-effect.json"
+      ], deps);
+
+      expect(result.exitCode).toBe(0);
+      expect(applyAuthoringIntentMock).toHaveBeenCalledTimes(1);
+    }
+  );
+
   it("returns invalid_json for malformed request bodies", async () => {
     const { deps, stdout } = createDeps({
       readTextFile: vi.fn(async () => "{")
@@ -1675,6 +1955,139 @@ describe("sdd-helper CLI", () => {
       can_render: false,
       should_stop: true
     });
+  });
+
+  it("returns structured diagnostics for invalid apply insert fields", async () => {
+    const { deps, stdout, applyChangeSetMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        operations: [
+          {
+            kind: "insert_edge_line",
+            parent_handle: "hdl_parent",
+            rel_type: "TRANSITIONS_TO",
+            to: "next place",
+            effect: "side effect"
+          }
+        ]
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/apply-invalid-format.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyChangeSetMock).not.toHaveBeenCalled();
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      diagnostics: [
+        {
+          code: "helper.request.invalid_sdd_id",
+          relatedIds: expect.arrayContaining([
+            "json_pointer:/operations/0/to",
+            "field_path:operations[0].to",
+            "bundle_source:bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
+          ])
+        }
+      ],
+      assessment: {
+        blocking_diagnostics: [
+          expect.objectContaining({
+            code: "helper.request.invalid_sdd_id"
+          })
+        ]
+      }
+    });
+  });
+
+  it("returns structured diagnostics for invalid apply edge effects", async () => {
+    const { deps, stdout, applyChangeSetMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        operations: [
+          {
+            kind: "insert_edge_line",
+            parent_handle: "hdl_parent",
+            rel_type: "TRANSITIONS_TO",
+            to: "P-002",
+            effect: "side effect"
+          }
+        ]
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/apply-invalid-effect.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(applyChangeSetMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      diagnostics: [
+        {
+          code: "helper.request.invalid_sdd_atom",
+          message: expect.stringContaining("For prose, use JSON value \"\\\"side effect\\\"\"."),
+          relatedIds: expect.arrayContaining([
+            "json_pointer:/operations/0/effect",
+            "field_path:operations[0].effect",
+            "bundle_source:bundle/v0.1/core/syntax.yaml#/atoms/effect_atom"
+          ])
+        }
+      ]
+    });
+  });
+
+  it("uses the active bundle effect_atom when validating apply requests", async () => {
+    const widenedBundle = createContractResolutionBundle();
+    widenedBundle.syntax.atoms.effect_atom = {
+      one_of: [
+        ...("one_of" in widenedBundle.syntax.atoms.effect_atom ? widenedBundle.syntax.atoms.effect_atom.one_of : []),
+        { pattern_ref: "lexical.bare_value_pattern" }
+      ]
+    };
+    widenedBundle.syntax.lexical.bare_value_pattern = "^[A-Za-z0-9_./:-]+$";
+    const { deps, applyChangeSetMock } = createDeps({
+      loadBundle: vi.fn(async () => widenedBundle),
+      readTextFile: vi.fn(async () => JSON.stringify({
+        path: "docs/example.sdd",
+        base_revision: "rev_base",
+        operations: [
+          {
+            kind: "insert_edge_line",
+            parent_handle: "hdl_parent",
+            rel_type: "TRANSITIONS_TO",
+            to: "P-002",
+            effect: "123"
+          }
+        ]
+      }))
+    });
+
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/apply-widened-effect.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(applyChangeSetMock).toHaveBeenCalledTimes(1);
   });
 
   it("returns undo payloads directly on stdout", async () => {

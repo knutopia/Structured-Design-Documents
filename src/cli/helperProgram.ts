@@ -31,6 +31,12 @@ import {
   type AssessableAuthoringOutcome,
   type HelperErrorAssessmentContext
 } from "../authoring/outcomeAssessment.js";
+import {
+  invalidSddAtomDiagnostic,
+  invalidSddIdDiagnostic,
+  isSddNodeId,
+  isSyntaxAtom
+} from "../authoring/authoringFormat.js";
 import { AuthoringGitError, getGitStatus, gitCommit } from "../authoring/git.js";
 import { inspectDocument } from "../authoring/inspect.js";
 import { listDocuments, searchGraph } from "../authoring/listing.js";
@@ -194,7 +200,24 @@ async function loadRequestText(
   return requestSource === "-" ? deps.readStdin() : deps.readTextFile(requestSource);
 }
 
-type RequestValidator = (value: unknown) => string | undefined;
+interface RequestValidationFailure {
+  message: string;
+  diagnostics?: Diagnostic[];
+}
+
+type RequestValidationResult = string | RequestValidationFailure | undefined;
+type RequestValidator = (value: unknown) => RequestValidationResult;
+
+function validationFailure(message: string, diagnostics?: Diagnostic[]): RequestValidationFailure {
+  return diagnostics && diagnostics.length > 0 ? { message, diagnostics } : { message };
+}
+
+function normalizeValidationFailure(result: RequestValidationResult): RequestValidationFailure | undefined {
+  if (result === undefined) {
+    return undefined;
+  }
+  return typeof result === "string" ? validationFailure(result) : result;
+}
 
 function createRequestAssessmentContext(
   requestSource: string,
@@ -225,12 +248,12 @@ function parseJsonRequest<T>(
     );
   }
 
-  const validationError = validate(parsed);
+  const validationError = normalizeValidationFailure(validate(parsed));
   if (validationError) {
     throw new HelperCliError(
       "invalid_args",
-      `Request body does not match ${requestName}: ${validationError}`,
-      undefined,
+      `Request body does not match ${requestName}: ${validationError.message}`,
+      validationError.diagnostics,
       assessmentContext
     );
   }
@@ -314,6 +337,72 @@ function validateOptionalNullableString(record: Record<string, unknown>, fieldNa
     : `${fieldPath}.${fieldName} must be a string or null when provided.`;
 }
 
+function requestDiagnosticFile(requestSource: string): string {
+  return requestSource === "-" ? "stdin" : requestSource;
+}
+
+function requestFieldFailure(diagnostic: Diagnostic): RequestValidationFailure {
+  return validationFailure(diagnostic.message, [diagnostic]);
+}
+
+function validateSddIdField(
+  bundle: Bundle,
+  file: string,
+  fieldPath: string,
+  jsonPointer: string,
+  value: string
+): RequestValidationResult {
+  if (isSddNodeId(bundle, value)) {
+    return undefined;
+  }
+
+  return requestFieldFailure(invalidSddIdDiagnostic({ bundle, file, fieldPath, jsonPointer, value }));
+}
+
+function validateAtomField(
+  bundle: Bundle,
+  file: string,
+  fieldPath: string,
+  jsonPointer: string,
+  atomName: "event_atom" | "effect_atom",
+  value: unknown
+): RequestValidationResult {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  if (isSyntaxAtom(bundle, atomName, value)) {
+    return undefined;
+  }
+
+  return requestFieldFailure(invalidSddAtomDiagnostic({ bundle, file, fieldPath, jsonPointer, atomName, value }));
+}
+
+function validateNodeRefFormats(
+  value: unknown,
+  fieldPath: string,
+  jsonPointer: string,
+  bundle: Bundle,
+  file: string
+): RequestValidationResult {
+  if (!isRecord(value) || value.by !== "selector" || !isRecord(value.selector)) {
+    return undefined;
+  }
+  if (value.selector.kind !== "node_id" || typeof value.selector.node_id !== "string") {
+    return undefined;
+  }
+
+  return validateSddIdField(
+    bundle,
+    file,
+    `${fieldPath}.selector.node_id`,
+    `${jsonPointer}/selector/node_id`,
+    value.selector.node_id
+  );
+}
+
 function validateChangeOperation(value: unknown, fieldPath: string): string | undefined {
   if (!isRecord(value)) {
     return `${fieldPath} must be an object.`;
@@ -370,7 +459,38 @@ function validateChangeOperation(value: unknown, fieldPath: string): string | un
   }
 }
 
-function validateApplyChangeSetArgs(value: unknown, bundle: Bundle): string | undefined {
+function validateChangeOperationFormats(
+  value: unknown,
+  index: number,
+  bundle: Bundle,
+  file: string
+): RequestValidationResult {
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const fieldPath = `operations[${index}]`;
+  const jsonPointer = `/operations/${index}`;
+
+  switch (value.kind as ChangeOperation["kind"]) {
+    case "insert_node_block":
+      return typeof value.node_id === "string"
+        ? validateSddIdField(bundle, file, `${fieldPath}.node_id`, `${jsonPointer}/node_id`, value.node_id)
+        : undefined;
+    case "insert_edge_line":
+      return (
+        (typeof value.to === "string"
+          ? validateSddIdField(bundle, file, `${fieldPath}.to`, `${jsonPointer}/to`, value.to)
+          : undefined) ??
+        validateAtomField(bundle, file, `${fieldPath}.event`, `${jsonPointer}/event`, "event_atom", value.event) ??
+        validateAtomField(bundle, file, `${fieldPath}.effect`, `${jsonPointer}/effect`, "effect_atom", value.effect)
+      );
+    default:
+      return undefined;
+  }
+}
+
+function validateApplyChangeSetArgs(value: unknown, bundle: Bundle, requestSource: string): RequestValidationResult {
   if (!isRecord(value)) {
     return "expected an object.";
   }
@@ -398,6 +518,14 @@ function validateApplyChangeSetArgs(value: unknown, bundle: Bundle): string | un
     const operationError = validateChangeOperation(operation, `operations[${index}]`);
     if (operationError) {
       return operationError;
+    }
+  }
+
+  const requestFile = requestDiagnosticFile(requestSource);
+  for (const [index, operation] of value.operations.entries()) {
+    const formatError = validateChangeOperationFormats(operation, index, bundle, requestFile);
+    if (formatError) {
+      return formatError;
     }
   }
   return undefined;
@@ -584,7 +712,97 @@ function validateInsertNodeScaffoldIntent(
   return undefined;
 }
 
-function validateApplyAuthoringIntentArgs(value: unknown, bundle: Bundle): string | undefined {
+function validateInsertNodeScaffoldIntentFormats(
+  value: unknown,
+  fieldPath: string,
+  jsonPointer: string,
+  bundle: Bundle,
+  file: string
+): RequestValidationResult {
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const parentError = value.parent !== undefined
+    ? validateNodeRefFormats(value.parent, `${fieldPath}.parent`, `${jsonPointer}/parent`, bundle, file)
+    : undefined;
+  if (parentError) {
+    return parentError;
+  }
+
+  if (isRecord(value.placement) && value.placement.anchor !== undefined) {
+    const anchorError = validateNodeRefFormats(
+      value.placement.anchor,
+      `${fieldPath}.placement.anchor`,
+      `${jsonPointer}/placement/anchor`,
+      bundle,
+      file
+    );
+    if (anchorError) {
+      return anchorError;
+    }
+  }
+
+  if (!isRecord(value.node)) {
+    return undefined;
+  }
+
+  if (typeof value.node.node_id === "string") {
+    const nodeIdError = validateSddIdField(
+      bundle,
+      file,
+      `${fieldPath}.node.node_id`,
+      `${jsonPointer}/node/node_id`,
+      value.node.node_id
+    );
+    if (nodeIdError) {
+      return nodeIdError;
+    }
+  }
+
+  if (Array.isArray(value.node.edges)) {
+    for (const [edgeIndex, edge] of value.node.edges.entries()) {
+      if (!isRecord(edge)) {
+        continue;
+      }
+      const edgePath = `${fieldPath}.node.edges[${edgeIndex}]`;
+      const edgePointer = `${jsonPointer}/node/edges/${edgeIndex}`;
+      const edgeToError = typeof edge.to === "string"
+        ? validateSddIdField(bundle, file, `${edgePath}.to`, `${edgePointer}/to`, edge.to)
+        : undefined;
+      if (edgeToError) {
+        return edgeToError;
+      }
+      const eventError = validateAtomField(bundle, file, `${edgePath}.event`, `${edgePointer}/event`, "event_atom", edge.event);
+      if (eventError) {
+        return eventError;
+      }
+      const effectError = validateAtomField(bundle, file, `${edgePath}.effect`, `${edgePointer}/effect`, "effect_atom", edge.effect);
+      if (effectError) {
+        return effectError;
+      }
+    }
+  }
+
+  if (Array.isArray(value.node.children)) {
+    for (const [childIndex, child] of value.node.children.entries()) {
+      const childError = validateInsertNodeScaffoldIntentFormats(
+        child,
+        `${fieldPath}.node.children[${childIndex}]`,
+        `${jsonPointer}/node/children/${childIndex}`,
+        bundle,
+        file
+      );
+      if (childError) {
+        return childError;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function validateApplyAuthoringIntentArgs(value: unknown, bundle: Bundle, requestSource: string): RequestValidationResult {
   if (!isRecord(value)) {
     return "expected an object.";
   }
@@ -619,6 +837,20 @@ function validateApplyAuthoringIntentArgs(value: unknown, bundle: Bundle): strin
     );
     if (intentError) {
       return intentError;
+    }
+  }
+
+  const requestFile = requestDiagnosticFile(requestSource);
+  for (const [index, intent] of value.intents.entries()) {
+    const formatError = validateInsertNodeScaffoldIntentFormats(
+      intent,
+      `intents[${index}]`,
+      `/intents/${index}`,
+      bundle,
+      requestFile
+    );
+    if (formatError) {
+      return formatError;
     }
   }
   return undefined;
@@ -826,7 +1058,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const request = parseJsonRequest<ApplyChangeSetArgs>(
         rawRequest,
         "ApplyChangeSetArgs",
-        (value) => validateApplyChangeSetArgs(value, bundle),
+        (value) => validateApplyChangeSetArgs(value, bundle, options.request),
         assessmentContext
       );
       workspace.normalizeDocumentPath(request.path);
@@ -843,7 +1075,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       const request = parseJsonRequest<ApplyAuthoringIntentArgs>(
         rawRequest,
         "ApplyAuthoringIntentArgs",
-        (value) => validateApplyAuthoringIntentArgs(value, bundle),
+        (value) => validateApplyAuthoringIntentArgs(value, bundle, options.request),
         assessmentContext
       );
       workspace.normalizeDocumentPath(request.path);

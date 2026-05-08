@@ -591,6 +591,7 @@ export type ContractShapeId = `shared.shape.${string}`;
 export type ContractConstraintId = `shared.constraint.${string}`;
 export type ContractBindingId = `shared.binding.${string}`;
 export type ContractContinuationId = `shared.continuation.${string}`;
+export type ContractFormatHintId = `sdd.${string}`;
 
 export type ContractSchemaFormat = "json_schema_2020_12";
 export type ContractResolutionMode = "static" | "bundle_resolved";
@@ -628,6 +629,7 @@ export interface ContractSubjectDetail {
   bindings: ContractBindingSpec[];
   continuation: ContractContinuationSpec[];
   examples?: ContractExampleSpec[];
+  authoring_format_card?: ContractAuthoringFormatCard;
   resolution: {
     mode: ContractResolutionMode;
     bundle_name?: string;
@@ -700,4 +702,27 @@ export interface ContractExampleSpec {
   title: string;
   when_to_include: "explicit_request_only" | "essential_only";
   payload: unknown;
+}
+
+export interface ContractFieldFormatHint {
+  hint_id: ContractFormatHintId;
+  applies_to_shape_id: ContractShapeId;
+  applies_to_json_pointers: string[];
+  source: string;
+  accepted_pattern?: string;
+  accepted_forms?: string[];
+  examples?: string[];
+  json_examples?: Array<{
+    json: string;
+    renders: string;
+  }>;
+  concise: string;
+}
+
+export interface ContractAuthoringFormatCard {
+  card_id: ContractFormatHintId;
+  summary: string;
+  source: string;
+  lines: string[];
+  field_hints: ContractFieldFormatHint[];
 }
