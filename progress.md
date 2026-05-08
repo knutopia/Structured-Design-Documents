@@ -23,6 +23,7 @@
 -added docs/skill/README.md
 -sdd-helper partial-write fix
 -corepack install fix
+-captured helper payload subdivision issue
 
 ## Thu 5-07
 
