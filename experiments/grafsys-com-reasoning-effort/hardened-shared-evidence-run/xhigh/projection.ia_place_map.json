@@ -1,0 +1,145 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd/projection/ia_place_map",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd",
+  "revision": "rev_0f08ce0c39809c61cbd4080f2e848b8200c91a674d48e7821954fe35cf17b14b",
+  "view_id": "ia_place_map",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ia_place_map",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "AR-001",
+        "type": "Area",
+        "name": "Grafsys Public Site"
+      },
+      {
+        "id": "PL-001",
+        "type": "Place",
+        "name": "Homepage"
+      },
+      {
+        "id": "PL-002",
+        "type": "Place",
+        "name": "Main Content Anchor"
+      },
+      {
+        "id": "PL-003",
+        "type": "Place",
+        "name": "WordPress.com Attribution Target"
+      }
+    ],
+    "edges": [
+      {
+        "from": "AR-001",
+        "type": "CONTAINS",
+        "to": "PL-001"
+      },
+      {
+        "from": "PL-001",
+        "type": "CONTAINS",
+        "to": "PL-002"
+      },
+      {
+        "from": "PL-001",
+        "type": "NAVIGATES_TO",
+        "to": "PL-001"
+      },
+      {
+        "from": "PL-001",
+        "type": "NAVIGATES_TO",
+        "to": "PL-002"
+      },
+      {
+        "from": "PL-001",
+        "type": "NAVIGATES_TO",
+        "to": "PL-003"
+      }
+    ],
+    "derived": {
+      "node_annotations": [
+        {
+          "node_id": "PL-001",
+          "display": {
+            "subtitle": "/",
+            "badge": "public",
+            "metadata": [
+              {
+                "key": "entry_points",
+                "value": "direct:homepage,footer-home:homepage"
+              },
+              {
+                "key": "primary_nav",
+                "value": "false"
+              }
+            ]
+          }
+        },
+        {
+          "node_id": "PL-002",
+          "display": {
+            "subtitle": "#content",
+            "badge": "public",
+            "metadata": [
+              {
+                "key": "entry_points",
+                "value": "skip-link:#content"
+              },
+              {
+                "key": "primary_nav",
+                "value": "false"
+              }
+            ]
+          }
+        },
+        {
+          "node_id": "PL-003",
+          "display": {
+            "subtitle": "https://wordpress.com/?ref=footer_custom_svg",
+            "badge": "public",
+            "metadata": [
+              {
+                "key": "entry_points",
+                "value": "footer-attribution:wordpress"
+              },
+              {
+                "key": "primary_nav",
+                "value": "false"
+              }
+            ]
+          }
+        }
+      ],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {}
+    },
+    "omissions": [
+      {
+        "kind": "edge",
+        "from": "PL-001",
+        "type": "CONTAINS",
+        "to": "VS-001",
+        "reason": "endpoint_out_of_scope",
+        "detail": "Target node type ViewState is outside the ia_place_map node scope."
+      }
+    ],
+    "notes": [
+      "Place route, access, and entry metadata are available as node annotations for profile-aware rendering."
+    ]
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

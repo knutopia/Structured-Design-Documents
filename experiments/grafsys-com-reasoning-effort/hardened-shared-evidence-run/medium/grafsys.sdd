@@ -1,0 +1,56 @@
+SDD-TEXT 0.1
+Area A-001site "Graf Systems public site"
+  source_url="https://grafsys.com/"
+  evidence_scope="Shared homepage desktop and mobile accessibility snapshots captured 2026-05-07"
+  CONTAINS P-001home
+  + Place P-001home "Homepage"
+    route_or_key="https://grafsys.com/"
+    access=public
+    primary_nav=true
+    page_title="Graf Systems - Solutions & Design"
+    CONTAINS VS-001home
+    COMPOSED_OF C-001skip
+    COMPOSED_OF C-002article
+    COMPOSED_OF C-006footer
+    + ViewState VS-001home "Default responsive homepage structure"
+      observed_viewports="desktop snapshot and 390x844 mobile snapshot expose the same accessibility structure"
+    END
+    + Component C-001skip "Skip to content link"
+      href="#content"
+      accessible_name="Skip to content"
+      EMITS E-001skip
+    END
+    + Event E-001skip "Activate skip to content"
+    END
+    + Component C-002article "Main article"
+      landmark="main article"
+      CONTAINS C-003heading
+      CONTAINS C-004logo
+      CONTAINS C-005tagline
+      + Component C-003heading "H1 Graf Systems"
+        text="Graf Systems"
+        level=1
+      END
+      + Component C-004logo "Logo image"
+        accessible_name="Graf Systems"
+      END
+      + Component C-005tagline "Solutions and design tagline"
+        text="Solutions & Design by Knut Graf"
+      END
+    END
+    + Component C-006footer "Footer contentinfo"
+      CONTAINS C-007homelink
+      CONTAINS C-008wordpress
+      + Component C-007homelink "Footer Graf Systems home link"
+        href="https://grafsys.com/"
+        accessible_name="Graf Systems"
+        classification="same-site home link"
+      END
+      + Component C-008wordpress "WordPress attribution link"
+        href="https://wordpress.com/?ref=footer_custom_svg"
+        accessible_name="Create a website or blog at WordPress.com"
+        classification="external attribution link"
+      END
+    END
+  END
+END

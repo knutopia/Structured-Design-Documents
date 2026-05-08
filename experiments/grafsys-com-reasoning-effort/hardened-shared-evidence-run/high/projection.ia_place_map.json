@@ -1,0 +1,86 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/high/grafsys.sdd/projection/ia_place_map",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/high/grafsys.sdd",
+  "revision": "rev_767ea7465d6f7072b29945fe0ca089c01d2fe2e175684f8f76b0ec78e7ff7adc",
+  "view_id": "ia_place_map",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ia_place_map",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "A-001",
+        "type": "Area",
+        "name": "Graf Systems public site"
+      },
+      {
+        "id": "P-001",
+        "type": "Place",
+        "name": "Homepage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A-001",
+        "type": "CONTAINS",
+        "to": "P-001"
+      },
+      {
+        "from": "P-001",
+        "type": "NAVIGATES_TO",
+        "to": "P-001"
+      }
+    ],
+    "derived": {
+      "node_annotations": [
+        {
+          "node_id": "P-001",
+          "display": {
+            "subtitle": "https://grafsys.com/",
+            "badge": "public",
+            "metadata": [
+              {
+                "key": "entry_points",
+                "value": "direct:homepage,footer_home_link:homepage"
+              },
+              {
+                "key": "primary_nav",
+                "value": "false"
+              }
+            ]
+          }
+        }
+      ],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {}
+    },
+    "omissions": [
+      {
+        "kind": "edge",
+        "from": "P-001",
+        "type": "CONTAINS",
+        "to": "VS-001",
+        "reason": "endpoint_out_of_scope",
+        "detail": "Target node type ViewState is outside the ia_place_map node scope."
+      }
+    ],
+    "notes": [
+      "Place route, access, and entry metadata are available as node annotations for profile-aware rendering."
+    ]
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

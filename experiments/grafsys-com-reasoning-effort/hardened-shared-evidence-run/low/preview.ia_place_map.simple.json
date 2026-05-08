@@ -1,0 +1,24 @@
+{
+  "kind": "sdd-preview",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/low/grafsys.sdd",
+  "revision": "rev_592dd69926539166dfa76acfba612c8b0dfda046cdab93a623123823e995568e",
+  "view_id": "ia_place_map",
+  "profile_id": "simple",
+  "backend_id": "staged_ia_place_map_preview",
+  "format": "svg",
+  "mime_type": "image/svg+xml",
+  "artifact_path": "/tmp/unique-previews/20260508-060531Z-A6LOXg/grafsys.ia_place_map.simple.svg",
+  "notes": [],
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Use the rendered preview artifact.",
+    "blocking_diagnostics": [],
+    "summary": "The preview rendered successfully."
+  }
+}

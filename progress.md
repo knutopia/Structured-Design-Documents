@@ -21,6 +21,7 @@
 -testing skill across thinking levels
 -exposed ssh key to non-interactive shells so codex can use git
 -another helper hardening
+-ran architecture experiment with odd results
 
 ## Wed 5-06
 

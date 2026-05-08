@@ -1,0 +1,209 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd/projection/ui_contracts",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd",
+  "revision": "rev_0f08ce0c39809c61cbd4080f2e848b8200c91a674d48e7821954fe35cf17b14b",
+  "view_id": "ui_contracts",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ui_contracts",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "CMP-001",
+        "type": "Component",
+        "name": "Skip to Content Link"
+      },
+      {
+        "id": "CMP-002",
+        "type": "Component",
+        "name": "Main Article"
+      },
+      {
+        "id": "CMP-003",
+        "type": "Component",
+        "name": "Brand Heading"
+      },
+      {
+        "id": "CMP-004",
+        "type": "Component",
+        "name": "Brand Logo Image"
+      },
+      {
+        "id": "CMP-005",
+        "type": "Component",
+        "name": "Tagline Paragraph"
+      },
+      {
+        "id": "CMP-006",
+        "type": "Component",
+        "name": "Footer"
+      },
+      {
+        "id": "CMP-007",
+        "type": "Component",
+        "name": "Footer Home Link"
+      },
+      {
+        "id": "CMP-008",
+        "type": "Component",
+        "name": "WordPress Attribution Link"
+      },
+      {
+        "id": "EV-001",
+        "type": "Event",
+        "name": "Skip Link Activated"
+      },
+      {
+        "id": "EV-002",
+        "type": "Event",
+        "name": "Footer Home Link Activated"
+      },
+      {
+        "id": "EV-003",
+        "type": "Event",
+        "name": "WordPress Attribution Link Activated"
+      },
+      {
+        "id": "PL-001",
+        "type": "Place",
+        "name": "Homepage"
+      },
+      {
+        "id": "PL-002",
+        "type": "Place",
+        "name": "Main Content Anchor"
+      },
+      {
+        "id": "PL-003",
+        "type": "Place",
+        "name": "WordPress.com Attribution Target"
+      },
+      {
+        "id": "VS-001",
+        "type": "ViewState",
+        "name": "Homepage Visible Content"
+      }
+    ],
+    "edges": [
+      {
+        "from": "CMP-001",
+        "type": "EMITS",
+        "to": "EV-001"
+      },
+      {
+        "from": "CMP-002",
+        "type": "CONTAINS",
+        "to": "CMP-003"
+      },
+      {
+        "from": "CMP-002",
+        "type": "CONTAINS",
+        "to": "CMP-004"
+      },
+      {
+        "from": "CMP-002",
+        "type": "CONTAINS",
+        "to": "CMP-005"
+      },
+      {
+        "from": "CMP-006",
+        "type": "CONTAINS",
+        "to": "CMP-007"
+      },
+      {
+        "from": "CMP-006",
+        "type": "CONTAINS",
+        "to": "CMP-008"
+      },
+      {
+        "from": "CMP-007",
+        "type": "EMITS",
+        "to": "EV-002"
+      },
+      {
+        "from": "CMP-008",
+        "type": "EMITS",
+        "to": "EV-003"
+      },
+      {
+        "from": "PL-001",
+        "type": "CONTAINS",
+        "to": "PL-002"
+      },
+      {
+        "from": "PL-001",
+        "type": "CONTAINS",
+        "to": "VS-001"
+      },
+      {
+        "from": "VS-001",
+        "type": "COMPOSED_OF",
+        "to": "CMP-001"
+      },
+      {
+        "from": "VS-001",
+        "type": "COMPOSED_OF",
+        "to": "CMP-002"
+      },
+      {
+        "from": "VS-001",
+        "type": "COMPOSED_OF",
+        "to": "CMP-006"
+      }
+    ],
+    "derived": {
+      "node_annotations": [],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {
+        "transition_graph_priority": {
+          "primary_node_type": "ViewState",
+          "secondary_node_type": "State",
+          "secondary_render_mode": "inset",
+          "fallback_to_secondary_when_primary_absent": true
+        }
+      }
+    },
+    "omissions": [
+      {
+        "kind": "edge",
+        "from": "PL-001",
+        "type": "NAVIGATES_TO",
+        "to": "PL-001",
+        "reason": "relationship_not_in_scope",
+        "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+      },
+      {
+        "kind": "edge",
+        "from": "PL-001",
+        "type": "NAVIGATES_TO",
+        "to": "PL-002",
+        "reason": "relationship_not_in_scope",
+        "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+      },
+      {
+        "kind": "edge",
+        "from": "PL-001",
+        "type": "NAVIGATES_TO",
+        "to": "PL-003",
+        "reason": "relationship_not_in_scope",
+        "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+      }
+    ],
+    "notes": []
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

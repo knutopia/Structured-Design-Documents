@@ -1,0 +1,148 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/low/grafsys.sdd/projection/ui_contracts",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/low/grafsys.sdd",
+  "revision": "rev_592dd69926539166dfa76acfba612c8b0dfda046cdab93a623123823e995568e",
+  "view_id": "ui_contracts",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ui_contracts",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "GS-002",
+        "type": "Place",
+        "name": "Homepage"
+      },
+      {
+        "id": "GS-003",
+        "type": "ViewState",
+        "name": "Default homepage view"
+      },
+      {
+        "id": "GS-004",
+        "type": "Component",
+        "name": "Skip to content link"
+      },
+      {
+        "id": "GS-005",
+        "type": "Component",
+        "name": "Main article"
+      },
+      {
+        "id": "GS-006",
+        "type": "Component",
+        "name": "Graf Systems heading"
+      },
+      {
+        "id": "GS-007",
+        "type": "Component",
+        "name": "Graf Systems logo image"
+      },
+      {
+        "id": "GS-008",
+        "type": "Component",
+        "name": "Solutions and design tagline"
+      },
+      {
+        "id": "GS-009",
+        "type": "Component",
+        "name": "Footer"
+      },
+      {
+        "id": "GS-010",
+        "type": "Component",
+        "name": "Footer home link"
+      },
+      {
+        "id": "GS-011",
+        "type": "Component",
+        "name": "WordPress attribution link"
+      }
+    ],
+    "edges": [
+      {
+        "from": "GS-002",
+        "type": "CONTAINS",
+        "to": "GS-003"
+      },
+      {
+        "from": "GS-003",
+        "type": "COMPOSED_OF",
+        "to": "GS-004"
+      },
+      {
+        "from": "GS-003",
+        "type": "COMPOSED_OF",
+        "to": "GS-005"
+      },
+      {
+        "from": "GS-003",
+        "type": "COMPOSED_OF",
+        "to": "GS-009"
+      },
+      {
+        "from": "GS-005",
+        "type": "CONTAINS",
+        "to": "GS-006"
+      },
+      {
+        "from": "GS-005",
+        "type": "CONTAINS",
+        "to": "GS-007"
+      },
+      {
+        "from": "GS-005",
+        "type": "CONTAINS",
+        "to": "GS-008"
+      },
+      {
+        "from": "GS-009",
+        "type": "CONTAINS",
+        "to": "GS-010"
+      },
+      {
+        "from": "GS-009",
+        "type": "CONTAINS",
+        "to": "GS-011"
+      }
+    ],
+    "derived": {
+      "node_annotations": [],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {
+        "transition_graph_priority": {
+          "primary_node_type": "ViewState",
+          "secondary_node_type": "State",
+          "secondary_render_mode": "inset",
+          "fallback_to_secondary_when_primary_absent": true
+        }
+      }
+    },
+    "omissions": [
+      {
+        "kind": "edge",
+        "from": "GS-002",
+        "type": "NAVIGATES_TO",
+        "to": "GS-002",
+        "reason": "relationship_not_in_scope",
+        "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+      }
+    ],
+    "notes": []
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

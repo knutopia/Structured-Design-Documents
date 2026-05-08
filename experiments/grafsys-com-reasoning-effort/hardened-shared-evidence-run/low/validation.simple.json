@@ -1,0 +1,23 @@
+{
+  "kind": "sdd-validation",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/low/grafsys.sdd/validation/simple",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/low/grafsys.sdd",
+  "revision": "rev_592dd69926539166dfa76acfba612c8b0dfda046cdab93a623123823e995568e",
+  "profile_id": "simple",
+  "report": {
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the persisted document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The persisted document state passed validation and is render-eligible."
+  }
+}

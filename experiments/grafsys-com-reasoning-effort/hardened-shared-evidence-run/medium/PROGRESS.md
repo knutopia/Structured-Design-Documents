@@ -1,0 +1,30 @@
+## Progress
+
+- Created assigned output folder and STARTED marker.
+- Loaded sdd-skill instructions.
+- Found helper wrapper is not executable directly; recovering by invoking it with `bash`.
+- Found shared evidence files: manifest, summary, desktop snapshot, mobile snapshot.
+- Inspected helper capabilities and author contract.
+- Inspected shared evidence content. Evidence supports only the public homepage, skip link, main article, heading, logo image, tagline text, footer home link, external WordPress attribution link, and same desktop/mobile structure.
+- Created `grafsys.sdd` bootstrap through helper. Helper assessment says initial authoring content is needed before inspecting/rendering.
+- First author dry-run returned `sdd-helper-error` / `helper.request.invalid_sdd_id`: node IDs must match `^[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?$`.
+- Recovery: revise author request IDs to bundle-valid SDD IDs and retry.
+- Second author dry-run applied structurally but assessment was blocked by missing deeper nested nodes and invalid `primary_nav` value.
+- Recovery: rewrote author request as a flat sequence of explicit parent-referenced intents and set `primary_nav` to `true`.
+- Third author dry-run returned acceptable, no diagnostics, `can_commit: true`.
+- Next: commit the same candidate, then validate, project, and render persisted outputs.
+- Author commit applied successfully. Helper assessment: acceptable, `can_render: true`.
+- Next: write validation/projection JSON and render simple-profile SVG artifacts.
+- Wrote validation and projection JSON files.
+- `pnpm sdd show --help` failed because Corepack tried to create state under `/mnt/c/Users/Knut/AppData/Local/node/corepack/v1`.
+- Recovery: retry CLI with `COREPACK_HOME=/tmp/corepack` and `TMPDIR=/tmp`.
+- Status check 2026-05-08: retried `COREPACK_HOME=/tmp/corepack TMPDIR=/tmp pnpm sdd show --help`; sandboxed run failed on network/DNS while Corepack tried to download pnpm.
+- Last tool outcome: escalated retry for `pnpm sdd show --help` was interrupted/aborted by user after waiting. No render artifact was produced by that command.
+- Current phase: rendering recovery. Next: use sdd-skill helper `preview` for simple SVG renders, inspect helper assessments/results, then copy preview SVGs into this assigned output folder.
+- Helper preview for `ia_place_map` simple SVG succeeded with acceptable assessment; copied artifact into assigned folder as `grafsys.ia_place_map.simple.svg`.
+- Helper preview for `ui_contracts` simple SVG succeeded with acceptable assessment; copied artifact into assigned folder as `grafsys.ui_contracts.simple.svg`.
+- Next: write README and perform final scoped file/status checks.
+- Wrote `README.md`.
+- Final scoped file check found all expected output files.
+- JSON parse/status check succeeded: validation diagnostics `0`, IA projection diagnostics `0`, UI projection diagnostics `0`.
+- SVG size check succeeded: both requested SVG files are non-empty.

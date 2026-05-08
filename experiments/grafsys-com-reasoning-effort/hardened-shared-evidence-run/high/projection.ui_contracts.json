@@ -1,0 +1,178 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/high/grafsys.sdd/projection/ui_contracts",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/high/grafsys.sdd",
+  "revision": "rev_767ea7465d6f7072b29945fe0ca089c01d2fe2e175684f8f76b0ec78e7ff7adc",
+  "view_id": "ui_contracts",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ui_contracts",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "C-001",
+        "type": "Component",
+        "name": "Skip to content link"
+      },
+      {
+        "id": "C-002",
+        "type": "Component",
+        "name": "Main article"
+      },
+      {
+        "id": "C-003",
+        "type": "Component",
+        "name": "Graf Systems heading"
+      },
+      {
+        "id": "C-004",
+        "type": "Component",
+        "name": "Graf Systems logo image"
+      },
+      {
+        "id": "C-005",
+        "type": "Component",
+        "name": "Solutions and Design tagline"
+      },
+      {
+        "id": "C-006",
+        "type": "Component",
+        "name": "Footer"
+      },
+      {
+        "id": "C-007",
+        "type": "Component",
+        "name": "Footer Graf Systems home link"
+      },
+      {
+        "id": "C-008",
+        "type": "Component",
+        "name": "WordPress attribution link"
+      },
+      {
+        "id": "EV-001",
+        "type": "Event",
+        "name": "Skip link activated"
+      },
+      {
+        "id": "EV-002",
+        "type": "Event",
+        "name": "Footer home link activated"
+      },
+      {
+        "id": "EV-003",
+        "type": "Event",
+        "name": "WordPress attribution link activated"
+      },
+      {
+        "id": "P-001",
+        "type": "Place",
+        "name": "Homepage"
+      },
+      {
+        "id": "VS-001",
+        "type": "ViewState",
+        "name": "Default homepage view"
+      }
+    ],
+    "edges": [
+      {
+        "from": "C-001",
+        "type": "EMITS",
+        "to": "EV-001"
+      },
+      {
+        "from": "C-002",
+        "type": "CONTAINS",
+        "to": "C-003"
+      },
+      {
+        "from": "C-002",
+        "type": "CONTAINS",
+        "to": "C-004"
+      },
+      {
+        "from": "C-002",
+        "type": "CONTAINS",
+        "to": "C-005"
+      },
+      {
+        "from": "C-006",
+        "type": "CONTAINS",
+        "to": "C-007"
+      },
+      {
+        "from": "C-006",
+        "type": "CONTAINS",
+        "to": "C-008"
+      },
+      {
+        "from": "C-007",
+        "type": "EMITS",
+        "to": "EV-002"
+      },
+      {
+        "from": "C-008",
+        "type": "EMITS",
+        "to": "EV-003"
+      },
+      {
+        "from": "P-001",
+        "type": "CONTAINS",
+        "to": "VS-001"
+      },
+      {
+        "from": "VS-001",
+        "type": "COMPOSED_OF",
+        "to": "C-001"
+      },
+      {
+        "from": "VS-001",
+        "type": "COMPOSED_OF",
+        "to": "C-002"
+      },
+      {
+        "from": "VS-001",
+        "type": "COMPOSED_OF",
+        "to": "C-006"
+      }
+    ],
+    "derived": {
+      "node_annotations": [],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {
+        "transition_graph_priority": {
+          "primary_node_type": "ViewState",
+          "secondary_node_type": "State",
+          "secondary_render_mode": "inset",
+          "fallback_to_secondary_when_primary_absent": true
+        }
+      }
+    },
+    "omissions": [
+      {
+        "kind": "edge",
+        "from": "P-001",
+        "type": "NAVIGATES_TO",
+        "to": "P-001",
+        "reason": "relationship_not_in_scope",
+        "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+      }
+    ],
+    "notes": []
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

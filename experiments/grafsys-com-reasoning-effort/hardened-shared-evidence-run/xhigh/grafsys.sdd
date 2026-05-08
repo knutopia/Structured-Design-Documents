@@ -1,0 +1,90 @@
+SDD-TEXT 0.1
+Area AR-001 "Grafsys Public Site"
+  source_url="https://grafsys.com/"
+  evidence_scope="Shared homepage desktop and mobile accessibility snapshots captured 2026-05-07."
+  CONTAINS PL-001 "Homepage"
+  + Place PL-001 "Homepage"
+    route_or_key="/"
+    url="https://grafsys.com/"
+    title="Graf Systems - Solutions & Design"
+    access=public
+    entry_points="direct:homepage,footer-home:homepage"
+    primary_nav=false
+    CONTAINS PL-002 "Main Content Anchor"
+    CONTAINS VS-001 "Homepage Visible Content"
+    NAVIGATES_TO PL-002 "Main Content Anchor" [EV-001]
+    NAVIGATES_TO PL-001 "Homepage" [EV-002]
+    NAVIGATES_TO PL-003 "WordPress.com Attribution Target" [EV-003]
+    + Place PL-002 "Main Content Anchor"
+      route_or_key="#content"
+      access=public
+      entry_points="skip-link:#content"
+      primary_nav=false
+    END
+    + ViewState VS-001 "Homepage Visible Content"
+      evidence="Desktop and 390x844 mobile snapshots expose the same accessibility structure."
+      data_required="No backend data contract evidenced."
+      COMPOSED_OF CMP-001 "Skip to Content Link"
+      COMPOSED_OF CMP-002 "Main Article"
+      COMPOSED_OF CMP-006 "Footer"
+      + Component CMP-001 "Skip to Content Link"
+        role=link
+        label="Skip to content"
+        href="#content"
+        EMITS EV-001 "Skip Link Activated"
+      END
+      + Component CMP-002 "Main Article"
+        role=article
+        CONTAINS CMP-003 "Brand Heading"
+        CONTAINS CMP-004 "Brand Logo Image"
+        CONTAINS CMP-005 "Tagline Paragraph"
+        + Component CMP-003 "Brand Heading"
+          role="heading level 1"
+          text="Graf Systems"
+        END
+        + Component CMP-004 "Brand Logo Image"
+          role=image
+          accessible_name="Graf Systems"
+        END
+        + Component CMP-005 "Tagline Paragraph"
+          role=paragraph
+          text="Solutions & Design by Knut Graf"
+        END
+      END
+      + Component CMP-006 "Footer"
+        role=contentinfo
+        CONTAINS CMP-007 "Footer Home Link"
+        CONTAINS CMP-008 "WordPress Attribution Link"
+        + Component CMP-007 "Footer Home Link"
+          role=link
+          label="Graf Systems"
+          href="https://grafsys.com/"
+          EMITS EV-002 "Footer Home Link Activated"
+        END
+        + Component CMP-008 "WordPress Attribution Link"
+          role=link
+          label="Create a website or blog at WordPress.com"
+          href="https://wordpress.com/?ref=footer_custom_svg"
+          contains_image_name="Create a website or blog at WordPress.com"
+          EMITS EV-003 "WordPress Attribution Link Activated"
+        END
+      END
+    END
+  END
+END
+Place PL-003 "WordPress.com Attribution Target"
+  route_or_key="https://wordpress.com/?ref=footer_custom_svg"
+  access=public
+  entry_points="footer-attribution:wordpress"
+  site_scope="External attribution target observed from grafsys.com footer."
+  primary_nav=false
+END
+Event EV-001 "Skip Link Activated"
+  trigger="User activates Skip to content link."
+END
+Event EV-002 "Footer Home Link Activated"
+  trigger="User activates footer Graf Systems link."
+END
+Event EV-003 "WordPress Attribution Link Activated"
+  trigger="User activates footer WordPress attribution link."
+END

@@ -1,0 +1,567 @@
+{
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd",
+  "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+  "mode": "commit",
+  "validate_profile": "simple",
+  "projection_views": [
+    "ia_place_map",
+    "ui_contracts"
+  ],
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area_public_site",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "AR-001",
+        "name": "Grafsys Public Site",
+        "props": [
+          {
+            "key": "source_url",
+            "value_kind": "quoted_string",
+            "raw_value": "https://grafsys.com/"
+          },
+          {
+            "key": "evidence_scope",
+            "value_kind": "quoted_string",
+            "raw_value": "Shared homepage desktop and mobile accessibility snapshots captured 2026-05-07."
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "edge_area_contains_homepage",
+            "rel_type": "CONTAINS",
+            "to": "PL-001",
+            "to_name": "Homepage"
+          }
+        ],
+        "children": [
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place_homepage",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "PL-001",
+              "name": "Homepage",
+              "props": [
+                {
+                  "key": "route_or_key",
+                  "value_kind": "quoted_string",
+                  "raw_value": "/"
+                },
+                {
+                  "key": "url",
+                  "value_kind": "quoted_string",
+                  "raw_value": "https://grafsys.com/"
+                },
+                {
+                  "key": "title",
+                  "value_kind": "quoted_string",
+                  "raw_value": "Graf Systems - Solutions & Design"
+                },
+                {
+                  "key": "access",
+                  "value_kind": "bare_value",
+                  "raw_value": "public"
+                },
+                {
+                  "key": "entry_points",
+                  "value_kind": "quoted_string",
+                  "raw_value": "direct:homepage,footer-home:homepage"
+                },
+                {
+                  "key": "primary_nav",
+                  "value_kind": "bare_value",
+                  "raw_value": "false"
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge_home_contains_content_anchor",
+                  "rel_type": "CONTAINS",
+                  "to": "PL-002",
+                  "to_name": "Main Content Anchor"
+                },
+                {
+                  "local_id": "edge_home_contains_rendered_state",
+                  "rel_type": "CONTAINS",
+                  "to": "VS-001",
+                  "to_name": "Homepage Visible Content"
+                },
+                {
+                  "local_id": "edge_home_skip_to_content",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "PL-002",
+                  "to_name": "Main Content Anchor",
+                  "event": "EV-001"
+                },
+                {
+                  "local_id": "edge_home_footer_home",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "PL-001",
+                  "to_name": "Homepage",
+                  "event": "EV-002"
+                },
+                {
+                  "local_id": "edge_home_wordpress_attribution",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "PL-003",
+                  "to_name": "WordPress.com Attribution Target",
+                  "event": "EV-003"
+                }
+              ],
+              "children": [
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "place_content_anchor",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Place",
+                    "node_id": "PL-002",
+                    "name": "Main Content Anchor",
+                    "props": [
+                      {
+                        "key": "route_or_key",
+                        "value_kind": "quoted_string",
+                        "raw_value": "#content"
+                      },
+                      {
+                        "key": "access",
+                        "value_kind": "bare_value",
+                        "raw_value": "public"
+                      },
+                      {
+                        "key": "entry_points",
+                        "value_kind": "quoted_string",
+                        "raw_value": "skip-link:#content"
+                      },
+                      {
+                        "key": "primary_nav",
+                        "value_kind": "bare_value",
+                        "raw_value": "false"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "view_home_visible",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "ViewState",
+                    "node_id": "VS-001",
+                    "name": "Homepage Visible Content",
+                    "props": [
+                      {
+                        "key": "evidence",
+                        "value_kind": "quoted_string",
+                        "raw_value": "Desktop and 390x844 mobile snapshots expose the same accessibility structure."
+                      },
+                      {
+                        "key": "data_required",
+                        "value_kind": "quoted_string",
+                        "raw_value": "No backend data contract evidenced."
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_view_skip_component",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "CMP-001",
+                        "to_name": "Skip to Content Link"
+                      },
+                      {
+                        "local_id": "edge_view_article_component",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "CMP-002",
+                        "to_name": "Main Article"
+                      },
+                      {
+                        "local_id": "edge_view_footer_component",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "CMP-006",
+                        "to_name": "Footer"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_skip_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "CMP-001",
+                          "name": "Skip to Content Link",
+                          "props": [
+                            {
+                              "key": "role",
+                              "value_kind": "bare_value",
+                              "raw_value": "link"
+                            },
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Skip to content"
+                            },
+                            {
+                              "key": "href",
+                              "value_kind": "quoted_string",
+                              "raw_value": "#content"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_skip_emits_event",
+                              "rel_type": "EMITS",
+                              "to": "EV-001",
+                              "to_name": "Skip Link Activated"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_main_article",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "CMP-002",
+                          "name": "Main Article",
+                          "props": [
+                            {
+                              "key": "role",
+                              "value_kind": "bare_value",
+                              "raw_value": "article"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_article_heading",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-003",
+                              "to_name": "Brand Heading"
+                            },
+                            {
+                              "local_id": "edge_article_logo",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-004",
+                              "to_name": "Brand Logo Image"
+                            },
+                            {
+                              "local_id": "edge_article_tagline",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-005",
+                              "to_name": "Tagline Paragraph"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_brand_heading",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-003",
+                                "name": "Brand Heading",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "heading level 1"
+                                  },
+                                  {
+                                    "key": "text",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_brand_logo",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-004",
+                                "name": "Brand Logo Image",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "image"
+                                  },
+                                  {
+                                    "key": "accessible_name",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_tagline",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-005",
+                                "name": "Tagline Paragraph",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "paragraph"
+                                  },
+                                  {
+                                    "key": "text",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Solutions & Design by Knut Graf"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_footer",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "CMP-006",
+                          "name": "Footer",
+                          "props": [
+                            {
+                              "key": "role",
+                              "value_kind": "bare_value",
+                              "raw_value": "contentinfo"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_footer_home_link",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-007",
+                              "to_name": "Footer Home Link"
+                            },
+                            {
+                              "local_id": "edge_footer_wordpress_link",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-008",
+                              "to_name": "WordPress Attribution Link"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_footer_home_link",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-007",
+                                "name": "Footer Home Link",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "link"
+                                  },
+                                  {
+                                    "key": "label",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  },
+                                  {
+                                    "key": "href",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "https://grafsys.com/"
+                                  }
+                                ],
+                                "edges": [
+                                  {
+                                    "local_id": "edge_footer_home_emits_event",
+                                    "rel_type": "EMITS",
+                                    "to": "EV-002",
+                                    "to_name": "Footer Home Link Activated"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_wordpress_link",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-008",
+                                "name": "WordPress Attribution Link",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "link"
+                                  },
+                                  {
+                                    "key": "label",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Create a website or blog at WordPress.com"
+                                  },
+                                  {
+                                    "key": "href",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+                                  },
+                                  {
+                                    "key": "contains_image_name",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Create a website or blog at WordPress.com"
+                                  }
+                                ],
+                                "edges": [
+                                  {
+                                    "local_id": "edge_wordpress_emits_event",
+                                    "rel_type": "EMITS",
+                                    "to": "EV-003",
+                                    "to_name": "WordPress Attribution Link Activated"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place_wordpress_target",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "PL-003",
+        "name": "WordPress.com Attribution Target",
+        "props": [
+          {
+            "key": "route_or_key",
+            "value_kind": "quoted_string",
+            "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+          },
+          {
+            "key": "access",
+            "value_kind": "bare_value",
+            "raw_value": "public"
+          },
+          {
+            "key": "entry_points",
+            "value_kind": "quoted_string",
+            "raw_value": "footer-attribution:wordpress"
+          },
+          {
+            "key": "site_scope",
+            "value_kind": "quoted_string",
+            "raw_value": "External attribution target observed from grafsys.com footer."
+          },
+          {
+            "key": "primary_nav",
+            "value_kind": "bare_value",
+            "raw_value": "false"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "event_skip_link",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Event",
+        "node_id": "EV-001",
+        "name": "Skip Link Activated",
+        "props": [
+          {
+            "key": "trigger",
+            "value_kind": "quoted_string",
+            "raw_value": "User activates Skip to content link."
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "event_footer_home",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Event",
+        "node_id": "EV-002",
+        "name": "Footer Home Link Activated",
+        "props": [
+          {
+            "key": "trigger",
+            "value_kind": "quoted_string",
+            "raw_value": "User activates footer Graf Systems link."
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "event_wordpress_link",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Event",
+        "node_id": "EV-003",
+        "name": "WordPress Attribution Link Activated",
+        "props": [
+          {
+            "key": "trigger",
+            "value_kind": "quoted_string",
+            "raw_value": "User activates footer WordPress attribution link."
+          }
+        ]
+      }
+    }
+  ]
+}

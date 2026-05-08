@@ -1,0 +1,149 @@
+{
+  "kind": "sdd-projection",
+  "uri": "sdd://document/experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/medium/grafsys.sdd/projection/ui_contracts",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/medium/grafsys.sdd",
+  "revision": "rev_4b30a8829039debca64c4c702aba5fd96a7982fce4aa3ed946b9a6058680701a",
+  "view_id": "ui_contracts",
+  "projection": {
+    "schema": "sdd-text-view-projection",
+    "version": "0.1",
+    "view_id": "ui_contracts",
+    "source_example": "grafsys",
+    "nodes": [
+      {
+        "id": "C-001skip",
+        "type": "Component",
+        "name": "Skip to content link"
+      },
+      {
+        "id": "C-002article",
+        "type": "Component",
+        "name": "Main article"
+      },
+      {
+        "id": "C-003heading",
+        "type": "Component",
+        "name": "H1 Graf Systems"
+      },
+      {
+        "id": "C-004logo",
+        "type": "Component",
+        "name": "Logo image"
+      },
+      {
+        "id": "C-005tagline",
+        "type": "Component",
+        "name": "Solutions and design tagline"
+      },
+      {
+        "id": "C-006footer",
+        "type": "Component",
+        "name": "Footer contentinfo"
+      },
+      {
+        "id": "C-007homelink",
+        "type": "Component",
+        "name": "Footer Graf Systems home link"
+      },
+      {
+        "id": "C-008wordpress",
+        "type": "Component",
+        "name": "WordPress attribution link"
+      },
+      {
+        "id": "E-001skip",
+        "type": "Event",
+        "name": "Activate skip to content"
+      },
+      {
+        "id": "P-001home",
+        "type": "Place",
+        "name": "Homepage"
+      },
+      {
+        "id": "VS-001home",
+        "type": "ViewState",
+        "name": "Default responsive homepage structure"
+      }
+    ],
+    "edges": [
+      {
+        "from": "C-001skip",
+        "type": "EMITS",
+        "to": "E-001skip"
+      },
+      {
+        "from": "C-002article",
+        "type": "CONTAINS",
+        "to": "C-003heading"
+      },
+      {
+        "from": "C-002article",
+        "type": "CONTAINS",
+        "to": "C-004logo"
+      },
+      {
+        "from": "C-002article",
+        "type": "CONTAINS",
+        "to": "C-005tagline"
+      },
+      {
+        "from": "C-006footer",
+        "type": "CONTAINS",
+        "to": "C-007homelink"
+      },
+      {
+        "from": "C-006footer",
+        "type": "CONTAINS",
+        "to": "C-008wordpress"
+      },
+      {
+        "from": "P-001home",
+        "type": "COMPOSED_OF",
+        "to": "C-001skip"
+      },
+      {
+        "from": "P-001home",
+        "type": "COMPOSED_OF",
+        "to": "C-002article"
+      },
+      {
+        "from": "P-001home",
+        "type": "COMPOSED_OF",
+        "to": "C-006footer"
+      },
+      {
+        "from": "P-001home",
+        "type": "CONTAINS",
+        "to": "VS-001home"
+      }
+    ],
+    "derived": {
+      "node_annotations": [],
+      "edge_annotations": [],
+      "node_groups": [],
+      "view_metadata": {
+        "transition_graph_priority": {
+          "primary_node_type": "ViewState",
+          "secondary_node_type": "State",
+          "secondary_render_mode": "inset",
+          "fallback_to_secondary_when_primary_absent": true
+        }
+      }
+    },
+    "omissions": [],
+    "notes": []
+  },
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Render the projected document state if a visual artifact is needed.",
+    "blocking_diagnostics": [],
+    "summary": "The projection is clean and render-eligible."
+  }
+}

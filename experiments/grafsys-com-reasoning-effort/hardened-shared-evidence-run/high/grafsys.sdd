@@ -1,0 +1,68 @@
+SDD-TEXT 0.1
+Area A-001 "Graf Systems public site"
+  evidence="Homepage snapshots and manifest for https://grafsys.com/"
+  scope="Only observed homepage structure and links"
+  CONTAINS P-001 "Homepage"
+  + Place P-001 "Homepage"
+    route_or_key="https://grafsys.com/"
+    access=public
+    entry_points="direct:homepage,footer_home_link:homepage"
+    primary_nav="false"
+    CONTAINS VS-001 "Default homepage view"
+    NAVIGATES_TO P-001 "Homepage" [EV-002]
+    + ViewState VS-001 "Default homepage view"
+      responsive_evidence="Desktop and 390x844 mobile snapshots expose the same accessibility structure"
+      page_title="Graf Systems - Solutions & Design"
+      COMPOSED_OF C-001 "Skip to content link"
+      COMPOSED_OF C-002 "Main article"
+      COMPOSED_OF C-006 "Footer"
+      + Component C-001 "Skip to content link"
+        label="Skip to content"
+        target="#content"
+        EMITS EV-001 "Skip link activated"
+      END
+      + Component C-002 "Main article"
+        landmark="main article"
+        CONTAINS C-003 "Graf Systems heading"
+        CONTAINS C-004 "Graf Systems logo image"
+        CONTAINS C-005 "Solutions and Design tagline"
+        + Component C-003 "Graf Systems heading"
+          role="heading level 1"
+          text="Graf Systems"
+        END
+        + Component C-004 "Graf Systems logo image"
+          role="image"
+          accessible_name="Graf Systems"
+        END
+        + Component C-005 "Solutions and Design tagline"
+          role="paragraph"
+          text="Solutions & Design by Knut Graf"
+        END
+      END
+      + Component C-006 "Footer"
+        landmark="contentinfo"
+        CONTAINS C-007 "Footer Graf Systems home link"
+        CONTAINS C-008 "WordPress attribution link"
+        + Component C-007 "Footer Graf Systems home link"
+          label="Graf Systems"
+          href="https://grafsys.com/"
+          EMITS EV-002 "Footer home link activated"
+        END
+        + Component C-008 "WordPress attribution link"
+          label="Create a website or blog at WordPress.com"
+          href="https://wordpress.com/?ref=footer_custom_svg"
+          EMITS EV-003 "WordPress attribution link activated"
+        END
+      END
+      + Event EV-001 "Skip link activated"
+        effect="Moves focus/navigation target to #content"
+      END
+      + Event EV-002 "Footer home link activated"
+        target="https://grafsys.com/"
+      END
+      + Event EV-003 "WordPress attribution link activated"
+        target="https://wordpress.com/?ref=footer_custom_svg"
+      END
+    END
+  END
+END

@@ -1,0 +1,444 @@
+{
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/high/grafsys.sdd",
+  "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+  "mode": "commit",
+  "validate_profile": "simple",
+  "projection_views": [
+    "ia_place_map",
+    "ui_contracts"
+  ],
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "site_area",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "A-001",
+        "name": "Graf Systems public site",
+        "props": [
+          {
+            "key": "evidence",
+            "value_kind": "quoted_string",
+            "raw_value": "Homepage snapshots and manifest for https://grafsys.com/"
+          },
+          {
+            "key": "scope",
+            "value_kind": "quoted_string",
+            "raw_value": "Only observed homepage structure and links"
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "area_contains_home",
+            "rel_type": "CONTAINS",
+            "to": "P-001",
+            "to_name": "Homepage"
+          }
+        ],
+        "children": [
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "homepage",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "P-001",
+              "name": "Homepage",
+              "props": [
+                {
+                  "key": "route_or_key",
+                  "value_kind": "quoted_string",
+                  "raw_value": "https://grafsys.com/"
+                },
+                {
+                  "key": "access",
+                  "value_kind": "bare_value",
+                  "raw_value": "public"
+                },
+                {
+                  "key": "entry_points",
+                  "value_kind": "quoted_string",
+                  "raw_value": "direct:homepage,footer_home_link:homepage"
+                },
+                {
+                  "key": "primary_nav",
+                  "value_kind": "quoted_string",
+                  "raw_value": "false"
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "home_contains_default_view",
+                  "rel_type": "CONTAINS",
+                  "to": "VS-001",
+                  "to_name": "Default homepage view"
+                },
+                {
+                  "local_id": "home_navigates_to_self",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "P-001",
+                  "to_name": "Homepage",
+                  "event": "EV-002"
+                }
+              ],
+              "children": [
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "default_view",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "ViewState",
+                    "node_id": "VS-001",
+                    "name": "Default homepage view",
+                    "props": [
+                      {
+                        "key": "responsive_evidence",
+                        "value_kind": "quoted_string",
+                        "raw_value": "Desktop and 390x844 mobile snapshots expose the same accessibility structure"
+                      },
+                      {
+                        "key": "page_title",
+                        "value_kind": "quoted_string",
+                        "raw_value": "Graf Systems - Solutions & Design"
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "view_composed_skip",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-001",
+                        "to_name": "Skip to content link"
+                      },
+                      {
+                        "local_id": "view_composed_article",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-002",
+                        "to_name": "Main article"
+                      },
+                      {
+                        "local_id": "view_composed_footer",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "C-006",
+                        "to_name": "Footer"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "skip_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-001",
+                          "name": "Skip to content link",
+                          "props": [
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Skip to content"
+                            },
+                            {
+                              "key": "target",
+                              "value_kind": "quoted_string",
+                              "raw_value": "#content"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "skip_emits",
+                              "rel_type": "EMITS",
+                              "to": "EV-001",
+                              "to_name": "Skip link activated"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "main_article",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-002",
+                          "name": "Main article",
+                          "props": [
+                            {
+                              "key": "landmark",
+                              "value_kind": "quoted_string",
+                              "raw_value": "main article"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "article_composed_heading",
+                              "rel_type": "CONTAINS",
+                              "to": "C-003",
+                              "to_name": "Graf Systems heading"
+                            },
+                            {
+                              "local_id": "article_composed_logo",
+                              "rel_type": "CONTAINS",
+                              "to": "C-004",
+                              "to_name": "Graf Systems logo image"
+                            },
+                            {
+                              "local_id": "article_composed_tagline",
+                              "rel_type": "CONTAINS",
+                              "to": "C-005",
+                              "to_name": "Solutions and Design tagline"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "heading",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "C-003",
+                                "name": "Graf Systems heading",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "heading level 1"
+                                  },
+                                  {
+                                    "key": "text",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "logo",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "C-004",
+                                "name": "Graf Systems logo image",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "image"
+                                  },
+                                  {
+                                    "key": "accessible_name",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "tagline",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "C-005",
+                                "name": "Solutions and Design tagline",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "paragraph"
+                                  },
+                                  {
+                                    "key": "text",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Solutions & Design by Knut Graf"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "footer",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "C-006",
+                          "name": "Footer",
+                          "props": [
+                            {
+                              "key": "landmark",
+                              "value_kind": "quoted_string",
+                              "raw_value": "contentinfo"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "footer_composed_home",
+                              "rel_type": "CONTAINS",
+                              "to": "C-007",
+                              "to_name": "Footer Graf Systems home link"
+                            },
+                            {
+                              "local_id": "footer_composed_wp",
+                              "rel_type": "CONTAINS",
+                              "to": "C-008",
+                              "to_name": "WordPress attribution link"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "footer_home",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "C-007",
+                                "name": "Footer Graf Systems home link",
+                                "props": [
+                                  {
+                                    "key": "label",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  },
+                                  {
+                                    "key": "href",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "https://grafsys.com/"
+                                  }
+                                ],
+                                "edges": [
+                                  {
+                                    "local_id": "footer_home_emits",
+                                    "rel_type": "EMITS",
+                                    "to": "EV-002",
+                                    "to_name": "Footer home link activated"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "wp_link",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "C-008",
+                                "name": "WordPress attribution link",
+                                "props": [
+                                  {
+                                    "key": "label",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Create a website or blog at WordPress.com"
+                                  },
+                                  {
+                                    "key": "href",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+                                  }
+                                ],
+                                "edges": [
+                                  {
+                                    "local_id": "wp_link_emits",
+                                    "rel_type": "EMITS",
+                                    "to": "EV-003",
+                                    "to_name": "WordPress attribution link activated"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "skip_event",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Event",
+                          "node_id": "EV-001",
+                          "name": "Skip link activated",
+                          "props": [
+                            {
+                              "key": "effect",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Moves focus/navigation target to #content"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "footer_home_event",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Event",
+                          "node_id": "EV-002",
+                          "name": "Footer home link activated",
+                          "props": [
+                            {
+                              "key": "target",
+                              "value_kind": "quoted_string",
+                              "raw_value": "https://grafsys.com/"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "wp_event",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Event",
+                          "node_id": "EV-003",
+                          "name": "WordPress attribution link activated",
+                          "props": [
+                            {
+                              "key": "target",
+                              "value_kind": "quoted_string",
+                              "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

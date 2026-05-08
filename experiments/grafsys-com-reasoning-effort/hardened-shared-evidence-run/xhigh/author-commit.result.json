@@ -1,0 +1,2080 @@
+{
+  "kind": "sdd-authoring-intent-result",
+  "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd",
+  "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+  "resulting_revision": "rev_0f08ce0c39809c61cbd4080f2e848b8200c91a674d48e7821954fe35cf17b14b",
+  "mode": "commit",
+  "status": "applied",
+  "intents": [
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "area_public_site",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Area",
+        "node_id": "AR-001",
+        "name": "Grafsys Public Site",
+        "props": [
+          {
+            "key": "source_url",
+            "value_kind": "quoted_string",
+            "raw_value": "https://grafsys.com/"
+          },
+          {
+            "key": "evidence_scope",
+            "value_kind": "quoted_string",
+            "raw_value": "Shared homepage desktop and mobile accessibility snapshots captured 2026-05-07."
+          }
+        ],
+        "edges": [
+          {
+            "local_id": "edge_area_contains_homepage",
+            "rel_type": "CONTAINS",
+            "to": "PL-001",
+            "to_name": "Homepage"
+          }
+        ],
+        "children": [
+          {
+            "kind": "insert_node_scaffold",
+            "local_id": "place_homepage",
+            "placement": {
+              "mode": "last"
+            },
+            "node": {
+              "node_type": "Place",
+              "node_id": "PL-001",
+              "name": "Homepage",
+              "props": [
+                {
+                  "key": "route_or_key",
+                  "value_kind": "quoted_string",
+                  "raw_value": "/"
+                },
+                {
+                  "key": "url",
+                  "value_kind": "quoted_string",
+                  "raw_value": "https://grafsys.com/"
+                },
+                {
+                  "key": "title",
+                  "value_kind": "quoted_string",
+                  "raw_value": "Graf Systems - Solutions & Design"
+                },
+                {
+                  "key": "access",
+                  "value_kind": "bare_value",
+                  "raw_value": "public"
+                },
+                {
+                  "key": "entry_points",
+                  "value_kind": "quoted_string",
+                  "raw_value": "direct:homepage,footer-home:homepage"
+                },
+                {
+                  "key": "primary_nav",
+                  "value_kind": "bare_value",
+                  "raw_value": "false"
+                }
+              ],
+              "edges": [
+                {
+                  "local_id": "edge_home_contains_content_anchor",
+                  "rel_type": "CONTAINS",
+                  "to": "PL-002",
+                  "to_name": "Main Content Anchor"
+                },
+                {
+                  "local_id": "edge_home_contains_rendered_state",
+                  "rel_type": "CONTAINS",
+                  "to": "VS-001",
+                  "to_name": "Homepage Visible Content"
+                },
+                {
+                  "local_id": "edge_home_skip_to_content",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "PL-002",
+                  "to_name": "Main Content Anchor",
+                  "event": "EV-001"
+                },
+                {
+                  "local_id": "edge_home_footer_home",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "PL-001",
+                  "to_name": "Homepage",
+                  "event": "EV-002"
+                },
+                {
+                  "local_id": "edge_home_wordpress_attribution",
+                  "rel_type": "NAVIGATES_TO",
+                  "to": "PL-003",
+                  "to_name": "WordPress.com Attribution Target",
+                  "event": "EV-003"
+                }
+              ],
+              "children": [
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "place_content_anchor",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "Place",
+                    "node_id": "PL-002",
+                    "name": "Main Content Anchor",
+                    "props": [
+                      {
+                        "key": "route_or_key",
+                        "value_kind": "quoted_string",
+                        "raw_value": "#content"
+                      },
+                      {
+                        "key": "access",
+                        "value_kind": "bare_value",
+                        "raw_value": "public"
+                      },
+                      {
+                        "key": "entry_points",
+                        "value_kind": "quoted_string",
+                        "raw_value": "skip-link:#content"
+                      },
+                      {
+                        "key": "primary_nav",
+                        "value_kind": "bare_value",
+                        "raw_value": "false"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "insert_node_scaffold",
+                  "local_id": "view_home_visible",
+                  "placement": {
+                    "mode": "last"
+                  },
+                  "node": {
+                    "node_type": "ViewState",
+                    "node_id": "VS-001",
+                    "name": "Homepage Visible Content",
+                    "props": [
+                      {
+                        "key": "evidence",
+                        "value_kind": "quoted_string",
+                        "raw_value": "Desktop and 390x844 mobile snapshots expose the same accessibility structure."
+                      },
+                      {
+                        "key": "data_required",
+                        "value_kind": "quoted_string",
+                        "raw_value": "No backend data contract evidenced."
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "local_id": "edge_view_skip_component",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "CMP-001",
+                        "to_name": "Skip to Content Link"
+                      },
+                      {
+                        "local_id": "edge_view_article_component",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "CMP-002",
+                        "to_name": "Main Article"
+                      },
+                      {
+                        "local_id": "edge_view_footer_component",
+                        "rel_type": "COMPOSED_OF",
+                        "to": "CMP-006",
+                        "to_name": "Footer"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_skip_link",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "CMP-001",
+                          "name": "Skip to Content Link",
+                          "props": [
+                            {
+                              "key": "role",
+                              "value_kind": "bare_value",
+                              "raw_value": "link"
+                            },
+                            {
+                              "key": "label",
+                              "value_kind": "quoted_string",
+                              "raw_value": "Skip to content"
+                            },
+                            {
+                              "key": "href",
+                              "value_kind": "quoted_string",
+                              "raw_value": "#content"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_skip_emits_event",
+                              "rel_type": "EMITS",
+                              "to": "EV-001",
+                              "to_name": "Skip Link Activated"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_main_article",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "CMP-002",
+                          "name": "Main Article",
+                          "props": [
+                            {
+                              "key": "role",
+                              "value_kind": "bare_value",
+                              "raw_value": "article"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_article_heading",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-003",
+                              "to_name": "Brand Heading"
+                            },
+                            {
+                              "local_id": "edge_article_logo",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-004",
+                              "to_name": "Brand Logo Image"
+                            },
+                            {
+                              "local_id": "edge_article_tagline",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-005",
+                              "to_name": "Tagline Paragraph"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_brand_heading",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-003",
+                                "name": "Brand Heading",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "heading level 1"
+                                  },
+                                  {
+                                    "key": "text",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_brand_logo",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-004",
+                                "name": "Brand Logo Image",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "image"
+                                  },
+                                  {
+                                    "key": "accessible_name",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_tagline",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-005",
+                                "name": "Tagline Paragraph",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "paragraph"
+                                  },
+                                  {
+                                    "key": "text",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Solutions & Design by Knut Graf"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "insert_node_scaffold",
+                        "local_id": "component_footer",
+                        "placement": {
+                          "mode": "last"
+                        },
+                        "node": {
+                          "node_type": "Component",
+                          "node_id": "CMP-006",
+                          "name": "Footer",
+                          "props": [
+                            {
+                              "key": "role",
+                              "value_kind": "bare_value",
+                              "raw_value": "contentinfo"
+                            }
+                          ],
+                          "edges": [
+                            {
+                              "local_id": "edge_footer_home_link",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-007",
+                              "to_name": "Footer Home Link"
+                            },
+                            {
+                              "local_id": "edge_footer_wordpress_link",
+                              "rel_type": "CONTAINS",
+                              "to": "CMP-008",
+                              "to_name": "WordPress Attribution Link"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_footer_home_link",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-007",
+                                "name": "Footer Home Link",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "link"
+                                  },
+                                  {
+                                    "key": "label",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Graf Systems"
+                                  },
+                                  {
+                                    "key": "href",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "https://grafsys.com/"
+                                  }
+                                ],
+                                "edges": [
+                                  {
+                                    "local_id": "edge_footer_home_emits_event",
+                                    "rel_type": "EMITS",
+                                    "to": "EV-002",
+                                    "to_name": "Footer Home Link Activated"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "insert_node_scaffold",
+                              "local_id": "component_wordpress_link",
+                              "placement": {
+                                "mode": "last"
+                              },
+                              "node": {
+                                "node_type": "Component",
+                                "node_id": "CMP-008",
+                                "name": "WordPress Attribution Link",
+                                "props": [
+                                  {
+                                    "key": "role",
+                                    "value_kind": "bare_value",
+                                    "raw_value": "link"
+                                  },
+                                  {
+                                    "key": "label",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Create a website or blog at WordPress.com"
+                                  },
+                                  {
+                                    "key": "href",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+                                  },
+                                  {
+                                    "key": "contains_image_name",
+                                    "value_kind": "quoted_string",
+                                    "raw_value": "Create a website or blog at WordPress.com"
+                                  }
+                                ],
+                                "edges": [
+                                  {
+                                    "local_id": "edge_wordpress_emits_event",
+                                    "rel_type": "EMITS",
+                                    "to": "EV-003",
+                                    "to_name": "WordPress Attribution Link Activated"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "place_wordpress_target",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Place",
+        "node_id": "PL-003",
+        "name": "WordPress.com Attribution Target",
+        "props": [
+          {
+            "key": "route_or_key",
+            "value_kind": "quoted_string",
+            "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+          },
+          {
+            "key": "access",
+            "value_kind": "bare_value",
+            "raw_value": "public"
+          },
+          {
+            "key": "entry_points",
+            "value_kind": "quoted_string",
+            "raw_value": "footer-attribution:wordpress"
+          },
+          {
+            "key": "site_scope",
+            "value_kind": "quoted_string",
+            "raw_value": "External attribution target observed from grafsys.com footer."
+          },
+          {
+            "key": "primary_nav",
+            "value_kind": "bare_value",
+            "raw_value": "false"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "event_skip_link",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Event",
+        "node_id": "EV-001",
+        "name": "Skip Link Activated",
+        "props": [
+          {
+            "key": "trigger",
+            "value_kind": "quoted_string",
+            "raw_value": "User activates Skip to content link."
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "event_footer_home",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Event",
+        "node_id": "EV-002",
+        "name": "Footer Home Link Activated",
+        "props": [
+          {
+            "key": "trigger",
+            "value_kind": "quoted_string",
+            "raw_value": "User activates footer Graf Systems link."
+          }
+        ]
+      }
+    },
+    {
+      "kind": "insert_node_scaffold",
+      "local_id": "event_wordpress_link",
+      "placement": {
+        "mode": "last"
+      },
+      "node": {
+        "node_type": "Event",
+        "node_id": "EV-003",
+        "name": "WordPress Attribution Link Activated",
+        "props": [
+          {
+            "key": "trigger",
+            "value_kind": "quoted_string",
+            "raw_value": "User activates footer WordPress attribution link."
+          }
+        ]
+      }
+    }
+  ],
+  "change_set": {
+    "kind": "sdd-change-set",
+    "change_set_id": "chg_aea8e565-0f3e-4588-a565-9c24d9a3ed02",
+    "path": "experiments/grafsys-com-reasoning-effort/hardened-shared-evidence-run/xhigh/grafsys.sdd",
+    "origin": "apply_authoring_intent",
+    "document_effect": "updated",
+    "base_revision": "rev_ce0346709efe3ad4b016e73afa4a61e0782b68562b0d4cd0e90c339b6c1590f8",
+    "mode": "commit",
+    "status": "applied",
+    "undo_eligible": true,
+    "operations": [
+      {
+        "kind": "insert_node_block",
+        "node_type": "Area",
+        "node_id": "AR-001",
+        "name": "Grafsys Public Site",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+        "key": "source_url",
+        "value_kind": "quoted_string",
+        "raw_value": "https://grafsys.com/"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+        "key": "evidence_scope",
+        "value_kind": "quoted_string",
+        "raw_value": "Shared homepage desktop and mobile accessibility snapshots captured 2026-05-07."
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+        "rel_type": "CONTAINS",
+        "to": "PL-001",
+        "to_name": "Homepage"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "PL-001",
+        "name": "Homepage",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "key": "route_or_key",
+        "value_kind": "quoted_string",
+        "raw_value": "/"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "key": "url",
+        "value_kind": "quoted_string",
+        "raw_value": "https://grafsys.com/"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "key": "title",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems - Solutions & Design"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "key": "access",
+        "value_kind": "bare_value",
+        "raw_value": "public"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "key": "entry_points",
+        "value_kind": "quoted_string",
+        "raw_value": "direct:homepage,footer-home:homepage"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "key": "primary_nav",
+        "value_kind": "bare_value",
+        "raw_value": "false"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "rel_type": "CONTAINS",
+        "to": "PL-002",
+        "to_name": "Main Content Anchor"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "rel_type": "CONTAINS",
+        "to": "VS-001",
+        "to_name": "Homepage Visible Content"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "rel_type": "NAVIGATES_TO",
+        "to": "PL-002",
+        "to_name": "Main Content Anchor",
+        "event": "EV-001"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "rel_type": "NAVIGATES_TO",
+        "to": "PL-001",
+        "to_name": "Homepage",
+        "event": "EV-002"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+        "rel_type": "NAVIGATES_TO",
+        "to": "PL-003",
+        "to_name": "WordPress.com Attribution Target",
+        "event": "EV-003"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "PL-002",
+        "name": "Main Content Anchor",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+        "key": "route_or_key",
+        "value_kind": "quoted_string",
+        "raw_value": "#content"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+        "key": "access",
+        "value_kind": "bare_value",
+        "raw_value": "public"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+        "key": "entry_points",
+        "value_kind": "quoted_string",
+        "raw_value": "skip-link:#content"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+        "key": "primary_nav",
+        "value_kind": "bare_value",
+        "raw_value": "false"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "ViewState",
+        "node_id": "VS-001",
+        "name": "Homepage Visible Content",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+        "key": "evidence",
+        "value_kind": "quoted_string",
+        "raw_value": "Desktop and 390x844 mobile snapshots expose the same accessibility structure."
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+        "key": "data_required",
+        "value_kind": "quoted_string",
+        "raw_value": "No backend data contract evidenced."
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+        "rel_type": "COMPOSED_OF",
+        "to": "CMP-001",
+        "to_name": "Skip to Content Link"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+        "rel_type": "COMPOSED_OF",
+        "to": "CMP-002",
+        "to_name": "Main Article"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+        "rel_type": "COMPOSED_OF",
+        "to": "CMP-006",
+        "to_name": "Footer"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-001",
+        "name": "Skip to Content Link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "link"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+        "key": "label",
+        "value_kind": "quoted_string",
+        "raw_value": "Skip to content"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+        "key": "href",
+        "value_kind": "quoted_string",
+        "raw_value": "#content"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+        "rel_type": "EMITS",
+        "to": "EV-001",
+        "to_name": "Skip Link Activated"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-002",
+        "name": "Main Article",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "article"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+        "rel_type": "CONTAINS",
+        "to": "CMP-003",
+        "to_name": "Brand Heading"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+        "rel_type": "CONTAINS",
+        "to": "CMP-004",
+        "to_name": "Brand Logo Image"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+        "rel_type": "CONTAINS",
+        "to": "CMP-005",
+        "to_name": "Tagline Paragraph"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-003",
+        "name": "Brand Heading",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_d4ab5d8fb9df6be11f63cba3faaa038e3fac128b9eab2b383cec9a3d76556247",
+        "key": "role",
+        "value_kind": "quoted_string",
+        "raw_value": "heading level 1"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_d4ab5d8fb9df6be11f63cba3faaa038e3fac128b9eab2b383cec9a3d76556247",
+        "key": "text",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-004",
+        "name": "Brand Logo Image",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_d43f8a276ed29d8c74bacd268384ac7ea634f589a5275bba57edb2b517e47b93",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "image"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_d43f8a276ed29d8c74bacd268384ac7ea634f589a5275bba57edb2b517e47b93",
+        "key": "accessible_name",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-005",
+        "name": "Tagline Paragraph",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_c0f91c552896038f2a4045a6598698507d61cde6f415feb1d3af7009122c4487",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "paragraph"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_c0f91c552896038f2a4045a6598698507d61cde6f415feb1d3af7009122c4487",
+        "key": "text",
+        "value_kind": "quoted_string",
+        "raw_value": "Solutions & Design by Knut Graf"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-006",
+        "name": "Footer",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "contentinfo"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+        "rel_type": "CONTAINS",
+        "to": "CMP-007",
+        "to_name": "Footer Home Link"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+        "rel_type": "CONTAINS",
+        "to": "CMP-008",
+        "to_name": "WordPress Attribution Link"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-007",
+        "name": "Footer Home Link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "link"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+        "key": "label",
+        "value_kind": "quoted_string",
+        "raw_value": "Graf Systems"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+        "key": "href",
+        "value_kind": "quoted_string",
+        "raw_value": "https://grafsys.com/"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+        "rel_type": "EMITS",
+        "to": "EV-002",
+        "to_name": "Footer Home Link Activated"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Component",
+        "node_id": "CMP-008",
+        "name": "WordPress Attribution Link",
+        "placement": {
+          "mode": "last",
+          "stream": "body",
+          "parent_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+        "key": "role",
+        "value_kind": "bare_value",
+        "raw_value": "link"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+        "key": "label",
+        "value_kind": "quoted_string",
+        "raw_value": "Create a website or blog at WordPress.com"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+        "key": "href",
+        "value_kind": "quoted_string",
+        "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+        "key": "contains_image_name",
+        "value_kind": "quoted_string",
+        "raw_value": "Create a website or blog at WordPress.com"
+      },
+      {
+        "kind": "insert_edge_line",
+        "parent_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+        "rel_type": "EMITS",
+        "to": "EV-003",
+        "to_name": "WordPress Attribution Link Activated"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Place",
+        "node_id": "PL-003",
+        "name": "WordPress.com Attribution Target",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+        "key": "route_or_key",
+        "value_kind": "quoted_string",
+        "raw_value": "https://wordpress.com/?ref=footer_custom_svg"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+        "key": "access",
+        "value_kind": "bare_value",
+        "raw_value": "public"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+        "key": "entry_points",
+        "value_kind": "quoted_string",
+        "raw_value": "footer-attribution:wordpress"
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+        "key": "site_scope",
+        "value_kind": "quoted_string",
+        "raw_value": "External attribution target observed from grafsys.com footer."
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+        "key": "primary_nav",
+        "value_kind": "bare_value",
+        "raw_value": "false"
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Event",
+        "node_id": "EV-001",
+        "name": "Skip Link Activated",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_1e1312d06eab14befe11a42b4a3fa569781e6cdc3214f60caec107f0ffa690a4",
+        "key": "trigger",
+        "value_kind": "quoted_string",
+        "raw_value": "User activates Skip to content link."
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Event",
+        "node_id": "EV-002",
+        "name": "Footer Home Link Activated",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_9da8d9512497f21dc40f7e6f06cdabb5b57a047514ab2de331691ab33e7fbba5",
+        "key": "trigger",
+        "value_kind": "quoted_string",
+        "raw_value": "User activates footer Graf Systems link."
+      },
+      {
+        "kind": "insert_node_block",
+        "node_type": "Event",
+        "node_id": "EV-003",
+        "name": "WordPress Attribution Link Activated",
+        "placement": {
+          "mode": "last",
+          "stream": "top_level"
+        }
+      },
+      {
+        "kind": "set_node_property",
+        "node_handle": "hdl_66c5a54b8c3bb60379a9d073cc5b413f2bd3d2f01f535cc9be654cc74c9d0c2e",
+        "key": "trigger",
+        "value_kind": "quoted_string",
+        "raw_value": "User activates footer WordPress attribution link."
+      }
+    ],
+    "summary": {
+      "node_insertions": [
+        {
+          "handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+          "node_id": "AR-001",
+          "node_type": "Area"
+        },
+        {
+          "handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "node_id": "PL-001",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+          "node_id": "PL-002",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+          "node_id": "VS-001",
+          "node_type": "ViewState"
+        },
+        {
+          "handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+          "node_id": "CMP-001",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+          "node_id": "CMP-002",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_d4ab5d8fb9df6be11f63cba3faaa038e3fac128b9eab2b383cec9a3d76556247",
+          "node_id": "CMP-003",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_d43f8a276ed29d8c74bacd268384ac7ea634f589a5275bba57edb2b517e47b93",
+          "node_id": "CMP-004",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_c0f91c552896038f2a4045a6598698507d61cde6f415feb1d3af7009122c4487",
+          "node_id": "CMP-005",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+          "node_id": "CMP-006",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+          "node_id": "CMP-007",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+          "node_id": "CMP-008",
+          "node_type": "Component"
+        },
+        {
+          "handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+          "node_id": "PL-003",
+          "node_type": "Place"
+        },
+        {
+          "handle": "hdl_1e1312d06eab14befe11a42b4a3fa569781e6cdc3214f60caec107f0ffa690a4",
+          "node_id": "EV-001",
+          "node_type": "Event"
+        },
+        {
+          "handle": "hdl_9da8d9512497f21dc40f7e6f06cdabb5b57a047514ab2de331691ab33e7fbba5",
+          "node_id": "EV-002",
+          "node_type": "Event"
+        },
+        {
+          "handle": "hdl_66c5a54b8c3bb60379a9d073cc5b413f2bd3d2f01f535cc9be654cc74c9d0c2e",
+          "node_id": "EV-003",
+          "node_type": "Event"
+        }
+      ],
+      "node_deletions": [],
+      "node_renames": [],
+      "property_changes": [
+        {
+          "node_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+          "key": "source_url",
+          "to": "https://grafsys.com/"
+        },
+        {
+          "node_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+          "key": "evidence_scope",
+          "to": "Shared homepage desktop and mobile accessibility snapshots captured 2026-05-07."
+        },
+        {
+          "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "key": "route_or_key",
+          "to": "/"
+        },
+        {
+          "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "key": "url",
+          "to": "https://grafsys.com/"
+        },
+        {
+          "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "key": "title",
+          "to": "Graf Systems - Solutions & Design"
+        },
+        {
+          "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "key": "access",
+          "to": "public"
+        },
+        {
+          "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "key": "entry_points",
+          "to": "direct:homepage,footer-home:homepage"
+        },
+        {
+          "node_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "key": "primary_nav",
+          "to": "false"
+        },
+        {
+          "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+          "key": "route_or_key",
+          "to": "#content"
+        },
+        {
+          "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+          "key": "access",
+          "to": "public"
+        },
+        {
+          "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+          "key": "entry_points",
+          "to": "skip-link:#content"
+        },
+        {
+          "node_handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+          "key": "primary_nav",
+          "to": "false"
+        },
+        {
+          "node_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+          "key": "evidence",
+          "to": "Desktop and 390x844 mobile snapshots expose the same accessibility structure."
+        },
+        {
+          "node_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+          "key": "data_required",
+          "to": "No backend data contract evidenced."
+        },
+        {
+          "node_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+          "key": "role",
+          "to": "link"
+        },
+        {
+          "node_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+          "key": "label",
+          "to": "Skip to content"
+        },
+        {
+          "node_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+          "key": "href",
+          "to": "#content"
+        },
+        {
+          "node_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+          "key": "role",
+          "to": "article"
+        },
+        {
+          "node_handle": "hdl_d4ab5d8fb9df6be11f63cba3faaa038e3fac128b9eab2b383cec9a3d76556247",
+          "key": "role",
+          "to": "heading level 1"
+        },
+        {
+          "node_handle": "hdl_d4ab5d8fb9df6be11f63cba3faaa038e3fac128b9eab2b383cec9a3d76556247",
+          "key": "text",
+          "to": "Graf Systems"
+        },
+        {
+          "node_handle": "hdl_d43f8a276ed29d8c74bacd268384ac7ea634f589a5275bba57edb2b517e47b93",
+          "key": "role",
+          "to": "image"
+        },
+        {
+          "node_handle": "hdl_d43f8a276ed29d8c74bacd268384ac7ea634f589a5275bba57edb2b517e47b93",
+          "key": "accessible_name",
+          "to": "Graf Systems"
+        },
+        {
+          "node_handle": "hdl_c0f91c552896038f2a4045a6598698507d61cde6f415feb1d3af7009122c4487",
+          "key": "role",
+          "to": "paragraph"
+        },
+        {
+          "node_handle": "hdl_c0f91c552896038f2a4045a6598698507d61cde6f415feb1d3af7009122c4487",
+          "key": "text",
+          "to": "Solutions & Design by Knut Graf"
+        },
+        {
+          "node_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+          "key": "role",
+          "to": "contentinfo"
+        },
+        {
+          "node_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+          "key": "role",
+          "to": "link"
+        },
+        {
+          "node_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+          "key": "label",
+          "to": "Graf Systems"
+        },
+        {
+          "node_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+          "key": "href",
+          "to": "https://grafsys.com/"
+        },
+        {
+          "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+          "key": "role",
+          "to": "link"
+        },
+        {
+          "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+          "key": "label",
+          "to": "Create a website or blog at WordPress.com"
+        },
+        {
+          "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+          "key": "href",
+          "to": "https://wordpress.com/?ref=footer_custom_svg"
+        },
+        {
+          "node_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+          "key": "contains_image_name",
+          "to": "Create a website or blog at WordPress.com"
+        },
+        {
+          "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+          "key": "route_or_key",
+          "to": "https://wordpress.com/?ref=footer_custom_svg"
+        },
+        {
+          "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+          "key": "access",
+          "to": "public"
+        },
+        {
+          "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+          "key": "entry_points",
+          "to": "footer-attribution:wordpress"
+        },
+        {
+          "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+          "key": "site_scope",
+          "to": "External attribution target observed from grafsys.com footer."
+        },
+        {
+          "node_handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877",
+          "key": "primary_nav",
+          "to": "false"
+        },
+        {
+          "node_handle": "hdl_1e1312d06eab14befe11a42b4a3fa569781e6cdc3214f60caec107f0ffa690a4",
+          "key": "trigger",
+          "to": "User activates Skip to content link."
+        },
+        {
+          "node_handle": "hdl_9da8d9512497f21dc40f7e6f06cdabb5b57a047514ab2de331691ab33e7fbba5",
+          "key": "trigger",
+          "to": "User activates footer Graf Systems link."
+        },
+        {
+          "node_handle": "hdl_66c5a54b8c3bb60379a9d073cc5b413f2bd3d2f01f535cc9be654cc74c9d0c2e",
+          "key": "trigger",
+          "to": "User activates footer WordPress attribution link."
+        }
+      ],
+      "edge_insertions": [
+        {
+          "handle": "hdl_0b39495aa9e917e444f64d0614778b3f6246b5b07a85529cb46442248fd05598",
+          "parent_handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a",
+          "rel_type": "CONTAINS",
+          "to": "PL-001"
+        },
+        {
+          "handle": "hdl_31680cd3ecce4866c5937beb06973d9c5b2577fa3863e53a1e782a8bf6b5878e",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "rel_type": "CONTAINS",
+          "to": "PL-002"
+        },
+        {
+          "handle": "hdl_74aa3bd3ee5ad2f83f7cf3306065883d60dc862f2f08cb3f22f9530177c8d14d",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "rel_type": "CONTAINS",
+          "to": "VS-001"
+        },
+        {
+          "handle": "hdl_b5985da15703c8cb3d97261afe998ac102c0685b01fdf0c5ccc0ac6088682ee2",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "rel_type": "NAVIGATES_TO",
+          "to": "PL-002"
+        },
+        {
+          "handle": "hdl_39dd7cac018caeeae301a461a151567d91b7d85c29291b6c6caaccd8bcb70fe4",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "rel_type": "NAVIGATES_TO",
+          "to": "PL-001"
+        },
+        {
+          "handle": "hdl_8d4044bc6b43907b6c429711e5dbfb5ea05ccb44b85dae3455818e021414e2cb",
+          "parent_handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+          "rel_type": "NAVIGATES_TO",
+          "to": "PL-003"
+        },
+        {
+          "handle": "hdl_76cc499f0da1c85b37061f1c84188d9ea8a07d0d0dddbbd5d836839104bc73b5",
+          "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+          "rel_type": "COMPOSED_OF",
+          "to": "CMP-001"
+        },
+        {
+          "handle": "hdl_4bb6d0687daf2aea041b020059744cffdf496718043e068b09a78d62fe3c9e1b",
+          "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+          "rel_type": "COMPOSED_OF",
+          "to": "CMP-002"
+        },
+        {
+          "handle": "hdl_b2e05372e5c623778b59e358335ce727ab4fcd0fe3fb6ff73e9c3601999b314f",
+          "parent_handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+          "rel_type": "COMPOSED_OF",
+          "to": "CMP-006"
+        },
+        {
+          "handle": "hdl_bd00d80e1b94a4efbd052d0bd8b017316d7f8932f423d848ff60e49ea8b72b9e",
+          "parent_handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+          "rel_type": "EMITS",
+          "to": "EV-001"
+        },
+        {
+          "handle": "hdl_21fc4f7c58e8f38e0c9bdedc73c626235f7559ae8517bdc609fb6a533b58679b",
+          "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+          "rel_type": "CONTAINS",
+          "to": "CMP-003"
+        },
+        {
+          "handle": "hdl_800d63c60eff404b8eb08a75c03b6532366beb8ca3eff5037a9b4c175edd7cb7",
+          "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+          "rel_type": "CONTAINS",
+          "to": "CMP-004"
+        },
+        {
+          "handle": "hdl_890715ecdc60f68cbedd93f1f171a8fa5c1cf444777551edc25add395ff19f48",
+          "parent_handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+          "rel_type": "CONTAINS",
+          "to": "CMP-005"
+        },
+        {
+          "handle": "hdl_87c2e746c9860350ae6fc926ccc8e1a6348a703c1fddb4090199f0c081377f53",
+          "parent_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+          "rel_type": "CONTAINS",
+          "to": "CMP-007"
+        },
+        {
+          "handle": "hdl_75aa48103b47eda2d7ec59621e2c4ddf834e9cfbd11e105bc637069e5989c822",
+          "parent_handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+          "rel_type": "CONTAINS",
+          "to": "CMP-008"
+        },
+        {
+          "handle": "hdl_17e48889c0037a90687f83a440f5f03f37ced12e853d02b1e3316116be0be7d6",
+          "parent_handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+          "rel_type": "EMITS",
+          "to": "EV-002"
+        },
+        {
+          "handle": "hdl_5633aef0b808078c82ebdd94ff69193aa2dba6127e30720f934fcb2d04d89a34",
+          "parent_handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+          "rel_type": "EMITS",
+          "to": "EV-003"
+        }
+      ],
+      "edge_deletions": [],
+      "ordering_changes": []
+    },
+    "diagnostics": [],
+    "projection_results": [
+      {
+        "view_id": "ia_place_map",
+        "projection": {
+          "schema": "sdd-text-view-projection",
+          "version": "0.1",
+          "view_id": "ia_place_map",
+          "source_example": "grafsys",
+          "nodes": [
+            {
+              "id": "AR-001",
+              "type": "Area",
+              "name": "Grafsys Public Site"
+            },
+            {
+              "id": "PL-001",
+              "type": "Place",
+              "name": "Homepage"
+            },
+            {
+              "id": "PL-002",
+              "type": "Place",
+              "name": "Main Content Anchor"
+            },
+            {
+              "id": "PL-003",
+              "type": "Place",
+              "name": "WordPress.com Attribution Target"
+            }
+          ],
+          "edges": [
+            {
+              "from": "AR-001",
+              "type": "CONTAINS",
+              "to": "PL-001"
+            },
+            {
+              "from": "PL-001",
+              "type": "CONTAINS",
+              "to": "PL-002"
+            },
+            {
+              "from": "PL-001",
+              "type": "NAVIGATES_TO",
+              "to": "PL-001"
+            },
+            {
+              "from": "PL-001",
+              "type": "NAVIGATES_TO",
+              "to": "PL-002"
+            },
+            {
+              "from": "PL-001",
+              "type": "NAVIGATES_TO",
+              "to": "PL-003"
+            }
+          ],
+          "derived": {
+            "node_annotations": [
+              {
+                "node_id": "PL-001",
+                "display": {
+                  "subtitle": "/",
+                  "badge": "public",
+                  "metadata": [
+                    {
+                      "key": "entry_points",
+                      "value": "direct:homepage,footer-home:homepage"
+                    },
+                    {
+                      "key": "primary_nav",
+                      "value": "false"
+                    }
+                  ]
+                }
+              },
+              {
+                "node_id": "PL-002",
+                "display": {
+                  "subtitle": "#content",
+                  "badge": "public",
+                  "metadata": [
+                    {
+                      "key": "entry_points",
+                      "value": "skip-link:#content"
+                    },
+                    {
+                      "key": "primary_nav",
+                      "value": "false"
+                    }
+                  ]
+                }
+              },
+              {
+                "node_id": "PL-003",
+                "display": {
+                  "subtitle": "https://wordpress.com/?ref=footer_custom_svg",
+                  "badge": "public",
+                  "metadata": [
+                    {
+                      "key": "entry_points",
+                      "value": "footer-attribution:wordpress"
+                    },
+                    {
+                      "key": "primary_nav",
+                      "value": "false"
+                    }
+                  ]
+                }
+              }
+            ],
+            "edge_annotations": [],
+            "node_groups": [],
+            "view_metadata": {}
+          },
+          "omissions": [
+            {
+              "kind": "edge",
+              "from": "PL-001",
+              "type": "CONTAINS",
+              "to": "VS-001",
+              "reason": "endpoint_out_of_scope",
+              "detail": "Target node type ViewState is outside the ia_place_map node scope."
+            }
+          ],
+          "notes": [
+            "Place route, access, and entry metadata are available as node annotations for profile-aware rendering."
+          ]
+        },
+        "diagnostics": []
+      },
+      {
+        "view_id": "ui_contracts",
+        "projection": {
+          "schema": "sdd-text-view-projection",
+          "version": "0.1",
+          "view_id": "ui_contracts",
+          "source_example": "grafsys",
+          "nodes": [
+            {
+              "id": "CMP-001",
+              "type": "Component",
+              "name": "Skip to Content Link"
+            },
+            {
+              "id": "CMP-002",
+              "type": "Component",
+              "name": "Main Article"
+            },
+            {
+              "id": "CMP-003",
+              "type": "Component",
+              "name": "Brand Heading"
+            },
+            {
+              "id": "CMP-004",
+              "type": "Component",
+              "name": "Brand Logo Image"
+            },
+            {
+              "id": "CMP-005",
+              "type": "Component",
+              "name": "Tagline Paragraph"
+            },
+            {
+              "id": "CMP-006",
+              "type": "Component",
+              "name": "Footer"
+            },
+            {
+              "id": "CMP-007",
+              "type": "Component",
+              "name": "Footer Home Link"
+            },
+            {
+              "id": "CMP-008",
+              "type": "Component",
+              "name": "WordPress Attribution Link"
+            },
+            {
+              "id": "EV-001",
+              "type": "Event",
+              "name": "Skip Link Activated"
+            },
+            {
+              "id": "EV-002",
+              "type": "Event",
+              "name": "Footer Home Link Activated"
+            },
+            {
+              "id": "EV-003",
+              "type": "Event",
+              "name": "WordPress Attribution Link Activated"
+            },
+            {
+              "id": "PL-001",
+              "type": "Place",
+              "name": "Homepage"
+            },
+            {
+              "id": "PL-002",
+              "type": "Place",
+              "name": "Main Content Anchor"
+            },
+            {
+              "id": "PL-003",
+              "type": "Place",
+              "name": "WordPress.com Attribution Target"
+            },
+            {
+              "id": "VS-001",
+              "type": "ViewState",
+              "name": "Homepage Visible Content"
+            }
+          ],
+          "edges": [
+            {
+              "from": "CMP-001",
+              "type": "EMITS",
+              "to": "EV-001"
+            },
+            {
+              "from": "CMP-002",
+              "type": "CONTAINS",
+              "to": "CMP-003"
+            },
+            {
+              "from": "CMP-002",
+              "type": "CONTAINS",
+              "to": "CMP-004"
+            },
+            {
+              "from": "CMP-002",
+              "type": "CONTAINS",
+              "to": "CMP-005"
+            },
+            {
+              "from": "CMP-006",
+              "type": "CONTAINS",
+              "to": "CMP-007"
+            },
+            {
+              "from": "CMP-006",
+              "type": "CONTAINS",
+              "to": "CMP-008"
+            },
+            {
+              "from": "CMP-007",
+              "type": "EMITS",
+              "to": "EV-002"
+            },
+            {
+              "from": "CMP-008",
+              "type": "EMITS",
+              "to": "EV-003"
+            },
+            {
+              "from": "PL-001",
+              "type": "CONTAINS",
+              "to": "PL-002"
+            },
+            {
+              "from": "PL-001",
+              "type": "CONTAINS",
+              "to": "VS-001"
+            },
+            {
+              "from": "VS-001",
+              "type": "COMPOSED_OF",
+              "to": "CMP-001"
+            },
+            {
+              "from": "VS-001",
+              "type": "COMPOSED_OF",
+              "to": "CMP-002"
+            },
+            {
+              "from": "VS-001",
+              "type": "COMPOSED_OF",
+              "to": "CMP-006"
+            }
+          ],
+          "derived": {
+            "node_annotations": [],
+            "edge_annotations": [],
+            "node_groups": [],
+            "view_metadata": {
+              "transition_graph_priority": {
+                "primary_node_type": "ViewState",
+                "secondary_node_type": "State",
+                "secondary_render_mode": "inset",
+                "fallback_to_secondary_when_primary_absent": true
+              }
+            }
+          },
+          "omissions": [
+            {
+              "kind": "edge",
+              "from": "PL-001",
+              "type": "NAVIGATES_TO",
+              "to": "PL-001",
+              "reason": "relationship_not_in_scope",
+              "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+            },
+            {
+              "kind": "edge",
+              "from": "PL-001",
+              "type": "NAVIGATES_TO",
+              "to": "PL-002",
+              "reason": "relationship_not_in_scope",
+              "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+            },
+            {
+              "kind": "edge",
+              "from": "PL-001",
+              "type": "NAVIGATES_TO",
+              "to": "PL-003",
+              "reason": "relationship_not_in_scope",
+              "detail": "NAVIGATES_TO is outside the ui_contracts edge scope."
+            }
+          ],
+          "notes": []
+        },
+        "diagnostics": []
+      }
+    ],
+    "resulting_revision": "rev_0f08ce0c39809c61cbd4080f2e848b8200c91a674d48e7821954fe35cf17b14b"
+  },
+  "created_targets": [
+    {
+      "local_id": "area_public_site",
+      "kind": "node",
+      "handle": "hdl_cbe9452fbd39855f0afac68a0ca748c4821caae9d2ea7ded7ca842bbd62da34a"
+    },
+    {
+      "local_id": "edge_area_contains_homepage",
+      "kind": "edge",
+      "handle": "hdl_0b39495aa9e917e444f64d0614778b3f6246b5b07a85529cb46442248fd05598",
+      "parent_local_id": "area_public_site"
+    },
+    {
+      "local_id": "place_homepage",
+      "kind": "node",
+      "handle": "hdl_f47a7a10c1adbe9bfefaea6a4320cfbbc930c5b28a5ef4859b1bcb51ed29bbc6",
+      "parent_local_id": "area_public_site"
+    },
+    {
+      "local_id": "edge_home_contains_content_anchor",
+      "kind": "edge",
+      "handle": "hdl_31680cd3ecce4866c5937beb06973d9c5b2577fa3863e53a1e782a8bf6b5878e",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "edge_home_contains_rendered_state",
+      "kind": "edge",
+      "handle": "hdl_74aa3bd3ee5ad2f83f7cf3306065883d60dc862f2f08cb3f22f9530177c8d14d",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "edge_home_skip_to_content",
+      "kind": "edge",
+      "handle": "hdl_b5985da15703c8cb3d97261afe998ac102c0685b01fdf0c5ccc0ac6088682ee2",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "edge_home_footer_home",
+      "kind": "edge",
+      "handle": "hdl_39dd7cac018caeeae301a461a151567d91b7d85c29291b6c6caaccd8bcb70fe4",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "edge_home_wordpress_attribution",
+      "kind": "edge",
+      "handle": "hdl_8d4044bc6b43907b6c429711e5dbfb5ea05ccb44b85dae3455818e021414e2cb",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "place_content_anchor",
+      "kind": "node",
+      "handle": "hdl_7418e4abac4c9b33ac83139b030a6365f1da9dfc6d34fab0abd7f0f2d971a6c0",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "view_home_visible",
+      "kind": "node",
+      "handle": "hdl_906a9fd17970cb233cc209df2d60ba8341484556073a0f70ace823c832864c38",
+      "parent_local_id": "place_homepage"
+    },
+    {
+      "local_id": "edge_view_skip_component",
+      "kind": "edge",
+      "handle": "hdl_76cc499f0da1c85b37061f1c84188d9ea8a07d0d0dddbbd5d836839104bc73b5",
+      "parent_local_id": "view_home_visible"
+    },
+    {
+      "local_id": "edge_view_article_component",
+      "kind": "edge",
+      "handle": "hdl_4bb6d0687daf2aea041b020059744cffdf496718043e068b09a78d62fe3c9e1b",
+      "parent_local_id": "view_home_visible"
+    },
+    {
+      "local_id": "edge_view_footer_component",
+      "kind": "edge",
+      "handle": "hdl_b2e05372e5c623778b59e358335ce727ab4fcd0fe3fb6ff73e9c3601999b314f",
+      "parent_local_id": "view_home_visible"
+    },
+    {
+      "local_id": "component_skip_link",
+      "kind": "node",
+      "handle": "hdl_4ce25bc52f2d9cf7428f3924b0ad08b396b8e14641bc0652a757ca69f183cc30",
+      "parent_local_id": "view_home_visible"
+    },
+    {
+      "local_id": "edge_skip_emits_event",
+      "kind": "edge",
+      "handle": "hdl_bd00d80e1b94a4efbd052d0bd8b017316d7f8932f423d848ff60e49ea8b72b9e",
+      "parent_local_id": "component_skip_link"
+    },
+    {
+      "local_id": "component_main_article",
+      "kind": "node",
+      "handle": "hdl_215223ec584a576564dee1603e98b3aafb9e4df9f097241b26417579155e1f73",
+      "parent_local_id": "view_home_visible"
+    },
+    {
+      "local_id": "edge_article_heading",
+      "kind": "edge",
+      "handle": "hdl_21fc4f7c58e8f38e0c9bdedc73c626235f7559ae8517bdc609fb6a533b58679b",
+      "parent_local_id": "component_main_article"
+    },
+    {
+      "local_id": "edge_article_logo",
+      "kind": "edge",
+      "handle": "hdl_800d63c60eff404b8eb08a75c03b6532366beb8ca3eff5037a9b4c175edd7cb7",
+      "parent_local_id": "component_main_article"
+    },
+    {
+      "local_id": "edge_article_tagline",
+      "kind": "edge",
+      "handle": "hdl_890715ecdc60f68cbedd93f1f171a8fa5c1cf444777551edc25add395ff19f48",
+      "parent_local_id": "component_main_article"
+    },
+    {
+      "local_id": "component_brand_heading",
+      "kind": "node",
+      "handle": "hdl_d4ab5d8fb9df6be11f63cba3faaa038e3fac128b9eab2b383cec9a3d76556247",
+      "parent_local_id": "component_main_article"
+    },
+    {
+      "local_id": "component_brand_logo",
+      "kind": "node",
+      "handle": "hdl_d43f8a276ed29d8c74bacd268384ac7ea634f589a5275bba57edb2b517e47b93",
+      "parent_local_id": "component_main_article"
+    },
+    {
+      "local_id": "component_tagline",
+      "kind": "node",
+      "handle": "hdl_c0f91c552896038f2a4045a6598698507d61cde6f415feb1d3af7009122c4487",
+      "parent_local_id": "component_main_article"
+    },
+    {
+      "local_id": "component_footer",
+      "kind": "node",
+      "handle": "hdl_581812d7c721e565dad76d985a92e97b27596ab3ed726e691eefb2d69350ecfd",
+      "parent_local_id": "view_home_visible"
+    },
+    {
+      "local_id": "edge_footer_home_link",
+      "kind": "edge",
+      "handle": "hdl_87c2e746c9860350ae6fc926ccc8e1a6348a703c1fddb4090199f0c081377f53",
+      "parent_local_id": "component_footer"
+    },
+    {
+      "local_id": "edge_footer_wordpress_link",
+      "kind": "edge",
+      "handle": "hdl_75aa48103b47eda2d7ec59621e2c4ddf834e9cfbd11e105bc637069e5989c822",
+      "parent_local_id": "component_footer"
+    },
+    {
+      "local_id": "component_footer_home_link",
+      "kind": "node",
+      "handle": "hdl_8eb358ccc83030389544339ca49996ddd8e2e75583f9e9f75e51a41ec15ec0a5",
+      "parent_local_id": "component_footer"
+    },
+    {
+      "local_id": "edge_footer_home_emits_event",
+      "kind": "edge",
+      "handle": "hdl_17e48889c0037a90687f83a440f5f03f37ced12e853d02b1e3316116be0be7d6",
+      "parent_local_id": "component_footer_home_link"
+    },
+    {
+      "local_id": "component_wordpress_link",
+      "kind": "node",
+      "handle": "hdl_24897c9ea0ddefbc52186c0f4ef1063a168685a64ba964edb52f57fa667808a1",
+      "parent_local_id": "component_footer"
+    },
+    {
+      "local_id": "edge_wordpress_emits_event",
+      "kind": "edge",
+      "handle": "hdl_5633aef0b808078c82ebdd94ff69193aa2dba6127e30720f934fcb2d04d89a34",
+      "parent_local_id": "component_wordpress_link"
+    },
+    {
+      "local_id": "place_wordpress_target",
+      "kind": "node",
+      "handle": "hdl_e9f118a0f52786bd96e2da3b6be55afef41ad7d1170c2b710cf0501329713877"
+    },
+    {
+      "local_id": "event_skip_link",
+      "kind": "node",
+      "handle": "hdl_1e1312d06eab14befe11a42b4a3fa569781e6cdc3214f60caec107f0ffa690a4"
+    },
+    {
+      "local_id": "event_footer_home",
+      "kind": "node",
+      "handle": "hdl_9da8d9512497f21dc40f7e6f06cdabb5b57a047514ab2de331691ab33e7fbba5"
+    },
+    {
+      "local_id": "event_wordpress_link",
+      "kind": "node",
+      "handle": "hdl_66c5a54b8c3bb60379a9d073cc5b413f2bd3d2f01f535cc9be654cc74c9d0c2e"
+    }
+  ],
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Validate or render the committed document state as needed.",
+    "blocking_diagnostics": [],
+    "summary": "The committed change set is clean and render-eligible."
+  }
+}
