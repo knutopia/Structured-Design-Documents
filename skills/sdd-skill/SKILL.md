@@ -7,13 +7,13 @@ description: "(Structured Design Documents): search .sdd files, inspect structur
 
 Use this skill when the current workspace is this SDD repository, or a structurally compatible checkout, and the task involves `.sdd` documents.
 
-This skill enables working with structured design documents. In this repo source tree, the bundled helper wrapper lives at `skills/sdd-skill/scripts/run_helper.sh`. In an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill directory. Use the repo-visible path in this checkout as the stable entrypoint to the `sdd-helper` utility instead of raw file editing, so changes stay revision-bound, handle-based, and aligned to the shared authoring contracts.
+This skill enables working with structured design documents. The bundled helper wrapper lives in `scripts/run_helper.sh` relative to the installed skill directory. Use this stable entrypoint to the `sdd-helper` utility instead of raw file editing, so changes stay revision-bound, handle-based, and aligned to the shared authoring contracts.
 
 ## Start Here
 
-- Helper discovery is the helper-command authority: use `skills/sdd-skill/scripts/run_helper.sh capabilities` to confirm which helper commands exist.
-- Helper contract detail is the helper request/result authority: use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command.
-- Before composing the first `author` request in a task, use `skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
+- Helper discovery is the helper-command authority: use `scripts/run_helper.sh capabilities` to confirm which helper commands exist.
+- Helper contract detail is the helper request/result authority: use `scripts/run_helper.sh contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command.
+- Before composing the first `author` request in a task, use `scripts/run_helper.sh contract helper.command.author --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
 - SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.
 - Shared `assessment` answers whether to stop, continue, commit, or render.
 - Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery.
@@ -33,8 +33,8 @@ This skill enables working with structured design documents. In this repo source
 
 ### Edit Existing Document
 
-- If the target `.sdd` is unknown, use `skills/sdd-skill/scripts/run_helper.sh search ...` only to locate the existing document or node.
-- Once the target is known, use `skills/sdd-skill/scripts/run_helper.sh inspect <document_path>` to obtain the current `revision`, handles, and order data before handle-based changes.
+- If the target `.sdd` is unknown, use `scripts/run_helper.sh search ...` only to locate the existing document or node.
+- Once the target is known, use `scripts/run_helper.sh inspect <document_path>` to obtain the current `revision`, handles, and order data before handle-based changes.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
 - Determine any needed bundle-defined relationship from the active bundle files before composing view-sensitive structure. Do not rely on nested source layout as semantic proof.
 - Keep child nodes top-level only when nesting would mislead, such as reuse, multiple semantic parents, cross-cutting placement, or unclear ownership.

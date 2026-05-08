@@ -14,6 +14,12 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 5-08
+
+-made local run_helper.sh executable
+-updated skill to point to installed helper wrapper instead of local
+-added docs/skill/README.md
+
 ## Thu 5-07
 
 -patched Corepack tmp dir for skill
