@@ -2,7 +2,7 @@
 
 ## Open Issues
 
--FUCKING COREPACK NPNM PROMPT
+-verify corepack installation
 
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
@@ -24,6 +24,7 @@
 -sdd-helper partial-write fix
 -corepack install fix
 -captured helper payload subdivision issue
+-created helper payload subdivision design
 
 ## Thu 5-07
 
