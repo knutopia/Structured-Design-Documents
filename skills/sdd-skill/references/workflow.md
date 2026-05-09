@@ -2,27 +2,25 @@
 
 This file gives the concrete helper-first workflow for the `sdd-skill`.
 
-Before any helper call, resolve one helper executable for this task. In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`; in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder.
+Before any helper call, resolve one helper executable for this task:
 
-Call the resolved executable `<helper>` in these instructions. For every later helper command, replace `<helper>` with the full resolved path. Do not run bare `scripts/run_helper.sh` from the repo root.
+1. If `skills/sdd-skill/scripts/run_helper.sh` exists from the repo root, use that.
+2. Otherwise, use the installed skill wrapper at `<skill_dir>/scripts/run_helper.sh`.
+
+Call the resolved executable `<helper>` in these instructions. For every later helper command, replace `<helper>` with the full resolved path. Do not run bare `scripts/run_helper.sh` from the repo root. `<helper>` is a documentation placeholder, not a shell variable.
+
 
 ## 1. Confirm The Helper Surface
 
-Use this when you suspect the helper surface may have changed:
-
-```bash
-skills/sdd-skill/scripts/run_helper.sh capabilities
-```
+When you suspect the helper surface may have changed, use `<helper> capabilities`
 
 The result is the canonical JSON command manifest for the helper.
 
 Use deep helper introspection only when the current task needs it:
 
-```bash
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --purpose request --resolve bundle
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
-```
+`<helper> contract helper.command.author`
+`<helper> contract helper.command.author --purpose request --resolve bundle`
+`<helper> contract helper.command.preview --resolve bundle`
 
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
 Before composing the first `author` request in a task, prefer the request-purpose resolved author contract and read its `authoring_format_card`; it gives the compact bundle-derived JSON formatting details for IDs and raw event/effect atoms without requiring a full `syntax.yaml` read or the full author result schema.
