@@ -22,6 +22,7 @@ failures seen in the log: wrong wrapper path selection, `sdd show --output` vs `
 
 -skill run diagnostics
 -cleansed the repo-local wrapper language again
+-adjusted --purpose request plan remainder after diagnostics
 
 ## Fri 5-08
 

@@ -2,7 +2,8 @@
 
 ## Summary
 
-Create `docs/sdd_helper_contract_request_purpose_implementation_plan.md` to guide an additive rollout of `sdd-helper contract <subject_id> --purpose request`.
+Guide the additive rollout of `sdd-helper contract <subject_id> --purpose
+request` through this live implementation plan.
 
 Normative source: `docs/sdd_helper_contract_request_purpose_design.md`.
 
@@ -13,7 +14,7 @@ Non-negotiable invariants:
 - Request-purpose payloads exclude `output_shape`, full result schemas, assessment schemas, diagnostic schemas, and result-only continuation notes.
 - Implement and verify `helper.command.author` first, then pause before extending to `apply`, `create`, and `undo`.
 
-## Gate 1: Author Slice
+## [Done] Gate 1: Author Slice
 
 Implement only `helper.command.author --purpose request`.
 
@@ -49,12 +50,20 @@ Extend the same request-purpose selector to `helper.command.apply`.
 
 Key changes:
 - Add `contract_purposes: ["request"]` for apply.
+- Generalize the existing bundle-derived format-card builder so the public
+  `authoring_format_card` field can carry command-specific guidance for apply,
+  not author-intent JSON pointers.
 - Include `input_shape`, `request_body`, low-level operation schema through `ApplyChangeSetArgs`, handle/base-revision request constraints, request bundle bindings for inline validation/projection fields, and `resolution`.
+- Include command-specific `authoring_format_card` when `--resolve bundle` is
+  supplied, with hints for `node_id`, `node_type`, `rel_type`, `to`, `event`,
+  `effect`, `value_kind`, and `raw_value`.
 - Exclude `output_shape`, insertion-handle continuation schemas, full assessment schemas, and full diagnostics schemas.
 
 Tests:
 - Assert `--purpose request` excludes `output_shape`.
 - Assert request-side handle/revision constraints remain present.
+- Assert resolved apply request-purpose payload includes the format card,
+  excludes result schemas, and does not reuse author-intent JSON pointers.
 - Assert no result-only continuation or assessment schema leaks into the payload.
 
 ## Gate 3: Create
@@ -77,13 +86,27 @@ Tests:
 Extend request-purpose selector to `helper.command.undo`.
 
 Key changes:
-- Add `contract_purposes: ["request"]` for undo.
-- Include `input_shape`, `request_body`, `change_set_id` request shape, mode/validation inputs, and minimum request-facing undo eligibility metadata.
-- If current metadata is insufficient, add one narrow undo request constraint covering: target record must exist, be committed, be undo-eligible, have a supported inverse, and match the current document revision.
-- Exclude undo result `sdd-change-set`, result assessment schemas, and diagnostic schemas.
+- Add `contract_purposes: ["request"]` for undo only with the eligibility
+  guidance below.
+- Add optional `/validate_profile` bundle binding for undo; if resolved values
+  are exposed, advertise `bundle_resolved` in `detail_modes`.
+- Add one narrow `undo_change_set_eligibility` request constraint on
+  `/change_set_id`: target record must exist, be committed, be applied,
+  be undo-eligible, have a supported inverse, and still match the current
+  document revision.
+- Include `input_shape`, `request_body`, `change_set_id` request shape,
+  mode/validation inputs, the validate-profile binding, `resolution`, and the
+  eligibility/current-revision constraint.
+- Exclude undo result `sdd-change-set`, result assessment schemas, diagnostic
+  schemas, operations, handles, `path`, and `base_revision`.
+- Stop Gate 4 as incomplete if the request-purpose payload only describes
+  `change_set_id`, `mode`, and `validate_profile` without eligibility/current-
+  revision guidance.
 
 Tests:
 - Assert undo request-purpose payload contains eligibility/current-revision guidance.
+- Assert undo request-purpose payload includes the optional validate-profile
+  binding and resolved profile values when called with `--resolve bundle`.
 - Assert no `output_shape` or result schema leaks.
 - Keep existing undo behavior tests unchanged.
 
@@ -96,9 +119,9 @@ Run:
 
 Manual CLI checks:
 - `TMPDIR=/tmp pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle`
-- `TMPDIR=/tmp pnpm sdd-helper contract helper.command.apply --purpose request`
+- `TMPDIR=/tmp pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle`
 - `TMPDIR=/tmp pnpm sdd-helper contract helper.command.create --purpose request`
-- `TMPDIR=/tmp pnpm sdd-helper contract helper.command.undo --purpose request`
+- `TMPDIR=/tmp pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle`
 - Compare each request-purpose payload against its full no-purpose payload and confirm it is smaller and request-focused.
 
 Assumptions:
