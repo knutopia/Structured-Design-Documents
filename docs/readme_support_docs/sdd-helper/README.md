@@ -1,6 +1,6 @@
 # SDD Helper
 
-`sdd-helper` is the JSON-first companion CLI for SDD authoring workflows. Its target user is an agentic skill (Codex skill, Claude skill, Gemini skill). It is designed for structured automation, not for interactive terminal narration: successful commands return exactly one JSON payload, and the command surface stays narrow, repo-local, and focused on `.sdd` documents.
+`sdd-helper` is the JSON-first companion CLI for SDD authoring workflows. Its primary callers are agents and automation workflows using an SDD-focused skill, such as a Codex skill, Claude skill, or Gemini skill. It is designed for structured automation, not for interactive terminal narration: successful commands return exactly one JSON payload, and the command surface stays narrow, repo-local, and focused on `.sdd` documents.
 
 This page documents the helper for three audiences:
 
@@ -31,11 +31,14 @@ Use `capabilities` for lightweight discovery: command names, invocation patterns
 
 ```bash
 pnpm sdd-helper contract helper.command.author
+pnpm sdd-helper contract helper.command.create --purpose request
 pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.preview --resolve bundle
 ```
 
-`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings; it is still helper contract detail, not the general SDD language authority.
+`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned values for helper commands that declare those bindings, such as `view_id`, `profile_id`, and bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
 
 Use this page when you want the same surface explained in practical terms.
 
@@ -56,7 +59,7 @@ Helper mechanics are not SDD language authority. Use the helper surfaces for hel
 
 - Use helper discovery for helper mechanics: which commands exist, how they are invoked, and what result kind each command returns.
 - Use helper `contract <subject_id>` for deep helper request and result shape, continuation semantics, constraints, and helper-specific bundle bindings.
-- Use helper `contract <subject_id> --purpose request` for supported request-composition payloads when the full result schema is unnecessary.
+- Use helper `contract <subject_id> --purpose request` for supported request-composition payloads when the full result schema is unnecessary. The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`.
 - Use `contract --resolve bundle` when a helper command needs active bundle-owned `view_id` or `profile_id` values exposed through its contract bindings.
 - Use `bundle/v0.1/` files for SDD language semantics such as syntax, vocabulary, endpoint rules, profile behavior, and view behavior.
 - Use docs to explain a surface or investigate a mismatch.
@@ -104,11 +107,13 @@ pnpm sdd-helper capabilities
 
 This returns the static helper manifest: command names, invocation patterns, result kinds, key constraints, and the subject and shape ids needed to fetch deeper detail.
 
-If the next step requires nested request-shape detail, semantic constraints, or continuation rules, fetch deep contract detail for that specific subject before composing JSON:
+If the next step requires request-shape detail, semantic constraints, or continuation rules before composing JSON, fetch request-purpose contract detail for that specific subject:
 
 ```bash
-pnpm sdd-helper contract helper.command.apply
+pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
 ```
+
+Use the full no-purpose contract when you also need the result schema.
 
 ### 2. Find a target document
 
@@ -224,7 +229,7 @@ interface HelperCapabilitiesResultCommand {
 - Invocation: `pnpm sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]`
 - Key inputs: one helper `subject_id`, optional `--purpose request`, plus optional `--resolve bundle`.
 - Result kind: `sdd-contract-subject-detail`
-- Important constraints: static full detail is the default and does not require bundle loading; `--purpose request` excludes full result schemas for supported subjects; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id` and `profile_id`. For `helper.command.author`, resolved detail also includes `authoring_format_card`, a compact bundle-derived guide for author JSON formatting.
+- Important constraints: static full detail is the default and does not require bundle loading; `--purpose request` excludes full result schemas for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id` and `profile_id`. For `helper.command.author` and `helper.command.apply`, resolved request detail also includes an `authoring_format_card`, a compact bundle-derived guide for authoring JSON formatting.
 - Practical notes: use `capabilities` first to discover the command and its `subject_id`, then use `contract` only for the specific subject that needs deep detail.
 
 #### `sdd-helper inspect <document_path>`
@@ -257,17 +262,22 @@ interface HelperCapabilitiesResultCommand {
 - Key inputs: a repo-relative document path and an optional version.
 - Result kind: successful creates return `sdd-create-document`; create domain rejections return a structured `sdd-change-set` and still exit zero.
 - Important constraints: create always bootstraps an empty document skeleton; the current implementation supports version `0.1`.
-- Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits. The empty bootstrap document can carry parse diagnostics and may not be inspectable until initial content is authored. Use the returned create `revision` as the continuation surface for the first follow-on `author` or `apply` request; this is helper workflow behavior, not SDD language authority.
+- Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits. The empty bootstrap document can carry parse diagnostics and may not be inspectable until initial content is authored. Use the returned create `revision` as the continuation surface for the first follow-on `author` or `apply` request; this is helper workflow behavior, not SDD language authority. Use `pnpm sdd-helper contract helper.command.create --purpose request` when you only need the create request shape and bootstrap continuation guidance.
 
 For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSON request from stdin until EOF. Empty stdin fails JSON parsing and returns `sdd-helper-error` with `code: "invalid_json"` and message `Unexpected end of JSON input`.
 
-For first-pass `author` JSON, prefer:
+For request composition, use request-purpose to learn contract detail for the mutation command you are about to call:
 
 ```bash
+pnpm sdd-helper contract helper.command.create --purpose request
 pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 ```
 
-Read the returned `authoring_format_card` before composing IDs, edge targets, events, or effects. It is intentionally smaller than `syntax.yaml`: it summarizes the active bundle's SDD node id pattern, event/effect atom forms, and the JSON escaping needed when an effect or event is prose. `capabilities` remains static and does not inline this card.
+For `create`, request-purpose detail describes the command arguments, `document_path` and optional `version`. For `apply`, `author`, and `undo`, it describes the JSON body loaded through `--request`.
+
+For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author` request-purpose contract. Read the returned `authoring_format_card` before composing IDs, edge targets, events, or effects. It is intentionally smaller than `syntax.yaml`: it summarizes the active bundle's SDD node id pattern, event/effect atom forms, and the JSON escaping needed when an effect or event is prose. `capabilities` remains static and does not inline this card.
 
 #### `sdd-helper apply --request <file-or-stdin>`
 
@@ -394,7 +404,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 
 - Start with `capabilities`; it is the canonical discovery surface.
 - Use `contract` when you need nested request-shape detail, semantic constraints, continuation semantics, or binding metadata for one subject.
-- Use `contract --purpose request` on subjects that declare it when composing a request and the full result schema is unnecessary.
+- Use `contract --purpose request` on `helper.command.create`, `helper.command.author`, `helper.command.apply`, or `helper.command.undo` when composing a request and the full result schema is unnecessary.
 - Use `contract --resolve bundle` only when you need active bundle-owned values such as `view_id` or `profile_id`.
 - Use bundle files, not helper mechanics, for SDD language semantics.
 - Treat JSON as the public interface. Do not expect human-readable CLI text.

@@ -26,6 +26,7 @@ failures seen in the log: wrong wrapper path selection, `sdd show --output` vs `
 -adjusted --purpose request plan remainder after diagnostics
 -implemented adjusted plan, it reverted wrapper fix
 -manually reverted wrapper fix, aligned tests
+-updated skiil & helper doc pages
 
 ## Fri 5-08
 

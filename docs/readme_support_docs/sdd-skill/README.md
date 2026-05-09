@@ -1,6 +1,6 @@
 # SDD Skill Guide
 
-The SDD Skill provides a simple way to work with structured design documents. The skill understands the SDD grammar and provides valid, consistent output. The SDD Skill is an alternative to manually authoring and editing SDD documents, which is also possible.
+The SDD Skill provides a simple way for Codex to work with structured design documents. It gives the agent workflow guidance, helper commands, and SDD grammar context for producing valid, consistent output. The SDD Skill is an alternative to manually authoring and editing SDD documents, which is also possible.
 
 The current SDD Skill is written for Codex. The same skill content may also work in other compatible hosts. 
 
@@ -14,7 +14,7 @@ After copying the folder, restart Codex so it discovers the skill. Then continue
 
 If you have an app idea in mind, you can start by describing the app in plain language.
 
-The SDD Skill helps turn that description into a structured design document.
+An agent using the SDD Skill can turn that description into a structured design document.
 
 Here is an example prompt:
 
@@ -25,7 +25,7 @@ Create a new SDD ("shop_sched_exploration") for it and create a simple informati
 - Dashboard
 - a Mechanic's Scheduling area with Open Shifts, Shift Detail, My Schedule
 ```
-That is enough to get started. You do not need to know SDD syntax first (although the syntax is quite simple.) You could omit the filename. The skill would choose a name then.
+That is enough to get started. You do not need to know SDD syntax first (although the syntax is quite simple.) You could omit the filename. The agent can choose a name then.
 
 ### Output
 
@@ -69,7 +69,7 @@ Instead of a vague app idea, you now have a structured design starting point, be
 - A visible app map that makes the overall shape easier to review.
 - A concrete starting point for follow-up refinement before you move into implementation.
 
-Behind the scenes, the skill uses editing tools that allow it to read, write and check SDD documents quickly and reliably.
+Behind the scenes, the agent follows the skill workflow and uses editing tools that read, write, and check SDD documents quickly and reliably.
 
 ## Follow-Up Requests
 
@@ -186,13 +186,13 @@ Area A-010 "Mechanic's Scheduling"
 
 ### Manual View Command
 
-When you want to see a current diagram for an existing SDD file, you can ask the skill for it:
+When you want to see a current diagram for an existing SDD file, you can ask the agent using the skill for it:
 
 ```text
 Using $sdd-skill, show the information architecture.
 ```
 
-The skill then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
+The agent then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
 
 ```console
 bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
@@ -206,15 +206,30 @@ Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 
 ## What Happens Behind The Scenes
 
-- The skill recognizes the initial prompt as a *create new document* request. It creates the new, empty `.sdd` document, using the filename in the prompt. It translates the prompt's ask into an app structure (this is the core of the LLM work) and then follows SDD rules to create nodes and connections. It then writes this content into the document. The skill also recognizes the request for the IA diagram as a *read, validate, or preview an existing document* request and executes it.
-- The skill recognizes the follow-up prompts as *edit an existing document* requests. For each request, it looks at the current structure before making changes, so each follow-up builds on the actual document. The follow-up requests for diagrams are recognized as *read, validate, or preview an existing document* again.
-- All the edits are made through a structured workflow provided by the sdd-helper tool, instead of brittle free-form rewriting. The tool explains its capabilities to the skill when the skill asks. The tool and the skill speak JSON to one another, which is easy to use for the LLM.
+*The skill provides a set of capabilites to the agent. The agent interprets the prompt in light of these capabilities. The agent probes the capabilities, uses them, interprets the results and takes the next step.*
+
+- The agent recognizes the initial prompt as a *create new document* request. It creates the new, empty `.sdd` document, using the filename in the prompt. It translates the prompt's ask into an app structure (this is the core of the LLM work) and then follows SDD rules to create nodes and connections. It then writes this content into the document. The agent also recognizes the request for the IA diagram as a *read, validate, or preview an existing document* request and executes it.
+- The agent recognizes the follow-up prompts as *edit an existing document* requests. For each request, it looks at the current structure before making changes, so each follow-up builds on the actual document. The follow-up requests for diagrams are recognized as *read, validate, or preview an existing document* again.
+- All the edits are made through a structured workflow provided by the sdd-helper tool, instead of brittle free-form rewriting. The agent queries helper capabilities and request contracts when it needs them. The agent and helper speak JSON to one another, which is easy for automation to use.
+
+### Helper Request Contracts
+
+When an agent is using the skill and needs to understand helper request details, it can ask `sdd-helper` for a request-purpose contract to learn those details, instead of loading the full helper contract. This is useful when the agent only needs to compose the next helper request and does not need the full result schema.
+
+```bash
+pnpm sdd-helper contract helper.command.create --purpose request
+pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
+```
+
+The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. For first-pass `author` JSON, the agent should prefer the bundle-resolved request-purpose contract and read its `authoring_format_card`, which gives compact bundle-derived guidance for IDs, relationship tokens, events, effects, and raw SDD values.
 
 For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used by the skill.
 
 ## Go Beyond the Skill
 
-The skill empowers an LLM to respond to users' natural-language prompts, allowing a user to work with SDD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
+The skill gives an LLM enough workflow guidance to respond to users' natural-language prompts, allowing a user to work with SDD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
 
 ## SDD During the Product Lifecycle
 
