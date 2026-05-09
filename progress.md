@@ -2,11 +2,6 @@
 
 ## Open Issues
 
-failures seen in the log: wrong wrapper path selection, `sdd show --output` vs `--out`, missing view/profile/vocabulary discovery, or missing actual author request/result payloads in the execution log. Those are separate workflow/tooling issues.
-
--skill / helper doc page catch up
--verify corepack installation
-
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
 
@@ -27,6 +22,7 @@ failures seen in the log: wrong wrapper path selection, `sdd show --output` vs `
 -implemented adjusted plan, it reverted wrapper fix
 -manually reverted wrapper fix, aligned tests
 -updated skiil & helper doc pages
+-analyzed skill execution, found improvement
 
 ## Fri 5-08
 

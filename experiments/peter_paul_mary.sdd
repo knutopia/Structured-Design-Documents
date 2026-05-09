@@ -1,0 +1,9 @@
+SDD-TEXT 0.1
+Place P-001 "Peter"
+  NAVIGATES_TO P-002 "Paul"
+  NAVIGATES_TO P-003 "Mary"
+END
+Place P-002 "Paul"
+END
+Place P-003 "Mary"
+END
