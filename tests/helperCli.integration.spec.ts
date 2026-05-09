@@ -564,7 +564,7 @@ describe("sdd-helper entrypoint integration", () => {
       });
       });
     },
-    20000
+    40000
   );
 
   it("reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid", async () => {

@@ -2,19 +2,16 @@
 
 This file gives the concrete helper-first workflow for the `sdd-skill`.
 
-Before any helper call, resolve one helper executable for this task:
+Before any helper call, resolve one helper executable for this task. In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`; in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder.
 
-1. If `skills/sdd-skill/scripts/run_helper.sh` exists from the repo root, use that.
-2. Otherwise, use the installed skill wrapper at `<skill_dir>/scripts/run_helper.sh`.
-
-Call the resolved executable `<helper>` in these instructions. For every later helper command, replace `<helper>` with the full resolved path. Do not run bare `scripts/run_helper.sh` from the repo root. `<helper>` is a documentation placeholder, not a shell variable.
+Call the resolved executable `<helper>` in these instructions. For every later helper command, replace `<helper>` with the full resolved path. Do not run bare `scripts/run_helper.sh` from the repo root.
 
 ## 1. Confirm The Helper Surface
 
 Use this when you suspect the helper surface may have changed:
 
 ```bash
-<helper> capabilities
+skills/sdd-skill/scripts/run_helper.sh capabilities
 ```
 
 The result is the canonical JSON command manifest for the helper.
@@ -22,9 +19,9 @@ The result is the canonical JSON command manifest for the helper.
 Use deep helper introspection only when the current task needs it:
 
 ```bash
-<helper> contract helper.command.author
-<helper> contract helper.command.author --purpose request --resolve bundle
-<helper> contract helper.command.preview --resolve bundle
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --purpose request --resolve bundle
+skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
 ```
 
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.

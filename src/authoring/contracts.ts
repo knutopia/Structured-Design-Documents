@@ -626,6 +626,7 @@ export interface ContractSubjectDescriptor {
 export interface ContractSubjectDetail {
   kind: "sdd-contract-subject-detail";
   subject: ContractSubjectDescriptor;
+  invocation?: string;
   input_shape?: ContractShapeDescriptor;
   output_shape?: ContractShapeDescriptor;
   request_body?: HelperRequestBodySpec;
@@ -662,6 +663,7 @@ export interface ContractConstraintSpec {
     | "unique_within_request"
     | "must_reference_earlier_local_id"
     | "same_revision_handle"
+    | "undo_change_set_eligibility"
     | "commit_safe_continuation"
     | "dry_run_informational_only";
   parameters: Record<string, unknown>;

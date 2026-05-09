@@ -120,6 +120,19 @@ function createContractResolutionBundle(
         }
       }
     },
+    vocab: {
+      version: "0.1",
+      closed_vocab: true,
+      node_types: [
+        { token: "Outcome", group: "strategy", description: "Desired measurable outcome." },
+        { token: "Place", group: "experience", description: "Information architecture place." },
+        { token: "ViewState", group: "experience", description: "UI view state." }
+      ],
+      relationship_types: [
+        { token: "CONTAINS", group: "structure", description: "Structural containment." },
+        { token: "TRANSITIONS_TO", group: "behavior", description: "Behavioral transition." }
+      ]
+    },
     views: {
       version: "0.1",
       views: [
@@ -503,6 +516,25 @@ describe("sdd-helper CLI", () => {
           }
         }),
         expect.objectContaining({
+          name: "apply",
+          subject_id: "helper.command.apply",
+          detail_modes: ["static", "bundle_resolved"],
+          contract_purposes: ["request"],
+          request_body: {
+            via_option: "--request",
+            top_level_shape: "ApplyChangeSetArgs",
+            source: "file_path_or_stdin_dash",
+            stdin_dash: {
+              read_mode: "read_all_stdin_until_eof",
+              empty_input_error: {
+                kind: "sdd-helper-error",
+                code: "invalid_json",
+                message: "Unexpected end of JSON input"
+              }
+            }
+          }
+        }),
+        expect.objectContaining({
           name: "create",
           invocation: "sdd-helper create <document_path> [--version <version>]",
           subject_id: "helper.command.create",
@@ -510,6 +542,7 @@ describe("sdd-helper CLI", () => {
           output_shape_id: "shared.shape.create_document_result",
           has_deep_introspection: true,
           detail_modes: ["static"],
+          contract_purposes: ["request"],
           options: [
             {
               flag: "--version",
@@ -522,6 +555,28 @@ describe("sdd-helper CLI", () => {
             "Create always bootstraps an empty document skeleton.",
             "Current implementation supports version 0.1."
           ])
+        }),
+        expect.objectContaining({
+          name: "undo",
+          subject_id: "helper.command.undo",
+          input_shape_id: "shared.shape.undo_change_set_args",
+          output_shape_id: "shared.shape.undo_change_set_result",
+          has_deep_introspection: true,
+          detail_modes: ["static", "bundle_resolved"],
+          contract_purposes: ["request"],
+          request_body: {
+            via_option: "--request",
+            top_level_shape: "UndoChangeSetArgs",
+            source: "file_path_or_stdin_dash",
+            stdin_dash: {
+              read_mode: "read_all_stdin_until_eof",
+              empty_input_error: {
+                kind: "sdd-helper-error",
+                code: "invalid_json",
+                message: "Unexpected end of JSON input"
+              }
+            }
+          }
         }),
         expect.objectContaining({
           name: "project",
@@ -660,7 +715,8 @@ describe("sdd-helper CLI", () => {
     const result = await runHelperCli(["node", "sdd-helper", "contract", "helper.command.create"], deps);
 
     expect(result.exitCode).toBe(0);
-    expect(parseStdoutPayload(stdout)).toMatchObject({
+    const payload = parseStdoutPayload(stdout) as Record<string, unknown>;
+    expect(payload).toMatchObject({
       kind: "sdd-contract-subject-detail",
       subject: {
         subject_id: "helper.command.create"
@@ -677,6 +733,64 @@ describe("sdd-helper CLI", () => {
         mode: "static"
       }
     });
+    expect(payload).not.toHaveProperty("invocation");
+    expect(payload).toHaveProperty("output_shape");
+    expect(JSON.stringify(payload)).toContain("sdd-create-document");
+  });
+
+  it("returns request-purpose create contract detail without request body or result schemas", async () => {
+    const { deps, stdout } = createDeps();
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.create", "--purpose", "request"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(0);
+    const requestJson = stdout.join("");
+    const requestPayload = parseStdoutPayload(stdout) as Record<string, unknown>;
+    expect(requestPayload).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.create",
+        detail_modes: ["static"],
+        contract_purposes: ["request"]
+      },
+      invocation: "sdd-helper create <document_path> [--version <version>]",
+      input_shape: {
+        shape_id: "shared.shape.create_document_args",
+        schema: {
+          required: ["path"],
+          properties: {
+            path: {
+              type: "string"
+            },
+            version: {
+              type: "string",
+              enum: ["0.1"]
+            }
+          }
+        }
+      },
+      constraints: [],
+      bindings: [],
+      continuation: [
+        {
+          kind: "create_revision_is_bootstrap_continuation_surface"
+        },
+        {
+          kind: "inspect_may_fail_on_empty_bootstrap"
+        }
+      ],
+      resolution: {
+        mode: "static"
+      }
+    });
+    expect(requestPayload).not.toHaveProperty("request_body");
+    expect(requestPayload).not.toHaveProperty("output_shape");
+    expect(requestJson).not.toContain("sdd-create-document");
+    expect(requestJson).not.toContain("sdd-change-set");
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+    expect(requestJson).not.toContain("blocking_diagnostics");
   });
 
   it("returns unresolved binding references in static contract detail", async () => {
@@ -888,6 +1002,199 @@ describe("sdd-helper CLI", () => {
 
     expect(fullResult.exitCode).toBe(0);
     expect(requestJson.length).toBeLessThan(fullDeps.stdout.join("").length / 2);
+  });
+
+  it("returns request-purpose resolved apply contract detail without result schemas", async () => {
+    const bundle = createContractResolutionBundle();
+    const { deps, stdout, loadBundleMock } = createDeps({
+      loadBundle: vi.fn(async () => bundle)
+    });
+
+    const requestResult = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.apply", "--purpose", "request", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(requestResult.exitCode).toBe(0);
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    const requestJson = stdout.join("");
+    const requestPayload = parseStdoutPayload(stdout) as Record<string, unknown>;
+    expect(requestPayload).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.apply",
+        detail_modes: ["static", "bundle_resolved"],
+        contract_purposes: ["request"]
+      },
+      input_shape: {
+        shape_id: "shared.shape.apply_change_set_args"
+      },
+      request_body: {
+        top_level_shape: "ApplyChangeSetArgs"
+      },
+      resolution: {
+        mode: "bundle_resolved",
+        bundle_name: "sdd-text-spec-bundle",
+        bundle_version: "0.1"
+      },
+      authoring_format_card: {
+        card_id: "sdd.v0_1.apply_json_quick_format",
+        field_hints: expect.arrayContaining([
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.node_id",
+            applies_to_json_pointers: ["/operations/*/node_id", "/operations/*/to"]
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.node_type",
+            applies_to_json_pointers: ["/operations/*/node_type"]
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.rel_type",
+            applies_to_json_pointers: ["/operations/*/rel_type"]
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.event_atom",
+            applies_to_json_pointers: ["/operations/*/event"]
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.effect_atom",
+            applies_to_json_pointers: ["/operations/*/effect"]
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.value_kind",
+            applies_to_json_pointers: ["/operations/*/value_kind"]
+          }),
+          expect.objectContaining({
+            hint_id: "sdd.v0_1.raw_value",
+            applies_to_json_pointers: ["/operations/*/raw_value"]
+          })
+        ])
+      }
+    });
+    expect(requestPayload).not.toHaveProperty("output_shape");
+    expect((requestPayload.constraints as Array<{ kind: string }>).map((constraint) => constraint.kind)).toEqual([
+      "same_revision_handle"
+    ]);
+    const bindings = requestPayload.bindings as Array<{
+      binding_id: string;
+      applies_to_json_pointer: string;
+      resolved_values?: Array<{ value: string }>;
+    }>;
+    const validateProfileBinding = bindings.find(
+      (binding) => binding.binding_id === "shared.binding.apply_change_set.validate_profile"
+    );
+    const projectionViewsBinding = bindings.find(
+      (binding) => binding.binding_id === "shared.binding.apply_change_set.projection_views"
+    );
+    expect(validateProfileBinding).toMatchObject({
+      applies_to_json_pointer: "/validate_profile",
+      resolved_values: [{ value: "simple" }, { value: "permissive" }, { value: "strict" }]
+    });
+    expect(projectionViewsBinding).toMatchObject({
+      applies_to_json_pointer: "/projection_views/*"
+    });
+    expect(projectionViewsBinding?.resolved_values).toEqual(
+      expect.arrayContaining([expect.objectContaining({ value: "ia_place_map" })])
+    );
+    expect(requestPayload.continuation).toEqual([]);
+    expect(requestJson).not.toContain("/intents/*");
+    expect(requestJson).not.toContain("sdd-change-set");
+    expect(requestJson).not.toContain("sdd-authoring-intent-result");
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+    expect(requestJson).not.toContain("blocking_diagnostics");
+    expect(requestJson).not.toContain("created_targets");
+    expect(requestJson).not.toContain("commit_handles_are_safe_continuation_surfaces");
+    expect(requestJson).not.toContain("dry_run_handles_are_informational_only");
+  });
+
+  it("returns request-purpose resolved undo contract detail with eligibility guidance and no result schemas", async () => {
+    const bundle = createContractResolutionBundle();
+    const { deps, stdout, loadBundleMock } = createDeps({
+      loadBundle: vi.fn(async () => bundle)
+    });
+
+    const requestResult = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.undo", "--purpose", "request", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(requestResult.exitCode).toBe(0);
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    const requestJson = stdout.join("");
+    const requestPayload = parseStdoutPayload(stdout) as Record<string, unknown>;
+    expect(requestPayload).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.undo",
+        detail_modes: ["static", "bundle_resolved"],
+        contract_purposes: ["request"]
+      },
+      input_shape: {
+        shape_id: "shared.shape.undo_change_set_args",
+        schema: {
+          required: ["change_set_id"],
+          properties: {
+            change_set_id: {
+              type: "string"
+            },
+            mode: {
+              enum: ["dry_run", "commit"]
+            },
+            validate_profile: {
+              type: "string"
+            }
+          }
+        }
+      },
+      request_body: {
+        top_level_shape: "UndoChangeSetArgs"
+      },
+      resolution: {
+        mode: "bundle_resolved",
+        bundle_name: "sdd-text-spec-bundle",
+        bundle_version: "0.1"
+      }
+    });
+    expect(requestPayload).not.toHaveProperty("output_shape");
+    const constraints = requestPayload.constraints as Array<{
+      kind: string;
+      applies_to_json_pointers?: string[];
+      parameters?: Record<string, unknown>;
+    }>;
+    expect(constraints).toHaveLength(1);
+    expect(constraints[0]).toMatchObject({
+      kind: "undo_change_set_eligibility",
+      applies_to_json_pointers: ["/change_set_id"],
+      parameters: {
+        target_record_required: true,
+        required_target_change_set: {
+          mode: "commit",
+          status: "applied",
+          undo_eligible: true
+        },
+        supported_inverse_kinds: ["restore_document", "delete_document"],
+        current_document_revision_must_equal: "target.change_set.resulting_revision",
+        default_mode: "dry_run"
+      }
+    });
+    const bindings = requestPayload.bindings as Array<{
+      binding_id: string;
+      applies_to_json_pointer: string;
+      resolved_values?: Array<{ value: string }>;
+    }>;
+    expect(bindings).toHaveLength(1);
+    expect(bindings[0]).toMatchObject({
+      binding_id: "shared.binding.undo_change_set.validate_profile",
+      applies_to_json_pointer: "/validate_profile",
+      resolved_values: [{ value: "simple" }, { value: "permissive" }, { value: "strict" }]
+    });
+    expect(requestPayload.continuation).toEqual([]);
+    expect(requestJson).not.toContain("sdd-change-set");
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+    expect(requestJson).not.toContain("blocking_diagnostics");
+    expect(requestJson).not.toContain("\"operations\"");
+    expect(requestJson).not.toContain("\"path\"");
+    expect(requestJson).not.toContain("base_revision");
   });
 
   it("reflects active bundle syntax changes in resolved author format card", async () => {

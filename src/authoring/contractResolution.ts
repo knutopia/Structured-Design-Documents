@@ -6,7 +6,7 @@ import type {
   ContractSubjectDetail,
   ContractSubjectId
 } from "./contracts.js";
-import { createAuthoringFormatCard } from "./authoringFormat.js";
+import { createApplyFormatCard, createAuthoringFormatCard } from "./authoringFormat.js";
 import { getContractSubjectDetail, selectContractSubjectDetailForPurpose } from "./contractMetadata.js";
 
 function expectSelector(binding: ContractBindingSpec, expectedSelector: string): void {
@@ -41,6 +41,22 @@ function resolveAllowedValues(
         }
       }));
 
+    case "vocab_node_types":
+      expectSelector(binding, "node_types");
+      return bundle.vocab.node_types.map((entry) => ({
+        value: entry.token,
+        label: entry.description,
+        metadata: entry.group ? { group: entry.group } : undefined
+      }));
+
+    case "vocab_relationship_types":
+      expectSelector(binding, "relationship_types");
+      return bundle.vocab.relationship_types.map((entry) => ({
+        value: entry.token,
+        label: entry.description,
+        metadata: entry.group ? { group: entry.group } : undefined
+      }));
+
     default:
       throw new Error(
         `Contract binding '${binding.binding_id}' uses unsupported bundle artifact '${binding.bundle_source.artifact}'.`
@@ -68,6 +84,8 @@ export function getBundleResolvedContractSubjectDetail(
   };
   if (subjectId === "helper.command.author") {
     detail.authoring_format_card = createAuthoringFormatCard(bundle);
+  } else if (subjectId === "helper.command.apply") {
+    detail.authoring_format_card = createApplyFormatCard(bundle);
   }
 
   return detail;

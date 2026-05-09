@@ -7,14 +7,26 @@ import type {
 } from "./contracts.js";
 
 const APPLY_AUTHORING_INTENT_SHAPE: ContractShapeId = "shared.shape.apply_authoring_intent_args";
+const APPLY_CHANGE_SET_SHAPE: ContractShapeId = "shared.shape.apply_change_set_args";
+
 function syntaxDocumentSource(bundle: Bundle): string {
   const languageVersion = bundle.manifest.language_version ?? "0.1";
   const syntaxPath = bundle.manifest.core?.syntax ?? "core/syntax.yaml";
   return `bundle/v${languageVersion}/${syntaxPath}`;
 }
 
+function vocabDocumentSource(bundle: Bundle): string {
+  const languageVersion = bundle.manifest.language_version ?? "0.1";
+  const vocabPath = bundle.manifest.core?.vocab ?? "core/vocab.yaml";
+  return `bundle/v${languageVersion}/${vocabPath}`;
+}
+
 function syntaxSource(bundle: Bundle, fragment: string): string {
   return `${syntaxDocumentSource(bundle)}#/${fragment}`;
+}
+
+function vocabSource(bundle: Bundle, fragment: string): string {
+  return `${vocabDocumentSource(bundle)}#/${fragment}`;
 }
 
 export function idPatternSource(bundle: Bundle): string {
@@ -185,6 +197,108 @@ export function createAuthoringFormatCard(bundle: Bundle): ContractAuthoringForm
       "property values should use value_kind quoted_string for prose; bare_value is for simple tokens."
     ],
     field_hints: [nodeIdHint, eventHint, effectHint]
+  };
+}
+
+export function createApplyFormatCard(bundle: Bundle): ContractAuthoringFormatCard {
+  const idPattern = bundle.syntax.lexical.id_pattern;
+  const eventForms = acceptedFormsForAtom(bundle, "event_atom");
+  const effectForms = acceptedFormsForAtom(bundle, "effect_atom");
+  const nodeTypes = bundle.vocab.node_types.map((entry) => entry.token);
+  const relationshipTypes = bundle.vocab.relationship_types.map((entry) => entry.token);
+
+  const nodeIdHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.node_id",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/node_id", "/operations/*/to"],
+    source: idPatternSource(bundle),
+    accepted_pattern: idPattern,
+    examples: ["P-001", "J-010", "SA-010", "ST-010a"],
+    concise: "Use SDD node IDs for inserted node_id values and inserted edge to targets."
+  };
+
+  const nodeTypeHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.node_type",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/node_type"],
+    source: vocabSource(bundle, "node_types"),
+    accepted_forms: nodeTypes,
+    examples: nodeTypes.slice(0, 4),
+    concise: "Use a bundle node type token exactly as written, not a prose label."
+  };
+
+  const relationshipTypeHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.rel_type",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/rel_type"],
+    source: vocabSource(bundle, "relationship_types"),
+    accepted_forms: relationshipTypes,
+    examples: relationshipTypes.slice(0, 4),
+    concise: "Use a bundle relationship type token exactly as written."
+  };
+
+  const eventHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.event_atom",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/event"],
+    source: atomSource(bundle, "event_atom"),
+    accepted_forms: eventForms,
+    examples: ["E-010", "ClickReview", "\"User clicked review\""],
+    json_examples: [
+      jsonExample("E-010", "[E-010]"),
+      jsonExample("ClickReview", "[ClickReview]"),
+      jsonExample("\"User clicked review\"", "[\"User clicked review\"]")
+    ],
+    concise: "This is raw SDD source text. Prose needs embedded SDD quotes."
+  };
+
+  const effectHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.effect_atom",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/effect"],
+    source: atomSource(bundle, "effect_atom"),
+    accepted_forms: effectForms,
+    examples: ["SA-010", "emitMetric", "\"side effect\""],
+    json_examples: [
+      jsonExample("SA-010", "/ SA-010"),
+      jsonExample("emitMetric", "/ emitMetric"),
+      jsonExample("\"side effect\"", "/ \"side effect\"")
+    ],
+    concise: "This is raw SDD source text. Prose needs embedded SDD quotes."
+  };
+
+  const valueKindHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.value_kind",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/value_kind"],
+    source: syntaxSource(bundle, "statements/property_line"),
+    accepted_forms: ["quoted_string", "bare_value"],
+    examples: ["quoted_string", "bare_value"],
+    concise: "Use quoted_string for prose property values and bare_value for simple source tokens."
+  };
+
+  const rawValueHint: ContractFieldFormatHint = {
+    hint_id: "sdd.v0_1.raw_value",
+    applies_to_shape_id: APPLY_CHANGE_SET_SHAPE,
+    applies_to_json_pointers: ["/operations/*/raw_value"],
+    source: syntaxSource(bundle, "statements/property_line"),
+    examples: ["\"prose value\"", "active", "42"],
+    concise: "raw_value is SDD source text matching value_kind; quoted_string values include SDD quotes inside the JSON string."
+  };
+
+  return {
+    card_id: "sdd.v0_1.apply_json_quick_format",
+    summary: "Compact bundle-derived formatting guidance for helper apply JSON.",
+    source: syntaxDocumentSource(bundle),
+    lines: [
+      `insert_node_block.node_id and insert_edge_line.to use SDD node IDs: ${idPattern}; examples P-001, J-010, SA-010, ST-010a.`,
+      "insert_node_block.node_type and insert_edge_line.rel_type use bundle vocabulary tokens exactly as written.",
+      `insert_edge_line.event/effect are raw SDD atoms: ${[...new Set([...eventForms, ...effectForms])].join(", ")}.`,
+      "For prose event/effect text in JSON, include SDD quotes, e.g. \"effect\": \"\\\"side effect\\\"\".",
+      "set_node_property.raw_value is raw SDD source text; quoted strings include embedded SDD quotes.",
+      "set_node_property.value_kind must match the raw_value form: quoted_string or bare_value."
+    ],
+    field_hints: [nodeIdHint, nodeTypeHint, relationshipTypeHint, eventHint, effectHint, valueKindHint, rawValueHint]
   };
 }
 

@@ -871,6 +871,7 @@ const contractConstraintSpecSchema = objectSchema(
       "unique_within_request",
       "must_reference_earlier_local_id",
       "same_revision_handle",
+      "undo_change_set_eligibility",
       "commit_safe_continuation",
       "dry_run_informational_only"
     ]),
@@ -983,6 +984,7 @@ const contractSubjectDetailSchema = objectSchema(
   {
     kind: stringSchema(["sdd-contract-subject-detail"]),
     subject: contractSubjectDescriptorSchema,
+    invocation: stringSchema(),
     input_shape: contractShapeDescriptorSchema,
     output_shape: contractShapeDescriptorSchema,
     request_body: helperRequestBodySpecSchema,
@@ -1314,6 +1316,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     input_shape_id: "shared.shape.create_document_args",
     output_shape_id: "shared.shape.create_document_result",
     detail_modes: ["static"],
+    contract_purposes: [...CONTRACT_PURPOSES],
     has_deep_introspection: true
   },
   {
@@ -1325,7 +1328,8 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "conditional",
     input_shape_id: "shared.shape.apply_change_set_args",
     output_shape_id: "shared.shape.apply_change_set_result",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
+    contract_purposes: [...CONTRACT_PURPOSES],
     has_deep_introspection: true
   },
   {
@@ -1350,7 +1354,8 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "conditional",
     input_shape_id: "shared.shape.undo_change_set_args",
     output_shape_id: "shared.shape.undo_change_set_result",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
+    contract_purposes: [...CONTRACT_PURPOSES],
     has_deep_introspection: true
   },
   {
@@ -1460,6 +1465,10 @@ const REQUEST_BODIES = new Map<ContractSubjectId, HelperRequestBodySpec>([
   ["helper.command.undo", createRequestBodySpec("UndoChangeSetArgs")]
 ]);
 
+const REQUEST_INVOCATIONS = new Map<ContractSubjectId, string>([
+  ["helper.command.create", "sdd-helper create <document_path> [--version <version>]"]
+]);
+
 const CONSTRAINTS: readonly ContractConstraintSpec[] = [
   {
     constraint_id: "shared.constraint.authoring_intent.anchor_required_for_before_after",
@@ -1533,6 +1542,34 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
       reference_mode: "by_handle"
     },
     summary: "Handle-based authoring references are valid only against the supplied base_revision."
+  },
+  {
+    constraint_id: "shared.constraint.undo_change_set.target_is_eligible_current_revision",
+    applies_to_shape_id: "shared.shape.undo_change_set_args",
+    applies_to_json_pointers: ["/change_set_id"],
+    kind: "undo_change_set_eligibility",
+    parameters: {
+      change_set_id_pointer: "/change_set_id",
+      record_source: "helper_change_set_journal",
+      target_record_required: true,
+      change_set_id_is_opaque: true,
+      caller_must_use_prior_helper_result_id: true,
+      dry_run_records_are_not_undo_targets: true,
+      required_target_change_set: {
+        mode: "commit",
+        status: "applied",
+        undo_eligible: true
+      },
+      supported_inverse_kinds: ["restore_document", "delete_document"],
+      target_resulting_revision_required: true,
+      current_document_revision_must_equal: "target.change_set.resulting_revision",
+      target_path_source: "target.change_set.path",
+      expected_revision_source: "target.change_set.resulting_revision",
+      default_mode: "dry_run",
+      commit_guidance: "Dry-run first; commit only when the returned assessment permits it."
+    },
+    summary:
+      "Undo targets must be existing committed, applied, undo-eligible helper change-set records whose supported inverse still matches the current document revision."
   },
   {
     constraint_id: "shared.constraint.apply_change_set.commit_handles_are_continuation_safe",
@@ -1640,6 +1677,45 @@ const BINDINGS: readonly ContractBindingSpec[] = [
     static_behavior: "reference_only",
     bundle_resolved_behavior: "expand_values",
     summary: "Preview profile_id is bundle-owned and must be resolved from the active bundle profiles list."
+  },
+  {
+    binding_id: "shared.binding.apply_change_set.validate_profile",
+    applies_to_shape_id: "shared.shape.apply_change_set_args",
+    applies_to_json_pointer: "/validate_profile",
+    kind: "bundle_value_set",
+    bundle_source: {
+      artifact: "manifest_profiles",
+      selector: "profiles"
+    },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "Apply validate_profile is bundle-owned and must be resolved from the active bundle profiles list."
+  },
+  {
+    binding_id: "shared.binding.apply_change_set.projection_views",
+    applies_to_shape_id: "shared.shape.apply_change_set_args",
+    applies_to_json_pointer: "/projection_views/*",
+    kind: "bundle_value_set",
+    bundle_source: {
+      artifact: "views_yaml",
+      selector: "views"
+    },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "Apply projection_views entries are bundle-owned and must be resolved from the active bundle views list."
+  },
+  {
+    binding_id: "shared.binding.undo_change_set.validate_profile",
+    applies_to_shape_id: "shared.shape.undo_change_set_args",
+    applies_to_json_pointer: "/validate_profile",
+    kind: "bundle_value_set",
+    bundle_source: {
+      artifact: "manifest_profiles",
+      selector: "profiles"
+    },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "Undo validate_profile is optional, bundle-owned, and must be resolved from the active bundle profiles list when supplied."
   }
 ] as const;
 
@@ -1738,11 +1814,17 @@ export function selectContractSubjectDetailForPurpose(
     const selected: ContractSubjectDetail = {
       kind: "sdd-contract-subject-detail",
       subject: detail.subject,
+      ...(REQUEST_INVOCATIONS.has(detail.subject.subject_id)
+        ? { invocation: REQUEST_INVOCATIONS.get(detail.subject.subject_id) }
+        : {}),
       ...(detail.input_shape ? { input_shape: detail.input_shape } : {}),
       ...(detail.request_body ? { request_body: detail.request_body } : {}),
       constraints: detail.constraints.filter((constraint) => requestShapeIds.has(constraint.applies_to_shape_id)),
       bindings: detail.bindings.filter((binding) => requestShapeIds.has(binding.applies_to_shape_id)),
-      continuation: [],
+      continuation:
+        detail.subject.subject_id === "helper.command.create"
+          ? detail.continuation
+          : [],
       ...(detail.authoring_format_card ? { authoring_format_card: detail.authoring_format_card } : {}),
       resolution: detail.resolution
     };

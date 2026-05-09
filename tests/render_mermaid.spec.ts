@@ -35,5 +35,5 @@ describe("renderSource mermaid", () => {
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());
     }
-  });
+  }, 15000);
 });

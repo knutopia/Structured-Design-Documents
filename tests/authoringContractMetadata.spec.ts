@@ -237,6 +237,37 @@ describe("authoring contract metadata", () => {
     expect(JSON.stringify(requestDetail).length).toBeLessThan(JSON.stringify(fullDetail).length / 2);
   });
 
+  it("returns apply request-purpose detail with request-side constraints and bindings only", () => {
+    const requestDetail = getContractSubjectDetailForPurpose("helper.command.apply", "request");
+    const requestJson = JSON.stringify(requestDetail);
+
+    expect(requestDetail).toBeDefined();
+    expect(requestDetail?.subject.detail_modes).toEqual(["static", "bundle_resolved"]);
+    expect(requestDetail?.subject.detail_modes).not.toContain("request");
+    expect(requestDetail?.subject.contract_purposes).toEqual(["request"]);
+    expect(requestDetail?.input_shape?.shape_id).toBe("shared.shape.apply_change_set_args");
+    expect(requestDetail?.request_body?.top_level_shape).toBe("ApplyChangeSetArgs");
+    expect(requestDetail).not.toHaveProperty("output_shape");
+    expect(requestDetail?.constraints.map((constraint) => constraint.constraint_id)).toEqual([
+      "shared.constraint.apply_change_set.handles_are_revision_bound"
+    ]);
+    expect(requestDetail?.constraints[0]).toMatchObject({
+      kind: "same_revision_handle",
+      parameters: {
+        base_revision_pointer: "/base_revision"
+      }
+    });
+    expect(requestDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
+      "shared.binding.apply_change_set.validate_profile",
+      "shared.binding.apply_change_set.projection_views"
+    ]);
+    expect(requestDetail?.continuation).toEqual([]);
+    expect(requestJson).not.toContain("sdd-change-set");
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+    expect(requestJson).not.toContain("commit_handles_are_safe_continuation_surfaces");
+    expect(requestJson).not.toContain("dry_run_handles_are_informational_only");
+  });
+
   it("returns create detail with bootstrap continuation semantics", () => {
     const detail = getContractSubjectDetail("helper.command.create");
 
@@ -244,6 +275,125 @@ describe("authoring contract metadata", () => {
       "create_revision_is_bootstrap_continuation_surface",
       "inspect_may_fail_on_empty_bootstrap"
     ]);
+  });
+
+  it("returns create request-purpose detail with path/version shape and bootstrap continuation", () => {
+    const requestDetail = getContractSubjectDetailForPurpose("helper.command.create", "request");
+    const fullDetail = getContractSubjectDetail("helper.command.create");
+    const requestJson = JSON.stringify(requestDetail);
+
+    expect(requestDetail).toBeDefined();
+    expect(requestDetail?.subject.detail_modes).toEqual(["static"]);
+    expect(requestDetail?.subject.detail_modes).not.toContain("request");
+    expect(requestDetail?.subject.contract_purposes).toEqual(["request"]);
+    expect(requestDetail?.invocation).toBe("sdd-helper create <document_path> [--version <version>]");
+    expect(requestDetail?.input_shape).toMatchObject({
+      shape_id: "shared.shape.create_document_args",
+      summary: "Create-document request payload.",
+      schema: {
+        type: "object",
+        required: ["path"],
+        properties: {
+          path: {
+            type: "string"
+          },
+          version: {
+            type: "string",
+            enum: ["0.1"]
+          }
+        }
+      }
+    });
+    expect(requestDetail).not.toHaveProperty("request_body");
+    expect(requestDetail).not.toHaveProperty("output_shape");
+    expect(requestDetail?.constraints).toEqual([]);
+    expect(requestDetail?.bindings).toEqual([]);
+    expect(requestDetail?.continuation.map((entry) => entry.kind)).toEqual([
+      "create_revision_is_bootstrap_continuation_surface",
+      "inspect_may_fail_on_empty_bootstrap"
+    ]);
+    expect(requestDetail?.resolution).toEqual({ mode: "static" });
+    expect(requestJson).not.toContain("sdd-create-document");
+    expect(requestJson).not.toContain("sdd-change-set");
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+    expect(requestJson).not.toContain("blocking_diagnostics");
+    expect(fullDetail).not.toHaveProperty("invocation");
+  });
+
+  it("returns undo request-purpose detail with eligibility and current-revision guidance only", () => {
+    const requestDetail = getContractSubjectDetailForPurpose("helper.command.undo", "request");
+    const requestJson = JSON.stringify(requestDetail);
+
+    expect(requestDetail).toBeDefined();
+    expect(requestDetail?.subject.detail_modes).toEqual(["static", "bundle_resolved"]);
+    expect(requestDetail?.subject.detail_modes).not.toContain("request");
+    expect(requestDetail?.subject.contract_purposes).toEqual(["request"]);
+    expect(requestDetail?.input_shape).toMatchObject({
+      shape_id: "shared.shape.undo_change_set_args",
+      schema: {
+        type: "object",
+        required: ["change_set_id"],
+        properties: {
+          change_set_id: {
+            type: "string"
+          },
+          mode: {
+            type: "string",
+            enum: ["dry_run", "commit"]
+          },
+          validate_profile: {
+            type: "string"
+          }
+        }
+      }
+    });
+    expect(requestDetail?.request_body?.top_level_shape).toBe("UndoChangeSetArgs");
+    expect(requestDetail).not.toHaveProperty("output_shape");
+    expect(requestDetail?.constraints).toHaveLength(1);
+    expect(requestDetail?.constraints[0]).toMatchObject({
+      constraint_id: "shared.constraint.undo_change_set.target_is_eligible_current_revision",
+      applies_to_shape_id: "shared.shape.undo_change_set_args",
+      applies_to_json_pointers: ["/change_set_id"],
+      kind: "undo_change_set_eligibility",
+      parameters: {
+        change_set_id_pointer: "/change_set_id",
+        record_source: "helper_change_set_journal",
+        target_record_required: true,
+        change_set_id_is_opaque: true,
+        caller_must_use_prior_helper_result_id: true,
+        dry_run_records_are_not_undo_targets: true,
+        required_target_change_set: {
+          mode: "commit",
+          status: "applied",
+          undo_eligible: true
+        },
+        supported_inverse_kinds: ["restore_document", "delete_document"],
+        target_resulting_revision_required: true,
+        current_document_revision_must_equal: "target.change_set.resulting_revision",
+        target_path_source: "target.change_set.path",
+        expected_revision_source: "target.change_set.resulting_revision",
+        default_mode: "dry_run"
+      }
+    });
+    expect(requestDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
+      "shared.binding.undo_change_set.validate_profile"
+    ]);
+    expect(requestDetail?.bindings[0]).toMatchObject({
+      applies_to_json_pointer: "/validate_profile",
+      bundle_source: {
+        artifact: "manifest_profiles",
+        selector: "profiles"
+      }
+    });
+    expect(requestDetail?.continuation).toEqual([]);
+    expect(requestJson).not.toContain("\"output_shape\":");
+    expect(requestJson).not.toContain("sdd-change-set");
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+    expect(requestJson).not.toContain("blocking_diagnostics");
+    expect(requestJson).not.toContain("\"operations\"");
+    expect(requestJson).not.toContain("\"path\"");
+    expect(requestJson).not.toContain("base_revision");
+    expect(requestJson).not.toContain("handle");
   });
 
   it("exposes request body stdin semantics for helper request-loading commands", () => {
@@ -354,6 +504,7 @@ describe("authoring contract metadata", () => {
       "must_reference_earlier_local_id",
       "required_if",
       "same_revision_handle",
+      "undo_change_set_eligibility",
       "unique_within_request"
     ]);
   });
