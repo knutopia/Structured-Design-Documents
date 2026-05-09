@@ -19,11 +19,14 @@ The result is the canonical JSON command manifest for the helper.
 Use deep helper introspection only when the current task needs it:
 
 `<helper> contract helper.command.author`
+`<helper> contract helper.command.create --purpose request`
 `<helper> contract helper.command.author --purpose request --resolve bundle`
+`<helper> contract helper.command.apply --purpose request --resolve bundle`
+`<helper> contract helper.command.undo --purpose request --resolve bundle`
 `<helper> contract helper.command.preview --resolve bundle`
 
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
-Before composing the first `author` request in a task, prefer the request-purpose resolved author contract and read its `authoring_format_card`; it gives the compact bundle-derived JSON formatting details for IDs and raw event/effect atoms without requiring a full `syntax.yaml` read or the full author result schema.
+Request-purpose detail is a lossy request-composition view for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. Use it when composing request arguments or JSON and the full result schema is unnecessary. Before composing the first `author` request in a task, prefer the request-purpose resolved author contract and read its `authoring_format_card`; it gives the compact bundle-derived JSON formatting details for IDs and raw event/effect atoms without requiring a full `syntax.yaml` read or the full author result schema.
 
 ## 2. Choose The Task Kind
 
@@ -39,7 +42,7 @@ Use the matching branch below instead of forcing every request through one linea
 
 ## 3. Targeted Bundle Reading And Language Authority
 
-Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use `contract <subject_id> --purpose request` when a supported helper subject only needs request-composition guidance. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
+Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use `contract <subject_id> --purpose request` when `helper.command.create`, `helper.command.author`, `helper.command.apply`, or `helper.command.undo` only needs request-composition guidance. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
 For routine author request formatting, use `contract helper.command.author --purpose request --resolve bundle` and its `authoring_format_card` first. Read `bundle/v0.1/core/syntax.yaml` only when the card is absent or the task needs deeper language semantics than request formatting.
 
 For implementation audits of bundle authority, the parser path loads bundle data with `loadBundle(...)` and consumes syntax through `createParserSyntaxRuntime(bundle)`. This is evidence of the runtime path, not a normal authoring fallback for helper request shapes.
@@ -95,10 +98,10 @@ This creates a bootstrap document only. A newly created empty document may still
 
 Use the `revision` returned by `create` as the continuation surface for the next mutation request. Immediate `inspect` is not the normal next step after `create`, because the empty bootstrap may still be parse-invalid. If the returned `assessment.next_action` gives a more specific bootstrap instruction, follow it.
 
-If the bootstrap continuation rule matters for planning the next step, fetch the subject detail explicitly:
+If the path/version request shape or bootstrap continuation rule matters for planning the next step, fetch request-purpose subject detail explicitly:
 
 ```bash
-<helper> contract helper.command.create
+<helper> contract helper.command.create --purpose request
 ```
 
 For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires a bundle-defined relationship for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
@@ -133,12 +136,12 @@ Use `author` when the task is mostly scaffold creation or nested structure autho
 
 Before composing either request, determine whether the intended result depends on a bundle-defined relationship rather than nesting alone. Nesting is an authoring affordance, not semantic proof. When the change should affect projected meaning, resolve the bundle-defined relationship first and author it explicitly.
 
-Before composing complex nested `author`, `apply`, or `undo` JSON, fetch the current subject detail in static mode rather than spelunking code or tests for normal request-shape knowledge:
+Before composing complex nested `author`, `apply`, or `undo` JSON, fetch request-purpose subject detail rather than spelunking code or tests for normal request-shape knowledge:
 
 ```bash
 <helper> contract helper.command.author --purpose request --resolve bundle
-<helper> contract helper.command.apply
-<helper> contract helper.command.undo
+<helper> contract helper.command.apply --purpose request --resolve bundle
+<helper> contract helper.command.undo --purpose request --resolve bundle
 ```
 
 ## 7. Read, Validate, Project, Or Render An Existing Document

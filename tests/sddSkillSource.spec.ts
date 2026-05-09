@@ -133,14 +133,22 @@ describe("canonical sdd-skill source", () => {
 
   it("locks the top-level authority selectors", async () => {
     const { skillMarkdown } = await readSkillSourceMarkdown();
+    const resolveHelper = extractMarkdownSection(skillMarkdown, "## Resolve Helper First");
     const startHere = extractMarkdownSection(skillMarkdown, "## Start Here");
 
+    expect(resolveHelper).toContain("skills/sdd-skill/scripts/run_helper.sh");
+    expect(resolveHelper).toContain("<skill_dir>/scripts/run_helper.sh");
+    expect(resolveHelper).toContain("Call the resolved executable `<helper>`");
+    expect(resolveHelper).toContain("Do not run bare `scripts/run_helper.sh` from the repo root.");
     expect(startHere).toContain("Helper discovery is the helper-command authority");
-    expect(startHere).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(startHere).toContain("use `<helper> capabilities`");
     expect(startHere).toContain("which helper commands exist");
     expect(startHere).toContain("Helper contract detail is the helper request/result authority");
-    expect(startHere).toContain("skills/sdd-skill/scripts/run_helper.sh contract <subject_id>");
+    expect(startHere).toContain("use `<helper> contract <subject_id>`");
     expect(startHere).toContain("exact request shape, result shape, continuation semantics");
+    expect(startHere).toContain(
+      "`helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`"
+    );
     expect(startHere).toContain("contract helper.command.author --purpose request --resolve bundle");
     expect(startHere).toContain("authoring_format_card");
     expect(startHere).toContain(
@@ -325,11 +333,16 @@ describe("canonical sdd-skill source", () => {
 
     expect(skillMarkdown.split(/\r?\n/).length).toBeLessThanOrEqual(120);
     expect(skillMarkdown).toContain("Helper discovery is the helper-command authority");
-    expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
+    expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh");
+    expect(skillMarkdown).toContain("<skill_dir>/scripts/run_helper.sh");
+    expect(skillMarkdown).toContain("use `<helper> capabilities`");
     expect(skillMarkdown).toContain(
       "Helper contract detail is the helper request/result authority"
     );
-    expect(skillMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
+    expect(skillMarkdown).toContain("use `<helper> contract <subject_id>`");
+    expect(skillMarkdown).toContain(
+      "`helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`"
+    );
     expect(skillMarkdown).toContain(
       "exact request shape, result shape, continuation semantics, helper constraints"
     );
@@ -359,8 +372,9 @@ describe("canonical sdd-skill source", () => {
       "For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command."
     );
     expect(skillMarkdown).toContain(
-      "`scripts/run_helper.sh` relative to the installed skill directory"
+      "Call the resolved executable `<helper>`"
     );
+    expect(skillMarkdown).toContain("Use only commands returned by `<helper> capabilities`");
     expect(skillMarkdown).toContain("references/workflow.md");
     expect(skillMarkdown).toContain("references/change-set-recipes.md");
     expect(skillMarkdown).toContain("references/current-helper-gaps.md");
@@ -387,12 +401,27 @@ describe("canonical sdd-skill source", () => {
     expect(skillMarkdown).toContain("Do not treat result `status` as the acceptance gate.");
     expect(skillMarkdown).toContain("If an expected `assessment` is missing from a relevant helper payload, stop and verify helper/contract surface instead of reimplementing acceptance logic in the skill.");
 
-    expect(workflowMarkdown).toContain("In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`;");
     expect(workflowMarkdown).toContain(
-      "in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder."
+      "If `skills/sdd-skill/scripts/run_helper.sh` exists from the repo root, use that."
     );
-    expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh capabilities");
-    expect(workflowMarkdown).toContain("skills/sdd-skill/scripts/run_helper.sh contract");
+    expect(workflowMarkdown).toContain(
+      "use the installed skill wrapper at `<skill_dir>/scripts/run_helper.sh`"
+    );
+    expect(workflowMarkdown).toContain("Call the resolved executable `<helper>`");
+    expect(workflowMarkdown).toContain("<helper> capabilities");
+    expect(workflowMarkdown).toContain("<helper> contract helper.command.create --purpose request");
+    expect(workflowMarkdown).toContain(
+      "<helper> contract helper.command.author --purpose request --resolve bundle"
+    );
+    expect(workflowMarkdown).toContain(
+      "<helper> contract helper.command.apply --purpose request --resolve bundle"
+    );
+    expect(workflowMarkdown).toContain(
+      "<helper> contract helper.command.undo --purpose request --resolve bundle"
+    );
+    expect(workflowMarkdown).toContain(
+      "Request-purpose detail is a lossy request-composition view for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`."
+    );
     expect(workflowMarkdown).toContain("--resolve bundle");
     expect(workflowMarkdown).toContain("authoring_format_card");
     expect(workflowMarkdown).toContain("## 3. Targeted Bundle Reading And Language Authority");

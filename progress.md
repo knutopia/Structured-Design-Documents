@@ -25,7 +25,7 @@ failures seen in the log: wrong wrapper path selection, `sdd show --output` vs `
 -cleansed the repo-local wrapper language again
 -adjusted --purpose request plan remainder after diagnostics
 -implemented adjusted plan, it reverted wrapper fix
--manually reverted wrapper fix, failing tests
+-manually reverted wrapper fix, aligned tests
 
 ## Fri 5-08
 

@@ -21,7 +21,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 ## Start Here
 
 - Helper discovery is the helper-command authority: use `<helper> capabilities` to confirm which helper commands exist.
-- Helper contract detail is the helper request/result authority: use `<helper> contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command; use `--purpose request` when a supported subject only needs request-composition guidance.
+- Helper contract detail is the helper request/result authority: use `<helper> contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command; use `--purpose request` for request-composition guidance on `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`.
 - Before composing the first `author` request in a task, use `<helper> contract helper.command.author --purpose request --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
 - SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.
 - Shared `assessment` answers whether to stop, continue, commit, or render.
@@ -36,7 +36,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 - Choose the repo-relative `.sdd` path directly. Default to the current working directory unless the user names or clearly implies another location.
 - Do not search repo `.sdd` examples to pick a filename, infer syntax, or infer structure unless the user explicitly asks for comparison or example reuse.
 - Run `create`, then continue from the returned `revision`; immediate `inspect` is not the normal next step because the empty bootstrap may still be parse-invalid.
-- Prefer `author` for first-pass scaffold creation. Use `<helper> contract helper.command.create` or `<helper> contract helper.command.author --purpose request --resolve bundle` when bootstrap continuation or author request-shape detail matters.
+- Prefer `author` for first-pass scaffold creation. Use `<helper> contract helper.command.create --purpose request` or `<helper> contract helper.command.author --purpose request --resolve bundle` when bootstrap continuation or author request-shape detail matters.
 - Do not let "nesting is not semantic" become "avoid nesting". For child nodes with one clear local parent and no reuse or cross-cutting placement intent, prefer both the explicit semantic edge and nested source placement under the parent for readability.
 - When nesting child nodes under a parent, keep the parent's semantic edge lines above nested child blocks. Prefer body order: properties, semantic edge lines, nested child blocks. Do not place relationship lines after the nested blocks they introduce.
 
@@ -97,23 +97,8 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 
 ## Supported Helper Surface
 
-This skill should refer only to the currently available helper commands:
+When using this skill, do not claim or rely on helper commands unless `<helper> capabilities` reports them; for example. `references/current-helper-gaps.md` tracks the current command inventory. 
 
-- `capabilities`
-- `contract`
-- `inspect`
-- `search`
-- `create`
-- `author`
-- `apply`
-- `undo`
-- `validate`
-- `project`
-- `preview`
-- `git-status`
-- `git-commit`
-
-Do not promise helper commands that still do not exist today, including `list documents`.
 
 ## Reference Map
 

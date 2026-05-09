@@ -25,11 +25,7 @@ These are the only helper commands the skill should present as available.
 helper contract detail; they do not add new standalone SDD document-authoring
 semantics.
 
-## Not Exposed As Standalone Helper Commands
-
-The helper still does not currently expose standalone commands for:
-
-- list-documents discovery
+## Finding Semantic Confirmation
 
 When the skill needs semantic confirmation after a change, it should use:
 
