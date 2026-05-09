@@ -19,7 +19,7 @@ Non-negotiable invariants:
 - `helper.command.author` lands and is verified first, then implementation
   pauses before `apply`, `create`, and `undo`
 
-## Gate 1: Author
+## [DONE] Gate 1: Author
 
 Implement only:
 

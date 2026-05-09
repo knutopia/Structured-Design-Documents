@@ -2,14 +2,19 @@
 
 This file gives the concrete helper-first workflow for the `sdd-skill`.
 
-In the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh`; in an installed skill copy, the same wrapper is available as `scripts/run_helper.sh` relative to the installed skill folder.
+Before any helper call, resolve one helper executable for this task:
+
+1. If `skills/sdd-skill/scripts/run_helper.sh` exists from the repo root, use that.
+2. Otherwise, use the installed skill wrapper at `<skill_dir>/scripts/run_helper.sh`.
+
+Call the resolved executable `<helper>` in these instructions. For every later helper command, replace `<helper>` with the full resolved path. Do not run bare `scripts/run_helper.sh` from the repo root. `<helper>` is a documentation placeholder, not a shell variable.
 
 ## 1. Confirm The Helper Surface
 
 Use this when you suspect the helper surface may have changed:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh capabilities
+<helper> capabilities
 ```
 
 The result is the canonical JSON command manifest for the helper.
@@ -17,9 +22,9 @@ The result is the canonical JSON command manifest for the helper.
 Use deep helper introspection only when the current task needs it:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.author
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --purpose request --resolve bundle
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
+<helper> contract helper.command.author
+<helper> contract helper.command.author --purpose request --resolve bundle
+<helper> contract helper.command.preview --resolve bundle
 ```
 
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
@@ -88,7 +93,7 @@ For new-document authoring, do not use `search` to pick a filename or to hunt re
 The current helper creates an empty bootstrap document:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh create <document_path> --version 0.1
+<helper> create <document_path> --version 0.1
 ```
 
 This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
@@ -98,7 +103,7 @@ Use the `revision` returned by `create` as the continuation surface for the next
 If the bootstrap continuation rule matters for planning the next step, fetch the subject detail explicitly:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.create
+<helper> contract helper.command.create
 ```
 
 For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires a bundle-defined relationship for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
@@ -108,7 +113,7 @@ For first-pass scaffold creation, prefer `author`. Before composing the request,
 If the target existing `.sdd` document is unknown, search first:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh search --query <query> --under <repo_relative_directory> --limit <count>
+<helper> search --query <query> --under <repo_relative_directory> --limit <count>
 ```
 
 Use the returned paths to choose the most likely existing document, then inspect that document.
@@ -116,7 +121,7 @@ Use the returned paths to choose the most likely existing document, then inspect
 Inspect is the normal starting point for existing-document edits:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh inspect <document_path>
+<helper> inspect <document_path>
 ```
 
 Inspect returns:
@@ -136,9 +141,9 @@ Before composing either request, determine whether the intended result depends o
 Before composing complex nested `author`, `apply`, or `undo` JSON, fetch the current subject detail in static mode rather than spelunking code or tests for normal request-shape knowledge:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.author --purpose request --resolve bundle
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.apply
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.undo
+<helper> contract helper.command.author --purpose request --resolve bundle
+<helper> contract helper.command.apply
+<helper> contract helper.command.undo
 ```
 
 ## 7. Read, Validate, Project, Or Render An Existing Document
@@ -148,8 +153,8 @@ If the document is already named and the user only needs a read, validation, pro
 Use persisted-state semantic reads when you want confirmation without issuing a mutation request:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh validate <document_path> --profile <profile_id>
-skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
+<helper> validate <document_path> --profile <profile_id>
+<helper> project <document_path> --view <view_id>
 ```
 
 Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state diagram artifact work.
@@ -157,9 +162,9 @@ Read the returned assessment before proceeding. Use `assessment.can_render` as t
 If the relevant `view_id` or `profile_id` is not already known, use `contract --resolve bundle` to expand the active helper-exposed values before choosing command arguments:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.validate --resolve bundle
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.project --resolve bundle
-skills/sdd-skill/scripts/run_helper.sh contract helper.command.preview --resolve bundle
+<helper> contract helper.command.validate --resolve bundle
+<helper> contract helper.command.project --resolve bundle
+<helper> contract helper.command.preview --resolve bundle
 ```
 
 For normal human-facing diagram requests, produce a durable saved file. Use `sdd show` only after the relevant committed persisted state returns `assessment.can_render` for the requested profile and view:
@@ -191,7 +196,7 @@ Inline-image branch:
 Inline-image command:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
+<helper> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
   --format <format>
@@ -232,7 +237,7 @@ Example low-level `apply` request shape:
 Submit it with:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh apply --request <request_file>
+<helper> apply --request <request_file>
 ```
 
 Review assessment first:
@@ -294,8 +299,8 @@ Read the committed result assessment. If further edits require fresh handles, ei
 Use persisted-state semantic reads when you want confirmation after commit or when you do not need a mutation request at all:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh validate <document_path> --profile <profile_id>
-skills/sdd-skill/scripts/run_helper.sh project <document_path> --view <view_id>
+<helper> validate <document_path> --profile <profile_id>
+<helper> project <document_path> --view <view_id>
 ```
 
 These commands read the current on-disk document only. They do not inspect dry-run candidates. Use their returned assessment to decide whether the persisted state is blocked, needs review, or can be rendered.
@@ -335,7 +340,7 @@ Inline-image branch:
 Inline-image command:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
+<helper> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
   --format <format>
@@ -348,7 +353,7 @@ If the relevant `view_id` or `profile_id` is unknown, use `contract --resolve bu
 Use helper preview alone only when the user explicitly asks for preview-only, inline-only, transient raw artifact output, or a chat-safe artifact path rather than the normal saved deliverable:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh preview <document_path> \
+<helper> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
   --format <format> \
@@ -376,7 +381,7 @@ Example request shape:
 Submit it with:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh undo --request <request_file>
+<helper> undo --request <request_file>
 ```
 
 Read the undo dry-run assessment before committing an undo. Commit only when `assessment.can_commit` is true and the user wants the undo applied.
@@ -403,13 +408,13 @@ Use helper git commands only when the user wants `.sdd`-scoped git behavior.
 Status:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh git-status <document_path>
+<helper> git-status <document_path>
 ```
 
 Commit explicit `.sdd` paths:
 
 ```bash
-skills/sdd-skill/scripts/run_helper.sh git-commit --message "Update example SDD" \
+<helper> git-commit --message "Update example SDD" \
   <document_path>
 ```
 

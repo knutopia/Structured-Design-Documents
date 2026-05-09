@@ -2,7 +2,8 @@
 
 ## Open Issues
 
--repo-local wrapper AGAIN?
+failures seen in the log: wrong wrapper path selection, `sdd show --output` vs `--out`, missing view/profile/vocabulary discovery, or missing actual author request/result payloads in the execution log. Those are separate workflow/tooling issues.
+
 -verify corepack installation
 
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
@@ -20,7 +21,7 @@
 ## Sat 5-09
 
 -skill run diagnostics
-
+-cleansed the repo-local wrapper language again
 
 ## Fri 5-08
 

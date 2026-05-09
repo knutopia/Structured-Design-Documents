@@ -52,8 +52,8 @@ The skill should not promise richer bootstrap or starter-pack flows until the he
 
 The helper is the machine-facing contract for the skill. If the skill teaches commands or flows that the helper does not actually support, the skill becomes misleading and harder to trust.
 
-When in doubt, verify against:
+When in doubt, resolve `<helper>` as described in the main skill file, then verify against:
 
-- `skills/sdd-skill/scripts/run_helper.sh capabilities`
+- `<helper> capabilities`
 - `docs/readme_support_docs/sdd-helper/README.md`
 - `src/authoring/contracts.ts`
