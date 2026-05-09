@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-repo-local wrapper AGAIN?
 -verify corepack installation
 
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
@@ -15,6 +16,11 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Sat 5-09
+
+-skill run diagnostics
+
 
 ## Fri 5-08
 
