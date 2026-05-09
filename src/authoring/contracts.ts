@@ -550,6 +550,7 @@ export interface HelperCapabilitiesResultCommand {
   output_shape_id?: ContractShapeId;
   has_deep_introspection: true;
   detail_modes?: ContractResolutionMode[];
+  contract_purposes?: ContractPurpose[];
 }
 
 export interface HelperCapabilitiesResult {
@@ -579,6 +580,7 @@ export interface HelperCapabilitiesResult {
 export interface HelperContractArgs {
   subject_id: ContractSubjectId;
   resolve?: "bundle";
+  purpose?: ContractPurpose;
 }
 
 export type ContractSubjectId =
@@ -595,6 +597,7 @@ export type ContractFormatHintId = `sdd.${string}`;
 
 export type ContractSchemaFormat = "json_schema_2020_12";
 export type ContractResolutionMode = "static" | "bundle_resolved";
+export type ContractPurpose = "request";
 export type ContractStability = "stable" | "experimental" | "deprecated";
 export type ContractSurfaceKind = "helper_command" | "mcp_tool" | "mcp_resource" | "mcp_prompt";
 
@@ -616,6 +619,7 @@ export interface ContractSubjectDescriptor {
   input_shape_id?: ContractShapeId;
   output_shape_id?: ContractShapeId;
   detail_modes: ContractResolutionMode[];
+  contract_purposes?: ContractPurpose[];
   has_deep_introspection: true;
 }
 

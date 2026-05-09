@@ -4,7 +4,10 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadBundle } from "../src/bundle/loadBundle.js";
 import type { Bundle } from "../src/bundle/types.js";
 import { getContractSubjectDetail } from "../src/authoring/contractMetadata.js";
-import { getBundleResolvedContractSubjectDetail } from "../src/authoring/contractResolution.js";
+import {
+  getBundleResolvedContractSubjectDetail,
+  getBundleResolvedContractSubjectDetailForPurpose
+} from "../src/authoring/contractResolution.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -66,6 +69,27 @@ describe("authoring contract resolution", () => {
     expect(projectDetail?.bindings[0]?.resolved_values?.map((value) => value.value)).toEqual(
       bundle.views.views.map((view) => view.id)
     );
+  });
+
+  it("returns resolved author request-purpose detail without result schemas", () => {
+    const fullResolvedDetail = getBundleResolvedContractSubjectDetail("helper.command.author", bundle);
+    const requestDetail = getBundleResolvedContractSubjectDetailForPurpose("helper.command.author", bundle, "request");
+
+    expect(fullResolvedDetail).toBeDefined();
+    expect(requestDetail).toBeDefined();
+    expect(requestDetail?.resolution).toEqual({
+      mode: "bundle_resolved",
+      bundle_name: bundle.manifest.bundle_name,
+      bundle_version: bundle.manifest.bundle_version
+    });
+    expect(requestDetail?.input_shape?.shape_id).toBe("shared.shape.apply_authoring_intent_args");
+    expect(requestDetail).not.toHaveProperty("output_shape");
+    expect(requestDetail?.authoring_format_card).toMatchObject({
+      card_id: "sdd.v0_1.author_json_quick_format"
+    });
+    expect(requestDetail?.continuation).toEqual([]);
+    expect(JSON.stringify(requestDetail)).not.toContain("sdd-authoring-outcome-assessment");
+    expect(JSON.stringify(requestDetail).length).toBeLessThan(JSON.stringify(fullResolvedDetail).length / 2);
   });
 
   it("returns undefined for unknown subjects", () => {

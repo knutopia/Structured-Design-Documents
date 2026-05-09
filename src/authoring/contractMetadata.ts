@@ -3,6 +3,7 @@ import type {
   ContractConstraintSpec,
   ContractContinuationSpec,
   ContractIndex,
+  ContractPurpose,
   ContractShapeDescriptor,
   ContractShapeId,
   ContractSubjectDescriptor,
@@ -776,7 +777,8 @@ const helperCapabilitiesCommandSchema = objectSchema(
     input_shape_id: stringSchema(),
     output_shape_id: stringSchema(),
     has_deep_introspection: booleanSchema(),
-    detail_modes: arraySchema(stringSchema(["static", "bundle_resolved"]))
+    detail_modes: arraySchema(stringSchema(["static", "bundle_resolved"])),
+    contract_purposes: arraySchema(stringSchema(["request"]))
   },
   [
     "name",
@@ -841,6 +843,7 @@ const contractSubjectDescriptorSchema = objectSchema(
     input_shape_id: stringSchema(),
     output_shape_id: stringSchema(),
     detail_modes: arraySchema(stringSchema(["static", "bundle_resolved"])),
+    contract_purposes: arraySchema(stringSchema(["request"])),
     has_deep_introspection: booleanSchema()
   },
   ["subject_id", "surface_kind", "surface_name", "summary", "stability", "detail_modes", "has_deep_introspection"]
@@ -1000,6 +1003,8 @@ const contractSubjectDetailSchema = objectSchema(
   },
   ["kind", "subject", "constraints", "bindings", "continuation", "resolution"]
 );
+
+const CONTRACT_PURPOSES: readonly ContractPurpose[] = ["request"];
 
 const SHAPES: readonly ContractShapeDescriptor[] = [
   {
@@ -1258,7 +1263,8 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     schema: objectSchema(
       {
         subject_id: stringSchema(),
-        resolve: stringSchema(["bundle"])
+        resolve: stringSchema(["bundle"]),
+        purpose: stringSchema(["request"])
       },
       ["subject_id"]
     ),
@@ -1332,6 +1338,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     input_shape_id: "shared.shape.apply_authoring_intent_args",
     output_shape_id: "shared.shape.apply_authoring_intent_result",
     detail_modes: ["static", "bundle_resolved"],
+    contract_purposes: [...CONTRACT_PURPOSES],
     has_deep_introspection: true
   },
   {
@@ -1712,6 +1719,46 @@ export function getContractSubjectDescriptor(subjectId: ContractSubjectId): Cont
 export function getContractSubjectRequestBody(subjectId: ContractSubjectId): HelperRequestBodySpec | undefined {
   const requestBody = REQUEST_BODIES.get(subjectId);
   return requestBody ? cloneValue(requestBody) : undefined;
+}
+
+export function selectContractSubjectDetailForPurpose(
+  detail: ContractSubjectDetail,
+  purpose: ContractPurpose
+): ContractSubjectDetail | undefined {
+  if (!detail.subject.contract_purposes?.includes(purpose)) {
+    return undefined;
+  }
+
+  if (purpose === "request") {
+    const requestShapeIds = new Set<ContractShapeId>();
+    if (detail.input_shape) {
+      requestShapeIds.add(detail.input_shape.shape_id);
+    }
+
+    const selected: ContractSubjectDetail = {
+      kind: "sdd-contract-subject-detail",
+      subject: detail.subject,
+      ...(detail.input_shape ? { input_shape: detail.input_shape } : {}),
+      ...(detail.request_body ? { request_body: detail.request_body } : {}),
+      constraints: detail.constraints.filter((constraint) => requestShapeIds.has(constraint.applies_to_shape_id)),
+      bindings: detail.bindings.filter((binding) => requestShapeIds.has(binding.applies_to_shape_id)),
+      continuation: [],
+      ...(detail.authoring_format_card ? { authoring_format_card: detail.authoring_format_card } : {}),
+      resolution: detail.resolution
+    };
+
+    return cloneValue(selected);
+  }
+
+  return undefined;
+}
+
+export function getContractSubjectDetailForPurpose(
+  subjectId: ContractSubjectId,
+  purpose: ContractPurpose
+): ContractSubjectDetail | undefined {
+  const detail = getContractSubjectDetail(subjectId);
+  return detail ? selectContractSubjectDetailForPurpose(detail, purpose) : undefined;
 }
 
 export function getContractSubjectDetail(subjectId: ContractSubjectId): ContractSubjectDetail | undefined {

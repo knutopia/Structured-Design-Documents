@@ -11,9 +11,9 @@ This skill enables working with structured design documents. The bundled helper 
 
 ## Start Here
 
-- Helper discovery is the helper-command authority: use `scripts/run_helper.sh capabilities` to confirm which helper commands exist.
-- Helper contract detail is the helper request/result authority: use `scripts/run_helper.sh contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command.
-- Before composing the first `author` request in a task, use `scripts/run_helper.sh contract helper.command.author --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
+- Helper discovery is the helper-command authority: in the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh capabilities`; in an installed skill copy, use `scripts/run_helper.sh capabilities` to confirm which helper commands exist.
+- Helper contract detail is the helper request/result authority: in the repo source tree, use `skills/sdd-skill/scripts/run_helper.sh contract <subject_id>`; in an installed skill copy, use `scripts/run_helper.sh contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command; use `--purpose request` when a supported subject only needs request-composition guidance.
+- Before composing the first `author` request in a task, use `scripts/run_helper.sh contract helper.command.author --purpose request --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
 - SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.
 - Shared `assessment` answers whether to stop, continue, commit, or render.
 - Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery.
@@ -27,7 +27,7 @@ This skill enables working with structured design documents. The bundled helper 
 - Choose the repo-relative `.sdd` path directly. Default to the current working directory unless the user names or clearly implies another location.
 - Do not search repo `.sdd` examples to pick a filename, infer syntax, or infer structure unless the user explicitly asks for comparison or example reuse.
 - Run `create`, then continue from the returned `revision`; immediate `inspect` is not the normal next step because the empty bootstrap may still be parse-invalid.
-- Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` or `contract helper.command.author` when bootstrap continuation or request-shape detail matters.
+- Prefer `author` for first-pass scaffold creation. Use `contract helper.command.create` or `contract helper.command.author --purpose request --resolve bundle` when bootstrap continuation or author request-shape detail matters.
 - Do not let "nesting is not semantic" become "avoid nesting". For child nodes with one clear local parent and no reuse or cross-cutting placement intent, prefer both the explicit semantic edge and nested source placement under the parent for readability.
 - When nesting child nodes under a parent, keep the parent's semantic edge lines above nested child blocks. Prefer body order: properties, semantic edge lines, nested child blocks. Do not place relationship lines after the nested blocks they introduce.
 

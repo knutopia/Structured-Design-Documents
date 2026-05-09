@@ -457,7 +457,7 @@ describe("sdd-helper CLI", () => {
         }),
         expect.objectContaining({
           name: "contract",
-          invocation: "sdd-helper contract <subject_id> [--resolve bundle]",
+          invocation: "sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]",
           result_kind: "sdd-contract-subject-detail",
           subject_id: "helper.command.contract",
           input_shape_id: "shared.shape.helper_contract_args",
@@ -465,6 +465,12 @@ describe("sdd-helper CLI", () => {
           has_deep_introspection: true,
           detail_modes: ["static", "bundle_resolved"],
           options: [
+            {
+              flag: "--purpose",
+              required: false,
+              value_name: "purpose",
+              description: "Optional payload purpose. Supported value: request."
+            },
             {
               flag: "--resolve",
               required: false,
@@ -481,6 +487,7 @@ describe("sdd-helper CLI", () => {
           output_shape_id: "shared.shape.apply_authoring_intent_result",
           has_deep_introspection: true,
           detail_modes: ["static", "bundle_resolved"],
+          contract_purposes: ["request"],
           request_body: {
             via_option: "--request",
             top_level_shape: "ApplyAuthoringIntentArgs",
@@ -821,6 +828,68 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("returns request-purpose resolved author contract detail without result schemas", async () => {
+    const bundle = createContractResolutionBundle();
+    const { deps, stdout, loadBundleMock } = createDeps({
+      loadBundle: vi.fn(async () => bundle)
+    });
+
+    const requestResult = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.author", "--purpose", "request", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(requestResult.exitCode).toBe(0);
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    const requestJson = stdout.join("");
+    const requestPayload = parseStdoutPayload(stdout) as Record<string, unknown>;
+    expect(requestPayload).toMatchObject({
+      kind: "sdd-contract-subject-detail",
+      subject: {
+        subject_id: "helper.command.author",
+        detail_modes: ["static", "bundle_resolved"],
+        contract_purposes: ["request"]
+      },
+      input_shape: {
+        shape_id: "shared.shape.apply_authoring_intent_args"
+      },
+      request_body: {
+        top_level_shape: "ApplyAuthoringIntentArgs"
+      },
+      resolution: {
+        mode: "bundle_resolved",
+        bundle_name: "sdd-text-spec-bundle",
+        bundle_version: "0.1"
+      },
+      authoring_format_card: {
+        card_id: "sdd.v0_1.author_json_quick_format"
+      }
+    });
+    expect(requestPayload).not.toHaveProperty("output_shape");
+    expect(requestPayload).not.toHaveProperty("examples");
+    expect((requestPayload.constraints as Array<{ kind: string }>).map((constraint) => constraint.kind)).toEqual([
+      "required_if",
+      "forbidden_if",
+      "unique_within_request",
+      "must_reference_earlier_local_id",
+      "same_revision_handle"
+    ]);
+    expect(requestPayload.bindings).toEqual([]);
+    expect(requestPayload.continuation).toEqual([]);
+    expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");
+
+    const fullDeps = createDeps({
+      loadBundle: vi.fn(async () => bundle)
+    });
+    const fullResult = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.author", "--resolve", "bundle"],
+      fullDeps.deps
+    );
+
+    expect(fullResult.exitCode).toBe(0);
+    expect(requestJson.length).toBeLessThan(fullDeps.stdout.join("").length / 2);
+  });
+
   it("reflects active bundle syntax changes in resolved author format card", async () => {
     const alteredBundle = createContractResolutionBundle();
     alteredBundle.syntax.lexical.id_pattern = "^[A-Z]+_[0-9]+$";
@@ -911,6 +980,30 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-helper-error",
       code: "invalid_args",
       message: "Unsupported --resolve mode 'invalid'. The only supported value is 'bundle'."
+    });
+    expectAssessment(payload, {
+      outcome: "blocked",
+      layer: "request_shape",
+      can_commit: false,
+      can_render: false,
+      should_stop: true
+    });
+  });
+
+  it("returns invalid_args for unsupported contract purposes", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "helper.command.author", "--purpose", "banana"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    const payload = parseStdoutPayload(stdout);
+    expect(payload).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message: "Unsupported --purpose 'banana'. The only supported value is 'request'."
     });
     expectAssessment(payload, {
       outcome: "blocked",

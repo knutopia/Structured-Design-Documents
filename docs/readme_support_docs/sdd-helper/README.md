@@ -27,14 +27,15 @@ That stub is intentionally brief. It tells callers that the helper is JSON-first
 pnpm sdd-helper capabilities
 ```
 
-Use `capabilities` for lightweight discovery: command names, invocation patterns, result kinds, and pointers to deeper contract detail. Use `contract` when you need the full nested request or result shape, semantic constraints, continuation semantics, or bundle-binding metadata for one subject:
+Use `capabilities` for lightweight discovery: command names, invocation patterns, result kinds, and pointers to deeper contract detail. Use `contract` when you need the full nested request or result shape, semantic constraints, continuation semantics, or bundle-binding metadata for one subject. Use `--purpose request` on subjects that declare it when you only need request-composition guidance:
 
 ```bash
 pnpm sdd-helper contract helper.command.author
+pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.preview --resolve bundle
 ```
 
-`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings; it is still helper contract detail, not the general SDD language authority.
+`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings; it is still helper contract detail, not the general SDD language authority.
 
 Use this page when you want the same surface explained in practical terms.
 
@@ -55,6 +56,7 @@ Helper mechanics are not SDD language authority. Use the helper surfaces for hel
 
 - Use helper discovery for helper mechanics: which commands exist, how they are invoked, and what result kind each command returns.
 - Use helper `contract <subject_id>` for deep helper request and result shape, continuation semantics, constraints, and helper-specific bundle bindings.
+- Use helper `contract <subject_id> --purpose request` for supported request-composition payloads when the full result schema is unnecessary.
 - Use `contract --resolve bundle` when a helper command needs active bundle-owned `view_id` or `profile_id` values exposed through its contract bindings.
 - Use `bundle/v0.1/` files for SDD language semantics such as syntax, vocabulary, endpoint rules, profile behavior, and view behavior.
 - Use docs to explain a surface or investigate a mismatch.
@@ -211,17 +213,18 @@ interface HelperCapabilitiesResultCommand {
   output_shape_id?: string;
   has_deep_introspection: true;
   detail_modes?: Array<"static" | "bundle_resolved">;
+  contract_purposes?: Array<"request">;
 }
 ```
 
-#### `sdd-helper contract <subject_id> [--resolve bundle]`
+#### `sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]`
 
 - Purpose: return full shared contract detail for one helper subject.
-- Use when: you need the full input or output shape, semantic constraints, continuation rules, or bundle-binding metadata for a specific helper command.
-- Invocation: `pnpm sdd-helper contract <subject_id> [--resolve bundle]`
-- Key inputs: one helper `subject_id`, plus optional `--resolve bundle`.
+- Use when: you need the full input or output shape, semantic constraints, continuation rules, or bundle-binding metadata for a specific helper command; use `--purpose request` when supported and only request-composition detail is needed.
+- Invocation: `pnpm sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]`
+- Key inputs: one helper `subject_id`, optional `--purpose request`, plus optional `--resolve bundle`.
 - Result kind: `sdd-contract-subject-detail`
-- Important constraints: static detail is the default and does not require bundle loading; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id` and `profile_id`. For `helper.command.author`, resolved detail also includes `authoring_format_card`, a compact bundle-derived guide for author JSON formatting.
+- Important constraints: static full detail is the default and does not require bundle loading; `--purpose request` excludes full result schemas for supported subjects; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id` and `profile_id`. For `helper.command.author`, resolved detail also includes `authoring_format_card`, a compact bundle-derived guide for author JSON formatting.
 - Practical notes: use `capabilities` first to discover the command and its `subject_id`, then use `contract` only for the specific subject that needs deep detail.
 
 #### `sdd-helper inspect <document_path>`
@@ -261,7 +264,7 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 For first-pass `author` JSON, prefer:
 
 ```bash
-pnpm sdd-helper contract helper.command.author --resolve bundle
+pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
 ```
 
 Read the returned `authoring_format_card` before composing IDs, edge targets, events, or effects. It is intentionally smaller than `syntax.yaml`: it summarizes the active bundle's SDD node id pattern, event/effect atom forms, and the JSON escaping needed when an effect or event is prose. `capabilities` remains static and does not inline this card.
@@ -391,6 +394,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 
 - Start with `capabilities`; it is the canonical discovery surface.
 - Use `contract` when you need nested request-shape detail, semantic constraints, continuation semantics, or binding metadata for one subject.
+- Use `contract --purpose request` on subjects that declare it when composing a request and the full result schema is unnecessary.
 - Use `contract --resolve bundle` only when you need active bundle-owned values such as `view_id` or `profile_id`.
 - Use bundle files, not helper mechanics, for SDD language semantics.
 - Treat JSON as the public interface. Do not expect human-readable CLI text.

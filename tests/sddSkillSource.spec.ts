@@ -99,6 +99,7 @@ describe("canonical sdd-skill source", () => {
     expect(helperReadme).toContain("Successful commands write exactly one JSON payload to `stdout`.");
     expect(helperReadme).toContain("`capabilities` is helper command discovery and remains static");
     expect(helperReadme).toContain("`contract` is deep helper contract detail");
+    expect(helperReadme).toContain("`contract --purpose request` is a lossy request-composition view");
     expect(helperReadme).toContain(
       "`contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values"
     );
@@ -140,7 +141,7 @@ describe("canonical sdd-skill source", () => {
     expect(startHere).toContain("Helper contract detail is the helper request/result authority");
     expect(startHere).toContain("skills/sdd-skill/scripts/run_helper.sh contract <subject_id>");
     expect(startHere).toContain("exact request shape, result shape, continuation semantics");
-    expect(startHere).toContain("contract helper.command.author --resolve bundle");
+    expect(startHere).toContain("contract helper.command.author --purpose request --resolve bundle");
     expect(startHere).toContain("authoring_format_card");
     expect(startHere).toContain(
       "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"

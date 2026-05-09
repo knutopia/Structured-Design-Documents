@@ -10,6 +10,7 @@ import type {
   AuthoringIntent,
   ChangeOperation,
   ChangeSetResult,
+  ContractPurpose,
   ContractSubjectId,
   CreateDocumentArgs,
   HelperErrorResult,
@@ -22,7 +23,7 @@ import type {
   UndoChangeSetArgs
 } from "../authoring/contracts.js";
 import { applyAuthoringIntent } from "../authoring/authoringIntents.js";
-import { getContractSubjectDetail } from "../authoring/contractMetadata.js";
+import { getContractSubjectDetail, selectContractSubjectDetailForPurpose } from "../authoring/contractMetadata.js";
 import { getBundleResolvedContractSubjectDetail } from "../authoring/contractResolution.js";
 import {
   assessAuthoringOutcome,
@@ -962,8 +963,19 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   program
     .command("contract")
     .argument("<subject_id>", "shared contract subject id")
+    .option("--purpose <purpose>", "payload purpose")
     .option("--resolve <mode>", "resolution mode")
-    .action(async (subjectId: string, options: { resolve?: HelperContractArgs["resolve"] | string }) => {
+    .action(async (
+      subjectId: string,
+      options: { purpose?: HelperContractArgs["purpose"] | string; resolve?: HelperContractArgs["resolve"] | string }
+    ) => {
+      if (options.purpose !== undefined && options.purpose !== "request") {
+        throw new HelperCliError(
+          "invalid_args",
+          `Unsupported --purpose '${options.purpose}'. The only supported value is 'request'.`
+        );
+      }
+
       if (options.resolve !== undefined && options.resolve !== "bundle") {
         throw new HelperCliError(
           "invalid_args",
@@ -980,13 +992,25 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
         );
       }
 
+      const contractPurpose = options.purpose as ContractPurpose | undefined;
+      if (contractPurpose && !staticDetail.subject.contract_purposes?.includes(contractPurpose)) {
+        throw new HelperCliError(
+          "invalid_args",
+          `Contract subject_id '${subjectId}' does not support --purpose '${contractPurpose}'.`
+        );
+      }
+
       if (options.resolve === "bundle") {
         const { bundle } = await loadBundleContext(deps);
-        writeJson(deps, getBundleResolvedContractSubjectDetail(contractSubjectId, bundle) ?? staticDetail);
+        const detail = getBundleResolvedContractSubjectDetail(contractSubjectId, bundle) ?? staticDetail;
+        writeJson(deps, contractPurpose ? selectContractSubjectDetailForPurpose(detail, contractPurpose) ?? detail : detail);
         return;
       }
 
-      writeJson(deps, staticDetail);
+      writeJson(
+        deps,
+        contractPurpose ? selectContractSubjectDetailForPurpose(staticDetail, contractPurpose) ?? staticDetail : staticDetail
+      );
     });
 
   program

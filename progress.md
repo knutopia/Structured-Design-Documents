@@ -25,6 +25,7 @@
 -corepack install fix
 -captured helper payload subdivision issue
 -created helper payload subdivision design
+-added --purpose request for helper.command.author
 
 ## Thu 5-07
 

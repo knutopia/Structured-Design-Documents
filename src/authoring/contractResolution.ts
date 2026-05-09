@@ -1,12 +1,13 @@
 import type { Bundle } from "../bundle/types.js";
 import type {
   ContractBindingSpec,
+  ContractPurpose,
   ContractResolvedAllowedValue,
   ContractSubjectDetail,
   ContractSubjectId
 } from "./contracts.js";
 import { createAuthoringFormatCard } from "./authoringFormat.js";
-import { getContractSubjectDetail } from "./contractMetadata.js";
+import { getContractSubjectDetail, selectContractSubjectDetailForPurpose } from "./contractMetadata.js";
 
 function expectSelector(binding: ContractBindingSpec, expectedSelector: string): void {
   if (binding.bundle_source.selector !== expectedSelector) {
@@ -70,4 +71,13 @@ export function getBundleResolvedContractSubjectDetail(
   }
 
   return detail;
+}
+
+export function getBundleResolvedContractSubjectDetailForPurpose(
+  subjectId: ContractSubjectId,
+  bundle: Bundle,
+  purpose: ContractPurpose
+): ContractSubjectDetail | undefined {
+  const detail = getBundleResolvedContractSubjectDetail(subjectId, bundle);
+  return detail ? selectContractSubjectDetailForPurpose(detail, purpose) : undefined;
 }

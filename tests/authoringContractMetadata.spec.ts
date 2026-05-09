@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   createContractIndex,
   getContractSubjectDescriptor,
-  getContractSubjectDetail
+  getContractSubjectDetail,
+  getContractSubjectDetailForPurpose
 } from "../src/authoring/contractMetadata.js";
 import type { ContractShapeId, ContractSubjectId } from "../src/authoring/contracts.js";
 
@@ -209,6 +210,31 @@ describe("authoring contract metadata", () => {
         "dry_run_handles_are_informational_only"
       ])
     );
+  });
+
+  it("returns author request-purpose detail without result schemas", () => {
+    const fullDetail = getContractSubjectDetail("helper.command.author");
+    const requestDetail = getContractSubjectDetailForPurpose("helper.command.author", "request");
+
+    expect(fullDetail).toBeDefined();
+    expect(requestDetail).toBeDefined();
+    expect(requestDetail?.subject.detail_modes).toEqual(["static", "bundle_resolved"]);
+    expect(requestDetail?.subject.detail_modes).not.toContain("request");
+    expect(requestDetail?.subject.contract_purposes).toEqual(["request"]);
+    expect(requestDetail?.input_shape?.shape_id).toBe("shared.shape.apply_authoring_intent_args");
+    expect(requestDetail).not.toHaveProperty("output_shape");
+    expect(requestDetail?.request_body?.top_level_shape).toBe("ApplyAuthoringIntentArgs");
+    expect(requestDetail?.constraints.map((constraint) => constraint.kind)).toEqual([
+      "required_if",
+      "forbidden_if",
+      "unique_within_request",
+      "must_reference_earlier_local_id",
+      "same_revision_handle"
+    ]);
+    expect(requestDetail?.bindings).toEqual([]);
+    expect(requestDetail?.continuation).toEqual([]);
+    expect(JSON.stringify(requestDetail)).not.toContain("sdd-authoring-outcome-assessment");
+    expect(JSON.stringify(requestDetail).length).toBeLessThan(JSON.stringify(fullDetail).length / 2);
   });
 
   it("returns create detail with bootstrap continuation semantics", () => {

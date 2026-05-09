@@ -292,7 +292,7 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   },
   {
     subject_id: "helper.command.contract",
-    invocation: "sdd-helper contract <subject_id> [--resolve bundle]",
+    invocation: "sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]",
     arguments: [
       {
         name: "subject_id",
@@ -301,6 +301,12 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
       }
     ],
     options: [
+      {
+        flag: "--purpose",
+        required: false,
+        value_name: "purpose",
+        description: "Optional payload purpose. Supported value: request."
+      },
       {
         flag: "--resolve",
         required: false,
@@ -311,7 +317,8 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
     result_kind: "sdd-contract-subject-detail",
     constraints: [
       "The subject_id must match a subject exposed through sdd-helper capabilities.",
-      "Static detail is the default; use --resolve bundle to expand bundle-owned allowed values on demand."
+      "Static detail is the default; use --purpose request for request-composition payloads on subjects that declare it.",
+      "Use --resolve bundle to expand bundle-owned allowed values on demand."
     ]
   },
   {
@@ -350,7 +357,8 @@ function mergeCommandCapabilities(presentation: HelperCommandPresentation): Help
     input_shape_id: descriptor.input_shape_id,
     output_shape_id: descriptor.output_shape_id,
     has_deep_introspection: descriptor.has_deep_introspection,
-    detail_modes: descriptor.detail_modes
+    detail_modes: descriptor.detail_modes,
+    contract_purposes: descriptor.contract_purposes
   };
 }
 
