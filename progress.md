@@ -12,6 +12,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 5-07
+
+-added outcome opportunity map renderer design
+
 ## Wed 5-06
 
 -clarified edges per node in specifications readme
