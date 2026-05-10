@@ -43,6 +43,7 @@
 -exposed ssh key to non-interactive shells so codex can use git
 -another helper hardening
 -ran architecture experiment with odd results
+-added outcome opportunity map renderer design
 
 ## Wed 5-06
 
