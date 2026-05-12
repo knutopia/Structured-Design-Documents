@@ -6,7 +6,6 @@
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
 
 -generalizing the skill beyond this repository layout
--documentation for skill, including how to install
 -remove service_blueprint DOT output
 -how to enrich the diagram type with deeper content (link?)
 -horizontal / vertical per level / per parent
