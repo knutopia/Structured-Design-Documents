@@ -15,6 +15,8 @@
 
 ## Wed 5-13
 
+created implementation plan for outcome_opportunity_map
+
 ## Sat 5-09
 
 -skill run diagnostics
