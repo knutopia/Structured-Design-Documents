@@ -1,4 +1,4 @@
-# SDD Helper Contract Request Purpose Design
+# [Done] SDD Helper Contract Request Purpose Design
 
 Status: implementation target
 

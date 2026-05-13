@@ -1,4 +1,4 @@
-# Gated Implementation Plan: `sdd-helper contract --purpose request`
+# [Done] Gated Implementation Plan: `sdd-helper contract --purpose request`
 
 ## Summary
 
