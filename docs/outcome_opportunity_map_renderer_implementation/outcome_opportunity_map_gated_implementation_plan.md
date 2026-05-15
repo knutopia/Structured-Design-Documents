@@ -248,18 +248,20 @@ Encode view-owned renderer conventions in the bundle and align stale documentati
 ### Proof Tasks
 
 1. Add outcome-opportunity renderer defaults under `outcome_opportunity_map.conventions.renderer_defaults` for conventions that the design identifies as bundle-owned, including:
-   - semantic column order and labels
+   - fixed semantic column order and labels
    - node type to semantic column mapping
    - node chrome or visual role mapping
    - edge type to connector channel mapping
    - connector priority order
    - default visible edge label behavior, unless the design explicitly keeps labels render-model-owned for this gate
 2. Add typed bundle interfaces where needed. Keep generic `RendererDefaultsConfig` compatibility, but expose a typed reader for outcome-opportunity defaults instead of scattering casts and literal lists.
-3. Update `buildOutcomeOpportunityMapRenderModel(...)` so current lane order, node-type mapping, shape/chrome role, edge labels, and instrumentation profile display are driven by bundle defaults.
-4. Update callers so the render model receives the view/defaults it needs. Legacy DOT/Mermaid output should remain semantically equivalent.
-5. Add tests that prove bundle-only changes affect render-model output. Example: create a view copy with swapped semantic column order or altered node chrome role and assert the render model changes without editing TypeScript constants.
-6. Preserve existing `simple`, `permissive`, and `strict` instrumentation annotation behavior.
-7. Revise stale active documentation that suggests ELK-managed routing for `outcome_opportunity_map`, pointing it to this custom staged design instead.
+3. Validate the fixed-column contract at the bundle reader or render-model boundary: staged outcome-opportunity rendering must receive exactly four semantic columns in this order: `Initiatives`, `Opportunities`, `Outcomes`, `Metrics`.
+4. Update `buildOutcomeOpportunityMapRenderModel(...)` so current lane order, node-type mapping, shape/chrome role, edge labels, and instrumentation profile display are driven by bundle defaults.
+5. Update callers so the render model receives the view/defaults it needs. Legacy DOT/Mermaid output should remain semantically equivalent.
+6. Add tests that prove allowed bundle-only changes affect render-model output, such as altered column labels, altered chrome roles, or altered edge-channel metadata. Do not treat column reordering as an allowed positive case.
+7. Add tests that invalid bundle configurations with missing, extra, or reordered outcome-opportunity semantic columns fail explicitly before staged placement or routing.
+8. Preserve existing `simple`, `permissive`, and `strict` instrumentation annotation behavior.
+9. Revise stale active documentation that suggests ELK-managed routing for `outcome_opportunity_map`, pointing it to this custom staged design instead.
 
 ### Verification Commands
 
@@ -276,12 +278,14 @@ Stop if:
 
 - a required renderer convention cannot be expressed in `views.yaml` without extending the bundle contract
 - render-model behavior still depends on hidden hardcoded column, node-type, chrome, edge-channel, or priority lists after the gate
+- invalid missing, extra, or reordered semantic columns are accepted silently
 - projection or validation output changes
 - docs remain in active conflict about using ELK for staged `outcome_opportunity_map`
 
 ### Acceptance Criteria
 
 - bundle defaults encode the relevant renderer conventions
+- invalid fixed-column configurations are rejected before staged placement or routing
 - TypeScript consumes those defaults through a typed or generic bundle-loading path
 - tests prove bundle-only edits can change render-model behavior
 - legacy DOT/Mermaid behavior remains equivalent for current bundle data
@@ -440,16 +444,18 @@ Build the staged `RendererScene`, measure it, and emit a meaningful pre-routing 
 3. Build root grid cells sorted by physical row/slot order, column order, then stable id.
 4. Add restrained column headers for `Initiatives`, `Opportunities`, `Outcomes`, and `Metrics`.
 5. Build semantic nodes with shared staged card primitives and bundle-derived chrome roles.
-6. Represent metric instrumentation annotations as measured secondary content blocks. Do not bake pre-wrapped annotation lines into final coordinates.
-7. Declare explicit ports on semantic nodes:
+6. Use standard classed staged cards as the fallback chrome for `Opportunity`, `Outcome`, and `Metric` when shared hexagon-like, pill/ellipse, or note-corner primitives do not already exist.
+7. Add advanced visual treatments only through shared staged primitive/backend support with focused tests; do not fake them with raw SVG strings or view-specific backend bypasses.
+8. Represent metric instrumentation annotations as measured secondary content blocks. Do not bake pre-wrapped annotation lines into final coordinates.
+9. Declare explicit ports on semantic nodes:
    - `intent_in`
    - `intent_out`
    - `measure_in`
    - `measure_out`
    - `secondary_in`
    - `secondary_out`
-8. Build scene edges with routing intents but without final polylines.
-9. Add `renderOutcomeOpportunityMapPreRoutingArtifacts(...)` that returns:
+10. Build scene edges with routing intents but without final polylines.
+11. Add `renderOutcomeOpportunityMapPreRoutingArtifacts(...)` that returns:
    - `rendererScene`
    - `measuredScene`
    - `preRoutingPositionedScene`
@@ -457,7 +463,7 @@ Build the staged `RendererScene`, measure it, and emit a meaningful pre-routing 
    - diagnostics
    - `preRoutingSvg`
    - `preRoutingPng`
-10. In the pre-routing artifact, omit semantic edges and show columns, outcome bands, parking bands, headers, and nodes.
+12. In the pre-routing artifact, omit semantic edges and show columns, outcome bands, parking bands, headers, and nodes.
 
 ### Verification Commands
 
@@ -473,6 +479,7 @@ Stop if:
 
 - `RendererScene` contains final x/y coordinates, final line breaks, route polylines, SVG strings, DOT text, Mermaid text, or external layout JSON
 - scene construction reconstructs placement instead of consuming the middle layer
+- node chrome requires raw SVG strings or view-specific backend bypasses
 - metric annotation sizing bypasses staged measurement
 - node ports fall back to box centers instead of explicit roles
 - pre-routing output cannot distinguish semantic bands from physical slots
@@ -543,9 +550,11 @@ Implement the typed connector-plan and endpoint/template routing foundation, pro
    - same-band stacked metrics: outcome east, measured-column gutter track, metric west
    - cross-band connectors: horizontal departure, vertical bridge in a gutter, horizontal terminal approach
    - parking connectors: deterministic orthogonal fallback plus diagnostic
-5. Produce a `step2PositionedScene` with endpoint sides, node-edge buckets, and initial route templates.
-6. Prove routes leave and enter endpoint nodes from the exterior side for canonical proof cases.
-7. Preserve labels as measured edge labels, but do not place final labels before final routing geometry exists.
+5. Treat parking bands as terminal for placement and ordering, not as disconnected nodes. Projected edges involving parking nodes must receive deterministic parking connectors with diagnostics.
+6. Use endpoint displacement on crowded node edges only when it satisfies no-crossing, spacing, and label-clearance tests. If displacement alone cannot satisfy those tests, add type-specific ports with focused tests instead of tuning coordinates.
+7. Produce a `step2PositionedScene` with endpoint sides, node-edge buckets, and initial route templates.
+8. Prove routes leave and enter endpoint nodes from the exterior side for canonical proof cases.
+9. Preserve labels as measured edge labels, but do not place final labels before final routing geometry exists.
 
 ### Verification Commands
 
@@ -562,6 +571,8 @@ Stop if:
 - a route endpoint enters the interior of its source or target node
 - routing infers channel, side, or priority from CSS classes
 - step 2 includes placeholder gutters or occupancy records that are not consumed by the routing algorithm
+- crowded ports can only be made to pass through coordinate tuning instead of endpoint displacement or typed ports
+- projected parking-node edges are silently dropped or treated as disconnected without diagnostics
 - the implementation claims final route acceptance before Gate 5
 
 ### Acceptance Criteria
@@ -569,6 +580,8 @@ Stop if:
 - step-2 routing exposes meaningful endpoint/template routes
 - endpoint sides and route priorities are deterministic and typed
 - canonical proof-case endpoint approaches are exterior to source and target boxes
+- crowded endpoints are handled by proven displacement or type-specific ports
+- parking-node edge handling is deterministic and diagnosed
 - labels remain deferred until final routing
 - no public preview behavior changes yet
 
@@ -605,6 +618,7 @@ Complete the custom router with service-blueprint-equivalent gutter, occupancy, 
 - no no-op gutter stage
 - no "route then hope" shortcut
 - no proof-case-specific hardcoded coordinates
+- no rewrite of accepted Gate 4 endpoint/template generation except for narrow final-routing necessities; any such change must rerun Gate 4 acceptance checks
 - no service-blueprint or scenario-flow behavior changes unless a tiny shared extraction is proven behavior-preserving
 
 ### Proof Tasks
@@ -619,24 +633,27 @@ Complete the custom router with service-blueprint-equivalent gutter, occupancy, 
    - endpoint coordinate displacement on crowded node edges
    - segment coordinate displacement for overlapping same-orientation spans
    - bounded iterative rerouting after global gutter expansion
-2. Produce `routing_step_3_gutters` with obstacle-aware provisional connector routes, gutter occupancy, endpoint displacement, and segment spacing before final expansion.
-3. Produce final routed `PositionedScene` through the full stage sequence.
-4. Place edge labels only after final route geometry is known.
-5. Emit diagnostics for degraded routes or label fallbacks. Do not silently accept node crossings or label collisions.
-6. Prove `outcome_to_ia_trace`:
+2. Keep the Gate 4 endpoint/template model as the foundation. If final routing requires changing it, document why and rerun the Gate 4 acceptance checks in this gate.
+3. Use endpoint displacement on crowded node edges only when it satisfies no-crossing, spacing, and label-clearance tests. If displacement alone cannot satisfy those tests, add type-specific ports with focused tests instead of tuning coordinates.
+4. Route projected parking-node edges through deterministic parking connectors with diagnostics. If no acceptable no-crossing route exists, degrade or omit the edge with an explicit diagnostic; never silently drop it.
+5. Produce `routing_step_3_gutters` with obstacle-aware provisional connector routes, gutter occupancy, endpoint displacement, and segment spacing before final expansion.
+6. Produce final routed `PositionedScene` through the full stage sequence.
+7. Place edge labels only after final route geometry is known.
+8. Emit diagnostics for degraded routes or label fallbacks. Do not silently accept node crossings or label collisions.
+9. Prove `outcome_to_ia_trace`:
    - all four nodes share one outcome band
    - connector direction reads left to right
    - no connector crosses a non-endpoint node
    - labels do not overlap nodes, column headers, or each other
    - `simple` hides metric instrumentation annotations
    - `permissive` and `strict` show the expected instrumentation annotations
-7. Prove `metric_event_instrumentation`:
+10. Prove `metric_event_instrumentation`:
    - `M-050` and `M-051` occupy stable same-band metric slots
    - `MEASURED_BY` connectors fan out from `O-050` through distinct endpoint tracks
    - same-orientation segments are separated by the staged routing layer's fixed spacing
    - labels for both measured-by connectors are readable and collision-free
    - the second metric route does not slice across the first metric node or the outcome node
-8. Prove synthetic dense and cross-band cases:
+11. Prove synthetic dense and cross-band cases:
    - shared opportunity across outcomes routes back to one canonical node
    - shared initiative across bands routes without duplication
    - shared metric across outcomes routes without duplication
@@ -658,6 +675,8 @@ Stop if:
 - final routes cross non-endpoint node boxes in either canonical proof case
 - endpoint routes enter source or target interiors
 - same-orientation overlapping segments are not separated by the fixed connector spacing used by the staged routing layer
+- crowded ports can only be made to pass through coordinate tuning instead of endpoint displacement or typed ports
+- projected parking-node edges are silently dropped or treated as disconnected without diagnostics
 - labels can only be made readable through hardcoded proof-case coordinates
 - step 3 does not expose real gutter/occupancy information
 - diagnostics hide structural routing failures as acceptable output
@@ -783,14 +802,19 @@ Capture focused renderer-stage snapshots and goldens only after structural accep
    - final `PositionedScene`
    - final SVG
    - debug step SVGs where useful
-2. Add structural assertions before snapshot assertions in the tests:
+2. After canonical acceptance, add a small selected synthetic renderer-stage golden set for:
+   - dense metric fan-out
+   - shared multi-outcome node routing
+   - parking fallback routing
+3. Keep remaining synthetic fixtures as structural and routing tests, not renderer-stage goldens or corpus artifacts.
+4. Add structural assertions before snapshot assertions in the tests:
    - expected bands and slots
    - expected route count and edge ids
    - no forbidden diagnostics
    - no endpoint intrusion
    - no non-endpoint node crossings
    - no label collisions
-3. Keep snapshots deterministic with canonical `LF` line endings.
+5. Keep snapshots deterministic with canonical `LF` line endings.
 
 ### Verification Commands
 
@@ -806,11 +830,13 @@ Stop if:
 - snapshot changes are needed because acceptance invariants still fail
 - snapshots include external layout JSON, DOT text, Mermaid text, or SVG strings inside `RendererScene`
 - broad unrelated goldens change
+- synthetic goldens expand beyond the selected regression set without a concrete accepted routing risk
 - debug snapshots do not show meaningful stage differences
 
 ### Acceptance Criteria
 
 - focused renderer-stage goldens exist for accepted staged output
+- selected synthetic renderer-stage goldens cover dense fan-out, shared multi-outcome routing, and parking fallback
 - structural assertions fail before snapshots would normalize a problem
 - snapshots are deterministic and limited to outcome-opportunity staged artifacts
 
