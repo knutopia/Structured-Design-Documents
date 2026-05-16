@@ -185,9 +185,11 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
         : options.viewId === "ui_contracts"
           ? "staged_ui_contracts_preview"
           : options.viewId === "service_blueprint"
-            ? "staged_service_blueprint_preview"
-            : options.viewId === "scenario_flow"
-              ? "staged_scenario_flow_preview"
+          ? "staged_service_blueprint_preview"
+          : options.viewId === "scenario_flow"
+            ? "staged_scenario_flow_preview"
+            : options.viewId === "outcome_opportunity_map"
+              ? "staged_outcome_opportunity_map_preview"
               : "legacy_graphviz_preview");
     const artifact = options.format === "svg"
       ? {
@@ -544,6 +546,79 @@ describe("CLI wrappers", () => {
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/journey.svg", "<svg>embedded</svg>");
     expect(stderr.join("")).toContain("Wrote /tmp/journey.svg");
+  });
+
+  it("show defaults outcome_opportunity_map previews to the staged backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "outcome_opportunity_map",
+      "--out",
+      "/tmp/outcome-opportunity.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "outcome_opportunity_map",
+      format: "svg",
+      backendId: "staged_outcome_opportunity_map_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/outcome-opportunity.svg", "<svg>staged</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/outcome-opportunity.svg");
+  });
+
+  it("show allows outcome_opportunity_map to opt back into the legacy preview backend", async () => {
+    const { deps, renderSourcePreviewMock, stderr } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "outcome_opportunity_map",
+      "--backend",
+      "legacy_graphviz_preview",
+      "--out",
+      "/tmp/outcome-opportunity-legacy.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "outcome_opportunity_map",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/outcome-opportunity-legacy.svg", "<svg>embedded</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/outcome-opportunity-legacy.svg");
+  });
+
+  it("show writes outcome_opportunity_map --dot-out by auto-selecting the legacy backend", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+    const result = await runCli([
+      "node",
+      "sdd",
+      "show",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view",
+      "outcome_opportunity_map",
+      "--out",
+      "/tmp/outcome-opportunity.svg",
+      "--dot-out",
+      "/tmp/outcome-opportunity.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
+      viewId: "outcome_opportunity_map",
+      format: "svg",
+      backendId: "legacy_graphviz_preview"
+    });
+    expect(deps.writeTextFile).toHaveBeenCalledWith("/tmp/outcome-opportunity.dot", "digraph G {}");
+    expect(stderr.join("")).toContain("Wrote /tmp/outcome-opportunity.dot");
   });
 
   it("show defaults service_blueprint previews to the staged backend", async () => {
@@ -1257,10 +1332,11 @@ describe("CLI wrappers", () => {
     expect(help).toContain("strict       strict governance (default)");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
+    expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
-    expect(help).toContain("`ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default");
+    expect(help).toContain("`ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default");
     expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging.");
     expect(help).toContain("sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple");
   });
@@ -1306,7 +1382,8 @@ describe("CLI wrappers", () => {
     expect(help).not.toContain("scenario.svg");
     expect(help).not.toContain("outcome-map.svg");
     expect(help).toContain("Preferred preview command for renderable views.");
-    expect(help).toContain("staged preview backends by default");
+    expect(help).toContain("now select staged preview backends by");
+    expect(help).toContain("default, while the remaining views");
     expect(help).toContain("internal/debug: also keep the intermediate DOT source");
     expect(help).toContain("in a file");
     expect(help).not.toContain("--dot-out ./outcome.dot");

@@ -135,6 +135,7 @@ The preview-ready views in the CLI today are:
 - `ui_contracts`
 - `service_blueprint`
 - `scenario_flow`
+- `outcome_opportunity_map`
 
 These are the views you should expect to work with `sdd show`. Other bundle-defined views may exist, but they are not polished preview-ready views in the CLI yet.
 

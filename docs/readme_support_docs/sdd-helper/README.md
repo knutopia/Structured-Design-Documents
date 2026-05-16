@@ -38,7 +38,7 @@ pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.preview --resolve bundle
 ```
 
-`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned values for helper commands that declare those bindings, such as `view_id`, `profile_id`, and bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
+`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
 
 Use this page when you want the same surface explained in practical terms.
 

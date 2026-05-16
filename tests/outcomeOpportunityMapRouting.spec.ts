@@ -1,0 +1,409 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+import { compileSource, loadBundle } from "../src/index.js";
+import { projectView } from "../src/projector/projectView.js";
+import type {
+  Point,
+  PortSide,
+  PositionedContainer,
+  PositionedEdge,
+  PositionedItem,
+  PositionedNode
+} from "../src/renderer/staged/contracts.js";
+import {
+  renderOutcomeOpportunityMapRoutingDebugArtifacts,
+  type OutcomeOpportunityMapRoutingDebugArtifactsResult
+} from "../src/renderer/staged/outcomeOpportunityMap.js";
+import {
+  collectEdgeLabelBoxes,
+  expectLabelsDoNotOverlapBoxes,
+  expectLabelsDoNotOverlapEachOther,
+  expectNoRouteIntersectionsWithNonEndpointBoxes,
+  expectRoutesDoNotEnterEndpointBoxes,
+  expectSameOrientationSegmentsSeparated
+} from "./stagedVisualHarness.js";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
+
+async function renderOutcomeOpportunitySource(
+  sourceText: string,
+  profileId = "strict"
+): Promise<OutcomeOpportunityMapRoutingDebugArtifactsResult> {
+  const bundle = await loadBundle(manifestPath);
+  const view = bundle.views.views.find((candidate) => candidate.id === "outcome_opportunity_map");
+  if (!view) {
+    throw new Error("Could not resolve the outcome_opportunity_map view.");
+  }
+
+  const input = {
+    path: path.join(repoRoot, "tests/fixtures/render/__inline_outcome_opportunity_routing__.sdd"),
+    text: `${sourceText.trim()}\n`
+  };
+  const compiled = compileSource(input, bundle);
+  expect(compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+  if (!compiled.graph) {
+    throw new Error("Could not compile inline outcome-opportunity source.");
+  }
+
+  const projected = projectView(compiled.graph, bundle, "outcome_opportunity_map");
+  expect(projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+  if (!projected.projection) {
+    throw new Error("Could not project inline source to outcome_opportunity_map.");
+  }
+
+  return renderOutcomeOpportunityMapRoutingDebugArtifacts(
+    projected.projection,
+    compiled.graph,
+    view,
+    profileId
+  );
+}
+
+async function renderOutcomeOpportunityExample(
+  exampleName: string,
+  profileId = "strict"
+): Promise<OutcomeOpportunityMapRoutingDebugArtifactsResult> {
+  return renderOutcomeOpportunitySource(
+    await readFile(path.join(repoRoot, "bundle/v0.1/examples", `${exampleName}.sdd`), "utf8"),
+    profileId
+  );
+}
+
+function flattenPositionedItems(root: PositionedContainer): PositionedItem[] {
+  const items: PositionedItem[] = [root];
+  for (const child of root.children) {
+    items.push(child);
+    if (child.kind === "container") {
+      items.push(...flattenPositionedItems(child));
+    }
+  }
+  return items;
+}
+
+function findNode(root: PositionedContainer, nodeId: string): PositionedNode {
+  const item = flattenPositionedItems(root).find((candidate) => candidate.id === nodeId);
+  if (!item || item.kind !== "node") {
+    throw new Error(`Could not find positioned node "${nodeId}".`);
+  }
+  return item;
+}
+
+function findEdge(edges: readonly PositionedEdge[], edgeId: string): PositionedEdge {
+  const edge = edges.find((candidate) => candidate.id === edgeId);
+  if (!edge) {
+    throw new Error(`Could not find positioned edge "${edgeId}".`);
+  }
+  return edge;
+}
+
+function collectNodeBoxes(root: PositionedContainer): Array<{ itemId: string; x: number; y: number; width: number; height: number }> {
+  return flattenPositionedItems(root)
+    .filter((item): item is PositionedNode => item.kind === "node")
+    .map((item) => ({
+      itemId: item.id,
+      x: item.x,
+      y: item.y,
+      width: item.width,
+      height: item.height
+    }));
+}
+
+function expectEndpointOnExteriorSide(
+  point: Point,
+  node: PositionedNode,
+  side: PortSide
+): void {
+  switch (side) {
+    case "north":
+      expect(point.y).toBe(node.y);
+      expect(point.x).toBeGreaterThanOrEqual(node.x);
+      expect(point.x).toBeLessThanOrEqual(node.x + node.width);
+      break;
+    case "south":
+      expect(point.y).toBe(node.y + node.height);
+      expect(point.x).toBeGreaterThanOrEqual(node.x);
+      expect(point.x).toBeLessThanOrEqual(node.x + node.width);
+      break;
+    case "east":
+      expect(point.x).toBe(node.x + node.width);
+      expect(point.y).toBeGreaterThanOrEqual(node.y);
+      expect(point.y).toBeLessThanOrEqual(node.y + node.height);
+      break;
+    case "west":
+      expect(point.x).toBe(node.x);
+      expect(point.y).toBeGreaterThanOrEqual(node.y);
+      expect(point.y).toBeLessThanOrEqual(node.y + node.height);
+      break;
+  }
+}
+
+describe("outcome_opportunity_map routing step 2", () => {
+  it("builds deterministic endpoint buckets and exterior same-band templates for the canonical trace", async () => {
+    const rendered = await renderOutcomeOpportunityExample("outcome_to_ia_trace");
+
+    expect(rendered.routingStages.connectorPlans.map((plan) => ({
+      edgeId: plan.edgeId,
+      type: plan.type,
+      pattern: plan.pattern,
+      sourceSide: plan.sourceSide,
+      targetSide: plan.targetSide,
+      label: plan.label?.lines.flat().join(" ")
+    }))).toEqual([
+      {
+        edgeId: "OP-001__supports__O-001",
+        type: "SUPPORTS",
+        pattern: "same_band_support",
+        sourceSide: "east",
+        targetSide: "west",
+        label: "supports"
+      },
+      {
+        edgeId: "I-001__addresses__OP-001",
+        type: "ADDRESSES",
+        pattern: "same_band_addressing",
+        sourceSide: "east",
+        targetSide: "west",
+        label: "addresses"
+      },
+      {
+        edgeId: "O-001__measured_by__M-001",
+        type: "MEASURED_BY",
+        pattern: "same_band_measurement",
+        sourceSide: "east",
+        targetSide: "west",
+        label: "measured by"
+      }
+    ]);
+    expect(rendered.step2PositionedScene.edges.map((edge) => edge.label)).toEqual([undefined, undefined, undefined]);
+
+    const opBucket = rendered.routingStages.nodeEdgeBuckets.find((bucket) => bucket.nodeId === "OP-001");
+    expect(opBucket?.east.startingConnectorIds).toEqual(["connector:1:OP-001__supports__O-001"]);
+    expect(opBucket?.west.endingConnectorIds).toEqual(["connector:2:I-001__addresses__OP-001"]);
+
+    const supports = findEdge(rendered.step2PositionedScene.edges, "OP-001__supports__O-001");
+    expectEndpointOnExteriorSide(supports.from, findNode(rendered.step2PositionedScene.root, "OP-001"), "east");
+    expectEndpointOnExteriorSide(supports.to, findNode(rendered.step2PositionedScene.root, "O-001"), "west");
+    expect(supports.route.points).toEqual([
+      { x: supports.from.x, y: supports.from.y },
+      { x: supports.to.x, y: supports.to.y }
+    ]);
+
+    expect(rendered.step2Svg).toContain("outcome_opportunity_semantic_edge");
+    expect(Array.from(rendered.step2Png.slice(0, PNG_SIGNATURE.length))).toEqual(PNG_SIGNATURE);
+  });
+
+  it("displaces crowded metric endpoints and uses a measured-column template for stacked metrics", async () => {
+    const rendered = await renderOutcomeOpportunityExample("metric_event_instrumentation");
+    const measuredPlans = rendered.routingStages.connectorPlans.filter((plan) => plan.type === "MEASURED_BY");
+
+    expect(measuredPlans.map((plan) => ({
+      edgeId: plan.edgeId,
+      pattern: plan.pattern
+    }))).toEqual([
+      {
+        edgeId: "O-050__measured_by__M-050",
+        pattern: "same_band_measurement"
+      },
+      {
+        edgeId: "O-050__measured_by__M-051",
+        pattern: "stacked_measurement"
+      }
+    ]);
+
+    const outcomeBucket = rendered.routingStages.nodeEdgeBuckets.find((bucket) => bucket.nodeId === "O-050");
+    expect(outcomeBucket?.east.startingConnectorIds).toEqual([
+      "connector:3:O-050__measured_by__M-050",
+      "connector:4:O-050__measured_by__M-051"
+    ]);
+
+    const firstMetricEdge = findEdge(rendered.step2PositionedScene.edges, "O-050__measured_by__M-050");
+    const secondMetricEdge = findEdge(rendered.step2PositionedScene.edges, "O-050__measured_by__M-051");
+    expect(firstMetricEdge.from.y).not.toBe(secondMetricEdge.from.y);
+    expect(secondMetricEdge.route.points.length).toBeGreaterThan(3);
+    expect(secondMetricEdge.route.points[0]).toEqual({
+      x: secondMetricEdge.from.x,
+      y: secondMetricEdge.from.y
+    });
+    expect(secondMetricEdge.route.points.at(-1)).toEqual({
+      x: secondMetricEdge.to.x,
+      y: secondMetricEdge.to.y
+    });
+    expectEndpointOnExteriorSide(secondMetricEdge.from, findNode(rendered.step2PositionedScene.root, "O-050"), "east");
+    expectEndpointOnExteriorSide(secondMetricEdge.to, findNode(rendered.step2PositionedScene.root, "M-051"), "west");
+
+    const step2Route = rendered.routingStages.step2PositionedScene.edges.find((edge) =>
+      edge.id === "O-050__measured_by__M-051"
+    )?.route.points;
+    const step3Route = rendered.routingStages.step3PositionedScene.edges.find((edge) =>
+      edge.id === "O-050__measured_by__M-051"
+    )?.route.points;
+    expect(step3Route).not.toEqual(step2Route);
+    expect(rendered.routingStages.gutterOccupancy.some((entry) =>
+      entry.key === "node:O-050:right" && entry.kind === "node_right" && entry.locked
+    )).toBe(true);
+    expect(rendered.routingStages.gutterOccupancy.some((entry) =>
+      entry.kind === "column" && entry.columnOrder !== undefined
+    )).toBe(true);
+    expect(Math.max(0, ...Object.values(rendered.routingStages.globalGutterState.columnExpansions)))
+      .toBeGreaterThan(0);
+  });
+
+  it("routes projected secondary connectors through typed secondary ports without final labels", async () => {
+    const rendered = await renderOutcomeOpportunitySource(`
+SDD-TEXT 0.1
+
+Outcome O-900 "Dense Outcome"
+  MEASURED_BY M-901 "Metric One"
+END
+
+Metric M-901 "Metric One"
+  INSTRUMENTED_AT O-900 "Dense Outcome"
+END
+
+Opportunity OP-901 "Dense Opportunity"
+  SUPPORTS O-900 "Dense Outcome"
+END
+
+Initiative I-901 "Implementation Reference"
+  ADDRESSES OP-901 "Dense Opportunity"
+  IMPLEMENTED_BY M-901 "Metric One"
+END
+`);
+
+    expect(rendered.routingStages.connectorPlans.filter((plan) =>
+      plan.type === "IMPLEMENTED_BY" || plan.type === "INSTRUMENTED_AT"
+    ).map((plan) => ({
+      edgeId: plan.edgeId,
+      sourceSide: plan.sourceSide,
+      targetSide: plan.targetSide,
+      pattern: plan.pattern,
+      sourcePortId: plan.sourcePortId,
+      targetPortId: plan.targetPortId
+    }))).toEqual([
+      {
+        edgeId: "I-901__implemented_by__M-901",
+        sourceSide: "south",
+        targetSide: "north",
+        pattern: "secondary_reference",
+        sourcePortId: "secondary_out",
+        targetPortId: "secondary_in"
+      },
+      {
+        edgeId: "M-901__instrumented_at__O-900",
+        sourceSide: "south",
+        targetSide: "north",
+        pattern: "secondary_reference",
+        sourcePortId: "secondary_out",
+        targetPortId: "secondary_in"
+      }
+    ]);
+    expect(rendered.step2PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
+  });
+
+  it("keeps parking connectors deterministic and diagnosed", async () => {
+    const rendered = await renderOutcomeOpportunitySource(`
+SDD-TEXT 0.1
+
+Outcome O-990 "Anchored Outcome"
+END
+
+Opportunity OP-991 "Orphan Opportunity"
+END
+
+Initiative I-991 "Orphan Initiative"
+  ADDRESSES OP-991 "Orphan Opportunity"
+END
+`);
+
+    expect(rendered.routingStages.connectorPlans).toEqual([
+      expect.objectContaining({
+        edgeId: "I-991__addresses__OP-991",
+        pattern: "parking_fallback",
+        sourceSide: "east",
+        targetSide: "west"
+      })
+    ]);
+    expect(rendered.routingStages.diagnostics.map((diagnostic) => ({
+      code: diagnostic.code,
+      targetId: diagnostic.targetId,
+      severity: diagnostic.severity
+    }))).toEqual([
+      {
+        code: "renderer.routing.outcome_opportunity_parking_connector",
+        targetId: "I-991__addresses__OP-991",
+        severity: "info"
+      }
+    ]);
+
+    const parkingEdge = findEdge(rendered.step2PositionedScene.edges, "I-991__addresses__OP-991");
+    expect(parkingEdge.route.points.length).toBeGreaterThan(3);
+    expectEndpointOnExteriorSide(parkingEdge.from, findNode(rendered.step2PositionedScene.root, "I-991"), "east");
+    expectEndpointOnExteriorSide(parkingEdge.to, findNode(rendered.step2PositionedScene.root, "OP-991"), "west");
+  });
+
+  it("produces final routed canonical proof cases with labels and no node-crossing routes", async () => {
+    for (const exampleName of ["outcome_to_ia_trace", "metric_event_instrumentation"] as const) {
+      const rendered = await renderOutcomeOpportunityExample(exampleName);
+      const finalEdges = rendered.routingStages.finalPositionedScene.edges;
+      const nodeBoxes = collectNodeBoxes(rendered.routingStages.finalPositionedScene.root);
+      const labelBoxes = collectEdgeLabelBoxes(finalEdges);
+
+      expect(finalEdges.length).toBeGreaterThan(0);
+      expect(labelBoxes.length).toBe(finalEdges.length);
+      expect(rendered.routingStages.diagnostics.filter((diagnostic) =>
+        diagnostic.code === "renderer.routing.outcome_opportunity_node_intersection"
+        || diagnostic.code === "renderer.routing.outcome_opportunity_edge_label_omitted"
+        || diagnostic.code === "renderer.routing.outcome_opportunity_edge_label_fallback"
+      )).toEqual([]);
+      expectNoRouteIntersectionsWithNonEndpointBoxes(finalEdges, nodeBoxes);
+      expectRoutesDoNotEnterEndpointBoxes(finalEdges, nodeBoxes);
+      expectSameOrientationSegmentsSeparated(finalEdges);
+      expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
+      expectLabelsDoNotOverlapEachOther(labelBoxes);
+    }
+  });
+
+  it("keeps shared cross-band nodes canonical while routing final connectors without duplication", async () => {
+    const rendered = await renderOutcomeOpportunitySource(`
+SDD-TEXT 0.1
+
+Outcome O-301 "Outcome A"
+  MEASURED_BY M-399 "Shared Metric"
+END
+
+Outcome O-302 "Outcome B"
+  MEASURED_BY M-399 "Shared Metric"
+END
+
+Opportunity OP-399 "Shared Opportunity"
+  SUPPORTS O-302 "Outcome B"
+  SUPPORTS O-301 "Outcome A"
+END
+
+Opportunity OP-301 "Opportunity A"
+  SUPPORTS O-301 "Outcome A"
+END
+
+Initiative I-399 "Shared Initiative"
+  ADDRESSES OP-301 "Opportunity A"
+  ADDRESSES OP-399 "Shared Opportunity"
+END
+
+Metric M-399 "Shared Metric"
+END
+`);
+    const finalEdges = rendered.routingStages.finalPositionedScene.edges;
+    const nodeBoxes = collectNodeBoxes(rendered.routingStages.finalPositionedScene.root);
+
+    expect(rendered.middleLayer.placements.filter((placement) => placement.nodeId === "OP-399")).toHaveLength(1);
+    expect(rendered.middleLayer.placements.filter((placement) => placement.nodeId === "I-399")).toHaveLength(1);
+    expect(rendered.middleLayer.placements.filter((placement) => placement.nodeId === "M-399")).toHaveLength(1);
+    expect(rendered.routingStages.connectorPlans.map((plan) => plan.pattern)).toContain("cross_band_bridge");
+    expectNoRouteIntersectionsWithNonEndpointBoxes(finalEdges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(finalEdges, nodeBoxes);
+  });
+});

@@ -85,9 +85,43 @@ export type ScenarioFlowItemMetadata =
       placementRole: "spine_step" | "branch_step" | "realized_place" | "realized_view_state" | "parking";
     };
 
+export type OutcomeOpportunityItemMetadata =
+  | {
+      kind: "cell";
+      columnId: string;
+      columnLabel: string;
+      bandId: string;
+      bandLabel: string;
+      bandKind: "outcome" | "parking";
+      bandOrder: number;
+      physicalSlotId: string;
+      rowOrder: number;
+      columnOrder: number;
+      slotOrderWithinBand: number;
+      slotKind: "primary" | "stack" | "parking";
+      anchorOutcomeId?: string;
+      parking: boolean;
+    }
+  | {
+      kind: "semantic_node";
+      placementRole:
+        | "anchor_outcome"
+        | "supporting_opportunity"
+        | "addressing_initiative"
+        | "measuring_metric"
+        | "parking";
+      semanticColumnId: string;
+      semanticBandId: string;
+      physicalSlotId: string;
+      cellId: string;
+      anchorOutcomeId?: string;
+      parking: boolean;
+    };
+
 export interface ViewMetadata {
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
+  outcomeOpportunity?: OutcomeOpportunityItemMetadata;
 }
 
 export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | undefined {
@@ -107,6 +141,13 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
       ? {
         scenarioFlow: {
           ...viewMetadata.scenarioFlow
+        }
+      }
+      : {}),
+    ...(viewMetadata.outcomeOpportunity
+      ? {
+        outcomeOpportunity: {
+          ...viewMetadata.outcomeOpportunity
         }
       }
       : {})

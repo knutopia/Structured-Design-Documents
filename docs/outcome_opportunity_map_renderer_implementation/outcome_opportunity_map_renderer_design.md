@@ -1,14 +1,14 @@
 # Outcome-Opportunity Map Staged Renderer Design
 
-Status: active design authority for a future multi-gate implementation plan
+Status: active design authority for the staged renderer implementation and gated plan
 
 Audience: maintainers and implementation agents working on staged rendering for `outcome_opportunity_map`
 
-Purpose: define the ground truth for a custom staged `outcome_opportunity_map` renderer before any implementation plan or code is written.
+Purpose: define the ground truth for the custom staged `outcome_opportunity_map` renderer and its implementation plan.
 
 ## 1. Summary
 
-`outcome_opportunity_map` should become a first-class staged SVG/PNG preview path using a custom deterministic layout. It must not use Elk, Graphviz, Mermaid, or any other external layout engine for staged node placement or connector routing.
+`outcome_opportunity_map` is a first-class staged SVG/PNG preview path using a custom deterministic layout. It must not use Elk, Graphviz, Mermaid, or any other external layout engine for staged node placement or connector routing.
 
 The target visual model is an outcome-centered intent map:
 
@@ -22,7 +22,7 @@ The staged pipeline remains:
 
 `Projection -> RendererScene -> MeasuredScene -> PositionedScene -> SVG -> PNG`
 
-Legacy DOT, Mermaid, and Graphviz-backed preview outputs remain available until staged output is accepted and explicitly promoted.
+Legacy DOT, Mermaid, and Graphviz-backed preview outputs remain available after staged output is accepted and explicitly promoted.
 
 ## 2. Authority And Grounding
 
@@ -43,9 +43,9 @@ Use these sources by role.
 | Service-blueprint layout and routing guide | `docs/[Done] service_blueprint_renderer_implementation/service_blueprint_layout_rules.md`, `docs/[Done] service_blueprint_renderer_implementation/Service Blueprint Routing Rules.md`, `docs/[Done] service_blueprint_renderer_implementation/reference/Service Blueprint Reference Design Notes.md` |
 | Scenario-flow no-Elk staged renderer precedent | `docs/scenario_flow_renderer_implementation/[Done]  scenario_flow_renderer_design.md`, `docs/scenario_flow_renderer_implementation/scenario_flow_routing_parity_plan.md` |
 | Renderer migration architecture | `docs/toolchain/renderer_migration_guidance.md`, `docs/toolchain/architecture.md` |
-| Current visual evidence only | `examples/rendered/v0.1/outcome_opportunity_map_diagram_type [preview_only]/outcome_to_ia_trace_example`, `examples/rendered/v0.1/outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example` |
+| Current staged and legacy corpus evidence | `examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`, `examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example` |
 
-The current Graphviz outputs are semantic evidence, not visual authority. They prove scoped nodes, edge labels, profile-driven instrumentation annotations, and current corpus shape. They do not define accepted staged geometry.
+The preserved Graphviz outputs are semantic evidence, not visual authority. They prove scoped nodes, edge labels, profile-driven instrumentation annotations, and legacy corpus shape. They do not define accepted staged geometry.
 
 ## 3. History Lessons To Encode
 
@@ -82,7 +82,7 @@ Before implementation, the multi-gate plan must include an early authority check
 
 - If fixed columns, node type placement, node chrome, connector channel priority, or profile-display behavior are considered view conventions, encode them in `bundle/v0.1/core/views.yaml` under `outcome_opportunity_map.conventions.renderer_defaults`.
 - If new renderer-default fields are added, update `src/bundle/types.ts` and consume them through generic bundle-loading/runtime paths.
-- Future staged code should consume those fields in `buildOutcomeOpportunityMapRenderModel(...)` and the future `buildOutcomeOpportunityMapMiddleLayer(...)`.
+- Staged code consumes those fields in `buildOutcomeOpportunityMapRenderModel(...)` and `buildOutcomeOpportunityMapMiddleLayer(...)`.
 - Bundle-only changes to the relevant renderer defaults must be able to change staged behavior. If changing bundle data would not affect staged behavior, the implementation has failed the bundle-authority policy.
 
 Current bundle fields already own:

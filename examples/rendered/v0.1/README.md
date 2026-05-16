@@ -13,8 +13,8 @@ Source manifest: `bundle/v0.1/manifest.yaml`
 
 Curated view/example pairs:
 
-- `outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example`
-- `outcome_opportunity_map_diagram_type [preview_only]/outcome_to_ia_trace_example`
+- `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
+- `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`
 - `journey_map_diagram_type [preview_only]/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/place_viewstate_transition_example`
@@ -63,4 +63,14 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the lane grid before any edge routing runs
 - additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement
 - additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
+- legacy Graphviz preview siblings remain committed for side-by-side comparison
+
+`outcome_opportunity_map` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts come from the custom outcome-opportunity staged renderer
+- columns stay fixed left-to-right as Initiatives, Opportunities, Outcomes, and Metrics
+- outcome bands anchor related opportunities, initiatives, and metrics without duplicating shared nodes
+- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed column and outcome-band grid before semantic edges are drawn
+- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show endpoint-side selection and initial connector templates
+- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show gutter-aware provisional routes before final expansion and label placement
 - legacy Graphviz preview siblings remain committed for side-by-side comparison

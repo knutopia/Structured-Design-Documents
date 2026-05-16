@@ -340,8 +340,45 @@ export interface PreviewDefaultsConfig {
   dot?: DotPreviewStyleConfig;
 }
 
+export interface RendererSemanticColumnConfig {
+  id: string;
+  label: string;
+}
+
+export interface RendererSemanticColumnsConfig {
+  fixed_order?: RendererSemanticColumnConfig[];
+  node_type_columns?: Record<string, string>;
+}
+
+export interface RendererNodeChromeConfig {
+  visual_role?: string;
+  legacy_dot_shape?: string;
+  [key: string]: unknown;
+}
+
+export interface RendererConnectorLabelConfig {
+  visible?: boolean;
+  text?: string;
+  [key: string]: unknown;
+}
+
+export interface RendererConnectorChannelConfig {
+  channel?: string;
+  label?: RendererConnectorLabelConfig;
+  [key: string]: unknown;
+}
+
+export interface RendererConnectorsConfig {
+  edge_type_channels?: Record<string, RendererConnectorChannelConfig>;
+  priority_order?: string[];
+  [key: string]: unknown;
+}
+
 export interface RendererDefaultsConfig {
   preview?: PreviewDefaultsConfig;
+  semantic_columns?: RendererSemanticColumnsConfig;
+  node_chrome?: Record<string, RendererNodeChromeConfig>;
+  connectors?: RendererConnectorsConfig;
   [key: string]: unknown;
 }
 

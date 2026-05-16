@@ -37,7 +37,6 @@ export interface RenderedCorpusOutputPaths {
 }
 
 const previewOnlyRenderedCorpusViewIds = new Set([
-  "outcome_opportunity_map",
   "journey_map"
 ]);
 

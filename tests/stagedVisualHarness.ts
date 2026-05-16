@@ -16,6 +16,7 @@ import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { renderScenarioFlowStagedSvg } from "../src/renderer/staged/scenarioFlow.js";
 import { renderServiceBlueprintStagedSvg } from "../src/renderer/staged/serviceBlueprint.js";
 import { buildUiContractsRendererScene } from "../src/renderer/staged/uiContracts.js";
+import { renderOutcomeOpportunityMapStagedSvg } from "../src/renderer/staged/outcomeOpportunityMap.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -45,7 +46,7 @@ export interface EdgeLabelBox extends Rect {
 
 export async function renderStagedArtifacts(
   sourcePath: string,
-  viewId: "ia_place_map" | "service_blueprint" | "scenario_flow" | "ui_contracts",
+  viewId: "ia_place_map" | "service_blueprint" | "scenario_flow" | "ui_contracts" | "outcome_opportunity_map",
   profileId: string
 ): Promise<RenderedStagedArtifacts> {
   const bundle = await loadBundle(manifestPath);
@@ -79,6 +80,21 @@ export async function renderStagedArtifacts(
 
   if (viewId === "scenario_flow") {
     const rendered = await renderScenarioFlowStagedSvg(
+      projected.projection!,
+      compiled.graph!,
+      view,
+      profileId
+    );
+
+    return {
+      rendererScene: rendered.rendererScene,
+      measuredScene: rendered.measuredScene,
+      positionedScene: rendered.positionedScene
+    };
+  }
+
+  if (viewId === "outcome_opportunity_map") {
+    const rendered = await renderOutcomeOpportunityMapStagedSvg(
       projected.projection!,
       compiled.graph!,
       view,

@@ -13,14 +13,19 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 5-16
+
+-finished oom implementation (raw)
+
 ## Fri 5-15
 
-reviewed, refined implementation plan
-
+-reviewed, refined implementation plan
+-updated AGENTS
+-started implementing the oom plan
 
 ## Wed 5-13
 
-created implementation plan for outcome_opportunity_map
+-created implementation plan for outcome_opportunity_map
 
 ## Sat 5-09
 

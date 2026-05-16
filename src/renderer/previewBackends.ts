@@ -20,6 +20,10 @@ import {
   renderIaPlaceMapStagedSvg
 } from "./staged/iaPlaceMap.js";
 import {
+  renderOutcomeOpportunityMapStagedPng,
+  renderOutcomeOpportunityMapStagedSvg
+} from "./staged/outcomeOpportunityMap.js";
+import {
   renderScenarioFlowStagedPng,
   renderScenarioFlowStagedSvg
 } from "./staged/scenarioFlow.js";
@@ -36,6 +40,7 @@ export const STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID = "staged_ia_place_map_previ
 export const STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID = "staged_ui_contracts_preview";
 export const STAGED_SERVICE_BLUEPRINT_PREVIEW_BACKEND_ID = "staged_service_blueprint_preview";
 export const STAGED_SCENARIO_FLOW_PREVIEW_BACKEND_ID = "staged_scenario_flow_preview";
+export const STAGED_OUTCOME_OPPORTUNITY_MAP_PREVIEW_BACKEND_ID = "staged_outcome_opportunity_map_preview";
 
 export type PreviewArtifactSource =
   | {
@@ -224,6 +229,12 @@ const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor
     viewId: "scenario_flow",
     renderSvg: renderScenarioFlowStagedSvg,
     renderPng: renderScenarioFlowStagedPng
+  }),
+  [STAGED_OUTCOME_OPPORTUNITY_MAP_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
+    id: STAGED_OUTCOME_OPPORTUNITY_MAP_PREVIEW_BACKEND_ID,
+    viewId: "outcome_opportunity_map",
+    renderSvg: renderOutcomeOpportunityMapStagedSvg,
+    renderPng: renderOutcomeOpportunityMapStagedPng
   })
 };
 

@@ -27,6 +27,62 @@ views:
         - id: include_edge_only_when_both_endpoints_included
           description: Edge is included only if both endpoints pass node-type filter.
       renderer_defaults:
+        semantic_columns:
+          fixed_order:
+            - id: initiative
+              label: Initiatives
+            - id: opportunity
+              label: Opportunities
+            - id: outcome
+              label: Outcomes
+            - id: metric
+              label: Metrics
+          node_type_columns:
+            Initiative: initiative
+            Opportunity: opportunity
+            Outcome: outcome
+            Metric: metric
+        node_chrome:
+          Initiative:
+            visual_role: work_action_card
+            legacy_dot_shape: box
+          Opportunity:
+            visual_role: opportunity_card
+            legacy_dot_shape: hexagon
+          Outcome:
+            visual_role: outcome_anchor
+            legacy_dot_shape: ellipse
+          Metric:
+            visual_role: evidence_card
+            legacy_dot_shape: note
+        connectors:
+          edge_type_channels:
+            SUPPORTS:
+              channel: opportunity_support
+              label:
+                visible: true
+                text: supports
+            ADDRESSES:
+              channel: initiative_addressing
+              label:
+                visible: true
+                text: addresses
+            MEASURED_BY:
+              channel: outcome_measurement
+              label:
+                visible: true
+                text: measured by
+            IMPLEMENTED_BY:
+              channel: implementation_reference
+              label:
+                visible: true
+                text: implemented by
+            INSTRUMENTED_AT:
+              channel: instrumentation_reference
+              label:
+                visible: true
+                text: instrumented at
+          priority_order: [SUPPORTS, ADDRESSES, MEASURED_BY, IMPLEMENTED_BY, INSTRUMENTED_AT]
         instrumentation_annotations:
           source_edge_type: INSTRUMENTED_AT
           render_mode: annotate_metric_when_target_out_of_scope

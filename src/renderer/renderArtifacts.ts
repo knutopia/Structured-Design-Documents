@@ -7,6 +7,7 @@ export type TextRendererBackendId = "legacy_dot" | "legacy_mermaid";
 export type PreviewRendererBackendId =
   | "legacy_graphviz_preview"
   | "staged_scenario_flow_preview"
+  | "staged_outcome_opportunity_map_preview"
   | "staged_ia_place_map_preview"
   | "staged_ui_contracts_preview"
   | "staged_service_blueprint_preview";

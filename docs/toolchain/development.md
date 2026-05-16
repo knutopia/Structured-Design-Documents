@@ -19,8 +19,8 @@ Projection remains an internal artifact in v0.1. The repo now projects every man
 
 Current renderable views:
 
-- Supported preview output via `sdd show`: `ia_place_map`, `ui_contracts`, `service_blueprint`, `scenario_flow`
-- Preview-only / not-yet-usable output via `sdd show`: `journey_map`, `outcome_opportunity_map`
+- Supported preview output via `sdd show`: `ia_place_map`, `ui_contracts`, `service_blueprint`, `scenario_flow`, `outcome_opportunity_map`
+- Preview-only / not-yet-usable output via `sdd show`: `journey_map`
 - Internal `.dot` and `.mmd` text artifacts are retained for all renderable views for tests, corpus generation, and debugging.
 
 Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `strict_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile. Preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
@@ -32,8 +32,9 @@ The CLI preview pipeline is SVG-first:
 - `ui_contracts` now also defaults `sdd show` to the staged preview backend `staged_ui_contracts_preview`, which renders the routed and balanced staged SVG directly and derives PNG from that SVG
 - `service_blueprint` now also defaults `sdd show` to the staged preview backend `staged_service_blueprint_preview`, which renders the ELK-authoritative staged SVG directly and derives PNG from that SVG
 - `scenario_flow` now also defaults `sdd show` to the staged preview backend `staged_scenario_flow_preview`, which renders the accepted custom lane-and-routing staged SVG directly and derives PNG from that SVG
+- `outcome_opportunity_map` now also defaults `sdd show` to the staged preview backend `staged_outcome_opportunity_map_preview`, which renders deterministic semantic lanes and custom staged opportunity routing directly and derives PNG from that SVG
 - the remaining views still default to `legacy_graphviz_preview`, which renders DOT, runs Graphviz to produce SVG layout, embeds the vendored Public Sans webfont, and produces PNG from that SVG when requested
-- legacy Graphviz preview remains selectable for `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` with `--backend legacy_graphviz_preview`, and internal `--dot-out` automatically chooses a DOT-capable backend when needed
+- legacy Graphviz preview remains selectable for `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` with `--backend legacy_graphviz_preview`, and internal `--dot-out` automatically chooses a DOT-capable backend when needed
 - PNG output is still derived from SVG in both preview paths, and the vendored Public Sans desktop font keeps preview typography independent of user-installed system fonts
 - The shared preview defaults live in `bundle/v0.1/core/views.yaml`, with `svg_font_asset` for SVG output, `png_font_asset` for PNG output, and legacy `font_asset` kept only as a compatibility fallback
 
@@ -119,7 +120,7 @@ Render a Journey Map SVG preview artifact:
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out /tmp/journey.svg
 ```
 
-Render an Outcome-Opportunity Map SVG preview artifact:
+Render an Outcome-Opportunity Map staged SVG preview artifact:
 
 ```bash
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out /tmp/outcome-map.svg
@@ -247,8 +248,9 @@ Authoring guidance for the newly renderable views:
 - `src/renderer/svgArtifacts.ts` holds the shared embedded-font and SVG-to-PNG helpers reused by the staged backend and the legacy Graphviz preview backend.
 - This staged pipeline remains separate from `renderSource`; selected views are wired into the CLI preview registry through backend-specific staged preview adapters.
 - `tests/rendererStageSnapshotHarness.ts` is the shared helper for deterministic staged-renderer JSON comparisons.
-- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures for the staged fixture set plus accepted migrated views such as `ia_place_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
+- Committed staged-renderer goldens live under `tests/goldens/renderer-stages/` and now include both stage JSON fixtures and deterministic staged SVG fixtures for the staged fixture set plus accepted migrated views such as `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`; they are implementation-contract fixtures, not bundle source-of-truth artifacts.
 - The staged pipeline now has shared measurement, manual macro-layout, selective `elk_layered` placement where a view chooses it, and shared routing strong enough for the migrated staged views. Staged `ia_place_map` uses manual hub/follower grouping, staged `ui_contracts` combines scoped manual layout with selective `elk_layered` transition placement and dedicated contract-label lanes, and staged `scenario_flow` uses custom lane-and-band placement plus staged branch routing without Elk or any other external layout engine.
+- Staged `outcome_opportunity_map` uses semantic-lane placement plus custom opportunity routing without Elk, Graphviz, Mermaid, or any other external layout engine.
 
 ## Adding A New View
 

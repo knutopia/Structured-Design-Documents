@@ -150,6 +150,19 @@ const stagedScenarioFlowPreviewArtifacts: PreviewArtifactCapability[] = [
   }
 ];
 
+const stagedOutcomeOpportunityMapPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "staged_outcome_opportunity_map_preview",
+    backendClass: "staged"
+  },
+  {
+    format: "png",
+    backendId: "staged_outcome_opportunity_map_preview",
+    backendClass: "staged"
+  }
+];
+
 function dotAndMermaidPreviewCapability(): ViewRenderCapability {
   return {
     textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
@@ -215,10 +228,21 @@ const journeyMapRenderer: ViewTextRenderer = {
 };
 
 const outcomeOpportunityMapRenderer: ViewTextRenderer = {
-  capability: dotAndMermaidPreviewCapability(),
+  capability: {
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: [
+      ...stagedOutcomeOpportunityMapPreviewArtifacts.map((artifact) => ({ ...artifact })),
+      ...legacyPreviewArtifacts.map((artifact) => ({ ...artifact }))
+    ],
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: {
+      svg: "staged_outcome_opportunity_map_preview",
+      png: "staged_outcome_opportunity_map_preview"
+    }
+  },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
-    const model = buildOutcomeOpportunityMapRenderModel(projection, graph, displayPolicy);
+    const model = buildOutcomeOpportunityMapRenderModel(projection, graph, view, displayPolicy);
     if (format === "dot") {
       return {
         text: renderOutcomeOpportunityMapDot(model, resolveLegacyDotPreviewStyle(bundle, view)),

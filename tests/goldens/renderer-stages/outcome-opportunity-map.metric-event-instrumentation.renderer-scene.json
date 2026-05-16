@@ -1,0 +1,805 @@
+{
+  "viewId": "outcome_opportunity_map",
+  "profileId": "strict",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "outcome_opportunity_map",
+      "outcome_opportunity_map"
+    ],
+    "layout": {
+      "strategy": "grid",
+      "gap": 28,
+      "columns": 4,
+      "crossAlignment": "stretch"
+    },
+    "chrome": {
+      "padding": {
+        "top": 56,
+        "right": 28,
+        "bottom": 28,
+        "left": 28
+      },
+      "gutter": 28,
+      "headerBandHeight": 0
+    },
+    "children": [
+      {
+        "kind": "container",
+        "id": "initiative__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-initiative",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "I-050",
+            "role": "initiative",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-initiative",
+              "visual-role-work_action_card",
+              "shape-box",
+              "column-initiative",
+              "placement-role-addressing_initiative",
+              "band-band-outcome-1"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 3
+            },
+            "content": [
+              {
+                "id": "I-050__content__line_0",
+                "kind": "text",
+                "text": "Review Queue Instrumentation",
+                "textStyleRole": "label",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west"
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east"
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west"
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east"
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north"
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south"
+              }
+            ]
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "opportunity__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-opportunity",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "OP-050",
+            "role": "opportunity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-opportunity",
+              "visual-role-opportunity_card",
+              "shape-hexagon",
+              "column-opportunity",
+              "placement-role-supporting_opportunity",
+              "band-band-outcome-1"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 3
+            },
+            "content": [
+              {
+                "id": "OP-050__content__line_0",
+                "kind": "text",
+                "text": "Review Queue Visibility",
+                "textStyleRole": "label",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west"
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east"
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west"
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east"
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north"
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south"
+              }
+            ]
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "outcome__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-outcome",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "O-050",
+            "role": "outcome",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-outcome",
+              "visual-role-outcome_anchor",
+              "shape-ellipse",
+              "column-outcome",
+              "placement-role-anchor_outcome",
+              "band-band-outcome-1"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 3
+            },
+            "content": [
+              {
+                "id": "O-050__content__line_0",
+                "kind": "text",
+                "text": "Reduce Risk Review Delays",
+                "textStyleRole": "title",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west"
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east"
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west"
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east"
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north"
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south"
+              }
+            ]
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "metric__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-metric",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "M-050",
+            "role": "metric",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-metric",
+              "visual-role-evidence_card",
+              "shape-note",
+              "column-metric",
+              "placement-role-measuring_metric",
+              "band-band-outcome-1"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "secondary_area",
+              "maxLines": 1
+            },
+            "content": [
+              {
+                "id": "M-050__content__line_0",
+                "kind": "text",
+                "text": "Alert Stream Coverage",
+                "textStyleRole": "label",
+                "priority": "primary"
+              },
+              {
+                "id": "M-050__content__line_1",
+                "kind": "metadata",
+                "text": "Event: E-050 Alert Emitted",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
+              },
+              {
+                "id": "M-050__content__line_2",
+                "kind": "metadata",
+                "text": "Event: E-051 Review Completed Event",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west"
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east"
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west"
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east"
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north"
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south"
+              }
+            ]
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:metric",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "initiative__cell__band:outcome:1__slot:1",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-initiative",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-stack",
+          "row-1",
+          "empty-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "opportunity__cell__band:outcome:1__slot:1",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-opportunity",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-stack",
+          "row-1",
+          "empty-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "outcome__cell__band:outcome:1__slot:1",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-outcome",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-stack",
+          "row-1",
+          "empty-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "metric__cell__band:outcome:1__slot:1",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-metric",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-stack",
+          "row-1"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "M-051",
+            "role": "metric",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-metric",
+              "visual-role-evidence_card",
+              "shape-note",
+              "column-metric",
+              "placement-role-measuring_metric",
+              "band-band-outcome-1"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "secondary_area",
+              "maxLines": 1
+            },
+            "content": [
+              {
+                "id": "M-051__content__line_0",
+                "kind": "text",
+                "text": "Manual Review Completion",
+                "textStyleRole": "label",
+                "priority": "primary"
+              },
+              {
+                "id": "M-051__content__line_1",
+                "kind": "metadata",
+                "text": "Experience: J-050 Review Risk Alert",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
+              },
+              {
+                "id": "M-051__content__line_2",
+                "kind": "metadata",
+                "text": "Event: E-051 Review Completed Event",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west"
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east"
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west"
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east"
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north"
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south"
+              }
+            ]
+          }
+        ],
+        "ports": [],
+        "sharedWidthGroup": "outcome_opportunity_map:column:metric",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      }
+    ],
+    "ports": []
+  },
+  "edges": [
+    {
+      "id": "O-050__measured_by__M-050",
+      "role": "measured_by",
+      "classes": [
+        "outcome_opportunity_edge",
+        "outcome_opportunity_semantic_edge",
+        "edge-type-measured_by",
+        "edge-channel-outcome_measurement"
+      ],
+      "from": {
+        "itemId": "O-050"
+      },
+      "to": {
+        "itemId": "M-050"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "measure_out",
+        "targetPortRole": "measure_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "measured by",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "O-050__measured_by__M-051",
+      "role": "measured_by",
+      "classes": [
+        "outcome_opportunity_edge",
+        "outcome_opportunity_semantic_edge",
+        "edge-type-measured_by",
+        "edge-channel-outcome_measurement"
+      ],
+      "from": {
+        "itemId": "O-050"
+      },
+      "to": {
+        "itemId": "M-051"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "measure_out",
+        "targetPortRole": "measure_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "measured by",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "OP-050__supports__O-050",
+      "role": "supports",
+      "classes": [
+        "outcome_opportunity_edge",
+        "outcome_opportunity_semantic_edge",
+        "edge-type-supports",
+        "edge-channel-opportunity_support"
+      ],
+      "from": {
+        "itemId": "OP-050"
+      },
+      "to": {
+        "itemId": "O-050"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "intent_out",
+        "targetPortRole": "intent_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "supports",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    },
+    {
+      "id": "I-050__addresses__OP-050",
+      "role": "addresses",
+      "classes": [
+        "outcome_opportunity_edge",
+        "outcome_opportunity_semantic_edge",
+        "edge-type-addresses",
+        "edge-channel-initiative_addressing"
+      ],
+      "from": {
+        "itemId": "I-050"
+      },
+      "to": {
+        "itemId": "OP-050"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "sourcePortRole": "intent_out",
+        "targetPortRole": "intent_in",
+        "labelPlacement": "segment",
+        "authority": "flexible"
+      },
+      "label": {
+        "text": "addresses",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root"
+    }
+  ],
+  "diagnostics": []
+}

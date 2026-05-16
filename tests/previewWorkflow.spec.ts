@@ -269,6 +269,70 @@ describe("preview workflow", () => {
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 
+  it("renders outcome_opportunity_map SVG previews through the staged backend by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("outcome_to_ia_trace.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "outcome_opportunity_map",
+      format: "svg",
+      profileId: "strict"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_outcome_opportunity_map_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected staged SVG artifact.");
+    }
+
+    expect(result.artifact.text).toContain('class="staged-svg');
+    expect(result.artifact.text).toContain("Checkout Completion Rate");
+    expect(result.artifact.text).toContain('class="scene-edge');
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders outcome_opportunity_map PNG previews through the staged backend by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("metric_event_instrumentation.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "outcome_opportunity_map",
+      format: "png",
+      profileId: "strict"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_outcome_opportunity_map_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("png");
+    if (!result.artifact || result.artifact.format !== "png") {
+      throw new Error("Expected staged PNG artifact.");
+    }
+
+    expect(Array.from(result.artifact.bytes.slice(0, PNG_SIGNATURE.length))).toEqual(PNG_SIGNATURE);
+    expect(result.artifact.bytes.length).toBeGreaterThan(32);
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders outcome_opportunity_map SVG previews through the explicit legacy backend", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("outcome_to_ia_trace.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "outcome_opportunity_map",
+      format: "svg",
+      profileId: "strict",
+      backendId: "legacy_graphviz_preview"
+    });
+
+    expect(result.previewCapability.backendId).toBe("legacy_graphviz_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected legacy SVG artifact.");
+    }
+
+    expect(result.artifact.text).toContain("<svg");
+    expect(result.artifact.sourceArtifacts?.dot).toContain("digraph outcome_opportunity_map");
+  });
+
   it("renders service_blueprint SVG previews through the explicit legacy backend", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadInput("service_blueprint_slice.sdd");

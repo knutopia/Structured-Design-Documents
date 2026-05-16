@@ -20,10 +20,11 @@ This page collects the current diagram families, their status, and links to avai
   Step-by-step UI-level activities (but *without* collapsing the world into screens).
   Example: [scenario_branching_example](../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/)
 
-## Planned
-
-- Outcome-Opportunity Map: [Planned]
+- Outcome-Opportunity Map: [Available]
   Product intent, explicit and traceable: what the product solves, and how to know it works.
+  Examples: [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/), [metric_event_instrumentation_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/)
+
+## Planned
 
 - Journey Map: [Planned]
   Experience intent from above: stages and steps, needs, friction, moments of truth.

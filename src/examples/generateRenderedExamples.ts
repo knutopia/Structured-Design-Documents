@@ -16,6 +16,10 @@ import {
   renderScenarioFlowRoutingDebugArtifacts
 } from "../renderer/staged/scenarioFlow.js";
 import {
+  renderOutcomeOpportunityMapPreRoutingArtifacts,
+  renderOutcomeOpportunityMapRoutingDebugArtifacts
+} from "../renderer/staged/outcomeOpportunityMap.js";
+import {
   getPreviewArtifactCapabilities,
   getPreviewArtifactCapability,
   getViewRenderCapability
@@ -108,6 +112,16 @@ function buildReadmeContent(
   lines.push("- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the lane grid before any edge routing runs");
   lines.push("- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement");
   lines.push("- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement");
+  lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
+  lines.push("");
+  lines.push("`outcome_opportunity_map` visual review checklist:");
+  lines.push("");
+  lines.push("- staged unsuffixed `.svg` and `.png` artifacts come from the custom outcome-opportunity staged renderer");
+  lines.push("- columns stay fixed left-to-right as Initiatives, Opportunities, Outcomes, and Metrics");
+  lines.push("- outcome bands anchor related opportunities, initiatives, and metrics without duplicating shared nodes");
+  lines.push("- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed column and outcome-band grid before semantic edges are drawn");
+  lines.push("- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show endpoint-side selection and initial connector templates");
+  lines.push("- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show gutter-aware provisional routes before final expansion and label placement");
   lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
   lines.push("");
 
@@ -241,6 +255,65 @@ async function main(): Promise<void> {
       );
 
       const routingDebug = await renderScenarioFlowRoutingDebugArtifacts(
+        projected.projection,
+        compiled.graph,
+        view,
+        variant.profileId
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
+        routingDebug.step2Svg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "png"),
+        routingDebug.step2Png
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "svg"),
+        routingDebug.step3Svg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_3_gutters", "png"),
+        routingDebug.step3Png
+      );
+    }
+
+    if (variant.viewId === "outcome_opportunity_map") {
+      const compiled = compileSource(input, bundle);
+      const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
+      if (compileErrors.length > 0 || !compiled.graph) {
+        throw new Error(
+          `Failed to compile outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
+        );
+      }
+
+      const projected = projectView(compiled.graph, bundle, variant.viewId);
+      const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
+      if (projectionErrors.length > 0 || !projected.projection) {
+        throw new Error(
+          `Failed to project outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
+        );
+      }
+
+      const preRouting = await renderOutcomeOpportunityMapPreRoutingArtifacts(
+        projected.projection,
+        compiled.graph,
+        view,
+        variant.profileId
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
+        preRouting.preRoutingSvg,
+        "utf8"
+      );
+      await writeFile(
+        getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "png"),
+        preRouting.preRoutingPng
+      );
+
+      const routingDebug = await renderOutcomeOpportunityMapRoutingDebugArtifacts(
         projected.projection,
         compiled.graph,
         view,

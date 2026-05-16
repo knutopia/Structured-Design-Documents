@@ -20,7 +20,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 
 ## Start Here
 
-- Helper discovery is the helper-command authority: use `<helper> capabilities` to confirm which helper commands exist.
+- Helper discovery is the helper-command authority: use `<helper> capabilities` to confirm which helper commands exist. Use only commands returned by `<helper> capabilities`.
 - Helper contract detail is the helper request/result authority: use `<helper> contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command; use `--purpose request` for request-composition guidance on `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`.
 - Before composing the first `author` request in a task, use `<helper> contract helper.command.author --purpose request --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
 - SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.

@@ -1040,11 +1040,12 @@ Default backend resolution:
 - `service_blueprint` -> `staged_service_blueprint_preview`
 - `scenario_flow` -> `staged_scenario_flow_preview`
 - `journey_map` -> `legacy_graphviz_preview`
-- `outcome_opportunity_map` -> `legacy_graphviz_preview`
+- `outcome_opportunity_map` -> `staged_outcome_opportunity_map_preview`
 
 Rules:
 
 - incompatible `backend_id` and `view_id` combinations fail
+- `legacy_graphviz_preview` remains an explicit backend override for migrated views that preserve the legacy preview path
 - preview is a tool output, not a persistent resource
 - success responses materialize SVG or PNG bytes to `artifact_path` and do not include inline SVG text or base64 PNG data
 - `artifact_path` is an absolute local path under `/tmp/unique-previews/<unique-dir>/<basename>`

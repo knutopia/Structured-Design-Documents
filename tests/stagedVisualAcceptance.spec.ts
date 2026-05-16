@@ -39,6 +39,13 @@ const SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS = [
   "renderer.routing.scenario_flow_edge_label_fallback"
 ] as const;
 const SCENARIO_FLOW_LABEL_CLEARANCE = 12;
+const OUTCOME_OPPORTUNITY_FORBIDDEN_DIAGNOSTICS = [
+  "renderer.routing.outcome_opportunity_unresolved_connector",
+  "renderer.routing.outcome_opportunity_unresolved_port",
+  "renderer.routing.outcome_opportunity_node_intersection",
+  "renderer.routing.outcome_opportunity_edge_label_omitted",
+  "renderer.routing.outcome_opportunity_edge_label_fallback"
+] as const;
 
 function getVisibleNodeBoxes(root: Awaited<ReturnType<typeof renderStagedArtifacts>>["positionedScene"]["root"]) {
   return collectVisibleItemBoxes(root).filter((box) => {
@@ -179,5 +186,35 @@ describe("staged visual acceptance", () => {
     expectLabelsHaveMinimumBoxClearance(labelBoxes, nodeBoxes, SCENARIO_FLOW_LABEL_CLEARANCE);
     expectLabelsDoNotOverlapEachOther(labelBoxes);
     expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
+  });
+
+  it("keeps outcome_opportunity_map proof cases free of forbidden diagnostics, node-crossing routes, and label collisions", async () => {
+    const cases = [
+      path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),
+      path.join(repoRoot, "bundle/v0.1/examples/metric_event_instrumentation.sdd")
+    ];
+
+    for (const sourcePath of cases) {
+      const rendered = await renderStagedArtifacts(sourcePath, "outcome_opportunity_map", "strict");
+      expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+      expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, OUTCOME_OPPORTUNITY_FORBIDDEN_DIAGNOSTICS);
+
+      const semanticEdges = rendered.positionedScene.edges.filter((edge) =>
+        edge.classes.includes("outcome_opportunity_semantic_edge")
+      );
+      expect(semanticEdges.length).toBeGreaterThan(0);
+
+      const nodeBoxes = getVisibleNodeBoxes(rendered.positionedScene.root);
+      const labelBoxes = collectEdgeLabelBoxes(semanticEdges);
+      expect(labelBoxes.length).toBe(semanticEdges.length);
+
+      expectNoRouteIntersectionsWithNonEndpointBoxes(semanticEdges, nodeBoxes);
+      expectRoutesDoNotEnterEndpointBoxes(semanticEdges, nodeBoxes);
+      expectSameOrientationSegmentsSeparated(semanticEdges);
+      expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
+      expectLabelsHaveMinimumBoxClearance(labelBoxes, nodeBoxes, SCENARIO_FLOW_LABEL_CLEARANCE);
+      expectLabelsDoNotOverlapEachOther(labelBoxes);
+      expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
+    }
   });
 });

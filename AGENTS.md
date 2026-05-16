@@ -24,9 +24,9 @@ Verify Graphviz setup with:
 - `pnpm run check:graphviz`
 - `dot -V`
 
-### Graphing with Elkjs
+### No More Graphing with Elkjs
 
-Some diagram types use the Elkjs (Eclipse Layout Kernel) layout engine. When encountering Elkjs-related tasks, DO review current Elkjs online documentation - do not guess - know your choices.
+Some diagram types in the past did use the Elkjs (Eclipse Layout Kernel) layout engine. The use of Elkjs is no longer being pursued.Avoid using Elkjs. Some remnants of Elkjs remain in the codebase. 
 Elkjs project & readme: https://github.com/kieler/elkjs
 Elk documentation: https://eclipse.dev/elk/reference.html
 
@@ -67,7 +67,10 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 
 ## Current Project Goal: LLM-Integration for SDD
 
-To enable LLM workflow integration with SDD, we recently created a (Codex-) Skill, a helper-app that assists the skill, and shared authoring infrastructure that supports the helper app and the future future MCP server. The current project goal is to create a SDD MCP server.
+To enable LLM workflow integration with SDD, we recently created a (Codex-) Skill, a helper-app that assists the skill, and shared authoring infrastructure that supports the helper app and the future future MCP server. 
+
+The current project mid-term goal is to create a SDD MCP server.
+The current short-term goal is to realize more staged graph types.
 
 ## Renderer Constraints
 

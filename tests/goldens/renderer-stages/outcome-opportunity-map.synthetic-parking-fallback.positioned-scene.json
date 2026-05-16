@@ -1,0 +1,991 @@
+{
+  "viewId": "outcome_opportunity_map",
+  "profileId": "strict",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "outcome_opportunity_map",
+      "outcome_opportunity_map"
+    ],
+    "layout": {
+      "strategy": "grid",
+      "gap": 28,
+      "columns": 4,
+      "crossAlignment": "stretch"
+    },
+    "chrome": {
+      "padding": {
+        "top": 56,
+        "right": 28,
+        "bottom": 28,
+        "left": 28
+      },
+      "gutter": 28,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "initiative__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-initiative",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0",
+          "empty-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 28,
+        "y": 56,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "opportunity__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-opportunity",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0",
+          "empty-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 345.336,
+        "y": 56,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "outcome__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-outcome",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "O-990",
+            "role": "outcome",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-outcome",
+              "visual-role-outcome_anchor",
+              "shape-ellipse",
+              "column-outcome",
+              "placement-role-anchor_outcome",
+              "band-band-outcome-1"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 3
+            },
+            "content": [
+              {
+                "id": "O-990__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Anchored Outcome"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 143.712,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 627.336,
+            "y": 66,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 617.336,
+        "y": 56,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "metric__cell__band:outcome:1__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-metric",
+          "band-kind-outcome",
+          "band-band-outcome-1",
+          "slot-kind-primary",
+          "row-0",
+          "empty-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 889.336,
+        "y": 56,
+        "width": 20,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:metric",
+        "sharedHeightGroup": "outcome_opportunity_map:row:0"
+      },
+      {
+        "kind": "container",
+        "id": "initiative__cell__band:parking:1:OP-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-initiative",
+          "band-kind-parking",
+          "band-band-parking-1-op-991",
+          "slot-kind-parking",
+          "row-1",
+          "empty-cell",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 28,
+        "y": 152,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "opportunity__cell__band:parking:1:OP-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-opportunity",
+          "band-kind-parking",
+          "band-band-parking-1-op-991",
+          "slot-kind-parking",
+          "row-1",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "OP-991",
+            "role": "opportunity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-opportunity",
+              "visual-role-opportunity_card",
+              "shape-hexagon",
+              "column-opportunity",
+              "placement-role-parking",
+              "band-band-parking-1-op-991",
+              "parking-node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 3
+            },
+            "content": [
+              {
+                "id": "OP-991__content__line_0",
+                "kind": "text",
+                "textStyleRole": "label",
+                "lines": [
+                  "Orphan Opportunity"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 120.133,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 355.336,
+            "y": 162,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 345.336,
+        "y": 152,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "outcome__cell__band:parking:1:OP-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-outcome",
+          "band-kind-parking",
+          "band-band-parking-1-op-991",
+          "slot-kind-parking",
+          "row-1",
+          "empty-cell",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 617.336,
+        "y": 152,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "metric__cell__band:parking:1:OP-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-metric",
+          "band-kind-parking",
+          "band-band-parking-1-op-991",
+          "slot-kind-parking",
+          "row-1",
+          "empty-cell",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 889.336,
+        "y": 152,
+        "width": 20,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:metric",
+        "sharedHeightGroup": "outcome_opportunity_map:row:1"
+      },
+      {
+        "kind": "container",
+        "id": "initiative__cell__band:parking:2:I-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-initiative",
+          "band-kind-parking",
+          "band-band-parking-2-i-991",
+          "slot-kind-parking",
+          "row-2",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "I-991",
+            "role": "initiative",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "outcome_opportunity_node",
+              "type-initiative",
+              "visual-role-work_action_card",
+              "shape-box",
+              "column-initiative",
+              "placement-role-parking",
+              "band-band-parking-2-i-991",
+              "parking-node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 3
+            },
+            "content": [
+              {
+                "id": "I-991__content__line_0",
+                "kind": "text",
+                "textStyleRole": "label",
+                "lines": [
+                  "Orphan Initiative"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 99.249,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "intent_in",
+                "role": "intent_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "intent_out",
+                "role": "intent_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "measure_in",
+                "role": "measure_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "measure_out",
+                "role": "measure_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "secondary_in",
+                "role": "secondary_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "secondary_out",
+                "role": "secondary_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 38,
+            "y": 258,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 28,
+        "y": 248,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
+        "sharedHeightGroup": "outcome_opportunity_map:row:2"
+      },
+      {
+        "kind": "container",
+        "id": "opportunity__cell__band:parking:2:I-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-opportunity",
+          "band-kind-parking",
+          "band-band-parking-2-i-991",
+          "slot-kind-parking",
+          "row-2",
+          "empty-cell",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 345.336,
+        "y": 248,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
+        "sharedHeightGroup": "outcome_opportunity_map:row:2"
+      },
+      {
+        "kind": "container",
+        "id": "outcome__cell__band:parking:2:I-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-outcome",
+          "band-kind-parking",
+          "band-band-parking-2-i-991",
+          "slot-kind-parking",
+          "row-2",
+          "empty-cell",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 617.336,
+        "y": 248,
+        "width": 244,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
+        "sharedHeightGroup": "outcome_opportunity_map:row:2"
+      },
+      {
+        "kind": "container",
+        "id": "metric__cell__band:parking:2:I-991__slot:0",
+        "role": "outcome_opportunity_cell",
+        "primitive": "cluster",
+        "classes": [
+          "outcome_opportunity_cell",
+          "column-metric",
+          "band-kind-parking",
+          "band-band-parking-2-i-991",
+          "slot-kind-parking",
+          "row-2",
+          "empty-cell",
+          "parking-cell"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 889.336,
+        "y": 248,
+        "width": 20,
+        "height": 68,
+        "sharedWidthGroup": "outcome_opportunity_map:column:metric",
+        "sharedHeightGroup": "outcome_opportunity_map:row:2"
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 937.336,
+    "height": 344
+  },
+  "edges": [
+    {
+      "id": "I-991__addresses__OP-991",
+      "role": "addresses",
+      "classes": [
+        "outcome_opportunity_edge",
+        "outcome_opportunity_semantic_edge",
+        "edge-type-addresses",
+        "edge-channel-initiative_addressing",
+        "route-pattern-parking_fallback"
+      ],
+      "from": {
+        "itemId": "I-991",
+        "portId": "intent_out",
+        "x": 262,
+        "y": 282
+      },
+      "to": {
+        "itemId": "OP-991",
+        "portId": "intent_in",
+        "x": 355.336,
+        "y": 186
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 282
+          },
+          {
+            "x": 308.668,
+            "y": 282
+          },
+          {
+            "x": 308.668,
+            "y": 186
+          },
+          {
+            "x": 355.336,
+            "y": 186
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "addresses"
+        ],
+        "width": 69.336,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 320.668,
+        "y": 223
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "decorations": [
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-column-initiative__title",
+      "classes": [
+        "outcome_opportunity_column_title",
+        "column-initiative"
+      ],
+      "paintGroup": "labels",
+      "x": 32,
+      "y": 26,
+      "text": "Initiatives",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-column-opportunity__title",
+      "classes": [
+        "outcome_opportunity_column_title",
+        "column-opportunity"
+      ],
+      "paintGroup": "labels",
+      "x": 304,
+      "y": 26,
+      "text": "Opportunities",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-column-outcome__title",
+      "classes": [
+        "outcome_opportunity_column_title",
+        "column-outcome"
+      ],
+      "paintGroup": "labels",
+      "x": 576,
+      "y": 26,
+      "text": "Outcomes",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-column-metric__title",
+      "classes": [
+        "outcome_opportunity_column_title",
+        "column-metric"
+      ],
+      "paintGroup": "labels",
+      "x": 848,
+      "y": 26,
+      "text": "Metrics",
+      "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-band-band-outcome-1__title",
+      "classes": [
+        "outcome_opportunity_band_title",
+        "band-kind-outcome"
+      ],
+      "paintGroup": "labels",
+      "x": 8,
+      "y": 82,
+      "text": "Band 1",
+      "textStyleRole": "edge_label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-band-band-parking-1-op-991__title",
+      "classes": [
+        "outcome_opportunity_band_title",
+        "band-kind-parking"
+      ],
+      "paintGroup": "labels",
+      "x": 8,
+      "y": 178,
+      "text": "Parking 2",
+      "textStyleRole": "edge_label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-band-band-parking-2-i-991__title",
+      "classes": [
+        "outcome_opportunity_band_title",
+        "band-kind-parking"
+      ],
+      "paintGroup": "labels",
+      "x": 8,
+      "y": 274,
+      "text": "Parking 3",
+      "textStyleRole": "edge_label"
+    }
+  ],
+  "diagnostics": [
+    {
+      "phase": "scene",
+      "code": "renderer.scene.outcome_opportunity_map_parking_node",
+      "severity": "info",
+      "message": "Node \"I-991\" has no anchoring path to an Outcome. Placing it in a deterministic parking band.",
+      "targetId": "I-991"
+    },
+    {
+      "phase": "scene",
+      "code": "renderer.scene.outcome_opportunity_map_parking_node",
+      "severity": "info",
+      "message": "Node \"OP-991\" has no anchoring path to an Outcome. Placing it in a deterministic parking band.",
+      "targetId": "OP-991"
+    },
+    {
+      "phase": "routing",
+      "code": "renderer.routing.outcome_opportunity_parking_connector",
+      "severity": "info",
+      "message": "Connector \"I-991__addresses__OP-991\" uses deterministic parking fallback routing because at least one endpoint is in a parking band.",
+      "targetId": "I-991__addresses__OP-991"
+    }
+  ],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

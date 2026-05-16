@@ -1,10 +1,12 @@
 # Outcome-Opportunity Map Staged Renderer Gated Implementation Plan
 
-Status: active gated implementation plan for `docs/outcome_opportunity_map_renderer_implementation/outcome_opportunity_map_renderer_design.md`
+Status: completed gated implementation plan for `docs/outcome_opportunity_map_renderer_implementation/outcome_opportunity_map_renderer_design.md`
 
 Audience: orchestration threads and sequential implementation subagents
 
 Purpose: implement custom staged `outcome_opportunity_map` rendering through gated work, one gate at a time, with explicit authority, write scopes, proof tasks, verification, and stop conditions.
+
+Note: the gate sections preserve the historical entry criteria and baseline state that each gate used during execution.
 
 ## 1. Summary
 
@@ -18,7 +20,7 @@ The implementation target is a custom staged renderer for `outcome_opportunity_m
 - outcome bands are the primary vertical anchors; parking bands are terminal fallback rows
 - routing must include explicit ports, endpoint offsets, keyed occupancy, segment separation, global gutter expansion, final label placement, and diagnostics from the first accepted routing implementation
 - debug outputs must exist for `pre_routing`, `routing_step_2_edges`, `routing_step_3_gutters`, and final staged SVG/PNG
-- legacy DOT, Mermaid, and `legacy_graphviz_preview` remain available until staged output is accepted and intentionally promoted
+- legacy DOT, Mermaid, and `legacy_graphviz_preview` remain available after staged output is accepted and intentionally promoted
 
 This plan must be executed gate by gate. A later gate must not begin until the orchestration thread verifies the previous gate against its acceptance criteria and stop conditions.
 
@@ -44,7 +46,7 @@ Use these sources by role:
 | Renderer migration architecture | `docs/toolchain/renderer_migration_guidance.md`, `docs/toolchain/architecture.md`, `docs/toolchain/development.md` |
 | Canonical proof-case sources | `bundle/v0.1/examples/outcome_to_ia_trace.sdd`, `bundle/v0.1/examples/metric_event_instrumentation.sdd` |
 | Canonical proof-case projections | `bundle/v0.1/snapshots/outcome_to_ia_trace.outcome_opportunity_map.projection.json`, `bundle/v0.1/snapshots/metric_event_instrumentation.outcome_opportunity_map.projection.json` |
-| Visual evidence only, not geometry authority | `examples/rendered/v0.1/outcome_opportunity_map_diagram_type [preview_only]/outcome_to_ia_trace_example`, `examples/rendered/v0.1/outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example` |
+| Visual evidence only, not geometry authority | `examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`, `examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example` |
 | Current Elk background, context only | `https://github.com/kieler/elkjs`, `https://eclipse.dev/elk/reference.html` |
 
 Current Elk documentation is context for recognizing stale or conflicting guidance. It is not implementation authority for this view. The design explicitly forbids Elk and other external layout engines for staged `outcome_opportunity_map` placement or routing.
