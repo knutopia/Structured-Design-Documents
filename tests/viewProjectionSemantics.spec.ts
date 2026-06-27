@@ -219,4 +219,40 @@ END
       "No ViewState nodes are present in this example; State acts as the effective primary transition graph."
     ]);
   });
+
+  it("derives outcome-opportunity implementation references for out-of-scope initiative targets", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const examplePath = path.join(bundle.rootDir, "examples/outcome_to_ia_trace.sdd");
+    const input = {
+      path: examplePath,
+      text: await readFile(examplePath, "utf8")
+    };
+
+    const compiled = compileSource(input, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+
+    const projected = projectView(compiled.graph!, bundle, "outcome_opportunity_map");
+
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection?.edges.some((edge) => edge.type === "IMPLEMENTED_BY")).toBe(false);
+    expect(projected.projection?.derived.node_annotations).toContainEqual({
+      node_id: "I-001",
+      references: [
+        {
+          role: "implemented_by",
+          target_id: "P-001",
+          target_type: "Place",
+          target_name: "Billing"
+        }
+      ]
+    });
+    expect(projected.projection?.omissions).toContainEqual({
+      kind: "edge",
+      from: "I-001",
+      type: "IMPLEMENTED_BY",
+      to: "P-001",
+      reason: "derived_annotation_instead_of_edge",
+      detail: "Rendered as an implementation annotation because the target node type Place is outside the view node scope."
+    });
+  });
 });

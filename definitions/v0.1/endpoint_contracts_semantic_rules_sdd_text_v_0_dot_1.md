@@ -153,6 +153,7 @@ Each relationship below defines:
 **Additional constraints:**
 - Use `IMPLEMENTED_BY` for “work produces artifact.”
 - Use `REALIZED_BY` for “experience step is realized by artifact.”
+- In `outcome_opportunity_map`, an out-of-scope implementation target MAY surface as an Initiative annotation instead of a visible edge.
 
 ---
 

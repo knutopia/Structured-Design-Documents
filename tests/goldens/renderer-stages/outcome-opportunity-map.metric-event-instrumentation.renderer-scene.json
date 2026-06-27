@@ -92,6 +92,13 @@
                 "text": "Review Queue Instrumentation",
                 "textStyleRole": "label",
                 "priority": "primary"
+              },
+              {
+                "id": "I-050__content__line_1",
+                "kind": "metadata",
+                "text": "Implemented by: P-050 Risk Review Queue",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
               }
             ],
             "ports": [

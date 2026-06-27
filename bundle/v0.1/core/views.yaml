@@ -93,13 +93,24 @@ views:
           display:
             include_target_id: true
             include_target_name_when_available: true
+        implementation_annotations:
+          source_edge_type: IMPLEMENTED_BY
+          render_mode: annotate_initiative_when_target_out_of_scope
+          target_type_order: [Place, ViewState, Component, Process, SystemAction]
+          display:
+            label: Implemented by
+            include_target_id: true
+            include_target_name_when_available: true
         profile_display:
           simple:
             show_instrumentation_annotations: false
+            show_implementation_annotations: false
           permissive:
             show_instrumentation_annotations: true
+            show_implementation_annotations: true
           strict:
             show_instrumentation_annotations: true
+            show_implementation_annotations: true
 
   - id: journey_map
     name: Journey Map

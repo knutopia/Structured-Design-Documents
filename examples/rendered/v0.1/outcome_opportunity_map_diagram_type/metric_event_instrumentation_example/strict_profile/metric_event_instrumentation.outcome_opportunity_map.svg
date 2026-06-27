@@ -50,7 +50,7 @@
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-i-050" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-050" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="66" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="38" y="66" width="224" height="78" rx="14" ry="14"/>
     </g>
     <g id="scene-node-op-050" class="scene-node primitive-card role-opportunity paint-nodes semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-050" data-role="opportunity">
       <rect class="scene-node__chrome" x="355.336" y="66" width="224" height="48" rx="14" ry="14"/>
@@ -69,6 +69,10 @@
     <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-050" data-role="initiative">
       <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="91">
           <tspan x="50" dy="0">Review Queue Instrumentation</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="50" y="112">
+          <tspan x="50" dy="0">Implemented by: P-050 Risk Review</tspan>
+          <tspan x="50" dy="16">Queue</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-opportunity paint-labels semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-050" data-role="opportunity">

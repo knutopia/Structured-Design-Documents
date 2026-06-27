@@ -92,6 +92,13 @@
                 "text": "Billing Simplification",
                 "textStyleRole": "label",
                 "priority": "primary"
+              },
+              {
+                "id": "I-001__content__line_1",
+                "kind": "metadata",
+                "text": "Implemented by: P-001 Billing",
+                "textStyleRole": "metadata",
+                "priority": "secondary"
               }
             ],
             "ports": [

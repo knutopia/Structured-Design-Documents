@@ -6,7 +6,7 @@ digraph outcome_opportunity_map {
   subgraph rank_initiative {
     rank=same;
     "lane_initiative" [shape=plaintext, label="Initiatives"];
-    "I-050" [shape="box", label="Review Queue Instrumentation"];
+    "I-050" [shape="box", label="Review Queue Instrumentation\nImplemented by: P-050 Risk Review Queue"];
   }
   subgraph rank_opportunity {
     rank=same;

@@ -45,6 +45,17 @@
   "derived": {
     "node_annotations": [
       {
+        "node_id": "I-001",
+        "references": [
+          {
+            "role": "implemented_by",
+            "target_id": "P-001",
+            "target_type": "Place",
+            "target_name": "Billing"
+          }
+        ]
+      },
+      {
         "node_id": "M-001",
         "references": [
           {
@@ -74,8 +85,8 @@
       "from": "I-001",
       "type": "IMPLEMENTED_BY",
       "to": "P-001",
-      "reason": "endpoint_out_of_scope",
-      "detail": "Target node type Place is outside the outcome_opportunity_map node scope."
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "Rendered as an implementation annotation because the target node type Place is outside the view node scope."
     },
     {
       "kind": "edge",

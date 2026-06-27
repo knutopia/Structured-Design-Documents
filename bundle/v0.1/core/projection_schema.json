@@ -226,6 +226,7 @@
         "role": {
           "type": "string",
           "enum": [
+            "implemented_by",
             "instrumented_at",
             "opportunity_ref"
           ]

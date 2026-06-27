@@ -6,7 +6,7 @@ digraph outcome_opportunity_map {
   subgraph rank_initiative {
     rank=same;
     "lane_initiative" [shape=plaintext, label="Initiatives"];
-    "I-001" [shape="box", label="Billing Simplification"];
+    "I-001" [shape="box", label="Billing Simplification\nImplemented by: P-001 Billing"];
   }
   subgraph rank_opportunity {
     rank=same;

@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--IMPLEMENTED_BY edge in oom
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
 
@@ -14,13 +13,18 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+
+## Sat 6-27
+
+-Made IMPLEMENTED_BY edge visible, profile-based 
+
 ## Fri 6-26
 
-- Explored syntax highlighting opportunity
-- Removed redundant cell visuals in oom
-- Improved column alignment in oom
-- Explored options for adding details to diagrams
-- Created list of shown / not shown edges per diagram type
+-Explored syntax highlighting opportunity
+-Removed redundant cell visuals in oom
+-Improved column alignment in oom
+-Explored options for adding details to diagrams
+-Created list of shown / not shown edges per diagram type
 
 ## Sat 5-16
 

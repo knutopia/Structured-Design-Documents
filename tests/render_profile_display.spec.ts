@@ -93,7 +93,7 @@ describe("profile-aware render detail", () => {
     }
   });
 
-  it("omits outcome-opportunity instrumentation annotations in simple", async () => {
+  it("omits outcome-opportunity secondary annotations in simple", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadExampleInput(bundle.rootDir, "metric_event_instrumentation");
 
@@ -111,7 +111,9 @@ describe("profile-aware render detail", () => {
 
       expect(simple.text).not.toContain("Experience:");
       expect(simple.text).not.toContain("Event:");
+      expect(simple.text).not.toContain("Implemented by:");
       expect(permissive.text).toContain("Event:");
+      expect(permissive.text).toContain("Implemented by:");
     }
   });
 

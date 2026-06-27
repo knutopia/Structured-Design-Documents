@@ -19,6 +19,13 @@ interface InstrumentationConfig {
   includeTargetNameWhenAvailable: boolean;
 }
 
+interface ImplementationConfig {
+  sourceEdgeType?: string;
+  targetTypeOrder: string[];
+  includeTargetId: boolean;
+  includeTargetNameWhenAvailable: boolean;
+}
+
 function readInstrumentationConfig(view: ViewSpec): InstrumentationConfig {
   const defaults = (view.conventions.renderer_defaults?.instrumentation_annotations ?? {}) as Record<string, unknown>;
   const display = (defaults.display ?? {}) as Record<string, unknown>;
@@ -42,6 +49,20 @@ function readInstrumentationConfig(view: ViewSpec): InstrumentationConfig {
   };
 }
 
+function readImplementationConfig(view: ViewSpec): ImplementationConfig {
+  const defaults = (view.conventions.renderer_defaults?.implementation_annotations ?? {}) as Record<string, unknown>;
+  const display = (defaults.display ?? {}) as Record<string, unknown>;
+
+  return {
+    sourceEdgeType: typeof defaults.source_edge_type === "string" ? defaults.source_edge_type : undefined,
+    targetTypeOrder: Array.isArray(defaults.target_type_order)
+      ? defaults.target_type_order.filter((value): value is string => typeof value === "string")
+      : [],
+    includeTargetId: display.include_target_id !== false,
+    includeTargetNameWhenAvailable: display.include_target_name_when_available !== false
+  };
+}
+
 function instrumentationGroupForTarget(targetType: string | undefined, config: InstrumentationConfig): string | undefined {
   if (!targetType) {
     return undefined;
@@ -55,20 +76,35 @@ function instrumentationGroupForTarget(targetType: string | undefined, config: I
   return undefined;
 }
 
-function sortInstrumentationReferences(
+function sortOutcomeOpportunityReferences(
   references: NonNullable<ProjectionNodeAnnotation["references"]>,
-  config: InstrumentationConfig
+  instrumentationConfig: InstrumentationConfig,
+  implementationConfig: ImplementationConfig
 ): NonNullable<ProjectionNodeAnnotation["references"]> {
-  const groupOrder = new Map(config.groupOrder.map((group, index) => [group, index]));
-  const targetTypeOrder = new Map(config.targetTypeOrder.map((targetType, index) => [targetType, index]));
+  const instrumentationGroupOrder = new Map(instrumentationConfig.groupOrder.map((group, index) => [group, index]));
+  const instrumentationTargetTypeOrder = new Map(instrumentationConfig.targetTypeOrder.map((targetType, index) => [targetType, index]));
+  const implementationTargetTypeOrder = new Map(implementationConfig.targetTypeOrder.map((targetType, index) => [targetType, index]));
+  const roleOrder = new Map([
+    ["implemented_by", 0],
+    ["instrumented_at", 1]
+  ]);
 
   return [...references].sort((left, right) => {
-    const leftGroupRank = groupOrder.get(left.group ?? "") ?? Number.MAX_SAFE_INTEGER;
-    const rightGroupRank = groupOrder.get(right.group ?? "") ?? Number.MAX_SAFE_INTEGER;
+    const leftRoleRank = roleOrder.get(left.role) ?? Number.MAX_SAFE_INTEGER;
+    const rightRoleRank = roleOrder.get(right.role) ?? Number.MAX_SAFE_INTEGER;
+    if (leftRoleRank !== rightRoleRank) {
+      return leftRoleRank - rightRoleRank;
+    }
+
+    const leftGroupRank = instrumentationGroupOrder.get(left.group ?? "") ?? Number.MAX_SAFE_INTEGER;
+    const rightGroupRank = instrumentationGroupOrder.get(right.group ?? "") ?? Number.MAX_SAFE_INTEGER;
     if (leftGroupRank !== rightGroupRank) {
       return leftGroupRank - rightGroupRank;
     }
 
+    const targetTypeOrder = left.role === "implemented_by"
+      ? implementationTargetTypeOrder
+      : instrumentationTargetTypeOrder;
     const leftTypeRank = targetTypeOrder.get(left.target_type ?? "") ?? Number.MAX_SAFE_INTEGER;
     const rightTypeRank = targetTypeOrder.get(right.target_type ?? "") ?? Number.MAX_SAFE_INTEGER;
     if (leftTypeRank !== rightTypeRank) {
@@ -86,13 +122,21 @@ function buildInstrumentationOmission(edge: Pick<CompiledEdge, "from" | "type" |
   );
 }
 
+function buildImplementationOmission(edge: Pick<CompiledEdge, "from" | "type" | "to">, targetType: string): ProjectionOmission {
+  return createDerivedAnnotationOmission(
+    edge,
+    `Rendered as an implementation annotation because the target node type ${targetType} is outside the view node scope.`
+  );
+}
+
 export function buildOutcomeOpportunityMapProjection(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec
 ): ProjectionResult {
   const context = createProjectionBuilderContext(graph, bundle, view);
-  const config = readInstrumentationConfig(view);
+  const instrumentationConfig = readInstrumentationConfig(view);
+  const implementationConfig = readImplementationConfig(view);
   const referencesByNodeId = new Map<string, NonNullable<ProjectionNodeAnnotation["references"]>>();
   const omissions: ProjectionOmission[] = [];
 
@@ -102,21 +146,38 @@ export function buildOutcomeOpportunityMapProjection(
     }
 
     const targetNode = context.graphNodesById.get(edge.to);
-    if (edge.type === config.sourceEdgeType) {
-      const group = instrumentationGroupForTarget(targetNode?.type, config);
+    if (edge.type === instrumentationConfig.sourceEdgeType) {
+      const group = instrumentationGroupForTarget(targetNode?.type, instrumentationConfig);
       if (group) {
         const references = referencesByNodeId.get(edge.from) ?? [];
         references.push({
           role: "instrumented_at",
           group,
-          target_id: config.includeTargetId ? edge.to : "",
+          target_id: instrumentationConfig.includeTargetId ? edge.to : "",
           target_type: targetNode?.type,
-          target_name: config.includeTargetNameWhenAvailable ? targetNode?.name : undefined
+          target_name: instrumentationConfig.includeTargetNameWhenAvailable ? targetNode?.name : undefined
         });
         referencesByNodeId.set(edge.from, references);
         omissions.push(buildInstrumentationOmission(edge, group, targetNode?.type ?? "unknown"));
         continue;
       }
+    }
+
+    if (
+      edge.type === implementationConfig.sourceEdgeType &&
+      targetNode?.type &&
+      implementationConfig.targetTypeOrder.includes(targetNode.type)
+    ) {
+      const references = referencesByNodeId.get(edge.from) ?? [];
+      references.push({
+        role: "implemented_by",
+        target_id: implementationConfig.includeTargetId ? edge.to : "",
+        target_type: targetNode.type,
+        target_name: implementationConfig.includeTargetNameWhenAvailable ? targetNode.name : undefined
+      });
+      referencesByNodeId.set(edge.from, references);
+      omissions.push(buildImplementationOmission(edge, targetNode.type));
+      continue;
     }
 
     if (context.includedEdgeTypes.has(edge.type)) {
@@ -127,9 +188,10 @@ export function buildOutcomeOpportunityMapProjection(
   const nodeAnnotations: ProjectionNodeAnnotation[] = [...referencesByNodeId.entries()]
     .map(([nodeId, references]) => ({
       node_id: nodeId,
-      references: sortInstrumentationReferences(
+      references: sortOutcomeOpportunityReferences(
         references.filter((reference) => reference.target_id.length > 0),
-        config
+        instrumentationConfig,
+        implementationConfig
       )
     }))
     .filter((annotation) => annotation.references && annotation.references.length > 0);

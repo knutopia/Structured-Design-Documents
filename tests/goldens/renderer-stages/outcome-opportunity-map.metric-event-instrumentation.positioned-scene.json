@@ -103,6 +103,22 @@
                 "lineHeight": 16,
                 "region": "primary",
                 "priority": "primary"
+              },
+              {
+                "id": "I-050__content__line_1",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
+                "lines": [
+                  "Implemented by: P-050 Risk Review",
+                  "Queue"
+                ],
+                "x": 12,
+                "y": 34,
+                "width": 198.888,
+                "height": 32,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "secondary"
               }
             ],
             "ports": [
@@ -111,28 +127,28 @@
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 39
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 39
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 39
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 39
               },
               {
                 "id": "secondary_in",
@@ -146,7 +162,7 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 78
               }
             ],
             "overflow": {
@@ -155,7 +171,7 @@
             "x": 38,
             "y": 66,
             "width": 224,
-            "height": 48
+            "height": 78
           }
         ],
         "ports": [],

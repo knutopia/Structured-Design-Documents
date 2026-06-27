@@ -161,6 +161,11 @@ function expectNoOutcomeOpportunityBandLabelsInSvg(svg: string): void {
   expect(svg).not.toMatch(/>Band \d+</);
 }
 
+function expectNoOutcomeOpportunityImplementedByEdgesInSvg(svg: string): void {
+  expect(svg).not.toContain("edge-type-implemented_by");
+  expect(svg).not.toContain("role-implemented_by");
+}
+
 function expectNoOutcomeOpportunityBandDecorations(scene: PositionedScene): void {
   expect(scene.decorations.filter((decoration) =>
     decoration.id.startsWith("outcome-opportunity-band-")
@@ -238,18 +243,18 @@ describe("staged outcome_opportunity_map", () => {
       }
     ]);
 
-    const node = findSceneItem(scene, "M-001");
-    expect(node.kind).toBe("node");
-    if (node.kind !== "node") {
+    const metricNode = findSceneItem(scene, "M-001");
+    expect(metricNode.kind).toBe("node");
+    if (metricNode.kind !== "node") {
       throw new Error("Expected M-001 to be a node.");
     }
-    expect(node.viewMetadata?.outcomeOpportunity).toEqual(expect.objectContaining({
+    expect(metricNode.viewMetadata?.outcomeOpportunity).toEqual(expect.objectContaining({
       kind: "semantic_node",
       placementRole: "measuring_metric",
       semanticColumnId: "metric",
       anchorOutcomeId: "O-001"
     }));
-    expect(node.ports.map((port) => port.role)).toEqual([
+    expect(metricNode.ports.map((port) => port.role)).toEqual([
       "intent_in",
       "intent_out",
       "measure_in",
@@ -257,13 +262,26 @@ describe("staged outcome_opportunity_map", () => {
       "secondary_in",
       "secondary_out"
     ]);
-    expect(node.content.map((block) => ({
+    expect(metricNode.content.map((block) => ({
       text: block.text,
       priority: block.priority
     }))).toEqual([
       { text: "Checkout Completion Rate", priority: "primary" },
       { text: "Experience: J-002 Confirm Payment", priority: "secondary" },
       { text: "Event: E-001 Payment Submitted", priority: "secondary" }
+    ]);
+
+    const initiativeNode = findSceneItem(scene, "I-001");
+    expect(initiativeNode.kind).toBe("node");
+    if (initiativeNode.kind !== "node") {
+      throw new Error("Expected I-001 to be a node.");
+    }
+    expect(initiativeNode.content.map((block) => ({
+      text: block.text,
+      priority: block.priority
+    }))).toEqual([
+      { text: "Billing Simplification", priority: "primary" },
+      { text: "Implemented by: P-001 Billing", priority: "secondary" }
     ]);
     expect(JSON.stringify(scene)).not.toMatch(/"x"|"y"|"points"|"svg"|"dot"|"mermaid"|"elk"/i);
   });
@@ -334,7 +352,7 @@ describe("staged outcome_opportunity_map", () => {
     ]);
   });
 
-  it("keeps instrumentation annotations in measured secondary blocks according to profile display", async () => {
+  it("keeps outcome annotations in measured secondary blocks according to profile display", async () => {
     const strictContext = await resolveOutcomeOpportunityContext("outcome_to_ia_trace", "strict");
     const strictRendered = await renderOutcomeOpportunityMapPreRoutingArtifacts(
       strictContext.projection,
@@ -352,10 +370,19 @@ describe("staged outcome_opportunity_map", () => {
 
     const strictMetric = flattenMeasuredItems(strictRendered.measuredScene.root).find((item) => item.id === "M-001");
     const simpleMetric = flattenMeasuredItems(simpleRendered.measuredScene.root).find((item) => item.id === "M-001");
+    const strictInitiative = flattenMeasuredItems(strictRendered.measuredScene.root).find((item) => item.id === "I-001");
+    const simpleInitiative = flattenMeasuredItems(simpleRendered.measuredScene.root).find((item) => item.id === "I-001");
     expect(strictMetric?.kind).toBe("node");
     expect(simpleMetric?.kind).toBe("node");
-    if (strictMetric?.kind !== "node" || simpleMetric?.kind !== "node") {
-      throw new Error("Expected M-001 to be measured as a node.");
+    expect(strictInitiative?.kind).toBe("node");
+    expect(simpleInitiative?.kind).toBe("node");
+    if (
+      strictMetric?.kind !== "node" ||
+      simpleMetric?.kind !== "node" ||
+      strictInitiative?.kind !== "node" ||
+      simpleInitiative?.kind !== "node"
+    ) {
+      throw new Error("Expected M-001 and I-001 to be measured as nodes.");
     }
 
     expect(strictMetric.content.map((block) => ({
@@ -381,6 +408,25 @@ describe("staged outcome_opportunity_map", () => {
     ]);
     expect(simpleMetric.content.map((block) => block.lines.join(" "))).toEqual([
       "Checkout Completion Rate"
+    ]);
+    expect(strictInitiative.content.map((block) => ({
+      lines: block.lines,
+      kind: block.kind,
+      priority: block.priority
+    }))).toEqual([
+      {
+        lines: ["Billing Simplification"],
+        kind: "text",
+        priority: "primary"
+      },
+      {
+        lines: ["Implemented by: P-001 Billing"],
+        kind: "metadata",
+        priority: "secondary"
+      }
+    ]);
+    expect(simpleInitiative.content.map((block) => block.lines.join(" "))).toEqual([
+      "Billing Simplification"
     ]);
   });
 
@@ -447,6 +493,10 @@ describe("staged outcome_opportunity_map", () => {
       expectNoOutcomeOpportunityBandLabelsInSvg(routingDebug.step2Svg);
       expectNoOutcomeOpportunityBandLabelsInSvg(routingDebug.step3Svg);
       expectNoOutcomeOpportunityBandLabelsInSvg(rendered.svg);
+      expectNoOutcomeOpportunityImplementedByEdgesInSvg(preRouting.preRoutingSvg);
+      expectNoOutcomeOpportunityImplementedByEdgesInSvg(routingDebug.step2Svg);
+      expectNoOutcomeOpportunityImplementedByEdgesInSvg(routingDebug.step3Svg);
+      expectNoOutcomeOpportunityImplementedByEdgesInSvg(rendered.svg);
       expectNoOutcomeOpportunityBandDecorations(preRouting.preRoutingPositionedScene);
       expectNoOutcomeOpportunityBandDecorations(routingDebug.step2PositionedScene);
       expectNoOutcomeOpportunityBandDecorations(routingDebug.step3PositionedScene);

@@ -56,6 +56,7 @@ SDD-Text supports multiple diagram “views” over the same graph. The recommen
       - `Opportunity` (`SUPPORTS`)
       - `Initiative` (`ADDRESSES`, `IMPLEMENTED_BY`)
    - `INSTRUMENTED_AT` context may render as grouped metric annotations when targets are outside the view scope, with experience targets separated from event targets.
+   - `IMPLEMENTED_BY` context may render as Initiative annotations when implementation targets are outside the view scope.
 
 2. **Journey Map**
    - Answers: *What steps happen over time, from the user’s perspective?*

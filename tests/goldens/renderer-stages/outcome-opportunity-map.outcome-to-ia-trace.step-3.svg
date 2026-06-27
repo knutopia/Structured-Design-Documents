@@ -50,7 +50,7 @@
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-i-001" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-001" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="66" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="38" y="66" width="224" height="62" rx="14" ry="14"/>
     </g>
     <g id="scene-node-op-001" class="scene-node primitive-card role-opportunity paint-nodes semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-001" data-role="opportunity">
       <rect class="scene-node__chrome" x="310" y="66" width="224" height="48" rx="14" ry="14"/>
@@ -66,6 +66,9 @@
     <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-001" data-role="initiative">
       <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="91">
           <tspan x="50" dy="0">Billing Simplification</tspan>
+        </text>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="50" y="112">
+          <tspan x="50" dy="0">Implemented by: P-001 Billing</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-opportunity paint-labels semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-001" data-role="opportunity">
@@ -115,7 +118,7 @@
       <path class="scene-edge__path" d="M 534 90 L 582 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-001__addresses__op-001" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-001__addresses__OP-001" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 90 L 310 90" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 262 97 L 310 97" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-001__measured_by__m-001" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-001__measured_by__M-001" data-role="measured_by">
       <path class="scene-edge__path" d="M 806 90 L 854 90" marker-end="url(#scene-marker-arrow-end)"/>

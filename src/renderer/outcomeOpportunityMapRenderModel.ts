@@ -52,6 +52,7 @@ export interface OutcomeOpportunityMapRenderModel {
 
 interface OutcomeOpportunityMapDisplayOptions {
   showInstrumentationAnnotations: boolean;
+  showImplementationAnnotations: boolean;
 }
 
 interface OutcomeOpportunitySemanticColumn {
@@ -80,6 +81,7 @@ export interface OutcomeOpportunityRendererDefaults {
   nodeChrome: Record<string, OutcomeOpportunityNodeChrome>;
   connectors: Record<string, OutcomeOpportunityConnector>;
   connectorPriorityOrder: string[];
+  implementationAnnotationLabel: string;
 }
 
 const expectedFixedColumns: OutcomeOpportunitySemanticColumn[] = [
@@ -271,6 +273,19 @@ function readConnectorPriorityOrder(view: ViewSpec): string[] {
   return edgeTypes;
 }
 
+function readImplementationAnnotationLabel(view: ViewSpec): string {
+  const implementationAnnotations = assertRecordValue(
+    view.conventions.renderer_defaults?.implementation_annotations,
+    "implementation_annotations"
+  );
+  const display = assertRecordValue(
+    implementationAnnotations.display,
+    "implementation_annotations.display"
+  );
+
+  return assertString(display.label, "implementation_annotations.display.label");
+}
+
 export function readOutcomeOpportunityRendererDefaults(view: ViewSpec): OutcomeOpportunityRendererDefaults {
   const semanticColumns = readFixedSemanticColumns(view);
   return {
@@ -278,7 +293,8 @@ export function readOutcomeOpportunityRendererDefaults(view: ViewSpec): OutcomeO
     nodeTypeColumns: readNodeTypeColumns(view, semanticColumns),
     nodeChrome: readNodeChrome(view),
     connectors: readConnectors(view),
-    connectorPriorityOrder: readConnectorPriorityOrder(view)
+    connectorPriorityOrder: readConnectorPriorityOrder(view),
+    implementationAnnotationLabel: readImplementationAnnotationLabel(view)
   };
 }
 
@@ -286,8 +302,33 @@ function readOutcomeOpportunityMapDisplayOptions(
   policy: ResolvedProfileDisplayPolicy
 ): OutcomeOpportunityMapDisplayOptions {
   return {
-    showInstrumentationAnnotations: readBooleanProfileDisplaySetting(policy, "show_instrumentation_annotations", true)
+    showInstrumentationAnnotations: readBooleanProfileDisplaySetting(policy, "show_instrumentation_annotations", true),
+    showImplementationAnnotations: readBooleanProfileDisplaySetting(policy, "show_implementation_annotations", true)
   };
+}
+
+function formatReferenceLine(
+  reference: NonNullable<Projection["derived"]["node_annotations"][number]["references"]>[number],
+  rendererDefaults: OutcomeOpportunityRendererDefaults,
+  displayOptions: OutcomeOpportunityMapDisplayOptions
+): string | undefined {
+  if (reference.role === "instrumented_at") {
+    if (!displayOptions.showInstrumentationAnnotations) {
+      return undefined;
+    }
+
+    return `${capitalize(reference.group)}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`;
+  }
+
+  if (reference.role === "implemented_by") {
+    if (!displayOptions.showImplementationAnnotations) {
+      return undefined;
+    }
+
+    return `${rendererDefaults.implementationAnnotationLabel}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`;
+  }
+
+  return undefined;
 }
 
 function buildAuthorOrderByEdgeKey(graph: CompiledGraph): Map<string, number> {
@@ -360,9 +401,10 @@ export function buildOutcomeOpportunityMapRenderModel(
       const node = projectionNodesById.get(nodeId)!;
       const chrome = rendererDefaults.nodeChrome[node.type];
       const labelLines = [node.name];
-      if (displayOptions.showInstrumentationAnnotations) {
-        for (const reference of annotationsByNodeId.get(nodeId)?.references ?? []) {
-          labelLines.push(`${capitalize(reference.group)}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`);
+      for (const reference of annotationsByNodeId.get(nodeId)?.references ?? []) {
+        const referenceLine = formatReferenceLine(reference, rendererDefaults, displayOptions);
+        if (referenceLine) {
+          labelLines.push(referenceLine);
         }
       }
 

@@ -103,6 +103,21 @@
                 "lineHeight": 16,
                 "region": "primary",
                 "priority": "primary"
+              },
+              {
+                "id": "I-001__content__line_1",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
+                "lines": [
+                  "Implemented by: P-001 Billing"
+                ],
+                "x": 12,
+                "y": 34,
+                "width": 165.144,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary",
+                "priority": "secondary"
               }
             ],
             "ports": [
@@ -111,28 +126,28 @@
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 31
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 31
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 31
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 31
               },
               {
                 "id": "secondary_in",
@@ -146,14 +161,14 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 62
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 62
           }
         ],
         "ports": [],
