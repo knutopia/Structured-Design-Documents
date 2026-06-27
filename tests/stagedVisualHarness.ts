@@ -465,6 +465,54 @@ export function expectLabelsHaveMinimumBoxClearance(
   }
 }
 
+function containsY(box: Rect, y: number): boolean {
+  return y >= box.y - EPSILON && y <= box.y + box.height + EPSILON;
+}
+
+export function expectHorizontalEndpointLabelsHaveMinimumClearance(
+  edges: readonly PositionedEdge[],
+  boxes: ReadonlyArray<Rect & { itemId: string }>,
+  minClearance: number
+): void {
+  const boxById = new Map(boxes.map((box) => [box.itemId, box] as const));
+  let checkedLabels = 0;
+
+  for (const edge of edges) {
+    if (!edge.label) {
+      continue;
+    }
+    const sourceBox = boxById.get(edge.from.itemId);
+    const targetBox = boxById.get(edge.to.itemId);
+    if (!sourceBox || !targetBox) {
+      continue;
+    }
+
+    const labelCenterY = edge.label.y + edge.label.height / 2;
+    if (!containsY(sourceBox, labelCenterY) || !containsY(targetBox, labelCenterY)) {
+      continue;
+    }
+
+    if (sourceBox.x + sourceBox.width <= targetBox.x + EPSILON) {
+      checkedLabels += 1;
+      expect(edge.label.x - (sourceBox.x + sourceBox.width), `${edge.id} source horizontal label clearance`)
+        .toBeGreaterThanOrEqual(minClearance - EPSILON);
+      expect(targetBox.x - (edge.label.x + edge.label.width), `${edge.id} target horizontal label clearance`)
+        .toBeGreaterThanOrEqual(minClearance - EPSILON);
+      continue;
+    }
+
+    if (targetBox.x + targetBox.width <= sourceBox.x + EPSILON) {
+      checkedLabels += 1;
+      expect(edge.label.x - (targetBox.x + targetBox.width), `${edge.id} target horizontal label clearance`)
+        .toBeGreaterThanOrEqual(minClearance - EPSILON);
+      expect(sourceBox.x - (edge.label.x + edge.label.width), `${edge.id} source horizontal label clearance`)
+        .toBeGreaterThanOrEqual(minClearance - EPSILON);
+    }
+  }
+
+  expect(checkedLabels).toBeGreaterThan(0);
+}
+
 export function expectLabelsDoNotOverlapEachOther(labels: readonly EdgeLabelBox[]): void {
   for (let index = 0; index < labels.length; index += 1) {
     for (let otherIndex = index + 1; otherIndex < labels.length; otherIndex += 1) {

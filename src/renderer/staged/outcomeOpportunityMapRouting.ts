@@ -189,7 +189,9 @@ export interface OutcomeOpportunityRoutingStages {
 const ENDPOINT_SPACING = 16;
 const EXTERIOR_STUB = 18;
 const ENDPOINT_MARGIN = 10;
-const LABEL_GAP = 24;
+const HORIZONTAL_LABEL_NODE_CLEARANCE = 24;
+const HORIZONTAL_LABEL_GAP = HORIZONTAL_LABEL_NODE_CLEARANCE * 2;
+const VERTICAL_LABEL_GAP = 24;
 const MAX_GLOBAL_GUTTER_ATTEMPTS = 4;
 
 const ENDPOINTS_BY_CHANNEL: Record<string, { source: EndpointSpec; target: EndpointSpec }> = {
@@ -885,7 +887,7 @@ function resolveRequiredGlobalGutterState(
     }
     if (plan.sourceSide === "east" && plan.targetSide === "west" && source.placement.columnOrder < target.placement.columnOrder) {
       const availableGap = roundMetric(target.node.x - (source.node.x + source.node.width));
-      const labelNeed = plan.label ? plan.label.width + LABEL_GAP : 0;
+      const labelNeed = plan.label ? plan.label.width + HORIZONTAL_LABEL_GAP : 0;
       const routeNeed = EXTERIOR_STUB * 2 + (plan.outgoingOrder * ENDPOINT_SPACING);
       accumulateExpansion(
         columnExpansions,
@@ -895,7 +897,7 @@ function resolveRequiredGlobalGutterState(
     }
     if (plan.sourceSide === "south" && plan.targetSide === "north" && source.placement.rowOrder <= target.placement.rowOrder) {
       const availableGap = roundMetric(target.node.y - (source.node.y + source.node.height));
-      const labelNeed = plan.label ? plan.label.height + LABEL_GAP : 0;
+      const labelNeed = plan.label ? plan.label.height + VERTICAL_LABEL_GAP : 0;
       accumulateExpansion(rowExpansions, source.placement.rowOrder, labelNeed - availableGap);
     }
   }
@@ -1114,8 +1116,18 @@ function emitFinalIntersectionDiagnostics(
   }
 }
 
+function inflateBoxHorizontally(box: OutcomeOpportunityBox, clearance: number): BlockingBox {
+  return {
+    itemId: box.itemId,
+    x: roundMetric(box.x - clearance),
+    y: box.y,
+    width: roundMetric(box.width + clearance * 2),
+    height: box.height
+  };
+}
+
 function collectBlockingBoxes(index: OutcomeOpportunityPositionedIndex): BlockingBox[] {
-  return index.nodeBoxes.map((box) => ({ ...box }));
+  return index.nodeBoxes.map((box) => inflateBoxHorizontally(box, HORIZONTAL_LABEL_NODE_CLEARANCE));
 }
 
 function placeLabels(

@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-capture terminology for diagram types
+-service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
 
@@ -17,6 +19,7 @@
 ## Sat 6-27
 
 -Made IMPLEMENTED_BY edge visible, profile-based 
+-Increased label gutter spacing
 
 ## Fri 6-26
 

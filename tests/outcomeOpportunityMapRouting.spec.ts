@@ -20,6 +20,7 @@ import {
   collectEdgeLabelBoxes,
   expectLabelsDoNotOverlapBoxes,
   expectLabelsDoNotOverlapEachOther,
+  expectHorizontalEndpointLabelsHaveMinimumClearance,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
   expectRoutesDoNotEnterEndpointBoxes,
   expectSameOrientationSegmentsSeparated
@@ -28,6 +29,7 @@ import {
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
+const OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE = 24;
 
 async function renderOutcomeOpportunitySource(
   sourceText: string,
@@ -363,6 +365,7 @@ END
       expectRoutesDoNotEnterEndpointBoxes(finalEdges, nodeBoxes);
       expectSameOrientationSegmentsSeparated(finalEdges);
       expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
+      expectHorizontalEndpointLabelsHaveMinimumClearance(finalEdges, nodeBoxes, OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE);
       expectLabelsDoNotOverlapEachOther(labelBoxes);
     }
   });
