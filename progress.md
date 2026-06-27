@@ -21,6 +21,7 @@
 -Made IMPLEMENTED_BY edge visible, profile-based 
 -Increased label gutter spacing
 -Aligned label gutter code structure with scenario-flow
+-Added descriptions to diagram types page
 
 ## Fri 6-26
 

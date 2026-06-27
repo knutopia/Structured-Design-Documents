@@ -1,6 +1,8 @@
 # Example: Service Blueprint Slice
 
-This example shows how SDD-Text expresses a service blueprint slice for a simple claim flow. The diagram connects customer-visible steps to frontstage, backstage, support, system, and policy elements in one structured graph. The image below is the `strict_profile` render from the code-driven example set.
+This example shows how SDD-Text expresses a service blueprint slice for a simple claim flow.
+
+The image below is the `strict_profile` render from the code-driven example set.
 
 Full source: [claim_flow_slice.sdd](claim_flow_slice.sdd)
 
