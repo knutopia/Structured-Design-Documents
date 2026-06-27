@@ -291,7 +291,7 @@ function buildCellContainer(
     kind: "container",
     id: cell.id,
     role: "outcome_opportunity_cell",
-    primitive: "cluster",
+    primitive: "stack",
     classes: buildCellClasses(cell),
     viewMetadata: buildCellViewMetadata(cell, column),
     layout: {

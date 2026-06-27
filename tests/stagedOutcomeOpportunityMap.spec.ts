@@ -148,6 +148,11 @@ function expectNoForbiddenOutcomeOpportunityDiagnostics(diagnostics: readonly { 
   )).toEqual([]);
 }
 
+function expectNoOutcomeOpportunityCellChrome(svg: string): void {
+  expect(svg).not.toContain("outcome_opportunity_cell");
+  expect(svg).not.toContain("role-outcome_opportunity_cell");
+}
+
 describe("staged outcome_opportunity_map", () => {
   it("builds a RendererScene from the middle layer without final geometry", async () => {
     const context = await resolveOutcomeOpportunityContext("outcome_to_ia_trace", "strict");
@@ -257,6 +262,9 @@ describe("staged outcome_opportunity_map", () => {
       rowOrder: 1,
       parking: false
     }));
+    expect(metricCell?.primitive).toBe("stack");
+    expect(rendered.preRoutingSvg).toContain('id="scene-node-m-051"');
+    expectNoOutcomeOpportunityCellChrome(rendered.preRoutingSvg);
     expect(rendered.preRoutingPositionedScene.decorations.map((decoration) => decoration.id)).toEqual(expect.arrayContaining([
       "outcome-opportunity-column-initiative__title",
       "outcome-opportunity-column-opportunity__title",
@@ -371,6 +379,10 @@ describe("staged outcome_opportunity_map", () => {
       expect(rendered.positionedScene.edges.map((edge) => edge.id)).toEqual(testCase.expectedEdges);
       expectNoForbiddenOutcomeOpportunityDiagnostics(rendered.positionedScene.diagnostics);
       expect(JSON.stringify(rendererScene)).not.toMatch(/"points"|"svg"|"dot"|"mermaid"|"elk"/i);
+      expectNoOutcomeOpportunityCellChrome(preRouting.preRoutingSvg);
+      expectNoOutcomeOpportunityCellChrome(routingDebug.step2Svg);
+      expectNoOutcomeOpportunityCellChrome(routingDebug.step3Svg);
+      expectNoOutcomeOpportunityCellChrome(rendered.svg);
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.renderer-scene.json`, stripViewMetadata(rendererScene));
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.measured-scene.json`, stripViewMetadata(measuredScene));
@@ -475,6 +487,7 @@ END
 
       expect(rendered.positionedScene.edges.length).toBeGreaterThan(0);
       expectNoForbiddenOutcomeOpportunityDiagnostics(rendered.positionedScene.diagnostics);
+      expectNoOutcomeOpportunityCellChrome(rendered.svg);
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);

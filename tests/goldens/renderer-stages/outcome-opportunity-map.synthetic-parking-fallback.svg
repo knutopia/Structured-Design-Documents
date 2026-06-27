@@ -47,42 +47,6 @@
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram outcome_opportunity_map outcome_opportunity_map" data-item-id="root" data-role="diagram_root">
       <rect class="scene-container__chrome" x="0" y="0" width="937.336" height="344" rx="18" ry="18"/>
     </g>
-    <g id="scene-container-initiative__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-initiative band-kind-outcome band-band-outcome-1 slot-kind-primary row-0 empty-cell" data-item-id="initiative__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="28" y="56" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-opportunity__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-opportunity band-kind-outcome band-band-outcome-1 slot-kind-primary row-0 empty-cell" data-item-id="opportunity__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="345.336" y="56" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-outcome__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-outcome band-kind-outcome band-band-outcome-1 slot-kind-primary row-0" data-item-id="outcome__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="617.336" y="56" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-metric__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-metric band-kind-outcome band-band-outcome-1 slot-kind-primary row-0 empty-cell" data-item-id="metric__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="889.336" y="56" width="20" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-initiative__cell__band-parking-1-op-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-initiative band-kind-parking band-band-parking-1-op-991 slot-kind-parking row-1 empty-cell parking-cell" data-item-id="initiative__cell__band:parking:1:OP-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="28" y="152" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-opportunity__cell__band-parking-1-op-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-opportunity band-kind-parking band-band-parking-1-op-991 slot-kind-parking row-1 parking-cell" data-item-id="opportunity__cell__band:parking:1:OP-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="345.336" y="152" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-outcome__cell__band-parking-1-op-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-outcome band-kind-parking band-band-parking-1-op-991 slot-kind-parking row-1 empty-cell parking-cell" data-item-id="outcome__cell__band:parking:1:OP-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="617.336" y="152" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-metric__cell__band-parking-1-op-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-metric band-kind-parking band-band-parking-1-op-991 slot-kind-parking row-1 empty-cell parking-cell" data-item-id="metric__cell__band:parking:1:OP-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="889.336" y="152" width="20" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-initiative__cell__band-parking-2-i-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-initiative band-kind-parking band-band-parking-2-i-991 slot-kind-parking row-2 parking-cell" data-item-id="initiative__cell__band:parking:2:I-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="28" y="248" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-opportunity__cell__band-parking-2-i-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-opportunity band-kind-parking band-band-parking-2-i-991 slot-kind-parking row-2 empty-cell parking-cell" data-item-id="opportunity__cell__band:parking:2:I-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="345.336" y="248" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-outcome__cell__band-parking-2-i-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-outcome band-kind-parking band-band-parking-2-i-991 slot-kind-parking row-2 empty-cell parking-cell" data-item-id="outcome__cell__band:parking:2:I-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="617.336" y="248" width="244" height="68" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-metric__cell__band-parking-2-i-991__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-metric band-kind-parking band-band-parking-2-i-991 slot-kind-parking row-2 empty-cell parking-cell" data-item-id="metric__cell__band:parking:2:I-991__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="889.336" y="248" width="20" height="68" rx="16" ry="16"/>
-    </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-o-990" class="scene-node primitive-card role-outcome paint-nodes semantic_node outcome_opportunity_node type-outcome visual-role-outcome_anchor shape-ellipse column-outcome placement-role-anchor_outcome band-band-outcome-1" data-item-id="O-990" data-role="outcome">

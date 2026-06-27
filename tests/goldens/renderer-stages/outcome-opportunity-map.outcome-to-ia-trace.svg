@@ -47,18 +47,6 @@
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram outcome_opportunity_map outcome_opportunity_map" data-item-id="root" data-role="diagram_root">
       <rect class="scene-container__chrome" x="0" y="0" width="1258.524" height="188" rx="18" ry="18"/>
     </g>
-    <g id="scene-container-initiative__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-initiative band-kind-outcome band-band-outcome-1 slot-kind-primary row-0" data-item-id="initiative__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="28" y="56" width="244" height="104" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-opportunity__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-opportunity band-kind-outcome band-band-outcome-1 slot-kind-primary row-0" data-item-id="opportunity__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="345.336" y="56" width="244" height="104" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-outcome__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-outcome band-kind-outcome band-band-outcome-1 slot-kind-primary row-0" data-item-id="outcome__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="654.77" y="56" width="244" height="104" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-metric__cell__band-outcome-1__slot-0" class="scene-container primitive-cluster role-outcome_opportunity_cell paint-chrome outcome_opportunity_cell column-metric band-kind-outcome band-band-outcome-1 slot-kind-primary row-0" data-item-id="metric__cell__band:outcome:1__slot:0" data-role="outcome_opportunity_cell">
-      <rect class="scene-container__chrome" x="986.524" y="56" width="244" height="104" rx="16" ry="16"/>
-    </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-i-001" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-001" data-role="initiative">

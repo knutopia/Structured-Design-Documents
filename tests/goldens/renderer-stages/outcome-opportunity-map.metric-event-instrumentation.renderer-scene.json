@@ -33,7 +33,7 @@
         "kind": "container",
         "id": "initiative__cell__band:outcome:1__slot:0",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-initiative",
@@ -136,7 +136,7 @@
         "kind": "container",
         "id": "opportunity__cell__band:outcome:1__slot:0",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-opportunity",
@@ -238,7 +238,7 @@
         "kind": "container",
         "id": "outcome__cell__band:outcome:1__slot:0",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-outcome",
@@ -340,7 +340,7 @@
         "kind": "container",
         "id": "metric__cell__band:outcome:1__slot:0",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-metric",
@@ -457,7 +457,7 @@
         "kind": "container",
         "id": "initiative__cell__band:outcome:1__slot:1",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-initiative",
@@ -491,7 +491,7 @@
         "kind": "container",
         "id": "opportunity__cell__band:outcome:1__slot:1",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-opportunity",
@@ -525,7 +525,7 @@
         "kind": "container",
         "id": "outcome__cell__band:outcome:1__slot:1",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-outcome",
@@ -559,7 +559,7 @@
         "kind": "container",
         "id": "metric__cell__band:outcome:1__slot:1",
         "role": "outcome_opportunity_cell",
-        "primitive": "cluster",
+        "primitive": "stack",
         "classes": [
           "outcome_opportunity_cell",
           "column-metric",
