@@ -81,33 +81,18 @@
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-opportunity__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-opportunity" data-decoration-id="outcome-opportunity-column-opportunity__title">
-      <text class="scene-text text-role-label block-kind-text" x="304" y="39">
-          <tspan x="304" dy="0">Opportunities</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="349.336" y="39">
+          <tspan x="349.336" dy="0">Opportunities</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-outcome__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-outcome" data-decoration-id="outcome-opportunity-column-outcome__title">
-      <text class="scene-text text-role-label block-kind-text" x="576" y="39">
-          <tspan x="576" dy="0">Outcomes</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="621.336" y="39">
+          <tspan x="621.336" dy="0">Outcomes</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-metric__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-metric" data-decoration-id="outcome-opportunity-column-metric__title">
-      <text class="scene-text text-role-label block-kind-text" x="848" y="39">
-          <tspan x="848" dy="0">Metrics</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-band-band-outcome-1__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_band_title band-kind-outcome" data-decoration-id="outcome-opportunity-band-band-outcome-1__title">
-      <text class="scene-text text-role-edge_label block-kind-text" x="8" y="94">
-          <tspan x="8" dy="0">Band 1</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-band-band-parking-1-op-991__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_band_title band-kind-parking" data-decoration-id="outcome-opportunity-band-band-parking-1-op-991__title">
-      <text class="scene-text text-role-edge_label block-kind-text" x="8" y="190">
-          <tspan x="8" dy="0">Parking 2</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-band-band-parking-2-i-991__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_band_title band-kind-parking" data-decoration-id="outcome-opportunity-band-band-parking-2-i-991__title">
-      <text class="scene-text text-role-edge_label block-kind-text" x="8" y="286">
-          <tspan x="8" dy="0">Parking 3</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="893.336" y="39">
+          <tspan x="893.336" dy="0">Metrics</tspan>
         </text>
     </g>
   </g>

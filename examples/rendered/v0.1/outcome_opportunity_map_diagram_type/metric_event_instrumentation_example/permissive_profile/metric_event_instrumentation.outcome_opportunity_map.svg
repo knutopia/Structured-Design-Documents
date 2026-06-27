@@ -112,23 +112,18 @@
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-opportunity__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-opportunity" data-decoration-id="outcome-opportunity-column-opportunity__title">
-      <text class="scene-text text-role-label block-kind-text" x="304" y="39">
-          <tspan x="304" dy="0">Opportunities</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="349.336" y="39">
+          <tspan x="349.336" dy="0">Opportunities</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-outcome__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-outcome" data-decoration-id="outcome-opportunity-column-outcome__title">
-      <text class="scene-text text-role-label block-kind-text" x="576" y="39">
-          <tspan x="576" dy="0">Outcomes</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="658.77" y="39">
+          <tspan x="658.77" dy="0">Outcomes</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-metric__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-metric" data-decoration-id="outcome-opportunity-column-metric__title">
-      <text class="scene-text text-role-label block-kind-text" x="848" y="39">
-          <tspan x="848" dy="0">Metrics</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-band-band-outcome-1__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_band_title band-kind-outcome" data-decoration-id="outcome-opportunity-band-band-outcome-1__title">
-      <text class="scene-text text-role-edge_label block-kind-text" x="8" y="198">
-          <tspan x="8" dy="0">Band 1</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="990.524" y="39">
+          <tspan x="990.524" dy="0">Metrics</tspan>
         </text>
     </g>
   </g>

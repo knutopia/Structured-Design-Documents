@@ -112,11 +112,6 @@
           <tspan x="848" dy="0">Metrics</tspan>
         </text>
     </g>
-    <g id="scene-decoration-outcome-opportunity-band-band-outcome-1__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_band_title band-kind-outcome" data-decoration-id="outcome-opportunity-band-band-outcome-1__title">
-      <text class="scene-text text-role-edge_label block-kind-text" x="8" y="150">
-          <tspan x="8" dy="0">Band 1</tspan>
-        </text>
-    </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
   </g>

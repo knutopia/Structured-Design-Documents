@@ -7,6 +7,8 @@ import { projectView } from "../src/projector/projectView.js";
 import type {
   MeasuredItem,
   PositionedContainer,
+  PositionedScene,
+  PositionedTextDecoration,
   PositionedItem,
   RendererScene,
   SceneItem
@@ -153,6 +155,52 @@ function expectNoOutcomeOpportunityCellChrome(svg: string): void {
   expect(svg).not.toContain("role-outcome_opportunity_cell");
 }
 
+function expectNoOutcomeOpportunityBandLabelsInSvg(svg: string): void {
+  expect(svg).not.toContain("outcome_opportunity_band_title");
+  expect(svg).not.toContain("outcome-opportunity-band-");
+  expect(svg).not.toMatch(/>Band \d+</);
+}
+
+function expectNoOutcomeOpportunityBandDecorations(scene: PositionedScene): void {
+  expect(scene.decorations.filter((decoration) =>
+    decoration.id.startsWith("outcome-opportunity-band-")
+    || decoration.classes.includes("outcome_opportunity_band_title")
+    || (decoration.kind === "text" && /^Band \d+$/.test(decoration.text))
+  )).toEqual([]);
+}
+
+function expectOutcomeOpportunityColumnHeadersAligned(scene: PositionedScene): void {
+  const firstCellByColumn = new Map<string, PositionedContainer>();
+  for (const item of scene.root.children) {
+    if (item.kind !== "container" || item.viewMetadata?.outcomeOpportunity?.kind !== "cell") {
+      continue;
+    }
+    const metadata = item.viewMetadata.outcomeOpportunity;
+    const existing = firstCellByColumn.get(metadata.columnId);
+    if (!existing || item.y < existing.y || (item.y === existing.y && item.x < existing.x)) {
+      firstCellByColumn.set(metadata.columnId, item);
+    }
+  }
+
+  const columnTitles = scene.decorations.filter((decoration): decoration is PositionedTextDecoration =>
+    decoration.kind === "text" && decoration.classes.includes("outcome_opportunity_column_title")
+  );
+  expect(columnTitles.map((decoration) => decoration.id).sort()).toEqual([
+    "outcome-opportunity-column-initiative__title",
+    "outcome-opportunity-column-metric__title",
+    "outcome-opportunity-column-opportunity__title",
+    "outcome-opportunity-column-outcome__title"
+  ]);
+  expect(new Set(columnTitles.map((decoration) => decoration.y)).size).toBe(1);
+
+  for (const [columnId, cell] of firstCellByColumn.entries()) {
+    const title = columnTitles.find((decoration) => decoration.id === `outcome-opportunity-column-${columnId}__title`);
+    expect(title).toBeDefined();
+    expect(title?.x).toBeCloseTo(cell.x + 4, 3);
+    expect(title?.y).toBe(Math.max(12, cell.y - 30));
+  }
+}
+
 describe("staged outcome_opportunity_map", () => {
   it("builds a RendererScene from the middle layer without final geometry", async () => {
     const context = await resolveOutcomeOpportunityContext("outcome_to_ia_trace", "strict");
@@ -240,6 +288,14 @@ describe("staged outcome_opportunity_map", () => {
       "O-050",
       "OP-050"
     ]);
+    expect(rendered.middleLayer.bands).toEqual([
+      expect.objectContaining({
+        id: "band:outcome:1",
+        label: "B1",
+        kind: "outcome",
+        anchorOutcomeId: "O-050"
+      })
+    ]);
 
     const positionedItems = flattenPositionedItems(rendered.preRoutingPositionedScene.root);
     const metricNode = positionedItems.find((item) => item.id === "M-051");
@@ -257,6 +313,8 @@ describe("staged outcome_opportunity_map", () => {
     );
     expect(metricCell?.viewMetadata?.outcomeOpportunity).toEqual(expect.objectContaining({
       kind: "cell",
+      bandId: "band:outcome:1",
+      bandLabel: "Band 1",
       bandKind: "outcome",
       physicalSlotId: "band:outcome:1__slot:1",
       rowOrder: 1,
@@ -265,13 +323,15 @@ describe("staged outcome_opportunity_map", () => {
     expect(metricCell?.primitive).toBe("stack");
     expect(rendered.preRoutingSvg).toContain('id="scene-node-m-051"');
     expectNoOutcomeOpportunityCellChrome(rendered.preRoutingSvg);
-    expect(rendered.preRoutingPositionedScene.decorations.map((decoration) => decoration.id)).toEqual(expect.arrayContaining([
+    expectNoOutcomeOpportunityBandLabelsInSvg(rendered.preRoutingSvg);
+    expectNoOutcomeOpportunityBandDecorations(rendered.preRoutingPositionedScene);
+    expectOutcomeOpportunityColumnHeadersAligned(rendered.preRoutingPositionedScene);
+    expect(rendered.preRoutingPositionedScene.decorations.map((decoration) => decoration.id)).toEqual([
       "outcome-opportunity-column-initiative__title",
       "outcome-opportunity-column-opportunity__title",
       "outcome-opportunity-column-outcome__title",
-      "outcome-opportunity-column-metric__title",
-      "outcome-opportunity-band-band-outcome-1__title"
-    ]));
+      "outcome-opportunity-column-metric__title"
+    ]);
   });
 
   it("keeps instrumentation annotations in measured secondary blocks according to profile display", async () => {
@@ -383,6 +443,18 @@ describe("staged outcome_opportunity_map", () => {
       expectNoOutcomeOpportunityCellChrome(routingDebug.step2Svg);
       expectNoOutcomeOpportunityCellChrome(routingDebug.step3Svg);
       expectNoOutcomeOpportunityCellChrome(rendered.svg);
+      expectNoOutcomeOpportunityBandLabelsInSvg(preRouting.preRoutingSvg);
+      expectNoOutcomeOpportunityBandLabelsInSvg(routingDebug.step2Svg);
+      expectNoOutcomeOpportunityBandLabelsInSvg(routingDebug.step3Svg);
+      expectNoOutcomeOpportunityBandLabelsInSvg(rendered.svg);
+      expectNoOutcomeOpportunityBandDecorations(preRouting.preRoutingPositionedScene);
+      expectNoOutcomeOpportunityBandDecorations(routingDebug.step2PositionedScene);
+      expectNoOutcomeOpportunityBandDecorations(routingDebug.step3PositionedScene);
+      expectNoOutcomeOpportunityBandDecorations(rendered.positionedScene);
+      expectOutcomeOpportunityColumnHeadersAligned(preRouting.preRoutingPositionedScene);
+      expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step2PositionedScene);
+      expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step3PositionedScene);
+      expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.renderer-scene.json`, stripViewMetadata(rendererScene));
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.measured-scene.json`, stripViewMetadata(measuredScene));
@@ -488,6 +560,9 @@ END
       expect(rendered.positionedScene.edges.length).toBeGreaterThan(0);
       expectNoForbiddenOutcomeOpportunityDiagnostics(rendered.positionedScene.diagnostics);
       expectNoOutcomeOpportunityCellChrome(rendered.svg);
+      expectNoOutcomeOpportunityBandLabelsInSvg(rendered.svg);
+      expectNoOutcomeOpportunityBandDecorations(rendered.positionedScene);
+      expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);

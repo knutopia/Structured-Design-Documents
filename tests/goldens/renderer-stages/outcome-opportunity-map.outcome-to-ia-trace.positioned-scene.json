@@ -786,7 +786,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 304,
+      "x": 349.336,
       "y": 26,
       "text": "Opportunities",
       "textStyleRole": "label"
@@ -799,7 +799,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 576,
+      "x": 658.77,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -812,23 +812,10 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 848,
+      "x": 990.524,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"
-    },
-    {
-      "kind": "text",
-      "id": "outcome-opportunity-band-band-outcome-1__title",
-      "classes": [
-        "outcome_opportunity_band_title",
-        "band-kind-outcome"
-      ],
-      "paintGroup": "labels",
-      "x": 8,
-      "y": 100,
-      "text": "Band 1",
-      "textStyleRole": "edge_label"
     }
   ],
   "diagnostics": [],

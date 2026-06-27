@@ -9,10 +9,7 @@ import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
 import type {
   ContentBlock,
   MeasuredScene,
-  PositionedContainer,
-  PositionedDecoration,
   PositionedScene,
-  PositionedItem,
   RendererScene,
   RoutingIntent,
   SceneContainer,
@@ -32,6 +29,7 @@ import {
   type OutcomeOpportunityMiddleLayerModel,
   type OutcomeOpportunityNodePlacement
 } from "./outcomeOpportunityMapMiddleLayer.js";
+import { decorateOutcomeOpportunityPositionedScene } from "./outcomeOpportunityMapDecorations.js";
 import {
   buildOutcomeOpportunityMapRoutingStages,
   type OutcomeOpportunityRoutingStages
@@ -54,8 +52,6 @@ const ROOT_GAP = 28;
 const ROOT_TOP_GUTTER = 56;
 const CELL_GAP = 10;
 const CELL_PADDING = 10;
-const COLUMN_HEADER_Y_OFFSET = 30;
-const BAND_LABEL_X = 8;
 
 interface OutcomeOpportunityRenderContext {
   rendererScene: RendererScene;
@@ -67,13 +63,6 @@ interface SceneBuildContext {
   placementByNodeId: ReadonlyMap<string, OutcomeOpportunityNodePlacement>;
   columnById: ReadonlyMap<string, OutcomeOpportunityColumn>;
 }
-
-type OutcomeOpportunityCellMetadata = Extract<NonNullable<ViewMetadata["outcomeOpportunity"]>, { kind: "cell" }>;
-type PositionedOutcomeOpportunityCell = PositionedContainer & {
-  viewMetadata: {
-    outcomeOpportunity: OutcomeOpportunityCellMetadata;
-  };
-};
 
 export interface OutcomeOpportunityMapPreRoutingArtifactsResult {
   rendererScene: RendererScene;
@@ -382,91 +371,6 @@ function buildSceneEdge(edge: OutcomeOpportunityMiddleEdge): SceneEdge {
   };
 }
 
-function isOutcomeOpportunityCell(item: PositionedItem): item is PositionedOutcomeOpportunityCell {
-  return item.kind === "container" && item.viewMetadata?.outcomeOpportunity?.kind === "cell";
-}
-
-function buildColumnHeaderDecorations(scene: PositionedScene): PositionedDecoration[] {
-  const cells = scene.root.children.filter(isOutcomeOpportunityCell);
-  const firstCellByColumn = new Map<number, PositionedContainer>();
-
-  for (const cell of cells) {
-    const metadata = cell.viewMetadata.outcomeOpportunity;
-    const existing = firstCellByColumn.get(metadata.columnOrder);
-    if (!existing || cell.y < existing.y || (cell.y === existing.y && cell.x < existing.x)) {
-      firstCellByColumn.set(metadata.columnOrder, cell);
-    }
-  }
-
-  return [...firstCellByColumn.entries()]
-    .sort((left, right) => left[0] - right[0])
-    .map(([, cell]) => {
-      const metadata = cell.viewMetadata!.outcomeOpportunity!;
-      if (metadata.kind !== "cell") {
-        throw new Error("Expected outcome-opportunity cell metadata.");
-      }
-
-      return {
-        kind: "text",
-        id: `outcome-opportunity-column-${sanitizeToken(metadata.columnId)}__title`,
-        classes: ["outcome_opportunity_column_title", `column-${sanitizeToken(metadata.columnId)}`],
-        paintGroup: "labels",
-        x: cell.x + 4,
-        y: Math.max(12, cell.y - COLUMN_HEADER_Y_OFFSET),
-        text: metadata.columnLabel,
-        textStyleRole: "label"
-      } satisfies PositionedDecoration;
-    });
-}
-
-function buildBandDecorations(scene: PositionedScene): PositionedDecoration[] {
-  const cells = scene.root.children.filter(isOutcomeOpportunityCell);
-  const cellsByBand = new Map<string, PositionedOutcomeOpportunityCell[]>();
-
-  for (const cell of cells) {
-    const metadata = cell.viewMetadata.outcomeOpportunity;
-    const group = cellsByBand.get(metadata.bandId) ?? [];
-    group.push(cell);
-    cellsByBand.set(metadata.bandId, group);
-  }
-
-  return [...cellsByBand.entries()]
-    .map(([, bandCells]) => {
-      const sorted = [...bandCells].sort((left, right) => left.y - right.y || left.x - right.x);
-      const first = sorted[0];
-      if (!first) {
-        return undefined;
-      }
-      const metadata = first.viewMetadata.outcomeOpportunity;
-      const minY = Math.min(...bandCells.map((cell) => cell.y));
-      const maxY = Math.max(...bandCells.map((cell) => cell.y + cell.height));
-      const classToken = metadata.bandKind === "parking" ? "parking" : "outcome";
-
-      return {
-        kind: "text",
-        id: `outcome-opportunity-band-${sanitizeToken(metadata.bandId)}__title`,
-        classes: ["outcome_opportunity_band_title", `band-kind-${classToken}`],
-        paintGroup: "labels",
-        x: BAND_LABEL_X,
-        y: minY + Math.max(10, (maxY - minY) / 2 - 8),
-        text: metadata.bandLabel,
-        textStyleRole: "edge_label"
-      } satisfies PositionedDecoration;
-    })
-    .filter((decoration): decoration is NonNullable<typeof decoration> => decoration !== undefined)
-    .sort((left, right) => left.id.localeCompare(right.id));
-}
-
-function decorateOutcomeOpportunityPreRoutingScene(scene: PositionedScene): PositionedScene {
-  return {
-    ...scene,
-    decorations: [
-      ...buildColumnHeaderDecorations(scene),
-      ...buildBandDecorations(scene)
-    ]
-  };
-}
-
 function buildOutcomeOpportunityRenderContext(
   projection: Projection,
   graph: CompiledGraph,
@@ -546,7 +450,7 @@ async function buildOutcomeOpportunityPreRoutingPipeline(
 }> {
   const context = buildOutcomeOpportunityRenderContext(projection, graph, view, profileId, themeId);
   const measuredScene = measureScene(context.rendererScene);
-  const basePositionedScene = decorateOutcomeOpportunityPreRoutingScene(
+  const basePositionedScene = decorateOutcomeOpportunityPositionedScene(
     await positionMeasuredSceneBeforeRouting(measuredScene)
   );
 

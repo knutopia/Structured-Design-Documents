@@ -13,6 +13,12 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 6-26
+
+- Explored syntax highlighting opportunity
+- Removed redundant cell visuals in oom
+- Improved column alignment in oom
+
 ## Sat 5-16
 
 -finished oom implementation (raw)

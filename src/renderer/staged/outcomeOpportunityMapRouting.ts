@@ -26,6 +26,7 @@ import type {
   OutcomeOpportunityMiddleLayerModel,
   OutcomeOpportunityNodePlacement
 } from "./outcomeOpportunityMapMiddleLayer.js";
+import { decorateOutcomeOpportunityPositionedScene } from "./outcomeOpportunityMapDecorations.js";
 
 export type OutcomeOpportunityRoutePattern =
   | "same_band_addressing"
@@ -946,8 +947,10 @@ function applyGlobalGutterExpansions(
   const rootBottomPadding = Math.max(expanded.root.chrome.padding.bottom, 28);
   expanded.root.width = roundMetric(Math.max(expanded.root.width, maxRight + rootRightPadding));
   expanded.root.height = roundMetric(Math.max(expanded.root.height, maxBottom + rootBottomPadding));
-  expanded.decorations = expanded.decorations.map((decoration) => ({ ...decoration }));
-  return expanded;
+  return decorateOutcomeOpportunityPositionedScene({
+    ...expanded,
+    decorations: []
+  });
 }
 
 function buildSegmentOccupancy(
@@ -1173,14 +1176,15 @@ function withStep2EdgesAndDiagnostics(
   edges: PositionedEdge[],
   diagnostics: readonly RendererDiagnostic[]
 ): PositionedScene {
-  return {
+  return decorateOutcomeOpportunityPositionedScene({
     ...structuredClone(scene),
     edges,
+    decorations: [],
     diagnostics: sortRendererDiagnostics([
       ...scene.diagnostics,
       ...diagnostics
     ])
-  };
+  });
 }
 
 function routePlansForScene(

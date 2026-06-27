@@ -887,7 +887,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 304,
+      "x": 349.336,
       "y": 26,
       "text": "Opportunities",
       "textStyleRole": "label"
@@ -900,7 +900,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 576,
+      "x": 621.336,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -913,49 +913,10 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 848,
+      "x": 893.336,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"
-    },
-    {
-      "kind": "text",
-      "id": "outcome-opportunity-band-band-outcome-1__title",
-      "classes": [
-        "outcome_opportunity_band_title",
-        "band-kind-outcome"
-      ],
-      "paintGroup": "labels",
-      "x": 8,
-      "y": 82,
-      "text": "Band 1",
-      "textStyleRole": "edge_label"
-    },
-    {
-      "kind": "text",
-      "id": "outcome-opportunity-band-band-parking-1-op-991__title",
-      "classes": [
-        "outcome_opportunity_band_title",
-        "band-kind-parking"
-      ],
-      "paintGroup": "labels",
-      "x": 8,
-      "y": 178,
-      "text": "Parking 2",
-      "textStyleRole": "edge_label"
-    },
-    {
-      "kind": "text",
-      "id": "outcome-opportunity-band-band-parking-2-i-991__title",
-      "classes": [
-        "outcome_opportunity_band_title",
-        "band-kind-parking"
-      ],
-      "paintGroup": "labels",
-      "x": 8,
-      "y": 274,
-      "text": "Parking 3",
-      "textStyleRole": "edge_label"
     }
   ],
   "diagnostics": [

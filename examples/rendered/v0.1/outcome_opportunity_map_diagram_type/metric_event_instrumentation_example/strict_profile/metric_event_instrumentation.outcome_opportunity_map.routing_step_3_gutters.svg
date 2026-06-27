@@ -126,11 +126,6 @@
           <tspan x="848" dy="0">Metrics</tspan>
         </text>
     </g>
-    <g id="scene-decoration-outcome-opportunity-band-band-outcome-1__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_band_title band-kind-outcome" data-decoration-id="outcome-opportunity-band-band-outcome-1__title">
-      <text class="scene-text text-role-edge_label block-kind-text" x="8" y="198">
-          <tspan x="8" dy="0">Band 1</tspan>
-        </text>
-    </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-op-050__supports__o-050" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-050__supports__O-050" data-role="supports">

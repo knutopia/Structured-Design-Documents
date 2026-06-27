@@ -783,19 +783,6 @@
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"
-    },
-    {
-      "kind": "text",
-      "id": "outcome-opportunity-band-band-outcome-1__title",
-      "classes": [
-        "outcome_opportunity_band_title",
-        "band-kind-outcome"
-      ],
-      "paintGroup": "labels",
-      "x": 8,
-      "y": 100,
-      "text": "Band 1",
-      "textStyleRole": "edge_label"
     }
   ],
   "diagnostics": [],
