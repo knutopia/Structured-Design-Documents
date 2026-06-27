@@ -5,3 +5,5 @@ dist/
 .DS_Store
 coverage/
 .Identifier
+.sdd-helper-requests/
+.playwright-mcp/*.log
