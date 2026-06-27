@@ -852,12 +852,22 @@ function accumulateExpansion(target: Record<number, number>, order: number, amou
   target[order] = roundMetric(Math.max(target[order] ?? 0, amount));
 }
 
+function mergeExpansionRecords(...records: ReadonlyArray<Record<number, number>>): Record<number, number> {
+  const merged: Record<number, number> = {};
+  for (const record of records) {
+    for (const [order, amount] of Object.entries(record)) {
+      accumulateExpansion(merged, Number(order), amount);
+    }
+  }
+  return merged;
+}
+
 function countSideBucketConnectors(buckets: OutcomeOpportunityNodeEdgeBuckets, side: PortSide): number {
   const sideBuckets = getSideBuckets(buckets, side);
   return sideBuckets.startingConnectorIds.length + sideBuckets.endingConnectorIds.length;
 }
 
-function resolveRequiredGlobalGutterState(
+function resolveRequiredEndpointGapExpansions(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   index: OutcomeOpportunityPositionedIndex,
   bucketsByNodeId: ReadonlyMap<string, OutcomeOpportunityNodeEdgeBuckets>
@@ -887,22 +897,79 @@ function resolveRequiredGlobalGutterState(
     }
     if (plan.sourceSide === "east" && plan.targetSide === "west" && source.placement.columnOrder < target.placement.columnOrder) {
       const availableGap = roundMetric(target.node.x - (source.node.x + source.node.width));
-      const labelNeed = plan.label ? plan.label.width + HORIZONTAL_LABEL_GAP : 0;
       const routeNeed = EXTERIOR_STUB * 2 + (plan.outgoingOrder * ENDPOINT_SPACING);
-      accumulateExpansion(
-        columnExpansions,
-        source.placement.columnOrder,
-        Math.max(labelNeed, routeNeed) - availableGap
-      );
-    }
-    if (plan.sourceSide === "south" && plan.targetSide === "north" && source.placement.rowOrder <= target.placement.rowOrder) {
-      const availableGap = roundMetric(target.node.y - (source.node.y + source.node.height));
-      const labelNeed = plan.label ? plan.label.height + VERTICAL_LABEL_GAP : 0;
-      accumulateExpansion(rowExpansions, source.placement.rowOrder, labelNeed - availableGap);
+      accumulateExpansion(columnExpansions, source.placement.columnOrder, routeNeed - availableGap);
     }
   }
 
   return buildGlobalGutterState(columnExpansions, rowExpansions);
+}
+
+// Mirrors scenario-flow's label-column expansion phase while keeping outcome-specific
+// exact expansion and the wider outcome label clearance.
+function resolveRequiredLabelColumnExpansions(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  index: OutcomeOpportunityPositionedIndex
+): Record<number, number> {
+  const columnExpansions: Record<number, number> = {};
+
+  for (const plan of plans) {
+    if (!plan.label || plan.sourceSide !== "east" || plan.targetSide !== "west") {
+      continue;
+    }
+
+    const source = index.nodeById.get(plan.from);
+    const target = index.nodeById.get(plan.to);
+    if (!source || !target || source.placement.columnOrder >= target.placement.columnOrder) {
+      continue;
+    }
+
+    const availableGap = roundMetric(target.node.x - (source.node.x + source.node.width));
+    const required = roundMetric(plan.label.width + HORIZONTAL_LABEL_GAP);
+    accumulateExpansion(columnExpansions, source.placement.columnOrder, required - availableGap);
+  }
+
+  return columnExpansions;
+}
+
+function resolveRequiredLabelRowExpansions(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  index: OutcomeOpportunityPositionedIndex
+): Record<number, number> {
+  const rowExpansions: Record<number, number> = {};
+
+  for (const plan of plans) {
+    if (!plan.label || plan.sourceSide !== "south" || plan.targetSide !== "north") {
+      continue;
+    }
+
+    const source = index.nodeById.get(plan.from);
+    const target = index.nodeById.get(plan.to);
+    if (!source || !target || source.placement.rowOrder > target.placement.rowOrder) {
+      continue;
+    }
+
+    const availableGap = roundMetric(target.node.y - (source.node.y + source.node.height));
+    const required = roundMetric(plan.label.height + VERTICAL_LABEL_GAP);
+    accumulateExpansion(rowExpansions, source.placement.rowOrder, required - availableGap);
+  }
+
+  return rowExpansions;
+}
+
+function resolveRequiredGlobalGutterState(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  index: OutcomeOpportunityPositionedIndex,
+  bucketsByNodeId: ReadonlyMap<string, OutcomeOpportunityNodeEdgeBuckets>
+): OutcomeOpportunityGlobalGutterState {
+  const endpointGapExpansions = resolveRequiredEndpointGapExpansions(plans, index, bucketsByNodeId);
+  const labelColumnExpansions = resolveRequiredLabelColumnExpansions(plans, index);
+  const labelRowExpansions = resolveRequiredLabelRowExpansions(plans, index);
+
+  return buildGlobalGutterState(
+    mergeExpansionRecords(endpointGapExpansions.columnExpansions, labelColumnExpansions),
+    mergeExpansionRecords(endpointGapExpansions.rowExpansions, labelRowExpansions)
+  );
 }
 
 function translatePositionedItem(item: PositionedItem, dx: number, dy: number): void {
@@ -1116,7 +1183,9 @@ function emitFinalIntersectionDiagnostics(
   }
 }
 
-function inflateBoxHorizontally(box: OutcomeOpportunityBox, clearance: number): BlockingBox {
+// Mirrors scenario-flow's blocker-inflation phase, but expands horizontally only
+// because the current outcome clearance invariant targets flanking horizontal labels.
+function inflateHorizontalLabelBlockingBox(box: OutcomeOpportunityBox, clearance: number): BlockingBox {
   return {
     itemId: box.itemId,
     x: roundMetric(box.x - clearance),
@@ -1126,8 +1195,8 @@ function inflateBoxHorizontally(box: OutcomeOpportunityBox, clearance: number): 
   };
 }
 
-function collectBlockingBoxes(index: OutcomeOpportunityPositionedIndex): BlockingBox[] {
-  return index.nodeBoxes.map((box) => inflateBoxHorizontally(box, HORIZONTAL_LABEL_NODE_CLEARANCE));
+function collectLabelBlockingBoxes(index: OutcomeOpportunityPositionedIndex): BlockingBox[] {
+  return index.nodeBoxes.map((box) => inflateHorizontalLabelBlockingBox(box, HORIZONTAL_LABEL_NODE_CLEARANCE));
 }
 
 function placeLabels(
@@ -1143,7 +1212,7 @@ function placeLabels(
     (plan) => plan.finalRoute
   );
   const placedLabelBoxes: BlockingBox[] = [];
-  const nodeBoxes = collectBlockingBoxes(index);
+  const nodeBoxes = collectLabelBlockingBoxes(index);
 
   for (const plan of plans) {
     if (!plan.label) {
