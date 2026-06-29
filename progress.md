@@ -16,6 +16,12 @@
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
 
+## Mon 6-29
+
+-Identified routing failures in outcome-opportunity map
+-Created arch doc to fix routing failures
+
+
 ## Sat 6-27
 
 -Made IMPLEMENTED_BY edge visible, profile-based 
