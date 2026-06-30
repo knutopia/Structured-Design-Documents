@@ -406,7 +406,11 @@ describe("outcome_opportunity_map routing step 2", () => {
     )?.route.points;
     expect(step3Route).not.toEqual(step2Route);
     expect(rendered.routingStages.gutterOccupancy.some((entry) =>
-      entry.key === "node:O-050:right" && entry.kind === "node_right" && entry.locked
+      entry.key === "node:O-050:right"
+      && entry.kind === "node_right"
+      && entry.axis === "vertical"
+      && entry.spanEnd > entry.spanStart
+      && entry.locked === undefined
     )).toBe(true);
     expect(rendered.routingStages.gutterOccupancy.some((entry) =>
       entry.kind === "column" && entry.columnOrder !== undefined
@@ -488,6 +492,151 @@ END
     expect(outcomeOneWestArrivals.length).toBeGreaterThanOrEqual(4);
     expectEndpointSpacing(outcomeOneWestArrivals, "to");
     expectPrimaryConnectorLabelsPresent(finalEdges);
+  });
+
+  it("separates same-source east-edge address fan-out through local node-right bundles", async () => {
+    const rendered = await renderOutcomeOpportunitySource(`
+SDD-TEXT 0.1
+
+Initiative I-001 "Guided setup priority planner"
+  ADDRESSES OP-001 "Users cannot see which setup steps matter"
+  ADDRESSES OP-007 "Handoff gaps hide next ownership"
+END
+
+Initiative I-002 "Data readiness preflight"
+  ADDRESSES OP-002 "Imported data quality issues appear too late"
+END
+
+Initiative I-003 "Vocabulary mapping and templates"
+  ADDRESSES OP-003 "Terminology does not match the team workflow"
+  ADDRESSES OP-001 "Users cannot see which setup steps matter"
+END
+
+Initiative I-004 "Exception triage workspace"
+  ADDRESSES OP-004 "Exception handling requires support escalation"
+  ADDRESSES OP-006 "Teams need rollout controls before trusting automation"
+END
+
+Initiative I-005 "Recommendation evidence drawer"
+  ADDRESSES OP-005 "Recommendation evidence is hard to audit"
+  ADDRESSES OP-008 "Outcome history is not visible at review time"
+END
+
+Initiative I-006 "Controlled automation rollout"
+  ADDRESSES OP-006 "Teams need rollout controls before trusting automation"
+  ADDRESSES OP-005 "Recommendation evidence is hard to audit"
+END
+
+Initiative I-007 "Operational handoff checklist"
+  ADDRESSES OP-007 "Handoff gaps hide next ownership"
+  ADDRESSES OP-004 "Exception handling requires support escalation"
+END
+
+Opportunity OP-001 "Users cannot see which setup steps matter"
+  SUPPORTS O-001 "Shorten time to first value"
+  SUPPORTS O-002 "Increase self-serve task completion"
+END
+
+Opportunity OP-002 "Imported data quality issues appear too late"
+  SUPPORTS O-001 "Shorten time to first value"
+  SUPPORTS O-003 "Improve trust in automated recommendations"
+END
+
+Opportunity OP-003 "Terminology does not match the team workflow"
+  SUPPORTS O-002 "Increase self-serve task completion"
+END
+
+Opportunity OP-004 "Exception handling requires support escalation"
+  SUPPORTS O-002 "Increase self-serve task completion"
+END
+
+Opportunity OP-005 "Recommendation evidence is hard to audit"
+  SUPPORTS O-003 "Improve trust in automated recommendations"
+END
+
+Opportunity OP-006 "Teams need rollout controls before trusting automation"
+  SUPPORTS O-002 "Increase self-serve task completion"
+  SUPPORTS O-003 "Improve trust in automated recommendations"
+END
+
+Opportunity OP-007 "Handoff gaps hide next ownership"
+  SUPPORTS O-001 "Shorten time to first value"
+  SUPPORTS O-002 "Increase self-serve task completion"
+END
+
+Opportunity OP-008 "Outcome history is not visible at review time"
+  SUPPORTS O-003 "Improve trust in automated recommendations"
+END
+
+Outcome O-001 "Shorten time to first value"
+END
+
+Outcome O-002 "Increase self-serve task completion"
+END
+
+Outcome O-003 "Improve trust in automated recommendations"
+END
+`);
+
+    expectSceneRoutesOrthogonal(rendered.routingStages.finalPositionedScene);
+    expect(rendered.routingStages.connectorPlans.filter((plan) => plan.from === "I-007").map((plan) => ({
+      edgeId: plan.edgeId,
+      pattern: plan.pattern
+    }))).toEqual([
+      {
+        edgeId: "I-007__addresses__OP-007",
+        pattern: "same_band_addressing"
+      },
+      {
+        edgeId: "I-007__addresses__OP-004",
+        pattern: "cross_band_bridge"
+      }
+    ]);
+
+    const sourceEdges = rendered.routingStages.finalPositionedScene.edges.filter((edge) => edge.from.itemId === "I-007");
+    expect(sourceEdges.map((edge) => edge.id)).toEqual([
+      "I-007__addresses__OP-007",
+      "I-007__addresses__OP-004"
+    ]);
+    expectEndpointSpacing(sourceEdges, "from");
+
+    const sourceHorizontalSegments = sourceEdges.flatMap((edge) =>
+      collectAxisAlignedSegments(edge).filter((segment) =>
+        segment.axis === "horizontal" && segment.segmentIndex === 0
+      )
+    );
+    expect(sourceHorizontalSegments.length).toBe(2);
+    expectOverlappingSegmentsSeparated(sourceHorizontalSegments);
+
+    const sourceLocalVerticalTurns = sourceEdges.flatMap((edge) =>
+      collectAxisAlignedSegments(edge).filter((segment) =>
+        segment.axis === "vertical" && segment.segmentIndex === 1
+      )
+    );
+    expect(sourceLocalVerticalTurns.length).toBe(2);
+    expectOverlappingSegmentsSeparated(sourceLocalVerticalTurns);
+
+    const sourceLocalOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
+      entry.key === "node:I-007:right" && entry.connectorId.includes("I-007__addresses")
+    );
+    expect(sourceLocalOccupancy.some((entry) =>
+      entry.kind === "node_right"
+      && entry.axis === "vertical"
+      && entry.spanEnd > entry.spanStart
+      && entry.locked === undefined
+    )).toBe(true);
+    expect(rendered.routingStages.gutterOccupancy.some((entry) =>
+      entry.connectorId.includes("I-007__addresses")
+      && entry.kind === "column"
+      && entry.columnOrder !== undefined
+      && entry.locked === undefined
+    )).toBe(true);
+    expect(rendered.routingStages.gutterOccupancy.some((entry) =>
+      entry.connectorId.includes("I-007__addresses")
+      && entry.kind === "band"
+      && entry.rowOrder !== undefined
+      && entry.locked === undefined
+    )).toBe(true);
   });
 
   it("keeps parking connectors deterministic and diagnosed", async () => {
