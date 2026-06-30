@@ -10,7 +10,8 @@ import type {
   PositionedContainer,
   PositionedEdge,
   PositionedItem,
-  PositionedNode
+  PositionedNode,
+  PositionedScene
 } from "../src/renderer/staged/contracts.js";
 import {
   renderOutcomeOpportunityMapRoutingDebugArtifacts,
@@ -30,6 +31,58 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
 const OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE = 24;
+const ROUTING_SPACING = 16;
+
+const DENSE_ROUTING_SOURCE = `
+SDD-TEXT 0.1
+
+Outcome O-001 "Outcome One"
+  MEASURED_BY M-999 "Shared Metric"
+END
+
+Outcome O-002 "Outcome Two"
+  MEASURED_BY M-999 "Shared Metric"
+END
+
+Outcome O-003 "Outcome Three"
+  MEASURED_BY M-999 "Shared Metric"
+END
+
+Opportunity OP-001 "Opportunity One"
+  SUPPORTS O-001 "Outcome One"
+  SUPPORTS O-002 "Outcome Two"
+END
+
+Opportunity OP-002 "Opportunity Two"
+  SUPPORTS O-002 "Outcome Two"
+  SUPPORTS O-003 "Outcome Three"
+END
+
+Opportunity OP-003 "Opportunity Three"
+  SUPPORTS O-003 "Outcome Three"
+  SUPPORTS O-001 "Outcome One"
+END
+
+Opportunity OP-004 "Opportunity Four"
+  SUPPORTS O-001 "Outcome One"
+END
+
+Opportunity OP-005 "Opportunity Five"
+  SUPPORTS O-001 "Outcome One"
+END
+
+Opportunity OP-006 "Opportunity Six"
+  SUPPORTS O-001 "Outcome One"
+END
+
+Initiative I-001 "Shared Initiative"
+  ADDRESSES OP-001 "Opportunity One"
+  ADDRESSES OP-003 "Opportunity Three"
+END
+
+Metric M-999 "Shared Metric"
+END
+`;
 
 async function renderOutcomeOpportunitySource(
   sourceText: string,
@@ -100,6 +153,114 @@ function findEdge(edges: readonly PositionedEdge[], edgeId: string): PositionedE
     throw new Error(`Could not find positioned edge "${edgeId}".`);
   }
   return edge;
+}
+
+function expectOrthogonalRoute(edge: PositionedEdge): void {
+  for (let index = 1; index < edge.route.points.length; index += 1) {
+    const start = edge.route.points[index - 1]!;
+    const end = edge.route.points[index]!;
+    expect(start.x === end.x || start.y === end.y, `${edge.id} segment ${index - 1}`).toBe(true);
+  }
+}
+
+function expectSceneRoutesOrthogonal(scene: PositionedScene): void {
+  for (const edge of scene.edges) {
+    expectOrthogonalRoute(edge);
+  }
+}
+
+interface AxisAlignedSegment {
+  edgeId: string;
+  segmentIndex: number;
+  axis: "horizontal" | "vertical";
+  coordinate: number;
+  spanStart: number;
+  spanEnd: number;
+}
+
+function collectAxisAlignedSegments(edge: PositionedEdge): AxisAlignedSegment[] {
+  const segments: AxisAlignedSegment[] = [];
+  for (let index = 1; index < edge.route.points.length; index += 1) {
+    const start = edge.route.points[index - 1]!;
+    const end = edge.route.points[index]!;
+    if (start.x === end.x) {
+      segments.push({
+        edgeId: edge.id,
+        segmentIndex: index - 1,
+        axis: "vertical",
+        coordinate: start.x,
+        spanStart: Math.min(start.y, end.y),
+        spanEnd: Math.max(start.y, end.y)
+      });
+      continue;
+    }
+    if (start.y === end.y) {
+      segments.push({
+        edgeId: edge.id,
+        segmentIndex: index - 1,
+        axis: "horizontal",
+        coordinate: start.y,
+        spanStart: Math.min(start.x, end.x),
+        spanEnd: Math.max(start.x, end.x)
+      });
+    }
+  }
+  return segments;
+}
+
+function collectInternalVerticalSegments(edge: PositionedEdge): AxisAlignedSegment[] {
+  const segments = collectAxisAlignedSegments(edge);
+  return segments.filter((segment, index) =>
+    segment.axis === "vertical" && index > 0 && index < segments.length - 1
+  );
+}
+
+function expectOverlappingSegmentsSeparated(segments: readonly AxisAlignedSegment[], spacing = ROUTING_SPACING): void {
+  for (let index = 0; index < segments.length; index += 1) {
+    for (let otherIndex = index + 1; otherIndex < segments.length; otherIndex += 1) {
+      const first = segments[index]!;
+      const second = segments[otherIndex]!;
+      if (first.axis !== second.axis) {
+        continue;
+      }
+      const overlap = Math.min(first.spanEnd, second.spanEnd) - Math.max(first.spanStart, second.spanStart);
+      if (overlap <= 0.5) {
+        continue;
+      }
+      expect(Math.abs(first.coordinate - second.coordinate), [
+        first.edgeId,
+        `segment ${first.segmentIndex}`,
+        second.edgeId,
+        `segment ${second.segmentIndex}`,
+        first.axis,
+        `overlap ${overlap}`
+      ].join(" ")).toBeGreaterThanOrEqual(spacing - 0.5);
+    }
+  }
+}
+
+function expectEndpointSpacing(
+  edges: readonly PositionedEdge[],
+  endpoint: "from" | "to",
+  spacing = ROUTING_SPACING
+): void {
+  const coordinates = edges
+    .map((edge) => endpoint === "from" ? edge.from.y : edge.to.y)
+    .sort((left, right) => left - right);
+  for (let index = 1; index < coordinates.length; index += 1) {
+    expect(coordinates[index]! - coordinates[index - 1]!, `endpoint gap ${index}`)
+      .toBeGreaterThanOrEqual(spacing - 0.5);
+  }
+}
+
+function expectPrimaryConnectorLabelsPresent(edges: readonly PositionedEdge[]): void {
+  for (const edge of edges.filter((candidate) =>
+    candidate.id.includes("__supports__")
+    || candidate.id.includes("__addresses__")
+    || candidate.id.includes("__measured_by__")
+  )) {
+    expect(edge.label, edge.id).toBeDefined();
+  }
 }
 
 function collectNodeBoxes(root: PositionedContainer): Array<{ itemId: string; x: number; y: number; width: number; height: number }> {
@@ -304,6 +465,29 @@ END
       }
     ]);
     expect(rendered.step2PositionedScene.edges.every((edge) => edge.label === undefined)).toBe(true);
+  });
+
+  it("keeps dense multi-outcome routing orthogonal, separated, and label-visible", async () => {
+    const rendered = await renderOutcomeOpportunitySource(DENSE_ROUTING_SOURCE);
+
+    expectSceneRoutesOrthogonal(rendered.routingStages.step2PositionedScene);
+    expectSceneRoutesOrthogonal(rendered.routingStages.step3PositionedScene);
+    expectSceneRoutesOrthogonal(rendered.routingStages.finalPositionedScene);
+
+    const finalEdges = rendered.routingStages.finalPositionedScene.edges;
+    const bridgeSegments = [
+      "OP-001__supports__O-002",
+      "OP-002__supports__O-003",
+      "OP-003__supports__O-001"
+    ].flatMap((edgeId) => collectInternalVerticalSegments(findEdge(finalEdges, edgeId)));
+    expect(bridgeSegments.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(bridgeSegments.map((segment) => segment.coordinate)).size).toBeGreaterThan(1);
+    expectOverlappingSegmentsSeparated(bridgeSegments);
+
+    const outcomeOneWestArrivals = finalEdges.filter((edge) => edge.to.itemId === "O-001");
+    expect(outcomeOneWestArrivals.length).toBeGreaterThanOrEqual(4);
+    expectEndpointSpacing(outcomeOneWestArrivals, "to");
+    expectPrimaryConnectorLabelsPresent(finalEdges);
   });
 
   it("keeps parking connectors deterministic and diagnosed", async () => {

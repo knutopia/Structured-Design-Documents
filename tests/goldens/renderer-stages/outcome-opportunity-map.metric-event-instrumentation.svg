@@ -139,10 +139,10 @@
       <path class="scene-edge__path" d="M 262 90 L 379.336 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-050__measured_by__m-050" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-050__measured_by__M-050" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 90 L 1068.524 90" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 936.77 98 L 1068.524 98" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-050__measured_by__m-051" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-050__measured_by__M-051" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 106 L 1018.647 106 L 1018.647 270 L 1068.524 270" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 936.77 114 L 1018.647 114 L 1018.647 270 L 1068.524 270" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
@@ -159,8 +159,8 @@
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-050__measured_by__M-050" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="960.77" y="79" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="966.77" y="90" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="960.77" y="87" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="966.77" y="98" dominant-baseline="middle">
           <tspan x="966.77" dy="0">measured by</tspan>
         </text>
     </g>

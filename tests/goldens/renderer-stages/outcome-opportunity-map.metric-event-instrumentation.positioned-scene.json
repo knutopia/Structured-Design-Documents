@@ -1030,24 +1030,24 @@
         "itemId": "O-050",
         "portId": "measure_out",
         "x": 936.77,
-        "y": 90
+        "y": 98
       },
       "to": {
         "itemId": "M-050",
         "portId": "measure_in",
         "x": 1068.524,
-        "y": 90
+        "y": 98
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 936.77,
-            "y": 90
+            "y": 98
           },
           {
             "x": 1068.524,
-            "y": 90
+            "y": 98
           }
         ]
       },
@@ -1060,7 +1060,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 960.77,
-        "y": 79
+        "y": 87
       },
       "markers": {
         "end": "arrow"
@@ -1081,7 +1081,7 @@
         "itemId": "O-050",
         "portId": "measure_out",
         "x": 936.77,
-        "y": 106
+        "y": 114
       },
       "to": {
         "itemId": "M-051",
@@ -1094,11 +1094,11 @@
         "points": [
           {
             "x": 936.77,
-            "y": 106
+            "y": 114
           },
           {
             "x": 1018.647,
-            "y": 106
+            "y": 114
           },
           {
             "x": 1018.647,

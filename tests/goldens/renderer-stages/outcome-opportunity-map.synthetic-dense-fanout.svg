@@ -128,13 +128,13 @@
       <path class="scene-edge__path" d="M 262 90 L 379.336 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-900__measured_by__m-901" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-900__measured_by__M-901" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 76 L 1068.524 76" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 936.77 74 L 952.77 74 L 952.77 90 L 1068.524 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-900__measured_by__m-902" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-902" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 90 L 1018.647 90 L 1018.647 186 L 1068.524 186" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 936.77 90 L 952.77 90 L 952.77 106 L 1018.647 106 L 1018.647 186 L 1068.524 186" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-900__measured_by__m-903" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-903" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 104 L 1034.647 104 L 1034.647 282 L 1068.524 282" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 936.77 106 L 952.77 106 L 952.77 122 L 1034.647 122 L 1034.647 282 L 1068.524 282" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
@@ -151,15 +151,15 @@
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-900__measured_by__M-901" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="960.77" y="65" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="966.77" y="76" dominant-baseline="middle">
-          <tspan x="966.77" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="856.77" y="114" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="862.77" y="125" dominant-baseline="middle">
+          <tspan x="862.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-902" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="922.893" y="128" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="928.893" y="139" dominant-baseline="middle">
-          <tspan x="928.893" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1030.647" y="44" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1036.647" y="55" dominant-baseline="middle">
+          <tspan x="1036.647" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-903" data-role="measured_by">
