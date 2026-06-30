@@ -558,14 +558,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1116.524,
+            "x": 1068.524,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1106.524,
+        "x": 1058.524,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -605,7 +605,7 @@
         "children": [],
         "ports": [],
         "x": 28,
-        "y": 152,
+        "y": 168,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
@@ -644,7 +644,7 @@
         "children": [],
         "ports": [],
         "x": 369.336,
-        "y": 152,
+        "y": 168,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
@@ -683,7 +683,7 @@
         "children": [],
         "ports": [],
         "x": 702.77,
-        "y": 152,
+        "y": 168,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
@@ -811,15 +811,15 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1116.524,
-            "y": 162,
+            "x": 1068.524,
+            "y": 178,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1106.524,
-        "y": 152,
+        "x": 1058.524,
+        "y": 168,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
@@ -858,7 +858,7 @@
         "children": [],
         "ports": [],
         "x": 28,
-        "y": 248,
+        "y": 280,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
@@ -897,7 +897,7 @@
         "children": [],
         "ports": [],
         "x": 369.336,
-        "y": 248,
+        "y": 280,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
@@ -936,7 +936,7 @@
         "children": [],
         "ports": [],
         "x": 702.77,
-        "y": 248,
+        "y": 280,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
@@ -1064,15 +1064,15 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1116.524,
-            "y": 258,
+            "x": 1068.524,
+            "y": 290,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1106.524,
-        "y": 248,
+        "x": 1058.524,
+        "y": 280,
         "width": 244,
         "height": 68,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
@@ -1082,8 +1082,8 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1378.524,
-    "height": 344
+    "width": 1330.524,
+    "height": 376
   },
   "edges": [
     {
@@ -1207,7 +1207,7 @@
       "to": {
         "itemId": "M-901",
         "portId": "measure_in",
-        "x": 1116.524,
+        "x": 1068.524,
         "y": 90
       },
       "route": {
@@ -1218,15 +1218,15 @@
             "y": 74
           },
           {
-            "x": 1090.647,
+            "x": 990.77,
             "y": 74
           },
           {
-            "x": 1090.647,
+            "x": 990.77,
             "y": 90
           },
           {
-            "x": 1116.524,
+            "x": 1068.524,
             "y": 90
           }
         ]
@@ -1239,8 +1239,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 992.77,
-        "y": 63
+        "x": 856.77,
+        "y": 114
       },
       "markers": {
         "end": "arrow"
@@ -1266,8 +1266,8 @@
       "to": {
         "itemId": "M-902",
         "portId": "measure_in",
-        "x": 1116.524,
-        "y": 186
+        "x": 1068.524,
+        "y": 202
       },
       "route": {
         "style": "orthogonal",
@@ -1277,16 +1277,24 @@
             "y": 90
           },
           {
-            "x": 1074.647,
+            "x": 952.77,
             "y": 90
           },
           {
-            "x": 1074.647,
-            "y": 186
+            "x": 952.77,
+            "y": 106
           },
           {
-            "x": 1116.524,
-            "y": 186
+            "x": 1018.647,
+            "y": 106
+          },
+          {
+            "x": 1018.647,
+            "y": 202
+          },
+          {
+            "x": 1068.524,
+            "y": 202
           }
         ]
       },
@@ -1298,8 +1306,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 963.832,
-        "y": 114
+        "x": 1030.647,
+        "y": 22
       },
       "markers": {
         "end": "arrow"
@@ -1325,8 +1333,8 @@
       "to": {
         "itemId": "M-903",
         "portId": "measure_in",
-        "x": 1116.524,
-        "y": 282
+        "x": 1068.524,
+        "y": 314
       },
       "route": {
         "style": "orthogonal",
@@ -1336,16 +1344,24 @@
             "y": 106
           },
           {
-            "x": 1058.647,
+            "x": 952.77,
             "y": 106
           },
           {
-            "x": 1058.647,
-            "y": 282
+            "x": 952.77,
+            "y": 122
           },
           {
-            "x": 1116.524,
-            "y": 282
+            "x": 1034.647,
+            "y": 122
+          },
+          {
+            "x": 1034.647,
+            "y": 314
+          },
+          {
+            "x": 1068.524,
+            "y": 314
           }
         ]
       },
@@ -1357,8 +1373,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 962.893,
-        "y": 151
+        "x": 1046.647,
+        "y": 156
       },
       "markers": {
         "end": "arrow"
@@ -1414,7 +1430,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 1110.524,
+      "x": 1062.524,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"

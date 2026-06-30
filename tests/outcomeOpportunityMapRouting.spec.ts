@@ -406,9 +406,9 @@ describe("outcome_opportunity_map routing step 2", () => {
     )?.route.points;
     expect(step3Route).not.toEqual(step2Route);
     expect(rendered.routingStages.gutterOccupancy.some((entry) =>
-      entry.key === "node:O-050:right"
-      && entry.kind === "node_right"
-      && entry.axis === "vertical"
+      entry.kind === "column"
+      && entry.key.includes(":expanded")
+      && entry.columnOrder !== undefined
       && entry.spanEnd > entry.spanStart
       && entry.locked === undefined
     )).toBe(true);
@@ -637,6 +637,37 @@ END
       && entry.rowOrder !== undefined
       && entry.locked === undefined
     )).toBe(true);
+
+    const nodeBoxes = collectNodeBoxes(rendered.routingStages.finalPositionedScene.root);
+    expectNoRouteIntersectionsWithNonEndpointBoxes(rendered.routingStages.finalPositionedScene.edges, nodeBoxes);
+    expect(rendered.routingStages.diagnostics.filter((diagnostic) =>
+      diagnostic.code === "renderer.routing.outcome_opportunity_node_intersection"
+    )).toEqual([]);
+
+    const obstacleOccupancy = rendered.routingStages.gutterOccupancy.filter((candidate) =>
+      candidate.kind.startsWith("obstacle_")
+    );
+    expect(obstacleOccupancy.length).toBeGreaterThan(0);
+
+    const movableObstacleSegmentsByGroup = new Map<string, AxisAlignedSegment[]>();
+    for (const entry of obstacleOccupancy.filter((candidate) => (candidate.ownershipRank ?? 0) > 0)) {
+      const groupKey = `${entry.key}|${entry.axis}`;
+      const existing = movableObstacleSegmentsByGroup.get(groupKey) ?? [];
+      if (!existing.some((segment) => segment.edgeId === entry.connectorId && segment.segmentIndex === entry.routeSegmentIndex)) {
+        existing.push({
+          edgeId: entry.connectorId,
+          segmentIndex: entry.routeSegmentIndex,
+          axis: entry.axis,
+          coordinate: entry.nominalCoordinate,
+          spanStart: entry.spanStart,
+          spanEnd: entry.spanEnd
+        });
+      }
+      movableObstacleSegmentsByGroup.set(groupKey, existing);
+    }
+    for (const obstacleSegments of movableObstacleSegmentsByGroup.values()) {
+      expectOverlappingSegmentsSeparated(obstacleSegments);
+    }
   });
 
   it("keeps parking connectors deterministic and diagnosed", async () => {

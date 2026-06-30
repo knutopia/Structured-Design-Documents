@@ -21,6 +21,7 @@
 -Identified routing failures in outcome-opportunity map
 -Created arch doc to fix routing failures
 -Executed fixes, routing inrementally improved
+-Closed logic delta to service blueprint routing, slight regression
 
 ## Sat 6-27
 
