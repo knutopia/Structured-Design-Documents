@@ -179,6 +179,7 @@ interface OutcomeOpportunityPreparedRouteResolution {
   lockedSegmentKeys: Set<string>;
   requiredColumnExpansions: Record<number, number>;
   requiredRowExpansions: Record<number, number>;
+  targetLocalBypassSelections: Map<string, OutcomeOpportunityTargetLocalBypassSelection>;
   routeStates: Map<string, OutcomeOpportunityConnectorRouteState>;
   occupancyResult: {
     occupancy: OutcomeOpportunityGutterOccupancy[];
@@ -209,6 +210,13 @@ export interface OutcomeOpportunityNodeGutter {
 export interface OutcomeOpportunityGlobalGutterState {
   columnExpansions: Record<number, number>;
   rowExpansions: Record<number, number>;
+}
+
+interface OutcomeOpportunityTargetLocalBypassSelection {
+  connectorId: string;
+  targetNodeId: string;
+  side: PortSide;
+  blockerConnectorIds: string[];
 }
 
 export interface OutcomeOpportunityGutterOccupancy {
@@ -2260,6 +2268,51 @@ function buildEdgeLocalOccupancy(
   };
 }
 
+function segmentSitsOutsideNodeSide(
+  segment: OutcomeOpportunityRouteSegmentDetail,
+  node: { x: number; y: number; width: number; height: number },
+  side: PortSide
+): boolean {
+  switch (side) {
+    case "north":
+      return segment.orientation === "horizontal" && segment.coordinate < node.y - 0.5;
+    case "south":
+      return segment.orientation === "horizontal" && segment.coordinate > node.y + node.height + 0.5;
+    case "east":
+      return segment.orientation === "vertical" && segment.coordinate > node.x + node.width + 0.5;
+    case "west":
+      return segment.orientation === "vertical" && segment.coordinate < node.x - 0.5;
+  }
+}
+
+function findEndpointLocalSegment(
+  routeSegments: readonly OutcomeOpportunityRouteSegmentDetail[],
+  node: { x: number; y: number; width: number; height: number },
+  side: PortSide,
+  endpointRole: EndpointRole
+): OutcomeOpportunityRouteSegmentDetail | undefined {
+  const expectedOrientation = getExpectedEdgeLocalAxis(side);
+  const isValidLocalSegment = (segment: OutcomeOpportunityRouteSegmentDetail | undefined): segment is OutcomeOpportunityRouteSegmentDetail =>
+    segment !== undefined
+    && segment.orientation === expectedOrientation
+    && overlapsNodeExtent(segment, node)
+    && segmentSitsOutsideNodeSide(segment, node, side);
+
+  if (endpointRole === "source") {
+    const sourceLocalSegment = routeSegments[1];
+    return isValidLocalSegment(sourceLocalSegment) ? sourceLocalSegment : undefined;
+  }
+
+  for (let segmentIndex = routeSegments.length - 2; segmentIndex >= 0; segmentIndex -= 1) {
+    const segment = routeSegments[segmentIndex];
+    if (isValidLocalSegment(segment)) {
+      return segment;
+    }
+  }
+
+  return undefined;
+}
+
 function buildEdgeLocalOccupancyForEndpoint(
   plan: OutcomeOpportunityConnectorTemplatePlan,
   routeSegments: readonly OutcomeOpportunityRouteSegmentDetail[],
@@ -2272,33 +2325,11 @@ function buildEdgeLocalOccupancyForEndpoint(
     return undefined;
   }
 
-  const segment = endpointRole === "source" ? routeSegments[1] : routeSegments[routeSegments.length - 2];
-  if (!segment || segment.orientation !== getExpectedEdgeLocalAxis(side)) {
+  const segment = findEndpointLocalSegment(routeSegments, node, side, endpointRole);
+  if (!segment) {
     return undefined;
   }
-
-  if (!overlapsNodeExtent(segment, node)) {
-    return undefined;
-  }
-
-  switch (side) {
-    case "north":
-      return segment.orientation === "horizontal" && segment.coordinate < node.y - 0.5
-        ? buildEdgeLocalOccupancy(plan.id, segment, nodeId, side, endpointRole)
-        : undefined;
-    case "south":
-      return segment.orientation === "horizontal" && segment.coordinate > node.y + node.height + 0.5
-        ? buildEdgeLocalOccupancy(plan.id, segment, nodeId, side, endpointRole)
-        : undefined;
-    case "east":
-      return segment.orientation === "vertical" && segment.coordinate > node.x + node.width + 0.5
-        ? buildEdgeLocalOccupancy(plan.id, segment, nodeId, side, endpointRole)
-        : undefined;
-    case "west":
-      return segment.orientation === "vertical" && segment.coordinate < node.x - 0.5
-        ? buildEdgeLocalOccupancy(plan.id, segment, nodeId, side, endpointRole)
-        : undefined;
-  }
+  return buildEdgeLocalOccupancy(plan.id, segment, nodeId, side, endpointRole);
 }
 
 function extractEdgeLocalOccupancyForConnector(
@@ -2895,20 +2926,318 @@ function buildGutterLocalBundleResolution(
   };
 }
 
+interface OutcomeOpportunityTargetEdgeLocalClaim {
+  entry: OutcomeOpportunityGutterOccupancy;
+  plan: OutcomeOpportunityConnectorTemplatePlan;
+  side: PortSide;
+  baseCoordinate: number;
+  direction: 1 | -1;
+  localTrunk: OutcomeOpportunityRouteSegmentDetail;
+  finalApproach: OutcomeOpportunityRouteSegmentDetail;
+  targetAxisCoordinate: number;
+  routeLength: number;
+}
+
+function segmentSpanStart(segment: OutcomeOpportunityRouteSegmentDetail): number {
+  return segment.orientation === "horizontal"
+    ? Math.min(segment.start.x, segment.end.x)
+    : Math.min(segment.start.y, segment.end.y);
+}
+
+function segmentSpanEnd(segment: OutcomeOpportunityRouteSegmentDetail): number {
+  return segment.orientation === "horizontal"
+    ? Math.max(segment.start.x, segment.end.x)
+    : Math.max(segment.start.y, segment.end.y);
+}
+
+function segmentContainsPoint(segment: OutcomeOpportunityRouteSegmentDetail, point: Point): boolean {
+  if (segment.orientation === "horizontal") {
+    return Math.abs(point.y - segment.coordinate) <= 0.5
+      && point.x >= segmentSpanStart(segment) - 0.5
+      && point.x <= segmentSpanEnd(segment) + 0.5;
+  }
+
+  return Math.abs(point.x - segment.coordinate) <= 0.5
+    && point.y >= segmentSpanStart(segment) - 0.5
+    && point.y <= segmentSpanEnd(segment) + 0.5;
+}
+
+function segmentContainsAxisCoordinateInterior(
+  segment: OutcomeOpportunityRouteSegmentDetail,
+  coordinate: number
+): boolean {
+  return coordinate > segmentSpanStart(segment) + 0.5
+    && coordinate < segmentSpanEnd(segment) - 0.5;
+}
+
+function routeManhattanLength(route: PositionedRoute): number {
+  return route.points.reduce((total, point, index) => {
+    const previous = route.points[index - 1];
+    if (!previous) {
+      return total;
+    }
+    return total + Math.abs(point.x - previous.x) + Math.abs(point.y - previous.y);
+  }, 0);
+}
+
+function approachCrossesLocalTrunk(
+  approach: OutcomeOpportunityRouteSegmentDetail,
+  trunk: OutcomeOpportunityRouteSegmentDetail
+): boolean {
+  if (approach.orientation === trunk.orientation) {
+    return false;
+  }
+
+  if (approach.orientation === "horizontal") {
+    return trunk.coordinate > segmentSpanStart(approach) + 0.5
+      && trunk.coordinate < segmentSpanEnd(approach) - 0.5
+      && approach.coordinate > segmentSpanStart(trunk) + 0.5
+      && approach.coordinate < segmentSpanEnd(trunk) - 0.5;
+  }
+
+  return approach.coordinate > segmentSpanStart(trunk) + 0.5
+    && approach.coordinate < segmentSpanEnd(trunk) - 0.5
+    && trunk.coordinate > segmentSpanStart(approach) + 0.5
+    && trunk.coordinate < segmentSpanEnd(approach) - 0.5;
+}
+
+function routeSegmentsCrossAtInterior(
+  first: OutcomeOpportunityRouteSegmentDetail,
+  second: OutcomeOpportunityRouteSegmentDetail
+): boolean {
+  if (first.orientation === second.orientation) {
+    return false;
+  }
+
+  const horizontal = first.orientation === "horizontal" ? first : second;
+  const vertical = first.orientation === "vertical" ? first : second;
+  return vertical.coordinate > segmentSpanStart(horizontal) + 0.5
+    && vertical.coordinate < segmentSpanEnd(horizontal) - 0.5
+    && horizontal.coordinate > segmentSpanStart(vertical) + 0.5
+    && horizontal.coordinate < segmentSpanEnd(vertical) - 0.5;
+}
+
+function routesCrossAtInterior(left: PositionedRoute, right: PositionedRoute): boolean {
+  const leftSegments = buildRouteSegmentDetails(left);
+  const rightSegments = buildRouteSegmentDetails(right);
+  return leftSegments.some((leftSegment) =>
+    rightSegments.some((rightSegment) => routeSegmentsCrossAtInterior(leftSegment, rightSegment))
+  );
+}
+
+function deriveTargetEdgeLocalClaim(
+  entry: OutcomeOpportunityGutterOccupancy,
+  plan: OutcomeOpportunityConnectorTemplatePlan,
+  route: PositionedRoute,
+  baseCoordinate: number,
+  side: PortSide
+): OutcomeOpportunityTargetEdgeLocalClaim | undefined {
+  const routeSegments = buildRouteSegmentDetails(route);
+  const localTrunk = routeSegments.find((segment) => segment.routeSegmentIndex === entry.routeSegmentIndex);
+  if (!localTrunk || localTrunk.orientation !== getExpectedEdgeLocalAxis(side)) {
+    return undefined;
+  }
+
+  const targetPoint = route.points[route.points.length - 1];
+  if (!targetPoint) {
+    return undefined;
+  }
+
+  const finalApproach = routeSegments.find((segment) =>
+    segment.routeSegmentIndex > localTrunk.routeSegmentIndex
+    && segment.orientation === getPrimaryOrientationForSide(side)
+    && segmentContainsPoint(segment, targetPoint)
+  );
+  if (!finalApproach) {
+    return undefined;
+  }
+
+  return {
+    entry,
+    plan,
+    side,
+    baseCoordinate,
+    direction: getOutwardDirectionForSide(side),
+    localTrunk,
+    finalApproach,
+    targetAxisCoordinate: side === "east" || side === "west" ? targetPoint.y : targetPoint.x,
+    routeLength: routeManhattanLength(route)
+  };
+}
+
+function compareTargetTrackPreference(
+  left: OutcomeOpportunityTargetEdgeLocalClaim,
+  right: OutcomeOpportunityTargetEdgeLocalClaim
+): number {
+  const axisOrder = left.direction < 0
+    ? right.targetAxisCoordinate - left.targetAxisCoordinate
+    : left.targetAxisCoordinate - right.targetAxisCoordinate;
+  return axisOrder
+    || compareConnectorPlanPriority(left.plan, right.plan)
+    || left.entry.routeSegmentIndex - right.entry.routeSegmentIndex
+    || left.entry.connectorId.localeCompare(right.entry.connectorId);
+}
+
+function findStronglyConnectedComponents(
+  indices: readonly number[],
+  edges: ReadonlyMap<number, ReadonlySet<number>>
+): number[][] {
+  const allowed = new Set(indices);
+  const indexByNode = new Map<number, number>();
+  const lowlinkByNode = new Map<number, number>();
+  const stack: number[] = [];
+  const onStack = new Set<number>();
+  const components: number[][] = [];
+  let nextIndex = 0;
+
+  const visit = (node: number): void => {
+    indexByNode.set(node, nextIndex);
+    lowlinkByNode.set(node, nextIndex);
+    nextIndex += 1;
+    stack.push(node);
+    onStack.add(node);
+
+    for (const target of edges.get(node) ?? []) {
+      if (!allowed.has(target)) {
+        continue;
+      }
+      if (!indexByNode.has(target)) {
+        visit(target);
+        lowlinkByNode.set(node, Math.min(lowlinkByNode.get(node) ?? 0, lowlinkByNode.get(target) ?? 0));
+      } else if (onStack.has(target)) {
+        lowlinkByNode.set(node, Math.min(lowlinkByNode.get(node) ?? 0, indexByNode.get(target) ?? 0));
+      }
+    }
+
+    if (lowlinkByNode.get(node) !== indexByNode.get(node)) {
+      return;
+    }
+
+    const component: number[] = [];
+    while (stack.length > 0) {
+      const stacked = stack.pop()!;
+      onStack.delete(stacked);
+      component.push(stacked);
+      if (stacked === node) {
+        break;
+      }
+    }
+    components.push(component);
+  };
+
+  for (const index of indices) {
+    if (!indexByNode.has(index)) {
+      visit(index);
+    }
+  }
+
+  return components;
+}
+
+function countCycleCrossings(
+  claimIndex: number,
+  componentIndices: readonly number[],
+  edges: ReadonlyMap<number, ReadonlySet<number>>
+): number {
+  let crossings = 0;
+  const componentIndexSet = new Set(componentIndices);
+  for (const target of edges.get(claimIndex) ?? []) {
+    if (componentIndexSet.has(target)) {
+      crossings += 1;
+    }
+  }
+  for (const [source, targets] of edges.entries()) {
+    if (source !== claimIndex && componentIndexSet.has(source) && targets.has(claimIndex)) {
+      crossings += 1;
+    }
+  }
+  return crossings;
+}
+
+function chooseTargetLocalBypassClaim(
+  componentIndices: readonly number[],
+  claims: readonly OutcomeOpportunityTargetEdgeLocalClaim[],
+  edges: ReadonlyMap<number, ReadonlySet<number>>
+): number {
+  return [...componentIndices].sort((leftIndex, rightIndex) => {
+    const left = claims[leftIndex]!;
+    const right = claims[rightIndex]!;
+    const leftBridge = left.plan.pattern === "cross_band_bridge" ? 0 : 1;
+    const rightBridge = right.plan.pattern === "cross_band_bridge" ? 0 : 1;
+    return leftBridge - rightBridge
+      || countCycleCrossings(rightIndex, componentIndices, edges) - countCycleCrossings(leftIndex, componentIndices, edges)
+      || right.routeLength - left.routeLength
+      || compareConnectorPlanPriority(left.plan, right.plan)
+      || left.entry.connectorId.localeCompare(right.entry.connectorId);
+  })[0]!;
+}
+
+function topologicalTargetTrackOrder(
+  componentIndices: readonly number[],
+  claims: readonly OutcomeOpportunityTargetEdgeLocalClaim[],
+  edges: ReadonlyMap<number, ReadonlySet<number>>
+): number[] {
+  const componentIndexSet = new Set(componentIndices);
+  const indegree = new Map<number, number>();
+  for (const index of componentIndices) {
+    indegree.set(index, 0);
+  }
+  for (const [sourceIndex, targets] of edges.entries()) {
+    if (!componentIndexSet.has(sourceIndex)) {
+      continue;
+    }
+    for (const targetIndex of targets) {
+      if (componentIndexSet.has(targetIndex)) {
+        indegree.set(targetIndex, (indegree.get(targetIndex) ?? 0) + 1);
+      }
+    }
+  }
+
+  const remaining = new Set(componentIndices);
+  const ordered: number[] = [];
+  while (remaining.size > 0) {
+    const available = [...remaining]
+      .filter((index) => (indegree.get(index) ?? 0) === 0)
+      .sort((leftIndex, rightIndex) => compareTargetTrackPreference(claims[leftIndex]!, claims[rightIndex]!));
+    if (available.length === 0) {
+      ordered.push(
+        ...[...remaining].sort((leftIndex, rightIndex) =>
+          compareTargetTrackPreference(claims[leftIndex]!, claims[rightIndex]!)
+        )
+      );
+      break;
+    }
+
+    const nextIndex = available[0]!;
+    ordered.push(nextIndex);
+    remaining.delete(nextIndex);
+    for (const targetIndex of edges.get(nextIndex) ?? []) {
+      if (remaining.has(targetIndex)) {
+        indegree.set(targetIndex, (indegree.get(targetIndex) ?? 1) - 1);
+      }
+    }
+  }
+
+  return ordered;
+}
+
 function resolveTargetEdgeLocalCompaction(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   occupancy: readonly OutcomeOpportunityGutterOccupancy[],
+  routeStates: ReadonlyMap<string, OutcomeOpportunityConnectorRouteState>,
   index: OutcomeOpportunityPositionedIndex
 ): {
   endpointCoordinateByEndpointKey: Map<string, number>;
   segmentCoordinateBySegmentKey: Map<string, number>;
   lockedSegmentKeys: Set<string>;
+  targetLocalBypassSelections: Map<string, OutcomeOpportunityTargetLocalBypassSelection>;
 } {
   const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
-  const grouped = new Map<string, Array<{ entry: OutcomeOpportunityGutterOccupancy; baseCoordinate: number }>>();
+  const grouped = new Map<string, OutcomeOpportunityTargetEdgeLocalClaim[]>();
   const endpointCoordinateByEndpointKey = new Map<string, number>();
   const segmentCoordinateBySegmentKey = new Map<string, number>();
   const lockedSegmentKeys = new Set<string>();
+  const targetLocalBypassSelections = new Map<string, OutcomeOpportunityTargetLocalBypassSelection>();
 
   for (const entry of occupancy) {
     if (!isEdgeLocalKind(entry.kind)
@@ -2923,33 +3252,24 @@ function resolveTargetEdgeLocalCompaction(
     if (!node) {
       continue;
     }
+    const plan = planById.get(entry.connectorId);
+    if (!plan) {
+      continue;
+    }
     const baseCoordinate = getObstacleLocalBaseCoordinate(node, entry.side);
+    const route = routeStates.get(entry.connectorId)?.route ?? plan.step3Route;
+    const claim = deriveTargetEdgeLocalClaim(entry, plan, route, baseCoordinate, entry.side);
+    if (!claim) {
+      continue;
+    }
     const key = `target-edge-local:${entry.side}:${entry.axis}:${baseCoordinate}`;
     const existing = grouped.get(key) ?? [];
-    existing.push({
-      entry,
-      baseCoordinate
-    });
+    existing.push(claim);
     grouped.set(key, existing);
   }
 
-  const compareByPriority = (
-    left: OutcomeOpportunityGutterOccupancy,
-    right: OutcomeOpportunityGutterOccupancy
-  ): number => {
-    const leftPlan = planById.get(left.connectorId);
-    const rightPlan = planById.get(right.connectorId);
-    if (!leftPlan || !rightPlan) {
-      return left.connectorId.localeCompare(right.connectorId)
-        || left.routeSegmentIndex - right.routeSegmentIndex;
-    }
-    return compareConnectorPlanPriority(leftPlan, rightPlan)
-      || left.routeSegmentIndex - right.routeSegmentIndex
-      || left.connectorId.localeCompare(right.connectorId);
-  };
-
   grouped.forEach((group) => {
-    const side = group[0]?.entry.side;
+    const side = group[0]?.side;
     const baseCoordinate = group[0]?.baseCoordinate;
     if (!side || baseCoordinate === undefined) {
       return;
@@ -2958,9 +3278,32 @@ function resolveTargetEdgeLocalCompaction(
     const direction = getOutwardDirectionForSide(side);
     const visited = new Set<number>();
     const touchesOrOverlaps = (
-      left: { entry: OutcomeOpportunityGutterOccupancy },
-      right: { entry: OutcomeOpportunityGutterOccupancy }
+      left: OutcomeOpportunityTargetEdgeLocalClaim,
+      right: OutcomeOpportunityTargetEdgeLocalClaim
     ): boolean => spansTouchOrOverlap(left.entry.spanStart, left.entry.spanEnd, right.entry.spanStart, right.entry.spanEnd);
+
+    const crossingEdges = new Map<number, Set<number>>();
+    const addCrossingEdge = (innerIndex: number, outerIndex: number): void => {
+      if (innerIndex === outerIndex) {
+        return;
+      }
+      const existing = crossingEdges.get(innerIndex) ?? new Set<number>();
+      existing.add(outerIndex);
+      crossingEdges.set(innerIndex, existing);
+    };
+
+    for (let sourceIndex = 0; sourceIndex < group.length; sourceIndex += 1) {
+      for (let targetIndex = 0; targetIndex < group.length; targetIndex += 1) {
+        if (sourceIndex === targetIndex) {
+          continue;
+        }
+        const source = group[sourceIndex]!;
+        const target = group[targetIndex]!;
+        if (segmentContainsAxisCoordinateInterior(target.localTrunk, source.targetAxisCoordinate)) {
+          addCrossingEdge(sourceIndex, targetIndex);
+        }
+      }
+    }
 
     for (let entryIndex = 0; entryIndex < group.length; entryIndex += 1) {
       if (visited.has(entryIndex)) {
@@ -2977,54 +3320,103 @@ function resolveTargetEdgeLocalCompaction(
           if (visited.has(candidateIndex)) {
             continue;
           }
-          if (touchesOrOverlaps(group[currentIndex]!, group[candidateIndex]!)) {
+          if (touchesOrOverlaps(group[currentIndex]!, group[candidateIndex]!)
+            || (crossingEdges.get(currentIndex)?.has(candidateIndex) ?? false)
+            || (crossingEdges.get(candidateIndex)?.has(currentIndex) ?? false)
+          ) {
             visited.add(candidateIndex);
             queue.push(candidateIndex);
           }
         }
       }
 
-      const component = componentIndices
-        .map((componentIndex) => group[componentIndex]!)
-        .sort((left, right) =>
-          left.entry.spanStart - right.entry.spanStart
-          || left.entry.spanEnd - right.entry.spanEnd
-          || compareByPriority(left.entry, right.entry)
-        );
-      if (component.length <= 1) {
+      if (componentIndices.length <= 1) {
         continue;
       }
 
-      const occupied: Array<{ entry: OutcomeOpportunityGutterOccupancy; coordinate: number }> = [];
-      for (const { entry } of component) {
-        let assignedCoordinate = baseCoordinate;
-        for (const occupiedEntry of occupied) {
-          if (!spansTouchOrOverlap(
-            entry.spanStart,
-            entry.spanEnd,
-            occupiedEntry.entry.spanStart,
-            occupiedEntry.entry.spanEnd
-          )) {
-            continue;
+      const bypassedClaimIndices = new Set<number>();
+      while (true) {
+        const activeIndices = componentIndices.filter((componentIndex) => !bypassedClaimIndices.has(componentIndex));
+        const cyclicComponents = findStronglyConnectedComponents(activeIndices, crossingEdges)
+          .filter((component) =>
+            component.length > 1
+            || component.some((componentIndex) => crossingEdges.get(componentIndex)?.has(componentIndex) ?? false)
+          );
+        if (cyclicComponents.length === 0) {
+          break;
+        }
+
+        const cycle = cyclicComponents
+          .sort((left, right) =>
+            Math.min(...left) - Math.min(...right)
+            || left.length - right.length
+          )[0]!;
+        const bypassedClaimIndex = chooseTargetLocalBypassClaim(cycle, group, crossingEdges);
+        bypassedClaimIndices.add(bypassedClaimIndex);
+        const bypassedClaim = group[bypassedClaimIndex]!;
+        const blockerConnectorIds = cycle
+          .filter((cycleIndex) => cycleIndex !== bypassedClaimIndex)
+          .filter((cycleIndex) =>
+            approachCrossesLocalTrunk(bypassedClaim.finalApproach, group[cycleIndex]!.localTrunk)
+            || approachCrossesLocalTrunk(group[cycleIndex]!.finalApproach, bypassedClaim.localTrunk)
+            || segmentContainsAxisCoordinateInterior(group[cycleIndex]!.localTrunk, bypassedClaim.targetAxisCoordinate)
+            || segmentContainsAxisCoordinateInterior(bypassedClaim.localTrunk, group[cycleIndex]!.targetAxisCoordinate)
+          )
+          .map((cycleIndex) => group[cycleIndex]!.entry.connectorId);
+        const existing = targetLocalBypassSelections.get(bypassedClaim.entry.connectorId);
+        targetLocalBypassSelections.set(bypassedClaim.entry.connectorId, {
+          connectorId: bypassedClaim.entry.connectorId,
+          targetNodeId: bypassedClaim.entry.nodeId ?? bypassedClaim.plan.to,
+          side: bypassedClaim.side,
+          blockerConnectorIds: [...new Set([
+            ...(existing?.blockerConnectorIds ?? []),
+            ...(blockerConnectorIds.length > 0
+              ? blockerConnectorIds
+              : cycle
+                .filter((cycleIndex) => cycleIndex !== bypassedClaimIndex)
+                .map((cycleIndex) => group[cycleIndex]!.entry.connectorId))
+          ])].sort()
+        });
+      }
+
+      const assignmentEdges = new Map<number, Set<number>>();
+      for (const [sourceIndex, targets] of crossingEdges.entries()) {
+        if (bypassedClaimIndices.has(sourceIndex) || !componentIndices.includes(sourceIndex)) {
+          continue;
+        }
+        for (const targetIndex of targets) {
+          if (!bypassedClaimIndices.has(targetIndex) && componentIndices.includes(targetIndex)) {
+            const existing = assignmentEdges.get(sourceIndex) ?? new Set<number>();
+            existing.add(targetIndex);
+            assignmentEdges.set(sourceIndex, existing);
           }
-          if (direction > 0) {
-            if (assignedCoordinate < occupiedEntry.coordinate + ENDPOINT_SPACING) {
-              assignedCoordinate = roundMetric(occupiedEntry.coordinate + ENDPOINT_SPACING);
-            }
-          } else if (assignedCoordinate > occupiedEntry.coordinate - ENDPOINT_SPACING) {
-            assignedCoordinate = roundMetric(occupiedEntry.coordinate - ENDPOINT_SPACING);
+        }
+      }
+
+      const orderedClaimIndices = topologicalTargetTrackOrder(componentIndices, group, assignmentEdges);
+      const assignedDepthByClaimIndex = new Map<number, number>();
+      for (const claimIndex of orderedClaimIndices) {
+        const claim = group[claimIndex]!;
+        let assignedDepth = 0;
+        for (const [sourceIndex, targets] of assignmentEdges.entries()) {
+          if (targets.has(claimIndex)) {
+            assignedDepth = Math.max(assignedDepth, (assignedDepthByClaimIndex.get(sourceIndex) ?? 0) + 1);
           }
         }
 
-        const endpointKey = buildEndpointCoordinateKey(entry.connectorId, "target");
-        const segmentKey = buildSegmentDisplacementKey(entry.connectorId, entry.routeSegmentIndex);
+        while ([...assignedDepthByClaimIndex.entries()].some(([assignedClaimIndex, depth]) =>
+          depth === assignedDepth && touchesOrOverlaps(claim, group[assignedClaimIndex]!)
+        )) {
+          assignedDepth += 1;
+        }
+
+        assignedDepthByClaimIndex.set(claimIndex, assignedDepth);
+        const assignedCoordinate = roundMetric(baseCoordinate + direction * assignedDepth * ENDPOINT_SPACING);
+        const endpointKey = buildEndpointCoordinateKey(claim.entry.connectorId, "target");
+        const segmentKey = buildSegmentDisplacementKey(claim.entry.connectorId, claim.entry.routeSegmentIndex);
         endpointCoordinateByEndpointKey.set(endpointKey, assignedCoordinate);
         segmentCoordinateBySegmentKey.set(segmentKey, assignedCoordinate);
         lockedSegmentKeys.add(segmentKey);
-        occupied.push({
-          entry,
-          coordinate: assignedCoordinate
-        });
       }
     }
   });
@@ -3032,7 +3424,8 @@ function resolveTargetEdgeLocalCompaction(
   return {
     endpointCoordinateByEndpointKey,
     segmentCoordinateBySegmentKey,
-    lockedSegmentKeys
+    lockedSegmentKeys,
+    targetLocalBypassSelections
   };
 }
 
@@ -3770,6 +4163,168 @@ function buildRouteStatesForPlans(
   return routeStates;
 }
 
+interface OutcomeOpportunityTargetLocalRouteGeometry {
+  side: PortSide;
+  localTrunk: OutcomeOpportunityRouteSegmentDetail;
+  finalApproach: OutcomeOpportunityRouteSegmentDetail;
+  targetAxisCoordinate: number;
+}
+
+function deriveTargetLocalRouteGeometry(
+  plan: OutcomeOpportunityConnectorTemplatePlan,
+  route: PositionedRoute,
+  index: OutcomeOpportunityPositionedIndex
+): OutcomeOpportunityTargetLocalRouteGeometry | undefined {
+  const target = index.nodeById.get(plan.to);
+  if (!target) {
+    return undefined;
+  }
+
+  const routeSegments = buildRouteSegmentDetails(route);
+  const localTrunk = findEndpointLocalSegment(routeSegments, target.node, plan.targetSide, "target");
+  const targetPoint = route.points[route.points.length - 1];
+  if (!localTrunk || !targetPoint) {
+    return undefined;
+  }
+
+  const finalApproach = routeSegments.find((segment) =>
+    segment.routeSegmentIndex > localTrunk.routeSegmentIndex
+    && segment.orientation === getPrimaryOrientationForSide(plan.targetSide)
+    && segmentContainsPoint(segment, targetPoint)
+  );
+  if (!finalApproach) {
+    return undefined;
+  }
+
+  return {
+    side: plan.targetSide,
+    localTrunk,
+    finalApproach,
+    targetAxisCoordinate: plan.targetSide === "east" || plan.targetSide === "west"
+      ? targetPoint.y
+      : targetPoint.x
+  };
+}
+
+function buildTargetLocalBypassRoute(
+  route: PositionedRoute,
+  geometry: OutcomeOpportunityTargetLocalRouteGeometry,
+  bypassCoordinate: number
+): PositionedRoute {
+  const targetPoint = route.points[route.points.length - 1]!;
+  const prefix = route.points.slice(0, geometry.localTrunk.routeSegmentIndex + 1);
+
+  if (geometry.side === "east" || geometry.side === "west") {
+    return buildRoute([
+      ...prefix,
+      {
+        x: geometry.localTrunk.coordinate,
+        y: bypassCoordinate
+      },
+      {
+        x: targetPoint.x,
+        y: bypassCoordinate
+      },
+      targetPoint
+    ]);
+  }
+
+  return buildRoute([
+    ...prefix,
+    {
+      x: bypassCoordinate,
+      y: geometry.localTrunk.coordinate
+    },
+    {
+      x: bypassCoordinate,
+      y: targetPoint.y
+    },
+    targetPoint
+  ]);
+}
+
+function applyTargetLocalBypassesToRouteStates(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  routeStates: ReadonlyMap<string, OutcomeOpportunityConnectorRouteState>,
+  targetLocalBypassSelections: ReadonlyMap<string, OutcomeOpportunityTargetLocalBypassSelection>,
+  index: OutcomeOpportunityPositionedIndex,
+  diagnostics: RendererDiagnostic[]
+): Map<string, OutcomeOpportunityConnectorRouteState> {
+  if (targetLocalBypassSelections.size === 0) {
+    return new Map(routeStates);
+  }
+
+  const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
+  const updated = new Map(routeStates);
+
+  for (const selection of targetLocalBypassSelections.values()) {
+    const plan = planById.get(selection.connectorId);
+    const routeState = updated.get(selection.connectorId);
+    if (!plan || !routeState) {
+      continue;
+    }
+
+    const geometry = deriveTargetLocalRouteGeometry(plan, routeState.route, index);
+    if (!geometry || geometry.side !== selection.side) {
+      continue;
+    }
+
+    const blockerRoutes: PositionedRoute[] = [];
+    const blockerGeometries = selection.blockerConnectorIds.flatMap((blockerConnectorId) => {
+      const blockerPlan = planById.get(blockerConnectorId);
+      const blockerRouteState = updated.get(blockerConnectorId);
+      if (!blockerPlan || !blockerRouteState) {
+        return [];
+      }
+      const blockerGeometry = deriveTargetLocalRouteGeometry(blockerPlan, blockerRouteState.route, index);
+      if (blockerGeometry && blockerGeometry.side === selection.side
+        && approachCrossesLocalTrunk(geometry.finalApproach, blockerGeometry.localTrunk)
+      ) {
+        blockerRoutes.push(blockerRouteState.route);
+        return [blockerGeometry];
+      }
+      return [];
+    });
+    if (blockerGeometries.length === 0) {
+      continue;
+    }
+
+    const blockerSpanStart = Math.min(...blockerGeometries.map((blocker) => segmentSpanStart(blocker.localTrunk)));
+    const blockerSpanEnd = Math.max(...blockerGeometries.map((blocker) => segmentSpanEnd(blocker.localTrunk)));
+    const candidateCoordinates = [
+      roundMetric(blockerSpanStart - ENDPOINT_SPACING),
+      roundMetric(blockerSpanEnd + ENDPOINT_SPACING)
+    ].sort((left, right) =>
+      Math.abs(left - geometry.targetAxisCoordinate) - Math.abs(right - geometry.targetAxisCoordinate)
+      || left - right
+    );
+
+    const acceptedRoute = candidateCoordinates
+      .map((candidateCoordinate) => buildTargetLocalBypassRoute(routeState.route, geometry, candidateCoordinate))
+      .find((candidateRoute) => collectIntersectingBoxes(
+        candidateRoute.points,
+        getNonEndpointBoxes(plan, index)
+      ).length === 0 && blockerRoutes.every((blockerRoute) => !routesCrossAtInterior(candidateRoute, blockerRoute)));
+
+    if (!acceptedRoute) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.outcome_opportunity_connector_crossing_fallback",
+        `Connector "${plan.edgeId}" kept its target approach because no node- and connector-clear target-local bypass was available.`,
+        plan.edgeId,
+        "warn"
+      ));
+      continue;
+    }
+
+    updated.set(selection.connectorId, {
+      route: acceptedRoute,
+      occupiedGutters: []
+    });
+  }
+
+  return updated;
+}
+
 function buildGutterLocalPreparedRoutes(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   scene: PositionedScene,
@@ -4067,6 +4622,7 @@ function buildPreparedRoutesWithObstacleCompaction(
   const targetEdgeLocalCompaction = resolveTargetEdgeLocalCompaction(
     gutterLocalPrepared.connectorPlansWithOccupancy,
     gutterLocalPrepared.occupancyResult.occupancy,
+    gutterLocalPrepared.routeStates,
     index
   );
   const preparedEndpointCoordinateByEndpointKey = new Map(
@@ -4136,6 +4692,7 @@ function buildPreparedRoutesWithObstacleCompaction(
       lockedSegmentKeys,
       requiredColumnExpansions: gutterLocalPrepared.requiredColumnExpansions,
       requiredRowExpansions: gutterLocalPrepared.requiredRowExpansions,
+      targetLocalBypassSelections: targetEdgeLocalCompaction.targetLocalBypassSelections,
       routeStates,
       occupancyResult,
       connectorPlansWithOccupancy: gutterLocalPrepared.connectorPlansWithOccupancy.map((plan) => ({
@@ -4261,13 +4818,20 @@ export function buildOutcomeOpportunityMapRoutingStages(
     preparedRoutesFinal.occupancyResult.occupancy,
     preparedRoutesFinal.lockedSegmentKeys
   );
-  const finalRouteStates = buildRouteStatesForPlans(
+  const finalRouteStatesBeforeBypass = buildRouteStatesForPlans(
     preparedRoutesFinal.connectorPlansWithOccupancy,
     workingIndex,
     finalEndpointOffsetsByNodeId,
     finalDisplacementBySegmentKey,
     preparedRoutesFinal.bundleEndpointCoordinateByEndpointKey,
     preparedRoutesFinal.preparedSegmentCoordinateBySegmentKey
+  );
+  const finalRouteStates = applyTargetLocalBypassesToRouteStates(
+    preparedRoutesFinal.connectorPlansWithOccupancy,
+    finalRouteStatesBeforeBypass,
+    preparedRoutesFinal.targetLocalBypassSelections,
+    workingIndex,
+    finalDiagnostics
   );
   const finalOccupancyResult = extractGutterOccupancyByConnector(
     preparedRoutesFinal.connectorPlansWithOccupancy,

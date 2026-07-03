@@ -240,6 +240,34 @@ function expectOverlappingSegmentsSeparated(segments: readonly AxisAlignedSegmen
   }
 }
 
+function segmentsCrossAtInterior(first: AxisAlignedSegment, second: AxisAlignedSegment): boolean {
+  if (first.axis === second.axis) {
+    return false;
+  }
+
+  const horizontal = first.axis === "horizontal" ? first : second;
+  const vertical = first.axis === "vertical" ? first : second;
+  return vertical.coordinate > horizontal.spanStart + 0.5
+    && vertical.coordinate < horizontal.spanEnd - 0.5
+    && horizontal.coordinate > vertical.spanStart + 0.5
+    && horizontal.coordinate < vertical.spanEnd - 0.5;
+}
+
+function expectNoInteriorRouteCrossing(first: PositionedEdge, second: PositionedEdge): void {
+  const firstSegments = collectAxisAlignedSegments(first);
+  const secondSegments = collectAxisAlignedSegments(second);
+  for (const firstSegment of firstSegments) {
+    for (const secondSegment of secondSegments) {
+      expect(segmentsCrossAtInterior(firstSegment, secondSegment), [
+        first.id,
+        `segment ${firstSegment.segmentIndex}`,
+        second.id,
+        `segment ${secondSegment.segmentIndex}`
+      ].join(" ")).toBe(false);
+    }
+  }
+}
+
 function segmentOverlapsNodeHeight(segment: AxisAlignedSegment, node: PositionedNode): boolean {
   return segment.axis === "vertical"
     && Math.min(segment.spanEnd, node.y + node.height) - Math.max(segment.spanStart, node.y) > 0.5;
@@ -722,6 +750,32 @@ END
     );
     expect(outcomeOneLocalVerticals.length).toBeGreaterThanOrEqual(3);
     expectOverlappingSegmentsSeparated(outcomeOneLocalVerticals);
+    const outcomeOneTargetApproaches = outcomeOneArrivals.map((edge) => {
+      const approach = collectAxisAlignedSegments(edge).find((segment) =>
+        segment.axis === "horizontal"
+        && Math.abs(segment.coordinate - edge.to.y) <= 0.5
+        && Math.abs(segment.spanEnd - edge.to.x) <= 0.5
+      );
+      if (!approach) {
+        throw new Error(`Expected ${edge.id} to have a final horizontal target approach.`);
+      }
+      return approach;
+    });
+    for (const approach of outcomeOneTargetApproaches) {
+      expect(approach.spanEnd - approach.spanStart, approach.edgeId)
+        .toBeLessThanOrEqual(ROUTING_SPACING * 3 + 0.5);
+      for (const trunk of outcomeOneLocalVerticals) {
+        if (trunk.edgeId === approach.edgeId) {
+          continue;
+        }
+        expect(segmentsCrossAtInterior(approach, trunk), [
+          approach.edgeId,
+          `approach ${approach.segmentIndex}`,
+          trunk.edgeId,
+          `trunk ${trunk.segmentIndex}`
+        ].join(" ")).toBe(false);
+      }
+    }
     const op002ToOutcomeOne = findEdge(finalEdges, "OP-002__supports__O-001");
     const op002TargetApproach = collectAxisAlignedSegments(op002ToOutcomeOne).find((segment) =>
       segment.axis === "horizontal"
@@ -764,6 +818,10 @@ END
       collectAxisAlignedSegments(edge).filter((segment) => segment.axis === "vertical")
     );
     expectOverlappingSegmentsSeparated(supportsOverlapSegments);
+    expectNoInteriorRouteCrossing(
+      findEdge(finalEdges, "I-001__addresses__OP-007"),
+      findEdge(finalEdges, "I-003__addresses__OP-001")
+    );
 
     const directSupport = findEdge(finalEdges, "OP-003__supports__O-002");
     expect(directSupport.route.points).toEqual([
