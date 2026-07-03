@@ -287,14 +287,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 379.336,
+            "x": 411.336,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 369.336,
+        "x": 401.336,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -422,14 +422,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 760.77,
+            "x": 824.77,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 750.77,
+        "x": 814.77,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -558,14 +558,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1116.524,
+            "x": 1212.524,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1106.524,
+        "x": 1202.524,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -732,14 +732,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 379.336,
+            "x": 411.336,
             "y": 162,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 369.336,
+        "x": 401.336,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -867,14 +867,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 760.77,
+            "x": 824.77,
             "y": 162,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 750.77,
+        "x": 814.77,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -913,7 +913,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 1106.524,
+        "x": 1202.524,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -924,7 +924,7 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1378.524,
+    "width": 1474.524,
     "height": 248
   },
   "edges": [
@@ -941,24 +941,24 @@
       "from": {
         "itemId": "OP-301",
         "portId": "intent_out",
-        "x": 603.336,
+        "x": 635.336,
         "y": 90
       },
       "to": {
         "itemId": "O-301",
         "portId": "intent_in",
-        "x": 760.77,
+        "x": 824.77,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 603.336,
+            "x": 635.336,
             "y": 90
           },
           {
-            "x": 760.77,
+            "x": 824.77,
             "y": 90
           }
         ]
@@ -971,7 +971,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 651.336,
+        "x": 699.336,
         "y": 79
       },
       "markers": {
@@ -992,32 +992,32 @@
       "from": {
         "itemId": "OP-399",
         "portId": "intent_out",
-        "x": 603.336,
+        "x": 635.336,
         "y": 202
       },
       "to": {
         "itemId": "O-302",
         "portId": "intent_in",
-        "x": 760.77,
+        "x": 824.77,
         "y": 186
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 603.336,
+            "x": 635.336,
             "y": 202
           },
           {
-            "x": 744.77,
+            "x": 792.77,
             "y": 202
           },
           {
-            "x": 744.77,
+            "x": 792.77,
             "y": 186
           },
           {
-            "x": 760.77,
+            "x": 824.77,
             "y": 186
           }
         ]
@@ -1030,8 +1030,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 659.336,
-        "y": 191
+        "x": 707.336,
+        "y": 156
       },
       "markers": {
         "end": "arrow"
@@ -1051,32 +1051,40 @@
       "from": {
         "itemId": "OP-399",
         "portId": "intent_out",
-        "x": 603.336,
+        "x": 635.336,
         "y": 186
       },
       "to": {
         "itemId": "O-301",
         "portId": "intent_in",
-        "x": 760.77,
+        "x": 824.77,
         "y": 106
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 603.336,
+            "x": 635.336,
             "y": 186
           },
           {
-            "x": 698.053,
+            "x": 651.336,
             "y": 186
           },
           {
-            "x": 698.053,
+            "x": 651.336,
+            "y": 218
+          },
+          {
+            "x": 808.77,
+            "y": 218
+          },
+          {
+            "x": 808.77,
             "y": 106
           },
           {
-            "x": 760.77,
+            "x": 824.77,
             "y": 106
           }
         ]
@@ -1089,8 +1097,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 710.053,
-        "y": 127
+        "x": 820.77,
+        "y": 10
       },
       "markers": {
         "end": "arrow"
@@ -1116,7 +1124,7 @@
       "to": {
         "itemId": "OP-301",
         "portId": "intent_in",
-        "x": 379.336,
+        "x": 411.336,
         "y": 90
       },
       "route": {
@@ -1127,7 +1135,7 @@
             "y": 90
           },
           {
-            "x": 379.336,
+            "x": 411.336,
             "y": 90
           }
         ]
@@ -1140,8 +1148,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 286,
-        "y": 79
+        "x": 302,
+        "y": 44
       },
       "markers": {
         "end": "arrow"
@@ -1167,7 +1175,7 @@
       "to": {
         "itemId": "OP-399",
         "portId": "intent_in",
-        "x": 379.336,
+        "x": 411.336,
         "y": 186
       },
       "route": {
@@ -1178,15 +1186,15 @@
             "y": 106
           },
           {
-            "x": 336.668,
+            "x": 352.668,
             "y": 106
           },
           {
-            "x": 336.668,
+            "x": 352.668,
             "y": 186
           },
           {
-            "x": 379.336,
+            "x": 411.336,
             "y": 186
           }
         ]
@@ -1199,8 +1207,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 348.668,
-        "y": 119
+        "x": 364.668,
+        "y": 10
       },
       "markers": {
         "end": "arrow"
@@ -1220,24 +1228,24 @@
       "from": {
         "itemId": "O-301",
         "portId": "measure_out",
-        "x": 984.77,
+        "x": 1048.77,
         "y": 90
       },
       "to": {
         "itemId": "M-399",
         "portId": "measure_in",
-        "x": 1116.524,
+        "x": 1212.524,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 984.77,
+            "x": 1048.77,
             "y": 90
           },
           {
-            "x": 1116.524,
+            "x": 1212.524,
             "y": 90
           }
         ]
@@ -1250,8 +1258,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1008.77,
-        "y": 79
+        "x": 1088.77,
+        "y": 44
       },
       "markers": {
         "end": "arrow"
@@ -1271,32 +1279,32 @@
       "from": {
         "itemId": "O-302",
         "portId": "measure_out",
-        "x": 984.77,
+        "x": 1048.77,
         "y": 186
       },
       "to": {
         "itemId": "M-399",
         "portId": "measure_in",
-        "x": 1116.524,
+        "x": 1212.524,
         "y": 106
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 984.77,
+            "x": 1048.77,
             "y": 186
           },
           {
-            "x": 1050.647,
+            "x": 1130.647,
             "y": 186
           },
           {
-            "x": 1050.647,
+            "x": 1130.647,
             "y": 106
           },
           {
-            "x": 1116.524,
+            "x": 1212.524,
             "y": 106
           }
         ]
@@ -1309,8 +1317,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1062.647,
-        "y": 135
+        "x": 1142.647,
+        "y": 182
       },
       "markers": {
         "end": "arrow"
@@ -1340,7 +1348,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 373.336,
+      "x": 405.336,
       "y": 26,
       "text": "Opportunities",
       "textStyleRole": "label"
@@ -1353,7 +1361,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 754.77,
+      "x": 818.77,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -1366,7 +1374,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 1110.524,
+      "x": 1206.524,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"

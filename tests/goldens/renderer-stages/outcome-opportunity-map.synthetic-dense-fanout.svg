@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1330.524" height="376" viewBox="0 0 1330.524 376" class="staged-svg view-outcome_opportunity_map profile-strict theme-default theme-revision-public-sans-v0-1" data-view-id="outcome_opportunity_map" data-profile-id="strict" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1410.524" height="376" viewBox="0 0 1410.524 376" class="staged-svg view-outcome_opportunity_map profile-strict theme-default theme-revision-public-sans-v0-1" data-view-id="outcome_opportunity_map" data-profile-id="strict" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -45,7 +45,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram outcome_opportunity_map outcome_opportunity_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1330.524" height="376" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="1410.524" height="376" rx="18" ry="18"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
@@ -53,19 +53,19 @@
       <rect class="scene-node__chrome" x="38" y="66" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-op-901" class="scene-node primitive-card role-opportunity paint-nodes semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-901" data-role="opportunity">
-      <rect class="scene-node__chrome" x="379.336" y="66" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="395.336" y="66" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-o-900" class="scene-node primitive-card role-outcome paint-nodes semantic_node outcome_opportunity_node type-outcome visual-role-outcome_anchor shape-ellipse column-outcome placement-role-anchor_outcome band-band-outcome-1" data-item-id="O-900" data-role="outcome">
-      <rect class="scene-node__chrome" x="712.77" y="66" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="744.77" y="66" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-m-901" class="scene-node primitive-card role-metric paint-nodes semantic_node outcome_opportunity_node type-metric visual-role-evidence_card shape-note column-metric placement-role-measuring_metric band-band-outcome-1" data-item-id="M-901" data-role="metric">
-      <rect class="scene-node__chrome" x="1068.524" y="66" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1148.524" y="66" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-m-902" class="scene-node primitive-card role-metric paint-nodes semantic_node outcome_opportunity_node type-metric visual-role-evidence_card shape-note column-metric placement-role-measuring_metric band-band-outcome-1" data-item-id="M-902" data-role="metric">
-      <rect class="scene-node__chrome" x="1068.524" y="178" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1148.524" y="178" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-m-903" class="scene-node primitive-card role-metric paint-nodes semantic_node outcome_opportunity_node type-metric visual-role-evidence_card shape-note column-metric placement-role-measuring_metric band-band-outcome-1" data-item-id="M-903" data-role="metric">
-      <rect class="scene-node__chrome" x="1068.524" y="290" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1148.524" y="290" width="224" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -75,28 +75,28 @@
         </text>
     </g>
     <g class="scene-node primitive-card role-opportunity paint-labels semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-901" data-role="opportunity">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="391.336" y="91">
-          <tspan x="391.336" dy="0">Dense Opportunity</tspan>
+      <text class="scene-text text-role-label block-kind-text block-region-primary" x="407.336" y="91">
+          <tspan x="407.336" dy="0">Dense Opportunity</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-outcome paint-labels semantic_node outcome_opportunity_node type-outcome visual-role-outcome_anchor shape-ellipse column-outcome placement-role-anchor_outcome band-band-outcome-1" data-item-id="O-900" data-role="outcome">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="724.77" y="94">
-          <tspan x="724.77" dy="0">Dense Outcome</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="756.77" y="94">
+          <tspan x="756.77" dy="0">Dense Outcome</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-metric paint-labels semantic_node outcome_opportunity_node type-metric visual-role-evidence_card shape-note column-metric placement-role-measuring_metric band-band-outcome-1" data-item-id="M-901" data-role="metric">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="1080.524" y="91">
-          <tspan x="1080.524" dy="0">Metric One</tspan>
+      <text class="scene-text text-role-label block-kind-text block-region-primary" x="1160.524" y="91">
+          <tspan x="1160.524" dy="0">Metric One</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-metric paint-labels semantic_node outcome_opportunity_node type-metric visual-role-evidence_card shape-note column-metric placement-role-measuring_metric band-band-outcome-1" data-item-id="M-902" data-role="metric">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="1080.524" y="203">
-          <tspan x="1080.524" dy="0">Metric Two</tspan>
+      <text class="scene-text text-role-label block-kind-text block-region-primary" x="1160.524" y="203">
+          <tspan x="1160.524" dy="0">Metric Two</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-metric paint-labels semantic_node outcome_opportunity_node type-metric visual-role-evidence_card shape-note column-metric placement-role-measuring_metric band-band-outcome-1" data-item-id="M-903" data-role="metric">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="1080.524" y="315">
-          <tspan x="1080.524" dy="0">Metric Three</tspan>
+      <text class="scene-text text-role-label block-kind-text block-region-primary" x="1160.524" y="315">
+          <tspan x="1160.524" dy="0">Metric Three</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-initiative__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-initiative" data-decoration-id="outcome-opportunity-column-initiative__title">
@@ -105,67 +105,67 @@
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-opportunity__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-opportunity" data-decoration-id="outcome-opportunity-column-opportunity__title">
-      <text class="scene-text text-role-label block-kind-text" x="373.336" y="39">
-          <tspan x="373.336" dy="0">Opportunities</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="389.336" y="39">
+          <tspan x="389.336" dy="0">Opportunities</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-outcome__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-outcome" data-decoration-id="outcome-opportunity-column-outcome__title">
-      <text class="scene-text text-role-label block-kind-text" x="706.77" y="39">
-          <tspan x="706.77" dy="0">Outcomes</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="738.77" y="39">
+          <tspan x="738.77" dy="0">Outcomes</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-metric__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-metric" data-decoration-id="outcome-opportunity-column-metric__title">
-      <text class="scene-text text-role-label block-kind-text" x="1062.524" y="39">
-          <tspan x="1062.524" dy="0">Metrics</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="1142.524" y="39">
+          <tspan x="1142.524" dy="0">Metrics</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-op-901__supports__o-900" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-901__supports__O-900" data-role="supports">
-      <path class="scene-edge__path" d="M 603.336 90 L 712.77 90" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 619.336 90 L 744.77 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-901__addresses__op-901" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-901__addresses__OP-901" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 90 L 379.336 90" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 262 90 L 395.336 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-900__measured_by__m-901" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-900__measured_by__M-901" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 74 L 990.77 74 L 990.77 90 L 1068.524 90" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 968.77 74 L 1022.77 74 L 1022.77 90 L 1148.524 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-900__measured_by__m-902" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-902" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 90 L 952.77 90 L 952.77 106 L 1018.647 106 L 1018.647 202 L 1068.524 202" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 968.77 90 L 984.77 90 L 984.77 106 L 1116.524 106 L 1116.524 202 L 1148.524 202" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-o-900__measured_by__m-903" class="scene-edge role-measured_by route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-903" data-role="measured_by">
-      <path class="scene-edge__path" d="M 936.77 106 L 952.77 106 L 952.77 122 L 1034.647 122 L 1034.647 314 L 1068.524 314" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 968.77 106 L 984.77 106 L 984.77 122 L 1100.524 122 L 1100.524 314 L 1148.524 314" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-901__supports__O-900" data-role="supports">
-      <rect class="scene-edge-label__box" x="627.336" y="79" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="633.336" y="90" dominant-baseline="middle">
-          <tspan x="633.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="651.336" y="79" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="657.336" y="90" dominant-baseline="middle">
+          <tspan x="657.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-901__addresses__OP-901" data-role="addresses">
-      <rect class="scene-edge-label__box" x="286" y="79" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="90" dominant-baseline="middle">
-          <tspan x="292" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="294" y="79" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="300" y="90" dominant-baseline="middle">
+          <tspan x="300" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-900__measured_by__M-901" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="856.77" y="114" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="862.77" y="125" dominant-baseline="middle">
-          <tspan x="862.77" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1008.77" y="44" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1014.77" y="55" dominant-baseline="middle">
+          <tspan x="1014.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-902" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1030.647" y="22" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1036.647" y="33" dominant-baseline="middle">
-          <tspan x="1036.647" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1128.524" y="10" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1134.524" y="21" dominant-baseline="middle">
+          <tspan x="1134.524" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-900__measured_by__M-903" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1046.647" y="156" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1052.647" y="167" dominant-baseline="middle">
-          <tspan x="1052.647" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1004.77" y="157.123" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1010.77" y="168.123" dominant-baseline="middle">
+          <tspan x="1010.77" dy="0">measured by</tspan>
         </text>
     </g>
   </g>

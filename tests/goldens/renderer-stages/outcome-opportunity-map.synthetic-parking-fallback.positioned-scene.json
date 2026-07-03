@@ -101,7 +101,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 369.336,
+        "x": 385.336,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -229,14 +229,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 651.336,
+            "x": 667.336,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 641.336,
+        "x": 657.336,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -275,7 +275,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 913.336,
+        "x": 929.336,
         "y": 56,
         "width": 20,
         "height": 68,
@@ -445,14 +445,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 379.336,
+            "x": 395.336,
             "y": 162,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 369.336,
+        "x": 385.336,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -492,7 +492,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 641.336,
+        "x": 657.336,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -532,7 +532,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 913.336,
+        "x": 929.336,
         "y": 152,
         "width": 20,
         "height": 68,
@@ -710,7 +710,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 369.336,
+        "x": 385.336,
         "y": 248,
         "width": 244,
         "height": 68,
@@ -750,7 +750,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 641.336,
+        "x": 657.336,
         "y": 248,
         "width": 244,
         "height": 68,
@@ -790,7 +790,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 913.336,
+        "x": 929.336,
         "y": 248,
         "width": 20,
         "height": 68,
@@ -801,7 +801,7 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 961.336,
+    "width": 977.336,
     "height": 344
   },
   "edges": [
@@ -824,7 +824,7 @@
       "to": {
         "itemId": "OP-991",
         "portId": "intent_in",
-        "x": 379.336,
+        "x": 395.336,
         "y": 186
       },
       "route": {
@@ -835,15 +835,15 @@
             "y": 282
           },
           {
-            "x": 320.668,
+            "x": 328.668,
             "y": 282
           },
           {
-            "x": 320.668,
+            "x": 328.668,
             "y": 186
           },
           {
-            "x": 379.336,
+            "x": 395.336,
             "y": 186
           }
         ]
@@ -856,8 +856,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 332.668,
-        "y": 223
+        "x": 340.668,
+        "y": 278
       },
       "markers": {
         "end": "arrow"
@@ -887,7 +887,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 373.336,
+      "x": 389.336,
       "y": 26,
       "text": "Opportunities",
       "textStyleRole": "label"
@@ -900,7 +900,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 645.336,
+      "x": 661.336,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -913,7 +913,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 917.336,
+      "x": 933.336,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"

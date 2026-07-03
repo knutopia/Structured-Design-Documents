@@ -22,6 +22,7 @@ import {
   expectLabelsDoNotOverlapBoxes,
   expectLabelsDoNotOverlapEachOther,
   expectHorizontalEndpointLabelsHaveMinimumClearance,
+  expectLabelsHaveMinimumBoxClearance,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
   expectRoutesDoNotEnterEndpointBoxes,
   expectSameOrientationSegmentsSeparated
@@ -239,6 +240,42 @@ function expectOverlappingSegmentsSeparated(segments: readonly AxisAlignedSegmen
   }
 }
 
+function segmentOverlapsNodeHeight(segment: AxisAlignedSegment, node: PositionedNode): boolean {
+  return segment.axis === "vertical"
+    && Math.min(segment.spanEnd, node.y + node.height) - Math.max(segment.spanStart, node.y) > 0.5;
+}
+
+function labelSegmentClearance(
+  label: NonNullable<PositionedEdge["label"]>,
+  segment: AxisAlignedSegment
+): number {
+  if (segment.axis === "vertical") {
+    const horizontalGap = Math.max(
+      segment.coordinate - (label.x + label.width),
+      label.x - segment.coordinate,
+      0
+    );
+    const verticalGap = Math.max(
+      segment.spanStart - (label.y + label.height),
+      label.y - segment.spanEnd,
+      0
+    );
+    return Math.hypot(horizontalGap, verticalGap);
+  }
+
+  const horizontalGap = Math.max(
+    segment.spanStart - (label.x + label.width),
+    label.x - segment.spanEnd,
+    0
+  );
+  const verticalGap = Math.max(
+    segment.coordinate - (label.y + label.height),
+    label.y - segment.coordinate,
+    0
+  );
+  return Math.hypot(horizontalGap, verticalGap);
+}
+
 function expectEndpointSpacing(
   edges: readonly PositionedEdge[],
   endpoint: "from" | "to",
@@ -417,6 +454,33 @@ describe("outcome_opportunity_map routing step 2", () => {
     )).toBe(true);
     expect(Math.max(0, ...Object.values(rendered.routingStages.globalGutterState.columnExpansions)))
       .toBeGreaterThan(0);
+
+    const finalStackedMetricEdge = findEdge(
+      rendered.routingStages.finalPositionedScene.edges,
+      "O-050__measured_by__M-051"
+    );
+    expect(finalStackedMetricEdge.label).toBeDefined();
+    if (!finalStackedMetricEdge.label) {
+      throw new Error("Expected stacked metric label to be present.");
+    }
+    const firstMetricNode = findNode(rendered.routingStages.finalPositionedScene.root, "M-050");
+    expectLabelsHaveMinimumBoxClearance(
+      [{
+        edgeId: finalStackedMetricEdge.id,
+        x: finalStackedMetricEdge.label.x,
+        y: finalStackedMetricEdge.label.y,
+        width: finalStackedMetricEdge.label.width,
+        height: finalStackedMetricEdge.label.height
+      }],
+      [{
+        itemId: firstMetricNode.id,
+        x: firstMetricNode.x,
+        y: firstMetricNode.y,
+        width: firstMetricNode.width,
+        height: firstMetricNode.height
+      }],
+      OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE
+    );
   });
 
   it("routes projected secondary connectors through typed secondary ports without final labels", async () => {
@@ -643,6 +707,86 @@ END
     expect(rendered.routingStages.diagnostics.filter((diagnostic) =>
       diagnostic.code === "renderer.routing.outcome_opportunity_node_intersection"
     )).toEqual([]);
+
+    const finalEdges = rendered.routingStages.finalPositionedScene.edges;
+    const outcomeOne = findNode(rendered.routingStages.finalPositionedScene.root, "O-001");
+    const outcomeOneArrivals = [
+      "OP-001__supports__O-001",
+      "OP-002__supports__O-001",
+      "OP-007__supports__O-001"
+    ].map((edgeId) => findEdge(finalEdges, edgeId));
+    const outcomeOneLocalVerticals = outcomeOneArrivals.flatMap((edge) =>
+      collectAxisAlignedSegments(edge).filter((segment) =>
+        segmentOverlapsNodeHeight(segment, outcomeOne) && segment.coordinate < outcomeOne.x
+      )
+    );
+    expect(outcomeOneLocalVerticals.length).toBeGreaterThanOrEqual(3);
+    expectOverlappingSegmentsSeparated(outcomeOneLocalVerticals);
+    const op002ToOutcomeOne = findEdge(finalEdges, "OP-002__supports__O-001");
+    const op002TargetApproach = collectAxisAlignedSegments(op002ToOutcomeOne).find((segment) =>
+      segment.axis === "horizontal"
+      && Math.abs(segment.coordinate - op002ToOutcomeOne.to.y) <= 0.5
+      && Math.abs(segment.spanEnd - op002ToOutcomeOne.to.x) <= 0.5
+    );
+    expect(op002TargetApproach).toBeDefined();
+    if (!op002TargetApproach) {
+      throw new Error("Expected OP-002__supports__O-001 to have a target-local horizontal approach.");
+    }
+    expect(op002TargetApproach.spanEnd - op002TargetApproach.spanStart)
+      .toBeLessThanOrEqual(ROUTING_SPACING * 3 + 0.5);
+    const op002TargetVertical = outcomeOneLocalVerticals.find((segment) =>
+      segment.edgeId === "OP-002__supports__O-001"
+    );
+    expect(op002TargetVertical).toBeDefined();
+    if (!op002TargetVertical) {
+      throw new Error("Expected OP-002__supports__O-001 to have a target-local vertical approach.");
+    }
+    expect(outcomeOne.x - op002TargetVertical.coordinate)
+      .toBeLessThanOrEqual(ROUTING_SPACING * 3 + 0.5);
+    const outcomeOneEdgeLocalOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
+      entry.key === "edge-local:O-001:west"
+      && entry.kind === "edge_local"
+      && entry.endpointRole === "target"
+    );
+    for (const edgeId of [
+      "OP-001__supports__O-001",
+      "OP-002__supports__O-001",
+      "OP-007__supports__O-001"
+    ]) {
+      expect(outcomeOneEdgeLocalOccupancy.some((entry) => entry.connectorId.includes(edgeId)), edgeId).toBe(true);
+    }
+
+    const supportsOverlapSegments = [
+      findEdge(finalEdges, "OP-002__supports__O-003"),
+      findEdge(finalEdges, "OP-007__supports__O-001"),
+      findEdge(finalEdges, "OP-007__supports__O-002")
+    ].flatMap((edge) =>
+      collectAxisAlignedSegments(edge).filter((segment) => segment.axis === "vertical")
+    );
+    expectOverlappingSegmentsSeparated(supportsOverlapSegments);
+
+    const directSupport = findEdge(finalEdges, "OP-003__supports__O-002");
+    expect(directSupport.route.points).toEqual([
+      { x: directSupport.from.x, y: directSupport.from.y },
+      { x: directSupport.to.x, y: directSupport.to.y }
+    ]);
+
+    const directSupportLabel = directSupport.label;
+    expect(directSupportLabel).toBeDefined();
+    if (!directSupportLabel) {
+      throw new Error("Expected OP-003__supports__O-002 label to be present.");
+    }
+    const longSupportVerticals = collectAxisAlignedSegments(findEdge(finalEdges, "OP-002__supports__O-003"))
+      .filter((segment) => segment.axis === "vertical");
+    expect(Math.min(...longSupportVerticals.map((segment) => labelSegmentClearance(directSupportLabel, segment))))
+      .toBeGreaterThanOrEqual(ROUTING_SPACING - 0.5);
+
+    const opportunity = findNode(rendered.routingStages.finalPositionedScene.root, "OP-003");
+    const outcome = findNode(rendered.routingStages.finalPositionedScene.root, "O-002");
+    const supportCorridorWidth = outcome.x - (opportunity.x + opportunity.width);
+    expect(supportCorridorWidth).toBeGreaterThanOrEqual(
+      (directSupport.label?.width ?? 0) + OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE * 2 + ROUTING_SPACING * 3 - 0.5
+    );
 
     const obstacleOccupancy = rendered.routingStages.gutterOccupancy.filter((candidate) =>
       candidate.kind.startsWith("obstacle_")

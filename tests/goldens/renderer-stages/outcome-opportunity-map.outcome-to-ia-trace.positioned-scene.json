@@ -302,14 +302,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 379.336,
+            "x": 395.336,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 369.336,
+        "x": 385.336,
         "y": 56,
         "width": 244,
         "height": 104,
@@ -437,14 +437,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 712.77,
+            "x": 744.77,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 702.77,
+        "x": 734.77,
         "y": 56,
         "width": 244,
         "height": 104,
@@ -603,14 +603,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1068.524,
+            "x": 1116.524,
             "y": 66,
             "width": 224,
             "height": 84
           }
         ],
         "ports": [],
-        "x": 1058.524,
+        "x": 1106.524,
         "y": 56,
         "width": 244,
         "height": 104,
@@ -621,7 +621,7 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1330.524,
+    "width": 1378.524,
     "height": 188
   },
   "edges": [
@@ -638,24 +638,24 @@
       "from": {
         "itemId": "OP-001",
         "portId": "intent_out",
-        "x": 603.336,
+        "x": 619.336,
         "y": 90
       },
       "to": {
         "itemId": "O-001",
         "portId": "intent_in",
-        "x": 712.77,
+        "x": 744.77,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 603.336,
+            "x": 619.336,
             "y": 90
           },
           {
-            "x": 712.77,
+            "x": 744.77,
             "y": 90
           }
         ]
@@ -668,7 +668,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 627.336,
+        "x": 651.336,
         "y": 79
       },
       "markers": {
@@ -695,7 +695,7 @@
       "to": {
         "itemId": "OP-001",
         "portId": "intent_in",
-        "x": 379.336,
+        "x": 395.336,
         "y": 97
       },
       "route": {
@@ -706,7 +706,7 @@
             "y": 97
           },
           {
-            "x": 379.336,
+            "x": 395.336,
             "y": 97
           }
         ]
@@ -719,7 +719,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 286,
+        "x": 294,
         "y": 86
       },
       "markers": {
@@ -740,24 +740,24 @@
       "from": {
         "itemId": "O-001",
         "portId": "measure_out",
-        "x": 936.77,
+        "x": 968.77,
         "y": 90
       },
       "to": {
         "itemId": "M-001",
         "portId": "measure_in",
-        "x": 1068.524,
+        "x": 1116.524,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 936.77,
+            "x": 968.77,
             "y": 90
           },
           {
-            "x": 1068.524,
+            "x": 1116.524,
             "y": 90
           }
         ]
@@ -770,7 +770,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 960.77,
+        "x": 1000.77,
         "y": 79
       },
       "markers": {
@@ -801,7 +801,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 373.336,
+      "x": 389.336,
       "y": 26,
       "text": "Opportunities",
       "textStyleRole": "label"
@@ -814,7 +814,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 706.77,
+      "x": 738.77,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -827,7 +827,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 1062.524,
+      "x": 1110.524,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"
