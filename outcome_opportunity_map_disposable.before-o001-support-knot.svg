@@ -282,7 +282,7 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-op-001__supports__o-001" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-001__supports__O-001" data-role="supports">
-      <path class="scene-edge__path" d="M 763.336 94 L 1016.77 94 L 1016.77 74 L 1064.77 74" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 763.336 94 L 1048.77 94 L 1048.77 74 L 1064.77 74" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-op-001__supports__o-002" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-001__supports__O-002" data-role="supports">
       <path class="scene-edge__path" d="M 763.336 110 L 1000.77 110 L 1000.77 394 L 1064.77 394" marker-end="url(#scene-marker-arrow-end)"/>
@@ -294,7 +294,7 @@
       <path class="scene-edge__path" d="M 763.336 214 L 984.77 214 L 984.77 732 L 1064.77 732" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-op-007__supports__o-001" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-007__supports__O-001" data-role="supports">
-      <path class="scene-edge__path" d="M 763.336 302 L 1048.77 302 L 1048.77 106 L 1064.77 106" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 763.336 302 L 1016.77 302 L 1016.77 106 L 1064.77 106" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-op-007__supports__o-002" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-007__supports__O-002" data-role="supports">
       <path class="scene-edge__path" d="M 763.336 318 L 968.77 318 L 968.77 410 L 1064.77 410" marker-end="url(#scene-marker-arrow-end)"/>
@@ -389,9 +389,9 @@
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-002__supports__O-001" data-role="supports">
-      <rect class="scene-edge-label__box" x="1081.336" y="187" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1087.336" y="198" dominant-baseline="middle">
-          <tspan x="1087.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="1057.336" y="187" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1063.336" y="198" dominant-baseline="middle">
+          <tspan x="1063.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-002__supports__O-003" data-role="supports">

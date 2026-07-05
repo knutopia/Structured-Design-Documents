@@ -2952,7 +2952,8 @@ function buildGutterLocalBundleResolution(
 function resolveTargetEdgeLocalCompaction(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   occupancy: readonly OutcomeOpportunityGutterOccupancy[],
-  index: OutcomeOpportunityPositionedIndex
+  index: OutcomeOpportunityPositionedIndex,
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>
 ): {
   endpointCoordinateByEndpointKey: Map<string, number>;
   segmentCoordinateBySegmentKey: Map<string, number>;
@@ -3002,9 +3003,19 @@ function resolveTargetEdgeLocalCompaction(
       || left.connectorId.localeCompare(right.connectorId);
   };
   const resolveTargetEndpointOrderCoordinate = (entry: OutcomeOpportunityGutterOccupancy): number => {
-    const node = entry.nodeId ? index.nodeById.get(entry.nodeId)?.node : undefined;
-    if (!node || !entry.side) {
+    const nodeId = entry.nodeId;
+    const node = nodeId ? index.nodeById.get(nodeId)?.node : undefined;
+    if (!nodeId || !node || !entry.side) {
       return entry.spanStart;
+    }
+    const plan = planById.get(entry.connectorId);
+    if (plan && plan.to === nodeId && plan.targetSide === entry.side) {
+      const targetPoint = getSidePointWithOffset(
+        node,
+        entry.side,
+        getEndpointOffset(endpointOffsetsByNodeId, nodeId, entry.side, entry.connectorId)
+      );
+      return entry.axis === "vertical" ? targetPoint.y : targetPoint.x;
     }
 
     if (entry.axis === "vertical" && (entry.side === "east" || entry.side === "west")) {
@@ -3031,6 +3042,11 @@ function resolveTargetEdgeLocalCompaction(
   ): number => left.spanStart - right.spanStart
     || left.spanEnd - right.spanEnd
     || compareByPriority(left, right);
+  const compareByReverseTargetEndpointOrder = (
+    left: OutcomeOpportunityGutterOccupancy,
+    right: OutcomeOpportunityGutterOccupancy
+  ): number => resolveTargetEndpointOrderCoordinate(right) - resolveTargetEndpointOrderCoordinate(left)
+    || compareBySpanOrder(left, right);
   const shouldOrderComponentByTargetEndpoint = (
     component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>
   ): boolean => component.length > 1 && component.every(({ entry }) => {
@@ -3039,6 +3055,212 @@ function resolveTargetEdgeLocalCompaction(
       && entry.axis === "vertical"
       && (entry.side === "east" || entry.side === "west");
   });
+  const shouldOrderComponentByCrossingScore = (
+    component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>
+  ): boolean => component.length > 1 && component.every(({ entry }) => {
+    const plan = planById.get(entry.connectorId);
+    return plan?.channel === "opportunity_support"
+      && entry.axis === "vertical"
+      && (entry.side === "east" || entry.side === "west");
+  });
+  const resolveSourceEndpointOrderCoordinate = (entry: OutcomeOpportunityGutterOccupancy): number => {
+    const targetCoordinate = resolveTargetEndpointOrderCoordinate(entry);
+    if (Math.abs(entry.spanStart - targetCoordinate) <= 0.5) {
+      return entry.spanEnd;
+    }
+    if (Math.abs(entry.spanEnd - targetCoordinate) <= 0.5) {
+      return entry.spanStart;
+    }
+
+    return Math.abs(entry.spanStart - targetCoordinate) > Math.abs(entry.spanEnd - targetCoordinate)
+      ? entry.spanStart
+      : entry.spanEnd;
+  };
+  const buildAssignedCoordinatesForOrder = (
+    ordered: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>,
+    direction: 1 | -1,
+    baseCoordinate: number
+  ): Map<OutcomeOpportunityGutterOccupancy, number> => {
+    const assignedByEntry = new Map<OutcomeOpportunityGutterOccupancy, number>();
+    const occupied: Array<{ entry: OutcomeOpportunityGutterOccupancy; coordinate: number }> = [];
+
+    for (const { entry } of ordered) {
+      let assignedCoordinate = baseCoordinate;
+      for (const occupiedEntry of occupied) {
+        if (!spansTouchOrOverlap(
+          entry.spanStart,
+          entry.spanEnd,
+          occupiedEntry.entry.spanStart,
+          occupiedEntry.entry.spanEnd
+        )) {
+          continue;
+        }
+        if (direction > 0) {
+          if (assignedCoordinate < occupiedEntry.coordinate + ENDPOINT_SPACING) {
+            assignedCoordinate = roundMetric(occupiedEntry.coordinate + ENDPOINT_SPACING);
+          }
+        } else if (assignedCoordinate > occupiedEntry.coordinate - ENDPOINT_SPACING) {
+          assignedCoordinate = roundMetric(occupiedEntry.coordinate - ENDPOINT_SPACING);
+        }
+      }
+
+      assignedByEntry.set(entry, assignedCoordinate);
+      occupied.push({
+        entry,
+        coordinate: assignedCoordinate
+      });
+    }
+
+    return assignedByEntry;
+  };
+  const componentOrderKey = (component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>): string =>
+    component.map(({ entry }) => `${entry.connectorId}|${entry.routeSegmentIndex}`).join("\n");
+  const dedupeCandidateOrders = (
+    candidates: ReadonlyArray<ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>>
+  ): Array<Array<{ entry: OutcomeOpportunityGutterOccupancy }>> => {
+    const seen = new Set<string>();
+    const deduped: Array<Array<{ entry: OutcomeOpportunityGutterOccupancy }>> = [];
+    for (const candidate of candidates) {
+      const key = componentOrderKey(candidate);
+      if (seen.has(key)) {
+        continue;
+      }
+      seen.add(key);
+      deduped.push([...candidate]);
+    }
+    return deduped;
+  };
+  const countCrossingsForOrder = (
+    ordered: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>,
+    direction: 1 | -1,
+    baseCoordinate: number
+  ): { crossings: number; nearBendCrossings: number } => {
+    const assignedByEntry = buildAssignedCoordinatesForOrder(ordered, direction, baseCoordinate);
+    let crossings = 0;
+    let nearBendCrossings = 0;
+    const isOutwardOf = (candidateCoordinate: number, referenceCoordinate: number): boolean =>
+      (candidateCoordinate - referenceCoordinate) * direction > 0.5;
+    const isInwardOf = (candidateCoordinate: number, referenceCoordinate: number): boolean =>
+      (candidateCoordinate - referenceCoordinate) * direction < -0.5;
+    const spansInteriorCoordinate = (entry: OutcomeOpportunityGutterOccupancy, coordinate: number): boolean =>
+      coordinate > entry.spanStart + 0.5 && coordinate < entry.spanEnd - 0.5;
+    const countCrossing = (
+      crossingCoordinate: number,
+      verticalEntry: OutcomeOpportunityGutterOccupancy,
+      horizontalEntry: OutcomeOpportunityGutterOccupancy
+    ): void => {
+      crossings += 1;
+      const verticalSource = resolveSourceEndpointOrderCoordinate(verticalEntry);
+      const verticalTarget = resolveTargetEndpointOrderCoordinate(verticalEntry);
+      const nearestVerticalBend = Math.min(
+        Math.abs(crossingCoordinate - verticalSource),
+        Math.abs(crossingCoordinate - verticalTarget)
+      );
+      const nearestHorizontalBend = Math.min(
+        Math.abs(crossingCoordinate - resolveSourceEndpointOrderCoordinate(horizontalEntry)),
+        Math.abs(crossingCoordinate - resolveTargetEndpointOrderCoordinate(horizontalEntry))
+      );
+      if (Math.min(nearestVerticalBend, nearestHorizontalBend) <= ENDPOINT_SPACING) {
+        nearBendCrossings += 1;
+      }
+    };
+
+    for (const { entry: horizontalEntry } of ordered) {
+      const horizontalLane = assignedByEntry.get(horizontalEntry);
+      if (horizontalLane === undefined) {
+        continue;
+      }
+      const sourceCoordinate = resolveSourceEndpointOrderCoordinate(horizontalEntry);
+      const targetCoordinate = resolveTargetEndpointOrderCoordinate(horizontalEntry);
+      for (const { entry: verticalEntry } of ordered) {
+        if (horizontalEntry === verticalEntry) {
+          continue;
+        }
+        const verticalLane = assignedByEntry.get(verticalEntry);
+        if (verticalLane === undefined) {
+          continue;
+        }
+        if (spansInteriorCoordinate(verticalEntry, sourceCoordinate) && isOutwardOf(verticalLane, horizontalLane)) {
+          countCrossing(sourceCoordinate, verticalEntry, horizontalEntry);
+        }
+        if (spansInteriorCoordinate(verticalEntry, targetCoordinate) && isInwardOf(verticalLane, horizontalLane)) {
+          countCrossing(targetCoordinate, verticalEntry, horizontalEntry);
+        }
+      }
+    }
+
+    return {
+      crossings,
+      nearBendCrossings
+    };
+  };
+  const chooseCrossingMinimizedOrder = (
+    component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>,
+    direction: 1 | -1,
+    baseCoordinate: number
+  ): Array<{ entry: OutcomeOpportunityGutterOccupancy }> => {
+    const spanOrder = [...component].sort((left, right) => compareBySpanOrder(left.entry, right.entry));
+    const candidates = dedupeCandidateOrders([
+      spanOrder,
+      [...component].sort((left, right) => compareByTargetEndpointOrder(left.entry, right.entry)),
+      [...component].sort((left, right) => compareByReverseTargetEndpointOrder(left.entry, right.entry))
+    ]);
+    const baseScore = countCrossingsForOrder(spanOrder, direction, baseCoordinate);
+    let bestOrder = spanOrder;
+    let bestScore = baseScore;
+
+    for (const candidate of candidates.slice(1)) {
+      const candidateScore = countCrossingsForOrder(candidate, direction, baseCoordinate);
+      if (candidateScore.crossings < bestScore.crossings
+        || (candidateScore.crossings === bestScore.crossings
+          && candidateScore.nearBendCrossings < bestScore.nearBendCrossings)) {
+        bestOrder = candidate;
+        bestScore = candidateScore;
+      }
+    }
+
+    return bestScore.crossings < baseScore.crossings
+      || (bestScore.crossings === baseScore.crossings && bestScore.nearBendCrossings < baseScore.nearBendCrossings)
+      ? bestOrder
+      : spanOrder;
+  };
+  const remapSameTargetCrossingMinimizedCoordinates = (
+    spanOrder: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>,
+    assignedByEntry: ReadonlyMap<OutcomeOpportunityGutterOccupancy, number>,
+    direction: 1 | -1,
+    baseCoordinate: number
+  ): Map<OutcomeOpportunityGutterOccupancy, number> => {
+    const remapped = new Map(assignedByEntry);
+    const groupByNodeId = new Map<string, Array<{ entry: OutcomeOpportunityGutterOccupancy }>>();
+    for (const item of spanOrder) {
+      const nodeId = item.entry.nodeId;
+      if (!nodeId) {
+        continue;
+      }
+      const existing = groupByNodeId.get(nodeId) ?? [];
+      existing.push(item);
+      groupByNodeId.set(nodeId, existing);
+    }
+
+    for (const group of groupByNodeId.values()) {
+      if (group.length <= 1) {
+        continue;
+      }
+      const optimizedGroup = chooseCrossingMinimizedOrder(group, direction, baseCoordinate);
+      if (componentOrderKey(optimizedGroup) === componentOrderKey(group)) {
+        continue;
+      }
+      const assignedCoordinates = group.map(({ entry }) => assignedByEntry.get(entry));
+      optimizedGroup.forEach(({ entry }, index) => {
+        const assignedCoordinate = assignedCoordinates[index];
+        if (assignedCoordinate !== undefined) {
+          remapped.set(entry, assignedCoordinate);
+        }
+      });
+    }
+
+    return remapped;
+  };
 
   grouped.forEach((group) => {
     const side = group[0]?.entry.side;
@@ -3077,17 +3299,21 @@ function resolveTargetEdgeLocalCompaction(
       }
 
       const componentEntries = componentIndices.map((componentIndex) => group[componentIndex]!);
-      const compareComponentEntries = shouldOrderComponentByTargetEndpoint(componentEntries)
-        ? compareByTargetEndpointOrder
-        : compareBySpanOrder;
-      const component = componentEntries.sort((left, right) =>
-        compareComponentEntries(left.entry, right.entry)
-      );
+      const usesSameTargetCrossingRemap = shouldOrderComponentByCrossingScore(componentEntries);
+      const component = usesSameTargetCrossingRemap
+        ? [...componentEntries].sort((left, right) => compareBySpanOrder(left.entry, right.entry))
+        : componentEntries.sort((left, right) => {
+          const compareComponentEntries = shouldOrderComponentByTargetEndpoint(componentEntries)
+            ? compareByTargetEndpointOrder
+            : compareBySpanOrder;
+          return compareComponentEntries(left.entry, right.entry);
+        });
       if (component.length <= 1) {
         continue;
       }
 
       const occupied: Array<{ entry: OutcomeOpportunityGutterOccupancy; coordinate: number }> = [];
+      const assignedCoordinateByEntry = new Map<OutcomeOpportunityGutterOccupancy, number>();
       for (const { entry } of component) {
         let assignedCoordinate = baseCoordinate;
         for (const occupiedEntry of occupied) {
@@ -3108,15 +3334,26 @@ function resolveTargetEdgeLocalCompaction(
           }
         }
 
+        assignedCoordinateByEntry.set(entry, assignedCoordinate);
+        occupied.push({
+          entry,
+          coordinate: assignedCoordinate
+        });
+      }
+
+      const finalCoordinateByEntry = usesSameTargetCrossingRemap
+        ? remapSameTargetCrossingMinimizedCoordinates(component, assignedCoordinateByEntry, direction, baseCoordinate)
+        : assignedCoordinateByEntry;
+      for (const { entry } of component) {
+        const assignedCoordinate = finalCoordinateByEntry.get(entry);
+        if (assignedCoordinate === undefined) {
+          continue;
+        }
         const endpointKey = buildEndpointCoordinateKey(entry.connectorId, "target");
         const segmentKey = buildSegmentDisplacementKey(entry.connectorId, entry.routeSegmentIndex);
         endpointCoordinateByEndpointKey.set(endpointKey, assignedCoordinate);
         segmentCoordinateBySegmentKey.set(segmentKey, assignedCoordinate);
         lockedSegmentKeys.add(segmentKey);
-        occupied.push({
-          entry,
-          coordinate: assignedCoordinate
-        });
       }
     }
   });
@@ -4161,7 +4398,8 @@ function buildPreparedRoutesWithObstacleCompaction(
   const targetEdgeLocalCompaction = resolveTargetEdgeLocalCompaction(
     gutterLocalPrepared.connectorPlansWithOccupancy,
     gutterLocalPrepared.occupancyResult.occupancy,
-    index
+    index,
+    endpointOffsetsByNodeId
   );
   const preparedEndpointCoordinateByEndpointKey = new Map(
     gutterLocalPrepared.bundleEndpointCoordinateByEndpointKey

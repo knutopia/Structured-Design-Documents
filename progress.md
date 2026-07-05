@@ -19,6 +19,7 @@
 -Restored previous commit
 -Small-step connector priority adjustment
 -Small-step connnector termination routing adjustment
+-Another termination improvement
 
 ## Thu 7-2
 

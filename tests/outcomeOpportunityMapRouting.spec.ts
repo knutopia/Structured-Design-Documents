@@ -249,6 +249,38 @@ function segmentSpansCoordinate(segment: AxisAlignedSegment, coordinate: number)
   return coordinate >= segment.spanStart - 0.5 && coordinate <= segment.spanEnd + 0.5;
 }
 
+function collectOrthogonalCrossings(
+  firstEdge: PositionedEdge,
+  secondEdge: PositionedEdge
+): Point[] {
+  const crossings: Point[] = [];
+  const firstSegments = collectAxisAlignedSegments(firstEdge);
+  const secondSegments = collectAxisAlignedSegments(secondEdge);
+
+  for (const first of firstSegments) {
+    for (const second of secondSegments) {
+      const horizontal = first.axis === "horizontal" ? first : second.axis === "horizontal" ? second : undefined;
+      const vertical = first.axis === "vertical" ? first : second.axis === "vertical" ? second : undefined;
+      if (!horizontal || !vertical) {
+        continue;
+      }
+      if (
+        vertical.coordinate > horizontal.spanStart + 0.5
+        && vertical.coordinate < horizontal.spanEnd - 0.5
+        && horizontal.coordinate > vertical.spanStart + 0.5
+        && horizontal.coordinate < vertical.spanEnd - 0.5
+      ) {
+        crossings.push({
+          x: vertical.coordinate,
+          y: horizontal.coordinate
+        });
+      }
+    }
+  }
+
+  return crossings;
+}
+
 function labelSegmentClearance(
   label: NonNullable<PositionedEdge["label"]>,
   segment: AxisAlignedSegment
@@ -740,7 +772,22 @@ END
     );
     expect(outcomeOneLocalVerticals.length).toBeGreaterThanOrEqual(3);
     expectOverlappingSegmentsSeparated(outcomeOneLocalVerticals);
+    const op001ToOutcomeOne = findEdge(finalEdges, "OP-001__supports__O-001");
     const op002ToOutcomeOne = findEdge(finalEdges, "OP-002__supports__O-001");
+    const op001TargetVertical = outcomeOneLocalVerticals.find((segment) =>
+      segment.edgeId === "OP-001__supports__O-001"
+    );
+    const op002TargetVertical = outcomeOneLocalVerticals.find((segment) =>
+      segment.edgeId === "OP-002__supports__O-001"
+    );
+    expect(op001TargetVertical).toBeDefined();
+    expect(op002TargetVertical).toBeDefined();
+    if (!op001TargetVertical || !op002TargetVertical) {
+      throw new Error("Expected OP-001 and OP-002 to have O-001 target-local vertical approaches.");
+    }
+    expect(op001TargetVertical.coordinate)
+      .toBeLessThan(op002TargetVertical.coordinate - ROUTING_SPACING + 0.5);
+    expect(collectOrthogonalCrossings(op001ToOutcomeOne, op002ToOutcomeOne)).toEqual([]);
     const op002TargetApproach = collectAxisAlignedSegments(op002ToOutcomeOne).find((segment) =>
       segment.axis === "horizontal"
       && Math.abs(segment.coordinate - op002ToOutcomeOne.to.y) <= 0.5
@@ -752,13 +799,6 @@ END
     }
     expect(op002TargetApproach.spanEnd - op002TargetApproach.spanStart)
       .toBeLessThanOrEqual(ROUTING_SPACING * 3 + 0.5);
-    const op002TargetVertical = outcomeOneLocalVerticals.find((segment) =>
-      segment.edgeId === "OP-002__supports__O-001"
-    );
-    expect(op002TargetVertical).toBeDefined();
-    if (!op002TargetVertical) {
-      throw new Error("Expected OP-002__supports__O-001 to have a target-local vertical approach.");
-    }
     expect(outcomeOne.x - op002TargetVertical.coordinate)
       .toBeLessThanOrEqual(ROUTING_SPACING * 3 + 0.5);
     const outcomeOneEdgeLocalOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
