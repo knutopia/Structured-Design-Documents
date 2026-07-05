@@ -125,10 +125,10 @@
       <path class="scene-edge__path" d="M 635.336 90 L 824.77 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-op-399__supports__o-302" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-399__supports__O-302" data-role="supports">
-      <path class="scene-edge__path" d="M 635.336 202 L 808.77 202 L 808.77 186 L 824.77 186" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 635.336 202 L 792.77 202 L 792.77 186 L 824.77 186" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-op-399__supports__o-301" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-399__supports__O-301" data-role="supports">
-      <path class="scene-edge__path" d="M 635.336 186 L 792.77 186 L 792.77 106 L 824.77 106" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 635.336 186 L 651.336 186 L 651.336 218 L 808.77 218 L 808.77 106 L 824.77 106" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-399__addresses__op-301" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-399__addresses__OP-301" data-role="addresses">
       <path class="scene-edge__path" d="M 262 90 L 411.336 90" marker-end="url(#scene-marker-arrow-end)"/>
@@ -151,15 +151,15 @@
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-399__supports__O-302" data-role="supports">
-      <rect class="scene-edge-label__box" x="707.336" y="226" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="713.336" y="237" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="707.336" y="156" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="713.336" y="167" dominant-baseline="middle">
           <tspan x="713.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-399__supports__O-301" data-role="supports">
-      <rect class="scene-edge-label__box" x="739.336" y="140" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="151" dominant-baseline="middle">
-          <tspan x="745.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="820.77" y="10" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="826.77" y="21" dominant-baseline="middle">
+          <tspan x="826.77" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-399__addresses__OP-301" data-role="addresses">

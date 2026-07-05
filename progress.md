@@ -17,7 +17,7 @@
 ## Thu 7-2
 
 -Further incremental routing fixes
--Stuck in regressions, trash
+
 
 ## Mon 6-29
 
