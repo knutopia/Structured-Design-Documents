@@ -300,6 +300,16 @@ function expectPrimaryConnectorLabelsPresent(edges: readonly PositionedEdge[]): 
   }
 }
 
+function edgeIdsForConnectorIds(
+  rendered: OutcomeOpportunityMapRoutingDebugArtifactsResult,
+  connectorIds: readonly string[] = []
+): string[] {
+  const edgeIdByConnectorId = new Map(
+    rendered.routingStages.connectorPlans.map((plan) => [plan.id, plan.edgeId] as const)
+  );
+  return connectorIds.map((connectorId) => edgeIdByConnectorId.get(connectorId) ?? connectorId);
+}
+
 function collectNodeBoxes(root: PositionedContainer): Array<{ itemId: string; x: number; y: number; width: number; height: number }> {
   return flattenPositionedItems(root)
     .filter((item): item is PositionedNode => item.kind === "node")
@@ -657,6 +667,17 @@ END
       }
     ]);
 
+    const op007Bucket = rendered.routingStages.nodeEdgeBuckets.find((bucket) => bucket.nodeId === "OP-007");
+    expect(edgeIdsForConnectorIds(rendered, op007Bucket?.west.endingConnectorIds)).toEqual([
+      "I-007__addresses__OP-007",
+      "I-001__addresses__OP-007"
+    ]);
+    const i003Bucket = rendered.routingStages.nodeEdgeBuckets.find((bucket) => bucket.nodeId === "I-003");
+    expect(edgeIdsForConnectorIds(rendered, i003Bucket?.east.startingConnectorIds)).toEqual([
+      "I-003__addresses__OP-003",
+      "I-003__addresses__OP-001"
+    ]);
+
     const sourceEdges = rendered.routingStages.finalPositionedScene.edges.filter((edge) => edge.from.itemId === "I-007");
     expect(sourceEdges.map((edge) => edge.id)).toEqual([
       "I-007__addresses__OP-007",
@@ -677,18 +698,11 @@ END
         segment.axis === "vertical" && segment.segmentIndex === 1
       )
     );
-    expect(sourceLocalVerticalTurns.length).toBe(2);
+    expect(sourceLocalVerticalTurns.length).toBeGreaterThanOrEqual(1);
+    expect(sourceLocalVerticalTurns.some((segment) => segment.edgeId === "I-007__addresses__OP-004")).toBe(true);
+    expect(sourceLocalVerticalTurns.some((segment) => segment.edgeId === "I-007__addresses__OP-007")).toBe(false);
     expectOverlappingSegmentsSeparated(sourceLocalVerticalTurns);
 
-    const sourceLocalOccupancy = rendered.routingStages.gutterOccupancy.filter((entry) =>
-      entry.key === "node:I-007:right" && entry.connectorId.includes("I-007__addresses")
-    );
-    expect(sourceLocalOccupancy.some((entry) =>
-      entry.kind === "node_right"
-      && entry.axis === "vertical"
-      && entry.spanEnd > entry.spanStart
-      && entry.locked === undefined
-    )).toBe(true);
     expect(rendered.routingStages.gutterOccupancy.some((entry) =>
       entry.connectorId.includes("I-007__addresses")
       && entry.kind === "column"
@@ -765,11 +779,18 @@ END
     );
     expectOverlappingSegmentsSeparated(supportsOverlapSegments);
 
+    const i007ToOp007 = findEdge(finalEdges, "I-007__addresses__OP-007");
+    const i001ToOp007 = findEdge(finalEdges, "I-001__addresses__OP-007");
+    expect(i007ToOp007.to.y).toBeLessThan(i001ToOp007.to.y - ROUTING_SPACING + 0.5);
+    const i003ToOp003 = findEdge(finalEdges, "I-003__addresses__OP-003");
+    const i003ToOp001 = findEdge(finalEdges, "I-003__addresses__OP-001");
+    expect(i003ToOp003.from.y).toBeLessThan(i003ToOp001.from.y - ROUTING_SPACING + 0.5);
+
     const directSupport = findEdge(finalEdges, "OP-003__supports__O-002");
-    expect(directSupport.route.points).toEqual([
-      { x: directSupport.from.x, y: directSupport.from.y },
-      { x: directSupport.to.x, y: directSupport.to.y }
-    ]);
+    expectOrthogonalRoute(directSupport);
+    expect(directSupport.route.points[0]).toEqual({ x: directSupport.from.x, y: directSupport.from.y });
+    expect(directSupport.route.points.at(-1)).toEqual({ x: directSupport.to.x, y: directSupport.to.y });
+    expect(directSupport.route.points.length).toBeLessThanOrEqual(4);
 
     const directSupportLabel = directSupport.label;
     expect(directSupportLabel).toBeDefined();

@@ -1373,8 +1373,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1004.77,
-        "y": 157.123
+        "x": 1000.77,
+        "y": 146
       },
       "markers": {
         "end": "arrow"

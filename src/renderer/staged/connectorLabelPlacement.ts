@@ -100,6 +100,7 @@ export interface ConnectorLabelPlacementOptions {
   connectorBlockMode?: "vertical_only" | "all_segments";
   separatorBlockMode?: "vertical_stem" | "box";
   horizontalPlacementMode?: "service_shift_right" | "scenario_side_offsets";
+  includeAdjacentHorizontalLabelAnchors?: boolean;
 }
 
 function roundMetric(value: number): number {
@@ -349,7 +350,10 @@ function measureMinimumBoxClearance(
   );
 }
 
-function buildConnectorLabelAnchorCandidates(route: PositionedRoute): ConnectorLabelAnchorCandidate[] | undefined {
+function buildConnectorLabelAnchorCandidates(
+  route: PositionedRoute,
+  includeAdjacentHorizontalLabelAnchors = false
+): ConnectorLabelAnchorCandidate[] | undefined {
   const details = buildRouteSegmentDetails(route)
     .filter((segment) => getRouteSegmentLength(segment) > 0.5);
   const midpoint = resolveConnectorMidpointSegment(route);
@@ -381,6 +385,23 @@ function buildConnectorLabelAnchorCandidates(route: PositionedRoute): ConnectorL
     ) * 2;
 
   if (!isLocalHorizontalSwerve) {
+    if (midpoint.segment.orientation === "vertical") {
+      for (const candidateIndex of [midpoint.segmentIndex - 1, midpoint.segmentIndex + 1]) {
+        const segment = details[candidateIndex];
+        if (!includeAdjacentHorizontalLabelAnchors
+          || !segment
+          || segment.orientation !== "horizontal"
+          || getRouteSegmentLength(segment) < FIXED_LABEL_CLEARANCE) {
+          continue;
+        }
+        const anchorDistance = startDistances[candidateIndex]! + getRouteSegmentLength(segment) / 2;
+        candidates.push({
+          segment,
+          point: getRouteSegmentMidpoint(segment),
+          routeDistanceFromMidpoint: Math.abs(anchorDistance - midpoint.midpointDistance)
+        });
+      }
+    }
     return candidates;
   }
 
@@ -1222,7 +1243,7 @@ export function positionConnectorLabel(
   const horizontalPlacementMode = options.horizontalPlacementMode ?? "service_shift_right";
   const diagnosticSeverity = diagnosticsPolicy.severity ?? "info";
 
-  const anchorCandidates = buildConnectorLabelAnchorCandidates(route);
+  const anchorCandidates = buildConnectorLabelAnchorCandidates(route, options.includeAdjacentHorizontalLabelAnchors);
   if (!anchorCandidates || anchorCandidates.length === 0) {
     diagnostics.push(
       createRoutingDiagnostic(

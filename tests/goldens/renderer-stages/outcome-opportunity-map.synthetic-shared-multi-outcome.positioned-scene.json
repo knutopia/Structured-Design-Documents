@@ -422,14 +422,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 824.77,
+            "x": 776.77,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 814.77,
+        "x": 766.77,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -558,14 +558,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1212.524,
+            "x": 1164.524,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1202.524,
+        "x": 1154.524,
         "y": 56,
         "width": 244,
         "height": 68,
@@ -867,14 +867,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 824.77,
+            "x": 776.77,
             "y": 162,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 814.77,
+        "x": 766.77,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -913,7 +913,7 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 1202.524,
+        "x": 1154.524,
         "y": 152,
         "width": 244,
         "height": 68,
@@ -924,7 +924,7 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1474.524,
+    "width": 1426.524,
     "height": 248
   },
   "edges": [
@@ -947,7 +947,7 @@
       "to": {
         "itemId": "O-301",
         "portId": "intent_in",
-        "x": 824.77,
+        "x": 776.77,
         "y": 90
       },
       "route": {
@@ -958,7 +958,7 @@
             "y": 90
           },
           {
-            "x": 824.77,
+            "x": 776.77,
             "y": 90
           }
         ]
@@ -971,8 +971,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 699.336,
-        "y": 79
+        "x": 675.336,
+        "y": 44
       },
       "markers": {
         "end": "arrow"
@@ -993,12 +993,12 @@
         "itemId": "OP-399",
         "portId": "intent_out",
         "x": 635.336,
-        "y": 202
+        "y": 186
       },
       "to": {
         "itemId": "O-302",
         "portId": "intent_in",
-        "x": 824.77,
+        "x": 776.77,
         "y": 186
       },
       "route": {
@@ -1006,18 +1006,10 @@
         "points": [
           {
             "x": 635.336,
-            "y": 202
-          },
-          {
-            "x": 792.77,
-            "y": 202
-          },
-          {
-            "x": 792.77,
             "y": 186
           },
           {
-            "x": 824.77,
+            "x": 776.77,
             "y": 186
           }
         ]
@@ -1030,8 +1022,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 707.336,
-        "y": 156
+        "x": 675.336,
+        "y": 20
       },
       "markers": {
         "end": "arrow"
@@ -1052,12 +1044,12 @@
         "itemId": "OP-399",
         "portId": "intent_out",
         "x": 635.336,
-        "y": 186
+        "y": 202
       },
       "to": {
         "itemId": "O-301",
         "portId": "intent_in",
-        "x": 824.77,
+        "x": 776.77,
         "y": 106
       },
       "route": {
@@ -1065,26 +1057,18 @@
         "points": [
           {
             "x": 635.336,
-            "y": 186
+            "y": 202
           },
           {
-            "x": 651.336,
-            "y": 186
+            "x": 722.053,
+            "y": 202
           },
           {
-            "x": 651.336,
-            "y": 218
-          },
-          {
-            "x": 808.77,
-            "y": 218
-          },
-          {
-            "x": 808.77,
+            "x": 722.053,
             "y": 106
           },
           {
-            "x": 824.77,
+            "x": 776.77,
             "y": 106
           }
         ]
@@ -1097,8 +1081,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 820.77,
-        "y": 10
+        "x": 671.978,
+        "y": 226
       },
       "markers": {
         "end": "arrow"
@@ -1207,8 +1191,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 364.668,
-        "y": 10
+        "x": 299.334,
+        "y": 175
       },
       "markers": {
         "end": "arrow"
@@ -1228,24 +1212,24 @@
       "from": {
         "itemId": "O-301",
         "portId": "measure_out",
-        "x": 1048.77,
+        "x": 1000.77,
         "y": 90
       },
       "to": {
         "itemId": "M-399",
         "portId": "measure_in",
-        "x": 1212.524,
+        "x": 1164.524,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1048.77,
+            "x": 1000.77,
             "y": 90
           },
           {
-            "x": 1212.524,
+            "x": 1164.524,
             "y": 90
           }
         ]
@@ -1258,7 +1242,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1088.77,
+        "x": 1040.77,
         "y": 44
       },
       "markers": {
@@ -1279,32 +1263,32 @@
       "from": {
         "itemId": "O-302",
         "portId": "measure_out",
-        "x": 1048.77,
+        "x": 1000.77,
         "y": 186
       },
       "to": {
         "itemId": "M-399",
         "portId": "measure_in",
-        "x": 1212.524,
+        "x": 1164.524,
         "y": 106
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1048.77,
+            "x": 1000.77,
             "y": 186
           },
           {
-            "x": 1130.647,
+            "x": 1082.647,
             "y": 186
           },
           {
-            "x": 1130.647,
+            "x": 1082.647,
             "y": 106
           },
           {
-            "x": 1212.524,
+            "x": 1164.524,
             "y": 106
           }
         ]
@@ -1317,7 +1301,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1142.647,
+        "x": 1094.647,
         "y": 182
       },
       "markers": {
@@ -1361,7 +1345,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 818.77,
+      "x": 770.77,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -1374,7 +1358,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 1206.524,
+      "x": 1158.524,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"

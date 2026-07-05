@@ -608,11 +608,48 @@ function getSideBuckets(
   }
 }
 
+function getSameRowNextColumnEndpointPriority(
+  plan: OutcomeOpportunityConnectorTemplatePlan,
+  index: OutcomeOpportunityPositionedIndex
+): number {
+  const source = index.nodeById.get(plan.from);
+  const target = index.nodeById.get(plan.to);
+  if (!source || !target) {
+    return 1;
+  }
+
+  return plan.sourceSide === "east"
+    && plan.targetSide === "west"
+    && target.placement.columnOrder === source.placement.columnOrder + 1
+    && target.placement.rowOrder === source.placement.rowOrder
+    ? 0
+    : 1;
+}
+
+function compareEndpointSlotOrder(
+  left: OutcomeOpportunityConnectorTemplatePlan,
+  right: OutcomeOpportunityConnectorTemplatePlan,
+  index: OutcomeOpportunityPositionedIndex
+): number {
+  return getSameRowNextColumnEndpointPriority(left, index) - getSameRowNextColumnEndpointPriority(right, index)
+    || compareConnectorPlanPriority(left, right);
+}
+
 function buildNodeEdgeBuckets(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   index: OutcomeOpportunityPositionedIndex
 ): Map<string, OutcomeOpportunityNodeEdgeBuckets> {
   const bucketsByNodeId = new Map<string, OutcomeOpportunityNodeEdgeBuckets>();
+  const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
+  const compareConnectorIds = (leftId: string, rightId: string): number => {
+    const leftPlan = planById.get(leftId);
+    const rightPlan = planById.get(rightId);
+    if (!leftPlan || !rightPlan) {
+      return leftId.localeCompare(rightId);
+    }
+    return compareEndpointSlotOrder(leftPlan, rightPlan, index);
+  };
+
   for (const nodeId of index.nodeById.keys()) {
     bucketsByNodeId.set(nodeId, buildEmptyNodeEdgeBuckets(nodeId));
   }
@@ -624,6 +661,14 @@ function buildNodeEdgeBuckets(
     getSideBuckets(targetBuckets, plan.targetSide).endingConnectorIds.push(plan.id);
     bucketsByNodeId.set(plan.from, sourceBuckets);
     bucketsByNodeId.set(plan.to, targetBuckets);
+  }
+
+  for (const buckets of bucketsByNodeId.values()) {
+    for (const side of ["north", "south", "east", "west"] as const) {
+      const sideBuckets = getSideBuckets(buckets, side);
+      sideBuckets.startingConnectorIds.sort(compareConnectorIds);
+      sideBuckets.endingConnectorIds.sort(compareConnectorIds);
+    }
   }
 
   return bucketsByNodeId;
@@ -1504,7 +1549,8 @@ function getPreferredPreparedStemCoordinate(
 function buildPreferredEndpointSideOrderOverrides(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   bucketsByNodeId: ReadonlyMap<string, OutcomeOpportunityNodeEdgeBuckets>,
-  routeStates: ReadonlyMap<string, OutcomeOpportunityConnectorRouteState>
+  routeStates: ReadonlyMap<string, OutcomeOpportunityConnectorRouteState>,
+  index: OutcomeOpportunityPositionedIndex
 ): OutcomeOpportunityEndpointSideOrderOverrides {
   const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
   const overrides = new Map<string, Map<PortSide, OutcomeOpportunityEndpointSideOrderOverride>>();
@@ -1525,6 +1571,14 @@ function buildPreferredEndpointSideOrderOverrides(
   ): number => {
     const leftPlan = planById.get(leftId);
     const rightPlan = planById.get(rightId);
+    if (leftPlan && rightPlan) {
+      const priorityDelta = getSameRowNextColumnEndpointPriority(leftPlan, index)
+        - getSameRowNextColumnEndpointPriority(rightPlan, index);
+      if (priorityDelta !== 0) {
+        return priorityDelta;
+      }
+    }
+
     const leftRoute = routeStates.get(leftId)?.route;
     const rightRoute = routeStates.get(rightId)?.route;
     const leftCoordinate = leftPlan && leftRoute
@@ -3399,7 +3453,8 @@ function placeLabels(
         fallbackMessage: (connectorId) => `Connector "${connectorId}" used fallback label placement.`
       },
       connectorBlockMode: "all_segments",
-      horizontalPlacementMode: "scenario_side_offsets"
+      horizontalPlacementMode: "scenario_side_offsets",
+      includeAdjacentHorizontalLabelAnchors: true
     });
     if (!label) {
       continue;
@@ -3881,7 +3936,8 @@ function buildPreparedRoutesWithLateEndpointOrdering(
   const preferredSideOrderOverrides = buildPreferredEndpointSideOrderOverrides(
     plans,
     bucketsByNodeId,
-    initialPrepared.routeStates
+    initialPrepared.routeStates,
+    index
   );
 
   if (preferredSideOrderOverrides.size === 0) {

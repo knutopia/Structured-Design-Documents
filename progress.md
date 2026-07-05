@@ -17,6 +17,7 @@
 ## Sun 7-5
 
 -Restored previous commit
+-Small-step connector priority adjustment
 
 ## Thu 7-2
 
