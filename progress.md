@@ -14,10 +14,14 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 7-5
+
+-Restored previous commit
+
 ## Thu 7-2
 
 -Further incremental routing fixes
-
+-Lost in the weeds
 
 ## Mon 6-29
 
