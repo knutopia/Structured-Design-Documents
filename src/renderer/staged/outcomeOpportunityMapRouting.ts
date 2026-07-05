@@ -3001,6 +3001,44 @@ function resolveTargetEdgeLocalCompaction(
       || left.routeSegmentIndex - right.routeSegmentIndex
       || left.connectorId.localeCompare(right.connectorId);
   };
+  const resolveTargetEndpointOrderCoordinate = (entry: OutcomeOpportunityGutterOccupancy): number => {
+    const node = entry.nodeId ? index.nodeById.get(entry.nodeId)?.node : undefined;
+    if (!node || !entry.side) {
+      return entry.spanStart;
+    }
+
+    if (entry.axis === "vertical" && (entry.side === "east" || entry.side === "west")) {
+      const candidates = [entry.spanStart, entry.spanEnd].filter((coordinate) =>
+        coordinate >= node.y - 0.5 && coordinate <= node.y + node.height + 0.5
+      );
+      if (candidates.length > 0) {
+        return roundMetric(candidates.reduce((sum, coordinate) => sum + coordinate, 0) / candidates.length);
+      }
+    }
+
+    return entry.spanStart;
+  };
+  const compareByTargetEndpointOrder = (
+    left: OutcomeOpportunityGutterOccupancy,
+    right: OutcomeOpportunityGutterOccupancy
+  ): number => resolveTargetEndpointOrderCoordinate(left) - resolveTargetEndpointOrderCoordinate(right)
+    || left.spanStart - right.spanStart
+    || left.spanEnd - right.spanEnd
+    || compareByPriority(left, right);
+  const compareBySpanOrder = (
+    left: OutcomeOpportunityGutterOccupancy,
+    right: OutcomeOpportunityGutterOccupancy
+  ): number => left.spanStart - right.spanStart
+    || left.spanEnd - right.spanEnd
+    || compareByPriority(left, right);
+  const shouldOrderComponentByTargetEndpoint = (
+    component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>
+  ): boolean => component.length > 1 && component.every(({ entry }) => {
+    const plan = planById.get(entry.connectorId);
+    return plan?.channel === "initiative_addressing"
+      && entry.axis === "vertical"
+      && (entry.side === "east" || entry.side === "west");
+  });
 
   grouped.forEach((group) => {
     const side = group[0]?.entry.side;
@@ -3038,13 +3076,13 @@ function resolveTargetEdgeLocalCompaction(
         }
       }
 
-      const component = componentIndices
-        .map((componentIndex) => group[componentIndex]!)
-        .sort((left, right) =>
-          left.entry.spanStart - right.entry.spanStart
-          || left.entry.spanEnd - right.entry.spanEnd
-          || compareByPriority(left.entry, right.entry)
-        );
+      const componentEntries = componentIndices.map((componentIndex) => group[componentIndex]!);
+      const compareComponentEntries = shouldOrderComponentByTargetEndpoint(componentEntries)
+        ? compareByTargetEndpointOrder
+        : compareBySpanOrder;
+      const component = componentEntries.sort((left, right) =>
+        compareComponentEntries(left.entry, right.entry)
+      );
       if (component.length <= 1) {
         continue;
       }

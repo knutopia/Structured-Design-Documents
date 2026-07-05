@@ -321,7 +321,7 @@
       <path class="scene-edge__path" d="M 262 90 L 539.336 90" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-001__addresses__op-007" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-001__addresses__OP-007" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 106 L 507.336 106 L 507.336 318 L 539.336 318" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 262 106 L 523.336 106 L 523.336 318 L 539.336 318" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-002__addresses__op-002" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-002__addresses__OP-002" data-role="addresses">
       <path class="scene-edge__path" d="M 262 194 L 539.336 194" marker-end="url(#scene-marker-arrow-end)"/>
@@ -336,7 +336,7 @@
       <path class="scene-edge__path" d="M 262 406 L 539.336 406" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-003__addresses__op-001" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-cross_band_bridge" data-edge-id="I-003__addresses__OP-001" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 422 L 523.336 422 L 523.336 110 L 539.336 110" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 262 422 L 507.336 422 L 507.336 110 L 539.336 110" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-i-004__addresses__op-004" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-004__addresses__OP-004" data-role="addresses">
       <path class="scene-edge__path" d="M 262 514 L 539.336 514" marker-end="url(#scene-marker-arrow-end)"/>
@@ -455,9 +455,9 @@
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-001__addresses__OP-007" data-role="addresses">
-      <rect class="scene-edge-label__box" x="424" y="130" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="430" y="141" dominant-baseline="middle">
-          <tspan x="430" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="400" y="130" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="406" y="141" dominant-baseline="middle">
+          <tspan x="406" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-002__addresses__OP-002" data-role="addresses">
@@ -485,9 +485,9 @@
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-cross_band_bridge" data-edge-id="I-003__addresses__OP-001" data-role="addresses">
-      <rect class="scene-edge-label__box" x="358" y="446" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="364" y="457" dominant-baseline="middle">
-          <tspan x="364" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="350" y="446" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="356" y="457" dominant-baseline="middle">
+          <tspan x="356" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-004__addresses__OP-004" data-role="addresses">

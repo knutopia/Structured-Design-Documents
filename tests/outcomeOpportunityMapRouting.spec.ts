@@ -245,6 +245,10 @@ function segmentOverlapsNodeHeight(segment: AxisAlignedSegment, node: Positioned
     && Math.min(segment.spanEnd, node.y + node.height) - Math.max(segment.spanStart, node.y) > 0.5;
 }
 
+function segmentSpansCoordinate(segment: AxisAlignedSegment, coordinate: number): boolean {
+  return coordinate >= segment.spanStart - 0.5 && coordinate <= segment.spanEnd + 0.5;
+}
+
 function labelSegmentClearance(
   label: NonNullable<PositionedEdge["label"]>,
   segment: AxisAlignedSegment
@@ -785,6 +789,27 @@ END
     const i003ToOp003 = findEdge(finalEdges, "I-003__addresses__OP-003");
     const i003ToOp001 = findEdge(finalEdges, "I-003__addresses__OP-001");
     expect(i003ToOp003.from.y).toBeLessThan(i003ToOp001.from.y - ROUTING_SPACING + 0.5);
+    const i001ToOp007Segments = collectAxisAlignedSegments(i001ToOp007);
+    const i003ToOp001Segments = collectAxisAlignedSegments(i003ToOp001);
+    const i001ToOp007Vertical = i001ToOp007Segments.find((segment) => segment.axis === "vertical");
+    const i003ToOp001Vertical = i003ToOp001Segments.find((segment) => segment.axis === "vertical");
+    const i001ToOp007TargetApproach = i001ToOp007Segments.find((segment) =>
+      segment.axis === "horizontal"
+      && Math.abs(segment.coordinate - i001ToOp007.to.y) <= 0.5
+      && Math.abs(segment.spanEnd - i001ToOp007.to.x) <= 0.5
+    );
+    const i003ToOp001TargetApproach = i003ToOp001Segments.find((segment) =>
+      segment.axis === "horizontal"
+      && Math.abs(segment.coordinate - i003ToOp001.to.y) <= 0.5
+      && Math.abs(segment.spanEnd - i003ToOp001.to.x) <= 0.5
+    );
+    if (!i001ToOp007Vertical || !i003ToOp001Vertical || !i001ToOp007TargetApproach || !i003ToOp001TargetApproach) {
+      throw new Error("Expected I-001/I-003 address routes to have vertical bridge and target approach segments.");
+    }
+    expect(i001ToOp007Vertical.coordinate)
+      .toBeLessThan(i003ToOp001Vertical.coordinate - ROUTING_SPACING + 0.5);
+    expect(segmentSpansCoordinate(i001ToOp007TargetApproach, i003ToOp001Vertical.coordinate)).toBe(true);
+    expect(segmentSpansCoordinate(i003ToOp001TargetApproach, i001ToOp007Vertical.coordinate)).toBe(false);
 
     const directSupport = findEdge(finalEdges, "OP-003__supports__O-002");
     expectOrthogonalRoute(directSupport);
