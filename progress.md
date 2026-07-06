@@ -21,6 +21,7 @@
 -Small-step connnector termination routing adjustment
 -Another termination improvement
 -Half-failed label placement change
+-Label placement salvaged, still rough
 
 ## Thu 7-2
 

@@ -3788,7 +3788,9 @@ function placeLabels(
       horizontalPlacementMode: "scenario_side_offsets",
       horizontalSideLabelDistance: FIXED_LABEL_DISTANCE,
       includeAdjacentHorizontalLabelAnchors: true,
-      preferHorizontalLabelAnchors: true
+      nearbyHorizontalLabelPreference: {
+        maxXOffset: 0.5
+      }
     });
     if (!label) {
       continue;

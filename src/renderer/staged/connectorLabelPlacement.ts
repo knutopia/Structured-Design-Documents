@@ -61,6 +61,7 @@ interface ConnectorLabelPlacementResult {
   box: LabelBox;
   fallback: boolean;
   distanceFromAnchor: number;
+  nearbyHorizontalPreferenceEligible?: boolean;
 }
 
 interface VerticalLabelPlacementCandidate {
@@ -76,6 +77,7 @@ interface HorizontalLabelPlacementCandidate {
   distanceFromAnchor: number;
   tierRank: number;
   minimumBlockerClearance: number;
+  xOffset: number;
 }
 
 export interface ConnectorLabelDiagnosticsPolicy {
@@ -85,6 +87,10 @@ export interface ConnectorLabelDiagnosticsPolicy {
   noAnchorMessage: (connectorId: string) => string;
   noCandidateMessage: (connectorId: string) => string;
   fallbackMessage: (connectorId: string) => string;
+}
+
+export interface NearbyHorizontalLabelPreference {
+  maxXOffset: number;
 }
 
 export interface ConnectorLabelPlacementOptions {
@@ -102,7 +108,7 @@ export interface ConnectorLabelPlacementOptions {
   horizontalPlacementMode?: "service_shift_right" | "scenario_side_offsets";
   horizontalSideLabelDistance?: number;
   includeAdjacentHorizontalLabelAnchors?: boolean;
-  preferHorizontalLabelAnchors?: boolean;
+  nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference;
 }
 
 function roundMetric(value: number): number {
@@ -432,6 +438,11 @@ function isLabelBoxWithinScene(scene: PositionedScene, box: LabelBox): boolean {
 
 function spansOverlap(startA: number, endA: number, startB: number, endB: number): boolean {
   return Math.min(endA, endB) - Math.max(startA, startB) > 0.5;
+}
+
+function measureHorizontalOverlap(box: LabelBox, segment: RouteSegmentDetail): number {
+  return Math.min(box.x + box.width, Math.max(segment.start.x, segment.end.x))
+    - Math.max(box.x, Math.min(segment.start.x, segment.end.x));
 }
 
 function boxIntersectsConnectorSegments(
@@ -1108,7 +1119,8 @@ function buildScenarioHorizontalLabelSearchCandidates(
           box.y + box.height / 2 - anchorPoint.y
         ),
         tierRank: yCandidate.tierRank,
-        minimumBlockerClearance: measureMinimumBoxClearance(box, blockedBoxes)
+        minimumBlockerClearance: measureMinimumBoxClearance(box, blockedBoxes),
+        xOffset
       });
     }
   }
@@ -1141,7 +1153,8 @@ function resolveScenarioHorizontalLabelPlacement(
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
-  horizontalSideLabelDistance = FIXED_LABEL_CLEARANCE
+  horizontalSideLabelDistance = FIXED_LABEL_CLEARANCE,
+  nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference
 ): ConnectorLabelPlacementResult {
   const candidates = buildScenarioHorizontalLabelSearchCandidates(
     measuredLabel,
@@ -1162,11 +1175,16 @@ function resolveScenarioHorizontalLabelPlacement(
       connectorBlockMode,
       separatorBlockMode
     )) {
+      const nearbyHorizontalPreferenceEligible = nearbyHorizontalLabelPreference !== undefined
+        && (candidate.tierRank === 1 || candidate.tierRank === 2)
+        && Math.abs(candidate.xOffset) <= nearbyHorizontalLabelPreference.maxXOffset + 0.001
+        && measureHorizontalOverlap(candidate.box, segment) > 0.5;
       return {
         label: buildPositionedEdgeLabelFromBox(measuredLabel, candidate.box),
         box: candidate.box,
         fallback: false,
-        distanceFromAnchor: candidate.distanceFromAnchor
+        distanceFromAnchor: candidate.distanceFromAnchor,
+        nearbyHorizontalPreferenceEligible
       };
     }
   }
@@ -1200,14 +1218,14 @@ function compareAnchorPlacementCandidates(
     anchor: ConnectorLabelAnchorCandidate;
     placement: ConnectorLabelPlacementResult;
     minimumBlockerClearance: number;
-  },
-  preferHorizontalLabelAnchors = false
+  }
 ): number {
   if (left.placement.fallback !== right.placement.fallback) {
     return left.placement.fallback ? 1 : -1;
   }
-  if (preferHorizontalLabelAnchors && left.anchor.segment.orientation !== right.anchor.segment.orientation) {
-    return left.anchor.segment.orientation === "horizontal" ? -1 : 1;
+  if ((left.placement.nearbyHorizontalPreferenceEligible ?? false)
+    !== (right.placement.nearbyHorizontalPreferenceEligible ?? false)) {
+    return left.placement.nearbyHorizontalPreferenceEligible ? -1 : 1;
   }
   if (left.minimumBlockerClearance > right.minimumBlockerClearance + 0.001) {
     return -1;
@@ -1292,7 +1310,8 @@ export function positionConnectorLabel(
             scene,
             connectorBlockMode,
             separatorBlockMode,
-            horizontalSideLabelDistance
+            horizontalSideLabelDistance,
+            options.nearbyHorizontalLabelPreference
           )
         : resolveServiceHorizontalLabelPlacement(
             connectorId,
@@ -1311,11 +1330,7 @@ export function positionConnectorLabel(
       placement,
       minimumBlockerClearance: measureMinimumBoxClearance(placement.box, blockedBoxes)
     };
-  }).sort((left, right) => compareAnchorPlacementCandidates(
-    left,
-    right,
-    options.preferHorizontalLabelAnchors ?? false
-  ));
+  }).sort(compareAnchorPlacementCandidates);
 
   const chosen = scoredCandidates[0];
   if (!chosen) {

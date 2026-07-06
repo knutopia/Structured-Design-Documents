@@ -103,9 +103,9 @@
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-parking_fallback" data-edge-id="I-991__addresses__OP-991" data-role="addresses">
-      <rect class="scene-edge-label__box" x="279.334" y="175" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="285.334" y="186" dominant-baseline="middle">
-          <tspan x="285.334" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="340.668" y="278" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="346.668" y="289" dominant-baseline="middle">
+          <tspan x="346.668" dy="0">addresses</tspan>
         </text>
     </g>
   </g>

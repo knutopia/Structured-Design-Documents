@@ -345,6 +345,38 @@ function expectLabelVerticalGapToHorizontalSegment(
     .toBeCloseTo(expectedGap, 3);
 }
 
+function findSourceHorizontalSegment(edge: PositionedEdge): AxisAlignedSegment {
+  const segment = collectAxisAlignedSegments(edge).find((candidate) =>
+    candidate.axis === "horizontal"
+    && Math.abs(candidate.coordinate - edge.from.y) <= 0.5
+    && (
+      Math.abs(candidate.spanStart - edge.from.x) <= 0.5
+      || Math.abs(candidate.spanEnd - edge.from.x) <= 0.5
+    )
+  );
+  if (!segment) {
+    throw new Error(`Expected ${edge.id} to have a source horizontal segment.`);
+  }
+  return segment;
+}
+
+function expectLabelCloserToSourceHorizontalThanTerminalHorizontal(edge: PositionedEdge): void {
+  if (!edge.label) {
+    throw new Error(`Expected ${edge.id} to have a label.`);
+  }
+  const sourceSegment = findSourceHorizontalSegment(edge);
+  const terminalSegment = findTerminalHorizontalSegment(edge);
+  const labelCenterY = edge.label.y + edge.label.height / 2;
+  expect(
+    Math.abs(labelCenterY - sourceSegment.coordinate),
+    `${edge.id} label source-side y distance`
+  ).toBeLessThan(Math.abs(labelCenterY - terminalSegment.coordinate));
+  const sourceOverlap = Math.min(edge.label.x + edge.label.width, sourceSegment.spanEnd)
+    - Math.max(edge.label.x, sourceSegment.spanStart);
+  expect(sourceOverlap, `${edge.id} label source horizontal overlap`)
+    .toBeGreaterThan(0.5);
+}
+
 function findTerminalHorizontalSegment(edge: PositionedEdge): AxisAlignedSegment {
   const segment = collectAxisAlignedSegments(edge).find((candidate) =>
     candidate.axis === "horizontal"
@@ -801,6 +833,9 @@ END
       findEdge(sourceEdges, "I-007__addresses__OP-004"),
       0,
       OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP
+    );
+    expectLabelCloserToSourceHorizontalThanTerminalHorizontal(
+      findEdge(rendered.routingStages.finalPositionedScene.edges, "I-001__addresses__OP-007")
     );
 
     const sourceLocalVerticalTurns = sourceEdges.flatMap((edge) =>
