@@ -20,6 +20,7 @@
 -Small-step connector priority adjustment
 -Small-step connnector termination routing adjustment
 -Another termination improvement
+-Half-failed label placement change
 
 ## Thu 7-2
 

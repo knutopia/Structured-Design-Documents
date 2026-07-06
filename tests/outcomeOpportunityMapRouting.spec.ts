@@ -33,6 +33,8 @@ const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
 const OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE = 24;
 const ROUTING_SPACING = 16;
+const OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP = 12;
+const OUTCOME_OPPORTUNITY_TARGET_TERMINAL_CROSSING_CLEARANCE = ROUTING_SPACING * 2;
 
 const DENSE_ROUTING_SOURCE = `
 SDD-TEXT 0.1
@@ -310,6 +312,68 @@ function labelSegmentClearance(
     0
   );
   return Math.hypot(horizontalGap, verticalGap);
+}
+
+function findAxisAlignedSegment(edge: PositionedEdge, segmentIndex: number): AxisAlignedSegment {
+  const segment = collectAxisAlignedSegments(edge).find((candidate) => candidate.segmentIndex === segmentIndex);
+  if (!segment) {
+    throw new Error(`Expected ${edge.id} to include route segment ${segmentIndex}.`);
+  }
+  return segment;
+}
+
+function expectLabelVerticalGapToHorizontalSegment(
+  edge: PositionedEdge,
+  segmentIndex: number,
+  expectedGap: number
+): void {
+  if (!edge.label) {
+    throw new Error(`Expected ${edge.id} to have a label.`);
+  }
+  const segment = findAxisAlignedSegment(edge, segmentIndex);
+  expect(segment.axis, `${edge.id} segment ${segmentIndex}`).toBe("horizontal");
+  const horizontalOverlap = Math.min(edge.label.x + edge.label.width, segment.spanEnd)
+    - Math.max(edge.label.x, segment.spanStart);
+  expect(horizontalOverlap, `${edge.id} segment ${segmentIndex} label overlap`)
+    .toBeGreaterThan(0.5);
+  const verticalGap = Math.max(
+    segment.coordinate - (edge.label.y + edge.label.height),
+    edge.label.y - segment.coordinate,
+    0
+  );
+  expect(verticalGap, `${edge.id} segment ${segmentIndex} label gap`)
+    .toBeCloseTo(expectedGap, 3);
+}
+
+function findTerminalHorizontalSegment(edge: PositionedEdge): AxisAlignedSegment {
+  const segment = collectAxisAlignedSegments(edge).find((candidate) =>
+    candidate.axis === "horizontal"
+    && Math.abs(candidate.coordinate - edge.to.y) <= 0.5
+    && (
+      Math.abs(candidate.spanStart - edge.to.x) <= 0.5
+      || Math.abs(candidate.spanEnd - edge.to.x) <= 0.5
+    )
+  );
+  if (!segment) {
+    throw new Error(`Expected ${edge.id} to have a terminal horizontal segment.`);
+  }
+  return segment;
+}
+
+function expectVerticalCrossingHasTerminalClearance(
+  verticalSegment: AxisAlignedSegment,
+  terminalEdge: PositionedEdge,
+  minClearance: number
+): void {
+  expect(verticalSegment.axis, `${verticalSegment.edgeId} crossing segment`).toBe("vertical");
+  const terminalSegment = findTerminalHorizontalSegment(terminalEdge);
+  const crossesTerminalSegment = verticalSegment.coordinate > terminalSegment.spanStart + 0.5
+    && verticalSegment.coordinate < terminalSegment.spanEnd - 0.5
+    && terminalSegment.coordinate > verticalSegment.spanStart + 0.5
+    && terminalSegment.coordinate < verticalSegment.spanEnd - 0.5;
+  expect(crossesTerminalSegment, `${verticalSegment.edgeId} crossing ${terminalEdge.id}`).toBe(true);
+  expect(Math.abs(verticalSegment.coordinate - terminalEdge.to.x), `${verticalSegment.edgeId} crossing ${terminalEdge.id}`)
+    .toBeGreaterThanOrEqual(minClearance - 0.5);
 }
 
 function expectEndpointSpacing(
@@ -728,6 +792,16 @@ END
     );
     expect(sourceHorizontalSegments.length).toBe(2);
     expectOverlappingSegmentsSeparated(sourceHorizontalSegments);
+    expectLabelVerticalGapToHorizontalSegment(
+      findEdge(sourceEdges, "I-007__addresses__OP-007"),
+      0,
+      OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP
+    );
+    expectLabelVerticalGapToHorizontalSegment(
+      findEdge(sourceEdges, "I-007__addresses__OP-004"),
+      0,
+      OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP
+    );
 
     const sourceLocalVerticalTurns = sourceEdges.flatMap((edge) =>
       collectAxisAlignedSegments(edge).filter((segment) =>
@@ -825,12 +899,15 @@ END
 
     const i007ToOp007 = findEdge(finalEdges, "I-007__addresses__OP-007");
     const i001ToOp007 = findEdge(finalEdges, "I-001__addresses__OP-007");
+    const i007ToOp004 = findEdge(finalEdges, "I-007__addresses__OP-004");
     expect(i007ToOp007.to.y).toBeLessThan(i001ToOp007.to.y - ROUTING_SPACING + 0.5);
     const i003ToOp003 = findEdge(finalEdges, "I-003__addresses__OP-003");
     const i003ToOp001 = findEdge(finalEdges, "I-003__addresses__OP-001");
     expect(i003ToOp003.from.y).toBeLessThan(i003ToOp001.from.y - ROUTING_SPACING + 0.5);
+    const i007ToOp004Segments = collectAxisAlignedSegments(i007ToOp004);
     const i001ToOp007Segments = collectAxisAlignedSegments(i001ToOp007);
     const i003ToOp001Segments = collectAxisAlignedSegments(i003ToOp001);
+    const i007ToOp004Vertical = i007ToOp004Segments.find((segment) => segment.axis === "vertical");
     const i001ToOp007Vertical = i001ToOp007Segments.find((segment) => segment.axis === "vertical");
     const i003ToOp001Vertical = i003ToOp001Segments.find((segment) => segment.axis === "vertical");
     const i001ToOp007TargetApproach = i001ToOp007Segments.find((segment) =>
@@ -843,11 +920,22 @@ END
       && Math.abs(segment.coordinate - i003ToOp001.to.y) <= 0.5
       && Math.abs(segment.spanEnd - i003ToOp001.to.x) <= 0.5
     );
-    if (!i001ToOp007Vertical || !i003ToOp001Vertical || !i001ToOp007TargetApproach || !i003ToOp001TargetApproach) {
-      throw new Error("Expected I-001/I-003 address routes to have vertical bridge and target approach segments.");
+    if (!i007ToOp004Vertical
+      || !i001ToOp007Vertical
+      || !i003ToOp001Vertical
+      || !i001ToOp007TargetApproach
+      || !i003ToOp001TargetApproach) {
+      throw new Error("Expected I-007/I-001/I-003 address routes to have vertical bridge and target approach segments.");
     }
+    expect(i007ToOp004Vertical.coordinate)
+      .toBeLessThan(i001ToOp007Vertical.coordinate - ROUTING_SPACING + 0.5);
     expect(i001ToOp007Vertical.coordinate)
       .toBeLessThan(i003ToOp001Vertical.coordinate - ROUTING_SPACING + 0.5);
+    expectVerticalCrossingHasTerminalClearance(
+      i003ToOp001Vertical,
+      i001ToOp007,
+      OUTCOME_OPPORTUNITY_TARGET_TERMINAL_CROSSING_CLEARANCE
+    );
     expect(segmentSpansCoordinate(i001ToOp007TargetApproach, i003ToOp001Vertical.coordinate)).toBe(true);
     expect(segmentSpansCoordinate(i003ToOp001TargetApproach, i001ToOp007Vertical.coordinate)).toBe(false);
 

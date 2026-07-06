@@ -15,6 +15,7 @@ import type {
 } from "./contracts.js";
 import {
   buildConnectorRouteSegmentsById,
+  FIXED_LABEL_DISTANCE,
   FIXED_LABEL_CLEARANCE,
   positionConnectorLabel,
   type BlockingBox
@@ -280,6 +281,11 @@ const VERTICAL_LABEL_GAP = 24;
 const MAX_GLOBAL_GUTTER_ATTEMPTS = 4;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
 const OBSTACLE_SWERVE_CLEARANCE = 16;
+const TARGET_TERMINAL_CROSSING_CLEARANCE = ENDPOINT_SPACING * 2;
+const TARGET_TERMINAL_CROSSING_BASE_OFFSET = Math.max(
+  0,
+  TARGET_TERMINAL_CROSSING_CLEARANCE - OBSTACLE_SWERVE_CLEARANCE
+);
 
 const ENDPOINTS_BY_CHANNEL: Record<string, { source: EndpointSpec; target: EndpointSpec }> = {
   initiative_addressing: {
@@ -3047,6 +3053,18 @@ function resolveTargetEdgeLocalCompaction(
     right: OutcomeOpportunityGutterOccupancy
   ): number => resolveTargetEndpointOrderCoordinate(right) - resolveTargetEndpointOrderCoordinate(left)
     || compareBySpanOrder(left, right);
+  const isOutwardOf = (
+    candidateCoordinate: number,
+    referenceCoordinate: number,
+    direction: 1 | -1
+  ): boolean => (candidateCoordinate - referenceCoordinate) * direction > 0.5;
+  const isInwardOf = (
+    candidateCoordinate: number,
+    referenceCoordinate: number,
+    direction: 1 | -1
+  ): boolean => (candidateCoordinate - referenceCoordinate) * direction < -0.5;
+  const spansInteriorCoordinate = (entry: OutcomeOpportunityGutterOccupancy, coordinate: number): boolean =>
+    coordinate > entry.spanStart + 0.5 && coordinate < entry.spanEnd - 0.5;
   const shouldOrderComponentByTargetEndpoint = (
     component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>
   ): boolean => component.length > 1 && component.every(({ entry }) => {
@@ -3113,6 +3131,48 @@ function resolveTargetEdgeLocalCompaction(
 
     return assignedByEntry;
   };
+  const resolveTargetBoundaryCoordinate = (
+    baseCoordinate: number,
+    direction: 1 | -1
+  ): number => roundMetric(baseCoordinate - direction * OBSTACLE_SWERVE_CLEARANCE);
+  const resolveTargetTerminalCrossingBaseCoordinate = (
+    component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>,
+    direction: 1 | -1,
+    baseCoordinate: number
+  ): number => {
+    if (TARGET_TERMINAL_CROSSING_BASE_OFFSET <= 0) {
+      return baseCoordinate;
+    }
+
+    const assignedByEntry = buildAssignedCoordinatesForOrder(component, direction, baseCoordinate);
+    const targetBoundaryCoordinate = resolveTargetBoundaryCoordinate(baseCoordinate, direction);
+
+    for (const { entry: horizontalEntry } of component) {
+      const horizontalLane = assignedByEntry.get(horizontalEntry);
+      if (horizontalLane === undefined) {
+        continue;
+      }
+      const targetCoordinate = resolveTargetEndpointOrderCoordinate(horizontalEntry);
+      for (const { entry: verticalEntry } of component) {
+        if (horizontalEntry === verticalEntry) {
+          continue;
+        }
+        const verticalLane = assignedByEntry.get(verticalEntry);
+        if (verticalLane === undefined) {
+          continue;
+        }
+        if (!spansInteriorCoordinate(verticalEntry, targetCoordinate)
+          || !isInwardOf(verticalLane, horizontalLane, direction)) {
+          continue;
+        }
+        if (Math.abs(verticalLane - targetBoundaryCoordinate) < TARGET_TERMINAL_CROSSING_CLEARANCE - 0.5) {
+          return roundMetric(baseCoordinate + direction * TARGET_TERMINAL_CROSSING_BASE_OFFSET);
+        }
+      }
+    }
+
+    return baseCoordinate;
+  };
   const componentOrderKey = (component: ReadonlyArray<{ entry: OutcomeOpportunityGutterOccupancy }>): string =>
     component.map(({ entry }) => `${entry.connectorId}|${entry.routeSegmentIndex}`).join("\n");
   const dedupeCandidateOrders = (
@@ -3138,12 +3198,6 @@ function resolveTargetEdgeLocalCompaction(
     const assignedByEntry = buildAssignedCoordinatesForOrder(ordered, direction, baseCoordinate);
     let crossings = 0;
     let nearBendCrossings = 0;
-    const isOutwardOf = (candidateCoordinate: number, referenceCoordinate: number): boolean =>
-      (candidateCoordinate - referenceCoordinate) * direction > 0.5;
-    const isInwardOf = (candidateCoordinate: number, referenceCoordinate: number): boolean =>
-      (candidateCoordinate - referenceCoordinate) * direction < -0.5;
-    const spansInteriorCoordinate = (entry: OutcomeOpportunityGutterOccupancy, coordinate: number): boolean =>
-      coordinate > entry.spanStart + 0.5 && coordinate < entry.spanEnd - 0.5;
     const countCrossing = (
       crossingCoordinate: number,
       verticalEntry: OutcomeOpportunityGutterOccupancy,
@@ -3180,10 +3234,12 @@ function resolveTargetEdgeLocalCompaction(
         if (verticalLane === undefined) {
           continue;
         }
-        if (spansInteriorCoordinate(verticalEntry, sourceCoordinate) && isOutwardOf(verticalLane, horizontalLane)) {
+        if (spansInteriorCoordinate(verticalEntry, sourceCoordinate)
+          && isOutwardOf(verticalLane, horizontalLane, direction)) {
           countCrossing(sourceCoordinate, verticalEntry, horizontalEntry);
         }
-        if (spansInteriorCoordinate(verticalEntry, targetCoordinate) && isInwardOf(verticalLane, horizontalLane)) {
+        if (spansInteriorCoordinate(verticalEntry, targetCoordinate)
+          && isInwardOf(verticalLane, horizontalLane, direction)) {
           countCrossing(targetCoordinate, verticalEntry, horizontalEntry);
         }
       }
@@ -3312,10 +3368,11 @@ function resolveTargetEdgeLocalCompaction(
         continue;
       }
 
+      const componentBaseCoordinate = resolveTargetTerminalCrossingBaseCoordinate(component, direction, baseCoordinate);
       const occupied: Array<{ entry: OutcomeOpportunityGutterOccupancy; coordinate: number }> = [];
       const assignedCoordinateByEntry = new Map<OutcomeOpportunityGutterOccupancy, number>();
       for (const { entry } of component) {
-        let assignedCoordinate = baseCoordinate;
+        let assignedCoordinate = componentBaseCoordinate;
         for (const occupiedEntry of occupied) {
           if (!spansTouchOrOverlap(
             entry.spanStart,
@@ -3342,7 +3399,7 @@ function resolveTargetEdgeLocalCompaction(
       }
 
       const finalCoordinateByEntry = usesSameTargetCrossingRemap
-        ? remapSameTargetCrossingMinimizedCoordinates(component, assignedCoordinateByEntry, direction, baseCoordinate)
+        ? remapSameTargetCrossingMinimizedCoordinates(component, assignedCoordinateByEntry, direction, componentBaseCoordinate)
         : assignedCoordinateByEntry;
       for (const { entry } of component) {
         const assignedCoordinate = finalCoordinateByEntry.get(entry);
@@ -3729,7 +3786,9 @@ function placeLabels(
       },
       connectorBlockMode: "all_segments",
       horizontalPlacementMode: "scenario_side_offsets",
-      includeAdjacentHorizontalLabelAnchors: true
+      horizontalSideLabelDistance: FIXED_LABEL_DISTANCE,
+      includeAdjacentHorizontalLabelAnchors: true,
+      preferHorizontalLabelAnchors: true
     });
     if (!label) {
       continue;

@@ -100,7 +100,9 @@ export interface ConnectorLabelPlacementOptions {
   connectorBlockMode?: "vertical_only" | "all_segments";
   separatorBlockMode?: "vertical_stem" | "box";
   horizontalPlacementMode?: "service_shift_right" | "scenario_side_offsets";
+  horizontalSideLabelDistance?: number;
   includeAdjacentHorizontalLabelAnchors?: boolean;
+  preferHorizontalLabelAnchors?: boolean;
 }
 
 function roundMetric(value: number): number {
@@ -1057,7 +1059,8 @@ function buildScenarioHorizontalLabelSearchCandidates(
   measuredLabel: MeasuredEdgeLabel,
   segment: RouteSegmentDetail,
   anchorPoint: Point,
-  blockedBoxes: readonly BlockingBox[]
+  blockedBoxes: readonly BlockingBox[],
+  sideLabelDistance = FIXED_LABEL_CLEARANCE
 ): HorizontalLabelPlacementCandidate[] {
   const xBase = anchorPoint.x - measuredLabel.width / 2;
   const xOffsets: number[] = [0];
@@ -1074,11 +1077,11 @@ function buildScenarioHorizontalLabelSearchCandidates(
   for (let attempt = 0; attempt <= 6; attempt += 1) {
     const extra = attempt * FIXED_LABEL_CLEARANCE;
     yCandidates.push({
-      y: roundMetric(segment.coordinate + FIXED_LABEL_CLEARANCE + extra),
+      y: roundMetric(segment.coordinate + sideLabelDistance + extra),
       tierRank: attempt * 2 + 1
     });
     yCandidates.push({
-      y: roundMetric(segment.coordinate - FIXED_LABEL_CLEARANCE - measuredLabel.height - extra),
+      y: roundMetric(segment.coordinate - sideLabelDistance - measuredLabel.height - extra),
       tierRank: attempt * 2 + 2
     });
   }
@@ -1137,13 +1140,15 @@ function resolveScenarioHorizontalLabelPlacement(
   separatorSegments: readonly HorizontalLineSegment[],
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
-  separatorBlockMode: "vertical_stem" | "box"
+  separatorBlockMode: "vertical_stem" | "box",
+  horizontalSideLabelDistance = FIXED_LABEL_CLEARANCE
 ): ConnectorLabelPlacementResult {
   const candidates = buildScenarioHorizontalLabelSearchCandidates(
     measuredLabel,
     segment,
     anchorPoint,
-    blockedBoxes
+    blockedBoxes,
+    horizontalSideLabelDistance
   );
 
   for (const candidate of candidates) {
@@ -1195,10 +1200,14 @@ function compareAnchorPlacementCandidates(
     anchor: ConnectorLabelAnchorCandidate;
     placement: ConnectorLabelPlacementResult;
     minimumBlockerClearance: number;
-  }
+  },
+  preferHorizontalLabelAnchors = false
 ): number {
   if (left.placement.fallback !== right.placement.fallback) {
     return left.placement.fallback ? 1 : -1;
+  }
+  if (preferHorizontalLabelAnchors && left.anchor.segment.orientation !== right.anchor.segment.orientation) {
+    return left.anchor.segment.orientation === "horizontal" ? -1 : 1;
   }
   if (left.minimumBlockerClearance > right.minimumBlockerClearance + 0.001) {
     return -1;
@@ -1241,6 +1250,7 @@ export function positionConnectorLabel(
   const connectorBlockMode = options.connectorBlockMode ?? "vertical_only";
   const separatorBlockMode = options.separatorBlockMode ?? "vertical_stem";
   const horizontalPlacementMode = options.horizontalPlacementMode ?? "service_shift_right";
+  const horizontalSideLabelDistance = options.horizontalSideLabelDistance ?? FIXED_LABEL_CLEARANCE;
   const diagnosticSeverity = diagnosticsPolicy.severity ?? "info";
 
   const anchorCandidates = buildConnectorLabelAnchorCandidates(route, options.includeAdjacentHorizontalLabelAnchors);
@@ -1281,7 +1291,8 @@ export function positionConnectorLabel(
             separatorSegments,
             scene,
             connectorBlockMode,
-            separatorBlockMode
+            separatorBlockMode,
+            horizontalSideLabelDistance
           )
         : resolveServiceHorizontalLabelPlacement(
             connectorId,
@@ -1300,7 +1311,11 @@ export function positionConnectorLabel(
       placement,
       minimumBlockerClearance: measureMinimumBoxClearance(placement.box, blockedBoxes)
     };
-  }).sort(compareAnchorPlacementCandidates);
+  }).sort((left, right) => compareAnchorPlacementCandidates(
+    left,
+    right,
+    options.preferHorizontalLabelAnchors ?? false
+  ));
 
   const chosen = scoredCandidates[0];
   if (!chosen) {
