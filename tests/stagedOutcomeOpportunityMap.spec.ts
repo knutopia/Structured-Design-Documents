@@ -25,13 +25,16 @@ import {
   expectRendererStageTextSnapshot
 } from "./rendererStageSnapshotHarness.js";
 import {
-  expectEdgeLabelsNearOwnHorizontalSegments
+  expectEdgeLabelsNearOwnHorizontalSegments,
+  expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments
 } from "./stagedVisualHarness.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
 const OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE = 48;
+const OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE = 12;
+const OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP = 24;
 
 async function resolveOutcomeOpportunityContext(exampleName: string, profileId = "strict") {
   const bundle = await loadBundle(manifestPath);
@@ -509,9 +512,10 @@ describe("staged outcome_opportunity_map", () => {
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step2PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step3PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
-      expectEdgeLabelsNearOwnHorizontalSegments(
+      expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
         rendered.positionedScene.edges.filter((edge) => edge.label !== undefined),
-        OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE
+        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
+        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
       );
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.renderer-scene.json`, stripViewMetadata(rendererScene));

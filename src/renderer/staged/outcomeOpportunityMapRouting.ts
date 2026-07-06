@@ -3843,13 +3843,16 @@ function placeLabels(
       horizontalSideLabelDistance: FIXED_LABEL_DISTANCE,
       includeAdjacentHorizontalLabelAnchors: true,
       preferHorizontalAnchors: plan.sourceSide === "east" && plan.targetSide === "west",
+      preferEarlierHorizontalAnchors: plan.sourceSide === "east" && plan.targetSide === "west",
       preferHorizontalSidePlacement: plan.sourceSide === "east" && plan.targetSide === "west",
       maxVerticalLabelAnchorDistance: plan.sourceSide === "east" && plan.targetSide === "west"
         ? FIXED_LABEL_CLEARANCE
         : undefined,
       horizontalLabelAssociationPolicy: plan.sourceSide === "east" && plan.targetSide === "west"
         ? {
-            maxDetachedDistance: HORIZONTAL_LABEL_ASSOCIATION_DISTANCE
+            maxDetachedDistance: HORIZONTAL_LABEL_ASSOCIATION_DISTANCE,
+            minStrongOverlap: FIXED_LABEL_CLEARANCE,
+            maxStrongDetachedDistance: FIXED_LABEL_DISTANCE
           }
         : undefined,
       horizontalLabelLanePreference: horizontalLabelLanePreferences.get(plan.id),

@@ -21,7 +21,7 @@ import {
   collectEdgeLabelBoxes,
   expectLabelsDoNotOverlapBoxes,
   expectLabelsDoNotOverlapEachOther,
-  expectEdgeLabelsNearOwnHorizontalSegments,
+  expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments,
   expectHorizontalEndpointLabelsHaveMinimumClearance,
   expectLabelsHaveMinimumBoxClearance,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
@@ -33,7 +33,8 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
 const OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE = 24;
-const OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE = 48;
+const OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE = 12;
+const OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP = 24;
 const ROUTING_SPACING = 16;
 const OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP = 12;
 const OUTCOME_OPPORTUNITY_TARGET_TERMINAL_CROSSING_CLEARANCE = ROUTING_SPACING * 2;
@@ -913,9 +914,23 @@ END
       || edge.id.includes("__supports__")
       || edge.id.includes("__measured_by__")
     );
-    expectEdgeLabelsNearOwnHorizontalSegments(primaryEdges, OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE);
+    expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
+      primaryEdges,
+      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
+      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
+    );
     expectRoleLabelsShareLeftX(finalEdges, "__addresses__");
     expectRoleLabelsShareLeftX(finalEdges, "__measured_by__");
+    expectLabelVerticalGapToHorizontalSegment(
+      findEdge(finalEdges, "OP-005__supports__O-003"),
+      0,
+      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE
+    );
+    expectLabelVerticalGapToHorizontalSegment(
+      findEdge(finalEdges, "OP-006__supports__O-003"),
+      0,
+      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE
+    );
 
     const outcomeOne = findNode(rendered.routingStages.finalPositionedScene.root, "O-001");
     const outcomeOneArrivals = [
@@ -1132,7 +1147,11 @@ END
       expectSameOrientationSegmentsSeparated(finalEdges);
       expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
       expectHorizontalEndpointLabelsHaveMinimumClearance(finalEdges, nodeBoxes, OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE);
-      expectEdgeLabelsNearOwnHorizontalSegments(finalEdges, OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE);
+      expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
+        finalEdges,
+        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
+        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
+      );
       expectLabelsDoNotOverlapEachOther(labelBoxes);
     }
   });

@@ -140,6 +140,76 @@ describe("connector label placement", () => {
     expect(Math.abs(label!.y + label!.height - 100)).toBeLessThanOrEqual(12.5);
   });
 
+  it("prefers strong horizontal overlap over weak distance-only association", () => {
+    const route: PositionedRoute = {
+      style: "orthogonal",
+      points: [
+        { x: 0, y: 100 },
+        { x: 120, y: 100 },
+        { x: 120, y: 200 },
+        { x: 240, y: 200 }
+      ]
+    };
+
+    const { label, diagnostics } = placeLabel(route, {
+      horizontalLabelLanePreference: { leftX: 72 }
+    });
+
+    expect(diagnostics).toEqual([]);
+    expect(label).toBeDefined();
+    expect(label!.x).toBeCloseTo(72, 3);
+    expect(label!.y + label!.height).toBeCloseTo(88, 3);
+  });
+
+  it("uses weak horizontal association when no strong candidate is available", () => {
+    const route: PositionedRoute = {
+      style: "orthogonal",
+      points: [
+        { x: 0, y: 100 },
+        { x: 120, y: 100 }
+      ]
+    };
+
+    const { label, diagnostics } = placeLabel(route, {
+      blockedBoxes: [{
+        x: 30,
+        y: 90,
+        width: 60,
+        height: 20
+      }],
+      horizontalLabelAssociationPolicy: {
+        maxDetachedDistance: 12,
+        maxStrongDetachedDistance: 0
+      }
+    });
+
+    expect(diagnostics).toEqual([]);
+    expect(label).toBeDefined();
+    expect(label!.y + label!.height).toBeCloseTo(88, 3);
+  });
+
+  it("prefers the earlier horizontal anchor when strong lane candidates tie", () => {
+    const route: PositionedRoute = {
+      style: "orthogonal",
+      points: [
+        { x: 0, y: 100 },
+        { x: 120, y: 100 },
+        { x: 120, y: 200 },
+        { x: 240, y: 200 }
+      ]
+    };
+
+    const { label, diagnostics } = placeLabel(route, {
+      horizontalLabelLanePreference: { leftX: 96 },
+      preferEarlierHorizontalAnchors: true
+    });
+
+    expect(diagnostics).toEqual([]);
+    expect(label).toBeDefined();
+    expect(label!.x).toBeCloseTo(96, 3);
+    expect(label!.y + label!.height).toBeCloseTo(88, 3);
+  });
+
   it("uses vertical placement when no adjacent horizontal segment is usable", () => {
     const route: PositionedRoute = {
       style: "orthogonal",

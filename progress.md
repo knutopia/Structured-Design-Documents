@@ -17,6 +17,7 @@
 ## Mon 7-6
 
 -Much cleaner label placement
+-Clean but repetitive individual label placement
 
 ## Sun 7-5
 

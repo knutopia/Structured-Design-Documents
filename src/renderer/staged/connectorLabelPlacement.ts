@@ -63,6 +63,7 @@ interface ConnectorLabelPlacementResult {
   distanceFromAnchor: number;
   nearbyHorizontalPreferenceEligible?: boolean;
   horizontalAssociationEligible?: boolean;
+  horizontalAssociationStrength?: HorizontalLabelAssociationStrength;
   laneAlignmentDistance?: number;
 }
 
@@ -81,6 +82,7 @@ interface HorizontalLabelPlacementCandidate {
   minimumBlockerClearance: number;
   xOffset: number;
   horizontalAssociationEligible?: boolean;
+  horizontalAssociationStrength?: HorizontalLabelAssociationStrength;
   laneAlignmentDistance?: number;
 }
 
@@ -97,9 +99,13 @@ export interface NearbyHorizontalLabelPreference {
   maxXOffset: number;
 }
 
+export type HorizontalLabelAssociationStrength = "none" | "weak" | "strong";
+
 export interface HorizontalLabelAssociationPolicy {
   minOverlap?: number;
   maxDetachedDistance?: number;
+  minStrongOverlap?: number;
+  maxStrongDetachedDistance?: number;
 }
 
 export interface HorizontalLabelLanePreference {
@@ -126,6 +132,7 @@ export interface ConnectorLabelPlacementOptions {
   horizontalLabelLanePreference?: HorizontalLabelLanePreference;
   preferHorizontalSidePlacement?: boolean;
   preferHorizontalAnchors?: boolean;
+  preferEarlierHorizontalAnchors?: boolean;
   maxVerticalLabelAnchorDistance?: number;
 }
 
@@ -491,19 +498,32 @@ function measureSegmentClearance(box: LabelBox, segment: RouteSegmentDetail): nu
   return Math.hypot(horizontalGap, verticalGap);
 }
 
-function isHorizontalLabelAssociatedWithSegment(
+function classifyHorizontalLabelAssociationWithSegment(
   box: LabelBox,
   segment: RouteSegmentDetail,
   policy: HorizontalLabelAssociationPolicy
-): boolean {
+): HorizontalLabelAssociationStrength {
+  const segmentClearance = measureSegmentClearance(box, segment);
+  const horizontalOverlap = measureHorizontalOverlap(box, segment);
   const maxDetachedDistance = policy.maxDetachedDistance ?? FIXED_LABEL_DISTANCE;
-  if (measureSegmentClearance(box, segment) <= maxDetachedDistance + 0.001) {
-    return true;
+  const minOverlap = policy.minOverlap ?? 0.5;
+  const distanceAssociated = segmentClearance <= maxDetachedDistance + 0.001;
+  const overlapAssociated = horizontalOverlap > minOverlap
+    && Math.abs((box.y + box.height / 2) - segment.coordinate) <= maxDetachedDistance + box.height / 2 + 0.001;
+  if (!distanceAssociated && !overlapAssociated) {
+    return "none";
   }
 
-  const minOverlap = policy.minOverlap ?? 0.5;
-  return measureHorizontalOverlap(box, segment) > minOverlap
-    && Math.abs((box.y + box.height / 2) - segment.coordinate) <= maxDetachedDistance + box.height / 2 + 0.001;
+  const minStrongOverlap = Math.min(
+    policy.minStrongOverlap ?? FIXED_LABEL_CLEARANCE,
+    box.width,
+    getRouteSegmentLength(segment)
+  );
+  const maxStrongDetachedDistance = policy.maxStrongDetachedDistance ?? FIXED_LABEL_DISTANCE;
+  return horizontalOverlap >= minStrongOverlap - 0.001
+    && segmentClearance <= maxStrongDetachedDistance + 0.001
+    ? "strong"
+    : "weak";
 }
 
 function boxIntersectsConnectorSegments(
@@ -1201,6 +1221,9 @@ function buildScenarioHorizontalLabelSearchCandidates(
         continue;
       }
       seen.add(key);
+      const horizontalAssociationStrength = associationPolicy === undefined
+        ? undefined
+        : classifyHorizontalLabelAssociationWithSegment(box, segment, associationPolicy);
       candidates.push({
         box,
         distanceFromAnchor: Math.hypot(
@@ -1210,9 +1233,10 @@ function buildScenarioHorizontalLabelSearchCandidates(
         tierRank: yCandidate.tierRank,
         minimumBlockerClearance: measureMinimumBoxClearance(box, blockedBoxes),
         xOffset,
-        horizontalAssociationEligible: associationPolicy === undefined
+        horizontalAssociationEligible: horizontalAssociationStrength === undefined
           ? undefined
-          : isHorizontalLabelAssociatedWithSegment(box, segment, associationPolicy),
+          : horizontalAssociationStrength !== "none",
+        horizontalAssociationStrength,
         laneAlignmentDistance: labelLanePreference === undefined
           ? undefined
           : Math.abs(box.x - labelLanePreference.leftX)
@@ -1221,6 +1245,13 @@ function buildScenarioHorizontalLabelSearchCandidates(
   }
 
   return candidates.sort((left, right) => {
+    if (associationPolicy) {
+      const strengthRankDifference = getHorizontalAssociationStrengthRank(left.horizontalAssociationStrength ?? "none")
+        - getHorizontalAssociationStrengthRank(right.horizontalAssociationStrength ?? "none");
+      if (strengthRankDifference !== 0) {
+        return strengthRankDifference;
+      }
+    }
     if (left.tierRank !== right.tierRank) {
       return left.tierRank - right.tierRank;
     }
@@ -1297,6 +1328,7 @@ function resolveScenarioHorizontalLabelPlacement(
         distanceFromAnchor: candidate.distanceFromAnchor,
         nearbyHorizontalPreferenceEligible,
         horizontalAssociationEligible: candidate.horizontalAssociationEligible,
+        horizontalAssociationStrength: candidate.horizontalAssociationStrength,
         laneAlignmentDistance: candidate.laneAlignmentDistance
       };
     }
@@ -1321,6 +1353,19 @@ function resolveScenarioHorizontalLabelPlacement(
   };
 }
 
+function getHorizontalAssociationStrengthRank(
+  strength: HorizontalLabelAssociationStrength
+): number {
+  switch (strength) {
+    case "strong":
+      return 0;
+    case "weak":
+      return 1;
+    case "none":
+      return 2;
+  }
+}
+
 function compareAnchorPlacementCandidates(
   left: {
     anchor: ConnectorLabelAnchorCandidate;
@@ -1332,13 +1377,22 @@ function compareAnchorPlacementCandidates(
     placement: ConnectorLabelPlacementResult;
     minimumBlockerClearance: number;
   },
-  preferHorizontalAnchors = false
+  preferHorizontalAnchors = false,
+  preferEarlierHorizontalAnchors = false
 ): number {
   if (left.placement.fallback !== right.placement.fallback) {
     return left.placement.fallback ? 1 : -1;
   }
   if (preferHorizontalAnchors && left.anchor.segment.orientation !== right.anchor.segment.orientation) {
     return left.anchor.segment.orientation === "horizontal" ? -1 : 1;
+  }
+  if (left.placement.horizontalAssociationStrength !== undefined
+    && right.placement.horizontalAssociationStrength !== undefined) {
+    const strengthRankDifference = getHorizontalAssociationStrengthRank(left.placement.horizontalAssociationStrength)
+      - getHorizontalAssociationStrengthRank(right.placement.horizontalAssociationStrength);
+    if (strengthRankDifference !== 0) {
+      return strengthRankDifference;
+    }
   }
   if ((left.placement.nearbyHorizontalPreferenceEligible ?? false)
     !== (right.placement.nearbyHorizontalPreferenceEligible ?? false)) {
@@ -1349,6 +1403,12 @@ function compareAnchorPlacementCandidates(
   if (leftLaneDistance !== undefined && rightLaneDistance !== undefined
     && Math.abs(leftLaneDistance - rightLaneDistance) > 0.001) {
     return leftLaneDistance - rightLaneDistance;
+  }
+  if (preferEarlierHorizontalAnchors
+    && left.anchor.segment.orientation === "horizontal"
+    && right.anchor.segment.orientation === "horizontal"
+    && left.anchor.segment.routeSegmentIndex !== right.anchor.segment.routeSegmentIndex) {
+    return left.anchor.segment.routeSegmentIndex - right.anchor.segment.routeSegmentIndex;
   }
   if (left.minimumBlockerClearance > right.minimumBlockerClearance + 0.001) {
     return -1;
@@ -1458,7 +1518,12 @@ export function positionConnectorLabel(
       minimumBlockerClearance: measureMinimumBoxClearance(placement.box, blockedBoxes)
     };
   }).sort((left, right) =>
-    compareAnchorPlacementCandidates(left, right, options.preferHorizontalAnchors ?? false)
+    compareAnchorPlacementCandidates(
+      left,
+      right,
+      options.preferHorizontalAnchors ?? false,
+      options.preferEarlierHorizontalAnchors ?? false
+    )
   );
 
   const chosen = scoredCandidates[0];

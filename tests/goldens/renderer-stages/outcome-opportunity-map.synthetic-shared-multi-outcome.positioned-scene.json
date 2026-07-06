@@ -1192,7 +1192,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 286,
-        "y": 152
+        "y": 118
       },
       "markers": {
         "end": "arrow"
@@ -1302,7 +1302,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 1024.77,
-        "y": 118
+        "y": 152
       },
       "markers": {
         "end": "arrow"

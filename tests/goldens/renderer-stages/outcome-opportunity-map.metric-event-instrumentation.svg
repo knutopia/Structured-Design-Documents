@@ -165,8 +165,8 @@
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-050__measured_by__M-051" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="992.77" y="236" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="998.77" y="247" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="992.77" y="126" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="998.77" y="137" dominant-baseline="middle">
           <tspan x="998.77" dy="0">measured by</tspan>
         </text>
     </g>

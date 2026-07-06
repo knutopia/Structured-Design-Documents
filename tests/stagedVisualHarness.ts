@@ -563,6 +563,13 @@ function labelClearanceToSegment(label: Rect, segment: AxisAlignedSegment): numb
   return Math.hypot(horizontalGap, verticalGap);
 }
 
+function horizontalSegmentOverlap(label: Rect, segment: AxisAlignedSegment): number {
+  if (segment.axis !== "horizontal") {
+    return 0;
+  }
+  return Math.min(label.x + label.width, segment.spanEnd) - Math.max(label.x, segment.spanStart);
+}
+
 export function expectEdgeLabelsNearOwnHorizontalSegments(
   edges: readonly PositionedEdge[],
   maxDistance: number
@@ -582,6 +589,31 @@ export function expectEdgeLabelsNearOwnHorizontalSegments(
     );
     expect(nearest, `${edge.id} label horizontal route association`)
       .toBeLessThanOrEqual(maxDistance + EPSILON);
+  }
+
+  expect(checkedLabels).toBeGreaterThan(0);
+}
+
+export function expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
+  edges: readonly PositionedEdge[],
+  maxDistance: number,
+  minOverlap: number
+): void {
+  let checkedLabels = 0;
+
+  for (const edge of edges) {
+    if (!edge.label) {
+      continue;
+    }
+    checkedLabels += 1;
+    const horizontalSegments = collectAxisAlignedSegments(edge)
+      .filter((segment) => segment.axis === "horizontal");
+    const hasStrongAssociation = horizontalSegments.some((segment) => {
+      const requiredOverlap = Math.min(minOverlap, edge.label!.width, segment.spanEnd - segment.spanStart);
+      return labelClearanceToSegment(edge.label!, segment) <= maxDistance + EPSILON
+        && horizontalSegmentOverlap(edge.label!, segment) >= requiredOverlap - EPSILON;
+    });
+    expect(hasStrongAssociation, `${edge.id} label strong horizontal route association`).toBe(true);
   }
 
   expect(checkedLabels).toBeGreaterThan(0);
