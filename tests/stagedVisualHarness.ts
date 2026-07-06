@@ -535,6 +535,58 @@ export function expectRoutesDoNotCrossLabels(
   }
 }
 
+function labelClearanceToSegment(label: Rect, segment: AxisAlignedSegment): number {
+  if (segment.axis === "vertical") {
+    const horizontalGap = Math.max(
+      segment.coordinate - (label.x + label.width),
+      label.x - segment.coordinate,
+      0
+    );
+    const verticalGap = Math.max(
+      segment.spanStart - (label.y + label.height),
+      label.y - segment.spanEnd,
+      0
+    );
+    return Math.hypot(horizontalGap, verticalGap);
+  }
+
+  const horizontalGap = Math.max(
+    segment.spanStart - (label.x + label.width),
+    label.x - segment.spanEnd,
+    0
+  );
+  const verticalGap = Math.max(
+    segment.coordinate - (label.y + label.height),
+    label.y - segment.coordinate,
+    0
+  );
+  return Math.hypot(horizontalGap, verticalGap);
+}
+
+export function expectEdgeLabelsNearOwnHorizontalSegments(
+  edges: readonly PositionedEdge[],
+  maxDistance: number
+): void {
+  let checkedLabels = 0;
+
+  for (const edge of edges) {
+    if (!edge.label) {
+      continue;
+    }
+    checkedLabels += 1;
+    const horizontalSegments = collectAxisAlignedSegments(edge)
+      .filter((segment) => segment.axis === "horizontal");
+    const nearest = Math.min(
+      Number.POSITIVE_INFINITY,
+      ...horizontalSegments.map((segment) => labelClearanceToSegment(edge.label!, segment))
+    );
+    expect(nearest, `${edge.id} label horizontal route association`)
+      .toBeLessThanOrEqual(maxDistance + EPSILON);
+  }
+
+  expect(checkedLabels).toBeGreaterThan(0);
+}
+
 export function getEdgeLabelBox(edge: PositionedEdge): EdgeLabelBox | undefined {
   if (!edge.label) {
     return undefined;

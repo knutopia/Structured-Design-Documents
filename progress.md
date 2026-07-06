@@ -14,6 +14,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 7-6
+
+-Much cleaner label placement
+
 ## Sun 7-5
 
 -Restored previous commit

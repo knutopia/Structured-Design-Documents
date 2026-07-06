@@ -276,7 +276,9 @@ const EXTERIOR_STUB = 18;
 const ENDPOINT_MARGIN = 10;
 const HORIZONTAL_LABEL_NODE_CLEARANCE = 24;
 const HORIZONTAL_LABEL_GAP = HORIZONTAL_LABEL_NODE_CLEARANCE * 2;
-const HORIZONTAL_LABEL_TRACK_CLEARANCE = FIXED_LABEL_CLEARANCE;
+// Keep track clearance soft so crowded labels can stay associated without crossing routes.
+const HORIZONTAL_LABEL_TRACK_CLEARANCE = 8;
+const HORIZONTAL_LABEL_ASSOCIATION_DISTANCE = HORIZONTAL_LABEL_GAP;
 const VERTICAL_LABEL_GAP = 24;
 const MAX_GLOBAL_GUTTER_ATTEMPTS = 4;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
@@ -3745,6 +3747,57 @@ function buildConnectorSegmentBlockingBoxes(
   return boxes;
 }
 
+function buildHorizontalLabelLanePreferences(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  index: OutcomeOpportunityPositionedIndex
+): Map<string, { leftX: number }> {
+  const demandByGroup = new Map<string, {
+    planIds: string[];
+    leftX: number;
+    rightLimit: number;
+    widestLabelWidth: number;
+  }>();
+
+  for (const plan of plans) {
+    if (!plan.label || plan.sourceSide !== "east" || plan.targetSide !== "west") {
+      continue;
+    }
+
+    const source = index.nodeById.get(plan.from);
+    const target = index.nodeById.get(plan.to);
+    if (!source || !target || source.placement.columnOrder >= target.placement.columnOrder) {
+      continue;
+    }
+
+    const groupKey = `${source.placement.columnOrder}->${target.placement.columnOrder}:${plan.role}`;
+    const candidateLeftX = roundMetric(source.node.x + source.node.width + HORIZONTAL_LABEL_NODE_CLEARANCE);
+    const candidateRightLimit = roundMetric(target.node.x - HORIZONTAL_LABEL_NODE_CLEARANCE);
+    const existing = demandByGroup.get(groupKey) ?? {
+      planIds: [],
+      leftX: candidateLeftX,
+      rightLimit: candidateRightLimit,
+      widestLabelWidth: 0
+    };
+    existing.planIds.push(plan.id);
+    existing.leftX = Math.max(existing.leftX, candidateLeftX);
+    existing.rightLimit = Math.min(existing.rightLimit, candidateRightLimit);
+    existing.widestLabelWidth = Math.max(existing.widestLabelWidth, plan.label.width);
+    demandByGroup.set(groupKey, existing);
+  }
+
+  const lanePreferenceByPlanId = new Map<string, { leftX: number }>();
+  for (const demand of demandByGroup.values()) {
+    if (demand.leftX + demand.widestLabelWidth > demand.rightLimit + 0.5) {
+      continue;
+    }
+    for (const planId of demand.planIds) {
+      lanePreferenceByPlanId.set(planId, { leftX: demand.leftX });
+    }
+  }
+
+  return lanePreferenceByPlanId;
+}
+
 function placeLabels(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   scene: PositionedScene,
@@ -3759,6 +3812,7 @@ function placeLabels(
   );
   const placedLabelBoxes: BlockingBox[] = [];
   const nodeBoxes = collectLabelBlockingBoxes(index);
+  const horizontalLabelLanePreferences = buildHorizontalLabelLanePreferences(plans, index);
 
   for (const plan of plans) {
     if (!plan.label) {
@@ -3788,6 +3842,17 @@ function placeLabels(
       horizontalPlacementMode: "scenario_side_offsets",
       horizontalSideLabelDistance: FIXED_LABEL_DISTANCE,
       includeAdjacentHorizontalLabelAnchors: true,
+      preferHorizontalAnchors: plan.sourceSide === "east" && plan.targetSide === "west",
+      preferHorizontalSidePlacement: plan.sourceSide === "east" && plan.targetSide === "west",
+      maxVerticalLabelAnchorDistance: plan.sourceSide === "east" && plan.targetSide === "west"
+        ? FIXED_LABEL_CLEARANCE
+        : undefined,
+      horizontalLabelAssociationPolicy: plan.sourceSide === "east" && plan.targetSide === "west"
+        ? {
+            maxDetachedDistance: HORIZONTAL_LABEL_ASSOCIATION_DISTANCE
+          }
+        : undefined,
+      horizontalLabelLanePreference: horizontalLabelLanePreferences.get(plan.id),
       nearbyHorizontalLabelPreference: {
         maxXOffset: 0.5
       }

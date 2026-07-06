@@ -4,6 +4,7 @@ import {
   collectEdgeLabelBoxes,
   collectHeaderBoxes,
   collectVisibleItemBoxes,
+  expectEdgeLabelsNearOwnHorizontalSegments,
   expectHorizontalEndpointLabelsHaveMinimumClearance,
   expectLabelsDoNotOverlapEachOther,
   expectLabelsDoNotOverlapHeaders,
@@ -41,6 +42,7 @@ const SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS = [
 ] as const;
 const SCENARIO_FLOW_LABEL_CLEARANCE = 12;
 const OUTCOME_OPPORTUNITY_LABEL_CLEARANCE = 24;
+const OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE = 48;
 const OUTCOME_OPPORTUNITY_FORBIDDEN_DIAGNOSTICS = [
   "renderer.routing.outcome_opportunity_unresolved_connector",
   "renderer.routing.outcome_opportunity_unresolved_port",
@@ -215,6 +217,7 @@ describe("staged visual acceptance", () => {
       expectSameOrientationSegmentsSeparated(semanticEdges);
       expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
       expectHorizontalEndpointLabelsHaveMinimumClearance(semanticEdges, nodeBoxes, OUTCOME_OPPORTUNITY_LABEL_CLEARANCE);
+      expectEdgeLabelsNearOwnHorizontalSegments(semanticEdges, OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE);
       expectLabelsDoNotOverlapEachOther(labelBoxes);
       expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
     }

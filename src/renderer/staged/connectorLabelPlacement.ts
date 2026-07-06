@@ -62,6 +62,8 @@ interface ConnectorLabelPlacementResult {
   fallback: boolean;
   distanceFromAnchor: number;
   nearbyHorizontalPreferenceEligible?: boolean;
+  horizontalAssociationEligible?: boolean;
+  laneAlignmentDistance?: number;
 }
 
 interface VerticalLabelPlacementCandidate {
@@ -78,6 +80,8 @@ interface HorizontalLabelPlacementCandidate {
   tierRank: number;
   minimumBlockerClearance: number;
   xOffset: number;
+  horizontalAssociationEligible?: boolean;
+  laneAlignmentDistance?: number;
 }
 
 export interface ConnectorLabelDiagnosticsPolicy {
@@ -91,6 +95,15 @@ export interface ConnectorLabelDiagnosticsPolicy {
 
 export interface NearbyHorizontalLabelPreference {
   maxXOffset: number;
+}
+
+export interface HorizontalLabelAssociationPolicy {
+  minOverlap?: number;
+  maxDetachedDistance?: number;
+}
+
+export interface HorizontalLabelLanePreference {
+  leftX: number;
 }
 
 export interface ConnectorLabelPlacementOptions {
@@ -109,6 +122,11 @@ export interface ConnectorLabelPlacementOptions {
   horizontalSideLabelDistance?: number;
   includeAdjacentHorizontalLabelAnchors?: boolean;
   nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference;
+  horizontalLabelAssociationPolicy?: HorizontalLabelAssociationPolicy;
+  horizontalLabelLanePreference?: HorizontalLabelLanePreference;
+  preferHorizontalSidePlacement?: boolean;
+  preferHorizontalAnchors?: boolean;
+  maxVerticalLabelAnchorDistance?: number;
 }
 
 function roundMetric(value: number): number {
@@ -443,6 +461,49 @@ function spansOverlap(startA: number, endA: number, startB: number, endB: number
 function measureHorizontalOverlap(box: LabelBox, segment: RouteSegmentDetail): number {
   return Math.min(box.x + box.width, Math.max(segment.start.x, segment.end.x))
     - Math.max(box.x, Math.min(segment.start.x, segment.end.x));
+}
+
+function measureSegmentClearance(box: LabelBox, segment: RouteSegmentDetail): number {
+  if (segment.orientation === "vertical") {
+    const horizontalGap = Math.max(
+      segment.coordinate - (box.x + box.width),
+      box.x - segment.coordinate,
+      0
+    );
+    const verticalGap = Math.max(
+      Math.min(segment.start.y, segment.end.y) - (box.y + box.height),
+      box.y - Math.max(segment.start.y, segment.end.y),
+      0
+    );
+    return Math.hypot(horizontalGap, verticalGap);
+  }
+
+  const horizontalGap = Math.max(
+    Math.min(segment.start.x, segment.end.x) - (box.x + box.width),
+    box.x - Math.max(segment.start.x, segment.end.x),
+    0
+  );
+  const verticalGap = Math.max(
+    segment.coordinate - (box.y + box.height),
+    box.y - segment.coordinate,
+    0
+  );
+  return Math.hypot(horizontalGap, verticalGap);
+}
+
+function isHorizontalLabelAssociatedWithSegment(
+  box: LabelBox,
+  segment: RouteSegmentDetail,
+  policy: HorizontalLabelAssociationPolicy
+): boolean {
+  const maxDetachedDistance = policy.maxDetachedDistance ?? FIXED_LABEL_DISTANCE;
+  if (measureSegmentClearance(box, segment) <= maxDetachedDistance + 0.001) {
+    return true;
+  }
+
+  const minOverlap = policy.minOverlap ?? 0.5;
+  return measureHorizontalOverlap(box, segment) > minOverlap
+    && Math.abs((box.y + box.height / 2) - segment.coordinate) <= maxDetachedDistance + box.height / 2 + 0.001;
 }
 
 function boxIntersectsConnectorSegments(
@@ -862,7 +923,8 @@ function resolveVerticalLabelPlacementOnSide(
   separatorSegments: readonly HorizontalLineSegment[],
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
-  separatorBlockMode: "vertical_stem" | "box"
+  separatorBlockMode: "vertical_stem" | "box",
+  maxAnchorDistance?: number
 ): ConnectorLabelPlacementResult {
   const candidates = buildVerticalLabelSearchCandidates(
     segment.coordinate,
@@ -877,6 +939,9 @@ function resolveVerticalLabelPlacementOnSide(
   );
 
   for (const candidate of candidates) {
+    if (maxAnchorDistance !== undefined && candidate.distanceFromAnchor > maxAnchorDistance + 0.001) {
+      continue;
+    }
     const isClear = candidate.tierRank === 0
       ? isVerticalLabelCandidateClear(
           candidate.box,
@@ -940,7 +1005,8 @@ function resolveVerticalLabelPlacement(
   separatorSegments: readonly HorizontalLineSegment[],
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
-  separatorBlockMode: "vertical_stem" | "box"
+  separatorBlockMode: "vertical_stem" | "box",
+  maxAnchorDistance?: number
 ): ConnectorLabelPlacementResult {
   const rightCandidate = buildVerticalLabelBox(
     segment.coordinate,
@@ -979,7 +1045,8 @@ function resolveVerticalLabelPlacement(
     separatorSegments,
     scene,
     connectorBlockMode,
-    separatorBlockMode
+    separatorBlockMode,
+    maxAnchorDistance
   );
 
   if (!preferredPlacement.fallback) {
@@ -997,7 +1064,8 @@ function resolveVerticalLabelPlacement(
     separatorSegments,
     scene,
     connectorBlockMode,
-    separatorBlockMode
+    separatorBlockMode,
+    maxAnchorDistance
   );
 
   if (!alternatePlacement.fallback) {
@@ -1071,29 +1139,50 @@ function buildScenarioHorizontalLabelSearchCandidates(
   segment: RouteSegmentDetail,
   anchorPoint: Point,
   blockedBoxes: readonly BlockingBox[],
-  sideLabelDistance = FIXED_LABEL_CLEARANCE
+  sideLabelDistance = FIXED_LABEL_CLEARANCE,
+  labelLanePreference?: HorizontalLabelLanePreference,
+  associationPolicy?: HorizontalLabelAssociationPolicy,
+  preferSidePlacement = false
 ): HorizontalLabelPlacementCandidate[] {
   const xBase = anchorPoint.x - measuredLabel.width / 2;
-  const xOffsets: number[] = [0];
+  const xOffsets: number[] = [];
+  if (labelLanePreference) {
+    xOffsets.push(roundMetric(labelLanePreference.leftX - xBase));
+  }
+  xOffsets.push(0);
   for (let attempt = 1; attempt <= 12; attempt += 1) {
     xOffsets.push(attempt * FIXED_LABEL_CLEARANCE);
     xOffsets.push(-attempt * FIXED_LABEL_CLEARANCE);
   }
 
   const yCandidates: Array<{ y: number; tierRank: number }> = [];
-  yCandidates.push({
-    y: roundMetric(anchorPoint.y - measuredLabel.height / 2),
-    tierRank: 0
-  });
+  if (!preferSidePlacement) {
+    yCandidates.push({
+      y: roundMetric(anchorPoint.y - measuredLabel.height / 2),
+      tierRank: 0
+    });
+  }
   for (let attempt = 0; attempt <= 6; attempt += 1) {
     const extra = attempt * FIXED_LABEL_CLEARANCE;
-    yCandidates.push({
-      y: roundMetric(segment.coordinate + sideLabelDistance + extra),
-      tierRank: attempt * 2 + 1
-    });
-    yCandidates.push({
+    const aboveCandidate = {
       y: roundMetric(segment.coordinate - sideLabelDistance - measuredLabel.height - extra),
+      tierRank: attempt * 2 + 1
+    };
+    const belowCandidate = {
+      y: roundMetric(segment.coordinate + sideLabelDistance + extra),
       tierRank: attempt * 2 + 2
+    };
+    yCandidates.push(...(preferSidePlacement
+      ? [aboveCandidate, belowCandidate]
+      : [
+          { ...belowCandidate, tierRank: attempt * 2 + 1 },
+          { ...aboveCandidate, tierRank: attempt * 2 + 2 }
+        ]));
+  }
+  if (preferSidePlacement) {
+    yCandidates.push({
+      y: roundMetric(anchorPoint.y - measuredLabel.height / 2),
+      tierRank: 100
     });
   }
 
@@ -1120,7 +1209,13 @@ function buildScenarioHorizontalLabelSearchCandidates(
         ),
         tierRank: yCandidate.tierRank,
         minimumBlockerClearance: measureMinimumBoxClearance(box, blockedBoxes),
-        xOffset
+        xOffset,
+        horizontalAssociationEligible: associationPolicy === undefined
+          ? undefined
+          : isHorizontalLabelAssociatedWithSegment(box, segment, associationPolicy),
+        laneAlignmentDistance: labelLanePreference === undefined
+          ? undefined
+          : Math.abs(box.x - labelLanePreference.leftX)
       });
     }
   }
@@ -1128,6 +1223,13 @@ function buildScenarioHorizontalLabelSearchCandidates(
   return candidates.sort((left, right) => {
     if (left.tierRank !== right.tierRank) {
       return left.tierRank - right.tierRank;
+    }
+    if (labelLanePreference) {
+      const leftLaneDistance = left.laneAlignmentDistance ?? Number.POSITIVE_INFINITY;
+      const rightLaneDistance = right.laneAlignmentDistance ?? Number.POSITIVE_INFINITY;
+      if (Math.abs(leftLaneDistance - rightLaneDistance) > 0.001) {
+        return leftLaneDistance - rightLaneDistance;
+      }
     }
     if (Math.abs(left.distanceFromAnchor - right.distanceFromAnchor) > 0.001) {
       return left.distanceFromAnchor - right.distanceFromAnchor;
@@ -1154,17 +1256,26 @@ function resolveScenarioHorizontalLabelPlacement(
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
   horizontalSideLabelDistance = FIXED_LABEL_CLEARANCE,
-  nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference
+  nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference,
+  labelLanePreference?: HorizontalLabelLanePreference,
+  associationPolicy?: HorizontalLabelAssociationPolicy,
+  preferSidePlacement = false
 ): ConnectorLabelPlacementResult {
   const candidates = buildScenarioHorizontalLabelSearchCandidates(
     measuredLabel,
     segment,
     anchorPoint,
     blockedBoxes,
-    horizontalSideLabelDistance
+    horizontalSideLabelDistance,
+    labelLanePreference,
+    associationPolicy,
+    preferSidePlacement
   );
 
   for (const candidate of candidates) {
+    if (associationPolicy !== undefined && !candidate.horizontalAssociationEligible) {
+      continue;
+    }
     if (!isHorizontalLabelBlocked(
       candidate.box,
       connectorId,
@@ -1184,7 +1295,9 @@ function resolveScenarioHorizontalLabelPlacement(
         box: candidate.box,
         fallback: false,
         distanceFromAnchor: candidate.distanceFromAnchor,
-        nearbyHorizontalPreferenceEligible
+        nearbyHorizontalPreferenceEligible,
+        horizontalAssociationEligible: candidate.horizontalAssociationEligible,
+        laneAlignmentDistance: candidate.laneAlignmentDistance
       };
     }
   }
@@ -1218,14 +1331,24 @@ function compareAnchorPlacementCandidates(
     anchor: ConnectorLabelAnchorCandidate;
     placement: ConnectorLabelPlacementResult;
     minimumBlockerClearance: number;
-  }
+  },
+  preferHorizontalAnchors = false
 ): number {
   if (left.placement.fallback !== right.placement.fallback) {
     return left.placement.fallback ? 1 : -1;
   }
+  if (preferHorizontalAnchors && left.anchor.segment.orientation !== right.anchor.segment.orientation) {
+    return left.anchor.segment.orientation === "horizontal" ? -1 : 1;
+  }
   if ((left.placement.nearbyHorizontalPreferenceEligible ?? false)
     !== (right.placement.nearbyHorizontalPreferenceEligible ?? false)) {
     return left.placement.nearbyHorizontalPreferenceEligible ? -1 : 1;
+  }
+  const leftLaneDistance = left.placement.laneAlignmentDistance;
+  const rightLaneDistance = right.placement.laneAlignmentDistance;
+  if (leftLaneDistance !== undefined && rightLaneDistance !== undefined
+    && Math.abs(leftLaneDistance - rightLaneDistance) > 0.001) {
+    return leftLaneDistance - rightLaneDistance;
   }
   if (left.minimumBlockerClearance > right.minimumBlockerClearance + 0.001) {
     return -1;
@@ -1296,7 +1419,8 @@ export function positionConnectorLabel(
           separatorSegments,
           scene,
           connectorBlockMode,
-          separatorBlockMode
+          separatorBlockMode,
+          options.maxVerticalLabelAnchorDistance
         )
       : horizontalPlacementMode === "scenario_side_offsets"
         ? resolveScenarioHorizontalLabelPlacement(
@@ -1311,7 +1435,10 @@ export function positionConnectorLabel(
             connectorBlockMode,
             separatorBlockMode,
             horizontalSideLabelDistance,
-            options.nearbyHorizontalLabelPreference
+            options.nearbyHorizontalLabelPreference,
+            options.horizontalLabelLanePreference,
+            options.horizontalLabelAssociationPolicy,
+            options.preferHorizontalSidePlacement
           )
         : resolveServiceHorizontalLabelPlacement(
             connectorId,
@@ -1330,7 +1457,9 @@ export function positionConnectorLabel(
       placement,
       minimumBlockerClearance: measureMinimumBoxClearance(placement.box, blockedBoxes)
     };
-  }).sort(compareAnchorPlacementCandidates);
+  }).sort((left, right) =>
+    compareAnchorPlacementCandidates(left, right, options.preferHorizontalAnchors ?? false)
+  );
 
   const chosen = scoredCandidates[0];
   if (!chosen) {

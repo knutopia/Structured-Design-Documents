@@ -24,10 +24,14 @@ import {
   expectRendererStageSnapshot,
   expectRendererStageTextSnapshot
 } from "./rendererStageSnapshotHarness.js";
+import {
+  expectEdgeLabelsNearOwnHorizontalSegments
+} from "./stagedVisualHarness.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
+const OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE = 48;
 
 async function resolveOutcomeOpportunityContext(exampleName: string, profileId = "strict") {
   const bundle = await loadBundle(manifestPath);
@@ -505,6 +509,10 @@ describe("staged outcome_opportunity_map", () => {
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step2PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step3PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
+      expectEdgeLabelsNearOwnHorizontalSegments(
+        rendered.positionedScene.edges.filter((edge) => edge.label !== undefined),
+        OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE
+      );
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.renderer-scene.json`, stripViewMetadata(rendererScene));
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.measured-scene.json`, stripViewMetadata(measuredScene));
@@ -613,6 +621,15 @@ END
       expectNoOutcomeOpportunityBandLabelsInSvg(rendered.svg);
       expectNoOutcomeOpportunityBandDecorations(rendered.positionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
+      const nonParkingLabeledEdges = rendered.positionedScene.edges.filter((edge) =>
+        edge.label !== undefined && !edge.classes.includes("route-pattern-parking_fallback")
+      );
+      if (nonParkingLabeledEdges.length > 0) {
+        expectEdgeLabelsNearOwnHorizontalSegments(
+          nonParkingLabeledEdges,
+          OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE
+        );
+      }
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);

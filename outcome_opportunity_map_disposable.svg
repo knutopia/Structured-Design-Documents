@@ -377,147 +377,147 @@
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-001__supports__O-001" data-role="supports">
-      <rect class="scene-edge-label__box" x="821.336" y="60" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="827.336" y="71" dominant-baseline="middle">
-          <tspan x="827.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="60" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="71" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-001__supports__O-002" data-role="supports">
-      <rect class="scene-edge-label__box" x="771.336" y="122" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="777.336" y="133" dominant-baseline="middle">
-          <tspan x="777.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="122" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="133" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-002__supports__O-001" data-role="supports">
-      <rect class="scene-edge-label__box" x="961.336" y="187" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="967.336" y="198" dominant-baseline="middle">
-          <tspan x="967.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="164" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="175" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-002__supports__O-003" data-role="supports">
-      <rect class="scene-edge-label__box" x="746.053" y="768" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="752.053" y="779" dominant-baseline="middle">
-          <tspan x="752.053" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="226" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="237" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-007__supports__O-001" data-role="supports">
-      <rect class="scene-edge-label__box" x="948.77" y="287.717" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="954.77" y="298.717" dominant-baseline="middle">
-          <tspan x="954.77" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="268" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="279" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-007__supports__O-002" data-role="supports">
-      <rect class="scene-edge-label__box" x="762.053" y="446" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="768.053" y="457" dominant-baseline="middle">
-          <tspan x="768.053" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="330" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="341" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-003__supports__O-002" data-role="supports">
-      <rect class="scene-edge-label__box" x="754.053" y="367" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="760.053" y="378" dominant-baseline="middle">
-          <tspan x="760.053" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="390" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="401" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-004__supports__O-002" data-role="supports">
-      <rect class="scene-edge-label__box" x="930.053" y="486" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="936.053" y="497" dominant-baseline="middle">
-          <tspan x="936.053" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="484" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="495" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-006__supports__O-002" data-role="supports">
-      <rect class="scene-edge-label__box" x="915.336" y="611" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="921.336" y="622" dominant-baseline="middle">
-          <tspan x="921.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="588" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="599" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-cross_band_bridge" data-edge-id="OP-006__supports__O-003" data-role="supports">
-      <rect class="scene-edge-label__box" x="995.336" y="627" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1001.336" y="638" dominant-baseline="middle">
-          <tspan x="1001.336" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="762.053" y="760" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="768.053" y="771" dominant-baseline="middle">
+          <tspan x="768.053" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-005__supports__O-003" data-role="supports">
-      <rect class="scene-edge-label__box" x="754.053" y="705" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="760.053" y="716" dominant-baseline="middle">
-          <tspan x="760.053" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="682" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="693" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-008__supports__O-003" data-role="supports">
-      <rect class="scene-edge-label__box" x="874.694" y="776" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="880.694" y="787" dominant-baseline="middle">
-          <tspan x="880.694" dy="0">supports</tspan>
+      <rect class="scene-edge-label__box" x="739.336" y="824" width="61.434" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="745.336" y="835" dominant-baseline="middle">
+          <tspan x="745.336" dy="0">supports</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-001__addresses__OP-001" data-role="addresses">
-      <rect class="scene-edge-label__box" x="342" y="56" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="348" y="67" dominant-baseline="middle">
-          <tspan x="348" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="56" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="67" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-001__addresses__OP-007" data-role="addresses">
-      <rect class="scene-edge-label__box" x="318" y="118" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="324" y="129" dominant-baseline="middle">
-          <tspan x="324" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="118" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="129" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-002__addresses__OP-002" data-role="addresses">
-      <rect class="scene-edge-label__box" x="342" y="183" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="348" y="194" dominant-baseline="middle">
-          <tspan x="348" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="160" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="171" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-007__addresses__OP-007" data-role="addresses">
-      <rect class="scene-edge-label__box" x="342" y="264" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="348" y="275" dominant-baseline="middle">
-          <tspan x="348" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="264" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="275" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-cross_band_bridge" data-edge-id="I-007__addresses__OP-004" data-role="addresses">
-      <rect class="scene-edge-label__box" x="310" y="326" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="316" y="337" dominant-baseline="middle">
-          <tspan x="316" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="326" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="337" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-003__addresses__OP-003" data-role="addresses">
-      <rect class="scene-edge-label__box" x="318" y="372" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="324" y="383" dominant-baseline="middle">
-          <tspan x="324" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="372" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="383" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-cross_band_bridge" data-edge-id="I-003__addresses__OP-001" data-role="addresses">
-      <rect class="scene-edge-label__box" x="326" y="434" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="332" y="445" dominant-baseline="middle">
-          <tspan x="332" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="434" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="445" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-004__addresses__OP-004" data-role="addresses">
-      <rect class="scene-edge-label__box" x="318" y="480" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="324" y="491" dominant-baseline="middle">
-          <tspan x="324" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="480" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="491" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-004__addresses__OP-006" data-role="addresses">
-      <rect class="scene-edge-label__box" x="302" y="542" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="308" y="553" dominant-baseline="middle">
-          <tspan x="308" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="542" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="553" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-006__addresses__OP-006" data-role="addresses">
-      <rect class="scene-edge-label__box" x="318" y="584" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="324" y="595" dominant-baseline="middle">
-          <tspan x="324" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="584" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="595" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-cross_band_bridge" data-edge-id="I-006__addresses__OP-005" data-role="addresses">
-      <rect class="scene-edge-label__box" x="294" y="646" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="300" y="657" dominant-baseline="middle">
-          <tspan x="300" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="646" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="657" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-005__addresses__OP-005" data-role="addresses">
-      <rect class="scene-edge-label__box" x="294" y="692" width="69.336" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="300" y="703" dominant-baseline="middle">
-          <tspan x="300" dy="0">addresses</tspan>
+      <rect class="scene-edge-label__box" x="286" y="692" width="69.336" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="292" y="703" dominant-baseline="middle">
+          <tspan x="292" dy="0">addresses</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-addresses outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-005__addresses__OP-008" data-role="addresses">
@@ -527,39 +527,39 @@
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-001__measured_by__M-001" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1232.77" y="56" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1238.77" y="67" dominant-baseline="middle">
-          <tspan x="1238.77" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1216.77" y="56" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1222.77" y="67" dominant-baseline="middle">
+          <tspan x="1222.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-001__measured_by__M-002" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1233.709" y="183" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1239.709" y="194" dominant-baseline="middle">
-          <tspan x="1239.709" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1216.77" y="160" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1222.77" y="171" dominant-baseline="middle">
+          <tspan x="1222.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-002__measured_by__M-003" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1232.77" y="376" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1238.77" y="387" dominant-baseline="middle">
-          <tspan x="1238.77" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1216.77" y="376" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1222.77" y="387" dominant-baseline="middle">
+          <tspan x="1222.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-002__measured_by__M-004" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1302.647" y="287" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1308.647" y="298" dominant-baseline="middle">
-          <tspan x="1308.647" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1216.77" y="484" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1222.77" y="495" dominant-baseline="middle">
+          <tspan x="1222.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-same_band_measurement" data-edge-id="O-003__measured_by__M-005" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1232.77" y="706" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1238.77" y="717" dominant-baseline="middle">
-          <tspan x="1238.77" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1216.77" y="706" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1222.77" y="717" dominant-baseline="middle">
+          <tspan x="1222.77" dy="0">measured by</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-measured_by outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-measured_by edge-channel-outcome_measurement route-pattern-stacked_measurement" data-edge-id="O-003__measured_by__M-006" data-role="measured_by">
-      <rect class="scene-edge-label__box" x="1233.709" y="843" width="83.754" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1239.709" y="854" dominant-baseline="middle">
-          <tspan x="1239.709" dy="0">measured by</tspan>
+      <rect class="scene-edge-label__box" x="1216.77" y="820" width="83.754" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="1222.77" y="831" dominant-baseline="middle">
+          <tspan x="1222.77" dy="0">measured by</tspan>
         </text>
     </g>
   </g>

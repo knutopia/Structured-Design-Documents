@@ -21,6 +21,7 @@ import {
   collectEdgeLabelBoxes,
   expectLabelsDoNotOverlapBoxes,
   expectLabelsDoNotOverlapEachOther,
+  expectEdgeLabelsNearOwnHorizontalSegments,
   expectHorizontalEndpointLabelsHaveMinimumClearance,
   expectLabelsHaveMinimumBoxClearance,
   expectNoRouteIntersectionsWithNonEndpointBoxes,
@@ -32,6 +33,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
 const OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE = 24;
+const OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE = 48;
 const ROUTING_SPACING = 16;
 const OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP = 12;
 const OUTCOME_OPPORTUNITY_TARGET_TERMINAL_CROSSING_CLEARANCE = ROUTING_SPACING * 2;
@@ -432,6 +434,20 @@ function expectPrimaryConnectorLabelsPresent(edges: readonly PositionedEdge[]): 
   }
 }
 
+function expectRoleLabelsShareLeftX(
+  edges: readonly PositionedEdge[],
+  roleNeedle: "__addresses__" | "__supports__" | "__measured_by__",
+  tolerance = 0.5
+): void {
+  const labelXs = edges
+    .filter((edge) => edge.id.includes(roleNeedle))
+    .map((edge) => edge.label?.x)
+    .filter((x): x is number => x !== undefined);
+  expect(labelXs.length, roleNeedle).toBeGreaterThan(1);
+  expect(Math.max(...labelXs) - Math.min(...labelXs), roleNeedle)
+    .toBeLessThanOrEqual(tolerance);
+}
+
 function edgeIdsForConnectorIds(
   rendered: OutcomeOpportunityMapRoutingDebugArtifactsResult,
   connectorIds: readonly string[] = []
@@ -775,12 +791,36 @@ Opportunity OP-008 "Outcome history is not visible at review time"
 END
 
 Outcome O-001 "Shorten time to first value"
+  MEASURED_BY M-001 "Median days to first completed workflow"
+  MEASURED_BY M-002 "Activation completion rate"
 END
 
 Outcome O-002 "Increase self-serve task completion"
+  MEASURED_BY M-003 "Self-serve task completion rate"
+  MEASURED_BY M-004 "Support deflection for recoverable tasks"
 END
 
 Outcome O-003 "Improve trust in automated recommendations"
+  MEASURED_BY M-005 "Recommendation acceptance rate"
+  MEASURED_BY M-006 "Recommendation reversal rate"
+END
+
+Metric M-001 "Median days to first completed workflow"
+END
+
+Metric M-002 "Activation completion rate"
+END
+
+Metric M-003 "Self-serve task completion rate"
+END
+
+Metric M-004 "Support deflection for recoverable tasks"
+END
+
+Metric M-005 "Recommendation acceptance rate"
+END
+
+Metric M-006 "Recommendation reversal rate"
 END
 `);
 
@@ -868,6 +908,15 @@ END
     )).toEqual([]);
 
     const finalEdges = rendered.routingStages.finalPositionedScene.edges;
+    const primaryEdges = finalEdges.filter((edge) =>
+      edge.id.includes("__addresses__")
+      || edge.id.includes("__supports__")
+      || edge.id.includes("__measured_by__")
+    );
+    expectEdgeLabelsNearOwnHorizontalSegments(primaryEdges, OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE);
+    expectRoleLabelsShareLeftX(finalEdges, "__addresses__");
+    expectRoleLabelsShareLeftX(finalEdges, "__measured_by__");
+
     const outcomeOne = findNode(rendered.routingStages.finalPositionedScene.root, "O-001");
     const outcomeOneArrivals = [
       "OP-001__supports__O-001",
@@ -1083,6 +1132,7 @@ END
       expectSameOrientationSegmentsSeparated(finalEdges);
       expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
       expectHorizontalEndpointLabelsHaveMinimumClearance(finalEdges, nodeBoxes, OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE);
+      expectEdgeLabelsNearOwnHorizontalSegments(finalEdges, OUTCOME_OPPORTUNITY_LABEL_ASSOCIATION_DISTANCE);
       expectLabelsDoNotOverlapEachOther(labelBoxes);
     }
   });
