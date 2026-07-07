@@ -1416,7 +1416,7 @@
       "x": 992.77,
       "y": 26,
       "text": "measured by",
-      "textStyleRole": "edge_label"
+      "textStyleRole": "label"
     }
   ],
   "diagnostics": [],

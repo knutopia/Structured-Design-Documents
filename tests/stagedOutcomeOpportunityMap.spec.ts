@@ -669,6 +669,12 @@ END
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
       const aggregateLabels = collectOutcomeOpportunityAggregateLabels(rendered.positionedScene);
       expect(aggregateLabels.map((decoration) => decoration.text).sort()).toEqual([...testCase.expectedAggregateLabels].sort());
+      for (const aggregateLabel of aggregateLabels) {
+        expect(aggregateLabel.textStyleRole, aggregateLabel.id).toBe("label");
+      }
+      if (aggregateLabels.length > 0) {
+        expect(rendered.svg).toMatch(/<g[^>]*outcome_opportunity_aggregate_label[\s\S]*?<text class="scene-text text-role-label block-kind-text"/);
+      }
       expect(collectOutcomeOpportunityColumnTitles(rendered.positionedScene).map((decoration) => decoration.text)).toEqual(
         aggregateLabels.length > 0
           ? ["Initiative", "Opportunity", "Outcome", "Metric"]

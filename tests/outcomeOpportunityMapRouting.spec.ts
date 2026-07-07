@@ -358,8 +358,12 @@ function expectPrimaryConnectorLabelCoverage(scene: PositionedScene): void {
 }
 
 function expectAggregateLabelTexts(scene: PositionedScene, expectedTexts: readonly string[]): void {
-  expect(collectAggregateLabelDecorations(scene).map((decoration) => decoration.text).sort())
+  const aggregateLabels = collectAggregateLabelDecorations(scene);
+  expect(aggregateLabels.map((decoration) => decoration.text).sort())
     .toEqual([...expectedTexts].sort());
+  for (const decoration of aggregateLabels) {
+    expect(decoration.textStyleRole, decoration.id).toBe("label");
+  }
 }
 
 function edgeIdsForConnectorIds(

@@ -33,6 +33,8 @@ import {
   decorateOutcomeOpportunityPositionedScene,
   type OutcomeOpportunityDecorationOptions
 } from "./outcomeOpportunityMapDecorations.js";
+import { createTextMeasurementService, type TextMeasurementService } from "./textMeasurement.js";
+import { resolveRendererTheme, type TextStyleToken } from "./theme.js";
 
 export type OutcomeOpportunityRoutePattern =
   | "same_band_addressing"
@@ -291,6 +293,7 @@ const AGGREGATE_LABEL_MIN_DOMINANT_RATIO = 2 / 3;
 const AGGREGATE_LABEL_MIN_COMPLEX_TOTAL = 4;
 const AGGREGATE_LABEL_MIN_COMPLEX_ROWS = 3;
 const AGGREGATE_LABEL_MAX_EXCEPTION_COUNT = 2;
+const AGGREGATE_LABEL_TEXT_STYLE_ROLE = "label";
 const MAX_GLOBAL_GUTTER_ATTEMPTS = 4;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
 const OBSTACLE_SWERVE_CLEARANCE = 16;
@@ -3823,6 +3826,16 @@ interface OutcomeOpportunityAggregateLabelDecision {
   blockingBoxes: BlockingBox[];
 }
 
+interface OutcomeOpportunityAggregateLabelMeasureContext {
+  measureText: TextMeasurementService;
+  textStyle: TextStyleToken;
+}
+
+interface OutcomeOpportunityAggregateLabelSize {
+  width: number;
+  height: number;
+}
+
 function sanitizeClassToken(value: string): string {
   return value
     .trim()
@@ -3914,10 +3927,36 @@ function collectAggregateLabelCandidates(
   return candidates;
 }
 
+function createAggregateLabelMeasureContext(
+  themeId: string,
+  diagnostics: RendererDiagnostic[]
+): OutcomeOpportunityAggregateLabelMeasureContext {
+  const resolvedTheme = resolveRendererTheme(themeId);
+  diagnostics.push(...resolvedTheme.diagnostics);
+
+  return {
+    measureText: createTextMeasurementService(resolvedTheme.theme.fontAssets.measurement),
+    textStyle: resolvedTheme.theme.textStyles[AGGREGATE_LABEL_TEXT_STYLE_ROLE] ?? resolvedTheme.theme.textStyles.label
+  };
+}
+
+function measureAggregateLabelText(
+  text: string,
+  context: OutcomeOpportunityAggregateLabelMeasureContext
+): OutcomeOpportunityAggregateLabelSize {
+  return {
+    width: roundMetric(context.measureText.measureText(text, context.textStyle)),
+    height: roundMetric(context.textStyle.lineHeight)
+  };
+}
+
 function buildOutcomeOpportunityAggregateLabelDecision(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
-  index: OutcomeOpportunityPositionedIndex
+  index: OutcomeOpportunityPositionedIndex,
+  scene: PositionedScene,
+  diagnostics: RendererDiagnostic[]
 ): OutcomeOpportunityAggregateLabelDecision {
+  const measureContext = createAggregateLabelMeasureContext(scene.themeId, diagnostics);
   const suppressedPlanIds = new Set<string>();
   const decorations: PositionedDecoration[] = [];
   const blockingBoxes: BlockingBox[] = [];
@@ -3965,9 +4004,10 @@ function buildOutcomeOpportunityAggregateLabelDecision(
       continue;
     }
 
+    const representative = dominant[0]!;
+    const aggregateLabelSize = measureAggregateLabelText(representative.labelText, measureContext);
     const labelX = roundMetric(sourceColumnRight + HORIZONTAL_LABEL_NODE_CLEARANCE);
-    const labelWidth = Math.max(...dominant.map((candidate) => candidate.plan.label?.width ?? 0));
-    const labelFitsTitleLane = labelX + labelWidth <= targetColumnContentLeft - AGGREGATE_LABEL_TARGET_TITLE_CLEARANCE + 0.5;
+    const labelFitsTitleLane = labelX + aggregateLabelSize.width <= targetColumnContentLeft - AGGREGATE_LABEL_TARGET_TITLE_CLEARANCE + 0.5;
     const isComplex = totalCount >= AGGREGATE_LABEL_MIN_COMPLEX_TOTAL
       || touchedRows.size >= AGGREGATE_LABEL_MIN_COMPLEX_ROWS;
     if (dominantCount < AGGREGATE_LABEL_MIN_DOMINANT_COUNT
@@ -3978,10 +4018,8 @@ function buildOutcomeOpportunityAggregateLabelDecision(
       continue;
     }
 
-    const representative = dominant[0]!;
     dominant.forEach((candidate) => suppressedPlanIds.add(candidate.plan.id));
     const labelY = getAggregateLabelTitleLaneY(index);
-    const labelHeight = Math.max(...dominant.map((candidate) => candidate.plan.label?.height ?? 0));
     decorations.push({
       kind: "text",
       id: `outcome-opportunity-aggregate-${sanitizeClassToken(representative.source.placement.semanticColumnId)}-to-${sanitizeClassToken(representative.target.placement.semanticColumnId)}-${sanitizeClassToken(representative.normalizedLabelText)}`,
@@ -3996,14 +4034,14 @@ function buildOutcomeOpportunityAggregateLabelDecision(
       x: labelX,
       y: labelY,
       text: representative.labelText,
-      textStyleRole: "edge_label"
+      textStyleRole: AGGREGATE_LABEL_TEXT_STYLE_ROLE
     });
     blockingBoxes.push({
       itemId: `aggregate-label:${representative.plan.role}:${sourceColumnOrder}->${targetColumnOrder}`,
       x: labelX,
       y: labelY,
-      width: labelWidth,
-      height: labelHeight
+      width: aggregateLabelSize.width,
+      height: aggregateLabelSize.height
     });
   }
 
@@ -4967,7 +5005,7 @@ export function buildOutcomeOpportunityMapRoutingStages(
     };
   });
   emitFinalIntersectionDiagnostics(finalPlans, workingIndex.nodeBoxes, finalDiagnostics);
-  const aggregateLabels = buildOutcomeOpportunityAggregateLabelDecision(finalPlans, workingIndex);
+  const aggregateLabels = buildOutcomeOpportunityAggregateLabelDecision(finalPlans, workingIndex, workingScene, finalDiagnostics);
   const labelsByPlanId = placeLabels(finalPlans, workingScene, workingIndex, finalDiagnostics, {
     suppressedPlanIds: aggregateLabels.suppressedPlanIds,
     additionalBlockedBoxes: aggregateLabels.blockingBoxes

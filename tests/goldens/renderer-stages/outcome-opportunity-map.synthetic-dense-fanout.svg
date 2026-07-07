@@ -120,7 +120,7 @@
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-aggregate-outcome-to-metric-measured-by" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_aggregate_label gap-outcome-metric edge-type-measured_by edge-channel-outcome_measurement role-measured_by" data-decoration-id="outcome-opportunity-aggregate-outcome-to-metric-measured-by">
-      <text class="scene-text text-role-edge_label block-kind-text" x="992.77" y="38">
+      <text class="scene-text text-role-label block-kind-text" x="992.77" y="39">
           <tspan x="992.77" dy="0">measured by</tspan>
         </text>
     </g>

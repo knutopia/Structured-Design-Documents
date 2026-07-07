@@ -17,6 +17,7 @@
 ## Tue 7-7
 
 -Added summary label titles for complex case
+-Made summary label titles uppercase
 
 ## Mon 7-6
 
