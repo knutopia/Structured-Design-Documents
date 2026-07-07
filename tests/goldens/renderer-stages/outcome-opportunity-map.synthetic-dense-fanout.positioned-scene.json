@@ -1231,17 +1231,6 @@
           }
         ]
       },
-      "label": {
-        "lines": [
-          "measured by"
-        ],
-        "width": 83.754,
-        "height": 22,
-        "lineHeight": 14,
-        "textStyleRole": "edge_label",
-        "x": 992.77,
-        "y": 56
-      },
       "markers": {
         "end": "arrow"
       },
@@ -1297,17 +1286,6 @@
             "y": 202
           }
         ]
-      },
-      "label": {
-        "lines": [
-          "measured by"
-        ],
-        "width": 83.754,
-        "height": 22,
-        "lineHeight": 14,
-        "textStyleRole": "edge_label",
-        "x": 992.77,
-        "y": 142
       },
       "markers": {
         "end": "arrow"
@@ -1365,17 +1343,6 @@
           }
         ]
       },
-      "label": {
-        "lines": [
-          "measured by"
-        ],
-        "width": 83.754,
-        "height": 22,
-        "lineHeight": 14,
-        "textStyleRole": "edge_label",
-        "x": 992.77,
-        "y": 280
-      },
       "markers": {
         "end": "arrow"
       },
@@ -1391,9 +1358,9 @@
         "column-initiative"
       ],
       "paintGroup": "labels",
-      "x": 32,
+      "x": 50,
       "y": 26,
-      "text": "Initiatives",
+      "text": "Initiative",
       "textStyleRole": "label"
     },
     {
@@ -1404,9 +1371,9 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 389.336,
+      "x": 407.336,
       "y": 26,
-      "text": "Opportunities",
+      "text": "Opportunity",
       "textStyleRole": "label"
     },
     {
@@ -1417,9 +1384,9 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 738.77,
+      "x": 756.77,
       "y": 26,
-      "text": "Outcomes",
+      "text": "Outcome",
       "textStyleRole": "label"
     },
     {
@@ -1430,10 +1397,26 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 1142.524,
+      "x": 1160.524,
       "y": 26,
-      "text": "Metrics",
+      "text": "Metric",
       "textStyleRole": "label"
+    },
+    {
+      "kind": "text",
+      "id": "outcome-opportunity-aggregate-outcome-to-metric-measured-by",
+      "classes": [
+        "outcome_opportunity_aggregate_label",
+        "gap-outcome-metric",
+        "edge-type-measured_by",
+        "edge-channel-outcome_measurement",
+        "role-measured_by"
+      ],
+      "paintGroup": "labels",
+      "x": 992.77,
+      "y": 26,
+      "text": "measured by",
+      "textStyleRole": "edge_label"
     }
   ],
   "diagnostics": [],

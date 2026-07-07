@@ -7,6 +7,7 @@ import type {
   Point,
   PortSide,
   PositionedContainer,
+  PositionedDecoration,
   PositionedEdge,
   PositionedItem,
   PositionedNode,
@@ -28,7 +29,10 @@ import type {
   OutcomeOpportunityMiddleLayerModel,
   OutcomeOpportunityNodePlacement
 } from "./outcomeOpportunityMapMiddleLayer.js";
-import { decorateOutcomeOpportunityPositionedScene } from "./outcomeOpportunityMapDecorations.js";
+import {
+  decorateOutcomeOpportunityPositionedScene,
+  type OutcomeOpportunityDecorationOptions
+} from "./outcomeOpportunityMapDecorations.js";
 
 export type OutcomeOpportunityRoutePattern =
   | "same_band_addressing"
@@ -280,6 +284,13 @@ const HORIZONTAL_LABEL_GAP = HORIZONTAL_LABEL_NODE_CLEARANCE * 2;
 const HORIZONTAL_LABEL_TRACK_CLEARANCE = 8;
 const HORIZONTAL_LABEL_ASSOCIATION_DISTANCE = HORIZONTAL_LABEL_GAP;
 const VERTICAL_LABEL_GAP = 24;
+const AGGREGATE_LABEL_TITLE_LANE_Y_OFFSET = 30;
+const AGGREGATE_LABEL_TARGET_TITLE_CLEARANCE = 8;
+const AGGREGATE_LABEL_MIN_DOMINANT_COUNT = 3;
+const AGGREGATE_LABEL_MIN_DOMINANT_RATIO = 2 / 3;
+const AGGREGATE_LABEL_MIN_COMPLEX_TOTAL = 4;
+const AGGREGATE_LABEL_MIN_COMPLEX_ROWS = 3;
+const AGGREGATE_LABEL_MAX_EXCEPTION_COUNT = 2;
 const MAX_GLOBAL_GUTTER_ATTEMPTS = 4;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
 const OBSTACLE_SWERVE_CLEARANCE = 16;
@@ -3798,11 +3809,220 @@ function buildHorizontalLabelLanePreferences(
   return lanePreferenceByPlanId;
 }
 
+interface OutcomeOpportunityAggregateLabelCandidate {
+  plan: OutcomeOpportunityConnectorTemplatePlan;
+  source: IndexedOutcomeOpportunityNode;
+  target: IndexedOutcomeOpportunityNode;
+  labelText: string;
+  normalizedLabelText: string;
+}
+
+interface OutcomeOpportunityAggregateLabelDecision {
+  suppressedPlanIds: Set<string>;
+  decorations: PositionedDecoration[];
+  blockingBoxes: BlockingBox[];
+}
+
+function sanitizeClassToken(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "unnamed";
+}
+
+function normalizeAggregateLabelText(value: string): string {
+  return value.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function getAggregateLabelText(plan: OutcomeOpportunityConnectorTemplatePlan): string | undefined {
+  const text = plan.label?.lines.join(" ").trim().replace(/\s+/g, " ");
+  return text && text.length > 0 ? text : undefined;
+}
+
+function isAggregateLabelPrimaryChannel(channel: OutcomeOpportunityEdgeChannel): boolean {
+  return channel === "initiative_addressing"
+    || channel === "opportunity_support"
+    || channel === "outcome_measurement";
+}
+
+function getNodeContentLeft(node: PositionedNode): number {
+  return roundMetric(node.x + Math.min(...node.content.map((block) => block.x), 12));
+}
+
+function getColumnContentLeft(index: OutcomeOpportunityPositionedIndex, columnOrder: number): number | undefined {
+  const lefts = [...index.nodeById.values()]
+    .filter((context) => context.placement.columnOrder === columnOrder)
+    .map((context) => getNodeContentLeft(context.node));
+  if (lefts.length > 0) {
+    return roundMetric(Math.min(...lefts));
+  }
+
+  const columnLeft = index.columnLeftByOrder.get(columnOrder);
+  return columnLeft === undefined ? undefined : roundMetric(columnLeft + 22);
+}
+
+function getColumnRight(index: OutcomeOpportunityPositionedIndex, columnOrder: number): number | undefined {
+  const rights = [...index.nodeById.values()]
+    .filter((context) => context.placement.columnOrder === columnOrder)
+    .map((context) => context.node.x + context.node.width);
+  if (rights.length > 0) {
+    return roundMetric(Math.max(...rights));
+  }
+
+  return index.columnRightByOrder.get(columnOrder);
+}
+
+function getAggregateLabelTitleLaneY(index: OutcomeOpportunityPositionedIndex): number {
+  return roundMetric(Math.max(12, Math.min(...index.rowTopByOrder.values()) - AGGREGATE_LABEL_TITLE_LANE_Y_OFFSET));
+}
+
+function collectAggregateLabelCandidates(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  index: OutcomeOpportunityPositionedIndex
+): OutcomeOpportunityAggregateLabelCandidate[] {
+  const candidates: OutcomeOpportunityAggregateLabelCandidate[] = [];
+
+  for (const plan of plans) {
+    const labelText = getAggregateLabelText(plan);
+    if (!labelText
+      || !isAggregateLabelPrimaryChannel(plan.channel)
+      || plan.sourceSide !== "east"
+      || plan.targetSide !== "west") {
+      continue;
+    }
+
+    const source = index.nodeById.get(plan.from);
+    const target = index.nodeById.get(plan.to);
+    if (!source
+      || !target
+      || source.placement.parking
+      || target.placement.parking
+      || source.placement.columnOrder + 1 !== target.placement.columnOrder) {
+      continue;
+    }
+
+    candidates.push({
+      plan,
+      source,
+      target,
+      labelText,
+      normalizedLabelText: normalizeAggregateLabelText(labelText)
+    });
+  }
+
+  return candidates;
+}
+
+function buildOutcomeOpportunityAggregateLabelDecision(
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  index: OutcomeOpportunityPositionedIndex
+): OutcomeOpportunityAggregateLabelDecision {
+  const suppressedPlanIds = new Set<string>();
+  const decorations: PositionedDecoration[] = [];
+  const blockingBoxes: BlockingBox[] = [];
+  const candidatesByGap = new Map<string, OutcomeOpportunityAggregateLabelCandidate[]>();
+
+  for (const candidate of collectAggregateLabelCandidates(plans, index)) {
+    const sourceColumnId = candidate.source.placement.semanticColumnId;
+    const targetColumnId = candidate.target.placement.semanticColumnId;
+    const gapKey = `${candidate.source.placement.columnOrder}->${candidate.target.placement.columnOrder}:${sourceColumnId}->${targetColumnId}`;
+    const existing = candidatesByGap.get(gapKey) ?? [];
+    existing.push(candidate);
+    candidatesByGap.set(gapKey, existing);
+  }
+
+  for (const candidates of candidatesByGap.values()) {
+    const totalCount = candidates.length;
+    const candidatesByLabel = new Map<string, OutcomeOpportunityAggregateLabelCandidate[]>();
+    for (const candidate of candidates) {
+      const existing = candidatesByLabel.get(candidate.normalizedLabelText) ?? [];
+      existing.push(candidate);
+      candidatesByLabel.set(candidate.normalizedLabelText, existing);
+    }
+
+    const dominant = [...candidatesByLabel.values()].sort((left, right) =>
+      right.length - left.length
+      || compareConnectorPlanPriority(left[0]!.plan, right[0]!.plan)
+    )[0];
+    if (!dominant) {
+      continue;
+    }
+
+    const dominantCount = dominant.length;
+    const exceptionCount = totalCount - dominantCount;
+    const touchedRows = new Set<number>();
+    for (const candidate of dominant) {
+      touchedRows.add(candidate.source.placement.rowOrder);
+      touchedRows.add(candidate.target.placement.rowOrder);
+    }
+
+    const sourceColumnOrder = dominant[0]!.source.placement.columnOrder;
+    const targetColumnOrder = dominant[0]!.target.placement.columnOrder;
+    const sourceColumnRight = getColumnRight(index, sourceColumnOrder);
+    const targetColumnContentLeft = getColumnContentLeft(index, targetColumnOrder);
+    if (sourceColumnRight === undefined || targetColumnContentLeft === undefined) {
+      continue;
+    }
+
+    const labelX = roundMetric(sourceColumnRight + HORIZONTAL_LABEL_NODE_CLEARANCE);
+    const labelWidth = Math.max(...dominant.map((candidate) => candidate.plan.label?.width ?? 0));
+    const labelFitsTitleLane = labelX + labelWidth <= targetColumnContentLeft - AGGREGATE_LABEL_TARGET_TITLE_CLEARANCE + 0.5;
+    const isComplex = totalCount >= AGGREGATE_LABEL_MIN_COMPLEX_TOTAL
+      || touchedRows.size >= AGGREGATE_LABEL_MIN_COMPLEX_ROWS;
+    if (dominantCount < AGGREGATE_LABEL_MIN_DOMINANT_COUNT
+      || dominantCount / totalCount < AGGREGATE_LABEL_MIN_DOMINANT_RATIO
+      || !isComplex
+      || exceptionCount > AGGREGATE_LABEL_MAX_EXCEPTION_COUNT
+      || !labelFitsTitleLane) {
+      continue;
+    }
+
+    const representative = dominant[0]!;
+    dominant.forEach((candidate) => suppressedPlanIds.add(candidate.plan.id));
+    const labelY = getAggregateLabelTitleLaneY(index);
+    const labelHeight = Math.max(...dominant.map((candidate) => candidate.plan.label?.height ?? 0));
+    decorations.push({
+      kind: "text",
+      id: `outcome-opportunity-aggregate-${sanitizeClassToken(representative.source.placement.semanticColumnId)}-to-${sanitizeClassToken(representative.target.placement.semanticColumnId)}-${sanitizeClassToken(representative.normalizedLabelText)}`,
+      classes: [
+        "outcome_opportunity_aggregate_label",
+        `gap-${sanitizeClassToken(representative.source.placement.semanticColumnId)}-${sanitizeClassToken(representative.target.placement.semanticColumnId)}`,
+        `edge-type-${sanitizeClassToken(representative.plan.type)}`,
+        `edge-channel-${sanitizeClassToken(representative.plan.channel)}`,
+        `role-${sanitizeClassToken(representative.plan.role)}`
+      ],
+      paintGroup: "labels",
+      x: labelX,
+      y: labelY,
+      text: representative.labelText,
+      textStyleRole: "edge_label"
+    });
+    blockingBoxes.push({
+      itemId: `aggregate-label:${representative.plan.role}:${sourceColumnOrder}->${targetColumnOrder}`,
+      x: labelX,
+      y: labelY,
+      width: labelWidth,
+      height: labelHeight
+    });
+  }
+
+  return {
+    suppressedPlanIds,
+    decorations,
+    blockingBoxes
+  };
+}
+
 function placeLabels(
   plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
   scene: PositionedScene,
   index: OutcomeOpportunityPositionedIndex,
-  diagnostics: RendererDiagnostic[]
+  diagnostics: RendererDiagnostic[],
+  options: {
+    suppressedPlanIds?: ReadonlySet<string>;
+    additionalBlockedBoxes?: readonly BlockingBox[];
+  } = {}
 ): Map<string, PositionedEdge["label"]> {
   const labelsByPlanId = new Map<string, PositionedEdge["label"]>();
   const connectorSegmentsById = buildConnectorRouteSegmentsById(
@@ -3815,7 +4035,7 @@ function placeLabels(
   const horizontalLabelLanePreferences = buildHorizontalLabelLanePreferences(plans, index);
 
   for (const plan of plans) {
-    if (!plan.label) {
+    if (!plan.label || options.suppressedPlanIds?.has(plan.id)) {
       continue;
     }
     const label = positionConnectorLabel({
@@ -3825,6 +4045,7 @@ function placeLabels(
       connectorSegmentsById,
       blockedBoxes: [
         ...nodeBoxes,
+        ...(options.additionalBlockedBoxes ?? []),
         ...buildConnectorSegmentBlockingBoxes(plans, plan.id, HORIZONTAL_LABEL_TRACK_CLEARANCE),
         ...placedLabelBoxes
       ],
@@ -3878,7 +4099,8 @@ function placeLabels(
 function withStep2EdgesAndDiagnostics(
   scene: PositionedScene,
   edges: PositionedEdge[],
-  diagnostics: readonly RendererDiagnostic[]
+  diagnostics: readonly RendererDiagnostic[],
+  decorationOptions: OutcomeOpportunityDecorationOptions = {}
 ): PositionedScene {
   return decorateOutcomeOpportunityPositionedScene({
     ...structuredClone(scene),
@@ -3888,7 +4110,7 @@ function withStep2EdgesAndDiagnostics(
       ...scene.diagnostics,
       ...diagnostics
     ])
-  });
+  }, decorationOptions);
 }
 
 function routePlansForScene(
@@ -4745,11 +4967,19 @@ export function buildOutcomeOpportunityMapRoutingStages(
     };
   });
   emitFinalIntersectionDiagnostics(finalPlans, workingIndex.nodeBoxes, finalDiagnostics);
-  const labelsByPlanId = placeLabels(finalPlans, workingScene, workingIndex, finalDiagnostics);
+  const aggregateLabels = buildOutcomeOpportunityAggregateLabelDecision(finalPlans, workingIndex);
+  const labelsByPlanId = placeLabels(finalPlans, workingScene, workingIndex, finalDiagnostics, {
+    suppressedPlanIds: aggregateLabels.suppressedPlanIds,
+    additionalBlockedBoxes: aggregateLabels.blockingBoxes
+  });
   const finalPositionedScene = withStep2EdgesAndDiagnostics(
     workingScene,
     buildPositionedEdges(finalPlans, (plan) => plan.finalRoute, labelsByPlanId),
-    finalDiagnostics
+    finalDiagnostics,
+    {
+      columnTitleMode: aggregateLabels.decorations.length > 0 ? "singular" : "plural",
+      aggregateLabels: aggregateLabels.decorations
+    }
   );
 
   return {

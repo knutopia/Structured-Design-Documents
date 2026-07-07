@@ -59,6 +59,26 @@ function getVisibleNodeBoxes(root: Awaited<ReturnType<typeof renderStagedArtifac
   });
 }
 
+function hasOutcomeOpportunityAggregateLabelForEdge(
+  scene: Awaited<ReturnType<typeof renderStagedArtifacts>>["positionedScene"],
+  edge: { role: string }
+): boolean {
+  return scene.decorations.some((decoration) =>
+    decoration.kind === "text"
+    && decoration.classes.includes("outcome_opportunity_aggregate_label")
+    && decoration.classes.includes(`role-${edge.role}`)
+  );
+}
+
+function expectOutcomeOpportunityLabelCoverage(
+  scene: Awaited<ReturnType<typeof renderStagedArtifacts>>["positionedScene"],
+  edges: readonly Array<{ id: string; role: string; label?: unknown }>
+): void {
+  for (const edge of edges) {
+    expect(edge.label !== undefined || hasOutcomeOpportunityAggregateLabelForEdge(scene, edge), edge.id).toBe(true);
+  }
+}
+
 function expectIaLocalStructureRoute(edge: ReturnType<typeof getEdgeById>): void {
   if (edge.classes.includes("direct_vertical")) {
     expect(edge.route.points).toHaveLength(2);
@@ -211,18 +231,21 @@ describe("staged visual acceptance", () => {
 
       const nodeBoxes = getVisibleNodeBoxes(rendered.positionedScene.root);
       const labelBoxes = collectEdgeLabelBoxes(semanticEdges);
-      expect(labelBoxes.length).toBe(semanticEdges.length);
+      const labeledSemanticEdges = semanticEdges.filter((edge) => edge.label !== undefined);
 
+      expectOutcomeOpportunityLabelCoverage(rendered.positionedScene, semanticEdges);
       expectNoRouteIntersectionsWithNonEndpointBoxes(semanticEdges, nodeBoxes);
       expectRoutesDoNotEnterEndpointBoxes(semanticEdges, nodeBoxes);
       expectSameOrientationSegmentsSeparated(semanticEdges);
       expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
-      expectHorizontalEndpointLabelsHaveMinimumClearance(semanticEdges, nodeBoxes, OUTCOME_OPPORTUNITY_LABEL_CLEARANCE);
-      expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
-        semanticEdges,
-        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
-        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
-      );
+      if (labeledSemanticEdges.length > 0) {
+        expectHorizontalEndpointLabelsHaveMinimumClearance(labeledSemanticEdges, nodeBoxes, OUTCOME_OPPORTUNITY_LABEL_CLEARANCE);
+        expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
+          labeledSemanticEdges,
+          OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
+          OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
+        );
+      }
       expectLabelsDoNotOverlapEachOther(labelBoxes);
       expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
     }

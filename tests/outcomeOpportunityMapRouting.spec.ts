@@ -8,6 +8,7 @@ import type {
   Point,
   PortSide,
   PositionedContainer,
+  PositionedDecoration,
   PositionedEdge,
   PositionedItem,
   PositionedNode,
@@ -36,7 +37,6 @@ const OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE = 24;
 const OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE = 12;
 const OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP = 24;
 const ROUTING_SPACING = 16;
-const OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP = 12;
 const OUTCOME_OPPORTUNITY_TARGET_TERMINAL_CROSSING_CLEARANCE = ROUTING_SPACING * 2;
 
 const DENSE_ROUTING_SOURCE = `
@@ -286,100 +286,6 @@ function collectOrthogonalCrossings(
   return crossings;
 }
 
-function labelSegmentClearance(
-  label: NonNullable<PositionedEdge["label"]>,
-  segment: AxisAlignedSegment
-): number {
-  if (segment.axis === "vertical") {
-    const horizontalGap = Math.max(
-      segment.coordinate - (label.x + label.width),
-      label.x - segment.coordinate,
-      0
-    );
-    const verticalGap = Math.max(
-      segment.spanStart - (label.y + label.height),
-      label.y - segment.spanEnd,
-      0
-    );
-    return Math.hypot(horizontalGap, verticalGap);
-  }
-
-  const horizontalGap = Math.max(
-    segment.spanStart - (label.x + label.width),
-    label.x - segment.spanEnd,
-    0
-  );
-  const verticalGap = Math.max(
-    segment.coordinate - (label.y + label.height),
-    label.y - segment.coordinate,
-    0
-  );
-  return Math.hypot(horizontalGap, verticalGap);
-}
-
-function findAxisAlignedSegment(edge: PositionedEdge, segmentIndex: number): AxisAlignedSegment {
-  const segment = collectAxisAlignedSegments(edge).find((candidate) => candidate.segmentIndex === segmentIndex);
-  if (!segment) {
-    throw new Error(`Expected ${edge.id} to include route segment ${segmentIndex}.`);
-  }
-  return segment;
-}
-
-function expectLabelVerticalGapToHorizontalSegment(
-  edge: PositionedEdge,
-  segmentIndex: number,
-  expectedGap: number
-): void {
-  if (!edge.label) {
-    throw new Error(`Expected ${edge.id} to have a label.`);
-  }
-  const segment = findAxisAlignedSegment(edge, segmentIndex);
-  expect(segment.axis, `${edge.id} segment ${segmentIndex}`).toBe("horizontal");
-  const horizontalOverlap = Math.min(edge.label.x + edge.label.width, segment.spanEnd)
-    - Math.max(edge.label.x, segment.spanStart);
-  expect(horizontalOverlap, `${edge.id} segment ${segmentIndex} label overlap`)
-    .toBeGreaterThan(0.5);
-  const verticalGap = Math.max(
-    segment.coordinate - (edge.label.y + edge.label.height),
-    edge.label.y - segment.coordinate,
-    0
-  );
-  expect(verticalGap, `${edge.id} segment ${segmentIndex} label gap`)
-    .toBeCloseTo(expectedGap, 3);
-}
-
-function findSourceHorizontalSegment(edge: PositionedEdge): AxisAlignedSegment {
-  const segment = collectAxisAlignedSegments(edge).find((candidate) =>
-    candidate.axis === "horizontal"
-    && Math.abs(candidate.coordinate - edge.from.y) <= 0.5
-    && (
-      Math.abs(candidate.spanStart - edge.from.x) <= 0.5
-      || Math.abs(candidate.spanEnd - edge.from.x) <= 0.5
-    )
-  );
-  if (!segment) {
-    throw new Error(`Expected ${edge.id} to have a source horizontal segment.`);
-  }
-  return segment;
-}
-
-function expectLabelCloserToSourceHorizontalThanTerminalHorizontal(edge: PositionedEdge): void {
-  if (!edge.label) {
-    throw new Error(`Expected ${edge.id} to have a label.`);
-  }
-  const sourceSegment = findSourceHorizontalSegment(edge);
-  const terminalSegment = findTerminalHorizontalSegment(edge);
-  const labelCenterY = edge.label.y + edge.label.height / 2;
-  expect(
-    Math.abs(labelCenterY - sourceSegment.coordinate),
-    `${edge.id} label source-side y distance`
-  ).toBeLessThan(Math.abs(labelCenterY - terminalSegment.coordinate));
-  const sourceOverlap = Math.min(edge.label.x + edge.label.width, sourceSegment.spanEnd)
-    - Math.max(edge.label.x, sourceSegment.spanStart);
-  expect(sourceOverlap, `${edge.id} label source horizontal overlap`)
-    .toBeGreaterThan(0.5);
-}
-
 function findTerminalHorizontalSegment(edge: PositionedEdge): AxisAlignedSegment {
   const segment = collectAxisAlignedSegments(edge).find((candidate) =>
     candidate.axis === "horizontal"
@@ -425,28 +331,35 @@ function expectEndpointSpacing(
   }
 }
 
-function expectPrimaryConnectorLabelsPresent(edges: readonly PositionedEdge[]): void {
-  for (const edge of edges.filter((candidate) =>
+function collectAggregateLabelDecorations(scene: PositionedScene): Extract<PositionedDecoration, { kind: "text" }>[] {
+  return scene.decorations.filter((decoration): decoration is Extract<PositionedDecoration, { kind: "text" }> =>
+    decoration.kind === "text" && decoration.classes.includes("outcome_opportunity_aggregate_label")
+  );
+}
+
+function hasAggregateLabelForEdge(scene: PositionedScene, edge: PositionedEdge): boolean {
+  return collectAggregateLabelDecorations(scene).some((decoration) =>
+    decoration.classes.includes(`role-${edge.role}`)
+  );
+}
+
+function expectEdgeHasLabelCoverage(scene: PositionedScene, edge: PositionedEdge): void {
+  expect(edge.label !== undefined || hasAggregateLabelForEdge(scene, edge), edge.id).toBe(true);
+}
+
+function expectPrimaryConnectorLabelCoverage(scene: PositionedScene): void {
+  for (const edge of scene.edges.filter((candidate) =>
     candidate.id.includes("__supports__")
     || candidate.id.includes("__addresses__")
     || candidate.id.includes("__measured_by__")
   )) {
-    expect(edge.label, edge.id).toBeDefined();
+    expectEdgeHasLabelCoverage(scene, edge);
   }
 }
 
-function expectRoleLabelsShareLeftX(
-  edges: readonly PositionedEdge[],
-  roleNeedle: "__addresses__" | "__supports__" | "__measured_by__",
-  tolerance = 0.5
-): void {
-  const labelXs = edges
-    .filter((edge) => edge.id.includes(roleNeedle))
-    .map((edge) => edge.label?.x)
-    .filter((x): x is number => x !== undefined);
-  expect(labelXs.length, roleNeedle).toBeGreaterThan(1);
-  expect(Math.max(...labelXs) - Math.min(...labelXs), roleNeedle)
-    .toBeLessThanOrEqual(tolerance);
+function expectAggregateLabelTexts(scene: PositionedScene, expectedTexts: readonly string[]): void {
+  expect(collectAggregateLabelDecorations(scene).map((decoration) => decoration.text).sort())
+    .toEqual([...expectedTexts].sort());
 }
 
 function edgeIdsForConnectorIds(
@@ -714,7 +627,50 @@ END
     const outcomeOneWestArrivals = finalEdges.filter((edge) => edge.to.itemId === "O-001");
     expect(outcomeOneWestArrivals.length).toBeGreaterThanOrEqual(4);
     expectEndpointSpacing(outcomeOneWestArrivals, "to");
-    expectPrimaryConnectorLabelsPresent(finalEdges);
+    expectPrimaryConnectorLabelCoverage(rendered.routingStages.finalPositionedScene);
+    expectAggregateLabelTexts(rendered.routingStages.finalPositionedScene, ["measured by", "supports"]);
+    for (const edge of finalEdges.filter((candidate) =>
+      candidate.id.includes("__supports__") || candidate.id.includes("__measured_by__")
+    )) {
+      expect(edge.label, edge.id).toBeUndefined();
+    }
+    for (const edge of finalEdges.filter((candidate) => candidate.id.includes("__addresses__"))) {
+      expect(edge.label, edge.id).toBeDefined();
+    }
+  });
+
+  it("aggregates eligible shared multi-outcome support labels without per-edge repetition", async () => {
+    const rendered = await renderOutcomeOpportunitySource(`
+SDD-TEXT 0.1
+
+Outcome O-001 "Outcome One"
+END
+
+Outcome O-002 "Outcome Two"
+END
+
+Outcome O-003 "Outcome Three"
+END
+
+Opportunity OP-001 "Shared Opportunity"
+  SUPPORTS O-001 "Outcome One"
+  SUPPORTS O-002 "Outcome Two"
+  SUPPORTS O-003 "Outcome Three"
+END
+
+Opportunity OP-002 "Focused Opportunity"
+  SUPPORTS O-001 "Outcome One"
+END
+`);
+    const finalScene = rendered.routingStages.finalPositionedScene;
+    const supportEdges = finalScene.edges.filter((edge) => edge.id.includes("__supports__"));
+
+    expect(supportEdges.length).toBe(4);
+    expectAggregateLabelTexts(finalScene, ["supports"]);
+    for (const edge of supportEdges) {
+      expect(edge.label, edge.id).toBeUndefined();
+      expectEdgeHasLabelCoverage(finalScene, edge);
+    }
   });
 
   it("separates same-source east-edge address fan-out through local node-right bundles", async () => {
@@ -865,17 +821,10 @@ END
     );
     expect(sourceHorizontalSegments.length).toBe(2);
     expectOverlappingSegmentsSeparated(sourceHorizontalSegments);
-    expectLabelVerticalGapToHorizontalSegment(
-      findEdge(sourceEdges, "I-007__addresses__OP-007"),
-      0,
-      OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP
-    );
-    expectLabelVerticalGapToHorizontalSegment(
-      findEdge(sourceEdges, "I-007__addresses__OP-004"),
-      0,
-      OUTCOME_OPPORTUNITY_ADJACENT_HORIZONTAL_LABEL_GAP
-    );
-    expectLabelCloserToSourceHorizontalThanTerminalHorizontal(
+    expectEdgeHasLabelCoverage(rendered.routingStages.finalPositionedScene, findEdge(sourceEdges, "I-007__addresses__OP-007"));
+    expectEdgeHasLabelCoverage(rendered.routingStages.finalPositionedScene, findEdge(sourceEdges, "I-007__addresses__OP-004"));
+    expectEdgeHasLabelCoverage(
+      rendered.routingStages.finalPositionedScene,
       findEdge(rendered.routingStages.finalPositionedScene.edges, "I-001__addresses__OP-007")
     );
 
@@ -914,23 +863,18 @@ END
       || edge.id.includes("__supports__")
       || edge.id.includes("__measured_by__")
     );
-    expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
-      primaryEdges,
-      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
-      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
-    );
-    expectRoleLabelsShareLeftX(finalEdges, "__addresses__");
-    expectRoleLabelsShareLeftX(finalEdges, "__measured_by__");
-    expectLabelVerticalGapToHorizontalSegment(
-      findEdge(finalEdges, "OP-005__supports__O-003"),
-      0,
-      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE
-    );
-    expectLabelVerticalGapToHorizontalSegment(
-      findEdge(finalEdges, "OP-006__supports__O-003"),
-      0,
-      OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE
-    );
+    expectPrimaryConnectorLabelCoverage(rendered.routingStages.finalPositionedScene);
+    expectAggregateLabelTexts(rendered.routingStages.finalPositionedScene, ["addresses", "measured by", "supports"]);
+    const primaryEdgesWithLabels = primaryEdges.filter((edge) => edge.label !== undefined);
+    if (primaryEdgesWithLabels.length > 0) {
+      expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
+        primaryEdgesWithLabels,
+        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
+        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
+      );
+    }
+    expectEdgeHasLabelCoverage(rendered.routingStages.finalPositionedScene, findEdge(finalEdges, "OP-005__supports__O-003"));
+    expectEdgeHasLabelCoverage(rendered.routingStages.finalPositionedScene, findEdge(finalEdges, "OP-006__supports__O-003"));
 
     const outcomeOne = findNode(rendered.routingStages.finalPositionedScene.root, "O-001");
     const outcomeOneArrivals = [
@@ -1043,23 +987,12 @@ END
     expect(directSupport.route.points[0]).toEqual({ x: directSupport.from.x, y: directSupport.from.y });
     expect(directSupport.route.points.at(-1)).toEqual({ x: directSupport.to.x, y: directSupport.to.y });
     expect(directSupport.route.points.length).toBeLessThanOrEqual(4);
-
-    const directSupportLabel = directSupport.label;
-    expect(directSupportLabel).toBeDefined();
-    if (!directSupportLabel) {
-      throw new Error("Expected OP-003__supports__O-002 label to be present.");
-    }
-    const longSupportVerticals = collectAxisAlignedSegments(findEdge(finalEdges, "OP-002__supports__O-003"))
-      .filter((segment) => segment.axis === "vertical");
-    expect(Math.min(...longSupportVerticals.map((segment) => labelSegmentClearance(directSupportLabel, segment))))
-      .toBeGreaterThanOrEqual(ROUTING_SPACING - 0.5);
+    expectEdgeHasLabelCoverage(rendered.routingStages.finalPositionedScene, directSupport);
 
     const opportunity = findNode(rendered.routingStages.finalPositionedScene.root, "OP-003");
     const outcome = findNode(rendered.routingStages.finalPositionedScene.root, "O-002");
     const supportCorridorWidth = outcome.x - (opportunity.x + opportunity.width);
-    expect(supportCorridorWidth).toBeGreaterThanOrEqual(
-      (directSupport.label?.width ?? 0) + OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE * 2 + ROUTING_SPACING * 3 - 0.5
-    );
+    expect(supportCorridorWidth).toBeGreaterThanOrEqual(OUTCOME_OPPORTUNITY_LABEL_NODE_CLEARANCE * 2 - 0.5);
 
     const obstacleOccupancy = rendered.routingStages.gutterOccupancy.filter((candidate) =>
       candidate.kind.startsWith("obstacle_")

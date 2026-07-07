@@ -755,7 +755,7 @@
         "column-initiative"
       ],
       "paintGroup": "labels",
-      "x": 32,
+      "x": 50,
       "y": 26,
       "text": "Initiatives",
       "textStyleRole": "label"
@@ -768,7 +768,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 304,
+      "x": 322,
       "y": 26,
       "text": "Opportunities",
       "textStyleRole": "label"
@@ -781,7 +781,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 576,
+      "x": 594,
       "y": 26,
       "text": "Outcomes",
       "textStyleRole": "label"
@@ -794,7 +794,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 848,
+      "x": 866,
       "y": 26,
       "text": "Metrics",
       "textStyleRole": "label"

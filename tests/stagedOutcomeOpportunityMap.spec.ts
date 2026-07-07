@@ -10,6 +10,7 @@ import type {
   PositionedScene,
   PositionedTextDecoration,
   PositionedItem,
+  PositionedNode,
   RendererScene,
   SceneItem
 } from "../src/renderer/staged/contracts.js";
@@ -181,6 +182,25 @@ function expectNoOutcomeOpportunityBandDecorations(scene: PositionedScene): void
   )).toEqual([]);
 }
 
+function collectPositionedNodes(item: PositionedItem): PositionedNode[] {
+  if (item.kind === "node") {
+    return [item];
+  }
+
+  return item.children.flatMap((child) => collectPositionedNodes(child));
+}
+
+function getCellColumnTitleX(cell: PositionedContainer): number {
+  const nodes = collectPositionedNodes(cell);
+  if (nodes.length === 0) {
+    return cell.x + cell.chrome.padding.left + 12;
+  }
+
+  return Math.min(...nodes.map((node) =>
+    node.x + Math.min(...node.content.map((block) => block.x), 12)
+  ));
+}
+
 function expectOutcomeOpportunityColumnHeadersAligned(scene: PositionedScene): void {
   const firstCellByColumn = new Map<string, PositionedContainer>();
   for (const item of scene.root.children) {
@@ -208,9 +228,21 @@ function expectOutcomeOpportunityColumnHeadersAligned(scene: PositionedScene): v
   for (const [columnId, cell] of firstCellByColumn.entries()) {
     const title = columnTitles.find((decoration) => decoration.id === `outcome-opportunity-column-${columnId}__title`);
     expect(title).toBeDefined();
-    expect(title?.x).toBeCloseTo(cell.x + 4, 3);
+    expect(title?.x).toBeCloseTo(getCellColumnTitleX(cell), 3);
     expect(title?.y).toBe(Math.max(12, cell.y - 30));
   }
+}
+
+function collectOutcomeOpportunityColumnTitles(scene: PositionedScene): PositionedTextDecoration[] {
+  return scene.decorations.filter((decoration): decoration is PositionedTextDecoration =>
+    decoration.kind === "text" && decoration.classes.includes("outcome_opportunity_column_title")
+  );
+}
+
+function collectOutcomeOpportunityAggregateLabels(scene: PositionedScene): PositionedTextDecoration[] {
+  return scene.decorations.filter((decoration): decoration is PositionedTextDecoration =>
+    decoration.kind === "text" && decoration.classes.includes("outcome_opportunity_aggregate_label")
+  );
 }
 
 describe("staged outcome_opportunity_map", () => {
@@ -512,6 +544,13 @@ describe("staged outcome_opportunity_map", () => {
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step2PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step3PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
+      expect(collectOutcomeOpportunityAggregateLabels(rendered.positionedScene)).toEqual([]);
+      expect(collectOutcomeOpportunityColumnTitles(rendered.positionedScene).map((decoration) => decoration.text)).toEqual([
+        "Initiatives",
+        "Opportunities",
+        "Outcomes",
+        "Metrics"
+      ]);
       expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
         rendered.positionedScene.edges.filter((edge) => edge.label !== undefined),
         OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
@@ -534,6 +573,7 @@ describe("staged outcome_opportunity_map", () => {
     const cases = [
       {
         goldenPrefix: "outcome-opportunity-map.synthetic-dense-fanout",
+        expectedAggregateLabels: ["measured by"],
         source: `
 SDD-TEXT 0.1
 
@@ -563,6 +603,7 @@ END
       },
       {
         goldenPrefix: "outcome-opportunity-map.synthetic-shared-multi-outcome",
+        expectedAggregateLabels: [],
         source: `
 SDD-TEXT 0.1
 
@@ -594,6 +635,7 @@ END
       },
       {
         goldenPrefix: "outcome-opportunity-map.synthetic-parking-fallback",
+        expectedAggregateLabels: [],
         source: `
 SDD-TEXT 0.1
 
@@ -625,6 +667,13 @@ END
       expectNoOutcomeOpportunityBandLabelsInSvg(rendered.svg);
       expectNoOutcomeOpportunityBandDecorations(rendered.positionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
+      const aggregateLabels = collectOutcomeOpportunityAggregateLabels(rendered.positionedScene);
+      expect(aggregateLabels.map((decoration) => decoration.text).sort()).toEqual([...testCase.expectedAggregateLabels].sort());
+      expect(collectOutcomeOpportunityColumnTitles(rendered.positionedScene).map((decoration) => decoration.text)).toEqual(
+        aggregateLabels.length > 0
+          ? ["Initiative", "Opportunity", "Outcome", "Metric"]
+          : ["Initiatives", "Opportunities", "Outcomes", "Metrics"]
+      );
       const nonParkingLabeledEdges = rendered.positionedScene.edges.filter((edge) =>
         edge.label !== undefined && !edge.classes.includes("route-pattern-parking_fallback")
       );

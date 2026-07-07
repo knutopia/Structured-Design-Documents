@@ -76,23 +76,23 @@
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-initiative__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-initiative" data-decoration-id="outcome-opportunity-column-initiative__title">
-      <text class="scene-text text-role-label block-kind-text" x="32" y="39">
-          <tspan x="32" dy="0">Initiatives</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="50" y="39">
+          <tspan x="50" dy="0">Initiatives</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-opportunity__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-opportunity" data-decoration-id="outcome-opportunity-column-opportunity__title">
-      <text class="scene-text text-role-label block-kind-text" x="389.336" y="39">
-          <tspan x="389.336" dy="0">Opportunities</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="407.336" y="39">
+          <tspan x="407.336" dy="0">Opportunities</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-outcome__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-outcome" data-decoration-id="outcome-opportunity-column-outcome__title">
-      <text class="scene-text text-role-label block-kind-text" x="661.336" y="39">
-          <tspan x="661.336" dy="0">Outcomes</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="679.336" y="39">
+          <tspan x="679.336" dy="0">Outcomes</tspan>
         </text>
     </g>
     <g id="scene-decoration-outcome-opportunity-column-metric__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-metric" data-decoration-id="outcome-opportunity-column-metric__title">
-      <text class="scene-text text-role-label block-kind-text" x="933.336" y="39">
-          <tspan x="933.336" dy="0">Metrics</tspan>
+      <text class="scene-text text-role-label block-kind-text" x="951.336" y="39">
+          <tspan x="951.336" dy="0">Metrics</tspan>
         </text>
     </g>
   </g>
