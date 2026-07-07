@@ -124,13 +124,12 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
-- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow
+- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, and Outcome-Opportunity Map
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations
 
-- Outcome-Opportunity Map and Journey Map renderers do not produce usable output yet.
-  - examples show unusable diagrams relying on poor Graphviz-based implementation
+- Journey Map renderer remains preview-only and is not yet polished staged output.
 - Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty
 - No "simple" non-technical user guidance available yet

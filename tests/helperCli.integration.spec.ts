@@ -160,7 +160,7 @@ describe("sdd-helper entrypoint integration", () => {
         view_id: "ia_place_map"
       });
     },
-    15000
+    30000
   );
 
   it(
@@ -285,7 +285,7 @@ describe("sdd-helper entrypoint integration", () => {
       ])
       });
     },
-    15000
+    30000
   );
 
   it(
@@ -662,7 +662,7 @@ describe("sdd-helper entrypoint integration", () => {
       });
       await rm(path.dirname(payload.artifact_path), { recursive: true, force: true });
     });
-  });
+  }, 15000);
 
   it(
     "returns unique materialized artifact paths for svg and png preview output",

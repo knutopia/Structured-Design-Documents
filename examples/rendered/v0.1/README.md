@@ -13,6 +13,7 @@ Source manifest: `bundle/v0.1/manifest.yaml`
 
 Curated view/example pairs:
 
+- `outcome_opportunity_map_diagram_type/dense_example_example`
 - `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
 - `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`
 - `journey_map_diagram_type [preview_only]/outcome_to_ia_trace_example`

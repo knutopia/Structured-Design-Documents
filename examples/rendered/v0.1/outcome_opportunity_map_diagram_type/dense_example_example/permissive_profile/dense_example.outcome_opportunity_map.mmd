@@ -1,0 +1,64 @@
+flowchart LR
+  subgraph n_initiative["Initiatives"]
+    n_I_001["Guided setup priority planner"]
+    n_I_002["Data readiness preflight"]
+    n_I_003["Vocabulary mapping and templates"]
+    n_I_004["Exception triage workspace"]
+    n_I_005["Recommendation evidence drawer"]
+    n_I_006["Controlled automation rollout"]
+    n_I_007["Operational handoff checklist"]
+  end
+  subgraph n_opportunity["Opportunities"]
+    n_OP_001["Users cannot see which setup steps matter"]
+    n_OP_002["Imported data quality issues appear too late"]
+    n_OP_003["Terminology does not match the team workflow"]
+    n_OP_004["Exception handling requires support escalation"]
+    n_OP_005["Recommendation evidence is hard to audit"]
+    n_OP_006["Teams need rollout controls before trusting automation"]
+    n_OP_007["Handoff gaps hide next ownership"]
+    n_OP_008["Outcome history is not visible at review time"]
+  end
+  subgraph n_outcome["Outcomes"]
+    n_O_001["Shorten time to first value"]
+    n_O_002["Increase self-serve task completion"]
+    n_O_003["Improve trust in automated recommendations"]
+  end
+  subgraph n_metric["Metrics"]
+    n_M_001["Median days to first completed workflow"]
+    n_M_002["Activation completion rate"]
+    n_M_003["Self-serve task completion rate"]
+    n_M_004["Support deflection for recoverable tasks"]
+    n_M_005["Recommendation acceptance rate"]
+    n_M_006["Recommendation reversal rate"]
+  end
+  n_I_001 -->|addresses| n_OP_001
+  n_I_001 -->|addresses| n_OP_007
+  n_I_002 -->|addresses| n_OP_002
+  n_I_003 -->|addresses| n_OP_001
+  n_I_003 -->|addresses| n_OP_003
+  n_I_004 -->|addresses| n_OP_004
+  n_I_004 -->|addresses| n_OP_006
+  n_I_005 -->|addresses| n_OP_005
+  n_I_005 -->|addresses| n_OP_008
+  n_I_006 -->|addresses| n_OP_005
+  n_I_006 -->|addresses| n_OP_006
+  n_I_007 -->|addresses| n_OP_004
+  n_I_007 -->|addresses| n_OP_007
+  n_O_001 -->|measured by| n_M_001
+  n_O_001 -->|measured by| n_M_002
+  n_O_002 -->|measured by| n_M_003
+  n_O_002 -->|measured by| n_M_004
+  n_O_003 -->|measured by| n_M_005
+  n_O_003 -->|measured by| n_M_006
+  n_OP_001 -->|supports| n_O_001
+  n_OP_001 -->|supports| n_O_002
+  n_OP_002 -->|supports| n_O_001
+  n_OP_002 -->|supports| n_O_003
+  n_OP_003 -->|supports| n_O_002
+  n_OP_004 -->|supports| n_O_002
+  n_OP_005 -->|supports| n_O_003
+  n_OP_006 -->|supports| n_O_002
+  n_OP_006 -->|supports| n_O_003
+  n_OP_007 -->|supports| n_O_001
+  n_OP_007 -->|supports| n_O_002
+  n_OP_008 -->|supports| n_O_003

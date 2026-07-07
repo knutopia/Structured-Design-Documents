@@ -474,6 +474,7 @@ describe("staged outcome_opportunity_map", () => {
       {
         exampleName: "outcome_to_ia_trace",
         goldenPrefix: "outcome-opportunity-map.outcome-to-ia-trace",
+        expectedAggregateLabels: [],
         expectedEdges: [
           "OP-001__supports__O-001",
           "I-001__addresses__OP-001",
@@ -483,11 +484,50 @@ describe("staged outcome_opportunity_map", () => {
       {
         exampleName: "metric_event_instrumentation",
         goldenPrefix: "outcome-opportunity-map.metric-event-instrumentation",
+        expectedAggregateLabels: [],
         expectedEdges: [
           "OP-050__supports__O-050",
           "I-050__addresses__OP-050",
           "O-050__measured_by__M-050",
           "O-050__measured_by__M-051"
+        ]
+      },
+      {
+        exampleName: "dense_example",
+        goldenPrefix: "outcome-opportunity-map.dense-example",
+        expectedAggregateLabels: ["supports", "addresses", "measured by"],
+        expectedEdges: [
+          "OP-001__supports__O-001",
+          "OP-001__supports__O-002",
+          "OP-002__supports__O-001",
+          "OP-002__supports__O-003",
+          "OP-007__supports__O-001",
+          "OP-007__supports__O-002",
+          "OP-003__supports__O-002",
+          "OP-004__supports__O-002",
+          "OP-006__supports__O-002",
+          "OP-006__supports__O-003",
+          "OP-005__supports__O-003",
+          "OP-008__supports__O-003",
+          "I-001__addresses__OP-001",
+          "I-001__addresses__OP-007",
+          "I-002__addresses__OP-002",
+          "I-007__addresses__OP-007",
+          "I-007__addresses__OP-004",
+          "I-003__addresses__OP-003",
+          "I-003__addresses__OP-001",
+          "I-004__addresses__OP-004",
+          "I-004__addresses__OP-006",
+          "I-006__addresses__OP-006",
+          "I-006__addresses__OP-005",
+          "I-005__addresses__OP-005",
+          "I-005__addresses__OP-008",
+          "O-001__measured_by__M-001",
+          "O-001__measured_by__M-002",
+          "O-002__measured_by__M-003",
+          "O-002__measured_by__M-004",
+          "O-003__measured_by__M-005",
+          "O-003__measured_by__M-006"
         ]
       }
     ] as const;
@@ -544,18 +584,26 @@ describe("staged outcome_opportunity_map", () => {
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step2PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(routingDebug.step3PositionedScene);
       expectOutcomeOpportunityColumnHeadersAligned(rendered.positionedScene);
-      expect(collectOutcomeOpportunityAggregateLabels(rendered.positionedScene)).toEqual([]);
-      expect(collectOutcomeOpportunityColumnTitles(rendered.positionedScene).map((decoration) => decoration.text)).toEqual([
-        "Initiatives",
-        "Opportunities",
-        "Outcomes",
-        "Metrics"
-      ]);
-      expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
-        rendered.positionedScene.edges.filter((edge) => edge.label !== undefined),
-        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
-        OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
+      const aggregateLabels = collectOutcomeOpportunityAggregateLabels(rendered.positionedScene);
+      expect(aggregateLabels.map((decoration) => decoration.text).sort()).toEqual(
+        [...testCase.expectedAggregateLabels].sort()
       );
+      for (const aggregateLabel of aggregateLabels) {
+        expect(aggregateLabel.textStyleRole, aggregateLabel.id).toBe("label");
+      }
+      expect(collectOutcomeOpportunityColumnTitles(rendered.positionedScene).map((decoration) => decoration.text)).toEqual(
+        aggregateLabels.length > 0
+          ? ["Initiative", "Opportunity", "Outcome", "Metric"]
+          : ["Initiatives", "Opportunities", "Outcomes", "Metrics"]
+      );
+      const labeledSemanticEdges = rendered.positionedScene.edges.filter((edge) => edge.label !== undefined);
+      if (labeledSemanticEdges.length > 0) {
+        expectEdgeLabelsStronglyAssociatedWithOwnHorizontalSegments(
+          labeledSemanticEdges,
+          OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_DISTANCE,
+          OUTCOME_OPPORTUNITY_STRONG_LABEL_ASSOCIATION_OVERLAP
+        );
+      }
 
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.renderer-scene.json`, stripViewMetadata(rendererScene));
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.measured-scene.json`, stripViewMetadata(measuredScene));
@@ -567,7 +615,7 @@ describe("staged outcome_opportunity_map", () => {
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);
     }
-  });
+  }, 15000);
 
   it("matches selected synthetic renderer-stage snapshots for routing risk cases", async () => {
     const cases = [
@@ -693,5 +741,5 @@ END
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);
     }
-  });
+  }, 15000);
 });

@@ -1,0 +1,618 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "I-001",
+      "type": "Initiative",
+      "name": "Guided setup priority planner",
+      "props": {
+        "description": "Guide admins toward the setup tasks most likely to unlock first workflow value.",
+        "non_goals": "Does not replace existing analytics or support reporting",
+        "owner": "Activation team",
+        "release_slice": "Setup guidance",
+        "status": "candidate"
+      }
+    },
+    {
+      "id": "I-002",
+      "type": "Initiative",
+      "name": "Data readiness preflight",
+      "props": {
+        "description": "Surface data quality blockers before teams invest in downstream configuration.",
+        "non_goals": "Does not replace existing analytics or support reporting",
+        "owner": "Data platform",
+        "release_slice": "Import quality gates",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "I-003",
+      "type": "Initiative",
+      "name": "Vocabulary mapping and templates",
+      "props": {
+        "description": "Let teams map product vocabulary to their operating model and reusable templates.",
+        "non_goals": "Does not replace existing analytics or support reporting",
+        "owner": "UX systems",
+        "release_slice": "Domain language fit",
+        "status": "candidate"
+      }
+    },
+    {
+      "id": "I-004",
+      "type": "Initiative",
+      "name": "Exception triage workspace",
+      "props": {
+        "description": "Provide an in-product workspace for triaging and resolving recoverable exceptions.",
+        "non_goals": "Does not replace existing analytics or support reporting",
+        "owner": "Operations experience",
+        "release_slice": "Self-serve recovery",
+        "status": "candidate"
+      }
+    },
+    {
+      "id": "I-005",
+      "type": "Initiative",
+      "name": "Recommendation evidence drawer",
+      "props": {
+        "description": "Expose recommendation rationale, source evidence, and change history at decision time.",
+        "non_goals": "Does not replace existing analytics or support reporting",
+        "owner": "Decision intelligence",
+        "release_slice": "Explainability",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "I-006",
+      "type": "Initiative",
+      "name": "Controlled automation rollout",
+      "props": {
+        "description": "Add staged enablement and governance controls for automation rollout.",
+        "non_goals": "Does not automate final approval decisions",
+        "owner": "Platform governance",
+        "release_slice": "Trust controls",
+        "status": "candidate"
+      }
+    },
+    {
+      "id": "I-007",
+      "type": "Initiative",
+      "name": "Operational handoff checklist",
+      "props": {
+        "description": "Create an explicit post-setup handoff path for first-week ownership.",
+        "non_goals": "Does not replace existing analytics or support reporting",
+        "owner": "Customer success",
+        "release_slice": "Post-setup ownership",
+        "status": "candidate"
+      }
+    },
+    {
+      "id": "M-001",
+      "type": "Metric",
+      "name": "Median days to first completed workflow",
+      "props": {
+        "cadence": "Weekly cohort",
+        "definition": "Median calendar days from account creation to first completed workflow event.",
+        "description": "Tracks elapsed calendar days from workspace creation to the first completed workflow.",
+        "metric_type": "outcome",
+        "owner": "Product analytics",
+        "source": "Activation event stream"
+      }
+    },
+    {
+      "id": "M-002",
+      "type": "Metric",
+      "name": "Activation completion rate",
+      "props": {
+        "cadence": "Weekly cohort",
+        "definition": "Activated accounts divided by eligible accounts entering setup within the cohort window.",
+        "description": "Tracks the share of accounts completing the required activation path.",
+        "metric_type": "outcome",
+        "owner": "Product analytics",
+        "source": "Setup funnel warehouse table"
+      }
+    },
+    {
+      "id": "M-003",
+      "type": "Metric",
+      "name": "Self-serve task completion rate",
+      "props": {
+        "cadence": "Weekly task funnel",
+        "definition": "Eligible recoverable tasks completed in product divided by total eligible recoverable tasks.",
+        "description": "Tracks the share of eligible tasks completed without assisted support.",
+        "metric_type": "outcome",
+        "owner": "Product analytics",
+        "source": "Task completion event stream"
+      }
+    },
+    {
+      "id": "M-004",
+      "type": "Metric",
+      "name": "Support deflection for recoverable tasks",
+      "props": {
+        "cadence": "Monthly support report",
+        "definition": "Support cases avoided for tagged recoverable tasks compared with the trailing baseline.",
+        "description": "Tracks recoverable-task support contacts avoided by self-serve recovery paths.",
+        "metric_type": "outcome",
+        "owner": "Product analytics",
+        "source": "Support case tags and task events"
+      }
+    },
+    {
+      "id": "M-005",
+      "type": "Metric",
+      "name": "Recommendation acceptance rate",
+      "props": {
+        "cadence": "Weekly decision sample",
+        "definition": "Accepted recommendations divided by recommendations shown to reviewers.",
+        "description": "Tracks the share of shown recommendations accepted by accountable reviewers.",
+        "metric_type": "outcome",
+        "owner": "Product analytics",
+        "source": "Recommendation decision events"
+      }
+    },
+    {
+      "id": "M-006",
+      "type": "Metric",
+      "name": "Recommendation reversal rate",
+      "props": {
+        "cadence": "Weekly decision sample",
+        "definition": "Accepted recommendations later reversed divided by accepted recommendations.",
+        "description": "Tracks accepted recommendations later reversed or overridden by reviewers.",
+        "metric_type": "guardrail",
+        "owner": "Product analytics",
+        "source": "Recommendation audit log"
+      }
+    },
+    {
+      "id": "O-001",
+      "type": "Outcome",
+      "name": "Shorten time to first value",
+      "props": {
+        "description": "New admin teams reach a meaningful completed workflow faster after setup begins.",
+        "owner": "Product strategy",
+        "scope": "Activation and task completion workflows",
+        "stakeholder": "New workspace admins",
+        "target": "Reduce median first-value time from 9 days to 3 days",
+        "time_horizon": "Q3 pilot",
+        "timeframe": "Q3 pilot"
+      }
+    },
+    {
+      "id": "O-002",
+      "type": "Outcome",
+      "name": "Increase self-serve task completion",
+      "props": {
+        "description": "Task owners can finish recoverable work without waiting for support or specialist intervention.",
+        "owner": "Product strategy",
+        "scope": "Activation and task completion workflows",
+        "stakeholder": "Task owners and support leads",
+        "target": "Lift completion without support from 62 percent to 78 percent",
+        "time_horizon": "Q3 pilot",
+        "timeframe": "Q3 pilot"
+      }
+    },
+    {
+      "id": "O-003",
+      "type": "Outcome",
+      "name": "Improve trust in automated recommendations",
+      "props": {
+        "description": "Reviewers understand, accept, and retain automated recommendations in governed workflows.",
+        "owner": "Product strategy",
+        "scope": "Recommendation review and governance workflows",
+        "stakeholder": "Decision reviewers and governance owners",
+        "target": "Raise accepted recommendations while lowering reversals",
+        "time_horizon": "Q4 governance release",
+        "timeframe": "Q4 governance release"
+      }
+    },
+    {
+      "id": "OP-001",
+      "type": "Opportunity",
+      "name": "Users cannot see which setup steps matter",
+      "props": {
+        "description": "Setup work is not prioritized by expected value, so teams spend energy on low-impact configuration first.",
+        "evidence": "Setup interviews show teams complete low-impact steps first",
+        "owner": "Product discovery",
+        "segment": "New admin teams",
+        "severity": "high"
+      }
+    },
+    {
+      "id": "OP-002",
+      "type": "Opportunity",
+      "name": "Imported data quality issues appear too late",
+      "props": {
+        "description": "Import health checks arrive too late to prevent downstream rework and loss of confidence.",
+        "evidence": "Import errors often surface only after workflow configuration",
+        "owner": "Product discovery",
+        "segment": "Teams migrating existing records",
+        "severity": "high"
+      }
+    },
+    {
+      "id": "OP-003",
+      "type": "Opportunity",
+      "name": "Terminology does not match the team workflow",
+      "props": {
+        "description": "The product language does not reflect local operating models, increasing hesitation and mistakes.",
+        "evidence": "Users pause when product labels conflict with internal roles",
+        "owner": "Product discovery",
+        "segment": "Specialized operations teams",
+        "severity": "medium"
+      }
+    },
+    {
+      "id": "OP-004",
+      "type": "Opportunity",
+      "name": "Exception handling requires support escalation",
+      "props": {
+        "description": "Recoverable exceptions leave users without a clear next action inside the product.",
+        "evidence": "Support logs cluster around recoverable configuration exceptions",
+        "owner": "Product discovery",
+        "segment": "High-volume task owners",
+        "severity": "high"
+      }
+    },
+    {
+      "id": "OP-005",
+      "type": "Opportunity",
+      "name": "Recommendation evidence is hard to audit",
+      "props": {
+        "description": "Recommendation rationale and evidence are not visible enough for accountable review.",
+        "evidence": "Reviewers ask why recommendations changed before accepting them",
+        "owner": "Product discovery",
+        "segment": "Compliance-sensitive teams",
+        "severity": "high"
+      }
+    },
+    {
+      "id": "OP-006",
+      "type": "Opportunity",
+      "name": "Teams need rollout controls before trusting automation",
+      "props": {
+        "description": "Governed teams need staged enablement, override, and rollback controls before they trust automation.",
+        "evidence": "Pilot users request canary and override paths before enabling automation",
+        "owner": "Product discovery",
+        "segment": "Enterprise governance teams",
+        "severity": "medium"
+      }
+    },
+    {
+      "id": "OP-007",
+      "type": "Opportunity",
+      "name": "Handoff gaps hide next ownership",
+      "props": {
+        "description": "Ownership after setup is ambiguous, so first-week monitoring and follow-up work are missed.",
+        "evidence": "Setup owners do not know who should monitor the first live week",
+        "owner": "Product discovery",
+        "segment": "Multi-role rollout teams",
+        "severity": "medium"
+      }
+    },
+    {
+      "id": "OP-008",
+      "type": "Opportunity",
+      "name": "Outcome history is not visible at review time",
+      "props": {
+        "description": "Reviewers cannot see prior outcome movement where recommendation decisions happen.",
+        "evidence": "Decision reviewers open analytics in a separate workflow to compare history",
+        "owner": "Product discovery",
+        "segment": "Recurring business review teams",
+        "severity": "medium"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "I-001",
+      "type": "ADDRESSES",
+      "to": "OP-001",
+      "to_name": "Users cannot see which setup steps matter",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-001",
+      "type": "ADDRESSES",
+      "to": "OP-007",
+      "to_name": "Handoff gaps hide next ownership",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-002",
+      "type": "ADDRESSES",
+      "to": "OP-002",
+      "to_name": "Imported data quality issues appear too late",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-003",
+      "type": "ADDRESSES",
+      "to": "OP-001",
+      "to_name": "Users cannot see which setup steps matter",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-003",
+      "type": "ADDRESSES",
+      "to": "OP-003",
+      "to_name": "Terminology does not match the team workflow",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-004",
+      "type": "ADDRESSES",
+      "to": "OP-004",
+      "to_name": "Exception handling requires support escalation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-004",
+      "type": "ADDRESSES",
+      "to": "OP-006",
+      "to_name": "Teams need rollout controls before trusting automation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-005",
+      "type": "ADDRESSES",
+      "to": "OP-005",
+      "to_name": "Recommendation evidence is hard to audit",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-005",
+      "type": "ADDRESSES",
+      "to": "OP-008",
+      "to_name": "Outcome history is not visible at review time",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-006",
+      "type": "ADDRESSES",
+      "to": "OP-005",
+      "to_name": "Recommendation evidence is hard to audit",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-006",
+      "type": "ADDRESSES",
+      "to": "OP-006",
+      "to_name": "Teams need rollout controls before trusting automation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-007",
+      "type": "ADDRESSES",
+      "to": "OP-004",
+      "to_name": "Exception handling requires support escalation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "I-007",
+      "type": "ADDRESSES",
+      "to": "OP-007",
+      "to_name": "Handoff gaps hide next ownership",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-001",
+      "type": "MEASURED_BY",
+      "to": "M-001",
+      "to_name": "Median days to first completed workflow",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-001",
+      "type": "MEASURED_BY",
+      "to": "M-002",
+      "to_name": "Activation completion rate",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-002",
+      "type": "MEASURED_BY",
+      "to": "M-003",
+      "to_name": "Self-serve task completion rate",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-002",
+      "type": "MEASURED_BY",
+      "to": "M-004",
+      "to_name": "Support deflection for recoverable tasks",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-003",
+      "type": "MEASURED_BY",
+      "to": "M-005",
+      "to_name": "Recommendation acceptance rate",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "O-003",
+      "type": "MEASURED_BY",
+      "to": "M-006",
+      "to_name": "Recommendation reversal rate",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-001",
+      "type": "SUPPORTS",
+      "to": "O-001",
+      "to_name": "Shorten time to first value",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-001",
+      "type": "SUPPORTS",
+      "to": "O-002",
+      "to_name": "Increase self-serve task completion",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-002",
+      "type": "SUPPORTS",
+      "to": "O-001",
+      "to_name": "Shorten time to first value",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-002",
+      "type": "SUPPORTS",
+      "to": "O-003",
+      "to_name": "Improve trust in automated recommendations",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-003",
+      "type": "SUPPORTS",
+      "to": "O-002",
+      "to_name": "Increase self-serve task completion",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-004",
+      "type": "SUPPORTS",
+      "to": "O-002",
+      "to_name": "Increase self-serve task completion",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-005",
+      "type": "SUPPORTS",
+      "to": "O-003",
+      "to_name": "Improve trust in automated recommendations",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-006",
+      "type": "SUPPORTS",
+      "to": "O-002",
+      "to_name": "Increase self-serve task completion",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-006",
+      "type": "SUPPORTS",
+      "to": "O-003",
+      "to_name": "Improve trust in automated recommendations",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-007",
+      "type": "SUPPORTS",
+      "to": "O-001",
+      "to_name": "Shorten time to first value",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-007",
+      "type": "SUPPORTS",
+      "to": "O-002",
+      "to_name": "Increase self-serve task completion",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "OP-008",
+      "type": "SUPPORTS",
+      "to": "O-003",
+      "to_name": "Improve trust in automated recommendations",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

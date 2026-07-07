@@ -1,0 +1,293 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "outcome_opportunity_map",
+  "source_example": "dense_example",
+  "nodes": [
+    {
+      "id": "I-001",
+      "type": "Initiative",
+      "name": "Guided setup priority planner"
+    },
+    {
+      "id": "I-002",
+      "type": "Initiative",
+      "name": "Data readiness preflight"
+    },
+    {
+      "id": "I-003",
+      "type": "Initiative",
+      "name": "Vocabulary mapping and templates"
+    },
+    {
+      "id": "I-004",
+      "type": "Initiative",
+      "name": "Exception triage workspace"
+    },
+    {
+      "id": "I-005",
+      "type": "Initiative",
+      "name": "Recommendation evidence drawer"
+    },
+    {
+      "id": "I-006",
+      "type": "Initiative",
+      "name": "Controlled automation rollout"
+    },
+    {
+      "id": "I-007",
+      "type": "Initiative",
+      "name": "Operational handoff checklist"
+    },
+    {
+      "id": "M-001",
+      "type": "Metric",
+      "name": "Median days to first completed workflow"
+    },
+    {
+      "id": "M-002",
+      "type": "Metric",
+      "name": "Activation completion rate"
+    },
+    {
+      "id": "M-003",
+      "type": "Metric",
+      "name": "Self-serve task completion rate"
+    },
+    {
+      "id": "M-004",
+      "type": "Metric",
+      "name": "Support deflection for recoverable tasks"
+    },
+    {
+      "id": "M-005",
+      "type": "Metric",
+      "name": "Recommendation acceptance rate"
+    },
+    {
+      "id": "M-006",
+      "type": "Metric",
+      "name": "Recommendation reversal rate"
+    },
+    {
+      "id": "O-001",
+      "type": "Outcome",
+      "name": "Shorten time to first value"
+    },
+    {
+      "id": "O-002",
+      "type": "Outcome",
+      "name": "Increase self-serve task completion"
+    },
+    {
+      "id": "O-003",
+      "type": "Outcome",
+      "name": "Improve trust in automated recommendations"
+    },
+    {
+      "id": "OP-001",
+      "type": "Opportunity",
+      "name": "Users cannot see which setup steps matter"
+    },
+    {
+      "id": "OP-002",
+      "type": "Opportunity",
+      "name": "Imported data quality issues appear too late"
+    },
+    {
+      "id": "OP-003",
+      "type": "Opportunity",
+      "name": "Terminology does not match the team workflow"
+    },
+    {
+      "id": "OP-004",
+      "type": "Opportunity",
+      "name": "Exception handling requires support escalation"
+    },
+    {
+      "id": "OP-005",
+      "type": "Opportunity",
+      "name": "Recommendation evidence is hard to audit"
+    },
+    {
+      "id": "OP-006",
+      "type": "Opportunity",
+      "name": "Teams need rollout controls before trusting automation"
+    },
+    {
+      "id": "OP-007",
+      "type": "Opportunity",
+      "name": "Handoff gaps hide next ownership"
+    },
+    {
+      "id": "OP-008",
+      "type": "Opportunity",
+      "name": "Outcome history is not visible at review time"
+    }
+  ],
+  "edges": [
+    {
+      "from": "I-001",
+      "type": "ADDRESSES",
+      "to": "OP-001"
+    },
+    {
+      "from": "I-001",
+      "type": "ADDRESSES",
+      "to": "OP-007"
+    },
+    {
+      "from": "I-002",
+      "type": "ADDRESSES",
+      "to": "OP-002"
+    },
+    {
+      "from": "I-003",
+      "type": "ADDRESSES",
+      "to": "OP-001"
+    },
+    {
+      "from": "I-003",
+      "type": "ADDRESSES",
+      "to": "OP-003"
+    },
+    {
+      "from": "I-004",
+      "type": "ADDRESSES",
+      "to": "OP-004"
+    },
+    {
+      "from": "I-004",
+      "type": "ADDRESSES",
+      "to": "OP-006"
+    },
+    {
+      "from": "I-005",
+      "type": "ADDRESSES",
+      "to": "OP-005"
+    },
+    {
+      "from": "I-005",
+      "type": "ADDRESSES",
+      "to": "OP-008"
+    },
+    {
+      "from": "I-006",
+      "type": "ADDRESSES",
+      "to": "OP-005"
+    },
+    {
+      "from": "I-006",
+      "type": "ADDRESSES",
+      "to": "OP-006"
+    },
+    {
+      "from": "I-007",
+      "type": "ADDRESSES",
+      "to": "OP-004"
+    },
+    {
+      "from": "I-007",
+      "type": "ADDRESSES",
+      "to": "OP-007"
+    },
+    {
+      "from": "O-001",
+      "type": "MEASURED_BY",
+      "to": "M-001"
+    },
+    {
+      "from": "O-001",
+      "type": "MEASURED_BY",
+      "to": "M-002"
+    },
+    {
+      "from": "O-002",
+      "type": "MEASURED_BY",
+      "to": "M-003"
+    },
+    {
+      "from": "O-002",
+      "type": "MEASURED_BY",
+      "to": "M-004"
+    },
+    {
+      "from": "O-003",
+      "type": "MEASURED_BY",
+      "to": "M-005"
+    },
+    {
+      "from": "O-003",
+      "type": "MEASURED_BY",
+      "to": "M-006"
+    },
+    {
+      "from": "OP-001",
+      "type": "SUPPORTS",
+      "to": "O-001"
+    },
+    {
+      "from": "OP-001",
+      "type": "SUPPORTS",
+      "to": "O-002"
+    },
+    {
+      "from": "OP-002",
+      "type": "SUPPORTS",
+      "to": "O-001"
+    },
+    {
+      "from": "OP-002",
+      "type": "SUPPORTS",
+      "to": "O-003"
+    },
+    {
+      "from": "OP-003",
+      "type": "SUPPORTS",
+      "to": "O-002"
+    },
+    {
+      "from": "OP-004",
+      "type": "SUPPORTS",
+      "to": "O-002"
+    },
+    {
+      "from": "OP-005",
+      "type": "SUPPORTS",
+      "to": "O-003"
+    },
+    {
+      "from": "OP-006",
+      "type": "SUPPORTS",
+      "to": "O-002"
+    },
+    {
+      "from": "OP-006",
+      "type": "SUPPORTS",
+      "to": "O-003"
+    },
+    {
+      "from": "OP-007",
+      "type": "SUPPORTS",
+      "to": "O-001"
+    },
+    {
+      "from": "OP-007",
+      "type": "SUPPORTS",
+      "to": "O-002"
+    },
+    {
+      "from": "OP-008",
+      "type": "SUPPORTS",
+      "to": "O-003"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

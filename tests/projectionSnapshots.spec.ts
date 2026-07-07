@@ -36,5 +36,5 @@ describe("projectView projection snapshots", () => {
         );
       }
     }
-  });
+  }, 15000);
 });

@@ -18,6 +18,7 @@
 
 -Added summary label titles for complex case
 -Made summary label titles uppercase
+-Transformed dense example into canonical example
 
 ## Mon 7-6
 
