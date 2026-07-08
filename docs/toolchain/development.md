@@ -235,6 +235,7 @@ Authoring guidance for the newly renderable views:
 
 ## Staged Renderer Notes
 
+- For contributor and LLM-agent authoring guidance, see [adding_staged_renderers.md](adding_staged_renderers.md).
 - `src/renderer/staged/` holds the internal `RendererScene`, `MeasuredScene`, and `PositionedScene` contracts plus the current staged pipeline for those stages.
 - `src/renderer/staged/sceneBuilders.ts` holds the shared root-container, card-node, and reusable port builders extracted from the first two migrated views.
 - ordinary staged node/container ports are routing anchors, not normal painted SVG affordances; only explicit `connector_port` primitives should render as visible port dots.
