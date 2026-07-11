@@ -2,7 +2,7 @@
   "schema": "sdd-text-view-projection",
   "version": "0.1",
   "view_id": "outcome_opportunity_map",
-  "source_example": "dense_example",
+  "source_example": "multiple_outcomes",
   "nodes": [
     {
       "id": "I-001",

@@ -32,7 +32,7 @@ This page collects the current diagram families, their status, and links to avai
 
   The x-axis shows columns for Initiatives, Opportunities, Outcomes, Metrics. The y-axis displays a band for each Outcome, stacking rows when a column contains multiple entries.
 
-  Examples: [dense_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/dense_example_example/), [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/), [metric_event_instrumentation_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/)
+  Examples: [multiple_outcomes](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/), [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/), [metric_event_instrumentation_example](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/)
 
 ## Service Blueprint:
 

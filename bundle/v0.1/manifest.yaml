@@ -34,10 +34,10 @@ examples:
     compiled_snapshot: snapshots/metric_event_instrumentation.compiled.json
     projection_snapshots:
       - snapshots/metric_event_instrumentation.outcome_opportunity_map.projection.json
-  - path: examples/dense_example.sdd
-    compiled_snapshot: snapshots/dense_example.compiled.json
+  - path: examples/multiple_outcomes.sdd
+    compiled_snapshot: snapshots/multiple_outcomes.compiled.json
     projection_snapshots:
-      - snapshots/dense_example.outcome_opportunity_map.projection.json
+      - snapshots/multiple_outcomes.outcome_opportunity_map.projection.json
   - path: examples/place_viewstate_transition.sdd
     compiled_snapshot: snapshots/place_viewstate_transition.compiled.json
     projection_snapshots:

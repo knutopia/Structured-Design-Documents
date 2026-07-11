@@ -493,8 +493,8 @@ describe("staged outcome_opportunity_map", () => {
         ]
       },
       {
-        exampleName: "dense_example",
-        goldenPrefix: "outcome-opportunity-map.dense-example",
+        exampleName: "multiple_outcomes",
+        goldenPrefix: "outcome-opportunity-map.multiple-outcomes",
         expectedAggregateLabels: ["supports", "addresses", "measured by"],
         expectedEdges: [
           "OP-001__supports__O-001",

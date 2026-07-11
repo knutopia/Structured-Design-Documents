@@ -17,6 +17,7 @@
 ## Sat 7-11
 
 -Docs cleanup
+-Renamed the multiple outcomes example
 
 ## Tue 7-7
 

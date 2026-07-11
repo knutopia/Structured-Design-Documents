@@ -217,7 +217,7 @@ describe("staged visual acceptance", () => {
     const cases = [
       path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),
       path.join(repoRoot, "bundle/v0.1/examples/metric_event_instrumentation.sdd"),
-      path.join(repoRoot, "bundle/v0.1/examples/dense_example.sdd")
+      path.join(repoRoot, "bundle/v0.1/examples/multiple_outcomes.sdd")
     ];
 
     for (const sourcePath of cases) {
