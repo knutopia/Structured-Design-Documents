@@ -1,4 +1,4 @@
-# Outcome-Opportunity Map Staged Renderer Design
+# [Done] Outcome-Opportunity Map Staged Renderer Design
 
 Status: active design authority for the staged renderer implementation and gated plan
 

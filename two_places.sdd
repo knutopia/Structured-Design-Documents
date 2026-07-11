@@ -1,6 +1,0 @@
-SDD-TEXT 0.1
-Place P-001 "One"
-  NAVIGATES_TO P-002 "Two"
-END
-Place P-002 "Two"
-END

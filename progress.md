@@ -14,6 +14,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 7-11
+
+-Docs cleanup
+
 ## Tue 7-7
 
 -Added summary label titles for complex case

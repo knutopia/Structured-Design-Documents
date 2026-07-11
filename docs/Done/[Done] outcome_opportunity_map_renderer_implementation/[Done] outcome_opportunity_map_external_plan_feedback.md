@@ -1,4 +1,4 @@
-# External Feedback on the Implementation Plan
+# [Done] External Feedback on the Implementation Plan
 
 Another LLM analyzed the implementation plan in light of the design document and came up with the following observations. Note that the reviewing LLM did not have access to the project beyond theee two documents, but the LLM is a strong architect, just like you are.
 

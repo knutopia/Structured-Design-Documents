@@ -1,4 +1,4 @@
-# Outcome-Opportunity Map Staged Renderer Gated Implementation Plan
+# [Done] Outcome-Opportunity Map Staged Renderer Gated Implementation Plan
 
 Status: completed gated implementation plan for `docs/outcome_opportunity_map_renderer_implementation/outcome_opportunity_map_renderer_design.md`
 

@@ -118,4 +118,3 @@ The current short-term goal is to realize more staged graph types.
 - Also stop when a feature appears to require spec behavior that the bundle cannot yet express:
   extend the bundle contract first instead of silently moving the rule into code.
 
-For completed project milestones and legacy toolchain background, see `docs/Done/project_achievements.md`.

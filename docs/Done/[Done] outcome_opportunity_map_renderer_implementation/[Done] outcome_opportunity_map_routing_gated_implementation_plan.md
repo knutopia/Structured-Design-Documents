@@ -1,4 +1,4 @@
-# Outcome-Opportunity Map Routing Gated Implementation Plan
+# [Done] Outcome-Opportunity Map Routing Gated Implementation Plan
 
 Status: routing-specific orchestration handoff plan
 

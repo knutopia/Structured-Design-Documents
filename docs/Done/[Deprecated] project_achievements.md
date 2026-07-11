@@ -1,4 +1,6 @@
-# Project Achievements
+# [Deprecated] Project Achievements
+
+**This document is hopelessly incomplete, out of date and thus deprecated.**
 
 This document records completed project milestones and the initial toolchain background that followed from them. It is historical context, not active subagent guidance for the current renderer migration.
 

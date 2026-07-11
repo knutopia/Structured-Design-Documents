@@ -1,4 +1,4 @@
-# Outcome-Opportunity Routing Enhancement Architecture
+# [Done] Outcome-Opportunity Routing Enhancement Architecture
 
 Status: architecture handoff for a follow-up implementation-planning thread
 
