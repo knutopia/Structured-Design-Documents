@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 6 join family in blocking review
+Status: implementation in progress — Gate 6 join accepted provisionally; acceptance-record commit pending
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -18,7 +18,7 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 3 — RendererScene | accepted | user | 2026-07-13 | `d40a2fc` | 3 files/29 tests; accepted snapshots, build, whitespace, protected baselines clean |
 | 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
 | 5 — Basic routing | accepted | user | 2026-07-13 | `4ad14e2` | 2 files/16 focused tests; 5 files/44 shared regressions; build, deterministic review package, whitespace, and protected baselines clean |
-| 6 — Archetypes and ownership | in review — join family | user | — | pending | same-Stage skip `2c2c580`; long cross-Stage/root `3a894be`; branch `6dad32e`; join 2 files/27 tests and broader 5 files/61 tests green; human readability violated and retained for Gates 7–8; backward and later families blocked |
+| 6 — Archetypes and ownership | in progress — join accepted provisionally | user | 2026-07-13 | `08e5419` | same-Stage skip `2c2c580`; long cross-Stage/root `3a894be`; branch `6dad32e`; join post-acceptance 2 files/27 tests and broader 5 files/61 tests green; human readability violated and retained for Gates 7–8; backward and later families blocked |
 | 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
 | 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
 | 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
@@ -570,6 +570,12 @@ Expected diagnostics are unchanged and contain no warn/error: primary has only `
 **Invariant and visual report.** Satisfied hard invariants: exact occurrence partition and identity; typed ownership/priority/degree/order/ports/bypass/arrival; source-order and accepted-geometry preservation; deterministic reconstruction; Step/badge/header/unrelated-Stage clearance; legal exterior endpoints; orthogonality; 12px target legs; explicit failure diagnostics; protected renderer/legacy stability; and no Gate 7 behavior. Violated human invariant: branch/join identity is not reliably readable in the combined diagram. The strict overview visibly contains the locked crossing at `(1540,168)` and shared target-adjacent convergence; simple additionally shares a longer horizontal segment. The panorama and fit overview also make text difficult to read as already reported by the user. The family is therefore structurally implemented but not visually satisfactory. This violation is retained as blocking Gate 8 debt, not reframed as success and not hidden by snapshots.
 
 **Family human review request.** Review the strict/intrinsic primary evidence for the direct join, lower bypass, common west target, correct ports, arrow, and obstacle clearance, while treating the nominal crossing, short merged convergence, and overall readability as explicit failures that remain assigned to Gates 7–8. Acceptance would authorize only the join checkpoint and opening of backward routing; it would not declare the diagram readable, accept Gate 6 as a whole, or authorize a golden. No commit or backward-family production work may begin before that decision.
+
+**Provisional human acceptance.** On 2026-07-13 the user provisionally accepted the join family. This accepts the locked join occurrence set, semantic identity, ownership, typed degree/order metadata, port and bypass/arrival templates, hard-clearance proof, diagnostics, and deterministic review package sufficiently to run post-acceptance validation and create the focused checkpoint. It does not accept the branch/join crossing, shared convergence, overall human readability, all of Gate 6, Gate 8 visual quality, or any official golden. The material readability violation remains mandatory Gate 7–8 debt and retains the stop before Gate 8 acceptance or Gate 10 snapshot capture if the completed renderer is not legible at normal review scale.
+
+**Post-acceptance validation.** The focused routing/visual command passed 2 files and 27 tests, and the broader render-model/scene/pre-routing/routing/visual journey command passed 5 files and 61 tests. `TMPDIR=/tmp pnpm run build` and `git diff --check` passed. All fourteen Gate 0 protected staged-renderer hashes and both protected legacy journey DOT hashes remain exact. The review-only package remains outside the repository, no official golden changed, and only the ledger was uncommitted after the desktop checkpoint described below.
+
+**Checkpoint timing and desktop-action deviation.** The desktop commit action emitted at the blocking review handoff created commit `08e5419` (`Gate 6 join family`) before the user supplied provisional acceptance, contrary to the controlling rule that a reviewed family is not committed first. The commit contains the already validated join production/tests/review ledger plus a desktop-owned `progress.md` edit that changes the earlier broad `Gate 6 done` line to `Gate 6 done (mislabeled)` and adds `Gate 6 join family`. No implementation content changed between that commit and acceptance, and the complete post-acceptance validation above is green. Rewriting the commit would obscure the event, so it is preserved and recorded as a process deviation; this acceptance record is committed separately before backward work opens. The deviation does not waive any remaining family review, Gate 7–8 readability debt, or Gate 10 golden stop.
 
 ## 1. Completion definition
 
