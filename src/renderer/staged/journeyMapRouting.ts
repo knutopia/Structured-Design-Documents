@@ -21,9 +21,22 @@ import {
 } from "./diagnostics.js";
 import { MIN_ARROW_MARKER_LEG, resolvePortOnItem } from "./routing.js";
 
-export type JourneyMapBasicRouteArchetype =
+export type JourneyMapRouteArchetype =
   | "adjacent_forward_same_stage"
-  | "adjacent_forward_cross_stage";
+  | "adjacent_forward_cross_stage"
+  | "non_adjacent_forward_same_stage";
+
+export type JourneyMapBasicRouteArchetype = Exclude<
+  JourneyMapRouteArchetype,
+  "non_adjacent_forward_same_stage"
+>;
+
+function isBasicRouteArchetype(
+  archetype: JourneyMapRouteArchetype
+): archetype is JourneyMapBasicRouteArchetype {
+  return archetype === "adjacent_forward_same_stage"
+    || archetype === "adjacent_forward_cross_stage";
+}
 
 export type JourneyMapDeferredFamily =
   | "duplicate"
@@ -40,7 +53,7 @@ export type JourneyMapDeferredFamily =
 export interface JourneyMapResolvedEndpoint {
   itemId: string;
   portId: string;
-  side: "east" | "west";
+  side: PortSide;
   x: number;
   y: number;
   offset: number;
@@ -56,7 +69,7 @@ export interface JourneyMapStageGate {
 }
 
 export interface JourneyMapRoutePriority {
-  archetypeRank: 0 | 1;
+  archetypeRank: 0 | 1 | 2;
   sourceRootOrder: number;
   sourceStepOrder: number;
   authorOrder: number;
@@ -65,6 +78,24 @@ export interface JourneyMapRoutePriority {
   sameEndpointOrdinal: number;
   exactIdentityOrdinal: number;
   edgeId: string;
+}
+
+export interface JourneyMapStageLocalBypass {
+  stageId: string;
+  axis: "horizontal";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+  intermediateStepIds: string[];
+  obstacleControls: Array<{
+    stepId: string;
+    entryX: number;
+    exitX: number;
+  }>;
+  order: 0;
+  locked: false;
 }
 
 export interface JourneyMapNodeEdgeBucketLists {
@@ -85,7 +116,7 @@ export interface JourneyMapConnectorPlan {
   from: string;
   to: string;
   ownerContainerId: string;
-  archetype: JourneyMapBasicRouteArchetype;
+  archetype: JourneyMapRouteArchetype;
   priority: JourneyMapRoutePriority;
   authorOrder: number;
   sameEndpointOrdinal: number;
@@ -93,10 +124,12 @@ export interface JourneyMapConnectorPlan {
   sourceEndpoint: JourneyMapResolvedEndpoint;
   targetEndpoint: JourneyMapResolvedEndpoint;
   stageGates: JourneyMapStageGate[];
+  stageLocalBypass?: JourneyMapStageLocalBypass;
   role: string;
   classes: string[];
   markers?: EdgeMarkers;
   step2Route: PositionedRoute;
+  provisionalRoute: PositionedRoute;
   finalBasicRoute: PositionedRoute;
 }
 
@@ -113,6 +146,7 @@ export interface JourneyMapRoutingStages {
   failedConnectorIds: string[];
   nodeEdgeBuckets: JourneyMapNodeEdgeBuckets[];
   step2PositionedScene: PositionedScene;
+  provisionalPositionedScene: PositionedScene;
   finalBasicPositionedScene: PositionedScene;
   diagnostics: RendererDiagnostic[];
 }
@@ -145,8 +179,8 @@ interface JourneyDegreeIndex {
   outgoingTargetsByNodeId: Map<string, string[]>;
 }
 
-interface BasicEligibility {
-  archetype: JourneyMapBasicRouteArchetype;
+interface RouteEligibility {
+  archetype: JourneyMapRouteArchetype;
   source: IndexedJourneyNode;
   target: IndexedJourneyNode;
   sourceStage: IndexedJourneyStage;
@@ -249,11 +283,11 @@ function hasPath(
   return false;
 }
 
-function resolveBasicEligibility(
+function resolveRouteEligibility(
   edge: MeasuredEdge,
   index: JourneyMapPositionedIndex,
   degrees: JourneyDegreeIndex
-): BasicEligibility | undefined {
+): RouteEligibility | undefined {
   const source = index.nodeById.get(edge.from.itemId);
   const target = index.nodeById.get(edge.to.itemId);
   if (!source || !target || !source.metadata.stageId || !target.metadata.stageId) {
@@ -277,11 +311,13 @@ function resolveBasicEligibility(
     return undefined;
   }
   if (sourceStage.stage.id === targetStage.stage.id) {
-    if (targetStepOrder !== sourceStepOrder + 1) {
+    if (targetStepOrder <= sourceStepOrder) {
       return undefined;
     }
     return {
-      archetype: "adjacent_forward_same_stage",
+      archetype: targetStepOrder === sourceStepOrder + 1
+        ? "adjacent_forward_same_stage"
+        : "non_adjacent_forward_same_stage",
       source,
       target,
       sourceStage,
@@ -339,7 +375,9 @@ function classifyDeferredFamilies(
       && source.metadata.stepOrder !== undefined
       && target.metadata.stepOrder !== undefined
       && target.metadata.stepOrder <= source.metadata.stepOrder;
-    const backwardAtRoot = source.metadata.stageId !== target.metadata.stageId
+    const sharesContainedStage = source.metadata.stageId !== undefined
+      && source.metadata.stageId === target.metadata.stageId;
+    const backwardAtRoot = !sharesContainedStage
       && target.metadata.rootOrder <= source.metadata.rootOrder;
     if (backwardInStage || backwardAtRoot) {
       families.push("backward");
@@ -364,13 +402,11 @@ function resolveEndpoint(
   edge: MeasuredEdge,
   indexedNode: IndexedJourneyNode,
   endpoint: "source" | "target",
+  preferredRole: string | undefined,
+  expectedSide: PortSide,
   diagnostics: RendererDiagnostic[]
 ): JourneyMapResolvedEndpoint | undefined {
   const measuredEndpoint = endpoint === "source" ? edge.from : edge.to;
-  const preferredRole = endpoint === "source"
-    ? edge.routing.sourcePortRole
-    : edge.routing.targetPortRole;
-  const expectedSide = endpoint === "source" ? "east" : "west";
   const port = resolvePortOnItem(indexedNode.node, measuredEndpoint, preferredRole);
   if (!port || port.side !== expectedSide) {
     diagnostics.push(createRoutingDiagnostic(
@@ -388,12 +424,12 @@ function resolveEndpoint(
     side: expectedSide,
     x: roundMetric(indexedNode.node.x + port.x),
     y: roundMetric(indexedNode.node.y + port.y),
-    offset: roundMetric(port.y)
+    offset: roundMetric(port.side === "north" || port.side === "south" ? port.x : port.y)
   };
 }
 
 function buildStageGates(
-  eligibility: BasicEligibility,
+  eligibility: RouteEligibility,
   source: JourneyMapResolvedEndpoint,
   target: JourneyMapResolvedEndpoint
 ): JourneyMapStageGate[] {
@@ -418,6 +454,54 @@ function buildStageGates(
       locked: true
     }
   ];
+}
+
+function buildStageLocalBypass(
+  eligibility: RouteEligibility,
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint
+): JourneyMapStageLocalBypass | undefined {
+  if (eligibility.archetype !== "non_adjacent_forward_same_stage") {
+    return undefined;
+  }
+  const stepIds = eligibility.sourceStage.stepIds.slice(
+    eligibility.sourceStepOrder,
+    eligibility.targetStepOrder + 1
+  );
+  const childrenById = new Map(
+    eligibility.sourceStage.stage.children
+      .filter((child): child is PositionedNode => child.kind === "node")
+      .map((child) => [child.id, child])
+  );
+  const spannedSteps = stepIds
+    .map((stepId) => childrenById.get(stepId))
+    .filter((step): step is PositionedNode => step !== undefined);
+  if (spannedSteps.length !== stepIds.length) {
+    return undefined;
+  }
+  const maximumStepBottom = Math.max(...spannedSteps.map((step) => step.y + step.height));
+  const nominalCoordinate = roundMetric(maximumStepBottom + MIN_ARROW_MARKER_LEG);
+  const stageBottom = eligibility.sourceStage.stage.y + eligibility.sourceStage.stage.height;
+  if (nominalCoordinate >= stageBottom) {
+    return undefined;
+  }
+  return {
+    stageId: eligibility.sourceStage.stage.id,
+    axis: "horizontal",
+    nominalCoordinate,
+    span: {
+      start: roundMetric(Math.min(source.x, target.x)),
+      end: roundMetric(Math.max(source.x, target.x))
+    },
+    intermediateStepIds: stepIds.slice(1, -1),
+    obstacleControls: spannedSteps.slice(1, -1).map((step) => ({
+      stepId: step.id,
+      entryX: roundMetric(step.x),
+      exitX: roundMetric(step.x + step.width)
+    })),
+    order: 0,
+    locked: false
+  };
 }
 
 function cloneRoutePoints(points: readonly Point[]): Point[] {
@@ -490,13 +574,51 @@ function buildBasicRoute(
   };
 }
 
+function buildStageLocalBypassRoute(
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint,
+  bypass: JourneyMapStageLocalBypass,
+  includeObstacleControls: boolean
+): PositionedRoute | undefined {
+  const sourceLeg = Math.abs(bypass.nominalCoordinate - source.y);
+  const targetLeg = Math.abs(bypass.nominalCoordinate - target.y);
+  if (source.side !== "south"
+    || target.side !== "south"
+    || source.x >= target.x
+    || bypass.nominalCoordinate <= source.y
+    || bypass.nominalCoordinate <= target.y
+    || sourceLeg < MIN_ARROW_MARKER_LEG
+    || targetLeg < MIN_ARROW_MARKER_LEG) {
+    return undefined;
+  }
+  return {
+    style: "orthogonal",
+    points: cloneRoutePoints([
+      source,
+      { x: source.x, y: bypass.nominalCoordinate },
+      ...(includeObstacleControls
+        ? bypass.obstacleControls.flatMap((control) => [
+          { x: control.entryX, y: bypass.nominalCoordinate },
+          { x: control.exitX, y: bypass.nominalCoordinate }
+        ])
+        : []),
+      { x: target.x, y: bypass.nominalCoordinate },
+      target
+    ])
+  };
+}
+
 function buildPriority(
   edge: MeasuredEdge,
   metadata: JourneyMapEdgeMetadata,
-  eligibility: BasicEligibility
+  eligibility: RouteEligibility
 ): JourneyMapRoutePriority {
   return {
-    archetypeRank: eligibility.archetype === "adjacent_forward_same_stage" ? 0 : 1,
+    archetypeRank: eligibility.archetype === "adjacent_forward_same_stage"
+      ? 0
+      : eligibility.archetype === "adjacent_forward_cross_stage"
+        ? 1
+        : 2,
     sourceRootOrder: eligibility.source.metadata.rootOrder,
     sourceStepOrder: eligibility.sourceStepOrder,
     authorOrder: metadata.authorOrder,
@@ -545,8 +667,8 @@ function buildNodeEdgeBuckets(
     return created;
   };
   for (const plan of plans) {
-    getBucket(plan.from).east.startingConnectorIds.push(plan.id);
-    getBucket(plan.to).west.endingConnectorIds.push(plan.id);
+    getBucket(plan.from)[plan.sourceEndpoint.side].startingConnectorIds.push(plan.id);
+    getBucket(plan.to)[plan.targetEndpoint.side].endingConnectorIds.push(plan.id);
   }
   return [...bucketsByNodeId.values()].sort((left, right) =>
     (index.nodeById.get(left.nodeId)?.metadata.globalStepOrder ?? Number.MAX_SAFE_INTEGER)
@@ -629,6 +751,59 @@ function routeContainsPoint(route: PositionedRoute, point: Point): boolean {
   });
 }
 
+function routeContainsHorizontalSpan(
+  route: PositionedRoute,
+  y: number,
+  spanStart: number,
+  spanEnd: number
+): boolean {
+  const spans = routeSegments(route)
+    .filter(({ start, end }) => start.y === y && end.y === y)
+    .map(({ start, end }) => ({
+      start: Math.min(start.x, end.x),
+      end: Math.max(start.x, end.x)
+    }))
+    .sort((left, right) => left.start - right.start || left.end - right.end);
+  let coveredThrough = spanStart;
+  for (const span of spans) {
+    if (span.end < coveredThrough) {
+      continue;
+    }
+    if (span.start > coveredThrough) {
+      return false;
+    }
+    coveredThrough = Math.max(coveredThrough, span.end);
+    if (coveredThrough >= spanEnd) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function endpointIsOnExterior(
+  endpoint: JourneyMapResolvedEndpoint,
+  node: PositionedNode
+): boolean {
+  switch (endpoint.side) {
+    case "north":
+      return endpoint.y === node.y
+        && endpoint.x >= node.x
+        && endpoint.x <= node.x + node.width;
+    case "south":
+      return endpoint.y === node.y + node.height
+        && endpoint.x >= node.x
+        && endpoint.x <= node.x + node.width;
+    case "east":
+      return endpoint.x === node.x + node.width
+        && endpoint.y >= node.y
+        && endpoint.y <= node.y + node.height;
+    case "west":
+      return endpoint.x === node.x
+        && endpoint.y >= node.y
+        && endpoint.y <= node.y + node.height;
+  }
+}
+
 function pushGeometryDiagnostic(
   diagnostics: RendererDiagnostic[],
   code: string,
@@ -645,15 +820,21 @@ function pushGeometryDiagnostic(
   ));
 }
 
-export function validateJourneyMapBasicRoutes(
+export type JourneyMapRouteValidationStage = "step2" | "provisional" | "final_basic";
+
+export function validateJourneyMapRoutes(
   plans: readonly JourneyMapConnectorPlan[],
   positionedScene: PositionedScene,
-  routeStage: "step2" | "final_basic" = "final_basic"
+  routeStage: JourneyMapRouteValidationStage = "provisional"
 ): RendererDiagnostic[] {
   const diagnostics: RendererDiagnostic[] = [];
   const index = buildJourneyMapPositionedIndex(positionedScene);
   for (const plan of plans) {
-    const route = routeStage === "step2" ? plan.step2Route : plan.finalBasicRoute;
+    const route = routeStage === "step2"
+      ? plan.step2Route
+      : routeStage === "provisional"
+        ? plan.provisionalRoute
+        : plan.finalBasicRoute;
     const segments = routeSegments(route);
     const firstPoint = route.points[0];
     const lastPoint = route.points.at(-1);
@@ -693,12 +874,8 @@ export function validateJourneyMapBasicRoutes(
       );
       continue;
     }
-    const sourceAtExterior = plan.sourceEndpoint.x === source.node.x + source.node.width
-      && plan.sourceEndpoint.y >= source.node.y
-      && plan.sourceEndpoint.y <= source.node.y + source.node.height;
-    const targetAtExterior = plan.targetEndpoint.x === target.node.x
-      && plan.targetEndpoint.y >= target.node.y
-      && plan.targetEndpoint.y <= target.node.y + target.node.height;
+    const sourceAtExterior = endpointIsOnExterior(plan.sourceEndpoint, source.node);
+    const targetAtExterior = endpointIsOnExterior(plan.targetEndpoint, target.node);
     if (!sourceAtExterior || !targetAtExterior) {
       pushGeometryDiagnostic(
         diagnostics,
@@ -805,15 +982,15 @@ export function validateJourneyMapBasicRoutes(
 
     const expectedSourceStageId = source.metadata.stageId;
     const expectedTargetStageId = target.metadata.stageId;
-    const gateContractMatches = plan.archetype === "adjacent_forward_same_stage"
-      ? plan.stageGates.length === 0
-      : plan.stageGates.length === 2
+    const gateContractMatches = plan.archetype === "adjacent_forward_cross_stage"
+      ? plan.stageGates.length === 2
         && plan.stageGates[0]?.stageId === expectedSourceStageId
         && plan.stageGates[0]?.side === "east"
         && plan.stageGates[0]?.order === 0
         && plan.stageGates[1]?.stageId === expectedTargetStageId
         && plan.stageGates[1]?.side === "west"
-        && plan.stageGates[1]?.order === 0;
+        && plan.stageGates[1]?.order === 0
+      : plan.stageGates.length === 0;
     if (!gateContractMatches) {
       diagnostics.push(createRoutingDiagnostic(
         "renderer.routing.journey_map_boundary_gate_fallback",
@@ -847,8 +1024,84 @@ export function validateJourneyMapBasicRoutes(
         ));
       }
     }
+
+    const bypass = plan.stageLocalBypass;
+    const bypassExpected = plan.archetype === "non_adjacent_forward_same_stage";
+    if (bypassExpected) {
+      const stage = bypass ? index.stageById.get(bypass.stageId) : undefined;
+      const sourceStepOrder = source.metadata.stepOrder;
+      const targetStepOrder = target.metadata.stepOrder;
+      const expectedStepIds = stage && sourceStepOrder !== undefined && targetStepOrder !== undefined
+        ? stage.stepIds.slice(sourceStepOrder, targetStepOrder + 1)
+        : [];
+      const spannedSteps = expectedStepIds
+        .map((stepId) => index.nodeById.get(stepId)?.node)
+        .filter((step): step is PositionedNode => step !== undefined);
+      const maximumStepBottom = spannedSteps.length > 0
+        ? Math.max(...spannedSteps.map((step) => step.y + step.height))
+        : Number.NaN;
+      const expectedObstacleControls = spannedSteps.slice(1, -1).map((step) => ({
+        stepId: step.id,
+        entryX: roundMetric(step.x),
+        exitX: roundMetric(step.x + step.width)
+      }));
+      const stageBottom = stage ? stage.stage.y + stage.stage.height : Number.NaN;
+      const routeHasProvisionalControls = routeStage === "step2"
+        || expectedObstacleControls.every((control) =>
+          route.points.some((point) =>
+            point.x === control.entryX && point.y === bypass?.nominalCoordinate
+          )
+          && route.points.some((point) =>
+            point.x === control.exitX && point.y === bypass?.nominalCoordinate
+          )
+        );
+      const bypassContractMatches = bypass !== undefined
+        && stage?.stage.id === expectedSourceStageId
+        && expectedSourceStageId === expectedTargetStageId
+        && bypass.axis === "horizontal"
+        && bypass.nominalCoordinate === roundMetric(maximumStepBottom + MIN_ARROW_MARKER_LEG)
+        && bypass.nominalCoordinate < stageBottom
+        && bypass.span.start === Math.min(plan.sourceEndpoint.x, plan.targetEndpoint.x)
+        && bypass.span.end === Math.max(plan.sourceEndpoint.x, plan.targetEndpoint.x)
+        && JSON.stringify(bypass.intermediateStepIds) === JSON.stringify(expectedStepIds.slice(1, -1))
+        && JSON.stringify(bypass.obstacleControls) === JSON.stringify(expectedObstacleControls)
+        && bypass.order === 0
+        && bypass.locked === false
+        && routeHasProvisionalControls
+        && routeContainsHorizontalSpan(
+          route,
+          bypass.nominalCoordinate,
+          bypass.span.start,
+          bypass.span.end
+        );
+      if (!bypassContractMatches) {
+        diagnostics.push(createRoutingDiagnostic(
+          "renderer.routing.journey_map_archetype_fallback",
+          `Journey edge "${plan.id}" does not expose its accepted Stage-local bypass contract.`,
+          plan.id,
+          "warn",
+          JSON.stringify({ relatedIds: [plan.id, expectedSourceStageId] })
+        ));
+      }
+    } else if (bypass) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_archetype_fallback",
+        `Journey edge "${plan.id}" exposes an unexpected Stage-local bypass contract.`,
+        plan.id,
+        "warn",
+        JSON.stringify({ relatedIds: [plan.id, bypass.stageId] })
+      ));
+    }
   }
   return sortRendererDiagnostics(diagnostics);
+}
+
+export function validateJourneyMapBasicRoutes(
+  plans: readonly JourneyMapConnectorPlan[],
+  positionedScene: PositionedScene,
+  routeStage: "step2" | "final_basic" = "final_basic"
+): RendererDiagnostic[] {
+  return validateJourneyMapRoutes(plans, positionedScene, routeStage);
 }
 
 function positionedEdgeFromPlan(plan: JourneyMapConnectorPlan, route: PositionedRoute): PositionedEdge {
@@ -901,7 +1154,7 @@ export function buildJourneyMapRoutingStages(
   const connectorPlans: JourneyMapConnectorPlan[] = [];
   const deferredConnectors: JourneyMapDeferredConnector[] = [];
   const failedConnectorIds: string[] = [];
-  const basicEligibleIds = new Set<string>();
+  const routeEligibleIds = new Set<string>();
   const occurrenceCountById = new Map<string, number>();
   for (const edge of measuredScene.edges) {
     occurrenceCountById.set(edge.id, (occurrenceCountById.get(edge.id) ?? 0) + 1);
@@ -926,7 +1179,7 @@ export function buildJourneyMapRoutingStages(
     if (duplicateEdgeIds.has(edge.id)) {
       continue;
     }
-    const eligibility = resolveBasicEligibility(edge, index, degrees);
+    const eligibility = resolveRouteEligibility(edge, index, degrees);
     if (!eligibility) {
       const sourceExists = index.nodeById.has(edge.from.itemId);
       const targetExists = index.nodeById.has(edge.to.itemId);
@@ -949,9 +1202,9 @@ export function buildJourneyMapRoutingStages(
       }
       continue;
     }
-    basicEligibleIds.add(edge.id);
+    routeEligibleIds.add(edge.id);
     const edgeMetadata = edge.viewMetadata?.journeyMap;
-    const expectedOwnerId = eligibility.archetype === "adjacent_forward_same_stage"
+    const expectedOwnerId = eligibility.sourceStage.stage.id === eligibility.targetStage.stage.id
       ? eligibility.sourceStage.stage.id
       : preRoutingPositionedScene.root.id;
     if (!edgeMetadata || edge.ownerContainerId !== expectedOwnerId) {
@@ -965,8 +1218,23 @@ export function buildJourneyMapRoutingStages(
       failedConnectorIds.push(edge.id);
       continue;
     }
-    const sourceEndpoint = resolveEndpoint(edge, eligibility.source, "source", diagnostics);
-    const targetEndpoint = resolveEndpoint(edge, eligibility.target, "target", diagnostics);
+    const usesStageLocalBypass = eligibility.archetype === "non_adjacent_forward_same_stage";
+    const sourceEndpoint = resolveEndpoint(
+      edge,
+      eligibility.source,
+      "source",
+      usesStageLocalBypass ? "journey_escape_out" : edge.routing.sourcePortRole,
+      usesStageLocalBypass ? "south" : "east",
+      diagnostics
+    );
+    const targetEndpoint = resolveEndpoint(
+      edge,
+      eligibility.target,
+      "target",
+      usesStageLocalBypass ? "journey_escape_in" : edge.routing.targetPortRole,
+      usesStageLocalBypass ? "south" : "west",
+      diagnostics
+    );
     if (!sourceEndpoint || !targetEndpoint) {
       diagnostics.push(createRoutingDiagnostic(
         "renderer.routing.journey_map_edge_omitted",
@@ -979,24 +1247,39 @@ export function buildJourneyMapRoutingStages(
       continue;
     }
     const stageGates = buildStageGates(eligibility, sourceEndpoint, targetEndpoint);
-    const step2Route = buildBasicRoute(
-      eligibility.archetype,
-      sourceEndpoint,
-      targetEndpoint,
-      stageGates,
-      false
-    );
-    const finalBasicRoute = buildBasicRoute(
-      eligibility.archetype,
-      sourceEndpoint,
-      targetEndpoint,
-      stageGates,
-      true
-    );
-    if (!step2Route || !finalBasicRoute) {
+    const stageLocalBypass = buildStageLocalBypass(eligibility, sourceEndpoint, targetEndpoint);
+    const basicArchetype = isBasicRouteArchetype(eligibility.archetype)
+      ? eligibility.archetype
+      : undefined;
+    const step2Route = usesStageLocalBypass && stageLocalBypass
+      ? buildStageLocalBypassRoute(sourceEndpoint, targetEndpoint, stageLocalBypass, false)
+      : basicArchetype
+        ? buildBasicRoute(
+          basicArchetype,
+          sourceEndpoint,
+          targetEndpoint,
+          stageGates,
+          false
+        )
+        : undefined;
+    const provisionalRoute = usesStageLocalBypass && stageLocalBypass
+      ? buildStageLocalBypassRoute(sourceEndpoint, targetEndpoint, stageLocalBypass, true)
+      : basicArchetype
+        ? buildBasicRoute(
+          basicArchetype,
+          sourceEndpoint,
+          targetEndpoint,
+          stageGates,
+          true
+        )
+        : undefined;
+    const finalBasicRoute = provisionalRoute
+      ? { style: provisionalRoute.style, points: cloneRoutePoints(provisionalRoute.points) }
+      : undefined;
+    if (!step2Route || !provisionalRoute || !finalBasicRoute) {
       diagnostics.push(createRoutingDiagnostic(
         "renderer.routing.journey_map_archetype_fallback",
-        `Journey edge "${edge.id}" could not construct its accepted basic route template.`,
+        `Journey edge "${edge.id}" could not construct its accepted route template.`,
         edge.id,
         "warn",
         JSON.stringify({ relatedIds: [edge.id] })
@@ -1025,10 +1308,12 @@ export function buildJourneyMapRoutingStages(
       sourceEndpoint,
       targetEndpoint,
       stageGates,
+      ...(stageLocalBypass ? { stageLocalBypass } : {}),
       role: edge.role,
       classes: [...edge.classes],
       ...(edge.markers ? { markers: { ...edge.markers } } : {}),
       step2Route,
+      provisionalRoute,
       finalBasicRoute
     });
   }
@@ -1049,11 +1334,11 @@ export function buildJourneyMapRoutingStages(
       ));
     }
   }
-  for (const edgeId of basicEligibleIds) {
+  for (const edgeId of routeEligibleIds) {
     if (!routedCountById.has(edgeId) && !failedConnectorIds.includes(edgeId)) {
       diagnostics.push(createRoutingDiagnostic(
         "renderer.routing.journey_map_edge_omitted",
-        `Eligible journey edge "${edgeId}" has no reconstructed basic route.`,
+        `Eligible journey edge "${edgeId}" has no reconstructed accepted route.`,
         edgeId,
         "error",
         JSON.stringify({ relatedIds: [edgeId] })
@@ -1072,7 +1357,16 @@ export function buildJourneyMapRoutingStages(
     preRoutingPositionedScene,
     "final_basic"
   );
-  diagnostics.push(...step2ValidationDiagnostics, ...finalBasicValidationDiagnostics);
+  const provisionalValidationDiagnostics = validateJourneyMapRoutes(
+    connectorPlans,
+    preRoutingPositionedScene,
+    "provisional"
+  );
+  diagnostics.push(
+    ...step2ValidationDiagnostics,
+    ...provisionalValidationDiagnostics,
+    ...finalBasicValidationDiagnostics
+  );
   const sortedDiagnostics = sortRendererDiagnostics(diagnostics);
   const step2PositionedScene = withRoutes(
     preRoutingPositionedScene,
@@ -1086,6 +1380,12 @@ export function buildJourneyMapRoutingStages(
     (plan) => plan.finalBasicRoute,
     sortedDiagnostics
   );
+  const provisionalPositionedScene = withRoutes(
+    preRoutingPositionedScene,
+    connectorPlans,
+    (plan) => plan.provisionalRoute,
+    sortedDiagnostics
+  );
 
   return {
     connectorPlans,
@@ -1093,6 +1393,7 @@ export function buildJourneyMapRoutingStages(
     failedConnectorIds: [...new Set(failedConnectorIds)],
     nodeEdgeBuckets: buildNodeEdgeBuckets(connectorPlans, index),
     step2PositionedScene,
+    provisionalPositionedScene,
     finalBasicPositionedScene,
     diagnostics: sortRendererDiagnostics([...preRoutingPositionedScene.diagnostics, ...sortedDiagnostics])
   };

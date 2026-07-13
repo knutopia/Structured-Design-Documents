@@ -53,13 +53,17 @@ export interface JourneyMapPreRoutingArtifactsResult {
   preRoutingPng: Uint8Array;
 }
 
-export interface JourneyMapBasicRoutingArtifactsResult extends JourneyMapPreRoutingArtifactsResult {
+export interface JourneyMapRoutingArtifactsResult extends JourneyMapPreRoutingArtifactsResult {
   routingStages: JourneyMapRoutingStages;
   step2Svg: string;
   step2Png: Uint8Array;
+  provisionalSvg: string;
+  provisionalPng: Uint8Array;
   finalBasicSvg: string;
   finalBasicPng: Uint8Array;
 }
+
+export type JourneyMapBasicRoutingArtifactsResult = JourneyMapRoutingArtifactsResult;
 
 function buildJourneyScenePlacement(model: JourneyMapRenderModel): JourneyScenePlacement {
   const metadataByItemId = new Map<string, JourneyMapItemMetadata>();
@@ -615,14 +619,14 @@ export async function renderJourneyMapPreRoutingArtifacts(
   };
 }
 
-export async function renderJourneyMapBasicRoutingArtifacts(
+export async function renderJourneyMapRoutingArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
   profileId: string,
   themeId = "default"
-): Promise<JourneyMapBasicRoutingArtifactsResult> {
+): Promise<JourneyMapRoutingArtifactsResult> {
   const preRouting = await renderJourneyMapPreRoutingArtifacts(
     projection,
     graph,
@@ -635,8 +639,9 @@ export async function renderJourneyMapBasicRoutingArtifacts(
     preRouting.measuredScene,
     preRouting.preRoutingPositionedScene
   );
-  const [step2Rendered, finalBasicRendered] = await Promise.all([
+  const [step2Rendered, provisionalRendered, finalBasicRendered] = await Promise.all([
     renderPositionedSceneToPng(routingStages.step2PositionedScene),
+    renderPositionedSceneToPng(routingStages.provisionalPositionedScene),
     renderPositionedSceneToPng(routingStages.finalBasicPositionedScene)
   ]);
   return {
@@ -645,7 +650,27 @@ export async function renderJourneyMapBasicRoutingArtifacts(
     diagnostics: step2Rendered.diagnostics,
     step2Svg: step2Rendered.svg,
     step2Png: step2Rendered.png,
+    provisionalSvg: provisionalRendered.svg,
+    provisionalPng: provisionalRendered.png,
     finalBasicSvg: finalBasicRendered.svg,
     finalBasicPng: finalBasicRendered.png
   };
+}
+
+export async function renderJourneyMapBasicRoutingArtifacts(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<JourneyMapBasicRoutingArtifactsResult> {
+  return renderJourneyMapRoutingArtifacts(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
 }

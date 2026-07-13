@@ -21,11 +21,13 @@ import type {
 import {
   buildJourneyMapRendererScene,
   positionJourneyMapMeasuredSceneBeforeRouting,
-  renderJourneyMapBasicRoutingArtifacts
+  renderJourneyMapBasicRoutingArtifacts,
+  renderJourneyMapRoutingArtifacts
 } from "../src/renderer/staged/journeyMap.js";
 import {
   buildJourneyMapRoutingStages,
   validateJourneyMapBasicRoutes,
+  validateJourneyMapRoutes,
   type JourneyMapConnectorPlan,
   type JourneyMapRoutingStages
 } from "../src/renderer/staged/journeyMapRouting.js";
@@ -173,10 +175,10 @@ describe("journey map Gate 5 basic routing", () => {
     expectExactPartition(fixture);
   });
 
-  it("partitions every locked fixture without routing Gate 6 families early", async () => {
+  it("preserves the accepted partition while later Gate 6 families remain blocked", async () => {
     const cases = [
       ["primary", 3],
-      ["ordering_ownership", 0],
+      ["ordering_ownership", 1],
       ["topology", 0],
       ["duplicate", 0],
       ["compressed", 0]
@@ -413,5 +415,228 @@ describe("journey map Gate 5 basic routing", () => {
       "renderer.routing.journey_map_endpoint_intrusion",
       "renderer.routing.marker_leg_minimum_unmet"
     ]));
+  });
+});
+
+describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
+  it("routes only the isolated ordering skip and keeps every later family deferred", async () => {
+    const fixture = await buildFixture("ordering_ownership");
+    expect(fixture.routingStages.connectorPlans).toHaveLength(1);
+    const [plan] = fixture.routingStages.connectorPlans;
+    expect(plan).toMatchObject({
+      id: "J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0",
+      from: "J-503",
+      to: "J-501",
+      ownerContainerId: "G-500",
+      archetype: "non_adjacent_forward_same_stage",
+      authorOrder: 0,
+      sameEndpointOrdinal: 0,
+      exactIdentityOrdinal: 0,
+      sourceEndpoint: {
+        itemId: "J-503",
+        portId: "J-503__escape_out",
+        side: "south",
+        x: 980,
+        y: 156,
+        offset: 112
+      },
+      targetEndpoint: {
+        itemId: "J-501",
+        portId: "J-501__escape_in",
+        side: "south",
+        x: 1476,
+        y: 140,
+        offset: 112
+      },
+      stageGates: [],
+      stageLocalBypass: {
+        stageId: "G-500",
+        axis: "horizontal",
+        nominalCoordinate: 168,
+        span: { start: 980, end: 1476 },
+        intermediateStepIds: ["J-502"],
+        obstacleControls: [
+          { stepId: "J-502", entryX: 1116, exitX: 1340 }
+        ],
+        order: 0,
+        locked: false
+      }
+    });
+    expect(plan?.priority).toEqual({
+      archetypeRank: 2,
+      sourceRootOrder: 2,
+      sourceStepOrder: 0,
+      authorOrder: 0,
+      targetRootOrder: 2,
+      targetStepOrder: 2,
+      sameEndpointOrdinal: 0,
+      exactIdentityOrdinal: 0,
+      edgeId: plan.id
+    });
+    expect(fixture.routingStages.deferredConnectors.map((edge) => ({
+      edge: edgeKey(edge),
+      families: edge.deferredFamilies
+    }))).toEqual([
+      { edge: "J-501→J-502", families: ["backward", "non_adjacent_same_stage"] },
+      { edge: "J-591→J-590", families: ["root_step", "backward"] }
+    ]);
+    expect(fixture.routingStages.failedConnectorIds).toEqual([]);
+    expectExactPartition(fixture);
+
+    for (const name of ["topology", "duplicate", "compressed"] as const) {
+      const laterFamily = await buildFixture(name);
+      expect(laterFamily.routingStages.connectorPlans).toHaveLength(0);
+      expectExactPartition(laterFamily);
+    }
+    const primary = await buildFixture("primary");
+    expect(primary.routingStages.connectorPlans.map(edgeKey)).toEqual([
+      "J-101→J-102",
+      "J-102→J-103",
+      "J-103→J-201"
+    ]);
+  });
+
+  it("uses a bounds-derived south-to-south bypass below the Step row without moving accepted geometry", async () => {
+    const fixture = await buildFixture("ordering_ownership");
+    const [plan] = fixture.routingStages.connectorPlans;
+    expect(plan?.step2Route.points).toEqual([
+      { x: 980, y: 156 },
+      { x: 980, y: 168 },
+      { x: 1476, y: 168 },
+      { x: 1476, y: 140 }
+    ]);
+    expect(plan?.provisionalRoute.points).toEqual([
+      { x: 980, y: 156 },
+      { x: 980, y: 168 },
+      { x: 1116, y: 168 },
+      { x: 1340, y: 168 },
+      { x: 1476, y: 168 },
+      { x: 1476, y: 140 }
+    ]);
+    expect(plan?.provisionalRoute).not.toEqual(plan?.step2Route);
+    expect(plan?.provisionalRoute).not.toBe(plan?.step2Route);
+    expect(validateJourneyMapRoutes(
+      fixture.routingStages.connectorPlans,
+      fixture.preRoutingPositionedScene,
+      "step2"
+    )).toEqual([]);
+    expect(validateJourneyMapRoutes(
+      fixture.routingStages.connectorPlans,
+      fixture.preRoutingPositionedScene,
+      "provisional"
+    )).toEqual([]);
+    expect(validateJourneyMapRoutes(
+      fixture.routingStages.connectorPlans,
+      fixture.preRoutingPositionedScene,
+      "final_basic"
+    )).toEqual([]);
+    expect(fixture.routingStages.provisionalPositionedScene.root).toEqual(
+      fixture.preRoutingPositionedScene.root
+    );
+    expect(fixture.routingStages.provisionalPositionedScene.edges).toHaveLength(1);
+
+    const source = findNode(fixture.preRoutingPositionedScene, "J-503");
+    const intermediate = findNode(fixture.preRoutingPositionedScene, "J-502");
+    const target = findNode(fixture.preRoutingPositionedScene, "J-501");
+    const stage = findContainer(fixture.preRoutingPositionedScene, "G-500");
+    const trackY = plan!.stageLocalBypass!.nominalCoordinate;
+    expect(trackY).toBe(Math.max(
+      source.y + source.height,
+      intermediate.y + intermediate.height,
+      target.y + target.height
+    ) + MIN_ARROW_MARKER_LEG);
+    expect(trackY).toBeLessThan(stage.y + stage.height);
+    const routeSegments = segments(plan!.provisionalRoute);
+    expect(routeSegments.every(({ start, end }) => segmentLength(start, end) !== undefined)).toBe(true);
+    expect(segmentLength(routeSegments[0]!.start, routeSegments[0]!.end)).toBe(MIN_ARROW_MARKER_LEG);
+    expect(segmentLength(routeSegments.at(-1)!.start, routeSegments.at(-1)!.end)).toBeGreaterThanOrEqual(
+      MIN_ARROW_MARKER_LEG
+    );
+    expect(trackY).toBeGreaterThan(intermediate.y + intermediate.height);
+
+    const buckets = new Map(fixture.routingStages.nodeEdgeBuckets.map((bucket) => [bucket.nodeId, bucket]));
+    expect(buckets.get("J-503")?.south.startingConnectorIds).toEqual([plan?.id]);
+    expect(buckets.get("J-501")?.south.endingConnectorIds).toEqual([plan?.id]);
+    expect(buckets.get("J-503")?.east.startingConnectorIds).toEqual([]);
+    expect(buckets.get("J-501")?.west.endingConnectorIds).toEqual([]);
+    expect(fixture.routingStages.diagnostics.filter((diagnostic) =>
+      diagnostic.phase === "routing"
+    )).toEqual([]);
+  });
+
+  it("renders deterministic family debug SVG/PNG while retaining the accepted primary step-2 bytes", async () => {
+    const fixture = await buildFixture("ordering_ownership");
+    const first = await renderJourneyMapRoutingArtifacts(
+      fixture.projection,
+      fixture.graph,
+      fixture.bundle,
+      fixture.view,
+      "strict"
+    );
+    const second = await renderJourneyMapRoutingArtifacts(
+      fixture.projection,
+      fixture.graph,
+      fixture.bundle,
+      fixture.view,
+      "strict"
+    );
+    const direct = await renderPositionedSceneToPng(first.routingStages.provisionalPositionedScene);
+    expect(first.provisionalSvg).toBe(direct.svg);
+    expect(sha256(first.provisionalPng)).toBe(sha256(direct.png));
+    expect(first.provisionalSvg).not.toBe(first.step2Svg);
+    expect(sha256(first.provisionalPng)).toBe(sha256(first.step2Png));
+    expect((first.provisionalSvg.match(/data-edge-id=/g) ?? [])).toHaveLength(1);
+    expect(first.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
+    expect(sha256(first.provisionalSvg)).toBe(sha256(second.provisionalSvg));
+    expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
+    expect(first.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+
+    const primary = await buildFixture("primary");
+    const accepted = await renderJourneyMapRoutingArtifacts(
+      primary.projection,
+      primary.graph,
+      primary.bundle,
+      primary.view,
+      "strict"
+    );
+    expect(sha256(accepted.step2Svg)).toBe(
+      "2ca5e8b0f81ac98e515456dcc7c297776f32e92e650ae40015b00d057fc43527"
+    );
+    expect(sha256(accepted.step2Png)).toBe(
+      "dd488f89eb1c163fcee07f14ace58304a426e61ea4613dedb22dd18ff272ed5d"
+    );
+  });
+
+  it("fails visibly instead of falling back when a south port or baseline bypass space is unavailable", async () => {
+    const fixture = await buildFixture("ordering_ownership");
+    const missingPortScene = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
+    const missingPortNode = findNode(missingPortScene, "J-503");
+    missingPortNode.ports = missingPortNode.ports.filter((port) => port.role !== "journey_escape_out");
+    const missingPort = buildJourneyMapRoutingStages(fixture.measuredScene, missingPortScene);
+    expect(missingPort.connectorPlans).toEqual([]);
+    expect(missingPort.failedConnectorIds).toEqual([
+      "J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0"
+    ]);
+    expect(missingPort.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(expect.arrayContaining([
+      "renderer.routing.journey_map_unresolved_endpoint",
+      "renderer.routing.journey_map_edge_omitted"
+    ]));
+
+    const insufficientSpaceScene = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
+    findContainer(insufficientSpaceScene, "G-500").height = 132;
+    const insufficientSpace = buildJourneyMapRoutingStages(
+      fixture.measuredScene,
+      insufficientSpaceScene
+    );
+    expect(insufficientSpace.connectorPlans).toEqual([]);
+    expect(insufficientSpace.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(expect.arrayContaining([
+      "renderer.routing.journey_map_archetype_fallback",
+      "renderer.routing.journey_map_edge_omitted"
+    ]));
+    expect(insufficientSpace.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.routing.journey_map_gutter_expansion_exhausted"
+    )).toBe(false);
   });
 });
