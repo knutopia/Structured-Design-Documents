@@ -26,7 +26,10 @@ export type JourneyMapRouteArchetype =
   | "adjacent_forward_cross_stage"
   | "non_adjacent_forward_same_stage"
   | "long_forward_cross_stage"
-  | "adjacent_forward_root_step";
+  | "adjacent_forward_root_step"
+  | "adjacent_forward_root_to_contained"
+  | "long_forward_root_step"
+  | "adjacent_forward_contained_to_root";
 
 export type JourneyMapBasicRouteArchetype =
   | "adjacent_forward_same_stage"
@@ -70,7 +73,7 @@ export interface JourneyMapStageGate {
 }
 
 export interface JourneyMapRoutePriority {
-  archetypeRank: 0 | 1 | 2 | 3;
+  archetypeRank: 0 | 1 | 2 | 3 | 4;
   sourceRootOrder: number;
   sourceStepOrder: number;
   authorOrder: number;
@@ -86,6 +89,10 @@ export interface JourneyMapStageLocalBypass {
   axis: "horizontal";
   nominalCoordinate: number;
   span: {
+    start: number;
+    end: number;
+  };
+  endpointSpan?: {
     start: number;
     end: number;
   };
@@ -107,6 +114,10 @@ export interface JourneyMapRootOuterBypass {
     start: number;
     end: number;
   };
+  endpointSpan?: {
+    start: number;
+    end: number;
+  };
   intermediateRootItemIds: string[];
   obstacleControls: Array<{
     rootItemId: string;
@@ -115,6 +126,25 @@ export interface JourneyMapRootOuterBypass {
   }>;
   order: 0;
   locked: false;
+}
+
+export interface JourneyMapBranchDepartureControl {
+  axis: "vertical";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+  obstacleItemId: string;
+  obstacleBoundaryCoordinate: number;
+  order: 0;
+  locked: false;
+}
+
+export interface JourneyMapBranchPlan {
+  sourceOutdegree: number;
+  sourceOrdinal: number;
+  departureControl?: JourneyMapBranchDepartureControl;
 }
 
 export interface JourneyMapNodeEdgeBucketLists {
@@ -145,6 +175,8 @@ export interface JourneyMapConnectorPlan {
   stageGates: JourneyMapStageGate[];
   stageLocalBypass?: JourneyMapStageLocalBypass;
   rootOuterBypass?: JourneyMapRootOuterBypass;
+  topologyModifiers?: ["branch"];
+  branch?: JourneyMapBranchPlan;
   role: string;
   classes: string[];
   markers?: EdgeMarkers;
@@ -197,6 +229,7 @@ interface JourneyDegreeIndex {
   outgoingByNodeId: Map<string, number>;
   sameEndpointCountByKey: Map<string, number>;
   outgoingTargetsByNodeId: Map<string, string[]>;
+  outgoingEdgeIdsByNodeId: Map<string, string[]>;
 }
 
 interface RouteEligibility {
@@ -207,6 +240,10 @@ interface RouteEligibility {
   targetStage?: IndexedJourneyStage;
   sourceStepOrder: number;
   targetStepOrder: number;
+  branch?: {
+    sourceOutdegree: number;
+    sourceOrdinal: number;
+  };
 }
 
 interface Rect {
@@ -270,6 +307,7 @@ function buildDegreeIndex(edges: readonly MeasuredEdge[]): JourneyDegreeIndex {
   const outgoingByNodeId = new Map<string, number>();
   const sameEndpointCountByKey = new Map<string, number>();
   const outgoingTargetsByNodeId = new Map<string, string[]>();
+  const outgoingEdgesByNodeId = new Map<string, MeasuredEdge[]>();
   for (const edge of edges) {
     outgoingByNodeId.set(edge.from.itemId, (outgoingByNodeId.get(edge.from.itemId) ?? 0) + 1);
     incomingByNodeId.set(edge.to.itemId, (incomingByNodeId.get(edge.to.itemId) ?? 0) + 1);
@@ -278,8 +316,35 @@ function buildDegreeIndex(edges: readonly MeasuredEdge[]): JourneyDegreeIndex {
     const targets = outgoingTargetsByNodeId.get(edge.from.itemId) ?? [];
     targets.push(edge.to.itemId);
     outgoingTargetsByNodeId.set(edge.from.itemId, targets);
+    const outgoingEdges = outgoingEdgesByNodeId.get(edge.from.itemId) ?? [];
+    outgoingEdges.push(edge);
+    outgoingEdgesByNodeId.set(edge.from.itemId, outgoingEdges);
   }
-  return { incomingByNodeId, outgoingByNodeId, sameEndpointCountByKey, outgoingTargetsByNodeId };
+  const outgoingEdgeIdsByNodeId = new Map(
+    [...outgoingEdgesByNodeId].map(([nodeId, outgoingEdges]) => [
+      nodeId,
+      [...outgoingEdges]
+        .sort((left, right) => {
+          const leftMetadata = left.viewMetadata?.journeyMap;
+          const rightMetadata = right.viewMetadata?.journeyMap;
+          return (leftMetadata?.authorOrder ?? Number.MAX_SAFE_INTEGER)
+              - (rightMetadata?.authorOrder ?? Number.MAX_SAFE_INTEGER)
+            || (leftMetadata?.sameEndpointOrdinal ?? Number.MAX_SAFE_INTEGER)
+              - (rightMetadata?.sameEndpointOrdinal ?? Number.MAX_SAFE_INTEGER)
+            || (leftMetadata?.exactIdentityOrdinal ?? Number.MAX_SAFE_INTEGER)
+              - (rightMetadata?.exactIdentityOrdinal ?? Number.MAX_SAFE_INTEGER)
+            || left.id.localeCompare(right.id);
+        })
+        .map((edge) => edge.id)
+    ])
+  );
+  return {
+    incomingByNodeId,
+    outgoingByNodeId,
+    sameEndpointCountByKey,
+    outgoingTargetsByNodeId,
+    outgoingEdgeIdsByNodeId
+  };
 }
 
 function hasPath(
@@ -313,8 +378,10 @@ function resolveRouteEligibility(
   if (!source || !target) {
     return undefined;
   }
-  if ((degrees.outgoingByNodeId.get(source.node.id) ?? 0) !== 1
-    || (degrees.incomingByNodeId.get(target.node.id) ?? 0) !== 1) {
+  const sourceOutdegree = degrees.outgoingByNodeId.get(source.node.id) ?? 0;
+  const targetIndegree = degrees.incomingByNodeId.get(target.node.id) ?? 0;
+  const isBranch = sourceOutdegree > 1;
+  if ((!isBranch && sourceOutdegree !== 1) || (!isBranch && targetIndegree !== 1)) {
     return undefined;
   }
   const endpointKey = `${source.node.id}\u0000${target.node.id}`;
@@ -322,6 +389,13 @@ function resolveRouteEligibility(
     || hasPath(target.node.id, source.node.id, degrees.outgoingTargetsByNodeId)) {
     return undefined;
   }
+  const sourceOrdinal = isBranch
+    ? (degrees.outgoingEdgeIdsByNodeId.get(source.node.id) ?? []).indexOf(edge.id)
+    : -1;
+  if (isBranch && sourceOrdinal < 0) {
+    return undefined;
+  }
+  const branch = isBranch ? { sourceOutdegree, sourceOrdinal } : undefined;
 
   const sourceStage = source.metadata.stageId
     ? index.stageById.get(source.metadata.stageId)
@@ -333,18 +407,59 @@ function resolveRouteEligibility(
     return undefined;
   }
   if (!sourceStage && !targetStage) {
-    if (target.metadata.rootOrder !== source.metadata.rootOrder + 1) {
+    if (target.metadata.rootOrder <= source.metadata.rootOrder) {
+      return undefined;
+    }
+    if (!branch && target.metadata.rootOrder !== source.metadata.rootOrder + 1) {
       return undefined;
     }
     return {
-      archetype: "adjacent_forward_root_step",
+      archetype: target.metadata.rootOrder === source.metadata.rootOrder + 1
+        ? "adjacent_forward_root_step"
+        : "long_forward_root_step",
       source,
       target,
       sourceStepOrder: 0,
-      targetStepOrder: 0
+      targetStepOrder: 0,
+      ...(branch ? { branch } : {})
     };
   }
   if (!sourceStage || !targetStage) {
+    if (!branch || target.metadata.rootOrder <= source.metadata.rootOrder) {
+      return undefined;
+    }
+    if (!sourceStage && targetStage) {
+      const targetStepOrder = target.metadata.stepOrder;
+      if (targetStage.metadata.rootOrder !== source.metadata.rootOrder + 1
+        || targetStepOrder !== 0) {
+        return undefined;
+      }
+      return {
+        archetype: "adjacent_forward_root_to_contained",
+        source,
+        target,
+        targetStage,
+        sourceStepOrder: 0,
+        targetStepOrder,
+        branch
+      };
+    }
+    if (sourceStage && !targetStage) {
+      const sourceStepOrder = source.metadata.stepOrder;
+      if (target.metadata.rootOrder !== sourceStage.metadata.rootOrder + 1
+        || sourceStepOrder !== sourceStage.stepIds.length - 1) {
+        return undefined;
+      }
+      return {
+        archetype: "adjacent_forward_contained_to_root",
+        source,
+        target,
+        sourceStage,
+        sourceStepOrder,
+        targetStepOrder: 0,
+        branch
+      };
+    }
     return undefined;
   }
   const sourceStepOrder = source.metadata.stepOrder;
@@ -365,7 +480,8 @@ function resolveRouteEligibility(
       sourceStage,
       targetStage,
       sourceStepOrder,
-      targetStepOrder
+      targetStepOrder,
+      ...(branch ? { branch } : {})
     };
   }
 
@@ -375,6 +491,9 @@ function resolveRouteEligibility(
   const isAdjacentDirectBridge = targetStage.metadata.rootOrder === sourceStage.metadata.rootOrder + 1
     && sourceStepOrder === sourceStage.stepIds.length - 1
     && targetStepOrder === 0;
+  if (branch && !isAdjacentDirectBridge) {
+    return undefined;
+  }
   return {
     archetype: isAdjacentDirectBridge
       ? "adjacent_forward_cross_stage"
@@ -384,7 +503,8 @@ function resolveRouteEligibility(
     sourceStage,
     targetStage,
     sourceStepOrder,
-    targetStepOrder
+    targetStepOrder,
+    ...(branch ? { branch } : {})
   };
 }
 
@@ -478,10 +598,31 @@ function buildStageGates(
   source: JourneyMapResolvedEndpoint,
   target: JourneyMapResolvedEndpoint
 ): JourneyMapStageGate[] {
-  if (!eligibility.sourceStage || !eligibility.targetStage) {
-    return [];
+  if (eligibility.archetype === "adjacent_forward_root_to_contained"
+    && eligibility.targetStage) {
+    return [{
+      stageId: eligibility.targetStage.stage.id,
+      side: "west",
+      x: roundMetric(eligibility.targetStage.stage.x),
+      y: target.y,
+      order: 0,
+      locked: true
+    }];
   }
-  if (eligibility.archetype === "long_forward_cross_stage") {
+  if (eligibility.archetype === "adjacent_forward_contained_to_root"
+    && eligibility.sourceStage) {
+    return [{
+      stageId: eligibility.sourceStage.stage.id,
+      side: "east",
+      x: roundMetric(eligibility.sourceStage.stage.x + eligibility.sourceStage.stage.width),
+      y: source.y,
+      order: 0,
+      locked: true
+    }];
+  }
+  if (eligibility.archetype === "long_forward_cross_stage"
+    && eligibility.sourceStage
+    && eligibility.targetStage) {
     return [
       {
         stageId: eligibility.sourceStage.stage.id,
@@ -501,7 +642,9 @@ function buildStageGates(
       }
     ];
   }
-  if (eligibility.archetype !== "adjacent_forward_cross_stage") {
+  if (eligibility.archetype !== "adjacent_forward_cross_stage"
+    || !eligibility.sourceStage
+    || !eligibility.targetStage) {
     return [];
   }
   return [
@@ -553,16 +696,34 @@ function buildStageLocalBypass(
   if (nominalCoordinate >= stageBottom) {
     return undefined;
   }
+  const intermediateSteps = spannedSteps.slice(1, -1);
+  const firstIntermediateStep = intermediateSteps[0];
+  const branchDepartureX = eligibility.branch && firstIntermediateStep
+    ? roundMetric((source.x + firstIntermediateStep.x) / 2)
+    : undefined;
+  if (eligibility.branch && (!firstIntermediateStep
+    || branchDepartureX === undefined
+    || branchDepartureX - source.x < MIN_ARROW_MARKER_LEG
+    || firstIntermediateStep.x - branchDepartureX < MIN_ARROW_MARKER_LEG)) {
+    return undefined;
+  }
+  const trackStart = branchDepartureX ?? source.x;
   return {
     stageId: eligibility.sourceStage.stage.id,
     axis: "horizontal",
     nominalCoordinate,
     span: {
-      start: roundMetric(Math.min(source.x, target.x)),
+      start: roundMetric(Math.min(trackStart, target.x)),
       end: roundMetric(Math.max(source.x, target.x))
     },
+    ...(eligibility.branch ? {
+      endpointSpan: {
+        start: roundMetric(Math.min(source.x, target.x)),
+        end: roundMetric(Math.max(source.x, target.x))
+      }
+    } : {}),
     intermediateStepIds: stepIds.slice(1, -1),
-    obstacleControls: spannedSteps.slice(1, -1).map((step) => ({
+    obstacleControls: intermediateSteps.map((step) => ({
       stepId: step.id,
       entryX: roundMetric(step.x),
       exitX: roundMetric(step.x + step.width)
@@ -586,9 +747,14 @@ function buildRootOuterBypass(
   target: JourneyMapResolvedEndpoint
 ): JourneyMapRootOuterBypass | undefined {
   if (eligibility.archetype !== "long_forward_cross_stage"
-    || !eligibility.sourceStage
-    || !eligibility.targetStage
-    || root.children.length === 0) {
+    && eligibility.archetype !== "long_forward_root_step") {
+    return undefined;
+  }
+  if (eligibility.archetype === "long_forward_cross_stage"
+    && (!eligibility.sourceStage || !eligibility.targetStage)) {
+    return undefined;
+  }
+  if (root.children.length === 0) {
     return undefined;
   }
   const maximumRootItemBottom = Math.max(
@@ -606,14 +772,31 @@ function buildRootOuterBypass(
       && rootOrder > sourceRootOrder
       && rootOrder < targetRootOrder;
   });
+  const firstIntermediateRootItem = intermediateRootItems[0];
+  const branchDepartureX = eligibility.branch && firstIntermediateRootItem
+    ? roundMetric((source.x + firstIntermediateRootItem.x) / 2)
+    : undefined;
+  if (eligibility.branch && (!firstIntermediateRootItem
+    || branchDepartureX === undefined
+    || branchDepartureX - source.x < MIN_ARROW_MARKER_LEG
+    || firstIntermediateRootItem.x - branchDepartureX < MIN_ARROW_MARKER_LEG)) {
+    return undefined;
+  }
+  const trackStart = branchDepartureX ?? source.x;
   return {
     ownerContainerId: root.id,
     axis: "horizontal",
     nominalCoordinate,
     span: {
-      start: roundMetric(Math.min(source.x, target.x)),
-      end: roundMetric(Math.max(source.x, target.x))
+      start: roundMetric(Math.min(trackStart, target.x)),
+      end: roundMetric(Math.max(trackStart, target.x))
     },
+    ...(eligibility.branch ? {
+      endpointSpan: {
+        start: roundMetric(Math.min(source.x, target.x)),
+        end: roundMetric(Math.max(source.x, target.x))
+      }
+    } : {}),
     intermediateRootItemIds: intermediateRootItems.map((item) => item.id),
     obstacleControls: intermediateRootItems.map((item) => ({
       rootItemId: item.id,
@@ -622,6 +805,47 @@ function buildRootOuterBypass(
     })),
     order: 0,
     locked: false
+  };
+}
+
+function buildBranchPlan(
+  eligibility: RouteEligibility,
+  source: JourneyMapResolvedEndpoint,
+  stageLocalBypass: JourneyMapStageLocalBypass | undefined,
+  rootOuterBypass: JourneyMapRootOuterBypass | undefined
+): JourneyMapBranchPlan | undefined {
+  if (!eligibility.branch) {
+    return undefined;
+  }
+  const bypass = stageLocalBypass ?? rootOuterBypass;
+  const obstacleControl = stageLocalBypass?.obstacleControls[0]
+    ? {
+      obstacleItemId: stageLocalBypass.obstacleControls[0].stepId,
+      obstacleBoundaryCoordinate: stageLocalBypass.obstacleControls[0].entryX
+    }
+    : rootOuterBypass?.obstacleControls[0]
+      ? {
+        obstacleItemId: rootOuterBypass.obstacleControls[0].rootItemId,
+        obstacleBoundaryCoordinate: rootOuterBypass.obstacleControls[0].entryX
+      }
+      : undefined;
+  const departureControl = bypass && obstacleControl
+    ? {
+      axis: "vertical" as const,
+      nominalCoordinate: bypass.span.start,
+      span: {
+        start: roundMetric(Math.min(source.y, bypass.nominalCoordinate)),
+        end: roundMetric(Math.max(source.y, bypass.nominalCoordinate))
+      },
+      ...obstacleControl,
+      order: 0 as const,
+      locked: false as const
+    }
+    : undefined;
+  return {
+    sourceOutdegree: eligibility.branch.sourceOutdegree,
+    sourceOrdinal: eligibility.branch.sourceOrdinal,
+    ...(departureControl ? { departureControl } : {})
   };
 }
 
@@ -715,13 +939,96 @@ function buildBasicRoute(
   };
 }
 
+function buildSingleStageBoundaryRoute(
+  archetype: "adjacent_forward_root_to_contained" | "adjacent_forward_contained_to_root",
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint,
+  stageGates: readonly JourneyMapStageGate[],
+  includeStageGateVertex: boolean
+): PositionedRoute | undefined {
+  const [gate] = stageGates;
+  if (!gate
+    || source.side !== "east"
+    || target.side !== "west"
+    || source.x >= target.x) {
+    return undefined;
+  }
+  const gateIsTargetBoundary = archetype === "adjacent_forward_root_to_contained";
+  if ((gateIsTargetBoundary && (gate.side !== "west" || source.x >= gate.x || gate.x >= target.x))
+    || (!gateIsTargetBoundary && (gate.side !== "east" || source.x >= gate.x || gate.x >= target.x))) {
+    return undefined;
+  }
+  if (source.y === target.y) {
+    return {
+      style: "orthogonal",
+      points: cloneRoutePoints(includeStageGateVertex ? [source, gate, target] : [source, target])
+    };
+  }
+  const bendX = roundMetric(gateIsTargetBoundary
+    ? (source.x + gate.x) / 2
+    : (gate.x + target.x) / 2);
+  if (bendX - source.x < MIN_ARROW_MARKER_LEG
+    || target.x - bendX < MIN_ARROW_MARKER_LEG) {
+    return undefined;
+  }
+  return {
+    style: "orthogonal",
+    points: cloneRoutePoints(gateIsTargetBoundary
+      ? [
+        source,
+        { x: bendX, y: source.y },
+        { x: bendX, y: target.y },
+        ...(includeStageGateVertex ? [gate] : []),
+        target
+      ]
+      : [
+        source,
+        ...(includeStageGateVertex ? [gate] : []),
+        { x: bendX, y: source.y },
+        { x: bendX, y: target.y },
+        target
+      ])
+  };
+}
+
 function buildRootOuterBypassRoute(
   source: JourneyMapResolvedEndpoint,
   target: JourneyMapResolvedEndpoint,
   bypass: JourneyMapRootOuterBypass,
   stageGates: readonly JourneyMapStageGate[],
+  branch: JourneyMapBranchPlan | undefined,
   includeControls: boolean
 ): PositionedRoute | undefined {
+  const departure = branch?.departureControl;
+  if (departure) {
+    if (source.side !== "east"
+      || target.side !== "south"
+      || stageGates.length !== 0
+      || source.x >= departure.nominalCoordinate
+      || departure.nominalCoordinate >= target.x
+      || departure.nominalCoordinate - source.x < MIN_ARROW_MARKER_LEG
+      || bypass.nominalCoordinate <= source.y
+      || bypass.nominalCoordinate <= target.y
+      || bypass.nominalCoordinate - target.y < MIN_ARROW_MARKER_LEG) {
+      return undefined;
+    }
+    return {
+      style: "orthogonal",
+      points: cloneRoutePoints([
+        source,
+        { x: departure.nominalCoordinate, y: source.y },
+        { x: departure.nominalCoordinate, y: bypass.nominalCoordinate },
+        ...(includeControls
+          ? bypass.obstacleControls.flatMap((control) => [
+            { x: control.entryX, y: bypass.nominalCoordinate },
+            { x: control.exitX, y: bypass.nominalCoordinate }
+          ])
+          : []),
+        { x: target.x, y: bypass.nominalCoordinate },
+        target
+      ])
+    };
+  }
   const [sourceGate, targetGate] = stageGates;
   if (source.side !== "south"
     || target.side !== "south"
@@ -757,8 +1064,38 @@ function buildStageLocalBypassRoute(
   source: JourneyMapResolvedEndpoint,
   target: JourneyMapResolvedEndpoint,
   bypass: JourneyMapStageLocalBypass,
+  branch: JourneyMapBranchPlan | undefined,
   includeObstacleControls: boolean
 ): PositionedRoute | undefined {
+  const departure = branch?.departureControl;
+  if (departure) {
+    if (source.side !== "east"
+      || target.side !== "south"
+      || source.x >= departure.nominalCoordinate
+      || departure.nominalCoordinate >= target.x
+      || departure.nominalCoordinate - source.x < MIN_ARROW_MARKER_LEG
+      || bypass.nominalCoordinate <= source.y
+      || bypass.nominalCoordinate <= target.y
+      || bypass.nominalCoordinate - target.y < MIN_ARROW_MARKER_LEG) {
+      return undefined;
+    }
+    return {
+      style: "orthogonal",
+      points: cloneRoutePoints([
+        source,
+        { x: departure.nominalCoordinate, y: source.y },
+        { x: departure.nominalCoordinate, y: bypass.nominalCoordinate },
+        ...(includeObstacleControls
+          ? bypass.obstacleControls.flatMap((control) => [
+            { x: control.entryX, y: bypass.nominalCoordinate },
+            { x: control.exitX, y: bypass.nominalCoordinate }
+          ])
+          : []),
+        { x: target.x, y: bypass.nominalCoordinate },
+        target
+      ])
+    };
+  }
   const sourceLeg = Math.abs(bypass.nominalCoordinate - source.y);
   const targetLeg = Math.abs(bypass.nominalCoordinate - target.y);
   if (source.side !== "south"
@@ -793,7 +1130,9 @@ function buildPriority(
   eligibility: RouteEligibility
 ): JourneyMapRoutePriority {
   return {
-    archetypeRank: eligibility.archetype === "adjacent_forward_same_stage"
+    archetypeRank: eligibility.branch
+      ? 4
+      : eligibility.archetype === "adjacent_forward_same_stage"
       ? 0
       : eligibility.archetype === "adjacent_forward_cross_stage"
         ? 1
@@ -1006,10 +1345,12 @@ export type JourneyMapRouteValidationStage = "step2" | "provisional" | "final_ba
 export function validateJourneyMapRoutes(
   plans: readonly JourneyMapConnectorPlan[],
   positionedScene: PositionedScene,
-  routeStage: JourneyMapRouteValidationStage = "provisional"
+  routeStage: JourneyMapRouteValidationStage = "provisional",
+  measuredScene?: MeasuredScene
 ): RendererDiagnostic[] {
   const diagnostics: RendererDiagnostic[] = [];
   const index = buildJourneyMapPositionedIndex(positionedScene);
+  const measuredDegrees = measuredScene ? buildDegreeIndex(measuredScene.edges) : undefined;
   for (const plan of plans) {
     const route = routeStage === "step2"
       ? plan.step2Route
@@ -1183,6 +1524,18 @@ export function validateJourneyMapRoutes(
           && plan.stageGates[1]?.side === "south"
           && plan.stageGates[1]?.order === 0
           && plan.stageGates[1]?.locked === true
+        : plan.archetype === "adjacent_forward_root_to_contained"
+          ? plan.stageGates.length === 1
+            && plan.stageGates[0]?.stageId === expectedTargetStageId
+            && plan.stageGates[0]?.side === "west"
+            && plan.stageGates[0]?.order === 0
+            && plan.stageGates[0]?.locked === true
+          : plan.archetype === "adjacent_forward_contained_to_root"
+            ? plan.stageGates.length === 1
+              && plan.stageGates[0]?.stageId === expectedSourceStageId
+              && plan.stageGates[0]?.side === "east"
+              && plan.stageGates[0]?.order === 0
+              && plan.stageGates[0]?.locked === true
         : plan.stageGates.length === 0;
     if (!gateContractMatches) {
       diagnostics.push(createRoutingDiagnostic(
@@ -1244,6 +1597,13 @@ export function validateJourneyMapRoutes(
         entryX: roundMetric(step.x),
         exitX: roundMetric(step.x + step.width)
       }));
+      const expectedDepartureX = plan.branch && expectedObstacleControls[0]
+        ? roundMetric((plan.sourceEndpoint.x + expectedObstacleControls[0].entryX) / 2)
+        : plan.sourceEndpoint.x;
+      const expectedEndpointSpan = {
+        start: Math.min(plan.sourceEndpoint.x, plan.targetEndpoint.x),
+        end: Math.max(plan.sourceEndpoint.x, plan.targetEndpoint.x)
+      };
       const stageBottom = stage ? stage.stage.y + stage.stage.height : Number.NaN;
       const routeHasProvisionalControls = routeStage === "step2"
         || expectedObstacleControls.every((control) =>
@@ -1260,8 +1620,11 @@ export function validateJourneyMapRoutes(
         && bypass.axis === "horizontal"
         && bypass.nominalCoordinate === roundMetric(maximumStepBottom + MIN_ARROW_MARKER_LEG)
         && bypass.nominalCoordinate < stageBottom
-        && bypass.span.start === Math.min(plan.sourceEndpoint.x, plan.targetEndpoint.x)
-        && bypass.span.end === Math.max(plan.sourceEndpoint.x, plan.targetEndpoint.x)
+        && bypass.span.start === Math.min(expectedDepartureX, plan.targetEndpoint.x)
+        && bypass.span.end === Math.max(expectedDepartureX, plan.targetEndpoint.x)
+        && (plan.branch
+          ? JSON.stringify(bypass.endpointSpan) === JSON.stringify(expectedEndpointSpan)
+          : bypass.endpointSpan === undefined)
         && JSON.stringify(bypass.intermediateStepIds) === JSON.stringify(expectedStepIds.slice(1, -1))
         && JSON.stringify(bypass.obstacleControls) === JSON.stringify(expectedObstacleControls)
         && bypass.order === 0
@@ -1293,7 +1656,8 @@ export function validateJourneyMapRoutes(
     }
 
     const rootBypass = plan.rootOuterBypass;
-    const rootBypassExpected = plan.archetype === "long_forward_cross_stage";
+    const rootBypassExpected = plan.archetype === "long_forward_cross_stage"
+      || plan.archetype === "long_forward_root_step";
     if (rootBypassExpected) {
       const maximumRootItemBottom = positionedScene.root.children.length > 0
         ? Math.max(...positionedScene.root.children.map((item) => item.y + item.height))
@@ -1314,6 +1678,13 @@ export function validateJourneyMapRoutes(
         entryX: roundMetric(item.x),
         exitX: roundMetric(item.x + item.width)
       }));
+      const expectedDepartureX = plan.branch && expectedObstacleControls[0]
+        ? roundMetric((plan.sourceEndpoint.x + expectedObstacleControls[0].entryX) / 2)
+        : plan.sourceEndpoint.x;
+      const expectedEndpointSpan = {
+        start: Math.min(plan.sourceEndpoint.x, plan.targetEndpoint.x),
+        end: Math.max(plan.sourceEndpoint.x, plan.targetEndpoint.x)
+      };
       const routeHasProvisionalControls = routeStage === "step2"
         || expectedObstacleControls.every((control) =>
           route.points.some((point) =>
@@ -1329,8 +1700,11 @@ export function validateJourneyMapRoutes(
         && rootBypass.axis === "horizontal"
         && rootBypass.nominalCoordinate === expectedNominalCoordinate
         && rootBypass.nominalCoordinate < positionedScene.root.y + positionedScene.root.height
-        && rootBypass.span.start === Math.min(plan.sourceEndpoint.x, plan.targetEndpoint.x)
-        && rootBypass.span.end === Math.max(plan.sourceEndpoint.x, plan.targetEndpoint.x)
+        && rootBypass.span.start === Math.min(expectedDepartureX, plan.targetEndpoint.x)
+        && rootBypass.span.end === Math.max(expectedDepartureX, plan.targetEndpoint.x)
+        && (plan.branch
+          ? JSON.stringify(rootBypass.endpointSpan) === JSON.stringify(expectedEndpointSpan)
+          : rootBypass.endpointSpan === undefined)
         && JSON.stringify(rootBypass.intermediateRootItemIds)
           === JSON.stringify(intermediateRootItems.map((item) => item.id))
         && JSON.stringify(rootBypass.obstacleControls) === JSON.stringify(expectedObstacleControls)
@@ -1361,6 +1735,66 @@ export function validateJourneyMapRoutes(
         JSON.stringify({ relatedIds: [plan.id, rootBypass.ownerContainerId] })
       ));
     }
+
+    const branch = plan.branch;
+    const topologyModifiersMatch = branch
+      ? JSON.stringify(plan.topologyModifiers) === JSON.stringify(["branch"])
+      : plan.topologyModifiers === undefined;
+    const branchBypass = plan.stageLocalBypass ?? plan.rootOuterBypass;
+    const firstBranchObstacle = plan.stageLocalBypass?.obstacleControls[0]
+      ? {
+        obstacleItemId: plan.stageLocalBypass.obstacleControls[0].stepId,
+        obstacleBoundaryCoordinate: plan.stageLocalBypass.obstacleControls[0].entryX
+      }
+      : plan.rootOuterBypass?.obstacleControls[0]
+        ? {
+          obstacleItemId: plan.rootOuterBypass.obstacleControls[0].rootItemId,
+          obstacleBoundaryCoordinate: plan.rootOuterBypass.obstacleControls[0].entryX
+        }
+        : undefined;
+    const expectedDepartureControl = branchBypass && firstBranchObstacle
+      ? {
+        axis: "vertical" as const,
+        nominalCoordinate: roundMetric(
+          (plan.sourceEndpoint.x + firstBranchObstacle.obstacleBoundaryCoordinate) / 2
+        ),
+        span: {
+          start: roundMetric(Math.min(plan.sourceEndpoint.y, branchBypass.nominalCoordinate)),
+          end: roundMetric(Math.max(plan.sourceEndpoint.y, branchBypass.nominalCoordinate))
+        },
+        ...firstBranchObstacle,
+        order: 0 as const,
+        locked: false as const
+      }
+      : undefined;
+    const authoredOutgoingEdgeIds = measuredDegrees?.outgoingEdgeIdsByNodeId.get(plan.from);
+    const expectedSourceOrdinal = authoredOutgoingEdgeIds?.indexOf(plan.id);
+    const branchDegreeContractMatches = branch
+      ? authoredOutgoingEdgeIds
+        ? branch.sourceOutdegree === authoredOutgoingEdgeIds.length
+          && expectedSourceOrdinal !== undefined
+          && expectedSourceOrdinal >= 0
+          && branch.sourceOrdinal === expectedSourceOrdinal
+        : branch.sourceOutdegree > 1
+          && branch.sourceOrdinal >= 0
+          && branch.sourceOrdinal < branch.sourceOutdegree
+      : true;
+    const branchContractMatches = branch
+      ? topologyModifiersMatch
+        && branchDegreeContractMatches
+        && plan.priority.archetypeRank === 4
+        && JSON.stringify(branch.departureControl) === JSON.stringify(expectedDepartureControl)
+        && plan.sourceEndpoint.side === "east"
+      : topologyModifiersMatch && plan.priority.archetypeRank !== 4;
+    if (!branchContractMatches) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_archetype_fallback",
+        `Journey edge "${plan.id}" does not expose its accepted branch topology contract.`,
+        plan.id,
+        "warn",
+        JSON.stringify({ relatedIds: [plan.id, plan.from] })
+      ));
+    }
   }
   return sortRendererDiagnostics(diagnostics);
 }
@@ -1368,9 +1802,10 @@ export function validateJourneyMapRoutes(
 export function validateJourneyMapBasicRoutes(
   plans: readonly JourneyMapConnectorPlan[],
   positionedScene: PositionedScene,
-  routeStage: "step2" | "final_basic" = "final_basic"
+  routeStage: "step2" | "final_basic" = "final_basic",
+  measuredScene?: MeasuredScene
 ): RendererDiagnostic[] {
-  return validateJourneyMapRoutes(plans, positionedScene, routeStage);
+  return validateJourneyMapRoutes(plans, positionedScene, routeStage, measuredScene);
 }
 
 function positionedEdgeFromPlan(plan: JourneyMapConnectorPlan, route: PositionedRoute): PositionedEdge {
@@ -1490,22 +1925,25 @@ export function buildJourneyMapRoutingStages(
       continue;
     }
     const usesStageLocalBypass = eligibility.archetype === "non_adjacent_forward_same_stage";
-    const usesRootOuterBypass = eligibility.archetype === "long_forward_cross_stage";
-    const usesSouthEndpoints = usesStageLocalBypass || usesRootOuterBypass;
+    const usesRootOuterBypass = eligibility.archetype === "long_forward_cross_stage"
+      || eligibility.archetype === "long_forward_root_step";
+    const sourceUsesSouthEndpoint = !eligibility.branch
+      && (usesStageLocalBypass || usesRootOuterBypass);
+    const targetUsesSouthEndpoint = usesStageLocalBypass || usesRootOuterBypass;
     const sourceEndpoint = resolveEndpoint(
       edge,
       eligibility.source,
       "source",
-      usesSouthEndpoints ? "journey_escape_out" : edge.routing.sourcePortRole,
-      usesSouthEndpoints ? "south" : "east",
+      sourceUsesSouthEndpoint ? "journey_escape_out" : edge.routing.sourcePortRole,
+      sourceUsesSouthEndpoint ? "south" : "east",
       diagnostics
     );
     const targetEndpoint = resolveEndpoint(
       edge,
       eligibility.target,
       "target",
-      usesSouthEndpoints ? "journey_escape_in" : edge.routing.targetPortRole,
-      usesSouthEndpoints ? "south" : "west",
+      targetUsesSouthEndpoint ? "journey_escape_in" : edge.routing.targetPortRole,
+      targetUsesSouthEndpoint ? "south" : "west",
       diagnostics
     );
     if (!sourceEndpoint || !targetEndpoint) {
@@ -1527,51 +1965,89 @@ export function buildJourneyMapRoutingStages(
       sourceEndpoint,
       targetEndpoint
     );
+    const branch = buildBranchPlan(
+      eligibility,
+      sourceEndpoint,
+      stageLocalBypass,
+      rootOuterBypass
+    );
     const basicArchetype = isBasicRouteArchetype(eligibility.archetype)
       ? eligibility.archetype
       : undefined;
     const step2Route = usesStageLocalBypass && stageLocalBypass
-      ? buildStageLocalBypassRoute(sourceEndpoint, targetEndpoint, stageLocalBypass, false)
+      ? buildStageLocalBypassRoute(
+        sourceEndpoint,
+        targetEndpoint,
+        stageLocalBypass,
+        branch,
+        false
+      )
       : usesRootOuterBypass && rootOuterBypass
         ? buildRootOuterBypassRoute(
           sourceEndpoint,
           targetEndpoint,
           rootOuterBypass,
           stageGates,
+          branch,
           false
         )
         : eligibility.archetype === "adjacent_forward_root_step"
           ? buildAdjacentRootStepRoute(sourceEndpoint, targetEndpoint)
-      : basicArchetype
-        ? buildBasicRoute(
-          basicArchetype,
-          sourceEndpoint,
-          targetEndpoint,
-          stageGates,
-          false
-        )
-        : undefined;
+          : eligibility.archetype === "adjacent_forward_root_to_contained"
+            || eligibility.archetype === "adjacent_forward_contained_to_root"
+            ? buildSingleStageBoundaryRoute(
+              eligibility.archetype,
+              sourceEndpoint,
+              targetEndpoint,
+              stageGates,
+              false
+            )
+            : basicArchetype
+              ? buildBasicRoute(
+                basicArchetype,
+                sourceEndpoint,
+                targetEndpoint,
+                stageGates,
+                false
+              )
+              : undefined;
     const provisionalRoute = usesStageLocalBypass && stageLocalBypass
-      ? buildStageLocalBypassRoute(sourceEndpoint, targetEndpoint, stageLocalBypass, true)
+      ? buildStageLocalBypassRoute(
+        sourceEndpoint,
+        targetEndpoint,
+        stageLocalBypass,
+        branch,
+        true
+      )
       : usesRootOuterBypass && rootOuterBypass
         ? buildRootOuterBypassRoute(
           sourceEndpoint,
           targetEndpoint,
           rootOuterBypass,
           stageGates,
+          branch,
           true
         )
         : eligibility.archetype === "adjacent_forward_root_step"
           ? buildAdjacentRootStepRoute(sourceEndpoint, targetEndpoint)
-      : basicArchetype
-        ? buildBasicRoute(
-          basicArchetype,
-          sourceEndpoint,
-          targetEndpoint,
-          stageGates,
-          true
-        )
-        : undefined;
+          : eligibility.archetype === "adjacent_forward_root_to_contained"
+            || eligibility.archetype === "adjacent_forward_contained_to_root"
+            ? buildSingleStageBoundaryRoute(
+              eligibility.archetype,
+              sourceEndpoint,
+              targetEndpoint,
+              stageGates,
+              true
+            )
+            : basicArchetype
+              ? buildBasicRoute(
+                basicArchetype,
+                sourceEndpoint,
+                targetEndpoint,
+                stageGates,
+                true
+              )
+              : undefined;
     const finalBasicRoute = provisionalRoute
       ? { style: provisionalRoute.style, points: cloneRoutePoints(provisionalRoute.points) }
       : undefined;
@@ -1609,6 +2085,7 @@ export function buildJourneyMapRoutingStages(
       stageGates,
       ...(stageLocalBypass ? { stageLocalBypass } : {}),
       ...(rootOuterBypass ? { rootOuterBypass } : {}),
+      ...(branch ? { topologyModifiers: ["branch"] as ["branch"], branch } : {}),
       role: edge.role,
       classes: [...edge.classes],
       ...(edge.markers ? { markers: { ...edge.markers } } : {}),
@@ -1650,17 +2127,20 @@ export function buildJourneyMapRoutingStages(
   const step2ValidationDiagnostics = validateJourneyMapBasicRoutes(
     connectorPlans,
     preRoutingPositionedScene,
-    "step2"
+    "step2",
+    measuredScene
   );
   const finalBasicValidationDiagnostics = validateJourneyMapBasicRoutes(
     connectorPlans,
     preRoutingPositionedScene,
-    "final_basic"
+    "final_basic",
+    measuredScene
   );
   const provisionalValidationDiagnostics = validateJourneyMapRoutes(
     connectorPlans,
     preRoutingPositionedScene,
-    "provisional"
+    "provisional",
+    measuredScene
   );
   diagnostics.push(
     ...step2ValidationDiagnostics,

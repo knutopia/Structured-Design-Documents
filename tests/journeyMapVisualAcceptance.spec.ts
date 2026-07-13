@@ -26,6 +26,10 @@ const primaryFixturePath = path.join(
   repoRoot,
   "tests/fixtures/render/journey_map_staged_primary.sdd"
 );
+const topologyFixturePath = path.join(
+  repoRoot,
+  "tests/fixtures/render/journey_map_staged_topology.sdd"
+);
 
 describe("journey map Gate 6 visual acceptance", () => {
   it("keeps the isolated same-Stage skip below the Step row with clear south ports", async () => {
@@ -116,7 +120,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       "strict"
     );
     const scene = rendered.routingStages.provisionalPositionedScene;
-    expect(scene.edges).toHaveLength(5);
+    expect(scene.edges).toHaveLength(7);
     const longCross = scene.edges.find((edge) =>
       edge.from.itemId === "J-204" && edge.to.itemId === "J-401"
     );
@@ -170,6 +174,113 @@ describe("journey map Gate 6 visual acceptance", () => {
     expect(getTerminalSegmentLength(longCross!)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     expect(rendered.provisionalSvg).not.toBe(rendered.step2Svg);
     expect(rendered.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+
+  it("keeps branch fan-out on a common east departure with clear local and root-peripheral tracks", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+
+    const renderFixture = async (fixture: string) => {
+      const compiled = compileSource({
+        path: fixture,
+        text: await readFile(fixture, "utf8")
+      }, bundle);
+      expect(compiled.diagnostics).toEqual([]);
+      expect(compiled.graph).toBeDefined();
+      const projected = projectView(compiled.graph!, bundle, "journey_map");
+      expect(projected.diagnostics).toEqual([]);
+      expect(projected.projection).toBeDefined();
+      return renderJourneyMapRoutingArtifacts(
+        projected.projection!,
+        compiled.graph!,
+        bundle,
+        view!,
+        "strict"
+      );
+    };
+
+    const primary = await renderFixture(primaryFixturePath);
+    const primaryScene = primary.routingStages.provisionalPositionedScene;
+    const primaryBranches = primaryScene.edges.filter((edge) => edge.from.itemId === "J-201");
+    expect(primaryBranches).toHaveLength(2);
+    expect(primaryBranches.map((edge) => edge.from)).toEqual([
+      { itemId: "J-201", portId: "J-201__flow_out", x: 1156, y: 154 },
+      { itemId: "J-201", portId: "J-201__flow_out", x: 1156, y: 154 }
+    ]);
+    expect(primaryBranches[0]!.route.points).toContainEqual({ x: 1168, y: 116 });
+    expect(primaryBranches[1]!.route.points).toContainEqual({ x: 1168, y: 228 });
+
+    const primaryItems = flattenPositionedItems(primaryScene.root);
+    const primaryNodeBoxes = primaryItems
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id,
+        x: node.x,
+        y: node.y,
+        width: node.width,
+        height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes(primaryBranches, primaryNodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(primaryBranches, primaryNodeBoxes);
+    for (const edge of primaryBranches) {
+      for (const header of collectHeaderBoxes(primaryScene.root)) {
+        expect(routeIntersectsRect(edge.route, header)).toBe(false);
+      }
+      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    }
+
+    const topology = await renderFixture(topologyFixturePath);
+    const topologyScene = topology.routingStages.provisionalPositionedScene;
+    expect(topologyScene.edges).toHaveLength(3);
+    const enterStage = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-790" && edge.to.itemId === "J-701"
+    );
+    const outer = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-790" && edge.to.itemId === "J-791"
+    );
+    const exitStage = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-714" && edge.to.itemId === "J-791"
+    );
+    expect(enterStage?.route.points).toEqual([
+      { x: 256, y: 116 }, { x: 296, y: 116 }, { x: 316, y: 116 }
+    ]);
+    expect(outer?.route.points).toContainEqual({ x: 276, y: 188 });
+    expect(outer?.route.points).toContainEqual({ x: 1800, y: 188 });
+    expect(exitStage?.route.points).toEqual([
+      { x: 1780, y: 116 }, { x: 1800, y: 116 }, { x: 1840, y: 116 }
+    ]);
+
+    const topologyItems = flattenPositionedItems(topologyScene.root);
+    const topologyNodeBoxes = topologyItems
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id,
+        x: node.x,
+        y: node.y,
+        width: node.width,
+        height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes(topologyScene.edges, topologyNodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(topologyScene.edges, topologyNodeBoxes);
+    for (const edge of topologyScene.edges) {
+      for (const header of collectHeaderBoxes(topologyScene.root)) {
+        expect(routeIntersectsRect(edge.route, header)).toBe(false);
+      }
+      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    }
+    const stage = topologyItems.find((item): item is PositionedContainer =>
+      item.kind === "container" && item.id === "G-700"
+    );
+    expect(stage).toBeDefined();
+    expect(188).toBeGreaterThan(stage!.y + stage!.height);
+    expect(188).toBeLessThan(topologyScene.root.y + topologyScene.root.height);
+    expect(primary.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+    expect(topology.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
   });
