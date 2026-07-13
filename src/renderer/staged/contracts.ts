@@ -202,6 +202,22 @@ export interface EdgeViewMetadata {
   journeyMap?: JourneyMapEdgeMetadata;
 }
 
+export function cloneEdgeViewMetadata(viewMetadata?: EdgeViewMetadata): EdgeViewMetadata | undefined {
+  if (viewMetadata === undefined) {
+    return undefined;
+  }
+
+  return {
+    ...(viewMetadata.journeyMap
+      ? {
+        journeyMap: {
+          ...viewMetadata.journeyMap
+        }
+      }
+      : {})
+  };
+}
+
 export interface BoxSpacing {
   top: number;
   right: number;
@@ -248,6 +264,7 @@ export interface ContentBlock {
   kind: ContentBlockKind;
   text: string;
   textStyleRole: string;
+  region?: ContentRegion;
   priority?: ContentPriority;
 }
 
@@ -439,6 +456,7 @@ export interface MeasuredEdge {
   label?: MeasuredEdgeLabel;
   markers?: EdgeMarkers;
   ownerContainerId?: string;
+  viewMetadata?: EdgeViewMetadata;
 }
 
 export interface MeasuredScene {

@@ -581,7 +581,7 @@ The shared final arrow-marker terminal-leg threshold is exactly `MIN_ARROW_MARKE
 
 | Assertion | Stages | Cases |
 | --- | --- | --- |
-| One semantic edge occurrence, unique stable ID, no route geometry | RendererScene, MeasuredScene, pre-routing | all cases; duplicate proves multiplicity |
+| One semantic edge occurrence, unique stable ID, no route geometry | RendererScene and MeasuredScene; paired pre-routing evidence retains those ledgers while its PositionedScene has `edges=[]` | all cases; duplicate proves multiplicity |
 | Exactly one orthogonal route per occurrence | step-2, step-3, final | all cases |
 | Exterior endpoint approach | step-2, step-3, final | all cases |
 | Non-endpoint Step, endpoint-interior, header, badge, unrelated-Stage clearance | step-3 and final | every applicable edge; ordering included |
@@ -592,7 +592,7 @@ The shared final arrow-marker terminal-leg threshold is exactly `MIN_ARROW_MARKE
 | 12px final terminal leg | final | every arrow-ended edge |
 | Nominal-to-resolved occupancy change plus bounded whole-structure expansion | step-3 and final | compressed only |
 
-Human ownership at `1680×1050`, 100% zoom, intrinsic SVG: primary owns left-to-right reading, direct tracks, Stage chrome, empty/single Stages, long labels, badges, and baseline whitespace; primary and compressed own branch/join clarity; topology and compressed own peripheral returns; duplicate and compressed own edge identity; primary, ordering, topology, and compressed own consistent ports/boundary gates; primary and compressed own intentional whitespace. A review item may be `N/A` only when this table assigns it to another case; owned items require PASS. Any hard failure, unexpected renderer warning/error, non-empty violated-invariant field, or nominally identical debug stages fails the gate.
+Human ownership at `1680×1050`, 100% zoom, intrinsic SVG: primary owns left-to-right reading, direct tracks, Stage chrome, empty/single Stages, long labels, badges, and baseline whitespace; primary and compressed own branch/join clarity; topology and compressed own peripheral returns; duplicate and compressed own edge identity; primary, ordering, topology, and compressed own consistent ports/boundary gates; primary and compressed own intentional whitespace. Primary and dense/debug cases may scroll horizontally at intrinsic 100%; a fit-to-viewport overview is composition evidence only and cannot accept text readability. Vertical fit and every intrinsic geometry/readability check remain binding. A review item may be `N/A` only when this table assigns it to another case; owned items require PASS. Any hard failure, unexpected renderer warning/error, non-empty violated-invariant field, or nominally identical debug stages fails the gate.
 
 ## 5. Exact evidence names
 

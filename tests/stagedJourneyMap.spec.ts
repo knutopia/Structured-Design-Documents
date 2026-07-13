@@ -239,6 +239,7 @@ describe("staged journey map RendererScene", () => {
           kind: "badge_text",
           text: "Clear total cost",
           textStyleRole: "badge",
+          region: "secondary",
           priority: "secondary"
         },
         {
@@ -246,6 +247,7 @@ describe("staged journey map RendererScene", () => {
           kind: "badge_text",
           text: "Confidence before commitment",
           textStyleRole: "badge",
+          region: "secondary",
           priority: "secondary"
         }
       ]);

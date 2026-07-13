@@ -1,6 +1,6 @@
 {
   "viewId": "journey_map",
-  "profileId": "permissive",
+  "profileId": "strict",
   "themeId": "default",
   "root": {
     "kind": "container",
@@ -12,6 +12,37 @@
       "journey_map",
       "journey_map"
     ],
+    "viewMetadata": {
+      "journeyMap": {
+        "kind": "root",
+        "rootItemIds": [
+          "G-100",
+          "G-200",
+          "J-250",
+          "J-260",
+          "G-300",
+          "G-400"
+        ],
+        "stageIds": [
+          "G-100",
+          "G-200",
+          "G-300",
+          "G-400"
+        ],
+        "globalStepIds": [
+          "J-101",
+          "J-102",
+          "J-103",
+          "J-201",
+          "J-202",
+          "J-203",
+          "J-204",
+          "J-250",
+          "J-260",
+          "J-401"
+        ]
+      }
+    },
     "layout": {
       "strategy": "stack",
       "direction": "horizontal",
@@ -25,8 +56,10 @@
         "bottom": 32,
         "left": 32
       },
-      "gutter": 40
+      "gutter": 40,
+      "headerBandHeight": 0
     },
+    "headerContent": [],
     "children": [
       {
         "kind": "container",
@@ -64,8 +97,16 @@
           {
             "id": "G-100__header",
             "kind": "text",
-            "text": "Discover",
             "textStyleRole": "title",
+            "lines": [
+              "Discover"
+            ],
+            "x": 20,
+            "y": 10,
+            "width": 63.912,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           }
         ],
@@ -80,48 +121,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-101__title",
-                "kind": "text",
-                "text": "Recognize a need",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-101__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-101__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-101__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-101__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -132,7 +131,71 @@
                 "globalStepOrder": 0,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-101__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Recognize a need"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 130.528,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-101__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-101__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-101__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-101__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
           },
           {
             "kind": "node",
@@ -144,48 +207,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-102__title",
-                "kind": "text",
-                "text": "Compare plans, eligibility details, and expected total cost before choosing",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-102__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-102__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-102__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-102__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -196,7 +217,72 @@
                 "globalStepOrder": 1,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "wide",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-102__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Compare plans, eligibility details, and",
+                  "expected total cost before choosing"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 276.792,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-102__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "J-102__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 304,
+                "y": 32
+              },
+              {
+                "id": "J-102__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 152,
+                "y": 64
+              },
+              {
+                "id": "J-102__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 152,
+                "y": 64
+              }
+            ],
+            "overflow": {
+              "status": "escalated_width_band"
+            },
+            "width": 304,
+            "height": 64
           },
           {
             "kind": "node",
@@ -208,48 +294,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-103__title",
-                "kind": "text",
-                "text": "Shortlist an option",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-103__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-103__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-103__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-103__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -260,10 +304,76 @@
                 "globalStepOrder": 2,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-103__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Shortlist an option"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 136.424,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-103__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-103__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-103__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-103__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
           }
         ],
-        "ports": []
+        "ports": [],
+        "width": 840,
+        "height": 144
       },
       {
         "kind": "container",
@@ -301,8 +411,16 @@
           {
             "id": "G-200__header",
             "kind": "text",
-            "text": "Evaluate every option and choose the best path with confidence",
             "textStyleRole": "title",
+            "lines": [
+              "Evaluate every option and choose the best path with confidence"
+            ],
+            "x": 20,
+            "y": 10,
+            "width": 470.656,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           }
         ],
@@ -317,64 +435,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-201__title",
-                "kind": "text",
-                "text": "Review the recommendation",
-                "textStyleRole": "title",
-                "priority": "primary"
-              },
-              {
-                "id": "J-201__badge__OP-100__0",
-                "kind": "badge_text",
-                "text": "Clear total cost",
-                "textStyleRole": "badge",
-                "region": "secondary",
-                "priority": "secondary"
-              },
-              {
-                "id": "J-201__badge__OP-200__0",
-                "kind": "badge_text",
-                "text": "Confidence before commitment",
-                "textStyleRole": "badge",
-                "region": "secondary",
-                "priority": "secondary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-201__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-201__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-201__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-201__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -385,7 +445,102 @@
                 "globalStepOrder": 3,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-201__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Review the",
+                  "recommendation"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 125.368,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              },
+              {
+                "id": "J-201__badge__OP-100__0",
+                "kind": "badge_text",
+                "textStyleRole": "badge",
+                "lines": [
+                  "Clear total cost"
+                ],
+                "x": 12,
+                "y": 62,
+                "width": 101.062,
+                "height": 22,
+                "lineHeight": 14,
+                "region": "secondary",
+                "priority": "secondary"
+              },
+              {
+                "id": "J-201__badge__OP-200__0",
+                "kind": "badge_text",
+                "textStyleRole": "badge",
+                "lines": [
+                  "Confidence before commitment"
+                ],
+                "x": 12,
+                "y": 90,
+                "width": 191.842,
+                "height": 22,
+                "lineHeight": 14,
+                "region": "secondary",
+                "priority": "secondary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-201__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 62
+              },
+              {
+                "id": "J-201__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 62
+              },
+              {
+                "id": "J-201__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 124
+              },
+              {
+                "id": "J-201__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 124
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 124
           },
           {
             "kind": "node",
@@ -397,48 +552,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-202__title",
-                "kind": "text",
-                "text": "Compare the tradeoffs",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-202__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-202__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-202__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-202__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -449,7 +562,71 @@
                 "globalStepOrder": 4,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-202__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Compare the tradeoffs"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 168.072,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-202__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-202__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-202__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-202__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
           },
           {
             "kind": "node",
@@ -461,48 +638,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-203__title",
-                "kind": "text",
-                "text": "Resolve remaining concerns",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-203__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-203__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-203__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-203__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -513,7 +648,72 @@
                 "globalStepOrder": 5,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-203__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Resolve remaining",
+                  "concerns"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 136.408,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-203__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "J-203__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 32
+              },
+              {
+                "id": "J-203__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 64
+              },
+              {
+                "id": "J-203__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 64
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 64
           },
           {
             "kind": "node",
@@ -525,48 +725,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-204__title",
-                "kind": "text",
-                "text": "Choose a path",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-204__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-204__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-204__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-204__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -577,10 +735,76 @@
                 "globalStepOrder": 6,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-204__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Choose a path"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 105.336,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-204__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-204__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-204__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-204__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
           }
         ],
-        "ports": []
+        "ports": [],
+        "width": 1008,
+        "height": 204
       },
       {
         "kind": "node",
@@ -592,6 +816,14 @@
           "journey_step",
           "journey_step_root"
         ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 2,
+            "globalStepOrder": 7,
+            "uncontained": true
+          }
+        },
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
@@ -599,6 +831,7 @@
             "wide"
           ]
         },
+        "widthBand": "standard",
         "overflowPolicy": {
           "kind": "escalate_width_band",
           "maxLines": 2
@@ -607,8 +840,16 @@
           {
             "id": "J-250__title",
             "kind": "text",
-            "text": "Ask for human guidance",
             "textStyleRole": "title",
+            "lines": [
+              "Ask for human guidance"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 180.312,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           }
         ],
@@ -616,32 +857,37 @@
           {
             "id": "J-250__flow_in",
             "role": "journey_flow_in",
-            "side": "west"
+            "side": "west",
+            "x": 0,
+            "y": 24
           },
           {
             "id": "J-250__flow_out",
             "role": "journey_flow_out",
-            "side": "east"
+            "side": "east",
+            "x": 224,
+            "y": 24
           },
           {
             "id": "J-250__escape_in",
             "role": "journey_escape_in",
-            "side": "south"
+            "side": "south",
+            "x": 112,
+            "y": 48
           },
           {
             "id": "J-250__escape_out",
             "role": "journey_escape_out",
-            "side": "south"
+            "side": "south",
+            "x": 112,
+            "y": 48
           }
         ],
-        "viewMetadata": {
-          "journeyMap": {
-            "kind": "step",
-            "rootOrder": 2,
-            "globalStepOrder": 7,
-            "uncontained": true
-          }
-        }
+        "overflow": {
+          "status": "fits"
+        },
+        "width": 224,
+        "height": 48
       },
       {
         "kind": "node",
@@ -653,6 +899,14 @@
           "journey_step",
           "journey_step_root"
         ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 3,
+            "globalStepOrder": 8,
+            "uncontained": true
+          }
+        },
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
@@ -660,6 +914,7 @@
             "wide"
           ]
         },
+        "widthBand": "standard",
         "overflowPolicy": {
           "kind": "escalate_width_band",
           "maxLines": 2
@@ -668,8 +923,16 @@
           {
             "id": "J-260__title",
             "kind": "text",
-            "text": "Receive human guidance",
             "textStyleRole": "title",
+            "lines": [
+              "Receive human guidance"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 184.848,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           }
         ],
@@ -677,32 +940,37 @@
           {
             "id": "J-260__flow_in",
             "role": "journey_flow_in",
-            "side": "west"
+            "side": "west",
+            "x": 0,
+            "y": 24
           },
           {
             "id": "J-260__flow_out",
             "role": "journey_flow_out",
-            "side": "east"
+            "side": "east",
+            "x": 224,
+            "y": 24
           },
           {
             "id": "J-260__escape_in",
             "role": "journey_escape_in",
-            "side": "south"
+            "side": "south",
+            "x": 112,
+            "y": 48
           },
           {
             "id": "J-260__escape_out",
             "role": "journey_escape_out",
-            "side": "south"
+            "side": "south",
+            "x": 112,
+            "y": 48
           }
         ],
-        "viewMetadata": {
-          "journeyMap": {
-            "kind": "step",
-            "rootOrder": 3,
-            "globalStepOrder": 8,
-            "uncontained": true
-          }
-        }
+        "overflow": {
+          "status": "fits"
+        },
+        "width": 224,
+        "height": 48
       },
       {
         "kind": "container",
@@ -740,13 +1008,23 @@
           {
             "id": "G-300__header",
             "kind": "text",
-            "text": "Pause and reconsider",
             "textStyleRole": "title",
+            "lines": [
+              "Pause and reconsider"
+            ],
+            "x": 20,
+            "y": 10,
+            "width": 159.576,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           }
         ],
         "children": [],
-        "ports": []
+        "ports": [],
+        "width": 199.576,
+        "height": 80
       },
       {
         "kind": "container",
@@ -784,8 +1062,16 @@
           {
             "id": "G-400__header",
             "kind": "text",
-            "text": "Commit",
             "textStyleRole": "title",
+            "lines": [
+              "Commit"
+            ],
+            "x": 20,
+            "y": 10,
+            "width": 57.904,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
             "priority": "primary"
           }
         ],
@@ -800,48 +1086,6 @@
               "journey_step",
               "journey_step_contained"
             ],
-            "widthPolicy": {
-              "preferred": "standard",
-              "allowed": [
-                "standard",
-                "wide"
-              ]
-            },
-            "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
-            },
-            "content": [
-              {
-                "id": "J-401__title",
-                "kind": "text",
-                "text": "Complete enrollment",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
-            "ports": [
-              {
-                "id": "J-401__flow_in",
-                "role": "journey_flow_in",
-                "side": "west"
-              },
-              {
-                "id": "J-401__flow_out",
-                "role": "journey_flow_out",
-                "side": "east"
-              },
-              {
-                "id": "J-401__escape_in",
-                "role": "journey_escape_in",
-                "side": "south"
-              },
-              {
-                "id": "J-401__escape_out",
-                "role": "journey_escape_out",
-                "side": "south"
-              }
-            ],
             "viewMetadata": {
               "journeyMap": {
                 "kind": "step",
@@ -852,44 +1096,81 @@
                 "globalStepOrder": 9,
                 "uncontained": false
               }
-            }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-401__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Complete enrollment"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 156.064,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-401__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-401__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-401__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-401__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
           }
         ],
-        "ports": []
+        "ports": [],
+        "width": 264,
+        "height": 128
       }
     ],
     "ports": [],
-    "viewMetadata": {
-      "journeyMap": {
-        "kind": "root",
-        "rootItemIds": [
-          "G-100",
-          "G-200",
-          "J-250",
-          "J-260",
-          "G-300",
-          "G-400"
-        ],
-        "stageIds": [
-          "G-100",
-          "G-200",
-          "G-300",
-          "G-400"
-        ],
-        "globalStepIds": [
-          "J-101",
-          "J-102",
-          "J-103",
-          "J-201",
-          "J-202",
-          "J-203",
-          "J-204",
-          "J-250",
-          "J-260",
-          "J-401"
-        ]
-      }
-    }
+    "width": 3023.576,
+    "height": 268
   },
   "edges": [
     {
@@ -900,10 +1181,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-101"
+        "itemId": "J-101",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-102"
+        "itemId": "J-102",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -933,10 +1218,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-102"
+        "itemId": "J-102",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-103"
+        "itemId": "J-103",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -966,10 +1255,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-103"
+        "itemId": "J-103",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-201"
+        "itemId": "J-201",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -999,10 +1292,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-201"
+        "itemId": "J-201",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-202"
+        "itemId": "J-202",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -1032,10 +1329,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-201"
+        "itemId": "J-201",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-203"
+        "itemId": "J-203",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -1065,10 +1366,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-202"
+        "itemId": "J-202",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-204"
+        "itemId": "J-204",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -1098,10 +1403,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-203"
+        "itemId": "J-203",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-204"
+        "itemId": "J-204",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -1131,10 +1440,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-204"
+        "itemId": "J-204",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-401"
+        "itemId": "J-401",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",
@@ -1164,10 +1477,14 @@
         "journey_precedes"
       ],
       "from": {
-        "itemId": "J-250"
+        "itemId": "J-250",
+        "x": 0,
+        "y": 0
       },
       "to": {
-        "itemId": "J-260"
+        "itemId": "J-260",
+        "x": 0,
+        "y": 0
       },
       "routing": {
         "style": "orthogonal",

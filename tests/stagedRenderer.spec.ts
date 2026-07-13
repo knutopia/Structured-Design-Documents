@@ -369,6 +369,46 @@ describe("staged renderer contracts and harness", () => {
     expect(node.content.find((block) => block.id === "badge")?.region).toBe("secondary");
   });
 
+  it("honors an explicit secondary region independently from width escalation", async () => {
+    const node = await getOnlyMeasuredNode(buildSingleNodeScene({
+      kind: "node",
+      id: "node-explicit-secondary",
+      role: "place",
+      primitive: "card",
+      classes: ["place"],
+      widthPolicy: {
+        preferred: "standard",
+        allowed: ["standard", "wide"]
+      },
+      overflowPolicy: {
+        kind: "escalate_width_band",
+        maxLines: 2
+      },
+      content: [
+        {
+          id: "title",
+          kind: "text",
+          text: "A readable title",
+          textStyleRole: "title",
+          priority: "primary"
+        },
+        {
+          id: "badge",
+          kind: "badge_text",
+          text: "Explicit secondary badge",
+          textStyleRole: "badge",
+          region: "secondary",
+          priority: "secondary"
+        }
+      ],
+      ports: []
+    }));
+
+    expect(node.content.find((block) => block.id === "title")?.region).toBe("primary");
+    expect(node.content.find((block) => block.id === "badge")?.region).toBe("secondary");
+    expect(node.overflow.status).toBe("fits");
+  });
+
   it("falls back to the default theme with an explicit diagnostic for unknown theme ids", async () => {
     const scene = buildSingleNodeScene({
       kind: "node",

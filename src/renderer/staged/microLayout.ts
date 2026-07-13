@@ -1,4 +1,4 @@
-import { cloneViewMetadata } from "./contracts.js";
+import { cloneEdgeViewMetadata, cloneViewMetadata } from "./contracts.js";
 import type {
   ChromeSpec,
   ContentBlock,
@@ -468,7 +468,8 @@ function measureNodeContentAtBand(
   const width = context.theme.widthBands[widthBand];
   const availableWidth = Math.max(width - primitiveTheme.padding.left - primitiveTheme.padding.right, 1);
   const measuredBlocks = usableBlocks.map((block) => {
-    const region: ContentRegion = secondaryBlockIds.has(block.id) ? "secondary" : "primary";
+    const region: ContentRegion = block.region
+      ?? (secondaryBlockIds.has(block.id) ? "secondary" : "primary");
     const resolvedRole = resolveTextRoleForBlock(block.kind, block.textStyleRole);
     const style = getTextStyle(context, node.id, resolvedRole);
     const badgePadding = block.kind === "badge_text" && primitiveTheme.badgePadding
@@ -1130,7 +1131,10 @@ function measureEdge(edge: SceneEdge, context: MeasureContext): MeasuredEdge {
     },
     label: edge.label ? measureEdgeLabel(edge.label, context, edge.id) : undefined,
     markers: edge.markers ? { ...edge.markers } : undefined,
-    ownerContainerId: edge.ownerContainerId
+    ownerContainerId: edge.ownerContainerId,
+    ...(edge.viewMetadata
+      ? { viewMetadata: cloneEdgeViewMetadata(edge.viewMetadata) }
+      : {})
   };
 }
 

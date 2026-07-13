@@ -11,6 +11,8 @@ import {
 import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
 import type {
   JourneyMapItemMetadata,
+  MeasuredScene,
+  PositionedScene,
   RendererScene,
   SceneContainer,
   SceneEdge,
@@ -22,7 +24,10 @@ import {
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
+import { positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
+import { measureScene } from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
+import { renderPositionedSceneToPng } from "./svgBackend.js";
 
 const ROOT_GAP = 40;
 const STAGE_GAP = 24;
@@ -33,6 +38,15 @@ interface JourneyScenePlacement {
   rootItemIds: string[];
   stageIds: string[];
   globalStepIds: string[];
+}
+
+export interface JourneyMapPreRoutingArtifactsResult {
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  preRoutingPositionedScene: PositionedScene;
+  diagnostics: RendererDiagnostic[];
+  preRoutingSvg: string;
+  preRoutingPng: Uint8Array;
 }
 
 function buildJourneyScenePlacement(model: JourneyMapRenderModel): JourneyScenePlacement {
@@ -134,6 +148,7 @@ function buildJourneyStep(step: JourneyRenderStep, metadata: JourneyMapItemMetad
         kind: "badge_text" as const,
         text: badge.targetName && badge.targetName.length > 0 ? badge.targetName : badge.targetId,
         textStyleRole: "badge",
+        region: "secondary" as const,
         priority: "secondary" as const
       };
     })
@@ -432,6 +447,39 @@ function buildStepOnlyDiagnostics(placement: JourneyScenePlacement): RendererDia
   )];
 }
 
+function alignUncontainedStepsWithStageContent(root: PositionedScene["root"]): void {
+  const stageContentTops = root.children
+    .flatMap((item) => item.kind === "container" && item.viewMetadata?.journeyMap?.kind === "stage"
+      ? [item.y + item.chrome.padding.top + (item.chrome.headerBandHeight ?? 0)]
+      : []);
+  if (stageContentTops.length === 0) {
+    return;
+  }
+
+  const contentTop = Math.max(...stageContentTops);
+  for (const item of root.children) {
+    if (item.kind !== "node") {
+      continue;
+    }
+    const metadata = item.viewMetadata?.journeyMap;
+    if (metadata?.kind === "step" && metadata.uncontained) {
+      item.y = contentTop;
+    }
+  }
+
+  const contentBottom = Math.max(...root.children.map((item) => item.y + item.height));
+  root.height = Math.max(root.height, contentBottom - root.y + root.chrome.padding.bottom);
+}
+
+export async function positionJourneyMapMeasuredSceneBeforeRouting(
+  measuredScene: MeasuredScene
+): Promise<PositionedScene> {
+  return positionMeasuredSceneBeforeRouting(
+    measuredScene,
+    alignUncontainedStepsWithStageContent
+  );
+}
+
 export function buildJourneyMapRendererSceneFromModel(
   model: JourneyMapRenderModel,
   profileId: string,
@@ -498,4 +546,59 @@ export function buildJourneyMapRendererScene(
     ...buildStepOnlyDiagnostics(placement),
     ...buildDisconnectedChainDiagnostics(model, placement)
   ]);
+}
+
+async function buildJourneyMapPreRoutingPipeline(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<{
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  preRoutingPositionedScene: PositionedScene;
+}> {
+  const rendererScene = buildJourneyMapRendererScene(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
+  const measuredScene = measureScene(rendererScene);
+  const preRoutingPositionedScene = await positionJourneyMapMeasuredSceneBeforeRouting(measuredScene);
+  return {
+    rendererScene,
+    measuredScene,
+    preRoutingPositionedScene
+  };
+}
+
+export async function renderJourneyMapPreRoutingArtifacts(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<JourneyMapPreRoutingArtifactsResult> {
+  const pipeline = await buildJourneyMapPreRoutingPipeline(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
+  const rendered = await renderPositionedSceneToPng(pipeline.preRoutingPositionedScene);
+
+  return {
+    ...pipeline,
+    diagnostics: rendered.diagnostics,
+    preRoutingSvg: rendered.svg,
+    preRoutingPng: rendered.png
+  };
 }
