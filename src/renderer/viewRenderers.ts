@@ -209,6 +209,7 @@ const journeyMapRenderer: ViewTextRenderer = {
     const model = buildJourneyMapRenderModel(
       projection,
       graph,
+      bundle,
       view.projection.hierarchy_edges ?? [],
       view.projection.ordering_edges ?? [],
       displayPolicy

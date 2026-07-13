@@ -1,0 +1,98 @@
+SDD-TEXT 0.1
+
+Step J-790 "Root entry"
+  owner=Design
+  description="An uncontained entry into exceptional topology"
+  actor=User
+  intent="Enter the topology proof"
+  success_criteria="Both root branches remain visible"
+  kind=decision
+  PRECEDES J-701 "Begin intentional retry"
+  PRECEDES J-791 "Root exit"
+  REALIZED_BY P-700 "Topology proof surface"
+END
+
+Stage G-700 "Loops and returns"
+  owner=Design
+  description="Contain annotated loops, an unannotated cycle, and a backward edge"
+  order_index=10
+  CONTAINS J-701 "Begin intentional retry"
+  CONTAINS J-702 "Complete intentional retry"
+  CONTAINS J-711 "Begin unannotated retry"
+  CONTAINS J-712 "Complete unannotated retry"
+  CONTAINS J-713 "Repeat current action"
+  CONTAINS J-714 "Return to prior action"
+  + Step J-701 "Begin intentional retry"
+    owner=Design
+    description="Begin a bundle-annotated two-node retry"
+    actor=User
+    intent="Start an intentional retry"
+    success_criteria="The retry starts"
+    PRECEDES J-702 "Complete intentional retry" kind=loop
+    REALIZED_BY P-700 "Topology proof surface"
+  END
+  + Step J-702 "Complete intentional retry"
+    owner=Design
+    description="Return within the annotated retry component"
+    actor=User
+    intent="Complete the intentional retry"
+    success_criteria="The retry returns clearly"
+    PRECEDES J-701 "Begin intentional retry"
+    REALIZED_BY P-700 "Topology proof surface"
+  END
+  + Step J-711 "Begin unannotated retry"
+    owner=Design
+    description="Begin an intentionally unannotated cycle"
+    actor=User
+    intent="Start the unannotated cycle"
+    success_criteria="Validation identifies the component"
+    PRECEDES J-712 "Complete unannotated retry"
+    REALIZED_BY P-700 "Topology proof surface"
+  END
+  + Step J-712 "Complete unannotated retry"
+    owner=Design
+    description="Return within the unannotated cycle"
+    actor=User
+    intent="Complete the unannotated cycle"
+    success_criteria="The warning is stable and routing remains valid"
+    PRECEDES J-711 "Begin unannotated retry"
+    REALIZED_BY P-700 "Topology proof surface"
+  END
+  + Step J-713 "Repeat current action"
+    owner=Design
+    description="Exercise an annotated self-loop"
+    actor=User
+    intent="Repeat the current action"
+    success_criteria="The self-loop arrow is clear"
+    PRECEDES J-713 "Repeat current action" kind=loop
+    REALIZED_BY P-700 "Topology proof surface"
+  END
+  + Step J-714 "Return to prior action"
+    owner=Design
+    description="Exercise a standalone backward edge and root exit"
+    actor=User
+    intent="Return and then leave the Stage"
+    success_criteria="Both routes remain distinguishable"
+    kind=decision
+    PRECEDES J-713 "Repeat current action"
+    PRECEDES J-791 "Root exit"
+    REALIZED_BY P-700 "Topology proof surface"
+  END
+END
+
+Step J-791 "Root exit"
+  owner=Design
+  description="An uncontained exit from exceptional topology"
+  actor=User
+  intent="Leave the topology proof"
+  success_criteria="The root exit remains ordered"
+  REALIZED_BY P-700 "Topology proof surface"
+END
+
+Place P-700 "Topology proof surface"
+  owner=Design
+  description="Out-of-view realization target for topology proof"
+  surface=web
+  route_or_key=/proof/journey-topology
+  access=auth
+END

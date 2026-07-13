@@ -7,16 +7,19 @@ import {
   createProjectionBuilderContext
 } from "./shared.js";
 
-function splitReferenceIds(value: string | undefined): string[] {
+function splitReferenceIds(value: string | undefined, sort: unknown): string[] {
   if (!value) {
     return [];
   }
 
-  return value
+  const referenceIds = value
     .split(",")
     .map((entry) => entry.trim())
-    .filter((entry) => entry.length > 0)
-    .sort((left, right) => left.localeCompare(right));
+    .filter((entry) => entry.length > 0);
+
+  return sort === "id_ascending"
+    ? referenceIds.sort((left, right) => left.localeCompare(right))
+    : referenceIds;
 }
 
 function referenceRole(sourceProp: string): string {
@@ -32,6 +35,7 @@ function buildReferenceAnnotations(
   const defaults = (view.conventions.renderer_defaults?.reference_annotations ?? {}) as Record<string, unknown>;
   const sourceProp = typeof defaults.source_prop === "string" ? defaults.source_prop : undefined;
   const targetType = typeof defaults.target_type === "string" ? defaults.target_type : undefined;
+  const sort = defaults.sort;
   if (!sourceProp || !targetType) {
     return [];
   }
@@ -44,7 +48,7 @@ function buildReferenceAnnotations(
     }
 
     const references: NonNullable<ProjectionNodeAnnotation["references"]> = [];
-    for (const targetId of splitReferenceIds(node.props[sourceProp])) {
+    for (const targetId of splitReferenceIds(node.props[sourceProp], sort)) {
       const targetNode = graphNodesById.get(targetId);
       if (!targetNode || targetNode.type !== targetType) {
         continue;

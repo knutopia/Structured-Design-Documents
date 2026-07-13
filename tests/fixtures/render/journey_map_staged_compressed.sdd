@@ -1,0 +1,107 @@
+SDD-TEXT 0.1
+
+Stage G-900 "A"
+  owner=Design
+  description="Dense source Stage"
+  order_index=10
+  CONTAINS J-901 "A1"
+  CONTAINS J-902 "A2"
+  CONTAINS J-903 "A3"
+  + Step J-901 "A1"
+    owner=Design
+    description="Highest fan-out source"
+    actor=User
+    intent="Fan out across every routing region"
+    success_criteria="All outgoing routes remain distinct"
+    kind=decision
+    PRECEDES J-902 "A2"
+    PRECEDES J-903 "A3"
+    PRECEDES J-950 "X"
+    PRECEDES J-911 "B1"
+    PRECEDES J-912 "B2"
+    PRECEDES J-913 "B3"
+    REALIZED_BY P-900 "Compressed proof surface"
+  END
+  + Step J-902 "A2"
+    owner=Design
+    description="Secondary fan-out source"
+    actor=User
+    intent="Compete for local and root tracks"
+    success_criteria="Outgoing routes remain separated"
+    kind=decision
+    PRECEDES J-903 "A3"
+    PRECEDES J-950 "X"
+    PRECEDES J-913 "B3"
+    REALIZED_BY P-900 "Compressed proof surface"
+  END
+  + Step J-903 "A3"
+    owner=Design
+    description="Tertiary fan-out source"
+    actor=User
+    intent="Join the crowded root targets"
+    success_criteria="Both routes remain visible"
+    kind=decision
+    PRECEDES J-950 "X"
+    PRECEDES J-913 "B3"
+    REALIZED_BY P-900 "Compressed proof surface"
+  END
+END
+
+Step J-950 "X"
+  owner=Design
+  description="Crowded root obstacle and branch point"
+  actor=User
+  intent="Bridge the two Stages"
+  success_criteria="Incoming and outgoing routes remain ordered"
+  kind=decision
+  PRECEDES J-911 "B1"
+  PRECEDES J-912 "B2"
+  PRECEDES J-913 "B3"
+  REALIZED_BY P-900 "Compressed proof surface"
+END
+
+Stage G-910 "B"
+  owner=Design
+  description="Dense target Stage"
+  order_index=20
+  CONTAINS J-911 "B1"
+  CONTAINS J-912 "B2"
+  CONTAINS J-913 "B3"
+  + Step J-911 "B1"
+    owner=Design
+    description="First target and local bypass source"
+    actor=User
+    intent="Join the final target"
+    success_criteria="The local skip remains distinct"
+    PRECEDES J-913 "B3"
+    REALIZED_BY P-900 "Compressed proof surface"
+  END
+  + Step J-912 "B2"
+    owner=Design
+    description="Second target and backward return source"
+    actor=User
+    intent="Join and return across Stages"
+    success_criteria="Forward and return routes remain distinct"
+    kind=decision
+    PRECEDES J-913 "B3"
+    PRECEDES J-902 "A2" kind=loop
+    REALIZED_BY P-900 "Compressed proof surface"
+  END
+  + Step J-913 "B3"
+    owner=Design
+    description="Highest fan-in target and outer return source"
+    actor=User
+    intent="Receive crowded routes and return"
+    success_criteria="Every incoming route and return remains identifiable"
+    PRECEDES J-901 "A1" kind=loop
+    REALIZED_BY P-900 "Compressed proof surface"
+  END
+END
+
+Place P-900 "Compressed proof surface"
+  owner=Design
+  description="Out-of-view realization target for compressed proof"
+  surface=web
+  route_or_key=/proof/journey-compressed
+  access=auth
+END

@@ -1,13 +1,26 @@
+import { createHash } from "node:crypto";
+import type { Bundle } from "../bundle/types.js";
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
-import type { CompiledGraph } from "../compiler/types.js";
+import { getCompiledEdgeSourceSpan, type CompiledEdge, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
 import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+
+export interface JourneyRenderReferenceBadge {
+  kind: "reference";
+  role: string;
+  targetId: string;
+  targetType?: string;
+  targetName?: string;
+  sourceProp?: string;
+  label: string;
+}
 
 export interface JourneyRenderStep {
   kind: "step";
   id: string;
   labelLines: string[];
+  badges: JourneyRenderReferenceBadge[];
   orderAnchorId: string;
 }
 
@@ -23,8 +36,14 @@ export interface JourneyRenderStage {
 export type JourneyRenderItem = JourneyRenderStage | JourneyRenderStep;
 
 export interface JourneyRenderEdge {
+  id: string;
   from: string;
+  type: string;
   to: string;
+  authorOrder: number;
+  sameEndpointOrdinal: number;
+  semanticIdentityKey: string;
+  exactIdentityOrdinal: number;
 }
 
 export interface JourneyMapRenderModel {
@@ -62,6 +81,117 @@ function buildReferenceBadge(targetId: string, targetName?: string): string {
   return `[${targetName && targetName.length > 0 ? targetName : targetId}]`;
 }
 
+function duplicateEdgeIdentityFields(bundle: Bundle): string[] {
+  const rule = bundle.contracts.common_rules.find(
+    (candidate) => candidate.rule_logic?.kind === "duplicate_edge_identity"
+  );
+  const keyFields = rule?.rule_logic?.key_fields;
+  if (!Array.isArray(keyFields) || !keyFields.every((field): field is string => typeof field === "string")) {
+    throw new Error("Journey render-model construction requires bundle duplicate-edge identity key_fields.");
+  }
+  return keyFields;
+}
+
+function stableProps(props: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(Object.entries(props).sort(([left], [right]) => left.localeCompare(right)));
+}
+
+function semanticIdentityKey(edge: CompiledEdge, keyFields: string[]): string {
+  return JSON.stringify(
+    keyFields.map((field) => [
+      field,
+      field === "props" ? stableProps(edge.props) : edge[field as keyof CompiledEdge] ?? null
+    ])
+  );
+}
+
+function tripleKey(edge: Pick<CompiledEdge, "from" | "type" | "to">): string {
+  return JSON.stringify([edge.from, edge.type, edge.to]);
+}
+
+function sourceOrderedEdges(edges: CompiledEdge[]): CompiledEdge[] {
+  return edges
+    .map((edge, canonicalOrder) => ({ edge, canonicalOrder, offset: getCompiledEdgeSourceSpan(edge)?.startOffset }))
+    .sort((left, right) => {
+      if (left.offset !== undefined && right.offset !== undefined && left.offset !== right.offset) {
+        return left.offset - right.offset;
+      }
+      if (left.offset !== undefined && right.offset === undefined) {
+        return -1;
+      }
+      if (left.offset === undefined && right.offset !== undefined) {
+        return 1;
+      }
+      return left.canonicalOrder - right.canonicalOrder;
+    })
+    .map(({ edge }) => edge);
+}
+
+function buildJourneyRenderEdges(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  orderingTypeSet: Set<string>,
+  visibleNodeIds: Set<string>
+): JourneyRenderEdge[] {
+  const identityFields = duplicateEdgeIdentityFields(bundle);
+  const qualifyingCompiledEdges = sourceOrderedEdges(
+    graph.edges.filter(
+      (edge) => orderingTypeSet.has(edge.type) && visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)
+    )
+  );
+  const authorOrderByEdge = new Map(qualifyingCompiledEdges.map((edge, authorOrder) => [edge, authorOrder]));
+  const compiledByTriple = new Map<string, CompiledEdge[]>();
+  for (const edge of qualifyingCompiledEdges) {
+    const key = tripleKey(edge);
+    const occurrences = compiledByTriple.get(key) ?? [];
+    occurrences.push(edge);
+    compiledByTriple.set(key, occurrences);
+  }
+
+  const sameEndpointCounts = new Map<string, number>();
+  const exactIdentityCounts = new Map<string, number>();
+  const modelEdges = projection.edges
+    .filter(
+      (edge) => orderingTypeSet.has(edge.type) && visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)
+    )
+    .map((projectedEdge) => {
+      const endpointKey = tripleKey(projectedEdge);
+      const compiledEdge = compiledByTriple.get(endpointKey)?.shift();
+      if (!compiledEdge) {
+        throw new Error(
+          `Journey render-model construction could not match projected edge occurrence ${endpointKey} to compiled semantics.`
+        );
+      }
+
+      const identityKey = semanticIdentityKey(compiledEdge, identityFields);
+      const sameEndpointOrdinal = sameEndpointCounts.get(endpointKey) ?? 0;
+      const exactIdentityOrdinal = exactIdentityCounts.get(identityKey) ?? 0;
+      sameEndpointCounts.set(endpointKey, sameEndpointOrdinal + 1);
+      exactIdentityCounts.set(identityKey, exactIdentityOrdinal + 1);
+      const identityHash = createHash("sha256").update(identityKey).digest("hex");
+
+      return {
+        id: `${compiledEdge.from}__${compiledEdge.type}__${compiledEdge.to}__${identityHash}__${exactIdentityOrdinal}`,
+        from: compiledEdge.from,
+        type: compiledEdge.type,
+        to: compiledEdge.to,
+        authorOrder: authorOrderByEdge.get(compiledEdge)!,
+        sameEndpointOrdinal,
+        semanticIdentityKey: identityKey,
+        exactIdentityOrdinal
+      };
+    });
+
+  const unmatchedCount = [...compiledByTriple.values()].reduce((sum, occurrences) => sum + occurrences.length, 0);
+  if (unmatchedCount > 0) {
+    throw new Error(
+      `Journey render-model construction left ${unmatchedCount} compiled ordering edge occurrence(s) unmatched.`
+    );
+  }
+  return modelEdges;
+}
+
 function readJourneyMapDisplayOptions(policy: ResolvedProfileDisplayPolicy): JourneyMapDisplayOptions {
   return {
     showReferenceBadges: readBooleanProfileDisplaySetting(policy, "show_reference_badges", true)
@@ -71,6 +201,7 @@ function readJourneyMapDisplayOptions(policy: ResolvedProfileDisplayPolicy): Jou
 export function buildJourneyMapRenderModel(
   projection: Projection,
   graph: CompiledGraph,
+  bundle: Bundle,
   hierarchyEdgeTypes: string[],
   orderingEdgeTypes: string[],
   displayPolicy: ResolvedProfileDisplayPolicy = {}
@@ -104,9 +235,20 @@ export function buildJourneyMapRenderModel(
     }
 
     const labelLines = [projectionNode.name];
+    const badges: JourneyRenderReferenceBadge[] = [];
     if (displayOptions.showReferenceBadges) {
       for (const reference of annotationsByNodeId.get(stepId)?.references ?? []) {
-        labelLines.push(buildReferenceBadge(reference.target_id, reference.target_name));
+        const label = buildReferenceBadge(reference.target_id, reference.target_name);
+        labelLines.push(label);
+        badges.push({
+          kind: "reference",
+          role: reference.role,
+          targetId: reference.target_id,
+          targetType: reference.target_type,
+          targetName: reference.target_name,
+          sourceProp: reference.source_prop,
+          label
+        });
       }
     }
 
@@ -114,6 +256,7 @@ export function buildJourneyMapRenderModel(
       kind: "step",
       id: stepId,
       labelLines,
+      badges,
       orderAnchorId: stepId
     };
   };
@@ -155,14 +298,7 @@ export function buildJourneyMapRenderModel(
     })
     .filter((item): item is JourneyRenderItem => item !== undefined);
 
-  const edges = projection.edges
-    .filter(
-      (edge) => orderingTypeSet.has(edge.type) && visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)
-    )
-    .map((edge) => ({
-      from: edge.from,
-      to: edge.to
-    }));
+  const edges = buildJourneyRenderEdges(projection, graph, bundle, orderingTypeSet, visibleNodeIds);
 
   return {
     rootItems,
