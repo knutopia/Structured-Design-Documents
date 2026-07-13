@@ -168,8 +168,8 @@ describe("journey map Gate 5 basic routing", () => {
   it("preserves exact fixture partitions while unopened Gate 6 families remain blocked", async () => {
     const cases = [
       ["primary", 9],
-      ["ordering_ownership", 1],
-      ["topology", 3],
+      ["ordering_ownership", 3],
+      ["topology", 4],
       ["duplicate", 0],
       ["compressed", 0]
     ] as const;
@@ -411,10 +411,12 @@ describe("journey map Gate 5 basic routing", () => {
 });
 
 describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
-  it("routes only the isolated ordering skip and keeps every later family deferred", async () => {
+  it("retains the isolated ordering skip while later accepted families are added", async () => {
     const fixture = await buildFixture("ordering_ownership");
-    expect(fixture.routingStages.connectorPlans).toHaveLength(1);
-    const [plan] = fixture.routingStages.connectorPlans;
+    expect(fixture.routingStages.connectorPlans).toHaveLength(3);
+    const plan = fixture.routingStages.connectorPlans.find((candidate) =>
+      candidate.from === "J-503" && candidate.to === "J-501"
+    );
     expect(plan).toMatchObject({
       id: "J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0",
       from: "J-503",
@@ -465,18 +467,12 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       exactIdentityOrdinal: 0,
       edgeId: plan.id
     });
-    expect(fixture.routingStages.deferredConnectors.map((edge) => ({
-      edge: edgeKey(edge),
-      families: edge.deferredFamilies
-    }))).toEqual([
-      { edge: "J-501→J-502", families: ["backward", "non_adjacent_same_stage"] },
-      { edge: "J-591→J-590", families: ["root_step", "backward"] }
-    ]);
+    expect(fixture.routingStages.deferredConnectors).toEqual([]);
     expect(fixture.routingStages.failedConnectorIds).toEqual([]);
     expectExactPartition(fixture);
 
     for (const [name, expectedCount] of [
-      ["topology", 3],
+      ["topology", 4],
       ["duplicate", 0],
       ["compressed", 0]
     ] as const) {
@@ -500,7 +496,9 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
 
   it("uses a bounds-derived south-to-south bypass below the Step row without moving accepted geometry", async () => {
     const fixture = await buildFixture("ordering_ownership");
-    const [plan] = fixture.routingStages.connectorPlans;
+    const plan = fixture.routingStages.connectorPlans.find((candidate) =>
+      candidate.from === "J-503" && candidate.to === "J-501"
+    );
     expect(plan?.step2Route.points).toEqual([
       { x: 980, y: 156 },
       { x: 980, y: 168 },
@@ -535,7 +533,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
     expect(fixture.routingStages.provisionalPositionedScene.root).toEqual(
       fixture.preRoutingPositionedScene.root
     );
-    expect(fixture.routingStages.provisionalPositionedScene.edges).toHaveLength(1);
+    expect(fixture.routingStages.provisionalPositionedScene.edges).toHaveLength(3);
 
     const source = findNode(fixture.preRoutingPositionedScene, "J-503");
     const intermediate = findNode(fixture.preRoutingPositionedScene, "J-502");
@@ -587,7 +585,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
     expect(sha256(first.provisionalPng)).toBe(sha256(direct.png));
     expect(first.provisionalSvg).not.toBe(first.step2Svg);
     expect(sha256(first.provisionalPng)).toBe(sha256(first.step2Png));
-    expect((first.provisionalSvg.match(/data-edge-id=/g) ?? [])).toHaveLength(1);
+    expect((first.provisionalSvg.match(/data-edge-id=/g) ?? [])).toHaveLength(3);
     expect(first.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
     expect(sha256(first.provisionalSvg)).toBe(sha256(second.provisionalSvg));
     expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
@@ -628,7 +626,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
     const missingPortNode = findNode(missingPortScene, "J-503");
     missingPortNode.ports = missingPortNode.ports.filter((port) => port.role !== "journey_escape_out");
     const missingPort = buildJourneyMapRoutingStages(fixture.measuredScene, missingPortScene);
-    expect(missingPort.connectorPlans).toEqual([]);
+    expect(missingPort.connectorPlans).toHaveLength(2);
     expect(missingPort.failedConnectorIds).toEqual([
       "J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0"
     ]);
@@ -643,7 +641,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       fixture.measuredScene,
       insufficientSpaceScene
     );
-    expect(insufficientSpace.connectorPlans).toEqual([]);
+    expect(insufficientSpace.connectorPlans).toHaveLength(2);
     expect(insufficientSpace.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(expect.arrayContaining([
       "renderer.routing.journey_map_archetype_fallback",
       "renderer.routing.journey_map_edge_omitted"
@@ -975,7 +973,10 @@ describe("journey map Gate 6 branch fan-out routing", () => {
     expectExactPartition(primary);
 
     const topology = await buildFixture("topology");
-    expect(topology.routingStages.connectorPlans.map((plan) => ({
+    const topologyBranches = topology.routingStages.connectorPlans.filter((plan) =>
+      plan.priority.archetypeRank === 4
+    );
+    expect(topologyBranches.map((plan) => ({
       id: plan.id,
       edge: edgeKey(plan),
       owner: plan.ownerContainerId,
@@ -1036,8 +1037,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
       { edge: "J-702→J-701", families: ["cycle", "join", "backward", "non_adjacent_same_stage"] },
       { edge: "J-711→J-712", families: ["cycle"] },
       { edge: "J-712→J-711", families: ["cycle", "backward", "non_adjacent_same_stage"] },
-      { edge: "J-713→J-713", families: ["self_loop", "join", "backward", "non_adjacent_same_stage"] },
-      { edge: "J-714→J-713", families: ["branch", "join", "backward", "non_adjacent_same_stage"] }
+      { edge: "J-713→J-713", families: ["self_loop", "join", "backward", "non_adjacent_same_stage"] }
     ]);
     expect(topology.routingStages.failedConnectorIds).toEqual([]);
     expectExactPartition(topology);
@@ -1375,8 +1375,8 @@ describe("journey map Gate 6 join fan-in routing", () => {
     expectExactPartition(primary);
 
     for (const [name, routed, deferred] of [
-      ["ordering_ownership", 1, 2],
-      ["topology", 3, 6],
+      ["ordering_ownership", 3, 0],
+      ["topology", 4, 5],
       ["duplicate", 0, 3],
       ["compressed", 0, 18]
     ] as const) {
@@ -1606,6 +1606,330 @@ describe("journey map Gate 6 join fan-in routing", () => {
       || diagnostic.code.includes("capacity")
       || diagnostic.code.includes("expansion")
       || diagnostic.code.includes("separation")
+    )).toBe(false);
+  });
+});
+
+describe("journey map Gate 6 backward routing", () => {
+  it("routes exactly the three non-cyclic backward occurrences after every accepted earlier family", async () => {
+    const ordering = await buildFixture("ordering_ownership");
+    const orderingBackward = ordering.routingStages.connectorPlans.filter((plan) =>
+      plan.priority.archetypeRank === 6
+    );
+    expect(orderingBackward.map((plan) => ({
+      id: plan.id,
+      edge: edgeKey(plan),
+      owner: plan.ownerContainerId,
+      archetype: plan.archetype,
+      rank: plan.priority.archetypeRank,
+      authorOrder: plan.authorOrder,
+      modifiers: plan.topologyModifiers,
+      branch: plan.branch
+    }))).toEqual([
+      {
+        id: "J-501__PRECEDES__J-502__51e0788a6e29bb43634e865529e007ccee051ad1e572b8494b89efdd4ae46b2c__0",
+        edge: "J-501→J-502",
+        owner: "G-500",
+        archetype: "backward_same_stage",
+        rank: 6,
+        authorOrder: 1,
+        modifiers: undefined,
+        branch: undefined
+      },
+      {
+        id: "J-591__PRECEDES__J-590__f4e82fc8e90b608618ba9db0adfc05a2b84b27fd7ad9d5165dc1473d75b3dd85__0",
+        edge: "J-591→J-590",
+        owner: "root",
+        archetype: "backward_root_step",
+        rank: 6,
+        authorOrder: 2,
+        modifiers: undefined,
+        branch: undefined
+      }
+    ]);
+    expect(ordering.routingStages.connectorPlans).toHaveLength(3);
+    expect(ordering.routingStages.deferredConnectors).toEqual([]);
+    expect(ordering.routingStages.failedConnectorIds).toEqual([]);
+    expectExactPartition(ordering);
+
+    const topology = await buildFixture("topology");
+    const topologyBackward = topology.routingStages.connectorPlans.find((plan) =>
+      plan.archetype === "backward_same_stage"
+    );
+    expect(topologyBackward).toMatchObject({
+      id: "J-714__PRECEDES__J-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0",
+      from: "J-714",
+      to: "J-713",
+      ownerContainerId: "G-700",
+      archetype: "backward_same_stage",
+      priority: { archetypeRank: 6, sourceStepOrder: 5, targetStepOrder: 4, authorOrder: 7 },
+      topologyModifiers: ["branch"],
+      branch: { sourceOutdegree: 2, sourceOrdinal: 0 }
+    });
+    expect(topologyBackward?.join).toBeUndefined();
+    expect(topology.routingStages.connectorPlans).toHaveLength(4);
+    expect(topology.routingStages.deferredConnectors).toHaveLength(5);
+    expect(topology.routingStages.deferredConnectors.map(edgeKey)).toEqual([
+      "J-701→J-702", "J-702→J-701", "J-711→J-712", "J-712→J-711", "J-713→J-713"
+    ]);
+    expect(topology.routingStages.failedConnectorIds).toEqual([]);
+    expectExactPartition(topology);
+
+    for (const [name, routed, deferred] of [
+      ["primary", 9, 0],
+      ["duplicate", 0, 3],
+      ["compressed", 0, 18]
+    ] as const) {
+      const fixture = await buildFixture(name);
+      expect(fixture.routingStages.connectorPlans).toHaveLength(routed);
+      expect(fixture.routingStages.deferredConnectors).toHaveLength(deferred);
+      expect(fixture.routingStages.failedConnectorIds).toEqual([]);
+      expectExactPartition(fixture);
+    }
+
+    const reversedMeasuredScene = structuredClone(topology.measuredScene) as MeasuredScene;
+    reversedMeasuredScene.edges.reverse();
+    const reversed = buildJourneyMapRoutingStages(
+      reversedMeasuredScene,
+      topology.preRoutingPositionedScene
+    );
+    expect(reversed.connectorPlans.find((plan) => plan.archetype === "backward_same_stage"))
+      .toEqual(topologyBackward);
+
+    expect(topology.routingStages.connectorPlans.slice(0, 3).map((plan) => plan.id)).toEqual([
+      "J-790__PRECEDES__J-701__661a1f868e72e80d2f47aedd3157ec09171f344f4a9aa62486fc7da5457bd384__0",
+      "J-790__PRECEDES__J-791__71d18a11d3f80b2283cb17a0d68e86a327e54fca708def24c118a265fc3cd6be__0",
+      "J-714__PRECEDES__J-791__37d24514299e09f03f8d2a42e59503f5de765431b1348d451dfadcb4d8555722__0"
+    ]);
+  });
+
+  it("builds south-port Stage-local and reverse root-outer templates with exact controls", async () => {
+    const ordering = await buildFixture("ordering_ownership");
+    const [sameStage, rootReturn] = ordering.routingStages.connectorPlans.filter((plan) =>
+      plan.priority.archetypeRank === 6
+    );
+    expect(sameStage).toMatchObject({
+      sourceEndpoint: {
+        itemId: "J-501", portId: "J-501__escape_out", side: "south", x: 1476, y: 140
+      },
+      targetEndpoint: {
+        itemId: "J-502", portId: "J-502__escape_in", side: "south", x: 1228, y: 140
+      },
+      stageGates: [],
+      stageLocalBypass: {
+        stageId: "G-500",
+        axis: "horizontal",
+        nominalCoordinate: 152,
+        span: { start: 1228, end: 1476 },
+        intermediateStepIds: [],
+        obstacleControls: [],
+        order: 0,
+        locked: false
+      }
+    });
+    expect(sameStage?.step2Route.points).toEqual([
+      { x: 1476, y: 140 }, { x: 1476, y: 152 },
+      { x: 1228, y: 152 }, { x: 1228, y: 140 }
+    ]);
+    expect(sameStage?.provisionalRoute).toEqual(sameStage?.step2Route);
+
+    expect(rootReturn).toMatchObject({
+      sourceEndpoint: {
+        itemId: "J-591", portId: "J-591__escape_out", side: "south", x: 1760, y: 140
+      },
+      targetEndpoint: {
+        itemId: "J-590", portId: "J-590__escape_in", side: "south", x: 696, y: 140
+      },
+      stageGates: [],
+      rootOuterBypass: {
+        ownerContainerId: "root",
+        axis: "horizontal",
+        nominalCoordinate: 188,
+        span: { start: 696, end: 1760 },
+        intermediateRootItemIds: ["G-500"],
+        obstacleControls: [{ rootItemId: "G-500", entryX: 848, exitX: 1608 }],
+        order: 0,
+        locked: false
+      }
+    });
+    expect(rootReturn?.step2Route.points).toEqual([
+      { x: 1760, y: 140 }, { x: 1760, y: 188 },
+      { x: 696, y: 188 }, { x: 696, y: 140 }
+    ]);
+    expect(rootReturn?.provisionalRoute.points).toEqual([
+      { x: 1760, y: 140 }, { x: 1760, y: 188 },
+      { x: 1608, y: 188 }, { x: 848, y: 188 },
+      { x: 696, y: 188 }, { x: 696, y: 140 }
+    ]);
+
+    const topology = await buildFixture("topology");
+    const topologyBackward = topology.routingStages.connectorPlans.find((plan) =>
+      plan.archetype === "backward_same_stage"
+    );
+    expect(topologyBackward).toMatchObject({
+      sourceEndpoint: {
+        itemId: "J-714", portId: "J-714__escape_out", side: "south", x: 1668, y: 140
+      },
+      targetEndpoint: {
+        itemId: "J-713", portId: "J-713__escape_in", side: "south", x: 1420, y: 140
+      },
+      stageGates: [],
+      stageLocalBypass: {
+        stageId: "G-700", nominalCoordinate: 152,
+        span: { start: 1420, end: 1668 },
+        endpointSpan: { start: 1420, end: 1668 },
+        intermediateStepIds: [], obstacleControls: []
+      }
+    });
+    expect(topologyBackward?.provisionalRoute.points).toEqual([
+      { x: 1668, y: 140 }, { x: 1668, y: 152 },
+      { x: 1420, y: 152 }, { x: 1420, y: 140 }
+    ]);
+
+    for (const [fixture, plans] of [
+      [ordering, ordering.routingStages.connectorPlans],
+      [topology, topology.routingStages.connectorPlans]
+    ] as const) {
+      for (const stage of ["step2", "provisional", "final_basic"] as const) {
+        expect(validateJourneyMapRoutes(
+          plans,
+          fixture.preRoutingPositionedScene,
+          stage,
+          fixture.measuredScene
+        )).toEqual([]);
+      }
+    }
+
+    const first = await renderJourneyMapRoutingArtifacts(
+      ordering.projection, ordering.graph, ordering.bundle, ordering.view, "strict"
+    );
+    const second = await renderJourneyMapRoutingArtifacts(
+      ordering.projection, ordering.graph, ordering.bundle, ordering.view, "strict"
+    );
+    const directPng = await renderPositionedSceneToPng(first.routingStages.provisionalPositionedScene);
+    expect(first.provisionalSvg).toBe(directPng.svg);
+    expect(sha256(first.provisionalPng)).toBe(sha256(directPng.png));
+    expect(sha256(first.provisionalSvg)).toBe(sha256(second.provisionalSvg));
+    expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
+    expect(first.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+
+  it("fails malformed backward contracts visibly and keeps cycles, self-loops, duplicates, and Gate 7 blocked", async () => {
+    const ordering = await buildFixture("ordering_ownership");
+    const sameStage = ordering.routingStages.connectorPlans.find((plan) =>
+      plan.archetype === "backward_same_stage"
+    )!;
+    const rootReturn = ordering.routingStages.connectorPlans.find((plan) =>
+      plan.archetype === "backward_root_step"
+    )!;
+
+    const missingPortScene = structuredClone(ordering.preRoutingPositionedScene) as PositionedScene;
+    const source = findNode(missingPortScene, "J-501");
+    source.ports = source.ports.filter((port) => port.role !== "journey_escape_out");
+    const missingPort = buildJourneyMapRoutingStages(ordering.measuredScene, missingPortScene);
+    expect(missingPort.failedConnectorIds).toContain(sameStage.id);
+    expect(missingPort.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(expect.arrayContaining([
+      "renderer.routing.journey_map_unresolved_endpoint",
+      "renderer.routing.journey_map_edge_omitted"
+    ]));
+
+    const insufficientStage = structuredClone(ordering.preRoutingPositionedScene) as PositionedScene;
+    findContainer(insufficientStage, "G-500").height = 120;
+    expect(buildJourneyMapRoutingStages(ordering.measuredScene, insufficientStage).failedConnectorIds)
+      .toContain(sameStage.id);
+    const insufficientRoot = structuredClone(ordering.preRoutingPositionedScene) as PositionedScene;
+    insufficientRoot.root.height = 188;
+    expect(buildJourneyMapRoutingStages(ordering.measuredScene, insufficientRoot).failedConnectorIds)
+      .toContain(rootReturn.id);
+
+    const malformedRank = structuredClone(sameStage) as JourneyMapConnectorPlan;
+    malformedRank.priority.archetypeRank = 5;
+    const malformedDirection = structuredClone(sameStage) as JourneyMapConnectorPlan;
+    malformedDirection.archetype = "non_adjacent_forward_same_stage";
+    const swappedRootControls = structuredClone(rootReturn) as JourneyMapConnectorPlan;
+    [swappedRootControls.provisionalRoute.points[2], swappedRootControls.provisionalRoute.points[3]] = [
+      swappedRootControls.provisionalRoute.points[3]!,
+      swappedRootControls.provisionalRoute.points[2]!
+    ];
+    for (const malformed of [malformedRank, malformedDirection, swappedRootControls]) {
+      expect(validateJourneyMapRoutes(
+        [malformed], ordering.preRoutingPositionedScene, "provisional", ordering.measuredScene
+      ).map((diagnostic) => diagnostic.code)).toContain(
+        "renderer.routing.journey_map_archetype_fallback"
+      );
+    }
+
+    const branchingRootMeasuredScene = structuredClone(ordering.measuredScene) as MeasuredScene;
+    const measuredRootReturn = branchingRootMeasuredScene.edges.find((edge) =>
+      edge.id === rootReturn.id
+    )!;
+    branchingRootMeasuredScene.edges.push({
+      ...structuredClone(measuredRootReturn),
+      id: "synthetic-branching-root-backward",
+      to: { ...structuredClone(measuredRootReturn.to), itemId: "J-501" },
+      viewMetadata: {
+        journeyMap: {
+          kind: "precedes", authorOrder: 99, sameEndpointOrdinal: 0, exactIdentityOrdinal: 0
+        }
+      }
+    });
+    const branchingRoot = buildJourneyMapRoutingStages(
+      branchingRootMeasuredScene,
+      ordering.preRoutingPositionedScene
+    );
+    expect(branchingRoot.failedConnectorIds).not.toContain(rootReturn.id);
+    expect(branchingRoot.deferredConnectors.find((edge) => edge.id === rootReturn.id))
+      .toMatchObject({ deferredFamilies: ["root_step", "branch", "backward"] });
+
+    const topology = await buildFixture("topology");
+    const topologyBackward = topology.routingStages.connectorPlans.find((plan) =>
+      plan.archetype === "backward_same_stage"
+    )!;
+    const malformedBranch = structuredClone(topologyBackward) as JourneyMapConnectorPlan;
+    malformedBranch.branch!.sourceOrdinal = 1;
+    expect(validateJourneyMapRoutes(
+      [malformedBranch], topology.preRoutingPositionedScene, "provisional", topology.measuredScene
+    ).map((diagnostic) => diagnostic.code)).toContain(
+      "renderer.routing.journey_map_archetype_fallback"
+    );
+
+    const cyclicMeasuredScene = structuredClone(topology.measuredScene) as MeasuredScene;
+    const measuredBackward = cyclicMeasuredScene.edges.find((edge) => edge.id === topologyBackward.id)!;
+    cyclicMeasuredScene.edges.push({
+      ...structuredClone(measuredBackward),
+      id: "synthetic-cycle-return",
+      from: { ...structuredClone(measuredBackward.from), itemId: "J-713" },
+      to: { ...structuredClone(measuredBackward.to), itemId: "J-714" },
+      viewMetadata: {
+        journeyMap: {
+          kind: "precedes", authorOrder: 99, sameEndpointOrdinal: 0, exactIdentityOrdinal: 0
+        }
+      }
+    });
+    expect(validateJourneyMapRoutes(
+      [topologyBackward], topology.preRoutingPositionedScene, "provisional", cyclicMeasuredScene
+    ).map((diagnostic) => diagnostic.code)).toContain(
+      "renderer.routing.journey_map_archetype_fallback"
+    );
+
+    expect(topology.routingStages.deferredConnectors.map((edge) => edge.deferredFamilies)).toEqual([
+      ["cycle"],
+      ["cycle", "join", "backward", "non_adjacent_same_stage"],
+      ["cycle"],
+      ["cycle", "backward", "non_adjacent_same_stage"],
+      ["self_loop", "join", "backward", "non_adjacent_same_stage"]
+    ]);
+    const duplicate = await buildFixture("duplicate");
+    expect(duplicate.routingStages.connectorPlans).toEqual([]);
+    expect(duplicate.routingStages.deferredConnectors).toHaveLength(3);
+    expect(ordering.routingStages.diagnostics.some((diagnostic) =>
+      diagnostic.code.includes("occupancy")
+      || diagnostic.code.includes("capacity")
+      || diagnostic.code.includes("expansion")
+      || diagnostic.code.includes("separation")
+      || diagnostic.code === "renderer.routing.journey_map_peripheral_backward_edge"
     )).toBe(false);
   });
 });
