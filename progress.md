@@ -15,6 +15,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 7-13
+
+- Gate 4 done
+
 ## Sun 7-12
 
 - Added doc: Path to Replacing Legacy Rendering Pipeline with Staged Renderers

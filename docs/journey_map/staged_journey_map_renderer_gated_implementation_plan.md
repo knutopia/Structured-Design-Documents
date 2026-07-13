@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 4 checkpoint pending
+Status: implementation in progress — Gate 5 basic routing
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -16,8 +16,8 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 1 — Proof corpus and acceptance contract | accepted | user | 2026-07-12 | `c94eab8` | prerequisite and proof-contract validation green |
 | 2 — Typed render inputs | accepted | user | 2026-07-13 | `3900c5e` | 5 files/28 tests; build, whitespace, protected baselines clean |
 | 3 — RendererScene | accepted | user | 2026-07-13 | `d40a2fc` | 3 files/29 tests; accepted snapshots, build, whitespace, protected baselines clean |
-| 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | pending | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
-| 5 — Basic routing | blocked by Gate 4 | — | — | — | — |
+| 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
+| 5 — Basic routing | in progress | — | — | pending | opened after accepted Gate 4 checkpoint `ad75f44` |
 | 6 — Archetypes and ownership | blocked by Gate 5 | — | — | — | — |
 | 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
 | 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
@@ -398,6 +398,12 @@ Expected diagnostics are unchanged and contain no warn/error: primary has only `
 **Accepted evidence.** The eight Gate 4-owned reviewed JSON artifacts were copied byte-for-byte into their exact Gate 1 names. Repository hashes are: primary measured `f694b651f2fb4cf1e5aee7c5708fbe225ab1fa7014e7c885040b2620c21907c4`; primary pre-routing positioned `b40529183be64b33585680b28d5765ef43b5d866913a5e367189b66cda8e8d13`; simple badges measured `2fdcb41f3bde1ab9ed36a4adf5b60a4347a0a01993b6bfa77a2026813a3084da`; permissive badges measured `55c4c4800437b7806bc766abcf4cf3bd6a4e638eba89e838b13108978f0176b5`; ordering/ownership pre-routing positioned `3e487c5e014f62a558d4f2623ea5171c519fb97a9cd0aefefbde3b33e6e292c7`; topology pre-routing positioned `2ae8d12bc301be8e132f1a36289734f3f81e2ef3a52f721daaa3e298f3217270`; duplicate pre-routing positioned `5798fe18d3f9227cbe16a3fb68a645f3dd49f8801382655c30006208a066a4db`; compressed pre-routing positioned `4686c8554ae592fa1c9088c42d05a2f6cf7582c997ba5a3e2a320ebb59c236a5`. The accepted RendererScene evidence evolution remains the four reviewed additive badge-region fields only.
 
 **Post-acceptance validation.** The pre-routing suite now byte-compares all eight accepted Gate 4 repository artifacts. `TMPDIR=/tmp pnpm exec vitest run tests/stagedJourneyMap.spec.ts tests/journeyMapPreRouting.spec.ts tests/stagedRenderer.spec.ts tests/stagedSceneBuilders.spec.ts tests/stagedSvgBackend.spec.ts` passed 5 files and 45 tests. The build, whitespace, protected-baseline, and changed-file audits remain required immediately before the checkpoint.
+
+**Checkpoint.** Commit `ad75f44` (`Gate 4: add journey measurement and pre-routing`) succeeded with only the reviewed Gate 4 production, contracts, tests, accepted evidence, amendment, and ledger files. Gate 5 opened only after this checkpoint existed.
+
+### Gate 5 — 2026-07-13 opening record
+
+**Gate state.** Gate 5 is active. Scope is dedicated basic journey PRECEDES routing for adjacent same-Stage and simple adjacent cross-Stage families, with explicit plans and step-2 routes. Gate 6 archetypes, Gate 7 occupancy/expansion, Gate 8 final endpoint ordering/diagnostics, preview integration, and corpus regeneration remain blocked. Gate 4 source order, measured bounds, natural Stage policy, root alignment, and accepted pre-routing evidence are protected inputs.
 
 ## 1. Completion definition
 
