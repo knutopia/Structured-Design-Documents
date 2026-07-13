@@ -4,7 +4,12 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import type { PositionedContainer, PositionedNode } from "../src/renderer/staged/contracts.js";
+import type {
+  Point,
+  PositionedContainer,
+  PositionedNode,
+  PositionedRoute
+} from "../src/renderer/staged/contracts.js";
 import { renderJourneyMapRoutingArtifacts } from "../src/renderer/staged/journeyMap.js";
 import { MIN_ARROW_MARKER_LEG } from "../src/renderer/staged/routing.js";
 import {
@@ -30,6 +35,19 @@ const topologyFixturePath = path.join(
   repoRoot,
   "tests/fixtures/render/journey_map_staged_topology.sdd"
 );
+
+function routeContainsPoint(route: PositionedRoute, point: Point): boolean {
+  return route.points.slice(1).some((end, index) => {
+    const start = route.points[index]!;
+    if (start.x === end.x && point.x === start.x) {
+      return point.y >= Math.min(start.y, end.y) && point.y <= Math.max(start.y, end.y);
+    }
+    if (start.y === end.y && point.y === start.y) {
+      return point.x >= Math.min(start.x, end.x) && point.x <= Math.max(start.x, end.x);
+    }
+    return false;
+  });
+}
 
 describe("journey map Gate 6 visual acceptance", () => {
   it("keeps the isolated same-Stage skip below the Step row with clear south ports", async () => {
@@ -120,7 +138,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       "strict"
     );
     const scene = rendered.routingStages.provisionalPositionedScene;
-    expect(scene.edges).toHaveLength(7);
+    expect(scene.edges).toHaveLength(9);
     const longCross = scene.edges.find((edge) =>
       edge.from.itemId === "J-204" && edge.to.itemId === "J-401"
     );
@@ -281,6 +299,77 @@ describe("journey map Gate 6 visual acceptance", () => {
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
     expect(topology.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+
+  it("records the nominal join crossing as readability debt while keeping hard geometry clear", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: primaryFixturePath,
+      text: await readFile(primaryFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!,
+      compiled.graph!,
+      bundle,
+      view!,
+      "strict"
+    );
+    const scene = rendered.routingStages.provisionalPositionedScene;
+    expect(scene.edges).toHaveLength(9);
+    const bypass = scene.edges.find((edge) =>
+      edge.from.itemId === "J-202" && edge.to.itemId === "J-204"
+    );
+    const direct = scene.edges.find((edge) =>
+      edge.from.itemId === "J-203" && edge.to.itemId === "J-204"
+    );
+    const branchBypass = scene.edges.find((edge) =>
+      edge.from.itemId === "J-201" && edge.to.itemId === "J-203"
+    );
+    expect(bypass?.route.points).toEqual([
+      { x: 1292, y: 140 }, { x: 1292, y: 168 },
+      { x: 1428, y: 168 }, { x: 1652, y: 168 }, { x: 1664, y: 168 },
+      { x: 1664, y: 116 }, { x: 1676, y: 116 }
+    ]);
+    expect(direct?.route.points).toEqual([
+      { x: 1652, y: 124 }, { x: 1664, y: 124 },
+      { x: 1664, y: 116 }, { x: 1676, y: 116 }
+    ]);
+    expect(branchBypass).toBeDefined();
+
+    const nodeBoxes = flattenPositionedItems(scene.root)
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id,
+        x: node.x,
+        y: node.y,
+        width: node.width,
+        height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes([bypass!, direct!], nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes([bypass!, direct!], nodeBoxes);
+    for (const edge of [bypass!, direct!]) {
+      for (const header of collectHeaderBoxes(scene.root)) {
+        expect(routeIntersectsRect(edge.route, header)).toBe(false);
+      }
+      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    }
+
+    const nominalCrossing = { x: 1540, y: 168 };
+    expect(routeContainsPoint(bypass!.route, nominalCrossing)).toBe(true);
+    expect(routeContainsPoint(branchBypass!.route, nominalCrossing)).toBe(true);
+    const mergedConvergence = { x: 1664, y: 116 };
+    expect(routeContainsPoint(bypass!.route, mergedConvergence)).toBe(true);
+    expect(routeContainsPoint(direct!.route, mergedConvergence)).toBe(true);
+    expect(rendered.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
   });

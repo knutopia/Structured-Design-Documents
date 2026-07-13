@@ -18,7 +18,8 @@
 ## Mon 7-13
 
 - Gate 4 done
-- Gate 6 done
+- Gate 6 done (mislabeled)
+- Gate 6 join family
 
 ## Sun 7-12
 
