@@ -22,6 +22,10 @@ const fixturePath = path.join(
   repoRoot,
   "tests/fixtures/render/journey_map_staged_ordering_ownership.sdd"
 );
+const primaryFixturePath = path.join(
+  repoRoot,
+  "tests/fixtures/render/journey_map_staged_primary.sdd"
+);
 
 describe("journey map Gate 6 visual acceptance", () => {
   it("keeps the isolated same-Stage skip below the Step row with clear south ports", async () => {
@@ -85,6 +89,86 @@ describe("journey map Gate 6 visual acceptance", () => {
     }
     expect(rendered.provisionalSvg).toContain("data-edge-id=");
     expect(rendered.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
+    expect(rendered.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+
+  it("keeps the long cross-Stage route peripheral and the root-Step chain visually direct", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: primaryFixturePath,
+      text: await readFile(primaryFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!,
+      compiled.graph!,
+      bundle,
+      view!,
+      "strict"
+    );
+    const scene = rendered.routingStages.provisionalPositionedScene;
+    expect(scene.edges).toHaveLength(5);
+    const longCross = scene.edges.find((edge) =>
+      edge.from.itemId === "J-204" && edge.to.itemId === "J-401"
+    );
+    const rootDirect = scene.edges.find((edge) =>
+      edge.from.itemId === "J-250" && edge.to.itemId === "J-260"
+    );
+    expect(longCross).toBeDefined();
+    expect(rootDirect).toBeDefined();
+    expect(longCross!.from).toMatchObject({ portId: "J-204__escape_out", x: 1788, y: 140 });
+    expect(longCross!.to).toMatchObject({ portId: "J-401__escape_in", x: 2859.576, y: 140 });
+    expect(rootDirect!.route.points).toEqual([
+      { x: 2184, y: 116 },
+      { x: 2224, y: 116 }
+    ]);
+
+    const items = flattenPositionedItems(scene.root);
+    const nodes = items.filter((item): item is PositionedNode => item.kind === "node");
+    const nodeBoxes = nodes.map((node) => ({
+      itemId: node.id,
+      x: node.x,
+      y: node.y,
+      width: node.width,
+      height: node.height
+    }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes([longCross!, rootDirect!], nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes([longCross!, rootDirect!], nodeBoxes);
+    for (const header of collectHeaderBoxes(scene.root)) {
+      expect(routeIntersectsRect(longCross!.route, header)).toBe(false);
+    }
+
+    const rootItemBoxes = scene.root.children
+      .filter((item) => ["J-250", "J-260", "G-300"].includes(item.id))
+      .map((item) => ({
+        itemId: item.id,
+        x: item.x,
+        y: item.y,
+        width: item.width,
+        height: item.height
+      }));
+    for (const box of rootItemBoxes) {
+      expect(routeIntersectsRect(longCross!.route, box)).toBe(false);
+    }
+    const peripheralY = 248;
+    expect(peripheralY).toBeGreaterThan(
+      Math.max(...scene.root.children.map((item) => item.y + item.height))
+    );
+    expect(peripheralY).toBeLessThan(scene.root.y + scene.root.height);
+    expect(longCross!.route.points).toContainEqual({ x: 1788, y: 236 });
+    expect(longCross!.route.points).toContainEqual({ x: 2859.576, y: 160 });
+    expect(longCross!.route.points.at(-2)?.y).toBeGreaterThan(longCross!.route.points.at(-1)!.y);
+    expect(getTerminalSegmentLength(longCross!)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    expect(rendered.provisionalSvg).not.toBe(rendered.step2Svg);
     expect(rendered.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);

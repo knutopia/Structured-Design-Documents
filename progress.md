@@ -18,6 +18,7 @@
 ## Mon 7-13
 
 - Gate 4 done
+- Gate 6 done
 
 ## Sun 7-12
 
