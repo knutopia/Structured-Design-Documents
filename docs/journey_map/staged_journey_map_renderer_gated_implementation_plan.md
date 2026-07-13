@@ -1,10 +1,69 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation-ready planning contract; no renderer implementation is authorized by this document
+Status: implementation in progress — Gate 0 pending acceptance
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
 Purpose: deliver a deterministic, visually excellent journey-map renderer through narrow, sequential, proof-driven gates. Correct semantics, obstacle-free routing, connector identity, visual readability, and reviewability outrank implementation speed.
+
+## Implementation ledger
+
+This ledger is the execution record for the linear Gate 0 → Gate 10 dependency chain. Only the active gate may be in progress; every later gate remains blocked until its prerequisite evidence is accepted.
+
+| Gate | Status | Reviewer | Accepted | Checkpoint | Validation |
+| --- | --- | --- | --- | --- | --- |
+| 0 — Authority, drift, protected baseline | in review | human reviewer pending | — | no commit | focused baseline green; review package below |
+| 1 — Proof corpus and acceptance contract | blocked by Gate 0 | — | — | — | — |
+| 2 — Typed render inputs | blocked by Gate 1 | — | — | — | — |
+| 3 — RendererScene | blocked by Gate 2 | — | — | — | — |
+| 4 — Measurement and pre-routing | blocked by Gate 3 | — | — | — | — |
+| 5 — Basic routing | blocked by Gate 4 | — | — | — | — |
+| 6 — Archetypes and ownership | blocked by Gate 5 | — | — | — | — |
+| 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
+| 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
+| 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
+| 10 — Goldens, corpus, and closeout | blocked by Gate 9 | — | — | — | — |
+
+## Implementation log
+
+### Gate 0 — 2026-07-12 review package
+
+**Execution state.** The read-only authority, drift, tooling, and protected-baseline pass is complete. Gate 0 is in review; Gate 1 has not begun. The only tracked change made for this gate is this user-required execution record.
+
+**Authority and runtime consumption.** Repository policy is `AGENTS.md`. Bundle behavior is governed by `bundle/v0.1/core/views.yaml` and `bundle/v0.1/core/contracts.yaml`; `buildJourneyMapProjection(...)` in `src/projector/journeyMap.ts` consumes the loaded view contract at the semantic boundary; `buildJourneyMapRenderModel(...)` in `src/renderer/journeyMapRenderModel.ts` consumes projection output, bundle-provided hierarchy/ordering edge lists, profile display policy, and the author-order helpers in `src/compiler/authorOrder.ts`. Staged renderer documents and existing staged modules agree with the explicit projection-to-SVG pipeline and the journey-specific no-ELK/no-external-engine rule.
+
+**Baseline state.** Branch `journey_map` was clean and aligned with `origin/journey_map` at `41fd368026a84720222fb4f14614f536615ed641`. Tooling was Node `v22.17.0`, pnpm `10.31.0`, and Vitest `2.1.9`. No unrelated workspace changes were present before this ledger update.
+
+**Protected renderer baseline.** SHA-256 hashes recorded before implementation:
+
+| File | SHA-256 |
+| --- | --- |
+| `src/renderer/staged/iaPlaceMap.ts` | `98462a96069c3fc750c051ce339beeb8431ae34b271972bb42083cdd16fd13e7` |
+| `src/renderer/staged/uiContracts.ts` | `4c99cbd6acc406b535d6d58ea6a6ad61a5ecb152c96c33f085663dc2d780c58c` |
+| `src/renderer/staged/scenarioFlow.ts` | `445d9eaaaef82a486aef80422cf307b694d1ce938f2fdd4667c1568d8df91318` |
+| `src/renderer/staged/scenarioFlowDecorations.ts` | `1d2d37aecc771d02de96790588d2d50bb1783ad5169825bc6fcd71acc71ab301` |
+| `src/renderer/staged/scenarioFlowMiddleLayer.ts` | `99837f7d6df0d45c617ba5040d594a7ee63839d5b0f2c5fee7251193e869dbdd` |
+| `src/renderer/staged/scenarioFlowRouting.ts` | `a252ac1176e39ea2f942f164ba4eabfcfec73f862c221257fcc6ee4e75d9937f` |
+| `src/renderer/staged/serviceBlueprint.ts` | `ad097e7348c6ba0a79e2a185e7df285de23e2430cfcd03f8712122cd76af584e` |
+| `src/renderer/staged/serviceBlueprintDecorations.ts` | `41d02d526e572dd58b0a3b44b7fd2601b2a9e6d41442f8143dc6b3059e571b43` |
+| `src/renderer/staged/serviceBlueprintMiddleLayer.ts` | `608fa7cf3bfe724397ab8b67eb5f8233abea0523c76f4ae2fdba0e04534698b4` |
+| `src/renderer/staged/serviceBlueprintRouting.ts` | `64a3a68986a532c8494b8592508cefbda3b31bc4f2b67c46d8d84223c949cc2b` |
+| `src/renderer/staged/outcomeOpportunityMap.ts` | `b9dcfcd63c76244794f2f5767762ce695392ee4f42c023a6026042cd595188b0` |
+| `src/renderer/staged/outcomeOpportunityMapDecorations.ts` | `2178e56a4311322659b9ed3590b1bd2119525be6d0a93607460e053d92aaeb33` |
+| `src/renderer/staged/outcomeOpportunityMapMiddleLayer.ts` | `4d1ba3a36dda83f0b2e0a4f8580a6aab07a6445cd5647db3def8e6728d668f51` |
+| `src/renderer/staged/outcomeOpportunityMapRouting.ts` | `b2b1c984c5fda517376c91738b3a83614cd83ec45ebf0ddd07f3d3dabdfe6181` |
+
+Legacy journey DOT baselines were `8eea08164170aa69730b348c24eebafbbec7614cf456fc29ac181982291fdb04` for `outcome_to_ia_trace.journey_map.dot` and `43269f0851ca96c9b370b02cc850345243e88da468ba465dc8d8ca61795d144e` for `service_blueprint_slice.journey_map.dot`.
+
+**Validation.** `TMPDIR=/tmp pnpm exec vitest run tests/projectionSnapshots.spec.ts tests/render_profile_display.spec.ts tests/viewRenderers.spec.ts tests/cli.spec.ts` passed: 4 files, 63 tests. `git diff --check` passed. All cited tests and integration seams exist, and the baseline did not require Graphviz.
+
+**Material decisions and drift.** No new contradiction or architectural ambiguity was found. Gate 2 must give edge IDs semantic occurrence identity using the contract identity fields plus a duplicate ordinal, with author order stored separately. Typed badges must remain one block per resolved reference with target-name/ID fallback. Gate 7 occupancy records must retain the metadata required by the journey architecture. Existing ELK documentation describes protected current behavior only and does not authorize journey ELK. Gate 9 changes journey preview selection only while retaining internal DOT/Mermaid behavior and explicit legacy preview.
+
+Two known drift items remain deliberately unresolved: `reference_annotations.sort: id_ascending` is not visibly consumed by `splitReferenceIds(...)`, so Gate 2 must prove bundle dependence and stop before any protected projection change; `src/authoring/contracts.ts` omits the live outcome-opportunity staged backend ID, which remains out of journey scope unless separately approved at Gate 9.
+
+**Invariant report.** Satisfied: authority hierarchy, bundle ownership, projection boundary, source-order policy, explicit staged pipeline, SVG-first/PNG-derived policy, legacy selectability, protected-renderer scope, determinism baseline, and no-external-engine rule. Violated: none found. Artifacts/diagnostics: no visual artifact is required at Gate 0 and no new diagnostic was emitted. Deviation: the gate report is stored in this controlling plan as explicitly required by the execution request; no production, test, fixture, or rendered artifact was changed. Residual risk: focused journey semantic characterization does not yet exist and remains assigned to Gate 2.
+
+**Acceptance request.** Accept Gate 0 only if the authority hierarchy, protected baseline, drift ownership, invariant report, and absence of hidden scope conflict are confirmed. On acceptance, record the reviewer/date here and begin Gate 1; otherwise keep Gate 1 blocked and revise this report.
 
 ## 1. Completion definition
 
