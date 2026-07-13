@@ -631,7 +631,7 @@ Every code is a full code, deterministically sorted, and includes the listed rel
 | `renderer.routing.journey_map_boundary_gate_fallback` warn | preferred Stage gate unavailable | `[edgeId,stageId]`; capacity |
 | `renderer.routing.journey_map_archetype_fallback` warn | preferred template cannot be constructed | `[edgeId]`; capacity |
 | `renderer.routing.marker_leg_minimum_unmet` info | constructed terminal leg remains below 12px | `[edgeId]`; capacity; still fails an accepted proof by the hard contract |
-| `renderer.scene.journey_map_disconnected_chain` info | primary main/root components | component Step IDs; primary diagnostics |
+| `renderer.scene.journey_map_disconnected_chain` info | acyclic Step `PRECEDES` graph where every projected Step is incident and exactly two edge-bearing weak components exist; component containing lowest flattened visual Step order is main | non-main component Step IDs in flattened visual order; primary `[J-250,J-260]` |
 | `renderer.scene.journey_map_first_parent_selected` info | ordering multiply-contained `J-503` | `[J-503,G-500,G-600]`; ordering diagnostics |
 | `renderer.scene.journey_map_step_only` info | duplicate fixture | `[J-801,J-802]`; duplicate diagnostics |
 | `renderer.routing.journey_map_peripheral_backward_edge` info | topology/compressed backward edge | `[edgeId]`; case diagnostics |
@@ -639,6 +639,8 @@ Every code is a full code, deterministically sorted, and includes the listed rel
 | `renderer.routing.journey_map_self_loop` info | topology `J-713→J-713` | `[edgeId,J-713]`; topology diagnostics |
 
 Direct negative inputs are unit-only and never accepted visual proofs. Warnings do not waive failure.
+
+For `journey_map_disconnected_chain`, self-loops and multi-node directed cycles make the trigger inapplicable. Isolated Steps make the trigger inapplicable. The diagnostic targets the lowest flattened-order Step in the non-main component and records that component's ordered Step IDs in `details`. This is a generic scene-topology rule: fixture names and literal node IDs are never consulted.
 
 ## 7. Gate 1 completeness and stop rule
 

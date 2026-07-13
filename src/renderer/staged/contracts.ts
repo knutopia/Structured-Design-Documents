@@ -118,10 +118,33 @@ export type OutcomeOpportunityItemMetadata =
       parking: boolean;
     };
 
+export type JourneyMapItemMetadata =
+  | {
+      kind: "root";
+      rootItemIds: string[];
+      stageIds: string[];
+      globalStepIds: string[];
+    }
+  | {
+      kind: "stage";
+      rootOrder: number;
+      stageOrder: number;
+    }
+  | {
+      kind: "step";
+      rootOrder: number;
+      stageId?: string;
+      stageOrder?: number;
+      stepOrder?: number;
+      globalStepOrder: number;
+      uncontained: boolean;
+    };
+
 export interface ViewMetadata {
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
   outcomeOpportunity?: OutcomeOpportunityItemMetadata;
+  journeyMap?: JourneyMapItemMetadata;
 }
 
 export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | undefined {
@@ -150,8 +173,33 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
           ...viewMetadata.outcomeOpportunity
         }
       }
+      : {}),
+    ...(viewMetadata.journeyMap
+      ? {
+        journeyMap: {
+          ...viewMetadata.journeyMap,
+          ...(viewMetadata.journeyMap.kind === "root"
+            ? {
+              rootItemIds: [...viewMetadata.journeyMap.rootItemIds],
+              stageIds: [...viewMetadata.journeyMap.stageIds],
+              globalStepIds: [...viewMetadata.journeyMap.globalStepIds]
+            }
+            : {})
+        }
+      }
       : {})
   };
+}
+
+export interface JourneyMapEdgeMetadata {
+  kind: "precedes";
+  authorOrder: number;
+  sameEndpointOrdinal: number;
+  exactIdentityOrdinal: number;
+}
+
+export interface EdgeViewMetadata {
+  journeyMap?: JourneyMapEdgeMetadata;
 }
 
 export interface BoxSpacing {
@@ -284,6 +332,7 @@ export interface SceneEdge {
   label?: EdgeLabelSpec;
   markers?: EdgeMarkers;
   ownerContainerId?: string;
+  viewMetadata?: EdgeViewMetadata;
 }
 
 export interface RendererScene {

@@ -1,0 +1,501 @@
+import type { Bundle, ViewSpec } from "../../bundle/types.js";
+import type { CompiledGraph } from "../../compiler/types.js";
+import type { Projection } from "../../projector/types.js";
+import {
+  buildJourneyMapRenderModel,
+  type JourneyMapRenderModel,
+  type JourneyRenderEdge,
+  type JourneyRenderStage,
+  type JourneyRenderStep
+} from "../journeyMapRenderModel.js";
+import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import type {
+  JourneyMapItemMetadata,
+  RendererScene,
+  SceneContainer,
+  SceneEdge,
+  SceneItem,
+  SceneNode
+} from "./contracts.js";
+import {
+  createSceneDiagnostic,
+  sortRendererDiagnostics,
+  type RendererDiagnostic
+} from "./diagnostics.js";
+import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
+
+const ROOT_GAP = 40;
+const STAGE_GAP = 24;
+
+interface JourneyScenePlacement {
+  metadataByItemId: ReadonlyMap<string, JourneyMapItemMetadata>;
+  parentStageByStepId: ReadonlyMap<string, string>;
+  rootItemIds: string[];
+  stageIds: string[];
+  globalStepIds: string[];
+}
+
+function buildJourneyScenePlacement(model: JourneyMapRenderModel): JourneyScenePlacement {
+  const metadataByItemId = new Map<string, JourneyMapItemMetadata>();
+  const parentStageByStepId = new Map<string, string>();
+  const rootItemIds = model.rootItems.map((item) => item.id);
+  const stageIds: string[] = [];
+  const globalStepIds: string[] = [];
+  let stageOrder = 0;
+
+  for (const [rootOrder, item] of model.rootItems.entries()) {
+    if (item.kind === "stage") {
+      const currentStageOrder = stageOrder++;
+      stageIds.push(item.id);
+      metadataByItemId.set(item.id, {
+        kind: "stage",
+        rootOrder,
+        stageOrder: currentStageOrder
+      });
+      for (const [stepOrder, step] of item.items.entries()) {
+        const globalStepOrder = globalStepIds.length;
+        globalStepIds.push(step.id);
+        parentStageByStepId.set(step.id, item.id);
+        metadataByItemId.set(step.id, {
+          kind: "step",
+          rootOrder,
+          stageId: item.id,
+          stageOrder: currentStageOrder,
+          stepOrder,
+          globalStepOrder,
+          uncontained: false
+        });
+      }
+      continue;
+    }
+
+    const globalStepOrder = globalStepIds.length;
+    globalStepIds.push(item.id);
+    metadataByItemId.set(item.id, {
+      kind: "step",
+      rootOrder,
+      globalStepOrder,
+      uncontained: true
+    });
+  }
+
+  return {
+    metadataByItemId,
+    parentStageByStepId,
+    rootItemIds,
+    stageIds,
+    globalStepIds
+  };
+}
+
+function buildRootChrome(): SceneContainer["chrome"] {
+  return {
+    padding: {
+      top: 32,
+      right: 32,
+      bottom: 32,
+      left: 32
+    },
+    gutter: ROOT_GAP
+  };
+}
+
+function buildStageChrome(): SceneContainer["chrome"] {
+  return {
+    padding: {
+      top: 20,
+      right: 20,
+      bottom: 20,
+      left: 20
+    },
+    gutter: STAGE_GAP,
+    headerBandHeight: 40
+  };
+}
+
+function buildJourneyStep(step: JourneyRenderStep, metadata: JourneyMapItemMetadata): SceneNode {
+  if (metadata.kind !== "step") {
+    throw new Error(`Journey Step ${step.id} received non-Step placement metadata.`);
+  }
+  const duplicateTargetCounts = new Map<string, number>();
+  const content = [
+    {
+      id: `${step.id}__title`,
+      kind: "text" as const,
+      text: step.labelLines[0] ?? step.id,
+      textStyleRole: "title",
+      priority: "primary" as const
+    },
+    ...step.badges.map((badge) => {
+      const duplicateOrdinal = duplicateTargetCounts.get(badge.targetId) ?? 0;
+      duplicateTargetCounts.set(badge.targetId, duplicateOrdinal + 1);
+      return {
+        id: `${step.id}__badge__${badge.targetId}__${duplicateOrdinal}`,
+        kind: "badge_text" as const,
+        text: badge.targetName && badge.targetName.length > 0 ? badge.targetName : badge.targetId,
+        textStyleRole: "badge",
+        priority: "secondary" as const
+      };
+    })
+  ];
+
+  return {
+    ...buildCardNode({
+      id: step.id,
+      role: "journey_step",
+      classes: [
+        "journey_map",
+        "journey_step",
+        metadata.uncontained ? "journey_step_root" : "journey_step_contained"
+      ],
+      widthPolicy: {
+        preferred: "standard",
+        allowed: ["standard", "wide"]
+      },
+      content,
+      ports: [
+        buildPortSpec(`${step.id}__flow_in`, "journey_flow_in", "west"),
+        buildPortSpec(`${step.id}__flow_out`, "journey_flow_out", "east"),
+        buildPortSpec(`${step.id}__escape_in`, "journey_escape_in", "south"),
+        buildPortSpec(`${step.id}__escape_out`, "journey_escape_out", "south")
+      ]
+    }),
+    viewMetadata: {
+      journeyMap: metadata
+    }
+  };
+}
+
+function buildJourneyStage(
+  stage: JourneyRenderStage,
+  placement: JourneyScenePlacement
+): SceneContainer {
+  const metadata = placement.metadataByItemId.get(stage.id);
+  if (!metadata || metadata.kind !== "stage") {
+    throw new Error(`Missing journey Stage placement metadata for ${stage.id}.`);
+  }
+
+  return {
+    kind: "container",
+    id: stage.id,
+    role: "journey_stage",
+    primitive: "cluster",
+    classes: ["journey_map", "journey_stage"],
+    viewMetadata: {
+      journeyMap: metadata
+    },
+    layout: {
+      strategy: "stack",
+      direction: "horizontal",
+      gap: STAGE_GAP,
+      crossAlignment: "start"
+    },
+    chrome: buildStageChrome(),
+    headerContent: [
+      {
+        id: `${stage.id}__header`,
+        kind: "text",
+        text: stage.label,
+        textStyleRole: "title",
+        priority: "primary"
+      }
+    ],
+    children: stage.items.map((step) => {
+      const stepMetadata = placement.metadataByItemId.get(step.id);
+      if (!stepMetadata || stepMetadata.kind !== "step") {
+        throw new Error(`Missing journey Step placement metadata for ${step.id}.`);
+      }
+      return buildJourneyStep(step, stepMetadata);
+    }),
+    ports: []
+  };
+}
+
+function buildJourneyRootItem(item: JourneyMapRenderModel["rootItems"][number], placement: JourneyScenePlacement): SceneItem {
+  if (item.kind === "stage") {
+    return buildJourneyStage(item, placement);
+  }
+  const metadata = placement.metadataByItemId.get(item.id);
+  if (!metadata || metadata.kind !== "step") {
+    throw new Error(`Missing journey Step placement metadata for ${item.id}.`);
+  }
+  return buildJourneyStep(item, metadata);
+}
+
+function buildJourneyEdge(edge: JourneyRenderEdge, placement: JourneyScenePlacement): SceneEdge {
+  const sourceStageId = placement.parentStageByStepId.get(edge.from);
+  const targetStageId = placement.parentStageByStepId.get(edge.to);
+  return {
+    id: edge.id,
+    role: "precedes",
+    classes: ["journey_map", "journey_precedes"],
+    from: {
+      itemId: edge.from
+    },
+    to: {
+      itemId: edge.to
+    },
+    routing: {
+      style: "orthogonal",
+      avoidNodeBoxes: true,
+      preferAxis: "horizontal",
+      sourcePortRole: "journey_flow_out",
+      targetPortRole: "journey_flow_in"
+    },
+    markers: {
+      end: "arrow"
+    },
+    ownerContainerId: sourceStageId !== undefined && sourceStageId === targetStageId
+      ? sourceStageId
+      : "root",
+    viewMetadata: {
+      journeyMap: {
+        kind: "precedes",
+        authorOrder: edge.authorOrder,
+        sameEndpointOrdinal: edge.sameEndpointOrdinal,
+        exactIdentityOrdinal: edge.exactIdentityOrdinal
+      }
+    }
+  };
+}
+
+function buildDuplicateEdgeIdDiagnostics(edges: readonly SceneEdge[]): RendererDiagnostic[] {
+  const counts = new Map<string, number>();
+  for (const edge of edges) {
+    counts.set(edge.id, (counts.get(edge.id) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([edgeId]) => createSceneDiagnostic(
+      "renderer.scene.journey_map_duplicate_edge_id",
+      `Journey scene edge ID ${edgeId} occurs more than once.`,
+      {
+        severity: "error",
+        targetId: edgeId,
+        details: JSON.stringify({ relatedIds: [edgeId] })
+      }
+    ));
+}
+
+function buildFirstParentDiagnostics(
+  projection: Projection,
+  view: ViewSpec,
+  placement: JourneyScenePlacement
+): RendererDiagnostic[] {
+  const nodesById = new Map(projection.nodes.map((node) => [node.id, node] as const));
+  const hierarchyEdgeTypes = new Set(view.projection.hierarchy_edges);
+  const parentsByStepId = new Map<string, string[]>();
+  for (const edge of projection.edges) {
+    if (!hierarchyEdgeTypes.has(edge.type)
+      || nodesById.get(edge.from)?.type !== "Stage"
+      || nodesById.get(edge.to)?.type !== "Step") {
+      continue;
+    }
+    const parents = parentsByStepId.get(edge.to) ?? [];
+    if (!parents.includes(edge.from)) {
+      parents.push(edge.from);
+    }
+    parentsByStepId.set(edge.to, parents);
+  }
+
+  const diagnostics: RendererDiagnostic[] = [];
+  for (const stepId of placement.globalStepIds) {
+    const parents = parentsByStepId.get(stepId) ?? [];
+    if (parents.length < 2) {
+      continue;
+    }
+    const selectedStageId = placement.parentStageByStepId.get(stepId);
+    if (selectedStageId === undefined) {
+      continue;
+    }
+    diagnostics.push(createSceneDiagnostic(
+      "renderer.scene.journey_map_first_parent_selected",
+      `Journey Step ${stepId} uses projected Stage ${selectedStageId} as its first structural parent.`,
+      {
+        severity: "info",
+        targetId: stepId,
+        details: JSON.stringify({ relatedIds: [stepId, ...parents], selectedStageId })
+      }
+    ));
+  }
+  return diagnostics;
+}
+
+function hasDirectedCycle(stepIds: readonly string[], edges: readonly JourneyRenderEdge[]): boolean {
+  const adjacency = new Map(stepIds.map((stepId) => [stepId, [] as string[]]));
+  for (const edge of edges) {
+    if (edge.from === edge.to) {
+      return true;
+    }
+    adjacency.get(edge.from)?.push(edge.to);
+  }
+  const stateByStepId = new Map<string, "visiting" | "visited">();
+  const visit = (stepId: string): boolean => {
+    const state = stateByStepId.get(stepId);
+    if (state === "visiting") {
+      return true;
+    }
+    if (state === "visited") {
+      return false;
+    }
+    stateByStepId.set(stepId, "visiting");
+    for (const targetId of adjacency.get(stepId) ?? []) {
+      if (visit(targetId)) {
+        return true;
+      }
+    }
+    stateByStepId.set(stepId, "visited");
+    return false;
+  };
+  return stepIds.some((stepId) => visit(stepId));
+}
+
+function buildDisconnectedChainDiagnostics(
+  model: JourneyMapRenderModel,
+  placement: JourneyScenePlacement
+): RendererDiagnostic[] {
+  const stepIds = placement.globalStepIds;
+  if (stepIds.length === 0 || hasDirectedCycle(stepIds, model.edges)) {
+    return [];
+  }
+
+  const incidentStepIds = new Set<string>();
+  const neighbors = new Map(stepIds.map((stepId) => [stepId, new Set<string>()]));
+  for (const edge of model.edges) {
+    incidentStepIds.add(edge.from);
+    incidentStepIds.add(edge.to);
+    neighbors.get(edge.from)?.add(edge.to);
+    neighbors.get(edge.to)?.add(edge.from);
+  }
+  if (stepIds.some((stepId) => !incidentStepIds.has(stepId))) {
+    return [];
+  }
+
+  const remaining = new Set(stepIds);
+  const components: string[][] = [];
+  for (const firstStepId of stepIds) {
+    if (!remaining.has(firstStepId)) {
+      continue;
+    }
+    const component: string[] = [];
+    const pending = [firstStepId];
+    remaining.delete(firstStepId);
+    while (pending.length > 0) {
+      const stepId = pending.shift()!;
+      component.push(stepId);
+      for (const neighborId of neighbors.get(stepId) ?? []) {
+        if (remaining.delete(neighborId)) {
+          pending.push(neighborId);
+        }
+      }
+    }
+    const componentSet = new Set(component);
+    if (!model.edges.some((edge) => componentSet.has(edge.from) && componentSet.has(edge.to))) {
+      return [];
+    }
+    components.push(component);
+  }
+
+  if (components.length !== 2) {
+    return [];
+  }
+  const mainStepId = stepIds[0]!;
+  const secondary = components.find((component) => !component.includes(mainStepId));
+  if (!secondary || secondary.length === 0) {
+    return [];
+  }
+  const secondarySet = new Set(secondary);
+  const orderedSecondary = stepIds.filter((stepId) => secondarySet.has(stepId));
+  return [createSceneDiagnostic(
+    "renderer.scene.journey_map_disconnected_chain",
+    "Journey map contains a disconnected secondary PRECEDES chain.",
+    {
+      severity: "info",
+      targetId: orderedSecondary[0],
+      details: JSON.stringify({ relatedIds: orderedSecondary })
+    }
+  )];
+}
+
+function buildStepOnlyDiagnostics(placement: JourneyScenePlacement): RendererDiagnostic[] {
+  if (placement.stageIds.length > 0 || placement.globalStepIds.length === 0) {
+    return [];
+  }
+  return [createSceneDiagnostic(
+    "renderer.scene.journey_map_step_only",
+    "Journey map contains Steps without any Stage container.",
+    {
+      severity: "info",
+      targetId: placement.globalStepIds[0],
+      details: JSON.stringify({ relatedIds: placement.globalStepIds })
+    }
+  )];
+}
+
+export function buildJourneyMapRendererSceneFromModel(
+  model: JourneyMapRenderModel,
+  profileId: string,
+  themeId = "default",
+  diagnostics: readonly RendererDiagnostic[] = []
+): RendererScene {
+  const placement = buildJourneyScenePlacement(model);
+  const edges = model.edges.map((edge) => buildJourneyEdge(edge, placement));
+  const root = {
+    ...buildDiagramRootContainer({
+      viewId: "journey_map",
+      layout: {
+        strategy: "stack",
+        direction: "horizontal",
+        gap: ROOT_GAP,
+        crossAlignment: "start"
+      },
+      chrome: buildRootChrome(),
+      children: model.rootItems.map((item) => buildJourneyRootItem(item, placement)),
+      classes: ["journey_map"]
+    }),
+    viewMetadata: {
+      journeyMap: {
+        kind: "root" as const,
+        rootItemIds: [...placement.rootItemIds],
+        stageIds: [...placement.stageIds],
+        globalStepIds: [...placement.globalStepIds]
+      }
+    }
+  };
+
+  return {
+    viewId: "journey_map",
+    profileId,
+    themeId,
+    root,
+    edges,
+    diagnostics: sortRendererDiagnostics([
+      ...diagnostics,
+      ...buildDuplicateEdgeIdDiagnostics(edges)
+    ])
+  };
+}
+
+export function buildJourneyMapRendererScene(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): RendererScene {
+  const model = buildJourneyMapRenderModel(
+    projection,
+    graph,
+    bundle,
+    view.projection.hierarchy_edges,
+    view.projection.ordering_edges,
+    resolveProfileDisplayPolicy(view, profileId)
+  );
+  const placement = buildJourneyScenePlacement(model);
+  return buildJourneyMapRendererSceneFromModel(model, profileId, themeId, [
+    ...buildFirstParentDiagnostics(projection, view, placement),
+    ...buildStepOnlyDiagnostics(placement),
+    ...buildDisconnectedChainDiagnostics(model, placement)
+  ]);
+}
