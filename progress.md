@@ -19,6 +19,9 @@
 
 - Added doc: Path to Replacing Legacy Rendering Pipeline with Staged Renderers
 - Added journey map architecture doc
+- Added journey map plan prompt
+- Created journey_map branch
+- Created implementation plan
 
 ## Sat 7-11
 
