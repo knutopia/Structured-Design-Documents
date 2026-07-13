@@ -318,6 +318,10 @@ export interface SyntaxConfig {
 
 export interface RuleLogic {
   kind: string;
+  loop_annotation_target?: "edge" | "node";
+  loop_annotation_prop?: string;
+  loop_annotation_value?: string;
+  loop_annotation_coverage?: "each_cyclic_component" | "any_cyclic_component";
   [key: string]: unknown;
 }
 

@@ -117,7 +117,7 @@ relationships:
         to: State
     constraints:
       - id: precedes_cycle_policy
-        description: Linear flows should be acyclic; intentional loops should be annotated.
+        description: Linear flows should be acyclic; every intentional cyclic component should contain an annotated edge.
         severity_by_profile:
           simple: warn
           permissive: warn
@@ -125,8 +125,10 @@ relationships:
         rule_logic:
           kind: cyclic_flow_policy
           relationship: PRECEDES
+          loop_annotation_target: edge
           loop_annotation_prop: kind
           loop_annotation_value: loop
+          loop_annotation_coverage: each_cyclic_component
 
   - type: NAVIGATES_TO
     meaning: Navigation from one place to another.

@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 0 pending acceptance
+Status: implementation in progress — Gate 2 typed render inputs
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -12,9 +12,9 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 
 | Gate | Status | Reviewer | Accepted | Checkpoint | Validation |
 | --- | --- | --- | --- | --- | --- |
-| 0 — Authority, drift, protected baseline | in review | human reviewer pending | — | no commit | focused baseline green; review package below |
-| 1 — Proof corpus and acceptance contract | blocked by Gate 0 | — | — | — | — |
-| 2 — Typed render inputs | blocked by Gate 1 | — | — | — | — |
+| 0 — Authority, drift, protected baseline | accepted | user | 2026-07-12 | no commit | 4 files/63 tests; whitespace and protected baseline clean |
+| 1 — Proof corpus and acceptance contract | accepted | user | 2026-07-12 | Gate 1 checkpoint pending | prerequisite and proof-contract validation green |
+| 2 — Typed render inputs | in progress | — | — | pending | characterization pending |
 | 3 — RendererScene | blocked by Gate 2 | — | — | — | — |
 | 4 — Measurement and pre-routing | blocked by Gate 3 | — | — | — | — |
 | 5 — Basic routing | blocked by Gate 4 | — | — | — | — |
@@ -63,7 +63,201 @@ Two known drift items remain deliberately unresolved: `reference_annotations.sor
 
 **Invariant report.** Satisfied: authority hierarchy, bundle ownership, projection boundary, source-order policy, explicit staged pipeline, SVG-first/PNG-derived policy, legacy selectability, protected-renderer scope, determinism baseline, and no-external-engine rule. Violated: none found. Artifacts/diagnostics: no visual artifact is required at Gate 0 and no new diagnostic was emitted. Deviation: the gate report is stored in this controlling plan as explicitly required by the execution request; no production, test, fixture, or rendered artifact was changed. Residual risk: focused journey semantic characterization does not yet exist and remains assigned to Gate 2.
 
-**Acceptance request.** Accept Gate 0 only if the authority hierarchy, protected baseline, drift ownership, invariant report, and absence of hidden scope conflict are confirmed. On acceptance, record the reviewer/date here and begin Gate 1; otherwise keep Gate 1 blocked and revise this report.
+**Acceptance.** Accepted by the user on 2026-07-12. Gate 1 opened only after this acceptance was received.
+
+### Gate 1 — 2026-07-12 stop report: intentional-cycle annotation
+
+**Gate state.** Gate 1 began after Gate 0 acceptance and stopped before the fixture contract was locked. No fixture, production, test, snapshot, or rendered artifact has been created. Gates 2–10 remain blocked.
+
+**Authority conflict.** `bundle/v0.1/core/contracts.yaml` defines `precedes_cycle_policy` with `loop_annotation_prop: kind` and `loop_annotation_value: loop`; explanatory definitions explicitly identify this as an edge property, and the approved plan states that `PRECEDES` cycles recognize `props.kind=loop`. SDD syntax supports edge properties. The generic `cyclicFlowPolicy(...)` executor in `src/validator/ruleExecutors.ts`, however, looks for `kind=loop` on a cycle node. Under the strict profile, `Step.kind` permits only `decision`, so the node-level workaround that suppresses the cycle warning creates `validate.step_kind_enum` as a strict error.
+
+**Smallest reproducer.** A two-Step cycle with `kind=loop` on one `PRECEDES` edge still emits `validate.precedes_cycle_policy` because the edge property is ignored. Moving `kind=loop` to either Step suppresses that warning but violates strict `Step.kind=[decision]`. There is no existing cycle-policy test that resolves the contradiction.
+
+**Safe alternatives evaluated.** Separating annotated and unannotated cycle fixtures avoids diagnostic cross-talk but does not make the annotated edge observable to validation. Accepting the cycle warning for both cases would erase the bundle-owned annotated/unannotated distinction and would turn a known bundle-authority failure into fixture policy. Changing source order, renderer behavior, or proof coordinates is irrelevant and forbidden.
+
+**Invariant report.** Still satisfied: journey scope, projection boundary, renderer isolation, source-order policy, and no-external-engine rule. Violated by current runtime behavior: the bundle-declared intentional-loop annotation is not consumed from the specified edge property, and strict validation has no valid node-level substitute. Gate 1 acceptance is therefore not available.
+
+**Decision and approval.** On 2026-07-12 the user authorized the recommended narrow prerequisite contract repair and requested explicit, retraceable bundle-impact documentation. The repair may therefore update the bundle contract, its TypeScript contract shape, the generic validator consumer, focused validation tests, and explanatory contract commentary before Gate 1 fixture design resumes.
+
+**Bundle impact contract.** `precedes_cycle_policy.rule_logic` will explicitly declare: (1) the annotation target (`edge`), (2) the property and value (`kind=loop`), and (3) coverage (`each_cyclic_component`). `loadBundle(...)` already preserves open `rule_logic` data, so no view-specific loader branch is permitted; the generic `RuleLogic` type will expose the fields and `cyclicFlowPolicy(...)` will consume them. Each strongly connected cyclic component—including a one-node self-loop—must contain at least one matching internal annotated edge. A marker in one cyclic component cannot suppress a diagnostic for another. Tests must prove strict-profile compatibility without `Step.kind=loop`, edge-target consumption, per-component behavior, self-loops, deterministic related IDs, and that bundle-only mutations of the marker/target/coverage change runtime results. This repair changes validation only; parser, compiler, projection, renderer, and existing journey placement/routing semantics remain unchanged.
+
+**Deviation boundary.** This approved prerequisite is the only Gate 1 scope expansion. It must not introduce journey-specific validator code, new syntax, a new relationship, or renderer behavior. Gate 1 remains incomplete until the repair passes focused and full relevant validation and the fixture/acceptance contract is subsequently locked and reviewed.
+
+### Gate 1 prerequisite repair — validation result
+
+**Implemented bundle behavior.** `bundle/v0.1/core/contracts.yaml` now declares `loop_annotation_target: edge`, `loop_annotation_prop: kind`, `loop_annotation_value: loop`, and `loop_annotation_coverage: each_cyclic_component`. The generic `RuleLogic` TypeScript surface exposes those fields, `loadBundle(...)` passes them through without a relationship-specific branch, and `cyclicFlowPolicy(...)` uses deterministic strongly connected components. A multi-node component or self-loop is accepted only when one internal `PRECEDES` edge has the configured marker; connectors entering or leaving the component do not annotate it; one annotated component does not suppress another component's diagnostic.
+
+**Compatibility and retraceability.** The current v0.1 bundle is explicit and authoritative. For an older external bundle that omits the new target and coverage fields, the generic executor preserves the previous node-marker/relationship-wide behavior: any matching cycle-node marker suppresses the rule, otherwise one diagnostic contains the union of cyclic node IDs. Changing the loaded target, marker property/value, or coverage changes validation results without code edits. `definitions/v0.1/endpoint_contracts_semantic_rules_sdd_text_v_0_dot_1.md` now mirrors the per-component edge rule. No syntax, profile, manifest path, compiled schema, projection schema, example, projection snapshot, or rendered golden changed. Existing manifest examples contain no `PRECEDES` cycle, so regeneration was neither needed nor performed. A future independently versioned release must associate the first consuming engine version with this field; that release-version bookkeeping is outside this repository-local repair.
+
+**Changed files for the prerequisite.** Bundle: `bundle/v0.1/core/contracts.yaml`. Generic runtime contract/consumer: `src/bundle/types.ts`, `src/validator/ruleExecutors.ts`. Proof: `tests/cyclicFlowPolicy.spec.ts`. Commentary and execution trace: the endpoint-contract definition and this plan. No journey renderer, projection, parser, compiler, profile, snapshot, or protected staged renderer file changed.
+
+**Validation.** `TMPDIR=/tmp pnpm exec vitest run tests/cyclicFlowPolicy.spec.ts tests/validate.spec.ts tests/projectionSnapshots.spec.ts` passed 3 files and 16 tests. The focused suite proves strict edge annotation without `Step.kind`, rejection of the former strict-invalid node workaround, unannotated diagnostics, self-loops, independent components, multi-component deterministic related IDs, legacy omitted-field behavior, acyclic regression, and bundle-only target/marker/coverage mutation. `TMPDIR=/tmp pnpm run build` passed. `git diff --check` passed. Manifest examples remain strict/simple error-free and projection snapshots remain unchanged.
+
+**Invariant report.** Satisfied: bundle authority, generic consumption, bundle-only behavior change, strict-profile compatibility, deterministic component diagnostics, projection stability, and renderer isolation. Violated: none after repair. Deviation status: approved and closed. Gate 1 fixture/acceptance design may resume; Gate 1 itself is not yet accepted.
+
+### Gate 1 — locked proof-corpus contract
+
+The literal, decision-complete Gate 1 artifact is [`staged_journey_map_renderer_gate1_proof_contract.md`](staged_journey_map_renderer_gate1_proof_contract.md). Its five complete `.sdd` sources, per-edge ownership/archetypes, profiles, assertion/rubric ownership, diagnostic triggers, artifact names, thresholds, and return-to-Gate-1 stop rule are normative for later implementation. The summaries below provide traceability but do not authorize omissions or discretionary fixture edits.
+
+**Future fixture paths.** Gate 2 creates the semantic fixtures; Gate 1 only locks their content. The paths are:
+
+- `tests/fixtures/render/journey_map_staged_primary.sdd`
+- `tests/fixtures/render/journey_map_staged_ordering_ownership.sdd`
+- `tests/fixtures/render/journey_map_staged_topology.sdd`
+- `tests/fixtures/render/journey_map_staged_duplicate.sdd`
+- `tests/fixtures/render/journey_map_staged_compressed.sdd`
+
+Every literal value and source placement is fixed in the linked contract. All fixtures start with `SDD-TEXT 0.1`, satisfy strict required properties/realization except for named intentional warnings, place Stage `CONTAINS` lines before nested blocks, keep root/multiply-contained Steps top-level, and treat nesting as organization rather than semantics.
+
+#### Primary composition and profile fixture
+
+`journey_map_staged_primary.sdd` has projected root order `[G-100, G-200, J-250, J-260, G-300, G-400]`.
+
+| Node | Name / role | Exact structural or property contract |
+| --- | --- | --- |
+| `G-100` | Discover | `CONTAINS` order `[J-101,J-102,J-103]` |
+| `J-101` | Recognize a need | contained by `G-100` |
+| `J-102` | Compare plans, eligibility details, and expected total cost before choosing | contained by `G-100`; long-label proof |
+| `J-103` | Shortlist an option | contained by `G-100` |
+| `G-200` | Evaluate every option and choose the best path with confidence | long Stage title; `CONTAINS` order `[J-201,J-202,J-203,J-204]` |
+| `J-201` | Review the recommendation | `kind=decision`; `opportunity_refs="OP-200, OP-100"` deliberately reverses bundle display order |
+| `J-202` | Compare the tradeoffs | contained by `G-200` |
+| `J-203` | Resolve remaining concerns | contained by `G-200` |
+| `J-204` | Choose a path | contained by `G-200` |
+| `J-250`,`J-260` | Ask for / Receive human guidance | uncontained root Steps forming a disconnected two-node chain |
+| `G-300` | Pause and reconsider | empty Stage |
+| `G-400`,`J-401` | Commit / Complete enrollment | single-Step Stage; `CONTAINS [J-401]` |
+| `OP-100`,`OP-200` | Clear total cost / Confidence before commitment | resolved badge targets |
+| `P-100` | Journey proof surface | strict realization target for every Step |
+
+Authored qualifying `PRECEDES` order is fixed as follows; `owner` is the required lowest common container and the archetype is the expected routing classification.
+
+| Order | Edge | Owner | Archetype / proof |
+| --- | --- | --- | --- |
+| 0 | `J-101→J-102` | `G-100` | adjacent forward same-Stage direct |
+| 1 | `J-102→J-103` | `G-100` | adjacent forward same-Stage direct |
+| 2 | `J-103→J-201` | root | adjacent forward cross-Stage bridge |
+| 3 | `J-201→J-202` | `G-200` | adjacent branch member |
+| 4 | `J-201→J-203` | `G-200` | non-adjacent branch/bypass member |
+| 5 | `J-202→J-204` | `G-200` | non-adjacent join/bypass member |
+| 6 | `J-203→J-204` | `G-200` | adjacent join member |
+| 7 | `J-204→J-401` | root | long cross-Stage/root bypass avoiding root Steps and unrelated empty `G-300` |
+| 8 | `J-250→J-260` | root | root-Step direct; disconnected component |
+
+#### Ordering and ownership fixture
+
+`journey_map_staged_ordering_ownership.sdd` has projected root order `[G-600,J-590,G-500,J-591]`. `G-600` is authored before `G-500`, but projection edge ordering is canonical by `from/type/to`; therefore multiply-contained `J-503` selects `G-500` as its first qualifying parent.
+
+- `G-600` “Authored-first secondary parent” has `CONTAINS [J-601,J-503,J-602]`; its rendered children are `[J-601,J-602]` after first-parent filtering.
+- Top-level `J-503` “Shared multiply-contained step” stays top-level in source because it has two semantic parents, but renders inside `G-500`.
+- `G-500` “Projected-first structural owner” has deliberately non-ID `CONTAINS [J-503,J-502,J-501]`; this exact order is its rendered child order.
+- Root Steps are `J-590` “Root handoff” and `J-591` “Root return”. `P-500` is the strict realization target.
+- Authored `PRECEDES` order: `J-503→J-501` (same-Stage skip), `J-501→J-502` (backward relative to the locked child order), and `J-591→J-590` (backward root-owned edge). Placement remains source/edge-line ordered.
+- Expected validation: one `validate.contains_single_parent_recommended` warning related to `J-503`. Expected renderer context: one `renderer.scene.journey_map_first_parent_selected` info diagnostic; no renderer warning/error.
+
+#### Exceptional topology fixture
+
+`journey_map_staged_topology.sdd` has root order `[J-790,G-700,J-791]`. `G-700` “Loops and returns” has `CONTAINS [J-701,J-702,J-711,J-712,J-713,J-714]`; `P-700` realizes every Step. Both branching Steps `J-790` and `J-714` have `kind=decision`.
+
+| Order | Edge | Contract |
+| --- | --- | --- |
+| 0 | `J-790→J-701` | root-to-contained transition; `J-790 kind=decision` because it also targets `J-791` |
+| 1 | `J-790→J-791` | direct root-Step branch member |
+| 2 | `J-701→J-702 kind=loop` | annotated two-node cycle, internal edge marker |
+| 3 | `J-702→J-701` | annotated component return; same-Stage peripheral route |
+| 4 | `J-711→J-712` | unannotated cycle member |
+| 5 | `J-712→J-711` | unannotated cycle return; exactly one component diagnostic expected for `[J-711,J-712]` |
+| 6 | `J-713→J-713 kind=loop` | annotated self-loop |
+| 7 | `J-714→J-713` | standalone backward same-Stage edge |
+| 8 | `J-714→J-791` | contained-to-root transition |
+
+The annotated two-node cycle and self-loop emit no cycle-policy diagnostic. Validation emits exactly one `validate.precedes_cycle_policy` warning for the unannotated component. Renderer output routes every edge and may emit only the locked peripheral backward/cycle/self-loop info diagnostics; renderer warning/error is forbidden.
+
+#### Duplicate identity and Step-only fixture
+
+`journey_map_staged_duplicate.sdd` has no Stage. Root order is `[J-801,J-802]`; both Steps are realized by `P-800`. Branching Step `J-801` has `kind=decision` and authors these three same-endpoint edges in order:
+
+1. `PRECEDES J-802 "Continue guided" {advisor_available} channel=guided`
+2. `PRECEDES J-802 "Continue alone" {self_service} channel=self_service`
+3. `PRECEDES J-802 "Different non-semantic hint" {advisor_available} channel=guided`
+
+The bundle identity tuple is `(from,type,to,event,guard,effect,stable props)` and excludes `to_name`. Occurrence 0 and 2 therefore share a semantic identity while occurrence 1 is distinct. Gate 2 must preserve three projected/model/scene/final occurrences and expose: qualifying authored order `[0,1,2]`, same-endpoint ordinal `[0,1,2]`, semantic identity keys, and exact-identity ordinals `[0,0,1]`. Final ID string encoding remains Gate 2's owned decision, but it must derive from semantic occurrence identity rather than a bare global index. Projection intentionally erases annotations/properties; these fields may influence stable identity lookup but do not become journey edge labels or scene payload. Expect one `validate.duplicate_edge_detection` warning, the existing Step-only projection note, one `renderer.scene.journey_map_step_only` info diagnostic, and three distinct final routes where geometry permits; coincidence is not accepted by default.
+
+#### Dense/compressed fixture
+
+`journey_map_staged_compressed.sdd` has root order `[G-900,J-950,G-910]`, `G-900 CONTAINS [J-901,J-902,J-903]`, and `G-910 CONTAINS [J-911,J-912,J-913]`. Names are deliberately short (`A`, `A1`–`A3`, `X`, `B`, `B1`–`B3`) so content width does not hide routing pressure. `P-900` realizes every Step. Every Step with multiple outgoing edges has `kind=decision`.
+
+Authored `PRECEDES` order is:
+
+`J-901→J-902`, `J-901→J-903`, `J-901→J-950`, `J-901→J-911`, `J-901→J-912`, `J-901→J-913`, `J-902→J-903`, `J-902→J-950`, `J-902→J-913`, `J-903→J-950`, `J-903→J-913`, `J-950→J-911`, `J-950→J-912`, `J-950→J-913`, `J-911→J-913`, `J-912→J-913`, `J-912→J-902 kind=loop`, `J-913→J-901 kind=loop`.
+
+This yields six outgoing edges at `J-901`, six incoming edges at `J-913`, three incoming and three outgoing edges at `J-950`, competing Stage-local skips, cross-Stage branches/joins, obstacle-local swerves around the root Step, and two peripheral backward routes. The internal loop markers keep validation focused on geometry. The fixture encodes no coordinates. Acceptance requires at least one Stage-local and one root/inter-item resolved coordinate to differ from nominal, at least one bounded whole-structure expansion/reroute, distinct late-ordered endpoints, and 16px minimum competing-track separation. If literal semantic contention does not force that behavior, Gate 7 fails and returns to Gate 1 for a documented amendment and renewed acceptance; later gates may not tune the graph opportunistically.
+
+#### Profile reuse
+
+Run the primary fixture under simple, permissive, and strict. Run ordering/ownership, topology, duplicate, and compressed under strict. Simple exposes no typed badge blocks and retains title-only legacy lines. Permissive and strict expose exactly two badges for `J-201` in bundle-declared ID order: `OP-100` “Clear total cost”, then `OP-200` “Confidence before commitment”; their legacy `labelLines` append those bracketed names in the same order. Hierarchy, model edge identity/order, and scene intent are otherwise identical. Geometry may differ only where the measured badge-bearing card height changes. The strict-required scaffold prevents unrelated validation noise.
+
+### Gate 1 — test, assertion, artifact, and diagnostic contract
+
+**Future suite names.** `tests/journeyMapRenderModel.spec.ts`, `tests/stagedJourneyMap.spec.ts`, `tests/journeyMapPreRouting.spec.ts`, `tests/journeyMapRouting.spec.ts`, `tests/journeyMapVisualAcceptance.spec.ts`, and `tests/journeyMapPreviewBackend.spec.ts`.
+
+**Hard assertion ownership.** Existing generic harnesses remain preferred. Later work may add only test-owned `expectRoutesOrthogonal(...)` and `collectBadgeBoxes(...)` to `tests/stagedVisualHarness.ts`; Stage traversal, boundary gates, endpoint order, exactly-once occurrence matching, and author-order coordinate checks stay journey-specific.
+
+| Assertion | Owning proof/stages |
+| --- | --- |
+| Orthogonal adjacent route points | every case at step-2, step-3, final |
+| Exterior endpoint approach | every case at step-2, step-3, final |
+| No non-endpoint Step, endpoint-interior, Stage-header, badge, or unrelated-Stage intersection | every applicable case at step-3/final; ordering included |
+| Shared 12px terminal leg from `MIN_ARROW_MARKER_LEG` | every arrow-ended final edge; accepted proofs cannot use fallback |
+| 16px overlapping same-orientation separation | every competing span at step-3/final; focused pressure in primary/topology/duplicate/compressed |
+| Distinct late endpoint offsets ordered by prepared stems then priority | primary, topology branch sides, duplicate same-endpoint sides, compressed crowded sides |
+| Exactly one semantic edge occurrence with no route geometry | RendererScene, MeasuredScene, pre-routing for every case |
+| Exactly one stable orthogonal route per occurrence | step-2, step-3, final for every case; duplicate is the multiplicity proof |
+| Root and Stage child order preserved | every case at model, scene, pre-routing, final |
+| Ordered legal boundary gates | primary, ordering root return, topology root transitions, compressed contention |
+| Occupancy changes final geometry and expansion is bounded | compressed only; resolved-vs-nominal plus final segment and whole-structure shift |
+| Deterministic repeat | all model/scene/routing data and stored text hashes |
+
+**Stage golden names.** No golden is captured until its owning gate accepts behavior. The linked proof contract enumerates every required filename per case/profile and the three exact degraded-diagnostic artifacts; later gates have no discretion to omit a named stage. PNG derivation is asserted and temporary PNGs are reviewed, but renderer-stage PNG goldens are not stored.
+
+Temporary review artifacts use `/tmp/journey-map-review/<case>.<profile>.<pre-routing|step-2|step-3|final>.{svg,png}`. Gate 10 corpus debug stems, where Gate 9 later decides they are meaningful, remain the established `pre_routing`, `routing_step_2_edges`, and `routing_step_3_gutters` names.
+
+**Renderer diagnostic codes.** The linked proof contract maps every exact full code to a directly constructed trigger, phase/severity, target/related IDs, and one of three named degraded artifacts. Information diagnostics and intentional validation warnings are likewise mapped to exact cases/artifacts. Normal direct routes emit no info noise.
+
+Accepted primary/profile/compressed proofs contain no renderer warning/error. Ordering contains only the named validation warning plus first-parent info. Topology contains only the one named validation cycle warning plus peripheral topology info. Duplicate contains only the named validation duplicate warning plus Step-only info. Directly constructed negative/degraded unit inputs exercise the error/warning codes; those diagnostics never waive a proof failure.
+
+**Normal visual review contract.** Review in a `1680×1050` CSS-pixel viewport at 100% browser zoom, with SVG at intrinsic width/height and one scene unit per CSS pixel. The primary proof must fit without downscaling. Dense/debug cases may scroll at 100% and also receive a fit-to-viewport overview that is not used for text-readability acceptance. Review PNG uses the shared 192 DPI path with no post-raster scaling.
+
+Use this consolidated review form for each blocking visual pass:
+
+```text
+Journey Map Review — Gate __ / case __ / profile __ / artifact __
+Stage progression meaningful: pre-routing __ step-2 __ step-3 __ final __
+Hard checks: orthogonal __ obstacles/endpoints __ headers/badges __ unrelated Stages __
+16px separation __ exactly-once edges __ source order __ occupancy affects final __
+Visual: LTR reading __ direct forward tracks __ branch/join clarity __ peripheral returns __
+edge identity __ Stage chrome/whitespace __ empty/single Stage __ labels/badges __ ports/gates __
+Diagnostics: expected __ unexpected __
+Satisfied invariants: __
+Violated invariants: __
+Verdict: PASS | FAIL   Reviewer/date: __
+```
+
+The linked ownership table defines which review items each case must pass; an item may be `N/A` only when another named case owns it. Any owned hard-check failure, unexpected renderer error/warning, non-empty violated-invariant field, nominally identical debug stages, or snapshot proposal before acceptance is a FAIL and blocks the next gate.
+
+### Gate 1 — validation and consolidated review package
+
+**Artifacts.** The decision-complete fixture/assertion/review artifact is [`staged_journey_map_renderer_gate1_proof_contract.md`](staged_journey_map_renderer_gate1_proof_contract.md). It contains five literal future fixture sources, exact source placement and properties, all edge owners/archetypes/modifiers, profile assignments, expected validation diagnostics, hard and human assertion ownership, exact stage/diagnostic filenames, full diagnostic trigger mapping, the 12px terminal-leg threshold, normal review dimensions, and the return-to-Gate-1 amendment rule. No `.sdd` fixture, snapshot, golden, corpus output, SVG, or PNG has been created at Gate 1.
+
+**Executable fixture validation.** A temporary read-only extractor compiled all five literal Markdown sources through the real loaded bundle. Primary passed simple, permissive, and strict with no validation diagnostic. Ordering/ownership passed strict with only `validate.contains_single_parent_recommended`; topology passed strict with only `validate.precedes_cycle_policy` for `[J-711,J-712]`; duplicate passed strict with only `validate.duplicate_edge_detection`; compressed passed strict with no diagnostic. This is five fixtures and seven profile runs with no unexpected compile/validation result.
+
+**Commands and results.** Gate 1's exact `rg -n "journey_map" bundle/v0.1/manifest.yaml bundle/v0.1/examples tests/fixtures tests` command passed and reconfirmed the current journey evidence/capability surface. `git diff --check` passed. The approved prerequisite rerun `TMPDIR=/tmp pnpm exec vitest run tests/cyclicFlowPolicy.spec.ts tests/validate.spec.ts tests/projectionSnapshots.spec.ts` passed 3 files and 16 tests; `TMPDIR=/tmp pnpm run build` passed. No manifest, compiled snapshot, projection snapshot, renderer snapshot, golden, or corpus artifact changed.
+
+**Completeness review.** Independent read-only review initially found open literal values, incomplete edge/profile/assertion/rubric/diagnostic/artifact ownership, two missing decision markers, an unlocked terminal threshold, and an opportunistic compressed-fixture fallback. All were corrected. Final re-review found only the protected marker-leg severity (`info`, not `warn`) and simple/permissive final PositionedScene filenames; both were corrected. The final reviewer found no remaining contract blocker.
+
+**Invariant report.** Satisfied: every required topology has an exact fixture and assertion owner; primary is composition-rich while exceptional mechanics remain isolated and diagnosable; strict validation is controlled; bundle annotations and profiles are explicit; no coordinates preordain routes; hard assertions precede snapshots; visual review ownership and N/A policy are fixed; deterministic stage/diagnostic names are fixed; compressed contention cannot be tuned outside renewed Gate 1 review. Violated: none found. Deviation: the user-approved generic cycle-contract prerequisite is implemented, documented, and green; no other deviation occurred. Residual risk: visual width, chrome, routing templates, contention behavior, and final diagnostics remain deliberately unproven until their owning gates.
+
+**Acceptance.** Accepted by the user on 2026-07-12. The reviewer confirmed the Gate 1 proof contract is sufficient to begin Gate 2. The Gate 1 checkpoint contains the approved bundle/validator prerequisite, its tests and commentary, the literal proof contract, and this execution record.
 
 ## 1. Completion definition
 
