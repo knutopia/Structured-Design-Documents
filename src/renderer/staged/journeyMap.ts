@@ -25,6 +25,10 @@ import {
   type RendererDiagnostic
 } from "./diagnostics.js";
 import { positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
+import {
+  buildJourneyMapRoutingStages,
+  type JourneyMapRoutingStages
+} from "./journeyMapRouting.js";
 import { measureScene } from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
 import { renderPositionedSceneToPng } from "./svgBackend.js";
@@ -47,6 +51,14 @@ export interface JourneyMapPreRoutingArtifactsResult {
   diagnostics: RendererDiagnostic[];
   preRoutingSvg: string;
   preRoutingPng: Uint8Array;
+}
+
+export interface JourneyMapBasicRoutingArtifactsResult extends JourneyMapPreRoutingArtifactsResult {
+  routingStages: JourneyMapRoutingStages;
+  step2Svg: string;
+  step2Png: Uint8Array;
+  finalBasicSvg: string;
+  finalBasicPng: Uint8Array;
 }
 
 function buildJourneyScenePlacement(model: JourneyMapRenderModel): JourneyScenePlacement {
@@ -600,5 +612,40 @@ export async function renderJourneyMapPreRoutingArtifacts(
     diagnostics: rendered.diagnostics,
     preRoutingSvg: rendered.svg,
     preRoutingPng: rendered.png
+  };
+}
+
+export async function renderJourneyMapBasicRoutingArtifacts(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<JourneyMapBasicRoutingArtifactsResult> {
+  const preRouting = await renderJourneyMapPreRoutingArtifacts(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
+  const routingStages = buildJourneyMapRoutingStages(
+    preRouting.measuredScene,
+    preRouting.preRoutingPositionedScene
+  );
+  const [step2Rendered, finalBasicRendered] = await Promise.all([
+    renderPositionedSceneToPng(routingStages.step2PositionedScene),
+    renderPositionedSceneToPng(routingStages.finalBasicPositionedScene)
+  ]);
+  return {
+    ...preRouting,
+    routingStages,
+    diagnostics: step2Rendered.diagnostics,
+    step2Svg: step2Rendered.svg,
+    step2Png: step2Rendered.png,
+    finalBasicSvg: finalBasicRendered.svg,
+    finalBasicPng: finalBasicRendered.png
   };
 }
