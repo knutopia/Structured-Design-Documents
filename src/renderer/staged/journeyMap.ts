@@ -61,6 +61,10 @@ export interface JourneyMapRoutingArtifactsResult extends JourneyMapPreRoutingAr
   provisionalPng: Uint8Array;
   finalBasicSvg: string;
   finalBasicPng: Uint8Array;
+  step3Svg: string;
+  step3Png: Uint8Array;
+  finalSvg: string;
+  finalPng: Uint8Array;
 }
 
 export type JourneyMapBasicRoutingArtifactsResult = JourneyMapRoutingArtifactsResult;
@@ -639,21 +643,27 @@ export async function renderJourneyMapRoutingArtifacts(
     preRouting.measuredScene,
     preRouting.preRoutingPositionedScene
   );
-  const [step2Rendered, provisionalRendered, finalBasicRendered] = await Promise.all([
+  const [step2Rendered, provisionalRendered, finalBasicRendered, step3Rendered, finalRendered] = await Promise.all([
     renderPositionedSceneToPng(routingStages.step2PositionedScene),
     renderPositionedSceneToPng(routingStages.provisionalPositionedScene),
-    renderPositionedSceneToPng(routingStages.finalBasicPositionedScene)
+    renderPositionedSceneToPng(routingStages.finalBasicPositionedScene),
+    renderPositionedSceneToPng(routingStages.step3PositionedScene),
+    renderPositionedSceneToPng(routingStages.finalPositionedScene)
   ]);
   return {
     ...preRouting,
     routingStages,
-    diagnostics: step2Rendered.diagnostics,
+    diagnostics: finalRendered.diagnostics,
     step2Svg: step2Rendered.svg,
     step2Png: step2Rendered.png,
     provisionalSvg: provisionalRendered.svg,
     provisionalPng: provisionalRendered.png,
     finalBasicSvg: finalBasicRendered.svg,
-    finalBasicPng: finalBasicRendered.png
+    finalBasicPng: finalBasicRendered.png,
+    step3Svg: step3Rendered.svg,
+    step3Png: step3Rendered.png,
+    finalSvg: finalRendered.svg,
+    finalPng: finalRendered.png
   };
 }
 

@@ -908,3 +908,317 @@ describe("journey map Gate 6 duplicate occurrence visual acceptance", () => {
     ]);
   });
 });
+
+describe("journey map Gate 7 duplicate endpoint visual proof", () => {
+  it("removes both shared terminal stubs and arrow overdraw with legal separated border endpoints", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: duplicateFixturePath,
+      text: await readFile(duplicateFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const rerendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const scene = rendered.routingStages.finalPositionedScene;
+    expect(scene.root).toMatchObject({ x: 0, y: 0, width: 552, height: 112 });
+    expect(scene.edges.map((edge) => edge.route.points)).toEqual([
+      [{ x: 256, y: 56 }, { x: 296, y: 56 }],
+      [{ x: 256, y: 40 }, { x: 296, y: 40 }],
+      [{ x: 256, y: 72 }, { x: 296, y: 72 }]
+    ]);
+    expect(scene.edges.map((edge) => edge.from.y)).toEqual([56, 40, 72]);
+    expect(scene.edges.map((edge) => edge.to.y)).toEqual([56, 40, 72]);
+    expect(new Set(scene.edges.map((edge) => `${edge.to.x}:${edge.to.y}`)).size).toBe(3);
+    for (let left = 0; left < scene.edges.length; left += 1) {
+      for (let right = left + 1; right < scene.edges.length; right += 1) {
+        expect(routesIntersect(scene.edges[left]!.route, scene.edges[right]!.route)).toBe(false);
+        expect(sharedCollinearSegments(
+          scene.edges[left]!.route,
+          scene.edges[right]!.route
+        )).toEqual([]);
+        expect(properPerpendicularCrossings(
+          scene.edges[left]!.route,
+          scene.edges[right]!.route
+        )).toEqual([]);
+      }
+    }
+    for (const edge of scene.edges) {
+      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    }
+    const nodeBoxes = flattenPositionedItems(scene.root)
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id, x: node.x, y: node.y, width: node.width, height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes(scene.edges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(scene.edges, nodeBoxes);
+    expect(rendered.finalSvg).toBe(rerendered.finalSvg);
+    expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
+    expect((rendered.finalSvg.match(/data-edge-id=/g) ?? [])).toHaveLength(3);
+    expect((rendered.finalSvg.match(
+      /marker-end="url\(#scene-marker-arrow-end\)"/g
+    ) ?? [])).toHaveLength(3);
+    expect(rendered.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+});
+
+describe("journey map Gate 7 ordering and primary endpoint visual proof", () => {
+  async function renderFixture(fixture: string) {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: fixture,
+      text: await readFile(fixture, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    return renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+  }
+
+  it("separates the incoming and outgoing J-501 south stems without a crossing", async () => {
+    const rendered = await renderFixture(fixturePath);
+    const scene = rendered.routingStages.finalPositionedScene;
+    const incoming = scene.edges.find((edge) =>
+      edge.from.itemId === "J-503" && edge.to.itemId === "J-501"
+    )!;
+    const outgoing = scene.edges.find((edge) =>
+      edge.from.itemId === "J-501" && edge.to.itemId === "J-502"
+    )!;
+    expect(incoming.to).toMatchObject({ x: 1492, y: 140 });
+    expect(outgoing.from).toMatchObject({ x: 1476, y: 140 });
+    expect(incoming.to.x - outgoing.from.x).toBe(16);
+    expect(routesIntersect(incoming.route, outgoing.route)).toBe(false);
+    expect(sharedCollinearSegments(incoming.route, outgoing.route)).toEqual([]);
+    expect(properPerpendicularCrossings(incoming.route, outgoing.route)).toEqual([]);
+    expect(getTerminalSegmentLength(incoming)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    expect(getTerminalSegmentLength(outgoing)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
+  });
+
+  it("gives primary branches and joins distinct arrow endpoints in prepared-stem order", async () => {
+    const rendered = await renderFixture(primaryFixturePath);
+    const scene = rendered.routingStages.finalPositionedScene;
+    const edge = (from: string, to: string) => scene.edges.find((candidate) =>
+      candidate.from.itemId === from && candidate.to.itemId === to
+    )!;
+    const nearBranch = edge("J-201", "J-202");
+    const farBranch = edge("J-201", "J-203");
+    const upperJoin = edge("J-203", "J-204");
+    const lowerJoin = edge("J-202", "J-204");
+
+    expect([nearBranch.from.y, farBranch.from.y]).toEqual([146, 162]);
+    expect([upperJoin.to.y, lowerJoin.to.y]).toEqual([108, 124]);
+    expect([upperJoin.to.x, lowerJoin.to.x]).toEqual([1692, 1692]);
+    expect(farBranch.from.y - nearBranch.from.y).toBe(16);
+    expect(lowerJoin.to.y - upperJoin.to.y).toBe(16);
+    expect(sharedCollinearSegments(nearBranch.route, farBranch.route)).toEqual([]);
+    expect(sharedCollinearSegments(upperJoin.route, lowerJoin.route)).toEqual([]);
+    expect(properPerpendicularCrossings(nearBranch.route, farBranch.route)).toEqual([]);
+    expect(properPerpendicularCrossings(upperJoin.route, lowerJoin.route)).toEqual([]);
+    expect(routesIntersect(upperJoin.route, lowerJoin.route)).toBe(false);
+    expect(rendered.routingStages.expansionAttempts).toEqual([{
+      attempt: 1,
+      requests: [{
+        kind: "stage_step_gap", stageId: "G-200", afterStepOrder: 2, amount: 16
+      }]
+    }]);
+    for (const candidate of [nearBranch, farBranch, upperJoin, lowerJoin]) {
+      expect(getTerminalSegmentLength(candidate)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    }
+    expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
+    expect(rendered.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+});
+
+describe("journey map Gate 7 reciprocal topology visual proof", () => {
+  it("renders both simple reciprocal SCCs as crossing-free nested arcs", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: topologyFixturePath,
+      text: await readFile(topologyFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const rerendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const scene = rendered.routingStages.finalPositionedScene;
+    const edge = (from: string, to: string) => scene.edges.find((candidate) =>
+      candidate.from.itemId === from && candidate.to.itemId === to
+    )!;
+    const firstForward = edge("J-701", "J-702");
+    const firstReturn = edge("J-702", "J-701");
+    const secondForward = edge("J-711", "J-712");
+    const secondReturn = edge("J-712", "J-711");
+    const selfLoop = edge("J-713", "J-713");
+
+    expect(firstForward.route.points).toEqual([
+      { x: 444, y: 140 }, { x: 444, y: 152 },
+      { x: 676, y: 152 }, { x: 676, y: 140 }
+    ]);
+    expect(firstReturn.route.points).toEqual([
+      { x: 692, y: 140 }, { x: 692, y: 168 },
+      { x: 428, y: 168 }, { x: 428, y: 140 }
+    ]);
+    expect(secondForward.route.points).toEqual([
+      { x: 940, y: 140 }, { x: 940, y: 168 },
+      { x: 1172, y: 168 }, { x: 1172, y: 156 }
+    ]);
+    expect(secondReturn.route.points).toEqual([
+      { x: 1188, y: 156 }, { x: 1188, y: 184 },
+      { x: 924, y: 184 }, { x: 924, y: 140 }
+    ]);
+    for (const [inner, outer] of [
+      [firstForward, firstReturn],
+      [secondForward, secondReturn]
+    ]) {
+      expect(routesIntersect(inner.route, outer.route)).toBe(false);
+      expect(sharedCollinearSegments(inner.route, outer.route)).toEqual([]);
+      expect(properPerpendicularCrossings(inner.route, outer.route)).toEqual([]);
+      expect(getTerminalSegmentLength(inner)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+      expect(getTerminalSegmentLength(outer)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+    }
+    expect(selfLoop.route.points).toContainEqual({ x: 1544, y: 80 });
+    expect(selfLoop.route.points).toContainEqual({ x: 1296, y: 80 });
+    for (const reciprocal of [firstForward, firstReturn, secondForward, secondReturn]) {
+      expect(routesIntersect(selfLoop.route, reciprocal.route)).toBe(false);
+    }
+
+    const nodeBoxes = flattenPositionedItems(scene.root)
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id, x: node.x, y: node.y, width: node.width, height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes(scene.edges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(scene.edges, nodeBoxes);
+    for (const header of collectHeaderBoxes(scene.root)) {
+      for (const reciprocal of [firstForward, firstReturn, secondForward, secondReturn, selfLoop]) {
+        expect(routeIntersectsRect(reciprocal.route, header)).toBe(false);
+      }
+    }
+    expect(rendered.routingStages.expansionAttempts).toEqual([{
+      attempt: 1,
+      requests: [{ kind: "stage_bypass_gutter", stageId: "G-700", amount: 16 }]
+    }]);
+    expect(rendered.finalSvg).toBe(rerendered.finalSvg);
+    expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
+    expect(rendered.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+});
+
+describe("journey map Gate 7 compressed occupancy visual proof", () => {
+  it("keeps all dense connectors individually traceable after bounded expansion", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: compressedFixturePath,
+      text: await readFile(compressedFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const rerendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const scene = rendered.routingStages.finalPositionedScene;
+    expect(scene.edges).toHaveLength(18);
+    expect(scene.root).toMatchObject({ width: 2064, height: 384 });
+
+    const nodeBoxes = flattenPositionedItems(scene.root)
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id, x: node.x, y: node.y, width: node.width, height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes(scene.edges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(scene.edges, nodeBoxes);
+    for (const edge of scene.edges) {
+      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+      for (const header of collectHeaderBoxes(scene.root)) {
+        expect(routeIntersectsRect(edge.route, header)).toBe(false);
+      }
+    }
+    for (let leftIndex = 0; leftIndex < scene.edges.length; leftIndex += 1) {
+      for (let rightIndex = leftIndex + 1; rightIndex < scene.edges.length; rightIndex += 1) {
+        const left = scene.edges[leftIndex]!;
+        const right = scene.edges[rightIndex]!;
+        expect(sharedCollinearSegments(
+          left.route,
+          right.route
+        ), `${left.from.itemId}->${left.to.itemId} / ${right.from.itemId}->${right.to.itemId}`)
+          .toEqual([]);
+      }
+    }
+
+    const edge = (from: string, to: string) => scene.edges.find((candidate) =>
+      candidate.from.itemId === from && candidate.to.itemId === to
+    )!;
+    expect([
+      edge("J-901", "J-903").route.points.at(-2)?.y,
+      edge("J-901", "J-950").route.points.at(-2)?.y,
+      edge("J-901", "J-911").route.points[2]?.y,
+      edge("J-901", "J-912").route.points[2]?.y,
+      edge("J-901", "J-913").route.points[2]?.y,
+      edge("J-902", "J-950").route.points.at(-2)?.y,
+      edge("J-902", "J-913").route.points[2]?.y
+    ]).toEqual([152, 168, 184, 200, 216, 232, 248]);
+    expect([
+      edge("J-901", "J-911").route.points.at(-2)?.y,
+      edge("J-901", "J-912").route.points.at(-2)?.y,
+      edge("J-901", "J-913").route.points.at(-2)?.y,
+      edge("J-902", "J-913").route.points.at(-2)?.y,
+      edge("J-903", "J-913").route.points.at(-2)?.y,
+      edge("J-912", "J-902").route.points[1]?.y,
+      edge("J-913", "J-901").route.points[1]?.y
+    ]).toEqual([268, 284, 300, 316, 332, 348, 364]);
+    const crowdedSourceYs = scene.edges
+      .filter((candidate) => candidate.from.itemId === "J-901")
+      .map((candidate) => candidate.from.y)
+      .sort((left, right) => left - right);
+    expect(crowdedSourceYs).toEqual([96, 104, 112, 120, 128, 136]);
+    expect(new Set(crowdedSourceYs).size).toBe(6);
+
+    expect(rendered.routingStages.expansionAttempts).toHaveLength(1);
+    expect(rendered.diagnostics).toEqual(rendered.routingStages.diagnostics);
+    expect(rendered.finalSvg).toBe(rerendered.finalSvg);
+    expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
+    expect(rendered.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+});
