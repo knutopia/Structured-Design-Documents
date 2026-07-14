@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 6 self-loop accepted; checkpoint pending
+Status: implementation in progress — Gate 6 duplicate opening audit active
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -18,7 +18,7 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 3 — RendererScene | accepted | user | 2026-07-13 | `d40a2fc` | 3 files/29 tests; accepted snapshots, build, whitespace, protected baselines clean |
 | 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
 | 5 — Basic routing | accepted | user | 2026-07-13 | `4ad14e2` | 2 files/16 focused tests; 5 files/44 shared regressions; build, deterministic review package, whitespace, and protected baselines clean |
-| 6 — Archetypes and ownership | in progress — self-loop accepted; checkpoint pending | user | 2026-07-13 | cycle `c08beba` | same-Stage skip `2c2c580`; long cross-Stage/root `3a894be`; branch `6dad32e`; join `08e5419` + acceptance `837ab46`; backward `12423ba`; cycle `c08beba`; self-loop upper corridor accepted with zero intersections/shared segments; duplicate and later gates blocked until checkpoint |
+| 6 — Archetypes and ownership | in progress — duplicate opening audit | user | 2026-07-13 | self-loop `6aa2aa5` | same-Stage skip `2c2c580`; long cross-Stage/root `3a894be`; branch `6dad32e`; join `08e5419` + acceptance `837ab46`; backward `12423ba`; cycle `c08beba`; self-loop `6aa2aa5`; duplicate read-only contract discovery active; later gates blocked |
 | 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
 | 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
 | 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
@@ -728,6 +728,8 @@ Expected diagnostics are unchanged and contain no warn/error: primary has only `
 **Accepted review package and determinism.** `/tmp/journey-map-review/gate6/self-loop/` contains 12 review-only files for strict topology and is not an official golden. Two complete final regenerations produced the identical sorted aggregate hash `99506cc08eb09cc51ed30e4785224013e3a39314d0713ced56ed0daf56b38d1b`; manifest hash is `2eb1c927f6e69d8e0240f362ee8c47aa915bb7cd97105f018606a7823f120246`, provisional SVG hash is `9ef9c880a0d70fde24611e56cff27760e90684f98d1fb3f216af402edd638435`, and SVG-derived PNG hash is `fcf8fc9230414bf7c113bf661d805024123a923fb656e26d1dd7f3e2f8d8680f`. The final production SVG and PNG are byte-for-byte identical to the proposal the user accepted. Diagnostics contain no warning or error, topology is exactly nine routed, zero deferred, and zero failed, and all eight earlier connector plans remain exact.
 
 **Family acceptance and checkpoint authorization.** The user's confirmation accepts the upper self-loop morphology and consolidated human review for this route family. Satisfied hard invariants: semantic identity/owner/order/priority, east/west endpoint direction, deterministic typed upper track, actual-header/header-content and unrelated-obstacle clearance, orthogonality, exteriority, 12px terminal legs, zero accepted-route intersection, exact prior-family preservation, SVG-derived PNG, protected baselines, and explicit failure behavior. Violated invariants: none. Residual risk: the upper track has only 8px clearance below the header band, but it is visually accepted, deterministic, and does not overlap header text or any route. The focused self-loop checkpoint is authorized; duplicate-family work remains blocked until that commit succeeds and its hash is recorded.
+
+**Checkpoint result and next dependency.** The focused self-loop implementation, tests, acceptance record, and validation evidence were committed as `6aa2aa5` (`feat(renderer): route journey self-loops`). The checkpoint succeeded without including any bundle, projection, schema, fixture, snapshot, golden, protected renderer, legacy emitter, public selector, CLI, corpus, duplicate-family, or later-gate change. The self-loop dependency is complete. The duplicate-occurrence family is now the only active Gate 6 family and begins with read-only contract discovery; production and test edits remain blocked until that audit locks its decision-complete contract.
 
 ## 1. Completion definition
 
