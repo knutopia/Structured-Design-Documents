@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 6 consolidated review ready
+Status: implementation in progress — Gate 6 accepted; post-acceptance checkpoint pending
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -18,7 +18,7 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 3 — RendererScene | accepted | user | 2026-07-13 | `d40a2fc` | 3 files/29 tests; accepted snapshots, build, whitespace, protected baselines clean |
 | 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
 | 5 — Basic routing | accepted | user | 2026-07-13 | `4ad14e2` | 2 files/16 focused tests; 5 files/44 shared regressions; build, deterministic review package, whitespace, and protected baselines clean |
-| 6 — Archetypes and ownership | in progress — consolidated review ready | user | 2026-07-14 | duplicate `3a0421f` | all eight families checkpointed; seven-run/78-file deterministic all-archetype package and final validation ready for gate-level review; Gate 7+ blocked |
+| 6 — Archetypes and ownership | accepted — checkpoint pending | user | 2026-07-14 | all-archetype review `9c80398` | eight families and consolidated nominal-topology/debt boundary accepted; post-acceptance record and final audit pending |
 | 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
 | 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
 | 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
@@ -790,6 +790,10 @@ Two independent read-only audits found and closed material defensive gaps before
 **Independent final audits.** A read-only package audit independently reproduced the exact 78-file inventory, all 77 manifest-recorded artifact hashes, the manifest and aggregate hashes, every route-stage ID equality, the `9/9/9/3/9/3/18` routed partitions with zero deferred/failed occurrences, the diagnostic matrix, all sixteen archetypes, and all seven typed routing features. A separate intrinsic SVG/PNG audit found no unrecorded hard-geometry or readability defect and proved that the current topology reuses the accepted `y=80` self-loop bytes rather than the rejected `y=152` artifact. Both audits reported no Gate 6 blocker and made no repository edit; the listed Gate 7/8 debt remains mandatory and continues to block final readability and golden acceptance.
 
 **Gate-level human-review request.** Confirm that the consolidated package accurately preserves the eight individually accepted route-family contracts, exact identities/owners/gates/ports, complete all-archetype coverage, and the explicit provisional-debt boundary. Gate 6 acceptance would accept only correct nominal route topology before contention resolution and authorize the Gate 6 boundary checkpoint followed by Gate 7. It would not accept the listed readability debt as final, authorize Gate 8/9/10, change the staged preview default, or approve any snapshot/golden/corpus refresh. Any new unrecorded readability or hard-geometry defect remains a Gate 6 blocker. No Gate 7 code may begin before explicit gate-level acceptance and the post-acceptance checkpoint.
+
+**Gate-level acceptance.** On 2026-07-14 the user explicitly accepted Gate 6 at the gate level after reviewing the consolidated package. This accepts the eight family contracts and nominal all-archetype topology together with the explicit provisional-debt boundary. It does not accept that debt as final readability, authorize Gate 8 or later, change preview selection, or approve snapshots, goldens, or corpus refreshes. Commit `9c80398` (`Actual Gate 6`) is the clean, user-owned consolidated review checkpoint; because it was created while the ledger still correctly said review-ready, this post-acceptance record remains the required boundary commit before Gate 7 may become active.
+
+**Post-acceptance boundary audit.** The repository was clean at `9c80398`, which changed only this controlling plan and `progress.md` relative to the prior duplicate dependency record. The accepted final code state remains the state already proven by the consolidated 48-test focused, 82-test journey, 44-test protected shared-renderer, 28-test preservation, and build passes. The post-acceptance documentation diff passes `git diff --check`; all fourteen Gate 0 protected staged-renderer hashes and both legacy journey DOT hashes remain exact. No production, test, fixture, snapshot, golden, corpus, bundle, projection, or protected renderer changed after review. The sole pending file is this acceptance record.
 
 ## 1. Completion definition
 
