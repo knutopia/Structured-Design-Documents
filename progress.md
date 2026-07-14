@@ -20,6 +20,7 @@
 - Gate 4 done
 - Gate 6 done (mislabeled)
 - Gate 6 join family
+- Actual Gate 6
 
 ## Sun 7-12
 
