@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 6 duplicate family accepted, checkpoint pending
+Status: implementation in progress — Gate 6 consolidated review pending
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -18,7 +18,7 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 3 — RendererScene | accepted | user | 2026-07-13 | `d40a2fc` | 3 files/29 tests; accepted snapshots, build, whitespace, protected baselines clean |
 | 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
 | 5 — Basic routing | accepted | user | 2026-07-13 | `4ad14e2` | 2 files/16 focused tests; 5 files/44 shared regressions; build, deterministic review package, whitespace, and protected baselines clean |
-| 6 — Archetypes and ownership | in progress — duplicate accepted, checkpoint pending | user | 2026-07-14 | self-loop `6aa2aa5` | duplicate Alternative A provisionally accepted; post-acceptance focused 48/48, broader journey 82/82, shared 44/44, and build green; focused checkpoint pending; Gate 7+ blocked |
+| 6 — Archetypes and ownership | in progress — consolidated review pending | user | 2026-07-14 | duplicate `3a0421f` | all eight route families individually accepted and checkpointed; Gate 6 consolidated automated/visual review remains required; Gate 7+ blocked |
 | 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
 | 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
 | 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
@@ -770,6 +770,8 @@ Two independent read-only audits found and closed material defensive gaps before
 **Family acceptance.** On 2026-07-14 the user provisionally accepted the Gate 6 duplicate-occurrence family after reviewing the consolidated Alternative A artifact. This accepts the three countable direct/upper/lower nominal middle tracks, exact typed occurrence/owner/rank/port/fan contract, atomic failure boundary, deterministic review evidence, and the explicitly bounded shared-terminal-stub/arrow-overdraw debt solely for the focused duplicate-family checkpoint. It does not accept final endpoint readability, eliminate the recorded Gate 7 debt, accept Gate 6 at the gate level, authorize Gate 7, change public preview selection, or approve any official golden.
 
 **Post-acceptance validation and checkpoint authorization.** After the acceptance, `TMPDIR=/tmp pnpm exec vitest run tests/journeyMapRouting.spec.ts tests/journeyMapVisualAcceptance.spec.ts --reporter=dot` passed two files and 48 tests; the exact five-file journey render-model/RendererScene/pre-routing/routing/visual matrix passed 82 tests; the protected five-file shared-renderer matrix passed 44 tests; and `TMPDIR=/tmp pnpm run build` passed. The final changed-file audit remains limited to this ledger, `src/renderer/staged/journeyMapRouting.ts`, `tests/journeyMapRouting.spec.ts`, and `tests/journeyMapVisualAcceptance.spec.ts`. `git diff --check`, all fourteen protected staged-renderer hashes, and both legacy journey DOT hashes must remain exact immediately before commit. The focused duplicate checkpoint is authorized only if those final audits pass; Gate 7 remains blocked pending the subsequent Gate 6 gate-level boundary decision.
+
+**Checkpoint result and Gate 6 boundary.** Commit `3a0421f` (`feat(renderer): route duplicate journey occurrences`) records only the accepted duplicate production, focused routing/visual proof, bundle-impact trace, audit corrections, deterministic review evidence, acceptance record, and validation results. The pre-commit audit passed `git diff --check`; all fourteen protected staged-renderer hashes and both legacy journey DOT hashes remained exact. This completes the eighth and final Gate 6 route-family dependency. Every family now has its own accepted automated/visual package and focused checkpoint, but Gate 6 itself is not yet marked accepted: the approved execution contract still requires one consolidated gate-level review package and explicit gate-level acceptance. Preparing that consolidation is the only newly unblocked task; Gate 7 occupancy, expansion, endpoint displacement, and every later gate remain blocked.
 
 ## 1. Completion definition
 
