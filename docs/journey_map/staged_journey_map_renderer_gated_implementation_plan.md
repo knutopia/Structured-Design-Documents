@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 7 accepted; checkpoint pending
+Status: implementation in progress — Gate 8 diagnostics/readability contract discovery active
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -19,8 +19,8 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
 | 5 — Basic routing | accepted | user | 2026-07-13 | `4ad14e2` | 2 files/16 focused tests; 5 files/44 shared regressions; build, deterministic review package, whitespace, and protected baselines clean |
 | 6 — Archetypes and ownership | accepted | user | 2026-07-14 | acceptance `36604ee`; review `9c80398` | eight families and consolidated nominal-topology/debt boundary accepted; final audits and protected hashes clean |
-| 7 — Occupancy and expansion | accepted | user | 2026-07-14 | pending post-acceptance checkpoint | corrected final geometry and terminal parity pass; 63 focused, 97 broader journey, 44 protected-renderer, and 29 preservation tests; build, whitespace, protected hashes, deterministic artifacts, Gate 6 byte preservation, and independent re-audit pass |
-| 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
+| 7 — Occupancy and expansion | accepted | user | 2026-07-14 | `b913694` | corrected final geometry and terminal parity pass; 63 focused, 97 broader journey, 44 protected-renderer, and 29 preservation tests; build, whitespace, protected hashes, deterministic artifacts, Gate 6 byte preservation, and independent re-audit pass |
+| 8 — Diagnostics and focused acceptance | in progress — opening contract discovery | — | — | — | diagnostics and acknowledged readability failure under independent read-only audit; production blocked pending decision-complete result |
 | 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
 | 10 — Goldens, corpus, and closeout | blocked by Gate 9 | — | — | — | — |
 
@@ -860,6 +860,8 @@ The negative mutation proof rejects changes to connector identity, resource, res
 **Residual risk and Gate 7 human-review request.** Gate 7 removes shared terminal stubs, collapsed reciprocal tracks, and the audited 8px fit-capable conflict, but it does not claim complete normal-scale readability. The documented primary perpendicular branch/join crossing remains topologically unavoidable under the accepted sides/homotopy, and compressed retains several perpendicular crossings without merged trunks or sub-16px fit-capable parallel tracks. These are explicit Gate 8 diagnostic and focused-acceptance debt. Human Gate 7 review must confirm that occupancy visibly changes geometry, duplicate/ordering/topology endpoints and tracks remain countable, the corrected compressed final keeps every connector individually traceable after one bounded expansion, and the remaining crossing debt is accurately bounded for Gate 8. Acceptance authorizes only the Gate 7 checkpoint and Gate 8 diagnostics/focused acceptance; it does not accept the remaining readability debt as final, change public preview selection, or authorize snapshots, goldens, or corpus refreshes. Gate 8 and later remain blocked pending explicit Gate 7 acceptance.
 
 **Gate 7 acceptance and explicit readability violation.** On 2026-07-14 the user accepted Gate 7 while describing the compressed proof as an expected “unreadable trashfire.” This accepts the typed occupancy, late endpoint ordering, bounded expansion, terminal validation parity, corrected hard geometry, deterministic evidence, and protected-preservation boundary sufficiently to create the Gate 7 checkpoint and open Gate 8. It does not convert the compressed output into a human-readability pass, waive section 8, accept the remaining primary/compressed crossings, authorize Gate 8 acceptance, change public preview selection, or permit snapshot/golden/corpus capture. The severe dense-diagram readability failure is retained verbatim in substance as a blocking Gate 8 visual invariant: Gate 8 must either produce and receive explicit acceptance for a materially readable result or stop with a documented routing/layout decision rather than diagnose or snapshot the current trashfire as acceptable.
+
+**Gate 7 checkpoint and Gate 8 dependency boundary.** Commit `b913694` (`feat(renderer): resolve journey map occupancy`) records the accepted Gate 7 production, focused routing/visual tests, terminal validator and mutation proof, corrected dense geometry, consolidated evidence, explicit readability violation, and final validation results. Its pre-commit audit passed `git diff --check`; all fourteen protected staged-renderer hashes and both legacy journey DOT hashes remained exact. Gate 7 is closed. Gate 8 is now the only active gate; Gate 9 and later remain blocked. The first executable Gate 8 task is read-only contract discovery in two independent streams: one locks the final diagnostic code/severity/trigger/context matrix and exact tests, while the other evaluates the failed normal-size readability invariant and bounded architectural alternatives. No production, test, snapshot, golden, corpus, or public-selection edit may begin until both audits are reconciled and any material routing/layout ambiguity receives explicit approval.
 
 ## 1. Completion definition
 
