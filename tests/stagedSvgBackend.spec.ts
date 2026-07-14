@@ -22,6 +22,31 @@ describe("staged SVG backend", () => {
     expect(first).toEqual(second);
   });
 
+  it("renders deterministic positioned continuity marks without changing route points", async () => {
+    const scene = buildPositionedSvgFixture();
+    const edge = scene.edges[0]!;
+    const originalPoints = structuredClone(edge.route.points);
+    edge.continuityMarks = [{
+      id: "journey-crossover:nav-001:0:under-001:0",
+      segmentIndex: 0,
+      point: { x: 228, y: 104 },
+      halfSpan: 3,
+      rise: 3,
+      normalDirection: -1,
+      underEdgeId: "under-001"
+    }];
+
+    const first = await renderPositionedSceneToSvg(scene);
+    const second = await renderPositionedSceneToSvg(scene);
+
+    expect(first).toEqual(second);
+    expect(first.svg).toContain(
+      'd="M 208 104 L 225 104 Q 228 101 231 104 L 248 104 L 248 136 L 320 136 L 320 104"'
+    );
+    expect(edge.route.points).toEqual(originalPoints);
+    expect(first.diagnostics.some((diagnostic) => diagnostic.severity === "error")).toBe(false);
+  });
+
   it("emits layered paint groups, embedded font CSS, and split arrow marker defs", async () => {
     const scene = buildPositionedSvgFixture();
     const { svg } = await renderPositionedSceneToSvg(scene);

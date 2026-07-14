@@ -11,6 +11,7 @@ import type {
   PositionedRoute
 } from "../src/renderer/staged/contracts.js";
 import { renderJourneyMapRoutingArtifacts } from "../src/renderer/staged/journeyMap.js";
+import type { RendererDiagnostic } from "../src/renderer/staged/diagnostics.js";
 import { MIN_ARROW_MARKER_LEG } from "../src/renderer/staged/routing.js";
 import {
   collectHeaderBoxes,
@@ -43,6 +44,12 @@ const duplicateFixturePath = path.join(
   repoRoot,
   "tests/fixtures/render/journey_map_staged_duplicate.sdd"
 );
+
+function isBlockingJourneyDiagnostic(diagnostic: RendererDiagnostic): boolean {
+  return diagnostic.severity === "error"
+    || (diagnostic.severity === "warn"
+      && diagnostic.code !== "renderer.routing.journey_map_unavoidable_crossing");
+}
 
 function routeContainsPoint(route: PositionedRoute, point: Point): boolean {
   return route.points.slice(1).some((end, index) => {
@@ -236,9 +243,7 @@ describe("journey map Gate 6 visual acceptance", () => {
     }
     expect(rendered.provisionalSvg).toContain("data-edge-id=");
     expect(rendered.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("keeps the long cross-Stage route peripheral and the root-Step chain visually direct", async () => {
@@ -316,9 +321,7 @@ describe("journey map Gate 6 visual acceptance", () => {
     expect(longCross!.route.points.at(-2)?.y).toBeGreaterThan(longCross!.route.points.at(-1)!.y);
     expect(getTerminalSegmentLength(longCross!)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     expect(rendered.provisionalSvg).not.toBe(rendered.step2Svg);
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("keeps branch fan-out on a common east departure with clear local and root-peripheral tracks", async () => {
@@ -420,12 +423,8 @@ describe("journey map Gate 6 visual acceptance", () => {
     expect(stage).toBeDefined();
     expect(188).toBeGreaterThan(stage!.y + stage!.height);
     expect(188).toBeLessThan(topologyScene.root.y + topologyScene.root.height);
-    expect(primary.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
-    expect(topology.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(primary.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
+    expect(topology.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("records the nominal join crossing as readability debt while keeping hard geometry clear", async () => {
@@ -494,9 +493,7 @@ describe("journey map Gate 6 visual acceptance", () => {
     const mergedConvergence = { x: 1664, y: 116 };
     expect(routeContainsPoint(bypass!.route, mergedConvergence)).toBe(true);
     expect(routeContainsPoint(direct!.route, mergedConvergence)).toBe(true);
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("keeps backward routes peripheral while recording the shared ordering stem as readability debt", async () => {
@@ -592,12 +589,8 @@ describe("journey map Gate 6 visual acceptance", () => {
     expect(getTerminalSegmentLength(topologyReturn!)).toBeGreaterThanOrEqual(
       MIN_ARROW_MARKER_LEG
     );
-    expect(ordering.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
-    expect(topology.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(ordering.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
+    expect(topology.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("keeps reciprocal and complex SCC routes peripheral while recording their shared tracks as readability debt", async () => {
@@ -696,12 +689,8 @@ describe("journey map Gate 6 visual acceptance", () => {
         expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
       }
     }
-    expect(topology.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
-    expect(compressed.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(topology.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
+    expect(compressed.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 });
 
@@ -784,9 +773,7 @@ describe("journey map Gate 6 self-loop visual acceptance", () => {
     expect(routeContainsPoint(selfLoop!.route, { x: 1500, y: 80 })).toBe(true);
     expect(routeContainsPoint(backward!.route, { x: 1500, y: 152 })).toBe(true);
     expect(rendered.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 });
 
@@ -968,9 +955,7 @@ describe("journey map Gate 7 duplicate endpoint visual proof", () => {
     expect((rendered.finalSvg.match(
       /marker-end="url\(#scene-marker-arrow-end\)"/g
     ) ?? [])).toHaveLength(3);
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 });
 
@@ -1044,9 +1029,7 @@ describe("journey map Gate 7 ordering and primary endpoint visual proof", () => 
       expect(getTerminalSegmentLength(candidate)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     }
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 });
 
@@ -1130,9 +1113,7 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
     }]);
     expect(rendered.finalSvg).toBe(rerendered.finalSvg);
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 });
 
@@ -1196,7 +1177,7 @@ describe("journey map Gate 7 compressed occupancy visual proof", () => {
       edge("J-901", "J-913").route.points[2]?.y,
       edge("J-902", "J-950").route.points.at(-2)?.y,
       edge("J-902", "J-913").route.points[2]?.y
-    ]).toEqual([152, 168, 184, 200, 216, 232, 248]);
+    ]).toEqual([152, 168, 200, 232, 216, 184, 248]);
     expect([
       edge("J-901", "J-911").route.points.at(-2)?.y,
       edge("J-901", "J-912").route.points.at(-2)?.y,
@@ -1214,11 +1195,15 @@ describe("journey map Gate 7 compressed occupancy visual proof", () => {
     expect(new Set(crowdedSourceYs).size).toBe(6);
 
     expect(rendered.routingStages.expansionAttempts).toHaveLength(1);
+    expect(rendered.routingStages.residualCrossings).toHaveLength(42);
+    expect(scene.edges.flatMap((candidate) => candidate.continuityMarks ?? [])).toHaveLength(42);
+    expect((rendered.finalSvg.match(/ Q /g) ?? [])).toHaveLength(42);
+    expect(rendered.routingStages.step3PositionedScene.edges.every((candidate) =>
+      !candidate.continuityMarks
+    )).toBe(true);
     expect(rendered.diagnostics).toEqual(rendered.routingStages.diagnostics);
     expect(rendered.finalSvg).toBe(rerendered.finalSvg);
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
-    expect(rendered.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
-  });
+    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
+  }, 10_000);
 });

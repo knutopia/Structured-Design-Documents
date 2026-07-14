@@ -15,6 +15,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 7-14
+
+- Out of tokens somewhere in Gate 8
+
+
 ## Mon 7-13
 
 - Gate 4 done

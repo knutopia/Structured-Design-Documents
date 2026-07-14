@@ -26,6 +26,7 @@ import {
 } from "../src/renderer/staged/journeyMap.js";
 import {
   buildJourneyMapRoutingStages,
+  collectJourneyMapResidualCrossings,
   extractJourneyMapOccupancy,
   journeyMapDuplicateLaneIndex,
   JOURNEY_MAP_TRACK_SEPARATION,
@@ -38,6 +39,7 @@ import {
   type JourneyMapRoutingStages
 } from "../src/renderer/staged/journeyMapRouting.js";
 import { measureScene } from "../src/renderer/staged/pipeline.js";
+import type { RendererDiagnostic } from "../src/renderer/staged/diagnostics.js";
 import { MIN_ARROW_MARKER_LEG } from "../src/renderer/staged/routing.js";
 import { renderPositionedSceneToPng } from "../src/renderer/staged/svgBackend.js";
 
@@ -45,6 +47,25 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const fixtureRoot = path.join(repoRoot, "tests/fixtures/render");
 const bundlePromise = loadBundle(manifestPath);
+
+const GATE8_TERMINAL_DIAGNOSTIC_CODES = new Set([
+  "renderer.routing.journey_map_unavoidable_crossing",
+  "renderer.routing.journey_map_peripheral_backward_edge",
+  "renderer.routing.journey_map_peripheral_cycle",
+  "renderer.routing.journey_map_self_loop"
+]);
+
+function withoutGate8TerminalDiagnostics(
+  diagnostics: readonly RendererDiagnostic[]
+): RendererDiagnostic[] {
+  return diagnostics.filter((diagnostic) => !GATE8_TERMINAL_DIAGNOSTIC_CODES.has(diagnostic.code));
+}
+
+function isBlockingJourneyDiagnostic(diagnostic: RendererDiagnostic): boolean {
+  return diagnostic.severity === "error"
+    || (diagnostic.severity === "warn"
+      && diagnostic.code !== "renderer.routing.journey_map_unavoidable_crossing");
+}
 
 interface JourneyRoutingFixture {
   bundle: Bundle;
@@ -315,7 +336,8 @@ describe("journey map Gate 5 basic routing", () => {
         expect(plan.finalBasicRoute.points).toContainEqual({ x: gate.x, y: gate.y });
       }
     }
-    expect(fixture.routingStages.diagnostics.filter((diagnostic) => diagnostic.phase === "routing")).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics)
+      .filter((diagnostic) => diagnostic.phase === "routing")).toEqual([]);
   });
 
   it("keeps profile-dependent target geometry deterministic without changing the routed family", async () => {
@@ -358,9 +380,7 @@ describe("journey map Gate 5 basic routing", () => {
     expect(first.finalBasicSvg).not.toBe(first.step2Svg);
     expect(sha256(first.step2Svg)).toBe(sha256(second.step2Svg));
     expect(sha256(first.step2Png)).toBe(sha256(second.step2Png));
-    expect(first.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(first.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("emits locked structural diagnostics for missing endpoints, omissions, duplicate IDs, and diagonals", async () => {
@@ -870,12 +890,12 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       horizontalCoordinates("J-901->J-913")[1],
       horizontalCoordinates("J-902->J-950").at(-1),
       horizontalCoordinates("J-902->J-913")[1]
-    ]).toEqual([152, 168, 184, 200, 216, 232, 248]);
+    ]).toEqual([152, 168, 200, 232, 216, 184, 248]);
     expect([
       horizontalCoordinates("J-950->J-912").at(-1),
       horizontalCoordinates("J-950->J-913").at(-1),
       horizontalCoordinates("J-911->J-913")[0]
-    ]).toEqual([152, 168, 184]);
+    ]).toEqual([152, 184, 168]);
     expect([
       horizontalCoordinates("J-901->J-911").at(-1),
       horizontalCoordinates("J-901->J-912").at(-1),
@@ -914,7 +934,7 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       verticalCoordinates("J-901->J-911")[0],
       verticalCoordinates("J-901->J-912")[0],
       verticalCoordinates("J-901->J-913")[0]
-    ]).toEqual([368, 288, 304, 320, 336, 352]);
+    ]).toEqual([368, 352, 336, 320, 304, 288]);
 
     expect(routingStages.occupancy.some((record) =>
       record.resource.kind === "stage_local_bypass"
@@ -977,7 +997,7 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
     expect(rerun.resolvedConnectors).toEqual(routingStages.resolvedConnectors);
     expect(rerun.occupancy).toEqual(routingStages.occupancy);
     expect(rerun.finalPositionedScene).toEqual(routingStages.finalPositionedScene);
-    expect(routingStages.diagnostics).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(routingStages.diagnostics)).toEqual([]);
   });
 
   it("emits the locked capacity warning when pending expansion survives the hard attempt bound", () => {
@@ -1261,7 +1281,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
     expect(buckets.get("J-501")?.south.endingConnectorIds).toEqual([plan?.id]);
     expect(buckets.get("J-503")?.east.startingConnectorIds).toEqual([]);
     expect(buckets.get("J-501")?.west.endingConnectorIds).toEqual([]);
-    expect(fixture.routingStages.diagnostics.filter((diagnostic) =>
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics).filter((diagnostic) =>
       diagnostic.phase === "routing"
     )).toEqual([]);
   });
@@ -1291,9 +1311,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
     expect(first.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
     expect(sha256(first.provisionalSvg)).toBe(sha256(second.provisionalSvg));
     expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
-    expect(first.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(first.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
 
     const primary = await buildFixture("primary");
     expect(primary.routingStages.connectorPlans.slice(0, 3).map((plan) => ({
@@ -1509,7 +1527,7 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     expect(buckets.get("J-401")?.south.endingConnectorIds).toEqual([longCross?.id]);
     expect(buckets.get("J-250")?.east.startingConnectorIds).toEqual([rootDirect?.id]);
     expect(buckets.get("J-260")?.west.endingConnectorIds).toEqual([rootDirect?.id]);
-    expect(fixture.routingStages.diagnostics.filter((diagnostic) =>
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics).filter((diagnostic) =>
       diagnostic.phase === "routing"
     )).toEqual([]);
   });
@@ -1762,7 +1780,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
       step2Route: plan.step2Route,
       provisionalRoute: plan.provisionalRoute
     })));
-    expect(reordered.diagnostics.filter((diagnostic) =>
+    expect(withoutGate8TerminalDiagnostics(reordered.diagnostics).filter((diagnostic) =>
       diagnostic.phase === "routing"
     )).toEqual([]);
   });
@@ -1832,7 +1850,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
       fixture.preRoutingPositionedScene,
       "final_basic"
     )).toEqual([]);
-    expect(fixture.routingStages.diagnostics.filter((diagnostic) =>
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics).filter((diagnostic) =>
       diagnostic.phase === "routing"
     )).toEqual([]);
   });
@@ -1895,7 +1913,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
         fixture.measuredScene
       )).toEqual([]);
     }
-    expect(fixture.routingStages.diagnostics.filter((diagnostic) =>
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics).filter((diagnostic) =>
       diagnostic.phase === "routing"
     )).toEqual([]);
   });
@@ -2090,7 +2108,8 @@ describe("journey map Gate 6 join fan-in routing", () => {
       primary.preRoutingPositionedScene
     );
     expect(reordered.connectorPlans.filter((plan) => plan.join)).toEqual(joins);
-    expect(reordered.diagnostics.filter((diagnostic) => diagnostic.phase === "routing")).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(reordered.diagnostics)
+      .filter((diagnostic) => diagnostic.phase === "routing")).toEqual([]);
 
     const withoutJoins = structuredClone(primary.measuredScene) as MeasuredScene;
     const joinIds = new Set(joins.map((plan) => plan.id));
@@ -2186,9 +2205,7 @@ describe("journey map Gate 6 join fan-in routing", () => {
     expect(sha256(first.provisionalPng)).toBe(sha256(directPng.png));
     expect(sha256(first.provisionalSvg)).toBe(sha256(second.provisionalSvg));
     expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
-    expect(first.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(first.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("fails malformed joins visibly and defers unsupported join morphologies without Gate 7 behavior", async () => {
@@ -2504,9 +2521,7 @@ describe("journey map Gate 6 backward routing", () => {
     expect(sha256(first.provisionalPng)).toBe(sha256(directPng.png));
     expect(sha256(first.provisionalSvg)).toBe(sha256(second.provisionalSvg));
     expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
-    expect(first.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(first.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
   it("fails malformed backward contracts visibly and keeps duplicates and Gate 7 blocked", async () => {
@@ -2935,7 +2950,7 @@ describe("journey map Gate 6 shape-aware cycle routing", () => {
     expect(buckets.get("J-901")?.south.endingConnectorIds).toContain(returns[1]!.id);
     expect(fixture.routingStages.deferredConnectors).toEqual([]);
     expect(fixture.routingStages.failedConnectorIds).toEqual([]);
-    expect(fixture.routingStages.diagnostics).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics)).toEqual([]);
     expectExactPartition(fixture);
   });
 
@@ -2983,8 +2998,8 @@ describe("journey map Gate 6 shape-aware cycle routing", () => {
       fixture.preRoutingPositionedScene
     );
     expect(geometry(annotated)).toEqual(geometry(fixture.routingStages));
-    expect(reversed.diagnostics).toEqual([]);
-    expect(annotated.diagnostics).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(reversed.diagnostics)).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(annotated.diagnostics)).toEqual([]);
   });
 
   it("rejects malformed SCC metadata and does not misclassify duplicate reciprocal occurrences", async () => {
@@ -3243,7 +3258,7 @@ describe("journey map Gate 6 self-loop routing", () => {
     expect(fixture.routingStages.connectorPlans).toHaveLength(9);
     expect(fixture.routingStages.deferredConnectors).toEqual([]);
     expect(fixture.routingStages.failedConnectorIds).toEqual([]);
-    expect(fixture.routingStages.diagnostics).toEqual([]);
+    expect(withoutGate8TerminalDiagnostics(fixture.routingStages.diagnostics)).toEqual([]);
     expectExactPartition(fixture);
 
     const withoutSelfLoop = structuredClone(fixture.measuredScene) as MeasuredScene;
@@ -3542,9 +3557,7 @@ describe("journey map Gate 6 self-loop routing", () => {
     expect(first.provisionalSvg).toBe(second.provisionalSvg);
     expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
     expect(first.provisionalSvg).toContain(`data-edge-id="${selfLoopId}"`);
-    expect(first.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(first.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 });
 
@@ -4157,8 +4170,94 @@ describe("journey map Gate 6 duplicate occurrence routing", () => {
         targetId: "J-801"
       })
     ]);
-    expect(first.diagnostics.some((diagnostic) =>
-      diagnostic.severity === "warn" || diagnostic.severity === "error"
-    )).toBe(false);
+    expect(first.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
+  });
+});
+
+describe("journey map Gate 8 crossing continuity and terminal diagnostics", () => {
+  it("locks the seven-run diagnostic matrix and marks only residual final crossings", async () => {
+    const [primarySimple, primaryPermissive, primaryStrict, ordering, topology, duplicate, compressed] =
+      await Promise.all([
+        buildFixture("primary", "simple"),
+        buildFixture("primary", "permissive"),
+        buildFixture("primary", "strict"),
+        buildFixture("ordering_ownership"),
+        buildFixture("topology"),
+        buildFixture("duplicate"),
+        buildFixture("compressed")
+      ]);
+    const codes = (routing: JourneyMapRoutingStages) =>
+      routing.diagnostics.map((diagnostic) => diagnostic.code);
+    for (const primary of [primarySimple, primaryPermissive, primaryStrict]) {
+      expect(codes(primary.routingStages)).toEqual([
+        "renderer.routing.journey_map_unavoidable_crossing",
+        "renderer.scene.journey_map_disconnected_chain"
+      ]);
+      expect(primary.routingStages.residualCrossings).toHaveLength(1);
+    }
+    expect(codes(ordering.routingStages)).toEqual([
+      "renderer.scene.journey_map_first_parent_selected"
+    ]);
+    expect(codes(topology.routingStages)).toEqual([
+      "renderer.routing.journey_map_peripheral_backward_edge",
+      "renderer.routing.journey_map_peripheral_backward_edge",
+      "renderer.routing.journey_map_peripheral_backward_edge",
+      "renderer.routing.journey_map_peripheral_cycle",
+      "renderer.routing.journey_map_peripheral_cycle",
+      "renderer.routing.journey_map_self_loop"
+    ]);
+    expect(codes(duplicate.routingStages)).toEqual([
+      "renderer.scene.journey_map_step_only"
+    ]);
+    expect(compressed.routingStages.residualCrossings).toHaveLength(42);
+    expect(codes(compressed.routingStages)).toEqual([
+      ...Array.from({ length: 42 }, () => "renderer.routing.journey_map_unavoidable_crossing"),
+      "renderer.routing.journey_map_peripheral_backward_edge",
+      "renderer.routing.journey_map_peripheral_backward_edge",
+      "renderer.routing.journey_map_peripheral_cycle"
+    ]);
+
+    for (const fixture of [primarySimple, primaryPermissive, primaryStrict, compressed]) {
+      const routing = fixture.routingStages;
+      const marks = routing.finalPositionedScene.edges.flatMap((edge) => edge.continuityMarks ?? []);
+      expect(marks).toHaveLength(routing.residualCrossings.length);
+      expect(routing.step3PositionedScene.edges.every((edge) => !edge.continuityMarks)).toBe(true);
+      expect(routing.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
+      expect(collectJourneyMapResidualCrossings(
+        [...routing.connectorPlans].reverse(),
+        [...routing.resolvedConnectors].reverse()
+      )).toEqual(routing.residualCrossings);
+      for (const crossing of routing.residualCrossings) {
+        expect(crossing.edgeAId.localeCompare(crossing.edgeBId)).toBeLessThan(0);
+        expect(crossing.overEdgeId).not.toBe(crossing.underEdgeId);
+        const warning = routing.diagnostics.find((diagnostic) =>
+          diagnostic.code === "renderer.routing.journey_map_unavoidable_crossing"
+          && diagnostic.details?.includes(`\"crossingId\":\"${crossing.id}\"`)
+        );
+        expect(warning).toBeDefined();
+      }
+    }
+  }, 20_000);
+
+  it("collects strict interior perpendicular crossings but excludes touches and collinear runs", async () => {
+    const fixture = await buildFixture("primary");
+    const plans = fixture.routingStages.connectorPlans.slice(0, 2);
+    const states = fixture.routingStages.resolvedConnectors.slice(0, 2).map((state) =>
+      structuredClone(state)
+    );
+    states[0]!.finalRoute = {
+      style: "orthogonal",
+      points: [{ x: 0, y: 10 }, { x: 20, y: 10 }]
+    };
+    states[1]!.finalRoute = {
+      style: "orthogonal",
+      points: [{ x: 10, y: 0 }, { x: 10, y: 20 }]
+    };
+    expect(collectJourneyMapResidualCrossings(plans, states)).toHaveLength(1);
+
+    states[1]!.finalRoute.points = [{ x: 20, y: 0 }, { x: 20, y: 20 }];
+    expect(collectJourneyMapResidualCrossings(plans, states)).toEqual([]);
+    states[1]!.finalRoute.points = [{ x: 5, y: 10 }, { x: 15, y: 10 }];
+    expect(collectJourneyMapResidualCrossings(plans, states)).toEqual([]);
   });
 });

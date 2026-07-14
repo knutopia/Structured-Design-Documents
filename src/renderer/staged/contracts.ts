@@ -529,6 +529,16 @@ export interface PositionedRoute {
   points: Point[];
 }
 
+export interface PositionedEdgeContinuityMark {
+  id: string;
+  segmentIndex: number;
+  point: Point;
+  halfSpan: number;
+  rise: number;
+  normalDirection: -1 | 1;
+  underEdgeId: string;
+}
+
 export interface PositionedEdgeLabel {
   lines: string[];
   width: number;
@@ -546,6 +556,7 @@ export interface PositionedEdge {
   from: PositionedEdgeEndpoint;
   to: PositionedEdgeEndpoint;
   route: PositionedRoute;
+  continuityMarks?: PositionedEdgeContinuityMark[];
   label?: PositionedEdgeLabel;
   markers?: EdgeMarkers;
   paintGroup: PaintGroup;

@@ -9,6 +9,7 @@ import type {
   PortSide,
   PositionedContainer,
   PositionedEdge,
+  PositionedEdgeContinuityMark,
   PositionedItem,
   PositionedNode,
   PositionedRoute,
@@ -443,7 +444,21 @@ export interface JourneyMapRoutingStages {
   finalBasicPositionedScene: PositionedScene;
   step3PositionedScene: PositionedScene;
   finalPositionedScene: PositionedScene;
+  residualCrossings: JourneyMapResidualCrossing[];
   diagnostics: RendererDiagnostic[];
+}
+
+export interface JourneyMapResidualCrossing {
+  id: string;
+  edgeAId: string;
+  edgeASegmentIndex: number;
+  edgeBId: string;
+  edgeBSegmentIndex: number;
+  point: Point;
+  overEdgeId: string;
+  overSegmentIndex: number;
+  underEdgeId: string;
+  underSegmentIndex: number;
 }
 
 type JourneyStepMetadata = Extract<JourneyMapItemMetadata, { kind: "step" }>;
@@ -4229,24 +4244,28 @@ function applyPreparedStemCoordinates(
   claims: readonly JourneyMapPreparedStemClaim[]
 ): JourneyMapResolvedConnectorState[] {
   const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
-  const directDepartureRank = (claim: JourneyMapPreparedStemClaim): number => {
-    const plan = planById.get(claim.connectorId);
-    return claim.endpointRole === "source"
-      && claim.side === "east"
-      && (plan?.archetype === "adjacent_forward_same_stage"
-        || plan?.archetype === "adjacent_forward_root_step"
-        || plan?.archetype === "adjacent_forward_cross_stage"
-        || plan?.archetype === "adjacent_forward_contained_to_root"
-        || plan?.archetype === "adjacent_forward_root_to_contained")
-      ? 1
-      : 0;
+  const stateById = new Map(states.map((state) => [state.connectorId, state] as const));
+  const corridorDepth = (claim: JourneyMapPreparedStemClaim): number => {
+    const state = stateById.get(claim.connectorId);
+    const endpoint = claim.endpointRole === "source"
+      ? state?.sourceEndpoint
+      : state?.targetEndpoint;
+    if (!endpoint) {
+      return 0;
+    }
+    const tangent = tangentialCoordinateForSide(endpoint, claim.side);
+    return Math.max(
+      Math.abs(claim.span.start - tangent),
+      Math.abs(claim.span.end - tangent)
+    );
   };
   const claimByConnectorId = new Map(
     [...claims]
       .sort((left, right) => {
         const leftPlan = planById.get(left.connectorId);
         const rightPlan = planById.get(right.connectorId);
-        return directDepartureRank(left) - directDepartureRank(right)
+        const shapeOrder = corridorDepth(right) - corridorDepth(left);
+        return shapeOrder
           || (leftPlan && rightPlan
             ? comparePriorities(leftPlan.priority, rightPlan.priority)
             : left.connectorId.localeCompare(right.connectorId));
@@ -4342,6 +4361,70 @@ function positiveSpanOverlap(
   right: { start: number; end: number }
 ): boolean {
   return Math.min(left.end, right.end) - Math.max(left.start, right.start) > 0.001;
+}
+
+function strictInteriorCoordinate(coordinate: number, span: { start: number; end: number }): boolean {
+  return coordinate > span.start + 0.001 && coordinate < span.end - 0.001;
+}
+
+export function collectJourneyMapResidualCrossings(
+  plans: readonly JourneyMapConnectorPlan[],
+  states: readonly JourneyMapResolvedConnectorState[]
+): JourneyMapResidualCrossing[] {
+  const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
+  const orderedStates = [...states].sort((left, right) =>
+    left.connectorId.localeCompare(right.connectorId)
+  );
+  const crossings: JourneyMapResidualCrossing[] = [];
+  orderedStates.forEach((leftState, leftIndex) => {
+    for (const rightState of orderedStates.slice(leftIndex + 1)) {
+      const leftPlan = planById.get(leftState.connectorId);
+      const rightPlan = planById.get(rightState.connectorId);
+      if (!leftPlan || !rightPlan) {
+        continue;
+      }
+      for (const leftRun of buildJourneyMapRouteSegmentRuns(leftState.finalRoute)) {
+        for (const rightRun of buildJourneyMapRouteSegmentRuns(rightState.finalRoute)) {
+          if (leftRun.axis === rightRun.axis) {
+            continue;
+          }
+          const horizontal = leftRun.axis === "horizontal" ? leftRun : rightRun;
+          const vertical = leftRun.axis === "vertical" ? leftRun : rightRun;
+          if (!strictInteriorCoordinate(vertical.coordinate, horizontal.span)
+            || !strictInteriorCoordinate(horizontal.coordinate, vertical.span)) {
+            continue;
+          }
+          const edgeAId = leftState.connectorId;
+          const edgeBId = rightState.connectorId;
+          const edgeASegmentIndex = leftRun.segmentRunIndex;
+          const edgeBSegmentIndex = rightRun.segmentRunIndex;
+          const rightPaintsLater = comparePriorities(leftPlan.priority, rightPlan.priority) < 0
+            || (comparePriorities(leftPlan.priority, rightPlan.priority) === 0
+              && leftState.connectorId.localeCompare(rightState.connectorId) < 0);
+          crossings.push({
+            id: `journey-crossover:${edgeAId}:${edgeASegmentIndex}:${edgeBId}:${edgeBSegmentIndex}`,
+            edgeAId,
+            edgeASegmentIndex,
+            edgeBId,
+            edgeBSegmentIndex,
+            point: { x: vertical.coordinate, y: horizontal.coordinate },
+            overEdgeId: rightPaintsLater ? edgeBId : edgeAId,
+            overSegmentIndex: rightPaintsLater ? edgeBSegmentIndex : edgeASegmentIndex,
+            underEdgeId: rightPaintsLater ? edgeAId : edgeBId,
+            underSegmentIndex: rightPaintsLater ? edgeASegmentIndex : edgeBSegmentIndex
+          });
+        }
+      }
+    }
+  });
+  return crossings.sort((left, right) =>
+    left.point.y - right.point.y
+    || left.point.x - right.point.x
+    || left.edgeAId.localeCompare(right.edgeAId)
+    || left.edgeASegmentIndex - right.edgeASegmentIndex
+    || left.edgeBId.localeCompare(right.edgeBId)
+    || left.edgeBSegmentIndex - right.edgeBSegmentIndex
+  );
 }
 
 function isAllowedOverloadedEndpointPair(
@@ -4510,6 +4593,262 @@ function resolveLateDirectRunConflicts(
     }
   }
   return resolved;
+}
+
+interface JourneyMapSwappableCoordinateClaim {
+  connectorId: string;
+  segmentRunIndex: number;
+  axis: JourneyMapOccupancyAxis;
+}
+
+function isCrossingMinimizationResource(
+  resource: JourneyMapOccupancyResource
+): resource is JourneyMapResolvableTrackResource {
+  return resource.kind === "stage_local_bypass"
+    || resource.kind === "root_outer_bypass"
+    || resource.kind === "inter_root_item_gutter"
+    || resource.kind === "obstacle_swerve";
+}
+
+function isLockedPeripheralTrack(plan: JourneyMapConnectorPlan): boolean {
+  return plan.archetype === "backward_same_stage"
+    || plan.archetype === "backward_root_step"
+    || plan.archetype === "cycle_forward_same_stage"
+    || plan.archetype === "cycle_return_same_stage"
+    || plan.archetype === "cycle_return_cross_stage";
+}
+
+function swapJourneyMapResolvedCoordinates(
+  states: readonly JourneyMapResolvedConnectorState[],
+  left: JourneyMapSwappableCoordinateClaim,
+  right: JourneyMapSwappableCoordinateClaim
+): JourneyMapResolvedConnectorState[] | undefined {
+  const leftIndex = states.findIndex((state) => state.connectorId === left.connectorId);
+  const rightIndex = states.findIndex((state) => state.connectorId === right.connectorId);
+  if (leftIndex < 0 || rightIndex < 0) {
+    return undefined;
+  }
+  const next = [...states];
+  const leftState = structuredClone(states[leftIndex]!) as JourneyMapResolvedConnectorState;
+  const rightState = leftIndex === rightIndex
+    ? leftState
+    : structuredClone(states[rightIndex]!) as JourneyMapResolvedConnectorState;
+  next[leftIndex] = leftState;
+  next[rightIndex] = rightState;
+  const leftCoordinate = leftState?.segmentCoordinates.find((coordinate) =>
+    coordinate.segmentRunIndex === left.segmentRunIndex && coordinate.axis === left.axis
+  );
+  const rightCoordinate = rightState?.segmentCoordinates.find((coordinate) =>
+    coordinate.segmentRunIndex === right.segmentRunIndex && coordinate.axis === right.axis
+  );
+  if (!leftCoordinate || !rightCoordinate
+    || Math.abs(leftCoordinate.resolvedCoordinate - rightCoordinate.resolvedCoordinate) <= 0.001) {
+    return undefined;
+  }
+  const swap = leftCoordinate.resolvedCoordinate;
+  leftCoordinate.resolvedCoordinate = rightCoordinate.resolvedCoordinate;
+  rightCoordinate.resolvedCoordinate = swap;
+  for (const state of new Set([leftState, rightState])) {
+    const preparedRuns = buildJourneyMapRouteSegmentRuns(state.preparedRoute);
+    const reconstructed = reconstructRouteFromResolvedRuns(
+      state.preparedRoute,
+      preparedRuns,
+      state.segmentCoordinates,
+      state.sourceEndpoint,
+      state.targetEndpoint
+    );
+    if (!reconstructed
+      || JSON.stringify(buildJourneyMapRouteSegmentRuns(reconstructed).map((run) => run.axis))
+        !== JSON.stringify(preparedRuns.map((run) => run.axis))) {
+      return undefined;
+    }
+    state.finalRoute = reconstructed;
+  }
+  return next;
+}
+
+function crossingMinimizationSeparationScore(
+  states: readonly JourneyMapResolvedConnectorState[],
+  index: JourneyMapPositionedIndex
+): number {
+  return states.reduce((score, state) =>
+    score + routeSeparationConflictCount(state.connectorId, state.finalRoute, states, index), 0
+  );
+}
+
+function crossingMinimizationMergedSpanScore(
+  states: readonly JourneyMapResolvedConnectorState[]
+): number {
+  let mergedSpans = 0;
+  states.forEach((leftState, leftIndex) => {
+    for (const rightState of states.slice(leftIndex + 1)) {
+      for (const leftRun of buildJourneyMapRouteSegmentRuns(leftState.finalRoute)) {
+        for (const rightRun of buildJourneyMapRouteSegmentRuns(rightState.finalRoute)) {
+          if (leftRun.axis === rightRun.axis
+            && Math.abs(leftRun.coordinate - rightRun.coordinate) <= 0.001
+            && positiveSpanOverlap(leftRun.span, rightRun.span)) {
+            mergedSpans += 1;
+          }
+        }
+      }
+    }
+  });
+  return mergedSpans;
+}
+
+function crossingMinimizationSignature(
+  states: readonly JourneyMapResolvedConnectorState[]
+): string {
+  return JSON.stringify([...states]
+    .sort((left, right) => left.connectorId.localeCompare(right.connectorId))
+    .map((state) => ({
+      connectorId: state.connectorId,
+      coordinates: [...state.segmentCoordinates]
+        .sort((left, right) => left.segmentRunIndex - right.segmentRunIndex || left.axis.localeCompare(right.axis))
+        .map((coordinate) => [
+          coordinate.segmentRunIndex,
+          coordinate.axis,
+          coordinate.resolvedCoordinate
+        ])
+    })));
+}
+
+function crossingMinimizationDisplacement(
+  states: readonly JourneyMapResolvedConnectorState[],
+  initialCoordinates: ReadonlyMap<string, number>
+): number {
+  return states.reduce((total, state) => total + state.segmentCoordinates.reduce(
+    (stateTotal, coordinate) => stateTotal + Math.abs(
+      coordinate.resolvedCoordinate - (initialCoordinates.get(
+        `${state.connectorId}|${coordinate.segmentRunIndex}|${coordinate.axis}`
+      ) ?? coordinate.resolvedCoordinate)
+    ),
+    0
+  ), 0);
+}
+
+function minimizeJourneyMapCrossings(
+  plans: readonly JourneyMapConnectorPlan[],
+  states: readonly JourneyMapResolvedConnectorState[],
+  nominalOccupancy: readonly JourneyMapOccupancyRecord[],
+  positionedScene: PositionedScene,
+  index: JourneyMapPositionedIndex
+): JourneyMapResolvedConnectorState[] {
+  const planById = new Map(plans.map((plan) => [plan.id, plan] as const));
+  const stateById = new Map(states.map((state) => [state.connectorId, state] as const));
+  const groups = new Map<string, JourneyMapSwappableCoordinateClaim[]>();
+  const seen = new Set<string>();
+  for (const record of nominalOccupancy) {
+    const plan = planById.get(record.connectorId);
+    const state = stateById.get(record.connectorId);
+    if (record.lock.kind !== "none" || !isCrossingMinimizationResource(record.resource)
+      || !plan || !state || isLockedPeripheralTrack(plan)) {
+      continue;
+    }
+    const physical = physicalTrackResource(record.resource, positionedScene);
+    const run = physical ? matchingPreparedRun(record, state) : undefined;
+    if (!physical || !run) {
+      continue;
+    }
+    const identity = `${record.connectorId}|${run.segmentRunIndex}|${run.axis}`;
+    if (seen.has(identity)) {
+      continue;
+    }
+    seen.add(identity);
+    const key = `${occupancyResourceKey(record.ownerContainerId, physical)}|${run.axis}`;
+    groups.set(key, [...(groups.get(key) ?? []), {
+      connectorId: record.connectorId,
+      segmentRunIndex: run.segmentRunIndex,
+      axis: run.axis
+    }]);
+  }
+  const orderedGroups = [...groups]
+    .map(([key, claims]) => ({
+      key,
+      claims: [...claims].sort((left, right) =>
+        left.connectorId.localeCompare(right.connectorId)
+        || left.segmentRunIndex - right.segmentRunIndex
+        || left.axis.localeCompare(right.axis)
+      )
+    }))
+    .filter((group) => group.claims.length > 1)
+    .sort((left, right) => left.key.localeCompare(right.key));
+  if (orderedGroups.length === 0
+    || collectJourneyMapResidualCrossings(plans, states).length < 8) {
+    return states.map((state) => structuredClone(state));
+  }
+
+  const initialCoordinates = new Map(states.flatMap((state) =>
+    state.segmentCoordinates.map((coordinate) => [
+      `${state.connectorId}|${coordinate.segmentRunIndex}|${coordinate.axis}`,
+      coordinate.resolvedCoordinate
+    ] as const)
+  ));
+  let current = states.map((state) => structuredClone(state));
+  const maximumIterations = Math.min(8, orderedGroups.reduce(
+    (total, group) => total + group.claims.length * group.claims.length,
+    0
+  ));
+  for (let iteration = 0; iteration < maximumIterations; iteration += 1) {
+    const currentMergedSpans = crossingMinimizationMergedSpanScore(current);
+    const currentSeparation = crossingMinimizationSeparationScore(current, index);
+    const currentCrossings = collectJourneyMapResidualCrossings(plans, current).length;
+    let selected: {
+      states: JourneyMapResolvedConnectorState[];
+      mergedSpans: number;
+      separation: number;
+      crossings: number;
+      displacement: number;
+      signature: string;
+    } | undefined;
+    for (const group of orderedGroups) {
+      group.claims.forEach((left, leftIndex) => {
+        for (const right of group.claims.slice(leftIndex + 1)) {
+          const candidate = swapJourneyMapResolvedCoordinates(current, left, right);
+          if (!candidate) {
+            continue;
+          }
+          const mergedSpans = crossingMinimizationMergedSpanScore(candidate);
+          const separation = crossingMinimizationSeparationScore(candidate, index);
+          const crossings = collectJourneyMapResidualCrossings(plans, candidate).length;
+          const improvesCurrent = mergedSpans < currentMergedSpans
+            || (mergedSpans === currentMergedSpans && separation < currentSeparation)
+            || (mergedSpans === currentMergedSpans && separation === currentSeparation
+              && crossings < currentCrossings);
+          if (!improvesCurrent) {
+            continue;
+          }
+          const displacement = crossingMinimizationDisplacement(candidate, initialCoordinates);
+          const signature = crossingMinimizationSignature(candidate);
+          if (!selected
+            || mergedSpans < selected.mergedSpans
+            || (mergedSpans === selected.mergedSpans && separation < selected.separation)
+            || (mergedSpans === selected.mergedSpans && separation === selected.separation
+              && crossings < selected.crossings)
+            || (mergedSpans === selected.mergedSpans && separation === selected.separation
+              && crossings === selected.crossings
+              && displacement < selected.displacement)
+            || (mergedSpans === selected.mergedSpans && separation === selected.separation
+              && crossings === selected.crossings
+              && displacement === selected.displacement && signature.localeCompare(selected.signature) < 0)) {
+            selected = {
+              states: candidate,
+              mergedSpans,
+              separation,
+              crossings,
+              displacement,
+              signature
+            };
+          }
+        }
+      });
+    }
+    if (!selected) {
+      break;
+    }
+    current = selected.states;
+  }
+  return current;
 }
 
 function shiftPositionedItemX(item: PositionedItem, amount: number): void {
@@ -6339,6 +6678,153 @@ function withResolvedRoutes(
   };
 }
 
+function journeyMapCrossingDiagnostics(
+  crossings: readonly JourneyMapResidualCrossing[]
+): RendererDiagnostic[] {
+  return crossings.map((crossing) => createRoutingDiagnostic(
+    "renderer.routing.journey_map_unavoidable_crossing",
+    `Journey edges "${crossing.edgeAId}" and "${crossing.edgeBId}" retain a marked crossing after deterministic corridor alternatives were exhausted.`,
+    crossing.edgeAId,
+    "warn",
+    JSON.stringify({
+      relatedIds: [crossing.edgeAId, crossing.edgeBId],
+      crossingId: crossing.id,
+      point: crossing.point,
+      overEdgeId: crossing.overEdgeId,
+      underEdgeId: crossing.underEdgeId,
+      segmentIndexes: {
+        edgeA: crossing.edgeASegmentIndex,
+        edgeB: crossing.edgeBSegmentIndex
+      }
+    })
+  ));
+}
+
+function journeyMapTerminalInformationDiagnostics(
+  plans: readonly JourneyMapConnectorPlan[]
+): RendererDiagnostic[] {
+  const diagnostics: RendererDiagnostic[] = [];
+  const cyclePlansByComponent = new Map<string, JourneyMapConnectorPlan[]>();
+  for (const plan of plans) {
+    const component = plan.cycleComponent;
+    if (component && component.role !== "ordinary") {
+      cyclePlansByComponent.set(component.componentId, [
+        ...(cyclePlansByComponent.get(component.componentId) ?? []),
+        plan
+      ]);
+    }
+    const isCycleReturn = plan.archetype === "cycle_return_same_stage"
+      || plan.archetype === "cycle_return_cross_stage";
+    const isExceptionalBackward = (plan.archetype === "backward_same_stage"
+      || plan.archetype === "backward_root_step")
+      && (plan.branch !== undefined || plan.cycleComponent !== undefined);
+    if (isCycleReturn || isExceptionalBackward) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_peripheral_backward_edge",
+        `Journey edge "${plan.id}" is routed as an exceptional peripheral backward connector.`,
+        plan.id,
+        "info",
+        JSON.stringify({ relatedIds: [plan.id] })
+      ));
+    }
+    if (plan.archetype === "self_loop") {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_self_loop",
+        `Journey edge "${plan.id}" is rendered as a self-loop.`,
+        plan.id,
+        "info",
+        JSON.stringify({ relatedIds: [plan.id, plan.from] })
+      ));
+    }
+  }
+  for (const componentPlans of cyclePlansByComponent.values()) {
+    const first = [...componentPlans].sort((left, right) =>
+      (left.cycleComponent?.edgeOrdinal ?? Number.MAX_SAFE_INTEGER)
+        - (right.cycleComponent?.edgeOrdinal ?? Number.MAX_SAFE_INTEGER)
+      || comparePriorities(left.priority, right.priority)
+    )[0];
+    const component = first?.cycleComponent;
+    if (!first || !component) {
+      continue;
+    }
+    diagnostics.push(createRoutingDiagnostic(
+      "renderer.routing.journey_map_peripheral_cycle",
+      `Journey cycle "${component.componentId}" uses peripheral forward/return routing.`,
+      first.id,
+      "info",
+      JSON.stringify({ relatedIds: component.componentEdgeIds })
+    ));
+  }
+  return sortRendererDiagnostics(diagnostics);
+}
+
+function withJourneyMapContinuityMarks(
+  scene: PositionedScene,
+  crossings: readonly JourneyMapResidualCrossing[]
+): PositionedScene {
+  const cloned = structuredClone(scene) as PositionedScene;
+  const crossingsByEdge = new Map<string, JourneyMapResidualCrossing[]>();
+  for (const crossing of crossings) {
+    crossingsByEdge.set(crossing.overEdgeId, [
+      ...(crossingsByEdge.get(crossing.overEdgeId) ?? []),
+      crossing
+    ]);
+  }
+  cloned.edges = cloned.edges.map((edge) => {
+    const edgeCrossings = crossingsByEdge.get(edge.id);
+    if (!edgeCrossings || edgeCrossings.length === 0) {
+      return edge;
+    }
+    const grouped = new Map<number, JourneyMapResidualCrossing[]>();
+    for (const crossing of edgeCrossings) {
+      grouped.set(crossing.overSegmentIndex, [
+        ...(grouped.get(crossing.overSegmentIndex) ?? []),
+        crossing
+      ]);
+    }
+    const continuityMarks: PositionedEdgeContinuityMark[] = [];
+    for (const [segmentIndex, segmentCrossings] of grouped) {
+      const start = edge.route.points[segmentIndex];
+      const end = edge.route.points[segmentIndex + 1];
+      if (!start || !end) {
+        continue;
+      }
+      const horizontal = Math.abs(start.y - end.y) <= 0.001;
+      const ordered = [...segmentCrossings].sort((left, right) =>
+        (horizontal ? left.point.x - right.point.x : left.point.y - right.point.y)
+        || left.id.localeCompare(right.id)
+      );
+      ordered.forEach((crossing, crossingIndex) => {
+        const along = horizontal ? crossing.point.x : crossing.point.y;
+        const startAlong = horizontal ? start.x : start.y;
+        const endAlong = horizontal ? end.x : end.y;
+        const endpointClearance = Math.min(Math.abs(along - startAlong), Math.abs(endAlong - along));
+        const before = ordered[crossingIndex - 1];
+        const after = ordered[crossingIndex + 1];
+        const neighborClearance = Math.min(
+          before ? Math.abs(along - (horizontal ? before.point.x : before.point.y)) : Number.POSITIVE_INFINITY,
+          after ? Math.abs((horizontal ? after.point.x : after.point.y) - along) : Number.POSITIVE_INFINITY
+        );
+        const halfSpan = roundMetric(Math.min(3, endpointClearance / 3, neighborClearance / 3));
+        if (halfSpan <= 0.001) {
+          return;
+        }
+        continuityMarks.push({
+          id: crossing.id,
+          segmentIndex,
+          point: { ...crossing.point },
+          halfSpan,
+          rise: 3,
+          normalDirection: -1,
+          underEdgeId: crossing.underEdgeId
+        });
+      });
+    }
+    return continuityMarks.length > 0 ? { ...edge, continuityMarks } : edge;
+  });
+  return cloned;
+}
+
 function buildJourneyMapRoutingStagesInternal(
   measuredScene: MeasuredScene,
   preRoutingPositionedScene: PositionedScene,
@@ -6815,8 +7301,15 @@ function buildJourneyMapRoutingStagesInternal(
     preparedStemResolution.resolvedConnectors,
     index
   );
-  const resolvedConnectors = applyResolvedStageGates(
+  const crossingMinimizedConnectors = minimizeJourneyMapCrossings(
+    connectorPlans,
     lateSeparatedConnectors,
+    nominalOccupancy,
+    preRoutingPositionedScene,
+    index
+  );
+  const resolvedConnectors = applyResolvedStageGates(
+    crossingMinimizedConnectors,
     index
   );
   const expansionRequests = canonicalExpansionRequests([
@@ -6928,6 +7421,7 @@ function buildJourneyMapRoutingStagesInternal(
         finalBasicPositionedScene,
         step3PositionedScene: expanded.step3PositionedScene,
         finalPositionedScene: expanded.finalPositionedScene,
+        residualCrossings: expanded.residualCrossings,
         diagnostics: expanded.diagnostics
       };
     }
@@ -6942,9 +7436,15 @@ function buildJourneyMapRoutingStagesInternal(
     expansionBaselineScene,
     finalPositionedScene
   );
+  const residualCrossings = collectJourneyMapResidualCrossings(
+    connectorPlans,
+    resolvedConnectors
+  );
   const terminalDiagnostics = sortRendererDiagnostics([
     ...resolutionDiagnostics,
-    ...resolvedValidationDiagnostics
+    ...resolvedValidationDiagnostics,
+    ...journeyMapCrossingDiagnostics(residualCrossings),
+    ...journeyMapTerminalInformationDiagnostics(connectorPlans)
   ]);
   const validatedStep3PositionedScene = withResolvedRoutes(
     preRoutingPositionedScene,
@@ -6953,13 +7453,13 @@ function buildJourneyMapRoutingStagesInternal(
     (state) => state.preparedRoute,
     terminalDiagnostics
   );
-  const validatedFinalPositionedScene = withResolvedRoutes(
+  const validatedFinalPositionedScene = withJourneyMapContinuityMarks(withResolvedRoutes(
     preRoutingPositionedScene,
     connectorPlans,
     resolvedConnectors,
     (state) => state.finalRoute,
     terminalDiagnostics
-  );
+  ), residualCrossings);
 
   return {
     connectorPlans,
@@ -6975,6 +7475,7 @@ function buildJourneyMapRoutingStagesInternal(
     finalBasicPositionedScene,
     step3PositionedScene: validatedStep3PositionedScene,
     finalPositionedScene: validatedFinalPositionedScene,
+    residualCrossings,
     diagnostics: sortRendererDiagnostics([
       ...preRoutingPositionedScene.diagnostics,
       ...terminalDiagnostics
