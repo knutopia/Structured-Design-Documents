@@ -16,7 +16,7 @@ When asked for an "Information Architecture" the skill should produce an ia_plac
 
 ## Issue: Odd File Placement
 
-The generated SDD file is placed at docs/readme_support_docs/community_food_pantry_example
+The generated SDD file is placed at docs/doc_site/community_food_pantry_example
 
 The LLM justifies this position as being in the documentation path for the current project, along with other examples. 
 
@@ -58,30 +58,30 @@ I’ve got enough context to move from exploration into authoring.
 
 Plan:
 
-Create a new repo-local example SDD for the food pantry app in docs/readme_support_docs/.
+Create a new repo-local example SDD for the food pantry app in docs/doc_site/.
 Use the SDD helper’s create + author flow to scaffold the IA: Dashboard, Volunteer Scheduling, Open Shifts, Shift Detail, and My Schedule.
 Validate and project the document with the IA view, then render a preview so we have both the source and a confirmed information-architecture output.
 Share the new SDD path plus the resulting IA structure back to you.
 
 Explored 1 list, ran 1 command
-Listed files in readme_support_docs
-Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh search --query Dashboard --under docs/readme_support_docs --limit 10
-I’m placing this alongside the existing support examples under docs/readme_support_docs/. I also kicked off a quick search to avoid colliding with an existing pantry-style document and to sanity-check naming.
+Listed files in doc_site
+Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh search --query Dashboard --under docs/doc_site --limit 10
+I’m placing this alongside the existing support examples under docs/doc_site/. I also kicked off a quick search to avoid colliding with an existing pantry-style document and to sanity-check naming.
 
 
 Explored 1 file, 1 search
 Non-negotiable invariants I’m following for this SDD pass:
 
 Use the helper-first workflow: create/author instead of hand-editing the .sdd.
-Keep the document repo-relative and .sdd-scoped under docs/readme_support_docs/.
+Keep the document repo-relative and .sdd-scoped under docs/doc_site/.
 Gate the result with a clean dry run plus validate_profile, then commit, then project/preview the committed state under that same profile.
 Make the IA behavior come from the SDD structure itself so the ia_place_map projection is the authoritative “show” step.
 I’m starting the actual authoring now: create the new example document, inspect its fresh revision, then I’ll dry-run the scaffold against the strict profile before I commit anything.
 
 
 Explored 2 files, 3 searches, 2 lists, ran 2 commands
-Background terminal finished with mkdir -p docs/readme_support_docs/community_food_pantry_example
-Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh create docs/readme_support_docs/community_food_pantry_example/volunteer_scheduling_app.sdd --template empty --version 0.1
+Background terminal finished with mkdir -p docs/doc_site/community_food_pantry_example
+Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh create docs/doc_site/community_food_pantry_example/volunteer_scheduling_app.sdd --template empty --version 0.1
 Searched for children\?|insert_node_scaffold|CONTAINS|COMPOSED_OF|edges in authoringIntents.ts
 Read authoringIntents.ts
 Read README.md
@@ -101,10 +101,10 @@ I’ve committed the SDD. I’m in the confirmation pass now: checking the persi
 
 
 Explored 1 file, ran 3 commands
-Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh validate docs/readme_support_docs/community_food_pantry_example/volunteer_scheduling_app.sdd --profile strict
-Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh project docs/readme_support_docs/community_food_pantry_example/volunteer_scheduling_app.sdd --view ia_place_map
+Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh validate docs/doc_site/community_food_pantry_example/volunteer_scheduling_app.sdd --profile strict
+Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh project docs/doc_site/community_food_pantry_example/volunteer_scheduling_app.sdd --view ia_place_map
 Read volunteer_scheduling_app.sdd
-Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh preview docs/readme_support_docs/community_food_pantry_example/volunteer_scheduling_app.sdd --view ia_place_map --profile strict --format svg --backend staged_ia_place_map_preview
+Background terminal finished with TMPDIR=/tmp skills/sdd-skill/scripts/run_helper.sh preview docs/doc_site/community_food_pantry_example/volunteer_scheduling_app.sdd --view ia_place_map --profile strict --format svg --backend staged_ia_place_map_preview
 The committed file validates with 0 errors and 0 warnings, and the staged ia_place_map preview rendered successfully. I’m just pulling line numbers and the exact saved path now so I can hand back a clean reference to the new SDD and the IA structure.
 
 

@@ -19,7 +19,7 @@ This was a CLI option-wiring bug, not an authoring-layer template validation bug
 Command:
 
 ```bash
-pnpm sdd-helper create docs/readme_support_docs/sdd-skill/examples/_bug_repro.sdd --template empty --version 0.1
+pnpm sdd-helper create docs/doc_site/sdd-skill/examples/_bug_repro.sdd --template empty --version 0.1
 ```
 
 Historical observed result:
@@ -27,7 +27,7 @@ Historical observed result:
 ```json
 {
   "kind": "sdd-change-set",
-  "path": "docs/readme_support_docs/sdd-skill/examples/_bug_repro.sdd",
+  "path": "docs/doc_site/sdd-skill/examples/_bug_repro.sdd",
   "status": "rejected",
   "diagnostics": [
     {
@@ -69,7 +69,7 @@ Evidence:
 
 - [src/authoring/mutations.ts](../../src/authoring/mutations.ts) defines `EMPTY_TEMPLATE_ID = "empty"`
 - the same file rejects any `args.template_id !== EMPTY_TEMPLATE_ID`
-- [docs/readme_support_docs/sdd-helper/README.md](../readme_support_docs/sdd-helper/README.md) states:
+- [docs/doc_site/sdd-helper/README.md](../doc_site/sdd-helper/README.md) states:
   - `the current implementation supports template_id=empty`
 - [skills/sdd-skill/references/current-helper-gaps.md](../../skills/sdd-skill/references/current-helper-gaps.md) states:
   - `template_id=empty is the documented supported template`

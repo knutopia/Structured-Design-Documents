@@ -41,7 +41,7 @@ Grounding sources:
 
 - `skills/sdd-skill/SKILL.md`: defines the current skill workflow, the helper wrapper entrypoint, request-file guidance, bootstrap caveats, preview policy, and helper command set.
 - `skills/sdd-skill/scripts/run_helper.sh`: locates the repository, sets `TMPDIR=/tmp`, ensures `node` and `pnpm` are available, changes to the repo root, and executes `pnpm --silent sdd-helper "$@"`.
-- `docs/readme_support_docs/sdd-helper/README.md`: defines `sdd-helper` as the JSON-first machine-facing companion surface, separate from the human-facing `sdd` CLI.
+- `docs/doc_site/sdd-helper/README.md`: defines `sdd-helper` as the JSON-first machine-facing companion surface, separate from the human-facing `sdd` CLI.
 - `docs/future_explorations/mcp_server/sdd_mcp_server_design.md`: defines helper and MCP as sibling surfaces over shared SDD domain services, with no MCP shell-out to the helper app.
 - `docs/future_explorations/mcp_server/sdd_machine_readable_contract_layer_design.md`: defines the shared contract layer used for helper and future MCP contract metadata, with lightweight discovery and deep introspection.
 - `src/cli/helperProgram.ts`: implements the `sdd-helper` CLI adapter by loading repo and bundle context, loading request text from files or stdin, parsing JSON, validating request shape, invoking `src/authoring/*` services, and returning one JSON payload.

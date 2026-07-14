@@ -199,7 +199,7 @@ This is the first full vertical slice that a skill can consume. It is the point 
 - [`src/cli/helperProgram.ts`](../../../src/cli/helperProgram.ts)
 - [`src/authoring/contracts.ts`](../../../src/authoring/contracts.ts)
 - [`tests/helperCli.spec.ts`](../../../tests/helperCli.spec.ts)
-- [`docs/readme_support_docs/sdd-helper/README.md`](../../readme_support_docs/sdd-helper/README.md) only after the behavior is implemented
+- [`docs/doc_site/sdd-helper/README.md`](../../doc_site/sdd-helper/README.md) only after the behavior is implemented
 
 ### Proof Tasks
 
@@ -307,7 +307,7 @@ Without this gate, the new contract surfaces would exist, but the operating guid
 
 ### Primary Deliverables
 
-- updated [`docs/readme_support_docs/sdd-helper/README.md`](../../readme_support_docs/sdd-helper/README.md)
+- updated [`docs/doc_site/sdd-helper/README.md`](../../doc_site/sdd-helper/README.md)
 - updated [`skills/sdd-skill/SKILL.md`](../../../skills/sdd-skill/SKILL.md)
 - updated [`skills/sdd-skill/references/workflow.md`](../../../skills/sdd-skill/references/workflow.md)
 - updated [`sdd_mcp_server_design.md`](./sdd_mcp_server_design.md) where it currently assumes the thinner discovery-only helper contract
@@ -400,7 +400,7 @@ Implementation should use these as current authority and anchor points:
 - [`src/authoring/contracts.ts`](../../../src/authoring/contracts.ts)
 - [`src/cli/helperDiscovery.ts`](../../../src/cli/helperDiscovery.ts)
 - [`src/cli/helperProgram.ts`](../../../src/cli/helperProgram.ts)
-- [`docs/readme_support_docs/sdd-helper/README.md`](../../readme_support_docs/sdd-helper/README.md)
+- [`docs/doc_site/sdd-helper/README.md`](../../doc_site/sdd-helper/README.md)
 - [`skills/sdd-skill/SKILL.md`](../../../skills/sdd-skill/SKILL.md)
 - [`skills/sdd-skill/references/workflow.md`](../../../skills/sdd-skill/references/workflow.md)
 - [`tests/helperCli.spec.ts`](../../../tests/helperCli.spec.ts)

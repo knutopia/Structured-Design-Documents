@@ -15,6 +15,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tues 7-14
+
+- Changed site folder name, installed vitepress
+
 ## Sun 7-12
 
 - Added doc: Path to Replacing Legacy Rendering Pipeline with Staged Renderers

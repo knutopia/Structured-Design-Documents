@@ -477,7 +477,7 @@ When implementation lands, update docs only after behavior exists:
 - `docs/toolchain/renderer_migration_guidance.md` for staged outcome-opportunity status
 - `docs/toolchain/architecture.md` for the new staged backend
 - `docs/toolchain/development.md` with preview/debug commands
-- `docs/readme_support_docs/diagram_types/README.md` when the view is promoted out of planned/preview-only status
+- `docs/doc_site/diagram_types/README.md` when the view is promoted out of planned/preview-only status
 - `examples/rendered/v0.1/README.md` after corpus artifacts are refreshed
 
 Do not update status docs ahead of behavior except where the future gated implementation plan explicitly calls for an authority-alignment gate.

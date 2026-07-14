@@ -4,7 +4,7 @@ SDD-Text is a compact language for describing software product design as a struc
 
 SDD-Text makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
 
-Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](docs/readme_support_docs/diagram_types/).
+Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](docs/doc_site/diagram_types/).
 
 This repository contains the spec bundle defining the language. The bundle is meant to evolve, to improve the language. The repository also contains a toolchain that validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
 
@@ -30,7 +30,7 @@ scripts/setup-corepack.sh       # Mac, WSL, Linux
 pnpm install
 pnpm run build
 pnpm sdd --help
-pnpm sdd show docs/readme_support_docs/small_app_example/small_app.sdd --profile simple --view ia_place_map --out my_first_ia.svg
+pnpm sdd show docs/doc_site/small_app_example/small_app.sdd --profile simple --view ia_place_map --out my_first_ia.svg
 ```
 
 Notes:
@@ -43,7 +43,7 @@ Notes:
 
 Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
-Full source: [`small_app.sdd`](docs/readme_support_docs/small_app_example/small_app.sdd)
+Full source: [`small_app.sdd`](docs/doc_site/small_app_example/small_app.sdd)
 
 ```text
 SDD-TEXT 0.1
@@ -85,14 +85,14 @@ Area A-200 "Current Projects"
 
 Rendered outputs (click to open full size):
 
-<a href="docs/readme_support_docs/small_app_example/small_app_ia_1.png">
-  <img src="docs/readme_support_docs/small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
+<a href="docs/doc_site/small_app_example/small_app_ia_1.png">
+  <img src="docs/doc_site/small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
 </a>
-<a href="docs/readme_support_docs/small_app_example/small_app_uic_1.png">
-  <img src="docs/readme_support_docs/small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
+<a href="docs/doc_site/small_app_example/small_app_uic_1.png">
+  <img src="docs/doc_site/small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
 </a>
 
-See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
+See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
 
 ## Orientation
 
@@ -102,11 +102,11 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 ### Learn More
 
-- SDD Skill Guide (Codex Skill): [SDD Skill Guide](docs/readme_support_docs/sdd-skill/)
+- SDD Skill Guide (Codex Skill): [SDD Skill Guide](docs/doc_site/sdd-skill/)
 
-- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](docs/readme_support_docs/sdd_cli_tools/)
+- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](docs/doc_site/sdd_cli_tools/)
 
-- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](docs/readme_support_docs/sdd-helper/)
+- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](docs/doc_site/sdd-helper/)
 
 - Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
@@ -116,7 +116,7 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](<initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md>)
 
-- [Strategic Potential of SDD in the Product Lifecycle](<docs/readme_support_docs/strategic_potential/README.md>)
+- [Strategic Potential of SDD in the Product Lifecycle](<docs/doc_site/strategic_potential/README.md>)
 
 ## Current Status
 

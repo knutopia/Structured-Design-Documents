@@ -491,7 +491,7 @@ When implementation lands, update:
 - `docs/toolchain/renderer_migration_guidance.md` only if implementation reveals new renderer migration guidance beyond the no-Elk scenario-flow decision already recorded there
 - `docs/toolchain/architecture.md` to describe the staged `scenario_flow` backend
 - `docs/toolchain/development.md` to show staged `scenario_flow` preview commands
-- `docs/readme_support_docs/diagram_types/README.md` when `scenario_flow` is promoted out of planned/preview-only status
+- `docs/doc_site/diagram_types/README.md` when `scenario_flow` is promoted out of planned/preview-only status
 - rendered corpus README generation if the preview-only label changes
 
 Do not update these docs ahead of behavior except where explicitly called for by the gated implementation plan.

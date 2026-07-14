@@ -186,7 +186,7 @@ Align active documentation authority before code changes begin.
 - `docs/toolchain/renderer_migration_guidance.md`
 - `docs/toolchain/architecture.md`
 - `docs/toolchain/development.md`
-- `docs/readme_support_docs/diagram_types/README.md`
+- `docs/doc_site/diagram_types/README.md`
 
 ### Write Scope
 
@@ -627,7 +627,7 @@ Promote staged `scenario_flow` through generated examples and user-facing docs a
 - `examples/rendered/v0.1/README.md`
 - `docs/toolchain/architecture.md`
 - `docs/toolchain/development.md`
-- `docs/readme_support_docs/diagram_types/README.md`
+- `docs/doc_site/diagram_types/README.md`
 
 ### Write Scope
 

@@ -36,7 +36,7 @@ The active bundle manifest is `bundle/v0.1/manifest.yaml`. It maps:
 - `core/views.yaml` for projection definitions and renderer defaults.
 - `profiles/simple.yaml`, `profiles/permissive.yaml`, and `profiles/strict.yaml` for validation profiles.
 
-`docs/readme_support_docs/sdd-helper/README.md` defines `sdd-helper` as the JSON-first machine-facing companion surface. It is separate from the broader human-facing `sdd` CLI.
+`docs/doc_site/sdd-helper/README.md` defines `sdd-helper` as the JSON-first machine-facing companion surface. It is separate from the broader human-facing `sdd` CLI.
 
 `skills/sdd-skill/SKILL.md` defines the current skill as a helper-first workflow over repo-relative `.sdd` documents. It uses `skills/sdd-skill/scripts/run_helper.sh` as the stable helper wrapper, prefers request files for JSON request bodies, and branches between create, edit, read/validate/project/render, helper-failure diagnosis, and helper git workflows.
 

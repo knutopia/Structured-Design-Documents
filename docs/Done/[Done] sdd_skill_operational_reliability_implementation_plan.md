@@ -270,7 +270,7 @@ Update documentation after the shared assessment model, helper exposure, and con
 ### Landing Zones
 
 - `docs/sdd_skill_operational_reliability_design.md`
-- `docs/readme_support_docs/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/README.md`
 - `docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
 - `docs/future_explorations/mcp_server/sdd_machine_readable_contract_layer_design.md`
 
@@ -440,7 +440,7 @@ Stop closeout if:
 - `docs/sdd_skill_operational_reliability_design.md`
 - `docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
 - `docs/future_explorations/mcp_server/sdd_machine_readable_contract_layer_design.md`
-- `docs/readme_support_docs/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/README.md`
 - `skills/sdd-skill/SKILL.md`
 - `skills/sdd-skill/references/workflow.md`
 - `src/authoring/contracts.ts`
