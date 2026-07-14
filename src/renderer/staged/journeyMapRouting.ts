@@ -21,6 +21,8 @@ import {
 } from "./diagnostics.js";
 import { MIN_ARROW_MARKER_LEG, resolvePortOnItem } from "./routing.js";
 
+export const JOURNEY_MAP_TRACK_SEPARATION = 16;
+
 export type JourneyMapRouteArchetype =
   | "adjacent_forward_same_stage"
   | "adjacent_forward_cross_stage"
@@ -227,6 +229,37 @@ export interface JourneyMapSelfLoopTrack {
   locked: false;
 }
 
+export interface JourneyMapDuplicateFanControl {
+  axis: "vertical";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+  segmentIndex: 1 | 3;
+  order: 0;
+  locked: false;
+}
+
+export interface JourneyMapDuplicateFan {
+  policy: "distinct_nominal_fan";
+  groupEdgeIds: string[];
+  groupSize: number;
+  groupOrdinal: number;
+  laneIndex: number;
+  axis: "horizontal";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+  segmentIndex: 0 | 2;
+  sourceControl?: JourneyMapDuplicateFanControl;
+  targetControl?: JourneyMapDuplicateFanControl;
+  order: 0;
+  locked: false;
+}
+
 export interface JourneyMapNodeEdgeBucketLists {
   startingConnectorIds: string[];
   endingConnectorIds: string[];
@@ -256,6 +289,7 @@ export interface JourneyMapConnectorPlan {
   stageLocalBypass?: JourneyMapStageLocalBypass;
   rootOuterBypass?: JourneyMapRootOuterBypass;
   selfLoopTrack?: JourneyMapSelfLoopTrack;
+  duplicateFan?: JourneyMapDuplicateFan;
   cycleComponent?: JourneyMapCycleComponentMetadata;
   topologyModifiers?: ["branch"] | ["join"];
   branch?: JourneyMapBranchPlan;
@@ -312,6 +346,7 @@ interface JourneyDegreeIndex {
   incomingByNodeId: Map<string, number>;
   outgoingByNodeId: Map<string, number>;
   sameEndpointCountByKey: Map<string, number>;
+  sameEndpointEdgesByKey: Map<string, MeasuredEdge[]>;
   outgoingTargetsByNodeId: Map<string, string[]>;
   outgoingEdgeIdsByNodeId: Map<string, string[]>;
   incomingEdgeIdsByNodeId: Map<string, string[]>;
@@ -337,6 +372,12 @@ interface RouteEligibility {
   join?: {
     targetIndegree: number;
     targetOrdinal: number;
+  };
+  duplicate?: {
+    groupEdgeIds: string[];
+    groupSize: number;
+    groupOrdinal: number;
+    laneIndex: number;
   };
   cycleComponent?: JourneyMapCycleComponentMetadata;
 }
@@ -424,6 +465,7 @@ function buildDegreeIndex(edges: readonly MeasuredEdge[]): JourneyDegreeIndex {
   const incomingByNodeId = new Map<string, number>();
   const outgoingByNodeId = new Map<string, number>();
   const sameEndpointCountByKey = new Map<string, number>();
+  const sameEndpointEdgesByKey = new Map<string, MeasuredEdge[]>();
   const outgoingTargetsByNodeId = new Map<string, string[]>();
   const outgoingEdgesByNodeId = new Map<string, MeasuredEdge[]>();
   const incomingEdgesByNodeId = new Map<string, MeasuredEdge[]>();
@@ -432,6 +474,9 @@ function buildDegreeIndex(edges: readonly MeasuredEdge[]): JourneyDegreeIndex {
     incomingByNodeId.set(edge.to.itemId, (incomingByNodeId.get(edge.to.itemId) ?? 0) + 1);
     const endpointKey = `${edge.from.itemId}\u0000${edge.to.itemId}`;
     sameEndpointCountByKey.set(endpointKey, (sameEndpointCountByKey.get(endpointKey) ?? 0) + 1);
+    const sameEndpointEdges = sameEndpointEdgesByKey.get(endpointKey) ?? [];
+    sameEndpointEdges.push(edge);
+    sameEndpointEdgesByKey.set(endpointKey, sameEndpointEdges);
     const targets = outgoingTargetsByNodeId.get(edge.from.itemId) ?? [];
     targets.push(edge.to.itemId);
     outgoingTargetsByNodeId.set(edge.from.itemId, targets);
@@ -444,10 +489,17 @@ function buildDegreeIndex(edges: readonly MeasuredEdge[]): JourneyDegreeIndex {
   }
   const outgoingEdgeIdsByNodeId = orderedEdgeIdsByNode(outgoingEdgesByNodeId);
   const incomingEdgeIdsByNodeId = orderedEdgeIdsByNode(incomingEdgesByNodeId);
+  for (const [endpointKey, sameEndpointEdges] of sameEndpointEdgesByKey) {
+    sameEndpointEdgesByKey.set(
+      endpointKey,
+      [...sameEndpointEdges].sort(compareMeasuredEdgesByAuthoredOrder)
+    );
+  }
   return {
     incomingByNodeId,
     outgoingByNodeId,
     sameEndpointCountByKey,
+    sameEndpointEdgesByKey,
     outgoingTargetsByNodeId,
     outgoingEdgeIdsByNodeId,
     incomingEdgeIdsByNodeId
@@ -602,6 +654,14 @@ function hasPath(
   return false;
 }
 
+export function journeyMapDuplicateLaneIndex(groupOrdinal: number): number {
+  if (groupOrdinal === 0) {
+    return 0;
+  }
+  const magnitude = Math.ceil(groupOrdinal / 2);
+  return groupOrdinal % 2 === 1 ? -magnitude : magnitude;
+}
+
 function resolveRouteEligibility(
   edge: MeasuredEdge,
   index: JourneyMapPositionedIndex,
@@ -615,7 +675,8 @@ function resolveRouteEligibility(
     return undefined;
   }
   const endpointKey = `${source.node.id}\u0000${target.node.id}`;
-  if ((fullDegrees.sameEndpointCountByKey.get(endpointKey) ?? 0) !== 1) {
+  const sameEndpointCount = fullDegrees.sameEndpointCountByKey.get(endpointKey) ?? 0;
+  if (sameEndpointCount < 1) {
     return undefined;
   }
   const sourceStage = source.metadata.stageId
@@ -629,6 +690,57 @@ function resolveRouteEligibility(
   }
   const sourceStepOrder = source.metadata.stepOrder;
   const targetStepOrder = target.metadata.stepOrder;
+  if (sameEndpointCount > 1) {
+    const metadata = edge.viewMetadata?.journeyMap;
+    const groupEdges = fullDegrees.sameEndpointEdgesByKey.get(endpointKey) ?? [];
+    const groupEdgeIds = groupEdges.map((member) => member.id);
+    const sourceOutgoingIds = fullDegrees.outgoingEdgeIdsByNodeId.get(source.node.id) ?? [];
+    const targetIncomingIds = fullDegrees.incomingEdgeIdsByNodeId.get(target.node.id) ?? [];
+    const groupHasValidOrdinals = groupEdges.every((member, groupOrdinal) => {
+      const memberMetadata = member.viewMetadata?.journeyMap;
+      return memberMetadata !== undefined
+        && Number.isInteger(memberMetadata.authorOrder)
+        && memberMetadata.authorOrder >= 0
+        && (groupOrdinal === 0
+          || memberMetadata.authorOrder
+            > groupEdges[groupOrdinal - 1]!.viewMetadata!.journeyMap!.authorOrder)
+        && Number.isInteger(memberMetadata.sameEndpointOrdinal)
+        && memberMetadata.sameEndpointOrdinal === groupOrdinal
+        && Number.isInteger(memberMetadata.exactIdentityOrdinal)
+        && memberMetadata.exactIdentityOrdinal >= 0;
+    });
+    const groupOrdinal = metadata?.sameEndpointOrdinal ?? -1;
+    if (source.node.id !== target.node.id
+      && !sourceStage
+      && !targetStage
+      && target.metadata.rootOrder === source.metadata.rootOrder + 1
+      && cycleComponent === undefined
+      && !hasPath(target.node.id, source.node.id, fullDegrees.outgoingTargetsByNodeId)
+      && metadata !== undefined
+      && groupEdges.length === sameEndpointCount
+      && groupEdges.length > 1
+      && new Set(groupEdgeIds).size === groupEdgeIds.length
+      && JSON.stringify(sourceOutgoingIds) === JSON.stringify(groupEdgeIds)
+      && JSON.stringify(targetIncomingIds) === JSON.stringify(groupEdgeIds)
+      && groupHasValidOrdinals
+      && groupOrdinal >= 0
+      && groupEdges[groupOrdinal]?.id === edge.id) {
+      return {
+        archetype: "adjacent_forward_root_step",
+        source,
+        target,
+        sourceStepOrder: 0,
+        targetStepOrder: 0,
+        duplicate: {
+          groupEdgeIds,
+          groupSize: groupEdges.length,
+          groupOrdinal,
+          laneIndex: journeyMapDuplicateLaneIndex(groupOrdinal)
+        }
+      };
+    }
+    return undefined;
+  }
   if (source.node.id === target.node.id) {
     if (sourceStage
       && targetStage
@@ -957,6 +1069,208 @@ function resolveEndpoint(
   };
 }
 
+interface PreparedDuplicateFanRoute {
+  source: JourneyMapResolvedEndpoint;
+  target: JourneyMapResolvedEndpoint;
+  route: PositionedRoute;
+}
+
+function duplicatePairHasOnlyTerminalStubs(
+  left: PositionedRoute,
+  right: PositionedRoute,
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint
+): boolean {
+  const overlaps: Array<{
+    axis: "horizontal" | "vertical";
+    coordinate: number;
+    start: number;
+    end: number;
+  }> = [];
+  for (const leftSegment of routeSegments(left)) {
+    for (const rightSegment of routeSegments(right)) {
+      const leftHorizontal = leftSegment.start.y === leftSegment.end.y;
+      const rightHorizontal = rightSegment.start.y === rightSegment.end.y;
+      if (leftHorizontal && rightHorizontal && leftSegment.start.y === rightSegment.start.y) {
+        const start = Math.max(
+          Math.min(leftSegment.start.x, leftSegment.end.x),
+          Math.min(rightSegment.start.x, rightSegment.end.x)
+        );
+        const end = Math.min(
+          Math.max(leftSegment.start.x, leftSegment.end.x),
+          Math.max(rightSegment.start.x, rightSegment.end.x)
+        );
+        if (end > start) {
+          overlaps.push({
+            axis: "horizontal",
+            coordinate: leftSegment.start.y,
+            start,
+            end
+          });
+        }
+      } else if (!leftHorizontal && !rightHorizontal
+        && leftSegment.start.x === rightSegment.start.x) {
+        const start = Math.max(
+          Math.min(leftSegment.start.y, leftSegment.end.y),
+          Math.min(rightSegment.start.y, rightSegment.end.y)
+        );
+        const end = Math.min(
+          Math.max(leftSegment.start.y, leftSegment.end.y),
+          Math.max(rightSegment.start.y, rightSegment.end.y)
+        );
+        if (end > start) {
+          overlaps.push({
+            axis: "vertical",
+            coordinate: leftSegment.start.x,
+            start,
+            end
+          });
+        }
+      } else if (leftHorizontal !== rightHorizontal) {
+        const horizontal = leftHorizontal ? leftSegment : rightSegment;
+        const vertical = leftHorizontal ? rightSegment : leftSegment;
+        const crossingX = vertical.start.x;
+        const crossingY = horizontal.start.y;
+        if (crossingX > Math.min(horizontal.start.x, horizontal.end.x)
+          && crossingX < Math.max(horizontal.start.x, horizontal.end.x)
+          && crossingY > Math.min(vertical.start.y, vertical.end.y)
+          && crossingY < Math.max(vertical.start.y, vertical.end.y)) {
+          return false;
+        }
+      }
+    }
+  }
+  overlaps.sort((leftOverlap, rightOverlap) =>
+    leftOverlap.axis.localeCompare(rightOverlap.axis)
+    || leftOverlap.coordinate - rightOverlap.coordinate
+    || leftOverlap.start - rightOverlap.start
+    || leftOverlap.end - rightOverlap.end
+  );
+  const expected = [
+    {
+      axis: "horizontal" as const,
+      coordinate: source.y,
+      start: source.x,
+      end: roundMetric(source.x + MIN_ARROW_MARKER_LEG)
+    },
+    {
+      axis: "horizontal" as const,
+      coordinate: target.y,
+      start: roundMetric(target.x - MIN_ARROW_MARKER_LEG),
+      end: target.x
+    }
+  ];
+  return JSON.stringify(overlaps) === JSON.stringify(expected);
+}
+
+function duplicateGroupHasOnlyTerminalStubOverlap(
+  prepared: readonly PreparedDuplicateFanRoute[]
+): boolean {
+  const first = prepared[0];
+  if (!first || prepared.some((member) =>
+    member.source.x !== first.source.x
+    || member.source.y !== first.source.y
+    || member.target.x !== first.target.x
+    || member.target.y !== first.target.y
+  )) {
+    return false;
+  }
+  for (let left = 0; left < prepared.length; left += 1) {
+    for (let right = left + 1; right < prepared.length; right += 1) {
+      if (!duplicatePairHasOnlyTerminalStubs(
+        prepared[left]!.route,
+        prepared[right]!.route,
+        first.source,
+        first.target
+      )) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+function buildDuplicateGroupAdmission(
+  measuredScene: MeasuredScene,
+  root: PositionedContainer,
+  index: JourneyMapPositionedIndex,
+  degrees: JourneyDegreeIndex,
+  ordinaryDegrees: JourneyDegreeIndex,
+  cycleIndex: JourneyMapCycleIndex
+): Map<string, boolean> {
+  const admissionByEdgeId = new Map<string, boolean>();
+  for (const groupEdges of degrees.sameEndpointEdgesByKey.values()) {
+    if (groupEdges.length <= 1) {
+      continue;
+    }
+    const prepared: PreparedDuplicateFanRoute[] = [];
+    let admitted = true;
+    for (const edge of groupEdges) {
+      const eligibility = resolveRouteEligibility(
+        edge,
+        index,
+        degrees,
+        ordinaryDegrees,
+        cycleIndex.componentByEdgeId.get(edge.id)
+      );
+      if (!eligibility?.duplicate) {
+        admitted = false;
+        break;
+      }
+      const edgeMetadata = edge.viewMetadata?.journeyMap;
+      if (!edgeMetadata
+        || edge.ownerContainerId !== root.id
+        || edge.routing.sourcePortRole !== "journey_flow_out"
+        || edge.routing.targetPortRole !== "journey_flow_in"
+        || edge.markers?.start !== undefined
+        || edge.markers?.end !== "arrow") {
+        admitted = false;
+        break;
+      }
+      const ignoredDiagnostics: RendererDiagnostic[] = [];
+      const source = resolveEndpoint(
+        edge,
+        eligibility.source,
+        "source",
+        edge.routing.sourcePortRole,
+        "east",
+        ignoredDiagnostics
+      );
+      const target = resolveEndpoint(
+        edge,
+        eligibility.target,
+        "target",
+        edge.routing.targetPortRole,
+        "west",
+        ignoredDiagnostics
+      );
+      const fan = source && target
+        ? buildDuplicateFan(eligibility, source, target, root, index)
+        : undefined;
+      const route = source && target && fan
+        ? buildDuplicateFanRoute(source, target, fan)
+        : undefined;
+      if (!source || !target || !fan || !route) {
+        admitted = false;
+        break;
+      }
+      prepared.push({ source, target, route });
+    }
+    admitted = admitted
+      && prepared.length === groupEdges.length
+      && duplicateGroupHasOnlyTerminalStubOverlap(prepared);
+    for (const edge of groupEdges) {
+      admissionByEdgeId.set(edge.id, admitted);
+    }
+  }
+  for (const edge of measuredScene.edges) {
+    if (!admissionByEdgeId.has(edge.id)) {
+      admissionByEdgeId.set(edge.id, true);
+    }
+  }
+  return admissionByEdgeId;
+}
+
 function buildStageGates(
   eligibility: RouteEligibility,
   source: JourneyMapResolvedEndpoint,
@@ -1235,6 +1549,191 @@ function buildSelfLoopTrack(
     return undefined;
   }
   return track;
+}
+
+function buildDuplicateFanRoute(
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint,
+  fan: JourneyMapDuplicateFan
+): PositionedRoute | undefined {
+  if (source.itemId === target.itemId
+    || source.side !== "east"
+    || target.side !== "west"
+    || source.y !== target.y
+    || source.x >= target.x
+    || fan.policy !== "distinct_nominal_fan"
+    || fan.groupSize <= 1
+    || fan.groupEdgeIds.length !== fan.groupSize
+    || fan.groupOrdinal < 0
+    || fan.groupOrdinal >= fan.groupSize
+    || fan.laneIndex !== journeyMapDuplicateLaneIndex(fan.groupOrdinal)
+    || fan.axis !== "horizontal"
+    || fan.order !== 0
+    || fan.locked !== false) {
+    return undefined;
+  }
+  if (fan.laneIndex === 0) {
+    if (fan.nominalCoordinate !== source.y
+      || fan.segmentIndex !== 0
+      || fan.span.start !== source.x
+      || fan.span.end !== target.x
+      || fan.sourceControl !== undefined
+      || fan.targetControl !== undefined) {
+      return undefined;
+    }
+    return {
+      style: "orthogonal",
+      points: cloneRoutePoints([source, target])
+    };
+  }
+  const sourceControl = fan.sourceControl;
+  const targetControl = fan.targetControl;
+  const expectedControlSpan = {
+    start: roundMetric(Math.min(source.y, fan.nominalCoordinate)),
+    end: roundMetric(Math.max(source.y, fan.nominalCoordinate))
+  };
+  if (!sourceControl
+    || !targetControl
+    || fan.segmentIndex !== 2
+    || fan.nominalCoordinate !== roundMetric(
+      source.y + fan.laneIndex * JOURNEY_MAP_TRACK_SEPARATION
+    )
+    || fan.span.start !== sourceControl.nominalCoordinate
+    || fan.span.end !== targetControl.nominalCoordinate
+    || sourceControl.axis !== "vertical"
+    || targetControl.axis !== "vertical"
+    || sourceControl.nominalCoordinate - source.x !== MIN_ARROW_MARKER_LEG
+    || target.x - targetControl.nominalCoordinate !== MIN_ARROW_MARKER_LEG
+    || targetControl.nominalCoordinate - sourceControl.nominalCoordinate
+      < JOURNEY_MAP_TRACK_SEPARATION
+    || JSON.stringify(sourceControl.span) !== JSON.stringify(expectedControlSpan)
+    || JSON.stringify(targetControl.span) !== JSON.stringify(expectedControlSpan)
+    || sourceControl.segmentIndex !== 1
+    || targetControl.segmentIndex !== 3
+    || sourceControl.order !== 0
+    || targetControl.order !== 0
+    || sourceControl.locked !== false
+    || targetControl.locked !== false) {
+    return undefined;
+  }
+  return {
+    style: "orthogonal",
+    points: cloneRoutePoints([
+      source,
+      { x: sourceControl.nominalCoordinate, y: source.y },
+      { x: sourceControl.nominalCoordinate, y: fan.nominalCoordinate },
+      { x: targetControl.nominalCoordinate, y: fan.nominalCoordinate },
+      { x: targetControl.nominalCoordinate, y: target.y },
+      target
+    ])
+  };
+}
+
+function buildDuplicateFan(
+  eligibility: RouteEligibility,
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint,
+  root: PositionedContainer,
+  index: JourneyMapPositionedIndex
+): JourneyMapDuplicateFan | undefined {
+  const duplicate = eligibility.duplicate;
+  if (eligibility.archetype !== "adjacent_forward_root_step"
+    || !duplicate
+    || eligibility.sourceStage
+    || eligibility.targetStage
+    || eligibility.source.node.id === eligibility.target.node.id
+    || source.itemId !== eligibility.source.node.id
+    || target.itemId !== eligibility.target.node.id
+    || source.side !== "east"
+    || target.side !== "west"
+    || source.y !== target.y
+    || target.x - source.x
+      < 2 * MIN_ARROW_MARKER_LEG + JOURNEY_MAP_TRACK_SEPARATION) {
+    return undefined;
+  }
+  const nominalCoordinate = roundMetric(
+    source.y + duplicate.laneIndex * JOURNEY_MAP_TRACK_SEPARATION
+  );
+  const sourceControlX = roundMetric(source.x + MIN_ARROW_MARKER_LEG);
+  const targetControlX = roundMetric(target.x - MIN_ARROW_MARKER_LEG);
+  const controlSpan = {
+    start: roundMetric(Math.min(source.y, nominalCoordinate)),
+    end: roundMetric(Math.max(source.y, nominalCoordinate))
+  };
+  const isCanonical = duplicate.laneIndex === 0;
+  const fan: JourneyMapDuplicateFan = {
+    policy: "distinct_nominal_fan",
+    groupEdgeIds: [...duplicate.groupEdgeIds],
+    groupSize: duplicate.groupSize,
+    groupOrdinal: duplicate.groupOrdinal,
+    laneIndex: duplicate.laneIndex,
+    axis: "horizontal",
+    nominalCoordinate,
+    span: isCanonical
+      ? { start: source.x, end: target.x }
+      : { start: sourceControlX, end: targetControlX },
+    segmentIndex: isCanonical ? 0 : 2,
+    ...(!isCanonical ? {
+      sourceControl: {
+        axis: "vertical" as const,
+        nominalCoordinate: sourceControlX,
+        span: { ...controlSpan },
+        segmentIndex: 1 as const,
+        order: 0 as const,
+        locked: false as const
+      },
+      targetControl: {
+        axis: "vertical" as const,
+        nominalCoordinate: targetControlX,
+        span: { ...controlSpan },
+        segmentIndex: 3 as const,
+        order: 0 as const,
+        locked: false as const
+      }
+    } : {}),
+    order: 0,
+    locked: false
+  };
+  const route = buildDuplicateFanRoute(source, target, fan);
+  if (!route) {
+    return undefined;
+  }
+  const rootRight = roundMetric(root.x + root.width);
+  const rootBottom = roundMetric(root.y + root.height);
+  if (route.points.some((point) =>
+    point.x <= root.x || point.x >= rootRight || point.y <= root.y || point.y >= rootBottom
+  )) {
+    return undefined;
+  }
+  if (index.allNodes.some((candidate) => intersectsRoute(route, nodeRect(candidate)))) {
+    return undefined;
+  }
+  for (const stage of index.allStages) {
+    if (intersectsRoute(route, {
+      id: stage.stage.id,
+      x: stage.stage.x,
+      y: stage.stage.y,
+      width: stage.stage.width,
+      height: stage.stage.height
+    }) || stage.stage.headerContent.some((block) =>
+      intersectsRoute(route, containerContentRect(stage.stage, block))
+    )) {
+      return undefined;
+    }
+  }
+  if (root.headerContent.some((block) =>
+    intersectsRoute(route, containerContentRect(root, block))
+  )) {
+    return undefined;
+  }
+  for (const candidate of index.allNodes) {
+    for (const block of candidate.node.content.filter((item) => item.region === "secondary")) {
+      if (intersectsRoute(route, contentRect(candidate.node, block))) {
+        return undefined;
+      }
+    }
+  }
+  return fan;
 }
 
 function buildStageLocalBypass(
@@ -2334,6 +2833,19 @@ export function validateJourneyMapRoutes(
   const ordinaryMeasuredDegrees = measuredCycleIndex
     ? buildDegreeIndex(measuredCycleIndex.ordinaryEdges)
     : undefined;
+  const measuredDuplicateAdmission = measuredScene
+    && measuredDegrees
+    && ordinaryMeasuredDegrees
+    && measuredCycleIndex
+    ? buildDuplicateGroupAdmission(
+      measuredScene,
+      positionedScene.root,
+      index,
+      measuredDegrees,
+      ordinaryMeasuredDegrees,
+      measuredCycleIndex
+    )
+    : undefined;
   const measuredEdgeById = measuredScene
     ? new Map(measuredScene.edges.map((edge) => [edge.id, edge]))
     : undefined;
@@ -2881,6 +3393,80 @@ export function validateJourneyMapRoutes(
       ));
     }
 
+    const expectedDuplicateFan = expectedEligibility
+      ? buildDuplicateFan(
+        expectedEligibility,
+        plan.sourceEndpoint,
+        plan.targetEndpoint,
+        positionedScene.root,
+        index
+      )
+      : undefined;
+    const expectedDuplicateRoute = expectedDuplicateFan
+      ? buildDuplicateFanRoute(plan.sourceEndpoint, plan.targetEndpoint, expectedDuplicateFan)
+      : undefined;
+    const expectedDuplicatePriority = measuredEdge && measuredEdgeMetadata && expectedEligibility
+      ? buildPriority(measuredEdge, measuredEdgeMetadata, expectedEligibility)
+      : undefined;
+    const usesExactDuplicateEndpoints = sourceFlowPort !== undefined
+      && targetFlowPort !== undefined
+      && sourceFlowPort.side === "east"
+      && targetFlowPort.side === "west"
+      && plan.sourceEndpoint.portId === sourceFlowPort.id
+      && plan.sourceEndpoint.side === "east"
+      && plan.sourceEndpoint.x === roundMetric(source.node.x + sourceFlowPort.x)
+      && plan.sourceEndpoint.y === roundMetric(source.node.y + sourceFlowPort.y)
+      && plan.sourceEndpoint.offset === roundMetric(sourceFlowPort.y)
+      && plan.targetEndpoint.portId === targetFlowPort.id
+      && plan.targetEndpoint.side === "west"
+      && plan.targetEndpoint.x === roundMetric(target.node.x + targetFlowPort.x)
+      && plan.targetEndpoint.y === roundMetric(target.node.y + targetFlowPort.y)
+      && plan.targetEndpoint.offset === roundMetric(targetFlowPort.y);
+    const duplicateContractMatches = measuredScene
+      ? expectedEligibility?.duplicate
+        ? plan.archetype === "adjacent_forward_root_step"
+          && plan.ownerContainerId === positionedScene.root.id
+          && measuredEdge !== undefined
+          && measuredEdgeMetadata !== undefined
+          && measuredDuplicateAdmission?.get(plan.id) === true
+          && measuredEdge.ownerContainerId === positionedScene.root.id
+          && measuredEdge.routing.sourcePortRole === "journey_flow_out"
+          && measuredEdge.routing.targetPortRole === "journey_flow_in"
+          && plan.authorOrder === measuredEdgeMetadata.authorOrder
+          && plan.sameEndpointOrdinal === measuredEdgeMetadata.sameEndpointOrdinal
+          && plan.exactIdentityOrdinal === measuredEdgeMetadata.exactIdentityOrdinal
+          && expectedDuplicatePriority !== undefined
+          && expectedDuplicatePriority.archetypeRank === 3
+          && JSON.stringify(plan.priority) === JSON.stringify(expectedDuplicatePriority)
+          && measuredEdge.markers?.start === undefined
+          && measuredEdge.markers?.end === "arrow"
+          && plan.markers?.start === undefined
+          && plan.markers?.end === "arrow"
+          && usesExactDuplicateEndpoints
+          && plan.stageGates.length === 0
+          && plan.stageLocalBypass === undefined
+          && plan.rootOuterBypass === undefined
+          && plan.selfLoopTrack === undefined
+          && plan.cycleComponent === undefined
+          && plan.topologyModifiers === undefined
+          && plan.branch === undefined
+          && plan.join === undefined
+          && expectedDuplicateFan !== undefined
+          && JSON.stringify(plan.duplicateFan) === JSON.stringify(expectedDuplicateFan)
+          && expectedDuplicateRoute !== undefined
+          && JSON.stringify(route) === JSON.stringify(expectedDuplicateRoute)
+        : plan.duplicateFan === undefined
+      : plan.duplicateFan === undefined;
+    if (!duplicateContractMatches) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_archetype_fallback",
+        `Journey edge "${plan.id}" does not expose its accepted duplicate-fan contract.`,
+        plan.id,
+        "warn",
+        JSON.stringify({ relatedIds: [plan.id, plan.from, plan.to] })
+      ));
+    }
+
     const branch = plan.branch;
     const join = plan.join;
     const isBackwardArchetype = plan.archetype === "backward_same_stage"
@@ -3185,6 +3771,14 @@ export function buildJourneyMapRoutingStages(
       JSON.stringify({ relatedIds: [edgeId] })
     ));
   }
+  const duplicateGroupAdmission = buildDuplicateGroupAdmission(
+    measuredScene,
+    preRoutingPositionedScene.root,
+    index,
+    degrees,
+    ordinaryDegrees,
+    cycleIndex
+  );
 
   for (const edge of measuredScene.edges) {
     if (duplicateEdgeIds.has(edge.id)) {
@@ -3245,6 +3839,7 @@ export function buildJourneyMapRoutingStages(
       || eligibility.archetype === "cycle_return_same_stage"
       || eligibility.archetype === "cycle_return_cross_stage";
     const isSelfLoop = eligibility.archetype === "self_loop";
+    const isDuplicate = eligibility.duplicate !== undefined;
     const usesStageLocalBypass = eligibility.archetype === "non_adjacent_forward_same_stage"
       || eligibility.archetype === "backward_same_stage"
       || eligibility.archetype === "cycle_forward_same_stage"
@@ -3317,6 +3912,31 @@ export function buildJourneyMapRoutingStages(
       targetEndpoint,
       index
     );
+    const duplicateFan = buildDuplicateFan(
+      eligibility,
+      sourceEndpoint,
+      targetEndpoint,
+      preRoutingPositionedScene.root,
+      index
+    );
+    if (isDuplicate && (!duplicateFan || duplicateGroupAdmission.get(edge.id) !== true)) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_archetype_fallback",
+        `Journey duplicate group for edge "${edge.id}" cannot construct its complete nominal fan.`,
+        edge.id,
+        "warn",
+        JSON.stringify({ relatedIds: eligibility.duplicate?.groupEdgeIds ?? [edge.id] })
+      ));
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_edge_omitted",
+        `Journey duplicate edge "${edge.id}" was omitted because its group failed atomically.`,
+        edge.id,
+        "error",
+        JSON.stringify({ relatedIds: eligibility.duplicate?.groupEdgeIds ?? [edge.id] })
+      ));
+      failedConnectorIds.push(edge.id);
+      continue;
+    }
     const branch = buildBranchPlan(
       eligibility,
       sourceEndpoint,
@@ -3330,6 +3950,8 @@ export function buildJourneyMapRoutingStages(
     const usesBoundaryStageBypass = stageLocalBypass?.boundaryRole !== undefined;
     const step2Route = isSelfLoop && selfLoopTrack
       ? buildSelfLoopRoute(sourceEndpoint, targetEndpoint, selfLoopTrack)
+      : isDuplicate && duplicateFan
+        ? buildDuplicateFanRoute(sourceEndpoint, targetEndpoint, duplicateFan)
       : usesBoundaryStageBypass && stageLocalBypass
       ? buildBoundaryStageBypassRoute(
         sourceEndpoint,
@@ -3380,6 +4002,8 @@ export function buildJourneyMapRoutingStages(
               : undefined;
     const provisionalRoute = isSelfLoop && selfLoopTrack
       ? buildSelfLoopRoute(sourceEndpoint, targetEndpoint, selfLoopTrack)
+      : isDuplicate && duplicateFan
+        ? buildDuplicateFanRoute(sourceEndpoint, targetEndpoint, duplicateFan)
       : usesBoundaryStageBypass && stageLocalBypass
       ? buildBoundaryStageBypassRoute(
         sourceEndpoint,
@@ -3466,6 +4090,7 @@ export function buildJourneyMapRoutingStages(
       ...(stageLocalBypass ? { stageLocalBypass } : {}),
       ...(rootOuterBypass ? { rootOuterBypass } : {}),
       ...(selfLoopTrack ? { selfLoopTrack } : {}),
+      ...(duplicateFan ? { duplicateFan } : {}),
       ...(eligibility.cycleComponent
         ? { cycleComponent: structuredClone(eligibility.cycleComponent) }
         : {}),

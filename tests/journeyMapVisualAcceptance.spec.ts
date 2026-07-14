@@ -39,6 +39,10 @@ const compressedFixturePath = path.join(
   repoRoot,
   "tests/fixtures/render/journey_map_staged_compressed.sdd"
 );
+const duplicateFixturePath = path.join(
+  repoRoot,
+  "tests/fixtures/render/journey_map_staged_duplicate.sdd"
+);
 
 function routeContainsPoint(route: PositionedRoute, point: Point): boolean {
   return route.points.slice(1).some((end, index) => {
@@ -88,6 +92,83 @@ function routesIntersect(left: PositionedRoute, right: PositionedRoute): boolean
     return between(vertical.start.x, horizontal.start.x, horizontal.end.x)
       && between(horizontal.start.y, vertical.start.y, vertical.end.y);
   }));
+}
+
+function sharedCollinearSegments(
+  left: PositionedRoute,
+  right: PositionedRoute
+): Array<{ axis: "horizontal" | "vertical"; coordinate: number; start: number; end: number }> {
+  const segments = (route: PositionedRoute) => route.points.slice(1).map((end, index) => ({
+    start: route.points[index]!,
+    end
+  }));
+  const shared: Array<{
+    axis: "horizontal" | "vertical";
+    coordinate: number;
+    start: number;
+    end: number;
+  }> = [];
+  for (const leftSegment of segments(left)) {
+    for (const rightSegment of segments(right)) {
+      const leftHorizontal = leftSegment.start.y === leftSegment.end.y;
+      const rightHorizontal = rightSegment.start.y === rightSegment.end.y;
+      if (leftHorizontal && rightHorizontal && leftSegment.start.y === rightSegment.start.y) {
+        const start = Math.max(
+          Math.min(leftSegment.start.x, leftSegment.end.x),
+          Math.min(rightSegment.start.x, rightSegment.end.x)
+        );
+        const end = Math.min(
+          Math.max(leftSegment.start.x, leftSegment.end.x),
+          Math.max(rightSegment.start.x, rightSegment.end.x)
+        );
+        if (end > start) {
+          shared.push({ axis: "horizontal", coordinate: leftSegment.start.y, start, end });
+        }
+      } else if (!leftHorizontal && !rightHorizontal
+        && leftSegment.start.x === rightSegment.start.x) {
+        const start = Math.max(
+          Math.min(leftSegment.start.y, leftSegment.end.y),
+          Math.min(rightSegment.start.y, rightSegment.end.y)
+        );
+        const end = Math.min(
+          Math.max(leftSegment.start.y, leftSegment.end.y),
+          Math.max(rightSegment.start.y, rightSegment.end.y)
+        );
+        if (end > start) {
+          shared.push({ axis: "vertical", coordinate: leftSegment.start.x, start, end });
+        }
+      }
+    }
+  }
+  return shared;
+}
+
+function properPerpendicularCrossings(left: PositionedRoute, right: PositionedRoute): Point[] {
+  const segments = (route: PositionedRoute) => route.points.slice(1).map((end, index) => ({
+    start: route.points[index]!,
+    end
+  }));
+  const crossings: Point[] = [];
+  for (const leftSegment of segments(left)) {
+    for (const rightSegment of segments(right)) {
+      const leftHorizontal = leftSegment.start.y === leftSegment.end.y;
+      const rightHorizontal = rightSegment.start.y === rightSegment.end.y;
+      if (leftHorizontal === rightHorizontal) {
+        continue;
+      }
+      const horizontal = leftHorizontal ? leftSegment : rightSegment;
+      const vertical = leftHorizontal ? rightSegment : leftSegment;
+      const x = vertical.start.x;
+      const y = horizontal.start.y;
+      if (x > Math.min(horizontal.start.x, horizontal.end.x)
+        && x < Math.max(horizontal.start.x, horizontal.end.x)
+        && y > Math.min(vertical.start.y, vertical.end.y)
+        && y < Math.max(vertical.start.y, vertical.end.y)) {
+        crossings.push({ x, y });
+      }
+    }
+  }
+  return crossings;
 }
 
 describe("journey map Gate 6 visual acceptance", () => {
@@ -706,5 +787,124 @@ describe("journey map Gate 6 self-loop visual acceptance", () => {
     expect(rendered.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
+  });
+});
+
+describe("journey map Gate 6 duplicate occurrence visual acceptance", () => {
+  it("keeps three nominal tracks countable while isolating Gate 7 debt to terminal stubs", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: duplicateFixturePath,
+      text: await readFile(duplicateFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const rerendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    expect(rendered.provisionalSvg).toBe(rerendered.provisionalSvg);
+    const scene = rendered.routingStages.provisionalPositionedScene;
+    const duplicateIds = [
+      "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0",
+      "J-801__PRECEDES__J-802__8fcf1e99bcf6a39ba71e63745f7738eef3880d78bc98ad4a36e1fce1ef8a0b1e__0",
+      "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__1"
+    ];
+    const expectedRoutes = [
+      [{ x: 256, y: 56 }, { x: 296, y: 56 }],
+      [
+        { x: 256, y: 56 }, { x: 268, y: 56 }, { x: 268, y: 40 },
+        { x: 284, y: 40 }, { x: 284, y: 56 }, { x: 296, y: 56 }
+      ],
+      [
+        { x: 256, y: 56 }, { x: 268, y: 56 }, { x: 268, y: 72 },
+        { x: 284, y: 72 }, { x: 284, y: 56 }, { x: 296, y: 56 }
+      ]
+    ];
+    expect(scene.root).toMatchObject({ x: 0, y: 0, width: 552, height: 112 });
+    expect(scene.edges.map((edge) => edge.id)).toEqual(duplicateIds);
+    expect(scene.edges.map((edge) => edge.route.points)).toEqual(expectedRoutes);
+    expect(scene.edges.map((edge) => [
+      edge.from.portId,
+      edge.from.x,
+      edge.from.y,
+      edge.to.portId,
+      edge.to.x,
+      edge.to.y
+    ])).toEqual(duplicateIds.map(() => [
+      "J-801__flow_out", 256, 56, "J-802__flow_in", 296, 56
+    ]));
+
+    const checkpoints = [{ x: 276, y: 56 }, { x: 276, y: 40 }, { x: 276, y: 72 }];
+    for (const [expectedIndex, checkpoint] of checkpoints.entries()) {
+      expect(scene.edges.map((edge) => routeContainsPoint(edge.route, checkpoint))).toEqual(
+        scene.edges.map((_, index) => index === expectedIndex)
+      );
+    }
+    expect([56 - 40, 72 - 56]).toEqual([16, 16]);
+    const expectedSharedStubs = [
+      { axis: "horizontal" as const, coordinate: 56, start: 256, end: 268 },
+      { axis: "horizontal" as const, coordinate: 56, start: 284, end: 296 }
+    ];
+    for (let left = 0; left < scene.edges.length; left += 1) {
+      for (let right = left + 1; right < scene.edges.length; right += 1) {
+        expect(sharedCollinearSegments(
+          scene.edges[left]!.route,
+          scene.edges[right]!.route
+        )).toEqual(expectedSharedStubs);
+        expect(properPerpendicularCrossings(
+          scene.edges[left]!.route,
+          scene.edges[right]!.route
+        )).toEqual([]);
+      }
+    }
+    expect(routeContainsPoint(scene.edges[1]!.route, { x: 262, y: 56 })).toBe(true);
+    expect(routeContainsPoint(scene.edges[1]!.route, { x: 290, y: 56 })).toBe(true);
+    expect(getTerminalSegmentLength(scene.edges[0]!)).toBe(40);
+    expect(getTerminalSegmentLength(scene.edges[1]!)).toBe(MIN_ARROW_MARKER_LEG);
+    expect(getTerminalSegmentLength(scene.edges[2]!)).toBe(MIN_ARROW_MARKER_LEG);
+
+    const nodeBoxes = flattenPositionedItems(scene.root)
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id, x: node.x, y: node.y, width: node.width, height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes(scene.edges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(scene.edges, nodeBoxes);
+    expect(collectHeaderBoxes(scene.root)).toEqual([]);
+    for (const header of collectHeaderBoxes(scene.root)) {
+      for (const edge of scene.edges) {
+        expect(routeIntersectsRect(edge.route, header)).toBe(false);
+      }
+    }
+    for (const edge of scene.edges) {
+      for (const point of edge.route.points) {
+        expect(point.x).toBeGreaterThan(scene.root.x);
+        expect(point.x).toBeLessThan(scene.root.x + scene.root.width);
+        expect(point.y).toBeGreaterThan(scene.root.y);
+        expect(point.y).toBeLessThan(scene.root.y + scene.root.height);
+      }
+    }
+    for (const edgeId of duplicateIds) {
+      expect(rendered.provisionalSvg).toContain(`data-edge-id="${edgeId}"`);
+    }
+    expect((rendered.provisionalSvg.match(/data-edge-id=/g) ?? [])).toHaveLength(3);
+    expect((rendered.provisionalSvg.match(
+      /marker-end="url\(#scene-marker-arrow-end\)"/g
+    ) ?? [])).toHaveLength(3);
+    expect(rendered.diagnostics).toEqual([
+      expect.objectContaining({
+        code: "renderer.scene.journey_map_step_only",
+        severity: "info",
+        targetId: "J-801"
+      })
+    ]);
   });
 });

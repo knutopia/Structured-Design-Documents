@@ -26,6 +26,8 @@ import {
 } from "../src/renderer/staged/journeyMap.js";
 import {
   buildJourneyMapRoutingStages,
+  journeyMapDuplicateLaneIndex,
+  JOURNEY_MAP_TRACK_SEPARATION,
   validateJourneyMapBasicRoutes,
   validateJourneyMapRoutes,
   type JourneyMapConnectorPlan,
@@ -170,7 +172,7 @@ describe("journey map Gate 5 basic routing", () => {
       ["primary", 9],
       ["ordering_ownership", 3],
       ["topology", 9],
-      ["duplicate", 0],
+      ["duplicate", 3],
       ["compressed", 18]
     ] as const;
     for (const [name, expectedRoutedCount] of cases) {
@@ -473,7 +475,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
 
     for (const [name, expectedCount] of [
       ["topology", 9],
-      ["duplicate", 0],
+      ["duplicate", 3],
       ["compressed", 18]
     ] as const) {
       const laterFamily = await buildFixture(name);
@@ -1034,7 +1036,8 @@ describe("journey map Gate 6 branch fan-out routing", () => {
     expectExactPartition(topology);
 
     const duplicate = await buildFixture("duplicate");
-    expect(duplicate.routingStages.connectorPlans).toEqual([]);
+    expect(duplicate.routingStages.connectorPlans).toHaveLength(3);
+    expect(duplicate.routingStages.connectorPlans.filter((plan) => plan.branch)).toEqual([]);
     expectExactPartition(duplicate);
     const compressed = await buildFixture("compressed");
     expect(compressed.routingStages.connectorPlans.filter((plan) => plan.branch)).toHaveLength(14);
@@ -1370,7 +1373,7 @@ describe("journey map Gate 6 join fan-in routing", () => {
     for (const [name, routed, deferred] of [
       ["ordering_ownership", 3, 0],
       ["topology", 9, 0],
-      ["duplicate", 0, 3],
+      ["duplicate", 3, 0],
       ["compressed", 18, 0]
     ] as const) {
       const fixture = await buildFixture(name);
@@ -1667,7 +1670,7 @@ describe("journey map Gate 6 backward routing", () => {
 
     for (const [name, routed, deferred] of [
       ["primary", 9, 0],
-      ["duplicate", 0, 3],
+      ["duplicate", 3, 0],
       ["compressed", 18, 0]
     ] as const) {
       const fixture = await buildFixture(name);
@@ -1906,8 +1909,8 @@ describe("journey map Gate 6 backward routing", () => {
 
     expect(topology.routingStages.deferredConnectors).toEqual([]);
     const duplicate = await buildFixture("duplicate");
-    expect(duplicate.routingStages.connectorPlans).toEqual([]);
-    expect(duplicate.routingStages.deferredConnectors).toHaveLength(3);
+    expect(duplicate.routingStages.connectorPlans).toHaveLength(3);
+    expect(duplicate.routingStages.deferredConnectors).toEqual([]);
     expect(ordering.routingStages.diagnostics.some((diagnostic) =>
       diagnostic.code.includes("occupancy")
       || diagnostic.code.includes("capacity")
@@ -2839,6 +2842,621 @@ describe("journey map Gate 6 self-loop routing", () => {
     expect(first.provisionalSvg).toBe(second.provisionalSvg);
     expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
     expect(first.provisionalSvg).toContain(`data-edge-id="${selfLoopId}"`);
+    expect(first.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+});
+
+describe("journey map Gate 6 duplicate occurrence routing", () => {
+  const duplicateIds = [
+    "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0",
+    "J-801__PRECEDES__J-802__8fcf1e99bcf6a39ba71e63745f7738eef3880d78bc98ad4a36e1fce1ef8a0b1e__0",
+    "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__1"
+  ];
+  const expectedRoutes = [
+    [{ x: 256, y: 56 }, { x: 296, y: 56 }],
+    [
+      { x: 256, y: 56 }, { x: 268, y: 56 }, { x: 268, y: 40 },
+      { x: 284, y: 40 }, { x: 284, y: 56 }, { x: 296, y: 56 }
+    ],
+    [
+      { x: 256, y: 56 }, { x: 268, y: 56 }, { x: 268, y: 72 },
+      { x: 284, y: 72 }, { x: 284, y: 56 }, { x: 296, y: 56 }
+    ]
+  ];
+  const duplicateGroupFrom = (
+    base: MeasuredScene["edges"][number],
+    prefix: string
+  ): MeasuredScene["edges"] => Array.from({ length: 3 }, (_, ordinal) => {
+    const edge = structuredClone(base);
+    edge.id = `${prefix}-${ordinal}`;
+    const metadata = edge.viewMetadata?.journeyMap;
+    expect(metadata).toBeDefined();
+    metadata!.authorOrder = ordinal;
+    metadata!.sameEndpointOrdinal = ordinal;
+    metadata!.exactIdentityOrdinal = ordinal;
+    return edge;
+  });
+
+  it("maps authored duplicate ordinals to the accepted alternating nominal slots", () => {
+    expect(Array.from({ length: 7 }, (_, ordinal) =>
+      journeyMapDuplicateLaneIndex(ordinal)
+    )).toEqual([0, -1, 1, -2, 2, -3, 3]);
+  });
+
+  it("routes the complete duplicate group as the accepted direct/upper/lower nominal fan", async () => {
+    const fixture = await buildFixture("duplicate");
+    const plans = fixture.routingStages.connectorPlans;
+    expect(plans.map((plan) => plan.id)).toEqual(duplicateIds);
+    expect(plans.map((plan) => [
+      plan.authorOrder,
+      plan.sameEndpointOrdinal,
+      plan.exactIdentityOrdinal
+    ])).toEqual([[0, 0, 0], [1, 1, 0], [2, 2, 1]]);
+
+    for (const [groupOrdinal, plan] of plans.entries()) {
+      const laneIndex = [0, -1, 1][groupOrdinal]!;
+      expect(plan).toMatchObject({
+        from: "J-801",
+        to: "J-802",
+        ownerContainerId: "root",
+        archetype: "adjacent_forward_root_step",
+        sourceEndpoint: {
+          itemId: "J-801",
+          portId: "J-801__flow_out",
+          side: "east",
+          x: 256,
+          y: 56,
+          offset: 24
+        },
+        targetEndpoint: {
+          itemId: "J-802",
+          portId: "J-802__flow_in",
+          side: "west",
+          x: 296,
+          y: 56,
+          offset: 24
+        },
+        markers: { end: "arrow" },
+        stageGates: [],
+        duplicateFan: {
+          policy: "distinct_nominal_fan",
+          groupEdgeIds: duplicateIds,
+          groupSize: 3,
+          groupOrdinal,
+          laneIndex,
+          axis: "horizontal",
+          nominalCoordinate: 56 + laneIndex * JOURNEY_MAP_TRACK_SEPARATION,
+          order: 0,
+          locked: false
+        }
+      });
+      expect(plan.priority).toEqual({
+        archetypeRank: 3,
+        sourceRootOrder: 0,
+        sourceStepOrder: 0,
+        authorOrder: groupOrdinal,
+        targetRootOrder: 1,
+        targetStepOrder: 0,
+        sameEndpointOrdinal: groupOrdinal,
+        exactIdentityOrdinal: groupOrdinal === 2 ? 1 : 0,
+        edgeId: duplicateIds[groupOrdinal]
+      });
+      expect(plan.topologyModifiers).toBeUndefined();
+      expect(plan.branch).toBeUndefined();
+      expect(plan.join).toBeUndefined();
+      expect(plan.cycleComponent).toBeUndefined();
+      expect(plan.stageLocalBypass).toBeUndefined();
+      expect(plan.rootOuterBypass).toBeUndefined();
+      expect(plan.selfLoopTrack).toBeUndefined();
+      expect(plan.step2Route.points).toEqual(expectedRoutes[groupOrdinal]);
+      expect(plan.provisionalRoute.points).toEqual(expectedRoutes[groupOrdinal]);
+      expect(plan.finalBasicRoute.points).toEqual(expectedRoutes[groupOrdinal]);
+    }
+    expect(plans[0]!.duplicateFan).toEqual({
+      policy: "distinct_nominal_fan",
+      groupEdgeIds: duplicateIds,
+      groupSize: 3,
+      groupOrdinal: 0,
+      laneIndex: 0,
+      axis: "horizontal",
+      nominalCoordinate: 56,
+      span: { start: 256, end: 296 },
+      segmentIndex: 0,
+      order: 0,
+      locked: false
+    });
+    for (const [index, coordinate] of [[1, 40], [2, 72]] as const) {
+      expect(plans[index]!.duplicateFan).toEqual({
+        policy: "distinct_nominal_fan",
+        groupEdgeIds: duplicateIds,
+        groupSize: 3,
+        groupOrdinal: index,
+        laneIndex: index === 1 ? -1 : 1,
+        axis: "horizontal",
+        nominalCoordinate: coordinate,
+        span: { start: 268, end: 284 },
+        segmentIndex: 2,
+        sourceControl: {
+          axis: "vertical",
+          nominalCoordinate: 268,
+          span: { start: Math.min(56, coordinate), end: Math.max(56, coordinate) },
+          segmentIndex: 1,
+          order: 0,
+          locked: false
+        },
+        targetControl: {
+          axis: "vertical",
+          nominalCoordinate: 284,
+          span: { start: Math.min(56, coordinate), end: Math.max(56, coordinate) },
+          segmentIndex: 3,
+          order: 0,
+          locked: false
+        },
+        order: 0,
+        locked: false
+      });
+    }
+    const buckets = new Map(fixture.routingStages.nodeEdgeBuckets.map((bucket) => [
+      bucket.nodeId,
+      bucket
+    ]));
+    expect(buckets.get("J-801")?.east.startingConnectorIds).toEqual(duplicateIds);
+    expect(buckets.get("J-802")?.west.endingConnectorIds).toEqual(duplicateIds);
+    expect(fixture.routingStages.deferredConnectors).toEqual([]);
+    expect(fixture.routingStages.failedConnectorIds).toEqual([]);
+    expect(fixture.routingStages.diagnostics).toEqual([
+      expect.objectContaining({
+        code: "renderer.scene.journey_map_step_only",
+        severity: "info",
+        targetId: "J-801"
+      })
+    ]);
+    for (const stage of ["step2", "provisional", "final_basic"] as const) {
+      expect(validateJourneyMapRoutes(
+        plans,
+        fixture.preRoutingPositionedScene,
+        stage,
+        fixture.measuredScene
+      )).toEqual([]);
+    }
+    expectExactPartition(fixture);
+  });
+
+  it("keeps group assignment deterministic and recovers the canonical direct base for one occurrence", async () => {
+    const fixture = await buildFixture("duplicate");
+    const geometry = (routing: JourneyMapRoutingStages) => routing.connectorPlans.map((plan) => ({
+      id: plan.id,
+      ownerContainerId: plan.ownerContainerId,
+      archetype: plan.archetype,
+      priority: plan.priority,
+      sourceEndpoint: plan.sourceEndpoint,
+      targetEndpoint: plan.targetEndpoint,
+      duplicateFan: plan.duplicateFan,
+      step2Route: plan.step2Route,
+      provisionalRoute: plan.provisionalRoute,
+      finalBasicRoute: plan.finalBasicRoute
+    }));
+    const reversed = structuredClone(fixture.measuredScene) as MeasuredScene;
+    reversed.edges.reverse();
+    expect(geometry(buildJourneyMapRoutingStages(
+      reversed,
+      fixture.preRoutingPositionedScene
+    ))).toEqual(geometry(fixture.routingStages));
+
+    const annotationOnly = structuredClone(fixture.measuredScene) as MeasuredScene;
+    for (const edge of annotationOnly.edges) {
+      edge.role = "annotation-only-role";
+      edge.classes = [...edge.classes, "annotation-only-class"];
+      edge.label = {
+        lines: ["erased duplicate annotation"],
+        width: 200,
+        height: 16,
+        lineHeight: 16,
+        textStyleRole: "edge_label"
+      };
+    }
+    expect(geometry(buildJourneyMapRoutingStages(
+      annotationOnly,
+      fixture.preRoutingPositionedScene
+    ))).toEqual(geometry(fixture.routingStages));
+
+    const singleOccurrence = structuredClone(fixture.measuredScene) as MeasuredScene;
+    singleOccurrence.edges = [singleOccurrence.edges[0]!];
+    const recovered = buildJourneyMapRoutingStages(
+      singleOccurrence,
+      fixture.preRoutingPositionedScene
+    );
+    expect(recovered.connectorPlans).toHaveLength(1);
+    expect(recovered.connectorPlans[0]).toMatchObject({
+      id: duplicateIds[0],
+      archetype: "adjacent_forward_root_step",
+      priority: { archetypeRank: 3 },
+      step2Route: { points: expectedRoutes[0] }
+    });
+    expect(recovered.connectorPlans[0]?.duplicateFan).toBeUndefined();
+    expect(recovered.deferredConnectors).toEqual([]);
+    expect(recovered.failedConnectorIds).toEqual([]);
+  });
+
+  it("rejects malformed fan contracts and fails supported groups atomically", async () => {
+    const fixture = await buildFixture("duplicate");
+    const [direct, upper, lower] = fixture.routingStages.connectorPlans;
+    const malformedPlans: JourneyMapConnectorPlan[] = [];
+    const mutate = (
+      original: JourneyMapConnectorPlan,
+      mutation: (candidate: JourneyMapConnectorPlan) => void
+    ) => {
+      const candidate = structuredClone(original) as JourneyMapConnectorPlan;
+      mutation(candidate);
+      malformedPlans.push(candidate);
+    };
+    mutate(direct!, (plan) => { plan.duplicateFan!.groupEdgeIds.reverse(); });
+    mutate(direct!, (plan) => { plan.duplicateFan!.groupSize = 2; });
+    mutate(direct!, (plan) => { plan.duplicateFan!.groupOrdinal = 1; });
+    mutate(direct!, (plan) => { plan.duplicateFan!.laneIndex = -1; });
+    mutate(direct!, (plan) => { plan.duplicateFan!.nominalCoordinate = 40; });
+    mutate(direct!, (plan) => { plan.duplicateFan!.span.start += 1; });
+    mutate(direct!, (plan) => { plan.duplicateFan!.segmentIndex = 2; });
+    mutate(direct!, (plan) => { plan.duplicateFan!.locked = true as false; });
+    mutate(upper!, (plan) => { plan.duplicateFan!.sourceControl!.nominalCoordinate += 1; });
+    mutate(upper!, (plan) => { plan.duplicateFan!.targetControl!.span.end += 1; });
+    mutate(upper!, (plan) => { plan.duplicateFan!.sourceControl!.segmentIndex = 3; });
+    mutate(upper!, (plan) => { plan.priority.archetypeRank = 4; });
+    mutate(upper!, (plan) => { plan.ownerContainerId = "not-root"; });
+    mutate(upper!, (plan) => { plan.authorOrder += 1; });
+    mutate(upper!, (plan) => { plan.topologyModifiers = ["branch"]; });
+    mutate(upper!, (plan) => { delete plan.markers; });
+    for (const malformed of malformedPlans) {
+      expect(validateJourneyMapRoutes(
+        [malformed],
+        fixture.preRoutingPositionedScene,
+        "provisional",
+        fixture.measuredScene
+      ).map((diagnostic) => diagnostic.code)).toContain(
+        "renderer.routing.journey_map_archetype_fallback"
+      );
+    }
+    const swappedRoute = structuredClone(upper!) as JourneyMapConnectorPlan;
+    swappedRoute.provisionalRoute = structuredClone(lower!.provisionalRoute);
+    expect(validateJourneyMapRoutes(
+      [swappedRoute],
+      fixture.preRoutingPositionedScene,
+      "provisional",
+      fixture.measuredScene
+    ).map((diagnostic) => diagnostic.code)).toContain(
+      "renderer.routing.journey_map_archetype_fallback"
+    );
+    expect(validateJourneyMapRoutes(
+      [direct!],
+      fixture.preRoutingPositionedScene,
+      "provisional"
+    ).map((diagnostic) => diagnostic.code)).toContain(
+      "renderer.routing.journey_map_archetype_fallback"
+    );
+
+    for (const role of ["journey_flow_out", "journey_flow_in"] as const) {
+      const missingPortScene = structuredClone(
+        fixture.preRoutingPositionedScene
+      ) as PositionedScene;
+      const node = findNode(missingPortScene, role === "journey_flow_out" ? "J-801" : "J-802");
+      node.ports = node.ports.filter((port) => port.role !== role);
+      const missingPort = buildJourneyMapRoutingStages(fixture.measuredScene, missingPortScene);
+      expect(missingPort.connectorPlans).toEqual([]);
+      expect(missingPort.failedConnectorIds).toEqual(duplicateIds);
+      expect(missingPort.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
+        "renderer.routing.journey_map_unresolved_endpoint"
+      );
+    }
+    const malformedPortSide = structuredClone(
+      fixture.preRoutingPositionedScene
+    ) as PositionedScene;
+    findNode(malformedPortSide, "J-802").ports.find((port) =>
+      port.role === "journey_flow_in"
+    )!.side = "south";
+    const wrongSide = buildJourneyMapRoutingStages(fixture.measuredScene, malformedPortSide);
+    expect(wrongSide.connectorPlans).toEqual([]);
+    expect(wrongSide.failedConnectorIds).toEqual(duplicateIds);
+
+    const unequalEndpointY = structuredClone(
+      fixture.preRoutingPositionedScene
+    ) as PositionedScene;
+    findNode(unequalEndpointY, "J-802").y += 8;
+    const unequalYFailure = buildJourneyMapRoutingStages(
+      fixture.measuredScene,
+      unequalEndpointY
+    );
+    expect(unequalYFailure.connectorPlans).toEqual([]);
+    expect(unequalYFailure.failedConnectorIds).toEqual(duplicateIds);
+
+    const memberMutations: Array<(edge: MeasuredScene["edges"][number]) => void> = [
+      (edge) => { edge.ownerContainerId = "not-root"; },
+      (edge) => { edge.routing.sourcePortRole = "not-flow-out"; },
+      (edge) => { edge.routing.targetPortRole = "not-flow-in"; },
+      (edge) => { delete edge.markers; },
+      (edge) => { edge.markers = { start: "arrow", end: "arrow" }; }
+    ];
+    for (const mutateMember of memberMutations) {
+      const malformedMember = structuredClone(fixture.measuredScene) as MeasuredScene;
+      mutateMember(malformedMember.edges[1]!);
+      const atomicFailure = buildJourneyMapRoutingStages(
+        malformedMember,
+        fixture.preRoutingPositionedScene
+      );
+      expect(atomicFailure.connectorPlans).toEqual([]);
+      expect(atomicFailure.deferredConnectors).toEqual([]);
+      expect(atomicFailure.failedConnectorIds).toEqual(duplicateIds);
+      expect(validateJourneyMapRoutes(
+        fixture.routingStages.connectorPlans,
+        fixture.preRoutingPositionedScene,
+        "provisional",
+        malformedMember
+      ).map((diagnostic) => diagnostic.code)).toContain(
+        "renderer.routing.journey_map_archetype_fallback"
+      );
+    }
+
+    const malformedIdentityMutations: Array<
+      (metadata: NonNullable<MeasuredScene["edges"][number]["viewMetadata"]>["journeyMap"])
+        => void
+    > = [
+      (metadata) => { metadata!.authorOrder = -1; },
+      (metadata) => { metadata!.authorOrder = 0; },
+      (metadata) => { metadata!.sameEndpointOrdinal = 7; },
+      (metadata) => { metadata!.exactIdentityOrdinal = -1; }
+    ];
+    for (const mutateIdentity of malformedIdentityMutations) {
+      const malformedIdentity = structuredClone(fixture.measuredScene) as MeasuredScene;
+      const metadata = malformedIdentity.edges[1]!.viewMetadata?.journeyMap;
+      expect(metadata).toBeDefined();
+      mutateIdentity(metadata);
+      const deferred = buildJourneyMapRoutingStages(
+        malformedIdentity,
+        fixture.preRoutingPositionedScene
+      );
+      expect(deferred.connectorPlans).toEqual([]);
+      expect(deferred.deferredConnectors).toHaveLength(3);
+      expect(deferred.deferredConnectors.every((edge) =>
+        edge.deferredFamilies.includes("duplicate")
+      )).toBe(true);
+      expect(deferred.failedConnectorIds).toEqual([]);
+    }
+
+    const narrowGap = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
+    findNode(narrowGap, "J-802").x = 280;
+    const capacityFailure = buildJourneyMapRoutingStages(fixture.measuredScene, narrowGap);
+    expect(capacityFailure.connectorPlans).toEqual([]);
+    expect(capacityFailure.deferredConnectors).toEqual([]);
+    expect(capacityFailure.failedConnectorIds).toEqual(duplicateIds);
+    expect(capacityFailure.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(
+      expect.arrayContaining([
+        "renderer.routing.journey_map_archetype_fallback",
+        "renderer.routing.journey_map_edge_omitted"
+      ])
+    );
+
+    const insufficientRootHeight = structuredClone(
+      fixture.preRoutingPositionedScene
+    ) as PositionedScene;
+    insufficientRootHeight.root.height = 72;
+    const rootCapacityFailure = buildJourneyMapRoutingStages(
+      fixture.measuredScene,
+      insufficientRootHeight
+    );
+    expect(rootCapacityFailure.connectorPlans).toEqual([]);
+    expect(rootCapacityFailure.failedConnectorIds).toEqual(duplicateIds);
+
+    const obstructed = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
+    const obstacle = structuredClone(findNode(obstructed, "J-801")) as PositionedNode;
+    obstacle.id = "J-duplicate-obstacle";
+    obstacle.x = 270;
+    obstacle.y = 44;
+    obstacle.width = 12;
+    obstacle.height = 24;
+    obstacle.content = [];
+    obstacle.ports = [];
+    obstacle.viewMetadata = {
+      journeyMap: {
+        kind: "step",
+        rootOrder: 2,
+        globalStepOrder: 2,
+        uncontained: true
+      }
+    };
+    obstructed.root.children.push(obstacle);
+    const obstacleFailure = buildJourneyMapRoutingStages(fixture.measuredScene, obstructed);
+    expect(obstacleFailure.connectorPlans).toEqual([]);
+    expect(obstacleFailure.failedConnectorIds).toEqual(duplicateIds);
+
+    for (const groupSize of [4, 5]) {
+      const oversized = structuredClone(fixture.measuredScene) as MeasuredScene;
+      for (let ordinal = 3; ordinal < groupSize; ordinal += 1) {
+        const member = structuredClone(oversized.edges[ordinal === 3 ? 1 : 2]!);
+        member.id = `synthetic-duplicate-occurrence-${groupSize}-${ordinal}`;
+        const metadata = member.viewMetadata?.journeyMap;
+        expect(metadata).toBeDefined();
+        metadata!.authorOrder = ordinal;
+        metadata!.sameEndpointOrdinal = ordinal;
+        metadata!.exactIdentityOrdinal = ordinal - 2;
+        oversized.edges.push(member);
+      }
+      const oversizedFailure = buildJourneyMapRoutingStages(
+        oversized,
+        fixture.preRoutingPositionedScene
+      );
+      expect(oversizedFailure.connectorPlans).toEqual([]);
+      expect(oversizedFailure.deferredConnectors).toEqual([]);
+      expect(oversizedFailure.failedConnectorIds).toEqual(oversized.edges.map((edge) => edge.id));
+      expect(oversizedFailure.diagnostics.filter((diagnostic) =>
+        diagnostic.code === "renderer.routing.journey_map_archetype_fallback"
+      )).toHaveLength(groupSize);
+    }
+
+    const unsupported = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
+    const unsupportedMetadata = findNode(unsupported, "J-802").viewMetadata?.journeyMap;
+    expect(unsupportedMetadata?.kind).toBe("step");
+    if (unsupportedMetadata?.kind === "step") {
+      unsupportedMetadata.rootOrder = 2;
+    }
+    const unsupportedResult = buildJourneyMapRoutingStages(fixture.measuredScene, unsupported);
+    expect(unsupportedResult.connectorPlans).toEqual([]);
+    expect(unsupportedResult.deferredConnectors).toHaveLength(3);
+    expect(unsupportedResult.failedConnectorIds).toEqual([]);
+
+    const repeatedStableId = structuredClone(fixture.measuredScene) as MeasuredScene;
+    repeatedStableId.edges.push(structuredClone(repeatedStableId.edges[0]!));
+    const repeated = buildJourneyMapRoutingStages(
+      repeatedStableId,
+      fixture.preRoutingPositionedScene
+    );
+    expect(repeated.connectorPlans.filter((plan) =>
+      plan.from === "J-801" && plan.to === "J-802"
+    )).toEqual([]);
+    expect(repeated.failedConnectorIds).toContain(duplicateIds[0]);
+    expect(repeated.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
+      "renderer.routing.journey_map_edge_duplicated"
+    );
+  });
+
+  it("defers every duplicate morphology outside the accepted adjacent root-Step group", async () => {
+    const primary = await buildFixture("primary");
+    const topology = await buildFixture("topology");
+    const assertGroupDeferred = (
+      measuredScene: MeasuredScene,
+      positionedScene: PositionedScene,
+      groupIds: readonly string[]
+    ) => {
+      const result = buildJourneyMapRoutingStages(measuredScene, positionedScene);
+      expect(result.connectorPlans.filter((plan) => groupIds.includes(plan.id))).toEqual([]);
+      expect(result.failedConnectorIds.filter((id) => groupIds.includes(id))).toEqual([]);
+      expect(result.deferredConnectors.filter((edge) => groupIds.includes(edge.id))).toEqual(
+        expect.arrayContaining(groupIds.map((id) => expect.objectContaining({
+          id,
+          deferredFamilies: expect.arrayContaining(["duplicate"])
+        })))
+      );
+    };
+
+    const sameStageBase = primary.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-101" && edge.to.itemId === "J-102"
+    )!;
+    const sameStageGroup = duplicateGroupFrom(sameStageBase, "unsupported-contained");
+    assertGroupDeferred(
+      { ...structuredClone(primary.measuredScene), edges: sameStageGroup },
+      primary.preRoutingPositionedScene,
+      sameStageGroup.map((edge) => edge.id)
+    );
+
+    const crossStageBase = primary.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-103" && edge.to.itemId === "J-201"
+    )!;
+    const crossStageGroup = duplicateGroupFrom(crossStageBase, "unsupported-cross-stage");
+    assertGroupDeferred(
+      { ...structuredClone(primary.measuredScene), edges: crossStageGroup },
+      primary.preRoutingPositionedScene,
+      crossStageGroup.map((edge) => edge.id)
+    );
+
+    const backwardBase = topology.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-714" && edge.to.itemId === "J-713"
+    )!;
+    const backwardGroup = duplicateGroupFrom(backwardBase, "unsupported-backward");
+    assertGroupDeferred(
+      { ...structuredClone(topology.measuredScene), edges: backwardGroup },
+      topology.preRoutingPositionedScene,
+      backwardGroup.map((edge) => edge.id)
+    );
+
+    const selfLoopBase = topology.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-713" && edge.to.itemId === "J-713"
+    )!;
+    const selfLoopGroup = duplicateGroupFrom(selfLoopBase, "unsupported-self-loop");
+    assertGroupDeferred(
+      { ...structuredClone(topology.measuredScene), edges: selfLoopGroup },
+      topology.preRoutingPositionedScene,
+      selfLoopGroup.map((edge) => edge.id)
+    );
+
+    const cycleForwardBase = topology.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-701" && edge.to.itemId === "J-702"
+    )!;
+    const cycleReturn = structuredClone(topology.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-702" && edge.to.itemId === "J-701"
+    )!);
+    const cycleGroup = duplicateGroupFrom(cycleForwardBase, "unsupported-cycle");
+    assertGroupDeferred(
+      { ...structuredClone(topology.measuredScene), edges: [...cycleGroup, cycleReturn] },
+      topology.preRoutingPositionedScene,
+      cycleGroup.map((edge) => edge.id)
+    );
+
+    const rootBase = primary.measuredScene.edges.find((edge) =>
+      edge.from.itemId === "J-250" && edge.to.itemId === "J-260"
+    )!;
+    const mixedBranchGroup = duplicateGroupFrom(rootBase, "unsupported-mixed-branch");
+    const extraOutgoing = structuredClone(rootBase);
+    extraOutgoing.id = "unsupported-extra-outgoing";
+    extraOutgoing.to = { ...extraOutgoing.to, itemId: "J-401", portId: undefined };
+    extraOutgoing.viewMetadata!.journeyMap!.authorOrder = 3;
+    assertGroupDeferred(
+      {
+        ...structuredClone(primary.measuredScene),
+        edges: [...mixedBranchGroup, extraOutgoing]
+      },
+      primary.preRoutingPositionedScene,
+      mixedBranchGroup.map((edge) => edge.id)
+    );
+
+    const mixedJoinGroup = duplicateGroupFrom(rootBase, "unsupported-mixed-join");
+    const extraIncoming = structuredClone(rootBase);
+    extraIncoming.id = "unsupported-extra-incoming";
+    extraIncoming.from = { ...extraIncoming.from, itemId: "J-401", portId: undefined };
+    extraIncoming.viewMetadata!.journeyMap!.authorOrder = 3;
+    assertGroupDeferred(
+      {
+        ...structuredClone(primary.measuredScene),
+        edges: [...mixedJoinGroup, extraIncoming]
+      },
+      primary.preRoutingPositionedScene,
+      mixedJoinGroup.map((edge) => edge.id)
+    );
+  });
+
+  it("renders deterministic duplicate-fan SVG and derives PNG from that exact SVG", async () => {
+    const fixture = await buildFixture("duplicate");
+    const first = await renderJourneyMapRoutingArtifacts(
+      fixture.projection,
+      fixture.graph,
+      fixture.bundle,
+      fixture.view,
+      "strict"
+    );
+    const second = await renderJourneyMapRoutingArtifacts(
+      fixture.projection,
+      fixture.graph,
+      fixture.bundle,
+      fixture.view,
+      "strict"
+    );
+    const direct = await renderPositionedSceneToPng(
+      first.routingStages.provisionalPositionedScene
+    );
+    expect(first.provisionalSvg).toBe(direct.svg);
+    expect(sha256(first.provisionalPng)).toBe(sha256(direct.png));
+    expect(first.provisionalSvg).toBe(second.provisionalSvg);
+    expect(sha256(first.provisionalPng)).toBe(sha256(second.provisionalPng));
+    for (const edgeId of duplicateIds) {
+      expect(first.provisionalSvg).toContain(`data-edge-id="${edgeId}"`);
+    }
+    expect((first.provisionalSvg.match(/data-edge-id=/g) ?? [])).toHaveLength(3);
+    expect(first.diagnostics).toEqual([
+      expect.objectContaining({
+        code: "renderer.scene.journey_map_step_only",
+        severity: "info",
+        targetId: "J-801"
+      })
+    ]);
     expect(first.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
