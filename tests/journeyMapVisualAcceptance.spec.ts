@@ -53,6 +53,43 @@ function routeContainsPoint(route: PositionedRoute, point: Point): boolean {
   });
 }
 
+function routesIntersect(left: PositionedRoute, right: PositionedRoute): boolean {
+  const segments = (route: PositionedRoute) => route.points.slice(1).map((end, index) => ({
+    start: route.points[index]!,
+    end
+  }));
+  const between = (value: number, first: number, second: number) =>
+    value >= Math.min(first, second) && value <= Math.max(first, second);
+  return segments(left).some((leftSegment) => segments(right).some((rightSegment) => {
+    const leftHorizontal = leftSegment.start.y === leftSegment.end.y;
+    const rightHorizontal = rightSegment.start.y === rightSegment.end.y;
+    if (leftHorizontal && rightHorizontal) {
+      return leftSegment.start.y === rightSegment.start.y
+        && Math.max(
+          Math.min(leftSegment.start.x, leftSegment.end.x),
+          Math.min(rightSegment.start.x, rightSegment.end.x)
+        ) <= Math.min(
+          Math.max(leftSegment.start.x, leftSegment.end.x),
+          Math.max(rightSegment.start.x, rightSegment.end.x)
+        );
+    }
+    if (!leftHorizontal && !rightHorizontal) {
+      return leftSegment.start.x === rightSegment.start.x
+        && Math.max(
+          Math.min(leftSegment.start.y, leftSegment.end.y),
+          Math.min(rightSegment.start.y, rightSegment.end.y)
+        ) <= Math.min(
+          Math.max(leftSegment.start.y, leftSegment.end.y),
+          Math.max(rightSegment.start.y, rightSegment.end.y)
+        );
+    }
+    const horizontal = leftHorizontal ? leftSegment : rightSegment;
+    const vertical = leftHorizontal ? rightSegment : leftSegment;
+    return between(vertical.start.x, horizontal.start.x, horizontal.end.x)
+      && between(horizontal.start.y, vertical.start.y, vertical.end.y);
+  }));
+}
+
 describe("journey map Gate 6 visual acceptance", () => {
   it("keeps the isolated same-Stage skip below the Step row with clear south ports", async () => {
     const bundle = await loadBundle(manifestPath);
@@ -259,7 +296,7 @@ describe("journey map Gate 6 visual acceptance", () => {
 
     const topology = await renderFixture(topologyFixturePath);
     const topologyScene = topology.routingStages.provisionalPositionedScene;
-    expect(topologyScene.edges).toHaveLength(8);
+    expect(topologyScene.edges).toHaveLength(9);
     const enterStage = topologyScene.edges.find((edge) =>
       edge.from.itemId === "J-790" && edge.to.itemId === "J-701"
     );
@@ -452,7 +489,7 @@ describe("journey map Gate 6 visual acceptance", () => {
 
     const topology = await renderFixture(topologyFixturePath);
     const topologyScene = topology.routingStages.provisionalPositionedScene;
-    expect(topologyScene.edges).toHaveLength(8);
+    expect(topologyScene.edges).toHaveLength(9);
     const topologyReturn = topologyScene.edges.find((edge) =>
       edge.from.itemId === "J-714" && edge.to.itemId === "J-713"
     );
@@ -503,7 +540,7 @@ describe("journey map Gate 6 visual acceptance", () => {
 
     const topology = await renderFixture(topologyFixturePath);
     const topologyScene = topology.routingStages.provisionalPositionedScene;
-    expect(topologyScene.edges).toHaveLength(8);
+    expect(topologyScene.edges).toHaveLength(9);
     const firstForward = topologyScene.edges.find((edge) =>
       edge.from.itemId === "J-701" && edge.to.itemId === "J-702"
     );
@@ -582,6 +619,91 @@ describe("journey map Gate 6 visual acceptance", () => {
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
     expect(compressed.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+});
+
+describe("journey map Gate 6 self-loop visual acceptance", () => {
+  it("separates the clockwise upper collar from the accepted backward track", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: topologyFixturePath,
+      text: await readFile(topologyFixturePath, "utf8")
+    }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+    const projected = projectView(compiled.graph!, bundle, "journey_map");
+    expect(projected.diagnostics).toEqual([]);
+    expect(projected.projection).toBeDefined();
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const rendered = await renderJourneyMapRoutingArtifacts(
+      projected.projection!, compiled.graph!, bundle, view!, "strict"
+    );
+    const scene = rendered.routingStages.provisionalPositionedScene;
+    expect(scene.edges).toHaveLength(9);
+    const selfLoop = scene.edges.find((edge) =>
+      edge.from.itemId === "J-713" && edge.to.itemId === "J-713"
+    );
+    const backward = scene.edges.find((edge) =>
+      edge.from.itemId === "J-714" && edge.to.itemId === "J-713"
+    );
+    expect(selfLoop).toBeDefined();
+    expect(backward).toBeDefined();
+    expect(selfLoop).toMatchObject({
+      from: { itemId: "J-713", portId: "J-713__flow_out", x: 1532, y: 116 },
+      to: { itemId: "J-713", portId: "J-713__flow_in", x: 1308, y: 116 }
+    });
+    expect(selfLoop!.route.points).toEqual([
+      { x: 1532, y: 116 }, { x: 1544, y: 116 }, { x: 1544, y: 80 },
+      { x: 1296, y: 80 }, { x: 1296, y: 116 }, { x: 1308, y: 116 }
+    ]);
+    expect(getTerminalSegmentLength(selfLoop!)).toBe(MIN_ARROW_MARKER_LEG);
+
+    const items = flattenPositionedItems(scene.root);
+    const nodeBoxes = items
+      .filter((item): item is PositionedNode => item.kind === "node")
+      .map((node) => ({
+        itemId: node.id, x: node.x, y: node.y, width: node.width, height: node.height
+      }));
+    expectNoRouteIntersectionsWithNonEndpointBoxes([selfLoop!], nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes([selfLoop!], nodeBoxes);
+    for (const header of collectHeaderBoxes(scene.root)) {
+      expect(routeIntersectsRect(selfLoop!.route, header)).toBe(false);
+    }
+    const owner = items.find((item): item is PositionedContainer =>
+      item.kind === "container" && item.id === "G-700"
+    );
+    expect(owner).toBeDefined();
+    for (const point of selfLoop!.route.points) {
+      expect(point.x).toBeGreaterThan(owner!.x);
+      expect(point.x).toBeLessThan(owner!.x + owner!.width);
+      expect(point.y).toBeGreaterThan(
+        owner!.y + (owner!.chrome.headerBandHeight ?? 0)
+      );
+      expect(point.y).toBeLessThan(owner!.y + owner!.height);
+    }
+    expect(routesIntersect(selfLoop!.route, backward!.route)).toBe(false);
+    const acceptedEarlierIds = [
+      "J-790__PRECEDES__J-701__661a1f868e72e80d2f47aedd3157ec09171f344f4a9aa62486fc7da5457bd384__0",
+      "J-790__PRECEDES__J-791__71d18a11d3f80b2283cb17a0d68e86a327e54fca708def24c118a265fc3cd6be__0",
+      "J-714__PRECEDES__J-791__37d24514299e09f03f8d2a42e59503f5de765431b1348d451dfadcb4d8555722__0",
+      "J-701__PRECEDES__J-702__62dd9eaed887ffe62145782afe1dc6bc99c19e1b2bf7a5d307b531d232493540__0",
+      "J-702__PRECEDES__J-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0",
+      "J-711__PRECEDES__J-712__9a1802733c65b60fc3855bbf277a593f8778b7ddae303150862ec114578c2c57__0",
+      "J-712__PRECEDES__J-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0",
+      "J-714__PRECEDES__J-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0"
+    ];
+    const acceptedEarlier = scene.edges.filter((edge) => edge.id !== selfLoop!.id);
+    expect(acceptedEarlier.map((edge) => edge.id)).toEqual(acceptedEarlierIds);
+    for (const acceptedEdge of acceptedEarlier) {
+      expect(routesIntersect(selfLoop!.route, acceptedEdge.route), acceptedEdge.id).toBe(false);
+    }
+    expect(routeContainsPoint(selfLoop!.route, { x: 1500, y: 80 })).toBe(true);
+    expect(routeContainsPoint(backward!.route, { x: 1500, y: 152 })).toBe(true);
+    expect(rendered.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
+    expect(rendered.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
   });

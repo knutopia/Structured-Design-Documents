@@ -36,7 +36,8 @@ export type JourneyMapRouteArchetype =
   | "backward_root_step"
   | "cycle_forward_same_stage"
   | "cycle_return_same_stage"
-  | "cycle_return_cross_stage";
+  | "cycle_return_cross_stage"
+  | "self_loop";
 
 export type JourneyMapBasicRouteArchetype =
   | "adjacent_forward_same_stage"
@@ -200,6 +201,32 @@ export interface JourneyMapCycleComponentMetadata {
   role: JourneyMapCycleComponentRole;
 }
 
+export interface JourneyMapSelfLoopControl {
+  axis: "vertical";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+  order: 0;
+  locked: false;
+}
+
+export interface JourneyMapSelfLoopTrack {
+  nodeId: string;
+  loopSide: "north";
+  axis: "horizontal";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+  sourceControl: JourneyMapSelfLoopControl;
+  targetControl: JourneyMapSelfLoopControl;
+  order: 0;
+  locked: false;
+}
+
 export interface JourneyMapNodeEdgeBucketLists {
   startingConnectorIds: string[];
   endingConnectorIds: string[];
@@ -228,6 +255,7 @@ export interface JourneyMapConnectorPlan {
   stageGates: JourneyMapStageGate[];
   stageLocalBypass?: JourneyMapStageLocalBypass;
   rootOuterBypass?: JourneyMapRootOuterBypass;
+  selfLoopTrack?: JourneyMapSelfLoopTrack;
   cycleComponent?: JourneyMapCycleComponentMetadata;
   topologyModifiers?: ["branch"] | ["join"];
   branch?: JourneyMapBranchPlan;
@@ -587,8 +615,7 @@ function resolveRouteEligibility(
     return undefined;
   }
   const endpointKey = `${source.node.id}\u0000${target.node.id}`;
-  if ((fullDegrees.sameEndpointCountByKey.get(endpointKey) ?? 0) !== 1
-    || source.node.id === target.node.id) {
+  if ((fullDegrees.sameEndpointCountByKey.get(endpointKey) ?? 0) !== 1) {
     return undefined;
   }
   const sourceStage = source.metadata.stageId
@@ -602,6 +629,24 @@ function resolveRouteEligibility(
   }
   const sourceStepOrder = source.metadata.stepOrder;
   const targetStepOrder = target.metadata.stepOrder;
+  if (source.node.id === target.node.id) {
+    if (sourceStage
+      && targetStage
+      && sourceStage.stage.id === targetStage.stage.id
+      && sourceStepOrder !== undefined
+      && targetStepOrder !== undefined) {
+      return {
+        archetype: "self_loop",
+        source,
+        target,
+        sourceStage,
+        targetStage,
+        sourceStepOrder,
+        targetStepOrder
+      };
+    }
+    return undefined;
+  }
   const cycleRole = cycleComponent?.role;
   const isSimpleCycle = cycleComponent?.componentKind === "simple_reciprocal"
     && (cycleRole === "forward" || cycleRole === "return");
@@ -1083,6 +1128,113 @@ function buildStageGates(
       locked: true
     }
   ];
+}
+
+function buildSelfLoopTrack(
+  eligibility: RouteEligibility,
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint,
+  index: JourneyMapPositionedIndex
+): JourneyMapSelfLoopTrack | undefined {
+  if (eligibility.archetype !== "self_loop"
+    || eligibility.source.node.id !== eligibility.target.node.id
+    || !eligibility.sourceStage
+    || eligibility.sourceStage.stage.id !== eligibility.targetStage?.stage.id
+    || source.itemId !== target.itemId
+    || source.side !== "east"
+    || target.side !== "west"
+    || source.y !== target.y) {
+    return undefined;
+  }
+  const node = eligibility.source.node;
+  const stage = eligibility.sourceStage.stage;
+  const rightControlX = roundMetric(source.x + MIN_ARROW_MARKER_LEG);
+  const leftControlX = roundMetric(target.x - MIN_ARROW_MARKER_LEG);
+  const nominalCoordinate = roundMetric(node.y - MIN_ARROW_MARKER_LEG);
+  const headerBottom = roundMetric(stage.y + (stage.chrome.headerBandHeight ?? 0));
+  const stageRight = roundMetric(stage.x + stage.width);
+  if (leftControlX <= stage.x
+    || rightControlX >= stageRight
+    || nominalCoordinate <= headerBottom
+    || rightControlX - source.x < MIN_ARROW_MARKER_LEG
+    || target.x - leftControlX < MIN_ARROW_MARKER_LEG
+    || nominalCoordinate >= source.y) {
+    return undefined;
+  }
+  const controlSpan = {
+    start: roundMetric(Math.min(source.y, nominalCoordinate)),
+    end: roundMetric(Math.max(source.y, nominalCoordinate))
+  };
+  const track: JourneyMapSelfLoopTrack = {
+    nodeId: node.id,
+    loopSide: "north",
+    axis: "horizontal",
+    nominalCoordinate,
+    span: {
+      start: leftControlX,
+      end: rightControlX
+    },
+    sourceControl: {
+      axis: "vertical",
+      nominalCoordinate: rightControlX,
+      span: { ...controlSpan },
+      order: 0,
+      locked: false
+    },
+    targetControl: {
+      axis: "vertical",
+      nominalCoordinate: leftControlX,
+      span: { ...controlSpan },
+      order: 0,
+      locked: false
+    },
+    order: 0,
+    locked: false
+  };
+  const route = buildSelfLoopRoute(source, target, track);
+  if (!route) {
+    return undefined;
+  }
+  const headerRect: Rect = {
+    id: stage.id,
+    x: stage.x,
+    y: stage.y,
+    width: stage.width,
+    height: stage.chrome.headerBandHeight ?? 0
+  };
+  if (intersectsRoute(route, headerRect)
+    || stage.headerContent.some((block) => intersectsRoute(route, containerContentRect(stage, block)))) {
+    return undefined;
+  }
+  const intersectsUnrelatedStage = index.allStages.some((candidate) =>
+    candidate.stage.id !== stage.id
+    && (intersectsRoute(route, {
+      id: candidate.stage.id,
+      x: candidate.stage.x,
+      y: candidate.stage.y,
+      width: candidate.stage.width,
+      height: candidate.stage.height
+    })
+      || candidate.stage.headerContent.some((block) =>
+        intersectsRoute(route, containerContentRect(candidate.stage, block))
+      ))
+  );
+  if (intersectsUnrelatedStage) {
+    return undefined;
+  }
+  const siblingNodes = stage.children.filter((child): child is PositionedNode =>
+    child.kind === "node" && child.id !== node.id
+  );
+  if (siblingNodes.some((sibling) => intersectsRoute(route, {
+    id: sibling.id,
+    x: sibling.x,
+    y: sibling.y,
+    width: sibling.width,
+    height: sibling.height
+  }))) {
+    return undefined;
+  }
+  return track;
 }
 
 function buildStageLocalBypass(
@@ -1587,6 +1739,56 @@ function buildSingleStageBoundaryRoute(
   };
 }
 
+function buildSelfLoopRoute(
+  source: JourneyMapResolvedEndpoint,
+  target: JourneyMapResolvedEndpoint,
+  track: JourneyMapSelfLoopTrack
+): PositionedRoute | undefined {
+  const sourceControl = track.sourceControl;
+  const targetControl = track.targetControl;
+  if (source.itemId !== target.itemId
+    || track.nodeId !== source.itemId
+    || source.side !== "east"
+    || target.side !== "west"
+    || source.y !== target.y
+    || track.loopSide !== "north"
+    || track.axis !== "horizontal"
+    || track.order !== 0
+    || track.locked !== false
+    || sourceControl.axis !== "vertical"
+    || targetControl.axis !== "vertical"
+    || sourceControl.order !== 0
+    || targetControl.order !== 0
+    || sourceControl.locked !== false
+    || targetControl.locked !== false
+    || sourceControl.nominalCoordinate - source.x < MIN_ARROW_MARKER_LEG
+    || target.x - targetControl.nominalCoordinate < MIN_ARROW_MARKER_LEG
+    || track.nominalCoordinate >= source.y
+    || track.span.start !== targetControl.nominalCoordinate
+    || track.span.end !== sourceControl.nominalCoordinate
+    || JSON.stringify(sourceControl.span) !== JSON.stringify({
+      start: track.nominalCoordinate,
+      end: source.y
+    })
+    || JSON.stringify(targetControl.span) !== JSON.stringify({
+      start: track.nominalCoordinate,
+      end: target.y
+    })) {
+    return undefined;
+  }
+  return {
+    style: "orthogonal",
+    points: cloneRoutePoints([
+      source,
+      { x: sourceControl.nominalCoordinate, y: source.y },
+      { x: sourceControl.nominalCoordinate, y: track.nominalCoordinate },
+      { x: targetControl.nominalCoordinate, y: track.nominalCoordinate },
+      { x: targetControl.nominalCoordinate, y: target.y },
+      target
+    ])
+  };
+}
+
 function buildRootOuterBypassRoute(
   source: JourneyMapResolvedEndpoint,
   target: JourneyMapResolvedEndpoint,
@@ -1874,6 +2076,7 @@ function buildPriority(
       || eligibility.archetype === "cycle_forward_same_stage"
       || eligibility.archetype === "cycle_return_same_stage"
       || eligibility.archetype === "cycle_return_cross_stage"
+      || eligibility.archetype === "self_loop"
       ? 6
       : eligibility.branch
         ? 4
@@ -1997,6 +2200,16 @@ function contentRect(node: PositionedNode, block: MeasuredContentBlock): Rect {
     id: block.id,
     x: node.x + block.x,
     y: node.y + block.y,
+    width: block.width,
+    height: block.height
+  };
+}
+
+function containerContentRect(container: PositionedContainer, block: MeasuredContentBlock): Rect {
+  return {
+    id: block.id,
+    x: container.x + block.x,
+    y: container.y + block.y,
     width: block.width,
     height: block.height
   };
@@ -2126,7 +2339,9 @@ export function validateJourneyMapRoutes(
     : undefined;
   for (const plan of plans) {
     const measuredEdge = measuredEdgeById?.get(plan.id);
-    const expectedCycleComponent = measuredCycleIndex?.componentByEdgeId.get(plan.id);
+    const expectedCycleComponent = measuredEdge?.from.itemId === measuredEdge?.to.itemId
+      ? undefined
+      : measuredCycleIndex?.componentByEdgeId.get(plan.id);
     const expectedEligibility = measuredEdge && measuredDegrees && ordinaryMeasuredDegrees
       ? resolveRouteEligibility(
         measuredEdge,
@@ -2215,15 +2430,22 @@ export function validateJourneyMapRoutes(
         x: indexedStage.stage.x,
         y: indexedStage.stage.y,
         width: indexedStage.stage.width,
-        height: indexedStage.stage.chrome.padding.top + headerBandHeight
+        height: headerBandHeight
       };
-      if (intersectsRoute(route, headerRect)) {
+      const intersectingHeaderContent = indexedStage.stage.headerContent.find((block) =>
+        intersectsRoute(route, containerContentRect(indexedStage.stage, block))
+      );
+      if (intersectsRoute(route, headerRect) || intersectingHeaderContent) {
         pushGeometryDiagnostic(
           diagnostics,
           "renderer.routing.journey_map_stage_header_intersection",
           `Journey edge "${plan.id}" intersects Stage header "${indexedStage.stage.id}".`,
           plan.id,
-          [plan.id, indexedStage.stage.id]
+          [
+            plan.id,
+            indexedStage.stage.id,
+            ...(intersectingHeaderContent ? [intersectingHeaderContent.id] : [])
+          ]
         );
       }
       const sourceStageId = source.metadata.stageId;
@@ -2349,7 +2571,7 @@ export function validateJourneyMapRoutes(
     for (const gate of plan.stageGates) {
       const stage = index.stageById.get(gate.stageId);
       const headerBottom = stage
-        ? stage.stage.y + stage.stage.chrome.padding.top + (stage.stage.chrome.headerBandHeight ?? 0)
+        ? stage.stage.y + (stage.stage.chrome.headerBandHeight ?? 0)
         : Number.NaN;
       const stageBottom = stage ? stage.stage.y + stage.stage.height : Number.NaN;
       const stageRight = stage ? stage.stage.x + stage.stage.width : Number.NaN;
@@ -2595,6 +2817,70 @@ export function validateJourneyMapRoutes(
       ));
     }
 
+    const isSelfLoopArchetype = plan.archetype === "self_loop";
+    const expectedSelfLoopTrack = expectedEligibility
+      ? buildSelfLoopTrack(expectedEligibility, plan.sourceEndpoint, plan.targetEndpoint, index)
+      : undefined;
+    const expectedSelfLoopRoute = expectedSelfLoopTrack
+      ? buildSelfLoopRoute(plan.sourceEndpoint, plan.targetEndpoint, expectedSelfLoopTrack)
+      : undefined;
+    const measuredEdgeMetadata = measuredEdge?.viewMetadata?.journeyMap;
+    const expectedSelfLoopPriority = measuredEdge && measuredEdgeMetadata && expectedEligibility
+      ? buildPriority(measuredEdge, measuredEdgeMetadata, expectedEligibility)
+      : undefined;
+    const sourceFlowPort = source.node.ports.find((port) => port.role === "journey_flow_out");
+    const targetFlowPort = target.node.ports.find((port) => port.role === "journey_flow_in");
+    const usesExactSelfLoopEndpoints = sourceFlowPort !== undefined
+      && targetFlowPort !== undefined
+      && sourceFlowPort.side === "east"
+      && targetFlowPort.side === "west"
+      && plan.sourceEndpoint.portId === sourceFlowPort.id
+      && plan.sourceEndpoint.side === "east"
+      && plan.sourceEndpoint.x === roundMetric(source.node.x + sourceFlowPort.x)
+      && plan.sourceEndpoint.y === roundMetric(source.node.y + sourceFlowPort.y)
+      && plan.sourceEndpoint.offset === roundMetric(sourceFlowPort.y)
+      && plan.targetEndpoint.portId === targetFlowPort.id
+      && plan.targetEndpoint.side === "west"
+      && plan.targetEndpoint.x === roundMetric(target.node.x + targetFlowPort.x)
+      && plan.targetEndpoint.y === roundMetric(target.node.y + targetFlowPort.y)
+      && plan.targetEndpoint.offset === roundMetric(targetFlowPort.y);
+    const selfLoopContractMatches = measuredScene
+      ? isSelfLoopArchetype
+        ? expectedEligibility?.archetype === "self_loop"
+          && expectedEligibility.source.node.id === expectedEligibility.target.node.id
+          && plan.from === plan.to
+          && plan.ownerContainerId === expectedEligibility.sourceStage?.stage.id
+          && measuredEdgeMetadata !== undefined
+          && plan.authorOrder === measuredEdgeMetadata.authorOrder
+          && plan.sameEndpointOrdinal === measuredEdgeMetadata.sameEndpointOrdinal
+          && plan.exactIdentityOrdinal === measuredEdgeMetadata.exactIdentityOrdinal
+          && expectedSelfLoopPriority !== undefined
+          && expectedSelfLoopPriority.archetypeRank === 6
+          && JSON.stringify(plan.priority) === JSON.stringify(expectedSelfLoopPriority)
+          && usesExactSelfLoopEndpoints
+          && plan.stageGates.length === 0
+          && plan.stageLocalBypass === undefined
+          && plan.rootOuterBypass === undefined
+          && plan.cycleComponent === undefined
+          && plan.topologyModifiers === undefined
+          && plan.branch === undefined
+          && plan.join === undefined
+          && expectedSelfLoopTrack !== undefined
+          && JSON.stringify(plan.selfLoopTrack) === JSON.stringify(expectedSelfLoopTrack)
+          && expectedSelfLoopRoute !== undefined
+          && JSON.stringify(route) === JSON.stringify(expectedSelfLoopRoute)
+        : expectedEligibility?.archetype !== "self_loop" && plan.selfLoopTrack === undefined
+      : !isSelfLoopArchetype && plan.selfLoopTrack === undefined;
+    if (!selfLoopContractMatches) {
+      diagnostics.push(createRoutingDiagnostic(
+        "renderer.routing.journey_map_archetype_fallback",
+        `Journey edge "${plan.id}" does not expose its accepted self-loop topology contract.`,
+        plan.id,
+        "warn",
+        JSON.stringify({ relatedIds: [plan.id, plan.from] })
+      ));
+    }
+
     const branch = plan.branch;
     const join = plan.join;
     const isBackwardArchetype = plan.archetype === "backward_same_stage"
@@ -2804,7 +3090,7 @@ export function validateJourneyMapRoutes(
         && join === undefined
         && backwardDegreeContractMatches
         && backwardOrderContractMatches
-      : isCycleArchetype || plan.priority.archetypeRank !== 6;
+      : isCycleArchetype || isSelfLoopArchetype || plan.priority.archetypeRank !== 6;
     if (!backwardContractMatches) {
       diagnostics.push(createRoutingDiagnostic(
         "renderer.routing.journey_map_archetype_fallback",
@@ -2958,6 +3244,7 @@ export function buildJourneyMapRoutingStages(
     const isCyclePeripheral = eligibility.archetype === "cycle_forward_same_stage"
       || eligibility.archetype === "cycle_return_same_stage"
       || eligibility.archetype === "cycle_return_cross_stage";
+    const isSelfLoop = eligibility.archetype === "self_loop";
     const usesStageLocalBypass = eligibility.archetype === "non_adjacent_forward_same_stage"
       || eligibility.archetype === "backward_same_stage"
       || eligibility.archetype === "cycle_forward_same_stage"
@@ -2980,7 +3267,9 @@ export function buildJourneyMapRoutingStages(
       edge,
       eligibility.source,
       "source",
-      sourceUsesSouthEndpoint ? "journey_escape_out" : edge.routing.sourcePortRole,
+      isSelfLoop
+        ? "journey_flow_out"
+        : sourceUsesSouthEndpoint ? "journey_escape_out" : edge.routing.sourcePortRole,
       sourceUsesSouthEndpoint ? "south" : "east",
       diagnostics
     );
@@ -2988,7 +3277,9 @@ export function buildJourneyMapRoutingStages(
       edge,
       eligibility.target,
       "target",
-      targetUsesSouthEndpoint ? "journey_escape_in" : edge.routing.targetPortRole,
+      isSelfLoop
+        ? "journey_flow_in"
+        : targetUsesSouthEndpoint ? "journey_escape_in" : edge.routing.targetPortRole,
       targetUsesSouthEndpoint ? "south" : "west",
       diagnostics
     );
@@ -3020,6 +3311,12 @@ export function buildJourneyMapRoutingStages(
       sourceEndpoint,
       targetEndpoint
     );
+    const selfLoopTrack = buildSelfLoopTrack(
+      eligibility,
+      sourceEndpoint,
+      targetEndpoint,
+      index
+    );
     const branch = buildBranchPlan(
       eligibility,
       sourceEndpoint,
@@ -3031,7 +3328,9 @@ export function buildJourneyMapRoutingStages(
       ? eligibility.archetype
       : undefined;
     const usesBoundaryStageBypass = stageLocalBypass?.boundaryRole !== undefined;
-    const step2Route = usesBoundaryStageBypass && stageLocalBypass
+    const step2Route = isSelfLoop && selfLoopTrack
+      ? buildSelfLoopRoute(sourceEndpoint, targetEndpoint, selfLoopTrack)
+      : usesBoundaryStageBypass && stageLocalBypass
       ? buildBoundaryStageBypassRoute(
         sourceEndpoint,
         targetEndpoint,
@@ -3079,7 +3378,9 @@ export function buildJourneyMapRoutingStages(
                 false
               )
               : undefined;
-    const provisionalRoute = usesBoundaryStageBypass && stageLocalBypass
+    const provisionalRoute = isSelfLoop && selfLoopTrack
+      ? buildSelfLoopRoute(sourceEndpoint, targetEndpoint, selfLoopTrack)
+      : usesBoundaryStageBypass && stageLocalBypass
       ? buildBoundaryStageBypassRoute(
         sourceEndpoint,
         targetEndpoint,
@@ -3164,6 +3465,7 @@ export function buildJourneyMapRoutingStages(
       stageGates,
       ...(stageLocalBypass ? { stageLocalBypass } : {}),
       ...(rootOuterBypass ? { rootOuterBypass } : {}),
+      ...(selfLoopTrack ? { selfLoopTrack } : {}),
       ...(eligibility.cycleComponent
         ? { cycleComponent: structuredClone(eligibility.cycleComponent) }
         : {}),
