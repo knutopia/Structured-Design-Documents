@@ -35,6 +35,10 @@ const topologyFixturePath = path.join(
   repoRoot,
   "tests/fixtures/render/journey_map_staged_topology.sdd"
 );
+const compressedFixturePath = path.join(
+  repoRoot,
+  "tests/fixtures/render/journey_map_staged_compressed.sdd"
+);
 
 function routeContainsPoint(route: PositionedRoute, point: Point): boolean {
   return route.points.slice(1).some((end, index) => {
@@ -255,7 +259,7 @@ describe("journey map Gate 6 visual acceptance", () => {
 
     const topology = await renderFixture(topologyFixturePath);
     const topologyScene = topology.routingStages.provisionalPositionedScene;
-    expect(topologyScene.edges).toHaveLength(4);
+    expect(topologyScene.edges).toHaveLength(8);
     const enterStage = topologyScene.edges.find((edge) =>
       edge.from.itemId === "J-790" && edge.to.itemId === "J-701"
     );
@@ -448,7 +452,7 @@ describe("journey map Gate 6 visual acceptance", () => {
 
     const topology = await renderFixture(topologyFixturePath);
     const topologyScene = topology.routingStages.provisionalPositionedScene;
-    expect(topologyScene.edges).toHaveLength(4);
+    expect(topologyScene.edges).toHaveLength(8);
     const topologyReturn = topologyScene.edges.find((edge) =>
       edge.from.itemId === "J-714" && edge.to.itemId === "J-713"
     );
@@ -474,6 +478,110 @@ describe("journey map Gate 6 visual acceptance", () => {
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
     expect(topology.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+  });
+
+  it("keeps reciprocal and complex SCC routes peripheral while recording their shared tracks as readability debt", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
+    expect(view).toBeDefined();
+    const renderFixture = async (sourcePath: string) => {
+      const compiled = compileSource({
+        path: sourcePath,
+        text: await readFile(sourcePath, "utf8")
+      }, bundle);
+      expect(compiled.diagnostics).toEqual([]);
+      expect(compiled.graph).toBeDefined();
+      const projected = projectView(compiled.graph!, bundle, "journey_map");
+      expect(projected.diagnostics).toEqual([]);
+      expect(projected.projection).toBeDefined();
+      return renderJourneyMapRoutingArtifacts(
+        projected.projection!, compiled.graph!, bundle, view!, "strict"
+      );
+    };
+
+    const topology = await renderFixture(topologyFixturePath);
+    const topologyScene = topology.routingStages.provisionalPositionedScene;
+    expect(topologyScene.edges).toHaveLength(8);
+    const firstForward = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-701" && edge.to.itemId === "J-702"
+    );
+    const firstReturn = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-702" && edge.to.itemId === "J-701"
+    );
+    const secondForward = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-711" && edge.to.itemId === "J-712"
+    );
+    const secondReturn = topologyScene.edges.find((edge) =>
+      edge.from.itemId === "J-712" && edge.to.itemId === "J-711"
+    );
+    expect(firstForward?.route.points).toEqual([
+      { x: 428, y: 140 }, { x: 428, y: 152 },
+      { x: 676, y: 152 }, { x: 676, y: 140 }
+    ]);
+    expect(firstReturn?.route.points).toEqual([
+      { x: 676, y: 140 }, { x: 676, y: 152 },
+      { x: 428, y: 152 }, { x: 428, y: 140 }
+    ]);
+    expect(secondForward?.route.points).toEqual([
+      { x: 924, y: 140 }, { x: 924, y: 168 },
+      { x: 1172, y: 168 }, { x: 1172, y: 156 }
+    ]);
+    expect(secondReturn?.route.points).toEqual([
+      { x: 1172, y: 156 }, { x: 1172, y: 168 },
+      { x: 924, y: 168 }, { x: 924, y: 140 }
+    ]);
+    expect(routeContainsPoint(firstForward!.route, { x: 552, y: 152 })).toBe(true);
+    expect(routeContainsPoint(firstReturn!.route, { x: 552, y: 152 })).toBe(true);
+    expect(routeContainsPoint(secondForward!.route, { x: 1048, y: 168 })).toBe(true);
+    expect(routeContainsPoint(secondReturn!.route, { x: 1048, y: 168 })).toBe(true);
+
+    const compressed = await renderFixture(compressedFixturePath);
+    const compressedScene = compressed.routingStages.provisionalPositionedScene;
+    expect(compressedScene.edges).toHaveLength(18);
+    const shorterReturn = compressedScene.edges.find((edge) =>
+      edge.from.itemId === "J-912" && edge.to.itemId === "J-902"
+    );
+    const outerReturn = compressedScene.edges.find((edge) =>
+      edge.from.itemId === "J-913" && edge.to.itemId === "J-901"
+    );
+    expect(shorterReturn?.route.points).toEqual([
+      { x: 1476, y: 140 }, { x: 1476, y: 160 }, { x: 1476, y: 172 },
+      { x: 1056, y: 172 }, { x: 832, y: 172 }, { x: 412, y: 172 },
+      { x: 412, y: 160 }, { x: 412, y: 140 }
+    ]);
+    expect(outerReturn?.route.points).toEqual([
+      { x: 1724, y: 140 }, { x: 1724, y: 160 }, { x: 1724, y: 172 },
+      { x: 1056, y: 172 }, { x: 832, y: 172 }, { x: 164, y: 172 },
+      { x: 164, y: 160 }, { x: 164, y: 140 }
+    ]);
+    expect(routeContainsPoint(shorterReturn!.route, { x: 944, y: 172 })).toBe(true);
+    expect(routeContainsPoint(outerReturn!.route, { x: 944, y: 172 })).toBe(true);
+
+    for (const scene of [topologyScene, compressedScene]) {
+      const nodeBoxes = flattenPositionedItems(scene.root)
+        .filter((item): item is PositionedNode => item.kind === "node")
+        .map((node) => ({
+          itemId: node.id,
+          x: node.x,
+          y: node.y,
+          width: node.width,
+          height: node.height
+        }));
+      expectNoRouteIntersectionsWithNonEndpointBoxes(scene.edges, nodeBoxes);
+      expectRoutesDoNotEnterEndpointBoxes(scene.edges, nodeBoxes);
+      for (const edge of scene.edges) {
+        for (const header of collectHeaderBoxes(scene.root)) {
+          expect(routeIntersectsRect(edge.route, header)).toBe(false);
+        }
+        expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
+      }
+    }
+    expect(topology.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "warn" || diagnostic.severity === "error"
+    )).toBe(false);
+    expect(compressed.diagnostics.some((diagnostic) =>
       diagnostic.severity === "warn" || diagnostic.severity === "error"
     )).toBe(false);
   });

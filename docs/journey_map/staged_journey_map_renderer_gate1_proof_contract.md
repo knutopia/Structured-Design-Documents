@@ -551,19 +551,21 @@ Primary edges are fixed by the controlling plan. The remaining edges are fixed h
 | C03 | `J-901→J-950` | root | contained-to-root direct/bypass | branch + root fan-in |
 | C04 | `J-901→J-911` | root | long cross-Stage outer bypass | branch |
 | C05 | `J-901→J-912` | root | long cross-Stage outer bypass | branch |
-| C06 | `J-901→J-913` | root | long cross-Stage outer bypass | branch + join |
-| C07 | `J-902→J-903` | `G-900` | adjacent forward same-Stage direct | join |
-| C08 | `J-902→J-950` | root | contained-to-root direct/bypass | root fan-in |
-| C09 | `J-902→J-913` | root | long cross-Stage outer bypass | join |
-| C10 | `J-903→J-950` | root | contained-to-root direct/bypass | root fan-in |
-| C11 | `J-903→J-913` | root | long cross-Stage outer bypass | join |
+| C06 | `J-901→J-913` | root | long cross-Stage outer bypass | branch; join pressure retained in measured buckets |
+| C07 | `J-902→J-903` | `G-900` | adjacent forward same-Stage direct | branch |
+| C08 | `J-902→J-950` | root | contained-to-root direct/bypass | branch; root fan-in pressure |
+| C09 | `J-902→J-913` | root | long cross-Stage outer bypass | branch |
+| C10 | `J-903→J-950` | root | contained-to-root direct/bypass | branch; root fan-in pressure |
+| C11 | `J-903→J-913` | root | long cross-Stage outer bypass | branch |
 | C12 | `J-950→J-911` | root | root-to-contained bridge | branch |
 | C13 | `J-950→J-912` | root | root-to-contained bypass | branch |
-| C14 | `J-950→J-913` | root | root-to-contained bypass | branch + join |
+| C14 | `J-950→J-913` | root | root-to-contained bypass | branch; join pressure retained in measured buckets |
 | C15 | `J-911→J-913` | `G-910` | non-adjacent same-Stage bypass | join |
 | C16 | `J-912→J-913` | `G-910` | adjacent forward same-Stage direct | join |
 | C17 | `J-912→J-902` | root | backward cross-Stage outer return | annotated cycle member |
 | C18 | `J-913→J-901` | root | backward cross-Stage outer return | annotated cycle member |
+
+The 2026-07-13 Gate 6 complex-SCC amendment makes the route-role column generic and executable. Remove typed visual-return occurrences from a complex SCC's ordinary-forward degree graph, then apply exclusive Alternative B precedence: ordinary source outdegree greater than one owns the branch route role; otherwise ordinary target indegree greater than one owns the join route role. Complete measured node buckets still retain every source and target occurrence for Gate 7 occupancy, so route-role precedence does not erase fan-in/fan-out pressure. This amendment changes only the compressed modifier rows shown above; owners, base morphologies, authored order, fixture bytes, validation expectations, and every non-compressed contract remain unchanged.
 
 ## 3. Profile and validation contract
 
