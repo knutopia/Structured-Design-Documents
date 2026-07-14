@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Gated Implementation Plan
 
-Status: implementation in progress — Gate 6 cycle family accepted, checkpoint pending
+Status: implementation in progress — Gate 6 self-loop family opening audit active
 
 Audience: the single implementation agent, reviewers, and maintainers responsible for accepting a staged `journey_map` renderer
 
@@ -18,7 +18,7 @@ This ledger is the execution record for the linear Gate 0 → Gate 10 dependency
 | 3 — RendererScene | accepted | user | 2026-07-13 | `d40a2fc` | 3 files/29 tests; accepted snapshots, build, whitespace, protected baselines clean |
 | 4 — Measurement and pre-routing | accepted | user | 2026-07-13 | `ad75f44` | accepted evidence captured; 5 files/45 tests; shared regressions 4 files/24 tests; build, whitespace, protected hashes clean |
 | 5 — Basic routing | accepted | user | 2026-07-13 | `4ad14e2` | 2 files/16 focused tests; 5 files/44 shared regressions; build, deterministic review package, whitespace, and protected baselines clean |
-| 6 — Archetypes and ownership | in progress — cycle accepted, checkpoint pending | user | 2026-07-13 | backward `12423ba`; cycle pending | same-Stage skip `2c2c580`; long cross-Stage/root `3a894be`; branch `6dad32e`; join `08e5419` + acceptance `837ab46`; backward `12423ba`; shape-aware SCC and uniform Alternative B amendments accepted; cycle provisionally accepted; post-acceptance validation pending; self-loop/duplicate and later gates blocked; readability debt retained for Gates 7–8 |
+| 6 — Archetypes and ownership | in progress — self-loop opening audit | user | 2026-07-13 | cycle `c08beba` | same-Stage skip `2c2c580`; long cross-Stage/root `3a894be`; branch `6dad32e`; join `08e5419` + acceptance `837ab46`; backward `12423ba`; cycle `c08beba`; self-loop read-only contract discovery active; duplicate and later gates blocked; readability debt retained for Gates 7–8 |
 | 7 — Occupancy and expansion | blocked by Gate 6 | — | — | — | — |
 | 8 — Diagnostics and focused acceptance | blocked by Gate 7 | — | — | — | — |
 | 9 — Public preview integration | blocked by Gate 8 | — | — | — | — |
@@ -674,6 +674,12 @@ Expected diagnostics are unchanged and contain no warn/error: primary has only `
 **Family acceptance.** On 2026-07-13 the user provisionally accepted the Gate 6 cycle family. This accepts the shape-aware SCC classification, uniform Alternative B compressed modifier amendment, complete nominal cycle topology, hard-geometry evidence, and explicit review package solely for the cycle-family checkpoint. It does not accept the coincident reciprocal/outer tracks, compressed readability, all of Gate 6, Gate 8 visual quality, public integration, or any golden. Self-loop remains blocked until post-acceptance validation passes and the focused cycle checkpoint is recorded; duplicate and every later gate remain blocked.
 
 **Post-acceptance validation.** The focused routing/visual command passed 2 files and 36 tests, and the broader render-model/scene/pre-routing/routing/visual journey command passed 5 files and 70 tests. `TMPDIR=/tmp pnpm run build` and `git diff --check` passed. All fourteen Gate 0 protected staged-renderer hashes and both protected legacy journey DOT hashes remain exact. The deterministic 23-file review package retains manifest hash `48410e713a1bc2ae056e42623e9b9c86c79797ac5c85ce533b0917af2f83a8a7` and aggregate hash `b38d76ce0071ed8d27306771411b72408e8e3de98c6a8eededf502803eba6085`; no official artifact changed. The accepted cycle family is eligible for its focused checkpoint. Self-loop remains blocked until that checkpoint and its ledger record succeed.
+
+**Checkpoint and next dependency.** Commit `c08beba` (`Gate 6: add cycle routing`) records the accepted cycle production, amended proof contract, focused tests, independent-audit correction, validation evidence, review package record, and acceptance boundary. No self-loop work began before that checkpoint. This ledger acceptance record opens only the self-loop family for read-only contract discovery; duplicate production, Gate 7, and every later gate remain blocked. The cycle checkpoint does not waive any recorded branch/join/backward/cycle readability debt.
+
+### Gate 6 — 2026-07-13 self-loop family opening audit
+
+**Family state.** Only the seventh Gate 6 route family, self-loop, is active for read-only contract discovery after cycle checkpoint `c08beba`. Every accepted plan through the cycle family is a protected input. The audit must lock the exact topology self-loop identity/owner/metadata, generic self-loop precedence over branch/join/backward labels, ports, route archetype, local geometry, priority, buckets, diagnostic timing, hard-clearance criteria, review dimensions, and failure behavior before production or test edits. Duplicate occurrences remain blocked and cannot be generalized through the self-loop path; Gate 7 occupancy/separation/expansion, Gate 8 final diagnostics, public integration, and goldens remain blocked.
 
 ## 1. Completion definition
 
