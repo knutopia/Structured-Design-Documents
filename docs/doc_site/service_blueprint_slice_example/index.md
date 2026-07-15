@@ -4,7 +4,7 @@ This example shows how SDD-Text expresses a service blueprint slice for a simple
 
 The image below is the `strict_profile` render from the code-driven example set.
 
-Full source: [claim_flow_slice.sdd](claim_flow_slice.sdd)
+Full source: <IconFile/>[claim_flow_slice.sdd](claim_flow_slice.sdd)
 
 ## Generate the PNG
 
@@ -97,10 +97,7 @@ END
 ```
 
 ## Rendered Output
-
-<a href="claim_flow_slice.service_blueprint.png">
-  <img src="claim_flow_slice.service_blueprint.png" alt="Service blueprint slice (strict profile)" width="900">
-</a>
+![](claim_flow_slice.service_blueprint.png)
 
 ## What To Look For
 

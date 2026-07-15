@@ -23,6 +23,7 @@
 - Added inline expand svg sections
 - Added inline badges, icons
 - Updated skill guide page
+- Link-wrangling
 
 ## Sun 7-12
 
