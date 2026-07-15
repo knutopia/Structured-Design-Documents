@@ -22,6 +22,7 @@
 - Diagram Types page in OK shape
 - Added inline expand svg sections
 - Added inline badges, icons
+- Updated skill guide page
 
 ## Sun 7-12
 

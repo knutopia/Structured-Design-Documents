@@ -31,7 +31,7 @@ That is enough to get started. You do not need to know SDD syntax first (althoug
 
 The prompt generates the SDD file (Structured Design Document) and the information architecture diagram.
 
-SDD full source: [shop_sched_exploration.sdd](examples/shop_sched_exploration.sdd)
+SDD full source: <IconFile/>[shop_sched_exploration.sdd](examples/shop_sched_exploration.sdd)
 
 Trimmed excerpt:
 
@@ -56,10 +56,7 @@ Area A-010 "Mechanic's Scheduling"
 ```
 
 Information architecture from that first prompt:
-
-<a href="examples/shop_sched_exploration.ia_place_map.simple.svg">
-  <img src="examples/shop_sched_exploration.ia_place_map.simple.svg" alt="Scheduling app IA after the first prompt" height="230">
-</a>
+![](examples/shop_sched_exploration.ia_place_map.simple.svg)
 
 ### What This Creates
 
@@ -84,7 +81,7 @@ Connect to it from the Dashboard.
 Also add descriptions. Update the IA.
 ```
 
-Full source: [shop_sched_exploration_2.sdd](examples/shop_sched_exploration_2.sdd)
+Full source: <IconFile/>[shop_sched_exploration_2.sdd](examples/shop_sched_exploration_2.sdd)
 
 Trimmed excerpt:
 
@@ -109,10 +106,7 @@ END
 ```
 
 Rendered output from the admin-area follow-up:
-
-<a href="examples/shop_sched_exploration_2.ia_place_map.simple.svg">
-  <img src="examples/shop_sched_exploration_2.ia_place_map.simple.svg" alt="Scheduling app IA after adding the admin review area" height="230">
-</a>
+![](examples/shop_sched_exploration_2.ia_place_map.simple.svg)
 
 ### Add A Signup Flow And Show The UI Contracts
 
@@ -127,7 +121,7 @@ Using $sdd skill, add a simple signup flow in Shift Detail, with these view stat
 Show the UI contracts.
 ```
 
-Full source: [shop_sched_exploration_3.sdd](examples/shop_sched_exploration_3.sdd)
+Full source: <IconFile/>[shop_sched_exploration_3.sdd](examples/shop_sched_exploration_3.sdd)
 
 Trimmed excerpt, showing the added viewStates within Shift Detail:
 
@@ -154,10 +148,7 @@ Trimmed excerpt, showing the added viewStates within Shift Detail:
 ```
 
 Rendered output from the UI-contract follow-up, showing the viewState sequence:
-
-<a href="examples/shop_sched_exploration_3.ui_contracts.simple.svg">
-  <img src="examples/shop_sched_exploration_3.ui_contracts.simple.svg" alt="Scheduling app UI contracts for the shift signup flow" height="230">
-</a>
+![](examples/shop_sched_exploration_3.ui_contracts.simple.svg)
 
 ### Simple Follow-Up Edit
 
@@ -199,10 +190,7 @@ bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile si
 
 Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
-
-<a href="examples/shop_sched_exploration_4_IA_as_a.png">
-  <img src="examples/shop_sched_exploration_4_IA_as_a.png" alt="CLI show generated IA diagram as a PNG" height="230">
-</a>
+![](examples/shop_sched_exploration_4_IA_as_a.png)
 
 ## What Happens Behind The Scenes
 

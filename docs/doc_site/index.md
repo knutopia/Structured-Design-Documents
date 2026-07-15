@@ -129,9 +129,9 @@ See also: [Service Blueprint Slice example](service_blueprint_slice_example/) fo
 
 - SDD Skill Guide (Codex Skill): [SDD Skill Guide](sdd-skill/)
 
-- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](sdd_cli_tools/)
+- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](./sdd_cli_tools/)
 
-- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](sdd-helper/)
+- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](./sdd-helper/)
 
 - Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
