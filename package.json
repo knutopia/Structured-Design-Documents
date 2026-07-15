@@ -24,6 +24,7 @@
     "docs:preview": "vitepress preview docs/doc_site"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.0",
     "@resvg/resvg-js": "^2.6.2",
     "ajv": "^8.17.1",
     "commander": "^12.1.0",
