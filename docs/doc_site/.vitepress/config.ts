@@ -42,7 +42,7 @@ export default defineConfig({
     assetsInclude: ['**/*.sdd'], // Tells Vite to treat all .sdd files as static assets
     server: {
       fs: {
-        allow: ['../../../']
+        allow: ['../../..']
       }
     },
     plugins: [
@@ -79,6 +79,14 @@ export default defineConfig({
           },
           {
             src: normalizePath(path.resolve(__dirname, '../../../definitions')),
+            dest: './'
+          },
+          {
+            src: normalizePath(path.resolve(__dirname, '../../../CONTRIBUTING.md')),
+            dest: './'
+          },
+          {
+            src: normalizePath(path.resolve(__dirname, '../../../CLA.md')),
             dest: './'
           }
         ]

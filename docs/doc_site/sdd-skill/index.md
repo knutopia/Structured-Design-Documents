@@ -1,8 +1,8 @@
 # SDD Skill Guide
 
-The SDD Skill provides a simple way for Codex to work with structured design documents. It gives the agent workflow guidance, helper commands, and SDD grammar context for producing valid, consistent output. The SDD Skill is an alternative to manually authoring and editing SDD documents, which is also possible.
+The SDD Skill provides a simple way for an LLM to work with structured design documents. It gives the agent workflow guidance, helper commands, and SDD grammar context for producing valid, consistent output. The SDD Skill is an alternative to manually authoring and editing SDD documents, which is also possible.
 
-The current SDD Skill is written for Codex. The same skill content may also work in other compatible hosts. 
+The current SDD Skill is written for Codex. It has successfully been used with Claude. It likely works in other compatible hosts. 
 
 ## Install
 

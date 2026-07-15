@@ -68,7 +68,7 @@ Notes:
 
 Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
-Full source: [`small_app.sdd`](./small_app_example/small_app.sdd)
+Full source: <IconFile/>[`small_app.sdd`](./small_app_example/small_app.sdd)
 
 ```text
 SDD-TEXT 0.1
@@ -119,21 +119,25 @@ Rendered outputs (click to open full size):
 
 See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
 
-## Orientation
+## Using SDD
 
-- [bundle/v0.1/](bundle/v0.1/) houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling.
+The SDD Skill helps when using SDD with an LLM: [SDD Skill Guide](sdd-skill/)
 
-- [definitions/v0.1/](definitions/v0.1/) houses explanatory definitions and rationale for version 0.1 and should stay consistent with the bundle.
+Using SDD command line tools manually ("sdd show" etc): [SDD CLI User Guide](./sdd_cli_tools/)
 
-### Learn More
+## Technical Core
 
-- SDD Skill Guide (Codex Skill): [SDD Skill Guide](sdd-skill/)
+Two folders define the language:
 
-- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](./sdd_cli_tools/)
+- The *bundle/v0.1/* folder houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling. <IconGitHub/>[bundle/v0.1/ repo folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/bundle/v0.1)
 
-- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](./sdd-helper/)
+- The *definitions/v0.1/* houses explanatory definitions and rationale for version 0.1 and should stay consistent with the bundle. <IconGitHub/>[definitions/v0.1/ repo folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/definitions/v0.1)
 
-- Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](../../definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
+The *Authoring Spec* guides changes to the language: <IconFile/>[SDD-Text v0.1 — Authoring Spec (Type-first DSL)](../../definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md){target="_blank"}
+
+The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behind the scenes: [SDD Helper Guide](./sdd-helper/)
+
+## Background / Origins
 
 - [Initial Concepts 1: a 6-Diagram Suite v0.1](initial_concepts/Initial%20Concepts1%20a%206-Diagram%20Suite%20v0dot1.md)
 
@@ -171,5 +175,5 @@ See also: [Service Blueprint Slice example](service_blueprint_slice_example/) fo
 ## License And Contributions
 
 - License: this project is available under the [MIT License](LICENSE).
-- Contributing: please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. This repository is currently coordination-first and is not accepting unsolicited pull requests.
-- Contributor License Agreement: accepted outside contributions also require written acceptance of the [CLA](CLA.md) before implementation or merge.
+- Contributing: please read <IconFile/> [CONTRIBUTING.md](../../CONTRIBUTING%2Emd){target="_blank"} before opening an issue or pull request. This repository is currently coordination-first and is not accepting unsolicited pull requests.
+- Contributor License Agreement: accepted outside contributions also require written acceptance of the <IconFile/>[CLA](/CLA.md){target="_blank"} before implementation or merge.

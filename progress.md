@@ -25,6 +25,7 @@
 - Updated skill guide page
 - Link-wrangling
 - Moved initial_concepts into doc_site
+- Stuck in routing snafu for CONTRIBUTING.md
 
 ## Sun 7-12
 
