@@ -21,6 +21,7 @@
 
 - Changed site folder name, installed vitepress
 - Fighting incredible snafu link resolution trashfire
+- Diagram Types page in OK shape
 
 ## Sun 7-12
 

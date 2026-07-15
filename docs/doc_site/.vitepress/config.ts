@@ -10,14 +10,33 @@ export default defineConfig({
   ignoreDeadLinks: true,
 
   markdown: {
-      // This tells VitePress's link transformer to leave .sdd alone
-      // if it were a valid option, but since it's not, we use the 
-      // `transformHtml` hook to strip the .html from these specific links:
-    },
-    transformHtml(code, id) {
-      // This regex looks for links ending in .sdd.html and forces them to .sdd
-      return code.replace(/href="([^"]+)\.sdd\.html"/g, 'href="$1.sdd"');
-    },
+
+    config: (md) => {
+      // Store the default link renderer
+      const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+      };
+
+      // Override the link renderer
+      md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+        const hrefIndex = tokens[idx].attrIndex('href');
+        
+        if (hrefIndex >= 0 && tokens[idx].attrs) {
+          const href = tokens[idx].attrs[hrefIndex][1];
+          
+          // Detect your custom toolchain files
+          if (href.endsWith('.sdd')) {
+            // Inject target="_blank" to bypass the Vue SPA router
+            tokens[idx].attrPush(['target', '_blank']);
+            
+            // Note: If you prefer it to auto-download rather than open a new tab, 
+            // you can use this instead: tokens[idx].attrPush(['download', '']);
+          }
+        }
+        return defaultRender(tokens, idx, options, env, self);
+      };
+    }
+  },
 
   vite: {
     assetsInclude: ['**/*.sdd'], // Tells Vite to treat all .sdd files as static assets
