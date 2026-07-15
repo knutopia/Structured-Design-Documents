@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-Vitepress and vitecopy into config
+
 -service blueprint: track the sidecar placement regression
 -service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
@@ -18,6 +20,7 @@
 ## Tues 7-14
 
 - Changed site folder name, installed vitepress
+- Fighting incredible snafu link resolution trashfire
 
 ## Sun 7-12
 
