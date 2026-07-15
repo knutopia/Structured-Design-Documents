@@ -135,11 +135,11 @@ See also: [Service Blueprint Slice example](service_blueprint_slice_example/) fo
 
 - Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](../../definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
-- [Initial Concepts 1: a 6-Diagram Suite v0.1](<../../initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
+- [Initial Concepts 1: a 6-Diagram Suite v0.1](initial_concepts/Initial%20Concepts1%20a%206-Diagram%20Suite%20v0dot1.md)
 
-- [Initial Concepts 2: One-page Schema v0.1](<../../initial_concepts/Initial Concepts2 One-page Schema v0dot1.md>)
+- [Initial Concepts 2: One-page Schema v0.1](initial_concepts/Initial%20Concepts2%20One-page%20Schema%20v0dot1.md)
 
-- Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](<../../initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md>)
+- Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](../../initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice.md)
 
 - [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/README.md>)
 

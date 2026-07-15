@@ -24,6 +24,7 @@
 - Added inline badges, icons
 - Updated skill guide page
 - Link-wrangling
+- Moved initial_concepts into doc_site
 
 ## Sun 7-12
 

@@ -78,10 +78,6 @@ export default defineConfig({
             dest: './'
           },
           {
-            src: normalizePath(path.resolve(__dirname, '../../../initial_concepts')),
-            dest: './'
-          },
-          {
             src: normalizePath(path.resolve(__dirname, '../../../definitions')),
             dest: './'
           }
