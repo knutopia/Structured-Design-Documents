@@ -11,6 +11,7 @@ export type ValueKind = "quoted_string" | "bare_value";
 export type StructuralRelationshipType = "CONTAINS" | "COMPOSED_OF";
 export type PreviewBackendId =
   | "legacy_graphviz_preview"
+  | "staged_journey_map_preview"
   | "staged_ia_place_map_preview"
   | "staged_ui_contracts_preview"
   | "staged_service_blueprint_preview"

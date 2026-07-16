@@ -20,6 +20,10 @@ import {
   renderIaPlaceMapStagedSvg
 } from "./staged/iaPlaceMap.js";
 import {
+  renderJourneyMapStagedPng,
+  renderJourneyMapStagedSvg
+} from "./staged/journeyMap.js";
+import {
   renderOutcomeOpportunityMapStagedPng,
   renderOutcomeOpportunityMapStagedSvg
 } from "./staged/outcomeOpportunityMap.js";
@@ -37,6 +41,7 @@ import {
 } from "./staged/serviceBlueprint.js";
 
 export const STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID = "staged_ia_place_map_preview";
+export const STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID = "staged_journey_map_preview";
 export const STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID = "staged_ui_contracts_preview";
 export const STAGED_SERVICE_BLUEPRINT_PREVIEW_BACKEND_ID = "staged_service_blueprint_preview";
 export const STAGED_SCENARIO_FLOW_PREVIEW_BACKEND_ID = "staged_scenario_flow_preview";
@@ -105,7 +110,8 @@ interface StagedProjectionPreviewBackendOptions {
     graph: CompiledGraph,
     view: ViewSpec,
     profileId: string,
-    themeId?: string
+    themeId: string | undefined,
+    bundle: Bundle
   ) => Promise<{
     svg: string;
     diagnostics: RendererDiagnostic[];
@@ -115,7 +121,8 @@ interface StagedProjectionPreviewBackendOptions {
     graph: CompiledGraph,
     view: ViewSpec,
     profileId: string,
-    themeId?: string
+    themeId: string | undefined,
+    bundle: Bundle
   ) => Promise<{
     png: Uint8Array;
     diagnostics: RendererDiagnostic[];
@@ -146,7 +153,8 @@ function createStagedProjectionPreviewBackend(
           request.source.graph,
           request.view,
           request.source.profileId,
-          request.source.themeId
+          request.source.themeId,
+          request.bundle
         );
         return {
           format: "svg",
@@ -160,7 +168,8 @@ function createStagedProjectionPreviewBackend(
         request.source.graph,
         request.view,
         request.source.profileId,
-        request.source.themeId
+        request.source.themeId,
+        request.bundle
       );
       return {
         format: "png",
@@ -211,6 +220,14 @@ const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor
     viewId: "ia_place_map",
     renderSvg: renderIaPlaceMapStagedSvg,
     renderPng: renderIaPlaceMapStagedPng
+  }),
+  [STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
+    id: STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID,
+    viewId: "journey_map",
+    renderSvg: (projection, graph, view, profileId, themeId, bundle) =>
+      renderJourneyMapStagedSvg(projection, graph, bundle, view, profileId, themeId),
+    renderPng: (projection, graph, view, profileId, themeId, bundle) =>
+      renderJourneyMapStagedPng(projection, graph, bundle, view, profileId, themeId)
   }),
   [STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
     id: STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID,

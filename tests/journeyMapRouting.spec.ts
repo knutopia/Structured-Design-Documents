@@ -22,7 +22,9 @@ import {
   buildJourneyMapRendererScene,
   positionJourneyMapMeasuredSceneBeforeRouting,
   renderJourneyMapBasicRoutingArtifacts,
-  renderJourneyMapRoutingArtifacts
+  renderJourneyMapRoutingArtifacts,
+  renderJourneyMapStagedPng,
+  renderJourneyMapStagedSvg
 } from "../src/renderer/staged/journeyMap.js";
 import {
   buildJourneyMapRoutingStages,
@@ -4175,6 +4177,31 @@ describe("journey map Gate 6 duplicate occurrence routing", () => {
 });
 
 describe("journey map Gate 8 crossing continuity and terminal diagnostics", () => {
+  it("exposes the accepted final scene through byte-identical staged SVG and SVG-derived PNG wrappers", async () => {
+    const fixture = await buildFixture("primary");
+    const direct = await renderPositionedSceneToPng(fixture.routingStages.finalPositionedScene);
+    const stagedSvg = await renderJourneyMapStagedSvg(
+      fixture.projection,
+      fixture.graph,
+      fixture.bundle,
+      fixture.view,
+      "strict"
+    );
+    const stagedPng = await renderJourneyMapStagedPng(
+      fixture.projection,
+      fixture.graph,
+      fixture.bundle,
+      fixture.view,
+      "strict"
+    );
+
+    expect(stagedSvg.svg).toBe(direct.svg);
+    expect(stagedPng.svg).toBe(stagedSvg.svg);
+    expect(sha256(stagedPng.png)).toBe(sha256(direct.png));
+    expect(stagedSvg.positionedScene).toEqual(fixture.routingStages.finalPositionedScene);
+    expect(stagedPng.diagnostics).toEqual(stagedSvg.diagnostics);
+  });
+
   it("locks the seven-run diagnostic matrix and marks only residual final crossings", async () => {
     const [primarySimple, primaryPermissive, primaryStrict, ordering, topology, duplicate, compressed] =
       await Promise.all([

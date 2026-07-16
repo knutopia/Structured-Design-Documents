@@ -266,41 +266,52 @@ describe("view render capabilities", () => {
     });
   });
 
-  it("keeps the remaining views on legacy preview backends", () => {
-    for (const viewId of [
-      "journey_map"
-    ]) {
-      expect(getViewRenderCapability(viewId)).toEqual({
-        textArtifacts: [
-          {
-            format: "dot",
-            backendId: "legacy_dot",
-            backendClass: "legacy"
-          },
-          {
-            format: "mermaid",
-            backendId: "legacy_mermaid",
-            backendClass: "legacy"
-          }
-        ],
-        previewArtifacts: [
-          {
-            format: "svg",
-            backendId: "legacy_graphviz_preview",
-            backendClass: "legacy"
-          },
-          {
-            format: "png",
-            backendId: "legacy_graphviz_preview",
-            backendClass: "legacy"
-          }
-        ],
-        defaultPreviewFormat: "svg",
-        defaultPreviewBackends: {
-          svg: "legacy_graphviz_preview",
-          png: "legacy_graphviz_preview"
+  it("defaults journey_map previews to staged SVG and PNG while retaining legacy alternatives", () => {
+    const capability = getViewRenderCapability("journey_map");
+    expect(capability).toEqual({
+      textArtifacts: [
+        {
+          format: "dot",
+          backendId: "legacy_dot",
+          backendClass: "legacy"
+        },
+        {
+          format: "mermaid",
+          backendId: "legacy_mermaid",
+          backendClass: "legacy"
         }
-      });
-    }
+      ],
+      previewArtifacts: [
+        {
+          format: "svg",
+          backendId: "staged_journey_map_preview",
+          backendClass: "staged"
+        },
+        {
+          format: "png",
+          backendId: "staged_journey_map_preview",
+          backendClass: "staged"
+        },
+        {
+          format: "svg",
+          backendId: "legacy_graphviz_preview",
+          backendClass: "legacy"
+        },
+        {
+          format: "png",
+          backendId: "legacy_graphviz_preview",
+          backendClass: "legacy"
+        }
+      ],
+      defaultPreviewFormat: "svg",
+      defaultPreviewBackends: {
+        svg: "staged_journey_map_preview",
+        png: "staged_journey_map_preview"
+      }
+    });
+    expect(getPreviewArtifactCapability(capability!, "svg")?.backendId)
+      .toBe("staged_journey_map_preview");
+    expect(getPreviewArtifactCapability(capability!, "png")?.backendId)
+      .toBe("staged_journey_map_preview");
   });
 });

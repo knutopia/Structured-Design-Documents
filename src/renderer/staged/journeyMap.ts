@@ -31,7 +31,12 @@ import {
 } from "./journeyMapRouting.js";
 import { measureScene } from "./pipeline.js";
 import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
-import { renderPositionedSceneToPng } from "./svgBackend.js";
+import {
+  renderPositionedSceneToPng,
+  renderPositionedSceneToSvg,
+  type StagedPngArtifact,
+  type StagedSvgArtifact
+} from "./svgBackend.js";
 
 const ROOT_GAP = 40;
 const STAGE_GAP = 24;
@@ -66,6 +71,17 @@ export interface JourneyMapRoutingArtifactsResult extends JourneyMapPreRoutingAr
   finalSvg: string;
   finalPng: Uint8Array;
 }
+
+export interface JourneyMapStagedRenderResult {
+  rendererScene: RendererScene;
+  measuredScene: MeasuredScene;
+  positionedScene: PositionedScene;
+  routingStages: JourneyMapRoutingStages;
+  diagnostics: RendererDiagnostic[];
+}
+
+export interface JourneyMapStagedSvgResult extends JourneyMapStagedRenderResult, StagedSvgArtifact {}
+export interface JourneyMapStagedPngResult extends JourneyMapStagedRenderResult, StagedSvgArtifact, StagedPngArtifact {}
 
 export type JourneyMapBasicRoutingArtifactsResult = JourneyMapRoutingArtifactsResult;
 
@@ -597,6 +613,35 @@ async function buildJourneyMapPreRoutingPipeline(
   };
 }
 
+async function buildJourneyMapRoutedPipeline(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<JourneyMapStagedRenderResult> {
+  const pipeline = await buildJourneyMapPreRoutingPipeline(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
+  const routingStages = buildJourneyMapRoutingStages(
+    pipeline.measuredScene,
+    pipeline.preRoutingPositionedScene
+  );
+  return {
+    rendererScene: pipeline.rendererScene,
+    measuredScene: pipeline.measuredScene,
+    positionedScene: routingStages.finalPositionedScene,
+    routingStages,
+    diagnostics: routingStages.finalPositionedScene.diagnostics
+  };
+}
+
 export async function renderJourneyMapPreRoutingArtifacts(
   projection: Projection,
   graph: CompiledGraph,
@@ -664,6 +709,52 @@ export async function renderJourneyMapRoutingArtifacts(
     step3Png: step3Rendered.png,
     finalSvg: finalRendered.svg,
     finalPng: finalRendered.png
+  };
+}
+
+export async function renderJourneyMapStagedSvg(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<JourneyMapStagedSvgResult> {
+  const pipeline = await buildJourneyMapRoutedPipeline(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
+  const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
+  return {
+    ...pipeline,
+    ...rendered
+  };
+}
+
+export async function renderJourneyMapStagedPng(
+  projection: Projection,
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  profileId: string,
+  themeId = "default"
+): Promise<JourneyMapStagedPngResult> {
+  const renderedSvg = await renderJourneyMapStagedSvg(
+    projection,
+    graph,
+    bundle,
+    view,
+    profileId,
+    themeId
+  );
+  const renderedPng = await renderPositionedSceneToPng(renderedSvg.positionedScene);
+  return {
+    ...renderedSvg,
+    ...renderedPng
   };
 }
 
