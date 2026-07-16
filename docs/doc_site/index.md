@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "Structured Design Documents"
-  text: "Semantically Defined Structural Design for Better Products"
-  tagline: My great project tagline
+  name: "SDD"
+  text: "Structured Design Documents"
+  tagline: Semantically Defined Structural Design for Better Products
   actions:
     - theme: brand
       text: Markdown Examples
@@ -15,15 +15,13 @@ hero:
       link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Product Design Graph
+    details: Nodes and edges, from high-level opportunities to low-level details, prepared to evolve
+  - title: Simple Markup, Rendered Diagrams
+    details: Easy to read, easy to write, validated and rendered to diagrams as output
+  - title: For Us and for Our Machines
+    details: Use SDD to talk to an LLM about structural design
 ---
-
-# README: Structured Design Documents
 
 SDD-Text is a compact language for describing software product design as a structured map. SDD-Text is easy to read and write, for people and for LLMs.
 
@@ -42,27 +40,6 @@ Because rendering is separate from the source model, tools that work with design
 - To create design artifacts that AI and LLM workflows can consume without relying on image interpretation.
 - To provide a means to AI and LLM workflows to "speak design", so they can create structural design information outside blobs of code.
 - To give "traditional" product, design, and diagramming tools a shared semantic layer they can integrate with.
-
-## Quick Start
-
-Prerequisites: [Git](https://github.com/git/git), [Node.js 22 LTS](https://github.com/nodejs/node), and [pnpm](https://github.com/pnpm/pnpm). Install Node.js 22 first; `pnpm` will be activated via Corepack in the steps below.
-
-```bash
-git clone https://github.com/knutopia/Structured-Design-Documents.git
-cd Structured-Design-Documents
-scripts/setup-corepack.sh       # Mac, WSL, Linux
-# .\scripts\setup-corepack.ps1  # on Windows, use this instead (in Powershell)
-pnpm install
-pnpm run build
-pnpm sdd --help
-pnpm sdd show small_app_example/small_app.sdd --profile simple --view ia_place_map --out my_first_ia.svg
-```
-
-Notes:
-
-- The setup scripts activate the repo-pinned `pnpm` version declared in `package.json`.
-- In WSL, if future shells route Corepack through `/mnt/c/...`, run `scripts/setup-corepack.sh --write-profile` or add `export COREPACK_HOME="$HOME/.cache/corepack"` to `~/.profile`.
-- If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. For more environment details, see [docs/toolchain/development.md](/home/knut/projects/sdd/docs/toolchain/development.md). See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
 
 ## Example: Small App
 
@@ -172,8 +149,3 @@ The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behin
 - Solve renderers for more diagram types
 - Possibly standalone SDDT file server?
 
-## License And Contributions
-
-- License: this project is available under the [MIT License](LICENSE).
-- Contributing: please read <IconFile/> [CONTRIBUTING.md](../../CONTRIBUTING%2Emd){target="_blank"} before opening an issue or pull request. This repository is currently coordination-first and is not accepting unsolicited pull requests.
-- Contributor License Agreement: accepted outside contributions also require written acceptance of the <IconFile/>[CLA](/CLA.md){target="_blank"} before implementation or merge.

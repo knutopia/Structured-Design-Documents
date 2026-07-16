@@ -80,14 +80,6 @@ export default defineConfig({
           {
             src: normalizePath(path.resolve(__dirname, '../../../definitions')),
             dest: './'
-          },
-          {
-            src: normalizePath(path.resolve(__dirname, '../../../CONTRIBUTING.md')),
-            dest: './'
-          },
-          {
-            src: normalizePath(path.resolve(__dirname, '../../../CLA.md')),
-            dest: './'
           }
         ]
       })

@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-Making an SDD from Scratch Doc!
 -service blueprint: track the sidecar placement regression
 -service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
@@ -26,6 +27,7 @@
 - Link-wrangling
 - Moved initial_concepts into doc_site
 - Stuck in routing snafu for CONTRIBUTING.md
+- Shortened main README
 
 ## Sun 7-12
 
