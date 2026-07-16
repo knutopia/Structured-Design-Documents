@@ -1,0 +1,944 @@
+{
+  "viewId": "journey_map",
+  "profileId": "strict",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "journey_map",
+      "journey_map"
+    ],
+    "viewMetadata": {
+      "journeyMap": {
+        "kind": "root",
+        "rootItemIds": [
+          "G-600",
+          "J-590",
+          "G-500",
+          "J-591"
+        ],
+        "stageIds": [
+          "G-600",
+          "G-500"
+        ],
+        "globalStepIds": [
+          "J-601",
+          "J-602",
+          "J-590",
+          "J-503",
+          "J-502",
+          "J-501",
+          "J-591"
+        ]
+      }
+    },
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 40,
+      "crossAlignment": "start"
+    },
+    "chrome": {
+      "padding": {
+        "top": 32,
+        "right": 32,
+        "bottom": 32,
+        "left": 32
+      },
+      "gutter": 40,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "G-600",
+        "role": "journey_stage",
+        "primitive": "cluster",
+        "classes": [
+          "journey_map",
+          "journey_stage"
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "stage",
+            "rootOrder": 0,
+            "stageOrder": 0
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "horizontal",
+          "gap": 24,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 20,
+            "right": 20,
+            "bottom": 20,
+            "left": 20
+          },
+          "gutter": 24,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "G-600__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Authored-first secondary parent"
+            ],
+            "x": 20,
+            "y": 10,
+            "width": 240.08,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-601",
+            "role": "journey_step",
+            "primitive": "card",
+            "classes": [
+              "journey_map",
+              "journey_step",
+              "journey_step_contained"
+            ],
+            "viewMetadata": {
+              "journeyMap": {
+                "kind": "step",
+                "rootOrder": 0,
+                "stageId": "G-600",
+                "stageOrder": 0,
+                "stepOrder": 0,
+                "globalStepOrder": 0,
+                "uncontained": false
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-601__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Enter secondary flow"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 157.36,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-601__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-601__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-601__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-601__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 52,
+            "y": 92,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "kind": "node",
+            "id": "J-602",
+            "role": "journey_step",
+            "primitive": "card",
+            "classes": [
+              "journey_map",
+              "journey_step",
+              "journey_step_contained"
+            ],
+            "viewMetadata": {
+              "journeyMap": {
+                "kind": "step",
+                "rootOrder": 0,
+                "stageId": "G-600",
+                "stageOrder": 0,
+                "stepOrder": 1,
+                "globalStepOrder": 1,
+                "uncontained": false
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-602__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Leave secondary flow"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 160.768,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-602__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-602__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-602__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-602__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 300,
+            "y": 92,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 32,
+        "y": 32,
+        "width": 512,
+        "height": 128
+      },
+      {
+        "kind": "node",
+        "id": "J-590",
+        "role": "journey_step",
+        "primitive": "card",
+        "classes": [
+          "journey_map",
+          "journey_step",
+          "journey_step_root"
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 1,
+            "globalStepOrder": 2,
+            "uncontained": true
+          }
+        },
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-590__title",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Root handoff"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 96.232,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "J-590__flow_in",
+            "role": "journey_flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "J-590__flow_out",
+            "role": "journey_flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "J-590__escape_in",
+            "role": "journey_escape_in",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "J-590__escape_out",
+            "role": "journey_escape_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 584,
+        "y": 92,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "container",
+        "id": "G-500",
+        "role": "journey_stage",
+        "primitive": "cluster",
+        "classes": [
+          "journey_map",
+          "journey_stage"
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "stage",
+            "rootOrder": 2,
+            "stageOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "horizontal",
+          "gap": 24,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 20,
+            "right": 20,
+            "bottom": 20,
+            "left": 20
+          },
+          "gutter": 24,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "G-500__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Projected-first structural owner"
+            ],
+            "x": 20,
+            "y": 10,
+            "width": 234.848,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-503",
+            "role": "journey_step",
+            "primitive": "card",
+            "classes": [
+              "journey_map",
+              "journey_step",
+              "journey_step_contained"
+            ],
+            "viewMetadata": {
+              "journeyMap": {
+                "kind": "step",
+                "rootOrder": 2,
+                "stageId": "G-500",
+                "stageOrder": 1,
+                "stepOrder": 0,
+                "globalStepOrder": 3,
+                "uncontained": false
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-503__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Shared multiply-contained",
+                  "step"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 197.328,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-503__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "J-503__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 32
+              },
+              {
+                "id": "J-503__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 64
+              },
+              {
+                "id": "J-503__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 64
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 868,
+            "y": 92,
+            "width": 224,
+            "height": 64
+          },
+          {
+            "kind": "node",
+            "id": "J-502",
+            "role": "journey_step",
+            "primitive": "card",
+            "classes": [
+              "journey_map",
+              "journey_step",
+              "journey_step_contained"
+            ],
+            "viewMetadata": {
+              "journeyMap": {
+                "kind": "step",
+                "rootOrder": 2,
+                "stageId": "G-500",
+                "stageOrder": 1,
+                "stepOrder": 1,
+                "globalStepOrder": 4,
+                "uncontained": false
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-502__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Middle-authored child"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 164.008,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-502__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-502__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-502__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-502__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 1116,
+            "y": 92,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "kind": "node",
+            "id": "J-501",
+            "role": "journey_step",
+            "primitive": "card",
+            "classes": [
+              "journey_map",
+              "journey_step",
+              "journey_step_contained"
+            ],
+            "viewMetadata": {
+              "journeyMap": {
+                "kind": "step",
+                "rootOrder": 2,
+                "stageId": "G-500",
+                "stageOrder": 1,
+                "stepOrder": 2,
+                "globalStepOrder": 5,
+                "uncontained": false
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-501__title",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Last-authored child"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 144.496,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "J-501__flow_in",
+                "role": "journey_flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "J-501__flow_out",
+                "role": "journey_flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "J-501__escape_in",
+                "role": "journey_escape_in",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "J-501__escape_out",
+                "role": "journey_escape_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 1364,
+            "y": 92,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 848,
+        "y": 32,
+        "width": 760,
+        "height": 144
+      },
+      {
+        "kind": "node",
+        "id": "J-591",
+        "role": "journey_step",
+        "primitive": "card",
+        "classes": [
+          "journey_map",
+          "journey_step",
+          "journey_step_root"
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 3,
+            "globalStepOrder": 6,
+            "uncontained": true
+          }
+        },
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-591__title",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Root return"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 84.248,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "J-591__flow_in",
+            "role": "journey_flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "J-591__flow_out",
+            "role": "journey_flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "J-591__escape_in",
+            "role": "journey_escape_in",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "J-591__escape_out",
+            "role": "journey_escape_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 1648,
+        "y": 92,
+        "width": 224,
+        "height": 48
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 1904,
+    "height": 208
+  },
+  "edges": [
+    {
+      "id": "J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-503",
+        "portId": "J-503__escape_out",
+        "x": 980,
+        "y": 156
+      },
+      "to": {
+        "itemId": "J-501",
+        "portId": "J-501__escape_in",
+        "x": 1492,
+        "y": 140
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 980,
+            "y": 156
+          },
+          {
+            "x": 980,
+            "y": 168
+          },
+          {
+            "x": 1492,
+            "y": 168
+          },
+          {
+            "x": 1492,
+            "y": 140
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-501__PRECEDES__J-502__51e0788a6e29bb43634e865529e007ccee051ad1e572b8494b89efdd4ae46b2c__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-501",
+        "portId": "J-501__escape_out",
+        "x": 1476,
+        "y": 140
+      },
+      "to": {
+        "itemId": "J-502",
+        "portId": "J-502__escape_in",
+        "x": 1228,
+        "y": 140
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1476,
+            "y": 140
+          },
+          {
+            "x": 1476,
+            "y": 152
+          },
+          {
+            "x": 1228,
+            "y": 152
+          },
+          {
+            "x": 1228,
+            "y": 140
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-591__PRECEDES__J-590__f4e82fc8e90b608618ba9db0adfc05a2b84b27fd7ad9d5165dc1473d75b3dd85__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-591",
+        "portId": "J-591__escape_out",
+        "x": 1760,
+        "y": 140
+      },
+      "to": {
+        "itemId": "J-590",
+        "portId": "J-590__escape_in",
+        "x": 696,
+        "y": 140
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 1760,
+            "y": 140
+          },
+          {
+            "x": 1760,
+            "y": 188
+          },
+          {
+            "x": 696,
+            "y": 188
+          },
+          {
+            "x": 696,
+            "y": 140
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "decorations": [],
+  "diagnostics": [
+    {
+      "phase": "scene",
+      "code": "renderer.scene.journey_map_first_parent_selected",
+      "severity": "info",
+      "message": "Journey Step J-503 uses projected Stage G-500 as its first structural parent.",
+      "targetId": "J-503",
+      "details": "{\"relatedIds\":[\"J-503\",\"G-500\",\"G-600\"],\"selectedStageId\":\"G-500\"}"
+    }
+  ],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

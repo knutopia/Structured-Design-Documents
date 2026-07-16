@@ -18,18 +18,16 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("rendered example corpus", () => {
-  it("labels only preview-only rendered corpus view folders", async () => {
+  it("uses promoted rendered corpus view folders", async () => {
     expect(isPreviewOnlyRenderedCorpusView("outcome_opportunity_map")).toBe(false);
-    expect(isPreviewOnlyRenderedCorpusView("journey_map")).toBe(true);
+    expect(isPreviewOnlyRenderedCorpusView("journey_map")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("scenario_flow")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("ia_place_map")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("ui_contracts")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("service_blueprint")).toBe(false);
 
     expect(getRenderedCorpusViewDirName("outcome_opportunity_map")).toBe("outcome_opportunity_map_diagram_type");
-    expect(getRenderedCorpusViewDirName("journey_map")).toBe(
-      "journey_map_diagram_type [preview_only]"
-    );
+    expect(getRenderedCorpusViewDirName("journey_map")).toBe("journey_map_diagram_type");
     expect(getRenderedCorpusViewDirName("scenario_flow")).toBe("scenario_flow_diagram_type");
     expect(getRenderedCorpusViewDirName("ia_place_map")).toBe("ia_place_map_diagram_type");
     expect(getRenderedCorpusViewDirName("ui_contracts")).toBe("ui_contracts_diagram_type");
@@ -60,16 +58,52 @@ describe("rendered example corpus", () => {
     }
   });
 
-  it("documents the preview-only rendered corpus label in the generated README", async () => {
+  it("documents the promoted journey corpus in the generated README", async () => {
     const bundle = await loadBundle(manifestPath);
     const readme = await readFile(path.join(getRenderedCorpusRoot(bundle), "README.md"), "utf8");
 
-    expect(readme).toContain("Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.");
+    expect(readme).not.toContain("[preview_only]");
     expect(readme).toContain("outcome_opportunity_map_diagram_type/metric_event_instrumentation_example");
     expect(readme).not.toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
-    expect(readme).toContain("journey_map_diagram_type [preview_only]/service_blueprint_slice_example");
+    expect(readme).toContain("journey_map_diagram_type/service_blueprint_slice_example");
+    expect(readme).toContain("`journey_map` visual review checklist:");
     expect(readme).toContain("scenario_flow_diagram_type/scenario_branching_example");
     expect(readme).not.toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");
+  });
+
+  it("keeps staged journey_map previews as the default corpus artifacts while preserving legacy siblings", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
+      (variant) => variant.viewId === "journey_map"
+    );
+
+    expect(variants.length).toBeGreaterThan(0);
+
+    for (const variant of variants) {
+      const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
+      const defaultSvg = await readFile(outputPaths.svgOutputPath, "utf8");
+      expect(defaultSvg).toContain('class="staged-svg');
+      expect(defaultSvg).toContain("journey_map");
+
+      const legacySvgPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "svg",
+        "legacy_graphviz_preview",
+        "staged_journey_map_preview"
+      );
+      const legacyPngPath = getRenderedCorpusPreviewOutputPath(
+        bundle,
+        variant,
+        "png",
+        "legacy_graphviz_preview",
+        "staged_journey_map_preview"
+      );
+      await access(legacySvgPath);
+      await access(legacyPngPath);
+      expect(await readFile(legacySvgPath, "utf8")).not.toContain('class="staged-svg');
+    }
   });
 
   it("keeps committed ui_contracts SVG previews free of visible newline escapes", async () => {

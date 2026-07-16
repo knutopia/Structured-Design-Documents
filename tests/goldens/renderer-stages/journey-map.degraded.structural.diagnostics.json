@@ -1,0 +1,58 @@
+[
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_edge_duplicated",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" appears 2 times with the same stable ID.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_edge_omitted",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" could not be reconstructed after endpoint resolution.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\" and \"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0",
+    "details": "{\"relatedIds\":[\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\"],\"crossingId\":\"journey-crossover:J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0:3:J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0:1\",\"point\":{\"x\":1540,\"y\":168},\"overEdgeId\":\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\",\"underEdgeId\":\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"segmentIndexes\":{\"edgeA\":3,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unresolved_endpoint",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" could not resolve its required east source endpoint.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\",\"J-101\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unresolved_endpoint",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" references a missing positioned Step.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\",\"J-missing\"]}"
+  },
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_disconnected_chain",
+    "severity": "info",
+    "message": "Journey map contains a disconnected secondary PRECEDES chain.",
+    "targetId": "J-250",
+    "details": "{\"relatedIds\":[\"J-250\",\"J-260\"]}"
+  },
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_duplicate_edge_id",
+    "severity": "error",
+    "message": "Journey scene edge ID J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0 occurs more than once.",
+    "targetId": "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0",
+    "details": "{\"relatedIds\":[\"J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0\"]}"
+  }
+]

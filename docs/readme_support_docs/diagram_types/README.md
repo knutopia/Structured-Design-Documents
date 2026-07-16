@@ -43,6 +43,12 @@ This page collects the current diagram families, their status, and links to avai
   Example: [Service Blueprint Slice example](../service_blueprint_slice_example/)
 
 
-## *Not yet Available:* Journey Map
+## Journey Map
 
   Experience intent from above: stages and steps, needs, friction, moments of truth.
+
+  Stages contain source-ordered Steps, while `PRECEDES` relationships overlay journey flow and resolved `opportunity_refs` appear as profile-controlled inline badges.
+
+  Examples: [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/), [service_blueprint_slice_example](../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/)
+
+  Dense topologies may remain difficult to trace; residual crossings are bridged deterministically and reported through renderer diagnostics.

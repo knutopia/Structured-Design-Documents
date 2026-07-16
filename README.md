@@ -4,7 +4,7 @@ SDD-Text is a compact language for describing software product design as a struc
 
 SDD-Text makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
 
-Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](docs/readme_support_docs/diagram_types/).
+Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are available for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Outcome-Opportunity Map, and Journey Map views. All six default to staged preview output, while preserved Graphviz previews remain explicitly selectable. See [Diagram Types](docs/readme_support_docs/diagram_types/).
 
 This repository contains the spec bundle defining the language. The bundle is meant to evolve, to improve the language. The repository also contains a toolchain that validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
 
@@ -124,12 +124,13 @@ See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blu
 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
-- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, and Outcome-Opportunity Map
+- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Outcome-Opportunity Map, and Journey Map
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations
 
-- Journey Map renderer remains preview-only and is not yet polished staged output.
+- Dense or highly connected Journey Maps can remain difficult to trace; residual crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings.
+- Across staged renderers, connectors between unobstructed horizontally adjacent nodes can still use multi-segment doglegs and distracting vertical offsets instead of one straight horizontal segment; a global routing simplification is deferred.
 - Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty
 - No "simple" non-technical user guidance available yet

@@ -1,0 +1,114 @@
+[
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_archetype_fallback",
+    "severity": "warn",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not expose its accepted root-outer bypass contract.",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"root\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_badge_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects badge \"J-201__badge__OP-100__0\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\",\"J-201__badge__OP-100__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_boundary_gate_fallback",
+    "severity": "warn",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not cross Stage \"G-200\" at its locked south gate.",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-200\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_boundary_gate_fallback",
+    "severity": "warn",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not cross Stage \"G-400\" at its locked south gate.",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-400\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_endpoint_intrusion",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" has a disconnected or empty final_basic route.",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-204\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_endpoint_intrusion",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects endpoint Step \"J-204\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-204\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_node_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects unrelated Step \"J-201\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_node_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects unrelated Step \"J-203\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-203\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_node_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects unrelated Step \"J-250\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-250\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_non_orthogonal_route",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" contains a non-orthogonal segment.",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_stage_header_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects Stage header \"G-200\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-200\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_stage_header_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects Stage header \"G-300\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-300\",\"G-300__header\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unrelated_stage_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects unrelated Stage \"G-300\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-300\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.marker_leg_minimum_unmet",
+    "severity": "info",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" has an end marker leg below 12px.",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\"]}"
+  }
+]
