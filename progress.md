@@ -18,7 +18,7 @@
 ## Tue 7-14
 
 - Out of tokens somewhere in Gate 8
-
+- Gate 10 completed - plan done
 
 ## Mon 7-13
 
