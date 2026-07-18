@@ -206,7 +206,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -294,7 +297,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 2,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -382,7 +388,10 @@
                 "stageOrder": 0,
                 "stepOrder": 2,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -470,7 +479,10 @@
                 "stageOrder": 0,
                 "stepOrder": 3,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 3,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -559,7 +571,10 @@
                 "stageOrder": 0,
                 "stepOrder": 4,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 4,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -647,7 +662,10 @@
                 "stageOrder": 0,
                 "stepOrder": 5,
                 "globalStepOrder": 6,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 5,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -886,11 +904,11 @@
           },
           {
             "x": 276,
-            "y": 188
+            "y": 194
           },
           {
             "x": 1952,
-            "y": 188
+            "y": 194
           },
           {
             "x": 1952,
@@ -968,11 +986,11 @@
           },
           {
             "x": 428,
-            "y": 152
+            "y": 158
           },
           {
             "x": 676,
-            "y": 152
+            "y": 158
           },
           {
             "x": 676,
@@ -1013,11 +1031,11 @@
           },
           {
             "x": 676,
-            "y": 152
+            "y": 158
           },
           {
             "x": 428,
-            "y": 152
+            "y": 158
           },
           {
             "x": 428,
@@ -1058,11 +1076,11 @@
           },
           {
             "x": 924,
-            "y": 168
+            "y": 174
           },
           {
             "x": 1172,
-            "y": 168
+            "y": 174
           },
           {
             "x": 1172,
@@ -1103,11 +1121,11 @@
           },
           {
             "x": 1172,
-            "y": 168
+            "y": 174
           },
           {
             "x": 924,
-            "y": 168
+            "y": 174
           },
           {
             "x": 924,
@@ -1155,11 +1173,11 @@
             "y": 80
           },
           {
-            "x": 1296,
+            "x": 1290,
             "y": 80
           },
           {
-            "x": 1296,
+            "x": 1290,
             "y": 116
           },
           {
@@ -1201,11 +1219,11 @@
           },
           {
             "x": 1668,
-            "y": 152
+            "y": 158
           },
           {
             "x": 1420,
-            "y": 152
+            "y": 158
           },
           {
             "x": 1420,

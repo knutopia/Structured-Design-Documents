@@ -19,23 +19,7 @@
     "phase": "routing",
     "code": "renderer.routing.journey_map_boundary_gate_fallback",
     "severity": "warn",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not expose its accepted ordered Stage-gate contract.",
-    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-200\",\"G-400\"]}"
-  },
-  {
-    "phase": "routing",
-    "code": "renderer.routing.journey_map_boundary_gate_fallback",
-    "severity": "warn",
     "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not cross Stage \"G-200\" at its locked east gate.",
-    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-200\"]}"
-  },
-  {
-    "phase": "routing",
-    "code": "renderer.routing.journey_map_boundary_gate_fallback",
-    "severity": "warn",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not cross Stage \"G-200\" at its locked south gate.",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
     "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-200\"]}"
   },
@@ -65,6 +49,14 @@
   },
   {
     "phase": "routing",
+    "code": "renderer.routing.journey_map_preferred_terminal_leg_unmet",
+    "severity": "warn",
+    "message": "Journey edge \"J-903__PRECEDES__J-950__52d993425109eab3b9eefe102c522b22c8c13d129f35ba276e9f93bf496f07e9__0\" achieves a 12px terminal leg; 18px is preferred.",
+    "targetId": "J-903__PRECEDES__J-950__52d993425109eab3b9eefe102c522b22c8c13d129f35ba276e9f93bf496f07e9__0",
+    "details": "{\"relatedIds\":[\"J-903__PRECEDES__J-950__52d993425109eab3b9eefe102c522b22c8c13d129f35ba276e9f93bf496f07e9__0\"],\"edgeId\":\"J-903__PRECEDES__J-950__52d993425109eab3b9eefe102c522b22c8c13d129f35ba276e9f93bf496f07e9__0\",\"achievedLength\":12,\"desiredLength\":18,\"hardMinimum\":12}"
+  },
+  {
+    "phase": "routing",
     "code": "renderer.routing.journey_map_track_separation_unmet",
     "severity": "warn",
     "message": "Resolved journey tracks remain less than 16px apart over an overlapping span.",
@@ -75,14 +67,14 @@
     "phase": "routing",
     "code": "renderer.routing.journey_map_unavoidable_crossing",
     "severity": "warn",
-    "message": "Journey edges \"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\" and \"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
-    "targetId": "J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0",
-    "details": "{\"relatedIds\":[\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\"],\"crossingId\":\"journey-crossover:J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0:3:J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0:1\",\"point\":{\"x\":1540,\"y\":168},\"overEdgeId\":\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\",\"underEdgeId\":\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"segmentIndexes\":{\"edgeA\":3,\"edgeB\":1}}"
+    "message": "Journey edges \"J-901__PRECEDES__J-902__5cc77bf090b31fc282d4c563c7bbd6668d1bdd2b897e27cbd0237681998d79f9__0\" and \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-902__5cc77bf090b31fc282d4c563c7bbd6668d1bdd2b897e27cbd0237681998d79f9__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-902__5cc77bf090b31fc282d4c563c7bbd6668d1bdd2b897e27cbd0237681998d79f9__0\",\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-902__5cc77bf090b31fc282d4c563c7bbd6668d1bdd2b897e27cbd0237681998d79f9__0:0:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:1\",\"point\":{\"x\":336,\"y\":116},\"overEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"underEdgeId\":\"J-901__PRECEDES__J-902__5cc77bf090b31fc282d4c563c7bbd6668d1bdd2b897e27cbd0237681998d79f9__0\",\"segmentIndexes\":{\"edgeA\":0,\"edgeB\":1}}"
   },
   {
     "phase": "routing",
     "code": "renderer.routing.marker_leg_minimum_unmet",
-    "severity": "info",
+    "severity": "error",
     "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" has an end marker leg below 12px.",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
     "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\"]}"

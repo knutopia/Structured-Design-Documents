@@ -129,7 +129,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 0,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -215,7 +218,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -302,7 +308,10 @@
                 "stageOrder": 0,
                 "stepOrder": 2,
                 "globalStepOrder": 2,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -392,10 +401,34 @@
           }
         },
         "layout": {
-          "strategy": "stack",
-          "direction": "horizontal",
+          "strategy": "grid",
+          "columns": 4,
           "gap": 24,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "grid": {
+            "placements": [
+              {
+                "itemId": "J-201",
+                "row": 0,
+                "column": 0
+              },
+              {
+                "itemId": "J-202",
+                "row": 0,
+                "column": 1
+              },
+              {
+                "itemId": "J-203",
+                "row": 1,
+                "column": 1
+              },
+              {
+                "itemId": "J-204",
+                "row": 0,
+                "column": 2
+              }
+            ]
+          }
         },
         "chrome": {
           "padding": {
@@ -443,7 +476,11 @@
                 "stageOrder": 1,
                 "stepOrder": 0,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "diamond_split",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -477,31 +514,31 @@
               },
               {
                 "id": "J-201__badge__OP-100__0",
-                "kind": "badge_text",
-                "textStyleRole": "badge",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
                 "lines": [
                   "Clear total cost"
                 ],
                 "x": 12,
                 "y": 62,
-                "width": 101.062,
-                "height": 22,
-                "lineHeight": 14,
+                "width": 85.062,
+                "height": 16,
+                "lineHeight": 16,
                 "region": "secondary",
                 "priority": "secondary"
               },
               {
                 "id": "J-201__badge__OP-200__0",
-                "kind": "badge_text",
-                "textStyleRole": "badge",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
                 "lines": [
                   "Confidence before commitment"
                 ],
                 "x": 12,
-                "y": 90,
-                "width": 191.842,
-                "height": 22,
-                "lineHeight": 14,
+                "y": 84,
+                "width": 175.842,
+                "height": 16,
+                "lineHeight": 16,
                 "region": "secondary",
                 "priority": "secondary"
               }
@@ -512,35 +549,35 @@
                 "role": "journey_flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 62
+                "y": 56
               },
               {
                 "id": "J-201__flow_out",
                 "role": "journey_flow_out",
                 "side": "east",
                 "x": 224,
-                "y": 62
+                "y": 56
               },
               {
                 "id": "J-201__escape_in",
                 "role": "journey_escape_in",
                 "side": "south",
                 "x": 112,
-                "y": 124
+                "y": 112
               },
               {
                 "id": "J-201__escape_out",
                 "role": "journey_escape_out",
                 "side": "south",
                 "x": 112,
-                "y": 124
+                "y": 112
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 124
+            "height": 112
           },
           {
             "kind": "node",
@@ -560,7 +597,11 @@
                 "stageOrder": 1,
                 "stepOrder": 1,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "diamond_option",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -646,7 +687,11 @@
                 "stageOrder": 1,
                 "stepOrder": 2,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 1,
+                "placementRole": "diamond_option",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -733,7 +778,11 @@
                 "stageOrder": 1,
                 "stepOrder": 3,
                 "globalStepOrder": 6,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "diamond_join",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -803,8 +852,8 @@
           }
         ],
         "ports": [],
-        "width": 1008,
-        "height": 204
+        "width": 760,
+        "height": 280
       },
       {
         "kind": "node",
@@ -1094,7 +1143,10 @@
                 "stageOrder": 3,
                 "stepOrder": 0,
                 "globalStepOrder": 9,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -1169,8 +1221,8 @@
       }
     ],
     "ports": [],
-    "width": 3023.576,
-    "height": 268
+    "width": 2775.576,
+    "height": 344
   },
   "edges": [
     {

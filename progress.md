@@ -17,7 +17,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Sat 7-17
+## Sat 7-18
+
+- Plan partially completed (to gate 7 - 8 rejected - 9 closed incomplete)
+
+## Fri 7-17
 
 - Renamed staged_journey_map_renderer_verification_contract.md
 - Created a visual review doc

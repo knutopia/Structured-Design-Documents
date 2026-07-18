@@ -34,6 +34,7 @@ import {
   resolveTextRoleForBlock,
   validatePrimitiveContent
 } from "./primitives.js";
+import { resolveGridCells } from "./gridLayout.js";
 import { createTextMeasurementService, type TextMeasurementService } from "./textMeasurement.js";
 import { resolveRendererTheme, WIDTH_BAND_ORDER, type RendererTheme, type TextStyleToken } from "./theme.js";
 
@@ -879,34 +880,36 @@ function estimateLinearContentSize(
 
 function estimateGridContentSize(
   children: readonly MeasuredItem[],
-  columns: number | undefined,
+  layout: SceneContainer["layout"],
   gap: number
 ): MeasuredSize {
-  if (children.length === 0) {
+  const resolution = resolveGridCells(children.map((child) => child.id), layout);
+  if (resolution.cells.length === 0) {
     return {
       width: 0,
       height: 0
     };
   }
 
-  const columnCount = Math.max(1, Math.min(columns ?? 1, children.length));
-  const rowCount = Math.ceil(children.length / columnCount);
-  const columnWidths = Array.from({ length: columnCount }, () => 0);
-  const rowHeights = Array.from({ length: rowCount }, () => 0);
+  const columnWidths = Array.from({ length: resolution.columnCount }, () => 0);
+  const rowHeights = Array.from({ length: resolution.rowCount }, () => 0);
+  const cellByItemId = new Map(resolution.cells.map((cell) => [cell.itemId, cell] as const));
 
-  children.forEach((child, index) => {
-    const row = Math.floor(index / columnCount);
-    const column = index % columnCount;
-    columnWidths[column] = Math.max(columnWidths[column] ?? 0, child.width);
-    rowHeights[row] = Math.max(rowHeights[row] ?? 0, child.height);
+  children.forEach((child) => {
+    const cell = cellByItemId.get(child.id);
+    if (cell === undefined) {
+      return;
+    }
+    columnWidths[cell.column] = Math.max(columnWidths[cell.column] ?? 0, child.width);
+    rowHeights[cell.row] = Math.max(rowHeights[cell.row] ?? 0, child.height);
   });
 
   return {
     width: roundMetric(
-      columnWidths.reduce((sum, value) => sum + value, 0) + gap * Math.max(columnCount - 1, 0)
+      columnWidths.reduce((sum, value) => sum + value, 0) + gap * Math.max(resolution.columnCount - 1, 0)
     ),
     height: roundMetric(
-      rowHeights.reduce((sum, value) => sum + value, 0) + gap * Math.max(rowCount - 1, 0)
+      rowHeights.reduce((sum, value) => sum + value, 0) + gap * Math.max(resolution.rowCount - 1, 0)
     )
   };
 }
@@ -916,7 +919,7 @@ function estimateContainerContentSize(container: MeasuredContainer): MeasuredSiz
 
   switch (container.layout.strategy) {
     case "grid":
-      return estimateGridContentSize(container.children, container.layout.columns, gap);
+      return estimateGridContentSize(container.children, container.layout, gap);
     case "stack":
     case "lanes":
     case "elk_layered":
@@ -1055,7 +1058,14 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     primitive: container.primitive,
     classes: [...container.classes],
     viewMetadata: cloneViewMetadata(container.viewMetadata),
-    layout: { ...container.layout },
+    layout: {
+      ...container.layout,
+      ...(container.layout.grid
+        ? { grid: {
+          placements: container.layout.grid.placements.map((placement) => ({ ...placement }))
+        } }
+        : {})
+    },
     chrome,
     headerContent: headerLayout.blocks,
     children,

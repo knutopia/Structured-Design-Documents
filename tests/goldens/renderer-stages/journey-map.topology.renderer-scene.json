@@ -191,7 +191,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -255,7 +258,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 2,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -319,7 +325,10 @@
                 "stageOrder": 0,
                 "stepOrder": 2,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -383,7 +392,10 @@
                 "stageOrder": 0,
                 "stepOrder": 3,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 3,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -447,7 +459,10 @@
                 "stageOrder": 0,
                 "stepOrder": 4,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 4,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -511,7 +526,10 @@
                 "stageOrder": 0,
                 "stepOrder": 5,
                 "globalStepOrder": 6,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 5,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           }

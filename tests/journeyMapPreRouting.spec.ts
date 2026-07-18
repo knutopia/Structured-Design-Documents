@@ -134,6 +134,44 @@ function expectStrictlyIncreasingX(items: readonly PositionedItem[]): void {
   }
 }
 
+function expectProgressionColumnPlacement(items: readonly PositionedItem[]): void {
+  const byColumn = new Map<number, PositionedItem[]>();
+  for (const item of items) {
+    const metadata = item.viewMetadata?.journeyMap;
+    expect(metadata?.kind).toBe("step");
+    if (metadata?.kind !== "step") {
+      continue;
+    }
+    const progressionColumn = metadata.progressionColumn ?? metadata.stepOrder;
+    expect(progressionColumn).toBeDefined();
+    const columnItems = byColumn.get(progressionColumn!) ?? [];
+    columnItems.push(item);
+    byColumn.set(progressionColumn!, columnItems);
+  }
+  const orderedColumns = [...byColumn].sort(([left], [right]) => left - right);
+  for (let columnIndex = 1; columnIndex < orderedColumns.length; columnIndex += 1) {
+    const previousItems = orderedColumns[columnIndex - 1]![1];
+    const currentItems = orderedColumns[columnIndex]![1];
+    expect(Math.min(...currentItems.map((item) => item.x))).toBeGreaterThanOrEqual(
+      Math.max(...previousItems.map((item) => item.x + item.width))
+    );
+  }
+  for (const [, columnItems] of orderedColumns) {
+    expect(new Set(columnItems.map((item) => item.x)).size).toBe(1);
+    const laneOrdered = [...columnItems].sort((left, right) => {
+      const leftMetadata = left.viewMetadata?.journeyMap;
+      const rightMetadata = right.viewMetadata?.journeyMap;
+      return (leftMetadata?.kind === "step" ? leftMetadata.laneOrder ?? 0 : 0)
+        - (rightMetadata?.kind === "step" ? rightMetadata.laneOrder ?? 0 : 0);
+    });
+    for (let laneIndex = 1; laneIndex < laneOrdered.length; laneIndex += 1) {
+      expect(laneOrdered[laneIndex]!.y).toBeGreaterThanOrEqual(
+        laneOrdered[laneIndex - 1]!.y + laneOrdered[laneIndex - 1]!.height
+      );
+    }
+  }
+}
+
 function rectanglesOverlap(
   left: { x: number; y: number; width: number; height: number },
   right: { x: number; y: number; width: number; height: number }
@@ -149,7 +187,7 @@ function sha256(value: string | Uint8Array): string {
 }
 
 describe("journey map measurement and pre-routing placement", () => {
-  it("uses vendored font measurement, standard-to-wide escalation, and explicit secondary badge regions", async () => {
+  it("uses vendored font measurement, standard-to-wide escalation, and explicit secondary metadata regions", async () => {
     const { measuredScene } = await buildFixtureStages("primary");
     const longStep = findMeasuredNode(measuredScene, "J-102");
     expect(longStep.widthPolicy).toEqual({
@@ -170,6 +208,10 @@ describe("journey map measurement and pre-routing placement", () => {
       { id: "J-201__title", region: "primary" },
       { id: "J-201__badge__OP-100__0", region: "secondary" },
       { id: "J-201__badge__OP-200__0", region: "secondary" }
+    ]);
+    expect(badgedStep.content.slice(1).map(({ kind, textStyleRole }) => ({ kind, textStyleRole }))).toEqual([
+      { kind: "metadata", textStyleRole: "metadata" },
+      { kind: "metadata", textStyleRole: "metadata" }
     ]);
     for (const block of badgedStep.content) {
       expect(block.x).toBeGreaterThanOrEqual(0);
@@ -287,7 +329,7 @@ describe("journey map measurement and pre-routing placement", () => {
         expect(positionedItem.children.map((item) => item.id)).toEqual(
           sceneStage?.kind === "container" ? sceneStage.children.map((item) => item.id) : []
         );
-        expectStrictlyIncreasingX(positionedItem.children);
+        expectProgressionColumnPlacement(positionedItem.children);
         stageContentTops.push(
           positionedItem.y
           + positionedItem.chrome.padding.top
@@ -313,11 +355,22 @@ describe("journey map measurement and pre-routing placement", () => {
     const scene = first.preRoutingPositionedScene;
     const stage = findPositionedContainer(scene, "G-200");
 
-    for (let index = 1; index < stage.children.length; index += 1) {
-      const previous = stage.children[index - 1]!;
-      const current = stage.children[index]!;
-      expect(current.x - (previous.x + previous.width)).toBe(24);
-    }
+    const split = stage.children.find((item) => item.id === "J-201")!;
+    const firstOption = stage.children.find((item) => item.id === "J-202")!;
+    const secondOption = stage.children.find((item) => item.id === "J-203")!;
+    const join = stage.children.find((item) => item.id === "J-204")!;
+    expect(firstOption.x - (split.x + split.width)).toBe(24);
+    expect(secondOption.x).toBe(firstOption.x);
+    const mainLaneHeight = Math.max(
+      split.height,
+      firstOption.height,
+      join.height
+    );
+    expect(secondOption.y - firstOption.y).toBe(mainLaneHeight + 24);
+    expect(join.x - Math.max(
+      firstOption.x + firstOption.width,
+      secondOption.x + secondOption.width
+    )).toBe(24);
     const stageContentBottom = Math.max(...stage.children.map((item) => item.y + item.height));
     expect(stage.y + stage.height - stageContentBottom).toBe(20);
 
@@ -428,8 +481,7 @@ describe("journey map measurement and pre-routing placement", () => {
       ["primary", "permissive", "measuredScene", "journey-map.badges.permissive.measured-scene.json"],
       ["ordering_ownership", "strict", "preRoutingPositionedScene", "journey-map.ordering-ownership.pre-routing.positioned-scene.json"],
       ["topology", "strict", "preRoutingPositionedScene", "journey-map.topology.pre-routing.positioned-scene.json"],
-      ["duplicate", "strict", "preRoutingPositionedScene", "journey-map.duplicate.pre-routing.positioned-scene.json"],
-      ["compressed", "strict", "preRoutingPositionedScene", "journey-map.compressed.pre-routing.positioned-scene.json"]
+      ["duplicate", "strict", "preRoutingPositionedScene", "journey-map.duplicate.pre-routing.positioned-scene.json"]
     ] as const;
 
     for (const [fixture, profileId, stage, snapshotFileName] of cases) {

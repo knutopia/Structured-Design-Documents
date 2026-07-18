@@ -138,6 +138,10 @@ export type JourneyMapItemMetadata =
       stepOrder?: number;
       globalStepOrder: number;
       uncontained: boolean;
+      progressionColumn?: number;
+      laneOrder?: number;
+      placementRole?: "linear" | "diamond_split" | "diamond_option" | "diamond_join";
+      branchGroupId?: string;
     };
 
 export interface ViewMetadata {
@@ -225,12 +229,21 @@ export interface BoxSpacing {
   left: number;
 }
 
+export interface GridCellPlacement {
+  itemId: string;
+  row: number;
+  column: number;
+}
+
 export interface LayoutIntent {
   strategy: LayoutStrategy;
   direction?: LayoutDirection;
   gap?: number;
   crossAlignment?: CrossAlignment;
   columns?: number;
+  grid?: {
+    placements: GridCellPlacement[];
+  };
   elk?: {
     hierarchyHandling?: ElkHierarchyHandling;
     strict?: boolean;

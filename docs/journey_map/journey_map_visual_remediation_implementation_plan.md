@@ -1,10 +1,12 @@
 # Journey Map Visual Remediation Implementation Plan
 
-**Status:** proposed implementation plan; no remediation code has been written.
+**Status:** implemented through Gate 7; Gate 8 dense experiment rejected; Gate 9 closeout completed without compressed or corpus promotion.
 
 **Scope:** the visual issues recorded in [`visual_issues_in_journey_map.md`](visual_issues_in_journey_map.md), including the clarified requirement that opportunity references appear as plain, unboxed secondary text.
 
 **Primary proof:** the focused Journey Map fixtures and plates cataloged in [`staged_journey_map_renderer_current_state_visual_review.md`](staged_journey_map_renderer_current_state_visual_review.md).
+
+**Execution status:** execution closed on 2026-07-18 with `JM-VIS-002` still open. Bundle compatibility terms such as `inline_step_badges` and typed `badges` retain authority over inline reference presence, target resolution, ordering, and profile visibility; unboxed `metadata` is a staged Journey presentation choice and does not change SDD semantics. Direct-horizontal candidate policy is Journey-owned for this remediation. Connector labels remain deferred.
 
 ## 1. Outcome
 
@@ -353,6 +355,23 @@ All four must retain legal ports, clear arrows, exact edge counts, and zero seco
 9. Keep connector labels documented as deferred; do not alter label model, placement, or bundle behavior.
 
 **Exit:** focused and full verification pass, accepted artifacts are deterministic, protected outputs are exact, and each issue is closed, partial, superseded, or deferred with evidence.
+
+## 5.1 Execution ledger
+
+| Gate | Result | Evidence and decision |
+| --- | --- | --- |
+| 0 — contract and baseline | complete | Bundle-controlled reference presence/order was separated from staged presentation chrome; direct-route policy was recorded as Journey-owned; validation paths were made repository-relative. The dense baseline was 42 crossings; pre-routing root `1888×192`, `G-900` `760×128`, `G-910` `760×128`; final root `2064×384`, `G-900` `872×224`, `G-910` `760×160`. Protected output matrices established the legacy/projection/non-Journey hash boundary. |
+| 1 — plain reference metadata | complete | Strict and permissive staged Journey references render as unboxed secondary metadata, simple remains hidden, and shared legitimate `badge_text` chrome is unchanged. The collision diagnostic is `renderer.routing.journey_map_secondary_content_intersection`. |
+| 2 — explicit shared grid | complete | Measurement and macro layout consume the same pure resolver; complete/unique/non-negative placement validation, sparse cells, alignment, fallback, deep-clone isolation, and existing row-major byte parity are covered. |
+| 3 — middle layer and stacking | complete | The extracted middle layer recognizes only the locked non-overlapping simple-diamond topology. `G-200` retains authored children `[J-201,J-202,J-203,J-204]` while assigning `(0,0)`, `(1,0)`, `(1,1)`, `(2,0)`. Unsupported topology keeps the former horizontal fallback. |
+| 4 — direct routes | complete | The common deterministic selector scores actual previously accepted provisional routes in authored order. `J-101→J-102`, `J-102→J-103`, `J-201→J-202`, and public `J-001→J-002` are one segment; duplicate same-endpoint groups remain excluded. |
+| 5 — right-edge egress | complete | `J-204→J-401` selects `long_forward_east_egress`, leaves `G-200` through its east gate before descending, and does not change `G-200` dimensions. |
+| 6 — preferred terminal leg | complete with one specified degraded case | Preferred 18px construction runs before occupancy and endpoint resolution. Nominal bent proofs meet 18px; dense `J-903→J-950` exhausts bounded alternatives at 12px and emits exactly one warning containing achieved 12, desired 18, and hard minimum 12. |
+| 7 — minimal-turn reassessment | complete | Stacked fan-out/fan-in use selected minimal-L candidates where legal. The original `J-201→J-203` multi-turn defect disappeared, so `JM-VIS-005` is superseded by the executable stacked-placement/candidate proof. |
+| 8 — dense early-egress experiment | rejected | The experiment preserved all 18 edge identities and emitted no hard errors, but produced 58 residual crossings and 56 continuity marks, root `2064×400`, `G-900` `856×224`, and `G-910` `760×160`. It failed the `≤31` crossing and `≤2064×384` root gates. `early_south_egress` was withdrawn from selection, compressed goldens were not refreshed, and `JM-VIS-002` remains open. |
+| 9 — integration and closeout | partial by stop rule | Focused Journey, shared-grid, protected legacy/projection, non-Journey staged, public backend, and build checks pass. Accepted focused Journey evidence was refreshed only for completed gates. Corpus generation and promotion were withheld because Gate 8 failed; no corpus bytes were normalized around the rejected dense output. |
+
+Independent read-only review accepted the primary and topology proofs at intrinsic size and confirmed no unexplained non-Journey drift. It rejected the dense composition on the numeric gates above. Residual runtime diagnostics are the one dense preferred-leg warning, 58 dense crossing warnings, and the pre-existing informational topology diagnostics; accepted nominal proofs have no hard routing diagnostics.
 
 ## 6. Required test strategy
 

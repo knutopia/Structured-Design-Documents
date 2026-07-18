@@ -206,7 +206,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -294,7 +297,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 2,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -382,7 +388,10 @@
                 "stageOrder": 0,
                 "stepOrder": 2,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -470,7 +479,10 @@
                 "stageOrder": 0,
                 "stepOrder": 3,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 3,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -559,7 +571,10 @@
                 "stageOrder": 0,
                 "stepOrder": 4,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 4,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -647,7 +662,10 @@
                 "stageOrder": 0,
                 "stepOrder": 5,
                 "globalStepOrder": 6,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 5,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -722,7 +740,7 @@
         "x": 296,
         "y": 32,
         "width": 1504,
-        "height": 160
+        "height": 176
       },
       {
         "kind": "node",
@@ -814,7 +832,7 @@
     "x": 0,
     "y": 0,
     "width": 2096,
-    "height": 224
+    "height": 240
   },
   "edges": [
     {
@@ -828,7 +846,7 @@
         "itemId": "J-790",
         "portId": "J-790__flow_out",
         "x": 256,
-        "y": 108
+        "y": 116
       },
       "to": {
         "itemId": "J-701",
@@ -841,14 +859,6 @@
         "points": [
           {
             "x": 256,
-            "y": 108
-          },
-          {
-            "x": 286,
-            "y": 108
-          },
-          {
-            "x": 286,
             "y": 116
           },
           {
@@ -873,7 +883,7 @@
         "itemId": "J-790",
         "portId": "J-790__flow_out",
         "x": 256,
-        "y": 124
+        "y": 136
       },
       "to": {
         "itemId": "J-791",
@@ -886,19 +896,19 @@
         "points": [
           {
             "x": 256,
-            "y": 124
+            "y": 136
           },
           {
             "x": 276,
-            "y": 124
+            "y": 136
           },
           {
             "x": 276,
-            "y": 204
+            "y": 226
           },
           {
             "x": 1952,
-            "y": 204
+            "y": 226
           },
           {
             "x": 1952,
@@ -976,11 +986,11 @@
           },
           {
             "x": 444,
-            "y": 152
+            "y": 158
           },
           {
             "x": 676,
-            "y": 152
+            "y": 158
           },
           {
             "x": 676,
@@ -1021,11 +1031,11 @@
           },
           {
             "x": 692,
-            "y": 168
+            "y": 174
           },
           {
             "x": 428,
-            "y": 168
+            "y": 174
           },
           {
             "x": 428,
@@ -1066,11 +1076,11 @@
           },
           {
             "x": 940,
-            "y": 168
+            "y": 174
           },
           {
             "x": 1172,
-            "y": 168
+            "y": 174
           },
           {
             "x": 1172,
@@ -1111,11 +1121,11 @@
           },
           {
             "x": 1188,
-            "y": 184
+            "y": 190
           },
           {
             "x": 924,
-            "y": 184
+            "y": 190
           },
           {
             "x": 924,
@@ -1163,11 +1173,11 @@
             "y": 80
           },
           {
-            "x": 1296,
+            "x": 1290,
             "y": 80
           },
           {
-            "x": 1296,
+            "x": 1290,
             "y": 116
           },
           {
@@ -1209,11 +1219,11 @@
           },
           {
             "x": 1668,
-            "y": 152
+            "y": 158
           },
           {
             "x": 1420,
-            "y": 152
+            "y": 158
           },
           {
             "x": 1420,

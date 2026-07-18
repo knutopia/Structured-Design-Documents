@@ -11,6 +11,7 @@ import type {
   PositionedRoute
 } from "../src/renderer/staged/contracts.js";
 import { renderJourneyMapRoutingArtifacts } from "../src/renderer/staged/journeyMap.js";
+import { JOURNEY_MAP_PREFERRED_TERMINAL_LEG } from "../src/renderer/staged/journeyMapRouting.js";
 import type { RendererDiagnostic } from "../src/renderer/staged/diagnostics.js";
 import { MIN_ARROW_MARKER_LEG } from "../src/renderer/staged/routing.js";
 import {
@@ -277,11 +278,11 @@ describe("journey map Gate 6 visual acceptance", () => {
     );
     expect(longCross).toBeDefined();
     expect(rootDirect).toBeDefined();
-    expect(longCross!.from).toMatchObject({ portId: "J-204__escape_out", x: 1788, y: 140 });
-    expect(longCross!.to).toMatchObject({ portId: "J-401__escape_in", x: 2859.576, y: 140 });
+    expect(longCross!.from).toMatchObject({ portId: "J-204__flow_out", x: 1652, y: 116 });
+    expect(longCross!.to).toMatchObject({ portId: "J-401__escape_in", x: 2611.576, y: 140 });
     expect(rootDirect!.route.points).toEqual([
-      { x: 2184, y: 116 },
-      { x: 2224, y: 116 }
+      { x: 1936, y: 116 },
+      { x: 1976, y: 116 }
     ]);
 
     const items = flattenPositionedItems(scene.root);
@@ -311,20 +312,20 @@ describe("journey map Gate 6 visual acceptance", () => {
     for (const box of rootItemBoxes) {
       expect(routeIntersectsRect(longCross!.route, box)).toBe(false);
     }
-    const peripheralY = 248;
+    const peripheralY = 330;
     expect(peripheralY).toBeGreaterThan(
       Math.max(...scene.root.children.map((item) => item.y + item.height))
     );
     expect(peripheralY).toBeLessThan(scene.root.y + scene.root.height);
-    expect(longCross!.route.points).toContainEqual({ x: 1788, y: 236 });
-    expect(longCross!.route.points).toContainEqual({ x: 2859.576, y: 160 });
+    expect(longCross!.route.points).toContainEqual({ x: 1690, y: 330 });
+    expect(longCross!.route.points).toContainEqual({ x: 2611.576, y: 160 });
     expect(longCross!.route.points.at(-2)?.y).toBeGreaterThan(longCross!.route.points.at(-1)!.y);
     expect(getTerminalSegmentLength(longCross!)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     expect(rendered.provisionalSvg).not.toBe(rendered.step2Svg);
     expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
-  it("keeps branch fan-out on a common east departure with clear local and root-peripheral tracks", async () => {
+  it("uses direct and minimal-L branch fan-out with clear local and root-peripheral tracks", async () => {
     const bundle = await loadBundle(manifestPath);
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
@@ -353,11 +354,15 @@ describe("journey map Gate 6 visual acceptance", () => {
     const primaryBranches = primaryScene.edges.filter((edge) => edge.from.itemId === "J-201");
     expect(primaryBranches).toHaveLength(2);
     expect(primaryBranches.map((edge) => edge.from)).toEqual([
-      { itemId: "J-201", portId: "J-201__flow_out", x: 1156, y: 154 },
-      { itemId: "J-201", portId: "J-201__flow_out", x: 1156, y: 154 }
+      { itemId: "J-201", portId: "J-201__flow_out", x: 1156, y: 139 },
+      { itemId: "J-201", portId: "J-201__escape_out", x: 1044, y: 204 }
     ]);
-    expect(primaryBranches[0]!.route.points).toContainEqual({ x: 1168, y: 116 });
-    expect(primaryBranches[1]!.route.points).toContainEqual({ x: 1168, y: 228 });
+    expect(primaryBranches[0]!.route.points).toEqual([
+      { x: 1156, y: 139 }, { x: 1180, y: 139 }
+    ]);
+    expect(primaryBranches[1]!.route.points).toEqual([
+      { x: 1044, y: 204 }, { x: 1044, y: 260 }, { x: 1180, y: 260 }
+    ]);
 
     const primaryItems = flattenPositionedItems(primaryScene.root);
     const primaryNodeBoxes = primaryItems
@@ -391,10 +396,10 @@ describe("journey map Gate 6 visual acceptance", () => {
       edge.from.itemId === "J-714" && edge.to.itemId === "J-791"
     );
     expect(enterStage?.route.points).toEqual([
-      { x: 256, y: 116 }, { x: 296, y: 116 }, { x: 316, y: 116 }
+      { x: 256, y: 116 }, { x: 316, y: 116 }
     ]);
-    expect(outer?.route.points).toContainEqual({ x: 276, y: 188 });
-    expect(outer?.route.points).toContainEqual({ x: 1800, y: 188 });
+    expect(outer?.route.points).toContainEqual({ x: 276, y: 194 });
+    expect(outer?.route.points).toContainEqual({ x: 1800, y: 194 });
     expect(exitStage?.route.points).toEqual([
       { x: 1780, y: 116 }, { x: 1800, y: 116 }, { x: 1840, y: 116 }
     ]);
@@ -421,13 +426,13 @@ describe("journey map Gate 6 visual acceptance", () => {
       item.kind === "container" && item.id === "G-700"
     );
     expect(stage).toBeDefined();
-    expect(188).toBeGreaterThan(stage!.y + stage!.height);
-    expect(188).toBeLessThan(topologyScene.root.y + topologyScene.root.height);
+    expect(194).toBeGreaterThan(stage!.y + stage!.height);
+    expect(194).toBeLessThan(topologyScene.root.y + topologyScene.root.height);
     expect(primary.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
     expect(topology.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
-  it("records the nominal join crossing as readability debt while keeping hard geometry clear", async () => {
+  it("removes the nominal join crossing with direct and minimal-L routes", async () => {
     const bundle = await loadBundle(manifestPath);
     const compiled = compileSource({
       path: primaryFixturePath,
@@ -459,13 +464,10 @@ describe("journey map Gate 6 visual acceptance", () => {
       edge.from.itemId === "J-201" && edge.to.itemId === "J-203"
     );
     expect(bypass?.route.points).toEqual([
-      { x: 1292, y: 140 }, { x: 1292, y: 168 },
-      { x: 1428, y: 168 }, { x: 1652, y: 168 }, { x: 1664, y: 168 },
-      { x: 1664, y: 116 }, { x: 1676, y: 116 }
+      { x: 1404, y: 116 }, { x: 1428, y: 116 }
     ]);
     expect(direct?.route.points).toEqual([
-      { x: 1652, y: 124 }, { x: 1664, y: 124 },
-      { x: 1664, y: 116 }, { x: 1676, y: 116 }
+      { x: 1404, y: 260 }, { x: 1540, y: 260 }, { x: 1540, y: 140 }
     ]);
     expect(branchBypass).toBeDefined();
 
@@ -487,12 +489,10 @@ describe("journey map Gate 6 visual acceptance", () => {
       expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     }
 
-    const nominalCrossing = { x: 1540, y: 168 };
-    expect(routeContainsPoint(bypass!.route, nominalCrossing)).toBe(true);
-    expect(routeContainsPoint(branchBypass!.route, nominalCrossing)).toBe(true);
-    const mergedConvergence = { x: 1664, y: 116 };
-    expect(routeContainsPoint(bypass!.route, mergedConvergence)).toBe(true);
-    expect(routeContainsPoint(direct!.route, mergedConvergence)).toBe(true);
+    expect(routesIntersect(bypass!.route, direct!.route)).toBe(false);
+    expect(sharedCollinearSegments(bypass!.route, direct!.route)).toEqual([]);
+    expect(properPerpendicularCrossings(bypass!.route, direct!.route)).toEqual([]);
+    expect(properPerpendicularCrossings(branchBypass!.route, direct!.route)).toEqual([]);
     expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
 
@@ -528,13 +528,13 @@ describe("journey map Gate 6 visual acceptance", () => {
       edge.from.itemId === "J-591" && edge.to.itemId === "J-590"
     );
     expect(sameStageReturn?.route.points).toEqual([
-      { x: 1476, y: 140 }, { x: 1476, y: 152 },
-      { x: 1228, y: 152 }, { x: 1228, y: 140 }
+      { x: 1476, y: 140 }, { x: 1476, y: 158 },
+      { x: 1228, y: 158 }, { x: 1228, y: 140 }
     ]);
     expect(rootReturn?.route.points).toEqual([
-      { x: 1760, y: 140 }, { x: 1760, y: 188 },
-      { x: 1608, y: 188 }, { x: 848, y: 188 },
-      { x: 696, y: 188 }, { x: 696, y: 140 }
+      { x: 1760, y: 140 }, { x: 1760, y: 194 },
+      { x: 1608, y: 194 }, { x: 848, y: 194 },
+      { x: 696, y: 194 }, { x: 696, y: 140 }
     ]);
     expect(incomingSkip).toBeDefined();
     const sharedStemPoint = { x: 1476, y: 146 };
@@ -572,8 +572,8 @@ describe("journey map Gate 6 visual acceptance", () => {
       edge.from.itemId === "J-714" && edge.to.itemId === "J-713"
     );
     expect(topologyReturn?.route.points).toEqual([
-      { x: 1668, y: 140 }, { x: 1668, y: 152 },
-      { x: 1420, y: 152 }, { x: 1420, y: 140 }
+      { x: 1668, y: 140 }, { x: 1668, y: 158 },
+      { x: 1420, y: 158 }, { x: 1420, y: 140 }
     ]);
     const topologyItems = flattenPositionedItems(topologyScene.root);
     const topologyNodes = topologyItems
@@ -628,25 +628,25 @@ describe("journey map Gate 6 visual acceptance", () => {
       edge.from.itemId === "J-712" && edge.to.itemId === "J-711"
     );
     expect(firstForward?.route.points).toEqual([
-      { x: 428, y: 140 }, { x: 428, y: 152 },
-      { x: 676, y: 152 }, { x: 676, y: 140 }
+      { x: 428, y: 140 }, { x: 428, y: 158 },
+      { x: 676, y: 158 }, { x: 676, y: 140 }
     ]);
     expect(firstReturn?.route.points).toEqual([
-      { x: 676, y: 140 }, { x: 676, y: 152 },
-      { x: 428, y: 152 }, { x: 428, y: 140 }
+      { x: 676, y: 140 }, { x: 676, y: 158 },
+      { x: 428, y: 158 }, { x: 428, y: 140 }
     ]);
     expect(secondForward?.route.points).toEqual([
-      { x: 924, y: 140 }, { x: 924, y: 168 },
-      { x: 1172, y: 168 }, { x: 1172, y: 156 }
+      { x: 924, y: 140 }, { x: 924, y: 174 },
+      { x: 1172, y: 174 }, { x: 1172, y: 156 }
     ]);
     expect(secondReturn?.route.points).toEqual([
-      { x: 1172, y: 156 }, { x: 1172, y: 168 },
-      { x: 924, y: 168 }, { x: 924, y: 140 }
+      { x: 1172, y: 156 }, { x: 1172, y: 174 },
+      { x: 924, y: 174 }, { x: 924, y: 140 }
     ]);
-    expect(routeContainsPoint(firstForward!.route, { x: 552, y: 152 })).toBe(true);
-    expect(routeContainsPoint(firstReturn!.route, { x: 552, y: 152 })).toBe(true);
-    expect(routeContainsPoint(secondForward!.route, { x: 1048, y: 168 })).toBe(true);
-    expect(routeContainsPoint(secondReturn!.route, { x: 1048, y: 168 })).toBe(true);
+    expect(routeContainsPoint(firstForward!.route, { x: 552, y: 158 })).toBe(true);
+    expect(routeContainsPoint(firstReturn!.route, { x: 552, y: 158 })).toBe(true);
+    expect(routeContainsPoint(secondForward!.route, { x: 1048, y: 174 })).toBe(true);
+    expect(routeContainsPoint(secondReturn!.route, { x: 1048, y: 174 })).toBe(true);
 
     const compressed = await renderFixture(compressedFixturePath);
     const compressedScene = compressed.routingStages.provisionalPositionedScene;
@@ -657,18 +657,19 @@ describe("journey map Gate 6 visual acceptance", () => {
     const outerReturn = compressedScene.edges.find((edge) =>
       edge.from.itemId === "J-913" && edge.to.itemId === "J-901"
     );
-    expect(shorterReturn?.route.points).toEqual([
-      { x: 1476, y: 140 }, { x: 1476, y: 160 }, { x: 1476, y: 172 },
-      { x: 1056, y: 172 }, { x: 832, y: 172 }, { x: 412, y: 172 },
-      { x: 412, y: 160 }, { x: 412, y: 140 }
-    ]);
-    expect(outerReturn?.route.points).toEqual([
-      { x: 1724, y: 140 }, { x: 1724, y: 160 }, { x: 1724, y: 172 },
-      { x: 1056, y: 172 }, { x: 832, y: 172 }, { x: 164, y: 172 },
-      { x: 164, y: 160 }, { x: 164, y: 140 }
-    ]);
-    expect(routeContainsPoint(shorterReturn!.route, { x: 944, y: 172 })).toBe(true);
-    expect(routeContainsPoint(outerReturn!.route, { x: 944, y: 172 })).toBe(true);
+    expect(shorterReturn).toBeDefined();
+    expect(outerReturn).toBeDefined();
+    const sharedReturnTrack = sharedCollinearSegments(
+      shorterReturn!.route,
+      outerReturn!.route
+    ).find((segment) => segment.axis === "horizontal");
+    expect(sharedReturnTrack).toBeDefined();
+    expect(sharedReturnTrack!.coordinate).toBeGreaterThan(
+      Math.max(...compressedScene.root.children.map((item) => item.y + item.height))
+    );
+    expect(sharedReturnTrack!.coordinate).toBeLessThan(
+      compressedScene.root.y + compressedScene.root.height
+    );
 
     for (const scene of [topologyScene, compressedScene]) {
       const nodeBoxes = flattenPositionedItems(scene.root)
@@ -690,8 +691,12 @@ describe("journey map Gate 6 visual acceptance", () => {
       }
     }
     expect(topology.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
-    expect(compressed.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
-  });
+    expect(compressed.diagnostics.filter(isBlockingJourneyDiagnostic)).toEqual([
+      expect.objectContaining({
+        code: "renderer.routing.journey_map_preferred_terminal_leg_unmet"
+      })
+    ]);
+  }, 10_000);
 });
 
 describe("journey map Gate 6 self-loop visual acceptance", () => {
@@ -727,9 +732,9 @@ describe("journey map Gate 6 self-loop visual acceptance", () => {
     });
     expect(selfLoop!.route.points).toEqual([
       { x: 1532, y: 116 }, { x: 1544, y: 116 }, { x: 1544, y: 80 },
-      { x: 1296, y: 80 }, { x: 1296, y: 116 }, { x: 1308, y: 116 }
+      { x: 1290, y: 80 }, { x: 1290, y: 116 }, { x: 1308, y: 116 }
     ]);
-    expect(getTerminalSegmentLength(selfLoop!)).toBe(MIN_ARROW_MARKER_LEG);
+    expect(getTerminalSegmentLength(selfLoop!)).toBe(JOURNEY_MAP_PREFERRED_TERMINAL_LEG);
 
     const items = flattenPositionedItems(scene.root);
     const nodeBoxes = items
@@ -771,7 +776,7 @@ describe("journey map Gate 6 self-loop visual acceptance", () => {
       expect(routesIntersect(selfLoop!.route, acceptedEdge.route), acceptedEdge.id).toBe(false);
     }
     expect(routeContainsPoint(selfLoop!.route, { x: 1500, y: 80 })).toBe(true);
-    expect(routeContainsPoint(backward!.route, { x: 1500, y: 152 })).toBe(true);
+    expect(routeContainsPoint(backward!.route, { x: 1500, y: 158 })).toBe(true);
     expect(rendered.provisionalSvg).toContain("marker-end=\"url(#scene-marker-arrow-end)\"");
     expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   });
@@ -998,7 +1003,7 @@ describe("journey map Gate 7 ordering and primary endpoint visual proof", () => 
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
   });
 
-  it("gives primary branches and joins distinct arrow endpoints in prepared-stem order", async () => {
+  it("gives stacked primary branches and joins distinct legal endpoint sides", async () => {
     const rendered = await renderFixture(primaryFixturePath);
     const scene = rendered.routingStages.finalPositionedScene;
     const edge = (from: string, to: string) => scene.edges.find((candidate) =>
@@ -1009,22 +1014,16 @@ describe("journey map Gate 7 ordering and primary endpoint visual proof", () => 
     const upperJoin = edge("J-203", "J-204");
     const lowerJoin = edge("J-202", "J-204");
 
-    expect([nearBranch.from.y, farBranch.from.y]).toEqual([146, 162]);
-    expect([upperJoin.to.y, lowerJoin.to.y]).toEqual([108, 124]);
-    expect([upperJoin.to.x, lowerJoin.to.x]).toEqual([1692, 1692]);
-    expect(farBranch.from.y - nearBranch.from.y).toBe(16);
-    expect(lowerJoin.to.y - upperJoin.to.y).toBe(16);
+    expect(nearBranch.from).toMatchObject({ portId: "J-201__flow_out", x: 1156, y: 139 });
+    expect(farBranch.from).toMatchObject({ portId: "J-201__escape_out", x: 1044, y: 204 });
+    expect(upperJoin.to).toMatchObject({ portId: "J-204__escape_in", x: 1540, y: 140 });
+    expect(lowerJoin.to).toMatchObject({ portId: "J-204__flow_in", x: 1428, y: 116 });
     expect(sharedCollinearSegments(nearBranch.route, farBranch.route)).toEqual([]);
     expect(sharedCollinearSegments(upperJoin.route, lowerJoin.route)).toEqual([]);
     expect(properPerpendicularCrossings(nearBranch.route, farBranch.route)).toEqual([]);
     expect(properPerpendicularCrossings(upperJoin.route, lowerJoin.route)).toEqual([]);
     expect(routesIntersect(upperJoin.route, lowerJoin.route)).toBe(false);
-    expect(rendered.routingStages.expansionAttempts).toEqual([{
-      attempt: 1,
-      requests: [{
-        kind: "stage_step_gap", stageId: "G-200", afterStepOrder: 2, amount: 16
-      }]
-    }]);
+    expect(rendered.routingStages.expansionAttempts).toEqual([]);
     for (const candidate of [nearBranch, farBranch, upperJoin, lowerJoin]) {
       expect(getTerminalSegmentLength(candidate)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     }
@@ -1064,20 +1063,20 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
     const selfLoop = edge("J-713", "J-713");
 
     expect(firstForward.route.points).toEqual([
-      { x: 444, y: 140 }, { x: 444, y: 152 },
-      { x: 676, y: 152 }, { x: 676, y: 140 }
+      { x: 444, y: 140 }, { x: 444, y: 158 },
+      { x: 676, y: 158 }, { x: 676, y: 140 }
     ]);
     expect(firstReturn.route.points).toEqual([
-      { x: 692, y: 140 }, { x: 692, y: 168 },
-      { x: 428, y: 168 }, { x: 428, y: 140 }
+      { x: 692, y: 140 }, { x: 692, y: 174 },
+      { x: 428, y: 174 }, { x: 428, y: 140 }
     ]);
     expect(secondForward.route.points).toEqual([
-      { x: 940, y: 140 }, { x: 940, y: 168 },
-      { x: 1172, y: 168 }, { x: 1172, y: 156 }
+      { x: 940, y: 140 }, { x: 940, y: 174 },
+      { x: 1172, y: 174 }, { x: 1172, y: 156 }
     ]);
     expect(secondReturn.route.points).toEqual([
-      { x: 1188, y: 156 }, { x: 1188, y: 184 },
-      { x: 924, y: 184 }, { x: 924, y: 140 }
+      { x: 1188, y: 156 }, { x: 1188, y: 190 },
+      { x: 924, y: 190 }, { x: 924, y: 140 }
     ]);
     for (const [inner, outer] of [
       [firstForward, firstReturn],
@@ -1090,7 +1089,7 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
       expect(getTerminalSegmentLength(outer)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     }
     expect(selfLoop.route.points).toContainEqual({ x: 1544, y: 80 });
-    expect(selfLoop.route.points).toContainEqual({ x: 1296, y: 80 });
+    expect(selfLoop.route.points).toContainEqual({ x: 1290, y: 80 });
     for (const reciprocal of [firstForward, firstReturn, secondForward, secondReturn]) {
       expect(routesIntersect(selfLoop.route, reciprocal.route)).toBe(false);
     }
@@ -1109,7 +1108,7 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
     }
     expect(rendered.routingStages.expansionAttempts).toEqual([{
       attempt: 1,
-      requests: [{ kind: "stage_bypass_gutter", stageId: "G-700", amount: 16 }]
+      requests: [{ kind: "stage_bypass_gutter", stageId: "G-700", amount: 32 }]
     }]);
     expect(rendered.finalSvg).toBe(rerendered.finalSvg);
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
@@ -1117,8 +1116,8 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
   });
 });
 
-describe("journey map Gate 7 compressed occupancy visual proof", () => {
-  it("keeps all dense connectors individually traceable after bounded expansion", async () => {
+describe("journey map dense remediation stop proof", () => {
+  it("records the failed dense acceptance gates without accepting visual evidence", async () => {
     const bundle = await loadBundle(manifestPath);
     const compiled = compileSource({
       path: compressedFixturePath,
@@ -1139,71 +1138,25 @@ describe("journey map Gate 7 compressed occupancy visual proof", () => {
     );
     const scene = rendered.routingStages.finalPositionedScene;
     expect(scene.edges).toHaveLength(18);
-    expect(scene.root).toMatchObject({ width: 2064, height: 384 });
-
-    const nodeBoxes = flattenPositionedItems(scene.root)
-      .filter((item): item is PositionedNode => item.kind === "node")
-      .map((node) => ({
-        itemId: node.id, x: node.x, y: node.y, width: node.width, height: node.height
-      }));
-    expectNoRouteIntersectionsWithNonEndpointBoxes(scene.edges, nodeBoxes);
-    expectRoutesDoNotEnterEndpointBoxes(scene.edges, nodeBoxes);
-    for (const edge of scene.edges) {
-      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
-      for (const header of collectHeaderBoxes(scene.root)) {
-        expect(routeIntersectsRect(edge.route, header)).toBe(false);
-      }
-    }
-    for (let leftIndex = 0; leftIndex < scene.edges.length; leftIndex += 1) {
-      for (let rightIndex = leftIndex + 1; rightIndex < scene.edges.length; rightIndex += 1) {
-        const left = scene.edges[leftIndex]!;
-        const right = scene.edges[rightIndex]!;
-        expect(sharedCollinearSegments(
-          left.route,
-          right.route
-        ), `${left.from.itemId}->${left.to.itemId} / ${right.from.itemId}->${right.to.itemId}`)
-          .toEqual([]);
-      }
-    }
-
-    const edge = (from: string, to: string) => scene.edges.find((candidate) =>
-      candidate.from.itemId === from && candidate.to.itemId === to
-    )!;
-    expect([
-      edge("J-901", "J-903").route.points.at(-2)?.y,
-      edge("J-901", "J-950").route.points.at(-2)?.y,
-      edge("J-901", "J-911").route.points[2]?.y,
-      edge("J-901", "J-912").route.points[2]?.y,
-      edge("J-901", "J-913").route.points[2]?.y,
-      edge("J-902", "J-950").route.points.at(-2)?.y,
-      edge("J-902", "J-913").route.points[2]?.y
-    ]).toEqual([152, 168, 200, 232, 216, 184, 248]);
-    expect([
-      edge("J-901", "J-911").route.points.at(-2)?.y,
-      edge("J-901", "J-912").route.points.at(-2)?.y,
-      edge("J-901", "J-913").route.points.at(-2)?.y,
-      edge("J-902", "J-913").route.points.at(-2)?.y,
-      edge("J-903", "J-913").route.points.at(-2)?.y,
-      edge("J-912", "J-902").route.points[1]?.y,
-      edge("J-913", "J-901").route.points[1]?.y
-    ]).toEqual([268, 284, 300, 316, 332, 348, 364]);
-    const crowdedSourceYs = scene.edges
-      .filter((candidate) => candidate.from.itemId === "J-901")
-      .map((candidate) => candidate.from.y)
-      .sort((left, right) => left - right);
-    expect(crowdedSourceYs).toEqual([96, 104, 112, 120, 128, 136]);
-    expect(new Set(crowdedSourceYs).size).toBe(6);
-
-    expect(rendered.routingStages.expansionAttempts).toHaveLength(1);
-    expect(rendered.routingStages.residualCrossings).toHaveLength(42);
-    expect(scene.edges.flatMap((candidate) => candidate.continuityMarks ?? [])).toHaveLength(42);
-    expect((rendered.finalSvg.match(/ Q /g) ?? [])).toHaveLength(42);
+    expect(scene.root).toMatchObject({ width: 2064, height: 400 });
+    expect(rendered.routingStages.residualCrossings).toHaveLength(58);
+    expect(scene.edges.flatMap((candidate) => candidate.continuityMarks ?? [])).toHaveLength(56);
+    expect((rendered.finalSvg.match(/ Q /g) ?? [])).toHaveLength(56);
+    expect(rendered.routingStages.expansionAttempts).toHaveLength(2);
+    expect(rendered.routingStages.connectorPlans.some((plan) =>
+      plan.routeFamily === "early_south_egress"
+    )).toBe(false);
+    expect(rendered.routingStages.diagnostics.filter((diagnostic) =>
+      diagnostic.code === "renderer.routing.journey_map_preferred_terminal_leg_unmet"
+    )).toHaveLength(1);
+    expect(rendered.routingStages.diagnostics.some((diagnostic) =>
+      diagnostic.severity === "error"
+    )).toBe(false);
     expect(rendered.routingStages.step3PositionedScene.edges.every((candidate) =>
       !candidate.continuityMarks
     )).toBe(true);
     expect(rendered.diagnostics).toEqual(rendered.routingStages.diagnostics);
     expect(rendered.finalSvg).toBe(rerendered.finalSvg);
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
-    expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);
   }, 10_000);
 });

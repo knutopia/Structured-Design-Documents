@@ -129,7 +129,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 0,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -217,7 +220,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -306,7 +312,10 @@
                 "stageOrder": 0,
                 "stepOrder": 2,
                 "globalStepOrder": 2,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -400,10 +409,34 @@
           }
         },
         "layout": {
-          "strategy": "stack",
-          "direction": "horizontal",
+          "strategy": "grid",
+          "columns": 4,
           "gap": 24,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "grid": {
+            "placements": [
+              {
+                "itemId": "J-201",
+                "row": 0,
+                "column": 0
+              },
+              {
+                "itemId": "J-202",
+                "row": 0,
+                "column": 1
+              },
+              {
+                "itemId": "J-203",
+                "row": 1,
+                "column": 1
+              },
+              {
+                "itemId": "J-204",
+                "row": 0,
+                "column": 2
+              }
+            ]
+          }
         },
         "chrome": {
           "padding": {
@@ -451,7 +484,11 @@
                 "stageOrder": 1,
                 "stepOrder": 0,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "diamond_split",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -485,31 +522,31 @@
               },
               {
                 "id": "J-201__badge__OP-100__0",
-                "kind": "badge_text",
-                "textStyleRole": "badge",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
                 "lines": [
                   "Clear total cost"
                 ],
                 "x": 12,
                 "y": 62,
-                "width": 101.062,
-                "height": 22,
-                "lineHeight": 14,
+                "width": 85.062,
+                "height": 16,
+                "lineHeight": 16,
                 "region": "secondary",
                 "priority": "secondary"
               },
               {
                 "id": "J-201__badge__OP-200__0",
-                "kind": "badge_text",
-                "textStyleRole": "badge",
+                "kind": "metadata",
+                "textStyleRole": "metadata",
                 "lines": [
                   "Confidence before commitment"
                 ],
                 "x": 12,
-                "y": 90,
-                "width": 191.842,
-                "height": 22,
-                "lineHeight": 14,
+                "y": 84,
+                "width": 175.842,
+                "height": 16,
+                "lineHeight": 16,
                 "region": "secondary",
                 "priority": "secondary"
               }
@@ -520,28 +557,28 @@
                 "role": "journey_flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 62
+                "y": 56
               },
               {
                 "id": "J-201__flow_out",
                 "role": "journey_flow_out",
                 "side": "east",
                 "x": 224,
-                "y": 62
+                "y": 56
               },
               {
                 "id": "J-201__escape_in",
                 "role": "journey_escape_in",
                 "side": "south",
                 "x": 112,
-                "y": 124
+                "y": 112
               },
               {
                 "id": "J-201__escape_out",
                 "role": "journey_escape_out",
                 "side": "south",
                 "x": 112,
-                "y": 124
+                "y": 112
               }
             ],
             "overflow": {
@@ -550,7 +587,7 @@
             "x": 932,
             "y": 92,
             "width": 224,
-            "height": 124
+            "height": 112
           },
           {
             "kind": "node",
@@ -570,7 +607,11 @@
                 "stageOrder": 1,
                 "stepOrder": 1,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "diamond_option",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -658,7 +699,11 @@
                 "stageOrder": 1,
                 "stepOrder": 2,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 1,
+                "placementRole": "diamond_option",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -724,8 +769,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1428,
-            "y": 92,
+            "x": 1180,
+            "y": 228,
             "width": 224,
             "height": 64
           },
@@ -747,7 +792,11 @@
                 "stageOrder": 1,
                 "stepOrder": 3,
                 "globalStepOrder": 6,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "diamond_join",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -812,7 +861,7 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1692,
+            "x": 1428,
             "y": 92,
             "width": 224,
             "height": 48
@@ -821,8 +870,8 @@
         "ports": [],
         "x": 912,
         "y": 32,
-        "width": 1024,
-        "height": 204
+        "width": 760,
+        "height": 280
       },
       {
         "kind": "node",
@@ -904,7 +953,7 @@
         "overflow": {
           "status": "fits"
         },
-        "x": 1976,
+        "x": 1712,
         "y": 92,
         "width": 224,
         "height": 48
@@ -989,7 +1038,7 @@
         "overflow": {
           "status": "fits"
         },
-        "x": 2240,
+        "x": 1976,
         "y": 92,
         "width": 224,
         "height": 48
@@ -1045,7 +1094,7 @@
         ],
         "children": [],
         "ports": [],
-        "x": 2504,
+        "x": 2240,
         "y": 32,
         "width": 199.576,
         "height": 80
@@ -1118,7 +1167,10 @@
                 "stageOrder": 3,
                 "stepOrder": 0,
                 "globalStepOrder": 9,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -1183,14 +1235,14 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 2763.576,
+            "x": 2499.576,
             "y": 92,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 2743.576,
+        "x": 2479.576,
         "y": 32,
         "width": 264,
         "height": 128
@@ -1199,8 +1251,8 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 3039.576,
-    "height": 268
+    "width": 2775.576,
+    "height": 344
   },
   "edges": [
     {
@@ -1220,7 +1272,7 @@
         "itemId": "J-102",
         "portId": "J-102__flow_in",
         "x": 300,
-        "y": 124
+        "y": 116
       },
       "route": {
         "style": "orthogonal",
@@ -1230,16 +1282,8 @@
             "y": 116
           },
           {
-            "x": 288,
-            "y": 116
-          },
-          {
-            "x": 288,
-            "y": 124
-          },
-          {
             "x": 300,
-            "y": 124
+            "y": 116
           }
         ]
       },
@@ -1265,7 +1309,7 @@
         "itemId": "J-103",
         "portId": "J-103__flow_in",
         "x": 628,
-        "y": 116
+        "y": 124
       },
       "route": {
         "style": "orthogonal",
@@ -1275,16 +1319,8 @@
             "y": 124
           },
           {
-            "x": 616,
-            "y": 124
-          },
-          {
-            "x": 616,
-            "y": 116
-          },
-          {
             "x": 628,
-            "y": 116
+            "y": 124
           }
         ]
       },
@@ -1310,7 +1346,7 @@
         "itemId": "J-201",
         "portId": "J-201__flow_in",
         "x": 932,
-        "y": 154
+        "y": 116
       },
       "route": {
         "style": "orthogonal",
@@ -1320,16 +1356,8 @@
             "y": 116
           },
           {
-            "x": 892,
-            "y": 116
-          },
-          {
-            "x": 892,
-            "y": 154
-          },
-          {
             "x": 932,
-            "y": 154
+            "y": 116
           }
         ]
       },
@@ -1347,33 +1375,37 @@
       ],
       "from": {
         "itemId": "J-204",
-        "portId": "J-204__escape_out",
-        "x": 1804,
-        "y": 140
+        "portId": "J-204__flow_out",
+        "x": 1652,
+        "y": 116
       },
       "to": {
         "itemId": "J-401",
         "portId": "J-401__escape_in",
-        "x": 2875.576,
+        "x": 2611.576,
         "y": 140
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1804,
-            "y": 140
+            "x": 1652,
+            "y": 116
           },
           {
-            "x": 1804,
-            "y": 248
+            "x": 1690,
+            "y": 116
           },
           {
-            "x": 2875.576,
-            "y": 248
+            "x": 1690,
+            "y": 330
           },
           {
-            "x": 2875.576,
+            "x": 2611.576,
+            "y": 330
+          },
+          {
+            "x": 2611.576,
             "y": 140
           }
         ]
@@ -1393,24 +1425,24 @@
       "from": {
         "itemId": "J-250",
         "portId": "J-250__flow_out",
-        "x": 2200,
+        "x": 1936,
         "y": 116
       },
       "to": {
         "itemId": "J-260",
         "portId": "J-260__flow_in",
-        "x": 2240,
+        "x": 1976,
         "y": 116
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 2200,
+            "x": 1936,
             "y": 116
           },
           {
-            "x": 2240,
+            "x": 1976,
             "y": 116
           }
         ]
@@ -1431,32 +1463,24 @@
         "itemId": "J-201",
         "portId": "J-201__flow_out",
         "x": 1156,
-        "y": 146
+        "y": 139
       },
       "to": {
         "itemId": "J-202",
         "portId": "J-202__flow_in",
         "x": 1180,
-        "y": 116
+        "y": 139
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 1156,
-            "y": 146
-          },
-          {
-            "x": 1168,
-            "y": 146
-          },
-          {
-            "x": 1168,
-            "y": 116
+            "y": 139
           },
           {
             "x": 1180,
-            "y": 116
+            "y": 139
           }
         ]
       },
@@ -1474,38 +1498,30 @@
       ],
       "from": {
         "itemId": "J-201",
-        "portId": "J-201__flow_out",
-        "x": 1156,
-        "y": 162
+        "portId": "J-201__escape_out",
+        "x": 1044,
+        "y": 204
       },
       "to": {
         "itemId": "J-203",
-        "portId": "J-203__escape_in",
-        "x": 1540,
-        "y": 156
+        "portId": "J-203__flow_in",
+        "x": 1180,
+        "y": 260
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1156,
-            "y": 162
+            "x": 1044,
+            "y": 204
           },
           {
-            "x": 1168,
-            "y": 162
+            "x": 1044,
+            "y": 260
           },
           {
-            "x": 1168,
-            "y": 228
-          },
-          {
-            "x": 1540,
-            "y": 228
-          },
-          {
-            "x": 1540,
-            "y": 156
+            "x": 1180,
+            "y": 260
           }
         ]
       },
@@ -1523,59 +1539,33 @@
       ],
       "from": {
         "itemId": "J-202",
-        "portId": "J-202__escape_out",
-        "x": 1292,
-        "y": 140
+        "portId": "J-202__flow_out",
+        "x": 1404,
+        "y": 116
       },
       "to": {
         "itemId": "J-204",
         "portId": "J-204__flow_in",
-        "x": 1692,
-        "y": 124
+        "x": 1428,
+        "y": 116
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1292,
-            "y": 140
+            "x": 1404,
+            "y": 116
           },
           {
-            "x": 1292,
-            "y": 168
-          },
-          {
-            "x": 1680,
-            "y": 168
-          },
-          {
-            "x": 1680,
-            "y": 124
-          },
-          {
-            "x": 1692,
-            "y": 124
+            "x": 1428,
+            "y": 116
           }
         ]
       },
       "markers": {
         "end": "arrow"
       },
-      "paintGroup": "edges",
-      "continuityMarks": [
-        {
-          "id": "journey-crossover:J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0:3:J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0:1",
-          "segmentIndex": 1,
-          "point": {
-            "x": 1540,
-            "y": 168
-          },
-          "halfSpan": 3,
-          "rise": 3,
-          "normalDirection": -1,
-          "underEdgeId": "J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0"
-        }
-      ]
+      "paintGroup": "edges"
     },
     {
       "id": "J-203__PRECEDES__J-204__507b45c44ab3c264dd2cf0e03b67cea5ea2e7d31b604dd0d7f5a434686a53ac9__0",
@@ -1587,33 +1577,29 @@
       "from": {
         "itemId": "J-203",
         "portId": "J-203__flow_out",
-        "x": 1652,
-        "y": 124
+        "x": 1404,
+        "y": 260
       },
       "to": {
         "itemId": "J-204",
-        "portId": "J-204__flow_in",
-        "x": 1692,
-        "y": 108
+        "portId": "J-204__escape_in",
+        "x": 1540,
+        "y": 140
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1652,
-            "y": 124
+            "x": 1404,
+            "y": 260
           },
           {
-            "x": 1664,
-            "y": 124
+            "x": 1540,
+            "y": 260
           },
           {
-            "x": 1664,
-            "y": 108
-          },
-          {
-            "x": 1692,
-            "y": 108
+            "x": 1540,
+            "y": 140
           }
         ]
       },
@@ -1625,14 +1611,6 @@
   ],
   "decorations": [],
   "diagnostics": [
-    {
-      "phase": "routing",
-      "code": "renderer.routing.journey_map_unavoidable_crossing",
-      "severity": "warn",
-      "message": "Journey edges \"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\" and \"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
-      "targetId": "J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0",
-      "details": "{\"relatedIds\":[\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\"],\"crossingId\":\"journey-crossover:J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0:3:J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0:1\",\"point\":{\"x\":1540,\"y\":168},\"overEdgeId\":\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\",\"underEdgeId\":\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"segmentIndexes\":{\"edgeA\":3,\"edgeB\":1}}"
-    },
     {
       "phase": "scene",
       "code": "renderer.scene.journey_map_disconnected_chain",

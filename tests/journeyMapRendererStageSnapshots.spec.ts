@@ -117,6 +117,15 @@ function canonicalDiagnostics(...groups: readonly RendererDiagnostic[][]): Rende
   );
 }
 
+function portableValidationDiagnostics<T extends { file?: string }>(diagnostics: readonly T[]): T[] {
+  return diagnostics.map((diagnostic) => ({
+    ...diagnostic,
+    ...(diagnostic.file
+      ? { file: path.relative(repoRoot, diagnostic.file).split(path.sep).join("/") }
+      : {})
+  }));
+}
+
 async function expectFinalPngUsesExactSvg(
   rendered: Awaited<ReturnType<typeof renderJourneyMapRoutingArtifacts>>
 ): Promise<void> {
@@ -147,8 +156,8 @@ describe("journey map accepted renderer-stage goldens", () => {
       "journey-map.primary.diagnostics.json",
       rendered.routingStages.diagnostics
     );
-    expect(rendered.step2Svg).not.toBe(rendered.step3Svg);
-    expect(rendered.step3Svg).not.toBe(rendered.finalSvg);
+    expect(rendered.step2Svg).toBe(rendered.step3Svg);
+    expect(rendered.step3Svg).toBe(rendered.finalSvg);
     await expectFinalPngUsesExactSvg(rendered);
   });
 
@@ -163,6 +172,10 @@ describe("journey map accepted renderer-stage goldens", () => {
         `journey-map.badges.${profileId}.svg`,
         rendered.finalSvg
       );
+      if (profileId === "permissive") {
+        expect(rendered.finalSvg).not.toContain('<rect class="scene-badge__chrome"');
+        expect(rendered.finalSvg).toContain("block-kind-metadata block-region-secondary");
+      }
       await expectFinalPngUsesExactSvg(rendered);
     });
   }
@@ -179,7 +192,7 @@ describe("journey map accepted renderer-stage goldens", () => {
     );
     await expectRendererStageSnapshot(
       "journey-map.ordering-ownership.validation-diagnostics.json",
-      validationDiagnostics
+      portableValidationDiagnostics(validationDiagnostics)
     );
     await expectRendererStageSnapshot(
       "journey-map.ordering-ownership.diagnostics.json",
@@ -217,7 +230,7 @@ describe("journey map accepted renderer-stage goldens", () => {
       );
       await expectRendererStageSnapshot(
         `journey-map.${fixture}.validation-diagnostics.json`,
-        validationDiagnostics
+        portableValidationDiagnostics(validationDiagnostics)
       );
       await expectRendererStageSnapshot(
         `journey-map.${fixture}.diagnostics.json`,
@@ -231,33 +244,19 @@ describe("journey map accepted renderer-stage goldens", () => {
     });
   }
 
-  it("locks compressed occupancy progression, final evidence, and diagnosed crossings", async () => {
+  it("withholds compressed visual evidence while the dense acceptance gate is rejected", async () => {
     const { rendered } = await buildFixture("compressed");
-    await expectRendererStageSnapshot(
-      "journey-map.compressed.step-2.positioned-scene.json",
-      rendered.routingStages.step2PositionedScene
-    );
-    await expectRendererStageTextSnapshot("journey-map.compressed.step-2.svg", rendered.step2Svg);
-    await expectRendererStageSnapshot(
-      "journey-map.compressed.step-3.positioned-scene.json",
-      rendered.routingStages.step3PositionedScene
-    );
-    await expectRendererStageTextSnapshot("journey-map.compressed.step-3.svg", rendered.step3Svg);
-    await expectRendererStageSnapshot(
-      "journey-map.compressed.positioned-scene.json",
-      rendered.routingStages.finalPositionedScene
-    );
-    await expectRendererStageTextSnapshot("journey-map.compressed.svg", rendered.finalSvg);
-    await expectRendererStageSnapshot(
-      "journey-map.compressed.diagnostics.json",
-      rendered.routingStages.diagnostics
-    );
-    expect(rendered.step2Svg).not.toBe(rendered.step3Svg);
-    expect(rendered.step3Svg).not.toBe(rendered.finalSvg);
-    expect(rendered.routingStages.diagnostics.some((diagnostic) =>
-      diagnostic.code === "renderer.routing.journey_map_unavoidable_crossing"
-    )).toBe(true);
-    await expectFinalPngUsesExactSvg(rendered);
+    const stage900 = findContainer(rendered.routingStages.finalPositionedScene, "G-900");
+    expect(rendered.routingStages.residualCrossings).toHaveLength(58);
+    expect(rendered.routingStages.finalPositionedScene.root).toMatchObject({
+      width: 2064,
+      height: 400
+    });
+    expect(stage900).toMatchObject({ width: 856, height: 224 });
+    expect(rendered.routingStages.finalPositionedScene.root.height).toBeGreaterThan(384);
+    expect(rendered.routingStages.connectorPlans.some((plan) =>
+      plan.routeFamily === "early_south_egress"
+    )).toBe(false);
   });
 });
 
@@ -308,8 +307,7 @@ describe("journey map degraded diagnostic goldens", () => {
       "renderer.scene.journey_map_disconnected_chain",
       "renderer.routing.journey_map_edge_duplicated",
       "renderer.routing.journey_map_edge_omitted",
-      "renderer.routing.journey_map_unresolved_endpoint",
-      "renderer.routing.journey_map_unavoidable_crossing"
+      "renderer.routing.journey_map_unresolved_endpoint"
     ]));
     await expectRendererStageSnapshot(
       "journey-map.degraded.structural.diagnostics.json",
@@ -353,11 +351,11 @@ describe("journey map degraded diagnostic goldens", () => {
       unrelatedStage.x + unrelatedStage.width / 2,
       unrelatedStage.y + (unrelatedStage.chrome.headerBandHeight ?? 0) / 2
     );
-    const badgeNode = findNode(positioned, "J-201");
-    const badge = badgeNode.content.find((block) => block.region === "secondary")!;
-    const throughBadge = routeVia(
-      badgeNode.x + badge.x + badge.width / 2,
-      badgeNode.y + badge.y + badge.height / 2
+    const secondaryNode = findNode(positioned, "J-201");
+    const secondaryContent = secondaryNode.content.find((block) => block.region === "secondary")!;
+    const throughSecondaryContent = routeVia(
+      secondaryNode.x + secondaryContent.x + secondaryContent.width / 2,
+      secondaryNode.y + secondaryContent.y + secondaryContent.height / 2
     );
     const empty = structuredClone(base) as JourneyMapConnectorPlan;
     empty.finalBasicRoute.points = [];
@@ -372,7 +370,7 @@ describe("journey map degraded diagnostic goldens", () => {
       validate(diagonal),
       validate(throughNode),
       validate(throughStageHeader),
-      validate(throughBadge),
+      validate(throughSecondaryContent),
       validate(empty)
     );
     const codes = new Set(diagnostics.map((diagnostic) => diagnostic.code));
@@ -381,7 +379,7 @@ describe("journey map degraded diagnostic goldens", () => {
       "renderer.routing.journey_map_node_intersection",
       "renderer.routing.journey_map_endpoint_intrusion",
       "renderer.routing.journey_map_stage_header_intersection",
-      "renderer.routing.journey_map_badge_intersection",
+      "renderer.routing.journey_map_secondary_content_intersection",
       "renderer.routing.journey_map_unrelated_stage_intersection"
     ]) {
       expect(codes.has(code), code).toBe(true);
@@ -438,6 +436,15 @@ describe("journey map degraded diagnostic goldens", () => {
       compressed.rendered.preRoutingPositionedScene,
       separation.finalPositionedScene
     );
+    const residualCrossingDiagnostic = compressed.rendered.routingStages.diagnostics.find(
+      (diagnostic) => diagnostic.code === "renderer.routing.journey_map_unavoidable_crossing"
+    );
+    const preferredLegDiagnostic = compressed.rendered.routingStages.diagnostics.find(
+      (diagnostic) =>
+        diagnostic.code === "renderer.routing.journey_map_preferred_terminal_leg_unmet"
+    );
+    expect(residualCrossingDiagnostic).toBeDefined();
+    expect(preferredLegDiagnostic).toBeDefined();
 
     const diagnostics = canonicalDiagnostics(
       validateJourneyMapRoutes(
@@ -460,9 +467,8 @@ describe("journey map degraded diagnostic goldens", () => {
       ),
       expansionDiagnostics,
       separationDiagnostics,
-      primary.rendered.routingStages.diagnostics.filter((diagnostic) =>
-        diagnostic.code === "renderer.routing.journey_map_unavoidable_crossing"
-      )
+      [residualCrossingDiagnostic!],
+      [preferredLegDiagnostic!]
     );
     const codes = new Set(diagnostics.map((diagnostic) => diagnostic.code));
     for (const code of [
@@ -471,6 +477,7 @@ describe("journey map degraded diagnostic goldens", () => {
       "renderer.routing.journey_map_gutter_expansion_exhausted",
       "renderer.routing.journey_map_track_separation_unmet",
       "renderer.routing.journey_map_unavoidable_crossing",
+      "renderer.routing.journey_map_preferred_terminal_leg_unmet",
       "renderer.routing.marker_leg_minimum_unmet"
     ]) {
       expect(codes.has(code), code).toBe(true);

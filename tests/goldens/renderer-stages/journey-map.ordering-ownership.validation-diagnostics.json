@@ -4,7 +4,7 @@
     "code": "validate.contains_single_parent_recommended",
     "severity": "warn",
     "message": "Node 'J-503' has 2 incoming 'CONTAINS' edges; maximum is 1",
-    "file": "/tmp/sdd-journey-map-gate8/tests/fixtures/render/journey_map_staged_ordering_ownership.sdd",
+    "file": "tests/fixtures/render/journey_map_staged_ordering_ownership.sdd",
     "ruleId": "contains_single_parent_recommended",
     "profileId": "strict",
     "relatedIds": [

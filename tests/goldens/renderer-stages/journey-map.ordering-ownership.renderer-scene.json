@@ -130,7 +130,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 0,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -194,7 +197,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           }
@@ -364,7 +370,10 @@
                 "stageOrder": 1,
                 "stepOrder": 0,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -428,7 +437,10 @@
                 "stageOrder": 1,
                 "stepOrder": 1,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           },
@@ -492,7 +504,10 @@
                 "stageOrder": 1,
                 "stepOrder": 2,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             }
           }

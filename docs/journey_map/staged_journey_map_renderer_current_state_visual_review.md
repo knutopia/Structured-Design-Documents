@@ -1,12 +1,12 @@
 # Staged Journey Map Renderer — Current-State Visual Review
 
-Status: active remediation catalog
+Status: remediation closeout recorded on 2026-07-18; dense readability remains open
 
-Visual baseline: `journey_map` at `3fdb606`; the renderer, fixtures, and embedded journey goldens are unchanged from the accepted Gate 10 evidence at `2f17108`.
+Visual baseline: accepted focused primary, ordering, topology, and duplicate Journey evidence reflects the 2026-07-18 remediation. Compressed and rendered-corpus evidence remains at the pre-remediation baseline because the dense experiment failed its numeric gate and corpus promotion was consequently withheld.
 
 Purpose: review the cumulative final renderer by the gate criteria that introduced each behavior, identify visual defects precisely, and track fixes without treating earlier gate acceptance as a claim that the current output is visually finished.
 
-Authority: this is a review and remediation aid. The bundle, repository policy, [renderer architecture](staged_journey_map_renderer_architecture.md), [verification and acceptance contract](staged_journey_map_renderer_verification_contract.md), and [completed gated implementation plan](staged_journey_map_renderer_gated_implementation_plan.md) remain authoritative.
+Authority: this is a review and remediation aid. The bundle, repository policy, [completed renderer architecture](<[Done] staged_journey_map_renderer_architecture.md>), [verification and acceptance contract](staged_journey_map_renderer_verification_contract.md), and [completed gated implementation plan](<[Done] staged_journey_map_renderer_gated_implementation_plan.md>) remain authoritative. The active execution document is the [visual remediation implementation plan](journey_map_visual_remediation_implementation_plan.md).
 
 ## How to use this document
 
@@ -27,25 +27,25 @@ Unless a plate says otherwise, it uses the strict profile, default theme, final 
 
 ### `JM-VIS-001` — adjacent horizontal connector doglegs
 
-- **Status:** open
+- **Status:** closed; accepted direct-horizontal proofs pass
 - **Severity:** high
 - **First visible:** Gates 5–6
 - **Problem:** unobstructed horizontally adjacent nodes can be connected by multi-segment doglegs with distracting vertical offsets.
-- **Desired outcome:** prefer one straight horizontal segment whenever the semantic ports align and the unobstructed corridor is clear. Implement this in shared staged-routing infrastructure, not as a journey-only patch.
+- **Desired outcome:** prefer one straight horizontal segment whenever legal Journey side intervals overlap and the unobstructed corridor is clear. The selection policy is Journey-owned; its contract must remain suitable for later shared extraction.
 - **Affected plates:** `JM-G05-01`; `JM-G06-01` through `JM-G06-08`; `JM-G08-01`; `JM-G09-01`; `JM-G10-01`.
 
 ### `JM-VIS-002` — dense compressed proof readability
 
-- **Status:** open; accepted implementation limitation
+- **Status:** open; the 2026-07-18 early-egress experiment was rejected
 - **Severity:** high
 - **First visible:** Gates 7–8
-- **Problem:** the compressed eighteen-edge proof remains difficult to trace and contains 42 diagnosed residual crossings.
+- **Problem:** the retained compressed evidence contains 42 diagnosed residual crossings. The rejected same-run experiment produced all 18 edges but regressed to 58 crossings, 56 continuity marks, root `2064×400`, `G-900` `856×224`, and `G-910` `760×160`; it therefore produced no new compressed golden or corpus evidence.
 - **Desired outcome:** materially reduce crossings and improve edge identity without source reordering, hidden semantic changes, or an external routing engine.
 - **Affected plates:** `JM-G07-02`; `JM-G08-01`.
 
 ### `JM-VIS-003` — branch and join traceability
 
-- **Status:** monitor
+- **Status:** closed for the accepted stacked-diamond proofs; retain as a regression watch
 - **Severity:** medium
 - **First visible:** Gate 6 join family
 - **Problem:** branch and join convergence can make individual connectors difficult to follow, especially where stems and corridors are shared.
@@ -54,12 +54,52 @@ Unless a plate says otherwise, it uses the strict profile, default theme, final 
 
 ### `JM-VIS-004` — self-loop and backward-route blending
 
-- **Status:** resolved; regression watch
+- **Status:** resolved; regression watch passing
 - **Severity:** high
 - **First visible:** Gate 6 self-loop family
 - **Problem:** the self-loop around “Repeat current action” previously blended with the backward connector from “Return to prior action.”
 - **Desired outcome:** keep the upper self-loop collar distinct from the backward track with no overlap or ambiguous T-junction.
 - **Affected plate:** `JM-G06-07`.
+
+### `JM-VIS-005` — avoidable multi-turn routes
+
+- **Status:** superseded by stacked placement and common minimal-candidate selection
+- **Severity:** medium
+- **Proof edge:** `J-201→J-203`
+- **Problem:** a route may retain more bends than the minimum legal candidate because endpoint offsets are chosen before route-family comparison.
+- **Desired outcome:** select the minimum-turn legal Journey candidate after higher-priority ownership, obstacle, separation, and terminal-leg constraints pass.
+- **Affected plate:** `JM-G07-01`.
+
+### `JM-VIS-006` — long forward source-Stage egress
+
+- **Status:** closed; `J-204→J-401` uses right-edge egress without source-Stage growth
+- **Severity:** medium
+- **Proof edge:** `J-204→J-401`
+- **Problem:** the route exits through the source Stage bottom and adds avoidable local vertical distortion.
+- **Desired outcome:** leave `G-200` through its right boundary before descending onto a root-owned track, without funding source-Stage growth.
+- **Affected plate:** `JM-G06-02`.
+
+### `JM-VIS-007` — last-bend arrow crowding
+
+- **Status:** closed for nominal proofs; one dense degraded route retains the specified 12px warning after bounded expansion
+- **Severity:** medium
+- **Proof:** every bent nominal Journey route; self-loop/backward, duplicate, and dense plates own visual review
+- **Problem:** the hard 12px marker-leg minimum is visually cramped when it is also the final bend-to-arrow distance.
+- **Desired outcome:** prefer an 18px final leg; permit 12–17px only with the exact degraded-output warning.
+- **Affected plates:** `JM-G06-07`; `JM-G06-08`; `JM-G07-02`.
+
+### `JM-VIS-008` — boxed opportunity-reference presentation
+
+- **Status:** closed; permissive and strict staged Journey references are unboxed metadata and simple remains unchanged
+- **Severity:** medium
+- **Problem:** opportunity references use badge chrome even though they are secondary Step metadata.
+- **Desired outcome:** preserve bundle-controlled values, ordering, and visibility while rendering unboxed secondary text in the staged Journey backend.
+- **Affected plates:** `JM-G02-01`; `JM-G03-01`; `JM-G06-04`.
+
+### Connector labels — deferred
+
+- **Status:** explicitly out of scope
+- **Decision:** do not add label semantics, measurement, placement, SVG groups, or bundle behavior in this remediation.
 
 ## Coverage index
 
@@ -150,7 +190,7 @@ Current fixture sources:
 
 ![Gate 2 permissive profile: primary journey with ordered opportunity badges](../../tests/goldens/renderer-stages/journey-map.badges.permissive.svg)
 
-**Fixture:** primary. **Focus:** one typed badge per resolved reference, bundle-controlled ordering, stable content across profiles, and no badge/connector collision. **Expected difference:** simple hides badges; permissive shows `OP-100` followed by `OP-200`. **Current issues:** inspect adjacent connectors under `JM-VIS-001` without treating profile width differences as a routing defect.
+**Fixture:** primary. **Focus:** one typed reference per resolved target, bundle-controlled ordering, stable content across profiles, and no metadata/connector collision. **Expected difference:** simple hides references; permissive shows unboxed `OP-100` followed by `OP-200`. **Remediation result:** accepted under `JM-VIS-008`; profile width differences are not routing defects.
 
 ## Gate 3 — backend-neutral scene
 
@@ -188,7 +228,7 @@ Current fixture sources:
 
 ![Gate 5 basic routes in the current final primary diagram](../../tests/goldens/renderer-stages/journey-map.primary.svg)
 
-**Fixture:** primary. **Focus edges:** `J-101→J-102`, `J-102→J-103`, and `J-103→J-201`. **Review:** directness, arrow direction, east/west approaches, correct Stage boundary gates, and absence of needless bends. **Known issue:** `JM-VIS-001` specifically asks whether every unobstructed aligned pair can become a single horizontal segment.
+**Fixture:** primary. **Focus edges:** `J-101→J-102`, `J-102→J-103`, and `J-103→J-201`. **Review:** directness, arrow direction, east/west approaches, correct Stage boundary gates, and absence of needless bends. **Remediation result:** the named unobstructed adjacent proofs are accepted as single horizontal segments under `JM-VIS-001`.
 
 ## Gate 6 — dedicated route families
 
@@ -200,7 +240,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 6 same-Stage skip and ordering proof](../../tests/goldens/renderer-stages/journey-map.ordering-ownership.svg)
 
-**Fixture:** ordering/ownership. **Focus edge:** `J-503→J-501`. **Review:** the bypass remains outside intervening Step interiors, uses consistent semantic ports, and does not reorder authored Steps. **Issues:** `JM-VIS-001`.
+**Fixture:** ordering/ownership. **Focus edge:** `J-503→J-501`. **Review:** the bypass remains outside intervening Step interiors, uses consistent semantic ports, and does not reorder authored Steps. **Status:** accepted.
 
 ### Plate `JM-G06-02` — long cross-Stage and root-Step routing
 
@@ -208,7 +248,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 6 long cross-Stage and root-Step routes](../../tests/goldens/renderer-stages/journey-map.primary.svg)
 
-**Fixture:** primary. **Focus:** `J-204→J-401` plus the disconnected root chain `J-250→J-260`. **Review:** peripheral ownership, correct Stage gates, readable arrow direction, and avoidance of unrelated Stage interiors. **Issues:** `JM-VIS-001`.
+**Fixture:** primary. **Focus:** `J-204→J-401` plus the disconnected root chain `J-250→J-260`. **Review:** peripheral ownership, correct Stage gates, readable arrow direction, and avoidance of unrelated Stage interiors. **Remediation result:** right-edge egress and direct root-Step routing are accepted under `JM-VIS-006` and `JM-VIS-001`.
 
 ### Plate `JM-G06-03` — branch fan-out
 
@@ -216,7 +256,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 6 branch fan-out in the primary proof](../../tests/goldens/renderer-stages/journey-map.primary.svg)
 
-**Fixture:** primary. **Focus edges:** `J-201→J-202` and `J-201→J-203`. **Review:** common semantic departure, visibly distinct paths, no merged ambiguous trunk, and traceable arrowheads. **Issues:** `JM-VIS-001`, `JM-VIS-003`.
+**Fixture:** primary. **Focus edges:** `J-201→J-202` and `J-201→J-203`. **Review:** common semantic departure, visibly distinct paths, no merged ambiguous trunk, and traceable arrowheads. **Remediation result:** stacked options use accepted direct and minimal-L candidates; `JM-VIS-003` is closed for this proof.
 
 ### Plate `JM-G06-04` — join fan-in
 
@@ -224,7 +264,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 6 join fan-in in the primary proof](../../tests/goldens/renderer-stages/journey-map.primary.svg)
 
-**Fixture:** primary. **Focus edges:** `J-202→J-204` and `J-203→J-204`. **Review:** distinct arrivals, stable endpoint order, no visually merged identity, and no collision with badges or Stage chrome. **Issues:** `JM-VIS-001`, `JM-VIS-003`.
+**Fixture:** primary. **Focus edges:** `J-202→J-204` and `J-203→J-204`. **Review:** distinct arrivals, stable endpoint order, no visually merged identity, and no collision with metadata or Stage chrome. **Remediation result:** accepted under `JM-VIS-003`.
 
 ### Plate `JM-G06-05` — backward routing
 
@@ -232,7 +272,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 6 backward same-Stage and root routing](../../tests/goldens/renderer-stages/journey-map.ordering-ownership.svg)
 
-**Fixture:** ordering/ownership. **Focus edges:** `J-501→J-502` and root `J-591→J-590`. **Review:** peripheral return shape, correct arrow direction, unambiguous separation from forward routes, and preservation of source order. **Issues:** `JM-VIS-001`.
+**Fixture:** ordering/ownership. **Focus edges:** `J-501→J-502` and root `J-591→J-590`. **Review:** peripheral return shape, correct arrow direction, unambiguous separation from forward routes, and preservation of source order. **Status:** accepted.
 
 ### Plate `JM-G06-06` — shape-aware reciprocal cycles
 
@@ -256,7 +296,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 6 three duplicate PRECEDES occurrences routed independently](../../tests/goldens/renderer-stages/journey-map.duplicate.svg)
 
-**Fixture:** duplicate. **Focus:** all three `J-801→J-802` occurrences. **Review:** three independently traceable routes, stable semantic identities and ordinals, distinct endpoint tracks, and three clear arrowheads. **Issues:** `JM-VIS-001`.
+**Fixture:** duplicate. **Focus:** all three `J-801→J-802` occurrences. **Review:** three independently traceable routes, stable semantic identities and ordinals, distinct endpoint tracks, and three clear arrowheads. **Status:** accepted; duplicate same-endpoint groups remain excluded from direct-family reassignment.
 
 ## Gate 7 — occupancy, endpoint ordering, and bounded expansion
 
@@ -276,7 +316,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 7 primary final](../../tests/goldens/renderer-stages/journey-map.primary.svg)
 
-**Fixture:** primary. **Focus:** movement from nominal tracks to separated occupied tracks, crowded endpoint ordering, correct Stage gate order, and deterministic final parity. **Issues:** `JM-VIS-001`, `JM-VIS-003`.
+**Fixture:** primary. **Focus:** movement from nominal tracks to separated occupied tracks, crowded endpoint ordering, correct Stage gate order, and deterministic final parity. **Status:** accepted after stacked placement and common candidate selection.
 
 ### Plate `JM-G07-02` — compressed expansion proof
 
@@ -304,7 +344,7 @@ Gate 6 remains divided into its eight blocking route families so a reviewer can 
 
 ![Gate 8 compressed final with residual crossing continuity treatment](../../tests/goldens/renderer-stages/journey-map.compressed.svg)
 
-**Fixture:** compressed. **Focus:** final-only continuity bridges, orthogonal routes, hard obstacle clearance, exact warning alignment, and whether individual connectors can be followed. **Known issues:** `JM-VIS-001`, `JM-VIS-002`, `JM-VIS-003`. The accepted implementation records 42 residual crossings; this plate remains visually open.
+**Fixture:** compressed. **Focus:** final-only continuity bridges, orthogonal routes, hard obstacle clearance, exact warning alignment, and whether individual connectors can be followed. **Known issue:** `JM-VIS-002`. The retained accepted plate records 42 residual crossings; the rejected remediation run was worse at 58, so this plate remains visually open and unchanged.
 
 Diagnostics: [`journey-map.compressed.diagnostics.json`](../../tests/goldens/renderer-stages/journey-map.compressed.diagnostics.json)
 
@@ -326,7 +366,7 @@ Diagnostics: [`journey-map.topology.diagnostics.json`](../../tests/goldens/rende
 
 ![Gate 9 public staged Journey Map preview](../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.journey_map.svg)
 
-**Source:** canonical `outcome_to_ia_trace` corpus example, strict profile. **Focus:** the unsuffixed public SVG/PNG uses the staged backend, PNG derives from the exact staged SVG, and public selection does not alter internal DOT or Mermaid output. **Issue:** `JM-VIS-001` applies to the staged default globally.
+**Source:** canonical `outcome_to_ia_trace` corpus example, strict profile. **Focus:** the unsuffixed public SVG/PNG uses the staged backend, PNG derives from the exact staged SVG, and public selection does not alter internal DOT or Mermaid output. **Evidence state:** runtime selection and exact SVG-derived PNG are covered by focused tests; this corpus plate was not regenerated because dense closeout stopped before corpus promotion.
 
 ### Plate `JM-G09-02` — explicit preserved legacy fallback
 
@@ -380,10 +420,10 @@ For each affected plate, review at intrinsic 100% zoom before using fit-to-width
 - [ ] Branch departures and join arrivals remain visually distinct.
 - [ ] Backward, cyclic, and self-loop routes are distinguishable from nearby connectors.
 - [ ] Duplicate occurrences retain separate identities and arrowheads.
-- [ ] Routes clear non-endpoint Steps, endpoint interiors, headers, badges, and unrelated Stages.
+- [ ] Routes clear non-endpoint Steps, endpoint interiors, headers, secondary content, and unrelated Stages.
 - [ ] Crowded tracks and endpoint stems retain required separation or emit the exact accepted diagnostic.
 - [ ] Continuity marks clarify rather than obscure residual crossings.
-- [ ] Labels and badges remain readable without relying on fit-to-width scaling.
+- [ ] Labels and unboxed reference metadata remain readable without relying on fit-to-width scaling.
 - [ ] Whitespace, expansion, and Stage proportions remain intentional.
 - [ ] SVG is deterministic and PNG is derived from the exact reviewed SVG.
 

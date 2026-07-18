@@ -24,6 +24,10 @@ import {
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
+import {
+  buildJourneyScenePlacement,
+  type JourneyScenePlacement
+} from "./journeyMapMiddleLayer.js";
 import { positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
 import {
   buildJourneyMapRoutingStages,
@@ -40,14 +44,6 @@ import {
 
 const ROOT_GAP = 40;
 const STAGE_GAP = 24;
-
-interface JourneyScenePlacement {
-  metadataByItemId: ReadonlyMap<string, JourneyMapItemMetadata>;
-  parentStageByStepId: ReadonlyMap<string, string>;
-  rootItemIds: string[];
-  stageIds: string[];
-  globalStepIds: string[];
-}
 
 export interface JourneyMapPreRoutingArtifactsResult {
   rendererScene: RendererScene;
@@ -84,59 +80,6 @@ export interface JourneyMapStagedSvgResult extends JourneyMapStagedRenderResult,
 export interface JourneyMapStagedPngResult extends JourneyMapStagedRenderResult, StagedSvgArtifact, StagedPngArtifact {}
 
 export type JourneyMapBasicRoutingArtifactsResult = JourneyMapRoutingArtifactsResult;
-
-function buildJourneyScenePlacement(model: JourneyMapRenderModel): JourneyScenePlacement {
-  const metadataByItemId = new Map<string, JourneyMapItemMetadata>();
-  const parentStageByStepId = new Map<string, string>();
-  const rootItemIds = model.rootItems.map((item) => item.id);
-  const stageIds: string[] = [];
-  const globalStepIds: string[] = [];
-  let stageOrder = 0;
-
-  for (const [rootOrder, item] of model.rootItems.entries()) {
-    if (item.kind === "stage") {
-      const currentStageOrder = stageOrder++;
-      stageIds.push(item.id);
-      metadataByItemId.set(item.id, {
-        kind: "stage",
-        rootOrder,
-        stageOrder: currentStageOrder
-      });
-      for (const [stepOrder, step] of item.items.entries()) {
-        const globalStepOrder = globalStepIds.length;
-        globalStepIds.push(step.id);
-        parentStageByStepId.set(step.id, item.id);
-        metadataByItemId.set(step.id, {
-          kind: "step",
-          rootOrder,
-          stageId: item.id,
-          stageOrder: currentStageOrder,
-          stepOrder,
-          globalStepOrder,
-          uncontained: false
-        });
-      }
-      continue;
-    }
-
-    const globalStepOrder = globalStepIds.length;
-    globalStepIds.push(item.id);
-    metadataByItemId.set(item.id, {
-      kind: "step",
-      rootOrder,
-      globalStepOrder,
-      uncontained: true
-    });
-  }
-
-  return {
-    metadataByItemId,
-    parentStageByStepId,
-    rootItemIds,
-    stageIds,
-    globalStepIds
-  };
-}
 
 function buildRootChrome(): SceneContainer["chrome"] {
   return {
@@ -181,9 +124,9 @@ function buildJourneyStep(step: JourneyRenderStep, metadata: JourneyMapItemMetad
       duplicateTargetCounts.set(badge.targetId, duplicateOrdinal + 1);
       return {
         id: `${step.id}__badge__${badge.targetId}__${duplicateOrdinal}`,
-        kind: "badge_text" as const,
+        kind: "metadata" as const,
         text: badge.targetName && badge.targetName.length > 0 ? badge.targetName : badge.targetId,
-        textStyleRole: "badge",
+        textStyleRole: "metadata",
         region: "secondary" as const,
         priority: "secondary" as const
       };
@@ -225,6 +168,7 @@ function buildJourneyStage(
   if (!metadata || metadata.kind !== "stage") {
     throw new Error(`Missing journey Stage placement metadata for ${stage.id}.`);
   }
+  const gridPlacements = placement.gridPlacementsByStageId.get(stage.id);
 
   return {
     kind: "container",
@@ -235,12 +179,22 @@ function buildJourneyStage(
     viewMetadata: {
       journeyMap: metadata
     },
-    layout: {
-      strategy: "stack",
-      direction: "horizontal",
-      gap: STAGE_GAP,
-      crossAlignment: "start"
-    },
+    layout: gridPlacements
+      ? {
+        strategy: "grid",
+        columns: stage.items.length,
+        gap: STAGE_GAP,
+        crossAlignment: "start",
+        grid: {
+          placements: gridPlacements.map((cell) => ({ ...cell }))
+        }
+      }
+      : {
+        strategy: "stack",
+        direction: "horizontal",
+        gap: STAGE_GAP,
+        crossAlignment: "start"
+      },
     chrome: buildStageChrome(),
     headerContent: [
       {

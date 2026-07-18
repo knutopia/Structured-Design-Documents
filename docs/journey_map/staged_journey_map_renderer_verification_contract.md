@@ -2,7 +2,7 @@
 
 Status: accepted on 2026-07-12; established at Gate 1, governed Gates 2–10, and retained as the implementation verification and acceptance record
 
-Authority: subordinate execution artifact of [`staged_journey_map_renderer_gated_implementation_plan.md`](staged_journey_map_renderer_gated_implementation_plan.md). The bundle and repository policy remain higher authority. This document records the canonical fixture content, verification expectations, and acceptance ownership established at Gate 1; amendments during implementation required a return to Gate 1 and re-review.
+Authority: subordinate execution artifact of the [completed gated implementation plan](<[Done] staged_journey_map_renderer_gated_implementation_plan.md>) and the active [visual remediation implementation plan](journey_map_visual_remediation_implementation_plan.md). The bundle and repository policy remain higher authority. This document records the canonical fixture content, verification expectations, and acceptance ownership established at Gate 1; amendments during implementation require renewed review before production evidence changes.
 
 ## 1. Canonical verification fixture sources
 
@@ -569,7 +569,7 @@ The 2026-07-13 Gate 6 complex-SCC amendment makes the route-role column generic 
 
 ## 3. Profile and validation contract
 
-- Primary runs under simple, permissive, and strict. Simple hides badges; permissive and strict show `OP-100` then `OP-200`. All three are reviewed where content differs.
+- Primary runs under simple, permissive, and strict. Simple hides opportunity-reference metadata; permissive and strict show unboxed `OP-100` then `OP-200`. Compatibility names such as `inline_step_badges`, `JourneyRenderReferenceBadge`, and `badges` continue to govern inline presence and ordering, not staged chrome. All three profiles are reviewed where content differs.
 - Ordering/ownership, topology, duplicate, and compressed run under strict only.
 - Primary and compressed have no validation diagnostic.
 - Ordering/ownership expects exactly `validate.contains_single_parent_recommended` related to `J-503`.
@@ -579,22 +579,27 @@ The 2026-07-13 Gate 6 complex-SCC amendment makes the route-role column generic 
 
 ## 4. Hard assertion and human-rubric ownership
 
-The shared final arrow-marker terminal-leg threshold is exactly `MIN_ARROW_MARKER_LEG = 12px` from `src/renderer/staged/routing.ts`. Every accepted final arrow route must meet 12px; `renderer.routing.marker_leg_minimum_unmet` is allowed only in a directly constructed degraded case and fails a proof fixture.
+The shared final arrow-marker terminal-leg threshold is exactly `MIN_ARROW_MARKER_LEG = 12px` from `src/renderer/staged/routing.ts`. Every accepted final arrow route must meet 12px; `renderer.routing.marker_leg_minimum_unmet` is allowed only in a directly constructed degraded case and fails a proof fixture. Bent Journey routes additionally prefer `JOURNEY_MAP_PREFERRED_TERMINAL_LEG = 18px`; a 12–17px final leg is allowed only in a constructed degraded case with `renderer.routing.journey_map_preferred_terminal_leg_unmet`. One-segment routes are exempt from the preferred-length assertion.
 
 | Assertion | Stages | Cases |
 | --- | --- | --- |
 | One semantic edge occurrence, unique stable ID, no route geometry | RendererScene and MeasuredScene; paired pre-routing evidence retains those ledgers while its PositionedScene has `edges=[]` | all cases; duplicate proves multiplicity |
 | Exactly one orthogonal route per occurrence | step-2, step-3, final | all cases |
 | Exterior endpoint approach | step-2, step-3, final | all cases |
-| Non-endpoint Step, endpoint-interior, header, badge, unrelated-Stage clearance | step-3 and final | every applicable edge; ordering included |
+| Non-endpoint Step, endpoint-interior, header, secondary-content, unrelated-Stage clearance | step-3 and final | every applicable edge; ordering included |
 | 16px separation for every competing overlapping same-orientation span | step-3 and final | all cases; focused pressure in primary, topology, duplicate, compressed |
 | Crowded endpoint order/spacing | step-3 and final | primary branch/join, topology `J-790`/`J-714`, duplicate both sides, compressed crowded nodes |
-| Root/child source order | model, scene, pre-routing, final | every case; duplicate covers Step-only root order |
+| Authored root/child arrays plus progression-column/lane order | model, scene, pre-routing, final | every case; recognized primary diamond may share X only across ordered option lanes |
 | Boundary gates ordered and outside headers | step-3 and final | primary, ordering root return, topology root transitions, compressed |
 | 12px final terminal leg | final | every arrow-ended edge |
+| 18px preferred final leg | final | every bent nominal Journey edge; direct edges are N/A |
 | Nominal-to-resolved occupancy change plus bounded whole-structure expansion | step-3 and final | compressed only |
 
-Human ownership at `1680×1050`, 100% zoom, intrinsic SVG: primary owns left-to-right reading, direct tracks, Stage chrome, empty/single Stages, long labels, badges, and baseline whitespace; primary and compressed own branch/join clarity; topology and compressed own peripheral returns; duplicate and compressed own edge identity; primary, ordering, topology, and compressed own consistent ports/boundary gates; primary and compressed own intentional whitespace. Primary and dense/debug cases may scroll horizontally at intrinsic 100%; a fit-to-viewport overview is composition evidence only and cannot accept text readability. Vertical fit and every intrinsic geometry/readability check remain binding. A review item may be `N/A` only when this table assigns it to another case; owned items require PASS. Any hard failure, unexpected renderer warning/error, non-empty violated-invariant field, or nominally identical debug stages fails the gate.
+Human ownership at `1680×1050`, 100% zoom, intrinsic SVG: primary owns left-to-right reading, direct tracks, Stage chrome, empty/single Stages, long labels, plain reference metadata, and baseline whitespace; primary and compressed own branch/join clarity; topology and compressed own peripheral returns; duplicate and compressed own edge identity; primary, ordering, topology, and compressed own consistent ports/boundary gates; primary and compressed own intentional whitespace. Primary and dense/debug cases may scroll horizontally at intrinsic 100%; a fit-to-viewport overview is composition evidence only and cannot accept text readability. Vertical fit and every intrinsic geometry/readability check remain binding. A review item may be `N/A` only when this table assigns it to another case; owned items require PASS. Any hard failure, unexpected renderer warning/error, non-empty violated-invariant field, or nominally identical debug stages fails the gate.
+
+Source-order remediation rule: scene/model child arrays remain authored. Ordinary Stages remain strictly increasing in X. A recognized diamond has monotonically increasing progression columns; only its option Steps share X, and their Y order follows authored `laneOrder`. Ordering-edge array permutations must not change recognition or geometry. Removing the qualifying diamond edges returns the Stage to deterministic one-row placement.
+
+Dense remediation gate: all 18 semantic occurrences remain exact; root-owned `G-900` fan-out C03–C06 and C08–C11 must leave through ordered south gates with no root-owned horizontal span inside `G-900`; C04/C05/C06/C09/C11 remain individually traceable. Closure requires no hard diagnostic or merged span, no more than 31 residual crossings, final `G-900` equal to its same-run pre-routing size, final root no larger than `2064×384`, and `G-910` no larger than `760×160`.
 
 ## 5. Exact evidence names
 
@@ -624,7 +629,7 @@ Every code is a full code, deterministically sorted, and includes the listed rel
 | `renderer.routing.journey_map_node_intersection` error | route crosses unrelated Step | `[edgeId,stepId]`; geometry |
 | `renderer.routing.journey_map_endpoint_intrusion` error | route enters source/target beyond legal terminal approach | `[edgeId,stepId]`; geometry |
 | `renderer.routing.journey_map_stage_header_intersection` error | route crosses Stage header band | `[edgeId,stageId]`; geometry |
-| `renderer.routing.journey_map_badge_intersection` error | route crosses measured badge block | `[edgeId,stepId,badgeId]`; geometry |
+| `renderer.routing.journey_map_secondary_content_intersection` error | route crosses measured secondary-content block | `[edgeId,stepId,contentId]`; geometry |
 | `renderer.routing.journey_map_unrelated_stage_intersection` error | root-owned route enters unrelated Stage | `[edgeId,stageId]`; geometry |
 | `renderer.routing.journey_map_gutter_expansion_exhausted` warn | constructed occupancy exceeds bounded attempts | `[ownerId]`; capacity |
 | `renderer.routing.journey_map_unavoidable_crossing` warn | deterministic alternatives retain crossing | `[edgeA,edgeB]`; capacity |
@@ -633,6 +638,7 @@ Every code is a full code, deterministically sorted, and includes the listed rel
 | `renderer.routing.journey_map_boundary_gate_fallback` warn | preferred Stage gate unavailable | `[edgeId,stageId]`; capacity |
 | `renderer.routing.journey_map_archetype_fallback` warn | preferred template cannot be constructed | `[edgeId]`; capacity |
 | `renderer.routing.marker_leg_minimum_unmet` info | constructed terminal leg remains below 12px | `[edgeId]`; capacity; still fails an accepted proof by the hard contract |
+| `renderer.routing.journey_map_preferred_terminal_leg_unmet` warn | bent route retains a 12–17px final leg after bounded alternatives | `[edgeId]` plus achieved, desired 18, and hard minimum 12; capacity; fails nominal proofs |
 | `renderer.scene.journey_map_disconnected_chain` info | acyclic Step `PRECEDES` graph where every projected Step is incident and exactly two edge-bearing weak components exist; component containing lowest flattened visual Step order is main | non-main component Step IDs in flattened visual order; primary `[J-250,J-260]` |
 | `renderer.scene.journey_map_first_parent_selected` info | ordering multiply-contained `J-503` | `[J-503,G-500,G-600]`; ordering diagnostics |
 | `renderer.scene.journey_map_step_only` info | duplicate fixture | `[J-801,J-802]`; duplicate diagnostics |
@@ -649,3 +655,20 @@ For `journey_map_disconnected_chain`, self-loops and multi-node directed cycles 
 The primary case is complex but diagnosable because composition concerns are visible while ordering ownership, exceptional topology, duplicates, and contention have isolated fixtures. Every required topology, hard assertion, human rubric item, diagnostic family, stage artifact, profile, and threshold has an owner above.
 
 If compressed semantic contention does not force both resolved-coordinate changes and bounded whole-structure expansion, Gate 7 stops and returns to Gate 1. The literal graph may change only through a recorded Gate 1 amendment and renewed human acceptance. Never tune coordinates, silently add edges, weaken the assertion, or refresh goldens.
+
+## 8. Visual-remediation closeout amendment — 2026-07-18
+
+The remediation retained every semantic fixture, authored array, edge identity, profile rule, projection contract, and legacy backend owned by this document. Renderer-only additions are explicit grid-cell placement, Journey progression/lane metadata, route-family candidates, and the 18px preferred terminal construction. None adds final coordinates, final line breaks, or backend strings to `RendererScene`.
+
+Accepted focused evidence now proves:
+
+- permissive and strict opportunity references are unboxed secondary metadata while simple remains hidden;
+- the primary simple diamond is vertically stacked without changing its authored child array;
+- the locked adjacent proofs are direct horizontal routes;
+- `J-204→J-401` uses a right-edge source-Stage egress without changing `G-200` dimensions;
+- legal stacked branch/join routes use the common minimal-L selector; and
+- nominal bent routes use an 18px terminal approach, with the shared 12px hard minimum unchanged.
+
+The dense early-south experiment is not accepted evidence. Its same-run final result was 18 edges, 58 residual crossings, 56 continuity marks, root `2064×400`, `G-900` `856×224`, and `G-910` `760×160`, plus one exact preferred-terminal warning for a 12px degraded approach. Because it exceeded both the 31-crossing limit and the `2064×384` root bound, `early_south_egress` is not selectable, compressed scene/SVG/PNG goldens remain unchanged, and corpus generation/promotion is withheld. `JM-VIS-002` therefore remains open.
+
+The accepted diagnostic evidence contains only one representative dense crossing warning plus the preferred-terminal warning; it does not snapshot all 58 rejected-experiment crossings. Public staged backend selection and exact SVG-derived PNG remain test-owned. DOT, Mermaid, explicit legacy Graphviz, projection, and non-Journey staged outputs remain protected-output checks rather than remediation evidence refreshes.

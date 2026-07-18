@@ -200,7 +200,10 @@ describe("staged journey map RendererScene", () => {
       stageOrder: 1,
       stepOrder: 0,
       globalStepOrder: 3,
-      uncontained: false
+      uncontained: false,
+      progressionColumn: 0,
+      laneOrder: 0,
+      placementRole: "linear"
     });
     expect(journeyMetadata(findNode(scene, "J-590"))).toEqual({
       kind: "step",
@@ -211,7 +214,7 @@ describe("staged journey map RendererScene", () => {
     expect(flattenItems(scene.root).filter((item) => item.id === "J-503")).toHaveLength(1);
   });
 
-  it("builds badge blocks only from typed badges and preserves profile-controlled ordering", async () => {
+  it("builds unboxed metadata only from typed references and preserves profile-controlled ordering", async () => {
     const simple = await buildFixture("primary", "simple");
     const permissive = await buildFixture("primary", "permissive");
     const strict = await buildFixture("primary", "strict");
@@ -236,17 +239,17 @@ describe("staged journey map RendererScene", () => {
         },
         {
           id: "J-201__badge__OP-100__0",
-          kind: "badge_text",
+          kind: "metadata",
           text: "Clear total cost",
-          textStyleRole: "badge",
+          textStyleRole: "metadata",
           region: "secondary",
           priority: "secondary"
         },
         {
           id: "J-201__badge__OP-200__0",
-          kind: "badge_text",
+          kind: "metadata",
           text: "Confidence before commitment",
-          textStyleRole: "badge",
+          textStyleRole: "metadata",
           region: "secondary",
           priority: "secondary"
         }

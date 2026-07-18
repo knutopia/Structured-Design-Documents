@@ -129,7 +129,10 @@
                 "stageOrder": 0,
                 "stepOrder": 0,
                 "globalStepOrder": 0,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -215,7 +218,10 @@
                 "stageOrder": 0,
                 "stepOrder": 1,
                 "globalStepOrder": 1,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -302,7 +308,10 @@
                 "stageOrder": 0,
                 "stepOrder": 2,
                 "globalStepOrder": 2,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -392,10 +401,34 @@
           }
         },
         "layout": {
-          "strategy": "stack",
-          "direction": "horizontal",
+          "strategy": "grid",
+          "columns": 4,
           "gap": 24,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "grid": {
+            "placements": [
+              {
+                "itemId": "J-201",
+                "row": 0,
+                "column": 0
+              },
+              {
+                "itemId": "J-202",
+                "row": 0,
+                "column": 1
+              },
+              {
+                "itemId": "J-203",
+                "row": 1,
+                "column": 1
+              },
+              {
+                "itemId": "J-204",
+                "row": 0,
+                "column": 2
+              }
+            ]
+          }
         },
         "chrome": {
           "padding": {
@@ -443,7 +476,11 @@
                 "stageOrder": 1,
                 "stepOrder": 0,
                 "globalStepOrder": 3,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "diamond_split",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -530,7 +567,11 @@
                 "stageOrder": 1,
                 "stepOrder": 1,
                 "globalStepOrder": 4,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 0,
+                "placementRole": "diamond_option",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -616,7 +657,11 @@
                 "stageOrder": 1,
                 "stepOrder": 2,
                 "globalStepOrder": 5,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 1,
+                "laneOrder": 1,
+                "placementRole": "diamond_option",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -703,7 +748,11 @@
                 "stageOrder": 1,
                 "stepOrder": 3,
                 "globalStepOrder": 6,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 2,
+                "laneOrder": 0,
+                "placementRole": "diamond_join",
+                "branchGroupId": "G-200__diamond__J-201__J-204"
               }
             },
             "widthPolicy": {
@@ -773,8 +822,8 @@
           }
         ],
         "ports": [],
-        "width": 1008,
-        "height": 144
+        "width": 760,
+        "height": 232
       },
       {
         "kind": "node",
@@ -1064,7 +1113,10 @@
                 "stageOrder": 3,
                 "stepOrder": 0,
                 "globalStepOrder": 9,
-                "uncontained": false
+                "uncontained": false,
+                "progressionColumn": 0,
+                "laneOrder": 0,
+                "placementRole": "linear"
               }
             },
             "widthPolicy": {
@@ -1139,8 +1191,8 @@
       }
     ],
     "ports": [],
-    "width": 3023.576,
-    "height": 208
+    "width": 2775.576,
+    "height": 296
   },
   "edges": [
     {

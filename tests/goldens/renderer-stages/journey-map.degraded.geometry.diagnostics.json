@@ -9,17 +9,9 @@
   },
   {
     "phase": "routing",
-    "code": "renderer.routing.journey_map_badge_intersection",
-    "severity": "error",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects badge \"J-201__badge__OP-100__0\".",
-    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\",\"J-201__badge__OP-100__0\"]}"
-  },
-  {
-    "phase": "routing",
     "code": "renderer.routing.journey_map_boundary_gate_fallback",
     "severity": "warn",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not cross Stage \"G-200\" at its locked south gate.",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not cross Stage \"G-200\" at its locked east gate.",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
     "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"G-200\"]}"
   },
@@ -41,27 +33,11 @@
   },
   {
     "phase": "routing",
-    "code": "renderer.routing.journey_map_endpoint_intrusion",
-    "severity": "error",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects endpoint Step \"J-204\".",
-    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-204\"]}"
-  },
-  {
-    "phase": "routing",
     "code": "renderer.routing.journey_map_node_intersection",
     "severity": "error",
     "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects unrelated Step \"J-201\".",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
     "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\"]}"
-  },
-  {
-    "phase": "routing",
-    "code": "renderer.routing.journey_map_node_intersection",
-    "severity": "error",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects unrelated Step \"J-203\".",
-    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-203\"]}"
   },
   {
     "phase": "routing",
@@ -78,6 +54,14 @@
     "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" contains a non-orthogonal segment.",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
     "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_secondary_content_intersection",
+    "severity": "error",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects secondary content \"J-201__badge__OP-100__0\".",
+    "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\",\"J-201__badge__OP-100__0\"]}"
   },
   {
     "phase": "routing",
@@ -106,7 +90,7 @@
   {
     "phase": "routing",
     "code": "renderer.routing.marker_leg_minimum_unmet",
-    "severity": "info",
+    "severity": "error",
     "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" has an end marker leg below 12px.",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
     "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\"]}"

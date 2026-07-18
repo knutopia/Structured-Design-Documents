@@ -331,25 +331,20 @@ describe("preview workflow", () => {
 
     expect(result.previewCapability.backendId).toBe("staged_journey_map_preview");
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
-    expect(result.diagnostics).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        stage: "render",
-        code: "renderer.routing.journey_map_unavoidable_crossing",
-        severity: "warn"
-      }),
+    expect(result.diagnostics).toEqual([
       expect.objectContaining({
         stage: "render",
         code: "renderer.scene.journey_map_disconnected_chain",
         severity: "info"
       })
-    ]));
+    ]);
     expect(result.artifact?.format).toBe("svg");
     if (!result.artifact || result.artifact.format !== "svg") {
       throw new Error("Expected staged journey SVG artifact.");
     }
     expect(result.artifact.text).toContain('class="staged-svg view-journey_map');
     expect(result.artifact.text).toContain("Review the");
-    expect(result.artifact.text).toContain(" Q ");
+    expect(result.artifact.text).not.toContain(" Q ");
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 

@@ -129,13 +129,13 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-j-503__precedes__j-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 980 156 L 980 168 L 1492 168 L 1492 140" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 980 156 L 980 174 L 1492 174 L 1492 140" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-501__precedes__j-502__51e0788a6e29bb43634e865529e007ccee051ad1e572b8494b89efdd4ae46b2c__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-501__PRECEDES__J-502__51e0788a6e29bb43634e865529e007ccee051ad1e572b8494b89efdd4ae46b2c__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1476 140 L 1476 152 L 1228 152 L 1228 140" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1476 140 L 1476 158 L 1228 158 L 1228 140" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-591__precedes__j-590__f4e82fc8e90b608618ba9db0adfc05a2b84b27fd7ad9d5165dc1473d75b3dd85__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-591__PRECEDES__J-590__f4e82fc8e90b608618ba9db0adfc05a2b84b27fd7ad9d5165dc1473d75b3dd85__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1760 140 L 1760 188 L 696 188 L 696 140" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1760 140 L 1760 194 L 696 194 L 696 140" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

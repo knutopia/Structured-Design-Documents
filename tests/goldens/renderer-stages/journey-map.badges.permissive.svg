@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="3039.576" height="268" viewBox="0 0 3039.576 268" class="staged-svg view-journey_map profile-permissive theme-default theme-revision-public-sans-v0-1" data-view-id="journey_map" data-profile-id="permissive" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="2775.576" height="344" viewBox="0 0 2775.576 344" class="staged-svg view-journey_map profile-permissive theme-default theme-revision-public-sans-v0-1" data-view-id="journey_map" data-profile-id="permissive" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -45,23 +45,23 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram journey_map journey_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="3039.576" height="268" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0" y="0" width="2775.576" height="344" rx="18" ry="18"/>
     </g>
     <g id="scene-container-g-100" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-100" data-role="journey_stage">
       <rect class="scene-container__chrome" x="32" y="32" width="840" height="144" rx="16" ry="16"/>
       <rect class="scene-container__header-band" x="32" y="32" width="840" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-g-200" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-200" data-role="journey_stage">
-      <rect class="scene-container__chrome" x="912" y="32" width="1024" height="204" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="912" y="32" width="1024" height="40" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="912" y="32" width="760" height="280" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="912" y="32" width="760" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-g-300" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-300" data-role="journey_stage">
-      <rect class="scene-container__chrome" x="2504" y="32" width="199.576" height="80" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="2504" y="32" width="199.576" height="40" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="2240" y="32" width="199.576" height="80" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="2240" y="32" width="199.576" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-g-400" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-400" data-role="journey_stage">
-      <rect class="scene-container__chrome" x="2743.576" y="32" width="264" height="128" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="2743.576" y="32" width="264" height="40" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="2479.576" y="32" width="264" height="128" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="2479.576" y="32" width="264" height="40" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
@@ -75,27 +75,25 @@
       <rect class="scene-node__chrome" x="628" y="92" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-201" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_contained" data-item-id="J-201" data-role="journey_step">
-      <rect class="scene-node__chrome" x="932" y="92" width="224" height="124" rx="14" ry="14"/>
-      <rect class="scene-badge__chrome" x="944" y="154" width="101.062" height="22" rx="999" ry="999"/>
-      <rect class="scene-badge__chrome" x="944" y="182" width="191.842" height="22" rx="999" ry="999"/>
+      <rect class="scene-node__chrome" x="932" y="92" width="224" height="112" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-202" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_contained" data-item-id="J-202" data-role="journey_step">
       <rect class="scene-node__chrome" x="1180" y="92" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-203" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_contained" data-item-id="J-203" data-role="journey_step">
-      <rect class="scene-node__chrome" x="1428" y="92" width="224" height="64" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1180" y="228" width="224" height="64" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-204" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_contained" data-item-id="J-204" data-role="journey_step">
-      <rect class="scene-node__chrome" x="1692" y="92" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1428" y="92" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-250" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_root" data-item-id="J-250" data-role="journey_step">
-      <rect class="scene-node__chrome" x="1976" y="92" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1712" y="92" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-260" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_root" data-item-id="J-260" data-role="journey_step">
-      <rect class="scene-node__chrome" x="2240" y="92" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="1976" y="92" width="224" height="48" rx="14" ry="14"/>
     </g>
     <g id="scene-node-j-401" class="scene-node primitive-card role-journey_step paint-nodes journey_map journey_step journey_step_contained" data-item-id="J-401" data-role="journey_step">
-      <rect class="scene-node__chrome" x="2763.576" y="92" width="224" height="48" rx="14" ry="14"/>
+      <rect class="scene-node__chrome" x="2499.576" y="92" width="224" height="48" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -130,11 +128,11 @@
           <tspan x="944" dy="0">Review the</tspan>
           <tspan x="944" dy="20">recommendation</tspan>
         </text>
-      <text class="scene-text text-role-badge block-kind-badge_text block-region-secondary" x="952" y="170">
-          <tspan x="952" dy="0">Clear total cost</tspan>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-secondary" x="944" y="166">
+          <tspan x="944" dy="0">Clear total cost</tspan>
         </text>
-      <text class="scene-text text-role-badge block-kind-badge_text block-region-secondary" x="952" y="198">
-          <tspan x="952" dy="0">Confidence before commitment</tspan>
+      <text class="scene-text text-role-metadata block-kind-metadata block-region-secondary" x="944" y="188">
+          <tspan x="944" dy="0">Confidence before commitment</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-journey_step paint-labels journey_map journey_step journey_step_contained" data-item-id="J-202" data-role="journey_step">
@@ -143,69 +141,69 @@
         </text>
     </g>
     <g class="scene-node primitive-card role-journey_step paint-labels journey_map journey_step journey_step_contained" data-item-id="J-203" data-role="journey_step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1440" y="120">
-          <tspan x="1440" dy="0">Resolve remaining</tspan>
-          <tspan x="1440" dy="20">concerns</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1192" y="256">
+          <tspan x="1192" dy="0">Resolve remaining</tspan>
+          <tspan x="1192" dy="20">concerns</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-journey_step paint-labels journey_map journey_step journey_step_contained" data-item-id="J-204" data-role="journey_step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1704" y="120">
-          <tspan x="1704" dy="0">Choose a path</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1440" y="120">
+          <tspan x="1440" dy="0">Choose a path</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-journey_step paint-labels journey_map journey_step journey_step_root" data-item-id="J-250" data-role="journey_step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1988" y="120">
-          <tspan x="1988" dy="0">Ask for human guidance</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1724" y="120">
+          <tspan x="1724" dy="0">Ask for human guidance</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-journey_step paint-labels journey_map journey_step journey_step_root" data-item-id="J-260" data-role="journey_step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2252" y="120">
-          <tspan x="2252" dy="0">Receive human guidance</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1988" y="120">
+          <tspan x="1988" dy="0">Receive human guidance</tspan>
         </text>
     </g>
     <g class="scene-container primitive-cluster role-journey_stage paint-labels journey_map journey_stage" data-item-id="G-300" data-role="journey_stage">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2524" y="58">
-          <tspan x="2524" dy="0">Pause and reconsider</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2260" y="58">
+          <tspan x="2260" dy="0">Pause and reconsider</tspan>
         </text>
     </g>
     <g class="scene-container primitive-cluster role-journey_stage paint-labels journey_map journey_stage" data-item-id="G-400" data-role="journey_stage">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2763.576" y="58">
-          <tspan x="2763.576" dy="0">Commit</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2499.576" y="58">
+          <tspan x="2499.576" dy="0">Commit</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-journey_step paint-labels journey_map journey_step journey_step_contained" data-item-id="J-401" data-role="journey_step">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2775.576" y="120">
-          <tspan x="2775.576" dy="0">Complete enrollment</tspan>
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="2511.576" y="120">
+          <tspan x="2511.576" dy="0">Complete enrollment</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-j-101__precedes__j-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 276 116 L 288 116 L 288 124 L 300 124" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 276 116 L 300 116" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-102__precedes__j-103__462531a4b246334148d308dc1a5cd20d5bc06bcde42729b8c8d99ca735d1cf8a__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-102__PRECEDES__J-103__462531a4b246334148d308dc1a5cd20d5bc06bcde42729b8c8d99ca735d1cf8a__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 604 124 L 616 124 L 616 116 L 628 116" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 604 124 L 628 124" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-103__precedes__j-201__8c958eb2a8a74f09ca75b72e71f75ffb566ac2c0fcaf61578f908ae5d94b9b03__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-103__PRECEDES__J-201__8c958eb2a8a74f09ca75b72e71f75ffb566ac2c0fcaf61578f908ae5d94b9b03__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 852 116 L 892 116 L 892 154 L 932 154" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 852 116 L 932 116" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-204__precedes__j-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1804 140 L 1804 248 L 2875.576 248 L 2875.576 140" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1652 116 L 1690 116 L 1690 330 L 2611.576 330 L 2611.576 140" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-250__precedes__j-260__41af070b7875a64ca707ee01b6165425f0d5fc78aa0510895157b68f9195daa6__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-250__PRECEDES__J-260__41af070b7875a64ca707ee01b6165425f0d5fc78aa0510895157b68f9195daa6__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 2200 116 L 2240 116" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1936 116 L 1976 116" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-201__precedes__j-202__593fe33d0efc3afc341263d5931f29a5f6fe37e5d7a0c711e6b630dc3f490377__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-201__PRECEDES__J-202__593fe33d0efc3afc341263d5931f29a5f6fe37e5d7a0c711e6b630dc3f490377__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1156 146 L 1168 146 L 1168 116 L 1180 116" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1156 139 L 1180 139" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-201__precedes__j-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1156 162 L 1168 162 L 1168 228 L 1540 228 L 1540 156" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1044 204 L 1044 260 L 1180 260" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-202__precedes__j-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1292 140 L 1292 168 L 1537 168 Q 1540 165 1543 168 L 1680 168 L 1680 124 L 1692 124" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1404 116 L 1428 116" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-203__precedes__j-204__507b45c44ab3c264dd2cf0e03b67cea5ea2e7d31b604dd0d7f5a434686a53ac9__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-203__PRECEDES__J-204__507b45c44ab3c264dd2cf0e03b67cea5ea2e7d31b604dd0d7f5a434686a53ac9__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1652 124 L 1664 124 L 1664 108 L 1692 108" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1404 260 L 1540 260 L 1540 140" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

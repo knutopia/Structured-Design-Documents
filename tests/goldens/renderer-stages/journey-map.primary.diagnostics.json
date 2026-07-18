@@ -1,13 +1,5 @@
 [
   {
-    "phase": "routing",
-    "code": "renderer.routing.journey_map_unavoidable_crossing",
-    "severity": "warn",
-    "message": "Journey edges \"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\" and \"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
-    "targetId": "J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0",
-    "details": "{\"relatedIds\":[\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\"],\"crossingId\":\"journey-crossover:J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0:3:J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0:1\",\"point\":{\"x\":1540,\"y\":168},\"overEdgeId\":\"J-202__PRECEDES__J-204__34ffe7148c62ef2de7d7441ff3c229f6cdb4caa830ec06c13e4fc135c1d271b4__0\",\"underEdgeId\":\"J-201__PRECEDES__J-203__fa511db8d388c1c641794046eb99f8143ad8ad693087448c54862f0fdd6d7105__0\",\"segmentIndexes\":{\"edgeA\":3,\"edgeB\":1}}"
-  },
-  {
     "phase": "scene",
     "code": "renderer.scene.journey_map_disconnected_chain",
     "severity": "info",
