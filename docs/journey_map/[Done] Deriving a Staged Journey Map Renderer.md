@@ -1,4 +1,4 @@
-# Deriving a Staged Journey Map Renderer
+# [Done] Deriving a Staged Journey Map Renderer
 
 **KG:**
 

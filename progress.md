@@ -23,6 +23,8 @@
 - Created a visual review doc
 - Capturing visual issues
 - Mapped captured issues to prerecorded issues
+- Merged journey_map branch into main, deleted worktree, branched refine_journey_map
+- Created visual remediation plan
 
 ## Tue 7-14
 

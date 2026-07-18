@@ -1,4 +1,4 @@
-# Staged Journey Map Renderer Architecture
+# [Done] Staged Journey Map Renderer Architecture
 
 Status: architecture reference for a future implementation-planning thread
 
