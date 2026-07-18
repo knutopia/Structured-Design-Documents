@@ -97,7 +97,7 @@ Two known drift items remain deliberately unresolved: `reference_annotations.sor
 
 ### Gate 1 — locked proof-corpus contract
 
-The literal, decision-complete Gate 1 artifact is [`staged_journey_map_renderer_gate1_proof_contract.md`](staged_journey_map_renderer_gate1_proof_contract.md). Its five complete `.sdd` sources, per-edge ownership/archetypes, profiles, assertion/rubric ownership, diagnostic triggers, artifact names, thresholds, and return-to-Gate-1 stop rule are normative for later implementation. The summaries below provide traceability but do not authorize omissions or discretionary fixture edits.
+The literal, decision-complete Gate 1 artifact is [`staged_journey_map_renderer_verification_contract.md`](staged_journey_map_renderer_verification_contract.md). Its five complete `.sdd` sources, per-edge ownership/archetypes, profiles, assertion/rubric ownership, diagnostic triggers, artifact names, thresholds, and return-to-Gate-1 stop rule are normative for later implementation. The summaries below provide traceability but do not authorize omissions or discretionary fixture edits.
 
 **Future fixture paths.** Gate 2 creates the semantic fixtures; Gate 1 only locks their content. The paths are:
 
@@ -247,7 +247,7 @@ The linked ownership table defines which review items each case must pass; an it
 
 ### Gate 1 — validation and consolidated review package
 
-**Artifacts.** The decision-complete fixture/assertion/review artifact is [`staged_journey_map_renderer_gate1_proof_contract.md`](staged_journey_map_renderer_gate1_proof_contract.md). It contains five literal future fixture sources, exact source placement and properties, all edge owners/archetypes/modifiers, profile assignments, expected validation diagnostics, hard and human assertion ownership, exact stage/diagnostic filenames, full diagnostic trigger mapping, the 12px terminal-leg threshold, normal review dimensions, and the return-to-Gate-1 amendment rule. No `.sdd` fixture, snapshot, golden, corpus output, SVG, or PNG has been created at Gate 1.
+**Artifacts.** The decision-complete fixture/assertion/review artifact is [`staged_journey_map_renderer_verification_contract.md`](staged_journey_map_renderer_verification_contract.md). It contains five literal future fixture sources, exact source placement and properties, all edge owners/archetypes/modifiers, profile assignments, expected validation diagnostics, hard and human assertion ownership, exact stage/diagnostic filenames, full diagnostic trigger mapping, the 12px terminal-leg threshold, normal review dimensions, and the return-to-Gate-1 amendment rule. No `.sdd` fixture, snapshot, golden, corpus output, SVG, or PNG has been created at Gate 1.
 
 **Executable fixture validation.** A temporary read-only extractor compiled all five literal Markdown sources through the real loaded bundle. Primary passed simple, permissive, and strict with no validation diagnostic. Ordering/ownership passed strict with only `validate.contains_single_parent_recommended`; topology passed strict with only `validate.precedes_cycle_policy` for `[J-711,J-712]`; duplicate passed strict with only `validate.duplicate_edge_detection`; compressed passed strict with no diagnostic. This is five fixtures and seven profile runs with no unexpected compile/validation result.
 

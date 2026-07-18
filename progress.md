@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-feature: "render a diagram from a starting node"
+
 -service blueprint: track the sidecar placement regression
 -service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
@@ -14,6 +16,13 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Sat 7-17
+
+- Renamed staged_journey_map_renderer_verification_contract.md
+- Created a visual review doc
+- Capturing visual issues
+
 
 ## Tue 7-14
 

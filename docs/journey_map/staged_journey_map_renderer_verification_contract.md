@@ -1,12 +1,12 @@
-# Staged Journey Map Renderer — Gate 1 Proof Contract
+# Staged Journey Map Renderer — Verification and Acceptance Contract
 
-Status: accepted on 2026-07-12; normative for Gates 2–10
+Status: accepted on 2026-07-12; established at Gate 1, governed Gates 2–10, and retained as the implementation verification and acceptance record
 
-Authority: subordinate execution artifact of [`staged_journey_map_renderer_gated_implementation_plan.md`](staged_journey_map_renderer_gated_implementation_plan.md). The bundle and repository policy remain higher authority. This document fixes literal fixture content and acceptance ownership; later gates must return to Gate 1 and re-review any amendment.
+Authority: subordinate execution artifact of [`staged_journey_map_renderer_gated_implementation_plan.md`](staged_journey_map_renderer_gated_implementation_plan.md). The bundle and repository policy remain higher authority. This document records the canonical fixture content, verification expectations, and acceptance ownership established at Gate 1; amendments during implementation required a return to Gate 1 and re-review.
 
-## 1. Literal future fixture sources
+## 1. Canonical verification fixture sources
 
-Gate 2 creates these files byte-for-byte with canonical LF. Gate 1 creates no `.sdd` fixture. All support nodes and `REALIZED_BY` edges exist only to keep strict validation focused; journey projection omits them by bundle scope.
+Gate 2 created these files byte-for-byte with canonical LF; Gate 1 itself created no `.sdd` fixture. All support nodes and `REALIZED_BY` edges exist only to keep strict validation focused; journey projection omits them by bundle scope.
 
 ### `tests/fixtures/render/journey_map_staged_primary.sdd`
 

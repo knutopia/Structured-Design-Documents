@@ -1,4 +1,4 @@
-# Prompt: Create a Gated Implementation Plan for the Staged Journey Map Renderer
+# [Done] Prompt: Create a Gated Implementation Plan for the Staged Journey Map Renderer
 
 Copy the prompt below into a new Codex thread rooted at this repository.
 
