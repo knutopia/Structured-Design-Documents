@@ -9,14 +9,14 @@ Desired solution: show parallel paths on separate horizontal lanes, so that J-20
 
 This is a node placement issue (with routing consequences) seen in the primary fixture (plate JM-G03-01 and others.)
 Relevant gate: *Gate 4 — measurement and source-ordered placement*
-Also of consequence for Gate 6, *Plate JM-G06-01 — non-adjacent same-Stage skip*
+Also of consequence for Gate 6, *Plates JM-G06-03, JM-G06-04*
 
 ## 2. Straight Connectors Between Adjacent Nodes Within a Stage ( = JM-VIS-001)
 
 Issue: Two adjacent nodes within the same stage are connected by 3-segment connectors, because origin-Y and destination-y are different because of node height differences or because of connector-on-edge placement in multiple-connector-per-edge situations.
 
 Examples: 
-- J-101 PRECEDES J-102, J-202 PRECEDES J-203 (journey_map_staged_primary.sdd)
+- J-101 PRECEDES J-102, J-102 PRECEDES J-103 (journey_map_staged_primary.sdd)
 - (multiple connectors originating on same edge, impacted by Issue 1 above): J-201 PRECEDES J-202 (journey_map_staged_primary.sdd)
 - J-001 PRECEDES J-002 (outcome_to_ia_trace.sdd)
 
@@ -60,11 +60,12 @@ Not sure what gate this belongs to. Potentially deep impact on routing.
 
 Issue: While used in some other diagram types staged pipelines too, the ovals used for opportunity badges are ugly and hard to read.
 
-Desired outcome: clean "secondary node content". 
+Desired outcome: clean "secondary node content". (As unboxed metadata text, NOT as a rounded-corner box.)
 
-For a good implementation, see: 
-M001 INSTRUMENTED_AT J-002, M-001 INSTRUMENTED_AT E-001, I-001 IMPLEMENTED_BY P-001 
-(in examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd, examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.outcome_opportunity_map.svg)
+For good implementations, see: 
+- M001 INSTRUMENTED_AT J-002, M-001 INSTRUMENTED_AT E-001, I-001 IMPLEMENTED_BY P-001 (these are edges not properties but their box-less style fits)(in examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd, examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.outcome_opportunity_map.svg)
+
+- Place P-001 route_or_key=/checkout/billing, Place P-002 route_or_key=/checkout/review (not the visually-bad "auth")(in examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd, examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.ia_place_map.svg)
 
 Not sure what gate this belongs to.
 

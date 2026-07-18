@@ -1,4 +1,4 @@
-# Staged Journey Map Renderer — Gated Implementation Plan
+# [Done] Staged Journey Map Renderer — Gated Implementation Plan
 
 Status: implementation complete — Gates 0–10 accepted
 
