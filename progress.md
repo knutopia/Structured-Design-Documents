@@ -22,7 +22,7 @@
 - Renamed staged_journey_map_renderer_verification_contract.md
 - Created a visual review doc
 - Capturing visual issues
-
+- Mapped captured issues to prerecorded issues
 
 ## Tue 7-14
 

@@ -1,6 +1,6 @@
 # Visual Issues to Address in Journey Map
 
-## 1. Stacking Parallel Options
+## 1. Stacking Parallel Options (this is a specific solution to JM-VIS-003)
 
 Issue: Parallel paths are shown sequentially, with J-203 to the right of J-202.
 Example: J-201 PRECEDES J-202 and J-201 PRECEDES J-203 (journey_map_staged_primary.sdd)
@@ -11,7 +11,7 @@ This is a node placement issue (with routing consequences) seen in the primary f
 Relevant gate: *Gate 4 — measurement and source-ordered placement*
 Also of consequence for Gate 6, *Plate JM-G06-01 — non-adjacent same-Stage skip*
 
-## 2. Straight Connectors Between Adjacent Nodes Within a Stage
+## 2. Straight Connectors Between Adjacent Nodes Within a Stage ( = JM-VIS-001)
 
 Issue: Two adjacent nodes within the same stage are connected by 3-segment connectors, because origin-Y and destination-y are different because of node height differences or because of connector-on-edge placement in multiple-connector-per-edge situations.
 
@@ -21,6 +21,8 @@ Examples:
 - J-001 PRECEDES J-002 (outcome_to_ia_trace.sdd)
 
 Desired solution: use a straight, horizontal single-segment connector where possible, reducing segment-count for readability. To do this we sacrifice vertically-centered connector placement on vertical destination node edge (and possibly on corresponding source node edge)
+
+This is JM-VIS-001. *However*, unlike JM-VIS-001 says, implement the solution for Journey Map, not as shared infrastructure. Document the solution in a way that makes it straightforward to propagate the solution to shared infrastructure later.
 
 This is about *Gate 5 — basic routing*
 Also Gate 9, *plate JM-G09-01*
@@ -66,7 +68,7 @@ M001 INSTRUMENTED_AT J-002, M-001 INSTRUMENTED_AT E-001, I-001 IMPLEMENTED_BY P-
 
 Not sure what gate this belongs to.
 
-## 7. High Density Expansion De-Tangle
+## 7. High Density Expansion De-Tangle ( = JM-VIS-002)
 
 Not sure if there is asolution for this one. I see an actual solution but don't know how to express it as logic:
 
