@@ -18,12 +18,14 @@
 
 ## Sun 7-19
 
--installed fontawesome-free
--installed vitepress lightbox plugin
--installed medium-zoom via pnpm - already present - but made lightbox work
--rewrote service blueprint example page
--rewrote service blueprint section in diagram types page
--many minor edits
+- installed fontawesome-free
+- installed vitepress lightbox plugin
+- installed medium-zoom via pnpm - already present - but made lightbox work
+- rewrote service blueprint example page
+- rewrote service blueprint section in diagram types page
+- many minor edits
+- installed vitepress-plugin-tabs
+- debugged tabs breaking lightbox
 
 ## Satu 7-18
 

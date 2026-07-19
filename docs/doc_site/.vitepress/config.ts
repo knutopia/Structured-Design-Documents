@@ -4,6 +4,7 @@ import { normalizePath } from 'vite'
 
 import path from 'path'
 import lightbox from "vitepress-plugin-lightbox"
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -40,6 +41,8 @@ export default defineConfig({
     config: (md) => {
       // Use lightbox plugin
       md.use(lightbox, {});
+      // use tabs plugin
+      md.use(tabsMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {

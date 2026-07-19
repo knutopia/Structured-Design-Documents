@@ -1,0 +1,147 @@
+---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
+
+hero:
+  name: "SDD"
+  text: "Structured Design Documents"
+  tagline: Semantically Defined Structural Design for Better Products
+  actions:
+    - theme: brand
+      text: Markdown Examples
+      link: /markdown-examples
+    - theme: alt
+      text: API Examples
+      link: /api-examples
+
+features:
+  - title: Product Design Graph
+    details: Nodes and edges, from high-level opportunities to low-level details, prepared to evolve
+  - title: Simple Markup, Rendered Diagrams
+    details: Easy to read, easy to write, validated and rendered to diagrams as output
+  - title: For Us and for Our Machines
+    details: Use SDD to talk to an LLM about structural design
+---
+
+SDD-Text is a compact language for describing software product design as a structured map. SDD-Text is easy to read and write, for people and for LLMs.
+
+SDD-Text makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
+
+Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](./diagram_types/).
+
+This repository contains the spec bundle defining the language. The bundle is meant to evolve, to improve the language. The repository also contains a toolchain that validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
+
+Because rendering is separate from the source model, tools that work with design structure do not need graphical capabilities, while rendering tools can focus solely on presentation.
+
+## Why It Exists
+
+- To provide a structured source of truth for product design instead of fragmented diagrams and documents.
+- To make design structure machine-readable for validation, tooling, and deterministic rendering.
+- To create design artifacts that AI and LLM workflows can consume without relying on image interpretation.
+- To provide a means to AI and LLM workflows to "speak design", so they can create structural design information outside blobs of code.
+- To give "traditional" product, design, and diagramming tools a shared semantic layer they can integrate with.
+
+## Example: Small App
+
+Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
+
+Full source: <IconFile/>[`small_app.sdd`](./small_app_example/small_app.sdd)
+
+```text
+SDD-TEXT 0.1
+
+# small_app.sdd example file
+#
+# Area nodes and Places show up in the ia_place_map diagram.
+# Place nodes, their View States and Components show up in the ui_contracts diagram.
+#
+# This example is built for the "simple" profile, for quick sketches.
+
+Place P-100 "Dashboard"
+  description="Global project status and flow entry points"
+  primary_nav=true
+  COMPOSED_OF C-100 "Projects Status Summary"
+  COMPOSED_OF C-110 # (Quoted target name hints are optional...)
+  COMPOSED_OF C-900 "Global Navigation" # (...but can improve readability)
+
+  + Component C-100 "Projects Status Summary"
+    description="At-a-glance view of project statuses"
+  END
+  + Component C-110 "Priority List of Tasks"
+    description="What needs to be done"
+  END
+END
+
+Area A-200 "Current Projects"
+  description="Ongoing work"
+  CONTAINS P-210 "Projects Overview"
+  CONTAINS P-220 "Project Detail"
+  CONTAINS P-230 "Create New Project"
+  + Place P-210 "Projects Overview"
+    description="Selectable list of projects with contextual actions"
+    primary_nav=true
+    CONTAINS VS-210a "List of Projects"
+    CONTAINS VS-210b "Duplicate Project Dialog"
+    CONTAINS VS-210c "Delete Project Confirmation Dialog"
+```
+
+Rendered outputs (click to open full size):
+
+![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
+![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
+
+See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.
+
+## Using SDD
+
+The SDD Skill helps when using SDD with an LLM: [SDD Skill Guide](sdd-skill/)
+
+Using SDD command line tools manually ("sdd show" etc): [SDD CLI User Guide](./sdd_cli_tools/)
+
+## Technical Core
+
+Two folders define the language:
+
+- The *bundle/v0.1/* folder houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling. <IconGitHub/>[bundle/v0.1/ repo folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/bundle/v0.1)
+
+- The *definitions/v0.1/* houses explanatory definitions and rationale for version 0.1 and should stay consistent with the bundle. <IconGitHub/>[definitions/v0.1/ repo folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/definitions/v0.1)
+
+The *Authoring Spec* guides changes to the language: <IconFile/>[SDD-Text v0.1 — Authoring Spec (Type-first DSL)](../../definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md){target="_blank"}
+
+The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behind the scenes: [SDD Helper Guide](./sdd-helper/)
+
+## Background / Origins
+
+- [Initial Concepts 1: a 6-Diagram Suite v0.1](initial_concepts/Initial%20Concepts1%20a%206-Diagram%20Suite%20v0dot1.md)
+
+- [Initial Concepts 2: One-page Schema v0.1](initial_concepts/Initial%20Concepts2%20One-page%20Schema%20v0dot1.md)
+
+- Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](../../initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice.md)
+
+- [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/README.md>)
+
+## Current Status
+
+### Working Now
+
+- Solid v0.1 SDDT spec bundle
+- Completed initial compile-validate-render pipeline.
+- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, and Outcome-Opportunity Map
+- sdd-helper app available to assist agentic skills
+
+### Known Limitations
+
+- Journey Map renderer remains preview-only and is not yet polished staged output.
+- Styling for renderers lives in TypeScript source and should be in CSS files
+- Example corpus is spotty
+- No "simple" non-technical user guidance available yet
+
+### Current Focus
+
+- LLM integration (Skills, MCP Server)
+
+## Planned Additions
+
+- Solve renderers for more diagram types
+- Possibly standalone SDDT file server?
+
