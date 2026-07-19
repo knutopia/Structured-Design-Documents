@@ -3,15 +3,44 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { normalizePath } from 'vite'
 
 import path from 'path'
+import lightbox from "vitepress-plugin-lightbox"
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
 
+  title: "Structured Design Documents",
+  description: "Semantically Defined Structural Design for Better Products",
+
   ignoreDeadLinks: true,
+  cleanUrls: true,
+
+    themeConfig: {
+    // https://vitepress.dev/reference/default-theme-config
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Examples', link: '/markdown-examples' }
+    ],
+
+    sidebar: [
+      {
+        text: 'Examples',
+        items: [
+          { text: 'Markdown Examples', link: '/markdown-examples' },
+          { text: 'Runtime API Examples', link: '/api-examples' }
+        ]
+      }
+    ],
+
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+    ]
+  },
 
   markdown: {
-
     config: (md) => {
+      // Use lightbox plugin
+      md.use(lightbox, {});
+
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
@@ -83,29 +112,6 @@ export default defineConfig({
           }
         ]
       })
-    ]
-  },
-  title: "Structured Design Documents",
-  description: "Semantically Defined Structural Design for Better Products",
-  themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
-    ],
-
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
-
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]
   }
 })

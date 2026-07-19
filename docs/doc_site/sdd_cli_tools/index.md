@@ -1,6 +1,6 @@
-# SDD CLI Tools
+# SDD Command Line Tools
 
-The command-line tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It validates documents against profiles, compiles documents into canonical JSON, and generates diagrams. 
+The command-line (CLI) tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It validates documents against profiles, compiles documents into canonical JSON, and generates diagrams. 
 
 (This is different from `sdd-helper`. `sdd` is the normal tool for people running straightforward CLI workflows. `sdd-helper` is the JSON-first tool for automation and structured mutation flows.)
 
@@ -167,8 +167,10 @@ pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.js
 
 ## Practical Notes
 
-- If you hit temp-directory permission problems in this WSL setup, rerun commands with `TMPDIR=/tmp`.
-- Use `pnpm sdd --help`, `pnpm sdd help <command>`, or `pnpm sdd <command> --help` for command-specific details.
+- Use `pnpm sdd --help` for SDD help. 
+- Use `pnpm sdd help <command>` for command-specific details.
+- Since the sdd command looks for files in the project root directory, file paths have to be specified, as seen in the examples above. When using the SDD command from within another directory, use `$PWD` to point the command at the current directory without typing the path: `pnpm sdd show $PWD/input.sdd --view service_blueprint --out $PWD/output.svg`
+- When there are temp-directory permission problems in a WSL setup, rerun commands with `TMPDIR=/tmp`.
 
 ## Contract And Behavior Sources
 

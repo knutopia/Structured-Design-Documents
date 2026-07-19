@@ -87,14 +87,10 @@ Area A-200 "Current Projects"
 
 Rendered outputs (click to open full size):
 
-<a href="./small_app_example/small_app_ia_1.png">
-  <img src="./small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
-</a>
-<a href="./small_app_example/small_app_uic_1.png">
-  <img src="./small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
-</a>
+![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
+![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
 
-See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
+See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.
 
 ## Using SDD
 

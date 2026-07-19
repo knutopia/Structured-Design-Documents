@@ -28,12 +28,10 @@ To create a PNG as output, add *--format png* to the call and change the output 
 pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --out $PWD/my_service_blueprint.png --format png
 ```
 
-To see all the details about a command, use the `help`:
+To see all the details about a command, use the --help option:
 ```bash
-pnpm sdd help show
+pnpm sdd show --help
 ```
-
-Read [SDD Command Line Tools](../sdd_cli_tools/) to learn more.
 
 ## Source Excerpt
 

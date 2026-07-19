@@ -16,6 +16,19 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 7-19
+
+-installed fontawesome-free
+-installed vitepress lightbox plugin
+-installed medium-zoom via pnpm - already present - but made lightbox work
+-rewrote service blueprint example page
+-rewrote service blueprint section in diagram types page
+-many minor edits
+
+## Satu 7-18
+
+
+
 ## Tues 7-14
 
 - Changed site folder name, installed vitepress

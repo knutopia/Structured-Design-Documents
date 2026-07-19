@@ -88,7 +88,9 @@ This page collects the current diagram families, their status, and links to avai
 
   Connects user experience steps to the layers needed to realize it.
 
-  The x-axis shows customer journey progression over time: Step anchor bands ordered by `PRECEDES`, with interstitial bands for operational work that advances between customer steps. The y-axis shows fixed service lanes: customer, frontstage, backstage, support, system, and policy.
+  The x-axis shows customer journey progression over time: Anchor bands (columns) for steps connect a customer step the frontstage and backstage operations that make the step happen. Steps are ordered by `PRECEDES`. Additional interstitial bands are shown for work that advances between customer steps. The y-axis shows fixed service lanes: customer, frontstage, backstage, support, system, and policy.
+
+  Note: a single column is sometimes called a *slice*, but a slice can also be broader, covering an entire feature.
 
   Example:
   ::: details Service Blueprint Slice example 

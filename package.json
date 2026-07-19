@@ -34,11 +34,13 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
+    "medium-zoom": "^1.1.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^8.1.4",
     "vite-plugin-static-copy": "^4.1.1",
     "vitepress": "2.0.0-alpha.18",
+    "vitepress-plugin-lightbox": "^1.0.3",
     "vitest": "^2.1.8"
   }
 }
