@@ -26,6 +26,8 @@
 - many minor edits
 - installed vitepress-plugin-tabs
 - debugged tabs breaking lightbox
+- added tabs on landing page
+- attempting anchor link
 
 ## Satu 7-18
 

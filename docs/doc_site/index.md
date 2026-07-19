@@ -8,8 +8,8 @@ hero:
   tagline: Semantically Defined Structural Design for Better Products
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text:  Example
+      link:  (#Example:-Small-App)
     - theme: alt
       text: API Examples
       link: /api-examples
@@ -45,8 +45,15 @@ Because rendering is separate from the source model, tools that work with design
 
 Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
+:::tabs
+== Information Architecture
+![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
+== UI Contracts
+![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
+== SDD Source
 Full source: <IconFile/>[`small_app.sdd`](./small_app_example/small_app.sdd)
 
+Excerpt:
 ```text
 SDD-TEXT 0.1
 
@@ -84,11 +91,7 @@ Area A-200 "Current Projects"
     CONTAINS VS-210b "Duplicate Project Dialog"
     CONTAINS VS-210c "Delete Project Confirmation Dialog"
 ```
-
-Rendered outputs (click to open full size):
-
-![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
-![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
+:::
 
 See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.
 
