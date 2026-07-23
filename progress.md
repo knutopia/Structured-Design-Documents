@@ -17,6 +17,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 7-23
+
+- Captured visual_issues_stage2_in_journey_map.md based on visual proofs
+
 ## Wed 7-22
 
 - Remediation plan completed (minus gate 8 dense)

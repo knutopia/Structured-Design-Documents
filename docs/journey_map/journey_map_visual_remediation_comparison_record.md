@@ -42,6 +42,8 @@ Issue: `JM-VIS-001` — closed for the named primary proof.
 - **Source and intrinsic dimensions:** `8dfd883`, `3039.576×268`; `6201995`, `2775.576×344`. Both focus viewBoxes are `848×112`.
 - **Reviewer result:** accepted at intrinsic 100% size. Both arrows remain distinct and the authored left-to-right sequence is unchanged.
 
+
+
 ### `JM-RM-03` — simple diamond stacks options and minimizes turns
 
 Issues: `JM-VIS-003` — closed for the stacked-diamond proof; `JM-VIS-005` — superseded.

@@ -1,4 +1,4 @@
-# Journey Map Visual Remediation Implementation Plan
+# [Done] Journey Map Visual Remediation Implementation Plan
 
 **Status:** implemented through Gate 7; Gate 8 dense experiment rejected; Gate 9 closeout completed without compressed or corpus promotion.
 
