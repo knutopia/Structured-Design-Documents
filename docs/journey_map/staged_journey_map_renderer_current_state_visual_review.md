@@ -4,6 +4,8 @@ Status: remediation closeout recorded on 2026-07-18; dense readability remains o
 
 Visual baseline: accepted focused primary, ordering, topology, and duplicate Journey evidence reflects the 2026-07-18 remediation. Compressed and rendered-corpus evidence remains at the pre-remediation baseline because the dense experiment failed its numeric gate and corpus promotion was consequently withheld.
 
+The immutable before/after history, current-runtime public proof, and rejected dense experiment are archived in the [Journey Map visual remediation comparison record](journey_map_visual_remediation_comparison_record.md). This document keeps the accepted current plates as the canonical present-state review.
+
 Purpose: review the cumulative final renderer by the gate criteria that introduced each behavior, identify visual defects precisely, and track fixes without treating earlier gate acceptance as a claim that the current output is visually finished.
 
 Authority: this is a review and remediation aid. The bundle, repository policy, [completed renderer architecture](<[Done] staged_journey_map_renderer_architecture.md>), [verification and acceptance contract](staged_journey_map_renderer_verification_contract.md), and [completed gated implementation plan](<[Done] staged_journey_map_renderer_gated_implementation_plan.md>) remain authoritative. The active execution document is the [visual remediation implementation plan](journey_map_visual_remediation_implementation_plan.md).
@@ -24,6 +26,8 @@ The implementation gate and visual-remediation status are intentionally separate
 Unless a plate says otherwise, it uses the strict profile, default theme, final routing stage, intrinsic SVG dimensions, and the staged journey preview backend.
 
 ## Current issue register
+
+Comparison plates for every accepted disposition and the rejected dense experiment are indexed in the [visual remediation comparison record](journey_map_visual_remediation_comparison_record.md).
 
 ### `JM-VIS-001` — adjacent horizontal connector doglegs
 
@@ -132,13 +136,13 @@ Unless a plate says otherwise, it uses the strict profile, default theme, final 
 
 - **Concern:** adjacent same-Stage and adjacent cross-Stage routing.
 - **Plate:** `JM-G05-01`.
-- **Visual-remediation state:** open issue `JM-VIS-001`.
+- **Visual-remediation state:** `JM-VIS-001` closed for the named adjacent-route proofs.
 
 ### Gate 6 — dedicated route families
 
 - **Concern:** eight dedicated routing families.
 - **Plates:** `JM-G06-01` through `JM-G06-08`.
-- **Visual-remediation state:** open issues `JM-VIS-001` and `JM-VIS-003`; regression watch `JM-VIS-004`.
+- **Visual-remediation state:** `JM-VIS-001` and `JM-VIS-003` closed for the named proofs; `JM-VIS-004` regression watch passing.
 
 ### Gate 7 — occupancy and expansion
 
@@ -156,13 +160,13 @@ Unless a plate says otherwise, it uses the strict profile, default theme, final 
 
 - **Concern:** public staged preview and explicit legacy fallback.
 - **Plates:** `JM-G09-01`; `JM-G09-02`.
-- **Visual-remediation state:** staged output remains under review.
+- **Visual-remediation state:** current-runtime staged output accepted for `JM-VIS-001`; rendered-corpus promotion remains withheld by the dense stop.
 
 ### Gate 10 — accepted evidence baseline
 
 - **Concern:** accepted goldens and promoted corpus.
 - **Plates:** `JM-G10-01`; `JM-G10-02`.
-- **Visual-remediation state:** baseline captured; remediation remains open.
+- **Visual-remediation state:** accepted baseline retained; only dense `JM-VIS-002` remains open.
 
 ## Gates 0–1 — non-visual contracts
 
@@ -384,7 +388,7 @@ Diagnostics: [`journey-map.topology.diagnostics.json`](../../tests/goldens/rende
 
 ![Gate 10 promoted outcome-to-IA journey corpus visual](../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.journey_map.svg)
 
-**Source:** `bundle/v0.1/examples/outcome_to_ia_trace.sdd`, strict profile. **Focus:** current public corpus baseline, deterministic SVG serialization, SVG-derived PNG, and consistency with focused renderer-stage evidence. **Issue:** `JM-VIS-001`.
+**Source:** `bundle/v0.1/examples/outcome_to_ia_trace.sdd`, strict profile. **Focus:** retained public corpus baseline, deterministic SVG serialization, SVG-derived PNG, and consistency with focused renderer-stage evidence. **Remediation status:** `JM-VIS-001` is closed by the current-runtime public proof in comparison plate `JM-RM-06`; this corpus byte remains unchanged because dense closeout stopped corpus promotion.
 
 ### Plate `JM-G10-02` — canonical service-blueprint slice journey
 
@@ -398,17 +402,14 @@ Diagnostics: [`journey-map.topology.diagnostics.json`](../../tests/goldens/rende
 
 Add one entry per material visual change. Keep issue history append-only; do not erase the original observation when a fix is accepted.
 
-### No remediation change recorded yet
+### 2026-07-18 — visual remediation closeout
 
-For each future entry, record:
-
-- **Date**
-- **Issue ID**
-- **Change or decision**
-- **Commit**
-- **Automated validation**
-- **Regenerated plates**
-- **Reviewer and result**
+- **Issue IDs:** `JM-VIS-001`, `JM-VIS-003` through `JM-VIS-008`; `JM-VIS-002` remains open.
+- **Change or decision:** accepted plain opportunity metadata, explicit stacked-diamond placement, direct horizontal routing, right-edge long-route egress, preferred terminal construction, and common minimal-L candidate selection. Rejected the dense early-egress experiment on its numeric acceptance gates and withdrew that family from selection.
+- **Commit:** `6201995`.
+- **Automated validation:** focused Journey/shared/protected-output suites, build, public backend checks, and full serial Vitest (`161/161` suites, `630/630` tests) passed. The rejected dense run retained 18 edges and no hard errors but measured 58 crossings, 56 continuity marks, and root `2064×400`.
+- **Regenerated plates:** accepted focused primary, permissive metadata, topology, and duplicate evidence only. Compressed goldens and rendered corpus were not promoted. Immutable before/after evidence was captured on 2026-07-22 in the [comparison record](journey_map_visual_remediation_comparison_record.md).
+- **Reviewer and result:** primary, metadata, topology, duplicate, and public current-runtime proofs accepted at intrinsic 100% size; dense experiment rejected and `JM-VIS-002` left open.
 
 ## Review checklist
 

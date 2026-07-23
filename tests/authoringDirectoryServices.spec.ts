@@ -189,9 +189,11 @@ describe("authoring directory services", () => {
       expect(await readFile(journeyResult.artifact_path, "utf8"))
         .toContain('class="staged-svg view-journey_map');
       expect(journeyResult.diagnostics).toEqual(expect.arrayContaining([
-        expect.objectContaining({ code: "renderer.routing.journey_map_unavoidable_crossing" }),
         expect.objectContaining({ code: "renderer.scene.journey_map_disconnected_chain" })
       ]));
+      expect(journeyResult.diagnostics.some((diagnostic) =>
+        diagnostic.code === "renderer.routing.journey_map_unavoidable_crossing"
+      )).toBe(false);
       await rm(path.dirname(journeyResult.artifact_path), { recursive: true, force: true });
     });
   });

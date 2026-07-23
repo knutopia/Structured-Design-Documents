@@ -1,5 +1,18 @@
 # Visual Issues to Address in Journey Map
 
+The problem statements below are preserved as the original remediation brief. Dispositions and immutable before/after evidence are recorded in the [Journey Map visual remediation comparison record](journey_map_visual_remediation_comparison_record.md).
+
+| Original issue | Remediation issue | Disposition | Comparison plate |
+| --- | --- | --- | --- |
+| 1. Stacking Parallel Options | `JM-VIS-003` | closed for the accepted stacked-diamond proof | `JM-RM-03` |
+| 2. Straight Connectors Between Adjacent Nodes | `JM-VIS-001` | closed for the named primary and public proofs | `JM-RM-02`, `JM-RM-06` |
+| 3. Single-Turn Connectors Where Possible | `JM-VIS-005` | superseded by stacked placement and common minimal-candidate selection | `JM-RM-03` |
+| 4. Distant-Route Vertical Offset Reduction | `JM-VIS-006` | closed | `JM-RM-04` |
+| 5. Connector-End De-Crowding | `JM-VIS-007` | closed for nominal proofs; the rejected dense result retains one specified 12px warning | `JM-RM-05`, `JM-RM-X01` |
+| 6. Rounded Rectangles instead of Ovals | `JM-VIS-008` | closed with unboxed secondary metadata | `JM-RM-01` |
+| 7. High Density Expansion De-Tangle | `JM-VIS-002` | open; Gate 8 experiment rejected | `JM-RM-X01` |
+| 8. Label Placement | deferred | explicitly out of scope | — |
+
 ## 1. Stacking Parallel Options (this is a specific solution to JM-VIS-003)
 
 Issue: Parallel paths are shown sequentially, with J-203 to the right of J-202.

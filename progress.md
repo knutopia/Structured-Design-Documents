@@ -17,6 +17,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 7-22
+
+- Remediation plan completed (minus gate 8 dense)
+- Reviewed visual proofs, issues found
+
 ## Sat 7-18
 
 - Plan partially completed (to gate 7 - 8 rejected - 9 closed incomplete)
