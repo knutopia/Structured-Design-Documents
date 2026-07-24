@@ -21,6 +21,7 @@
 
 - Updated journey map file statuses to Done
 - Removed graph types goal from AGENTS.md
+- Merged refine_journey_map with better routing into main
 
 ## Thu 7-23
 
