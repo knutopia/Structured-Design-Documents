@@ -20,6 +20,7 @@
 ## Fri 7-24
 
 - Updated journey map file statuses to Done
+- Removed graph types goal from AGENTS.md
 
 ## Thu 7-23
 
