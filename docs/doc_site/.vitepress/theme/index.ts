@@ -6,6 +6,7 @@ import IconGitHub from './components/IconGitHub.vue'
 import IconFile from './components/IconFile.vue'
 import Layout from "./Layout.vue";
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
+import './style.css'
 
 // Local FontAwesome-free assets bundled natively by Vite
 import '@fortawesome/fontawesome-free/css/all.css'

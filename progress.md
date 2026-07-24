@@ -16,6 +16,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Frid 7-24
+
+- vitepress / vite config monkey business
+- introduced scrolling code section
+
 ## Sun 7-19
 
 - installed fontawesome-free

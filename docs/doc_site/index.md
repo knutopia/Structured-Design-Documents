@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text:  Example
-      link:  (#Example:-Small-App)
+      link:  '#example-small-app'
     - theme: alt
       text: API Examples
       link: /api-examples
@@ -46,15 +46,17 @@ Because rendering is separate from the source model, tools that work with design
 Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
 :::tabs
-== Information Architecture
+== Information Architecture Diagram
 ![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
-== UI Contracts
+== UI Contracts Diagram
 ![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
 == SDD Source
 Full source: <IconFile/>[`small_app.sdd`](./small_app_example/small_app.sdd)
 
 Excerpt:
-```text
+<div class="source-scroll"></div>
+
+```ts
 SDD-TEXT 0.1
 
 # small_app.sdd example file
