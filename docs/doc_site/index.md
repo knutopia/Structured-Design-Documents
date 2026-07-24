@@ -51,48 +51,12 @@ Here is a small SDD-Text example showing a dashboard, a project area, and a few 
 == UI Contracts Diagram
 ![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
 == SDD Source
-Full source: <IconFile/>[`small_app.sdd`](./small_app_example/small_app.sdd)
-
-Excerpt:
+<div class="link-right">
+  <a href="https://github.com/knutopia/Structured-Design-Documents/tree/main/docs/readme_support_docs/small_app_example"><IconGitHub/>Repo folder</a>
+</div>
 <div class="source-scroll"></div>
 
-```ts
-SDD-TEXT 0.1
-
-# small_app.sdd example file
-#
-# Area nodes and Places show up in the ia_place_map diagram.
-# Place nodes, their View States and Components show up in the ui_contracts diagram.
-#
-# This example is built for the "simple" profile, for quick sketches.
-
-Place P-100 "Dashboard"
-  description="Global project status and flow entry points"
-  primary_nav=true
-  COMPOSED_OF C-100 "Projects Status Summary"
-  COMPOSED_OF C-110 # (Quoted target name hints are optional...)
-  COMPOSED_OF C-900 "Global Navigation" # (...but can improve readability)
-
-  + Component C-100 "Projects Status Summary"
-    description="At-a-glance view of project statuses"
-  END
-  + Component C-110 "Priority List of Tasks"
-    description="What needs to be done"
-  END
-END
-
-Area A-200 "Current Projects"
-  description="Ongoing work"
-  CONTAINS P-210 "Projects Overview"
-  CONTAINS P-220 "Project Detail"
-  CONTAINS P-230 "Create New Project"
-  + Place P-210 "Projects Overview"
-    description="Selectable list of projects with contextual actions"
-    primary_nav=true
-    CONTAINS VS-210a "List of Projects"
-    CONTAINS VS-210b "Duplicate Project Dialog"
-    CONTAINS VS-210c "Delete Project Confirmation Dialog"
-```
+<<< ./small_app_example/small_app.sdd{ts}
 :::
 
 See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.
