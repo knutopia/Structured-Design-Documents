@@ -1,4 +1,4 @@
-# Visual Issues to Address in Journey Map
+# [Done] Visual Issues to Address in Journey Map
 
 The problem statements below are preserved as the original remediation brief. Dispositions and immutable before/after evidence are recorded in the [Journey Map visual remediation comparison record](journey_map_visual_remediation_comparison_record.md).
 

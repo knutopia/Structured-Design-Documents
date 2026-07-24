@@ -1,4 +1,4 @@
-# Journey Map Stage-2 Visual Remediation — Comparison Record
+# [Done] Journey Map Stage-2 Visual Remediation — Comparison Record
 
 Status: **accepted by visual review on 2026-07-23**
 

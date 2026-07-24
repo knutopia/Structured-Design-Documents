@@ -11,7 +11,7 @@ Produce a detailed, executable plan that a future implementation thread can foll
 
 Save the completed plan at:
 
-`docs/journey_map/staged_journey_map_renderer_gated_implementation_plan.md`
+`docs/journey_mapstaged_journey_map_renderer_gated_implementation_plan.md`
 
 This planning thread may write that plan document only. Do not write production code, tests, fixtures, snapshots, goldens, rendered corpus artifacts, or generated previews. Do not stage or commit changes unless the user separately asks.
 
@@ -28,7 +28,7 @@ Primary Architecture Authority
 
 Read this document completely before planning:
 
-`docs/journey_map/staged_journey_map_renderer_architecture.md`
+`docs/journey_mapstaged_journey_map_renderer_architecture.md`
 
 Treat it as the architecture authority for this plan, subordinate only to current `AGENTS.md` instructions and the active bundle contract. Do not silently weaken or omit its routing, diagnostics, proof-corpus, stop-condition, or visual-acceptance requirements.
 
@@ -43,7 +43,7 @@ Use these sources by role:
 5. `src/renderer/journeyMapRenderModel.ts` — current source ordering, first-parent behavior, root items, badges, and ordering edges.
 6. `docs/toolchain/adding_staged_renderers.md` — responsibility boundaries, evidence requirements, and staged renderer authoring rules.
 7. `docs/toolchain/architecture.md` — current pipeline and integration surfaces.
-8. `docs/journey_map/staged_journey_map_renderer_architecture.md` — journey-specific architecture and acceptance contract.
+8. `docs/journey_mapstaged_journey_map_renderer_architecture.md` — journey-specific architecture and acceptance contract.
 9. Existing staged renderers and their routing documentation — implementation exemplars only.
 
 Where older migration documentation discusses ELK, follow the current `AGENTS.md` and journey architecture instead: do not use or expand ELK, Graphviz, Mermaid, DOT, or another external layout engine for staged journey placement or routing.
@@ -315,7 +315,7 @@ Before finishing this planning thread:
 
 Final Response Expectations
 
-- Link to `docs/journey_map/staged_journey_map_renderer_gated_implementation_plan.md`.
+- Link to `docs/journey_mapstaged_journey_map_renderer_gated_implementation_plan.md`.
 - Summarize the gate structure and the principal routing-risk controls.
 - State that no implementation code or artifacts were changed.
 - Report link and whitespace verification.

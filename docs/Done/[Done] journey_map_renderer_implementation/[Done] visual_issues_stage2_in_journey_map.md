@@ -1,12 +1,12 @@
-#### Stage 2 Visual Issues to Address in Journey Map
+# [Done] Stage 2 Visual Issues to Address in Journey Map
 
 This document captures 2 remaining visual remediation issues after execution of the original visual remediation plan.
 
 7-23-26
 
 References:
-- docs/journey_map/journey_map_visual_remediation_comparison_record.md (visual proofs for visual remediation plan execution, referenced below)
-- docs/journey_map/[Done] journey_map_visual_remediation_implementation_plan.md (executed visual remediation plan)
+- docs/done/[Done] journey_map_renderer_implementation/journey_map_visual_remediation_comparison_record.md (visual proofs for visual remediation plan execution, referenced below)
+- docs/done/[Done] journey_map_renderer_implementation/[Done] journey_map_visual_remediation_implementation_plan.md (executed visual remediation plan)
 
 
 ## 1. Straight Connector Balance

@@ -1,4 +1,4 @@
-# Staged Journey Map Renderer — Verification and Acceptance Contract
+# [Done] Staged Journey Map Renderer — Verification and Acceptance Contract
 
 Status: accepted on 2026-07-12; established at Gate 1, governed Gates 2–10, and retained as the implementation verification and acceptance record
 
