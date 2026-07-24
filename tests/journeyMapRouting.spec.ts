@@ -33,6 +33,8 @@ import {
   journeyMapDuplicateLaneIndex,
   JOURNEY_MAP_PREFERRED_TERMINAL_LEG,
   JOURNEY_MAP_TRACK_SEPARATION,
+  resolveJourneyMapTrackOccupancy,
+  selectJourneyMapBalancedDirectCoordinate,
   validateJourneyMapBasicRoutes,
   validateJourneyMapExpansionBound,
   validateJourneyMapResolvedStages,
@@ -191,6 +193,31 @@ function expectExactPartition(fixture: JourneyRoutingFixture): void {
 }
 
 describe("journey map Gate 5 basic routing", () => {
+  it("balances direct coordinates symmetrically and resolves reservations deterministically", () => {
+    expect(selectJourneyMapBalancedDirectCoordinate({
+      source: { y: 92, height: 112 },
+      target: { y: 92, height: 48 }
+    })).toBe(116);
+    expect(selectJourneyMapBalancedDirectCoordinate({
+      source: { y: 92, height: 48 },
+      target: { y: 92, height: 112 }
+    })).toBe(116);
+    expect(selectJourneyMapBalancedDirectCoordinate({
+      source: { y: 92, height: 64 },
+      target: { y: 100, height: 64 }
+    })).toBe(128);
+    expect(selectJourneyMapBalancedDirectCoordinate({
+      source: { y: 92, height: 112 },
+      target: { y: 92, height: 48 },
+      sourceReservations: [116]
+    })).toBe(132);
+    expect(selectJourneyMapBalancedDirectCoordinate({
+      source: { y: 0, height: 17 },
+      target: { y: 0, height: 17 },
+      targetReservations: [8.5]
+    })).toBeUndefined();
+  });
+
   it("preserves the three locked basic primary occurrences and explicitly defers later branch/join work", async () => {
     const fixture = await buildFixture("primary");
     expect(fixture.routingStages.connectorPlans.slice(0, 3).map(edgeKey)).toEqual([
@@ -254,12 +281,12 @@ describe("journey map Gate 5 basic routing", () => {
       ownerContainerId: "G-100",
       archetype: "adjacent_forward_same_stage",
       routeFamily: "direct_horizontal",
-      sourceEndpoint: { x: 604, y: 124 },
-      targetEndpoint: { x: 628, y: 124 }
+      sourceEndpoint: { x: 604, y: 116 },
+      targetEndpoint: { x: 628, y: 116 }
     });
     expect(second?.step2Route.points).toEqual([
-      { x: 604, y: 124 },
-      { x: 628, y: 124 }
+      { x: 604, y: 116 },
+      { x: 628, y: 116 }
     ]);
     expect(cross).toMatchObject({
       from: "J-103",
@@ -518,10 +545,35 @@ describe("journey map Gate 5 basic routing", () => {
       candidate.from === "J-001" && candidate.to === "J-002"
     );
     expect(plan?.routeFamily).toBe("direct_horizontal");
-    expect(plan?.finalBasicRoute.points).toHaveLength(2);
+    expect(plan?.finalBasicRoute.points).toEqual([
+      { x: 276, y: 116 },
+      { x: 300, y: 116 }
+    ]);
     expect(rendered.routingStages.finalPositionedScene.edges.find((edge) =>
       edge.from.itemId === "J-001" && edge.to.itemId === "J-002"
-    )?.route.points).toHaveLength(2);
+    )?.route.points).toEqual([
+      { x: 276, y: 116 },
+      { x: 300, y: 116 }
+    ]);
+  });
+
+  it("keeps balanced direct endpoint reservations deterministic under measured-edge reordering", async () => {
+    const fixture = await buildFixture("primary");
+    const reversedMeasuredScene = structuredClone(fixture.measuredScene) as MeasuredScene;
+    reversedMeasuredScene.edges.reverse();
+    const reversed = buildJourneyMapRoutingStages(
+      reversedMeasuredScene,
+      fixture.preRoutingPositionedScene
+    );
+    const directGeometry = (routing: JourneyMapRoutingStages) => routing.connectorPlans
+      .filter((plan) => plan.routeFamily === "direct_horizontal")
+      .map((plan) => ({
+        id: plan.id,
+        sourceEndpoint: plan.sourceEndpoint,
+        targetEndpoint: plan.targetEndpoint,
+        route: plan.finalBasicRoute
+      }));
+    expect(directGeometry(reversed)).toEqual(directGeometry(fixture.routingStages));
   });
 });
 
@@ -594,6 +646,7 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       "node_side",
       "obstacle_swerve",
       "root_outer_bypass",
+      "root_span_bypass",
       "stage_boundary_gate",
       "stage_local_bypass"
     ];
@@ -807,7 +860,7 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
 
     expect([nearBranch.sourceEndpoint.side, farBranch.sourceEndpoint.side]).toEqual(["east", "south"]);
     expect([upperJoin.targetEndpoint.side, lowerJoin.targetEndpoint.side]).toEqual(["south", "west"]);
-    expect(nearBranch.finalRoute.points).toEqual([{ x: 1156, y: 139 }, { x: 1180, y: 139 }]);
+    expect(nearBranch.finalRoute.points).toEqual([{ x: 1156, y: 116 }, { x: 1180, y: 116 }]);
     expect(farBranch.finalRoute.points).toEqual([
       { x: 1044, y: 204 }, { x: 1044, y: 260 }, { x: 1180, y: 260 }
     ]);
@@ -1303,8 +1356,8 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       },
       {
         edge: "J-102→J-103",
-        step2: [{ x: 604, y: 124 }, { x: 628, y: 124 }],
-        provisional: [{ x: 604, y: 124 }, { x: 628, y: 124 }]
+        step2: [{ x: 604, y: 116 }, { x: 628, y: 116 }],
+        provisional: [{ x: 604, y: 116 }, { x: 628, y: 116 }]
       },
       {
         edge: "J-103→J-201",
@@ -1378,11 +1431,12 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
         { stageId: "G-200", side: "east", x: 1672, y: 116, order: 0, locked: true },
         { stageId: "G-400", side: "south", x: 2611.576, y: 160, order: 0, locked: true }
       ],
-      rootOuterBypass: {
+      rootSpanBypass: {
         ownerContainerId: "root",
         axis: "horizontal",
-        nominalCoordinate: 330,
+        nominalCoordinate: 178,
         span: { start: 1690, end: 2611.576 },
+        clearanceRootItemIds: ["J-250", "J-260", "G-300", "G-400"],
         intermediateRootItemIds: ["J-250", "J-260", "G-300"],
         obstacleControls: [
           { rootItemId: "J-250", entryX: 1712, exitX: 1936 },
@@ -1445,28 +1499,28 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     expectExactPartition(fixture);
   });
 
-  it("uses a right-edge east egress and root-peripheral track while keeping the adjacent root chain direct", async () => {
+  it("uses a right-edge east egress and span-local root track while keeping the adjacent root chain direct", async () => {
     const fixture = await buildFixture("primary");
     const [longCross, rootDirect] = fixture.routingStages.connectorPlans.slice(3);
     expect(longCross?.step2Route.points).toEqual([
       { x: 1652, y: 116 },
       { x: 1690, y: 116 },
-      { x: 1690, y: 330 },
-      { x: 2611.576, y: 330 },
+      { x: 1690, y: 178 },
+      { x: 2611.576, y: 178 },
       { x: 2611.576, y: 140 }
     ]);
     expect(longCross?.provisionalRoute.points).toEqual([
       { x: 1652, y: 116 },
       { x: 1672, y: 116 },
       { x: 1690, y: 116 },
-      { x: 1690, y: 330 },
-      { x: 1712, y: 330 },
-      { x: 1936, y: 330 },
-      { x: 1976, y: 330 },
-      { x: 2200, y: 330 },
-      { x: 2240, y: 330 },
-      { x: 2439.576, y: 330 },
-      { x: 2611.576, y: 330 },
+      { x: 1690, y: 178 },
+      { x: 1712, y: 178 },
+      { x: 1936, y: 178 },
+      { x: 1976, y: 178 },
+      { x: 2200, y: 178 },
+      { x: 2240, y: 178 },
+      { x: 2439.576, y: 178 },
+      { x: 2611.576, y: 178 },
       { x: 2611.576, y: 160 },
       { x: 2611.576, y: 140 }
     ]);
@@ -1490,13 +1544,15 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
       fixture.preRoutingPositionedScene,
       "final_basic"
     )).toEqual([]);
-    const maximumRootItemBottom = Math.max(
-      ...fixture.preRoutingPositionedScene.root.children.map((item) => item.y + item.height)
+    const overlappingRootItemBottom = Math.max(
+      ...fixture.preRoutingPositionedScene.root.children
+        .filter((item) => ["J-250", "J-260", "G-300", "G-400"].includes(item.id))
+        .map((item) => item.y + item.height)
     );
-    expect(longCross?.rootOuterBypass?.nominalCoordinate).toBe(
-      maximumRootItemBottom + JOURNEY_MAP_PREFERRED_TERMINAL_LEG
+    expect(longCross?.rootSpanBypass?.nominalCoordinate).toBe(
+      overlappingRootItemBottom + JOURNEY_MAP_PREFERRED_TERMINAL_LEG
     );
-    expect(longCross?.rootOuterBypass?.nominalCoordinate).toBeLessThan(
+    expect(longCross?.rootSpanBypass?.nominalCoordinate).toBeLessThan(
       fixture.preRoutingPositionedScene.root.y + fixture.preRoutingPositionedScene.root.height
     );
     const buckets = new Map(fixture.routingStages.nodeEdgeBuckets.map((bucket) => [bucket.nodeId, bucket]));
@@ -1509,7 +1565,7 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     )).toEqual([]);
   });
 
-  it("derives the peripheral track from each profile without changing semantic routing", async () => {
+  it("derives the span-local track from positioned bounds without changing semantic routing", async () => {
     const simple = await buildFixture("primary", "simple");
     const permissive = await buildFixture("primary", "permissive");
     const strict = await buildFixture("primary", "strict");
@@ -1519,12 +1575,12 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     expect(permissive.routingStages.connectorPlans).toEqual(strict.routingStages.connectorPlans);
     const simpleLong = simple.routingStages.connectorPlans[3]!;
     const strictLong = strict.routingStages.connectorPlans[3]!;
-    expect(simpleLong.rootOuterBypass?.nominalCoordinate).toBe(282);
+    expect(simpleLong.rootSpanBypass?.nominalCoordinate).toBe(178);
     expect(simpleLong.stageGates.map((gate) => gate.y)).toEqual([116, 160]);
-    expect(strictLong.rootOuterBypass?.nominalCoordinate).toBe(330);
+    expect(strictLong.rootSpanBypass?.nominalCoordinate).toBe(178);
     expect(strictLong.stageGates.map((gate) => gate.y)).toEqual([116, 160]);
-    expect(simpleLong.rootOuterBypass?.obstacleControls).toEqual(
-      strictLong.rootOuterBypass?.obstacleControls
+    expect(simpleLong.rootSpanBypass?.obstacleControls).toEqual(
+      strictLong.rootSpanBypass?.obstacleControls
     );
     expect(simple.routingStages.connectorPlans[4]?.step2Route.points).toEqual([
       { x: 1936, y: 116 }, { x: 1976, y: 116 }
@@ -1551,7 +1607,112 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     );
   });
 
-  it("falls back deterministically when east egress is unavailable and diagnoses malformed contracts", async () => {
+  it("derives span-local clearance only from horizontally overlapping root items", async () => {
+    const fixture = await buildFixture("primary");
+    const baseline = fixture.routingStages.connectorPlans[3]!;
+    expect(baseline.rootSpanBypass?.clearanceRootItemIds).toEqual([
+      "J-250",
+      "J-260",
+      "G-300",
+      "G-400"
+    ]);
+
+    const nonOverlappingTallScene = structuredClone(
+      fixture.preRoutingPositionedScene
+    ) as PositionedScene;
+    findContainer(nonOverlappingTallScene, "G-100").height = 300;
+    const nonOverlappingTall = buildJourneyMapRoutingStages(
+      fixture.measuredScene,
+      nonOverlappingTallScene
+    ).connectorPlans.find((plan) => edgeKey(plan) === "J-204→J-401");
+    expect(nonOverlappingTall?.rootSpanBypass?.nominalCoordinate).toBe(
+      baseline.rootSpanBypass?.nominalCoordinate
+    );
+
+    const overlappingTallScene = structuredClone(
+      fixture.preRoutingPositionedScene
+    ) as PositionedScene;
+    findContainer(overlappingTallScene, "G-300").height += 80;
+    const overlappingTall = buildJourneyMapRoutingStages(
+      fixture.measuredScene,
+      overlappingTallScene
+    ).connectorPlans.find((plan) => edgeKey(plan) === "J-204→J-401");
+    expect(overlappingTall?.rootSpanBypass?.nominalCoordinate).toBe(
+      findContainer(overlappingTallScene, "G-300").y
+        + findContainer(overlappingTallScene, "G-300").height
+        + JOURNEY_MAP_PREFERRED_TERMINAL_LEG
+    );
+    expect(overlappingTall?.rootSpanBypass?.clearanceRootItemIds).toContain("G-400");
+  });
+
+  it("separates overlapping root-span claims downward and requests bounded root expansion", async () => {
+    const fixture = await buildFixture("primary");
+    const longPlan = fixture.routingStages.connectorPlans[3]!;
+    const longState = fixture.routingStages.resolvedConnectors.find((state) =>
+      state.connectorId === longPlan.id
+    )!;
+    const contender = structuredClone(longPlan) as JourneyMapConnectorPlan;
+    contender.id = `${longPlan.id}:root-span-contender`;
+    contender.authorOrder += 1;
+    contender.priority.authorOrder += 1;
+    contender.priority.edgeId = contender.id;
+    const contenderState = structuredClone(longState);
+    contenderState.connectorId = contender.id;
+    const plans = [longPlan, contender];
+    const states = [longState, contenderState];
+    const nominalOccupancy = extractJourneyMapOccupancy(
+      plans,
+      fixture.preRoutingPositionedScene
+    );
+    const constrainedScene = structuredClone(
+      fixture.preRoutingPositionedScene
+    ) as PositionedScene;
+    constrainedScene.root.height = 200;
+    const resolution = resolveJourneyMapTrackOccupancy(
+      plans,
+      states,
+      nominalOccupancy,
+      constrainedScene
+    );
+    const spanCoordinates = resolution.resolvedConnectors.map((state) =>
+      state.segmentCoordinates.find((coordinate) =>
+        coordinate.axis === "horizontal"
+        && coordinate.nominalCoordinate === longPlan.rootSpanBypass?.nominalCoordinate
+      )?.resolvedCoordinate
+    );
+    expect(spanCoordinates).toEqual([178, 194]);
+    expect(resolution.expansionRequests).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        kind: "root_span_gutter",
+        ownerContainerId: "root",
+        amount: expect.any(Number)
+      })
+    ]));
+    expect(resolution.expansionRequests.find((request) =>
+      request.kind === "root_span_gutter"
+    )?.amount).toBeGreaterThan(0);
+  });
+
+  it("diagnoses a full-row east-egress fallback when the local track loses a route comparison", async () => {
+    const fixture = await buildFixture("primary");
+    const fallbackScene = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
+    const branchSource = findNode(fallbackScene, "J-201");
+    branchSource.x = 1740;
+    branchSource.y = 120;
+    findNode(fallbackScene, "J-203").y = 116;
+    const fallback = buildJourneyMapRoutingStages(fixture.measuredScene, fallbackScene);
+    const longPlan = fallback.connectorPlans.find((plan) => edgeKey(plan) === "J-204→J-401");
+    expect(longPlan?.routeFamily).toBe("long_forward_east_egress");
+    expect(longPlan?.rootSpanBypass).toBeUndefined();
+    expect(longPlan?.rootOuterBypass).toBeDefined();
+    expect(fallback.diagnostics).toContainEqual(expect.objectContaining({
+      code: "renderer.routing.journey_map_span_local_bypass_unavailable",
+      severity: "warn",
+      targetId: longPlan?.id
+    }));
+  });
+
+  it("fails visibly instead of reverting to south egress and diagnoses malformed contracts", async () => {
     const fixture = await buildFixture("primary");
     const longId = fixture.routingStages.connectorPlans[3]!.id;
 
@@ -1559,13 +1720,17 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     const source = findNode(missingPortScene, "J-204");
     source.ports = source.ports.filter((port) => port.role !== "journey_flow_out");
     const missingPort = buildJourneyMapRoutingStages(fixture.measuredScene, missingPortScene);
-    expect(missingPort.failedConnectorIds).not.toContain(longId);
-    expect(missingPort.connectorPlans.find((plan) => plan.id === longId)?.routeFamily).toBe(
-      "archetype_template"
+    expect(missingPort.failedConnectorIds).toContain(longId);
+    expect(missingPort.connectorPlans.find((plan) => plan.id === longId)).toBeUndefined();
+    expect(missingPort.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(
+      expect.arrayContaining([
+        "renderer.routing.journey_map_archetype_fallback",
+        "renderer.routing.journey_map_edge_omitted"
+      ])
     );
 
     const insufficientSpaceScene = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
-    insufficientSpaceScene.root.height = 248;
+    insufficientSpaceScene.root.height = 170;
     const insufficientSpace = buildJourneyMapRoutingStages(
       fixture.measuredScene,
       insufficientSpaceScene
@@ -1611,7 +1776,7 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     );
 
     const malformedControls = structuredClone(fixture.routingStages.connectorPlans[3]!) as JourneyMapConnectorPlan;
-    malformedControls.rootOuterBypass!.obstacleControls[0]!.entryX += 1;
+    malformedControls.rootSpanBypass!.obstacleControls[0]!.entryX += 1;
     expect(validateJourneyMapRoutes(
       [malformedControls],
       fixture.preRoutingPositionedScene,
@@ -1619,6 +1784,50 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     ).map((diagnostic) => diagnostic.code)).toContain(
       "renderer.routing.journey_map_archetype_fallback"
     );
+    const malformedClearanceIds = structuredClone(
+      fixture.routingStages.connectorPlans[3]!
+    ) as JourneyMapConnectorPlan;
+    malformedClearanceIds.rootSpanBypass!.clearanceRootItemIds.pop();
+    const malformedSpan = structuredClone(
+      fixture.routingStages.connectorPlans[3]!
+    ) as JourneyMapConnectorPlan;
+    malformedSpan.rootSpanBypass!.span.start += 1;
+    const malformedNominalY = structuredClone(
+      fixture.routingStages.connectorPlans[3]!
+    ) as JourneyMapConnectorPlan;
+    malformedNominalY.rootSpanBypass!.nominalCoordinate += 1;
+    const conflictingBypasses = structuredClone(
+      fixture.routingStages.connectorPlans[3]!
+    ) as JourneyMapConnectorPlan;
+    conflictingBypasses.rootOuterBypass = {
+      ownerContainerId: "root",
+      axis: "horizontal",
+      nominalCoordinate: 330,
+      span: { start: 1690, end: 2611.576 },
+      endpointSpan: { start: 1652, end: 2611.576 },
+      intermediateRootItemIds: ["J-250", "J-260", "G-300"],
+      obstacleControls: [
+        { rootItemId: "J-250", entryX: 1712, exitX: 1936 },
+        { rootItemId: "J-260", entryX: 1976, exitX: 2200 },
+        { rootItemId: "G-300", entryX: 2240, exitX: 2439.576 }
+      ],
+      order: 0,
+      locked: false
+    };
+    for (const malformed of [
+      malformedClearanceIds,
+      malformedSpan,
+      malformedNominalY,
+      conflictingBypasses
+    ]) {
+      expect(validateJourneyMapRoutes(
+        [malformed],
+        fixture.preRoutingPositionedScene,
+        "provisional"
+      ).map((diagnostic) => diagnostic.code)).toContain(
+        "renderer.routing.journey_map_archetype_fallback"
+      );
+    }
     expect(fixture.routingStages.diagnostics.some((diagnostic) =>
       diagnostic.code.includes("occupancy")
       || diagnostic.code.includes("capacity")
@@ -1767,14 +1976,14 @@ describe("journey map Gate 6 branch fan-out routing", () => {
     expect(direct).toMatchObject({
       routeFamily: "direct_horizontal",
       sourceEndpoint: {
-        itemId: "J-201", portId: "J-201__flow_out", side: "east", x: 1156, y: 139
+        itemId: "J-201", portId: "J-201__flow_out", side: "east", x: 1156, y: 116
       },
       targetEndpoint: {
-        itemId: "J-202", portId: "J-202__flow_in", side: "west", x: 1180, y: 139
+        itemId: "J-202", portId: "J-202__flow_in", side: "west", x: 1180, y: 116
       },
       stageGates: []
     });
-    expect(direct?.step2Route.points).toEqual([{ x: 1156, y: 139 }, { x: 1180, y: 139 }]);
+    expect(direct?.step2Route.points).toEqual([{ x: 1156, y: 116 }, { x: 1180, y: 116 }]);
     expect(direct?.provisionalRoute).toEqual(direct?.step2Route);
     expect(lower).toMatchObject({
       routeFamily: "minimal_l",
@@ -2662,7 +2871,7 @@ describe("journey map Gate 6 shape-aware cycle routing", () => {
       stageBypass: plan.stageLocalBypass
         ? plan.stageLocalBypass.boundaryRole ?? "local"
         : undefined,
-      rootBypass: plan.rootOuterBypass !== undefined
+      rootBypass: plan.rootSpanBypass !== undefined || plan.rootOuterBypass !== undefined
     }))).toEqual([
       { archetype: "adjacent_forward_same_stage", owner: "G-900", sides: "east→west", gateSides: "", stageBypass: undefined, rootBypass: false },
       { archetype: "non_adjacent_forward_same_stage", owner: "G-900", sides: "east→south", gateSides: "", stageBypass: "local", rootBypass: false },
@@ -2895,6 +3104,7 @@ describe("journey map Gate 6 shape-aware cycle routing", () => {
       targetEndpoint: plan.targetEndpoint,
       stageGates: plan.stageGates,
       stageLocalBypass: plan.stageLocalBypass,
+      rootSpanBypass: plan.rootSpanBypass,
       rootOuterBypass: plan.rootOuterBypass,
       step2Route: plan.step2Route,
       provisionalRoute: plan.provisionalRoute,

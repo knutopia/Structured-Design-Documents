@@ -1,6 +1,6 @@
 # Staged Journey Map Renderer — Current-State Visual Review
 
-Status: remediation closeout recorded on 2026-07-18; dense readability remains open
+Status: stage-2 visual remediation accepted on 2026-07-23; dense readability remains open
 
 Visual baseline: accepted focused primary, ordering, topology, and duplicate Journey evidence reflects the 2026-07-18 remediation. Compressed and rendered-corpus evidence remains at the pre-remediation baseline because the dense experiment failed its numeric gate and corpus promotion was consequently withheld.
 
@@ -28,6 +28,8 @@ Unless a plate says otherwise, it uses the strict profile, default theme, final 
 ## Current issue register
 
 Comparison plates for every accepted disposition and the rejected dense experiment are indexed in the [visual remediation comparison record](journey_map_visual_remediation_comparison_record.md).
+
+The two stage-2 refinements are stated in the [stage-2 visual-issues brief](visual_issues_stage2_in_journey_map.md). Their before/after evidence is published in the [stage-2 comparison record](journey_map_visual_remediation_stage2_comparison_record.md) and received explicit visual approval on 2026-07-23.
 
 ### `JM-VIS-001` — adjacent horizontal connector doglegs
 
@@ -99,6 +101,24 @@ Comparison plates for every accepted disposition and the rejected dense experime
 - **Problem:** opportunity references use badge chrome even though they are secondary Step metadata.
 - **Desired outcome:** preserve bundle-controlled values, ordering, and visibility while rendering unboxed secondary text in the staged Journey backend.
 - **Affected plates:** `JM-G02-01`; `JM-G03-01`; `JM-G06-04`.
+
+### `JM-VIS-009` — direct connector vertical balance
+
+- **Status:** closed; stage-2 comparison plates accepted on 2026-07-23
+- **Severity:** medium
+- **Proof edges:** `J-102→J-103`, `J-201→J-202`, and public `J-001→J-002`
+- **Problem:** the accepted direct-horizontal candidate breaks an equal-displacement tie toward the source center. When the source is taller, this can place the connector near the bottom of the shorter target edge.
+- **Desired outcome:** use the less-tall endpoint center when legal; when an accepted direct route already reserves either participating side, use the nearest deterministic 16px-separated shared coordinate. Preserve a single horizontal segment and legal endpoints.
+- **Affected comparison plates:** historical `JM-RM-02`, `JM-RM-03`, and `JM-RM-06`; stage-2 `JM2-RM-01`.
+
+### `JM-VIS-010` — span-local long-forward track
+
+- **Status:** closed; stage-2 comparison plate accepted on 2026-07-23
+- **Severity:** medium
+- **Proof edge:** `J-204→J-401`
+- **Problem:** `long_forward_east_egress` currently derives its lower horizontal track from the maximum bottom of every root item. The tall but horizontally non-competing `G-200` therefore pushes the route well below the shallow content that actually overlaps the forward span.
+- **Desired outcome:** retain root ownership, source-east egress, and target-south entry while deriving the nominal lower track from only root items that horizontally overlap the track span. A full-row east-egress track is a diagnosed degraded fallback, not the nominal proof.
+- **Affected comparison plate:** historical `JM-RM-04`; stage-2 `JM2-RM-02`.
 
 ### Connector labels — deferred
 
@@ -401,6 +421,14 @@ Diagnostics: [`journey-map.topology.diagnostics.json`](../../tests/goldens/rende
 ## Fix and re-review log
 
 Add one entry per material visual change. Keep issue history append-only; do not erase the original observation when a fix is accepted.
+
+### 2026-07-23 — stage-2 visual remediation closeout
+
+- **Issue IDs:** `JM-VIS-009` and `JM-VIS-010`, both closed after explicit visual approval.
+- **Change or decision:** accepted less-tall-endpoint centering with deterministic 16px contention handling for direct horizontal routes, and accepted the root-owned span-local track for `long_forward_east_egress` with a diagnosed full-row fallback.
+- **Automated validation:** focused Journey routing and visual acceptance (`75/75`), renderer-stage snapshots (`10/10`), public preview/CLI/profile checks (`76/76`), full serial Vitest (`72/72` files, `635/635` tests), build, deterministic double rendering, and `git diff --check` passed.
+- **Regenerated evidence:** only the affected primary/profile Journey positioned-scene and SVG goldens plus the two degraded-plan diagnostic snapshots. No PNG golden or rendered-corpus artifact was refreshed; the prior dense/corpus stop remains in force.
+- **Reviewer and result:** all three balanced-direct plates and the span-local long-forward plate accepted on 2026-07-23. The immutable before/after evidence and exact hashes are retained in the [stage-2 comparison record](journey_map_visual_remediation_stage2_comparison_record.md).
 
 ### 2026-07-18 — visual remediation closeout
 

@@ -3,9 +3,9 @@
     "phase": "routing",
     "code": "renderer.routing.journey_map_archetype_fallback",
     "severity": "warn",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not expose its accepted root-outer bypass contract.",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" does not expose exactly one accepted root-span or root-outer bypass contract.",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"root\"]}"
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-250\",\"J-260\",\"G-300\",\"G-400\"]}"
   },
   {
     "phase": "routing",

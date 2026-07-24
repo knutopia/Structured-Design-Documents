@@ -20,6 +20,7 @@
 ## Thu 7-23
 
 - Captured visual_issues_stage2_in_journey_map.md based on visual proofs
+- Implemented fixes, passed
 
 ## Wed 7-22
 

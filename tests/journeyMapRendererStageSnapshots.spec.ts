@@ -398,7 +398,7 @@ describe("journey map degraded diagnostic goldens", () => {
     const malformedGate = structuredClone(longPlan) as JourneyMapConnectorPlan;
     malformedGate.stageGates[0]!.side = "east";
     const malformedControls = structuredClone(longPlan) as JourneyMapConnectorPlan;
-    malformedControls.rootOuterBypass!.obstacleControls[0]!.entryX += 1;
+    malformedControls.rootSpanBypass!.obstacleControls[0]!.entryX += 1;
     const empty = structuredClone(longPlan) as JourneyMapConnectorPlan;
     empty.finalBasicRoute.points = [];
 
