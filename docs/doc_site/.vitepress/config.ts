@@ -67,6 +67,22 @@ export default defineConfig({
         }
         return defaultRender(tokens, idx, options, env, self);
       };
+
+      // Scrolling source code block for external source file
+      // expands to:
+      //   <div class="source-scroll"></div>
+      //
+      //   <<< file_path
+      // Preserves VitePress’s native file loading and Shiki highlighting, 
+      // plus your existing scrolling CSS. One limitation: because this is 
+      // a source-level macro, avoid placing a line beginning with showSource 
+      // inside a fenced example.
+      md.core.ruler.before('block', 'show-source', (state) => {
+        state.src = state.src.replace(
+          /^showSource\s+(\S+)\s*$/gm,
+          '<div class="source-scroll"></div>\n\n<<< $1{ts}'
+        )
+      });
     }
   },
 

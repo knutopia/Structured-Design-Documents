@@ -54,9 +54,7 @@ Here is a small SDD-Text example showing a dashboard, a project area, and a few 
 <div class="link-right">
   <a href="https://github.com/knutopia/Structured-Design-Documents/tree/main/docs/readme_support_docs/small_app_example"><IconGitHub/>Repo folder</a>
 </div>
-<div class="source-scroll"></div>
-
-<<< ./small_app_example/small_app.sdd{ts}
+showSource ./small_app_example/small_app.sdd
 :::
 
 See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.

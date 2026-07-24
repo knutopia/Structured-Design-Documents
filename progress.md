@@ -21,6 +21,7 @@
 - vitepress / vite config monkey business
 - introduced scrolling code section
 - scrolling code section looking good
+- added showSource macro
 
 ## Sun 7-19
 
