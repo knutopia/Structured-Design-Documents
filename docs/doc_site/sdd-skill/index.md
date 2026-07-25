@@ -58,6 +58,13 @@ Area A-010 "Mechanic's Scheduling"
 Information architecture from that first prompt:
 ![](examples/shop_sched_exploration.ia_place_map.simple.svg)
 
+:::tabs
+== Information Architecture Diagram
+![](examples/shop_sched_exploration.ia_place_map.simple.svg)
+== Source
+showSource examples/shop_sched_exploration.sdd
+:::
+
 ### What This Creates
 
 Instead of a vague app idea, you now have a structured design starting point, before anything is baked into code.

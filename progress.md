@@ -22,6 +22,7 @@
 - introduced scrolling code section
 - scrolling code section looking good
 - added showSource macro
+- added showRepoLink macro
 
 ## Sun 7-19
 

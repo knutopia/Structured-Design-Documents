@@ -83,6 +83,31 @@ export default defineConfig({
           '<div class="source-scroll"></div>\n\n<<< $1{ts}'
         )
       });
+
+      // Repo link macro, expands to:
+      //   <div class="link-right">
+      //     <a href="  
+      //     https://github.com/knutopia/Structured-Design-Documents/tree/main/
+      //     param_path">
+      //     <IconGitHub/>Repo folder</a>
+      //   </div>
+      md.core.ruler.before('block', 'custom-directives', (state) => {
+        state.src = state.src
+          .replace(
+            /^showSource\s+(\S+)\s*$/gm,
+            '<div class="source-scroll"></div>\n\n<<< $1{ts}'
+          )
+          .replace(
+            /^showRepoLink\s+([A-Za-z0-9._/-]+)\s*$/gm,
+            (_, repoPath) => {
+              const url =
+                'https://github.com/knutopia/Structured-Design-Documents/tree/main/' +
+                repoPath.replace(/^\/+/, '')
+
+              return `<div class="link-right"><a href="${url}" target="_blank" rel="noreferrer"><IconGitHub/>Repo folder</a></div>`
+            }
+          )
+      })
     }
   },
 

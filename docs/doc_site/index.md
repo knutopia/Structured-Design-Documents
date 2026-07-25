@@ -51,9 +51,7 @@ Here is a small SDD-Text example showing a dashboard, a project area, and a few 
 == UI Contracts Diagram
 ![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
 == SDD Source
-<div class="link-right">
-  <a href="https://github.com/knutopia/Structured-Design-Documents/tree/main/docs/readme_support_docs/small_app_example"><IconGitHub/>Repo folder</a>
-</div>
+showRepoLink docs/doc_site/small_app_example
 showSource ./small_app_example/small_app.sdd
 :::
 

@@ -6,6 +6,7 @@ This example shows how SDD-Text expresses a service blueprint slice for a simple
 == Diagram
 ![service blueprint example diagram](claim_flow_slice.service_blueprint.svg)
 == Source
+showRepoLink docs/doc_site/service_blueprint_slice_example/
 showSource claim_flow_slice.sdd{ts}
 :::
 
@@ -15,7 +16,7 @@ showSource claim_flow_slice.sdd{ts}
 - process nodes are distributed into frontstage, backstage, and support lanes according to `visibility`
 - system, data, and policy elements below the journey show operational dependencies and constraints
 
-## How To Create the Diagram Using the Command Line
+## How To Create the Diagram from the Source, Using the Command Line
 
 From the project root folder, go to the folder containing the source SDD:
 
