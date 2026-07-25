@@ -13,12 +13,6 @@ This page collects the current diagram families, their status, and links to avai
   <Badge type="info" text="Simple Profile" vertical="top" />
   ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.ia_place_map.svg)
   <IconFile/>[Read SDD Source](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd) <IconGitHub/>[Browse Repo Folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example)
-  :::tabs
-  == Information Architecture Diagram
-  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.ia_place_map.svg)
-  == Source
-  showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example
-  showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69-75,84-99}
   :::
   ::: details place_viewstate_transition_example
   <Badge type="info" text="Strict Profile" vertical="top" />

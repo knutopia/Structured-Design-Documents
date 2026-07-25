@@ -81,6 +81,8 @@ export default defineConfig({
       //
       // An optional VitePress line-highlight set is supported:
       //   showSource file_path {3,5-7}
+      // Whitespace around commas is also accepted:
+      //   showSource file_path {3, 5-7}
       // expands to:
       //   <<< file_path{3,5-7 language}
       // Preserves VitePress’s native file loading and Shiki highlighting, 
@@ -89,13 +91,13 @@ export default defineConfig({
       // inside a fenced example.
       md.core.ruler.before('block', 'show-source', (state) => {
         state.src = state.src.replace(
-          /^showSource[ \t]+([^{}\s]+)(?:[ \t]*\{(\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)\})?[ \t]*$/gm,
-          (_, sourcePath, highlightedLines) => {
+          /^([ \t]*)showSource[ \t]+([^{}\s]+)(?:[ \t]*\{(\d+(?:-\d+)?(?:[ \t]*,[ \t]*\d+(?:-\d+)?)*)\})?[ \t]*$/gm,
+          (_, indentation, sourcePath, highlightedLines) => {
             const language = sourcePath.endsWith('.sdd') ? 'sdd' : 'ts'
             const snippetOptions = highlightedLines
-              ? `${highlightedLines} ${language}`
+              ? `${highlightedLines.replace(/[ \t]+/g, '')} ${language}`
               : language
-            return `<div class="source-scroll"></div>\n\n<<< ${sourcePath}{${snippetOptions}}`
+            return `${indentation}<div class="source-scroll"></div>\n\n${indentation}<<< ${sourcePath}{${snippetOptions}}`
           }
         )
       });
@@ -110,13 +112,13 @@ export default defineConfig({
       md.core.ruler.before('block', 'custom-directives', (state) => {
         state.src = state.src
           .replace(
-            /^showRepoLink\s+([A-Za-z0-9._/-]+)\s*$/gm,
-            (_, repoPath) => {
+            /^([ \t]*)showRepoLink[ \t]+([A-Za-z0-9._/-]+)[ \t]*$/gm,
+            (_, indentation, repoPath) => {
               const url =
                 'https://github.com/knutopia/Structured-Design-Documents/tree/main/' +
                 repoPath.replace(/^\/+/, '')
 
-              return `<div class="link-right"><a href="${url}" target="_blank" rel="noreferrer"><IconGitHub/>Repo folder</a></div>`
+              return `${indentation}<div class="link-right"><a href="${url}" target="_blank" rel="noreferrer"><IconGitHub/>Repo folder</a></div>`
             }
           )
       })
