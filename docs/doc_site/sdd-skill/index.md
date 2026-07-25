@@ -71,7 +71,7 @@ Rendered output from the admin-area follow-up:
 showSource examples/shop_sched_exploration_2.sdd
 == Source Detail
 New "Admin Review" area:
-```text
+```sdd
 Area A-020 "Admin Review"
   description="Coordinator workspace for reviewing customer inquiries and approving volunteer signups."
   CONTAINS P-050
@@ -114,7 +114,7 @@ Rendered output from the UI-contracts follow-up, showing the viewState sequence:
 showSource examples/shop_sched_exploration_3.sdd
 == Source Detail
 Added viewStates within Shift Detail:
-```text
+```sdd
   + Place P-030 "Shift Detail"
     route_or_key="/mechanic/shifts/:shiftId"
     access="role:mechanic"
@@ -152,7 +152,7 @@ Renamed "Open Shifts" in "Mechanic's Scheduling" to "Available Shifts":
 showSource examples/shop_sched_exploration_4.sdd
 == Source Detail
 P-020 "Available Shifts" inside A-010 "Mechanic's Scheduling":
-```ts
+```sdd
 Area A-010 "Mechanic's Scheduling"
   description="Mechanic workspace for finding open shop shifts and managing accepted shifts."
   CONTAINS P-020

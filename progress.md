@@ -16,6 +16,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 7-25
+
+- added scripts/lvps.sh to launch vitepress dev server
+
 ## Frid 7-24
 
 - vitepress / vite config monkey business
