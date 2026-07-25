@@ -2,7 +2,7 @@
   "hash": "dd6a2034",
   "configHash": "06afd0e9",
   "lockfileHash": "f39476f7",
-  "browserHash": "293fd354",
+  "browserHash": "53ae3cea",
   "optimized": {
     "medium-zoom": {
       "src": "../../../../../node_modules/.pnpm/medium-zoom@1.1.0/node_modules/medium-zoom/dist/medium-zoom.esm.js",

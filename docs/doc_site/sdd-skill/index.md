@@ -31,35 +31,9 @@ That is enough to get started. You do not need to know SDD syntax first (althoug
 
 The prompt generates the SDD file (Structured Design Document) and the information architecture diagram.
 
-SDD full source: <IconFile/>[shop_sched_exploration.sdd](examples/shop_sched_exploration.sdd)
-
-Trimmed excerpt:
-
-```text
-SDD-TEXT 0.1
-Place P-010 "Dashboard"
-  route_or_key="/dashboard"
-  primary_nav="true"
-  NAVIGATES_TO P-020
-  NAVIGATES_TO P-040
-END
-Area A-010 "Mechanic's Scheduling"
-  CONTAINS P-020
-  CONTAINS P-030
-  CONTAINS P-040
-  + Place P-020 "Open Shifts"
-    route_or_key="/mechanic/shifts/open"
-    access="role:mechanic"
-    primary_nav="true"
-    NAVIGATES_TO P-030
-  END
-```
-
-Information architecture from that first prompt:
-![](examples/shop_sched_exploration.ia_place_map.simple.svg)
-
 :::tabs
 == Information Architecture Diagram
+Information architecture from that first prompt:
 ![](examples/shop_sched_exploration.ia_place_map.simple.svg)
 == Source
 showSource examples/shop_sched_exploration.sdd
@@ -87,11 +61,16 @@ Connect to it from the Dashboard.
 
 Also add descriptions. Update the IA.
 ```
+#### Output
 
-Full source: <IconFile/>[shop_sched_exploration_2.sdd](examples/shop_sched_exploration_2.sdd)
-
-Trimmed excerpt:
-
+:::tabs
+== Information Architecture Diagram
+Rendered output from the admin-area follow-up:
+![](examples/shop_sched_exploration_2.ia_place_map.simple.svg)
+== Source
+showSource examples/shop_sched_exploration_2.sdd
+== Source Detail
+New "Admin Review" area:
 ```text
 Area A-020 "Admin Review"
   description="Coordinator workspace for reviewing customer inquiries and approving volunteer signups."
@@ -111,11 +90,9 @@ Area A-020 "Admin Review"
   END
 END
 ```
+:::
 
-Rendered output from the admin-area follow-up:
-![](examples/shop_sched_exploration_2.ia_place_map.simple.svg)
-
-### Add A Signup Flow And Show The UI Contracts
+### Add A Signup Flow And Show a UI Contracts Diagram
 
 SDDs can capture states and view states to express progressions. Let's add a sign-up flow.
 
@@ -128,10 +105,15 @@ Using $sdd skill, add a simple signup flow in Shift Detail, with these view stat
 Show the UI contracts.
 ```
 
-Full source: <IconFile/>[shop_sched_exploration_3.sdd](examples/shop_sched_exploration_3.sdd)
-
-Trimmed excerpt, showing the added viewStates within Shift Detail:
-
+#### Output
+:::tabs
+== UI Contracts Diagram
+Rendered output from the UI-contracts follow-up, showing the viewState sequence:
+![](examples/shop_sched_exploration_3.ui_contracts.simple.svg)
+== Source
+showSource examples/shop_sched_exploration_3.sdd
+== Source Detail
+Added viewStates within Shift Detail:
 ```text
   + Place P-030 "Shift Detail"
     route_or_key="/mechanic/shifts/:shiftId"
@@ -153,21 +135,24 @@ Trimmed excerpt, showing the added viewStates within Shift Detail:
     END
   END
 ```
-
-Rendered output from the UI-contract follow-up, showing the viewState sequence:
-![](examples/shop_sched_exploration_3.ui_contracts.simple.svg)
+:::
 
 ### Simple Follow-Up Edit
 
 The same style also works for smaller follow-ups:
 
-```text
-Using $sdd skill, rename "Open Shifts" to "Available Shifts" and update the IA diagram.
-```
 
-Trimmed excerpt:
+#### Output
 
-```text
+:::tabs
+== Information Architecture Diagram
+Renamed "Open Shifts" in "Mechanic's Scheduling" to "Available Shifts":
+![](examples/shop_sched_exploration_4.ia_place_map.simple.svg)
+== Source
+showSource examples/shop_sched_exploration_4.sdd
+== Source Detail
+P-020 "Available Shifts" inside A-010 "Mechanic's Scheduling":
+```ts
 Area A-010 "Mechanic's Scheduling"
   description="Mechanic workspace for finding open shop shifts and managing accepted shifts."
   CONTAINS P-020
@@ -181,16 +166,17 @@ Area A-010 "Mechanic's Scheduling"
     NAVIGATES_TO P-030
   END
 ```
+:::
 
-### Manual View Command
+### Creating a Diagram from an Existing SDD File
 
-When you want to see a current diagram for an existing SDD file, you can ask the agent using the skill for it:
+When you want to see a current diagram for an existing SDD file, you can ask the agent for it:
 
 ```text
 Using $sdd-skill, show the information architecture.
 ```
 
-The agent then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
+The agent, guided by the skill, then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
 
 ```console
 bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
@@ -199,9 +185,25 @@ Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
 ![](examples/shop_sched_exploration_4_IA_as_a.png)
 
-## What Happens Behind The Scenes
+This works when the SDD contains the type of content that appears in the type of diagram that you ask for: to render an information architecture, the SDD must contain places (and optionally areas) - otherwise, there is nothing to `show`.
+
+## SDD During the Product Lifecycle
+
+These examples focus on simple information architecture and a bit of state handling. SDD provides means to go into greater detail, with flows, nested components and service blueprints. SDD also provides means to capture more abstract *drivers* of design, with journeys and opportunity maps. The goal is to create an opportunity to create a full picture of structural design - which is helpful for delivering on the design promise.
+
+The example shown here shows a from-scratch workflow. It is exciting to envision, design and build a product from scratch. It is also, in practical terms, rare. Most actual work in a product business is concerned with changing, improving, and growing an existing product over a long period of time. In that situation, [SDD can make a strategic difference](../strategic_potential/README.md).
+
+## Go Beyond the Skill
+
+The skill gives an LLM enough workflow guidance to respond to users' natural-language prompts, allowing a user to work with SDD without knowing the syntax. 
+
+The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
+
+## What Happens Behind The Scenes When Using the Skill
 
 *The skill provides a set of capabilites to the agent. The agent interprets the prompt in light of these capabilities. The agent probes the capabilities, uses them, interprets the results and takes the next step.*
+
+Looking at the examples above,
 
 - The agent recognizes the initial prompt as a *create new document* request. It creates the new, empty `.sdd` document, using the filename in the prompt. It translates the prompt's ask into an app structure (this is the core of the LLM work) and then follows SDD rules to create nodes and connections. It then writes this content into the document. The agent also recognizes the request for the IA diagram as a *read, validate, or preview an existing document* request and executes it.
 - The agent recognizes the follow-up prompts as *edit an existing document* requests. For each request, it looks at the current structure before making changes, so each follow-up builds on the actual document. The follow-up requests for diagrams are recognized as *read, validate, or preview an existing document* again.
@@ -222,12 +224,3 @@ The supported request-purpose subjects are `helper.command.create`, `helper.comm
 
 For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used by the skill.
 
-## Go Beyond the Skill
-
-The skill gives an LLM enough workflow guidance to respond to users' natural-language prompts, allowing a user to work with SDD without knowing the syntax. The syntax is fairly straightforward, though: about as complex as basic HTML. With not much learning effort, anyone can simply edit SDD files manually. That can be the quickest way from idea to document.
-
-## SDD During the Product Lifecycle
-
-The examples above focus on simple information architecture and a bit of state handling. SDD provides means to go into greater detail, with flows, nested components and service blueprints. SDD also provides means to capture more abstract *drivers* of design, with journeys and opportunity maps. The goal is to create an opportunity to create a full picture of structural design - which is helpful for delivering on the design promise.
-
-The example shown here shows a from-scratch workflow. It is exciting to envision, design and build a product from scratch. It is also, in practical terms, rare. Most actual work in a product business is concerned with changing, improving, and growing an existing product over a long period of time. In that situation, [SDD can make a strategic difference](../strategic_potential/README.md).

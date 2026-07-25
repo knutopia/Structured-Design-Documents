@@ -3,7 +3,7 @@
 This example shows how SDD-Text expresses a service blueprint slice for a simple claim flow.
 
 :::tabs
-== Diagram
+== Service Blueprint Diagram
 ![service blueprint example diagram](claim_flow_slice.service_blueprint.svg)
 == Source
 showRepoLink docs/doc_site/service_blueprint_slice_example/

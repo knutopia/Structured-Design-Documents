@@ -23,6 +23,8 @@
 - scrolling code section looking good
 - added showSource macro
 - added showRepoLink macro
+- edited skill page
+- added text area wrapping
 
 ## Sun 7-19
 
