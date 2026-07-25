@@ -5,7 +5,43 @@ set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 repo_root="$(cd "$script_dir/.." && pwd -P)"
 
+configure_server_window() {
+  local initial_rows initial_cols target_rows target_cols
+
+  # Set the Windows console defaults, then apply the equivalent terminal
+  # colors for terminal hosts that support ANSI/OSC sequences.
+  (
+    cd /mnt/c
+    cmd.exe /d /c color 2F >/dev/null 2>&1 || true
+  )
+  printf '\033]0;VitePress\007'
+  printf '\033]10;#e8f5e9\007\033]11;#003b20\007'
+  printf '\033[38;2;232;245;233m\033[48;2;0;59;32m\033[2J\033[H'
+
+  if read -r initial_rows initial_cols < <(stty size </dev/tty 2>/dev/null); then
+    target_rows=$((initial_rows / 2))
+    target_cols=$((initial_cols / 2))
+
+    # Keep enough room for VitePress's status output on unusually small
+    # initial consoles.
+    if ((target_rows < 12)); then
+      target_rows=12
+    fi
+    if ((target_cols < 40)); then
+      target_cols=40
+    fi
+
+    if command -v mode.com >/dev/null 2>&1; then
+      mode.com con: cols="$target_cols" lines="$target_rows" >/dev/null 2>&1 ||
+        printf '\033[8;%s;%st' "$target_rows" "$target_cols"
+    else
+      printf '\033[8;%s;%st' "$target_rows" "$target_cols"
+    fi
+  fi
+}
+
 if [[ "${1:-}" == "--run-server" ]]; then
+  configure_server_window
   cd "$repo_root"
 
   export COREPACK_HOME="${COREPACK_HOME:-$HOME/.cache/corepack}"

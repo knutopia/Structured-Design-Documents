@@ -77,18 +77,25 @@ export default defineConfig({
       // expands to:
       //   <div class="source-scroll"></div>
       //
-      //   <<< file_path
+      //   <<< file_path{language}
+      //
+      // An optional VitePress line-highlight set is supported:
+      //   showSource file_path {3,5-7}
+      // expands to:
+      //   <<< file_path{3,5-7 language}
       // Preserves VitePress’s native file loading and Shiki highlighting, 
       // plus your existing scrolling CSS. One limitation: because this is 
       // a source-level macro, avoid placing a line beginning with showSource 
       // inside a fenced example.
       md.core.ruler.before('block', 'show-source', (state) => {
         state.src = state.src.replace(
-          /^showSource\s+(\S+)\s*$/gm,
-          (_, sourceSpec) => {
-            const sourcePath = sourceSpec.replace(/\{[^{}]+\}$/, '')
+          /^showSource[ \t]+([^{}\s]+)(?:[ \t]*\{(\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)\})?[ \t]*$/gm,
+          (_, sourcePath, highlightedLines) => {
             const language = sourcePath.endsWith('.sdd') ? 'sdd' : 'ts'
-            return `<div class="source-scroll"></div>\n\n<<< ${sourcePath}{${language}}`
+            const snippetOptions = highlightedLines
+              ? `${highlightedLines} ${language}`
+              : language
+            return `<div class="source-scroll"></div>\n\n<<< ${sourcePath}{${snippetOptions}}`
           }
         )
       });

@@ -20,6 +20,8 @@
 
 - added scripts/lvps.sh to launch vitepress dev server
 - moved repo structure paragraph out of index into readme
+- added source syntax highlighting
+
 ## Frid 7-24
 
 - vitepress / vite config monkey business

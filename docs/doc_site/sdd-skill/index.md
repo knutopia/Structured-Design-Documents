@@ -68,7 +68,7 @@ Also add descriptions. Update the IA.
 Rendered output from the admin-area follow-up:
 ![](examples/shop_sched_exploration_2.ia_place_map.simple.svg)
 == Source
-showSource examples/shop_sched_exploration_2.sdd
+showSource examples/shop_sched_exploration_2.sdd {35-51}
 == Source Detail
 New "Admin Review" area:
 ```sdd
@@ -111,10 +111,10 @@ Show the UI contracts.
 Rendered output from the UI-contracts follow-up, showing the viewState sequence:
 ![](examples/shop_sched_exploration_3.ui_contracts.simple.svg)
 == Source
-showSource examples/shop_sched_exploration_3.sdd
+showSource examples/shop_sched_exploration_3.sdd {26-39}
 == Source Detail
 Added viewStates within Shift Detail:
-```sdd
+```sdd {5-18}
   + Place P-030 "Shift Detail"
     route_or_key="/mechanic/shifts/:shiftId"
     access="role:mechanic"
@@ -149,10 +149,10 @@ The same style also works for smaller follow-ups:
 Renamed "Open Shifts" in "Mechanic's Scheduling" to "Available Shifts":
 ![](examples/shop_sched_exploration_4.ia_place_map.simple.svg)
 == Source
-showSource examples/shop_sched_exploration_4.sdd
+showSource examples/shop_sched_exploration_4.sdd {15}
 == Source Detail
 P-020 "Available Shifts" inside A-010 "Mechanic's Scheduling":
-```sdd
+```sdd {6}
 Area A-010 "Mechanic's Scheduling"
   description="Mechanic workspace for finding open shop shifts and managing accepted shifts."
   CONTAINS P-020
