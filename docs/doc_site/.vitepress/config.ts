@@ -6,6 +6,7 @@ import path from 'path'
 import lightbox from "vitepress-plugin-lightbox"
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import sddGrammar from '../../../editors/vscode-sdd/syntaxes/sdd.tmLanguage.json'
+import { showSourceMarkdownPlugin } from './markdown/showSource'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -48,6 +49,8 @@ export default defineConfig({
       md.use(lightbox, {});
       // use tabs plugin
       md.use(tabsMarkdownPlugin);
+      // Render external source files, with optional excerpts and highlights.
+      md.use(showSourceMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
@@ -73,35 +76,6 @@ export default defineConfig({
         return defaultRender(tokens, idx, options, env, self);
       };
 
-      // Scrolling source code block for external source file
-      // expands to:
-      //   <div class="source-scroll"></div>
-      //
-      //   <<< file_path{language}
-      //
-      // An optional VitePress line-highlight set is supported:
-      //   showSource file_path {3,5-7}
-      // Whitespace around commas is also accepted:
-      //   showSource file_path {3, 5-7}
-      // expands to:
-      //   <<< file_path{3,5-7 language}
-      // Preserves VitePress’s native file loading and Shiki highlighting, 
-      // plus your existing scrolling CSS. One limitation: because this is 
-      // a source-level macro, avoid placing a line beginning with showSource 
-      // inside a fenced example.
-      md.core.ruler.before('block', 'show-source', (state) => {
-        state.src = state.src.replace(
-          /^([ \t]*)showSource[ \t]+([^{}\s]+)(?:[ \t]*\{(\d+(?:-\d+)?(?:[ \t]*,[ \t]*\d+(?:-\d+)?)*)\})?[ \t]*$/gm,
-          (_, indentation, sourcePath, highlightedLines) => {
-            const language = sourcePath.endsWith('.sdd') ? 'sdd' : 'ts'
-            const snippetOptions = highlightedLines
-              ? `${highlightedLines.replace(/[ \t]+/g, '')} ${language}`
-              : language
-            return `${indentation}<div class="source-scroll"></div>\n\n${indentation}<<< ${sourcePath}{${snippetOptions}}`
-          }
-        )
-      });
-
       // Repo link macro, expands to:
       //   <div class="link-right">
       //     <a href="  
@@ -118,7 +92,9 @@ export default defineConfig({
                 'https://github.com/knutopia/Structured-Design-Documents/tree/main/' +
                 repoPath.replace(/^\/+/, '')
 
-              return `${indentation}<div class="link-right"><a href="${url}" target="_blank" rel="noreferrer"><IconGitHub/>Repo folder</a></div>`
+              // Terminate the HTML block so a following Markdown block
+              // directive (such as showSource) can be tokenized separately.
+              return `${indentation}<div class="link-right"><a href="${url}" target="_blank" rel="noreferrer"><IconGitHub/>Repo folder</a></div>\n`
             }
           )
       })

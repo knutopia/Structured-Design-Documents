@@ -18,7 +18,7 @@ This page collects the current diagram families, their status, and links to avai
   ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.ia_place_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example
-  showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69-75,84-99}
+  showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69-75,84-99} {lines 60-}
   :::
   ::: details place_viewstate_transition_example
   <Badge type="info" text="Strict Profile" vertical="top" />
