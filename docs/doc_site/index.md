@@ -10,9 +10,9 @@ hero:
     - theme: brand
       text:  Example
       link:  '#example-small-app'
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+    - theme: brand
+      text: Repo
+      link: https://github.com/knutopia/Structured-Design-Documents/tree/main
 
 features:
   - title: Product Design Graph
@@ -23,15 +23,11 @@ features:
     details: Use SDD to talk to an LLM about structural design
 ---
 
-SDD-Text is a compact language for describing software product design as a structured map. SDD-Text is easy to read and write, for people and for LLMs.
+SDD *(Structured Design Documents)* is a compact language for describing software product design as a structured map. SDD is easy to read and write, for people and for LLMs.
 
-SDD-Text makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
+SDD makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
 
 Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](./diagram_types/).
-
-This repository contains the spec bundle defining the language. The bundle is meant to evolve, to improve the language. The repository also contains a toolchain that validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
-
-Because rendering is separate from the source model, tools that work with design structure do not need graphical capabilities, while rendering tools can focus solely on presentation.
 
 ## Why It Exists
 
@@ -43,7 +39,7 @@ Because rendering is separate from the source model, tools that work with design
 
 ## Example: Small App
 
-Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
+Here is a small SDD example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
 :::tabs
 == Information Architecture Diagram

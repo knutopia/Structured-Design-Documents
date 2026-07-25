@@ -19,7 +19,7 @@
 ## Sat 7-25
 
 - added scripts/lvps.sh to launch vitepress dev server
-
+- moved repo structure paragraph out of index into readme
 ## Frid 7-24
 
 - vitepress / vite config monkey business
