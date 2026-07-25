@@ -1,0 +1,720 @@
+{
+  "name": "sdd",
+  "scopeName": "source.sdd",
+  "fileTypes": [
+    "sdd"
+  ],
+  "patterns": [
+    {
+      "include": "#version-declaration"
+    },
+    {
+      "include": "#block-terminator"
+    },
+    {
+      "include": "#nested-node-header"
+    },
+    {
+      "include": "#top-node-header"
+    },
+    {
+      "include": "#edge-line"
+    },
+    {
+      "include": "#property-line"
+    },
+    {
+      "include": "#comment-line"
+    }
+  ],
+  "repository": {
+    "version-declaration": {
+      "name": "meta.version.sdd",
+      "match": "^(\\s*)(SDD-TEXT)(\\s+)([0-9][0-9.]*)\\s*$",
+      "captures": {
+        "2": {
+          "name": "keyword.other.version.sdd"
+        },
+        "4": {
+          "name": "constant.numeric.version.sdd"
+        }
+      }
+    },
+    "comment-line": {
+      "name": "comment.line.number-sign.sdd",
+      "match": "^\\s*(#).*$",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.comment.sdd"
+        }
+      }
+    },
+    "line-comment": {
+      "name": "comment.line.number-sign.sdd",
+      "match": "(#).*$",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.comment.sdd"
+        }
+      }
+    },
+    "quoted-string": {
+      "name": "string.quoted.double.sdd",
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.sdd"
+        }
+      },
+      "end": "(?:\"|$)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.sdd"
+        }
+      },
+      "patterns": [
+        {
+          "name": "constant.character.escape.sdd",
+          "match": "(?:\\\\\\\\\"|\\\\\\\\)"
+        }
+      ]
+    },
+    "bare-value": {
+      "name": "string.unquoted.bare.sdd",
+      "match": "(?<![A-Za-z0-9_./:-])(?:[A-Za-z0-9_./:-]+)(?![A-Za-z0-9_./:-])"
+    },
+    "block-terminator": {
+      "name": "meta.block.terminator.sdd",
+      "begin": "^(\\s*)(END)(?=\\s*(?:#|$))",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.control.end.sdd"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#line-comment"
+        }
+      ]
+    },
+    "top-node-header": {
+      "patterns": [
+        {
+          "name": "meta.block.header.node.sdd",
+          "begin": "^(\\s*)(Opportunity|Initiative|Outcome|Metric)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "storage.type.node.sdd.product-intent"
+            },
+            "4": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.sdd",
+          "begin": "^(\\s*)(Stage|Step)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "storage.type.node.sdd.experience"
+            },
+            "4": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.sdd",
+          "begin": "^(\\s*)(Place|Area)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "storage.type.node.sdd.structure"
+            },
+            "4": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.sdd",
+          "begin": "^(\\s*)(Component|ViewState|Event|State)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "storage.type.node.sdd.ui-behavior"
+            },
+            "4": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.sdd",
+          "begin": "^(\\s*)(SystemAction|DataEntity|Process|Policy)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "storage.type.node.sdd.service-delivery"
+            },
+            "4": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        }
+      ]
+    },
+    "nested-node-header": {
+      "patterns": [
+        {
+          "name": "meta.block.header.node.nested.sdd",
+          "begin": "^(\\s*)(\\+)(\\s+)(Opportunity|Initiative|Outcome|Metric)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "punctuation.definition.block.nested.sdd"
+            },
+            "4": {
+              "name": "storage.type.node.sdd.product-intent"
+            },
+            "6": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.nested.sdd",
+          "begin": "^(\\s*)(\\+)(\\s+)(Stage|Step)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "punctuation.definition.block.nested.sdd"
+            },
+            "4": {
+              "name": "storage.type.node.sdd.experience"
+            },
+            "6": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.nested.sdd",
+          "begin": "^(\\s*)(\\+)(\\s+)(Place|Area)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "punctuation.definition.block.nested.sdd"
+            },
+            "4": {
+              "name": "storage.type.node.sdd.structure"
+            },
+            "6": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.nested.sdd",
+          "begin": "^(\\s*)(\\+)(\\s+)(Component|ViewState|Event|State)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "punctuation.definition.block.nested.sdd"
+            },
+            "4": {
+              "name": "storage.type.node.sdd.ui-behavior"
+            },
+            "6": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.nested.sdd",
+          "begin": "^(\\s*)(\\+)(\\s+)(SystemAction|DataEntity|Process|Policy)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "punctuation.definition.block.nested.sdd"
+            },
+            "4": {
+              "name": "storage.type.node.sdd.service-delivery"
+            },
+            "6": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        }
+      ]
+    },
+    "property-line": {
+      "name": "meta.property.sdd",
+      "begin": "^(\\s*)([A-Za-z_][A-Za-z0-9_./:-]*)(\\s*)(=)(\\s*)",
+      "beginCaptures": {
+        "2": {
+          "name": "variable.other.property.sdd"
+        },
+        "4": {
+          "name": "keyword.operator.assignment.sdd"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#quoted-string"
+        },
+        {
+          "include": "#bare-value"
+        },
+        {
+          "include": "#line-comment"
+        }
+      ]
+    },
+    "edge-line": {
+      "patterns": [
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(COMPOSED_OF|CONTAINS)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.structure"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(PRECEDES)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.ordering"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(NAVIGATES_TO)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.navigation"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(IMPLEMENTED_BY|MEASURED_BY|REALIZED_BY|ADDRESSES|SUPPORTS)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.traceability"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(TRANSITIONS_TO|EMITS)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.behavior"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(CONSTRAINED_BY|DEPENDS_ON)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.dependency-constraints"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(BINDS_TO|WRITES|READS)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.data"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.relationship.sdd",
+          "begin": "^(\\s*)(INSTRUMENTED_AT)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s|$)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.relationship.sdd.measurement"
+            },
+            "4": {
+              "name": "constant.other.identifier.target.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#event-annotation"
+            },
+            {
+              "include": "#guard-annotation"
+            },
+            {
+              "include": "#effect-annotation"
+            },
+            {
+              "include": "#edge-property"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        }
+      ]
+    },
+    "event-annotation": {
+      "name": "meta.annotation.event.sdd",
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.brackets.begin.event.sdd"
+        }
+      },
+      "end": "(?:\\]|$)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.brackets.end.event.sdd"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#quoted-string"
+        },
+        {
+          "name": "constant.other.identifier.event.sdd",
+          "match": "(?<![A-Za-z0-9_./:-])(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?![A-Za-z0-9_./:-])"
+        },
+        {
+          "name": "variable.other.event.sdd",
+          "match": "(?<![A-Za-z0-9_./:-])(?:[A-Za-z_][A-Za-z0-9_./:-]*)(?![A-Za-z0-9_./:-])"
+        }
+      ]
+    },
+    "guard-annotation": {
+      "name": "meta.annotation.guard.sdd",
+      "begin": "\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.braces.begin.guard.sdd"
+        }
+      },
+      "end": "(?:\\}|$)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.braces.end.guard.sdd"
+        }
+      },
+      "patterns": [
+        {
+          "name": "string.unquoted.guard.sdd",
+          "match": "[^\\}\\r\\n]+"
+        }
+      ]
+    },
+    "effect-annotation": {
+      "name": "meta.annotation.effect.sdd",
+      "begin": "(/)(?=\\s*)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.operator.effect.sdd"
+        }
+      },
+      "end": "(?=\\s+(?:[A-Za-z_][A-Za-z0-9_./:-]*)\\s*=|\\s+#|$)",
+      "patterns": [
+        {
+          "include": "#quoted-string"
+        },
+        {
+          "name": "constant.other.identifier.effect.sdd",
+          "match": "(?<![A-Za-z0-9_./:-])(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?![A-Za-z0-9_./:-])"
+        },
+        {
+          "name": "entity.name.function.effect.sdd",
+          "match": "(?<![A-Za-z0-9_./:-])(?:[A-Za-z_][A-Za-z0-9_./:-]*)(?![A-Za-z0-9_./:-])"
+        }
+      ]
+    },
+    "edge-property": {
+      "name": "meta.property.edge.sdd",
+      "begin": "(\\s+)([A-Za-z_][A-Za-z0-9_./:-]*)(\\s*)(=)(\\s*)",
+      "beginCaptures": {
+        "2": {
+          "name": "variable.other.property.edge.sdd"
+        },
+        "4": {
+          "name": "keyword.operator.assignment.sdd"
+        }
+      },
+      "end": "(?=\\s+(?:[A-Za-z_][A-Za-z0-9_./:-]*)\\s*=|\\s+#|$)",
+      "patterns": [
+        {
+          "include": "#quoted-string"
+        },
+        {
+          "include": "#bare-value"
+        }
+      ]
+    }
+  }
+}

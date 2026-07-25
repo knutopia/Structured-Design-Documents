@@ -7,7 +7,7 @@ This example shows how SDD-Text expresses a service blueprint slice for a simple
 ![service blueprint example diagram](claim_flow_slice.service_blueprint.svg)
 == Source
 showRepoLink docs/doc_site/service_blueprint_slice_example/
-showSource claim_flow_slice.sdd{ts}
+showSource claim_flow_slice.sdd
 :::
 
 ## What To Look For in a Service Blueprint

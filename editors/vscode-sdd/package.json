@@ -1,0 +1,56 @@
+{
+  "name": "sdd-language",
+  "displayName": "SDD Language Support",
+  "description": "Syntax highlighting and basic editing ergonomics for Structured Design Documents.",
+  "version": "0.1.0",
+  "publisher": "knutopia",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "SDD",
+    "Structured Design Documents",
+    "language",
+    "syntax"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/knutopia/Structured-Design-Documents.git"
+  },
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "sdd",
+        "aliases": [
+          "SDD",
+          "sdd"
+        ],
+        "extensions": [
+          ".sdd"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sdd",
+        "scopeName": "source.sdd",
+        "path": "./syntaxes/sdd.tmLanguage.json"
+      }
+    ]
+  }
+}

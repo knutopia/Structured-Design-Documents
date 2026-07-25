@@ -5,6 +5,7 @@ import { normalizePath } from 'vite'
 import path from 'path'
 import lightbox from "vitepress-plugin-lightbox"
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
+import sddGrammar from '../../../editors/vscode-sdd/syntaxes/sdd.tmLanguage.json'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -38,6 +39,10 @@ export default defineConfig({
   },
 
   markdown: {
+    languages: [sddGrammar],
+    languageLabel: {
+      sdd: 'SDD'
+    },
     config: (md) => {
       // Use lightbox plugin
       md.use(lightbox, {});
@@ -80,7 +85,11 @@ export default defineConfig({
       md.core.ruler.before('block', 'show-source', (state) => {
         state.src = state.src.replace(
           /^showSource\s+(\S+)\s*$/gm,
-          '<div class="source-scroll"></div>\n\n<<< $1{ts}'
+          (_, sourceSpec) => {
+            const sourcePath = sourceSpec.replace(/\{[^{}]+\}$/, '')
+            const language = sourcePath.endsWith('.sdd') ? 'sdd' : 'ts'
+            return `<div class="source-scroll"></div>\n\n<<< ${sourcePath}{${language}}`
+          }
         )
       });
 
@@ -93,10 +102,6 @@ export default defineConfig({
       //   </div>
       md.core.ruler.before('block', 'custom-directives', (state) => {
         state.src = state.src
-          .replace(
-            /^showSource\s+(\S+)\s*$/gm,
-            '<div class="source-scroll"></div>\n\n<<< $1{ts}'
-          )
           .replace(
             /^showRepoLink\s+([A-Za-z0-9._/-]+)\s*$/gm,
             (_, repoPath) => {

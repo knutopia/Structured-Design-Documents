@@ -25,6 +25,7 @@
 - added showRepoLink macro
 - edited skill page
 - added text area wrapping
+- created TextMate grammar for VitePress and VS Code
 
 ## Sun 7-19
 
