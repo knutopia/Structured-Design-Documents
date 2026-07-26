@@ -16,7 +16,7 @@ This page collects the current diagram families, their status, and links to avai
   ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.ia_place_map.svg)
   == Source
   Area- and Place nodes: 
-  showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example
+  showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example {pos: up}
   showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69, 73, 74, 84, 90, 93} {lines 68-}
   :::
 
@@ -29,16 +29,14 @@ This page collects the current diagram families, their status, and links to avai
   showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 18, 35}
   :::
 
-  ::: details billSage app
-  <Badge type="info" text="Simple Profile" vertical="top" />
+  ::: details billSage app <Badge type="info" text="Simple Profile" vertical="top" />
+  :::tabs
+  == Information Architecture Diagram
   ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.simple.svg)
-  <IconFile/>[Read SDD Source](../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd) showRepoLink /real_world_exploration/billSage_example
-  <br>
-  <br>
-  <Badge type="info" text="Strict Profile" vertical="middle" />
-  ![svg](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.strict.svg)
-  *strict profile* <IconFile/>[Read SDD Source](../../../real_world_exploration/billSage_example/billSage_structure.sdd) showRepoLink /real_world_exploration/billSage_example
-  ::: 
+  == Source
+  showRepoLink /real_world_exploration/billSage_example
+  showSource ../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd {3, 8, 13, 15-18, 26, 27, 37, 39, 40, 44, 47, 49, 50, 59, 64, 76, 78, 79, 86, 88, 89, 95, 98, 99, 106, 108, 109}
+  :::
 
 ## UI Contracts
 
@@ -118,7 +116,7 @@ This page collects the current diagram families, their status, and links to avai
   ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/simple_profile/multiple_outcomes.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd {}
+  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd
   :::
 
 ## Service Blueprint:

@@ -23,6 +23,15 @@
   font-size: 0.875em;
 }
 
+.vp-doc p:has(> .link-right-up) {
+  display: flow-root;
+}
+
+.link-right-up {
+  float: right;
+  margin-left: 1rem;
+}
+
 .vp-doc .language-text pre {
   white-space: pre-wrap;
   overflow-x: hidden;

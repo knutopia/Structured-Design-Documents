@@ -10,6 +10,7 @@ import {
   showSourceMarkdownPlugin,
   type ShowSourceMarkdownOptions
 } from './markdown/showSource'
+import { showRepoLinkMarkdownPlugin } from './markdown/showRepoLink'
 
 const showSourceOptions = {
   lineNumbers: true
@@ -58,6 +59,8 @@ export default defineConfig({
       md.use(tabsMarkdownPlugin);
       // Render external source files, with optional excerpts and highlights.
       md.use(showSourceMarkdownPlugin, showSourceOptions);
+      // Link to a source directory, optionally aligned with preceding prose.
+      md.use(showRepoLinkMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
@@ -83,28 +86,6 @@ export default defineConfig({
         return defaultRender(tokens, idx, options, env, self);
       };
 
-      // Repo link macro, expands to:
-      //   <div class="link-right">
-      //     <a href="  
-      //     https://github.com/knutopia/Structured-Design-Documents/tree/main/
-      //     param_path">
-      //     <IconGitHub/>Repo folder</a>
-      //   </div>
-      md.core.ruler.before('block', 'custom-directives', (state) => {
-        state.src = state.src
-          .replace(
-            /^([ \t]*)showRepoLink[ \t]+([A-Za-z0-9._/-]+)[ \t]*$/gm,
-            (_, indentation, repoPath) => {
-              const url =
-                'https://github.com/knutopia/Structured-Design-Documents/tree/main/' +
-                repoPath.replace(/^\/+/, '')
-
-              // Terminate the HTML block so a following Markdown block
-              // directive (such as showSource) can be tokenized separately.
-              return `${indentation}<div class="link-right"><a href="${url}" target="_blank" rel="noreferrer"><IconGitHub/>Repo folder</a></div>\n`
-            }
-          )
-      })
     }
   },
 

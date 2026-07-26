@@ -16,6 +16,12 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 7-26
+
+- researched svg font rendering quality issue
+- added source highlights
+- added {pos: up} option to showRepoLink
+
 ## Sat 7-25
 
 - added scripts/lvps.sh to launch vitepress dev server
@@ -25,6 +31,7 @@
 - showSourceOptions.lineNumbers added to config for showSource
 - removed Current Status section from main index
 - adding source highlights (wip)
+- captured svg background transparency issue
 
 ## Frid 7-24
 

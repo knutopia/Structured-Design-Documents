@@ -41,6 +41,26 @@ Different aspects of the unified graph can be shown (rendered) as diagrams. Usab
 
 Here is a small SDD example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
+::::tabs
+=== Information Architecture
+:::tabs key:ab
+== Diagram
+![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
+== SDD Source
+Information architecture content
+showRepoLink docs/doc_site/small_app_example {pos: up}
+showSource ./small_app_example/small_app.sdd {10, 12, 25, 27-30, 32, 39, 40, 54, 56, 57, 61-64, 66, 67, 76, 81, 93, 95, 96}
+=== UI Contracts Diagram
+:::tabs key:ab
+== Diagram
+![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
+== SDD Source
+Highlights on UI contracts content
+showRepoLink docs/doc_site/small_app_example {pos: up}
+showSource ./small_app_example/small_app.sdd {10, 13-15, 17, 20, 30, 33-38, 41, 44, 47, 49, 51, 54, 58-60, 69, 71, 73, 76, 78-80, 82, 85, 88, 102}
+:::
+::::
+
 :::tabs
 == Information Architecture Diagram
 ![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
@@ -80,5 +100,4 @@ The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behin
 - Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](../../initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice.md)
 
 - [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/README.md>)
-
 
