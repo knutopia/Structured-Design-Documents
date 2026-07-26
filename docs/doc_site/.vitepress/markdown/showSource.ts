@@ -19,6 +19,10 @@ interface ShowSourceDirective {
   selection?: LineSelection
 }
 
+export interface ShowSourceMarkdownOptions {
+  lineNumbers?: boolean
+}
+
 const directiveStartPattern = /^showSource(?:[ \t]|$)/
 const directivePattern =
   /^showSource[ \t]+([^{}\s]+)((?:[ \t]+\{[^{}\r\n]*\})*)[ \t]*$/
@@ -203,7 +207,10 @@ function directiveError(
   )
 }
 
-export function showSourceMarkdownPlugin(md: MarkdownRenderer): void {
+export function showSourceMarkdownPlugin(
+  md: MarkdownRenderer,
+  { lineNumbers = false }: ShowSourceMarkdownOptions = {}
+): void {
   md.block.ruler.before(
     'fence',
     'show_source',
@@ -274,6 +281,9 @@ export function showSourceMarkdownPlugin(md: MarkdownRenderer): void {
       )
       const language = directive.sourcePath.endsWith('.sdd') ? 'sdd' : 'ts'
       const title = path.basename(directive.sourcePath)
+      const lineNumberMode = lineNumbers
+        ? `:line-numbers=${selected.start}`
+        : ':no-line-numbers'
 
       const markerToken = state.push('html_block', '', 0)
       markerToken.content = '<div class="source-scroll"></div>\n'
@@ -282,7 +292,7 @@ export function showSourceMarkdownPlugin(md: MarkdownRenderer): void {
       const fenceToken = state.push('fence', 'code', 0)
       fenceToken.content = selected.content
       fenceToken.info =
-        `${language}${highlightedLines ? `{${highlightedLines}}` : ''}[${title}]`
+        `${language}${lineNumberMode}${highlightedLines ? `{${highlightedLines}}` : ''}[${title}]`
       fenceToken.markup = '```'
       fenceToken.map = [startLine, startLine + 1]
 

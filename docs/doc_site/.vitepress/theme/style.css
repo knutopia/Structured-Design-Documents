@@ -8,6 +8,16 @@
   overflow: auto;
 }
 
+.source-scroll + div[class*='language-'].line-numbers-mode {
+  max-height: 32rem;
+  overflow: auto;
+}
+
+.source-scroll + div[class*='language-'].line-numbers-mode pre {
+  max-height: none;
+  overflow: visible;
+}
+
 .link-right {
   text-align: right;
   font-size: 0.875em;

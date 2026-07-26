@@ -22,6 +22,9 @@
 - moved repo structure paragraph out of index into readme
 - added source syntax highlighting
 - replaced showSource custom macro with source truncation-capable markdown-it block extension
+- showSourceOptions.lineNumbers added to config for showSource
+- adding source highlights (wip)
+
 ## Frid 7-24
 
 - vitepress / vite config monkey business

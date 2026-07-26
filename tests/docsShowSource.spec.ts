@@ -40,6 +40,11 @@ function highlightedLineCount(html: string): number {
   return html.match(/class="line highlighted"/g)?.length ?? 0
 }
 
+function renderedLineNumbers(html: string): number[] {
+  return [...html.matchAll(/class="line-number">(\d+)/g)]
+    .map((match) => Number.parseInt(match[1], 10))
+}
+
 describe('showSource Markdown-it plugin', () => {
   beforeAll(async () => {
     fixtureRoot = await mkdtemp(path.join(os.tmpdir(), 'sdd-show-source-'))
@@ -55,7 +60,7 @@ describe('showSource Markdown-it plugin', () => {
     renderer = await createMarkdownRenderer(fixtureRoot, {
       config(md) {
         md.use(tabsMarkdownPlugin)
-        md.use(showSourceMarkdownPlugin)
+        md.use(showSourceMarkdownPlugin, { lineNumbers: true })
       }
     })
   })
@@ -81,6 +86,8 @@ describe('showSource Markdown-it plugin', () => {
     expect(result.includes).toEqual([sourcePath])
     expect(tokens.find((token) => token.type === 'fence')?.info)
       .toContain('[sample.ts]')
+    expect(renderedLineNumbers(result.html)[0]).toBe(1)
+    expect(renderedLineNumbers(result.html).at(-1)).toBe(100)
   })
 
   it('supports single and spaced multi-range highlights', async () => {
@@ -107,6 +114,10 @@ describe('showSource Markdown-it plugin', () => {
       expect(result.html).toContain(firstIncluded)
       expect(result.html).toContain(lastIncluded)
       expect(result.html).not.toContain(excluded)
+      const expectedStart = selection.startsWith('-')
+        ? 1
+        : Number.parseInt(selection.split('-')[0], 10)
+      expect(renderedLineNumbers(result.html)[0]).toBe(expectedStart)
     }
   )
 
@@ -175,6 +186,17 @@ describe('showSource Markdown-it plugin', () => {
     expect(result.includes).toEqual([])
   })
 
+  it('does not add line numbers to ordinary fenced code blocks', async () => {
+    const result = await render([
+      '```ts',
+      'const ordinaryFence = true',
+      '```'
+    ].join('\n'))
+
+    expect(result.html).not.toContain('line-numbers-mode')
+    expect(renderedLineNumbers(result.html)).toEqual([])
+  })
+
   it.each([
     ['showSource ./missing.ts', 'source file not found'],
     ['showSource ./sample.ts {lines 0-10}', 'positive integers'],
@@ -184,5 +206,21 @@ describe('showSource Markdown-it plugin', () => {
   ])('rejects invalid directive %s', async (directive, message) => {
     await expect(render(`${directive}\n`)).rejects.toThrow(message)
     await expect(render(`${directive}\n`)).rejects.toThrow(`${pagePath}:1`)
+  })
+
+  it('can disable showSource line numbers independently of VitePress', async () => {
+    disposeMdItInstance()
+    renderer = await createMarkdownRenderer(fixtureRoot, {
+      lineNumbers: true,
+      config(md) {
+        md.use(tabsMarkdownPlugin)
+        md.use(showSourceMarkdownPlugin, { lineNumbers: false })
+      }
+    })
+
+    const result = await render('showSource ./sample.ts {lines 60-70}\n')
+
+    expect(result.html).not.toContain('line-numbers-mode')
+    expect(renderedLineNumbers(result.html)).toEqual([])
   })
 })

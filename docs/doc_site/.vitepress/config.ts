@@ -6,7 +6,14 @@ import path from 'path'
 import lightbox from "vitepress-plugin-lightbox"
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import sddGrammar from '../../../editors/vscode-sdd/syntaxes/sdd.tmLanguage.json'
-import { showSourceMarkdownPlugin } from './markdown/showSource'
+import {
+  showSourceMarkdownPlugin,
+  type ShowSourceMarkdownOptions
+} from './markdown/showSource'
+
+const showSourceOptions = {
+  lineNumbers: true
+} satisfies ShowSourceMarkdownOptions
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -50,7 +57,7 @@ export default defineConfig({
       // use tabs plugin
       md.use(tabsMarkdownPlugin);
       // Render external source files, with optional excerpts and highlights.
-      md.use(showSourceMarkdownPlugin);
+      md.use(showSourceMarkdownPlugin, showSourceOptions);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
