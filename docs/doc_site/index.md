@@ -81,28 +81,4 @@ The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behin
 
 - [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/README.md>)
 
-## Current Status
-
-### Working Now
-
-- Solid v0.1 SDDT spec bundle
-- Completed initial compile-validate-render pipeline.
-- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, and Outcome-Opportunity Map
-- sdd-helper app available to assist agentic skills
-
-### Known Limitations
-
-- Journey Map renderer remains preview-only and is not yet polished staged output.
-- Styling for renderers lives in TypeScript source and should be in CSS files
-- Example corpus is spotty
-- No "simple" non-technical user guidance available yet
-
-### Current Focus
-
-- LLM integration (Skills, MCP Server)
-
-## Planned Additions
-
-- Solve renderers for more diagram types
-- Possibly standalone SDDT file server?
 

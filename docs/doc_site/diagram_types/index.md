@@ -77,7 +77,7 @@ This page collects the current diagram families, their status, and links to avai
   ::: details scenario_branching_example <Badge type="info" text="Simple Profile" vertical="top" />
   
   :::tabs
-  == Diagram
+  == Scenario Flow Diagram
   ![svg](../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/simple_profile/scenario_branching.scenario_flow.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/
@@ -94,31 +94,31 @@ This page collects the current diagram families, their status, and links to avai
   ::: details outcome_to_ia_trace_example <Badge type="info" text="Strict Profile" vertical="top" />
   
   :::tabs
-  == Diagram
+  == Outcome-Opportunity Map Diagram
   ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd
+  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {3, 9, 12, 19, 20, 23, 29, 32, 37, 38, 84}
   :::
 
   ::: details metric_event_instrumentation_example <Badge type="info" text="Simple Profile" vertical="top" />
   
   :::tabs
-  == Diagram
+  == Outcome-Opportunity Map Diagram
   ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/simple_profile/metric_event_instrumentation.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd
+  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd {3, 9, 10, 13, 20, 21, 24, 31, 32, 35, 41, 44, 49, 50}
   :::
 
   ::: details multiple_outcomes <Badge type="info" text="Simple Profile" vertical="top" />
   
   :::tabs
-  == Diagram
+  == Outcome-Opportunity Map Diagram
   ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/simple_profile/multiple_outcomes.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd
+  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd {}
   :::
 
 ## Service Blueprint:
@@ -133,7 +133,7 @@ This page collects the current diagram families, their status, and links to avai
   ::: details Service Blueprint Slice example <Badge type="info" text="Strict Profile" vertical="top" />
   
   :::tabs
-  == Diagram
+  == Service Blueprint Diagram
   ![svg](../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/strict_profile/service_blueprint_slice.service_blueprint.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/

@@ -23,6 +23,7 @@
 - added source syntax highlighting
 - replaced showSource custom macro with source truncation-capable markdown-it block extension
 - showSourceOptions.lineNumbers added to config for showSource
+- removed Current Status section from main index
 - adding source highlights (wip)
 
 ## Frid 7-24
