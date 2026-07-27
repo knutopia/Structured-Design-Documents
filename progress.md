@@ -17,10 +17,14 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
 ## Mon 7-27
 
 - Created RM_bup of main readme
 - Deleted spurious vitePress files
+- Merged website into main
+- Fixed gitignore
+
 
 ## Sun 7-26
 
