@@ -22,6 +22,7 @@
 - Created RM_bup of main readme
 - Deleted spurious vitePress files
 - Improved SVG font rendering by adding 600 weight
+- Refreshed small app and billSage examples with better font rendering
 
 ## Sun 7-26
 

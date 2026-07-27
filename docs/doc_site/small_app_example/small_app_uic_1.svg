@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1552" height="574" viewBox="0 0 1552 574" class="staged-svg view-ia_place_map profile-simple theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="888" height="1316" viewBox="0 0 888 1316" class="staged-svg view-ui_contracts profile-simple theme-default theme-revision-public-sans-v0-2" data-view-id="ui_contracts" data-profile-id="simple" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -52,185 +52,211 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1552" height="574" rx="18" ry="18"/>
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ui_contracts" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome" x="0" y="0" width="888" height="1316" rx="18" ry="18"/>
     </g>
-    <g id="scene-container-a-200" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-200" data-role="area">
-      <rect class="scene-container__chrome" x="240" y="24" width="296" height="526" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="240" y="24" width="296" height="40" rx="16" ry="16"/>
+    <g id="scene-container-p-100" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-100" data-role="place">
+      <rect class="scene-container__chrome" x="24" y="24" width="840" height="272" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="24" width="840" height="40" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-a-300" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-300" data-role="area">
-      <rect class="scene-container__chrome" x="584" y="24" width="200" height="138" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="584" y="24" width="200" height="40" rx="16" ry="16"/>
+    <g id="scene-container-p-210" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-210" data-role="place">
+      <rect class="scene-container__chrome" x="24" y="324" width="840" height="408" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="324" width="840" height="40" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-a-400" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-400" data-role="area">
-      <rect class="scene-container__chrome" x="832" y="24" width="200" height="138" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="832" y="24" width="200" height="40" rx="16" ry="16"/>
+    <g id="scene-container-view_state_graph-p-210" class="scene-container primitive-cluster role-view_state_graph paint-chrome synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-210" data-role="view_state_graph">
+      <rect class="scene-container__chrome" x="36" y="376" width="632" height="280" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="36" y="376" width="632" height="40" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-a-500" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-500" data-role="area">
-      <rect class="scene-container__chrome" x="1080" y="24" width="200" height="138" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="1080" y="24" width="200" height="40" rx="16" ry="16"/>
+    <g id="scene-container-p-220" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-220" data-role="place">
+      <rect class="scene-container__chrome" x="24" y="760" width="840" height="312" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="760" width="840" height="40" rx="16" ry="16"/>
     </g>
-    <g id="scene-container-a-600" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-600" data-role="area">
-      <rect class="scene-container__chrome" x="1328" y="24" width="200" height="158" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="1328" y="24" width="200" height="40" rx="16" ry="16"/>
+    <g id="scene-container-view_state_graph-p-220" class="scene-container primitive-cluster role-view_state_graph paint-chrome synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-220" data-role="view_state_graph">
+      <rect class="scene-container__chrome" x="36" y="812" width="576" height="248" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="36" y="812" width="576" height="40" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-p-230" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-230" data-role="place">
+      <rect class="scene-container__chrome" x="24" y="1100" width="840" height="192" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="24" y="1100" width="840" height="40" rx="16" ry="16"/>
+    </g>
+    <g id="scene-container-view_state_graph-p-230" class="scene-container primitive-cluster role-view_state_graph paint-chrome synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-230" data-role="view_state_graph">
+      <rect class="scene-container__chrome" x="36" y="1152" width="582" height="128" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="36" y="1152" width="582" height="40" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-p-100" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-100" data-role="place">
-      <rect class="scene-node__chrome" x="24" y="24" width="168" height="66" rx="14" ry="14"/>
+    <g id="scene-node-c-100" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-100" data-role="component">
+      <rect class="scene-node__chrome" x="36" y="76" width="168" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-110" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-110" data-role="place">
-      <rect class="scene-node__chrome" x="24" y="122" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-c-110" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-110" data-role="component">
+      <rect class="scene-node__chrome" x="36" y="156" width="168" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-210" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-210" data-role="place">
-      <rect class="scene-node__chrome" x="256" y="80" width="168" height="86" rx="14" ry="14"/>
+    <g id="scene-node-c-900" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-900" data-role="component">
+      <rect class="scene-node__chrome" x="36" y="236" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-220" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-220" data-role="place">
-      <rect class="scene-node__chrome" x="304" y="198" width="168" height="48" rx="14" ry="14"/>
+    <g id="scene-node-vs-210a" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-210a" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="428" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-221" class="scene-node primitive-card role-place paint-nodes place nested_place depth-2" data-item-id="P-221" data-role="place">
-      <rect class="scene-node__chrome" x="352" y="278" width="168" height="64" rx="14" ry="14"/>
+    <g id="scene-node-vs-210b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-210b" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="496" width="168" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-222" class="scene-node primitive-card role-place paint-nodes place nested_place depth-2" data-item-id="P-222" data-role="place">
-      <rect class="scene-node__chrome" x="352" y="374" width="168" height="64" rx="14" ry="14"/>
+    <g id="scene-node-vs-210c" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-210c" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="580" width="224" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-230" class="scene-node primitive-card role-place paint-nodes place nested_place depth-1" data-item-id="P-230" data-role="place">
-      <rect class="scene-node__chrome" x="304" y="470" width="168" height="64" rx="14" ry="14"/>
+    <g id="scene-node-c-230" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-230" data-role="component">
+      <rect class="scene-node__chrome" x="684" y="376" width="168" height="64" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-310" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-310" data-role="place">
-      <rect class="scene-node__chrome" x="600" y="80" width="168" height="66" rx="14" ry="14"/>
+    <g id="scene-node-c-220" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-220" data-role="component">
+      <rect class="scene-node__chrome" x="36" y="672" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-410" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-410" data-role="place">
-      <rect class="scene-node__chrome" x="848" y="80" width="168" height="66" rx="14" ry="14"/>
+    <g id="scene-node-c-900" class="scene-node primitive-card role-component paint-nodes semantic_node shape-box" data-item-id="C-900" data-role="component">
+      <rect class="scene-node__chrome" x="684" y="672" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-510" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-510" data-role="place">
-      <rect class="scene-node__chrome" x="1096" y="80" width="168" height="66" rx="14" ry="14"/>
+    <g id="scene-node-vs-220a" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-220a" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="864" width="168" height="48" rx="14" ry="14"/>
     </g>
-    <g id="scene-node-p-610" class="scene-node primitive-card role-place paint-nodes place root_place depth-0" data-item-id="P-610" data-role="place">
-      <rect class="scene-node__chrome" x="1344" y="80" width="168" height="86" rx="14" ry="14"/>
+    <g id="scene-node-vs-220b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-220b" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="932" width="168" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-vs-220c" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-220c" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="1000" width="168" height="48" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-vs-230a" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-230a" data-role="viewstate">
+      <rect class="scene-node__chrome" x="49" y="1204" width="168" height="64" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-vs-230b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-230b" data-role="viewstate">
+      <rect class="scene-node__chrome" x="243" y="1204" width="168" height="64" rx="14" ry="14"/>
+    </g>
+    <g id="scene-node-vs-230c" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shape-box chrome-dashed" data-item-id="VS-230c" data-role="viewstate">
+      <rect class="scene-node__chrome" x="437" y="1204" width="168" height="64" rx="14" ry="14"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-100" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="52">
+    <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-100" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="50">
           <tspan x="36" dy="0">Dashboard</tspan>
         </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="36" y="74">
-          <tspan x="36" dy="0">primary_nav: true</tspan>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shape-box" data-item-id="C-100" data-role="component">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="104">
+          <tspan x="48" dy="0">Projects Status</tspan>
+          <tspan x="48" dy="20">Summary</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-110" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="150">
-          <tspan x="36" dy="0">Report View</tspan>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shape-box" data-item-id="C-110" data-role="component">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="184">
+          <tspan x="48" dy="0">Priority List of</tspan>
+          <tspan x="48" dy="20">Tasks</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-200" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="256" y="50">
-          <tspan x="256" dy="0">Projections</tspan>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shape-box" data-item-id="C-900" data-role="component">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="264">
+          <tspan x="48" dy="0">Global Navigation</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-210" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="268" y="108">
-          <tspan x="268" dy="0">Projections</tspan>
-          <tspan x="268" dy="20">Overview</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="268" y="150">
-          <tspan x="268" dy="0">primary_nav: true</tspan>
+    <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-210" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="350">
+          <tspan x="36" dy="0">Projects Overview</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-220" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="316" y="226">
-          <tspan x="316" dy="0">Projection</tspan>
+    <g class="scene-container primitive-cluster role-view_state_graph paint-labels synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-210" data-role="view_state_graph">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="402">
+          <tspan x="48" dy="0">ViewState Graph</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-2" data-item-id="P-221" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="364" y="306">
-          <tspan x="364" dy="0">Fee Schedule</tspan>
-          <tspan x="364" dy="20">Scenario Details</tspan>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-210a" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="456">
+          <tspan x="61" dy="0">Project List</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-2" data-item-id="P-222" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="364" y="402">
-          <tspan x="364" dy="0">Funding Scenario</tspan>
-          <tspan x="364" dy="20">Details</tspan>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-210b" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="524">
+          <tspan x="61" dy="0">Duplicate Project</tspan>
+          <tspan x="61" dy="20">Dialog</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place nested_place depth-1" data-item-id="P-230" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="316" y="498">
-          <tspan x="316" dy="0">Create New</tspan>
-          <tspan x="316" dy="20">Projection</tspan>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-210c" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="608">
+          <tspan x="61" dy="0">Delete Project</tspan>
+          <tspan x="61" dy="20">Confirmation Dialog</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-300" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="600" y="50">
-          <tspan x="600" dy="0">Current Bills</tspan>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shape-box" data-item-id="C-230" data-role="component">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="696" y="404">
+          <tspan x="696" dy="0">Contextual Actions</tspan>
+          <tspan x="696" dy="20">for List of Projects</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-310" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="612" y="108">
-          <tspan x="612" dy="0">Current Bills</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="612" y="130">
-          <tspan x="612" dy="0">primary_nav: true</tspan>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shape-box" data-item-id="C-220" data-role="component">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="700">
+          <tspan x="48" dy="0">Overview Actions</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-400" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="848" y="50">
-          <tspan x="848" dy="0">Review</tspan>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shape-box" data-item-id="C-900" data-role="component">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="696" y="700">
+          <tspan x="696" dy="0">Global Navigation</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-410" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="860" y="108">
-          <tspan x="860" dy="0">Review Past Bills</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="860" y="130">
-          <tspan x="860" dy="0">primary_nav: true</tspan>
+    <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-220" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="786">
+          <tspan x="36" dy="0">Project</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-500" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1096" y="50">
-          <tspan x="1096" dy="0">Accounts</tspan>
+    <g class="scene-container primitive-cluster role-view_state_graph paint-labels synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-220" data-role="view_state_graph">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="838">
+          <tspan x="48" dy="0">ViewState Graph</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-510" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1108" y="108">
-          <tspan x="1108" dy="0">Manage Accounts</tspan>
-        </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="1108" y="130">
-          <tspan x="1108" dy="0">primary_nav: true</tspan>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-220a" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="892">
+          <tspan x="61" dy="0">Overview Tab</tspan>
         </text>
     </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-600" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1344" y="50">
-          <tspan x="1344" dy="0">Fee Schedules</tspan>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-220b" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="960">
+          <tspan x="61" dy="0">Behavior Tab</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-place paint-labels place root_place depth-0" data-item-id="P-610" data-role="place">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="1356" y="108">
-          <tspan x="1356" dy="0">Manage Fee</tspan>
-          <tspan x="1356" dy="20">Schedules</tspan>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-220c" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="1028">
+          <tspan x="61" dy="0">Dataset Tab</tspan>
         </text>
-      <text class="scene-text text-role-metadata block-kind-metadata block-region-primary" x="1356" y="150">
-          <tspan x="1356" dy="0">primary_nav: true</tspan>
+    </g>
+    <g class="scene-container primitive-cluster role-place paint-labels place scope" data-item-id="P-230" data-role="place">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="36" y="1126">
+          <tspan x="36" dy="0">Create New Project</tspan>
+        </text>
+    </g>
+    <g class="scene-container primitive-cluster role-view_state_graph paint-labels synthetic transition_graph view_state_graph" data-item-id="view_state_graph:P-230" data-role="view_state_graph">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="48" y="1178">
+          <tspan x="48" dy="0">ViewState Graph</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-230a" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="61" y="1232">
+          <tspan x="61" dy="0">Create New</tspan>
+          <tspan x="61" dy="20">Project Step 1</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-230b" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="255" y="1232">
+          <tspan x="255" dy="0">Create New</tspan>
+          <tspan x="255" dy="20">Project Step 2</tspan>
+        </text>
+    </g>
+    <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shape-box chrome-dashed" data-item-id="VS-230c" data-role="viewstate">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="449" y="1232">
+          <tspan x="449" dy="0">Create New</tspan>
+          <tspan x="449" dy="20">Project Step 3</tspan>
         </text>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-p-100__nav__p-110" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge merged_navigation direct_vertical" data-edge-id="P-100__nav__P-110" data-role="contains_navigation">
-      <path class="scene-edge__path" d="M 48 90 L 48 122" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-transitions_to-vs-230a--vs-230b" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-230a-&gt;VS-230b" data-role="transitions_to">
+      <path class="scene-edge__path" d="M 217 1236 L 243 1236" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-p-220__nav__p-221" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge merged_navigation shared_trunk" data-edge-id="P-220__nav__P-221" data-role="contains_navigation">
-      <path class="scene-edge__path" d="M 328 246 L 328 310 L 352 310" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-p-220__nav__p-222" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge merged_navigation shared_trunk" data-edge-id="P-220__nav__P-222" data-role="contains_navigation">
-      <path class="scene-edge__path" d="M 328 246 L 328 406 L 352 406" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-p-210__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-210__nav__P-220" data-role="navigation">
-      <path class="scene-edge__path" d="M 280 166 L 280 222 L 304 222" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-p-210__nav__p-230" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-210__nav__P-230" data-role="navigation">
-      <path class="scene-edge__path" d="M 280 166 L 280 502 L 304 502" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-transitions_to-vs-230b--vs-230c" class="scene-edge role-transitions_to route-orthogonal paint-edges free_edge" data-edge-id="transitions_to:VS-230b-&gt;VS-230c" data-role="transitions_to">
+      <path class="scene-edge__path" d="M 411 1236 L 437 1236" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
