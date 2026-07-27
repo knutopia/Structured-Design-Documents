@@ -17,6 +17,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mond 7-27
+
+- Created RM_bup of main readme
+- Deleted spurious vitePress files
+
 ## Fri 7-24
 
 - Updated journey map file statuses to Done
