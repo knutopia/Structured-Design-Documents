@@ -1,7 +1,6 @@
 # Rendered Example Corpus
 
 This directory is generated from the canonical bundle examples and committed as a reviewer-friendly reference corpus.
-Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.
 
 Regenerate it with:
 
@@ -16,12 +15,12 @@ Curated view/example pairs:
 - `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
 - `outcome_opportunity_map_diagram_type/multiple_outcomes_example`
 - `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`
-- `journey_map_diagram_type [preview_only]/outcome_to_ia_trace_example`
+- `journey_map_diagram_type/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/outcome_to_ia_trace_example`
 - `ia_place_map_diagram_type/place_viewstate_transition_example`
 - `ui_contracts_diagram_type/place_viewstate_transition_example`
 - `scenario_flow_diagram_type/scenario_branching_example`
-- `journey_map_diagram_type [preview_only]/service_blueprint_slice_example`
+- `journey_map_diagram_type/service_blueprint_slice_example`
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
 - `ui_contracts_diagram_type/ui_state_fallback_example`
 
@@ -75,3 +74,12 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show endpoint-side selection and initial connector templates
 - additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show gutter-aware provisional routes before final expansion and label placement
 - legacy Graphviz preview siblings remain committed for side-by-side comparison
+
+`journey_map` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing
+- strict and permissive profiles show resolved opportunity badges while simple remains title-focused
+- explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path
+- focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior
+- residual perpendicular crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings
+- dense topologies can remain difficult to trace, and global straight-horizontal connector simplification remains deferred

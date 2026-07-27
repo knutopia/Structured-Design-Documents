@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
+import type { Bundle } from "../src/bundle/types.js";
 import { projectView } from "../src/projector/projectView.js";
 import { normalizeLineEndings } from "./textNormalization.js";
 
@@ -37,4 +38,43 @@ describe("projectView projection snapshots", () => {
       }
     }
   }, 15000);
+
+  it("uses the journey bundle reference sort instead of a hidden projection default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const compiled = compileSource({
+      path: "journey-reference-sort.sdd",
+      text: [
+        "SDD-TEXT 0.1",
+        "",
+        'Opportunity OP-100 "Clear total cost"',
+        "END",
+        "",
+        'Opportunity OP-200 "Confidence before commitment"',
+        "END",
+        "",
+        'Step J-201 "Review the recommendation"',
+        '  opportunity_refs="OP-200, OP-100"',
+        "END",
+        ""
+      ].join("\n")
+    }, bundle);
+
+    expect(compiled.diagnostics).toEqual([]);
+    expect(compiled.graph).toBeDefined();
+
+    const configured = projectView(compiled.graph!, bundle, "journey_map");
+    const configuredReferences = configured.projection?.derived.node_annotations[0]?.references ?? [];
+    expect(configuredReferences.map((reference) => reference.target_id)).toEqual(["OP-100", "OP-200"]);
+
+    const authoredOrderBundle = structuredClone(bundle) as Bundle;
+    const journeyView = authoredOrderBundle.views.views.find((view) => view.id === "journey_map");
+    const referenceAnnotations = journeyView?.conventions.renderer_defaults?.reference_annotations as
+      | Record<string, unknown>
+      | undefined;
+    delete referenceAnnotations?.sort;
+
+    const authoredOrder = projectView(compiled.graph!, authoredOrderBundle, "journey_map");
+    const authoredOrderReferences = authoredOrder.projection?.derived.node_annotations[0]?.references ?? [];
+    expect(authoredOrderReferences.map((reference) => reference.target_id)).toEqual(["OP-200", "OP-100"]);
+  });
 });

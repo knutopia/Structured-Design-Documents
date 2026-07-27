@@ -46,7 +46,6 @@ function buildReadmeContent(
     "# Rendered Example Corpus",
     "",
     "This directory is generated from the canonical bundle examples and committed as a reviewer-friendly reference corpus.",
-    "Folders suffixed with `[preview_only]` are committed for inspection/reference during renderer migration and are not yet ready as polished example output.",
     "",
     "Regenerate it with:",
     "",
@@ -123,6 +122,15 @@ function buildReadmeContent(
   lines.push("- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show endpoint-side selection and initial connector templates");
   lines.push("- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show gutter-aware provisional routes before final expansion and label placement");
   lines.push("- legacy Graphviz preview siblings remain committed for side-by-side comparison");
+  lines.push("");
+  lines.push("`journey_map` visual review checklist:");
+  lines.push("");
+  lines.push("- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing");
+  lines.push("- strict and permissive profiles show resolved opportunity badges while simple remains title-focused");
+  lines.push("- explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path");
+  lines.push("- focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior");
+  lines.push("- residual perpendicular crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings");
+  lines.push("- dense topologies can remain difficult to trace, and global straight-horizontal connector simplification remains deferred");
   lines.push("");
 
   return lines.join("\n");

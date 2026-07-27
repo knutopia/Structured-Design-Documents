@@ -82,6 +82,74 @@ function detectCycleNodeIds(edges: CompiledEdge[]): string[] {
   return [...cycleNodes].sort();
 }
 
+function detectCyclicComponents(edges: CompiledEdge[]): string[][] {
+  const adjacency = new Map<string, Set<string>>();
+  const selfLoopNodeIds = new Set<string>();
+  for (const edge of edges) {
+    const targets = adjacency.get(edge.from) ?? new Set<string>();
+    targets.add(edge.to);
+    adjacency.set(edge.from, targets);
+    if (!adjacency.has(edge.to)) {
+      adjacency.set(edge.to, new Set());
+    }
+    if (edge.from === edge.to) {
+      selfLoopNodeIds.add(edge.from);
+    }
+  }
+
+  let nextIndex = 0;
+  const indices = new Map<string, number>();
+  const lowLinks = new Map<string, number>();
+  const stack: string[] = [];
+  const onStack = new Set<string>();
+  const cyclicComponents: string[][] = [];
+
+  const visit = (nodeId: string): void => {
+    const nodeIndex = nextIndex;
+    nextIndex += 1;
+    indices.set(nodeId, nodeIndex);
+    lowLinks.set(nodeId, nodeIndex);
+    stack.push(nodeId);
+    onStack.add(nodeId);
+
+    const targets = [...(adjacency.get(nodeId) ?? [])].sort((left, right) => left.localeCompare(right));
+    for (const targetId of targets) {
+      if (!indices.has(targetId)) {
+        visit(targetId);
+        lowLinks.set(nodeId, Math.min(lowLinks.get(nodeId)!, lowLinks.get(targetId)!));
+      } else if (onStack.has(targetId)) {
+        lowLinks.set(nodeId, Math.min(lowLinks.get(nodeId)!, indices.get(targetId)!));
+      }
+    }
+
+    if (lowLinks.get(nodeId) !== indices.get(nodeId)) {
+      return;
+    }
+
+    const component: string[] = [];
+    while (stack.length > 0) {
+      const memberId = stack.pop()!;
+      onStack.delete(memberId);
+      component.push(memberId);
+      if (memberId === nodeId) {
+        break;
+      }
+    }
+    component.sort((left, right) => left.localeCompare(right));
+    if (component.length > 1 || selfLoopNodeIds.has(component[0]!)) {
+      cyclicComponents.push(component);
+    }
+  };
+
+  for (const nodeId of [...adjacency.keys()].sort((left, right) => left.localeCompare(right))) {
+    if (!indices.has(nodeId)) {
+      visit(nodeId);
+    }
+  }
+
+  return cyclicComponents.sort((left, right) => left.join("\u0000").localeCompare(right.join("\u0000")));
+}
+
 function nodeProperty(node: CompiledNode | undefined, property: string): string | undefined {
   return node?.props[property];
 }
@@ -213,28 +281,66 @@ export const maxIncomingEdges: RuleExecutor = (context, rule, logic, severity) =
 
 export const cyclicFlowPolicy: RuleExecutor = (context, rule, logic, severity) => {
   const relationship = typeof logic.relationship === "string" ? logic.relationship : "";
-  const cycleNodes = detectCycleNodeIds(getRelationshipEdges(context, relationship));
-  if (cycleNodes.length === 0) {
+  const relationshipEdges = getRelationshipEdges(context, relationship);
+  const cyclicComponents = detectCyclicComponents(relationshipEdges);
+  if (cyclicComponents.length === 0) {
     return [];
   }
 
   const markerProperty = typeof logic.loop_annotation_prop === "string" ? logic.loop_annotation_prop : "kind";
   const markerValue = typeof logic.loop_annotation_value === "string" ? logic.loop_annotation_value : "loop";
-  const annotated = cycleNodes.some((nodeId) => nodeProperty(context.index.nodesById.get(nodeId), markerProperty) === markerValue);
-  if (annotated) {
-    return [];
+  const markerTarget = logic.loop_annotation_target ?? "node";
+  const coverage = logic.loop_annotation_coverage === undefined
+    ? "any_cyclic_component"
+    : logic.loop_annotation_coverage;
+  const annotatedComponents = cyclicComponents.map((component) => {
+    if (markerTarget === "node") {
+      return component.some(
+        (nodeId) => nodeProperty(context.index.nodesById.get(nodeId), markerProperty) === markerValue
+      );
+    }
+
+    if (markerTarget !== "edge") {
+      return false;
+    }
+
+    const componentNodeIds = new Set(component);
+    return relationshipEdges.some(
+      (edge) => componentNodeIds.has(edge.from)
+        && componentNodeIds.has(edge.to)
+        && edge.props[markerProperty] === markerValue
+    );
+  });
+  const markerLocation = markerTarget === "edge" ? "an edge property" : "a node property";
+  if (coverage === "any_cyclic_component") {
+    if (annotatedComponents.some(Boolean)) {
+      return [];
+    }
+    return [
+      createDiagnostic(
+        context,
+        severity,
+        `validate.${rule.id}`,
+        `Relationship '${relationship}' contains a cycle without ${markerLocation} '${markerProperty}=${markerValue}' marker`,
+        rule.id,
+        [...new Set(cyclicComponents.flat())].sort((left, right) => left.localeCompare(right))
+      )
+    ];
   }
 
-  return [
-    createDiagnostic(
+  return cyclicComponents.flatMap((component, index) => {
+    if (annotatedComponents[index]) {
+      return [];
+    }
+    return createDiagnostic(
       context,
       severity,
       `validate.${rule.id}`,
-      `Relationship '${relationship}' contains a cycle without a '${markerProperty}=${markerValue}' marker`,
+      `Relationship '${relationship}' contains a cyclic component without ${markerLocation} '${markerProperty}=${markerValue}' marker`,
       rule.id,
-      cycleNodes
-    )
-  ];
+      component
+    );
+  });
 };
 
 export const optionalAnnotations: RuleExecutor = () => [];

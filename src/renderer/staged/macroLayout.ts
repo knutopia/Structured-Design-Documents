@@ -32,6 +32,7 @@ import {
   type ElkAdaptedEdge
 } from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
+import { resolveGridCells } from "./gridLayout.js";
 import {
   buildLocalPatternRoute,
   offsetParallelOrthogonalRoute,
@@ -109,7 +110,12 @@ function roundMetric(value: number): number {
 
 function cloneLayoutIntent(layout: LayoutIntent): LayoutIntent {
   return {
-    ...layout
+    ...layout,
+    ...(layout.grid
+      ? { grid: {
+        placements: layout.grid.placements.map((placement) => ({ ...placement }))
+      } }
+      : {})
   };
 }
 
@@ -474,15 +480,23 @@ async function layoutGridContainer(
   _ownedEdges: MeasuredEdge[],
   context: LayoutContext
 ): Promise<ContainerLayoutResult> {
-  if (children.length === 0) {
-    return {
-      contentWidth: 0,
-      contentHeight: 0
-    };
+  const resolution = resolveGridCells(children.map((child) => child.id), container.layout);
+  if (resolution.invalidPlacementReasons.length > 0) {
+    context.diagnostics.push(
+      createLayoutDiagnostic(
+        "renderer.layout.invalid_grid_placements",
+        `Grid placements must cover every child exactly once using known item IDs and unique non-negative integer cells. Falling back to row-major placement.`,
+        {
+          targetId: container.id,
+          details: [
+            `reasons=${resolution.invalidPlacementReasons.join(",")}`,
+            `itemIds=${resolution.invalidPlacementItemIds.join(",")}`
+          ].join("; ")
+        }
+      )
+    );
   }
-
-  let columns = container.layout.columns;
-  if (!Number.isInteger(columns) || (columns ?? 0) < 1) {
+  if (resolution.invalidColumns) {
     context.diagnostics.push(
       createLayoutDiagnostic(
         "renderer.layout.invalid_grid_columns",
@@ -490,21 +504,28 @@ async function layoutGridContainer(
         { targetId: container.id }
       )
     );
-    columns = 1;
   }
 
-  const columnCount = Math.min(columns ?? 1, children.length);
-  const rowCount = Math.ceil(children.length / columnCount);
+  if (children.length === 0) {
+    return {
+      contentWidth: 0,
+      contentHeight: 0
+    };
+  }
+
   const gap = resolveGap(container);
   const crossAlignment = container.layout.crossAlignment ?? "start";
-  const columnWidths = Array.from({ length: columnCount }, () => 0);
-  const rowHeights = Array.from({ length: rowCount }, () => 0);
+  const columnWidths = Array.from({ length: resolution.columnCount }, () => 0);
+  const rowHeights = Array.from({ length: resolution.rowCount }, () => 0);
+  const cellByItemId = new Map(resolution.cells.map((cell) => [cell.itemId, cell] as const));
 
-  children.forEach((child, index) => {
-    const row = Math.floor(index / columnCount);
-    const column = index % columnCount;
-    columnWidths[column] = Math.max(columnWidths[column], child.width);
-    rowHeights[row] = Math.max(rowHeights[row], child.height);
+  children.forEach((child) => {
+    const cell = cellByItemId.get(child.id);
+    if (cell === undefined) {
+      return;
+    }
+    columnWidths[cell.column] = Math.max(columnWidths[cell.column], child.width);
+    rowHeights[cell.row] = Math.max(rowHeights[cell.row], child.height);
   });
 
   const columnOffsets = columnWidths.map((_, column) =>
@@ -514,11 +535,13 @@ async function layoutGridContainer(
     roundMetric(rowHeights.slice(0, row).reduce((sum, value) => sum + value, 0) + gap * row)
   );
 
-  children.forEach((child, index) => {
-    const row = Math.floor(index / columnCount);
-    const column = index % columnCount;
-    const cellWidth = columnWidths[column];
-    const cellHeight = rowHeights[row];
+  children.forEach((child) => {
+    const cell = cellByItemId.get(child.id);
+    if (cell === undefined) {
+      return;
+    }
+    const cellWidth = columnWidths[cell.column];
+    const cellHeight = rowHeights[cell.row];
 
     if (crossAlignment === "stretch" && child.kind === "container") {
       resizeContainerToCell(child, cellWidth, cellHeight, context);
@@ -531,13 +554,13 @@ async function layoutGridContainer(
       ? roundMetric((cellHeight - child.height) / 2)
       : 0;
 
-    child.x = roundMetric(columnOffsets[column] + xOffset);
-    child.y = roundMetric(rowOffsets[row] + yOffset);
+    child.x = roundMetric(columnOffsets[cell.column] + xOffset);
+    child.y = roundMetric(rowOffsets[cell.row] + yOffset);
   });
 
   return {
-    contentWidth: roundMetric(columnWidths.reduce((sum, value) => sum + value, 0) + gap * Math.max(columnCount - 1, 0)),
-    contentHeight: roundMetric(rowHeights.reduce((sum, value) => sum + value, 0) + gap * Math.max(rowCount - 1, 0))
+    contentWidth: roundMetric(columnWidths.reduce((sum, value) => sum + value, 0) + gap * Math.max(resolution.columnCount - 1, 0)),
+    contentHeight: roundMetric(rowHeights.reduce((sum, value) => sum + value, 0) + gap * Math.max(resolution.rowCount - 1, 0))
   };
 }
 

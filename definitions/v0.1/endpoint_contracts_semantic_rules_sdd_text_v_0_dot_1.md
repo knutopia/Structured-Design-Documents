@@ -96,7 +96,7 @@ Each relationship below defines:
 
 **Additional constraints:**
 - If `PRECEDES` is used to represent a *linear* flow, tooling MAY warn on cycles.
-- For loops (retry/recovery), cycles are allowed but SHOULD be annotated (e.g., edge prop `kind=loop`) (recommended).
+- For loops (retry/recovery), cycles are allowed but each cyclic component SHOULD contain an annotated edge (for example, edge prop `kind=loop`) (recommended). The bundle encodes this as `loop_annotation_target=edge` with `loop_annotation_coverage=each_cyclic_component`; tools must consume the configured target, property, value, and coverage generically.
 
 ---
 

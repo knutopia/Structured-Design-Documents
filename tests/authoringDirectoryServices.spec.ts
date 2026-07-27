@@ -104,6 +104,11 @@ describe("authoring directory services", () => {
         "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
         "docs/outcome_to_ia_trace.sdd"
       );
+      await copyFixture(
+        tempRepoRoot,
+        "tests/fixtures/render/journey_map_staged_primary.sdd",
+        "docs/journey_map_staged_primary.sdd"
+      );
 
       const workspace = createAuthoringWorkspace(tempRepoRoot);
       const svgResult = await renderPreview(workspace, bundle, {
@@ -170,6 +175,26 @@ describe("authoring directory services", () => {
         "outcome_to_ia_trace.ia_place_map.strict.staged_ia_place_map_preview.svg"
       );
       await rm(path.dirname(explicitBackendResult.artifact_path), { recursive: true, force: true });
+
+      const journeyResult = await renderPreview(workspace, bundle, {
+        path: "docs/journey_map_staged_primary.sdd",
+        view_id: "journey_map",
+        profile_id: "strict",
+        format: "svg"
+      });
+      expect(journeyResult.backend_id).toBe("staged_journey_map_preview");
+      expect(path.basename(journeyResult.artifact_path)).toBe(
+        "journey_map_staged_primary.journey_map.strict.svg"
+      );
+      expect(await readFile(journeyResult.artifact_path, "utf8"))
+        .toContain('class="staged-svg view-journey_map');
+      expect(journeyResult.diagnostics).toEqual(expect.arrayContaining([
+        expect.objectContaining({ code: "renderer.scene.journey_map_disconnected_chain" })
+      ]));
+      expect(journeyResult.diagnostics.some((diagnostic) =>
+        diagnostic.code === "renderer.routing.journey_map_unavoidable_crossing"
+      )).toBe(false);
+      await rm(path.dirname(journeyResult.artifact_path), { recursive: true, force: true });
     });
   });
 });

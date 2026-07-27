@@ -153,7 +153,8 @@ Preview backends now split by view:
 - `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, ELK-authoritative staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_scenario_flow_preview` is the default selected preview backend for `scenario_flow`; it owns the accepted custom staged lane-and-routing SVG emission and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_outcome_opportunity_map_preview` is the default selected preview backend for `outcome_opportunity_map`; it owns the staged semantic-lane scene, custom opportunity routing, staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
-- `legacy_graphviz_preview` remains the default preview backend for the remaining views and remains selectable for `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts`; it owns:
+- `staged_journey_map_preview` is the default selected preview backend for `journey_map`; it owns source-ordered Stage/Step placement, dedicated orthogonal `PRECEDES` routing, deterministic crossing-continuity marks, staged SVG emission, and staged PNG derivation from that exact SVG
+- `legacy_graphviz_preview` remains explicitly selectable for all six renderable views; it owns:
 
 - Graphviz-driven DOT-to-SVG layout
 - shared preview-style resolution from `views.yaml`
@@ -169,15 +170,12 @@ The current end-to-end renderable set keeps two output layers:
 - supported preview artifacts: SVG/PNG via `sdd show`
 - retained internal text artifacts: DOT/Mermaid for tests, corpus generation, and debugging
 
-Current CLI preview status by view:
-
-- preview-ready: `ia_place_map`, `ui_contracts`, `service_blueprint`, `scenario_flow`, `outcome_opportunity_map`
-- preview-only / not yet usable: `journey_map`
+Current CLI preview-ready views are `ia_place_map`, `ui_contracts`, `service_blueprint`, `scenario_flow`, `outcome_opportunity_map`, and `journey_map`.
 
 These views share one pattern:
 
 - each renderable view gets its own render-model builder
-- preview capability is modeled per artifact, with `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now defaulting SVG and PNG previews to staged backends and the remaining views routing those previews through `legacy_graphviz_preview`
+- preview capability is modeled per artifact, with all six renderable views defaulting SVG and PNG previews to staged backends and retaining explicit `legacy_graphviz_preview` alternatives
 - internal DOT/Mermaid text artifacts remain parallel emitters for tests, corpus generation, and debugging, not a layout-parity contract with Graphviz
 
 The per-view render models keep semantics centralized:
@@ -192,17 +190,20 @@ The per-view render models keep semantics centralized:
 - inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges, assigns those edges to an invisible label lane inside that gutter, and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
 - inside the staged renderer, `scenario_flow` now uses a custom lane-and-band layout with staged branch routing and debug corpus artifacts for pre-routing, edge-side selection, and gutter occupancy
 - inside the staged renderer, `outcome_opportunity_map` now uses deterministic semantic lanes plus staged opportunity routing with debug corpus artifacts for pre-routing, endpoint/template selection, and final gutter occupancy
+- inside the staged renderer, `journey_map` preserves source-ordered Stage/Step placement and first-parent ownership, then applies dedicated journey-only orthogonal routing, occupancy, bounded expansion, late endpoint ordering, and final crossing-continuity marks without an external routing engine
 
-Inside the staged renderer, `outcome_opportunity_map`, `ui_contracts`, and `scenario_flow` still keep renderer-stage goldens as internal contract coverage, but their accepted staged paths now also serve their public staged preview backends.
+Inside the staged renderer, `journey_map`, `outcome_opportunity_map`, `ui_contracts`, and `scenario_flow` keep renderer-stage goldens as internal contract coverage, and their accepted staged paths also serve their public staged preview backends.
+
+Dense Journey Maps may remain visually poor even when hard geometry passes; residual perpendicular crossings receive deterministic continuity marks and `renderer.routing.journey_map_unavoidable_crossing` warnings. A later shared-routing task must prefer a straight, single horizontal segment between unobstructed horizontally adjacent nodes. That is global staged-routing debt, not a journey-only patch.
 
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
 - `renderSource` still returns only internal DOT or Mermaid text artifacts
-- `sdd show` resolves preview output through a backend registry; `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now default to staged preview backends, and the remaining views still default to `legacy_graphviz_preview`
+- `sdd show` resolves preview output through a backend registry; all six renderable views default to staged preview backends
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
 - `sdd show --dot-out` remains an internal/debug option and automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
-- the staged renderer contracts and staged SVG backend still exist in parallel with internal text artifacts and legacy preview outputs; `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
+- the staged renderer contracts and staged SVG backend still exist in parallel with internal text artifacts and legacy preview outputs; all six renderable views exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel
 
 ## Determinism
 
@@ -250,7 +251,7 @@ The test suite uses the bundle examples as conformance fixtures.
 - validation tests assert zero errors for current manifest examples under `strict`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
 - render tests assert stable internal DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
-- staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON plus deterministic staged SVG fixtures under `tests/goldens/renderer-stages/` without changing current legacy outputs
+- staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON plus deterministic staged SVG and diagnostic fixtures under `tests/goldens/renderer-stages/` while preserving explicit legacy outputs; accepted Journey Map evidence includes meaningful pre-routing, step-2, step-3, and final stages
 - staged micro-layout tests cover wrapping, width-band escalation, clamping, secondary-area handling, and unknown-theme fallback
 - corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile internal `.dot`/`.mmd` artifacts alongside `.svg` and `.png` preview artifacts
 - negative fixtures cover syntax, compile, and validation failures

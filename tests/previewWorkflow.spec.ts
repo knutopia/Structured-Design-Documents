@@ -17,6 +17,14 @@ async function loadInput(fileName: string): Promise<{ path: string; text: string
   };
 }
 
+async function loadRenderFixture(fileName: string): Promise<{ path: string; text: string }> {
+  const filePath = path.join(repoRoot, "tests/fixtures/render", fileName);
+  return {
+    path: filePath,
+    text: await readFile(filePath, "utf8")
+  };
+}
+
 describe("preview workflow", () => {
   it("renders ia_place_map SVG previews through the staged backend by default", async () => {
     const bundle = await loadBundle(manifestPath);
@@ -310,6 +318,74 @@ describe("preview workflow", () => {
     expect(Array.from(result.artifact.bytes.slice(0, PNG_SIGNATURE.length))).toEqual(PNG_SIGNATURE);
     expect(result.artifact.bytes.length).toBeGreaterThan(32);
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders journey_map SVG previews through the staged backend with mapped diagnostics", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadRenderFixture("journey_map_staged_primary.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "journey_map",
+      format: "svg",
+      profileId: "strict"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_journey_map_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.diagnostics).toEqual([
+      expect.objectContaining({
+        stage: "render",
+        code: "renderer.scene.journey_map_disconnected_chain",
+        severity: "info"
+      })
+    ]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected staged journey SVG artifact.");
+    }
+    expect(result.artifact.text).toContain('class="staged-svg view-journey_map');
+    expect(result.artifact.text).toContain("Review the");
+    expect(result.artifact.text).not.toContain(" Q ");
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders journey_map PNG previews from the staged final scene by default", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadRenderFixture("journey_map_staged_primary.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "journey_map",
+      format: "png",
+      profileId: "strict"
+    });
+
+    expect(result.previewCapability.backendId).toBe("staged_journey_map_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("png");
+    if (!result.artifact || result.artifact.format !== "png") {
+      throw new Error("Expected staged journey PNG artifact.");
+    }
+    expect(Array.from(result.artifact.bytes.slice(0, PNG_SIGNATURE.length))).toEqual(PNG_SIGNATURE);
+    expect(result.artifact.bytes.length).toBeGreaterThan(32);
+    expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
+  });
+
+  it("renders journey_map SVG previews through the explicit legacy backend", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadRenderFixture("journey_map_staged_primary.sdd");
+    const result = await renderSourcePreview(input, bundle, {
+      viewId: "journey_map",
+      format: "svg",
+      profileId: "strict",
+      backendId: "legacy_graphviz_preview"
+    });
+
+    expect(result.previewCapability.backendId).toBe("legacy_graphviz_preview");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.artifact?.format).toBe("svg");
+    if (!result.artifact || result.artifact.format !== "svg") {
+      throw new Error("Expected legacy journey SVG artifact.");
+    }
+    expect(result.artifact.text).toContain("<svg");
+    expect(result.artifact.sourceArtifacts?.dot).toContain("digraph journey_map");
   });
 
   it("renders outcome_opportunity_map SVG previews through the explicit legacy backend", async () => {

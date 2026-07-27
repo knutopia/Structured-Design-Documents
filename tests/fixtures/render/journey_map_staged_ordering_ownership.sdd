@@ -1,0 +1,89 @@
+SDD-TEXT 0.1
+
+Stage G-600 "Authored-first secondary parent"
+  owner=Design
+  description="A Stage authored first but not selected as the shared Step owner"
+  order_index=10
+  CONTAINS J-601 "Enter secondary flow"
+  CONTAINS J-503 "Shared multiply-contained step"
+  CONTAINS J-602 "Leave secondary flow"
+  + Step J-601 "Enter secondary flow"
+    owner=Design
+    description="Enter the secondary authored Stage"
+    actor=User
+    intent="Enter the secondary flow"
+    success_criteria="The secondary flow is entered"
+    REALIZED_BY P-500 "Ordering proof surface"
+  END
+  + Step J-602 "Leave secondary flow"
+    owner=Design
+    description="Leave the secondary authored Stage"
+    actor=User
+    intent="Leave the secondary flow"
+    success_criteria="The secondary flow is left"
+    REALIZED_BY P-500 "Ordering proof surface"
+  END
+END
+
+Step J-590 "Root handoff"
+  owner=Design
+  description="An uncontained root handoff before the selected owner"
+  actor=User
+  intent="Receive a root handoff"
+  success_criteria="The handoff is understood"
+  REALIZED_BY P-500 "Ordering proof surface"
+END
+
+Step J-503 "Shared multiply-contained step"
+  owner=Design
+  description="A Step with two explicit Stage parents"
+  actor=User
+  intent="Exercise first-parent selection"
+  success_criteria="Exactly one rendered owner is selected"
+  PRECEDES J-501 "Last-authored child"
+  REALIZED_BY P-500 "Ordering proof surface"
+END
+
+Stage G-500 "Projected-first structural owner"
+  owner=Design
+  description="The canonical projection-first owner for the shared Step"
+  order_index=20
+  CONTAINS J-503 "Shared multiply-contained step"
+  CONTAINS J-502 "Middle-authored child"
+  CONTAINS J-501 "Last-authored child"
+  + Step J-502 "Middle-authored child"
+    owner=Design
+    description="The middle child in explicit CONTAINS edge-line order"
+    actor=User
+    intent="Remain in the middle position"
+    success_criteria="Middle placement is preserved"
+    REALIZED_BY P-500 "Ordering proof surface"
+  END
+  + Step J-501 "Last-authored child"
+    owner=Design
+    description="The final child in explicit CONTAINS edge-line order"
+    actor=User
+    intent="Expose a backward PRECEDES edge"
+    success_criteria="Source order remains unchanged"
+    PRECEDES J-502 "Middle-authored child"
+    REALIZED_BY P-500 "Ordering proof surface"
+  END
+END
+
+Step J-591 "Root return"
+  owner=Design
+  description="A later root Step that returns to an earlier root Step"
+  actor=User
+  intent="Return to the earlier handoff"
+  success_criteria="The backward root route remains visible"
+  PRECEDES J-590 "Root handoff"
+  REALIZED_BY P-500 "Ordering proof surface"
+END
+
+Place P-500 "Ordering proof surface"
+  owner=Design
+  description="Out-of-view realization target for ordering proof"
+  surface=web
+  route_or_key=/proof/journey-ordering
+  access=auth
+END

@@ -118,10 +118,37 @@ export type OutcomeOpportunityItemMetadata =
       parking: boolean;
     };
 
+export type JourneyMapItemMetadata =
+  | {
+      kind: "root";
+      rootItemIds: string[];
+      stageIds: string[];
+      globalStepIds: string[];
+    }
+  | {
+      kind: "stage";
+      rootOrder: number;
+      stageOrder: number;
+    }
+  | {
+      kind: "step";
+      rootOrder: number;
+      stageId?: string;
+      stageOrder?: number;
+      stepOrder?: number;
+      globalStepOrder: number;
+      uncontained: boolean;
+      progressionColumn?: number;
+      laneOrder?: number;
+      placementRole?: "linear" | "diamond_split" | "diamond_option" | "diamond_join";
+      branchGroupId?: string;
+    };
+
 export interface ViewMetadata {
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
   outcomeOpportunity?: OutcomeOpportunityItemMetadata;
+  journeyMap?: JourneyMapItemMetadata;
 }
 
 export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | undefined {
@@ -150,6 +177,47 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
           ...viewMetadata.outcomeOpportunity
         }
       }
+      : {}),
+    ...(viewMetadata.journeyMap
+      ? {
+        journeyMap: {
+          ...viewMetadata.journeyMap,
+          ...(viewMetadata.journeyMap.kind === "root"
+            ? {
+              rootItemIds: [...viewMetadata.journeyMap.rootItemIds],
+              stageIds: [...viewMetadata.journeyMap.stageIds],
+              globalStepIds: [...viewMetadata.journeyMap.globalStepIds]
+            }
+            : {})
+        }
+      }
+      : {})
+  };
+}
+
+export interface JourneyMapEdgeMetadata {
+  kind: "precedes";
+  authorOrder: number;
+  sameEndpointOrdinal: number;
+  exactIdentityOrdinal: number;
+}
+
+export interface EdgeViewMetadata {
+  journeyMap?: JourneyMapEdgeMetadata;
+}
+
+export function cloneEdgeViewMetadata(viewMetadata?: EdgeViewMetadata): EdgeViewMetadata | undefined {
+  if (viewMetadata === undefined) {
+    return undefined;
+  }
+
+  return {
+    ...(viewMetadata.journeyMap
+      ? {
+        journeyMap: {
+          ...viewMetadata.journeyMap
+        }
+      }
       : {})
   };
 }
@@ -161,12 +229,21 @@ export interface BoxSpacing {
   left: number;
 }
 
+export interface GridCellPlacement {
+  itemId: string;
+  row: number;
+  column: number;
+}
+
 export interface LayoutIntent {
   strategy: LayoutStrategy;
   direction?: LayoutDirection;
   gap?: number;
   crossAlignment?: CrossAlignment;
   columns?: number;
+  grid?: {
+    placements: GridCellPlacement[];
+  };
   elk?: {
     hierarchyHandling?: ElkHierarchyHandling;
     strict?: boolean;
@@ -200,6 +277,7 @@ export interface ContentBlock {
   kind: ContentBlockKind;
   text: string;
   textStyleRole: string;
+  region?: ContentRegion;
   priority?: ContentPriority;
 }
 
@@ -284,6 +362,7 @@ export interface SceneEdge {
   label?: EdgeLabelSpec;
   markers?: EdgeMarkers;
   ownerContainerId?: string;
+  viewMetadata?: EdgeViewMetadata;
 }
 
 export interface RendererScene {
@@ -390,6 +469,7 @@ export interface MeasuredEdge {
   label?: MeasuredEdgeLabel;
   markers?: EdgeMarkers;
   ownerContainerId?: string;
+  viewMetadata?: EdgeViewMetadata;
 }
 
 export interface MeasuredScene {
@@ -462,6 +542,16 @@ export interface PositionedRoute {
   points: Point[];
 }
 
+export interface PositionedEdgeContinuityMark {
+  id: string;
+  segmentIndex: number;
+  point: Point;
+  halfSpan: number;
+  rise: number;
+  normalDirection: -1 | 1;
+  underEdgeId: string;
+}
+
 export interface PositionedEdgeLabel {
   lines: string[];
   width: number;
@@ -479,6 +569,7 @@ export interface PositionedEdge {
   from: PositionedEdgeEndpoint;
   to: PositionedEdgeEndpoint;
   route: PositionedRoute;
+  continuityMarks?: PositionedEdgeContinuityMark[];
   label?: PositionedEdgeLabel;
   markers?: EdgeMarkers;
   paintGroup: PaintGroup;

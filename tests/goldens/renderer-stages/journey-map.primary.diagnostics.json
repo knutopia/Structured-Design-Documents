@@ -1,0 +1,10 @@
+[
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_disconnected_chain",
+    "severity": "info",
+    "message": "Journey map contains a disconnected secondary PRECEDES chain.",
+    "targetId": "J-250",
+    "details": "{\"relatedIds\":[\"J-250\",\"J-260\"]}"
+  }
+]

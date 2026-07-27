@@ -70,7 +70,6 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 To enable LLM workflow integration with SDD, we recently created a (Codex-) Skill, a helper-app that assists the skill, and shared authoring infrastructure that supports the helper app and the future future MCP server. 
 
 The current project mid-term goal is to create a SDD MCP server.
-The current short-term goal is to realize more staged graph types.
 
 ## Renderer Constraints
 

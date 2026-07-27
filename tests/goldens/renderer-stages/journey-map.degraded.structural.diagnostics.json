@@ -1,0 +1,50 @@
+[
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_edge_duplicated",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" appears 2 times with the same stable ID.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_edge_omitted",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" could not be reconstructed after endpoint resolution.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unresolved_endpoint",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" could not resolve its required east source endpoint.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\",\"J-101\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unresolved_endpoint",
+    "severity": "error",
+    "message": "Journey edge \"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\" references a missing positioned Step.",
+    "targetId": "J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0",
+    "details": "{\"relatedIds\":[\"J-101__PRECEDES__J-102__a9481962fc4767194c5d1d0bfceb0aa4486a1c602f73328daf75bc96c9c0bcbb__0\",\"J-missing\"]}"
+  },
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_disconnected_chain",
+    "severity": "info",
+    "message": "Journey map contains a disconnected secondary PRECEDES chain.",
+    "targetId": "J-250",
+    "details": "{\"relatedIds\":[\"J-250\",\"J-260\"]}"
+  },
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_duplicate_edge_id",
+    "severity": "error",
+    "message": "Journey scene edge ID J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0 occurs more than once.",
+    "targetId": "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0",
+    "details": "{\"relatedIds\":[\"J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0\"]}"
+  }
+]

@@ -1,0 +1,31 @@
+SDD-TEXT 0.1
+
+Step J-801 "Choose a route"
+  owner=Design
+  description="Author three same-endpoint PRECEDES occurrences"
+  actor=User
+  intent="Choose how to continue"
+  success_criteria="Every authored occurrence remains identifiable"
+  kind=decision
+  PRECEDES J-802 "Continue guided" {advisor_available} channel=guided
+  PRECEDES J-802 "Continue alone" {self_service} channel=self_service
+  PRECEDES J-802 "Different non-semantic hint" {advisor_available} channel=guided
+  REALIZED_BY P-800 "Duplicate proof surface"
+END
+
+Step J-802 "Continue"
+  owner=Design
+  description="Receive all same-endpoint occurrences"
+  actor=User
+  intent="Continue through the selected route"
+  success_criteria="Every route arrives distinctly"
+  REALIZED_BY P-800 "Duplicate proof surface"
+END
+
+Place P-800 "Duplicate proof surface"
+  owner=Design
+  description="Out-of-view realization target for duplicate proof"
+  surface=web
+  route_or_key=/proof/journey-duplicate
+  access=auth
+END

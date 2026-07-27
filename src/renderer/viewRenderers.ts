@@ -111,6 +111,19 @@ const stagedIaPlaceMapPreviewArtifacts: PreviewArtifactCapability[] = [
   }
 ];
 
+const stagedJourneyMapPreviewArtifacts: PreviewArtifactCapability[] = [
+  {
+    format: "svg",
+    backendId: "staged_journey_map_preview",
+    backendClass: "staged"
+  },
+  {
+    format: "png",
+    backendId: "staged_journey_map_preview",
+    backendClass: "staged"
+  }
+];
+
 const stagedUiContractsPreviewArtifacts: PreviewArtifactCapability[] = [
   {
     format: "svg",
@@ -203,12 +216,24 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
 };
 
 const journeyMapRenderer: ViewTextRenderer = {
-  capability: dotAndMermaidPreviewCapability(),
+  capability: {
+    textArtifacts: legacyTextArtifacts.map((artifact) => ({ ...artifact })),
+    previewArtifacts: [
+      ...stagedJourneyMapPreviewArtifacts.map((artifact) => ({ ...artifact })),
+      ...legacyPreviewArtifacts.map((artifact) => ({ ...artifact }))
+    ],
+    defaultPreviewFormat: "svg",
+    defaultPreviewBackends: {
+      svg: "staged_journey_map_preview",
+      png: "staged_journey_map_preview"
+    }
+  },
   render: (projection, graph, bundle, view, format, profileId) => {
     const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
     const model = buildJourneyMapRenderModel(
       projection,
       graph,
+      bundle,
       view.projection.hierarchy_edges ?? [],
       view.projection.ordering_edges ?? [],
       displayPolicy

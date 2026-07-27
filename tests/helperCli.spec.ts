@@ -2785,6 +2785,47 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("forwards explicit journey_map staged preview backend requests", async () => {
+    const explicitBackend = "staged_journey_map_preview" satisfies NonNullable<RenderPreviewArgs["backend_id"]>;
+    const renderPreview = vi.fn(async (): Promise<RenderPreviewResult> => ({
+      kind: "sdd-preview",
+      path: "tests/fixtures/render/journey_map_staged_primary.sdd",
+      revision: "rev_journey_preview",
+      view_id: "journey_map",
+      profile_id: "strict",
+      backend_id: explicitBackend,
+      format: "svg",
+      mime_type: "image/svg+xml",
+      artifact_path: "/tmp/unique-previews/20260716-journey/journey_map_staged_primary.journey_map.strict.staged_journey_map_preview.svg",
+      notes: [],
+      diagnostics: []
+    }));
+    const { deps, stdout } = createDeps({ renderPreview });
+    const result = await runHelperCli([
+      "node", "sdd-helper", "preview",
+      "tests/fixtures/render/journey_map_staged_primary.sdd",
+      "--view", "journey_map",
+      "--profile", "strict",
+      "--format", "svg",
+      "--backend", explicitBackend
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(renderPreview).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      path: "tests/fixtures/render/journey_map_staged_primary.sdd",
+      view_id: "journey_map",
+      profile_id: "strict",
+      format: "svg",
+      backend_id: explicitBackend
+    });
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-preview",
+      view_id: "journey_map",
+      backend_id: explicitBackend,
+      artifact_path: "/tmp/unique-previews/20260716-journey/journey_map_staged_primary.journey_map.strict.staged_journey_map_preview.svg"
+    });
+  });
+
   it("rejects the removed preview display-copy option", async () => {
     const { deps, stdout, renderPreviewMock } = createDeps();
     const result = await runHelperCli([

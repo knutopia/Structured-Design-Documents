@@ -1,0 +1,15 @@
+[
+  {
+    "stage": "validate",
+    "code": "validate.duplicate_edge_detection",
+    "severity": "warn",
+    "message": "Duplicate edge detected for 'J-801 PRECEDES J-802'",
+    "file": "tests/fixtures/render/journey_map_staged_duplicate.sdd",
+    "ruleId": "duplicate_edge_detection",
+    "profileId": "strict",
+    "relatedIds": [
+      "J-801",
+      "J-802"
+    ]
+  }
+]

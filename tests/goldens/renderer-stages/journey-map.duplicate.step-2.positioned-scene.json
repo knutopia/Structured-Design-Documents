@@ -1,0 +1,387 @@
+{
+  "viewId": "journey_map",
+  "profileId": "strict",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "journey_map",
+      "journey_map"
+    ],
+    "viewMetadata": {
+      "journeyMap": {
+        "kind": "root",
+        "rootItemIds": [
+          "J-801",
+          "J-802"
+        ],
+        "stageIds": [],
+        "globalStepIds": [
+          "J-801",
+          "J-802"
+        ]
+      }
+    },
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 40,
+      "crossAlignment": "start"
+    },
+    "chrome": {
+      "padding": {
+        "top": 32,
+        "right": 32,
+        "bottom": 32,
+        "left": 32
+      },
+      "gutter": 40,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "node",
+        "id": "J-801",
+        "role": "journey_step",
+        "primitive": "card",
+        "classes": [
+          "journey_map",
+          "journey_step",
+          "journey_step_root"
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 0,
+            "globalStepOrder": 0,
+            "uncontained": true
+          }
+        },
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-801__title",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Choose a route"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 111.472,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "J-801__flow_in",
+            "role": "journey_flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "J-801__flow_out",
+            "role": "journey_flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "J-801__escape_in",
+            "role": "journey_escape_in",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "J-801__escape_out",
+            "role": "journey_escape_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 32,
+        "y": 32,
+        "width": 224,
+        "height": 48
+      },
+      {
+        "kind": "node",
+        "id": "J-802",
+        "role": "journey_step",
+        "primitive": "card",
+        "classes": [
+          "journey_map",
+          "journey_step",
+          "journey_step_root"
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 1,
+            "globalStepOrder": 1,
+            "uncontained": true
+          }
+        },
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "widthBand": "standard",
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-802__title",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Continue"
+            ],
+            "x": 12,
+            "y": 12,
+            "width": 66.8,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "J-802__flow_in",
+            "role": "journey_flow_in",
+            "side": "west",
+            "x": 0,
+            "y": 24
+          },
+          {
+            "id": "J-802__flow_out",
+            "role": "journey_flow_out",
+            "side": "east",
+            "x": 224,
+            "y": 24
+          },
+          {
+            "id": "J-802__escape_in",
+            "role": "journey_escape_in",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          },
+          {
+            "id": "J-802__escape_out",
+            "role": "journey_escape_out",
+            "side": "south",
+            "x": 112,
+            "y": 48
+          }
+        ],
+        "overflow": {
+          "status": "fits"
+        },
+        "x": 296,
+        "y": 32,
+        "width": 224,
+        "height": 48
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 552,
+    "height": 112
+  },
+  "edges": [
+    {
+      "id": "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-801",
+        "portId": "J-801__flow_out",
+        "x": 256,
+        "y": 56
+      },
+      "to": {
+        "itemId": "J-802",
+        "portId": "J-802__flow_in",
+        "x": 296,
+        "y": 56
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 256,
+            "y": 56
+          },
+          {
+            "x": 296,
+            "y": 56
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-801__PRECEDES__J-802__8fcf1e99bcf6a39ba71e63745f7738eef3880d78bc98ad4a36e1fce1ef8a0b1e__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-801",
+        "portId": "J-801__flow_out",
+        "x": 256,
+        "y": 56
+      },
+      "to": {
+        "itemId": "J-802",
+        "portId": "J-802__flow_in",
+        "x": 296,
+        "y": 56
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 256,
+            "y": 56
+          },
+          {
+            "x": 268,
+            "y": 56
+          },
+          {
+            "x": 268,
+            "y": 40
+          },
+          {
+            "x": 284,
+            "y": 40
+          },
+          {
+            "x": 284,
+            "y": 56
+          },
+          {
+            "x": 296,
+            "y": 56
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__1",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-801",
+        "portId": "J-801__flow_out",
+        "x": 256,
+        "y": 56
+      },
+      "to": {
+        "itemId": "J-802",
+        "portId": "J-802__flow_in",
+        "x": 296,
+        "y": 56
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 256,
+            "y": 56
+          },
+          {
+            "x": 268,
+            "y": 56
+          },
+          {
+            "x": 268,
+            "y": 72
+          },
+          {
+            "x": 284,
+            "y": 72
+          },
+          {
+            "x": 284,
+            "y": 56
+          },
+          {
+            "x": 296,
+            "y": 56
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "decorations": [],
+  "diagnostics": [
+    {
+      "phase": "scene",
+      "code": "renderer.scene.journey_map_step_only",
+      "severity": "info",
+      "message": "Journey map contains Steps without any Stage container.",
+      "targetId": "J-801",
+      "details": "{\"relatedIds\":[\"J-801\",\"J-802\"]}"
+    }
+  ],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

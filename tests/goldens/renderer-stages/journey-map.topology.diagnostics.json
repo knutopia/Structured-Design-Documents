@@ -1,0 +1,50 @@
+[
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_backward_edge",
+    "severity": "info",
+    "message": "Journey edge \"J-702__PRECEDES__J-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0\" is routed as an exceptional peripheral backward connector.",
+    "targetId": "J-702__PRECEDES__J-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0",
+    "details": "{\"relatedIds\":[\"J-702__PRECEDES__J-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_backward_edge",
+    "severity": "info",
+    "message": "Journey edge \"J-712__PRECEDES__J-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0\" is routed as an exceptional peripheral backward connector.",
+    "targetId": "J-712__PRECEDES__J-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0",
+    "details": "{\"relatedIds\":[\"J-712__PRECEDES__J-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_backward_edge",
+    "severity": "info",
+    "message": "Journey edge \"J-714__PRECEDES__J-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0\" is routed as an exceptional peripheral backward connector.",
+    "targetId": "J-714__PRECEDES__J-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0",
+    "details": "{\"relatedIds\":[\"J-714__PRECEDES__J-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_cycle",
+    "severity": "info",
+    "message": "Journey cycle \"journey-cycle:5:J-701|5:J-702\" uses peripheral forward/return routing.",
+    "targetId": "J-701__PRECEDES__J-702__62dd9eaed887ffe62145782afe1dc6bc99c19e1b2bf7a5d307b531d232493540__0",
+    "details": "{\"relatedIds\":[\"J-701__PRECEDES__J-702__62dd9eaed887ffe62145782afe1dc6bc99c19e1b2bf7a5d307b531d232493540__0\",\"J-702__PRECEDES__J-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_cycle",
+    "severity": "info",
+    "message": "Journey cycle \"journey-cycle:5:J-711|5:J-712\" uses peripheral forward/return routing.",
+    "targetId": "J-711__PRECEDES__J-712__9a1802733c65b60fc3855bbf277a593f8778b7ddae303150862ec114578c2c57__0",
+    "details": "{\"relatedIds\":[\"J-711__PRECEDES__J-712__9a1802733c65b60fc3855bbf277a593f8778b7ddae303150862ec114578c2c57__0\",\"J-712__PRECEDES__J-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_self_loop",
+    "severity": "info",
+    "message": "Journey edge \"J-713__PRECEDES__J-713__2a6ea6d3272f5ed9c1f8af6a31503aaeeeb10df8f9ebdce3f3a3b1cf36b09432__0\" is rendered as a self-loop.",
+    "targetId": "J-713__PRECEDES__J-713__2a6ea6d3272f5ed9c1f8af6a31503aaeeeb10df8f9ebdce3f3a3b1cf36b09432__0",
+    "details": "{\"relatedIds\":[\"J-713__PRECEDES__J-713__2a6ea6d3272f5ed9c1f8af6a31503aaeeeb10df8f9ebdce3f3a3b1cf36b09432__0\",\"J-713\"]}"
+  }
+]

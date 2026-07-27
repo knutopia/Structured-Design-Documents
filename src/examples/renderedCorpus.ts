@@ -36,9 +36,7 @@ export interface RenderedCorpusOutputPaths {
   pngOutputPath: string;
 }
 
-const previewOnlyRenderedCorpusViewIds = new Set([
-  "journey_map"
-]);
+const previewOnlyRenderedCorpusViewIds = new Set<string>();
 
 const previewOnlyRenderedCorpusViewDirSuffix = " [preview_only]";
 

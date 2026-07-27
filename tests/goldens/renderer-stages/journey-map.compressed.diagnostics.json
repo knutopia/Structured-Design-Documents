@@ -1,0 +1,362 @@
+[
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\" and \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0:2:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:1\",\"point\":{\"x\":616,\"y\":152},\"overEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"underEdgeId\":\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\" and \"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0:2:J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0:1\",\"point\":{\"x\":632,\"y\":152},\"overEdgeId\":\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\",\"underEdgeId\":\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0:2:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:2\",\"point\":{\"x\":492,\"y\":152},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\" and \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0:2:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:1\",\"point\":{\"x\":616,\"y\":200},\"overEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"underEdgeId\":\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\" and \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0:4:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:1\",\"point\":{\"x\":980,\"y\":268},\"overEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"underEdgeId\":\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\" and \"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0:5:J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0:1\",\"point\":{\"x\":1420,\"y\":168},\"overEdgeId\":\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"underEdgeId\":\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0:2:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:2\",\"point\":{\"x\":492,\"y\":200},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\" and \"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0:5:J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0:2\",\"point\":{\"x\":1420,\"y\":152},\"overEdgeId\":\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\",\"underEdgeId\":\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0:5:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1420,\"y\":184},\"overEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"underEdgeId\":\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:1:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:2\",\"point\":{\"x\":304,\"y\":216},\"overEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":1,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:4:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:3\",\"point\":{\"x\":948,\"y\":284},\"overEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":3}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:2:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:1\",\"point\":{\"x\":616,\"y\":232},\"overEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:4:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:1\",\"point\":{\"x\":980,\"y\":284},\"overEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:5:J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0:1\",\"point\":{\"x\":1668,\"y\":168},\"overEdgeId\":\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:2:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:2\",\"point\":{\"x\":492,\"y\":232},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:4:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0\",\"point\":{\"x\":1652,\"y\":284},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:5:J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0:2\",\"point\":{\"x\":1668,\"y\":152},\"overEdgeId\":\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0:5:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1668,\"y\":184},\"overEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"underEdgeId\":\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:2:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:1\",\"point\":{\"x\":616,\"y\":216},\"overEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:4:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:5\",\"point\":{\"x\":1916,\"y\":300},\"overEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":5}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:4:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:1\",\"point\":{\"x\":980,\"y\":300},\"overEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:2:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:2\",\"point\":{\"x\":492,\"y\":216},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:4:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0\",\"point\":{\"x\":1652,\"y\":300},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:4:J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0:0\",\"point\":{\"x\":1900,\"y\":300},\"overEdgeId\":\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0:5:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1932,\"y\":184},\"overEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"underEdgeId\":\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\" and \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0:2:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:1\",\"point\":{\"x\":616,\"y\":168},\"overEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"underEdgeId\":\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\" and \"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0:2:J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0:1\",\"point\":{\"x\":632,\"y\":168},\"overEdgeId\":\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\",\"underEdgeId\":\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\" and \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0:2:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:1\",\"point\":{\"x\":980,\"y\":168},\"overEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"underEdgeId\":\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0:2:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:2\",\"point\":{\"x\":492,\"y\":168},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" and \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0",
+    "details": "{\"relatedIds\":[\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\"],\"crossingId\":\"journey-crossover:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:4:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:1\",\"point\":{\"x\":980,\"y\":316},\"overEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"underEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0",
+    "details": "{\"relatedIds\":[\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:4:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0\",\"point\":{\"x\":1652,\"y\":316},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" and \"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0",
+    "details": "{\"relatedIds\":[\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\"],\"crossingId\":\"journey-crossover:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:4:J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0:0\",\"point\":{\"x\":1900,\"y\":316},\"overEdgeId\":\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\",\"underEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"segmentIndexes\":{\"edgeA\":4,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0",
+    "details": "{\"relatedIds\":[\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0:5:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1916,\"y\":184},\"overEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"underEdgeId\":\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"segmentIndexes\":{\"edgeA\":5,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\" and \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0",
+    "details": "{\"relatedIds\":[\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\"],\"crossingId\":\"journey-crossover:J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0:2:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:1\",\"point\":{\"x\":980,\"y\":184},\"overEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"underEdgeId\":\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":1}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0",
+    "details": "{\"relatedIds\":[\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:2:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0\",\"point\":{\"x\":1652,\"y\":332},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" and \"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0",
+    "details": "{\"relatedIds\":[\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\"],\"crossingId\":\"journey-crossover:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:2:J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0:0\",\"point\":{\"x\":1900,\"y\":332},\"overEdgeId\":\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\",\"underEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"segmentIndexes\":{\"edgeA\":2,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0",
+    "details": "{\"relatedIds\":[\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0:3:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1948,\"y\":184},\"overEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"underEdgeId\":\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"segmentIndexes\":{\"edgeA\":3,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\" and \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0",
+    "details": "{\"relatedIds\":[\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"],\"crossingId\":\"journey-crossover:J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0:1:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0\",\"point\":{\"x\":1652,\"y\":168},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"segmentIndexes\":{\"edgeA\":1,\"edgeB\":0}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\" and \"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0",
+    "details": "{\"relatedIds\":[\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\"],\"crossingId\":\"journey-crossover:J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0:0:J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0:2\",\"point\":{\"x\":1404,\"y\":152},\"overEdgeId\":\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"underEdgeId\":\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\",\"segmentIndexes\":{\"edgeA\":0,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" and \"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0",
+    "details": "{\"relatedIds\":[\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\"],\"crossingId\":\"journey-crossover:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0:J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0:2\",\"point\":{\"x\":1652,\"y\":152},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\",\"segmentIndexes\":{\"edgeA\":0,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0",
+    "details": "{\"relatedIds\":[\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0:0:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1652,\"y\":184},\"overEdgeId\":\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"underEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"segmentIndexes\":{\"edgeA\":0,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_unavoidable_crossing",
+    "severity": "warn",
+    "message": "Journey edges \"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\" and \"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\" retain a marked crossing after deterministic corridor alternatives were exhausted.",
+    "targetId": "J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0",
+    "details": "{\"relatedIds\":[\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\"],\"crossingId\":\"journey-crossover:J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0:0:J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0:2\",\"point\":{\"x\":1900,\"y\":184},\"overEdgeId\":\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\",\"underEdgeId\":\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"segmentIndexes\":{\"edgeA\":0,\"edgeB\":2}}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_backward_edge",
+    "severity": "info",
+    "message": "Journey edge \"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\" is routed as an exceptional peripheral backward connector.",
+    "targetId": "J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0",
+    "details": "{\"relatedIds\":[\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_backward_edge",
+    "severity": "info",
+    "message": "Journey edge \"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\" is routed as an exceptional peripheral backward connector.",
+    "targetId": "J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0",
+    "details": "{\"relatedIds\":[\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\"]}"
+  },
+  {
+    "phase": "routing",
+    "code": "renderer.routing.journey_map_peripheral_cycle",
+    "severity": "info",
+    "message": "Journey cycle \"journey-cycle:5:J-901|5:J-902|5:J-903|5:J-950|5:J-911|5:J-912|5:J-913\" uses peripheral forward/return routing.",
+    "targetId": "J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0",
+    "details": "{\"relatedIds\":[\"J-901__PRECEDES__J-902__5cc77bf090b31fc282d4c563c7bbd6668d1bdd2b897e27cbd0237681998d79f9__0\",\"J-901__PRECEDES__J-903__a245a3f8fcc4b13fe43058816b99db8297c90ba4120f4c25be2565e3c7b5321c__0\",\"J-901__PRECEDES__J-950__a8a369e8ede03131ca718d99f6f4de9cbf2712373bd65d049b7da003615dc552__0\",\"J-901__PRECEDES__J-911__4281d1695779b55f77979d9852a7c933dba72151a96ce91618cb3628a4f6d587__0\",\"J-901__PRECEDES__J-912__25c29e308ec26eee14d2db8f931fbb3219b13bcfd64968a338b2a32085329735__0\",\"J-901__PRECEDES__J-913__51991cf298fc3152cc8c106bb686bc60b4cfcfcb845521dcb83e922f7b56703d__0\",\"J-902__PRECEDES__J-903__6ec4c7c7d9938859a07917260af971bc8fd2effeb7d715bcfcdf08e2f31cd516__0\",\"J-902__PRECEDES__J-950__d3e925dcf13aa8261efb4cea079179d72a91587ec955770fabf2a0239911e33c__0\",\"J-902__PRECEDES__J-913__02e8b1a9b8aabbe41360a7d1d54c3d943d30114021b5c74989ee3a434707d593__0\",\"J-903__PRECEDES__J-950__52d993425109eab3b9eefe102c522b22c8c13d129f35ba276e9f93bf496f07e9__0\",\"J-903__PRECEDES__J-913__bc71579064cdf7826709fdcd3ddae8363299677297b7afe48cd52b9cd2607aa2__0\",\"J-950__PRECEDES__J-911__8337a8061e194eff1bc526c2c302a1cefa18c829043cf70d13ea4ba4f1b620f9__0\",\"J-950__PRECEDES__J-912__b65b74dae7a465dbe1df1e0f3d643f7706701663ab5e23cb59d52c4c57dcf819__0\",\"J-950__PRECEDES__J-913__672c0dab9cf4222db3646c099b0e3d6736dce9d0f176bb15a9cad87f17e776b6__0\",\"J-911__PRECEDES__J-913__69794b7e47fca03030920cb08cdaf077d57407649b5a092bd242bbafbac43cdd__0\",\"J-912__PRECEDES__J-913__fdfda28d0614fc98143d371f11282a934a38181b7e7181b3a32f6ba68c598a7e__0\",\"J-912__PRECEDES__J-902__a12cb505c63b480f8021887da6e121f4e9648f9ed790fe6807164aa5292f7aa8__0\",\"J-913__PRECEDES__J-901__7b4eca5f4029e1a43bf8ee79674d4564af767b19bcd79c60f4bfd5d83b5cd255__0\"]}"
+  }
+]

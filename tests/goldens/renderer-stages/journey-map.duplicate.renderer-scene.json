@@ -1,0 +1,281 @@
+{
+  "viewId": "journey_map",
+  "profileId": "strict",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "journey_map",
+      "journey_map"
+    ],
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 40,
+      "crossAlignment": "start"
+    },
+    "chrome": {
+      "padding": {
+        "top": 32,
+        "right": 32,
+        "bottom": 32,
+        "left": 32
+      },
+      "gutter": 40
+    },
+    "children": [
+      {
+        "kind": "node",
+        "id": "J-801",
+        "role": "journey_step",
+        "primitive": "card",
+        "classes": [
+          "journey_map",
+          "journey_step",
+          "journey_step_root"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-801__title",
+            "kind": "text",
+            "text": "Choose a route",
+            "textStyleRole": "title",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "J-801__flow_in",
+            "role": "journey_flow_in",
+            "side": "west"
+          },
+          {
+            "id": "J-801__flow_out",
+            "role": "journey_flow_out",
+            "side": "east"
+          },
+          {
+            "id": "J-801__escape_in",
+            "role": "journey_escape_in",
+            "side": "south"
+          },
+          {
+            "id": "J-801__escape_out",
+            "role": "journey_escape_out",
+            "side": "south"
+          }
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 0,
+            "globalStepOrder": 0,
+            "uncontained": true
+          }
+        }
+      },
+      {
+        "kind": "node",
+        "id": "J-802",
+        "role": "journey_step",
+        "primitive": "card",
+        "classes": [
+          "journey_map",
+          "journey_step",
+          "journey_step_root"
+        ],
+        "widthPolicy": {
+          "preferred": "standard",
+          "allowed": [
+            "standard",
+            "wide"
+          ]
+        },
+        "overflowPolicy": {
+          "kind": "escalate_width_band",
+          "maxLines": 2
+        },
+        "content": [
+          {
+            "id": "J-802__title",
+            "kind": "text",
+            "text": "Continue",
+            "textStyleRole": "title",
+            "priority": "primary"
+          }
+        ],
+        "ports": [
+          {
+            "id": "J-802__flow_in",
+            "role": "journey_flow_in",
+            "side": "west"
+          },
+          {
+            "id": "J-802__flow_out",
+            "role": "journey_flow_out",
+            "side": "east"
+          },
+          {
+            "id": "J-802__escape_in",
+            "role": "journey_escape_in",
+            "side": "south"
+          },
+          {
+            "id": "J-802__escape_out",
+            "role": "journey_escape_out",
+            "side": "south"
+          }
+        ],
+        "viewMetadata": {
+          "journeyMap": {
+            "kind": "step",
+            "rootOrder": 1,
+            "globalStepOrder": 1,
+            "uncontained": true
+          }
+        }
+      }
+    ],
+    "ports": [],
+    "viewMetadata": {
+      "journeyMap": {
+        "kind": "root",
+        "rootItemIds": [
+          "J-801",
+          "J-802"
+        ],
+        "stageIds": [],
+        "globalStepIds": [
+          "J-801",
+          "J-802"
+        ]
+      }
+    }
+  },
+  "edges": [
+    {
+      "id": "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-801"
+      },
+      "to": {
+        "itemId": "J-802"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "avoidNodeBoxes": true,
+        "preferAxis": "horizontal",
+        "sourcePortRole": "journey_flow_out",
+        "targetPortRole": "journey_flow_in"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root",
+      "viewMetadata": {
+        "journeyMap": {
+          "kind": "precedes",
+          "authorOrder": 0,
+          "sameEndpointOrdinal": 0,
+          "exactIdentityOrdinal": 0
+        }
+      }
+    },
+    {
+      "id": "J-801__PRECEDES__J-802__8fcf1e99bcf6a39ba71e63745f7738eef3880d78bc98ad4a36e1fce1ef8a0b1e__0",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-801"
+      },
+      "to": {
+        "itemId": "J-802"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "avoidNodeBoxes": true,
+        "preferAxis": "horizontal",
+        "sourcePortRole": "journey_flow_out",
+        "targetPortRole": "journey_flow_in"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root",
+      "viewMetadata": {
+        "journeyMap": {
+          "kind": "precedes",
+          "authorOrder": 1,
+          "sameEndpointOrdinal": 1,
+          "exactIdentityOrdinal": 0
+        }
+      }
+    },
+    {
+      "id": "J-801__PRECEDES__J-802__5d47769e364fd1c11f69d961820f545b79093ca7433a92b5ba977c55ca7db7c7__1",
+      "role": "precedes",
+      "classes": [
+        "journey_map",
+        "journey_precedes"
+      ],
+      "from": {
+        "itemId": "J-801"
+      },
+      "to": {
+        "itemId": "J-802"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "avoidNodeBoxes": true,
+        "preferAxis": "horizontal",
+        "sourcePortRole": "journey_flow_out",
+        "targetPortRole": "journey_flow_in"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "ownerContainerId": "root",
+      "viewMetadata": {
+        "journeyMap": {
+          "kind": "precedes",
+          "authorOrder": 2,
+          "sameEndpointOrdinal": 2,
+          "exactIdentityOrdinal": 1
+        }
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "phase": "scene",
+      "code": "renderer.scene.journey_map_step_only",
+      "severity": "info",
+      "message": "Journey map contains Steps without any Stage container.",
+      "targetId": "J-801",
+      "details": "{\"relatedIds\":[\"J-801\",\"J-802\"]}"
+    }
+  ]
+}

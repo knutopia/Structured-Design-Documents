@@ -574,13 +574,14 @@ function globalHelpText(): string {
     "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict",
     "  sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg",
     "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
     "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
-    "  `show` defaults to SVG preview output. `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default, while other views stay on the legacy Graphviz preview backend.",
+    "  `show` defaults to SVG preview output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.",
     "  Internal DOT and Mermaid text artifacts remain available for tests and debugging.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
@@ -711,7 +712,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default, while the remaining views continue to route through the legacy Graphviz preview backend unless you override `--backend`.")
+    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)

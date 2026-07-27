@@ -1,0 +1,10 @@
+[
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_first_parent_selected",
+    "severity": "info",
+    "message": "Journey Step J-503 uses projected Stage G-500 as its first structural parent.",
+    "targetId": "J-503",
+    "details": "{\"relatedIds\":[\"J-503\",\"G-500\",\"G-600\"],\"selectedStageId\":\"G-500\"}"
+  }
+]

@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-feature: "render a diagram from a starting node"
+
 -Making an SDD from Scratch Doc!
 -service blueprint: track the sidecar placement regression
 -service blueprint etc - were did the labels go?
@@ -15,6 +17,10 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+## Mon 7-27
+
+- Created RM_bup of main readme
+- Deleted spurious vitePress files
 
 ## Sun 7-26
 
@@ -44,6 +50,22 @@
 - added text area wrapping
 - created TextMate grammar for VitePress and VS Code
 
+main:
+
+- Updated journey map file statuses to Done
+- Removed graph types goal from AGENTS.md
+- Merged refine_journey_map with better routing into main
+
+## Thu 7-23
+
+- Captured visual_issues_stage2_in_journey_map.md based on visual proofs
+- Implemented fixes, passed
+
+## Wed 7-22
+
+- Remediation plan completed (minus gate 8 dense)
+- Reviewed visual proofs, issues found
+
 ## Sun 7-19
 
 - installed fontawesome-free
@@ -57,11 +79,22 @@
 - added tabs on landing page
 - attempting anchor link
 
-## Satu 7-18
+## Sat 7-18
 
+- Plan partially completed (to gate 7 - 8 rejected - 9 closed incomplete)
 
+## Fri 7-17
+
+- Renamed staged_journey_map_renderer_verification_contract.md
+- Created a visual review doc
+- Capturing visual issues
+- Mapped captured issues to prerecorded issues
+- Merged journey_map branch into main, deleted worktree, branched refine_journey_map
+- Created visual remediation plan
 
 ## Tues 7-14
+
+website:
 
 - Changed site folder name, installed vitepress
 - Fighting incredible snafu link resolution trashfire
@@ -74,10 +107,27 @@
 - Stuck in routing snafu for CONTRIBUTING.md
 - Shortened main README
 
+main:
+
+- Out of tokens somewhere in Gate 8
+- Gate 10 completed - plan done
+
+## Mon 7-13
+
+- Gate 4 done
+- Gate 6 done (mislabeled)
+- Gate 6 join family
+- Actual Gate 6
+
 ## Sun 7-12
 
 - Added doc: Path to Replacing Legacy Rendering Pipeline with Staged Renderers
 - Added journey map architecture doc
+- Added journey map plan prompt
+- Created journey_map branch
+- Created implementation plan
+- Gate 0 done
+- Gate 2 done
 
 ## Sat 7-11
 

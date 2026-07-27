@@ -1,0 +1,10 @@
+[
+  {
+    "phase": "scene",
+    "code": "renderer.scene.journey_map_step_only",
+    "severity": "info",
+    "message": "Journey map contains Steps without any Stage container.",
+    "targetId": "J-801",
+    "details": "{\"relatedIds\":[\"J-801\",\"J-802\"]}"
+  }
+]

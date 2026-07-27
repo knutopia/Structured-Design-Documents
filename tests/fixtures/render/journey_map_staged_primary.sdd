@@ -1,0 +1,150 @@
+SDD-TEXT 0.1
+
+Stage G-100 "Discover"
+  owner=Design
+  description="Recognize and frame the journey need"
+  order_index=10
+  CONTAINS J-101 "Recognize a need"
+  CONTAINS J-102 "Compare plans, eligibility details, and expected total cost before choosing"
+  CONTAINS J-103 "Shortlist an option"
+  + Step J-101 "Recognize a need"
+    owner=Design
+    description="Recognize a need that starts the journey"
+    actor=User
+    intent="Understand the need"
+    success_criteria="The need is clear"
+    PRECEDES J-102 "Compare plans, eligibility details, and expected total cost before choosing"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+  + Step J-102 "Compare plans, eligibility details, and expected total cost before choosing"
+    owner=Design
+    description="Compare detailed options before narrowing the choice"
+    actor=User
+    intent="Compare available options"
+    success_criteria="Viable options are understood"
+    PRECEDES J-103 "Shortlist an option"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+  + Step J-103 "Shortlist an option"
+    owner=Design
+    description="Select a shortlist for deeper evaluation"
+    actor=User
+    intent="Create a shortlist"
+    success_criteria="A shortlist is ready"
+    PRECEDES J-201 "Review the recommendation"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+END
+
+Stage G-200 "Evaluate every option and choose the best path with confidence"
+  owner=Design
+  description="Evaluate tradeoffs and resolve concerns"
+  order_index=20
+  CONTAINS J-201 "Review the recommendation"
+  CONTAINS J-202 "Compare the tradeoffs"
+  CONTAINS J-203 "Resolve remaining concerns"
+  CONTAINS J-204 "Choose a path"
+  + Step J-201 "Review the recommendation"
+    owner=Design
+    description="Review the recommendation and supporting evidence"
+    actor=User
+    intent="Evaluate the recommendation"
+    success_criteria="The recommendation is understood"
+    kind=decision
+    opportunity_refs="OP-200, OP-100"
+    PRECEDES J-202 "Compare the tradeoffs"
+    PRECEDES J-203 "Resolve remaining concerns"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+  + Step J-202 "Compare the tradeoffs"
+    owner=Design
+    description="Compare the tradeoffs between shortlisted options"
+    actor=User
+    intent="Understand tradeoffs"
+    success_criteria="Tradeoffs are explicit"
+    PRECEDES J-204 "Choose a path"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+  + Step J-203 "Resolve remaining concerns"
+    owner=Design
+    description="Resolve concerns that could block commitment"
+    actor=User
+    intent="Resolve open concerns"
+    success_criteria="Blocking concerns are resolved"
+    PRECEDES J-204 "Choose a path"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+  + Step J-204 "Choose a path"
+    owner=Design
+    description="Choose the preferred path"
+    actor=User
+    intent="Make a confident choice"
+    success_criteria="A path is selected"
+    PRECEDES J-401 "Complete enrollment"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+END
+
+Step J-250 "Ask for human guidance"
+  owner=Design
+  description="Ask a person for additional guidance"
+  actor=User
+  intent="Get human guidance"
+  success_criteria="A guidance request is made"
+  PRECEDES J-260 "Receive human guidance"
+  REALIZED_BY P-100 "Journey proof surface"
+END
+
+Step J-260 "Receive human guidance"
+  owner=Design
+  description="Receive guidance outside the main journey chain"
+  actor=User
+  intent="Understand the guidance"
+  success_criteria="Guidance is received"
+  REALIZED_BY P-100 "Journey proof surface"
+END
+
+Stage G-300 "Pause and reconsider"
+  owner=Design
+  description="Represent an intentionally empty journey stage"
+  order_index=30
+END
+
+Stage G-400 "Commit"
+  owner=Design
+  description="Complete the selected path"
+  order_index=40
+  CONTAINS J-401 "Complete enrollment"
+  + Step J-401 "Complete enrollment"
+    owner=Design
+    description="Complete enrollment in the selected option"
+    actor=User
+    intent="Finish enrollment"
+    success_criteria="Enrollment is complete"
+    REALIZED_BY P-100 "Journey proof surface"
+  END
+END
+
+Opportunity OP-100 "Clear total cost"
+  owner=Design
+  description="Make total cost easy to understand"
+  evidence="Journey research"
+  segment=all_users
+  severity=medium
+END
+
+Opportunity OP-200 "Confidence before commitment"
+  owner=Design
+  description="Increase confidence before commitment"
+  evidence="Journey research"
+  segment=all_users
+  severity=high
+END
+
+Place P-100 "Journey proof surface"
+  owner=Design
+  description="Out-of-view realization target for the primary proof"
+  surface=web
+  route_or_key=/proof/journey-primary
+  access=auth
+END

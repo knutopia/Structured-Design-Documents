@@ -1,0 +1,15 @@
+[
+  {
+    "stage": "validate",
+    "code": "validate.precedes_cycle_policy",
+    "severity": "warn",
+    "message": "Relationship 'PRECEDES' contains a cyclic component without an edge property 'kind=loop' marker",
+    "file": "tests/fixtures/render/journey_map_staged_topology.sdd",
+    "ruleId": "precedes_cycle_policy",
+    "profileId": "strict",
+    "relatedIds": [
+      "J-711",
+      "J-712"
+    ]
+  }
+]

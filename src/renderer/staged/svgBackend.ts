@@ -397,18 +397,84 @@ function collectPaintElements(
   }
 }
 
-function buildRoutePath(points: Point[], edgeId: string, diagnostics: RendererDiagnostic[]): string | undefined {
+function buildRoutePath(
+  edge: PositionedEdge,
+  diagnostics: RendererDiagnostic[]
+): string | undefined {
+  const { points } = edge.route;
   if (points.length < 2) {
     diagnostics.push(createBackendDiagnostic(
       "renderer.backend.invalid_edge_route",
       "Skipping edge because the route needs at least two points.",
-      { targetId: edgeId }
+      { targetId: edge.id }
     ));
     return undefined;
   }
 
   const [first, ...rest] = points;
-  return [`M ${formatNumber(first.x)} ${formatNumber(first.y)}`, ...rest.map((point) => `L ${formatNumber(point.x)} ${formatNumber(point.y)}`)].join(" ");
+  if (!edge.continuityMarks || edge.continuityMarks.length === 0) {
+    return [`M ${formatNumber(first.x)} ${formatNumber(first.y)}`, ...rest.map((point) => `L ${formatNumber(point.x)} ${formatNumber(point.y)}`)].join(" ");
+  }
+
+  const marksBySegment = new Map<number, typeof edge.continuityMarks>();
+  for (const mark of edge.continuityMarks) {
+    marksBySegment.set(mark.segmentIndex, [...(marksBySegment.get(mark.segmentIndex) ?? []), mark]);
+  }
+  const commands = [`M ${formatNumber(first.x)} ${formatNumber(first.y)}`];
+  for (let segmentIndex = 0; segmentIndex < points.length - 1; segmentIndex += 1) {
+    const start = points[segmentIndex]!;
+    const end = points[segmentIndex + 1]!;
+    const horizontal = Math.abs(start.y - end.y) <= 0.001;
+    const vertical = Math.abs(start.x - end.x) <= 0.001;
+    const direction = horizontal ? Math.sign(end.x - start.x) : Math.sign(end.y - start.y);
+    const marks = [...(marksBySegment.get(segmentIndex) ?? [])].sort((left, right) =>
+      direction * (horizontal ? left.point.x - right.point.x : left.point.y - right.point.y)
+        || left.id.localeCompare(right.id)
+    );
+    let valid = direction !== 0 && (horizontal || vertical);
+    let previousExit = Number.NEGATIVE_INFINITY;
+    for (const mark of marks) {
+      const along = horizontal ? mark.point.x : mark.point.y;
+      const startAlong = horizontal ? start.x : start.y;
+      const endAlong = horizontal ? end.x : end.y;
+      const entryAlong = along - direction * mark.halfSpan;
+      const exitAlong = along + direction * mark.halfSpan;
+      const directedEntry = direction * entryAlong;
+      const directedExit = direction * exitAlong;
+      valid = valid
+        && mark.halfSpan > 0
+        && mark.rise > 0
+        && direction * (entryAlong - startAlong) > 0.001
+        && direction * (endAlong - exitAlong) > 0.001
+        && directedEntry > previousExit + 0.001;
+      previousExit = directedExit;
+    }
+    if (!valid) {
+      diagnostics.push(createBackendDiagnostic(
+        "renderer.backend.invalid_edge_route",
+        "Skipping edge because its continuity marks do not fit its route segments.",
+        { targetId: edge.id }
+      ));
+      return undefined;
+    }
+    for (const mark of marks) {
+      const entry = horizontal
+        ? { x: mark.point.x - direction * mark.halfSpan, y: mark.point.y }
+        : { x: mark.point.x, y: mark.point.y - direction * mark.halfSpan };
+      const exit = horizontal
+        ? { x: mark.point.x + direction * mark.halfSpan, y: mark.point.y }
+        : { x: mark.point.x, y: mark.point.y + direction * mark.halfSpan };
+      const control = horizontal
+        ? { x: mark.point.x, y: mark.point.y + mark.normalDirection * mark.rise }
+        : { x: mark.point.x + mark.normalDirection * mark.rise, y: mark.point.y };
+      commands.push(
+        `L ${formatNumber(entry.x)} ${formatNumber(entry.y)}`,
+        `Q ${formatNumber(control.x)} ${formatNumber(control.y)} ${formatNumber(exit.x)} ${formatNumber(exit.y)}`
+      );
+    }
+    commands.push(`L ${formatNumber(end.x)} ${formatNumber(end.y)}`);
+  }
+  return commands.join(" ");
 }
 
 function buildArrowMarkerDef(direction: keyof typeof EDGE_MARKER_IDS, arrowSize: number): string {
@@ -446,7 +512,7 @@ function resolveMarkerAttributes(edge: PositionedEdge): string {
 }
 
 function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[]): string | undefined {
-  const path = buildRoutePath(edge.route.points, edge.id, diagnostics);
+  const path = buildRoutePath(edge, diagnostics);
   if (!path) {
     return undefined;
   }
