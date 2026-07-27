@@ -1,7 +1,10 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { Bundle, ViewSpec } from "../src/bundle/types.js";
-import { resolveLegacyDotPreviewStyle } from "../src/renderer/previewStyle.js";
+import {
+  resolveLegacyDotPreviewStyle,
+  resolveStagedPreviewStyle
+} from "../src/renderer/previewStyle.js";
 import { createMockSyntaxConfig } from "./mockSyntaxConfig.js";
 
 function createView(rendererDefaults: ViewSpec["conventions"]["renderer_defaults"] = {}): ViewSpec {
@@ -67,6 +70,30 @@ function createBundle(view: ViewSpec): Bundle {
           svg_font_asset: "assets/fonts/PublicSans-Regular.woff",
           png_font_asset: "assets/fonts/PublicSans-Regular.otf",
           dpi: 192
+        },
+        staged: {
+          font_family: "Public Sans",
+          width_bands: {
+            chip: 96,
+            narrow: 168,
+            standard: 224,
+            wide: 308
+          },
+          font_faces: [
+            {
+              font_weight: 400,
+              measurement_font_asset: "assets/fonts/PublicSans-Regular.otf",
+              svg_font_asset: "assets/fonts/PublicSans-Regular.woff",
+              png_font_asset: "assets/fonts/PublicSans-Regular.otf"
+            },
+            {
+              font_weight: 600,
+              measurement_font_asset: "assets/fonts/PublicSans-SemiBold.otf",
+              svg_font_asset: "assets/fonts/PublicSans-SemiBold.woff",
+              png_font_asset: "assets/fonts/PublicSans-SemiBold.otf"
+            }
+          ],
+          dpi: 192
         }
       },
       views: [view]
@@ -131,5 +158,108 @@ describe("resolveLegacyDotPreviewStyle", () => {
       pngFontAssetPath: path.resolve("/repo/bundle/v0.1", "assets/fonts/LegacyPublicSans-Regular.woff"),
       dpi: 192
     });
+  });
+});
+
+describe("resolveStagedPreviewStyle", () => {
+  it("resolves bundle-owned font faces in deterministic weight order", () => {
+    const view = createView();
+    const bundle = createBundle(view);
+
+    expect(resolveStagedPreviewStyle(bundle, view)).toEqual({
+      fontFamily: "Public Sans",
+      fontFaces: [
+        {
+          fontWeight: 400,
+          measurementFontAssetPath: path.resolve(
+            "/repo/bundle/v0.1",
+            "assets/fonts/PublicSans-Regular.otf"
+          ),
+          svgFontAssetPath: path.resolve(
+            "/repo/bundle/v0.1",
+            "assets/fonts/PublicSans-Regular.woff"
+          ),
+          pngFontAssetPath: path.resolve(
+            "/repo/bundle/v0.1",
+            "assets/fonts/PublicSans-Regular.otf"
+          )
+        },
+        {
+          fontWeight: 600,
+          measurementFontAssetPath: path.resolve(
+            "/repo/bundle/v0.1",
+            "assets/fonts/PublicSans-SemiBold.otf"
+          ),
+          svgFontAssetPath: path.resolve(
+            "/repo/bundle/v0.1",
+            "assets/fonts/PublicSans-SemiBold.woff"
+          ),
+          pngFontAssetPath: path.resolve(
+            "/repo/bundle/v0.1",
+            "assets/fonts/PublicSans-SemiBold.otf"
+          )
+        }
+      ],
+      widthBands: {
+        chip: 96,
+        narrow: 168,
+        standard: 224,
+        wide: 308
+      },
+      dpi: 192
+    });
+  });
+
+  it("merges per-view staged face overrides by weight", () => {
+    const view = createView({
+      preview: {
+        staged: {
+          font_faces: [
+            {
+              font_weight: 600,
+              svg_font_asset: "assets/fonts/Custom-SemiBold.woff"
+            }
+          ],
+          dpi: 288
+        }
+      }
+    });
+    const bundle = createBundle(view);
+
+    expect(resolveStagedPreviewStyle(bundle, view)).toEqual(
+      expect.objectContaining({
+        dpi: 288,
+        widthBands: {
+          chip: 96,
+          narrow: 168,
+          standard: 224,
+          wide: 308
+        },
+        fontFaces: [
+          expect.objectContaining({
+            fontWeight: 400,
+            svgFontAssetPath: path.resolve(
+              "/repo/bundle/v0.1",
+              "assets/fonts/PublicSans-Regular.woff"
+            )
+          }),
+          {
+            fontWeight: 600,
+            measurementFontAssetPath: path.resolve(
+              "/repo/bundle/v0.1",
+              "assets/fonts/PublicSans-SemiBold.otf"
+            ),
+            svgFontAssetPath: path.resolve(
+              "/repo/bundle/v0.1",
+              "assets/fonts/Custom-SemiBold.woff"
+            ),
+            pngFontAssetPath: path.resolve(
+              "/repo/bundle/v0.1",
+              "assets/fonts/PublicSans-SemiBold.otf"
+            )
+          }
+        ]
+      })
+    );
   });
 });

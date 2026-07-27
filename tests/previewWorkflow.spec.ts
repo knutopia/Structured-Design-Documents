@@ -44,6 +44,12 @@ describe("preview workflow", () => {
 
     expect(result.artifact.text).toContain('class="staged-svg');
     expect(result.artifact.text).toContain("Checkout Area");
+    expect(result.artifact.text.match(/@font-face/g)).toHaveLength(2);
+    expect(result.artifact.text).toContain("font-weight: 400");
+    expect(result.artifact.text).toContain("font-weight: 600");
+    expect(result.diagnostics).not.toContainEqual(expect.objectContaining({
+      code: expect.stringContaining("incomplete_font_weight")
+    }));
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 

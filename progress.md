@@ -21,6 +21,7 @@
 
 - Created RM_bup of main readme
 - Deleted spurious vitePress files
+- Improved SVG font rendering by adding 600 weight
 
 ## Sun 7-26
 

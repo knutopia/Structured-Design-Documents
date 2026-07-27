@@ -6,6 +6,10 @@ import {
   type RendererDiagnostic
 } from "../src/renderer/staged/diagnostics.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import {
+  registerStagedRendererTheme,
+  resolveRendererTheme
+} from "../src/renderer/staged/theme.js";
 import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 import { buildFixtureScene } from "./stagedRendererFixtures.js";
 
@@ -54,6 +58,75 @@ async function getOnlyMeasuredNode(scene: RendererScene): Promise<MeasuredNode> 
 }
 
 describe("staged renderer contracts and harness", () => {
+  it("registers bundle-resolved font assets as an immutable execution theme", () => {
+    const baseStyle = {
+      fontFamily: "Public Sans",
+      fontFaces: [
+        {
+          fontWeight: 400,
+          measurementFontAssetPath: "/bundle/regular.otf",
+          svgFontAssetPath: "/bundle/regular.woff",
+          pngFontAssetPath: "/bundle/regular.otf"
+        },
+        {
+          fontWeight: 600,
+          measurementFontAssetPath: "/bundle/semibold.otf",
+          svgFontAssetPath: "/bundle/semibold.woff",
+          pngFontAssetPath: "/bundle/semibold.otf"
+        }
+      ],
+      dpi: 192
+    };
+    const firstId = registerStagedRendererTheme("default", baseStyle);
+    const secondId = registerStagedRendererTheme("default", {
+      ...baseStyle,
+      fontFaces: baseStyle.fontFaces.map((face) =>
+        face.fontWeight === 600
+          ? { ...face, svgFontAssetPath: "/bundle/alternate-semibold.woff" }
+          : face
+      )
+    });
+
+    expect(firstId).not.toBe(secondId);
+    expect(resolveRendererTheme(firstId).theme.fontFaces).toContainEqual(
+      expect.objectContaining({
+        fontWeight: 600,
+        svgFontAssetPath: "/bundle/semibold.woff"
+      })
+    );
+    expect(resolveRendererTheme(secondId).theme.fontFaces).toContainEqual(
+      expect.objectContaining({
+        fontWeight: 600,
+        svgFontAssetPath: "/bundle/alternate-semibold.woff"
+      })
+    );
+  });
+
+  it("reports incomplete configured weights while retaining the vendored fallback face", () => {
+    const themeId = registerStagedRendererTheme("default", {
+      fontFamily: "Public Sans",
+      fontFaces: [
+        {
+          fontWeight: 400,
+          measurementFontAssetPath: "/bundle/regular.otf",
+          svgFontAssetPath: "/bundle/regular.woff",
+          pngFontAssetPath: "/bundle/regular.otf"
+        }
+      ],
+      dpi: 192
+    });
+    const resolved = resolveRendererTheme(themeId, "backend");
+
+    expect(resolved.diagnostics).toContainEqual(expect.objectContaining({
+      code: "renderer.backend.incomplete_font_weight",
+      severity: "warn"
+    }));
+    expect(resolved.theme.fontFaces).toContainEqual(expect.objectContaining({
+      fontWeight: 600,
+      measurementFontAssetPath: expect.stringContaining("PublicSans-SemiBold.otf")
+    }));
+  });
+
   it("matches committed renderer-stage snapshots for the synthetic fixture scene", async () => {
     const scene = buildFixtureScene();
     const result = await runStagedRendererPipeline(scene);

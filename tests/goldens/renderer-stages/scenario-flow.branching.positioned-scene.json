@@ -120,7 +120,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 139.984,
+                "width": 142.576,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -184,7 +184,7 @@
         "x": 132,
         "y": 28,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -278,7 +278,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 170.192,
+                "width": 172.976,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -342,7 +342,7 @@
         "x": 496,
         "y": 28,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -436,7 +436,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 178.4,
+                "width": 181.16,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -500,7 +500,7 @@
         "x": 764,
         "y": 28,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -594,7 +594,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 195.168,
+                "width": 198.664,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -658,7 +658,7 @@
         "x": 1176,
         "y": 28,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -712,7 +712,7 @@
         "x": 132,
         "y": 136,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -806,7 +806,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 154.112,
+                "width": 156.352,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -870,7 +870,7 @@
         "x": 496,
         "y": 136,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -924,7 +924,7 @@
         "x": 764,
         "y": 136,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -1014,12 +1014,13 @@
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
-                  "Review Pickup Instructions"
+                  "Review Pickup",
+                  "Instructions"
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 199.168,
-                "height": 20,
+                "width": 108.392,
+                "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
                 "priority": "primary"
@@ -1031,28 +1032,28 @@
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "realization_in",
@@ -1066,7 +1067,7 @@
                 "role": "realization_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 64
               }
             ],
             "overflow": {
@@ -1075,14 +1076,14 @@
             "x": 1186,
             "y": 146,
             "width": 224,
-            "height": 48
+            "height": 64
           }
         ],
         "ports": [],
         "x": 1176,
         "y": 136,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:step"
       },
@@ -1176,7 +1177,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 80.76,
+                "width": 82.616,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -1231,16 +1232,16 @@
               "status": "fits"
             },
             "x": 142,
-            "y": 254,
+            "y": 286,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 244,
+        "y": 276,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -1334,7 +1335,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 126.368,
+                "width": 128.472,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -1389,16 +1390,16 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 254,
+            "y": 286,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 244,
+        "y": 276,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -1492,7 +1493,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 119.176,
+                "width": 121.2,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -1547,16 +1548,16 @@
               "status": "fits"
             },
             "x": 774,
-            "y": 254,
+            "y": 286,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 764,
-        "y": 244,
+        "y": 276,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -1646,12 +1647,13 @@
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
-                  "Email Confirmation"
+                  "Email",
+                  "Confirmation"
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 141.552,
-                "height": 20,
+                "width": 98.264,
+                "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
                 "priority": "primary"
@@ -1663,28 +1665,28 @@
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
                 "x": 168,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
                 "x": 168,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "realization_in",
@@ -1698,23 +1700,23 @@
                 "role": "realization_out",
                 "side": "south",
                 "x": 84,
-                "y": 48
+                "y": 64
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 1186,
-            "y": 254,
+            "y": 286,
             "width": 168,
-            "height": 48
+            "height": 64
           }
         ],
         "ports": [],
         "x": 1176,
-        "y": 244,
+        "y": 276,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -1766,9 +1768,9 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 336,
+        "y": 384,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -1862,7 +1864,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 94.888,
+                "width": 96.392,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -1917,16 +1919,16 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 346,
+            "y": 394,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 336,
+        "y": 384,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -1978,9 +1980,9 @@
         "children": [],
         "ports": [],
         "x": 764,
-        "y": 336,
+        "y": 384,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -2070,12 +2072,13 @@
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
-                  "Pickup Instructions"
+                  "Pickup",
+                  "Instructions"
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 142.408,
-                "height": 20,
+                "width": 90.24,
+                "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
                 "priority": "primary"
@@ -2087,28 +2090,28 @@
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
                 "x": 168,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
                 "x": 168,
-                "y": 24
+                "y": 32
               },
               {
                 "id": "realization_in",
@@ -2122,23 +2125,23 @@
                 "role": "realization_out",
                 "side": "south",
                 "x": 84,
-                "y": 48
+                "y": 64
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 1186,
-            "y": 346,
+            "y": 394,
             "width": 168,
-            "height": 48
+            "height": 64
           }
         ],
         "ports": [],
         "x": 1176,
-        "y": 336,
+        "y": 384,
         "width": 244,
-        "height": 68,
+        "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:lane:place"
       },
@@ -2233,7 +2236,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 135.6,
+                "width": 138.088,
                 "height": 20,
                 "lineHeight": 20,
                 "region": "primary",
@@ -2288,14 +2291,14 @@
               "status": "fits"
             },
             "x": 142,
-            "y": 438,
+            "y": 502,
             "width": 168,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 428,
+        "y": 492,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2393,7 +2396,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 126.368,
+                "width": 128.472,
                 "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
@@ -2448,14 +2451,14 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 438,
+            "y": 502,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 428,
+        "y": 492,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2553,7 +2556,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 119.176,
+                "width": 121.2,
                 "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
@@ -2608,14 +2611,14 @@
               "status": "fits"
             },
             "x": 774,
-            "y": 438,
+            "y": 502,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 764,
-        "y": 428,
+        "y": 492,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2708,12 +2711,12 @@
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
-                  "Email Confirmation",
-                  "State"
+                  "Email",
+                  "Confirmation State"
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 141.552,
+                "width": 143.08,
                 "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
@@ -2768,14 +2771,14 @@
               "status": "fits"
             },
             "x": 1186,
-            "y": 438,
+            "y": 502,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 1176,
-        "y": 428,
+        "y": 492,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -2829,7 +2832,7 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 536,
+        "y": 600,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
@@ -2927,7 +2930,7 @@
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 94.888,
+                "width": 96.392,
                 "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
@@ -2982,14 +2985,14 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 546,
+            "y": 610,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 536,
+        "y": 600,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -3043,7 +3046,7 @@
         "children": [],
         "ports": [],
         "x": 764,
-        "y": 536,
+        "y": 600,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
@@ -3136,12 +3139,12 @@
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
-                  "Pickup Instructions",
-                  "State"
+                  "Pickup",
+                  "Instructions State"
                 ],
                 "x": 12,
                 "y": 12,
-                "width": 142.408,
+                "width": 134.968,
                 "height": 40,
                 "lineHeight": 20,
                 "region": "primary",
@@ -3196,14 +3199,14 @@
               "status": "fits"
             },
             "x": 1186,
-            "y": 546,
+            "y": 610,
             "width": 168,
             "height": 64
           }
         ],
         "ports": [],
         "x": 1176,
-        "y": 536,
+        "y": 600,
         "width": 244,
         "height": 84,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
@@ -3214,7 +3217,7 @@
     "x": 0,
     "y": 0,
     "width": 1472,
-    "height": 648
+    "height": 712
   },
   "edges": [
     {
@@ -3433,7 +3436,7 @@
         "itemId": "J-035",
         "portId": "flow_in",
         "x": 1186,
-        "y": 170
+        "y": 178
       },
       "route": {
         "style": "orthogonal",
@@ -3448,11 +3451,11 @@
           },
           {
             "x": 1092,
-            "y": 170
+            "y": 178
           },
           {
             "x": 1186,
-            "y": 170
+            "y": 178
           }
         ]
       },
@@ -3485,24 +3488,24 @@
         "itemId": "P-030",
         "portId": "mirror_out",
         "x": 310,
-        "y": 278
+        "y": 310
       },
       "to": {
         "itemId": "P-031",
         "portId": "mirror_in",
         "x": 506,
-        "y": 278
+        "y": 310
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 278
+            "y": 310
           },
           {
             "x": 506,
-            "y": 278
+            "y": 310
           }
         ]
       },
@@ -3524,32 +3527,32 @@
         "itemId": "P-030",
         "portId": "mirror_out",
         "x": 310,
-        "y": 294
+        "y": 326
       },
       "to": {
         "itemId": "P-032",
         "portId": "mirror_in",
         "x": 506,
-        "y": 370
+        "y": 418
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 294
+            "y": 326
           },
           {
             "x": 436,
-            "y": 294
+            "y": 326
           },
           {
             "x": 436,
-            "y": 370
+            "y": 418
           },
           {
             "x": 506,
-            "y": 370
+            "y": 418
           }
         ]
       },
@@ -3571,24 +3574,24 @@
         "itemId": "P-033",
         "portId": "mirror_out",
         "x": 942,
-        "y": 278
+        "y": 310
       },
       "to": {
         "itemId": "P-034",
         "portId": "mirror_in",
         "x": 1186,
-        "y": 278
+        "y": 310
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 942,
-            "y": 278
+            "y": 310
           },
           {
             "x": 1186,
-            "y": 278
+            "y": 310
           }
         ]
       },
@@ -3610,32 +3613,32 @@
         "itemId": "P-033",
         "portId": "mirror_out",
         "x": 942,
-        "y": 294
+        "y": 326
       },
       "to": {
         "itemId": "P-035",
         "portId": "mirror_in",
         "x": 1186,
-        "y": 370
+        "y": 426
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 942,
-            "y": 294
+            "y": 326
           },
           {
             "x": 1092,
-            "y": 294
+            "y": 326
           },
           {
             "x": 1092,
-            "y": 370
+            "y": 426
           },
           {
             "x": 1186,
-            "y": 370
+            "y": 426
           }
         ]
       },
@@ -3657,24 +3660,24 @@
         "itemId": "VS-030a",
         "portId": "mirror_out",
         "x": 310,
-        "y": 462
+        "y": 526
       },
       "to": {
         "itemId": "VS-031a",
         "portId": "mirror_in",
         "x": 506,
-        "y": 462
+        "y": 526
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 462
+            "y": 526
           },
           {
             "x": 506,
-            "y": 462
+            "y": 526
           }
         ]
       },
@@ -3696,32 +3699,32 @@
         "itemId": "VS-030a",
         "portId": "mirror_out",
         "x": 310,
-        "y": 478
+        "y": 542
       },
       "to": {
         "itemId": "VS-032a",
         "portId": "mirror_in",
         "x": 506,
-        "y": 578
+        "y": 642
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 310,
-            "y": 478
+            "y": 542
           },
           {
             "x": 436,
-            "y": 478
+            "y": 542
           },
           {
             "x": 436,
-            "y": 578
+            "y": 642
           },
           {
             "x": 506,
-            "y": 578
+            "y": 642
           }
         ]
       },
@@ -3743,24 +3746,24 @@
         "itemId": "VS-033a",
         "portId": "mirror_out",
         "x": 942,
-        "y": 470
+        "y": 534
       },
       "to": {
         "itemId": "VS-034a",
         "portId": "mirror_in",
         "x": 1186,
-        "y": 470
+        "y": 534
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 942,
-            "y": 470
+            "y": 534
           },
           {
             "x": 1186,
-            "y": 470
+            "y": 534
           }
         ]
       },
@@ -3782,32 +3785,32 @@
         "itemId": "VS-033a",
         "portId": "mirror_out",
         "x": 942,
-        "y": 486
+        "y": 550
       },
       "to": {
         "itemId": "VS-035a",
         "portId": "mirror_in",
         "x": 1186,
-        "y": 578
+        "y": 642
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 942,
-            "y": 486
+            "y": 550
           },
           {
             "x": 1092,
-            "y": 486
+            "y": 550
           },
           {
             "x": 1092,
-            "y": 578
+            "y": 642
           },
           {
             "x": 1186,
-            "y": 578
+            "y": 642
           }
         ]
       },
@@ -3836,7 +3839,7 @@
         "itemId": "P-030",
         "portId": "realization_in",
         "x": 254,
-        "y": 254
+        "y": 286
       },
       "route": {
         "style": "orthogonal",
@@ -3847,7 +3850,7 @@
           },
           {
             "x": 254,
-            "y": 254
+            "y": 286
           }
         ]
       },
@@ -3876,7 +3879,7 @@
         "itemId": "VS-030a",
         "portId": "realization_in",
         "x": 270,
-        "y": 438
+        "y": 502
       },
       "route": {
         "style": "orthogonal",
@@ -3887,15 +3890,15 @@
           },
           {
             "x": 328,
-            "y": 320
+            "y": 352
           },
           {
             "x": 270,
-            "y": 320
+            "y": 352
           },
           {
             "x": 270,
-            "y": 438
+            "y": 502
           }
         ]
       },
@@ -3924,7 +3927,7 @@
         "itemId": "P-031",
         "portId": "realization_in",
         "x": 618,
-        "y": 254
+        "y": 286
       },
       "route": {
         "style": "orthogonal",
@@ -3951,7 +3954,7 @@
           },
           {
             "x": 618,
-            "y": 254
+            "y": 286
           }
         ]
       },
@@ -3980,7 +3983,7 @@
         "itemId": "VS-031a",
         "portId": "realization_in",
         "x": 634,
-        "y": 438
+        "y": 502
       },
       "route": {
         "style": "orthogonal",
@@ -3999,15 +4002,15 @@
           },
           {
             "x": 764,
-            "y": 412
+            "y": 460
           },
           {
             "x": 634,
-            "y": 412
+            "y": 460
           },
           {
             "x": 634,
-            "y": 438
+            "y": 502
           }
         ]
       },
@@ -4036,7 +4039,7 @@
         "itemId": "P-032",
         "portId": "realization_in",
         "x": 650,
-        "y": 346
+        "y": 394
       },
       "route": {
         "style": "orthogonal",
@@ -4047,15 +4050,15 @@
           },
           {
             "x": 692,
-            "y": 320
+            "y": 352
           },
           {
             "x": 650,
-            "y": 320
+            "y": 352
           },
           {
             "x": 650,
-            "y": 346
+            "y": 394
           }
         ]
       },
@@ -4084,7 +4087,7 @@
         "itemId": "VS-032a",
         "portId": "realization_in",
         "x": 666,
-        "y": 546
+        "y": 610
       },
       "route": {
         "style": "orthogonal",
@@ -4095,15 +4098,15 @@
           },
           {
             "x": 708,
-            "y": 520
+            "y": 584
           },
           {
             "x": 666,
-            "y": 520
+            "y": 584
           },
           {
             "x": 666,
-            "y": 546
+            "y": 610
           }
         ]
       },
@@ -4132,7 +4135,7 @@
         "itemId": "P-033",
         "portId": "realization_in",
         "x": 886,
-        "y": 254
+        "y": 286
       },
       "route": {
         "style": "orthogonal",
@@ -4143,7 +4146,7 @@
           },
           {
             "x": 886,
-            "y": 254
+            "y": 286
           }
         ]
       },
@@ -4172,7 +4175,7 @@
         "itemId": "VS-033a",
         "portId": "realization_in",
         "x": 902,
-        "y": 438
+        "y": 502
       },
       "route": {
         "style": "orthogonal",
@@ -4183,15 +4186,15 @@
           },
           {
             "x": 960,
-            "y": 320
+            "y": 352
           },
           {
             "x": 902,
-            "y": 320
+            "y": 352
           },
           {
             "x": 902,
-            "y": 438
+            "y": 502
           }
         ]
       },
@@ -4220,7 +4223,7 @@
         "itemId": "P-034",
         "portId": "realization_in",
         "x": 1298,
-        "y": 254
+        "y": 286
       },
       "route": {
         "style": "orthogonal",
@@ -4239,15 +4242,15 @@
           },
           {
             "x": 1428,
-            "y": 212
+            "y": 228
           },
           {
             "x": 1298,
-            "y": 212
+            "y": 228
           },
           {
             "x": 1298,
-            "y": 254
+            "y": 286
           }
         ]
       },
@@ -4276,7 +4279,7 @@
         "itemId": "VS-034a",
         "portId": "realization_in",
         "x": 1314,
-        "y": 438
+        "y": 502
       },
       "route": {
         "style": "orthogonal",
@@ -4295,15 +4298,15 @@
           },
           {
             "x": 1444,
-            "y": 412
+            "y": 476
           },
           {
             "x": 1314,
-            "y": 412
+            "y": 476
           },
           {
             "x": 1314,
-            "y": 438
+            "y": 502
           }
         ]
       },
@@ -4326,32 +4329,32 @@
         "itemId": "J-035",
         "portId": "realization_out",
         "x": 1372,
-        "y": 194
+        "y": 210
       },
       "to": {
         "itemId": "P-035",
         "portId": "realization_in",
         "x": 1330,
-        "y": 346
+        "y": 394
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 1372,
-            "y": 194
+            "y": 210
           },
           {
             "x": 1372,
-            "y": 320
+            "y": 368
           },
           {
             "x": 1330,
-            "y": 320
+            "y": 368
           },
           {
             "x": 1330,
-            "y": 346
+            "y": 394
           }
         ]
       },
@@ -4374,32 +4377,32 @@
         "itemId": "J-035",
         "portId": "realization_out",
         "x": 1388,
-        "y": 194
+        "y": 210
       },
       "to": {
         "itemId": "VS-035a",
         "portId": "realization_in",
         "x": 1346,
-        "y": 546
+        "y": 610
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 1388,
-            "y": 194
+            "y": 210
           },
           {
             "x": 1388,
-            "y": 520
+            "y": 584
           },
           {
             "x": 1346,
-            "y": 520
+            "y": 584
           },
           {
             "x": 1346,
-            "y": 546
+            "y": 610
           }
         ]
       },
@@ -4419,7 +4422,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 106,
+      "y": 114,
       "text": "Steps",
       "textStyleRole": "label"
     },
@@ -4433,11 +4436,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 24,
-        "y": 204
+        "y": 220
       },
       "to": {
         "x": 1444,
-        "y": 204
+        "y": 220
       }
     },
     {
@@ -4449,7 +4452,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 314,
+      "y": 362,
       "text": "Places",
       "textStyleRole": "label"
     },
@@ -4463,11 +4466,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 24,
-        "y": 404
+        "y": 468
       },
       "to": {
         "x": 1444,
-        "y": 404
+        "y": 468
       }
     },
     {
@@ -4479,7 +4482,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 514,
+      "y": 578,
       "text": "View States",
       "textStyleRole": "label"
     }

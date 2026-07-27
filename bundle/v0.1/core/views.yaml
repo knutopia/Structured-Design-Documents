@@ -8,6 +8,23 @@ preview_defaults:
     svg_font_asset: assets/fonts/PublicSans-Regular.woff
     png_font_asset: assets/fonts/PublicSans-Regular.otf
     dpi: 192
+  staged:
+    font_family: Public Sans
+    width_bands:
+      chip: 96
+      narrow: 168
+      standard: 224
+      wide: 308
+    font_faces:
+      - font_weight: 400
+        measurement_font_asset: assets/fonts/PublicSans-Regular.otf
+        svg_font_asset: assets/fonts/PublicSans-Regular.woff
+        png_font_asset: assets/fonts/PublicSans-Regular.otf
+      - font_weight: 600
+        measurement_font_asset: assets/fonts/PublicSans-SemiBold.otf
+        svg_font_asset: assets/fonts/PublicSans-SemiBold.woff
+        png_font_asset: assets/fonts/PublicSans-SemiBold.otf
+    dpi: 192
 
 # normative_defaults describe the default semantic reading that projection/render tooling should explain or honor.
 # They do not by themselves validate source files or alter compiled graph semantics.

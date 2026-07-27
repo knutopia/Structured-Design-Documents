@@ -19,7 +19,7 @@ import {
 } from "./diagnostics.js";
 import { getContainerPrimitiveTheme, getNodePrimitiveTheme, resolveTextRoleForBlock } from "./primitives.js";
 import { resolveRendererTheme, type RendererTheme, type TextStyleToken } from "./theme.js";
-import { buildEmbeddedFontFaceStyleElement, renderSvgToPng } from "../svgArtifacts.js";
+import { buildEmbeddedFontFaceStyleElements, renderSvgToPng } from "../svgArtifacts.js";
 
 export interface StagedSvgArtifact {
   svg: string;
@@ -661,24 +661,20 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   return lines;
 }
 
-function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<string[]> {
-  return Promise.all([
-    buildEmbeddedFontFaceStyleElement({
+async function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<string[]> {
+  const fontFaceStyles = await buildEmbeddedFontFaceStyleElements(
+    theme.fontFaces.map((face) => ({
       fontFamily: theme.fontFamily,
-      fontAssetPath: theme.fontAssets.svg
-    })
-  ]).then(([fontFaceStyle]) => {
-    const defs: string[] = [];
-
-    if (fontFaceStyle) {
-      defs.push(fontFaceStyle);
-    }
-
-    defs.push(`<style><![CDATA[\n${buildStyleLines(scene, theme).join("\n")}\n]]></style>`);
-    defs.push(...buildArrowMarkerDefs(theme));
-
-    return defs;
-  });
+      fontAssetPath: face.svgFontAssetPath,
+      fontStyle: face.fontStyle,
+      fontWeight: face.fontWeight
+    }))
+  );
+  return [
+    ...fontFaceStyles,
+    `<style><![CDATA[\n${buildStyleLines(scene, theme).join("\n")}\n]]></style>`,
+    ...buildArrowMarkerDefs(theme)
+  ];
 }
 
 export async function renderPositionedSceneToSvg(scene: PositionedScene): Promise<StagedSvgArtifact> {
@@ -757,9 +753,9 @@ export async function renderPositionedSceneToPng(
   const rendered = await renderPositionedSceneToSvg(scene);
   const theme = resolveRendererTheme(scene.themeId, "backend").theme;
   const png = await renderSvgToPng(rendered.svg, {
-    dpi: options.dpi ?? 192,
+    dpi: options.dpi ?? theme.dpi,
     fontFamily: theme.fontFamily,
-    pngFontAssetPath: theme.fontAssets.png
+    pngFontAssetPaths: theme.fontFaces.map((face) => face.pngFontAssetPath)
   });
 
   return {

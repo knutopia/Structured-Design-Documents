@@ -234,7 +234,7 @@ function findLaneCells(
 function measureSeparatorTitleStartX(scene: PositionedScene, separatorTitleText: string): number {
   const theme = getRendererTheme(scene.themeId, "measure");
   const edgeLabelStyle = theme.textStyles.edge_label;
-  const measureText = createTextMeasurementService(theme.fontAssets.measurement);
+  const measureText = createTextMeasurementService(theme.fontFaces);
   return 24
     + measureText.measureText(separatorTitleText, edgeLabelStyle)
     + measureText.measureText(" ", edgeLabelStyle);

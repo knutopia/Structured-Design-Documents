@@ -278,11 +278,11 @@ describe("journey map Gate 6 visual acceptance", () => {
     );
     expect(longCross).toBeDefined();
     expect(rootDirect).toBeDefined();
-    expect(longCross!.from).toMatchObject({ portId: "J-204__flow_out", x: 1652, y: 116 });
-    expect(longCross!.to).toMatchObject({ portId: "J-401__escape_in", x: 2611.576, y: 140 });
+    expect(longCross!.from).toMatchObject({ portId: "J-204__flow_out", x: 1656, y: 116 });
+    expect(longCross!.to).toMatchObject({ portId: "J-401__escape_in", x: 2617.592, y: 140 });
     expect(rootDirect!.route.points).toEqual([
-      { x: 1936, y: 116 },
-      { x: 1976, y: 116 }
+      { x: 1940, y: 116 },
+      { x: 1980, y: 116 }
     ]);
 
     const items = flattenPositionedItems(scene.root);
@@ -319,8 +319,8 @@ describe("journey map Gate 6 visual acceptance", () => {
         .map((item) => item.y + item.height))
     );
     expect(spanLocalY).toBeLessThan(scene.root.y + scene.root.height);
-    expect(longCross!.route.points).toContainEqual({ x: 1690, y: 178 });
-    expect(longCross!.route.points).toContainEqual({ x: 2611.576, y: 160 });
+    expect(longCross!.route.points).toContainEqual({ x: 1694, y: 178 });
+    expect(longCross!.route.points).toContainEqual({ x: 2617.592, y: 160 });
     expect(longCross!.route.points.at(-2)?.y).toBeGreaterThan(longCross!.route.points.at(-1)!.y);
     expect(getTerminalSegmentLength(longCross!)).toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG);
     expect(rendered.provisionalSvg).not.toBe(rendered.step2Svg);
@@ -356,14 +356,14 @@ describe("journey map Gate 6 visual acceptance", () => {
     const primaryBranches = primaryScene.edges.filter((edge) => edge.from.itemId === "J-201");
     expect(primaryBranches).toHaveLength(2);
     expect(primaryBranches.map((edge) => edge.from)).toEqual([
-      { itemId: "J-201", portId: "J-201__flow_out", x: 1156, y: 116 },
-      { itemId: "J-201", portId: "J-201__escape_out", x: 1044, y: 204 }
+      { itemId: "J-201", portId: "J-201__flow_out", x: 1160, y: 116 },
+      { itemId: "J-201", portId: "J-201__escape_out", x: 1048, y: 204 }
     ]);
     expect(primaryBranches[0]!.route.points).toEqual([
-      { x: 1156, y: 116 }, { x: 1180, y: 116 }
+      { x: 1160, y: 116 }, { x: 1184, y: 116 }
     ]);
     expect(primaryBranches[1]!.route.points).toEqual([
-      { x: 1044, y: 204 }, { x: 1044, y: 260 }, { x: 1180, y: 260 }
+      { x: 1048, y: 204 }, { x: 1048, y: 260 }, { x: 1184, y: 260 }
     ]);
 
     const primaryItems = flattenPositionedItems(primaryScene.root);
@@ -466,10 +466,10 @@ describe("journey map Gate 6 visual acceptance", () => {
       edge.from.itemId === "J-201" && edge.to.itemId === "J-203"
     );
     expect(bypass?.route.points).toEqual([
-      { x: 1404, y: 116 }, { x: 1428, y: 116 }
+      { x: 1408, y: 116 }, { x: 1432, y: 116 }
     ]);
     expect(direct?.route.points).toEqual([
-      { x: 1404, y: 260 }, { x: 1540, y: 260 }, { x: 1540, y: 140 }
+      { x: 1408, y: 260 }, { x: 1544, y: 260 }, { x: 1544, y: 140 }
     ]);
     expect(branchBypass).toBeDefined();
 
@@ -1016,10 +1016,10 @@ describe("journey map Gate 7 ordering and primary endpoint visual proof", () => 
     const upperJoin = edge("J-203", "J-204");
     const lowerJoin = edge("J-202", "J-204");
 
-    expect(nearBranch.from).toMatchObject({ portId: "J-201__flow_out", x: 1156, y: 116 });
-    expect(farBranch.from).toMatchObject({ portId: "J-201__escape_out", x: 1044, y: 204 });
-    expect(upperJoin.to).toMatchObject({ portId: "J-204__escape_in", x: 1540, y: 140 });
-    expect(lowerJoin.to).toMatchObject({ portId: "J-204__flow_in", x: 1428, y: 116 });
+    expect(nearBranch.from).toMatchObject({ portId: "J-201__flow_out", x: 1160, y: 116 });
+    expect(farBranch.from).toMatchObject({ portId: "J-201__escape_out", x: 1048, y: 204 });
+    expect(upperJoin.to).toMatchObject({ portId: "J-204__escape_in", x: 1544, y: 140 });
+    expect(lowerJoin.to).toMatchObject({ portId: "J-204__flow_in", x: 1432, y: 116 });
     expect(sharedCollinearSegments(nearBranch.route, farBranch.route)).toEqual([]);
     expect(sharedCollinearSegments(upperJoin.route, lowerJoin.route)).toEqual([]);
     expect(properPerpendicularCrossings(nearBranch.route, farBranch.route)).toEqual([]);

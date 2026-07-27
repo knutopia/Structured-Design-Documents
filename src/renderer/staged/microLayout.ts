@@ -1111,7 +1111,7 @@ export function createEdgeLabelMeasurementService(
   diagnostics.push(...resolvedTheme.diagnostics);
   const context: MeasureContext = {
     theme: resolvedTheme.theme,
-    measureText: createTextMeasurementService(resolvedTheme.theme.fontAssets.measurement),
+    measureText: createTextMeasurementService(resolvedTheme.theme.fontFaces),
     diagnostics
   };
 
@@ -1152,7 +1152,7 @@ export function measureRendererScene(scene: RendererScene): MeasuredScene {
   const resolvedTheme = resolveRendererTheme(scene.themeId);
   const context: MeasureContext = {
     theme: resolvedTheme.theme,
-    measureText: createTextMeasurementService(resolvedTheme.theme.fontAssets.measurement),
+    measureText: createTextMeasurementService(resolvedTheme.theme.fontFaces),
     diagnostics: [...scene.diagnostics, ...resolvedTheme.diagnostics]
   };
 
