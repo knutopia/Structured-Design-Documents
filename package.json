@@ -17,10 +17,16 @@
     "check": "pnpm run test",
     "check:graphviz": "node ./scripts/check-graphviz.mjs",
     "generate:rendered-examples": "TMPDIR=/tmp pnpm run build && node dist/examples/generateRenderedExamples.js",
+    "generate:textmate": "pnpm run build && node dist/highlighting/generateSddTextMate.js",
+    "package:vscode-sdd": "node scripts/package-vscode-sdd.mjs",
     "sdd": "node dist/cli/main.js",
-    "sdd-helper": "node dist/cli/helperMain.js"
+    "sdd-helper": "node dist/cli/helperMain.js",
+    "docs:dev": "vitepress dev docs/doc_site",
+    "docs:build": "vitepress build docs/doc_site",
+    "docs:preview": "vitepress preview docs/doc_site"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.0",
     "@resvg/resvg-js": "^2.6.2",
     "ajv": "^8.17.1",
     "commander": "^12.1.0",
@@ -29,9 +35,17 @@
     "yaml": "^2.6.1"
   },
   "devDependencies": {
+    "@vscode/vsce": "3.9.2",
     "@types/node": "^22.10.1",
+    "medium-zoom": "^1.1.0",
+    "shiki": "4.3.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
+    "vite": "^8.1.4",
+    "vite-plugin-static-copy": "^4.1.1",
+    "vitepress": "2.0.0-alpha.18",
+    "vitepress-plugin-lightbox": "^1.0.3",
+    "vitepress-plugin-tabs": "^0.9.1",
     "vitest": "^2.1.8"
   }
 }

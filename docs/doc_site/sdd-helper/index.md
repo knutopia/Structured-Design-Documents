@@ -2,9 +2,7 @@
 
 `sdd-helper` is the JSON-first companion CLI for SDD authoring workflows. Its primary callers are agents and automation workflows using an SDD-focused skill, such as a Codex skill, Claude skill, or Gemini skill. It is designed for structured automation, not for interactive terminal narration: successful commands return exactly one JSON payload, and the command surface stays narrow, repo-local, and focused on `.sdd` documents.
 
-This page documents the helper for three audiences:
-
-- SDD users who want to know what the helper is for.
+Intended audiences for this page:
 - LLMs and automation authors who need a human-readable explanation of the helper's capabilities and constraints.
 - Future contributors who need to keep the documentation aligned with the actual helper contract.
 

@@ -2,19 +2,36 @@
 
 This example shows how SDD-Text expresses a service blueprint slice for a simple claim flow.
 
-The image below is the `strict_profile` render from the code-driven example set.
+This source: <IconFile/>[claim_flow_slice.sdd](claim_flow_slice.sdd)
+... yields this service blueprint diagram:
+![service blueprint example diagram](claim_flow_slice.service_blueprint.svg)
 
-Full source: [claim_flow_slice.sdd](claim_flow_slice.sdd)
+## How To Do This Using the Command Line
 
-## Generate the PNG
-
-From this folder, generate a PNG preview with the `show` command:
+From the project root folder, go to the folder containing the source:
 
 ```bash
-pnpm sdd show claim_flow_slice.sdd --view service_blueprint --format png --out /tmp/claim_flow_slice.service_blueprint.png
+cd docs/doc_site/service_blueprint_slice_example
 ```
 
-This uses the default `strict` profile and writes the PNG to `/tmp` instead of overwriting the checked-in example image.
+From this folder, generate the diagram with the `show` command:
+```bash
+pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --out $PWD/my_service_blueprint.svg
+```
+Notes:
+- $PWD points the command to the current directory. Without $PWD the command looks for the input file in the project root.
+- Output is an SVG, by default. Be sure to include .svg in the output filename
+- The diagram uses the default `strict` profile
+
+To create a PNG as output, add *--format png* to the call and change the output filename to use .png:
+```bash
+pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --out $PWD/my_service_blueprint.png --format png
+```
+
+To see all the details about a command, use the --help option:
+```bash
+pnpm sdd show --help
+```
 
 ## Source Excerpt
 
@@ -96,11 +113,6 @@ Policy PL-020 "Retention Policy"
 END
 ```
 
-## Rendered Output
-
-<a href="claim_flow_slice.service_blueprint.png">
-  <img src="claim_flow_slice.service_blueprint.png" alt="Service blueprint slice (strict profile)" width="900">
-</a>
 
 ## What To Look For
 

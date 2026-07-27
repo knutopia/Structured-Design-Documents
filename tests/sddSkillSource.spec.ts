@@ -6,7 +6,7 @@ import { createHelperCapabilities } from "../src/cli/helperDiscovery.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const skillRoot = path.join(repoRoot, "skills/sdd-skill");
-const helperReadmePath = path.join(repoRoot, "docs/readme_support_docs/sdd-helper/README.md");
+const helperReadmePath = path.join(repoRoot, "docs/doc_site/sdd-helper/README.md");
 
 async function expectExists(targetPath: string): Promise<void> {
   await expect(access(targetPath)).resolves.toBeUndefined();

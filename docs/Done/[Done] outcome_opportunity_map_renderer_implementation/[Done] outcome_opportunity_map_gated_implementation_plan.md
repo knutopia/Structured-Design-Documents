@@ -857,8 +857,8 @@ Promote accepted staged output through generated examples, CLI-facing status, an
 - `examples/rendered/v0.1/`
 - `docs/toolchain/architecture.md`
 - `docs/toolchain/development.md`
-- `docs/readme_support_docs/diagram_types/README.md`
-- `docs/readme_support_docs/sdd_cli_tools/README.md`
+- `docs/doc_site/diagram_types/README.md`
+- `docs/doc_site/sdd_cli_tools/README.md`
 - `examples/rendered/v0.1/README.md`
 
 ### Write Scope
@@ -869,8 +869,8 @@ Promote accepted staged output through generated examples, CLI-facing status, an
 - `examples/rendered/v0.1/`
 - `docs/toolchain/architecture.md`
 - `docs/toolchain/development.md`
-- `docs/readme_support_docs/diagram_types/README.md`
-- `docs/readme_support_docs/sdd_cli_tools/README.md`
+- `docs/doc_site/diagram_types/README.md`
+- `docs/doc_site/sdd_cli_tools/README.md`
 - `examples/rendered/v0.1/README.md`
 
 ### Forbidden Scope
@@ -936,7 +936,7 @@ Run final acceptance across code, tests, docs, generated artifacts, and visual p
 - generated staged and legacy corpus artifacts for canonical proof cases
 - `docs/toolchain/architecture.md`
 - `docs/toolchain/development.md`
-- `docs/readme_support_docs/diagram_types/README.md`
+- `docs/doc_site/diagram_types/README.md`
 - `examples/rendered/v0.1/README.md`
 
 ### Write Scope

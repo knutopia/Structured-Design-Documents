@@ -4,6 +4,7 @@
 
 -feature: "render a diagram from a starting node"
 
+-Making an SDD from Scratch Doc!
 -service blueprint: track the sidecar placement regression
 -service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
@@ -16,13 +17,40 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
-
-## Mond 7-27
+## Mon 7-27
 
 - Created RM_bup of main readme
 - Deleted spurious vitePress files
 
-## Fri 7-24
+## Sun 7-26
+
+- researched svg font rendering quality issue
+- added source highlights
+- added {pos: up} option to showRepoLink
+
+## Sat 7-25
+
+- added scripts/lvps.sh to launch vitepress dev server
+- moved repo structure paragraph out of index into readme
+- added source syntax highlighting
+- replaced showSource custom macro with source truncation-capable markdown-it block extension
+- showSourceOptions.lineNumbers added to config for showSource
+- removed Current Status section from main index
+- adding source highlights (wip)
+- captured svg background transparency issue
+
+## Frid 7-24
+
+- vitepress / vite config monkey business
+- introduced scrolling code section
+- scrolling code section looking good
+- added showSource macro
+- added showRepoLink macro
+- edited skill page
+- added text area wrapping
+- created TextMate grammar for VitePress and VS Code
+
+main:
 
 - Updated journey map file statuses to Done
 - Removed graph types goal from AGENTS.md
@@ -38,6 +66,19 @@
 - Remediation plan completed (minus gate 8 dense)
 - Reviewed visual proofs, issues found
 
+## Sun 7-19
+
+- installed fontawesome-free
+- installed vitepress lightbox plugin
+- installed medium-zoom via pnpm - already present - but made lightbox work
+- rewrote service blueprint example page
+- rewrote service blueprint section in diagram types page
+- many minor edits
+- installed vitepress-plugin-tabs
+- debugged tabs breaking lightbox
+- added tabs on landing page
+- attempting anchor link
+
 ## Sat 7-18
 
 - Plan partially completed (to gate 7 - 8 rejected - 9 closed incomplete)
@@ -51,7 +92,22 @@
 - Merged journey_map branch into main, deleted worktree, branched refine_journey_map
 - Created visual remediation plan
 
-## Tue 7-14
+## Tues 7-14
+
+website:
+
+- Changed site folder name, installed vitepress
+- Fighting incredible snafu link resolution trashfire
+- Diagram Types page in OK shape
+- Added inline expand svg sections
+- Added inline badges, icons
+- Updated skill guide page
+- Link-wrangling
+- Moved initial_concepts into doc_site
+- Stuck in routing snafu for CONTRIBUTING.md
+- Shortened main README
+
+main:
 
 - Out of tokens somewhere in Gate 8
 - Gate 10 completed - plan done

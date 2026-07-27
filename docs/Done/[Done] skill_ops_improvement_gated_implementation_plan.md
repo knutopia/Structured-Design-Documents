@@ -43,7 +43,7 @@ The implementation must use these sources by role:
 | Helper bundle-resolved contract metadata | `src/authoring/contractResolution.ts` |
 | Shared assessment implementation | `src/authoring/outcomeAssessment.ts` |
 | Public authoring/helper contracts | `src/authoring/contracts.ts` |
-| Helper README | `docs/readme_support_docs/sdd-helper/README.md` |
+| Helper README | `docs/doc_site/sdd-helper/README.md` |
 | Current repository skill | `skills/sdd-skill/SKILL.md` |
 | Current workflow reference | `skills/sdd-skill/references/workflow.md` |
 | Current helper gaps reference | `skills/sdd-skill/references/current-helper-gaps.md` |
@@ -190,7 +190,7 @@ Confirm the current repository state before changing files.
 - `bundle/v0.1/core/views.yaml`
 - `skills/sdd-skill/SKILL.md`
 - `skills/sdd-skill/references/workflow.md`
-- `docs/readme_support_docs/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/README.md`
 - `src/cli/helperDiscovery.ts`
 - `src/cli/helperProgram.ts`
 - `src/authoring/contractResolution.ts`
@@ -230,7 +230,7 @@ TMPDIR=/tmp pnpm exec vitest run tests/authoringContractResolution.spec.ts
 
 ### Stop Conditions
 
-Stop if the helper commands listed by capabilities differ from `skills/sdd-skill/references/current-helper-gaps.md` or `docs/readme_support_docs/sdd-helper/README.md`. Resolve documentation or implementation authority before later gates.
+Stop if the helper commands listed by capabilities differ from `skills/sdd-skill/references/current-helper-gaps.md` or `docs/doc_site/sdd-helper/README.md`. Resolve documentation or implementation authority before later gates.
 
 ## 7. Gate 1: Skill Top-Level Authority Model
 
@@ -476,7 +476,7 @@ Align helper documentation with the authority model and any Gate 3 runtime chang
 ### Read Scope
 
 - `docs/skill_ops_improvement_design_2nd_attempt.md`
-- `docs/readme_support_docs/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/README.md`
 - `src/cli/helperDiscovery.ts`
 - `src/cli/helperProgram.ts`
 - `src/authoring/contracts.ts`
@@ -486,7 +486,7 @@ Align helper documentation with the authority model and any Gate 3 runtime chang
 
 ### Write Scope
 
-- `docs/readme_support_docs/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/README.md`
 - `tests/sddSkillSource.spec.ts` only if helper documentation assertions belong there
 
 ### Required Changes

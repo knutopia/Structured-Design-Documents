@@ -439,7 +439,7 @@ For SDD language questions, use the targeted bundle files in section 3 instead o
 
 ## 17. Guide Follow-Up Inventory
 
-When later revising `docs/readme_support_docs/sdd-skill/README.md`, align it to this task-kind-first workflow:
+When later revising `docs/doc_site/sdd-skill/README.md`, align it to this task-kind-first workflow:
 
 - make the "start with an app idea" section clearly read as create-new-document flow rather than search-first flow
 - make omitted filenames read as direct path/name selection, not document/example search

@@ -7,3 +7,5 @@ coverage/
 .Identifier
 .sdd-helper-requests/
 .playwright-mcp/*.log
+docs/.vitepress/dist
+docs/.vitepress/cache

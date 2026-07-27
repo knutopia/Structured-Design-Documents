@@ -25,7 +25,7 @@ This fits the repo's current direction:
 Grounding sources:
 
 - `AGENTS.md`
-- `docs/readme_support_docs/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/README.md`
 - `docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
 - `src/authoring/contracts.ts`
 - `src/cli/helperDiscovery.ts`

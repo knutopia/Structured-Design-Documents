@@ -1636,7 +1636,7 @@ Dry-run summary excerpt:
 
 ```json
 {
-  "path": "docs/readme_support_docs/small_app_example/small_app.sdd",
+  "path": "docs/doc_site/small_app_example/small_app.sdd",
   "base_revision": "rev_01H...",
   "mode": "dry_run",
   "operations": [

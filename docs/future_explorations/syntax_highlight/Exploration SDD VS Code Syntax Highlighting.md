@@ -253,13 +253,13 @@ My recommendation: **in-repo VS Code extension, TypeScript, bundle-generated gra
 > - Read `./docs/Done/[Done]`
 > - Read `./docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
 > - Searched for `sdd\.|MCP Tools|Tools|Prompts|apply_authoring|author_new_document|resources|inspect|create_document|apply_change_set|preview` in `sdd_mcp_server_design.md`
-> - Read `./docs/readme_support_docs/sdd-helper/README.md`
+> - Read `./docs/doc_site/sdd-helper/README.md`
 > - Read `./docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
-> - Read `./docs/readme_support_docs/sdd-skill/README.md`
+> - Read `./docs/doc_site/sdd-skill/README.md`
 > - Read `./docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
 > - Read `./docs/future_explorations/mcp_server/sdd_mcp_server_design.md`
-> - Read `./docs/readme_support_docs/sdd-skill/README.md`
-> - Read `./docs/readme_support_docs/sdd-helper/README.md`
+> - Read `./docs/doc_site/sdd-skill/README.md`
+> - Read `./docs/doc_site/sdd-helper/README.md`
 >
 > </details>
 </details>

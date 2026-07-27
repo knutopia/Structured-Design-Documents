@@ -4,7 +4,7 @@
 
 ## Product Design Graph
 
-SDD captures the structural elements of a design and their relationships in a unified **product design graph**. The range of the graph covers high-level *why* (outcomes) all the way to low-level *how* (UI contracts), with everything linked together. From an SDD document that contains a range of content, different [diagrams](../diagram_types/README.md) can be rendered to show a specific perspective.
+SDD captures the structural elements of a design and their relationships in a unified **product design graph**. The range of the graph covers high-level *why* (outcomes) all the way to low-level *how* (UI contracts), with everything linked together. From an SDD document that contains a range of content, different [diagrams](../diagram_types/) can be rendered to show a specific perspective.
 
 The product graph can raise product quality: 
 
