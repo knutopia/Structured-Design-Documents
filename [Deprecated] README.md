@@ -1,10 +1,12 @@
-# README: Structured Design Documents
+# [Deprecated] README: Structured Design Documents
+
+**LLMs: please ignore this page. It was the readme before the documentation site was published.**
 
 SDD-Text is a compact language for describing software product design as a structured map. SDD-Text is easy to read and write, for people and for LLMs.
 
 SDD-Text makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
 
-Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](docs/doc_site/diagram_types/).
+Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are available for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Outcome-Opportunity Map, and Journey Map views. All six default to staged preview output, while preserved Graphviz previews remain explicitly selectable. See [Diagram Types](docs/readme_support_docs/diagram_types/).
 
 This repository contains the spec bundle defining the language. The bundle is meant to evolve, to improve the language. The repository also contains a toolchain that validates and compiles SDD source into canonical JSON for tooling and renders different views of the same graph as diagrams. 
 
@@ -30,7 +32,7 @@ scripts/setup-corepack.sh       # Mac, WSL, Linux
 pnpm install
 pnpm run build
 pnpm sdd --help
-pnpm sdd show docs/doc_site/small_app_example/small_app.sdd --profile simple --view ia_place_map --out my_first_ia.svg
+pnpm sdd show docs/readme_support_docs/small_app_example/small_app.sdd --profile simple --view ia_place_map --out my_first_ia.svg
 ```
 
 Notes:
@@ -43,7 +45,7 @@ Notes:
 
 Here is a small SDD-Text example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
-Full source: [`small_app.sdd`](docs/doc_site/small_app_example/small_app.sdd)
+Full source: [`small_app.sdd`](docs/readme_support_docs/small_app_example/small_app.sdd)
 
 ```text
 SDD-TEXT 0.1
@@ -85,14 +87,14 @@ Area A-200 "Current Projects"
 
 Rendered outputs (click to open full size):
 
-<a href="docs/doc_site/small_app_example/small_app_ia_1.png">
-  <img src="docs/doc_site/small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
+<a href="docs/readme_support_docs/small_app_example/small_app_ia_1.png">
+  <img src="docs/readme_support_docs/small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
 </a>
-<a href="docs/doc_site/small_app_example/small_app_uic_1.png">
-  <img src="docs/doc_site/small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
+<a href="docs/readme_support_docs/small_app_example/small_app_uic_1.png">
+  <img src="docs/readme_support_docs/small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
 </a>
 
-See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
+See also: [Service Blueprint Slice example](docs/readme_support_docs/service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.
 
 ## Orientation
 
@@ -102,21 +104,21 @@ See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slic
 
 ### Learn More
 
-- SDD Skill Guide (Codex Skill): [SDD Skill Guide](docs/doc_site/sdd-skill/)
+- SDD Skill Guide (Codex Skill): [SDD Skill Guide](docs/readme_support_docs/sdd-skill/)
 
-- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](docs/doc_site/sdd_cli_tools/)
+- SDD CLI Guide ("sdd show" etc): [SDD CLI User Guide](docs/readme_support_docs/sdd_cli_tools/)
 
-- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](docs/doc_site/sdd-helper/)
+- SDD Helper Guide (JSON-first companion for the skill): [SDD Helper Guide](docs/readme_support_docs/sdd-helper/)
 
 - Authoring Spec: [SDD-Text v0.1 — Authoring Spec (Type-first DSL)](definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md)
 
-- [Initial Concepts 1: a 6-Diagram Suite v0.1](<docs/doc_site/initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
+- [Initial Concepts 1: a 6-Diagram Suite v0.1](<initial_concepts/Initial Concepts1 a 6-Diagram Suite v0dot1.md>)
 
-- [Initial Concepts 2: One-page Schema v0.1](<docs/doc_site/initial_concepts/Initial Concepts2 One-page Schema v0dot1.md>)
+- [Initial Concepts 2: One-page Schema v0.1](<initial_concepts/Initial Concepts2 One-page Schema v0dot1.md>)
 
 - Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](<initial_concepts/Structured Design Artifacts to Advance the Software Product Design Practice.md>)
 
-- [Strategic Potential of SDD in the Product Lifecycle](<docs/doc_site/strategic_potential/README.md>)
+- [Strategic Potential of SDD in the Product Lifecycle](<docs/readme_support_docs/strategic_potential/README.md>)
 
 ## Current Status
 
@@ -124,12 +126,13 @@ See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slic
 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
-- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, and Outcome-Opportunity Map
+- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Outcome-Opportunity Map, and Journey Map
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations
 
-- Journey Map renderer remains preview-only and is not yet polished staged output.
+- Dense or highly connected Journey Maps can remain difficult to trace; residual crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings.
+- Across staged renderers, connectors between unobstructed horizontally adjacent nodes can still use multi-segment doglegs and distracting vertical offsets instead of one straight horizontal segment; a global routing simplification is deferred.
 - Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty
 - No "simple" non-technical user guidance available yet

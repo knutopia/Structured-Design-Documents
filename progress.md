@@ -30,6 +30,7 @@
 - Removed opaque corners from SVGs
 - Small main index edits
 - Setting up github.io site
+- Site published
 
 ## Sun 7-26
 
