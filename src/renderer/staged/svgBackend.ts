@@ -615,7 +615,6 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   const isServiceBlueprint = scene.viewId === "service_blueprint";
   const lines = [
     `.staged-svg { background: ${paint.canvasBackground}; }`,
-    `.paint-layer { isolation: isolate; }`,
     `.scene-container__chrome { fill: ${paint.palette.containerFill}; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
     `.scene-container.primitive-root .scene-container__chrome { fill: ${paint.palette.canvas}; }`,
     `.scene-container__header-band { fill: ${paint.palette.headerBandFill}; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,

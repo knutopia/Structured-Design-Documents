@@ -65,6 +65,12 @@ describe("staged SVG backend", () => {
     expect(svg).toContain(`base64,${regularWoff.toString("base64")}`);
     expect(svg).toContain(`base64,${semiboldWoff.toString("base64")}`);
     expect(svg.indexOf("font-weight: 400")).toBeLessThan(svg.indexOf("font-weight: 600"));
+    expect(svg).toContain(".staged-svg { background: transparent; }");
+    expect(svg).toContain(".scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }");
+    expect(svg).toContain(
+      '<rect class="scene-container__chrome" x="0" y="0" width="560" height="280" rx="18" ry="18"/>'
+    );
+    expect(svg).not.toContain("isolation: isolate");
     expect(svg.match(/id="scene-marker-arrow-end"/g)).toHaveLength(1);
     expect(svg.match(/id="scene-marker-arrow-start"/g)).toHaveLength(1);
     expect(svg).toContain('markerUnits="userSpaceOnUse"');

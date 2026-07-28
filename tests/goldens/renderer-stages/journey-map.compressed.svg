@@ -9,8 +9,7 @@
     }
     ]]></style>
     <style><![CDATA[
-    .staged-svg { background: #f7f8fb; }
-    .paint-layer { isolation: isolate; }
+    .staged-svg { background: transparent; }
     .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
     .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
     .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }

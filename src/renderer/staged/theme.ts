@@ -296,7 +296,7 @@ const defaultTheme: RendererTheme = {
     }
   },
   paint: {
-    canvasBackground: "#f7f8fb",
+    canvasBackground: "transparent",
     strokeWidth: 1.5,
     edgeStrokeWidth: 2,
     portRadius: 4,
