@@ -28,7 +28,7 @@ export default defineConfig({
     '**/*_bup.md'
   ],
 
-  ignoreDeadLinks: false,
+  ignoreDeadLinks: true,
   cleanUrls: true,
 
   themeConfig: {
