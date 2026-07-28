@@ -24,6 +24,7 @@
 - Improved SVG font rendering by adding 600 weight
 - Refreshed small app and billSage examples with better font rendering
 - Removed opaque corners from SVGs
+- Small main index edit
 
 ## Sun 7-26
 
