@@ -23,28 +23,60 @@ export default defineConfig({
   title: "Structured Design Documents",
   description: "Semantically Defined Structural Design for Better Products",
 
-  ignoreDeadLinks: true,
+  ignoreDeadLinks: false,
   cleanUrls: true,
 
-    themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+  themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
-    ],
-
-    sidebar: [
+      { text: 'Diagram Types', link: '/diagram_types/' },
+      {
+        text: 'Using SDD',
+        items: [
+          { text: 'Command Line', link: '/sdd_cli_tools/' },
+          { text: 'SDD Skill', link: '/sdd-skill/' }
+        ]
+      },
       {
         text: 'Examples',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          {
+            text: 'Service Blueprint',
+            link: '/service_blueprint_slice_example/'
+          }
+        ]
+      },
+      { text: 'Strategic Potential', link: '/strategic_potential/' }
+    ],
+/*
+    sidebar: [
+      {
+        text: 'Documentation',
+        items: [
+          { text: 'Diagram Types', link: '/diagram_types/' },
+          {
+            text: 'Service Blueprint Example',
+            link: '/service_blueprint_slice_example/'
+          },
+          {
+            text: 'SDD Command Line Tools',
+            link: '/sdd_cli_tools/'
+          },
+          { text: 'SDD Skill', link: '/sdd-skill/' },
+          { text: 'SDD Helper', link: '/sdd-helper/' },
+          {
+            text: 'Strategic Potential',
+            link: '/strategic_potential/'
+          }
         ]
       }
     ],
-
+*/
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      {
+        icon: 'github',
+        link: 'https://github.com/knutopia/Structured-Design-Documents'
+      }
     ]
   },
 

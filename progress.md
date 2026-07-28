@@ -31,6 +31,7 @@
 - Small main index edits
 - Setting up github.io site
 - Site published
+- Cleaned footer, added menu bar
 
 ## Sun 7-26
 
