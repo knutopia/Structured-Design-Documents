@@ -18,6 +18,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 7-28
+
+- Re-added journey map example
+
 ## Mon 7-27
 
 - Created RM_bup of main readme
