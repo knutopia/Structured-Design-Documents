@@ -37,7 +37,7 @@ Different aspects of the unified graph can be shown (rendered) as diagrams. Usab
 - To provide a means to AI and LLM workflows to "speak design", so they can create structural design information outside blobs of code.
 - To give "traditional" product, design, and diagramming tools a shared semantic layer they can integrate with.
 
-## Example: Small App
+## Example: Small App <Badge type="info" text="Simple Profile" vertical="top" />
 
 Here is a small SDD example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.
 
@@ -47,7 +47,7 @@ Here is a small SDD example showing a dashboard, a project area, and a few linke
 == Diagram
 ![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
 == SDD Source
-Information architecture content
+Highlights on information architecture content
 showRepoLink docs/doc_site/small_app_example {pos: up}
 showSource ./small_app_example/small_app.sdd {10, 12, 25, 27-30, 32, 39, 40, 54, 56, 57, 61-64, 66, 67, 76, 81, 93, 95, 96}
 === UI Contracts Diagram
@@ -61,7 +61,7 @@ showSource ./small_app_example/small_app.sdd {10, 13-15, 17, 20, 30, 33-38, 41, 
 :::
 ::::
 
-See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.
+See also: [Service Blueprint Slice example](service_blueprint_slice_example/), connecting customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram from an SDD file on the command line.
 
 ## Using SDD
 

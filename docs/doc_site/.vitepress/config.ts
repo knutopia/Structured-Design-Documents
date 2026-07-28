@@ -19,6 +19,7 @@ const showSourceOptions = {
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
 
+  base: '/Structured-Design-Documents/', 
   title: "Structured Design Documents",
   description: "Semantically Defined Structural Design for Better Products",
 
