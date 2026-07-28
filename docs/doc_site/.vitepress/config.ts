@@ -23,6 +23,11 @@ export default defineConfig({
   title: "Structured Design Documents",
   description: "Semantically Defined Structural Design for Better Products",
 
+  srcExclude: [
+    'README.md',
+    '**/*_bup.md'
+  ],
+
   ignoreDeadLinks: false,
   cleanUrls: true,
 

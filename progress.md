@@ -32,6 +32,7 @@
 - Setting up github.io site
 - Site published
 - Cleaned footer, added menu bar
+- Removed some dead links
 
 ## Sun 7-26
 

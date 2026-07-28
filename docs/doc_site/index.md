@@ -87,7 +87,7 @@ The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behin
 
 - [Initial Concepts 2: One-page Schema v0.1](initial_concepts/Initial%20Concepts2%20One-page%20Schema%20v0dot1.md)
 
-- Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](../../initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice.md)
+- Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice.md)
 
-- [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/README.md>)
+- [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/>)
 
