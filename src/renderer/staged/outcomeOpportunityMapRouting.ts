@@ -3935,7 +3935,7 @@ function createAggregateLabelMeasureContext(
   diagnostics.push(...resolvedTheme.diagnostics);
 
   return {
-    measureText: createTextMeasurementService(resolvedTheme.theme.fontAssets.measurement),
+    measureText: createTextMeasurementService(resolvedTheme.theme.fontFaces),
     textStyle: resolvedTheme.theme.textStyles[AGGREGATE_LABEL_TEXT_STYLE_ROLE] ?? resolvedTheme.theme.textStyles.label
   };
 }

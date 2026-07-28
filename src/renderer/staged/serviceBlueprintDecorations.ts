@@ -78,7 +78,7 @@ export function buildServiceBlueprintLaneDecorations(
   const decorations: PositionedDecoration[] = [];
   const theme = getRendererTheme(scene.themeId, "measure");
   const separatorTitleStyle = theme.textStyles.edge_label;
-  const measureText = createTextMeasurementService(theme.fontAssets.measurement);
+  const measureText = createTextMeasurementService(theme.fontFaces);
   const separatorTitleGapWidth = measureText.measureText(SEPARATOR_TITLE_GAP_TEXT, separatorTitleStyle);
   const cellById = buildPositionedCellMap(scene);
   const laneShellById = new Map(middleLayer.laneShells.map((laneShell) => [laneShell.id, laneShell] as const));

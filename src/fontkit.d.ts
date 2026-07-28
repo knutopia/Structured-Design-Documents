@@ -11,10 +11,18 @@ declare module "fontkit" {
   }
 
   export interface Font {
+    familyName: string;
+    subfamilyName: string;
+    fullName: string;
+    postscriptName: string;
+    version: string;
     unitsPerEm: number;
     ascent: number;
     descent: number;
     lineGap: number;
+    "OS/2": {
+      usWeightClass: number;
+    };
     layout(text: string, features?: string[] | Record<string, boolean>): GlyphRun;
   }
 

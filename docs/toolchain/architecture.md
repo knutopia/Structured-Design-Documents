@@ -201,6 +201,7 @@ Preview artifacts build on top of a backend-aware preview layer rather than expa
 - `renderSource` still returns only internal DOT or Mermaid text artifacts
 - `sdd show` resolves preview output through a backend registry; all six renderable views default to staged preview backends
 - `sdd show --format png` continues to derive PNG from SVG in both backend paths, with the vendored Public Sans desktop font keeping PNG export independent of user-installed fonts
+- staged SVG viewports remain transparent outside the rounded root container; the opaque root geometry owns the visible canvas and provides the backdrop beneath all text
 - `sdd show --dot-out` remains an internal/debug option and automatically selects a DOT-capable preview backend when the chosen default backend does not expose DOT intermediates
 - preview styling defaults are bundle-owned, with shared defaults at the `views.yaml` level, optional per-view overrides, and separate SVG and PNG font asset paths
 - the staged renderer contracts and staged SVG backend still exist in parallel with internal text artifacts and legacy preview outputs; all six renderable views exercise staged preview paths through the normal preview workflow and committed corpus, and legacy Graphviz preview remains explicitly available in parallel

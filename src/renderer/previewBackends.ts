@@ -14,6 +14,7 @@ import type {
   RendererBackendClass,
   TextRenderFormat
 } from "./renderArtifacts.js";
+import { resolveStagedPreviewStyle } from "./previewStyle.js";
 import type { RendererDiagnostic } from "./staged/diagnostics.js";
 import {
   renderIaPlaceMapStagedPng,
@@ -39,6 +40,7 @@ import {
   renderServiceBlueprintStagedPng,
   renderServiceBlueprintStagedSvg
 } from "./staged/serviceBlueprint.js";
+import { registerStagedRendererTheme } from "./staged/theme.js";
 
 export const STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID = "staged_ia_place_map_preview";
 export const STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID = "staged_journey_map_preview";
@@ -147,13 +149,17 @@ function createStagedProjectionPreviewBackend(
         throw new Error(`Preview backend '${options.id}' only supports the ${options.viewId} view.`);
       }
 
+      const themeId = registerStagedRendererTheme(
+        request.source.themeId ?? "default",
+        resolveStagedPreviewStyle(request.bundle, request.view)
+      );
       if (request.format === "svg") {
         const rendered = await options.renderSvg(
           request.source.projection,
           request.source.graph,
           request.view,
           request.source.profileId,
-          request.source.themeId,
+          themeId,
           request.bundle
         );
         return {
@@ -168,7 +174,7 @@ function createStagedProjectionPreviewBackend(
         request.source.graph,
         request.view,
         request.source.profileId,
-        request.source.themeId,
+        themeId,
         request.bundle
       );
       return {

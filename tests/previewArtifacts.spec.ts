@@ -110,4 +110,38 @@ describe("legacyGraphvizPreviewBackend helpers", () => {
     );
     expect(Buffer.from(png)).toEqual(Buffer.from("png"));
   });
+
+  it("registers ordered Regular and Semibold desktop faces for staged PNG rendering", async () => {
+    ResvgMock.mockImplementation(() => ({
+      render: () => ({
+        asPng: () => Buffer.from("png")
+      })
+    }));
+    const regularPath = path.join(
+      repoRoot,
+      "bundle/v0.1/assets/fonts/PublicSans-Regular.otf"
+    );
+    const semiboldPath = path.join(
+      repoRoot,
+      "bundle/v0.1/assets/fonts/PublicSans-SemiBold.otf"
+    );
+    const { renderSvgToPng } = await import("../src/renderer/svgArtifacts.js");
+
+    await renderSvgToPng(
+      [
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="100">',
+        '<text x="12" y="40" font-family="Public Sans" font-size="24" font-weight="400">Regular</text>',
+        '<text x="12" y="80" font-family="Public Sans" font-size="24" font-weight="600">Semibold</text>',
+        "</svg>"
+      ].join(""),
+      {
+        dpi: 192,
+        fontFamily: "Public Sans",
+        pngFontAssetPaths: [regularPath, semiboldPath]
+      }
+    );
+
+    const options = ResvgMock.mock.calls[0][1];
+    expect(options.font.fontFiles).toEqual([regularPath, semiboldPath]);
+  });
 });

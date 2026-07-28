@@ -61,16 +61,6 @@ showSource ./small_app_example/small_app.sdd {10, 13-15, 17, 20, 30, 33-38, 41, 
 :::
 ::::
 
-:::tabs
-== Information Architecture Diagram
-![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
-== UI Contracts Diagram
-![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
-== SDD Source
-showRepoLink docs/doc_site/small_app_example
-showSource ./small_app_example/small_app.sdd
-:::
-
 See also: [Service Blueprint Slice example](service_blueprint_slice_example/) for a service blueprint diagram,  that connects customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram using SDD on the command line.
 
 ## Using SDD

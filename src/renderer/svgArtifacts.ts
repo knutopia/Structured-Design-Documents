@@ -12,7 +12,10 @@ export interface SvgRasterizationOptions {
   dpi?: number;
   fontFamily: string;
   pngFontAssetPath?: string;
+  pngFontAssetPaths?: string[];
 }
+
+const embeddedFontFaceCssCache = new Map<string, Promise<string>>();
 
 function escapeCssString(value: string): string {
   return value.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -51,18 +54,31 @@ export async function buildEmbeddedFontFaceCss(options: SvgFontFaceOptions): Pro
     return undefined;
   }
 
-  const fontBuffer = await readFile(options.fontAssetPath);
-  const { mimeType, format } = inferFontMimeType(options.fontAssetPath);
-  const fontData = fontBuffer.toString("base64");
+  const cacheKey = JSON.stringify({
+    fontFamily: options.fontFamily,
+    fontAssetPath: options.fontAssetPath,
+    fontStyle: options.fontStyle ?? "normal",
+    fontWeight: options.fontWeight ?? 400
+  });
+  const cached = embeddedFontFaceCssCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
 
-  return [
-    "@font-face {",
-    `  font-family: '${escapeCssString(options.fontFamily)}';`,
-    `  src: url("data:${mimeType};base64,${fontData}") format('${format}');`,
-    `  font-style: ${options.fontStyle ?? "normal"};`,
-    `  font-weight: ${options.fontWeight ?? 400};`,
-    "}"
-  ].join("\n");
+  const css = readFile(options.fontAssetPath).then((fontBuffer) => {
+    const { mimeType, format } = inferFontMimeType(options.fontAssetPath!);
+    const fontData = fontBuffer.toString("base64");
+    return [
+      "@font-face {",
+      `  font-family: '${escapeCssString(options.fontFamily)}';`,
+      `  src: url("data:${mimeType};base64,${fontData}") format('${format}');`,
+      `  font-style: ${options.fontStyle ?? "normal"};`,
+      `  font-weight: ${options.fontWeight ?? 400};`,
+      "}"
+    ].join("\n");
+  });
+  embeddedFontFaceCssCache.set(cacheKey, css);
+  return css;
 }
 
 export async function buildEmbeddedFontFaceStyleElement(options: SvgFontFaceOptions): Promise<string | undefined> {
@@ -72,6 +88,17 @@ export async function buildEmbeddedFontFaceStyleElement(options: SvgFontFaceOpti
   }
 
   return `<style><![CDATA[\n${css}\n]]></style>`;
+}
+
+export async function buildEmbeddedFontFaceStyleElements(
+  faces: readonly SvgFontFaceOptions[]
+): Promise<string[]> {
+  const elements = await Promise.all(
+    [...faces]
+      .sort((left, right) => (left.fontWeight ?? 400) - (right.fontWeight ?? 400))
+      .map((face) => buildEmbeddedFontFaceStyleElement(face))
+  );
+  return elements.filter((element): element is string => element !== undefined);
 }
 
 export async function embedSvgFontFace(svg: string, options: SvgFontFaceOptions): Promise<string> {
@@ -90,10 +117,14 @@ export async function embedSvgFontFace(svg: string, options: SvgFontFaceOptions)
 }
 
 export async function renderSvgToPng(svg: string, options: SvgRasterizationOptions): Promise<Uint8Array> {
+  const fontFiles = [
+    ...(options.pngFontAssetPaths ?? []),
+    ...(options.pngFontAssetPath ? [options.pngFontAssetPath] : [])
+  ].filter((fontPath, index, allPaths) => allPaths.indexOf(fontPath) === index);
   const resvgOptions: ConstructorParameters<typeof Resvg>[1] = {
     dpi: options.dpi ?? 192,
     font: {
-      ...(options.pngFontAssetPath ? { fontFiles: [options.pngFontAssetPath] } : {}),
+      ...(fontFiles.length > 0 ? { fontFiles } : {}),
       loadSystemFonts: false,
       defaultFontFamily: options.fontFamily,
       sansSerifFamily: options.fontFamily,

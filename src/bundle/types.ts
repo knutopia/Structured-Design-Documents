@@ -340,8 +340,28 @@ export interface DotPreviewStyleConfig {
   dpi?: number;
 }
 
+export interface StagedPreviewFontFaceConfig {
+  font_weight: number;
+  measurement_font_asset?: string;
+  svg_font_asset?: string;
+  png_font_asset?: string;
+}
+
+export interface StagedPreviewStyleConfig {
+  font_family?: string;
+  font_faces?: StagedPreviewFontFaceConfig[];
+  width_bands?: {
+    chip?: number;
+    narrow?: number;
+    standard?: number;
+    wide?: number;
+  };
+  dpi?: number;
+}
+
 export interface PreviewDefaultsConfig {
   dot?: DotPreviewStyleConfig;
+  staged?: StagedPreviewStyleConfig;
 }
 
 export interface RendererSemanticColumnConfig {

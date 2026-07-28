@@ -195,7 +195,7 @@ describe("journey map measurement and pre-routing placement", () => {
       allowed: ["standard", "wide"]
     });
     expect(longStep.widthBand).toBe("wide");
-    expect(longStep.width).toBe(304);
+    expect(longStep.width).toBe(308);
     expect(longStep.overflow).toEqual({ status: "escalated_width_band" });
     expect(longStep.content[0]?.lines).toEqual([
       "Compare plans, eligibility details, and",

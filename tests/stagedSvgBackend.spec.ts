@@ -1,9 +1,13 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { renderPositionedSceneToPng, renderPositionedSceneToSvg } from "../src/renderer/staged/svgBackend.js";
 import { expectRendererStageTextSnapshot } from "./rendererStageSnapshotHarness.js";
 import { buildPositionedSvgFixture } from "./stagedSvgFixtures.js";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("staged SVG backend", () => {
   it("matches the committed SVG snapshot for the synthetic positioned scene", async () => {
@@ -50,8 +54,23 @@ describe("staged SVG backend", () => {
   it("emits layered paint groups, embedded font CSS, and split arrow marker defs", async () => {
     const scene = buildPositionedSvgFixture();
     const { svg } = await renderPositionedSceneToSvg(scene);
+    const regularWoff = await readFile(
+      path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-Regular.woff")
+    );
+    const semiboldWoff = await readFile(
+      path.join(repoRoot, "bundle/v0.1/assets/fonts/PublicSans-SemiBold.woff")
+    );
 
-    expect(svg).toContain("@font-face");
+    expect(svg.match(/@font-face/g)).toHaveLength(2);
+    expect(svg).toContain(`base64,${regularWoff.toString("base64")}`);
+    expect(svg).toContain(`base64,${semiboldWoff.toString("base64")}`);
+    expect(svg.indexOf("font-weight: 400")).toBeLessThan(svg.indexOf("font-weight: 600"));
+    expect(svg).toContain(".staged-svg { background: transparent; }");
+    expect(svg).toContain(".scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }");
+    expect(svg).toContain(
+      '<rect class="scene-container__chrome" x="0" y="0" width="560" height="280" rx="18" ry="18"/>'
+    );
+    expect(svg).not.toContain("isolation: isolate");
     expect(svg.match(/id="scene-marker-arrow-end"/g)).toHaveLength(1);
     expect(svg.match(/id="scene-marker-arrow-start"/g)).toHaveLength(1);
     expect(svg).toContain('markerUnits="userSpaceOnUse"');

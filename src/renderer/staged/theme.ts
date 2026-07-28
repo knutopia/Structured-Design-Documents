@@ -1,5 +1,7 @@
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { StagedPreviewStyle } from "../previewStyle.js";
 import type {
   BoxSpacing,
   ContentBlockKind,
@@ -76,15 +78,20 @@ export interface RendererPaintTheme {
   palette: RendererPaintPalette;
 }
 
+export interface RendererFontFace {
+  fontWeight: number;
+  fontStyle: "normal";
+  measurementFontAssetPath: string;
+  svgFontAssetPath: string;
+  pngFontAssetPath: string;
+}
+
 export interface RendererTheme {
   id: string;
   revision: string;
   fontFamily: string;
-  fontAssets: {
-    measurement: string;
-    svg: string;
-    png: string;
-  };
+  fontFaces: RendererFontFace[];
+  dpi: number;
   widthBands: Record<WidthBand, number>;
   edgeLabelMaxWidth: number;
   textStyles: Record<string, TextStyleToken>;
@@ -107,18 +114,30 @@ const bundledFontsRoot = path.resolve(repoRoot, "bundle/v0.1/assets/fonts");
 
 const defaultTheme: RendererTheme = {
   id: "default",
-  revision: "public-sans-v0.1",
+  revision: "public-sans-v0.2",
   fontFamily: "Public Sans",
-  fontAssets: {
-    measurement: path.resolve(bundledFontsRoot, "PublicSans-Regular.otf"),
-    svg: path.resolve(bundledFontsRoot, "PublicSans-Regular.woff"),
-    png: path.resolve(bundledFontsRoot, "PublicSans-Regular.otf")
-  },
+  fontFaces: [
+    {
+      fontWeight: 400,
+      fontStyle: "normal",
+      measurementFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-Regular.otf"),
+      svgFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-Regular.woff"),
+      pngFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-Regular.otf")
+    },
+    {
+      fontWeight: 600,
+      fontStyle: "normal",
+      measurementFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-SemiBold.otf"),
+      svgFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-SemiBold.woff"),
+      pngFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-SemiBold.otf")
+    }
+  ],
+  dpi: 192,
   widthBands: {
     chip: 96,
     narrow: 168,
     standard: 224,
-    wide: 304
+    wide: 308
   },
   edgeLabelMaxWidth: 180,
   textStyles: {
@@ -277,7 +296,7 @@ const defaultTheme: RendererTheme = {
     }
   },
   paint: {
-    canvasBackground: "#f7f8fb",
+    canvasBackground: "transparent",
     strokeWidth: 1.5,
     edgeStrokeWidth: 2,
     portRadius: 4,
@@ -320,22 +339,158 @@ const defaultTheme: RendererTheme = {
   }
 };
 
-const themeRegistry = new Map<string, RendererTheme>([[defaultTheme.id, defaultTheme]]);
+interface RendererThemeRegistryEntry {
+  theme: RendererTheme;
+  unknownThemeId?: string;
+  incompleteFontWeights: number[];
+}
+
+const themeRegistry = new Map<string, RendererThemeRegistryEntry>([[
+  defaultTheme.id,
+  {
+    theme: defaultTheme,
+    incompleteFontWeights: []
+  }
+]]);
 
 export interface ResolvedRendererTheme {
   theme: RendererTheme;
   diagnostics: RendererDiagnostic[];
 }
 
+function getRequiredFontWeights(theme: RendererTheme): number[] {
+  return [...new Set(
+    Object.values(theme.textStyles).map((style) => style.fontWeight)
+  )].sort((left, right) => left - right);
+}
+
+function isCompleteStagedFontFace(
+  face: StagedPreviewStyle["fontFaces"][number] | undefined
+): boolean {
+  return Boolean(
+    face?.measurementFontAssetPath &&
+    face.svgFontAssetPath &&
+    face.pngFontAssetPath
+  );
+}
+
+export function registerStagedRendererTheme(
+  requestedThemeId: string,
+  style: StagedPreviewStyle
+): string {
+  const baseEntry = themeRegistry.get(requestedThemeId);
+  const baseTheme = baseEntry?.theme ?? defaultTheme;
+  const overrideFaces = [...style.fontFaces].sort((left, right) => left.fontWeight - right.fontWeight);
+  const registryHash = createHash("sha256")
+    .update(JSON.stringify({
+      requestedThemeId,
+      fontFamily: style.fontFamily,
+      fontFaces: overrideFaces,
+      widthBands: style.widthBands,
+      dpi: style.dpi
+    }))
+    .digest("hex")
+    .slice(0, 16);
+  const registryId = `${requestedThemeId}@fonts-${registryHash}`;
+  if (themeRegistry.has(registryId)) {
+    return registryId;
+  }
+
+  const overridesByWeight = new Map(overrideFaces.map((face) => [face.fontWeight, face] as const));
+  const mergedFacesByWeight = new Map(
+    baseTheme.fontFaces.map((face) => [face.fontWeight, { ...face }] as const)
+  );
+
+  for (const override of overrideFaces) {
+    const fallback = mergedFacesByWeight.get(override.fontWeight);
+    if (!fallback) {
+      if (!isCompleteStagedFontFace(override)) {
+        continue;
+      }
+      mergedFacesByWeight.set(override.fontWeight, {
+        fontWeight: override.fontWeight,
+        fontStyle: "normal",
+        measurementFontAssetPath: override.measurementFontAssetPath!,
+        svgFontAssetPath: override.svgFontAssetPath!,
+        pngFontAssetPath: override.pngFontAssetPath!
+      });
+      continue;
+    }
+
+    mergedFacesByWeight.set(override.fontWeight, {
+      ...fallback,
+      ...(override.measurementFontAssetPath
+        ? { measurementFontAssetPath: override.measurementFontAssetPath }
+        : {}),
+      ...(override.svgFontAssetPath
+        ? { svgFontAssetPath: override.svgFontAssetPath }
+        : {}),
+      ...(override.pngFontAssetPath
+        ? { pngFontAssetPath: override.pngFontAssetPath }
+        : {})
+    });
+  }
+
+  const incompleteFontWeights = getRequiredFontWeights(baseTheme).filter((fontWeight) =>
+    !isCompleteStagedFontFace(overridesByWeight.get(fontWeight))
+  );
+  const theme: RendererTheme = {
+    ...baseTheme,
+    fontFamily: style.fontFamily,
+    fontFaces: [...mergedFacesByWeight.values()].sort(
+      (left, right) => left.fontWeight - right.fontWeight
+    ),
+    widthBands: {
+      ...baseTheme.widthBands,
+      ...(style.widthBands ?? {})
+    },
+    dpi: style.dpi
+  };
+
+  themeRegistry.set(registryId, {
+    theme,
+    ...(baseEntry ? {} : { unknownThemeId: requestedThemeId }),
+    incompleteFontWeights
+  });
+  return registryId;
+}
+
+export function getRendererFontFace(theme: RendererTheme, fontWeight: number): RendererFontFace {
+  const face = theme.fontFaces.find((candidate) => candidate.fontWeight === fontWeight);
+  if (!face) {
+    throw new Error(
+      `Staged renderer theme "${theme.id}" does not provide font weight ${fontWeight}.`
+    );
+  }
+  return face;
+}
+
 export function resolveRendererTheme(
   themeId: string,
   diagnosticPhase: RendererDiagnosticPhase = "measure"
 ): ResolvedRendererTheme {
-  const theme = themeRegistry.get(themeId);
-  if (theme) {
+  const entry = themeRegistry.get(themeId);
+  if (entry) {
+    const diagnostics: RendererDiagnostic[] = [];
+    if (entry.unknownThemeId) {
+      diagnostics.push(createRendererDiagnostic(
+        diagnosticPhase,
+        `renderer.${diagnosticPhase}.unknown_theme`,
+        "warn",
+        `Unknown staged renderer theme "${entry.unknownThemeId}". Falling back to "default".`
+      ));
+    }
+    for (const fontWeight of entry.incompleteFontWeights) {
+      diagnostics.push(createRendererDiagnostic(
+        diagnosticPhase,
+        `renderer.${diagnosticPhase}.incomplete_font_weight`,
+        "warn",
+        `Configured staged font weight ${fontWeight} is incomplete. Falling back to the theme's vendored face.`
+      ));
+    }
     return {
-      theme,
-      diagnostics: []
+      theme: entry.theme,
+      diagnostics
     };
   }
 
