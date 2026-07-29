@@ -65,6 +65,7 @@ describe("rendered example corpus", () => {
     expect(readme).not.toContain("[preview_only]");
     expect(readme).toContain("outcome_opportunity_map_diagram_type/metric_event_instrumentation_example");
     expect(readme).not.toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
+    expect(readme).toContain("journey_map_diagram_type/branching_journey_example");
     expect(readme).toContain("journey_map_diagram_type/service_blueprint_slice_example");
     expect(readme).toContain("`journey_map` visual review checklist:");
     expect(readme).toContain("scenario_flow_diagram_type/scenario_branching_example");

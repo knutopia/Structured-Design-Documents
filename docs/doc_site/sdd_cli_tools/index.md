@@ -87,14 +87,14 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map -
 pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --profile simple --out ./blueprint.svg
 pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
 pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --profile simple --out ./journey.svg
+pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
 ```
 
 Advanced note: all six v0.1 preview views default to staged SVG/PNG backends. `--backend legacy_graphviz_preview` selects preserved Graphviz output, for example:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --backend legacy_graphviz_preview --out ./journey-legacy.svg
+pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --backend legacy_graphviz_preview --out ./journey-legacy.svg
 ```
 
 ### `sdd validate`
