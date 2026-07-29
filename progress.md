@@ -21,7 +21,8 @@
 ## Wed 7-29
 
 - Noodled on quick syntax reference
-
+- Merged improvements
+- Detail edit in diagram types
 ## Tue 7-28
 
 - Re-added journey map example

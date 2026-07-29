@@ -2,9 +2,8 @@
 
 This page collects the current diagram families, their status, and links to available examples.
 
-See the [dropdown-switch node and edge reference](./dropdown_switch_example)
-for a compact comparison of the contracts available to each staged renderer
-diagram type.
+See the [node and edge reference](./dropdown_switch_example)
+for a compact list of content available to each diagram type.
 
 ## IA (Information Architecture) / Place Map
 
