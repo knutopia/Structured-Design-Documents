@@ -2,15 +2,15 @@
 
 Compact reference of content relationships per diagram type, listing available nodes and edges (relationships) per diagram type.
 
-A few counterpart node types are outside that view's visible node set because
-cross-view relationships can still be represented by the projection as
-annotations.
-
 > [!IMPORTANT]
 > In technical terms, this page is downstream documentation, 
 > not a normative source. Diagram node
 > and edge inclusion comes from `bundle/v0.1/core/views.yaml`; relationship
 > direction and endpoints come from `bundle/v0.1/core/contracts.yaml`.
+
+A few counterpart node types are outside that view's visible node set because
+cross-view relationships can still be represented by the projection as
+annotations.
 
 ::: dropdownSwitch Diagram type
 == IA Place Map
