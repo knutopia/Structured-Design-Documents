@@ -11,6 +11,7 @@ import {
   type ShowSourceMarkdownOptions
 } from './markdown/showSource'
 import { showRepoLinkMarkdownPlugin } from './markdown/showRepoLink'
+import { dropdownSwitchMarkdownPlugin } from './markdown/dropdownSwitch'
 
 const showSourceOptions = {
   lineNumbers: true
@@ -101,6 +102,8 @@ export default defineConfig({
       md.use(showSourceMarkdownPlugin, showSourceOptions);
       // Link to a source directory, optionally aligned with preceding prose.
       md.use(showRepoLinkMarkdownPlugin);
+      // Switch arbitrary Markdown content with an accessible in-page select.
+      md.use(dropdownSwitchMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {

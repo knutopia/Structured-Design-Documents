@@ -24,6 +24,8 @@
 - Fixed svg display-in-dev-mode regression
 - Added better canonical journey map example
 - Found & documented journey map renderer branching coverage gap
+- Added dropdown switch
+- Added quick syntax reference
 
 ## Mon 7-27
 

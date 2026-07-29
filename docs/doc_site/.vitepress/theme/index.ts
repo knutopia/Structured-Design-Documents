@@ -4,6 +4,7 @@ import DefaultTheme from 'vitepress/theme'
 import InlineIcon from './components/InlineIcon.vue'
 import IconGitHub from './components/IconGitHub.vue'
 import IconFile from './components/IconFile.vue'
+import DropdownSwitch from './components/DropdownSwitch.vue'
 import Layout from "./Layout.vue";
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import './style.css'
@@ -19,6 +20,7 @@ export default {
     app.component('InlineIcon', InlineIcon)
     app.component('IconGitHub', IconGitHub)
     app.component('IconFile', IconFile)
+    app.component('DropdownSwitch', DropdownSwitch)
     enhanceAppWithTabs(app)
   }
 } satisfies Theme
