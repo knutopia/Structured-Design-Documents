@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+
+-fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
 
 -Making an SDD from Scratch Doc!
@@ -23,6 +25,9 @@
 - Noodled on quick syntax reference
 - Merged improvements
 - Detail edit in diagram types
+- Disentangled dropdown-switch demo from node-edge reference
+- Created hidden_edge_reference.md
+- Added hidden-node detail to node_edge_reference.md
 ## Tue 7-28
 
 - Re-added journey map example
