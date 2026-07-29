@@ -18,12 +18,18 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 7-29
+
+- Noodled on quick syntax reference
+
 ## Tue 7-28
 
 - Re-added journey map example
 - Fixed svg display-in-dev-mode regression
 - Added better canonical journey map example
 - Found & documented journey map renderer branching coverage gap
+- Added dropdown switch
+- Added quick syntax reference
 
 ## Mon 7-27
 
