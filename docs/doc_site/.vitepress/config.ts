@@ -16,10 +16,12 @@ const showSourceOptions = {
   lineNumbers: true
 } satisfies ShowSourceMarkdownOptions
 
+const siteBase = '/Structured-Design-Documents/'
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
 
-  base: '/Structured-Design-Documents/', 
+  base: siteBase,
   title: "Structured Design Documents",
   description: "Semantically Defined Structural Design for Better Products",
 
@@ -135,6 +137,42 @@ export default defineConfig({
       }
     },
     plugins: [
+      {
+        name: 'restore-base-for-code-managed-assets-in-dev',
+        apply: 'serve',
+        configureServer(server) {
+          // These directories stay at the repository root because their files are
+          // generated or otherwise managed by the toolchain. viteStaticCopy below
+          // exposes them without requiring a second copy under docs/doc_site.
+          const codeManagedAssetPrefixes = [
+            '/examples/',
+            '/real_world_exploration/',
+            '/definitions/'
+          ]
+
+          server.middlewares.use((req, _res, next) => {
+            const url = req.url
+
+            // Production builds turn relative Markdown images into fingerprinted
+            // /assets/* files and include siteBase. In dev, VitePress currently
+            // emits root-relative URLs such as /examples/rendered/example.svg.
+            // With a non-root base, Vite rejects those requests before the
+            // viteStaticCopy middleware can see them.
+            if (
+              url &&
+              codeManagedAssetPrefixes.some((prefix) => url.startsWith(prefix))
+            ) {
+              // configureServer hooks run before Vite's internal base middleware.
+              // Add the base here so Vite accepts the request; Vite then strips
+              // the base again, leaving /examples/* (or another allowlisted
+              // prefix) for viteStaticCopy to resolve from its explicit file map.
+              req.url = `${siteBase.slice(0, -1)}${url}`
+            }
+
+            next()
+          })
+        }
+      },
       {
         name: 'serve-sdd-files',
         configureServer(server) {

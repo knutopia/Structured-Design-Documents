@@ -116,13 +116,13 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map -
 Render a Journey Map SVG preview artifact:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out /tmp/journey.svg
+pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --out /tmp/journey.svg
 ```
 
 Render the preserved legacy Graphviz Journey Map explicitly:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --backend legacy_graphviz_preview --out /tmp/journey-legacy.svg
+pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --backend legacy_graphviz_preview --out /tmp/journey-legacy.svg
 ```
 
 Dense journey routing can emit `renderer.routing.journey_map_unavoidable_crossing` warnings. These diagnostics preserve the artifact and identify deterministic continuity bridges; they do not claim that a highly connected diagram is easy to trace.

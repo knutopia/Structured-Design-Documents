@@ -1,0 +1,153 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "journey_map",
+  "source_example": "branching_journey",
+  "nodes": [
+    {
+      "id": "G-100",
+      "type": "Stage",
+      "name": "Discover a cooking class"
+    },
+    {
+      "id": "G-200",
+      "type": "Stage",
+      "name": "Reserve a place"
+    },
+    {
+      "id": "G-300",
+      "type": "Stage",
+      "name": "Prepare and enjoy"
+    },
+    {
+      "id": "J-101",
+      "type": "Step",
+      "name": "Find an appealing class"
+    },
+    {
+      "id": "J-102",
+      "type": "Step",
+      "name": "Review the class details"
+    },
+    {
+      "id": "J-201",
+      "type": "Step",
+      "name": "Choose how to attend"
+    },
+    {
+      "id": "J-202",
+      "type": "Step",
+      "name": "Book an in-person seat"
+    },
+    {
+      "id": "J-203",
+      "type": "Step",
+      "name": "Book the online session"
+    },
+    {
+      "id": "J-204",
+      "type": "Step",
+      "name": "Confirm the registration"
+    },
+    {
+      "id": "J-301",
+      "type": "Step",
+      "name": "Review preparation details"
+    },
+    {
+      "id": "J-303",
+      "type": "Step",
+      "name": "Enjoy the cooking class"
+    }
+  ],
+  "edges": [
+    {
+      "from": "G-100",
+      "type": "CONTAINS",
+      "to": "J-101"
+    },
+    {
+      "from": "G-100",
+      "type": "CONTAINS",
+      "to": "J-102"
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-201"
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-202"
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-203"
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-204"
+    },
+    {
+      "from": "G-300",
+      "type": "CONTAINS",
+      "to": "J-301"
+    },
+    {
+      "from": "G-300",
+      "type": "CONTAINS",
+      "to": "J-303"
+    },
+    {
+      "from": "J-101",
+      "type": "PRECEDES",
+      "to": "J-102"
+    },
+    {
+      "from": "J-102",
+      "type": "PRECEDES",
+      "to": "J-201"
+    },
+    {
+      "from": "J-201",
+      "type": "PRECEDES",
+      "to": "J-202"
+    },
+    {
+      "from": "J-201",
+      "type": "PRECEDES",
+      "to": "J-203"
+    },
+    {
+      "from": "J-202",
+      "type": "PRECEDES",
+      "to": "J-204"
+    },
+    {
+      "from": "J-203",
+      "type": "PRECEDES",
+      "to": "J-204"
+    },
+    {
+      "from": "J-204",
+      "type": "PRECEDES",
+      "to": "J-301"
+    },
+    {
+      "from": "J-301",
+      "type": "PRECEDES",
+      "to": "J-303"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

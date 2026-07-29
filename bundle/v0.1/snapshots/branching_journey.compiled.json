@@ -1,0 +1,387 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "G-100",
+      "type": "Stage",
+      "name": "Discover a cooking class",
+      "props": {
+        "description": "Explore a relaxed weekend activity and see whether it fits",
+        "order_index": "10",
+        "owner": "Design"
+      }
+    },
+    {
+      "id": "G-200",
+      "type": "Stage",
+      "name": "Reserve a place",
+      "props": {
+        "description": "Choose a convenient way to attend and complete registration",
+        "order_index": "20",
+        "owner": "Design"
+      }
+    },
+    {
+      "id": "G-300",
+      "type": "Stage",
+      "name": "Prepare and enjoy",
+      "props": {
+        "description": "Get ready for the session and take part with confidence",
+        "order_index": "30",
+        "owner": "Design"
+      }
+    },
+    {
+      "id": "J-101",
+      "type": "Step",
+      "name": "Find an appealing class",
+      "props": {
+        "actor": "Customer",
+        "description": "Notice a local weekend cooking class that looks enjoyable",
+        "intent": "Find a creative activity for the weekend",
+        "owner": "Design",
+        "success_criteria": "A promising class is saved for review"
+      }
+    },
+    {
+      "id": "J-102",
+      "type": "Step",
+      "name": "Review the class details",
+      "props": {
+        "actor": "Customer",
+        "description": "Check the menu, schedule, location, and skill level",
+        "intent": "Decide whether the class suits the weekend",
+        "owner": "Design",
+        "success_criteria": "The class feels like a good fit"
+      }
+    },
+    {
+      "id": "J-201",
+      "type": "Step",
+      "name": "Choose how to attend",
+      "props": {
+        "actor": "Customer",
+        "description": "Compare the available participation formats for the class",
+        "intent": "Pick the format that feels most convenient",
+        "kind": "decision",
+        "owner": "Design",
+        "success_criteria": "A preferred attendance format is selected"
+      }
+    },
+    {
+      "id": "J-202",
+      "type": "Step",
+      "name": "Book an in-person seat",
+      "props": {
+        "actor": "Customer",
+        "description": "Reserve a seat at the studio for the scheduled class",
+        "intent": "Attend the class at the venue",
+        "owner": "Design",
+        "success_criteria": "An in-person seat is held"
+      }
+    },
+    {
+      "id": "J-203",
+      "type": "Step",
+      "name": "Book the online session",
+      "props": {
+        "actor": "Customer",
+        "description": "Reserve access to join the same class from home",
+        "intent": "Attend the class remotely",
+        "owner": "Design",
+        "success_criteria": "Online access is reserved"
+      }
+    },
+    {
+      "id": "J-204",
+      "type": "Step",
+      "name": "Confirm the registration",
+      "props": {
+        "actor": "Customer",
+        "description": "Review the selected format and complete the booking",
+        "intent": "Know that the place in the class is secured",
+        "owner": "Design",
+        "success_criteria": "A confirmation and preparation details are available"
+      }
+    },
+    {
+      "id": "J-301",
+      "type": "Step",
+      "name": "Review preparation details",
+      "props": {
+        "actor": "Customer",
+        "description": "Check what to bring, when to arrive, or how to join",
+        "intent": "Feel ready before the class begins",
+        "owner": "Design",
+        "success_criteria": "The setup and timing are clear"
+      }
+    },
+    {
+      "id": "J-303",
+      "type": "Step",
+      "name": "Enjoy the cooking class",
+      "props": {
+        "actor": "Customer",
+        "description": "Join the session, follow the recipe, and try something new",
+        "intent": "Have a relaxed and rewarding experience",
+        "owner": "Design",
+        "success_criteria": "The class is completed with a new dish to enjoy"
+      }
+    },
+    {
+      "id": "P-100",
+      "type": "Place",
+      "name": "Cooking Class Hub",
+      "props": {
+        "access": "public",
+        "description": "Online hub for discovering, booking, preparing for, and joining a cooking class",
+        "owner": "Design",
+        "route_or_key": "/classes/cooking",
+        "surface": "web"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "G-100",
+      "type": "CONTAINS",
+      "to": "J-101",
+      "to_name": "Find an appealing class",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-100",
+      "type": "CONTAINS",
+      "to": "J-102",
+      "to_name": "Review the class details",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-201",
+      "to_name": "Choose how to attend",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-202",
+      "to_name": "Book an in-person seat",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-203",
+      "to_name": "Book the online session",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-200",
+      "type": "CONTAINS",
+      "to": "J-204",
+      "to_name": "Confirm the registration",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-300",
+      "type": "CONTAINS",
+      "to": "J-301",
+      "to_name": "Review preparation details",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-300",
+      "type": "CONTAINS",
+      "to": "J-303",
+      "to_name": "Enjoy the cooking class",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-101",
+      "type": "PRECEDES",
+      "to": "J-102",
+      "to_name": "Review the class details",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-101",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-102",
+      "type": "PRECEDES",
+      "to": "J-201",
+      "to_name": "Choose how to attend",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-102",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-201",
+      "type": "PRECEDES",
+      "to": "J-202",
+      "to_name": "Book an in-person seat",
+      "event": null,
+      "guard": "prefers the studio",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-201",
+      "type": "PRECEDES",
+      "to": "J-203",
+      "to_name": "Book the online session",
+      "event": null,
+      "guard": "prefers joining from home",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-201",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-202",
+      "type": "PRECEDES",
+      "to": "J-204",
+      "to_name": "Confirm the registration",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-202",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-203",
+      "type": "PRECEDES",
+      "to": "J-204",
+      "to_name": "Confirm the registration",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-203",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-204",
+      "type": "PRECEDES",
+      "to": "J-301",
+      "to_name": "Review preparation details",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-204",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-301",
+      "type": "PRECEDES",
+      "to": "J-303",
+      "to_name": "Enjoy the cooking class",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-301",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-303",
+      "type": "REALIZED_BY",
+      "to": "P-100",
+      "to_name": "Cooking Class Hub",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

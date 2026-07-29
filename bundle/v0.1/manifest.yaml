@@ -51,6 +51,10 @@ examples:
     compiled_snapshot: snapshots/scenario_branching.compiled.json
     projection_snapshots:
       - snapshots/scenario_branching.scenario_flow.projection.json
+  - path: examples/branching_journey.sdd
+    compiled_snapshot: snapshots/branching_journey.compiled.json
+    projection_snapshots:
+      - snapshots/branching_journey.journey_map.projection.json
   - path: examples/service_blueprint_slice.sdd
     compiled_snapshot: snapshots/service_blueprint_slice.compiled.json
     projection_snapshots:

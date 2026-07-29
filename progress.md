@@ -21,6 +21,9 @@
 ## Tue 7-28
 
 - Re-added journey map example
+- Fixed svg display-in-dev-mode regression
+- Added better canonical journey map example
+- Found & documented journey map renderer branching coverage gap
 
 ## Mon 7-27
 
