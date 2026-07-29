@@ -22,22 +22,6 @@ diagram type.
   Area- and Place nodes: 
   showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example {pos: up}
   showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69, 73, 74, 84, 90, 93} {lines 68-}
-  == Quick Reference
-  Available node types: `Area`, `Place`.
-
-  ### `Area`
-
-  - `CONTAINS` → `Place`
-
-  ### `Place`
-
-  - `CONTAINS` → `Place`, `ViewState`
-  - `NAVIGATES_TO` → `Place`
-
-  Incoming:
-
-  - `Area`, `Place` → `CONTAINS`
-  - `Place` → `NAVIGATES_TO`
   :::
   ::::
 

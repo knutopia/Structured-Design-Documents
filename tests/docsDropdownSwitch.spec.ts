@@ -229,27 +229,35 @@ function choiceSections(markdown: string): Map<string, string> {
   )
 }
 
-function nodeSections(markdown: string): Map<string, string> {
-  const matches = [...markdown.matchAll(/^### `(.+)`$/gm)]
+function sddCodeBlock(markdown: string): string {
+  const matches = [...markdown.matchAll(/```sdd\n([\s\S]*?)\n```/g)]
+  expect(matches).toHaveLength(1)
+  return matches[0][1]
+}
+
+function sddNodeSections(source: string): Map<string, string> {
+  const matches = [
+    ...source.matchAll(
+      /^([A-Za-z]+) [A-Z]{1,3}-[0-9]{3,}(?:[a-z][a-z0-9]*)? "[^"]+"\n([\s\S]*?)^END$/gm
+    )
+  ]
   return new Map(
-    matches.map((match, index) => [
+    matches.map((match) => [
       match[1],
-      markdown.slice(
-        match.index! + match[0].length,
-        matches[index + 1]?.index ?? markdown.length
-      )
+      match[2]
     ])
   )
 }
 
 describe('dropdownSwitch diagram-type sample', () => {
   it('tracks staged renderer views and their bundle-owned endpoint contracts', async () => {
-    const [bundle, markdown] = await Promise.all([
+    const [bundle, markdown, diagramTypesIndex] = await Promise.all([
       loadBundle('bundle/v0.1/manifest.yaml'),
       readFile(
         'docs/doc_site/diagram_types/dropdown_switch_example.md',
         'utf8'
-      )
+      ),
+      readFile('docs/doc_site/diagram_types/index.md', 'utf8')
     ])
     const stagedViews = bundle.views.views.filter((view) =>
       getViewRenderCapability(view.id)?.previewArtifacts.some(
@@ -257,22 +265,37 @@ describe('dropdownSwitch diagram-type sample', () => {
       )
     )
     const sections = choiceSections(markdown)
-
-    expect([...sections.keys()]).toEqual(
-      stagedViews.map((view) => view.name)
+    const indexHeadings = [...diagramTypesIndex.matchAll(/^## (.+)$/gm)].map(
+      (match) => match[1]
     )
+    const indexOrderedViewNames = indexHeadings.flatMap((heading) => {
+      const headingTokens = new Set(
+        heading.toLowerCase().match(/[a-z0-9]+/g) ?? []
+      )
+      const view = stagedViews.find((candidate) =>
+        (candidate.name.toLowerCase().match(/[a-z0-9]+/g) ?? []).every(
+          (token) => headingTokens.has(token)
+        )
+      )
+      return view ? [view.name] : []
+    })
+
+    expect(indexOrderedViewNames).toHaveLength(stagedViews.length)
+    expect([...sections.keys()]).toEqual(indexOrderedViewNames)
 
     for (const view of stagedViews) {
       const section = sections.get(view.name)!
-      const nodes = nodeSections(section)
+      const source = sddCodeBlock(section)
+      const nodes = sddNodeSections(source)
       const nodeList = view.projection.include_node_types
         .map((nodeType) => `\`${nodeType}\``)
         .join(', ')
-      expect(section).toContain(`Available node types: ${nodeList}.`)
+      expect(section).toContain(`Available node types: ${nodeList}`)
+      expect(section).not.toMatch(/^### /m)
+
+      const expectedIncomingComments: string[] = []
 
       for (const nodeType of view.projection.include_node_types) {
-        const nodeSection = nodes.get(nodeType)
-        expect(nodeSection).toBeDefined()
         const groups = directionGroups(
           view,
           nodeType,
@@ -284,30 +307,49 @@ describe('dropdownSwitch diagram-type sample', () => {
         const incoming = groups.filter(
           (group) => group.direction === 'Incoming'
         )
-        const expectedLines = outgoing.map((group) => {
-          const counterparts = group.counterparts
-            .map((counterpart) => `\`${counterpart}\``)
-            .join(', ')
-          return `- \`${group.relationship}\` → ${counterparts}`
-        })
+
+        const nodeSection = nodes.get(nodeType)
+        expect(nodeSection).toBeDefined()
+        const actualEdges = nodeSection!
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .map((line) => {
+            const match = line.match(
+              /^([A-Z_]+) [A-Z]{1,3}-[0-9]{3,}(?:[a-z][a-z0-9]*)? "(?:a|an) ([A-Za-z]+)"$/
+            )
+            expect(match, `invalid minimal edge line: ${line}`).not.toBeNull()
+            return `${match![1]} ${match![2]}`
+          })
+        const expectedEdges = outgoing.flatMap((group) =>
+          group.counterparts.map(
+            (counterpart) => `${group.relationship} ${counterpart}`
+          )
+        )
+        expect(actualEdges).toEqual(expectedEdges)
 
         if (incoming.length > 0) {
-          expectedLines.push('Incoming:')
-          expectedLines.push(
-            ...incoming.map((group) => {
-              const counterparts = group.counterparts
-                .map((counterpart) => `\`${counterpart}\``)
-                .join(', ')
-              return `- ${counterparts} → \`${group.relationship}\``
-            })
+          const incomingHeader = `# Incoming edges for ${nodeType}:`
+          expectedIncomingComments.push(incomingHeader)
+          expectedIncomingComments.push(
+            ...incoming.map(
+              (group) =>
+                `# ${group.counterparts.join(', ')} ${group.relationship} ${nodeType}`
+            )
+          )
+          expect(source).toMatch(
+            new RegExp(
+              `^${nodeType} [^\\n]+\\n(?:  [^\\n]+\\n)*END\\n\\n${incomingHeader}`,
+              'm'
+            )
           )
         }
-
-        const referenceLines = nodeSection!
-          .split('\n')
-          .filter((line) => line === 'Incoming:' || line.startsWith('- '))
-        expect(referenceLines).toEqual(expectedLines)
       }
+
+      const actualIncomingComments = source
+        .split('\n')
+        .filter((line) => line.startsWith('#'))
+      expect(actualIncomingComments).toEqual(expectedIncomingComments)
     }
   })
 })
