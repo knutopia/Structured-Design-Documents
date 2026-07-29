@@ -2,7 +2,7 @@
 
 This page collects the current diagram families, their status, and links to available examples.
 
-See the [node and edge reference](./dropdown_switch_example)
+See the [node and edge reference](./node_edge_reference.md)
 for a compact list of content available to each diagram type.
 
 ## IA (Information Architecture) / Place Map

@@ -65,6 +65,3 @@ duplicate label, or content before the first `==` marker.
   in `../theme/index.ts`.
 - Run the focused `docsDropdownSwitch` tests and `pnpm run docs:build` after
   parser or component changes.
-- Use `diagram_types/dropdown_switch_example.md` as the end-to-end authoring
-  example. Its SDD node and edge reference is downstream documentation derived
-  from the v0.1 bundle and protected by a bundle-drift test.
