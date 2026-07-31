@@ -2,7 +2,7 @@
 
 **SDD is not just a way to draw diagrams. It is a maintainable product design graph that lets teams describe, inspect, align, and evolve product structure before, during, and after implementation.**
 
-## Product Design Graph
+## Product Design Graph for Shared Clarity
 
 SDD captures the structural elements of a design and their relationships in a unified **product design graph**. The range of the graph covers high-level *why* (outcomes) all the way to low-level *how* (UI contracts), with everything linked together. From an SDD document that contains a range of content, different [diagrams](../diagram_types/) can be rendered to show a specific perspective.
 
@@ -13,7 +13,7 @@ The product graph can raise product quality:
 
 Because SDD is text-based, validated, and incrementally editable, keeping the graph current can be lighter than maintaining disconnected diagrams in traditional tools, and LLMs can participate.
 
-## Product Lifecycle
+## Raising the Signal Quality for Product Definition and Execution
 
 Product processes everywhere are getting reshaped by the presence of LLMs. Generally, they involve strategy, tactical preparation, implementation, and analysis. Design process plugs into product process.
 
@@ -55,9 +55,8 @@ Core language:
 - Not yet available: template mechanism, external links
 
 LLM integration tooling:
-- Codex Skill
-- Not tested: Skill use in Claude
-- Not yet available: MCP server
+- Codex Skill, usable with Claude too
+- (Not yet available: MCP server)
 
 This is a new project. Version 0.1 is meant to provide a useful starting point for the language definition and its tooling. The definition is intentionally separated from tooling code, so that either can evolve.
 

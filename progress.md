@@ -2,7 +2,7 @@
 
 ## Open Issues
 
-
+-add syntax highlight install / info
 -fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
 
@@ -19,6 +19,10 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Thu 7-30
+
+- Editing rationale page
 
 ## Wed 7-29
 
