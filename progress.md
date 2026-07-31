@@ -20,6 +20,11 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 7-31
+
+- Edited strategic potential
+- Edited practical use page
+
 ## Thu 7-30
 
 - Editing rationale page

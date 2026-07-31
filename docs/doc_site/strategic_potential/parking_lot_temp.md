@@ -1,7 +1,6 @@
 # PARKING LOT for "Strategic Potential" Content
 
-*temporary documend during editing*
-
+*temporary document during editing*
 ## 1. Design Sovereignity for Development
 
 This is the more "tactical" value of SDD. Software implementation is driven by requirements documentation and technical design documents. Those inputs can be weak on structural design and user experience. When actual UX- and UI design documentation is used to drive implementation, that design documentation is sometimes mis-aligned with the technical side (drift) or incomplete. The code that gets written *will* contain a structural design - but not necessarily the right one, because the structural design can be a side effect of other implementation decisions. While LLMs are very good coders, they are poor design decision makers.
