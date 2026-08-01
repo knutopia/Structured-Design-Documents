@@ -30,7 +30,7 @@ Traditional product management tools (like Jira, Aha, Confluence, others) captur
 
 ### More Specific Uses of SDD
 
-
+(link...)
 
 
 ## Possible Future

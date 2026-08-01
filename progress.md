@@ -20,6 +20,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 8-1
+
+- Created Power of the Strict Profile page
+
 ## Fri 7-31
 
 - Edited strategic potential
