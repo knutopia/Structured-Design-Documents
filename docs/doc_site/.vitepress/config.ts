@@ -41,8 +41,10 @@ export default defineConfig({
       {
         text: 'Using SDD',
         items: [
-          { text: 'Command Line', link: '/sdd_cli_tools/' },
-          { text: 'SDD Skill', link: '/sdd-skill/' }
+          { text: 'Using SDD Today', link: '/using_sdd/' },
+          { text: 'Command Line Tools', link: '/sdd_cli_tools/' },
+          { text: 'SDD Skill for LLMs', link: '/sdd-skill/' },
+          { text: 'Profiles', link:'/profiles/' }
         ]
       },
       {
@@ -54,7 +56,12 @@ export default defineConfig({
           }
         ]
       },
-      { text: 'Strategic Potential', link: '/strategic_potential/' }
+      { text: 'Impact',
+        items: [
+          { text: 'Strategic Potential', link: '/strategic_potential/' },
+          { text: 'Practical Applications', link: '/practical_applications/' }
+        ]
+      }
     ],
 /*
     sidebar: [

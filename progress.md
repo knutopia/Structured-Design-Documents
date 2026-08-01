@@ -26,6 +26,7 @@
 - Created doc_site_parking_lot
 - Created profiles page
 - Separated strategic-potential content
+- Updated top nav
 
 ## Fri 7-31
 

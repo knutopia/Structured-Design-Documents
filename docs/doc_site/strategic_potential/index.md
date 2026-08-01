@@ -1,71 +1,19 @@
-# Strategic Potential of SDD in the Product Lifecycle
+# Strategic Potential & Practical Applications of SDD in the Product Lifecycle
 
-**SDD is not just a way to draw diagrams. It is a maintainable product design graph that lets teams describe, inspect, align, and evolve product structure before, during, and after implementation.**
+**SDD is not just a way to draw diagrams. It is a maintainable product design graph that lets teams describe, inspect, align, and evolve product structure.**
 
-## Product Design Graph for Shared Clarity
+## Clarity and Better Signal for Product Work
 
-SDD captures the structural elements of a design and their relationships in a unified **product design graph**. The range of the graph covers high-level *why* (outcomes) all the way to low-level *how* (UI contracts), with everything linked together. From an SDD document that contains a range of content, different [diagrams](../diagram_types/) can be rendered to show a specific perspective.
+SDD captures the rationale and design decisions that shape a product. It connects execution-relevant details to user-facing structure, to planning artifacts, to high-level outcomes. In doing so, SDD keeps product management connected to stakeholder concerns and to execution, through design.
 
-The product graph can raise product quality: 
+With this explicit structure, a product team can keep exploration and execution aligned with with intentional product decisions, even as LLMs accellerate the process. SSD guides LLMs by making them aware of design structure, instead of allowing every prompt to invent the product anew.
 
-- As a tool for design exploration, it provides clarity, versatility, and the opportunity to let LLMs "speak design structure". 
-- As a source of truth for development, it provides predictability, ensuring that the structure actually ships. Other design deliverables (wireframes, "screens", prototypes and isolated structural diagrams) only contain product design structure implicitly, making it easy for team members and LLMs to miss. 
+Much of what SDD does has always been the promise of product design. But stale design deliverables, disconnected from product decision making and from product delivery, make product design easy to ignore, introducing design drift. SDD allows product design to deliver on its promise, by making product design information available in a dynamic, connected, impactful fashion.
 
-Because SDD is text-based, validated, and incrementally editable, keeping the graph current can be lighter than maintaining disconnected diagrams in traditional tools, and LLMs can participate.
+### Using SDD as Prompt Context
 
-## Raising the Signal Quality for Product Definition and Execution
+An SDD can provide structural context to an LLM prompt, so the LLM won't simply guess a structure based on random training data. This is a matter of using a text editor to trim the SDD file to the relevant content, and then attaching the file. An SDD can also be referenced in context, such as in README.md, CODEX.md or CLAUDE.md files.
 
-Product processes everywhere are getting reshaped by the presence of LLMs. Generally, they involve strategy, tactical preparation, implementation, and analysis. Design process plugs into product process.
+### Using SDD to Represent Rationale and Structure in Product Management
 
-SDD is process-agnostic. It does not come with a process recipe. SDD is built on the belief that a deliberate, clear, shared view of design structure is beneficial.
-
-(That belief is neither new nor controversial, but it is hard to follow through on without something like SDD.)
-
-Here is how that plays out in the product lifecycle:
-
-With SDD,
-- product structure becomes intentional
-- concerns of different stakeholders can be mapped to design structure
-- design proposals get connected to desired outcomes
-- traditional product management artifacts (bugs, tasks, stories) can get enriched with stable design references
-- agentic workflows can "stay on the rails", following existing product structure
-- agentic workflows can create product structure (without "baking" it into code)
-- designers, developers, PMs, and agents share the same product structure target
-
-Outcomes and opportunities become connected to the product structures where they are expected to show up. That makes goals less like slide-deck intent and more like traceable product structure.
-
-Product structure explorations remain aligned with product structure, or new structures can be explored and captured explicitly - even when working with LLMs.
-
-This informs shared, well-grounded product decisions.
-
-Product structure becomes an explicit input to implementation, keeping code generation aligned with the structure.
-
-SDD is not a magic bullet to make communication issues and team dysfunction go away. It provides an opportunity to make well-informed decisions about product structure. As a code-generation input, it keeps the product on track to actually use that structure. 
-
-This can be critical while more people generate more code with LLMs: product process is catching up with prompt-driven code that otherwise simply makes up its own product structure. In the struggle between "I can ship this idea right now" and "we are stewards of a well-structured, thoughtful solution", SDD can add some sanity.
-
-## Current Capability and Future Surface
-
-Rendered views:
-- Current usable views: IA / Place Map, UI Contracts, Service Blueprint, Scenario Flow.
-- Not yet available: Outcome-Opportunity Map, Journey Map.
-
-Core language:
-- v0.1 language definition provides a usable set of node types and edge (connection) types
-- Not yet available: template mechanism, external links
-
-LLM integration tooling:
-- Codex Skill, usable with Claude too
-- (Not yet available: MCP server)
-
-This is a new project. Version 0.1 is meant to provide a useful starting point for the language definition and its tooling. The definition is intentionally separated from tooling code, so that either can evolve.
-
-## What SDD Is Not
-
-SDD is not:
-- a magic bullet
-- a fix for broken process
-- a replacement for visual design & layout tools
-- a mature platform yet
-
-...but it may be useful when treated as an opportunity.
+Traditional product management tools (like Jira, Aha, Confluence, others) capture product structure and decisions in oceans of data. Showing SDDs in this context can provide clarity, driving alignment and good product decisions. Today, showing an SDD in an external tool means rendering a diagram to a file and then attaching the file in the external tool. 
