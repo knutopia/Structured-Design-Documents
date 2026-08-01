@@ -1,4 +1,4 @@
-# Power of the Strict Profile
+# Using the Strict Profile
 
 SDD’s `strict` profile turns a design model into a validated engineering reference for front-end implementation. It can capture and connect:
 

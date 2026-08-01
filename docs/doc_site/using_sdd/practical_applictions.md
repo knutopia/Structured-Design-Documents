@@ -1,4 +1,4 @@
-## Practical Use of SDD
+## Practical Applications of SDD
 
 SDD makes design structure available as content in a project, using a lightweight text-based syntax. This can be useful in a variety of ways:
 
@@ -54,7 +54,7 @@ This SDD-representation of front-end reality provides an opportunity to align ne
 
 Just like the design process, actual implementation also benefits from clear references to actual, existing front-end structures in a clear format. Both front-end developers and LLMs can easily read and reference SDD. 
 
-If the SDD is well-curated, it can contain technical details like API dependencies or links to actual front-end components. How much detail makes sense depends on the specifics of a given situation. There is a clear value proposition for structural clarity.
+If the SDD is well-curated, it can contain technical details that make it usable as an engineering reference. (The strict profile enforces inclusion of reference detail.) How much detail makes sense depends on the specifics of a given situation. There is a clear value proposition for structural clarity.
 
 ### Providing UX Guidance for Vibe-Coded Prototypes
 
@@ -74,15 +74,4 @@ By making SDD node IDs available as part of issue documentation, it becomes imme
 
 SDD node IDs can be added to issues manually, but a better approach is to capture them automatically using tooling. For example, a screenshot attached to a bug report can include a page footer, which is barely visible to the end user of the product, but shows encoded SDD node identifiers that map to a location. The "location" can be a simple place ID, or include more detail such as component IDs or viewState IDs. The functionality to provision such page footers does need to be built.
 
-### Accountability for Product Success
 
-(...)
-
-# **Concrete Examples of Use**
-
-## Comparing as-planned to as-built
-
-
-...works best together with a design system, healthy process etc
-
-...it's about signal, not ceremony

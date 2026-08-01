@@ -22,7 +22,10 @@
 
 ## Sat 8-1
 
-- Created Power of the Strict Profile page
+- Created Strict Profile page
+- Created doc_site_parking_lot
+- Created profiles page
+- Separated strategic-potential content
 
 ## Fri 7-31
 
