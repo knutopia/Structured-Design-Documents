@@ -1,7 +1,7 @@
 ---
 next:
   text: Evolution of the SDD Core
-  link: core_evolution.md
+  link: using_sdd/core_evolution.md
 ---
 
 # Using SDD in the Future

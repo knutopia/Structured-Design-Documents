@@ -1,7 +1,7 @@
 ---
 next:
   text: Using SDD in the Future
-  link: future_ux.md
+  link: /using_sdd/future_ux.md
 ---
 
 # Using SDD Today
@@ -18,7 +18,7 @@ When we accept that working with SDD takes some technical skill and manual steps
 
 [Diagram Types](/diagram_types/)  
 [Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference)  
-[SDD Command Line Tools](sdd_cli_tools)  
+[SDD Command Line Tools](/sdd_cli_tools/)  
 [Using Profiles](/profiles/)  
 [SDD-Skill](/sdd-skill/)  
 
