@@ -23,6 +23,12 @@ Notes:
 - In WSL, if future shells route Corepack through `/mnt/c/...`, run `scripts/setup-corepack.sh --write-profile` or add `export COREPACK_HOME="$HOME/.cache/corepack"` to `~/.profile`.
 - If you hit temp-directory permission errors in some WSL setups, rerun commands with `TMPDIR=/tmp`. For more environment details, see [docs/toolchain/development.md](/home/knut/projects/sdd/docs/toolchain/development.md). See [bundle/v0.1/examples/](bundle/v0.1/examples/) for additional sample `.sdd` inputs.
 
+## Syntax Highlighting
+
+Install the [textmate grammar for SDD](editors/vscode-sdd/README.md) for syntax highlighting in VS Code. (The grammar is not in the VS Code extensions marketplace yet.)
+
+This probably works with other editors too. The grammar is used for source code display in the [project documentation site.](https://knutopia.github.io/Structured-Design-Documents/)
+
 ## Orientation
 
 - [bundle/v0.1/](bundle/v0.1/) houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling.

@@ -1,4 +1,6 @@
 ---
+pageClass: wide-sidebar
+
 prev:
   text: Strategic Potential
   link: /strategic_potential/
