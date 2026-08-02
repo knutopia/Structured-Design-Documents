@@ -1,43 +1,23 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { selectAccordionSection } from './accordionScrollExpanderState'
 
-const root = ref<HTMLElement>()
+const track = ref<HTMLElement>()
+const stage = ref<HTMLElement>()
 
 let items: HTMLDetailsElement[] = []
 let animationFrame: number | undefined
+let breakpoint: MediaQueryList | undefined
 let changingItems = false
-let manualOverride = false
-let manualScrollPosition = 0
 
-function summaryFor(item: HTMLDetailsElement): HTMLElement | null {
-  return item.querySelector(':scope > summary')
+const desktopBreakpoint = '(min-width: 768px)'
+const scrollDistancePerSectionVh = 70
+
+function isDesktop(): boolean {
+  return breakpoint?.matches ?? false
 }
 
-function setManualOverride(): void {
-  manualOverride = true
-  manualScrollPosition = window.scrollY
-}
-
-function releaseChangeGuard(callback?: () => void): void {
-  nextTick(() => {
-    requestAnimationFrame(() => {
-      callback?.()
-      requestAnimationFrame(() => {
-        changingItems = false
-      })
-    })
-  })
-}
-
-function setOpenItem(
-  target: HTMLDetailsElement | null,
-  preserveTargetPosition = false
-): void {
-  const summary = target ? summaryFor(target) : null
-  const previousTop = preserveTargetPosition
-    ? summary?.getBoundingClientRect().top
-    : undefined
-
+function setOpenItem(target: HTMLDetailsElement | null): void {
   if (
     items.every((item) => item.open === (target !== null && item === target))
   ) {
@@ -48,15 +28,10 @@ function setOpenItem(
   for (const item of items) {
     item.open = target !== null && item === target
   }
-
-  releaseChangeGuard(() => {
-    if (summary && previousTop !== undefined) {
-      const nextTop = summary.getBoundingClientRect().top
-      const adjustment = nextTop - previousTop
-      if (Math.abs(adjustment) >= 1) {
-        window.scrollBy(0, adjustment)
-      }
-    }
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      changingItems = false
+    })
   })
 }
 
@@ -64,35 +39,30 @@ function activationLine(): number {
   const navBottom =
     document.querySelector<HTMLElement>('.VPNav')?.getBoundingClientRect()
       .bottom ?? 0
-  return Math.max(navBottom + 24, window.innerHeight * 0.35)
+  return Math.max(navBottom + 16, window.innerHeight * 0.2)
 }
 
 function evaluateScrollPosition(): void {
   animationFrame = undefined
-  if (changingItems || items.length === 0) {
+  if (
+    changingItems ||
+    !isDesktop() ||
+    !track.value ||
+    !stage.value ||
+    items.length === 0
+  ) {
     return
   }
 
-  if (manualOverride) {
-    if (Math.abs(window.scrollY - manualScrollPosition) <= 8) {
-      return
-    }
-    manualOverride = false
-  }
+  const nextIndex = selectAccordionSection({
+    sectionCount: items.length,
+    trackTop: track.value.getBoundingClientRect().top,
+    trackHeight: track.value.offsetHeight,
+    stageHeight: stage.value.offsetHeight,
+    activationLine: activationLine()
+  })
 
-  const threshold = activationLine()
-  let target: HTMLDetailsElement | null = null
-
-  for (const item of items) {
-    const summary = summaryFor(item)
-    if (summary && summary.getBoundingClientRect().top <= threshold) {
-      target = item
-    } else {
-      break
-    }
-  }
-
-  setOpenItem(target, target !== null)
+  setOpenItem(nextIndex >= 0 ? items[nextIndex] : null)
 }
 
 function scheduleScrollEvaluation(): void {
@@ -101,15 +71,40 @@ function scheduleScrollEvaluation(): void {
   }
 }
 
+function scrollToItem(item: HTMLDetailsElement): void {
+  if (!isDesktop() || !track.value || !stage.value) {
+    return
+  }
+
+  const index = items.indexOf(item)
+  if (index < 0) {
+    return
+  }
+
+  const trackDocumentTop =
+    track.value.getBoundingClientRect().top + window.scrollY
+  const scrollableDistance = Math.max(
+    track.value.offsetHeight - stage.value.offsetHeight,
+    1
+  )
+  const sectionProgress = (index + 0.5) / items.length
+  window.scrollTo(
+    0,
+    trackDocumentTop +
+      sectionProgress * scrollableDistance -
+      activationLine()
+  )
+}
+
 function handleToggle(event: Event): void {
   if (changingItems) {
     return
   }
 
   const item = event.currentTarget as HTMLDetailsElement
-  setManualOverride()
   if (item.open) {
-    setOpenItem(item, true)
+    setOpenItem(item)
+    scrollToItem(item)
   }
 }
 
@@ -136,8 +131,8 @@ function itemForHash(): HTMLDetailsElement | null {
 function openHashTarget(): void {
   const target = itemForHash()
   if (target) {
-    setManualOverride()
     setOpenItem(target)
+    nextTick(() => scrollToItem(target))
   }
 }
 
@@ -151,27 +146,41 @@ function handleClick(event: MouseEvent): void {
   const item = anchor?.closest<HTMLDetailsElement>(
     'details[data-accordion-scroll-item]'
   )
-  if (!anchor || !item || !root.value?.contains(item)) {
+  if (!anchor || !item || !stage.value?.contains(item)) {
     return
   }
 
   event.preventDefault()
   event.stopPropagation()
-  setManualOverride()
   setOpenItem(item)
+  scrollToItem(item)
 
   if (window.location.hash === anchor.hash) {
-    anchor.closest<HTMLElement>('h2[id]')?.scrollIntoView()
+    anchor.closest<HTMLElement>('h2[id]')?.focus({ preventScroll: true })
   } else {
-    window.location.hash = anchor.hash
+    window.history.pushState(null, '', anchor.hash)
   }
+}
+
+function handleBreakpointChange(): void {
+  setOpenItem(null)
+  scheduleScrollEvaluation()
 }
 
 onMounted(() => {
   items = Array.from(
-    root.value?.querySelectorAll<HTMLDetailsElement>(
+    stage.value?.querySelectorAll<HTMLDetailsElement>(
       ':scope > details[data-accordion-scroll-item]'
     ) ?? []
+  )
+
+  track.value?.style.setProperty(
+    '--accordion-scroll-track-height',
+    `${(items.length + 1) * scrollDistancePerSectionVh}vh`
+  )
+  stage.value?.style.setProperty(
+    '--accordion-section-count',
+    String(items.length)
   )
 
   for (const item of items) {
@@ -179,7 +188,9 @@ onMounted(() => {
     item.addEventListener('toggle', handleToggle)
   }
 
-  root.value?.addEventListener('click', handleClick, true)
+  breakpoint = window.matchMedia(desktopBreakpoint)
+  breakpoint.addEventListener('change', handleBreakpointChange)
+  stage.value?.addEventListener('click', handleClick, true)
   window.addEventListener('scroll', scheduleScrollEvaluation, { passive: true })
   window.addEventListener('resize', scheduleScrollEvaluation, { passive: true })
   window.addEventListener('hashchange', openHashTarget)
@@ -196,7 +207,8 @@ onUnmounted(() => {
   for (const item of items) {
     item.removeEventListener('toggle', handleToggle)
   }
-  root.value?.removeEventListener('click', handleClick, true)
+  breakpoint?.removeEventListener('change', handleBreakpointChange)
+  stage.value?.removeEventListener('click', handleClick, true)
   window.removeEventListener('scroll', scheduleScrollEvaluation)
   window.removeEventListener('resize', scheduleScrollEvaluation)
   window.removeEventListener('hashchange', openHashTarget)
@@ -205,16 +217,24 @@ onUnmounted(() => {
 
 <template>
   <div
-    ref="root"
-    class="accordion-scroll-expander"
+    ref="track"
+    class="accordion-scroll-expander__track"
   >
-    <slot />
+    <div
+      ref="stage"
+      class="accordion-scroll-expander"
+    >
+      <slot />
+    </div>
   </div>
 </template>
 
 <style scoped>
-.accordion-scroll-expander {
+.accordion-scroll-expander__track {
   margin: 32px 0;
+}
+
+.accordion-scroll-expander {
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
@@ -226,8 +246,8 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 20px;
-  padding: 0 16px;
+  gap: 14px;
+  padding: 0 12px;
   color: var(--vp-c-text-1);
   cursor: pointer;
   list-style: none;
@@ -280,15 +300,15 @@ onUnmounted(() => {
   :deep(.accordion-scroll-expander__summary > h2) {
   min-width: 0;
   margin: 0;
-  padding: 18px 0;
+  padding: 16px 0;
   border-top: 0;
   color: inherit;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.4;
 }
 
 .accordion-scroll-expander :deep(.accordion-scroll-expander__content) {
-  padding: 4px 20px 24px;
+  padding: 4px 12px 20px;
   background-color: var(--vp-c-bg-soft);
 }
 
@@ -302,20 +322,54 @@ onUnmounted(() => {
   margin-bottom: 0;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
+  .accordion-scroll-expander__track {
+    height: var(--accordion-scroll-track-height);
+  }
+
+  .accordion-scroll-expander {
+    position: sticky;
+    top: calc(var(--vp-nav-height) + 16px);
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: repeat(var(--accordion-section-count), auto);
+    column-gap: 32px;
+    align-content: center;
+    height: calc(100dvh - var(--vp-nav-height) - 32px);
+    max-height: 760px;
+    border-bottom: 0;
+  }
+
+  .accordion-scroll-expander :deep(> .accordion-scroll-expander__item) {
+    display: contents;
+  }
+
   .accordion-scroll-expander :deep(.accordion-scroll-expander__summary) {
-    gap: 14px;
-    padding: 0 12px;
+    grid-column: 1;
+    min-height: 48px;
+    border-top: 1px solid var(--vp-c-divider);
+  }
+
+  .accordion-scroll-expander
+    :deep(.accordion-scroll-expander__item:last-child > .accordion-scroll-expander__summary) {
+    border-bottom: 1px solid var(--vp-c-divider);
   }
 
   .accordion-scroll-expander
     :deep(.accordion-scroll-expander__summary > h2) {
-    padding: 16px 0;
-    font-size: 18px;
+    padding: 11px 0;
+    font-size: 16px;
   }
 
   .accordion-scroll-expander :deep(.accordion-scroll-expander__content) {
-    padding: 4px 12px 20px;
+    grid-row: 1 / -1;
+    grid-column: 2;
+    align-self: center;
+    overflow-y: auto;
+    max-height: 100%;
+    padding: 24px 28px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 12px;
   }
 }
 

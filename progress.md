@@ -29,7 +29,7 @@
 - Updated top nav
 - Added kinda-important page class
 - Added side-by-side markdown-it
-- Bad accordeon scroll expander
+- Failed accordeon scroll expander
 
 ## Fri 7-31
 

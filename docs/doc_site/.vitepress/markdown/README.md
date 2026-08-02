@@ -117,13 +117,16 @@ the section above them. The generated native `details` and `summary` elements
 start closed, allow direct mouse and keyboard activation, and preserve the
 original VitePress heading IDs, outline entries, and permalink anchors.
 
-Scrolling opens the last section title to cross the component's activation
-line and closes its siblings. The sections remain in normal document flow so
-long content does not create an inner scroll area. When nesting another
-colon-delimited container, use more markers for the outer
-`accordionScrollExpander` container. Fenced Markdown examples are left
-untouched, and invalid structure fails the documentation build with source
-page and line context.
+On desktop, the component creates a fixed-height scroll track around a sticky
+two-column stage. The complete title rail remains stable while equal segments
+of track progress select each content panel, including the final section.
+Because panel content never changes the track geometry, expansion cannot move
+its own scroll trigger. Narrow screens fall back to the native single-open
+accordion controlled by mouse or keyboard, avoiding an oversized sticky
+stage. When nesting another colon-delimited container, use more markers for
+the outer `accordionScrollExpander` container. Fenced Markdown examples are
+left untouched, and invalid structure fails the documentation build with
+source page and line context.
 
 ### Maintenance checklist
 
