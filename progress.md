@@ -32,6 +32,7 @@
 - Added side-by-side markdown-it
 - Failed accordeon scroll expander - source still lingers.
 - manual removal of ase from config
+- manual removal of ase from theme
 
 ## Fri 7-31
 
