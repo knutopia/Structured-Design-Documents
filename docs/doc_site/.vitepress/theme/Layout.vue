@@ -5,9 +5,11 @@ import DefaultTheme from "vitepress/theme";
 import { onMounted, onUnmounted, nextTick } from "vue";
 import { useRouter } from "vitepress";
 import mediumZoom from "medium-zoom";
+import { useOutlineNavigationTransition } from "./components/useOutlineNavigationTransition";
 
 const { Layout } = DefaultTheme;
 const router = useRouter();
+const { animatePendingOutlineNavigation } = useOutlineNavigationTransition();
 
 let zoom;
 let observer;
@@ -53,6 +55,7 @@ onUnmounted(() => {
 // Subscribe to route changes to fully wipe and re-apply medium zoom 
 router.onAfterRouteChange = () => {
   nextTick(setupMediumZoom);
+  animatePendingOutlineNavigation();
 };
 </script>
 

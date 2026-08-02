@@ -26,6 +26,7 @@
 - wide-sidebar page class
 - wide-sidebar extended to dropdown
 - surfaced syntax highlighting
+- animated section jump
 
 ## Sat 8-1
 
