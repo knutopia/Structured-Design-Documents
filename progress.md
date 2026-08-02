@@ -23,7 +23,8 @@
 
 ## Sun 8-2
 
-- wide-sidbar page class
+- wide-sidebar page class
+- wide-sidebar extended to dropdown
 
 ## Sat 8-1
 

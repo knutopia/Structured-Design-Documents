@@ -67,3 +67,16 @@
   overflow: visible;
   text-overflow: clip;
 }
+
+.wide-sidebar .VPLocalNavOutlineDropdown .outline {
+  min-width: 0;
+}
+
+.wide-sidebar .VPLocalNavOutlineDropdown .outline-link {
+  padding: 6px 0;
+  line-height: 1.4;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+}
