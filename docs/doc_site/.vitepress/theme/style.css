@@ -43,3 +43,19 @@
   white-space: inherit;
   overflow-wrap: anywhere;
 }
+
+.kinda-important .vp-doc h1 {
+  margin-bottom: 1rem;
+}
+
+.kinda-important .vp-doc h1 + p {
+  margin: 0 0 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--vp-c-brand-1);
+  border-radius: 8px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-text-1);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  font-weight: 500;
+}

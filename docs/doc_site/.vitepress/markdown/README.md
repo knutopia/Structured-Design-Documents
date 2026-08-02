@@ -65,3 +65,74 @@ duplicate label, or content before the first `==` marker.
   in `../theme/index.ts`.
 - Run the focused `docsDropdownSwitch` tests and `pnpm run docs:build` after
   parser or component changes.
+
+## `sideBySide`
+
+`sideBySide.ts` renders arbitrary Markdown content in two columns through the
+globally registered `SideBySide.vue` component. A line containing only `==`
+divides the columns:
+
+```md
+::: sideBySide
+### First heading
+First column content.
+
+==
+
+### Second heading
+Second column content.
+:::
+```
+
+The container requires exactly one divider. Content on either side is
+otherwise unrestricted: headings are optional, retain their normal VitePress
+IDs and anchor links, and may be nested inside other Markdown containers such
+as `info`. The columns have equal widths and stack vertically on narrow
+screens.
+
+When nesting another colon-delimited container, use more markers for the outer
+`sideBySide` container than for the inner container. Fenced Markdown examples
+are left untouched. A documentation build fails with the source page and line
+number when the container contract is invalid.
+
+## `accordionScrollExpander`
+
+`accordionScrollExpander.ts` turns consecutive level-two Markdown sections
+into an accessible, scroll-responsive accordion through the globally
+registered `AccordionScrollExpander.vue` component:
+
+```md
+::: accordionScrollExpander
+## First section
+First section content.
+
+## Second section
+Second section content.
+:::
+```
+
+The container must begin with a `##` heading and contain at least two
+top-level `##` sections. Lower-level headings and ordinary Markdown remain in
+the section above them. The generated native `details` and `summary` elements
+start closed, allow direct mouse and keyboard activation, and preserve the
+original VitePress heading IDs, outline entries, and permalink anchors.
+
+On desktop, the component creates a fixed-height scroll track around a sticky
+two-column stage. The complete title rail remains stable while equal segments
+of track progress select each content panel, including the final section.
+Because panel content never changes the track geometry, expansion cannot move
+its own scroll trigger. Narrow screens fall back to the native single-open
+accordion controlled by mouse or keyboard, avoiding an oversized sticky
+stage. When nesting another colon-delimited container, use more markers for
+the outer `accordionScrollExpander` container. Fenced Markdown examples are
+left untouched, and invalid structure fails the documentation build with
+source page and line context.
+
+### Maintenance checklist
+
+- Keep the directive's generated `details` structure aligned with the DOM
+  contract in `../theme/components/AccordionScrollExpander.vue`.
+- Keep plugin installation in `../config.ts` and global component registration
+  in `../theme/index.ts`.
+- Run the focused `docsAccordionScrollExpander` tests and `pnpm run docs:build`
+  after parser or component changes.

@@ -12,6 +12,8 @@ import {
 } from './markdown/showSource'
 import { showRepoLinkMarkdownPlugin } from './markdown/showRepoLink'
 import { dropdownSwitchMarkdownPlugin } from './markdown/dropdownSwitch'
+import { sideBySideMarkdownPlugin } from './markdown/sideBySide'
+import { accordionScrollExpanderMarkdownPlugin } from './markdown/accordionScrollExpander'
 
 const showSourceOptions = {
   lineNumbers: true
@@ -41,8 +43,10 @@ export default defineConfig({
       {
         text: 'Using SDD',
         items: [
-          { text: 'Command Line', link: '/sdd_cli_tools/' },
-          { text: 'SDD Skill', link: '/sdd-skill/' }
+          { text: 'Using SDD Today', link: '/using_sdd/' },
+          { text: 'Command Line Tools', link: '/sdd_cli_tools/' },
+          { text: 'SDD Skill for LLMs', link: '/sdd-skill/' },
+          { text: 'Profiles', link:'/profiles/' }
         ]
       },
       {
@@ -54,7 +58,12 @@ export default defineConfig({
           }
         ]
       },
-      { text: 'Strategic Potential', link: '/strategic_potential/' }
+      { text: 'Impact',
+        items: [
+          { text: 'Strategic Potential', link: '/strategic_potential/' },
+          { text: 'Practical Applications', link: '/practical_applications/' }
+        ]
+      }
     ],
 /*
     sidebar: [
@@ -104,6 +113,10 @@ export default defineConfig({
       md.use(showRepoLinkMarkdownPlugin);
       // Switch arbitrary Markdown content with an accessible in-page select.
       md.use(dropdownSwitchMarkdownPlugin);
+      // Render exactly two level-three Markdown sections as responsive columns.
+      md.use(sideBySideMarkdownPlugin);
+      // Expand consecutive level-two sections one at a time as the page scrolls.
+      md.use(accordionScrollExpanderMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {

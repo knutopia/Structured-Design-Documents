@@ -5,6 +5,8 @@ import InlineIcon from './components/InlineIcon.vue'
 import IconGitHub from './components/IconGitHub.vue'
 import IconFile from './components/IconFile.vue'
 import DropdownSwitch from './components/DropdownSwitch.vue'
+import SideBySide from './components/SideBySide.vue'
+import AccordionScrollExpander from './components/AccordionScrollExpander.vue'
 import Layout from "./Layout.vue";
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import './style.css'
@@ -21,6 +23,8 @@ export default {
     app.component('IconGitHub', IconGitHub)
     app.component('IconFile', IconFile)
     app.component('DropdownSwitch', DropdownSwitch)
+    app.component('SideBySide', SideBySide)
+    app.component('AccordionScrollExpander', AccordionScrollExpander)
     enhanceAppWithTabs(app)
   }
 } satisfies Theme

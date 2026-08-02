@@ -2,7 +2,8 @@
 
 ## Open Issues
 
-
+-remove the FOOBAR accordeon scroll expander
+-add syntax highlight install / info
 -fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
 
@@ -20,6 +21,26 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 8-1
+
+- Created Strict Profile page
+- Created doc_site_parking_lot
+- Created profiles page
+- Separated strategic-potential content
+- Updated top nav
+- Added kinda-important page class
+- Added side-by-side markdown-it
+- Failed accordeon scroll expander - source still lingers.
+
+## Fri 7-31
+
+- Edited strategic potential
+- Edited practical use page
+
+## Thu 7-30
+
+- Editing rationale page
+
 ## Wed 7-29
 
 - Noodled on quick syntax reference
@@ -28,6 +49,7 @@
 - Disentangled dropdown-switch demo from node-edge reference
 - Created hidden_edge_reference.md
 - Added hidden-node detail to node_edge_reference.md
+
 ## Tue 7-28
 
 - Re-added journey map example
