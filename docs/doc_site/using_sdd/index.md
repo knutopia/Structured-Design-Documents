@@ -16,10 +16,10 @@ When we accept that working with SDD takes some technical skill and manual steps
 
 ## Resources
 
-[Diagram Types](/diagram_types/)
-[Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference)
-[SDD Command Line Tools](sdd_cli_tools)
-[Using Profiles](/profiles/)
-[SDD-Skill](/sdd-skill/)
+[Diagram Types](/diagram_types/)  
+[Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference)  
+[SDD Command Line Tools](sdd_cli_tools)  
+[Using Profiles](/profiles/)  
+[SDD-Skill](/sdd-skill/)  
 
 (MISSING: installing the syntax highlighter)
