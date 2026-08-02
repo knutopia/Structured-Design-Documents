@@ -21,6 +21,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 8-2
+
+- wide-sidbar page class
+
 ## Sat 8-1
 
 - Created Strict Profile page
