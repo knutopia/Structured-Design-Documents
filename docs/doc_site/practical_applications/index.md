@@ -8,8 +8,6 @@ prev:
 
 SDD makes design structure available as content in a project, using a lightweight text-based syntax. This can be useful in a variety of ways:
 
-::: accordionScrollExpander
-
 ## Maintaining a Map of the Existing Product
 
 With an existing software product, especially while using continuous delivery over a long period of time, it can be hard to track what actually exists in production. Using SDD as a lightweight document format, capturing the currently existing information architecture can provide a "status quo map" of what is available where. 
@@ -81,5 +79,3 @@ When triaging bugs and other issues, it is often hard (and time-intensive) to pi
 By making SDD node IDs available as part of issue documentation, it becomes immediately clear where an issue occurs. With this information, it then becomes possible to see "hotspots" in the app, where issues are concentrated. That in turn helps with issue triage.
 
 SDD node IDs can be added to issues manually, but a better approach is to capture them automatically using tooling. For example, a screenshot attached to a bug report can include a page footer, which is barely visible to the end user of the product, but shows encoded SDD node identifiers that map to a location. The "location" can be a simple place ID, or include more detail such as component IDs or viewState IDs. The functionality to provision such page footers does need to be built.
-
-:::

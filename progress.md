@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-remove the FOOBAR accordeon scroll expander
 -add syntax highlight install / info
 -fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
@@ -29,7 +30,7 @@
 - Updated top nav
 - Added kinda-important page class
 - Added side-by-side markdown-it
-- Failed accordeon scroll expander
+- Failed accordeon scroll expander - source still lingers.
 
 ## Fri 7-31
 
