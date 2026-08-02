@@ -16,10 +16,9 @@ When we accept that working with SDD takes some technical skill and manual steps
 
 ## Resources
 
-[Diagram Types](/diagram_types/)  
-[Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference)  
-[SDD Command Line Tools](/sdd_cli_tools/)  
-[Using Profiles](/profiles/)  
-[SDD-Skill](/sdd-skill/)  
-
-(MISSING: installing the syntax highlighter)
+[Diagram Types](/diagram_types/) …an overview  
+[Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference) …details  
+[SDD Command Line Tools](/sdd_cli_tools/) …to generate diagrams  
+[Using Profiles](/profiles/) …probably stick with `simple`  
+[SDD-Skill](/sdd-skill/) …for working with LLMs  
+<IconGitHub/>[Textmate Grammar](https://github.com/knutopia/Structured-Design-Documents/tree/main/editors/vscode-sdd/README.md) …for syntax highlighting SDD source code in VS Code  

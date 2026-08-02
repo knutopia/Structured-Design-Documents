@@ -25,6 +25,7 @@
 
 - wide-sidebar page class
 - wide-sidebar extended to dropdown
+- surfaced syntax highlighting
 
 ## Sat 8-1
 
