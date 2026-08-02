@@ -1,4 +1,10 @@
-## Using SDD in the Future
+---
+next:
+  text: Evolution of the SDD Core
+  link: core_evolution.md
+---
+
+# Using SDD in the Future
 
 As SDD evolves, users should use it with conventional, low-friction graphical tools, without requiring techical skills. To use SDD with LLMs, no github repo should be needed.
 

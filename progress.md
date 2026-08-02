@@ -27,6 +27,9 @@
 - Created profiles page
 - Separated strategic-potential content
 - Updated top nav
+- Added kinda-important page class
+- Added side-by-side markdown-it
+- Bad accordeon scroll expander
 
 ## Fri 7-31
 
@@ -45,6 +48,7 @@
 - Disentangled dropdown-switch demo from node-edge reference
 - Created hidden_edge_reference.md
 - Added hidden-node detail to node_edge_reference.md
+
 ## Tue 7-28
 
 - Re-added journey map example

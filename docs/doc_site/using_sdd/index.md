@@ -1,4 +1,10 @@
-## Using SDD Today
+---
+next:
+  text: Using SDD in the Future
+  link: future_ux.md
+---
+
+# Using SDD Today
 
 The current SDD tools rely on the command line, LLM prompting, and on handling a GitHub repo. Not many people combine those technical skills *and* product design / product management skills. 
 
@@ -7,3 +13,13 @@ But many of us, including designers and product managers, have been learning to 
 SDDs are made by prompting the SDD skill with an LLM, or by manually writing a document in a text editor. Diagrams are created by rendering them, using the command line, or using the LLM skill.
 
 When we accept that working with SDD takes some technical skill and manual steps, SDD does unlock some actual practical value.
+
+## Resources
+
+[Diagram Types](/diagram_types/)
+[Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference)
+[SDD Command Line Tools](sdd_cli_tools)
+[Using Profiles](/profiles/)
+[SDD-Skill](/sdd-skill/)
+
+(MISSING: installing the syntax highlighter)
