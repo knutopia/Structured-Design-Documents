@@ -31,6 +31,7 @@
 - Added kinda-important page class
 - Added side-by-side markdown-it
 - Failed accordeon scroll expander - source still lingers.
+- manual removal of ase from config
 
 ## Fri 7-31
 
