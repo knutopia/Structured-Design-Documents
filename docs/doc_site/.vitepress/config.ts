@@ -38,6 +38,12 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Impact',
+        items: [
+          { text: 'Strategic Potential', link: '/strategic_potential/' },
+          { text: 'Practical Applications', link: '/practical_applications/' }
+        ]
+      },
       { text: 'Diagram Types', link: '/diagram_types/' },
       {
         text: 'Using SDD',
@@ -55,12 +61,6 @@ export default defineConfig({
             text: 'Service Blueprint',
             link: '/service_blueprint_slice_example/'
           }
-        ]
-      },
-      { text: 'Impact',
-        items: [
-          { text: 'Strategic Potential', link: '/strategic_potential/' },
-          { text: 'Practical Applications', link: '/practical_applications/' }
         ]
       }
     ],

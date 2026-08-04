@@ -12,7 +12,7 @@ for a compact list of content available to each diagram type.
   This view shows Areas and Place nested with `CONTAINS`, with `NAVIGATES_TO` connections between Places.
   
   Examples:
-  :::: details outcome_to_ia_trace_example <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details outcome_to_ia_trace_example <Badge type="info" text="Simple Profile" vertical="top" /> {open}
   
   :::tabs
   == Information Architecture Diagram
@@ -91,6 +91,48 @@ for a compact list of content available to each diagram type.
   :::
   ::::
 
+## Journey Map
+
+  User / customer journey, expressing the high-level sequence of interactions with the product. (Steps also appear in the more technical service blueprint, see above.)
+
+  Stages contain source-ordered Steps, while `PRECEDES` relationships define journey flow.
+
+  Examples:
+  :::: details branching_journey_example <Badge type="info" text="Simple Profile" vertical="top" />
+
+  :::tabs
+  == Journey Map Diagram
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/simple_profile/branching_journey.journey_map.svg)
+  == Source
+  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/
+  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/branching_journey.sdd
+  :::
+  ::::
+
+  :::: details outcome_to_ia_trace_example <Badge type="info" text="Simple Profile" vertical="top" />
+
+  :::tabs
+  == Journey Map Diagram
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.journey_map.svg)
+  == Source
+  (Same source file is used in outcome-opportunity maps examples.)
+  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/
+  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {41, 45, 46, 49, 56, 57, 60, 66} {lines 40-}
+  :::
+  ::::
+
+  :::: details service_blueprint_slice_example <Badge type="info" text="Simple Profile" vertical="top" />
+
+  :::tabs
+  == Journey Map Diagram
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/simple_profile/service_blueprint_slice.journey_map.svg)
+  == Source
+  (Same source file is used in service blueprint examples.)
+  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/
+  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd {3, 9, 10, 13, 19}
+  :::
+  ::::
+
 ## Outcome-Opportunity Map
 
   Product intent, explicit and traceable: what the product solves, and how to know it works.
@@ -131,7 +173,7 @@ for a compact list of content available to each diagram type.
   :::
   ::::
 
-## Service Blueprint:
+## Service Blueprint
 
   Connects user experience steps to the layers needed to realize it.
 
@@ -148,47 +190,5 @@ for a compact list of content available to each diagram type.
   == Source
   showRepoLink /examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/
   showSource ../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd
-  :::
-  ::::
-
-## Journey Map
-
-  User / customer journey, expressing the high-level sequence of interactions with the product. (Steps also appear in the more technical service blueprint, see above.)
-
-  Stages contain source-ordered Steps, while `PRECEDES` relationships define journey flow.
-
-  Examples:
-  :::: details branching_journey_example <Badge type="info" text="Simple Profile" vertical="top" />
-
-  :::tabs
-  == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/simple_profile/branching_journey.journey_map.svg)
-  == Source
-  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/
-  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/branching_journey.sdd
-  :::
-  ::::
-
-  :::: details outcome_to_ia_trace_example <Badge type="info" text="Simple Profile" vertical="top" />
-
-  :::tabs
-  == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.journey_map.svg)
-  == Source
-  (Same source file is used in outcome-opportunity maps examples.)
-  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/
-  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {41, 45, 46, 49, 56, 57, 60, 66} {lines 40-}
-  :::
-  ::::
-
-  :::: details service_blueprint_slice_example <Badge type="info" text="Simple Profile" vertical="top" />
-
-  :::tabs
-  == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/simple_profile/service_blueprint_slice.journey_map.svg)
-  == Source
-  (Same source file is used in service blueprint examples.)
-  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/
-  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd {3, 9, 10, 13, 19}
   :::
   ::::

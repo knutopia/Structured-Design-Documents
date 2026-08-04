@@ -21,6 +21,15 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 8-3
+
+- Opened up first example on diagram types page
+- Reduced syntax highlighting title
+- Linked impact in main index header
+- Smoothed main index diagram types language
+- Moved position of journey map up in diagram types
+- Experimenting with custom brand colors
+
 ## Sun 8-2
 
 - wide-sidebar page class

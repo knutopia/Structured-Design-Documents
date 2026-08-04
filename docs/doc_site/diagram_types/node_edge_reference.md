@@ -124,6 +124,24 @@ END
 # ViewState TRANSITIONS_TO ViewState
 ```
 
+== Journey Map
+
+Available node types: `Stage`, `Step`
+
+```sdd
+Stage G-001 "Stage Name"
+  CONTAINS J-001 "a Step"
+END
+
+Step J-001 "Step Name"
+  PRECEDES J-002 "a Step"
+END
+
+# Incoming edges for Step:
+# Stage CONTAINS Step
+# Step PRECEDES Step
+```
+
 == Outcome-Opportunity Map
 
 Available node types: `Outcome`, `Metric`, `Opportunity`, `Initiative`
@@ -211,24 +229,6 @@ END
 
 # Incoming edges for Policy:
 # Place, Process, SystemAction CONSTRAINED_BY Policy
-```
-
-== Journey Map
-
-Available node types: `Stage`, `Step`
-
-```sdd
-Stage G-001 "Stage Name"
-  CONTAINS J-001 "a Step"
-END
-
-Step J-001 "Step Name"
-  PRECEDES J-002 "a Step"
-END
-
-# Incoming edges for Step:
-# Stage CONTAINS Step
-# Step PRECEDES Step
 ```
 
 :::
