@@ -6,9 +6,9 @@ rendered with `profile=simple`, together with how those relationships appear
 when the same diagram is rendered with `profile=strict`.
 
 > [!IMPORTANT]
-> This page is downstream documentation, not a normative source. Diagram node
-> and edge inclusion comes from `bundle/v0.1/core/views.yaml`; relationship
-> direction and endpoints come from `bundle/v0.1/core/contracts.yaml`.
+> In technical terms, this page is downstream documentation, not a normative source. 
+> Diagram node and edge inclusion comes from `bundle/v0.1/core/views.yaml`; 
+> relationship direction and endpoints come from `bundle/v0.1/core/contracts.yaml`.
 
 ## Legend
 
@@ -97,6 +97,18 @@ One profile-dependent case affects a label rather than connector visibility:
 | --- | --- | --- | --- |
 | Decision `Step` | Annotated `Step PRECEDES Step` | Connector visible; branch label hidden | **C — strict label**, selected from `guard`, then `event`, then `to_name` |
 
+== Journey Map
+
+Available node types: `Stage`, `Step`
+
+There are no invisible relationship edges:
+
+- `Stage CONTAINS Step` is visible structurally.
+- `Step PRECEDES Step` is visible as the ordering connector.
+
+`strict` can add Opportunity reference badges to a `Step`, but
+`opportunity_refs` is a node property rather than a relationship edge.
+
 == Outcome-Opportunity Map
 
 Available node types: `Outcome`, `Metric`, `Opportunity`, `Initiative`
@@ -151,17 +163,5 @@ These are **C — strict label** cases rather than fully invisible edges.
 `PRECEDES` connectors remain visible without a relationship label in both
 profiles. The profile-dependent labels above are controlled by
 `show_secondary_edge_labels`.
-
-== Journey Map
-
-Available node types: `Stage`, `Step`
-
-There are no invisible relationship edges:
-
-- `Stage CONTAINS Step` is visible structurally.
-- `Step PRECEDES Step` is visible as the ordering connector.
-
-`strict` can add Opportunity reference badges to a `Step`, but
-`opportunity_refs` is a node property rather than a relationship edge.
 
 :::

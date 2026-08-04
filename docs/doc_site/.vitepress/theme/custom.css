@@ -1,0 +1,72 @@
+/* .vitepress/theme/custom.css */
+:root {
+
+  --sdd-c-testC-1: hsl(200, 65%, 48%);
+  --sdd-c-testC-2: hwb(194 20% 23%);
+  --sdd-c-testC-3: hsl(200, 29%, 37%);
+  --sdd-c-testC-soft: hsla(125, 100%, 70%, 0.14);
+
+  --sdd-c-testB-1: hsl(13, 66%, 49%);
+  --sdd-c-testB-2: hsl(127, 58%, 49%);
+  --sdd-c-testB-3: hsl(117, 29%, 37%);
+  --sdd-c-testB-soft: hsla(125, 100%, 70%, 0.14);
+
+  --sdd-c-testA5: #fe6e2b;
+  --sdd-c-testB5: #4b9b16;
+  --sdd-c-testC5: #337229;
+
+  --sdd-c-testA4: #fe6e2b;
+  --sdd-c-testB4: #9b1687;
+  --sdd-c-testC4: #653972;
+
+  --sdd-c-testA3: #fe6e2b;
+  --sdd-c-testB3: #13809e;
+  --sdd-c-testC3: #245178;
+  
+  --sdd-c-testA2: #fe6e2b;
+  --sdd-c-testB2: #1a8b9f;
+  --sdd-c-testC2: #196a78;
+  
+  --sdd-c-testA1: #fe6e2b;
+  --sdd-c-testB1: #5d9b16;
+  --sdd-c-testC1: #507229;
+  
+  /*
+  --vp-c-indigo-1: #3451b2;
+  --vp-c-indigo-2: #3a5ccc;
+  --vp-c-indigo-3: #5672cd;
+  --vp-c-indigo-soft: rgba(100, 108, 255, 0.14);
+*/
+  --vp-c-brand-1: var(--sdd-c-testC-1);
+  --vp-c-brand-2: var(--sdd-c-testC-2);
+  --vp-c-brand-3: var(--sdd-c-testC-3);
+  --vp-c-brand-soft: var(--sdd-c-testC-soft);
+
+/*
+  --vp-c-brand-1: var(--sdd-c-testA);
+  --vp-c-brand-2: var(--sdd-c-testB);
+  --vp-c-brand-3: var(--sdd-c-testC);
+  --vp-c-brand-soft: var(--sdd-c-indigo-soft);
+*/
+}
+
+.dark {
+  
+  --sdd-c-testC-1: hsl(200, 98%, 59%);
+  --sdd-c-testC-2: hsl(200, 29%, 37%);
+  --sdd-c-testC-3: hwb(186 19% 43%);
+  --sdd-c-testC-soft: hsla(124, 100%, 70%, 0.16);  
+
+  --sdd-c-testB-1: hsl(13, 98%, 59%);
+  --sdd-c-testB-2: hsl(117, 38%, 34%);
+  --sdd-c-testB-3: hsl(127, 34%, 48%);
+  --sdd-c-testB-soft: hsla(124, 100%, 70%, 0.16);
+
+/*
+  --vp-c-indigo-1: #a8b1ff;
+  --vp-c-indigo-2: #5c73e7;
+  --vp-c-indigo-3: #3e63dd;
+  --vp-c-indigo-soft: rgba(100, 108, 255, 0.16);
+*/
+
+}

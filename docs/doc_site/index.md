@@ -13,6 +13,9 @@ hero:
     - theme: brand
       text: Repo
       link: https://github.com/knutopia/Structured-Design-Documents/tree/main
+    - theme: brand
+      text: Impact
+      link: 'strategic_potential/'
 
 features:
   - title: Product Design Graph
@@ -27,7 +30,7 @@ SDD *(Structured Design Documents)* is a compact language for describing softwar
 
 SDD makes design elements and their relationships explicit, in a unified "Product Design Graph", which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.
 
-Different aspects of the unified graph can be shown (rendered) as diagrams. Usable staged SVG/PNG renderers are currently available for IA / Place Map, UI Contract, Service Blueprint, and Scenario Flow views. See [Diagram Types](./diagram_types/).
+The project includes tools for compiling and validating SDD source files and for generating diagrams from them. Different parts of the unified graph can be rendered as distinct diagrams: IA / Place Map, UI Contracts, Scenario Flow, Journey Map, Outcome-Opportunity Map, and Service Blueprint. See [Diagram Types](./diagram_types/).
 
 ## Why It Exists
 

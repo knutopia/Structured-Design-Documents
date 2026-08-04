@@ -18,17 +18,18 @@ With this explicit structure, a product team can keep exploration and execution 
 
 :::: sideBySide
 
+::: info Impact on Product Decisions
+
+Traditional product management tools capture product structure and decisions in oceans of data. Showing SDD diagrams in this context can provide clarity, driving alignment and good product decisions. Today, showing an SDD in an external tool means rendering a diagram to a file and then attaching the file in the external tool. 
+:::
+
+==
+
 ::: info Impact on LLM Output
 
 An SDD can provide structural context to an LLM prompt, so the LLM won't simply guess a structure based on random training data. This is a matter of using a text editor to trim the SDD file to the relevant content, and then attaching the file. An SDD can also be referenced in context, such as in README.md, CODEX.md or CLAUDE.md files.
 :::
 
-==
-
-::: info Impact on Product Decisions
-
-Traditional product management tools capture product structure and decisions in oceans of data. Showing SDD diagrams in this context can provide clarity, driving alignment and good product decisions. Today, showing an SDD in an external tool means rendering a diagram to a file and then attaching the file in the external tool. 
-:::
 ::::
 
 Much of what SDD does has always been the promise of product design. But unlike traditional product design diagrams, SDD connects product design content to product decision making and to product delivery, forestalling design drift. SDD allows product design to deliver on its promise, by making product design information available in a dynamic, connected, impactful fashion.
