@@ -51,5 +51,5 @@ The helper is the machine-facing contract for the skill. If the skill teaches co
 When in doubt, resolve `<helper>` as described in the main skill file, then verify against:
 
 - `<helper> capabilities`
-- `docs/doc_site/sdd-helper/README.md`
+- `docs/doc_site/sdd-helper/index.md`
 - `src/authoring/contracts.ts`

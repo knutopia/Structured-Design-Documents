@@ -6,7 +6,7 @@ import { createHelperCapabilities } from "../src/cli/helperDiscovery.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const skillRoot = path.join(repoRoot, "skills/sdd-skill");
-const helperReadmePath = path.join(repoRoot, "docs/doc_site/sdd-helper/README.md");
+const helperDocsPath = path.join(repoRoot, "docs/doc_site/sdd-helper/index.md");
 
 async function expectExists(targetPath: string): Promise<void> {
   await expect(access(targetPath)).resolves.toBeUndefined();
@@ -19,7 +19,7 @@ function extractSupportedHelperCommands(markdown: string): string[] {
   return Array.from(listBlock.matchAll(/^- `([^`]+)`$/gm), (match) => match[1]);
 }
 
-function extractHelperReadmeCommandNames(markdown: string): string[] {
+function extractHelperDocsCommandNames(markdown: string): string[] {
   return Array.from(
     new Set(Array.from(markdown.matchAll(/^#### `sdd-helper ([^`\s]+)/gm), (match) => match[1]))
   );
@@ -89,46 +89,46 @@ describe("canonical sdd-skill source", () => {
     );
   });
 
-  it("keeps the helper README aligned with helper authority routing", async () => {
-    const helperReadme = await readFile(helperReadmePath, "utf8");
-    const documentedCommands = extractHelperReadmeCommandNames(helperReadme).sort();
+  it("keeps the helper documentation aligned with helper authority routing", async () => {
+    const helperDocs = await readFile(helperDocsPath, "utf8");
+    const documentedCommands = extractHelperDocsCommandNames(helperDocs).sort();
     const capabilityCommands = createHelperCapabilities().commands.map((command) => command.name).sort();
 
     expect(documentedCommands).toEqual(capabilityCommands);
-    expect(helperReadme).toContain("`sdd-helper` is the JSON-first companion CLI");
-    expect(helperReadme).toContain("Successful commands write exactly one JSON payload to `stdout`.");
-    expect(helperReadme).toContain("`capabilities` is helper command discovery and remains static");
-    expect(helperReadme).toContain("`contract` is deep helper contract detail");
-    expect(helperReadme).toContain("`contract --purpose request` is a lossy request-composition view");
-    expect(helperReadme).toContain(
+    expect(helperDocs).toContain("`sdd-helper` is the JSON-first companion CLI");
+    expect(helperDocs).toContain("Successful commands write exactly one JSON payload to `stdout`.");
+    expect(helperDocs).toContain("`capabilities` is helper command discovery and remains static");
+    expect(helperDocs).toContain("`contract` is deep helper contract detail");
+    expect(helperDocs).toContain("`contract --purpose request` is a lossy request-composition view");
+    expect(helperDocs).toContain(
       "`contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values"
     );
-    expect(helperReadme).toContain("authoring_format_card");
-    expect(helperReadme).toContain("capabilities` remains static and does not inline this card");
-    expect(helperReadme).toContain("Helper mechanics are not SDD language authority");
-    expect(helperReadme).toContain("Use `bundle/v0.1/` files for SDD language semantics");
-    expect(helperReadme).toContain("Use docs to explain a surface or investigate a mismatch.");
-    expect(helperReadme).toContain(
+    expect(helperDocs).toContain("authoring_format_card");
+    expect(helperDocs).toContain("capabilities` remains static and does not inline this card");
+    expect(helperDocs).toContain("Helper mechanics are not SDD language authority");
+    expect(helperDocs).toContain("Use `bundle/v0.1/` files for SDD language semantics");
+    expect(helperDocs).toContain("Use docs to explain a surface or investigate a mismatch.");
+    expect(helperDocs).toContain(
       "Use implementation code for implementation debugging, not normal helper request-shape recovery."
     );
-    expect(helperReadme).toContain("For request-loading commands, request files remain the safest default.");
-    expect(helperReadme).toContain("Domain rejections are structured helper success payloads");
-    expect(helperReadme).toContain("Helper errors are `sdd-helper-error` payloads");
-    expect(helperReadme).toContain("Diagnostics are structured evidence");
-    expect(helperReadme).toContain("Persisted validation reads the on-disk document state");
-    expect(helperReadme).toContain("Projection reads the on-disk document state");
-    expect(helperReadme).toContain("Render failures happen in preview generation or materialization");
-    expect(helperReadme).toContain(
+    expect(helperDocs).toContain("For request-loading commands, request files remain the safest default.");
+    expect(helperDocs).toContain("Domain rejections are structured helper success payloads");
+    expect(helperDocs).toContain("Helper errors are `sdd-helper-error` payloads");
+    expect(helperDocs).toContain("Diagnostics are structured evidence");
+    expect(helperDocs).toContain("Persisted validation reads the on-disk document state");
+    expect(helperDocs).toContain("Projection reads the on-disk document state");
+    expect(helperDocs).toContain("Render failures happen in preview generation or materialization");
+    expect(helperDocs).toContain(
       "Use `assessment.layer`, `assessment.should_stop`, `assessment.next_action`, and `assessment.blocking_diagnostics`"
     );
-    expect(helperReadme).toContain(
+    expect(helperDocs).toContain(
       "Helper `preview` artifact paths are transient helper output and are not saved artifacts."
     );
-    expect(helperReadme).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>");
-    expect(helperReadme).toContain(
+    expect(helperDocs).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>");
+    expect(helperDocs).toContain(
       "Use helper discovery for helper mechanics, bundle files for SDD language, docs for explanation or mismatch investigation, and implementation code for implementation debugging."
     );
-    expect(helperReadme).not.toContain("capabilities -> contract -> code/docs only if still insufficient");
+    expect(helperDocs).not.toContain("capabilities -> contract -> code/docs only if still insufficient");
   });
 
   it("locks the top-level authority selectors", async () => {

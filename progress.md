@@ -26,6 +26,8 @@
 - Extended syntax highlighting language support instructions
 - Synced project on machine 2, capturing test failures
 - Approved @vscode/vsce-sign@2.0.9, keytar@7.9.0. pnpm build scripts on machine 2
+- Cleaned out AccordionScrollExpander remnants
+- Addressed test failures
 
 ## Mon 8-3
 

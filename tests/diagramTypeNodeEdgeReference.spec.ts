@@ -156,9 +156,9 @@ describe('diagram type node-and-edge reference', () => {
           .filter(Boolean)
           .map((line) => {
             const match = line.match(
-              /^([A-Z_]+) [A-Z]{1,3}-[0-9]{3,}(?:[a-z][a-z0-9]*)? "(?:a|an) ([A-Za-z]+)"$/
+              /^([A-Z_]+) [A-Z]{1,3}-[0-9]{3,}(?:[a-z][a-z0-9]*)? "(?:a|an) ([A-Za-z]+)"(?: # \((?:hidden|shown with strict profile)\))?$/
             )
-            expect(match, `invalid minimal edge line: ${line}`).not.toBeNull()
+            expect(match, `invalid edge reference line: ${line}`).not.toBeNull()
             return `${match![1]} ${match![2]}`
           })
         const expectedEdges = outgoing.flatMap((group) =>
