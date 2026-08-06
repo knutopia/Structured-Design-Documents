@@ -21,6 +21,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 8-6
+
+- Font exploration tools
+
 ## Tue 8-4
 
 - Extended syntax highlighting language support instructions
