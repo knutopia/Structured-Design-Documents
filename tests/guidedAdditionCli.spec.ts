@@ -28,6 +28,8 @@ afterAll(() => {
 });
 
 interface ScriptOptions {
+  additionKind?: "standalone" | "relationship";
+  startingNode?: string;
   operation?: { direction: "outgoing" | "incoming"; endpoint_strategy: "existing_only" | "existing_or_new" };
   nodeType?: string;
   relationship?: string;
@@ -59,6 +61,12 @@ class ScriptedPrompt implements GuidedPromptAdapter {
       if (!match) throw new Error(`Script has no matching choice for ${request.id}`);
       return match.value;
     };
+    if (request.id === "addition_kind" && this.options.additionKind) {
+      return find((choice) => choice.value === this.options.additionKind as T);
+    }
+    if (request.id === "starting_node" && this.options.startingNode) {
+      return find((choice) => (choice.value as any).node_id === this.options.startingNode);
+    }
     if (request.id === "operation" && this.options.operation) {
       return find((choice) => {
         const value = choice.value as any;
@@ -196,6 +204,69 @@ describe("interactive sdd add", () => {
     expect(harness.apply).not.toHaveBeenCalled();
     expect(harness.stdout.join("")).toContain("Cancelled. No changes were written.");
     expect(prompt.transcript.some((entry) => entry.id === "save_or_cancel")).toBe(true);
+  });
+
+  it("offers relationship addition and browses the starting node when --node is omitted", async () => {
+    const prompt = new ScriptedPrompt({
+      additionKind: "relationship",
+      startingNode: "O-001",
+      operation: { direction: "outgoing", endpoint_strategy: "existing_only" },
+      relationship: "MEASURED_BY",
+      endpoint: "M-001",
+      save: false
+    });
+    const harness = cliHarness(prompt);
+    const result = await runCli(["node", "sdd", "add", writeFixture("wrapper-relationship")], harness.deps);
+
+    expect(result.exitCode, harness.stderr.join("\n")).toBe(0);
+    expect(prompt.transcript.find((entry) => entry.id === "addition_kind")?.labels).toEqual([
+      "Add a standalone node — Create a node without a relationship",
+      "Add a relationship — Choose an existing starting node, then connect it"
+    ]);
+    expect(prompt.transcript.find((entry) => entry.id === "starting_node")).toMatchObject({
+      message: "Choose starting node"
+    });
+    expect(prompt.transcript.find((entry) => entry.id === "starting_node")?.labels?.join("\n"))
+      .toContain("O-001: Reduce Abandonment — Outcome");
+    expect(prompt.transcript.find((entry) => entry.id === "operation")?.message).toBe("Choose a relationship route");
+    expect(harness.apply).not.toHaveBeenCalled();
+  });
+
+  it("keeps the prompt open until the deferred Save or Cancel decision settles", async () => {
+    const scripted = new ScriptedPrompt({ nodeType: "Outcome" });
+    let markReviewReached!: () => void;
+    const reviewReached = new Promise<void>((resolve) => {
+      markReviewReached = resolve;
+    });
+    let resolveReview!: (decision: "save" | "cancel") => void;
+    const reviewDecision = new Promise<"save" | "cancel">((resolve) => {
+      resolveReview = resolve;
+    });
+    const close = vi.fn();
+    const prompt: GuidedPromptAdapter = {
+      select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[] }): Promise<T> {
+        if (request.id === "save_or_cancel") {
+          markReviewReached();
+          return reviewDecision as Promise<unknown> as Promise<T>;
+        }
+        return scripted.select(request);
+      },
+      input: (request) => scripted.input(request),
+      confirm: (request) => scripted.confirm(request),
+      close
+    };
+    const harness = cliHarness(scripted, { createGuidedPrompt: () => prompt });
+    const running = runCli(["node", "sdd", "add", writeFixture("deferred-review")], harness.deps);
+
+    await reviewReached;
+    const closeCallsBeforeDecision = close.mock.calls.length;
+    resolveReview("cancel");
+    const result = await running;
+
+    expect(closeCallsBeforeDecision).toBe(0);
+    expect(close).toHaveBeenCalledTimes(1);
+    expect(result.exitCode).toBe(0);
+    expect(harness.stdout.join("")).toContain("Cancelled. No changes were written.");
   });
 
   it("uses planner-provided view metadata, filter actions, ID suggestion, and advanced disclosure", async () => {

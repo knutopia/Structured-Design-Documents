@@ -28,6 +28,8 @@ z
 - Checkpoint 4 done
 - Checkpoint 5 done
 - Checkpoint 6 done
+- Improving sdd add guidance
+- Captured sdd add usability issues
 
 ## Mon 8-10
 

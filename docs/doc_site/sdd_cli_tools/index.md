@@ -70,13 +70,13 @@ If you only remember one command from this page, make it `sdd show`.
 
 ### `sdd add`
 
-- Purpose: interactively add a standalone node or an incoming/outgoing relationship.
-- Use when: you want the bundle to guide valid node types, relationship endpoints, fields, IDs, and source placement.
+- Purpose: interactively add content to an SDD file. Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
+- Use when: you want to create SDD content in a simple way, without writing source code from scratch.
 - Invocation: `pnpm sdd add <document_path>`
 - Common options: `--node <node_id>` anchors a relationship flow, `--view <view_id>` orders and filters guidance using a bundle-defined view, and `--bundle <manifest>` selects a different bundle.
 - Output: a reviewed dry run followed by an explicit Save or Cancel decision.
 
-Without `--node`, the command guides a standalone node. With an exact anchor node ID, it offers friendly incoming/outgoing routes to existing or new endpoints. Primary fields appear first; optional advanced fields are disclosed only when requested. Relationship menus explain the bundle-derived role and display behavior for the selected view.
+Without `--node`, the command offers a standalone node and, when the document contains nodes, a relationship. Choosing a relationship opens a starting-node browser before the friendly incoming/outgoing routes; `--node` skips that browser by supplying the exact anchor directly. Primary fields appear first; optional advanced fields are disclosed only when requested. Relationship menus explain the bundle-derived role and display behavior for the selected view.
 
 Save first performs a dry run using `simple` validation. Here `simple` is feedback about the completed candidate, not a restriction on which relationships can be browsed. Errors block saving. Warnings are shown and must be accepted before the final commit prompt. The exact reviewed proposal is then committed; if the document or bundle changed after review, restart the command.
 

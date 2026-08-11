@@ -145,6 +145,10 @@ function writeDiagnostics(deps: Pick<GuidedAdditionCliDeps, "stderr">, diagnosti
   if (diagnostics.length > 0) deps.stderr(appendLine(formatPrettyDiagnostics(diagnostics)));
 }
 
+function existingNodeRef(node: GuidedDocumentSnapshot["nodes"][number]): ExistingNodeRef {
+  return { kind: "existing_node", handle: node.handle, node_id: node.node_id, node_type: node.node_type };
+}
+
 function exactAnchor(snapshot: GuidedDocumentSnapshot, nodeId: string | undefined): ExistingNodeRef | undefined {
   if (!nodeId) return undefined;
   const matches = snapshot.nodes.filter((node) => node.node_id === nodeId);
@@ -152,8 +156,43 @@ function exactAnchor(snapshot: GuidedDocumentSnapshot, nodeId: string | undefine
     const detail = matches.length === 0 ? "was not found" : "is ambiguous";
     throw new Error(`Anchor node '${nodeId}' ${detail} in the document snapshot.`);
   }
-  const node = matches[0]!;
-  return { kind: "existing_node", handle: node.handle, node_id: node.node_id, node_type: node.node_type };
+  return existingNodeRef(matches[0]!);
+}
+
+async function chooseWrapperAddition(
+  prompt: GuidedPromptAdapter,
+  snapshot: GuidedDocumentSnapshot
+): Promise<{ kind: "standalone" } | { kind: "relationship"; anchor: ExistingNodeRef }> {
+  const kind = await prompt.select<"standalone" | "relationship">({
+    id: "addition_kind",
+    message: "What would you like to add?",
+    choices: [
+      {
+        value: "standalone",
+        label: "Add a standalone node",
+        description: "Create a node without a relationship"
+      },
+      ...(snapshot.nodes.length > 0
+        ? [{
+            value: "relationship" as const,
+            label: "Add a relationship",
+            description: "Choose an existing starting node, then connect it"
+          }]
+        : [])
+    ]
+  });
+  if (kind === "standalone") return { kind };
+
+  const anchor = await prompt.select<ExistingNodeRef>({
+    id: "starting_node",
+    message: "Choose starting node",
+    choices: snapshot.nodes.map((node) => ({
+      value: existingNodeRef(node),
+      label: `${node.node_id}: ${node.name}`,
+      description: node.node_type
+    }))
+  });
+  return { kind, anchor };
 }
 
 function operationLabel(selection: GuidedOperationSelection, anchor?: ExistingNodeRef): string {
@@ -337,7 +376,7 @@ async function actionForStep(
     case "choose_operation": {
       const selection = await prompt.select({
         id: "operation",
-        message: "What would you like to add?",
+        message: state.anchor ? "Choose a relationship route" : "What would you like to add?",
         choices: step.options.map((option) => ({ value: option, label: operationLabel(option, state.anchor) }))
       });
       return { kind: "choose_operation", selection };
@@ -514,16 +553,31 @@ export async function runGuidedAdditionCommand(
       text: source.text
     });
     const runtime = deps.createGuidedAdditionRuntime(bundle);
-    const anchor = exactAnchor(snapshot, options.node);
-    let result = runtime.begin(snapshot, {
-      ...(anchor ? { anchor } : {}),
-      ...(options.view ? { initial_filter: { view_id: options.view } } : {})
-    });
+    const initialFilter = options.view ? { initial_filter: { view_id: options.view } } : {};
+    const explicitAnchor = exactAnchor(snapshot, options.node);
+    let result: GuidedAdditionResult;
+
+    if (explicitAnchor) {
+      result = runtime.begin(snapshot, { anchor: explicitAnchor, ...initialFilter });
+    } else {
+      const unanchored = runtime.begin(snapshot, initialFilter);
+      const wrapperAddition = await chooseWrapperAddition(prompt, snapshot);
+      if (wrapperAddition.kind === "relationship") {
+        result = runtime.begin(snapshot, { anchor: wrapperAddition.anchor, ...initialFilter });
+      } else {
+        if (unanchored.kind !== "sdd-guided-addition-step" || unanchored.step.kind !== "choose_operation") {
+          throw new Error("The guided planner did not offer an initial standalone operation.");
+        }
+        const standalone = unanchored.step.options.find((option) => option.kind === "add_node");
+        if (!standalone) throw new Error("The guided planner did not offer a standalone-node operation.");
+        result = runtime.advance(snapshot, unanchored.state, { kind: "choose_operation", selection: standalone });
+      }
+    }
     const lastPlacement: { recommendation?: PlacementRecommendation } = {};
 
     for (;;) {
       if (result.kind === "sdd-guided-addition-complete") {
-        return saveProposal(deps, prompt, workspace, bundle, result.proposal);
+        return await saveProposal(deps, prompt, workspace, bundle, result.proposal);
       }
       const action = await actionForStep(prompt, result, lastPlacement);
       if (action === "cancel") {
