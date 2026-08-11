@@ -881,3 +881,115 @@ Checkpoint acceptance decision and next-checkpoint authorization:
 - Technical acceptance assessment: **PASS**. Checkpoint 2 meets its determinism, catalog mutation, snapshot/error-boundary, import-boundary, focused/full regression, documentation, and stop-condition requirements.
 - Unsupported bundle cases: authoring metadata absence is reported as `guided_addition.unsupported_bundle`; no unresolved supported-bundle case remains.
 - Checkpoint 3 authorization: **withheld pending explicit user acceptance of the Checkpoint 2 report**. No Checkpoint 3 code has started.
+- User acceptance received on 2026-08-11. Checkpoint 2 was committed as `bc5fcdb` (`Checkpoint 2 done`), authorizing Checkpoint 3.
+
+### 2026-08-11 — Checkpoint 3: Planner, forms, filtering, placement, and proposals
+
+Working-tree identifier: uncommitted Checkpoint 3 implementation based on commit `bc5fcdb` (`Checkpoint 2 done`). No Checkpoint 3 commit was created.
+
+Implemented scope:
+
+- Added the complete pure guided workflow and public contracts for standalone node creation plus outgoing/incoming relationships to existing or new endpoints.
+- Added immutable state transitions for operation selection, relationship filters and choices, endpoint strategy and selection, node and edge forms, placement review, exact effect confirmation, proposal review, and completion.
+- Added generic node/edge form construction and validation from catalog-carried syntax, schema, profile-rule, authoring-form, edge-support, and required-property metadata.
+- Added deterministic ID suggestions and opaque identifiers for choices, endpoint options, placements, effects, and completed proposals.
+- Added catalog-driven relationship ordering, view-role/display metadata, profile aliases, conditional display evaluation, and caller-requested role/presence/label filtering.
+- Added deterministic, bounded, de-duplicated node and edge placement alternatives, including structural reparent effects and exact confirmation binding.
+- Added public root exports and focused planner, placement, architecture-boundary, determinism, scenario, and bundle-mutation tests.
+
+Explicitly deferred:
+
+- Checkpoint 4 cross-stream `reparent_node_block`, proposal verification/translation, mutation execution, journaling, and undo integration.
+- All filesystem writes, CLI prompts, Save/Cancel behavior, and guided domain-service metadata.
+- Any new helper or MCP command.
+
+Route terminal proposal evidence:
+
+| Route | Terminal semantic proposal |
+| --- | --- |
+| Standalone | One `node_1`; no relationship and no edge. |
+| Outgoing + existing | No proposed node; relationship source is the anchor, target is the selected existing node, and `edge_1` matches those literal endpoints. |
+| Outgoing + new | One `node_1`; relationship source is the anchor, target is `node_1`, and `edge_1` matches. |
+| Incoming + existing | No proposed node; relationship source is the selected existing node, target is the anchor, and `edge_1` matches. |
+| Incoming + new | One `node_1`; relationship source is `node_1`, target is the anchor, and `edge_1` matches. |
+
+Bundle field → generic consumer → focused test → mutation proof:
+
+| Bundle/catalog field | Generic consumer | Focused test | Bundle-only proof |
+| --- | --- | --- | --- |
+| Endpoint triples and relationship order | planner relationship-choice builder | `guidedAdditionPlanner.spec.ts` route and endpoint-mutation cases | Changing an allowed endpoint changes the offered relationship choices without planner edits. |
+| Node prefixes, minimum width, and sequence policy | `suggestGuidedNodeId(...)` | `guidedAdditionPlanner.spec.ts` ID matrix | Prefix/width mutations change suggestions; empty, numeric, suffixed, edited, collision, invalid, and duplicate cases are covered. |
+| Node forms plus syntax/schema/profile rules | node form builder and value validator | planner form and architecture cases | Form inventory and formats are resolved from catalog metadata; no node type or property table exists in the planner. |
+| View roles, display rules, aliases, and predicates | choice metadata, ordering, and filters | planner display/filter cases | Role/display mutations change metadata, order, and filtering; simple, strict, permissive alias, and conditional UI behavior are covered. |
+| Edge-field support | edge form builder | optional PRECEDES and mutated-support cases | Adding/removing supported annotation or property fields changes the form and proposal content. |
+| `required_edge_property` rules | edge form completion gate | required BINDS_TO and mutation cases | Requiredness mutations change whether the same field values can complete. |
+| Relationship `authoring.graph_role` / `source_organization` | placement planner and effect builder | `guidedAdditionPlacement.spec.ts` structural mutation cases | Changing structural authoring semantics changes nesting/reparent requirements. |
+| Placement policy sequence, fallback, structural, edge, and name-hint values | placement recommendation builder | placement policy mutation cases | Policy-only mutations change recommendation kinds, ordering, effects, edge placement, and target-name hints. |
+
+Determinism, filtering, placement, and effect evidence:
+
+- Identical inputs produce byte-identical states, steps, completed proposals, and opaque identifiers: `relc_<sha256>`, `ntc_<sha256>`, `epc_<sha256>`, `plc_<sha256>`, `eff_<sha256>`, and `addp_<sha256>`.
+- Existing endpoint strategy is omitted when no matching endpoint exists; unavailable, stale, mismatched-anchor, invalid-field, duplicate-ID, and tampered caller-state actions are rejected with the unchanged caller state.
+- Relationship choices retain bridge entries unless filters exclude them and are ordered primary, supporting, then bridge using catalog relationship order as the stable tie-breaker.
+- Placement covers structural nesting, outgoing/incoming sequence placement, same-source target ordering, fallback append, same-level alternatives, and only offers before/after when the anchor belongs to that destination stream.
+- A reparent effect is bound to document revision, bundle fingerprint, relationship choice, target, old parent, new parent, and placement. Exact confirmation advances; stale or mismatched confirmation is rejected; a non-reparenting alternative clears the effect.
+- Completed proposals reserve only `node_1` and `edge_1` and contain semantic content rather than source text or mutation operations.
+
+Import and semantic-boundary audit:
+
+- Guided runtime modules import only guided contracts/catalog/snapshot support, bundle types, diagnostics, canonical JSON/crypto utilities, and pure helpers.
+- They do not import filesystem, workspace-write, mutation, journal, helper, CLI, or proposal-executor modules.
+- Source audits and architecture tests found no relationship name, node type, view ID, profile ID, prefix, or property-name fallback in planner/forms/placement code.
+- No workflow transition performs I/O, serializes SDD, or creates `ChangeOperation[]`.
+
+Exact verification:
+
+- `TMPDIR=/tmp pnpm exec vitest run tests/guidedAdditionPlanner.spec.ts tests/guidedAdditionPlacement.spec.ts tests/guidedAdditionCatalog.spec.ts tests/guidedAdditionArchitecture.spec.ts --no-file-parallelism --reporter=dot` — 4/4 files passed; 46/46 tests passed in 9.61 seconds.
+- `TMPDIR=/tmp pnpm run build` — passed, TypeScript compilation exit 0.
+- `TMPDIR=/tmp pnpm exec vitest run --no-file-parallelism --reporter=dot` — 85/85 files passed; 771/771 tests passed in 343.80 seconds.
+- `TMPDIR=/tmp pnpm docs:build` — passed; VitePress build completed in 8.58 seconds.
+- `git diff --check` — passed with no whitespace errors before this log entry and is rerun after it.
+
+Satisfied invariants:
+
+- The guided workflow is pure, stateless between calls, serializable, deterministic, and read-only.
+- The runtime consumes only the immutable guidance catalog established by Checkpoint 2 and does not reread bundle YAML shapes.
+- Bundle data controls relationship and endpoint choices, form inventory and formats, display classification and filtering, ID suggestions, supported/required edge fields, and placement inputs.
+- Every advance rechecks revision and bundle fingerprint, recomputes the currently offered option set, and rejects unavailable or tampered selections.
+- Incoming relationships remain literal and completed proposal relationship/edge endpoints match exactly.
+- Profile completeness is not enforced while browsing choices.
+- Reparent confirmation is exact, revision/fingerprint-bound, and invalidated when the selected placement changes.
+- Proposals contain no source text or `ChangeOperation[]`; no execution or persistence path was added.
+- The architecture and UX authority documents remain unchanged.
+
+Violated invariants:
+
+- None observed.
+
+Residual risks:
+
+- Completed proposals are intentionally non-executable until Checkpoint 4 adds the sole verified adapter to shared mutation machinery.
+- Form format resolution covers the currently declared generic profile rule kinds; a future format-rule kind requires a typed catalog/runtime extension before bundle use.
+- Placement policy values remain closed typed values. A future policy value requires a generic contract and planner extension before it can be declared in a bundle.
+
+Documentation updated:
+
+- `docs/toolchain/architecture.md`
+- This implementation plan and log
+
+Snapshot/golden audit:
+
+- No parser/compiler snapshots, projection snapshots, renderer-stage snapshots, goldens, rendered corpus artifacts, or `.sdd` examples were changed or refreshed.
+- The full snapshot, golden, and rendered-corpus regression suite passed without normalization.
+
+Unrelated-worktree preservation audit:
+
+- Checkpoint 3 began from clean committed Checkpoint 2 base `bc5fcdb`.
+- Only guided planner/contracts/forms/identifiers/placement code, root exports, focused tests, and the allowed documentation files are modified.
+- No bundle artifact, parser, compiler, validator, projection, renderer, mutation, journal, workspace, CLI, helper, snapshot, golden, corpus, architecture-authority, or UX-authority file was changed.
+
+Checkpoint acceptance decision and next-checkpoint authorization:
+
+- Technical acceptance assessment: **PASS**. Checkpoint 3 meets its route coverage, determinism, bundle-authority proofs, filtering/display, forms, placement/effect, import-boundary, focused/full regression, documentation, and stop-condition requirements.
+- Unsupported supported-bundle cases: none observed. Bundles without authoring metadata remain explicitly unsupported for guided addition.
+- Checkpoint 4 authorization: **withheld pending explicit user acceptance of the Checkpoint 3 report**. No Checkpoint 4 code has started.

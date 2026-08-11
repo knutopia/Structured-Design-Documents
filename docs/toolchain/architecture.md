@@ -163,7 +163,25 @@ Parse failures, duplicate IDs, schema failures, or other compile errors raise `G
 
 `createGuidedDocumentSnapshotFromWorkspace(...)` is the read-only file adapter. It normalizes the requested document through `AuthoringWorkspace`, reads it once, and assigns the same normalized repo-relative value to both `document_ref` and `path`.
 
-No planner, workflow state, proposal executor, helper command, or `sdd add` command is published yet. Those remain gated by the later serial Guided Addition API checkpoints.
+### Pure guided addition domain
+
+`createGuidedAdditionRuntime(bundle)` constructs an immutable guidance catalog and retains only that catalog. Its `begin(snapshot, request)` and `advance(snapshot, state, action)` entry points are pure: the caller carries the serializable workflow state, and the runtime performs no file access, workspace writes, mutation translation, journaling, helper invocation, or CLI work.
+
+Every advance rechecks the document reference, revision, bundle fingerprint, exact anchor, normalized filters, saved field values, endpoints, placements, and confirmations against freshly recomputed offers. Expected rejection raises `GuidedAdditionDomainError` with sorted `authoring` diagnostics and the unchanged caller state. A state cannot bypass a form or completion gate by carrying an unavailable or edited selection.
+
+The workflow supports one standalone-node route and the four normalized anchored routes formed by outgoing/incoming direction and existing-only/existing-or-new endpoint strategy. Relationship choices remain indivisible endpoint triples. Existing endpoint options precede the create-new option, incoming edges keep their literal direction, and no inverse is inferred.
+
+View filtering consumes the explicit view/triple matrix. It orders relationship choices by primary, supporting, then bridge role and retains bridge choices unless an explicit role filter removes them. Presence filters use the resolved ordered display rules for the selected profile and current snapshot node types. The default display profile is the first profile in bundle order; current v0.1 therefore selects `simple` without a planner-side profile fallback. Profile completeness validation is not part of browsing.
+
+Node forms combine the catalog's authoring descriptors with syntax/schema ID and name constraints and profile-owned property formats. ID suggestions consume the configured prefix, sequence policy, and minimum width, including suffixed numeric IDs when finding the next value. Edge forms consume only the selected relationship's `edge_field_support` and `required_edge_property` metadata. Optional empty properties are omitted; prefix mismatch is advisory, while invalid, duplicate, or missing required content blocks progress.
+
+Placement is a separate pure advisor. Relationship authoring roles and source organization select structural nesting, graph-sequence, same-source target ordering, or fallback precedence; authoring placement-policy fields supply the concrete modes. Recommendations expose a deterministic default and deduplicated bounded alternatives. Edge placement remains a separate recommendation in the literal source node's body.
+
+A structural new-parent/existing-child default proposes an explicit `reparent_existing_node` effect. Its `eff_<sha256>` identity binds the bundle, revision, target, old/new parent, placement, and literal relationship. Choosing a non-reparenting alternative clears the effect. Proposal review remains blocked until the exact current effect is confirmed.
+
+Completed proposals contain semantic nodes, literal edges, placement selections, and exact confirmations only. They contain no source text or authoring operations. Relationship proposals carry identical canonical `from`/`type`/`to` values in their relationship and edge records. Opaque deterministic identifiers use `relc_`, `ntc_`, `epc_`, `plc_`, `eff_`, and `addp_` prefixes; v1 reserves only `node_1` and `edge_1` as proposal-local IDs.
+
+No proposal executor, reparenting mutation primitive, helper command, or `sdd add` command is published yet. Those remain gated by later serial Guided Addition API checkpoints.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 
