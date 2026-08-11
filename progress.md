@@ -21,6 +21,10 @@
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 8-10
+
+- UX Brief for Guided Addition API
+
 ## Thu 8-6
 
 - Font exploration tools
