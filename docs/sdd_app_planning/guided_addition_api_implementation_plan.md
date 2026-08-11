@@ -993,3 +993,137 @@ Checkpoint acceptance decision and next-checkpoint authorization:
 - Technical acceptance assessment: **PASS**. Checkpoint 3 meets its route coverage, determinism, bundle-authority proofs, filtering/display, forms, placement/effect, import-boundary, focused/full regression, documentation, and stop-condition requirements.
 - Unsupported supported-bundle cases: none observed. Bundles without authoring metadata remain explicitly unsupported for guided addition.
 - Checkpoint 4 authorization: **withheld pending explicit user acceptance of the Checkpoint 3 report**. No Checkpoint 4 code has started.
+- User acceptance received on 2026-08-11. Checkpoint 3 was committed as `8f73d0e` (`Checkpoint 3 done`), authorizing Checkpoint 4.
+
+### 2026-08-11 — Checkpoint 4: Reparenting primitive and proposal executor
+
+Working-tree identifier: uncommitted Checkpoint 4 implementation based on commit `8f73d0e` (`Checkpoint 3 done`). No Checkpoint 4 commit was created.
+
+Implemented scope:
+
+- Added `reparent_node_block` as a separate low-level mutation operation while retaining `move_nested_node_block` as the backward-compatible same-parent reorder operation.
+- Added source-model movement across top-level and body streams, recursive indentation/header rebasing, self/descendant-cycle prevention, destination-anchor validation, and old/new parent/index summaries.
+- Made ordering summaries a discriminated union and added `apply_addition_proposal` as a change-set origin.
+- Added `ApplyAdditionProposalArgs`, `ApplyAdditionProposalResult`, and `applyAdditionProposal(...)` as the sole guided write-side adapter.
+- Added proposal path/revision/fingerprint/reference/ID/endpoint/field/view-role/placement/confirmation verification, deterministic operation translation, temporary local-handle mapping, and one call to `executeChangeOperations(...)`.
+- Added the low-level reparent operation to existing helper apply request validation and static contract metadata without adding a helper command.
+- Added focused reparent, proposal executor, helper validation, metadata, source-preservation, mutation-regression, journaling, and undo tests.
+
+Explicitly deferred:
+
+- Checkpoint 5 interactive `sdd add`, prompt adapters, review UI, Save/Cancel, warning acceptance, and client-owned confirmation refusal/alternative selection.
+- Checkpoint 6 shared guided-domain service metadata.
+- Any guided helper or MCP command.
+
+Bundle field → generic consumer → focused test → mutation proof:
+
+| Bundle/catalog field | Generic consumer | Focused test | Bundle-only proof |
+| --- | --- | --- | --- |
+| Current bundle fingerprint input, including authoring and contracts | `applyAdditionProposal(...)` preflight | `additionProposals.spec.ts` stale bundle cases | Changing the canonical Outcome prefix or removing an allowed endpoint makes a completed proposal stale before mutation execution. |
+| Allowed endpoint triples | proposal relationship verifier through `GuidanceCatalog.getRelationship(...)` | relationship/edge and endpoint mutation cases | Current triple must resolve from the catalog; the proposal carries no executor-side relationship allow-list. |
+| Relationship `authoring.graph_role` / `source_organization` | recomputed placement/effect verification | structural-semantics mutation case | Changing only `CONTAINS.source_organization` makes the same semantic new-parent addition complete without a reparent effect. |
+| Placement policies | `createPlacementRecommendations(...)`, `selectPlacement(...)`, `effectForSelections(...)` reused by executor | exact placement/confirmation cases | Executor accepts only recomputed currently offered placements/effects; there is no mutation-side placement fallback. |
+| Edge-field support and `required_edge_property` | `normalizeAndValidateEdgeFields(...)` | BINDS_TO required/relaxed cases | Removing only the required-property rule lets the same empty `BINDS_TO.props` proposal complete and apply under the mutated bundle. |
+| Node authoring forms and syntax/schema/profile formats | `normalizeAndValidateNodeFields(...)` | standalone property and proposal verification cases | Proposal nodes must normalize exactly against current catalog form/format metadata before translation. |
+| View/triple role records and profile inventory | proposal guidance-context verifier | proposal verification coverage | Any supplied view role and display-profile identifier must resolve from current catalog records; the executor carries no view/profile table. |
+
+Reparent before/after source evidence:
+
+```text
+# before: top-level child with a nested subtree
+Place P-001 "Child" # header tail
+  owner=Design # property tail
+  NAVIGATES_TO P-002 "Next" # edge tail
+
+  # before nested
+  + ViewState VS-001 "Nested"
+    description="kept"
+  END
+  # child trailing
+END # end tail
+
+# after: complete block nested under Area A-001
+  + Place P-001 "Child" # header tail
+    owner=Design # property tail
+    NAVIGATES_TO P-002 "Next" # edge tail
+
+    # before nested
+    + ViewState VS-001 "Nested"
+      description="kept"
+    END
+    # child trailing
+  END # end tail
+```
+
+The corresponding summary records `old_parent_handle: null`, the Area handle as `new_parent_handle`, `old_index: 1`, and `new_index: 1`. Separate focused cases record nested→different-parent and nested→top-level moves. Self, descendant, same-parent, invalid destination anchor, stale handle, and stale revision cases are rejected.
+
+Proposal translation and execution evidence:
+
+- Standalone node with one property translates as `insert_node_block`, then `set_node_property`.
+- New structural parent plus existing child translates as `insert_node_block`, `insert_edge_line`, then `reparent_node_block`.
+- The structural edge is inserted once and the existing child block is moved once; explicit source assertions find exactly one `CONTAINS` line and one nested child header.
+- Temporary node and edge handles remap to returned `hdl_*` created targets. The reparent operation's destination parent remaps to the exact created node handle.
+- Dry-run and commit produce identical candidate revision, operations, summary, and created-target mappings; only mode/change-set identity and persistence differ.
+- A committed proposal records a restore-document inverse and the shared undo path restores the exact original source.
+- Missing confirmation reports `guided_addition.confirmation_required`; an altered effect reports `guided_addition.confirmation_stale`.
+- Stale revision/fingerprint/reference, invalid proposal ID, missing file-backed path, and relationship/edge mismatch return rejected `sdd-addition-proposal-result` values rather than expected-domain exceptions.
+- Source audit confirms `additionProposals.ts` contains no SDD literal/emitter/write routine and contains exactly one `executeChangeOperations(...)` call.
+
+Exact verification:
+
+- `TMPDIR=/tmp pnpm exec vitest run tests/reparentNodeBlock.spec.ts tests/additionProposals.spec.ts tests/authoringMutations.spec.ts tests/authoringOrderingAndUndo.spec.ts tests/authoringIntents.spec.ts tests/helperCli.spec.ts --no-file-parallelism --reporter=dot` — 6/6 files passed; 93/93 tests passed in 18.96 seconds.
+- Additional metadata/integration verification: `tests/authoringContractMetadata.spec.ts`, `tests/authoringContractResolution.spec.ts`, and `tests/helperCli.integration.spec.ts` — 3/3 files and 27/27 tests passed; subsequent metadata/helper focused run passed 83/83 tests.
+- `TMPDIR=/tmp pnpm run build` — passed, TypeScript compilation exit 0.
+- `TMPDIR=/tmp pnpm exec vitest run --no-file-parallelism --reporter=dot` — 87/87 files passed; 781/781 tests passed in 375.65 seconds.
+- `TMPDIR=/tmp pnpm docs:build` — passed twice; the final post-log VitePress build completed in 8.54 seconds.
+- `git diff --check` — passed with no whitespace errors, including after this log entry.
+
+Satisfied invariants:
+
+- Existing mutation operations remain behaviorally compatible; cross-stream movement is an additive operation and has a distinct summary discriminant.
+- Reparenting moves the complete source-model subtree and preserves properties, edges, comments, blank lines, trailing comments, and relative nesting while rebasing indentation.
+- Reparenting rejects self/descendant cycles, stale revision/handles, invalid destination parents/anchors, and same-parent misuse.
+- Guided confirmation is enforced only by the proposal executor; the low-level reparent operation remains confirmation-agnostic.
+- Proposal verification recomputes revision, bundle fingerprint, snapshot references, bundle-owned semantics, placements, effects, required fields, and canonical identifiers.
+- Proposal relationship and edge endpoints must match exactly and incoming direction remains literal.
+- Translation order is nodes, properties, edges, then reparenting, and proposal-local parents work through temporary-handle remapping.
+- `applyAdditionProposal(...)` invokes the shared executor once and performs no source serialization or direct persistence.
+- Dry-run/commit candidate parity, journaling, undo, and created-target mappings are demonstrated.
+- Existing helper command inventory is unchanged; only the existing low-level apply contract gained the reparent operation.
+- The architecture and UX authority documents remain unchanged.
+
+Violated invariants:
+
+- None observed.
+
+Residual risks:
+
+- Reparent indentation rebasing follows the mutation engine's existing two-space emitted depth convention. Non-semantic unusual indentation remains parseable, but a moved header is normalized to the canonical top-level/nested form.
+- Proposal verification deliberately rereads the current file before delegating to the shared executor, which rereads and rechecks revision at mutation time. This closes the race boundary but performs two reads in the non-stale case.
+- The current file adapter requires `proposal.document_context.path`; alternative storage resolution remains future adapter work.
+- Guided proposal metadata is not yet represented as domain-service contract subjects; that remains Checkpoint 6 by design.
+
+Documentation updated:
+
+- `docs/toolchain/architecture.md`
+- `docs/doc_site/sdd-helper/index.md`
+- `definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.md`
+- This implementation plan and log
+
+Snapshot/golden audit:
+
+- No parser/compiler snapshots, projection snapshots, renderer-stage snapshots, goldens, rendered corpus artifacts, or `.sdd` examples were changed or refreshed.
+- The full compile, projection, renderer-stage, visual-acceptance, and rendered-corpus tests passed without normalization.
+
+Unrelated-worktree preservation audit:
+
+- Checkpoint 4 began from clean committed Checkpoint 3 base `8f73d0e`.
+- A contemporaneous external modification added `Checkpoint 4 done` to `progress.md`; this implementation did not create, edit, stage, or revert that change.
+- Only the Checkpoint 3 acceptance line, reparent/proposal contracts and implementation, existing helper apply validation/metadata, focused tests, and allowed explanatory documentation are part of the Checkpoint 4 scope.
+- No bundle artifact, parser, compiler, validator, projection, renderer, journal implementation, workspace implementation, CLI command inventory, snapshot, golden, corpus, architecture-authority, or UX-authority file was changed.
+
+Checkpoint acceptance decision and next-checkpoint authorization:
+
+- Technical acceptance assessment: **PASS**. Checkpoint 4 meets its source-preservation, cycle/stale rejection, proposal verification, bundle-authority proof, confirmation, translation-order, shared-executor, parity, journaling/undo, helper-compatibility, documentation, and regression requirements.
+- Unresolved proposal-executor gaps: none for the supported v1 proposal shapes.
+- Checkpoint 5 authorization: **withheld pending explicit user acceptance of the Checkpoint 4 report**. No Checkpoint 5 CLI code has started.

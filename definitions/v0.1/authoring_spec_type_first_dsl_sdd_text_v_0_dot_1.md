@@ -186,6 +186,8 @@ Tooling SHOULD treat two edges as **duplicates** if they have the same `from`, `
 
 Nesting is purely an authoring affordance: it helps writers place related nodes near each other.
 
+The shared authoring runtime can reparent a complete node block between the top-level stream and nested body streams without changing that rule. Reparenting preserves the moved subtree and its owned source trivia, but it does not create, remove, or infer a semantic relationship. Guided structural additions therefore author the explicit `CONTAINS` or `COMPOSED_OF` edge and treat any existing-node reparent as a separately confirmed source-organization effect.
+
 ### 6.2 Parsing rule
 
 Within a node body, a line whose **first non-whitespace character** is `+` starts a nested node header. The nested node continues until its `END`.

@@ -192,18 +192,40 @@ const changeSetSummarySchema = objectSchema(
         ["handle", "parent_handle", "rel_type", "to"]
       )
     ),
-    ordering_changes: arraySchema(
-      objectSchema(
-        {
-          kind: stringSchema(["top_level_node", "structural_edge", "nested_node_block"]),
-          target_handle: stringSchema(),
-          parent_handle: stringSchema(),
-          old_index: integerSchema(),
-          new_index: integerSchema()
-        },
-        ["kind", "target_handle", "old_index", "new_index"]
-      )
-    )
+    ordering_changes: arraySchema({
+      oneOf: [
+        objectSchema(
+          {
+            kind: stringSchema(["top_level_node"]),
+            target_handle: stringSchema(),
+            old_index: integerSchema(),
+            new_index: integerSchema()
+          },
+          ["kind", "target_handle", "old_index", "new_index"]
+        ),
+        objectSchema(
+          {
+            kind: stringSchema(["structural_edge", "nested_node_block"]),
+            target_handle: stringSchema(),
+            parent_handle: stringSchema(),
+            old_index: integerSchema(),
+            new_index: integerSchema()
+          },
+          ["kind", "target_handle", "parent_handle", "old_index", "new_index"]
+        ),
+        objectSchema(
+          {
+            kind: stringSchema(["reparented_node_block"]),
+            target_handle: stringSchema(),
+            old_parent_handle: { type: ["string", "null"] },
+            new_parent_handle: { type: ["string", "null"] },
+            old_index: integerSchema(),
+            new_index: integerSchema()
+          },
+          ["kind", "target_handle", "old_parent_handle", "new_parent_handle", "old_index", "new_index"]
+        )
+      ]
+    })
   },
   [
     "node_insertions",
@@ -324,6 +346,15 @@ const moveNestedNodeBlockOpSchema = objectSchema(
   ["kind", "node_handle", "placement"]
 );
 
+const reparentNodeBlockOpSchema = objectSchema(
+  {
+    kind: stringSchema(["reparent_node_block"]),
+    node_handle: stringSchema(),
+    placement: placementSchema
+  },
+  ["kind", "node_handle", "placement"]
+);
+
 const changeOperationSchema: JsonSchema = {
   oneOf: [
     insertNodeBlockOpSchema,
@@ -335,7 +366,8 @@ const changeOperationSchema: JsonSchema = {
     removeEdgeLineOpSchema,
     repositionTopLevelNodeOpSchema,
     repositionStructuralEdgeOpSchema,
-    moveNestedNodeBlockOpSchema
+    moveNestedNodeBlockOpSchema,
+    reparentNodeBlockOpSchema
   ]
 };
 
@@ -344,7 +376,7 @@ const changeSetResultSchema = objectSchema(
     kind: stringSchema(["sdd-change-set"]),
     change_set_id: stringSchema(),
     path: stringSchema(),
-    origin: stringSchema(["apply_change_set", "apply_authoring_intent", "undo_change_set", "create_document"]),
+    origin: stringSchema(["apply_change_set", "apply_authoring_intent", "apply_addition_proposal", "undo_change_set", "create_document"]),
     document_effect: stringSchema(["created", "updated", "deleted"]),
     base_revision: stringSchema(),
     resulting_revision: stringSchema(),

@@ -181,7 +181,15 @@ A structural new-parent/existing-child default proposes an explicit `reparent_ex
 
 Completed proposals contain semantic nodes, literal edges, placement selections, and exact confirmations only. They contain no source text or authoring operations. Relationship proposals carry identical canonical `from`/`type`/`to` values in their relationship and edge records. Opaque deterministic identifiers use `relc_`, `ntc_`, `epc_`, `plc_`, `eff_`, and `addp_` prefixes; v1 reserves only `node_1` and `edge_1` as proposal-local IDs.
 
-No proposal executor, reparenting mutation primitive, helper command, or `sdd add` command is published yet. Those remain gated by later serial Guided Addition API checkpoints.
+### Guided addition proposal execution
+
+`applyAdditionProposal(workspace, bundle, args)` is the only guided write-side adapter. It requires a file-backed proposal path, normalizes that path through `AuthoringWorkspace`, verifies the current revision and recomputed bundle fingerprint, rebuilds the guided snapshot/catalog, and revalidates every existing/local reference, endpoint triple, node/edge field, view role, placement, canonical proposal ID, and exact confirmation. Expected stale or invalid proposals return a rejected `sdd-addition-proposal-result`; they do not throw or invoke mutation execution.
+
+Accepted proposals translate deterministically in node, node-property, edge, then confirmed-reparent order. Proposal-local nodes and edges receive internal temporary handles so an inserted node can own an inserted edge and become the destination parent of an existing node in the same change set. The adapter invokes `executeChangeOperations(...)` once with origin `apply_addition_proposal`; it emits no SDD source and performs no direct persistence. Returned `created_targets` resolve proposal-local IDs to candidate handles, with committed handles serving as the persisted continuation surface.
+
+The low-level `reparent_node_block` operation moves an intact node model between top-level and body streams or between different body parents. It preserves the complete subtree, body content, owned comments, blank lines, and trailing comments while rebasing indentation and top-level/nested header form. It rejects stale handles/revisions, same-parent use, self/descendant cycles, missing destination parents, and relative anchors outside the destination stream. Its discriminated ordering summary records `old_parent_handle`, `new_parent_handle`, `old_index`, and `new_index`. Confirmation remains a guided proposal-executor concern; the low-level operation is confirmation-agnostic.
+
+The existing `sdd-helper apply` request contract recognizes `reparent_node_block` as a surgical low-level operation, and its machine-readable operation/summary schemas describe the new discriminants. This checkpoint adds no guided helper or MCP command. The interactive `sdd add` client remains gated by the next serial checkpoint.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 

@@ -145,6 +145,32 @@ describe("authoring contract metadata", () => {
     }
   });
 
+  it("describes reparent operations and discriminated reparent summaries", () => {
+    const applySchema = getShapeSchema("shared.shape.apply_change_set_args") as any;
+    const operationKinds = applySchema.properties.operations.items.oneOf.map(
+      (operation: any) => operation.properties.kind.enum[0]
+    );
+    expect(operationKinds).toContain("reparent_node_block");
+    const reparentOperation = applySchema.properties.operations.items.oneOf.find(
+      (operation: any) => operation.properties.kind.enum[0] === "reparent_node_block"
+    );
+    expect(reparentOperation.required).toEqual(["kind", "node_handle", "placement"]);
+
+    const resultSchema = getShapeSchema("shared.shape.apply_change_set_result") as any;
+    const summaryVariants = resultSchema.properties.summary.properties.ordering_changes.items.oneOf;
+    const reparentSummary = summaryVariants.find(
+      (variant: any) => variant.properties.kind.enum[0] === "reparented_node_block"
+    );
+    expect(reparentSummary.required).toEqual([
+      "kind",
+      "target_handle",
+      "old_parent_handle",
+      "new_parent_handle",
+      "old_index",
+      "new_index"
+    ]);
+  });
+
   it("exposes helper error result schema with optional diagnostics and assessment", () => {
     const schema = getShapeSchema("shared.shape.helper_error_result");
 

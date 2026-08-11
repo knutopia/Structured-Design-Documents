@@ -24,6 +24,7 @@ export { createGuidanceCatalog, GuidanceCatalog } from "./authoring/guidedAdditi
 export { createGuidedDocumentSnapshot } from "./authoring/guidedAddition/snapshot.js";
 export { createGuidedDocumentSnapshotFromWorkspace } from "./authoring/guidedAddition/snapshotFiles.js";
 export { createGuidedAdditionRuntime } from "./authoring/guidedAddition/planner.js";
+export { applyAdditionProposal } from "./authoring/additionProposals.js";
 export { GuidedAdditionDomainError } from "./authoring/guidedAddition/contracts.js";
 export { BundleValidationError, collectBundleDiagnostics, validateLoadedBundle } from "./bundle/validateLoadedBundle.js";
 export { parseSource } from "./parser/parseSource.js";
@@ -56,6 +57,7 @@ export type {
   GuidanceViewRelationshipRecord
 } from "./authoring/guidedAddition/catalog.js";
 export type * from "./authoring/guidedAddition/contracts.js";
+export type { ChangeOperation, OrderingChange, ReparentNodeBlockOp } from "./authoring/contracts.js";
 export type {
   AuthoringConfig,
   AuthoringFieldDescriptor,

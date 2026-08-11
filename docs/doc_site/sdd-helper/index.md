@@ -285,7 +285,7 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 - Key inputs: an `ApplyChangeSetArgs` JSON body loaded from a file path or from stdin via `--request -`.
 - Result kind: `sdd-change-set`
 - Important constraints: dry-run is the default when `mode` is omitted; rejected change sets remain structured and still exit zero.
-- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs.
+- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs. The low-level operation inventory includes `reparent_node_block` for moving a complete node subtree between top-level and nested streams. It remains revision/handle-bound, rejects self or descendant cycles, and reports old/new parents and stream indexes. This does not add a guided helper command; guided proposal application remains a library boundary for the future human CLI.
 
 #### `sdd-helper author --request <file-or-stdin>`
 

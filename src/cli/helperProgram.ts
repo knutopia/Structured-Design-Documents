@@ -455,6 +455,8 @@ function validateChangeOperation(value: unknown, fieldPath: string): string | un
       return requireStringField(value, "edge_handle", fieldPath) ?? validatePlacement(value.placement, `${fieldPath}.placement`);
     case "move_nested_node_block":
       return requireStringField(value, "node_handle", fieldPath) ?? validatePlacement(value.placement, `${fieldPath}.placement`);
+    case "reparent_node_block":
+      return requireStringField(value, "node_handle", fieldPath) ?? validatePlacement(value.placement, `${fieldPath}.placement`);
     default:
       return `${fieldPath}.kind '${String(value.kind)}' is not supported.`;
   }

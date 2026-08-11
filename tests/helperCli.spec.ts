@@ -2357,6 +2357,38 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("accepts reparent_node_block through the existing low-level apply contract", async () => {
+    const request = {
+      path: "docs/example.sdd",
+      base_revision: "rev_base",
+      operations: [
+        {
+          kind: "reparent_node_block",
+          node_handle: "hdl_child",
+          placement: {
+            mode: "last",
+            stream: "body",
+            parent_handle: "hdl_parent"
+          }
+        }
+      ]
+    };
+    const { deps, applyChangeSetMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify(request))
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/reparent.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(applyChangeSetMock).toHaveBeenCalledTimes(1);
+    expect(applyChangeSetMock.mock.calls[0]?.[2]).toEqual(request);
+  });
+
   it("returns structured diagnostics for invalid apply insert fields", async () => {
     const { deps, stdout, applyChangeSetMock } = createDeps({
       readTextFile: vi.fn(async () => JSON.stringify({

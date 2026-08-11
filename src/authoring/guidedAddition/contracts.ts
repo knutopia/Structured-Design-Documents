@@ -1,6 +1,15 @@
 import type { BundleFingerprint } from "../../bundle/fingerprint.js";
 import type { Diagnostic } from "../../types.js";
-import type { DocumentRevision, Handle, ValueKind } from "../contracts.js";
+import type {
+  ChangeSetMode,
+  ChangeSetResult,
+  ChangeSetStatus,
+  DocumentRevision,
+  Handle,
+  ProfileId,
+  ValueKind,
+  ViewId
+} from "../contracts.js";
 
 export interface GuidedDocumentSnapshotInput {
   document_ref: string;
@@ -290,6 +299,30 @@ export interface CompletedAdditionProposal {
   new_edges: ProposedEdge[];
   placements: SelectedPlacement[];
   confirmed_effects: ConfirmedProposalEffect[];
+}
+
+export interface ApplyAdditionProposalArgs {
+  proposal: CompletedAdditionProposal;
+  mode?: ChangeSetMode;
+  validate_profile?: ProfileId;
+  projection_views?: ViewId[];
+}
+
+export interface ApplyAdditionProposalResult {
+  kind: "sdd-addition-proposal-result";
+  proposal: CompletedAdditionProposal;
+  base_revision: DocumentRevision;
+  resulting_revision?: DocumentRevision;
+  mode: ChangeSetMode;
+  status: ChangeSetStatus;
+  change_set: ChangeSetResult;
+  created_targets: Array<{
+    local_id: string;
+    kind: "node" | "edge";
+    handle: Handle;
+    parent_local_id?: string;
+  }>;
+  diagnostics: Diagnostic[];
 }
 
 export type GuidedStepKind =

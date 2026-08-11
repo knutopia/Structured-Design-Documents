@@ -1012,6 +1012,53 @@ function moveArrayItem<T>(items: T[], fromIndex: number, insertIndex: number): n
   return normalizedIndex;
 }
 
+function shiftLineIndent(raw: string, depthDelta: number): string {
+  if (depthDelta === 0 || raw.trim().length === 0) {
+    return raw;
+  }
+  if (depthDelta > 0) {
+    return `${indentForDepth(depthDelta)}${raw}`;
+  }
+  const removeCount = Math.min(extractLeadingWhitespace(raw).length, Math.abs(depthDelta) * 2);
+  return raw.slice(removeCount);
+}
+
+function shiftTriviaIndent(lines: TriviaLineModel[], depthDelta: number): void {
+  for (const line of lines) {
+    line.raw = shiftLineIndent(line.raw, depthDelta);
+  }
+}
+
+function rebaseNodeDepth(node: NodeModel, syntax: AuthoringSyntax, newDepth: number): void {
+  const depthDelta = newDepth - node.depth;
+  shiftTriviaIndent(node.leadingTrivia, depthDelta);
+  shiftTriviaIndent(node.bodyTrailingTrivia, depthDelta);
+  node.depth = newDepth;
+  node.headerKind = newDepth === 0 ? syntax.topHeaderKind : syntax.nestedHeaderKind;
+  node.rawHeaderLine = null;
+  node.headerChanged = true;
+  if (node.rawEndLine !== null) {
+    node.rawEndLine = shiftLineIndent(node.rawEndLine, depthDelta);
+  }
+
+  for (const item of node.bodyItems) {
+    if (item.kind === "node_block") {
+      rebaseNodeDepth(item, syntax, newDepth + 1);
+      continue;
+    }
+    shiftTriviaIndent(item.leadingTrivia, depthDelta);
+    if (item.rawLine !== null) {
+      item.rawLine = shiftLineIndent(item.rawLine, depthDelta);
+    }
+  }
+}
+
+function nodeContainsHandle(node: NodeModel, handle: Handle): boolean {
+  return node.bodyItems.some((item) =>
+    item.kind === "node_block" && (item.handle === handle || nodeContainsHandle(item, handle))
+  );
+}
+
 function structuralStreamBodyIndexes(parent: NodeModel, relType: StructuralRelationshipType): number[] {
   return parent.bodyItems.flatMap((item, index) =>
     item.kind === "edge_line" && item.relType === relType ? [index] : []
@@ -1302,6 +1349,103 @@ function applyMoveNestedNodeBlock(
   return undefined;
 }
 
+function applyReparentNodeBlock(
+  model: DocumentModel,
+  syntax: AuthoringSyntax,
+  documentPath: DocumentPath,
+  operation: Extract<ChangeOperation, { kind: "reparent_node_block" }>,
+  summary: ChangeSetSummary
+): Diagnostic | undefined {
+  const anchorRequirement = requireAnchorForRelativePlacement(documentPath, operation.placement);
+  if (anchorRequirement) {
+    return anchorRequirement;
+  }
+
+  const topLevelIndex = findTopLevelIndex(model, operation.node_handle);
+  const bodyLocation = topLevelIndex === -1
+    ? findBodyItemLocation(model.topLevelNodes, operation.node_handle)
+    : undefined;
+  const target = topLevelIndex !== -1
+    ? model.topLevelNodes[topLevelIndex]
+    : bodyLocation?.item.kind === "node_block"
+      ? bodyLocation.item
+      : undefined;
+  if (!target) {
+    return handleError(documentPath, operation.node_handle);
+  }
+
+  const oldParent = bodyLocation?.parent ?? null;
+  const oldParentHandle = oldParent?.handle ?? null;
+  const oldIndex = topLevelIndex !== -1 ? topLevelIndex : bodyLocation!.index;
+  let newParent: NodeModel | null;
+  let destination: NodeModel[] | StructuralModelItem[];
+
+  if (operation.placement.stream === "top_level") {
+    if (operation.placement.parent_handle !== undefined) {
+      return placementError(documentPath, "Top-level reparenting must not specify parent_handle.");
+    }
+    newParent = null;
+    destination = model.topLevelNodes;
+  } else {
+    if (!operation.placement.parent_handle) {
+      return placementError(documentPath, "Body reparenting requires parent_handle.");
+    }
+    newParent = findNodeByHandle(model.topLevelNodes, operation.placement.parent_handle) ?? null;
+    if (!newParent) {
+      return handleError(documentPath, operation.placement.parent_handle);
+    }
+    if (newParent.handle === operation.node_handle || nodeContainsHandle(target, newParent.handle!)) {
+      return placementError(documentPath, "A node cannot be reparented under itself or one of its descendants.");
+    }
+    destination = newParent.bodyItems;
+  }
+
+  const newParentHandle = newParent?.handle ?? null;
+  if (oldParentHandle === newParentHandle) {
+    return placementError(documentPath, "Reparenting requires a different destination parent.");
+  }
+
+  let insertIndex: number;
+  switch (operation.placement.mode) {
+    case "first":
+      insertIndex = 0;
+      break;
+    case "last":
+      insertIndex = destination.length;
+      break;
+    case "before":
+    case "after": {
+      if (operation.placement.anchor_handle === operation.node_handle) {
+        return placementError(documentPath, "Placement anchor_handle must differ from the target node.");
+      }
+      const anchorIndex = destination.findIndex((item) => item.handle === operation.placement.anchor_handle);
+      if (anchorIndex === -1) {
+        return placementError(documentPath, "Reparenting anchor must belong to the destination stream.");
+      }
+      insertIndex = operation.placement.mode === "before" ? anchorIndex : anchorIndex + 1;
+      break;
+    }
+  }
+
+  if (topLevelIndex !== -1) {
+    model.topLevelNodes.splice(topLevelIndex, 1);
+  } else {
+    oldParent!.bodyItems.splice(bodyLocation!.index, 1);
+  }
+  rebaseNodeDepth(target, syntax, newParent ? newParent.depth + 1 : 0);
+  destination.splice(insertIndex, 0, target);
+
+  summary.ordering_changes.push({
+    kind: "reparented_node_block",
+    target_handle: operation.node_handle,
+    old_parent_handle: oldParentHandle,
+    new_parent_handle: newParentHandle,
+    old_index: oldIndex,
+    new_index: insertIndex
+  });
+  return undefined;
+}
+
 function applyInsertEdgeLine(
   model: DocumentModel,
   documentPath: DocumentPath,
@@ -1411,6 +1555,8 @@ function applyOperation(
       return applyRepositionStructuralEdge(model, documentPath, operation, summary);
     case "move_nested_node_block":
       return applyMoveNestedNodeBlock(model, documentPath, operation, summary);
+    case "reparent_node_block":
+      return applyReparentNodeBlock(model, syntax, documentPath, operation, summary);
     default:
       return createDiagnostic(
         documentPath,
@@ -1546,6 +1692,12 @@ export function remapOperationHandles(
           node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
           placement: remapPlacementHandles(operation.placement, mapping)
         };
+      case "reparent_node_block":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          placement: remapPlacementHandles(operation.placement, mapping)
+        };
     }
   });
 }
@@ -1581,11 +1733,27 @@ function remapSummaryHandles(
       handle: resolveMappedHandle(entry.handle, mapping) ?? entry.handle,
       parent_handle: resolveMappedHandle(entry.parent_handle, mapping) ?? entry.parent_handle
     })),
-    ordering_changes: summary.ordering_changes.map((entry) => ({
-      ...entry,
-      target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
-      parent_handle: resolveMappedHandle(entry.parent_handle, mapping)
-    }))
+    ordering_changes: summary.ordering_changes.map((entry) => {
+      if (entry.kind === "reparented_node_block") {
+        return {
+          ...entry,
+          target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
+          old_parent_handle: resolveMappedHandle(entry.old_parent_handle ?? undefined, mapping) ?? null,
+          new_parent_handle: resolveMappedHandle(entry.new_parent_handle ?? undefined, mapping) ?? null
+        };
+      }
+      if (entry.kind === "top_level_node") {
+        return {
+          ...entry,
+          target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle
+        };
+      }
+      return {
+        ...entry,
+        target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
+        parent_handle: resolveMappedHandle(entry.parent_handle, mapping) ?? entry.parent_handle
+      };
+    })
   };
 }
 
