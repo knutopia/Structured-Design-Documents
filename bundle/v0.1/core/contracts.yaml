@@ -56,6 +56,10 @@ common_rules:
 relationships:
   - type: CONTAINS
     meaning: Hierarchical containment or grouping for IA, journey structure, and UI hierarchy.
+    authoring:
+      graph_role: structural
+      source_representation: edge_line
+      source_organization: nest_target_under_source
     allowed_endpoints:
       - from: Stage
         to: Step
@@ -68,6 +72,11 @@ relationships:
       - from: Component
         to: Component
     constraints:
+      - id: contains_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
       - id: contains_acyclic
         description: Containment should be acyclic.
         severity_by_profile:
@@ -90,12 +99,21 @@ relationships:
 
   - type: COMPOSED_OF
     meaning: Composition relationship for UI assembly.
+    authoring:
+      graph_role: structural
+      source_representation: edge_line
+      source_organization: nest_target_under_source
     allowed_endpoints:
       - from: Place
         to: Component
       - from: ViewState
         to: Component
     constraints:
+      - id: composed_of_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
       - id: composed_of_acyclic
         description: Composition should be acyclic.
         severity_by_profile:
@@ -108,6 +126,10 @@ relationships:
 
   - type: PRECEDES
     meaning: Temporal ordering in scenario, process, or state sequence.
+    authoring:
+      graph_role: ordering
+      source_representation: edge_line
+      source_organization: same_level
     allowed_endpoints:
       - from: Step
         to: Step
@@ -116,6 +138,11 @@ relationships:
       - from: State
         to: State
     constraints:
+      - id: precedes_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: [event, guard, effect]
+          properties: []
       - id: precedes_cycle_policy
         description: Linear flows should be acyclic; every intentional cyclic component should contain an annotated edge.
         severity_by_profile:
@@ -132,10 +159,19 @@ relationships:
 
   - type: NAVIGATES_TO
     meaning: Navigation from one place to another.
+    authoring:
+      graph_role: behavioral
+      source_representation: edge_line
+      source_organization: same_level
     allowed_endpoints:
       - from: Place
         to: Place
     constraints:
+      - id: navigates_to_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: [event, guard]
+          properties: []
       - id: navigates_to_event_optional
         description: Event and guard annotations are optional and represent trigger/precondition when present.
         severity_by_profile:
@@ -148,10 +184,19 @@ relationships:
 
   - type: MEASURED_BY
     meaning: Outcome is measured by metric.
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Outcome
         to: Metric
     constraints:
+      - id: measured_by_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
       - id: outcome_has_metric
         description: Each Outcome should have one or more outgoing MEASURED_BY edges.
         severity_by_profile:
@@ -165,17 +210,35 @@ relationships:
 
   - type: SUPPORTS
     meaning: Opportunity contributes to an outcome.
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Opportunity
         to: Outcome
-    constraints: []
+    constraints:
+      - id: supports_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
 
   - type: ADDRESSES
     meaning: Initiative addresses an opportunity.
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Initiative
         to: Opportunity
     constraints:
+      - id: addresses_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
       - id: initiative_addresses_opportunity
         description: Each Initiative should address one or more opportunities.
         severity_by_profile:
@@ -189,6 +252,10 @@ relationships:
 
   - type: IMPLEMENTED_BY
     meaning: Initiative is implemented by concrete delivery artifacts.
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Initiative
         to: Place
@@ -200,10 +267,19 @@ relationships:
         to: Process
       - from: Initiative
         to: SystemAction
-    constraints: []
+    constraints:
+      - id: implemented_by_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
 
   - type: REALIZED_BY
     meaning: Step is realized by product structure, UI state, or service delivery process.
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Step
         to: Place
@@ -212,6 +288,11 @@ relationships:
       - from: Step
         to: Process
     constraints:
+      - id: realized_by_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
       - id: step_realization_required
         description: Every Step should have at least one REALIZED_BY edge.
         severity_by_profile:
@@ -225,12 +306,21 @@ relationships:
 
   - type: TRANSITIONS_TO
     meaning: Transition in ViewState or State model; may include event, guard, and effect.
+    authoring:
+      graph_role: behavioral
+      source_representation: edge_line
+      source_organization: same_level
     allowed_endpoints:
       - from: ViewState
         to: ViewState
       - from: State
         to: State
     constraints:
+      - id: transitions_to_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: [event, guard, effect]
+          properties: []
       - id: transitions_event_reference
         description: Event annotation should resolve to Event node ID in strict profile.
         severity_by_profile:
@@ -245,6 +335,10 @@ relationships:
 
   - type: EMITS
     meaning: Source emits an event.
+    authoring:
+      graph_role: behavioral
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Component
         to: Event
@@ -254,10 +348,19 @@ relationships:
         to: Event
       - from: SystemAction
         to: Event
-    constraints: []
+    constraints:
+      - id: emits_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
 
   - type: DEPENDS_ON
     meaning: Declares required dependency for execution or correctness.
+    authoring:
+      graph_role: dependency
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Process
         to: Process
@@ -267,10 +370,19 @@ relationships:
         to: SystemAction
       - from: Component
         to: SystemAction
-    constraints: []
+    constraints:
+      - id: depends_on_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
 
   - type: CONSTRAINED_BY
     meaning: Declares policy or rule constraint.
+    authoring:
+      graph_role: dependency
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Place
         to: Policy
@@ -279,6 +391,11 @@ relationships:
       - from: SystemAction
         to: Policy
     constraints:
+      - id: constrained_by_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
       - id: policy_enforcement_coverage
         description: Policy enforcement_point should correspond to at least one incoming CONSTRAINED_BY edge.
         severity_by_profile:
@@ -293,24 +410,51 @@ relationships:
 
   - type: READS
     meaning: System action reads data entity.
+    authoring:
+      graph_role: data
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: SystemAction
         to: DataEntity
-    constraints: []
+    constraints:
+      - id: reads_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
 
   - type: WRITES
     meaning: System action writes data entity.
+    authoring:
+      graph_role: data
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: SystemAction
         to: DataEntity
-    constraints: []
+    constraints:
+      - id: writes_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
 
   - type: BINDS_TO
     meaning: Component binds to data entity field.
+    authoring:
+      graph_role: data
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Component
         to: DataEntity
     constraints:
+      - id: binds_to_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: [field]
       - id: binds_to_requires_field
         description: BINDS_TO edge must include edge prop field.
         severity_by_profile:
@@ -324,6 +468,10 @@ relationships:
 
   - type: INSTRUMENTED_AT
     meaning: Metric is instrumented at experience, structure, or event node.
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
     allowed_endpoints:
       - from: Metric
         to: Step
@@ -333,4 +481,9 @@ relationships:
         to: ViewState
       - from: Metric
         to: Event
-    constraints: []
+    constraints:
+      - id: instrumented_at_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []

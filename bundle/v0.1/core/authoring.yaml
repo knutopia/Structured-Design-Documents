@@ -1,0 +1,139 @@
+version: "0.1"
+
+node_id_suggestions:
+  sequence_policy: max_numeric_plus_one
+  minimum_digits: 3
+  prefix_by_type:
+    Outcome: O
+    Metric: M
+    Opportunity: OP
+    Initiative: I
+    Stage: G
+    Step: J
+    Area: A
+    Place: P
+    ViewState: VS
+    Component: C
+    State: ST
+    Event: E
+    Process: PR
+    SystemAction: SA
+    DataEntity: D
+    Policy: PL
+
+node_forms:
+  common_fields:
+    - source: node_id
+      prominence: primary
+      label: Node ID
+      description: Stable identifier for the new node.
+    - source: name
+      prominence: primary
+      label: Name
+      description: Human-readable node name.
+    - source: property
+      property: description
+      prominence: primary
+      label: Description
+      description: Short explanation of the node's purpose.
+  by_type:
+    Outcome:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: time_horizon, prominence: advanced, label: Time horizon }
+        - { source: property, property: scope, prominence: advanced, label: Scope }
+        - { source: property, property: stakeholder, prominence: advanced, label: Stakeholder }
+    Metric:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: definition, prominence: advanced, label: Definition }
+        - { source: property, property: source, prominence: advanced, label: Source }
+        - { source: property, property: cadence, prominence: advanced, label: Cadence }
+        - { source: property, property: metric_type, prominence: advanced, label: Metric type }
+    Opportunity:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: evidence, prominence: advanced, label: Evidence }
+        - { source: property, property: segment, prominence: advanced, label: Segment }
+        - { source: property, property: severity, prominence: advanced, label: Severity }
+    Initiative:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: non_goals, prominence: advanced, label: Non-goals }
+        - { source: property, property: status, prominence: advanced, label: Status }
+    Stage:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: order_index, prominence: advanced, label: Order index }
+    Step:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: actor, prominence: advanced, label: Actor }
+        - { source: property, property: intent, prominence: advanced, label: Intent }
+        - { source: property, property: success_criteria, prominence: advanced, label: Success criteria }
+        - { source: property, property: opportunity_refs, prominence: advanced, label: Opportunity references }
+        - { source: property, property: kind, prominence: advanced, label: Kind }
+    Area:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: scope, prominence: advanced, label: Scope }
+    Place:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: surface, prominence: advanced, label: Surface }
+        - { source: property, property: route_or_key, prominence: advanced, label: Route or key }
+        - { source: property, property: access, prominence: advanced, label: Access }
+        - { source: property, property: entry_points, prominence: advanced, label: Entry points }
+        - { source: property, property: primary_nav, prominence: advanced, label: Primary navigation }
+    ViewState:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: place_id, prominence: advanced, label: Place ID }
+        - { source: property, property: data_required, prominence: advanced, label: Data required }
+    Component:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: responsibility, prominence: advanced, label: Responsibility }
+        - { source: property, property: inputs, prominence: advanced, label: Inputs }
+        - { source: property, property: outputs, prominence: advanced, label: Outputs }
+    State:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: scope_id, prominence: advanced, label: Scope ID }
+        - { source: property, property: invariants, prominence: advanced, label: Invariants }
+    Event:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: source_kind, prominence: advanced, label: Source kind }
+        - { source: property, property: payload_schema, prominence: advanced, label: Payload schema }
+    Process:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: visibility, prominence: advanced, label: Visibility }
+        - { source: property, property: sla, prominence: advanced, label: SLA }
+    SystemAction:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: system_name, prominence: advanced, label: System name }
+        - { source: property, property: action, prominence: advanced, label: Action }
+        - { source: property, property: failure_modes, prominence: advanced, label: Failure modes }
+    DataEntity:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: fields, prominence: advanced, label: Fields }
+        - { source: property, property: system_of_record, prominence: advanced, label: System of record }
+    Policy:
+      properties:
+        - { source: property, property: owner, prominence: advanced, label: Owner }
+        - { source: property, property: policy_owner, prominence: advanced, label: Policy owner }
+        - { source: property, property: enforcement_point, prominence: advanced, label: Enforcement point }
+
+placement_policies:
+  default:
+    fallback: last
+    outgoing_sequence: after_anchor
+    incoming_sequence: before_anchor
+    structural_new_target: nested_last
+    structural_existing_target: reparent_with_confirmation
+    edge_in_source_body: last
+    edge_to_name_hint: target_name

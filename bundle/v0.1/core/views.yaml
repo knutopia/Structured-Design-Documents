@@ -40,6 +40,472 @@ views:
       hierarchy_edges: []
       ordering_edges: []
     conventions:
+      guided_addition:
+        profile_aliases:
+          permissive: strict
+        relationships:
+          - from: Stage
+            type: CONTAINS
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Area
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: CONTAINS
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: PRECEDES
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: PRECEDES
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: PRECEDES
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: NAVIGATES_TO
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Outcome
+            type: MEASURED_BY
+            to: Metric
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Opportunity
+            type: SUPPORTS
+            to: Outcome
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Initiative
+            type: ADDRESSES
+            to: Opportunity
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Step
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: TRANSITIONS_TO
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: TRANSITIONS_TO
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: READS
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: WRITES
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: BINDS_TO
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
       normative_defaults:
         - id: include_edge_only_when_both_endpoints_included
           description: Edge is included only if both endpoints pass node-type filter.
@@ -138,6 +604,472 @@ views:
       hierarchy_edges: [CONTAINS]
       ordering_edges: [PRECEDES]
     conventions:
+      guided_addition:
+        profile_aliases:
+          permissive: strict
+        relationships:
+          - from: Stage
+            type: CONTAINS
+            to: Step
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: structural
+                  label: not_applicable
+              strict:
+                - presence: structural
+                  label: not_applicable
+          - from: Area
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: CONTAINS
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: PRECEDES
+            to: Step
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: Process
+            type: PRECEDES
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: PRECEDES
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: NAVIGATES_TO
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Outcome
+            type: MEASURED_BY
+            to: Metric
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Opportunity
+            type: SUPPORTS
+            to: Outcome
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: ADDRESSES
+            to: Opportunity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: TRANSITIONS_TO
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: TRANSITIONS_TO
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: READS
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: WRITES
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: BINDS_TO
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: stage_step_hierarchy
           description: Stage CONTAINS Step edges define hierarchy.
@@ -165,6 +1097,472 @@ views:
       hierarchy_edges: []
       ordering_edges: [PRECEDES]
     conventions:
+      guided_addition:
+        profile_aliases:
+          permissive: strict
+        relationships:
+          - from: Stage
+            type: CONTAINS
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Area
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: CONTAINS
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: PRECEDES
+            to: Step
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: Process
+            type: PRECEDES
+            to: Process
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: State
+            type: PRECEDES
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: NAVIGATES_TO
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Outcome
+            type: MEASURED_BY
+            to: Metric
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Opportunity
+            type: SUPPORTS
+            to: Outcome
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: ADDRESSES
+            to: Opportunity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Process
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: ViewState
+            type: TRANSITIONS_TO
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: TRANSITIONS_TO
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: Process
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Process
+            type: DEPENDS_ON
+            to: SystemAction
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: ViewState
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: CONSTRAINED_BY
+            to: Policy
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: SystemAction
+            type: CONSTRAINED_BY
+            to: Policy
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: SystemAction
+            type: READS
+            to: DataEntity
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: SystemAction
+            type: WRITES
+            to: DataEntity
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Component
+            type: BINDS_TO
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: process_sequence
           description: PRECEDES edges provide optional process ordering overlays.
@@ -198,6 +1596,472 @@ views:
       hierarchy_edges: [CONTAINS]
       ordering_edges: []
     conventions:
+      guided_addition:
+        profile_aliases:
+          permissive: strict
+        relationships:
+          - from: Stage
+            type: CONTAINS
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Area
+            type: CONTAINS
+            to: Place
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: structural
+                  label: not_applicable
+              strict:
+                - presence: structural
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: Place
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: structural
+                  label: not_applicable
+              strict:
+                - presence: structural
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: CONTAINS
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: PRECEDES
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: PRECEDES
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: PRECEDES
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: NAVIGATES_TO
+            to: Place
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: Outcome
+            type: MEASURED_BY
+            to: Metric
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Opportunity
+            type: SUPPORTS
+            to: Outcome
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: ADDRESSES
+            to: Opportunity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: TRANSITIONS_TO
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: TRANSITIONS_TO
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: READS
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: WRITES
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: BINDS_TO
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: hierarchy_from_contains
           description: IA hierarchy is derived from CONTAINS.
@@ -235,6 +2099,472 @@ views:
       hierarchy_edges: []
       ordering_edges: [PRECEDES]
     conventions:
+      guided_addition:
+        profile_aliases:
+          permissive: strict
+        relationships:
+          - from: Stage
+            type: CONTAINS
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Area
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: CONTAINS
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: COMPOSED_OF
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: PRECEDES
+            to: Step
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Process
+            type: PRECEDES
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: PRECEDES
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: NAVIGATES_TO
+            to: Place
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: Outcome
+            type: MEASURED_BY
+            to: Metric
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Opportunity
+            type: SUPPORTS
+            to: Outcome
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: ADDRESSES
+            to: Opportunity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Place
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: Step
+            type: REALIZED_BY
+            to: ViewState
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: Step
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: TRANSITIONS_TO
+            to: ViewState
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: hidden
+              strict:
+                - presence: connector
+                  label: hidden
+          - from: State
+            type: TRANSITIONS_TO
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: READS
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: WRITES
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: BINDS_TO
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: step_ordering_primary
           description: PRECEDES on Step is the primary flow spine.
@@ -261,6 +2591,507 @@ views:
       hierarchy_edges: [COMPOSED_OF, CONTAINS]
       ordering_edges: [TRANSITIONS_TO]
     conventions:
+      guided_addition:
+        profile_aliases:
+          permissive: strict
+        relationships:
+          - from: Stage
+            type: CONTAINS
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Area
+            type: CONTAINS
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: Place
+            role: supporting
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: CONTAINS
+            to: ViewState
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: structural
+                  label: not_applicable
+              strict:
+                - presence: structural
+                  label: not_applicable
+          - from: Component
+            type: CONTAINS
+            to: Component
+            role: supporting
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: COMPOSED_OF
+            to: Component
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: structural
+                  label: not_applicable
+              strict:
+                - presence: structural
+                  label: not_applicable
+          - from: ViewState
+            type: COMPOSED_OF
+            to: Component
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: structural
+                  label: not_applicable
+              strict:
+                - presence: structural
+                  label: not_applicable
+          - from: Step
+            type: PRECEDES
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: PRECEDES
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: State
+            type: PRECEDES
+            to: State
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Place
+            type: NAVIGATES_TO
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Outcome
+            type: MEASURED_BY
+            to: Metric
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Opportunity
+            type: SUPPORTS
+            to: Outcome
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: ADDRESSES
+            to: Opportunity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Component
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Initiative
+            type: IMPLEMENTED_BY
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Step
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: TRANSITIONS_TO
+            to: ViewState
+            role: primary
+            display_by_profile:
+              simple:
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: State
+            type: TRANSITIONS_TO
+            to: State
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Component
+            type: EMITS
+            to: Event
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: ViewState
+            type: EMITS
+            to: Event
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Process
+            type: EMITS
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: EMITS
+            to: Event
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Process
+            type: DEPENDS_ON
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: DEPENDS_ON
+            to: SystemAction
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ViewState
+            type: DEPENDS_ON
+            to: SystemAction
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Component
+            type: DEPENDS_ON
+            to: SystemAction
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Place
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Process
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: CONSTRAINED_BY
+            to: Policy
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: READS
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: SystemAction
+            type: WRITES
+            to: DataEntity
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Component
+            type: BINDS_TO
+            to: DataEntity
+            role: supporting
+            display_by_profile:
+              simple:
+                - when:
+                    kind: document_has_node_type
+                    node_type: ViewState
+                  presence: hidden
+                  label: not_applicable
+                - presence: connector
+                  label: visible
+              strict:
+                - presence: connector
+                  label: visible
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Step
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: ui_contract_scope
           description: Place and ViewState are containers for component and transition contracts.

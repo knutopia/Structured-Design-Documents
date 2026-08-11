@@ -20,10 +20,15 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 8-11
+
+- Checkpoint 1 done
+
 ## Mon 8-10
 
 - UX Brief for Guided Addition API
 - Matching architecture document
+- Updated AGENTS.md current goal
 
 ## Thu 8-6
 

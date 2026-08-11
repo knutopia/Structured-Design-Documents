@@ -24,6 +24,7 @@ export interface BundleManifest {
     contracts: string;
     projection_schema: string;
     views: string;
+    authoring?: string;
   };
   profiles: BundleManifestProfileEntry[];
   examples: BundleManifestExample[];
@@ -325,6 +326,18 @@ export interface RuleLogic {
   [key: string]: unknown;
 }
 
+export type AuthoringGraphRole = "structural" | "ordering" | "reference" | "dependency" | "behavioral" | "data";
+
+export type AuthoringSourceRepresentation = "edge_line";
+
+export type AuthoringSourceOrganization = "nest_target_under_source" | "same_level" | "unconstrained";
+
+export interface RelationshipAuthoringConfig {
+  graph_role: AuthoringGraphRole;
+  source_representation: AuthoringSourceRepresentation;
+  source_organization: AuthoringSourceOrganization;
+}
+
 export interface ContractRule {
   id: string;
   description?: string;
@@ -409,11 +422,45 @@ export interface RendererDefaultsConfig {
 export interface RelationshipContract {
   type: string;
   meaning?: string;
+  authoring?: RelationshipAuthoringConfig;
   allowed_endpoints: Array<{
     from: string;
     to: string;
   }>;
   constraints: ContractRule[];
+}
+
+export type GuidedRelationshipRole = "primary" | "supporting" | "bridge";
+
+export type GuidedRelationshipPresence = "connector" | "structural" | "annotation" | "hidden";
+
+export type GuidedRelationshipLabel = "visible" | "hidden" | "not_applicable";
+
+export interface GuidedDocumentHasNodeTypePredicate {
+  kind: "document_has_node_type";
+  node_type: string;
+}
+
+export type GuidedDisplayPredicate = GuidedDocumentHasNodeTypePredicate;
+
+export interface GuidedDisplayRule {
+  when?: GuidedDisplayPredicate;
+  presence: GuidedRelationshipPresence;
+  label: GuidedRelationshipLabel;
+  explanation?: string;
+}
+
+export interface GuidedViewRelationship {
+  from: string;
+  type: string;
+  to: string;
+  role: GuidedRelationshipRole;
+  display_by_profile: Record<string, GuidedDisplayRule[]>;
+}
+
+export interface GuidedAdditionViewConfig {
+  profile_aliases?: Record<string, string>;
+  relationships: GuidedViewRelationship[];
 }
 
 export interface ContractsConfig {
@@ -438,6 +485,7 @@ export interface ViewSpec {
       description: string;
     }>;
     renderer_defaults?: RendererDefaultsConfig;
+    guided_addition?: GuidedAdditionViewConfig;
   };
 }
 
@@ -454,11 +502,58 @@ export interface ProfileRule {
   applies_to?: string;
   required_props?: Record<string, string[]>;
   prefix_map?: Record<string, string>;
+  bundle_refs?: Record<string, BundleFieldReference>;
   authoritative_field?: string;
   requirement?: string;
   derived_edge_policy?: Record<string, unknown>;
   rule_logic?: RuleLogic;
   [key: string]: unknown;
+}
+
+export interface BundleFieldReference {
+  artifact: string;
+  selector: string;
+}
+
+export type AuthoringFieldSource = "node_id" | "name" | "property";
+
+export type AuthoringFieldProminence = "primary" | "advanced";
+
+export interface AuthoringFieldDescriptor {
+  source: AuthoringFieldSource;
+  property?: string;
+  prominence: AuthoringFieldProminence;
+  label?: string;
+  description?: string;
+  input_hint?: string;
+}
+
+export interface AuthoringNodeForm {
+  properties: AuthoringFieldDescriptor[];
+}
+
+export interface AuthoringConfig {
+  version: string;
+  node_id_suggestions: {
+    sequence_policy: "max_numeric_plus_one";
+    minimum_digits: number;
+    prefix_by_type: Record<string, string>;
+  };
+  node_forms: {
+    common_fields: AuthoringFieldDescriptor[];
+    by_type: Record<string, AuthoringNodeForm>;
+  };
+  placement_policies: {
+    default: {
+      fallback: "last";
+      outgoing_sequence: "after_anchor";
+      incoming_sequence: "before_anchor";
+      structural_new_target: "nested_last";
+      structural_existing_target: "reparent_with_confirmation";
+      edge_in_source_body: "last";
+      edge_to_name_hint: "target_name";
+    };
+  };
 }
 
 export interface ProfileConfig {
@@ -483,4 +578,5 @@ export interface Bundle {
   contracts: ContractsConfig;
   views: ViewsConfig;
   profiles: Record<string, ProfileConfig>;
+  authoring?: AuthoringConfig;
 }

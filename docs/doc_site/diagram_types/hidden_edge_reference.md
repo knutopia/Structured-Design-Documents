@@ -10,6 +10,8 @@ when the same diagram is rendered with `profile=strict`.
 > Diagram node and edge inclusion comes from `bundle/v0.1/core/views.yaml`; 
 > relationship direction and endpoints come from `bundle/v0.1/core/contracts.yaml`.
 
+The same view artifact now carries an explicit guided-authoring entry for every allowed endpoint triple. Those entries classify relationships as `primary`, `supporting`, or `bridge` and state their `simple` and `strict` presence/label behavior. `permissive` aliases `strict` in bundle data. The tables below explain that bundle matrix together with the current renderers; there is no runtime fallback for a missing entry.
+
 ## Legend
 
 | Marker | Meaning |
@@ -70,10 +72,12 @@ Available node types: `Place`, `ViewState`, `Component`, `State`, `Event`,
 `Place CONTAINS ViewState` and `Place` or `ViewState COMPOSED_OF Component`
 are visible structurally as containment rather than as drawn connectors.
 
-The **D\*** behavior is controlled by
-`show_secondary_state_groups_when_primary_view_state` and
-`show_supporting_contract_lane_when_primary_view_state`. Both settings are
-disabled in `simple` and enabled in `strict`.
+The **D\*** guidance behavior is encoded as ordered `simple` rules using the
+bundle predicate `document_has_node_type: ViewState`, followed by an
+unconditional visible-connector rule. `strict` always exposes the supporting
+connector. The current renderer's matching presentation behavior remains
+controlled by `show_secondary_state_groups_when_primary_view_state` and
+`show_supporting_contract_lane_when_primary_view_state`.
 
 == Scenario Flow
 

@@ -137,23 +137,12 @@ rules:
   - id: id_prefix_type_coupling
     source: profile
     severity: error
-    prefix_map:
-      Outcome: O
-      Metric: M
-      Opportunity: OP
-      Initiative: I
-      Stage: G
-      Step: J
-      Area: A
-      Place: P
-      ViewState: VS
-      Component: C
-      State: ST
-      Event: E
-      Process: PR
-      SystemAction: SA
-      DataEntity: D
-      Policy: PL
+    bundle_refs:
+      prefix_map:
+        artifact: authoring
+        selector: node_id_suggestions.prefix_by_type
+    rule_logic:
+      kind: id_prefix_type_coupling
   - id: viewstate_parentage_policy
     source: profile
     severity: error

@@ -65,11 +65,13 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 - In this WSL setup, default temp resolution may point at `/mnt/c/TEMP`, which can fail with `EACCES`.
 - `TMPDIR=/tmp` avoids that problem and should be the default for test runs.
 
-## Current Project Goal: LLM-Integration for SDD
+## Current Project Goal: Guided Human SDD Authoring
 
 To enable LLM workflow integration with SDD, we recently created a (Codex-) Skill, a helper-app that assists the skill, and shared authoring infrastructure that supports the helper app and the future future MCP server. 
 
-The current project mid-term goal is to create a SDD MCP server.
+We also recently transitioned some project documentation from README files in sub-folders of the repo to the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/
+
+The current project goal is to help people (humans) create SDD content by providing a guided authoring experience.
 
 ## Renderer Constraints
 

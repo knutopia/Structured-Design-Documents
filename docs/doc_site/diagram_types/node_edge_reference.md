@@ -8,6 +8,8 @@ Compact reference of content relationships per diagram type, listing available n
 > from `bundle/v0.1/core/views.yaml`; relationship direction 
 > and endpoints come from `bundle/v0.1/core/contracts.yaml`.
 
+Guided relationship role and profile-aware presence/label classification come from the complete endpoint-triple matrix in the same view artifact. Guided tools consume those bundle records directly; this page does not establish additional relationship choices.
+
 ::: dropdownSwitch Choose Diagram Type:
 == IA Place Map
 

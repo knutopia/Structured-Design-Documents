@@ -37,7 +37,7 @@ The staged renderer migration also introduces an internal-only renderer pipeline
 
 Each stage has a narrow responsibility:
 
-- `loadBundle` resolves the v0.1 manifest and loads vocab, syntax, schema, contracts, profiles, and views.
+- `loadBundle` resolves the v0.1 manifest and loads vocab, syntax, schema, contracts, profiles, views, and the optional authoring artifact, then runs deterministic cross-artifact validation.
 - `parseSource` interprets `syntax.yaml` and produces a source-spanned parse document.
 - `compileSource` flattens authoring blocks into canonical graph JSON, preserves author-order metadata for renderers, and validates the graph against `core/schema.json`.
 - `validateGraph` executes generic validation rules from contracts plus the selected profile.
@@ -118,6 +118,8 @@ The bundle owns:
 - node and relationship vocabularies
 - validation rule selection and rule configuration
 - view scope plus view-specific projection and rendering conventions
+- guided node forms, node-ID suggestion inputs, relationship authoring semantics, supported edge fields, and placement-policy inputs
+- the complete endpoint-triple guidance role and display matrix for every authoring-enabled view
 
 The engine owns:
 
@@ -129,6 +131,23 @@ The engine owns:
 - output formatting for diagnostics and internal DOT/Mermaid emitters
 
 The CLI owns preview artifact generation on top of those internal text renderers and staged preview backends through a backend-aware preview layer.
+
+### Guided authoring bundle substrate
+
+The current v0.1 manifest declares `core/authoring.yaml`. The loaded `Bundle.authoring` field remains optional so older bundles continue to compile, validate, project, and render. Guided consumers must report `guided_addition.unsupported_bundle` when it is absent; they do not substitute TypeScript defaults.
+
+The guided-authoring bundle substrate is split by ownership:
+
+- `authoring.yaml` owns node-ID sequence inputs, the canonical node-type prefix map, primary/advanced form prominence, authoring hints, and default placement inputs.
+- `contracts.yaml` retains endpoint triples as semantic authority and adds relationship graph role, source representation, source organization, and one explicit `edge_field_support` rule per relationship.
+- profile rules retain validation severity but may resolve fields through generic `bundle_refs`. Strict and permissive prefix coupling both resolve `authoring#node_id_suggestions.prefix_by_type`; inline values remain supported only for older bundles, and a rule cannot declare both forms.
+- `views.yaml` contains one `conventions.guided_addition` record for every allowed endpoint triple in every view. Each record owns its `primary`, `supporting`, or `bridge` role and explicit `simple`/`strict` display rules. `permissive` aliases `strict` in bundle data.
+
+`validateLoadedBundle(...)` rejects unresolved bundle references, incomplete vocabulary/form/prefix/relationship/view coverage, duplicate or unknown endpoint triples, missing edge-field rules, invalid property references, unknown display predicates, invalid aliases, and display rule lists without a final unconditional rule. Diagnostics use the `bundle` stage and are sorted before being attached to `BundleValidationError`.
+
+Generic, read-only accessors expose allowed endpoint triples, node-ID suggestion inputs, relationship authoring semantics, supported edge fields, placement inputs, view relationship records, and resolved conditional display. Downstream guided-domain code must consume these accessors instead of rereading YAML shapes or supplying relationship/view/profile fallbacks.
+
+This substrate does not yet publish a planner, document snapshot, proposal executor, helper command, or `sdd add` command. Those remain gated by the serial Guided Addition API implementation checkpoints.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 
