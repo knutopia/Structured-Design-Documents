@@ -2,8 +2,7 @@
 
 ## Open Issues
 
--remove the FOOBAR accordeon scroll expander
--add syntax highlight install / info
+-fix stale require_event_id_in_recommended in contracts.yaml
 -fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
 
@@ -12,7 +11,7 @@
 -service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
-
+z
 -generalizing the skill beyond this repository layout
 -remove service_blueprint DOT output
 -how to enrich the diagram type with deeper content (link?)
@@ -24,6 +23,7 @@
 ## Mon 8-10
 
 - UX Brief for Guided Addition API
+- Matching architecture document
 
 ## Thu 8-6
 
