@@ -10,28 +10,11 @@ The choices that *are* offered, are structured as a semantically sensible decisi
 
 This flow is meant to take place in the context of a known (populated or empty) SDD file (or, potentially in the future, file-equivalent database context), adding content to that context.
 
-This UX brief (current document) is meant to inform the design of a client-neutral API. This API is meant to be bundle-aware, with its logic driven by the spec bundle, following the overall repo approach that separates language definition from tooling.
+This UX brief (current document) is meant to inform the design of a client-neutral API. This API is meant to be bundle-aware, with its logic driven by the spec bundle, following the overall repo approach that separates language definition from tooling. The API is *not* meant to perform an SDD document edit - that is the responsibility of the caller.
 
 The initial user-facing solution to interface with the API is going to be a CLI tool. Later solutions will be web- or app-based, likely using VUE (out of scope for now.)
 
-## Content Delivery, Not Document Editing
-
-The Guided Addition API is meant to be a *content delivery* mechanism, not a document-editing mechanism.
-
-The responsibility of the API is meant to end by returning a structured addition proposal describing:
-- the selected relationship;
-- its direction and endpoints;
-- the new node’s content, if applicable;
-- the suggested placement;
-- any additional content (such as an edge being placed)
-- the suggested placement for the additional content
-- the document context against which the choices were made.
-- The calling context (e.g future SDD editor app) then decides when the user has pressed Save or Commit and passes that proposal to a separate document-authoring service.
-
-The boundary would be:
-CLI/web app → guided API → completed addition proposal → authoring API → SDD document
-
-## UX: 
+## UX
 
 ### 1. When a Node Is a Known Starting Point: (After User Selected a Node)
 
@@ -121,10 +104,8 @@ When filtering for a diagram type, "regular" relationships should be prioritized
 
 ## Sub-Flow: Create New Node
 
-Edit new node key fields. 
-Use bundle constraints for required/optional content and format. 
-Commit after edits ("Complete the proposal and return it to the caller.")
-Cancel is also an option, abandoning the flow without committing a new node.
+Edit new node key fields. Doing so, use bundle constraints for required/optional content and format. 
+After edits, complete the proposal and return it to the caller. The caller handles Commit / Cancel.
 
 S1.1. Edit node ID 
 
@@ -178,3 +159,37 @@ Stickiness applies to
 - Parameter combinations for filter choices
 - Default-active filters
 - Lists of choices in a menu providing most-recently-used (MRU) lists, which is especially powerful when done right in hierarchical menus
+
+## Content Delivery, Not Document Editing
+
+The Guided Addition API is meant to be a *content delivery* mechanism, not a document-editing mechanism.
+
+The responsibility of the API is meant to end by returning a structured addition proposal describing:
+- the selected relationship;
+- its direction and endpoints;
+- the new node’s content, if applicable;
+- the suggested placement;
+- any additional content (such as an edge being placed)
+- the suggested placement for the additional content
+- the document context against which the choices were made.
+- The calling context (e.g future SDD editor app) then decides when the user has pressed Save or Commit and passes that proposal to a separate document-authoring service.
+
+The boundary would be:
+CLI/web app → guided API → completed addition proposal → authoring API → SDD document
+
+This has several benefits:
+- The guided API remains focused on human decisions and bundle-aware recommendations.
+- It does not acquire file access, persistence, undo/redo, or database responsibilities.
+- The same guidance can serve a CLI, web app, or future storage model.
+- Commit and Cancel naturally remain app-level UX decisions.
+= The guided logic becomes easier to test because it produces content without changing anything.
+
+The qualification is that the caller should not be responsible for translating the proposal into raw SDD text. Otherwise each future client would implement node placement, edge ownership, escaping, and document mutation differently. The caller should invoke the existing shared authoring machinery—or a future dedicated authoring API—to apply the proposal.
+
+Three distinct responsibilities present themselves:
+
+1. The app conducts the interaction and owns Save/Cancel.
+2. The guided API supplies choices and returns a completed addition proposal.
+3. The authoring API safely applies that proposal to the document.
+
+Because guidance depends on the current document—existing nodes, available IDs, and placement—the guided API still needs document context as input. It simply does not need permission to modify that document.
