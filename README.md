@@ -14,6 +14,7 @@ scripts/setup-corepack.sh       # Mac, WSL, Linux
 pnpm install
 pnpm run build
 pnpm sdd --help
+pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
 pnpm sdd show docs/doc_site/small_app_example/small_app.sdd --profile simple --view ia_place_map --out my_first_ia.svg
 ```
 
@@ -60,6 +61,7 @@ This probably works with other editors too. The grammar is used for source code 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
 - Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Outcome-Opportunity Map, and Journey Map
+- Interactive `sdd add` guidance for bundle-derived node, relationship, field, and placement choices with explicit Save/Cancel
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations
@@ -68,7 +70,7 @@ This probably works with other editors too. The grammar is used for source code 
 - Across staged renderers, connectors between unobstructed horizontally adjacent nodes can still use multi-segment doglegs and distracting vertical offsets instead of one straight horizontal segment; a global routing simplification is deferred.
 - Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty
-- No "simple" non-technical user guidance available yet
+- Guided addition is currently terminal-based; a graphical non-technical authoring interface is not yet available
 
 ### Current Focus
 

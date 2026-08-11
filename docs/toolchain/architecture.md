@@ -2,8 +2,9 @@
 
 ## Goal
 
-The v0.1 toolchain provides one shared TypeScript engine with three public thin CLI commands:
+The v0.1 toolchain provides one shared TypeScript engine with four public thin CLI commands:
 
+- `sdd add`
 - `sdd compile`
 - `sdd validate`
 - `sdd show`
@@ -189,7 +190,19 @@ Accepted proposals translate deterministically in node, node-property, edge, the
 
 The low-level `reparent_node_block` operation moves an intact node model between top-level and body streams or between different body parents. It preserves the complete subtree, body content, owned comments, blank lines, and trailing comments while rebasing indentation and top-level/nested header form. It rejects stale handles/revisions, same-parent use, self/descendant cycles, missing destination parents, and relative anchors outside the destination stream. Its discriminated ordering summary records `old_parent_handle`, `new_parent_handle`, `old_index`, and `new_index`. Confirmation remains a guided proposal-executor concern; the low-level operation is confirmation-agnostic.
 
-The existing `sdd-helper apply` request contract recognizes `reparent_node_block` as a surgical low-level operation, and its machine-readable operation/summary schemas describe the new discriminants. This checkpoint adds no guided helper or MCP command. The interactive `sdd add` client remains gated by the next serial checkpoint.
+The existing `sdd-helper apply` request contract recognizes `reparent_node_block` as a surgical low-level operation, and its machine-readable operation/summary schemas describe the new discriminants. This milestone adds no guided helper or MCP command.
+
+### Interactive guided addition CLI
+
+`sdd add <document_path> [--node <node_id>] [--view <view_id>] [--bundle <manifest>]` is the human presentation adapter over the pure guided domain. It discovers the repository root, normalizes the document to a repo-relative workspace path, loads the selected bundle and source once for the initial snapshot, resolves an optional anchor exactly, and lets the planner validate the optional bundle-defined view.
+
+The CLI renders only planner-returned options and fields. Its friendly route labels map to the normalized outgoing/incoming and existing-only/existing-or-new operation values; relationship descriptions, role, presence, label visibility, bridge classification, form hints, ID suggestions, and placement recommendations come from planner results. Filter changes are submitted as `set_filter` actions. Primary node fields are shown first, while optional advanced node and edge fields require explicit disclosure. Required edge fields remain completion gates even when optional advanced fields stay hidden.
+
+Reparent confirmation is caller-owned but planner-bound: the CLI displays the exact current effect and submits that exact effect with `confirmed: true`. Refusal offers the planner's alternative placement or Cancel, and the CLI stores no independent confirmation flag. It does not inspect bundle contracts/views/authoring records, construct SDD source, translate proposals into operations, or invoke the mutation engine directly.
+
+Save first calls `applyAdditionProposal(...)` in `dry_run` mode with `validate_profile: simple`. This profile supplies validation feedback for the candidate; it is not used to restrict relationship browsing. Errors block commit. Warnings are displayed and require explicit acceptance. Final acceptance calls the executor again with the same completed proposal object in `commit` mode. Revision or bundle-fingerprint drift returns a stale rejection and requires restarting `sdd add`. Cancel and declined warning/commit prompts exit successfully without a commit call; successful commits exit 0 and domain/runtime failures exit 1.
+
+Production prompting uses `readline/promises` behind an injected prompt interface. Planner, snapshot, workspace, proposal-executor, and prompt dependencies are injected through the CLI dependency surface so deterministic tests can verify transcripts, Save/Cancel call counts, and proposal identity without moving semantics into terminal code.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 

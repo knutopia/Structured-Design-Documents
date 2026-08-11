@@ -1127,3 +1127,105 @@ Checkpoint acceptance decision and next-checkpoint authorization:
 - Technical acceptance assessment: **PASS**. Checkpoint 4 meets its source-preservation, cycle/stale rejection, proposal verification, bundle-authority proof, confirmation, translation-order, shared-executor, parity, journaling/undo, helper-compatibility, documentation, and regression requirements.
 - Unresolved proposal-executor gaps: none for the supported v1 proposal shapes.
 - Checkpoint 5 authorization: **withheld pending explicit user acceptance of the Checkpoint 4 report**. No Checkpoint 5 CLI code has started.
+- User acceptance received on 2026-08-11. Checkpoint 4 was committed as `a8e7634` (`Checkpoint 4 done`), authorizing Checkpoint 5.
+
+### 2026-08-11 — Checkpoint 5: Interactive `sdd add`
+
+Working-tree identifier: uncommitted Checkpoint 5 implementation based on commit `a8e7634` (`Checkpoint 4 done`). No Checkpoint 5 commit was created.
+
+Implemented scope:
+
+- Added public `sdd add <document_path> [--node <node_id>] [--view <view_id>] [--bundle <manifest>]` registration and command help.
+- Added a production `readline/promises` prompt adapter behind an injected, deterministic prompt contract.
+- Added repository-root discovery, repo-relative workspace normalization, one initial bundle/source load, file-backed snapshot construction, exact anchor resolution, and planner-owned view validation.
+- Added thin presentation for standalone and all four anchored operation routes, relationship/view metadata, planner filter actions, existing/new endpoints, primary and explicitly disclosed advanced fields, placement review, exact effect confirmation, refusal-to-alternative routing, and plain-language proposal/change summaries.
+- Added Save/Cancel orchestration: dry-run with `validate_profile: simple`, error blocking, explicit warning acceptance, final commit acceptance, exact proposal-object reuse, and stale-restart reporting.
+- Added deterministic CLI tests covering injected I/O, transcripts, route completion, bundle-only presentation mutations, no-write Cancel, dry-run/commit call identity, invalid inputs, warnings, confirmation, stale drift, and semantic-boundary source audits.
+- Updated the human CLI guide, toolchain architecture, and README quick start/current status.
+
+Explicitly deferred:
+
+- Checkpoint 6 machine-readable guided domain-service subjects, shapes, bindings, constraints, and continuations.
+- Any guided `sdd-helper` or MCP command or execution adapter.
+- Any graphical authoring client or JSON contract for human terminal output.
+
+Bundle field → generic consumer → focused test → mutation proof:
+
+| Bundle/catalog field | Generic consumer | Focused test | Bundle-only proof |
+| --- | --- | --- | --- |
+| Vocabulary node descriptions | `createGuidanceCatalog(...)` → planner `GuidedNodeTypeChoice.description` → CLI node-type menu | `guidedAdditionCli.spec.ts` bundle-only presentation case | Changing only the Outcome description changes the menu description; the CLI does not read `bundle.vocab`. |
+| View/triple roles and display rules | catalog display resolver → planner `RelationshipChoice.role_by_view` / `display_by_view` and ordering → CLI relationship menu | view/filter transcript and bundle-only presentation cases | Changing only `Outcome MEASURED_BY Metric` to bridge/hidden changes the displayed bridge annotation, role, presence, and label status through planner results. |
+| Authoring node prefix | catalog node ID inputs → planner form suggestion → CLI field default | bundle-only presentation case | Changing only the Outcome prefix from `O` to `OX` changes the displayed node-ID suggestion to an `OX...` value. |
+| Authoring field descriptions, prominence, formats, and allowed values | planner `GuidedFieldDefinition[]` → primary/advanced disclosure and prompt kind | advanced-field and form transcript cases | CLI iterates returned field descriptors; it contains no node/property inventory or format table. |
+| Relationship endpoint triples and endpoint availability | planner relationship/endpoint option lists → CLI choice menus | five route cases and invalid-choice domain coverage | Standalone plus outgoing/incoming existing/new flows render and submit only offered opaque choices; CLI contains no endpoint allow-list. |
+| Placement policy and relationship authoring semantics | planner placement recommendations/effects → CLI placement/effect prompts | placement mutation and structural confirmation/refusal cases | Changing only fallback placement from `last` to `first` changes the first displayed placement; structural semantics produce exact confirmation and a planner-offered non-reparenting alternative. |
+| Edge-field support and required-property rules | planner edge form/completion gates → CLI required/optional field prompts | advanced edge-field route and executor regression | Required fields are always prompted; optional edge fields require disclosure, with no relationship/property branch in CLI code. |
+
+Representative deterministic prompt transcripts:
+
+- Standalone Cancel: `operation → node_type → disclose_node_advanced → field:node_id → field:name → field:description → placement → save_or_cancel`; executor calls: 0.
+- Anchored view/filter route: `operation → relationship → filter_role → filter_presence → relationship → endpoint → disclose_node_advanced → node fields → placement(s) → save_or_cancel`. The relationship menu contains bundle-derived `role: primary`, `presence: connector`, label status, and descriptions.
+- Structural new-parent/existing-child acceptance: route/form/placement prompts followed by `confirm_effect → save_or_cancel` using the exact planner effect.
+- Structural refusal: `confirm_effect → reparent_refusal`, then the selected planner alternative clears the effect and returns to proposal review; refusal state is not stored as a confirmation.
+- Save with warning: proposal review followed by `save_or_cancel → accept_warnings → confirm_commit`; the dry-run and commit call arguments reference the same proposal object.
+
+Exact verification:
+
+- `TMPDIR=/tmp pnpm run build` — passed after the final CLI/test changes; TypeScript compilation exit 0.
+- `TMPDIR=/tmp pnpm exec vitest run tests/guidedAdditionCli.spec.ts tests/cli.spec.ts tests/additionProposals.spec.ts tests/helperCli.spec.ts --no-file-parallelism --reporter=dot` — 4/4 files passed; 131/131 tests passed in 17.44 seconds.
+- `TMPDIR=/tmp pnpm exec vitest run --no-file-parallelism --reporter=dot` — 88/88 files passed; 794/794 tests passed in 372.28 seconds.
+- `TMPDIR=/tmp pnpm docs:build` — passed twice; the final post-log VitePress build completed in 9.76 seconds.
+- `TMPDIR=/tmp pnpm sdd add --help` — passed and displayed the new required argument plus `--node`, `--view`, and `--bundle` options.
+- `TMPDIR=/tmp pnpm sdd-helper --help` — passed; unchanged helper inventory is `inspect`, `search`, `create`, `apply`, `author`, `undo`, `validate`, `project`, `preview`, `git-status`, `git-commit`, `contract`, and `capabilities`.
+- `git diff --check` — passed with no whitespace errors before this log entry.
+
+Satisfied invariants:
+
+- The CLI is a presentation and Save/Cancel adapter over the shared snapshot, planner, workspace, and proposal-executor APIs.
+- Bundle-derived planner results control descriptions, node/relationship choices, role/display ordering and classification, field forms, ID suggestions, and placement/effect prompts.
+- `--node` resolves exactly against the immutable snapshot; `--view` is validated through planner filter normalization.
+- Filter changes are planner actions; profile completeness is not applied while browsing.
+- Primary fields precede optional advanced disclosure, while required edge fields remain unavoidable completion gates.
+- Incoming relationships remain literal and the CLI submits only normalized direction/endpoint strategy values.
+- Reparent confirmation uses the exact planner-returned effect. Refusal selects a planner-provided alternative or Cancel, and the CLI stores no independent confirmation state.
+- Cancel, warning refusal, and final-commit refusal invoke no commit. Save always dry-runs with `simple`, displays diagnostics, and commits the same proposal object only after acceptance.
+- Stale revision or bundle fingerprint rejection blocks commit and tells the user to restart.
+- CLI source contains no bundle contract/view/authoring inspection, raw SDD construction, `ChangeOperation[]`, mutation translation, or direct mutation execution.
+- Existing helper commands, helper JSON contracts, and capabilities remain unchanged; no guided helper/MCP command was added.
+- The architecture and UX authority documents remain unchanged.
+
+Violated invariants:
+
+- None observed.
+
+Residual risks:
+
+- The production prompt adapter intentionally provides simple numbered terminal interaction; richer terminal controls or a graphical client remain future presentation work.
+- The CLI rereads through the proposal executor during dry-run and commit, as required for currentness. External changes between those calls correctly reject the commit and require restart rather than attempting an in-place workflow recovery.
+- Field input currently presents enum values as choices and other formats as text; semantic format validation and retry diagnostics remain planner-owned. A rejected entry is shown and the unchanged planner step is prompted again.
+- The file-backed client requires the document to be inside a discoverable repository with `package.json` and `bundle/v0.1/manifest.yaml`; future storage adapters may use `document_ref` differently.
+
+Documentation updated:
+
+- `docs/toolchain/architecture.md`
+- `docs/doc_site/sdd_cli_tools/index.md`
+- `README.md`
+- This implementation plan and log
+
+Snapshot/golden audit:
+
+- No parser/compiler snapshots, projection snapshots, renderer-stage snapshots, goldens, rendered corpus artifacts, or `.sdd` examples were changed or refreshed.
+- The full compiled snapshot, projection snapshot, renderer-stage snapshot, visual acceptance, and rendered-corpus suites passed without normalization.
+
+Unrelated-worktree preservation audit:
+
+- Checkpoint 5 began from clean committed Checkpoint 4 base `a8e7634`.
+- A contemporaneous external modification added `Checkpoint 5 done` to `progress.md`; this implementation did not create, edit, stage, or revert that change.
+- Only the Checkpoint 4 acceptance line, human CLI implementation/tests, allowed explanatory documentation, and this log are part of Checkpoint 5 scope.
+- No bundle artifact, definition, parser, compiler, validator, projection, renderer, guided planner/catalog/snapshot, proposal executor, mutation, journal, workspace, helper program/metadata, snapshot, golden, corpus, architecture-authority, or UX-authority file was changed.
+
+Checkpoint acceptance decision and next-checkpoint authorization:
+
+- Technical acceptance assessment: **PASS**. Checkpoint 5 meets its serial dependency, presentation-boundary, bundle-authority, route, filtering, form, placement/confirmation, Save/Cancel, warning, exact-proposal reuse, stale-rejection, documentation, helper-inventory, and regression requirements.
+- Unresolved CLI semantic-boundary gaps: none for the supported v1 guided workflow.
+- Checkpoint 6 authorization: **withheld pending explicit user acceptance of the Checkpoint 5 report**. No Checkpoint 6 domain metadata code has started.

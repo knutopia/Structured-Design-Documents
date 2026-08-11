@@ -26,6 +26,7 @@ z
 - Checkpoint 2 done
 - Checkpoint 3 done
 - Checkpoint 4 done
+- Checkpoint 5 done
 
 ## Mon 8-10
 

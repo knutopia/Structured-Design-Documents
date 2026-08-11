@@ -1,6 +1,6 @@
 # SDD Command Line Tools
 
-The command-line (CLI) tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It validates documents against profiles, compiles documents into canonical JSON, and generates diagrams. 
+The command-line (CLI) tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It guides additions, validates documents against profiles, compiles documents into canonical JSON, and generates diagrams.
 
 (This is different from `sdd-helper`. `sdd` is the normal tool for people running straightforward CLI workflows. `sdd-helper` is the JSON-first tool for automation and structured mutation flows.)
 
@@ -57,8 +57,9 @@ For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.m
 
 ## Public Commands At A Glance
 
-This page focuses on the three public subcommands most people need:
+This page focuses on the four public subcommands most people need:
 
+- `sdd add <document_path>`
 - `sdd show <input> --view <view>`
 - `sdd validate <input>`
 - `sdd compile <input>`
@@ -66,6 +67,27 @@ This page focuses on the three public subcommands most people need:
 If you only remember one command from this page, make it `sdd show`.
 
 ## Command Reference
+
+### `sdd add`
+
+- Purpose: interactively add a standalone node or an incoming/outgoing relationship.
+- Use when: you want the bundle to guide valid node types, relationship endpoints, fields, IDs, and source placement.
+- Invocation: `pnpm sdd add <document_path>`
+- Common options: `--node <node_id>` anchors a relationship flow, `--view <view_id>` orders and filters guidance using a bundle-defined view, and `--bundle <manifest>` selects a different bundle.
+- Output: a reviewed dry run followed by an explicit Save or Cancel decision.
+
+Without `--node`, the command guides a standalone node. With an exact anchor node ID, it offers friendly incoming/outgoing routes to existing or new endpoints. Primary fields appear first; optional advanced fields are disclosed only when requested. Relationship menus explain the bundle-derived role and display behavior for the selected view.
+
+Save first performs a dry run using `simple` validation. Here `simple` is feedback about the completed candidate, not a restriction on which relationships can be browsed. Errors block saving. Warnings are shown and must be accepted before the final commit prompt. The exact reviewed proposal is then committed; if the document or bundle changed after review, restart the command.
+
+Structural additions can recommend moving an existing node under a new parent. That move requires explicit confirmation tied to the reviewed relationship and placement. Refusing it lets you choose a non-reparenting placement when available or Cancel. Cancel exits successfully and writes nothing.
+
+Examples:
+
+```bash
+pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
+pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001 --view outcome_opportunity_map
+```
 
 ### `sdd show`
 
