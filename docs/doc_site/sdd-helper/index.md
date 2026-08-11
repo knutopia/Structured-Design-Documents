@@ -38,6 +38,8 @@ pnpm sdd-helper contract helper.command.preview --resolve bundle
 
 `capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
 
+The shared library contract index also contains guided `domain.service.*` metadata for future adapters. This does not add guided helper commands: `capabilities` is unchanged, and `sdd-helper contract` deliberately rejects non-`helper.command.*` subjects. Library callers use the exported contract metadata accessors; any helper or MCP adapter requires separate future work.
+
 Use this page when you want the same surface explained in practical terms.
 
 ## Core Operating Conventions
@@ -285,7 +287,7 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 - Key inputs: an `ApplyChangeSetArgs` JSON body loaded from a file path or from stdin via `--request -`.
 - Result kind: `sdd-change-set`
 - Important constraints: dry-run is the default when `mode` is omitted; rejected change sets remain structured and still exit zero.
-- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs. The low-level operation inventory includes `reparent_node_block` for moving a complete node subtree between top-level and nested streams. It remains revision/handle-bound, rejects self or descendant cycles, and reports old/new parents and stream indexes. This does not add a guided helper command; guided proposal application remains a library boundary for the future human CLI.
+- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs. The low-level operation inventory includes `reparent_node_block` for moving a complete node subtree between top-level and nested streams. It remains revision/handle-bound, rejects self or descendant cycles, and reports old/new parents and stream indexes. This does not add a guided helper command; the human `sdd add` client uses the separate shared guided proposal boundary.
 
 #### `sdd-helper author --request <file-or-stdin>`
 
@@ -420,6 +422,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 
 - Keep this page aligned with `pnpm sdd-helper capabilities`, `src/cli/helperDiscovery.ts`, `src/cli/helperProgram.ts`, and `src/authoring/contracts.ts`.
 - Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface; keep both aligned to the implemented helper behavior.
+- Keep guided `domain.service.*` metadata library-visible only unless a later approved plan explicitly adds a helper or MCP adapter.
 - When behavior changes, update both the machine-readable discovery surface and this human-readable page.
 - Document current implementation limits explicitly. Do not quietly broaden the docs ahead of the implementation.
 - Preserve the distinction between helper-level error behavior and structured domain-level results.

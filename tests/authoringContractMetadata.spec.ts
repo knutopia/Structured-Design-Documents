@@ -61,7 +61,7 @@ describe("authoring contract metadata", () => {
 
     expect(index.kind).toBe("sdd-contract-index");
     expect(index.contract_version).toBe("0.1");
-    expect(index.subjects.map((subject) => subject.subject_id)).toEqual([
+    expect(index.subjects.filter((subject) => subject.surface_kind === "helper_command").map((subject) => subject.subject_id)).toEqual([
       "helper.command.inspect",
       "helper.command.search",
       "helper.command.create",
@@ -525,10 +525,15 @@ describe("authoring contract metadata", () => {
 
     expect([...kinds].sort()).toEqual([
       "commit_safe_continuation",
+      "currently_offered_opaque_option",
       "dry_run_informational_only",
+      "exact_confirmation",
       "forbidden_if",
       "must_reference_earlier_local_id",
+      "proposal_relationship_edge_consistency",
       "required_if",
+      "same_bundle_fingerprint",
+      "same_document_revision",
       "same_revision_handle",
       "undo_change_set_eligibility",
       "unique_within_request"

@@ -985,6 +985,13 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
         );
       }
 
+      if (!subjectId.startsWith("helper.command.")) {
+        throw new HelperCliError(
+          "invalid_args",
+          `Contract subject_id '${subjectId}' is not a helper command subject. Domain service metadata is library-visible only.`
+        );
+      }
+
       const contractSubjectId = subjectId as ContractSubjectId;
       const staticDetail = getContractSubjectDetail(contractSubjectId);
       if (!staticDetail) {

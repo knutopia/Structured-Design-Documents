@@ -1343,6 +1343,23 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("rejects library-visible domain service metadata through the helper contract command", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "domain.service.guided_addition.begin", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message:
+        "Contract subject_id 'domain.service.guided_addition.begin' is not a helper command subject. Domain service metadata is library-visible only."
+    });
+  });
+
   it("writes inspect results as a single JSON payload on stdout", async () => {
     const { deps, stdout, stderr } = createDeps();
     const result = await runHelperCli(["node", "sdd-helper", "inspect", "docs/example.sdd"], deps);

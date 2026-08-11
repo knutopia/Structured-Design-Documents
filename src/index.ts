@@ -26,6 +26,18 @@ export { createGuidedDocumentSnapshotFromWorkspace } from "./authoring/guidedAdd
 export { createGuidedAdditionRuntime } from "./authoring/guidedAddition/planner.js";
 export { applyAdditionProposal } from "./authoring/additionProposals.js";
 export { GuidedAdditionDomainError } from "./authoring/guidedAddition/contracts.js";
+export {
+  createContractIndex,
+  getContractSubjectDescriptor,
+  getContractSubjectDetail,
+  getContractSubjectDetailForPurpose,
+  getContractSubjectRequestBody,
+  selectContractSubjectDetailForPurpose
+} from "./authoring/contractMetadata.js";
+export {
+  getBundleResolvedContractSubjectDetail,
+  getBundleResolvedContractSubjectDetailForPurpose
+} from "./authoring/contractResolution.js";
 export { BundleValidationError, collectBundleDiagnostics, validateLoadedBundle } from "./bundle/validateLoadedBundle.js";
 export { parseSource } from "./parser/parseSource.js";
 export { compileSource } from "./compiler/compileSource.js";
@@ -57,7 +69,28 @@ export type {
   GuidanceViewRelationshipRecord
 } from "./authoring/guidedAddition/catalog.js";
 export type * from "./authoring/guidedAddition/contracts.js";
-export type { ChangeOperation, OrderingChange, ReparentNodeBlockOp } from "./authoring/contracts.js";
+export type {
+  ChangeOperation,
+  ContractBindingId,
+  ContractBindingSpec,
+  ContractConstraintId,
+  ContractConstraintSpec,
+  ContractContinuationId,
+  ContractContinuationSpec,
+  ContractIndex,
+  ContractPurpose,
+  ContractResolutionMode,
+  ContractResolvedAllowedValue,
+  ContractShapeId,
+  ContractShapeDescriptor,
+  ContractSubjectDescriptor,
+  ContractSubjectDetail,
+  ContractSubjectId,
+  ContractStability,
+  ContractSurfaceKind,
+  OrderingChange,
+  ReparentNodeBlockOp
+} from "./authoring/contracts.js";
 export type {
   AuthoringConfig,
   AuthoringFieldDescriptor,

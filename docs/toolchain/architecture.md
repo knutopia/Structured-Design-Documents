@@ -204,6 +204,22 @@ Save first calls `applyAdditionProposal(...)` in `dry_run` mode with `validate_p
 
 Production prompting uses `readline/promises` behind an injected prompt interface. Planner, snapshot, workspace, proposal-executor, and prompt dependencies are injected through the CLI dependency surface so deterministic tests can verify transcripts, Save/Cancel call counts, and proposal identity without moving semantics into terminal code.
 
+### Guided domain contract metadata
+
+The shared contract index exposes three library-visible `domain_service` subjects after the unchanged helper subjects:
+
+- `domain.service.guided_addition.begin`
+- `domain.service.guided_addition.advance`
+- `domain.service.addition_proposal.apply`
+
+Their JSON Schema 2020-12 descriptors cover the guided snapshot, public begin request, caller-carried state, action/result unions, completed proposal, apply arguments/result, and complete begin/advance call envelopes. The metadata describes the existing TypeScript domain API; it does not create a transport, helper command, MCP tool, or alternate executor.
+
+Static detail contains only bundle references. Bundle-resolved detail expands view IDs, display-profile IDs, node types, validation profiles, and projection views in bundle order. It never copies relationship endpoint triples, visibility rules, field inventories, prefixes, or placement policy into metadata. Opaque choice/effect/proposal IDs and proposal-local IDs are deliberately not bundle-value bindings.
+
+Constraint metadata records same-revision and same-bundle-fingerprint requirements, currently offered opaque actions, exact confirmation, and proposal relationship/edge consistency. Continuations record caller-carried state, completed-proposal handoff to the apply service, and reuse of the exact proposal from dry-run to commit. These entries remain descriptive contracts over the existing runtime enforcement paths.
+
+`sdd-helper capabilities` remains byte-compatible and lists only helper commands. `sdd-helper contract` accepts only `helper.command.*` subjects and rejects domain subjects before bundle loading, so library metadata cannot become an accidental helper adapter. A future helper or MCP exposure requires a separate implementation plan.
+
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 
 Within that staged pipeline, renderer-owned measurement infrastructure is now shared rather than view-specific:

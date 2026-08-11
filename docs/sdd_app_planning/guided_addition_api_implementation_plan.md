@@ -1229,3 +1229,119 @@ Checkpoint acceptance decision and next-checkpoint authorization:
 - Technical acceptance assessment: **PASS**. Checkpoint 5 meets its serial dependency, presentation-boundary, bundle-authority, route, filtering, form, placement/confirmation, Save/Cancel, warning, exact-proposal reuse, stale-rejection, documentation, helper-inventory, and regression requirements.
 - Unresolved CLI semantic-boundary gaps: none for the supported v1 guided workflow.
 - Checkpoint 6 authorization: **withheld pending explicit user acceptance of the Checkpoint 5 report**. No Checkpoint 6 domain metadata code has started.
+- User acceptance received on 2026-08-11. Checkpoint 5 was committed as `9857328` (`Checkpoint 5 done`), authorizing Checkpoint 6.
+
+### 2026-08-11 — Checkpoint 6: Shared machine-readable domain metadata only
+
+Working-tree identifier: uncommitted Checkpoint 6 implementation based on commit `9857328` (`Checkpoint 5 done`). No Checkpoint 6 commit was created.
+
+Implemented scope:
+
+- Extended `ContractSubjectId` with `domain.service.*` and `ContractSurfaceKind` with `domain_service`.
+- Added library-visible subjects `domain.service.guided_addition.begin`, `domain.service.guided_addition.advance`, and `domain.service.addition_proposal.apply` after the unchanged helper-subject order.
+- Added JSON Schema 2020-12 descriptors for the guided document snapshot, public begin request, state, action/result unions, completed proposal, apply arguments/result, and complete begin/advance call envelopes.
+- Added bundle-reference bindings for guided view IDs, display-profile IDs, node types, proposal validation profiles, and projection views.
+- Added constraint kinds and records for same document revision, same bundle fingerprint, currently offered opaque actions, exact confirmation, and proposal relationship/edge consistency.
+- Added continuations for caller-carried state, completed-proposal handoff, and dry-run-to-commit reuse of the same proposal.
+- Exported the contract index/detail and bundle-resolution accessors plus their public metadata types from the package root.
+- Guarded `sdd-helper contract` so non-`helper.command.*` subjects are rejected before bundle loading.
+- Added focused schema compilation/value-validation, static-reference, bundle-resolution mutation, opaque-ID, helper-guard, and compatibility tests.
+
+Explicitly deferred:
+
+- Any guided `sdd-helper` command, helper request loader, helper result kind, helper capability entry, or helper execution adapter.
+- Any MCP tool, resource, prompt, server route, or execution adapter.
+- Any change to the SDD skill behavior.
+
+Registry inventory:
+
+- Subjects: 16 total — 13 unchanged helper subjects followed by 3 domain-service subjects.
+- Shapes: 37 total — 27 existing shapes plus 10 guided-domain/public-call shapes.
+- New unique bundle bindings: 16. Subject detail reports 6 on begin, 8 on advance, and 5 on apply because the shared result-shape bindings appear in both begin and advance detail.
+- New constraints: 9 records across 5 new kinds.
+- New continuations: 4 records across 3 new kinds.
+
+Bundle field → generic consumer → focused test → mutation proof:
+
+| Bundle value set | Generic consumer | Focused test | Bundle-only proof |
+| --- | --- | --- | --- |
+| `views.views[].id/name/status` | `resolveAllowedValues(...)` for `views_yaml/views` bindings | `guidedAdditionContractMetadata.spec.ts` resolved mutation case | Changing only the first bundle view ID/name changes domain resolved values to `mutated_view` / `Mutated View`; static detail remains unchanged. |
+| `manifest.profiles[].id/intent` | `resolveAllowedValues(...)` for `manifest_profiles/profiles` bindings | resolved mutation case | Changing only the first profile ID/intent changes display-profile resolved values to `mutated_profile` and its intent metadata. |
+| `vocab.node_types[].token/description/group` | `resolveAllowedValues(...)` for `vocab_node_types/node_types` bindings | resolved mutation case | Changing only the first node token/description changes node-type resolved values to `MutatedNode` and its bundle description. |
+| Proposal `validate_profile` | generic manifest-profile binding | subject binding inventory and bundle resolution tests | Allowed validation-profile metadata comes from the active manifest; metadata contains no inline profile IDs. |
+| Proposal `projection_views[]` | generic views binding | subject binding inventory and bundle resolution tests | Allowed projection views come from the active views artifact; metadata contains no inline view IDs. |
+| Guided choice/effect/proposal/local IDs | no bundle-value binding by design | static/opaque ID case | Binding pointers contain no `choice_id`, `option_id`, `recommendation_id`, `effect_id`, `proposal_id`, or `local_id`; these identifiers remain opaque runtime values. |
+
+Subject detail records:
+
+| Subject | Input → output | Bindings | Constraints | Continuations |
+| --- | --- | ---: | --- | --- |
+| `domain.service.guided_addition.begin` | `guided_addition_begin_args` → `guided_addition_result` | 6 | same bundle fingerprint | caller-carried state |
+| `domain.service.guided_addition.advance` | `guided_addition_advance_args` → `guided_addition_result` | 8 | same revision, same fingerprint, currently offered opaque option, exact confirmation | caller-carried state, completed-proposal handoff |
+| `domain.service.addition_proposal.apply` | `apply_addition_proposal_args` → `apply_addition_proposal_result` | 5 | same revision, same fingerprint, exact confirmation, relationship/edge consistency | dry-run-to-commit same proposal |
+
+Schema validation evidence:
+
+- All ten new schemas compile under Ajv 2020 with strict mode disabled consistently with existing project schema validation.
+- Real values produced by the current loaded bundle, snapshot builder, and guided runtime validate as `GuidedDocumentSnapshot`, begin request/args, `GuidedAdditionState`, `GuidedAdditionAction`, advance args, `GuidedAdditionResult`, and `CompletedAdditionProposal`.
+- Representative apply arguments and a structured rejected `ApplyAdditionProposalResult` validate against their descriptors.
+- Full domain subject-detail payloads validate against `shared.shape.contract_subject_detail`, proving the `domain_service`, constraint-kind, binding, and continuation schema extensions compose correctly.
+
+Exact verification:
+
+- `TMPDIR=/tmp pnpm run build` — passed; TypeScript compilation exit 0.
+- `TMPDIR=/tmp pnpm exec vitest run tests/guidedAdditionContractMetadata.spec.ts tests/authoringContractMetadata.spec.ts tests/authoringContractResolution.spec.ts tests/helperCli.spec.ts tests/helperCli.integration.spec.ts --no-file-parallelism --reporter=dot` — 5/5 files passed; 101/101 tests passed in 41.44 seconds.
+- `TMPDIR=/tmp pnpm exec vitest run --no-file-parallelism --reporter=dot` — 89/89 files passed; 801/801 tests passed in 346.58 seconds.
+- `TMPDIR=/tmp pnpm docs:build` — passed twice; the final post-log VitePress build completed in 8.21 seconds.
+- `node dist/cli/helperMain.js capabilities | sha256sum` — capability payload hash `0fbd734f7aa48fc62b6a7c540b2893ee3418a48c98712a4464d92363ca78b082`.
+- `node dist/cli/helperMain.js --help` — unchanged 13-command inventory: `inspect`, `search`, `create`, `apply`, `author`, `undo`, `validate`, `project`, `preview`, `git-status`, `git-commit`, `contract`, `capabilities`.
+- `git diff 9857328 -- src/cli/helperDiscovery.ts` — empty; helper capability construction/presentation data is byte-unchanged from accepted Checkpoint 5.
+- `git diff --check` — passed with no whitespace errors before this log entry.
+
+Satisfied invariants:
+
+- Domain metadata describes the stable existing guided APIs and introduces no alternate runtime or transport.
+- All required public guided shapes and the complete callable begin/advance argument envelopes are represented without weakening any existing helper schema.
+- Static domain detail contains bundle references only and performs no bundle load.
+- Bundle-resolved detail generically reflects active view, profile, and node-type values in bundle order.
+- Metadata does not duplicate endpoint triples, visibility rules, relationship fields, prefixes, or placement policies.
+- Guided choice IDs, effect IDs, proposal IDs, and proposal-local IDs remain opaque and are not represented as bundle-value bindings.
+- Revision, fingerprint, offered-action, confirmation, and relationship/edge invariants are described through explicit constraint kinds that match runtime enforcement.
+- Caller-carried state, completed-proposal handoff, and exact dry-run/commit proposal reuse are explicit continuations.
+- `sdd-helper capabilities`, helper command order, invocation strings, result kinds, request bodies, output contracts, and exit behavior remain compatible.
+- `sdd-helper contract` rejects domain subjects before optional bundle resolution, preventing accidental helper exposure.
+- No guided helper or MCP execution path exists.
+- The architecture and UX authority documents remain unchanged.
+
+Violated invariants:
+
+- None observed.
+
+Residual risks:
+
+- The guided schemas are intentionally explicit and therefore sizable. New guided union variants must update both the TypeScript contract and its schema descriptor in the same checkpoint.
+- Display profiles currently resolve from manifest profiles because those are the active bundle profile identifiers. If a future bundle separates display-only profile identity, the generic binding artifact/selector contract must be extended before use.
+- Domain service metadata is library-visible through the root exports but has no transport-level discovery surface by design; external adapters remain separate planned work.
+
+Documentation updated:
+
+- `docs/toolchain/architecture.md`
+- `docs/doc_site/sdd-helper/index.md`
+- This implementation plan and log
+
+Snapshot/golden audit:
+
+- No parser/compiler snapshots, projection snapshots, renderer-stage snapshots, goldens, rendered corpus artifacts, or `.sdd` examples were changed or refreshed.
+- The full compiled snapshot, projection snapshot, renderer-stage snapshot, visual acceptance, and rendered-corpus suites passed without normalization.
+
+Unrelated-worktree preservation audit:
+
+- Checkpoint 6 began from clean committed Checkpoint 5 base `9857328`.
+- Only the Checkpoint 5 acceptance line, shared contract types/metadata/resolution exports, helper contract guard, focused tests, explanatory documentation, and this log are part of Checkpoint 6 scope.
+- No bundle artifact, definition, parser, compiler, validator, projection, renderer, guided runtime/catalog/snapshot/planner, proposal executor, mutation, journal, workspace, human CLI, helper discovery/capability inventory, snapshot, golden, corpus, architecture-authority, or UX-authority file was changed.
+
+Checkpoint acceptance decision and milestone gate:
+
+- Technical acceptance assessment: **PASS**. Checkpoint 6 meets its stable-domain dependency, schema completeness, generic bundle resolution, opaque-ID, constraint, continuation, helper isolation, documentation, and regression requirements.
+- Unresolved domain-metadata gaps: none for the current public guided API.
+- Milestone acceptance: **withheld pending explicit user acceptance of the Checkpoint 6 report**. All six technical checkpoints have passed in order, but no helper/MCP adapter or post-plan work has started.
