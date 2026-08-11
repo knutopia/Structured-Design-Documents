@@ -1,5 +1,6 @@
 import type {
   AuthoringConfig,
+  AuthoringFieldDescriptor,
   Bundle,
   GuidedDisplayRule,
   GuidedViewRelationship,
@@ -22,6 +23,18 @@ export interface NodeIdSuggestionInputs {
 export interface EdgeFieldSupport {
   annotations: string[];
   properties: string[];
+}
+
+export interface NodeAuthoringForm {
+  common_fields: AuthoringFieldDescriptor[];
+  type_fields: AuthoringFieldDescriptor[];
+}
+
+export interface GuidedViewDefinition {
+  view_id: string;
+  name: string;
+  profile_aliases: Record<string, string>;
+  relationships: GuidedViewRelationship[];
 }
 
 export interface GuidedDisplayContext {
@@ -81,6 +94,22 @@ export function getNodeIdSuggestionInputs(bundle: Bundle, nodeType: string): Nod
     : undefined;
 }
 
+function cloneField(descriptor: AuthoringFieldDescriptor): AuthoringFieldDescriptor {
+  return { ...descriptor };
+}
+
+export function getNodeAuthoringForm(bundle: Bundle, nodeType: string): NodeAuthoringForm | undefined {
+  const authoring = requireAuthoring(bundle);
+  const form = authoring.node_forms.by_type[nodeType];
+  if (!form) {
+    return undefined;
+  }
+  return {
+    common_fields: authoring.node_forms.common_fields.map(cloneField),
+    type_fields: form.properties.map(cloneField)
+  };
+}
+
 export function getRelationshipAuthoringSemantics(
   bundle: Bundle,
   relationshipType: string
@@ -103,6 +132,19 @@ export function getRelationshipEdgeFieldSupport(bundle: Bundle, relationshipType
   };
 }
 
+export function getRelationshipRequiredEdgeProperties(bundle: Bundle, relationshipType: string): string[] | undefined {
+  requireAuthoring(bundle);
+  const relationship = bundle.contracts.relationships.find((candidate) => candidate.type === relationshipType);
+  if (!relationship) {
+    return undefined;
+  }
+  return relationship.constraints.flatMap((constraint) =>
+    constraint.rule_logic?.kind === "required_edge_property" && typeof constraint.rule_logic.property === "string"
+      ? [constraint.rule_logic.property]
+      : []
+  );
+}
+
 export function getPlacementPolicyInputs(bundle: Bundle): AuthoringConfig["placement_policies"]["default"] {
   return { ...requireAuthoring(bundle).placement_policies.default };
 }
@@ -118,6 +160,16 @@ export function listGuidedViewRelationships(bundle: Bundle, viewId: string): Gui
         rules.map((rule) => ({ ...rule, when: rule.when ? { ...rule.when } : undefined }))
       ])
     )
+  }));
+}
+
+export function listGuidedViewDefinitions(bundle: Bundle): GuidedViewDefinition[] {
+  requireAuthoring(bundle);
+  return bundle.views.views.map((view) => ({
+    view_id: view.id,
+    name: view.name,
+    profile_aliases: { ...(view.conventions.guided_addition?.profile_aliases ?? {}) },
+    relationships: listGuidedViewRelationships(bundle, view.id) ?? []
   }));
 }
 

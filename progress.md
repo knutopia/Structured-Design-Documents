@@ -23,6 +23,7 @@ z
 ## Tue 8-11
 
 - Checkpoint 1 done
+- Checkpoint 2 done
 
 ## Mon 8-10
 

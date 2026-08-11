@@ -147,7 +147,23 @@ The guided-authoring bundle substrate is split by ownership:
 
 Generic, read-only accessors expose allowed endpoint triples, node-ID suggestion inputs, relationship authoring semantics, supported edge fields, placement inputs, view relationship records, and resolved conditional display. Downstream guided-domain code must consume these accessors instead of rereading YAML shapes or supplying relationship/view/profile fallbacks.
 
-This substrate does not yet publish a planner, document snapshot, proposal executor, helper command, or `sdd add` command. Those remain gated by the serial Guided Addition API implementation checkpoints.
+### Guided bundle fingerprint and catalog
+
+`computeBundleFingerprint(...)` returns `bnd_` plus SHA-256 over recursively key-sorted canonical JSON. The fingerprint input contains the loaded manifest, vocabulary, syntax, core schema, projection schema, contracts, views, profiles represented in manifest order, and optional authoring configuration. Object-key order is insignificant, array order remains significant, and environment values such as `rootDir` and `manifestPath` are excluded.
+
+`createGuidanceCatalog(...)` consumes the generic bundle accessors and produces one deeply frozen catalog. It indexes node types, endpoint triples, relationship/endpoint order, view/profile records, conditional display rules, syntax/schema constraints, profile rules, edge-field support/requiredness, and placement inputs. Private `Map` indexes accelerate lookup but are not serialized. The catalog contains no environment paths and no mutable reference back into the loaded bundle.
+
+### Guided document snapshot
+
+`createGuidedDocumentSnapshot(...)` is a pure source-text adapter. It reuses `inspectDocumentText(...)` for revision-bound handles, parentage, and body/source order, then reuses `compileSource(...)` to verify literal graph semantics. It does not run a validation profile, so governance completeness does not restrict choice browsing.
+
+The public snapshot contains only document identity, revision, bundle fingerprint, effective version, source-ordered node/edge records, top-level/body order, and parse/compile warnings. Lookup indexes by handle, ID, type, direction, parent, and used ID remain private in a `WeakMap` and never serialize into caller-carried state. Incoming edges remain literal; the snapshot builder never infers an inverse.
+
+Parse failures, duplicate IDs, schema failures, or other compile errors raise `GuidedAdditionDomainError` with code `guided_addition.document_unavailable`, the underlying sorted diagnostics, and an `authoring`-stage boundary diagnostic. A bundle without authoring guidance raises `guided_addition.unsupported_bundle`. The machine-readable shared diagnostic schema includes the new `authoring` stage.
+
+`createGuidedDocumentSnapshotFromWorkspace(...)` is the read-only file adapter. It normalizes the requested document through `AuthoringWorkspace`, reads it once, and assigns the same normalized repo-relative value to both `document_ref` and `path`.
+
+No planner, workflow state, proposal executor, helper command, or `sdd add` command is published yet. Those remain gated by the later serial Guided Addition API checkpoints.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 

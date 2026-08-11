@@ -765,3 +765,119 @@ Checkpoint acceptance decision and next-checkpoint authorization:
 - Technical acceptance assessment: **PASS**. Checkpoint 1 meets its scope, bundle-authority proofs, focused/full regression, documentation, and stop-condition requirements.
 - Unresolved bundle gaps: none for Checkpoint 1.
 - Checkpoint 2 authorization: **withheld pending explicit user acceptance of the Checkpoint 1 report**. No Checkpoint 2 code has started.
+- User acceptance received on 2026-08-11. Checkpoint 1 was committed as `63d249e` (`Checkpoint 1 done`), authorizing Checkpoint 2.
+
+### 2026-08-11 — Checkpoint 2: Fingerprint, catalog, and document snapshot
+
+Working-tree identifier: uncommitted Checkpoint 2 implementation based on commit `63d249e` (`Checkpoint 1 done`). No Checkpoint 2 commit was created.
+
+Implemented scope:
+
+- Added recursive canonical JSON utilities and deterministic `bnd_<sha256>` bundle fingerprinting.
+- Added a deeply frozen guidance catalog with private profile, node-type, endpoint-triple, view, and view/triple indexes.
+- Added normalized catalog records for syntax/schema constraints, profile rules/order, node forms and ID suggestion inputs, relationship/endpoint order, authoring semantics, edge-field support/requiredness, view roles/display rules/aliases, and placement inputs.
+- Added pure source-text guided snapshot construction from `inspectDocumentText(...)` and `compileSource(...)`.
+- Added a read-only workspace adapter that normalizes file-backed `document_ref` and `path` to the same repo-relative path.
+- Added private snapshot indexes for nodes by handle/ID/type, incoming/outgoing edges, children, body order, and used IDs without serializing those indexes.
+- Added `GuidedAdditionDomainError`, stable unsupported/document-unavailable diagnostics, and the public `authoring` diagnostic stage in TypeScript and machine-readable diagnostic metadata.
+- Added root public exports for fingerprint, catalog, snapshot, contracts, and diagnostic stage types.
+
+Explicitly deferred:
+
+- Checkpoint 3 workflow state, transitions, relationship choices, filters, forms runtime, ID generation, placement alternatives/effects, confirmations, and completed proposals.
+- All mutation execution, reparenting, proposal execution, CLI prompts, Save/Cancel behavior, and guided domain-service metadata.
+- Any new helper or MCP command.
+
+Canonical fingerprint input:
+
+| Ordered top-level field | Included value | Notes |
+| --- | --- | --- |
+| `manifest` | Loaded manifest | Manifest paths and declared ordering remain semantic input. |
+| `vocab` | Vocabulary artifact | Array order remains significant. |
+| `syntax` | Syntax artifact | Recursively key-sorted. |
+| `schema` | Core schema | Recursively key-sorted. |
+| `projection_schema` | Projection schema | Recursively key-sorted. |
+| `contracts` | Contract artifact | Relationship and endpoint array order remain significant. |
+| `views` | View artifact | View, triple, and rule array order remain significant. |
+| `profiles` | `{id, profile}` records in manifest order | Environment paths are absent. |
+| `authoring` | Authoring artifact or `null` | `rootDir` and `manifestPath` are excluded. |
+
+Bundle field → generic consumer → focused test → mutation proof:
+
+| Bundle field | Generic consumer | Focused test | Bundle-only proof |
+| --- | --- | --- | --- |
+| All fingerprint artifacts above | `createBundleFingerprintInput(...)`, `computeBundleFingerprint(...)` | `guidedAdditionCatalog.spec.ts` artifact inclusion cases | Mutating each artifact changes the fingerprint; changing `rootDir`/`manifestPath` does not. |
+| Arbitrary object keys and ordered arrays | `canonicalizeJson(...)`, `stringifyCanonicalJson(...)` | key/array ordering case | Reordering object keys preserves the fingerprint; swapping an array element changes it. |
+| Vocabulary node records + authoring forms/prefixes | `createGuidanceCatalog(...)`, node-type index | immutable catalog and authoring mutation cases | Prefix/width mutations change the indexed node record without code changes. |
+| `allowed_endpoints` | relationship/triple catalog index | endpoint catalog mutation case | A coordinated endpoint/matrix mutation removes the old triple and adds the new triple. |
+| Relationship `authoring` and contract order | relationship catalog records | deterministic catalog case | Graph role/source semantics and relationship/endpoint order are copied through generic accessors. |
+| `edge_field_support` / `required_edge_property` | relationship edge-field catalog record | field-support/requiredness mutation case | Changing supported and required properties changes the catalog record. |
+| View roles, display rules, aliases, and predicates | view catalog/index and `resolveDisplay(...)` | role/display and conditional alias cases | Role/display mutations change records; simple conditional and permissive alias resolution come from catalog data. |
+| `placement_policies.default` | frozen catalog placement record | authoring placement mutation case | Changing placement data changes the catalog record. |
+| Source text structure | `inspectDocumentText(...)` within snapshot builder | snapshot source-order/revision cases | Source edits change revision/handles while preserving bundle identity. |
+| Compiled graph semantics | `compileSource(...)` within snapshot builder | literal-edge and duplicate-ID cases | Literal edge direction/order is preserved; duplicate IDs and compile failures block snapshot creation. |
+
+Repeat-run fingerprint and snapshot evidence:
+
+- Current fingerprint repeated identically: `bnd_37f9a7ff4e2e8fa75c9d36b2c4bf4c2ef5092f744b620c1493a0e6fd3def29ba`.
+- `outcome_to_ia_trace.sdd` snapshot revision: `rev_97935b9a59dcdee194023bbc1cd03a15b106f9ba55769f9f442f71344ac2747a`.
+- Snapshot counts: 11 nodes and 14 literal edges.
+- Node order begins `O-001`, `M-001`, `OP-001`, `I-001`, `G-001` and follows source traversal through `P-002`.
+- Edge order begins `O-001 MEASURED_BY M-001`, preserves authored instrumentation/support/addressing order, and ends `P-001 NAVIGATES_TO P-002`.
+- Source mutation tests changed revision and all revision-bound handles without changing the bundle fingerprint.
+- Bundle mutation tests changed the bundle fingerprint without changing source revision, nodes, or edges.
+
+Exact verification:
+
+- `TMPDIR=/tmp pnpm exec vitest run tests/guidedAdditionCatalog.spec.ts tests/guidedAdditionSnapshot.spec.ts tests/authoringInspect.spec.ts tests/compile.spec.ts --no-file-parallelism --reporter=dot` — 4/4 files passed; 28/28 tests passed.
+- `TMPDIR=/tmp pnpm run build` — passed, TypeScript compilation exit 0.
+- First `TMPDIR=/tmp pnpm exec vitest run --no-file-parallelism --reporter=dot` — 81/82 files and 734/735 tests passed; one unrelated journey-routing test exceeded its existing 5-second timeout at 5.158 seconds.
+- `TMPDIR=/tmp pnpm exec vitest run tests/journeyMapRouting.spec.ts -t "retains the isolated ordering skip while later accepted families are added" --no-file-parallelism --reporter=dot` — isolated case passed in 4.421 seconds.
+- Repeated exact `TMPDIR=/tmp pnpm exec vitest run --no-file-parallelism --reporter=dot` — 82/82 files passed; 735/735 tests passed in 332.93 seconds.
+- `TMPDIR=/tmp pnpm docs:build` — passed; VitePress build completed in 9.44 seconds.
+- `git diff --check` — passed with no whitespace errors.
+
+Satisfied invariants:
+
+- Same loaded bundle produces a byte-identical recursively canonical fingerprint; environment relocation does not affect it.
+- Same bundle/source produces byte-identical frozen snapshots, including after LF/CRLF normalization.
+- Catalog construction consumes the bundle-authority accessors and retains no mutable bundle references.
+- Catalog and snapshot lookup indexes are private and absent from serialization.
+- Snapshot nodes and edges preserve literal direction and source traversal order rather than compiled canonical order.
+- Parse and compile errors, including duplicate IDs, block snapshot creation with stable sorted guided-domain diagnostics.
+- Validation/profile completeness is not a snapshot prerequisite.
+- Source-text snapshot construction imports no mutation, journal, workspace-write, helper, CLI, or filesystem-write path.
+- The workspace adapter performs only normalized path resolution and a single read.
+- No planner, state transition, mutation operation, proposal, helper command, or CLI behavior was introduced.
+
+Violated invariants:
+
+- None observed. The first broad-run timeout was a non-reproducing timing failure in an unrelated existing renderer test; the isolated case and repeated exact full serial suite passed.
+
+Residual risks:
+
+- Snapshot private indexes are intentionally process-local `WeakMap` state. Serialized snapshots remain portable, and a later runtime must rebuild or retrieve indexes within the same process rather than expect them in caller state.
+- The catalog deliberately carries frozen schema and profile-rule metadata so Checkpoint 3 can remain bundle-independent. Checkpoint 3 must consume those normalized catalog records and must not reintroduce direct bundle-shape reads.
+- The existing journey-routing test remains close enough to its 5-second timeout to exhibit machine-load sensitivity, although it is unrelated to this checkpoint and passed on isolated and repeated full runs.
+
+Documentation updated:
+
+- `docs/toolchain/architecture.md`
+- This implementation plan and log
+
+Snapshot/golden audit:
+
+- No compiled snapshots, projection snapshots, renderer-stage snapshots, goldens, or rendered corpus artifacts were changed or refreshed.
+- Compile snapshots, projection snapshots, renderer-stage goldens, and rendered-corpus tests passed in the repeated full suite.
+
+Unrelated-worktree preservation audit:
+
+- Checkpoint 2 began from clean committed Checkpoint 1 base `63d249e`.
+- Only Checkpoint 2 fingerprint/catalog/snapshot/types/tests and allowed documentation files are modified.
+- No CLI, helper program, mutation, journal, workspace, renderer, snapshot, golden, or corpus file was changed.
+
+Checkpoint acceptance decision and next-checkpoint authorization:
+
+- Technical acceptance assessment: **PASS**. Checkpoint 2 meets its determinism, catalog mutation, snapshot/error-boundary, import-boundary, focused/full regression, documentation, and stop-condition requirements.
+- Unsupported bundle cases: authoring metadata absence is reported as `guided_addition.unsupported_bundle`; no unresolved supported-bundle case remains.
+- Checkpoint 3 authorization: **withheld pending explicit user acceptance of the Checkpoint 2 report**. No Checkpoint 3 code has started.

@@ -71,7 +71,7 @@ const sourceSpanSchema = objectSchema(
 
 const diagnosticSchema = objectSchema(
   {
-    stage: stringSchema(["bundle", "parse", "compile", "validate", "project", "render", "cli"]),
+    stage: stringSchema(["bundle", "authoring", "parse", "compile", "validate", "project", "render", "cli"]),
     code: stringSchema(),
     severity: stringSchema(["error", "warn", "info"]),
     message: stringSchema(),

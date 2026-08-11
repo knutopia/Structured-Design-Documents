@@ -2,6 +2,7 @@ export type Severity = "error" | "warn" | "info";
 
 export type DiagnosticStage =
   | "bundle"
+  | "authoring"
   | "parse"
   | "compile"
   | "validate"
