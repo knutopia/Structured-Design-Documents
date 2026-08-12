@@ -32,6 +32,7 @@ z
 - Captured sdd add usability issues
 - Analyis: permafucked snafu foobar implementation - collapsed the UX brief flows
 - Remediation started
+- Remediation UX is fucked too
 
 ## Mon 8-10
 
