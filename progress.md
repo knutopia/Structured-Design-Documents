@@ -20,6 +20,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 8-12
+
+- Manual edit (wip) of acceptance transcripts
+
 ## Tue 8-11
 
 - Checkpoint 1 done

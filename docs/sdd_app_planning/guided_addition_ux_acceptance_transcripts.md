@@ -1,5 +1,12 @@
 # Guided Addition UX Acceptance Transcripts
 
+---
+Status:
+**UX is NOT ACCEPTED!**
+
+- Missing an acceptance transcript for the "2. Add a relationship" case of the generic (node-less) entry to `sdd add` (regression from current sdd-add)
+---
+
 Status: **DRAFT COMPLETE — PENDING UX ACCEPTANCE**
 
 Phase decision: **PENDING UX ACCEPTANCE**
@@ -62,12 +69,12 @@ The principal anchor is `P-100: Dashboard`. The fixture deliberately supplies ex
 - “Provisional semantic action” is descriptive only and is not a final API contract.
 - Transcripts 1–15 prove individual decisions through proposal formation. Transcripts 16–18 separately prove Save, warning, and Cancel ownership so those decisions are not repeated in every case.
 - “Expected committed source effect” means the exact effect if that proposal later follows the applicable accepted Save transcript. Unshown source remains byte-for-byte unchanged.
-- `Diagram type: ...` and `Change diagram type` remain inside each applicable browse menu. Selecting or clearing a filter rerenders that same browse step; it does not change the relationship-first or existing-node-first order.
+- `[Filter nodes by diagram type: ...]` remains the first action inside each applicable browse menu. Selecting or clearing a filter rerenders that same browse step; it does not change the relationship-first or existing-node-first order.
 - A regular relationship is listed before a bridge relationship. A bridge remains available with the plain-language annotation `Cross-diagram connection`. Raw display classifications are not user-visible.
 
 ## 4. Acceptance Transcripts
 
-### T01 — Standalone Place With Diagram Selection, Change, And Clear
+### T01 — Standalone Place With Diagram Selection, Change, And Clear (#ANNOTATED)
 
 **Exact interaction**
 
@@ -76,10 +83,10 @@ What would you like to add?
   1. Add a standalone node
   2. Add a relationship
 Choose a number: 1
+Chosen: Add a standalone node
 
 Choose a node type
-Diagram type: All diagram types
-  1. Change diagram type
+  1. [Filter nodes by diagram type: All diagram types]
   2. Outcome — Desired change in user or business reality.
   3. Metric — Measurement definition for an outcome.
   4. Opportunity — Evidence-backed problem or leverage point.
@@ -98,8 +105,8 @@ Diagram type: All diagram types
   17. Policy — Rule or constraint.
 Choose a number: 1
 
-Choose a diagram type
-  1. All diagram types
+Choose a diagram type to filter nodes by
+  1. All diagram types (current)
   2. Outcome-Opportunity Map
   3. Journey Map
   4. Service Blueprint
@@ -107,15 +114,15 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts
 Choose a number: 5
+Chosen: IA Place Map filter
 
 Choose a node type
-Diagram type: IA Place Map
-  1. Change diagram type
+  1. [Filter nodes by diagram type: IA Place Map]
   2. Area — Information architecture grouping.
   3. Place — Navigable product location.
 Choose a number: 1
 
-Choose a diagram type
+Choose a diagram type to filter nodes by
   1. All diagram types
   2. Outcome-Opportunity Map
   3. Journey Map
@@ -124,10 +131,10 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts
 Choose a number: 7
+Chosen: UI Contracts filter
 
 Choose a node type
-Diagram type: UI Contracts
-  1. Change diagram type
+  1. [Filter nodes by diagram type: UI Contracts]
   2. Place — Navigable product location.
   3. ViewState — Distinct render or interaction mode within a place.
   4. Component — UI building block.
@@ -137,7 +144,7 @@ Diagram type: UI Contracts
   8. SystemAction — Discrete system operation or API call.
 Choose a number: 1
 
-Choose a diagram type
+Choose a diagram type to filter nodes by
   1. All diagram types
   2. Outcome-Opportunity Map
   3. Journey Map
@@ -146,10 +153,10 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts (current)
 Choose a number: 1
+Chosen: All diagram types filter
 
 Choose a node type
-Diagram type: All diagram types
-  1. Change diagram type
+  1. [Filter nodes by diagram type: All diagram types]
   2. Outcome — Desired change in user or business reality.
   3. Metric — Measurement definition for an outcome.
   4. Opportunity — Evidence-backed problem or leverage point.
@@ -167,16 +174,18 @@ Diagram type: All diagram types
   16. DataEntity — Domain object.
   17. Policy — Rule or constraint.
 Choose a number: 9
+Chosen: node type Place
 
-Node ID — Stable identifier for the new node. [P-301]: P-301
-Name — Human-readable node name.: Settings
-Description — Short explanation of the node's purpose.: Configuration and preferences
+New node ID [P-301]: P-301
+New node Name: Settings
+New node Description: Configuration and preferences
 Add more details about P-301: Settings? [y/N]: n
 
-Place P-301: Settings at top level
-  1. Last — Recommended
-  2. First
+Where to place P-301: Settings
+  1. Last position — Recommended
+  2. First position
 Choose a number: 1
+Chosen: Last position
 ```
 
 **Selected response:** IA Place Map, then UI Contracts, then All diagram types; `Place`; `P-301: Settings`; no additional details; top-level last.
@@ -197,35 +206,37 @@ END
 
 **Proof:** UX brief 2.1, diagram filtering, create-new-node sub-flow, and new-node placement; issues 1, 8, 9, 12, and 14.
 
-### T02 — Outgoing Relationship-First To Existing P-300
+### T02 — Outgoing Relationship-First To Existing P-300 (#ANNOTATED)
 
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose relationship type #CHANGED
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard. #CHANGED
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 5
+Chosen: P-100 NAVIGATES_TO Place
 
-Choose destination for P-100 NAVIGATES_TO (…)
+Choose destination for P-100 NAVIGATES_TO Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 2
+Chosen: P-100 NAVIGATES_TO P-300
 
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 ```
 
 **Selected response:** Outgoing relationship-first; `Place NAVIGATES_TO Place`; existing destination `P-300: Reports`; no optional navigation details.
@@ -240,44 +251,47 @@ Add a trigger or condition to this navigation? [y/N]: n
 
 **Proof:** UX brief 1.1, progressive disclosure, and placement; issues 4, 5, 7, 8, 11, and 13.
 
-### T03 — Outgoing Relationship-First To New P-301
+### T03 — Outgoing Relationship-First To New P-301 (#ANNOTATED)
 
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 5
+Chosen: P-100 NAVIGATES_TO Place
 
-Choose destination for P-100 NAVIGATES_TO (…)
+Choose destination for P-100 NAVIGATES_TO Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 3
+Chosen: P-100 NAVIGATES_TO new Place
 
-Node ID — Stable identifier for the new node. [P-301]: P-301
-Name — Human-readable node name.: Settings
-Description — Short explanation of the node's purpose.: Configuration and preferences
+New node ID [P-301]: P-301
+New node Name: Settings
+New node Description: Configuration and preferences
 Add more details about P-301: Settings? [y/N]: n
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 
-Place new destination P-301: Settings
+Where to place P-301: Settings
   1. Immediately after P-100: Dashboard at top level — Recommended
   2. At top level, last
 Choose a number: 1
+Chosen: Immediately after P-100: Dashboard at top level
 ```
 
 **Selected response:** Outgoing relationship-first; navigation to a new Place; `P-301: Settings`; no additional details; immediately after the anchor.
@@ -297,36 +311,38 @@ Choose a number: 1
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 2
+Chosen: P-100 connects to another node [choose existing destination node]
 
 Choose existing destination for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
+  1. [Filter nodes by diagram type: All diagram types]
   2. P-210: Projects Overview (Place)
   3. P-300: Reports (Place)
   4. VS-100: Summary (ViewState)
   5. C-100: Status Card (Component)
   6. C-200: Global Navigation (Component)
 Choose a number: 2
+Chosen: P-210: Projects Overview
 
 Choose how P-100: Dashboard connects to P-210: Projects Overview
-  1. CONTAINS — Put Projects Overview inside Dashboard.
-  2. NAVIGATES_TO — Navigate from Dashboard to Projects Overview.
+  1. P-100 CONTAINS P-210 — Put Projects Overview inside Dashboard.
+  2. P-100 NAVIGATES_TO P-210 — Navigate from Dashboard to Projects Overview.
 Choose a number: 2
+Chosen: P-100 NAVIGATES_TO P-210
 
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 ```
 
 **Selected response:** Outgoing existing-node-first; `P-210: Projects Overview`; `NAVIGATES_TO`; no optional details.
 
 **Provisional semantic action (descriptive only):** Propose the selected valid relationship from the anchor to the already chosen existing node, without moving it.
 
-**Why the choice constrains the next menu:** The existing-node menu includes only nodes reachable from a Place by at least one bundle-valid relationship. Choosing the exact Place `P-210` narrows the next menu to the two valid `Place → Place` relationships in this direction.
+**Why the choice constrains the next menu:** The existing-node menu includes only nodes reachable from a Place by at least one bundle-valid relationship. Choosing the exact Place `P-210` narrows the next menu to the two valid `Place Place` relationships in this direction.
 
 **Expected semantic proposal:** Add `P-100 NAVIGATES_TO P-210`; leave `P-210` nested under `A-200`.
 
@@ -339,38 +355,40 @@ Add a trigger or condition to this navigation? [y/N]: n
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 3
+Chosen: another node connects to P-100 [choose relationship]
 
-Choose a relationship and starting-node type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. Area → CONTAINS — Put Dashboard inside an Area.
-  3. Place → CONTAINS — Put Dashboard inside a Place.
-  4. Place → NAVIGATES_TO — Navigate from a Place to Dashboard.
-  5. Initiative → IMPLEMENTED_BY — Connect an Initiative to Dashboard.
-  6. Step → REALIZED_BY — Connect a journey Step to Dashboard.
-  7. Metric → INSTRUMENTED_AT — Observe a Metric at Dashboard.
+Choose a relationship type #CHANGED
+  1. [Filter nodes by diagram type: All diagram types]
+  2. Area CONTAINS P-100 — Put Dashboard inside an Area.
+  3. Place CONTAINS P-100 — Put Dashboard inside a Place.
+  4. Place NAVIGATES_TO P-100 — Navigate from a Place to Dashboard.
+  5. Initiative IMPLEMENTED_BY P-100 — Connect an Initiative to Dashboard.
+  6. Step REALIZED_BY P-100 — Connect a journey Step to Dashboard.
+  7. Metric INSTRUMENTED_AT P-100 — Observe a Metric at Dashboard.
 Choose a number: 4
+Chosen: Place NAVIGATES_TO P-100
 
-Choose starting point for (…) NAVIGATES_TO P-100
+Choose starting point (origin) for Place NAVIGATES_TO P-100
   1. P-210: Projects Overview (Place) — 1 matching relationship already exists
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 1
+Chosen: P-210 NAVIGATES_TO P-100
 
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 ```
 
 **Selected response:** Incoming relationship-first; Place navigation; existing origin `P-210: Projects Overview`; no optional details.
 
 **Provisional semantic action (descriptive only):** Propose another navigation with the selected existing Place as origin and flag the exact existing match for informed review.
 
-**Why the choice constrains the next menu:** Choosing `Place → NAVIGATES_TO → P-100` removes every non-Place origin. The existing-edge annotation is computed for that exact direction and triple and uses singular wording.
+**Why the choice constrains the next menu:** Choosing `Place NAVIGATES_TO P-100` removes every non-Place origin. The existing-edge annotation is computed for that exact direction and triple and uses singular wording.
 
 **Expected semantic proposal:** Add another unannotated `P-210 NAVIGATES_TO P-100`; preserve both node locations; surface the duplicate-edge warning only when Save is selected.
 
@@ -383,40 +401,43 @@ Add a trigger or condition to this navigation? [y/N]: n
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 3
+Chosen: another node connects to P-100 [choose relationship]
 
-Choose a relationship and starting-node type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. Area → CONTAINS — Put Dashboard inside an Area.
-  3. Place → CONTAINS — Put Dashboard inside a Place.
-  4. Place → NAVIGATES_TO — Navigate from a Place to Dashboard.
-  5. Initiative → IMPLEMENTED_BY — Connect an Initiative to Dashboard.
-  6. Step → REALIZED_BY — Connect a journey Step to Dashboard.
-  7. Metric → INSTRUMENTED_AT — Observe a Metric at Dashboard.
+Choose a relationship type 
+  1. [Filter nodes by diagram type: All diagram types]
+  2. Area CONTAINS P-100 — Put Dashboard inside an Area.
+  3. Place CONTAINS P-100 — Put Dashboard inside a Place.
+  4. Place NAVIGATES_TO P-100 — Navigate from a Place to Dashboard.
+  5. Initiative IMPLEMENTED_BY P-100 — Connect an Initiative to Dashboard.
+  6. Step REALIZED_BY P-100 — Connect a journey Step to Dashboard.
+  7. Metric INSTRUMENTED_AT P-100 — Observe a Metric at Dashboard.
 Choose a number: 4
+Chosen: Place NAVIGATES_TO P-100
 
-Choose starting point for (…) NAVIGATES_TO P-100
+Choose starting point (origin) for Place NAVIGATES_TO P-100
   1. P-210: Projects Overview (Place) — 1 matching relationship already exists
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 3
+Chosen: new Place NAVIGATES_TO P-100
 
-Node ID — Stable identifier for the new node. [P-301]: P-301
-Name — Human-readable node name.: Activity
-Description — Short explanation of the node's purpose.: Recent project activity
+New node ID [P-301]: P-301
+New node Name: Activity
+New node Description: Recent project activity
 Add more details about P-301: Activity? [y/N]: n
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 
-Place new starting point P-301: Activity
+Where to place P-301: Activity
   1. Immediately before P-100: Dashboard at top level — Recommended
   2. At top level, first
 Choose a number: 1
+Chosen: Immediately before P-100: Dashboard at top level
 ```
 
 **Selected response:** Incoming relationship-first; navigation from a new Place; `P-301: Activity`; no additional details; immediately before the anchor.
@@ -436,34 +457,36 @@ Choose a number: 1
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 4
+Chosen: another node connects to P-100 [choose existing origin node]
 
-Choose existing starting point for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. A-200: Projects (Area)
-  3. P-210: Projects Overview (Place)
-  4. P-300: Reports (Place)
+Choose existing starting point (origin) to connect to P-100 Dashboard #CHANGED
+  1. [Filter nodes by diagram type: All diagram types]
+  2. A-200: Projects (Area) connects to P-100
+  3. P-210: Projects Overview (Place) connects to P-100
+  4. P-300: Reports (Place) connects to P-100
 Choose a number: 3
+Chosen: P-210: Projects Overview connects to P-100 Dashboard
 
 Choose how P-210: Projects Overview connects to P-100: Dashboard
-  1. CONTAINS — Put Dashboard inside Projects Overview.
-  2. NAVIGATES_TO — Navigate from Projects Overview to Dashboard. 1 matching relationship already exists.
+  1. P-210 CONTAINS P-100 — Put Dashboard inside Projects Overview.
+  2. P-210 NAVIGATES_TO P-100 — Navigate from Projects Overview to Dashboard. 1 matching relationship already exists.
 Choose a number: 2
+Chosen: P-210 NAVIGATES_TO P-100
 
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 ```
 
 **Selected response:** Incoming existing-node-first; `P-210: Projects Overview`; `NAVIGATES_TO`; no optional details.
 
 **Provisional semantic action (descriptive only):** Propose the selected valid relationship from the already chosen origin to the anchor and preserve both existing source locations.
 
-**Why the choice constrains the next menu:** The origin menu includes only existing nodes with a valid bundle relationship to a Place. Choosing exact types `Place → Place` and incoming direction leaves only `CONTAINS` and `NAVIGATES_TO`; relationships for Area, Step, Initiative, or Metric are not carried forward.
+**Why the choice constrains the next menu:** The origin menu includes only existing nodes with a valid bundle relationship to a Place. Choosing exact types `Place Place` and incoming direction leaves only `CONTAINS` and `NAVIGATES_TO`; relationships for Area, Step, Initiative, or Metric are not carried forward.
 
 **Expected semantic proposal:** Add another `P-210 NAVIGATES_TO P-100`; flag the exact existing match at review and Save.
 
@@ -476,43 +499,47 @@ Add a trigger or condition to this navigation? [y/N]: n
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose a relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 2
+Chosen: P-100 CONTAINS Place
 
-Choose destination for P-100 CONTAINS (…)
+Choose destination for P-100 CONTAINS Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 3
+Chosen: P-100 CONTAINS new Place
 
-Node ID — Stable identifier for the new node. [P-301]: P-301
-Name — Human-readable node name.: Settings
-Description — Short explanation of the node's purpose.: Configuration and preferences
+New node ID [P-301]: P-301
+New node Name: Settings
+New node Description: Configuration and preferences
 Add more details about P-301: Settings? [y/N]: n
 
 Nest P-301: Settings in P-100: Dashboard?
   1. yes: place P-301 in P-100
   2. no: place P-301 at top level
 Choose a number: 1
+Chosen: yes: place P-301 in P-100
 
-Place P-301: Settings within P-100: Dashboard
-  1. Last, after C-100: Status Card — Recommended
-  2. First, before C-100: Status Card
+Where to place P-301: Settings within P-100: Dashboard
+  1. Last position, after C-100: Status Card — Recommended
+  2. First position, before C-100: Status Card
 Choose a number: 1
+Chosen: Last position, after C-100: Status Card
 ```
 
 **Selected response:** Outgoing structural combination; new `P-301: Settings`; nest yes; last after the existing nested child.
@@ -532,43 +559,47 @@ Choose a number: 1
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose a relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 2
+Chosen: P-100 CONTAINS Place
 
-Choose destination for P-100 CONTAINS (…)
+Choose destination for P-100 CONTAINS Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 3
+Chosen: P-100 CONTAINS new Place
 
-Node ID — Stable identifier for the new node. [P-301]: P-301
-Name — Human-readable node name.: Settings
-Description — Short explanation of the node's purpose.: Configuration and preferences
+New node ID [P-301]: P-301
+New node Name: Settings
+New node Description: Configuration and preferences
 Add more details about P-301: Settings? [y/N]: n
 
 Nest P-301: Settings in P-100: Dashboard?
   1. yes: place P-301 in P-100
   2. no: place P-301 at top level
 Choose a number: 2
+Chosen: no: place P-301 at top level
 
-Place P-301: Settings at top level
-  1. Last — Recommended
-  2. First
+Where to place P-301: Settings
+  1. Last position — Recommended
+  2. First position
 Choose a number: 1
+Chosen: Last position
 ```
 
 **Selected response:** Outgoing structural combination; new `P-301: Settings`; nest no; top-level last.
@@ -588,40 +619,44 @@ Choose a number: 1
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose a relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 2
+Chosen: P-100 CONTAINS Place
 
-Choose destination for P-100 CONTAINS (…)
+Choose destination for P-100 CONTAINS Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 1
+Chosen: P-100 CONTAINS P-210
 
 Nest P-210: Projects Overview in P-100: Dashboard?
   1. yes: move P-210 into P-100
   2. no: leave P-210 where it is
 Choose a number: 1
+Chosen: yes: move P-210 into P-100 #ADDED
 
-Place P-210: Projects Overview within P-100: Dashboard
-  1. Last, after C-100: Status Card — Recommended
-  2. First, before C-100: Status Card
+Where to place P-210: Projects Overview within P-100: Dashboard
+  1. Last position, after C-100: Status Card — Recommended
+  2. First position, before C-100: Status Card
 Choose a number: 1
+Chosen: Last position, after C-100 #ADDED
 
-Move P-210: Projects Overview
+Confirm Moving P-210: Projects Overview #ADDED EMPHASIS
   From within A-200: Projects
   To within P-100: Dashboard, after C-100: Status Card
   Existing relationships remain unchanged.
@@ -629,6 +664,7 @@ Move this node?
   1. Move it
   2. Go back
 Choose a number: 1
+Chosen: Move P-210
 ```
 
 **Selected response:** `P-100 CONTAINS P-210`; move the existing target under `P-100`; place it last; accept the displayed move effect.
@@ -648,33 +684,36 @@ Choose a number: 1
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose a relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.  
 Choose a number: 2
+Chosen: P-100 CONTAINS Place
 
-Choose destination for P-100 CONTAINS (…)
+Choose destination for P-100 CONTAINS Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 1
+Chosen: P-100 CONTAINS P-210
 
 Nest P-210: Projects Overview in P-100: Dashboard?
   1. yes: move P-210 into P-100
   2. no: leave P-210 where it is
 Choose a number: 2
+Chosen: no: leave P-210 where it is
 ```
 
 **Selected response:** `P-100 CONTAINS P-210`; no move; leave `P-210` where it is.
@@ -700,10 +739,11 @@ This transcript has paired outgoing and incoming cases, each reset to the fixtur
 ```console
 P-100: Dashboard will navigate to new Place P-301: Settings.
 
-Place new destination P-301: Settings
+Where to place P-301: Settings
   1. Immediately after P-100: Dashboard at top level — Recommended
   2. At top level, last
 Choose a number: 1
+Chosen: Immediately after P-100: Dashboard at top level
 ```
 
 #### T12B — New incoming starting point
@@ -713,10 +753,11 @@ Choose a number: 1
 ```console
 New Place P-301: Activity will navigate to P-100: Dashboard.
 
-Place new starting point P-301: Activity
+Where to place P-301: Activity
   1. Immediately before P-100: Dashboard at top level — Recommended
   2. At top level, first
 Choose a number: 1
+Chosen: Immediately before P-100: Dashboard at top level
 ```
 
 **Selected response:** Outgoing destination immediately after its origin; incoming origin immediately before its destination.
@@ -736,25 +777,25 @@ Choose a number: 1
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
+Choose a number: 1
+Chosen: P-100 connects to another node [choose relationship]
+
+Choose a relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 1
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
-Choose a number: 1
-
-Choose a diagram type
-  1. All diagram types
+Choose a diagram type to filter nodes by
+  1. All diagram types (current)
   2. Outcome-Opportunity Map
   3. Journey Map
   4. Service Blueprint
@@ -762,18 +803,19 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts
 Choose a number: 5
+Chosen: IA Place Map filter
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: IA Place Map
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  4. CONTAINS → ViewState — Cross-diagram connection
-  5. COMPOSED_OF → Component — Cross-diagram connection
-  6. CONSTRAINED_BY → Policy — Cross-diagram connection
+Choose a relationship type
+  1. [Filter nodes by diagram type: IA Place Map]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  4. P-100 CONTAINS ViewState — Cross-diagram connection
+  5. P-100 COMPOSED_OF Component — Cross-diagram connection
+  6. P-100 CONSTRAINED_BY Policy — Cross-diagram connection
+
 Choose a number: 1
 
-Choose a diagram type
+Choose a diagram type to filter nodes by
   1. All diagram types
   2. Outcome-Opportunity Map
   3. Journey Map
@@ -782,18 +824,18 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts
 Choose a number: 7
+Chosen: UI Contracts filter
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: UI Contracts
-  1. Change diagram type
-  2. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  3. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  4. CONTAINS → Place — Put a Place inside Dashboard.
-  5. NAVIGATES_TO → Place — Cross-diagram connection
-  6. CONSTRAINED_BY → Policy — Cross-diagram connection
+Choose a relationship type
+  1. [Filter nodes by diagram type: UI Contracts]
+  2. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  3. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  4. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  5. P-100 NAVIGATES_TO Place — Cross-diagram connection
+  6. P-100 CONSTRAINED_BY Policy — Cross-diagram connection
 Choose a number: 1
 
-Choose a diagram type
+Choose a diagram type to filter nodes by
   1. All diagram types
   2. Outcome-Opportunity Map
   3. Journey Map
@@ -802,27 +844,29 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts (current)
 Choose a number: 1
+Chosen: All diagram types filter
 
-Choose a relationship and destination type for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
-  2. CONTAINS → Place — Put a Place inside Dashboard.
-  3. CONTAINS → ViewState — Put a ViewState inside Dashboard.
-  4. COMPOSED_OF → Component — Make a Component part of Dashboard.
-  5. NAVIGATES_TO → Place — Navigate from Dashboard to a Place.
-  6. CONSTRAINED_BY → Policy — Apply a Policy to Dashboard.
+Choose a relationship type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. P-100 CONTAINS Place — Put a Place inside Dashboard.
+  3. P-100 CONTAINS ViewState — Put a ViewState inside Dashboard.
+  4. P-100 COMPOSED_OF Component — Make a Component part of Dashboard.
+  5. P-100 NAVIGATES_TO Place — Navigate from Dashboard to a Place.
+  6. P-100 CONSTRAINED_BY Policy — Apply a Policy to Dashboard.
 Choose a number: 5
+Chosen: P-100 NAVIGATES_TO Place
 
-Choose destination for P-100 NAVIGATES_TO (…)
+Choose destination for P-100 NAVIGATES_TO Place
   1. P-210: Projects Overview (Place)
   2. P-300: Reports (Place)
   3. Create a new Place
 Choose a number: 2
+Chosen: P-100 NAVIGATES_TO P-300
 
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 ```
 
-**Selected response:** Relationship-first; IA Place Map; UI Contracts; clear to All diagram types; select `NAVIGATES_TO → Place`; select `P-300: Reports`; no optional details.
+**Selected response:** Relationship-first; IA Place Map; UI Contracts; clear to All diagram types; select `NAVIGATES_TO Place`; select `P-300: Reports`; no optional details.
 
 **Provisional semantic action (descriptive only):** Recompute the same outgoing relationship/type browse step for each diagram selection, then preserve the relationship-first selection when one combination is chosen.
 
@@ -839,16 +883,16 @@ Add a trigger or condition to this navigation? [y/N]: n
 **Exact interaction**
 
 ```console
-Choose relationship first or node first
-  1. Connect P-100 to another node, choose relationship
-  2. Connect P-100 to another node, choose existing target node
-  3. Connect another node to P-100, choose relationship
-  4. Connect another node to P-100, choose existing origin node
+Choose a connection direction
+  1. Outgoing: P-100 connects to another node [choose relationship]
+  2. Outgoing: P-100 connects to another node [choose existing destination node]
+  3. Incoming: another node connects to P-100 [choose relationship]
+  4. Incoming: another node connects to P-100 [choose existing origin node]
 Choose a number: 2
+Chosen: P-100 connects to another node [choose existing destination node]
 
 Choose existing destination for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
+  1. [Filter nodes by diagram type: All diagram types]
   2. P-210: Projects Overview (Place)
   3. P-300: Reports (Place)
   4. VS-100: Summary (ViewState)
@@ -856,8 +900,8 @@ Diagram type: All diagram types
   6. C-200: Global Navigation (Component)
 Choose a number: 1
 
-Choose a diagram type
-  1. All diagram types
+Choose a diagram type to filter nodes by
+  1. All diagram types (current)
   2. Outcome-Opportunity Map
   3. Journey Map
   4. Service Blueprint
@@ -865,10 +909,10 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts
 Choose a number: 5
+Chosen: IA Place Map filter
 
 Choose existing destination for P-100: Dashboard
-Diagram type: IA Place Map
-  1. Change diagram type
+  1. [Filter nodes by diagram type: IA Place Map]
   2. P-210: Projects Overview (Place)
   3. P-300: Reports (Place)
   4. VS-100: Summary (ViewState) — Cross-diagram connection
@@ -876,7 +920,7 @@ Diagram type: IA Place Map
   6. C-200: Global Navigation (Component) — Cross-diagram connection
 Choose a number: 1
 
-Choose a diagram type
+Choose a diagram type to filter nodes by
   1. All diagram types
   2. Outcome-Opportunity Map
   3. Journey Map
@@ -885,10 +929,10 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts
 Choose a number: 7
+Chosen: UI Contracts filter
 
 Choose existing destination for P-100: Dashboard
-Diagram type: UI Contracts
-  1. Change diagram type
+  1. [Filter nodes by diagram type: UI Contracts]
   2. VS-100: Summary (ViewState)
   3. C-100: Status Card (Component)
   4. C-200: Global Navigation (Component)
@@ -896,7 +940,7 @@ Diagram type: UI Contracts
   6. P-300: Reports (Place)
 Choose a number: 1
 
-Choose a diagram type
+Choose a diagram type to filter nodes by
   1. All diagram types
   2. Outcome-Opportunity Map
   3. Journey Map
@@ -905,30 +949,32 @@ Choose a diagram type
   6. Scenario Flow
   7. UI Contracts (current)
 Choose a number: 1
+Chosen: All diagram types filter
 
 Choose existing destination for P-100: Dashboard
-Diagram type: All diagram types
-  1. Change diagram type
+  1. [Filter nodes by diagram type: All diagram types]
   2. P-210: Projects Overview (Place)
   3. P-300: Reports (Place)
   4. VS-100: Summary (ViewState)
   5. C-100: Status Card (Component)
   6. C-200: Global Navigation (Component)
 Choose a number: 2
+Chosen: P-210: Projects Overview
 
 Choose how P-100: Dashboard connects to P-210: Projects Overview
-  1. CONTAINS — Put Projects Overview inside Dashboard.
-  2. NAVIGATES_TO — Navigate from Dashboard to Projects Overview.
+  1. P-100 CONTAINS P-210 — Put Projects Overview inside Dashboard.
+  2. P-100 NAVIGATES_TO P-210 — Navigate from Dashboard to Projects Overview.
 Choose a number: 2
+Chosen: P-100 NAVIGATES_TO P-210
 
-Add a trigger or condition to this navigation? [y/N]: n
+Add an event trigger or guard condition to this navigation? [y/N]: n
 ```
 
 **Selected response:** Existing-target-first; IA Place Map; UI Contracts; clear to All diagram types; `P-210: Projects Overview`; `NAVIGATES_TO`; no optional details.
 
 **Provisional semantic action (descriptive only):** Recompute the same named-target browse step for each diagram selection, then constrain the relationship menu by the selected node's exact type and outgoing direction.
 
-**Why the choice constrains the next menu:** Filtering ranks or annotates valid existing targets without replacing them with relationship/type combinations. Only after choosing `P-210` does the exact two-item `Place → Place` relationship menu appear.
+**Why the choice constrains the next menu:** Filtering ranks or annotates valid existing targets without replacing them with relationship/type combinations. Only after choosing `P-210` does the exact two-item `Place Place` relationship menu appear.
 
 **Expected semantic proposal:** Add `P-100 NAVIGATES_TO P-210`; preserve the target location.
 
@@ -941,9 +987,9 @@ Add a trigger or condition to this navigation? [y/N]: n
 **Exact interaction**
 
 ```console
-Node ID — Stable identifier for the new node. [P-301]: P-301
-Name — Human-readable node name.: Settings
-Description — Short explanation of the node's purpose.: Configuration and preferences
+New node ID [P-301]: P-301
+New node Name: Settings
+New node Description: Configuration and preferences
 Add more details about P-301: Settings? [y/N]: y
 
 Owner (optional): Product Experience
@@ -953,14 +999,15 @@ Access (optional): signed-in users
 Entry points (optional):
 Primary navigation (optional):
 
-Add a trigger or condition to this navigation? [y/N]: y
+Add an event trigger or guard condition to this navigation? [y/N]: y
 Trigger (optional):
 Condition (optional): signed_in
 
-Place new destination P-301: Settings
+Where to place P-301: Settings
   1. Immediately after P-100: Dashboard at top level — Recommended
   2. At top level, last
 Choose a number: 1
+Chosen: Immediately after P-100: Dashboard at top level
 ```
 
 **Selected response:** Complete ID, name, and description first; disclose additional Place details; supply owner, surface, route, and access; disclose navigation details; supply only a condition; accept after-anchor placement.
