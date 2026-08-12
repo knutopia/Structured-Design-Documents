@@ -154,6 +154,16 @@ END
 ```
 That edge belongs at the bottom of the edge-content of the node, adjacent to the other edges.
 
+## issue 14:
+
+The diagram-type filters described throughout the UX brief are absent from the guided `sdd add` interaction.
+
+The `--view` command option is not a substitute for guided filtering. It requires the user to know and supply an internal view ID before the interaction begins. During the interaction, the user cannot browse diagram types, choose one to narrow node or relationship choices, change the selected diagram type, or return to all diagram types.
+
+The only in-flow filter prompt is available after a view was supplied externally, and it exposes internal role/presence classifications rather than offering diagram-type selection.
+
+Diagram-type filtering must be available as an optional, understandable part of each relevant browse flow described in the UX brief, including standalone node types and all four known-node relationship flows.
+
 ## Walk-Through 1: Adding a Standalone Node
 
 knut@sdd:~/projects/sdd$ pnpm sdd add small_app.sdd

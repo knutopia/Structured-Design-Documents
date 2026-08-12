@@ -1,12 +1,39 @@
 # Guided Addition API Architecture
 
-Status: proposed implementation authority for a later Guided Addition implementation thread
+Status: **REJECTED AS IMPLEMENTATION AUTHORITY**
+
+This architecture produced an implementation that violates the governing UX brief. It is retained as a historical record of the failed design, not as a contract for further implementation. Do not repair the implementation by continuing from this document.
+
+The controlling recovery document is [Guided Addition Remediation Strategy](./guided_addition_remediation_strategy.md). The [UX Brief for a Guided Addition API](./ux_brief_guided_addition_api.md) remains the normative product contract.
 
 Audience: maintainers implementing the shared authoring core, the initial interactive CLI, and later app or MCP adapters
 
-Purpose: define a decision-complete, client-neutral architecture for guiding a user through adding SDD nodes and relationships without allowing the guidance layer to edit an SDD document
+Historical purpose: define a decision-complete, client-neutral architecture for guiding a user through adding SDD nodes and relationships without allowing the guidance layer to edit an SDD document
 
-This document specifies intended future behavior. It does not describe an already implemented API.
+This document no longer specifies intended future behavior. Its central workflow and placement decisions were implemented and subsequently rejected through usability review.
+
+## 0. Post-Implementation Failure Finding
+
+The architecture failed to preserve the UX brief even though it named that brief as its highest authority.
+
+The primary failure is in [section 7.4](#74-normalized-known-node-flow): it replaces four intentionally different human decision trees with `direction + endpoint_strategy`. In particular, `existing_only` records endpoint availability but cannot represent whether the user chose the relationship first or chose an existing node first. Sections 7.5 through 7.7 then force every relationship flow through relationship selection before endpoint selection.
+
+That normalization preserved the final graph endpoints while destroying the interaction semantics. The UX brief requires both of these distinct routes in each direction:
+
+- relationship first, followed by a matching existing node or a new node;
+- existing node first, followed by relationships constrained by that exact node.
+
+Additional architecture failures are:
+
+- [Section 9](#9-placement-architecture) models nesting, node order, and edge-line order through one generic placement abstraction and exposes mechanically generated alternatives rather than semantically meaningful decisions.
+- The placement policy permits choices that contradict graph direction, such as placing a new outgoing destination before its origin.
+- Existing-node structural placement is not modeled as the explicit `nest` versus `leave where it is` decision required by the clarified UX.
+- [Section 9](#9-placement-architecture) specifies edge insertion at the end of the entire source body, allowing relationship lines to be written after nested child blocks.
+- [Section 14](#14-initial-sdd-add-client) turns safe dry-run/commit machinery into two ordinary user commit moments.
+- Diagram-type filtering is accepted only as a caller-supplied `view_id`; the workflow exposes no step that lets a user browse, select, change, or clear a diagram type while browsing nodes or relationships, despite that interaction appearing in every relevant UX-brief route.
+- The architecture does not define user-language acceptance criteria, so internal reason codes, opaque identifiers, and source-model terminology reached the CLI.
+
+The snapshot, bundle catalog, pure guidance boundary, semantic proposal boundary, stale-state protection, and shared authoring executor remain potentially reusable. The known-node workflow contract, placement contract, CLI interaction, and their machine-readable metadata are rejected and require redesign under the remediation strategy.
 
 ## 1. Authority And Scope
 

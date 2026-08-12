@@ -1,5 +1,40 @@
 # Guided Addition API Implementation Plan
 
+Status: **FAILED MILESTONE — HISTORICAL RECORD ONLY**
+
+This plan implemented and validated an architecture that violates the governing UX brief. Its checkpoint logs remain as evidence of what was built and tested, but their `PASS`, `None observed`, `complete`, `stable`, and “no gap” conclusions do not establish product acceptance and must not authorize further work.
+
+All remediation work is governed by [Guided Addition Remediation Strategy](./guided_addition_remediation_strategy.md), with the [UX Brief for a Guided Addition API](./ux_brief_guided_addition_api.md) as the normative product contract.
+
+## 0. Failure Record And Invalidation
+
+The milestone failed because the plan converted an incorrect architecture into exact implementation requirements and then tested conformance to those requirements instead of conformance to the UX brief.
+
+The decisive failures were:
+
+1. Checkpoint 3 required `begin(...)` and `advance(...)` to implement the architecture's exact state/step/action unions. Those unions cannot represent the brief's existing-node-first routes.
+2. “All four routes” was tested only as final proposal topology: outgoing/incoming and existing/new. No acceptance gate checked whether a user selected a relationship first or selected an existing node first.
+3. Checkpoint 3 explicitly required generic first/last/before/after placement alternatives. This produced irrelevant and contradictory choices instead of the brief's contextual placement behavior.
+4. Checkpoint 5 explicitly instructed the CLI to show four labels while sending only normalized direction/endpoint strategy. This guaranteed that labels could not change the underlying decision order.
+5. The recorded successful anchored transcript was `operation → relationship → ... → endpoint`, demonstrating the missing node-first route while presenting it as evidence of completion.
+6. The CLI acceptance gates checked dependency boundaries and deterministic I/O, but not comprehensible language, prompt meaning, node names, singular/plural text, absence of internal reason codes, or unnecessary decisions.
+7. The plan accepted `edge_in_source_body: last`, which overrides the authoring engine's safer edge-before-nested-child behavior.
+8. The plan treated a caller-supplied `--view` as diagram-type filtering. It never required the guided flow to list diagram types or let the user choose, change, or clear a diagram type at the browse points specified by the UX brief.
+9. Each checkpoint reported no violated invariants because the reports omitted the UX brief's controlling interaction invariants.
+
+Checkpoint disposition after usability review:
+
+| Checkpoint | Disposition | Rationale |
+| --- | --- | --- |
+| 1 — bundle contract | **Conditional salvage** | Vocabulary, form, endpoint, and display metadata are useful. Placement policy is insufficient and contains the incorrect edge-last rule. |
+| 2 — catalog and snapshot | **Salvage** | Read-only snapshotting, fingerprints, and indexes remain useful, subject to catalog changes required by corrected bundle metadata. |
+| 3 — planner and placement | **Rejected for redesign** | The route model erases node-first intent; placement decisions and alternatives are structurally wrong. Forms, filtering, ID suggestion, and opaque-ID utilities may be reused after contract redesign. |
+| 4 — executor and reparenting | **Conditional salvage** | The low-level reparent primitive and proposal verification are useful. Placement verification, translation, source spacing, and edge ordering require correction. |
+| 5 — `sdd add` | **Rejected for redesign** | The interaction sequence, language, absent guided diagram-type filtering, placement prompts, and save flow fail usability acceptance. Repository, prompt-adapter, and dependency-injection plumbing may be reused. |
+| 6 — contract metadata | **Invalidated and regenerate later** | It accurately describes a rejected public contract. It must not be treated as stable and must be regenerated only after the corrected API passes UX acceptance. |
+
+No prior checkpoint acceptance authorizes a remediation checkpoint. Remediation starts again from UX acceptance evidence, not from the last green technical test suite.
+
 ## 1. Summary and authority
 
 Implement the architecture in six strictly serial checkpoints. Only one checkpoint may be active at a time, and the next checkpoint may not start until the current checkpoint has passed its focused tests, full serial regression, documentation review, bundle-authority proof, and checkpoint acceptance.

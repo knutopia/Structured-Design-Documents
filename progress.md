@@ -30,6 +30,8 @@ z
 - Checkpoint 6 done
 - Improving sdd add guidance
 - Captured sdd add usability issues
+- Analyis: permafucked snafu foobar implementation - collapsed the UX brief flows
+- Remediation started
 
 ## Mon 8-10
 
