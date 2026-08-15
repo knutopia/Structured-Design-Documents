@@ -1,0 +1,533 @@
+SDD-TEXT 0.1
+Stage G-510 "Add something new"
+  owner="Product Experience"
+  description="A complete user journey for adding new content when nothing is selected."
+  order_index=1
+  CONTAINS J-1000
+  CONTAINS J-1001
+  CONTAINS J-1002
+  CONTAINS J-1003
+  CONTAINS J-1004
+  CONTAINS J-1005
+  CONTAINS J-1006
+  CONTAINS J-1007
+  + Step J-1000 "I start without anything selected"
+    owner="Product Experience"
+    description="I open guided addition without choosing an item in the document first."
+    actor="Document author"
+    intent="I start without anything selected"
+    success_criteria="I am offered a small choice based on what I want to accomplish."
+    PRECEDES J-1001
+  END
+  + Step J-1001 "I choose to add something new"
+    owner="Product Experience"
+    description="I choose the option for adding new content rather than connecting existing content."
+    actor="Document author"
+    intent="I choose to add something new"
+    success_criteria="The next choices are about the kind of content I want to add."
+    PRECEDES J-1002
+  END
+  + Step J-1002 "I browse the kinds of content I can add"
+    owner="Product Experience"
+    description="I browse valid choices and, if useful, narrow them to the diagram I am working on."
+    actor="Document author"
+    intent="I browse the kinds of content I can add"
+    success_criteria="I can find a suitable kind without seeing choices that would be invalid here."
+    PRECEDES J-1003
+  END
+  + Step J-1003 "I choose the kind that fits my intent"
+    owner="Product Experience"
+    description="I select the kind of content I mean to add."
+    actor="Document author"
+    intent="I choose the kind that fits my intent"
+    success_criteria="The remaining questions are tailored to the kind I selected."
+    PRECEDES J-1004
+  END
+  + Step J-1004 "I confirm its identity"
+    owner="Product Experience"
+    description="I review a collision-safe suggested ID and keep it or choose my own available ID."
+    actor="Document author"
+    intent="I confirm its identity"
+    success_criteria="The item has an ID I understand and no other item in the document uses it."
+    PRECEDES J-1005
+  END
+  + Step J-1005 "I name and describe it"
+    owner="Product Experience"
+    description="I provide the name and description needed to make the new content understandable."
+    actor="Document author"
+    intent="I name and describe it"
+    success_criteria="The proposed content has the required information and a clear purpose."
+    PRECEDES J-1006
+  END
+  + Step J-1006 "I choose where it should appear"
+    owner="Product Experience"
+    description="I review the suggested placement and change it when another allowed location makes more sense."
+    actor="Document author"
+    intent="I choose where it should appear"
+    success_criteria="I know where the new content will appear in the document."
+    PRECEDES J-1007
+  END
+  + Step J-1007 "I receive a complete addition to review"
+    owner="Product Experience"
+    description="The guidance returns a complete proposal to the app without changing my document."
+    actor="Document author"
+    intent="I receive a complete addition to review"
+    success_criteria="I can review the proposed content and placement before the app offers Save or Cancel."
+  END
+END
+Stage G-520 "Find a starting point for a connection"
+  owner="Product Experience"
+  description="The brief's partial journey for choosing an existing item before one of four connection routes."
+  order_index=2
+  CONTAINS J-1100
+  CONTAINS J-1101
+  CONTAINS J-1102
+  CONTAINS J-1103
+  CONTAINS J-1104
+  CONTAINS J-1105
+  + Step J-1100 "I start without anything selected"
+    owner="Product Experience"
+    description="I open guided addition without choosing an item in the document first."
+    actor="Document author"
+    intent="I start without anything selected"
+    success_criteria="I am offered a small choice based on what I want to accomplish."
+    PRECEDES J-1101
+  END
+  + Step J-1101 "I choose to connect things"
+    owner="Product Experience"
+    description="I choose the option for adding a connection rather than adding standalone content."
+    actor="Document author"
+    intent="I choose to connect things"
+    success_criteria="The experience first helps me choose a sensible starting point."
+    PRECEDES J-1102
+  END
+  + Step J-1102 "I browse what is already in my document"
+    owner="Product Experience"
+    description="I browse existing items and, if useful, narrow them to the diagram I am working on."
+    actor="Document author"
+    intent="I browse what is already in my document"
+    success_criteria="I can find a starting point without scanning unrelated content."
+    PRECEDES J-1103
+  END
+  + Step J-1103 "I choose the item I want to start from"
+    owner="Product Experience"
+    description="I select the existing item around which I want to describe a connection."
+    actor="Document author"
+    intent="I choose the item I want to start from"
+    success_criteria="The next choices are constrained to connections that are valid for this item."
+    PRECEDES J-1104
+  END
+  + Step J-1104 "I choose how I want to find the other end"
+    owner="Product Experience"
+    description="I choose whether the connection goes out or comes in, and whether I want to choose the connection kind or the existing item first."
+    actor="Document author"
+    intent="I choose how I want to find the other end"
+    success_criteria="I can follow the route that matches what I already know."
+    PRECEDES J-1105
+  END
+  + Step J-1105 "I continue with choices relevant to my starting point"
+    owner="Product Experience"
+    description="The experience continues into the matching outgoing or incoming route with my selected item carried forward."
+    actor="Document author"
+    intent="I continue with choices relevant to my starting point"
+    success_criteria="I do not have to select the starting item again."
+  END
+END
+Stage G-530 "Choose an outgoing connection before its destination"
+  owner="Product Experience"
+  description="The user knows what the connection means before deciding whether its destination already exists."
+  order_index=3
+  CONTAINS J-1200
+  CONTAINS J-1201
+  CONTAINS J-1202
+  CONTAINS J-1203
+  CONTAINS J-1204
+  CONTAINS J-1205
+  CONTAINS J-1206
+  CONTAINS J-1207
+  CONTAINS J-1208
+  CONTAINS J-1209
+  CONTAINS J-1210
+  CONTAINS J-1211
+  + Step J-1200 "I start from something already selected"
+    owner="Product Experience"
+    description="I begin with an existing item because I know where the connection should start."
+    actor="Document author"
+    intent="I start from something already selected"
+    success_criteria="Every choice shown next is valid for the selected item."
+    PRECEDES J-1201
+  END
+  + Step J-1201 "I choose a connection going out from it"
+    owner="Product Experience"
+    description="I indicate that the selected item should lead to another item."
+    actor="Document author"
+    intent="I choose a connection going out from it"
+    success_criteria="The direction of the connection is clear before I choose its details."
+    PRECEDES J-1202
+  END
+  + Step J-1202 "I choose the kind of connection first"
+    owner="Product Experience"
+    description="I choose the route that starts with what the connection means rather than which destination already exists."
+    actor="Document author"
+    intent="I choose the kind of connection first"
+    success_criteria="The experience uses the part of the connection I already know."
+    PRECEDES J-1203
+  END
+  + Step J-1203 "I browse valid connection and destination choices"
+    owner="Product Experience"
+    description="I browse valid combinations and may narrow them by diagram; ordinary choices come first and cross-diagram choices stay available with explanation."
+    actor="Document author"
+    intent="I browse valid connection and destination choices"
+    success_criteria="I can compare useful choices without being exposed to invalid combinations."
+    PRECEDES J-1204
+  END
+  + Step J-1204 "I choose the connection and destination kind"
+    owner="Product Experience"
+    description="I select the combination that expresses where the experience should lead."
+    actor="Document author"
+    intent="I choose the connection and destination kind"
+    success_criteria="The destination choices are now limited to the kind I selected."
+    PRECEDES J-1205
+  END
+  + Step J-1205 "I browse matching destinations when they exist"
+    owner="Product Experience"
+    description="I see existing destinations of the chosen kind and can use one or continue by creating a new destination."
+    actor="Document author"
+    intent="I browse matching destinations when they exist"
+    success_criteria="I can reuse existing content without losing the option to add what is missing."
+    PRECEDES J-1206
+  END
+  + Step J-1206 "I choose an existing destination or create a new one"
+    owner="Product Experience"
+    description="I decide whether an existing destination fits my intent."
+    actor="Document author"
+    intent="I choose an existing destination or create a new one"
+    success_criteria="The experience follows my choice without merging the two outcomes into an unclear shared step."
+    kind=decision
+    PRECEDES J-1207 {use something already here}
+    PRECEDES J-1209 {create something new}
+  END
+  + Step J-1207 "I choose an existing destination"
+    owner="Product Experience"
+    description="I select the existing item that should receive the outgoing connection."
+    actor="Document author"
+    intent="I choose an existing destination"
+    success_criteria="Both ends of the connection are clear."
+    PRECEDES J-1208
+  END
+  + Step J-1208 "I receive the connection to review"
+    owner="Product Experience"
+    description="The guidance returns the selected connection and its two existing endpoints without changing my document."
+    actor="Document author"
+    intent="I receive the connection to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+  + Step J-1209 "I define the new destination"
+    owner="Product Experience"
+    description="I confirm an available ID, then name and describe the new destination."
+    actor="Document author"
+    intent="I define the new destination"
+    success_criteria="The new destination is understandable and ready to be placed."
+    PRECEDES J-1210
+  END
+  + Step J-1210 "I choose where the new destination should appear"
+    owner="Product Experience"
+    description="I review a placement that follows the connection sequence and change it when another allowed location is better."
+    actor="Document author"
+    intent="I choose where the new destination should appear"
+    success_criteria="I understand where the new destination will appear."
+    PRECEDES J-1211
+  END
+  + Step J-1211 "I receive both additions to review"
+    owner="Product Experience"
+    description="The guidance returns the new destination, the outgoing connection, and their suggested placements without changing my document."
+    actor="Document author"
+    intent="I receive both additions to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+END
+Stage G-540 "Choose an existing destination before the outgoing connection"
+  owner="Product Experience"
+  description="The user knows the existing destination first and only disambiguates the connection when needed."
+  order_index=4
+  CONTAINS J-1300
+  CONTAINS J-1301
+  CONTAINS J-1302
+  CONTAINS J-1303
+  CONTAINS J-1304
+  CONTAINS J-1305
+  CONTAINS J-1306
+  CONTAINS J-1307
+  CONTAINS J-1308
+  + Step J-1300 "I start from something already selected"
+    owner="Product Experience"
+    description="I begin with an existing item because I know where the connection should start."
+    actor="Document author"
+    intent="I start from something already selected"
+    success_criteria="Every choice shown next is valid for the selected item."
+    PRECEDES J-1301
+  END
+  + Step J-1301 "I choose a connection going out from it"
+    owner="Product Experience"
+    description="I indicate that the selected item should lead to another existing item."
+    actor="Document author"
+    intent="I choose a connection going out from it"
+    success_criteria="The direction of the connection is clear before I choose its details."
+    PRECEDES J-1302
+  END
+  + Step J-1302 "I choose the destination first"
+    owner="Product Experience"
+    description="I choose the route that starts with the existing destination because that is the part I already know."
+    actor="Document author"
+    intent="I choose the destination first"
+    success_criteria="The experience follows my mental model instead of making me choose a connection label first."
+    PRECEDES J-1303
+  END
+  + Step J-1303 "I browse valid existing destinations"
+    owner="Product Experience"
+    description="I browse possible destinations, may narrow them by diagram, and see the valid connection choices beside each one."
+    actor="Document author"
+    intent="I browse valid existing destinations"
+    success_criteria="I can compare destinations without seeing choices that cannot connect from my starting item."
+    PRECEDES J-1304
+  END
+  + Step J-1304 "I choose the destination that fits"
+    owner="Product Experience"
+    description="I select the existing destination I had in mind."
+    actor="Document author"
+    intent="I choose the destination that fits"
+    success_criteria="The experience knows both endpoints and whether the connection is already unambiguous."
+    PRECEDES J-1305
+  END
+  + Step J-1305 "I see whether one or several connections fit"
+    owner="Product Experience"
+    description="If only one connection is valid, no extra question is asked; if several are valid, I am asked to choose."
+    actor="Document author"
+    intent="I see whether one or several connections fit"
+    success_criteria="I only make another choice when it is needed."
+    kind=decision
+    PRECEDES J-1306 {one clear connection}
+    PRECEDES J-1307 {several valid connections}
+  END
+  + Step J-1306 "I receive the clear connection to review"
+    owner="Product Experience"
+    description="The guidance returns the one valid outgoing connection without changing my document."
+    actor="Document author"
+    intent="I receive the clear connection to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+  + Step J-1307 "I choose what the connection means"
+    owner="Product Experience"
+    description="I select the exact connection from the short list that is valid between these two items."
+    actor="Document author"
+    intent="I choose what the connection means"
+    success_criteria="The proposal reflects the meaning I intended."
+    PRECEDES J-1308
+  END
+  + Step J-1308 "I receive my chosen connection to review"
+    owner="Product Experience"
+    description="The guidance returns the disambiguated outgoing connection without changing my document."
+    actor="Document author"
+    intent="I receive my chosen connection to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+END
+Stage G-550 "Choose an incoming connection before its starting item"
+  owner="Product Experience"
+  description="The user knows what the incoming connection means before deciding whether its starting item already exists."
+  order_index=5
+  CONTAINS J-1400
+  CONTAINS J-1401
+  CONTAINS J-1402
+  CONTAINS J-1403
+  CONTAINS J-1404
+  CONTAINS J-1405
+  CONTAINS J-1406
+  CONTAINS J-1407
+  CONTAINS J-1408
+  CONTAINS J-1409
+  CONTAINS J-1410
+  CONTAINS J-1411
+  + Step J-1400 "I start from something already selected"
+    owner="Product Experience"
+    description="I begin with an existing item because I know where the connection should end."
+    actor="Document author"
+    intent="I start from something already selected"
+    success_criteria="Every choice shown next is valid for the selected item."
+    PRECEDES J-1401
+  END
+  + Step J-1401 "I choose a connection coming into it"
+    owner="Product Experience"
+    description="I indicate that another item should lead to the selected item."
+    actor="Document author"
+    intent="I choose a connection coming into it"
+    success_criteria="The direction of the connection is clear before I choose its details."
+    PRECEDES J-1402
+  END
+  + Step J-1402 "I choose the kind of connection first"
+    owner="Product Experience"
+    description="I choose the route that starts with what the incoming connection means rather than which starting item already exists."
+    actor="Document author"
+    intent="I choose the kind of connection first"
+    success_criteria="The experience uses the part of the connection I already know."
+    PRECEDES J-1403
+  END
+  + Step J-1403 "I browse valid connection and starting-item choices"
+    owner="Product Experience"
+    description="I browse valid combinations and may narrow them by diagram; ordinary choices come first and cross-diagram choices stay available with explanation."
+    actor="Document author"
+    intent="I browse valid connection and starting-item choices"
+    success_criteria="I can compare useful choices without being exposed to invalid combinations."
+    PRECEDES J-1404
+  END
+  + Step J-1404 "I choose the connection and starting-item kind"
+    owner="Product Experience"
+    description="I select the combination that expresses what should lead into the selected item."
+    actor="Document author"
+    intent="I choose the connection and starting-item kind"
+    success_criteria="The starting-item choices are now limited to the kind I selected."
+    PRECEDES J-1405
+  END
+  + Step J-1405 "I browse matching starting items when they exist"
+    owner="Product Experience"
+    description="I see existing starting items of the chosen kind and can use one or continue by creating a new one."
+    actor="Document author"
+    intent="I browse matching starting items when they exist"
+    success_criteria="I can reuse existing content without losing the option to add what is missing."
+    PRECEDES J-1406
+  END
+  + Step J-1406 "I choose an existing starting item or create a new one"
+    owner="Product Experience"
+    description="I decide whether an existing item fits my intent."
+    actor="Document author"
+    intent="I choose an existing starting item or create a new one"
+    success_criteria="The experience follows my choice without merging the two outcomes into an unclear shared step."
+    kind=decision
+    PRECEDES J-1407 {use something already here}
+    PRECEDES J-1409 {create something new}
+  END
+  + Step J-1407 "I choose an existing starting item"
+    owner="Product Experience"
+    description="I select the existing item that should send the incoming connection."
+    actor="Document author"
+    intent="I choose an existing starting item"
+    success_criteria="Both ends of the connection are clear."
+    PRECEDES J-1408
+  END
+  + Step J-1408 "I receive the connection to review"
+    owner="Product Experience"
+    description="The guidance returns the selected connection and its two existing endpoints without changing my document."
+    actor="Document author"
+    intent="I receive the connection to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+  + Step J-1409 "I define the new starting item"
+    owner="Product Experience"
+    description="I confirm an available ID, then name and describe the new item that should lead into the selected item."
+    actor="Document author"
+    intent="I define the new starting item"
+    success_criteria="The new starting item is understandable and ready to be placed."
+    PRECEDES J-1410
+  END
+  + Step J-1410 "I choose where the new starting item should appear"
+    owner="Product Experience"
+    description="I review a placement that follows the connection sequence and change it when another allowed location is better."
+    actor="Document author"
+    intent="I choose where the new starting item should appear"
+    success_criteria="I understand where the new starting item will appear."
+    PRECEDES J-1411
+  END
+  + Step J-1411 "I receive both additions to review"
+    owner="Product Experience"
+    description="The guidance returns the new starting item, the incoming connection, and their suggested placements without changing my document."
+    actor="Document author"
+    intent="I receive both additions to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+END
+Stage G-560 "Choose an existing starting item before the incoming connection"
+  owner="Product Experience"
+  description="The user knows the existing starting item first and only disambiguates the connection when needed."
+  order_index=6
+  CONTAINS J-1500
+  CONTAINS J-1501
+  CONTAINS J-1502
+  CONTAINS J-1503
+  CONTAINS J-1504
+  CONTAINS J-1505
+  CONTAINS J-1506
+  CONTAINS J-1507
+  CONTAINS J-1508
+  + Step J-1500 "I start from something already selected"
+    owner="Product Experience"
+    description="I begin with an existing item because I know where the connection should end."
+    actor="Document author"
+    intent="I start from something already selected"
+    success_criteria="Every choice shown next is valid for the selected item."
+    PRECEDES J-1501
+  END
+  + Step J-1501 "I choose a connection coming into it"
+    owner="Product Experience"
+    description="I indicate that another existing item should lead to the selected item."
+    actor="Document author"
+    intent="I choose a connection coming into it"
+    success_criteria="The direction of the connection is clear before I choose its details."
+    PRECEDES J-1502
+  END
+  + Step J-1502 "I choose the starting item first"
+    owner="Product Experience"
+    description="I choose the route that starts with the existing item because that is the part I already know."
+    actor="Document author"
+    intent="I choose the starting item first"
+    success_criteria="The experience follows my mental model instead of making me choose a connection label first."
+    PRECEDES J-1503
+  END
+  + Step J-1503 "I browse valid existing starting items"
+    owner="Product Experience"
+    description="I browse possible starting items, may narrow them by diagram, and see the valid connection choices beside each one."
+    actor="Document author"
+    intent="I browse valid existing starting items"
+    success_criteria="I can compare starting items without seeing choices that cannot lead into my selected item."
+    PRECEDES J-1504
+  END
+  + Step J-1504 "I choose the starting item that fits"
+    owner="Product Experience"
+    description="I select the existing starting item I had in mind."
+    actor="Document author"
+    intent="I choose the starting item that fits"
+    success_criteria="The experience knows both endpoints and whether the connection is already unambiguous."
+    PRECEDES J-1505
+  END
+  + Step J-1505 "I see whether one or several connections fit"
+    owner="Product Experience"
+    description="If only one connection is valid, no extra question is asked; if several are valid, I am asked to choose."
+    actor="Document author"
+    intent="I see whether one or several connections fit"
+    success_criteria="I only make another choice when it is needed."
+    kind=decision
+    PRECEDES J-1506 {one clear connection}
+    PRECEDES J-1507 {several valid connections}
+  END
+  + Step J-1506 "I receive the clear connection to review"
+    owner="Product Experience"
+    description="The guidance returns the one valid incoming connection without changing my document."
+    actor="Document author"
+    intent="I receive the clear connection to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+  + Step J-1507 "I choose what the connection means"
+    owner="Product Experience"
+    description="I select the exact connection from the short list that is valid between these two items."
+    actor="Document author"
+    intent="I choose what the connection means"
+    success_criteria="The proposal reflects the meaning I intended."
+    PRECEDES J-1508
+  END
+  + Step J-1508 "I receive my chosen connection to review"
+    owner="Product Experience"
+    description="The guidance returns the disambiguated incoming connection without changing my document."
+    actor="Document author"
+    intent="I receive my chosen connection to review"
+    success_criteria="I can review the complete proposal before the app offers Save or Cancel."
+  END
+END

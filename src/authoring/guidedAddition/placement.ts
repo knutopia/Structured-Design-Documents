@@ -289,30 +289,6 @@ function fallbackNodeRecommendation(
   );
 }
 
-function edgeRecommendation(
-  catalog: GuidanceCatalog,
-  snapshot: GuidedDocumentSnapshot,
-  context: Required<Pick<GuidedPlacementContext, "relationship" | "from">>
-): GuidedPlacementRecommendationRecord {
-  const mode: ProposedPlacement["mode"] = catalog.placement_policy.edge_in_source_body === "last" ? "last" : "first";
-  const recommended: ProposedPlacement = { stream: "body", mode, parent: context.from };
-  const alternatives = orderedPlacements(recommended, [
-    { stream: "body", mode: "last", parent: context.from },
-    { stream: "body", mode: "first", parent: context.from }
-  ]);
-  return makeRecommendation(
-    catalog,
-    snapshot,
-    "edge",
-    context.from,
-    { kind: "edge", local_id: "edge_1" },
-    recommended,
-    alternatives,
-    "fallback_append",
-    context.relationship
-  );
-}
-
 export function createPlacementRecommendations(
   catalog: GuidanceCatalog,
   snapshot: GuidedDocumentSnapshot,
@@ -377,9 +353,6 @@ export function createPlacementRecommendations(
           : undefined;
       records.push(sameSource ?? fallbackNodeRecommendation(catalog, snapshot, context));
     }
-  }
-  if (context.relationship && context.from) {
-    records.push(edgeRecommendation(catalog, snapshot, { relationship: context.relationship, from: context.from }));
   }
   return records;
 }

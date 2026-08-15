@@ -2,11 +2,11 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: Phase 0 containment remains active until the broader public-documentation audit is complete. The Phase 1 transcript draft is **complete, pending explicit human acceptance**; its acceptance gate has not passed and no later phase is authorized.
+Current phase: **Phase 2 — ACCEPT**. Bundle expressiveness is corrected and documented in the [Phase 2 Acceptance Report](./guided_addition_phase_2_acceptance_report.md). Phase 3 remains unauthorized pending separate architecture planning and approval.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
-This is a strategy document, not authorization to begin implementation. Corrective architecture and proof transcripts must be accepted before code changes begin.
+This strategy authorizes work only within the active accepted phase. Corrective API architecture and later implementation remain gated by the phase sequence below.
 
 ## 1. Authority And Evidence
 
@@ -16,7 +16,7 @@ Authority is, in order:
 2. [SDD-Add: Observed Usability Issues](./sdd-add_observed_usability_issues.md) — concrete failure evidence and clarifications of the intended interaction.
 3. `AGENTS.md` — bundle authority, source-organization, acceptance, and stop-condition guardrails.
 4. The loaded bundle under `bundle/v0.1/` — machine-readable language and authoring behavior.
-5. [Guided Addition UX Acceptance Transcripts](./guided_addition_ux_acceptance_transcripts.md) — Phase 1 draft UX proof, pending explicit human acceptance.
+5. [Guided Addition UX Acceptance Transcripts](./guided_addition_ux_acceptance_transcripts.md) — accepted Phase 1 UX proof.
 6. This remediation strategy — recovery sequencing and acceptance gates.
 7. [Guided Addition API Architecture](./guided_addition_api_architecture.md) and [Guided Addition API Implementation Plan](./guided_addition_api_implementation_plan.md) — rejected historical evidence only.
 
@@ -49,6 +49,7 @@ The distinction is choice order and user intent, not merely whether the eventual
 At every browse point identified by the UX brief, the user may optionally choose a diagram type to narrow or prioritize the current choices. This applies to:
 
 - standalone node-type browsing;
+- initial starting-node browsing when adding a relationship without a preselected node;
 - outgoing relationship-first combinations;
 - outgoing existing-node-first choices;
 - incoming relationship-first combinations;
@@ -257,6 +258,8 @@ Only one phase may be active at a time. A green technical suite cannot advance a
 
 ### Phase 0 — Contain the failed milestone
 
+Status: **ACCEPT — contained by branch isolation**. The broader public-documentation audit is deferred to Phase 7 before cutover.
+
 Actions:
 
 - mark the architecture rejected and the implementation plan failed;
@@ -266,13 +269,13 @@ Actions:
 
 Gate:
 
-- repository documentation consistently identifies the failed status and points to this strategy.
+- the failed implementation remains isolated on the remediation branch, no downstream adapter is added over it, and no release or publication claim is made before the Phase 7 documentation audit.
 
 ### Phase 1 — Approve UX proof transcripts
 
-Status: **draft complete, pending explicit human acceptance**.
+Status: **ACCEPT — explicitly accepted by the human reviewer**.
 
-Draft proof artifact: [Guided Addition UX Acceptance Transcripts](./guided_addition_ux_acceptance_transcripts.md). The draft is not implementation authority and does not pass this phase's gate until a human explicitly accepts or corrects it.
+Accepted proof artifact: [Guided Addition UX Acceptance Transcripts](./guided_addition_ux_acceptance_transcripts.md). Its semantic-action descriptions remain provisional and do not establish final API type or field names.
 
 Before corrective architecture or code, write exact user-facing transcripts for:
 
@@ -284,6 +287,7 @@ Before corrective architecture or code, write exact user-facing transcripts for:
 - incoming relationship-first from new origin;
 - incoming existing-node-first;
 - standalone browsing with diagram-type selection and clearing;
+- initial starting-node browsing with diagram-type selection, changing, and clearing;
 - relationship-first browsing with diagram-type selection and changing;
 - existing-node-first browsing with diagram-type selection and changing;
 - structural new target with and without nesting;
@@ -303,6 +307,8 @@ Stop condition:
 - if a transcript requires a choice the proposed shared API cannot express, correct the API design; do not implement the choice in the CLI.
 
 ### Phase 2 — Correct bundle expressiveness
+
+Status: **ACCEPT**. See the [Phase 2 Acceptance Report](./guided_addition_phase_2_acceptance_report.md).
 
 Actions:
 
@@ -390,7 +396,7 @@ Gate:
 - transcript tests match accepted wording and step order;
 - a forbidden-language test rejects known internal tokens and patterns;
 - singular/plural tests cover zero, one, and multiple existing relationships;
-- transcript tests cover diagram-type selection, change, and clear for standalone, relationship-first, and existing-node-first browsing;
+- transcript tests cover diagram-type selection, change, and clear for standalone, initial starting-node, relationship-first, and existing-node-first browsing;
 - cancellation before Save performs no write; Save verifies and commits the reviewed proposal once;
 - a manual usability replay of every proof transcript is accepted before broader release claims.
 
@@ -425,7 +431,7 @@ Gate:
 | 11 — non-structural containment confusion | Placement contract and CLI | No nesting prompt for non-structural relationships; internal edge placement is not presented as containment. |
 | 12 — missing blank line | Shared mutation engine | Exact committed source contains a blank line between adjacent top-level node definitions. |
 | 13 — edge after nested nodes | Bundle policy and mutation path | Exact committed source places the new edge after existing edge content and before the first nested node. |
-| 14 — absent diagram-type filters | API workflow and CLI | Standalone and all four known-node routes can browse, select, change, and clear diagram type by human-readable name; choices are recomputed and ranked according to the UX brief. |
+| 14 — absent diagram-type filters | API workflow and CLI | Standalone, initial starting-node, and all four known-node routes can browse, select, change, and clear diagram type by human-readable name; choices are recomputed and ranked according to the UX brief. |
 
 ## 8. Review And Reporting Rules
 

@@ -550,7 +550,7 @@ export interface AuthoringConfig {
       incoming_sequence: "before_anchor";
       structural_new_target: "nested_last";
       structural_existing_target: "reparent_with_confirmation";
-      edge_in_source_body: "last";
+      edge_in_source_body: "after_relationships_before_nested_nodes" | "last";
       edge_to_name_hint: "target_name";
     };
   };

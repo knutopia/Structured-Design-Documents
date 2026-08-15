@@ -22,7 +22,8 @@ z
 
 ## Fri 8-14
 
-- polished acceptance scripts
+- Polished acceptance scripts
+- Remediation phase 1 & 2
 
 ## Wed 8-12
 

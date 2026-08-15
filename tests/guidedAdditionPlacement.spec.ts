@@ -171,6 +171,36 @@ describe("guided placement precedence", () => {
       { stream: "top_level", mode: "before", anchor: ref(snapshot, "J-001") }
     ]);
   });
+
+  it("keeps relationship-line placement internal to proposal application", () => {
+    const withNewNode = reachNewEndpointPlacement(bundle, snapshot, "A-001", "outgoing", "CONTAINS");
+    const review = step(withNewNode, "review_placement");
+    expect(review.recommendations).toHaveLength(1);
+    expect(review.recommendations.every((item) => item.target.kind === "new_node")).toBe(true);
+
+    const runtime = createGuidedAdditionRuntime(bundle);
+    let withExistingNode = runtime.begin(snapshot, { anchor: ref(snapshot, "O-001") });
+    withExistingNode = runtime.advance(snapshot, withExistingNode.state, {
+      kind: "choose_operation",
+      selection: { kind: "add_relationship", direction: "outgoing", endpoint_strategy: "existing_only" }
+    });
+    const relationship = step(withExistingNode, "choose_relationship").options.find(
+      (choice) => choice.relationship_type === "MEASURED_BY"
+    )!;
+    withExistingNode = runtime.advance(snapshot, withExistingNode.state, {
+      kind: "choose_relationship",
+      choice_id: relationship.choice_id
+    });
+    const endpoint = step(withExistingNode, "choose_endpoint").options.find(
+      (choice) => choice.kind === "existing" && choice.node.node_id === "M-001"
+    )!;
+    expect(endpoint.kind).toBe("existing");
+    withExistingNode = runtime.advance(snapshot, withExistingNode.state, {
+      kind: "choose_existing_endpoint",
+      node: (endpoint as Extract<typeof endpoint, { kind: "existing" }>).node
+    });
+    expect(step(withExistingNode, "review_proposal").proposal.placements).toEqual([]);
+  });
 });
 
 describe("confirmation-bound structural reparenting", () => {
@@ -199,7 +229,7 @@ describe("confirmation-bound structural reparenting", () => {
     });
     const proposal = step(confirmed, "review_proposal").proposal;
     expect(proposal.confirmed_effects).toEqual([{ ...confirmation.effect, confirmed: true }]);
-    expect(review.recommendations).toHaveLength(2);
+    expect(review.recommendations).toHaveLength(1);
   });
 
   it("clears the effect when a non-reparenting placement is selected", () => {

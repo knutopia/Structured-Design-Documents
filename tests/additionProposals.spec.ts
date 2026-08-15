@@ -81,7 +81,7 @@ function finish(
   initial: GuidedAdditionResult
 ): CompletedAdditionProposal {
   let result = initial;
-  while (step(result, "review_placement")) {
+  while ((result as Extract<GuidedAdditionResult, { kind: "sdd-guided-addition-step" }>).step.kind === "review_placement") {
     const review = step(result, "review_placement");
     const selected = new Set(result.state.selections.placements.map((item) => item.recommendation_id));
     const next = review.recommendations.find((item) => !selected.has(item.recommendation_id));

@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import { access, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import type { Bundle, SyntaxStatementDefinition } from "../bundle/types.js";
+import { getPlacementPolicyInputs } from "../bundle/guidedAuthoring.js";
+import type { AuthoringConfig, Bundle, SyntaxStatementDefinition } from "../bundle/types.js";
 import { sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
 import { stripTrailingComment } from "../parser/classifyLine.js";
 import type {
@@ -58,6 +59,7 @@ const TEMP_HANDLE_PREFIX = "tmp_authoring_";
 
 type TriviaItem = BlankLine | CommentLine;
 type StructuralModelItem = NodeModel | PropertyModel | EdgeModel;
+type AuthoringPlacementPolicy = AuthoringConfig["placement_policies"]["default"];
 
 interface TriviaLineModel {
   raw: string;
@@ -963,7 +965,14 @@ function applyRemoveNodeProperty(
   return undefined;
 }
 
-function defaultEdgeInsertIndex(parent: NodeModel): number {
+function defaultEdgeInsertIndex(
+  parent: NodeModel,
+  policy: AuthoringPlacementPolicy["edge_in_source_body"]
+): number {
+  if (policy === "last") {
+    return parent.bodyItems.length;
+  }
+
   for (let index = parent.bodyItems.length - 1; index >= 0; index -= 1) {
     if (parent.bodyItems[index]?.kind === "edge_line") {
       return index + 1;
@@ -1450,6 +1459,7 @@ function applyInsertEdgeLine(
   model: DocumentModel,
   documentPath: DocumentPath,
   operation: InsertEdgeLineOp,
+  placementPolicy: AuthoringPlacementPolicy | undefined,
   summary: ChangeSetSummary
 ): Diagnostic | undefined {
   const internalOperation = operation as InternalInsertEdgeLineOp;
@@ -1460,7 +1470,13 @@ function applyInsertEdgeLine(
 
   let insertIndex: number;
   if (!operation.placement) {
-    insertIndex = defaultEdgeInsertIndex(parent);
+    if (!placementPolicy) {
+      return placementError(
+        documentPath,
+        "Edge insertion without explicit placement requires bundle authoring placement metadata."
+      );
+    }
+    insertIndex = defaultEdgeInsertIndex(parent, placementPolicy.edge_in_source_body);
   } else {
     if (operation.placement.stream !== "body") {
       return placementError(documentPath, "Edge insertion placement must target the body stream.");
@@ -1532,6 +1548,7 @@ function applyOperation(
   syntax: AuthoringSyntax,
   documentPath: DocumentPath,
   operation: ChangeOperation,
+  placementPolicy: AuthoringPlacementPolicy | undefined,
   summary: ChangeSetSummary
 ): Diagnostic | undefined {
   switch (operation.kind) {
@@ -1546,7 +1563,7 @@ function applyOperation(
     case "remove_node_property":
       return applyRemoveNodeProperty(model, documentPath, operation, summary);
     case "insert_edge_line":
-      return applyInsertEdgeLine(model, documentPath, operation, summary);
+      return applyInsertEdgeLine(model, documentPath, operation, placementPolicy, summary);
     case "remove_edge_line":
       return applyRemoveEdgeLine(model, documentPath, operation, summary);
     case "reposition_top_level_node":
@@ -1862,6 +1879,7 @@ export async function executeChangeOperations(
 
   const inspected = inspectDocumentText(bundle, resolvedPath.publicPath, canonicalText);
   const syntax = createAuthoringSyntax(bundle);
+  const placementPolicy = bundle.authoring ? getPlacementPolicyInputs(bundle) : undefined;
   const summary = createEmptySummary();
   const model =
     inspected.kind === "sdd-inspect-load-failure"
@@ -1895,7 +1913,7 @@ export async function executeChangeOperations(
   }
 
   for (const operation of preparedOperations) {
-    const diagnostic = applyOperation(model, syntax, resolvedPath.publicPath, operation, summary);
+    const diagnostic = applyOperation(model, syntax, resolvedPath.publicPath, operation, placementPolicy, summary);
     if (diagnostic) {
       const rejected = createRejectedChangeSet(changeSet, [diagnostic], currentEvaluated);
       if (mode === "dry_run") {

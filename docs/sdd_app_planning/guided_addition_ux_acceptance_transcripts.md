@@ -1,13 +1,8 @@
 # Guided Addition UX Acceptance Transcripts
 
----
-Status:
-**UX is NOT ACCEPTED!**
----
+Status: **ACCEPTED**
 
-Status: **DRAFT COMPLETE — PENDING UX ACCEPTANCE**
-
-Phase decision: **PENDING UX ACCEPTANCE**
+Phase decision: **ACCEPT**
 
 This document is the Phase 1 UX proof source for remediating Guided Addition. It specifies human-visible interaction behavior to review and correct before corrective architecture begins. It does **not** define final API types, approve an architecture, authorize implementation, or change the authority of the loaded bundle.
 
@@ -22,7 +17,7 @@ These transcripts interpret, in order:
 3. `AGENTS.md`, especially bundle authority, spec-first acceptance, source organization, and stop conditions.
 4. `bundle/v0.1/core/views.yaml`, `vocab.yaml`, `contracts.yaml`, and `authoring.yaml` for the current diagram names, node types, valid relationship triples, form fields, and authoring semantics.
 
-No wording or behavior in this draft is approved until a human explicitly accepts it or supplies a correction. Later architecture must reproduce the accepted transcripts without making clients reconstruct semantic choices.
+The human reviewer accepted this wording and behavior. Later architecture must reproduce the accepted transcripts without making clients reconstruct semantic choices.
 
 ## 2. Controlled Fixture
 
@@ -1435,7 +1430,7 @@ Coverage result: **14 of 14 issues covered; no uncovered observed issue.**
 
 ## 8. Acceptance Checklist And Stop Condition
 
-Human acceptance should explicitly confirm or correct:
+Human acceptance confirms:
 
 - the exact four-choice relationship prompt and subsequent decision order;
 - the diagram names, in-menu location, select/change/clear behavior, regular-first ordering, and bridge annotation;
@@ -1447,11 +1442,6 @@ Human acceptance should explicitly confirm or correct:
 - one ordinary Save, concrete-warning confirmation, and no-write Cancel;
 - the four exact source-organization proofs in section 6.
 
-Until that happens:
+The accepted transcripts authorize the next remediation gate, not an unconstrained implementation. If any transcript cannot be represented by the shared API, correct the architecture before coding through the mismatch.
 
-- this document remains **PENDING UX ACCEPTANCE**;
-- no transcript is approved merely because it is written down;
-- no corrective API type, CLI implementation, bundle change, test change, or public metadata change is authorized;
-- if any transcript is wrong or cannot be represented by a later shared API, the transcript or architecture must be corrected before coding.
-
-Phase decision: **PENDING UX ACCEPTANCE**
+Phase decision: **ACCEPT**

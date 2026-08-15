@@ -548,6 +548,102 @@ describe("authoring mutations", () => {
     });
   });
 
+  it("uses the bundle edge policy for placement-free insertion and preserves explicit overrides", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const source = [
+        "SDD-TEXT 0.1",
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-100 \"Status Card\"",
+        "",
+        "  + Component C-100 \"Status Card\"",
+        "  END",
+        "END",
+        "",
+        "Place P-300 \"Reports\"",
+        "END",
+        ""
+      ].join("\n");
+      const activeExpected = [
+        "SDD-TEXT 0.1",
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-100 \"Status Card\"",
+        "  NAVIGATES_TO P-300 \"Reports\"",
+        "",
+        "  + Component C-100 \"Status Card\"",
+        "  END",
+        "END",
+        "",
+        "Place P-300 \"Reports\"",
+        "END",
+        ""
+      ].join("\n");
+      const lastExpected = [
+        "SDD-TEXT 0.1",
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-100 \"Status Card\"",
+        "",
+        "  + Component C-100 \"Status Card\"",
+        "  END",
+        "  NAVIGATES_TO P-300 \"Reports\"",
+        "END",
+        "",
+        "Place P-300 \"Reports\"",
+        "END",
+        ""
+      ].join("\n");
+
+      const insert = async (
+        documentPath: string,
+        selectedBundle: Bundle,
+        explicitLast = false
+      ) => {
+        await writeTempDocument(tempRepoRoot, documentPath, source);
+        const workspace = createAuthoringWorkspace(tempRepoRoot);
+        const inspected = expectInspectedDocument(await inspectDocument(workspace, selectedBundle, documentPath));
+        const parentHandle = inspected.resource.nodes.find((node) => node.node_id === "P-100")!.handle;
+        const result = await applyChangeSet(workspace, selectedBundle, {
+          path: documentPath,
+          base_revision: inspected.resource.revision,
+          mode: "commit",
+          operations: [
+            {
+              kind: "insert_edge_line",
+              parent_handle: parentHandle,
+              rel_type: "NAVIGATES_TO",
+              to: "P-300",
+              to_name: "Reports",
+              ...(explicitLast
+                ? { placement: { stream: "body" as const, mode: "last" as const, parent_handle: parentHandle } }
+                : {})
+            }
+          ]
+        });
+        return { result, text: await readTempDocument(tempRepoRoot, documentPath) };
+      };
+
+      const active = await insert("docs/semantic-policy.sdd", bundle);
+      expect(active.result.status).toBe("applied");
+      expect(active.text).toBe(activeExpected);
+
+      const legacyBundle = structuredClone(bundle);
+      legacyBundle.authoring!.placement_policies.default.edge_in_source_body = "last";
+      const legacy = await insert("docs/legacy-policy.sdd", legacyBundle);
+      expect(legacy.result.status).toBe("applied");
+      expect(legacy.text).toBe(lastExpected);
+
+      const explicit = await insert("docs/explicit-policy.sdd", bundle, true);
+      expect(explicit.result.status).toBe("applied");
+      expect(explicit.text).toBe(lastExpected);
+
+      const noAuthoringBundle = structuredClone(bundle);
+      delete noAuthoringBundle.authoring;
+      const noAuthoring = await insert("docs/no-authoring-policy.sdd", noAuthoringBundle);
+      expect(noAuthoring.result.status).toBe("rejected");
+      expect(diagnosticCodes(noAuthoring.result.diagnostics)).toContain("sdd.invalid_placement");
+      expect(noAuthoring.text).toBe(source);
+    });
+  });
+
   it("keeps compile diagnostics on compile-invalid apply results and returns validation/projection feedback", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const duplicatePath = "docs/duplicate.sdd";

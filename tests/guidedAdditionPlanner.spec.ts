@@ -77,7 +77,7 @@ function chooseOperation(
 
 function selectAllRecommended(current: GuidedDocumentSnapshot, initial: GuidedAdditionResult): GuidedAdditionResult {
   let result = initial;
-  while (expectStep(result, "review_placement")) {
+  while ((result as Extract<GuidedAdditionResult, { kind: "sdd-guided-addition-step" }>).step.kind === "review_placement") {
     const step = expectStep(result, "review_placement");
     const selectedIds = new Set(result.state.selections.placements.map((selection) => selection.recommendation_id));
     const recommendation = step.recommendations.find((candidate) => !selectedIds.has(candidate.recommendation_id));
@@ -323,7 +323,7 @@ describe("guided filtering, display metadata, and forms", () => {
       kind: "set_edge_fields",
       fields: { ...required.values, props: { field: "status" } }
     });
-    expectStep(result, "review_placement");
+    expect(expectStep(result, "review_proposal").proposal.placements).toEqual([]);
 
     result = relationshipRoute(
       snapshot,

@@ -359,23 +359,24 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     add("bundle.authoring.placement_policies_shape", "placement_policies must contain only the default policy");
   }
   const placement = authoring.placement_policies.default;
-  const expectedPlacement = {
-    fallback: "last",
-    outgoing_sequence: "after_anchor",
-    incoming_sequence: "before_anchor",
-    structural_new_target: "nested_last",
-    structural_existing_target: "reparent_with_confirmation",
-    edge_in_source_body: "last",
-    edge_to_name_hint: "target_name"
+  const supportedPlacementValues: Record<string, readonly string[]> = {
+    fallback: ["last"],
+    outgoing_sequence: ["after_anchor"],
+    incoming_sequence: ["before_anchor"],
+    structural_new_target: ["nested_last"],
+    structural_existing_target: ["reparent_with_confirmation"],
+    edge_in_source_body: ["after_relationships_before_nested_nodes", "last"],
+    edge_to_name_hint: ["target_name"]
   };
-  if (!sameStringSet(Object.keys(placement), Object.keys(expectedPlacement))) {
+  if (!sameStringSet(Object.keys(placement), Object.keys(supportedPlacementValues))) {
     add("bundle.authoring.placement_policy_shape", "The default placement policy has unexpected or missing fields");
   }
-  for (const [field, expected] of Object.entries(expectedPlacement)) {
-    if ((placement as unknown as Record<string, unknown>)[field] !== expected) {
+  for (const [field, supported] of Object.entries(supportedPlacementValues)) {
+    const actual = (placement as unknown as Record<string, unknown>)[field];
+    if (!supported.includes(String(actual))) {
       add(
         "bundle.authoring.unknown_placement_policy_value",
-        `Default placement field '${field}' must use the supported v0.1 value '${expected}'`
+        `Default placement field '${field}' must use a supported v0.1 value (${supported.join(", ")})`
       );
     }
   }

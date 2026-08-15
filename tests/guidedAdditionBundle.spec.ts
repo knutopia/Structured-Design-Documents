@@ -257,9 +257,25 @@ describe("guided addition bundle contract", () => {
 
   it("changes placement inputs when only the placement policy changes", () => {
     const cloned = cloneBundle();
+    expect(getPlacementPolicyInputs(cloned).edge_in_source_body).toBe("after_relationships_before_nested_nodes");
     expect(getPlacementPolicyInputs(cloned).fallback).toBe("last");
     cloned.authoring!.placement_policies.default.fallback = "first" as "last";
     expect(getPlacementPolicyInputs(cloned).fallback).toBe("first");
+  });
+
+  it("accepts semantic and legacy edge placement policies and rejects unknown values", () => {
+    const semantic = cloneBundle();
+    semantic.authoring!.placement_policies.default.edge_in_source_body = "after_relationships_before_nested_nodes";
+    expect(() => validateLoadedBundle(semantic)).not.toThrow();
+
+    const legacy = cloneBundle();
+    legacy.authoring!.placement_policies.default.edge_in_source_body = "last";
+    expect(() => validateLoadedBundle(legacy)).not.toThrow();
+    expect(getPlacementPolicyInputs(legacy).edge_in_source_body).toBe("last");
+
+    expectInvalid("bundle.authoring.unknown_placement_policy_value", (cloned) => {
+      cloned.authoring!.placement_policies.default.edge_in_source_body = "unknown" as "last";
+    });
   });
 
   it("exposes relationship semantics, edge fields, forms, and view records as read-only copies", () => {

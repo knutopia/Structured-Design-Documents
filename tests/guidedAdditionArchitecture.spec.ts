@@ -153,7 +153,7 @@ describe("bundle-only guided behavior proofs", () => {
       kind: "set_edge_fields",
       fields: { ...edge.values, props: { format: "currency" } }
     });
-    step(result, "review_placement");
+    expect(step(result, "review_proposal").proposal.placements).toEqual([]);
   });
 });
 
