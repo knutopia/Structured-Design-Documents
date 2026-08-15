@@ -32,6 +32,12 @@ function strings(value: unknown): string[] | undefined {
   return Array.isArray(value) && value.every((item) => typeof item === "string") ? value : undefined;
 }
 
+function record(value: unknown): Record<string, unknown> | undefined {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : undefined;
+}
+
 function duplicateValues(values: string[]): string[] {
   const seen = new Set<string>();
   const duplicates = new Set<string>();
@@ -271,8 +277,21 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
   }
 
   const authoring = bundle.authoring;
-  if (!sameStringSet(Object.keys(authoring), ["version", "node_id_suggestions", "node_forms", "placement_policies"])) {
+  if (!sameStringSet(Object.keys(authoring), ["version", "guided_addition", "node_id_suggestions", "node_forms", "placement_policies"])) {
     add("bundle.authoring.artifact_shape", "Authoring artifact must contain only the declared v0.1 sections");
+  }
+  const guidedAddition = record(authoring.guided_addition);
+  if (!guidedAddition || !sameStringSet(Object.keys(guidedAddition), ["default_display_profile_id"])) {
+    add("bundle.authoring.guided_addition_shape", "guided_addition has unexpected or missing fields");
+  }
+  const defaultDisplayProfileId = typeof guidedAddition?.default_display_profile_id === "string"
+    ? guidedAddition.default_display_profile_id
+    : "";
+  if (!profileIds.has(defaultDisplayProfileId)) {
+    add(
+      "bundle.authoring.unknown_default_display_profile",
+      `Guided Addition default display profile '${defaultDisplayProfileId}' is not declared by the bundle`
+    );
   }
   if (
     !sameStringSet(Object.keys(authoring.node_id_suggestions), ["sequence_policy", "minimum_digits", "prefix_by_type"])
@@ -495,6 +514,13 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
 
     const aliases = guided.profile_aliases ?? {};
     validateProfileAliases(view.id, aliases, profileIds, add);
+    let resolvedDefaultProfile = defaultDisplayProfileId;
+    const defaultVisited = new Set<string>();
+    while (aliases[resolvedDefaultProfile]) {
+      if (defaultVisited.has(resolvedDefaultProfile)) break;
+      defaultVisited.add(resolvedDefaultProfile);
+      resolvedDefaultProfile = aliases[resolvedDefaultProfile];
+    }
     const explicitProfiles = declaredProfileIds.filter((profileId) => aliases[profileId] === undefined);
     const actualTriples = guided.relationships.map((relationship) => tripleKey(relationship.from, relationship.type, relationship.to));
     if (!sameStringSet(actualTriples, expectedTriples)) {
@@ -523,6 +549,12 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         add(
           "bundle.guided_view.profile_coverage",
           `View '${view.id}' triple '${readableTriple}' must declare each non-aliased profile exactly`
+        );
+      }
+      if (!relationship.display_by_profile[resolvedDefaultProfile]) {
+        add(
+          "bundle.guided_view.default_profile_unresolvable",
+          `View '${view.id}' triple '${readableTriple}' cannot resolve Guided Addition default profile '${defaultDisplayProfileId}'`
         );
       }
       for (const [profileId, rules] of Object.entries(relationship.display_by_profile)) {

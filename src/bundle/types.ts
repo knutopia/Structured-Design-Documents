@@ -534,6 +534,9 @@ export interface AuthoringNodeForm {
 
 export interface AuthoringConfig {
   version: string;
+  guided_addition: {
+    default_display_profile_id: string;
+  };
   node_id_suggestions: {
     sequence_policy: "max_numeric_plus_one";
     minimum_digits: number;

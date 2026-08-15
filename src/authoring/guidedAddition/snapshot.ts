@@ -6,13 +6,13 @@ import { sortDiagnostics } from "../../diagnostics/types.js";
 import type { Diagnostic } from "../../types.js";
 import { inspectDocumentText, type InspectedDocument } from "../inspect.js";
 import type { Handle } from "../contracts.js";
-import {
-  GuidedAdditionDomainError,
-  type GuidedDocumentSnapshot,
-  type GuidedDocumentSnapshotInput,
-  type GuidedExistingEdge,
-  type GuidedExistingNode
-} from "./contracts.js";
+import { GuidedAdditionDomainError } from "./contracts.js";
+import type {
+  GuidedDocumentSnapshot,
+  GuidedDocumentSnapshotInput,
+  GuidedExistingEdge,
+  GuidedExistingNode
+} from "./sharedContracts.js";
 import { deepFreeze } from "./immutability.js";
 
 interface GuidedDocumentSnapshotIndexes {

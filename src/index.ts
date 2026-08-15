@@ -8,6 +8,7 @@ export {
 } from "./bundle/fingerprint.js";
 export {
   getNodeAuthoringForm,
+  getGuidedAdditionDefaultDisplayProfileId,
   getNodeIdSuggestionInputs,
   getPlacementPolicyInputs,
   getRelationshipAuthoringSemantics,

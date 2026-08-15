@@ -2,7 +2,7 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: **Phase 4 — planning the planner-behavior rebuild**. Phase 3 is human-approved through the accepted [Guided Addition API v1.0 Architecture](./guided_addition_api_v1_architecture.md) and [Phase 3 Acceptance Report](./guided_addition_phase_3_acceptance_report.md). Phase 4 implementation requires an approved Phase 4 plan.
+Current phase: **Phase 4 — implementation gate review**. The accepted [Phase 4 Implementation Plan](./guided_addition_phase_4_implementation_plan.md) has been implemented. The [Phase 4 Acceptance Report](./guided_addition_phase_4_acceptance_report.md) records a `BLOCKED` recommendation pending resolution of the accepted T19 starting-node ordering inconsistency; Phase 5 is not yet authorized.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
@@ -352,9 +352,11 @@ Gate:
 
 ### Phase 4 — Rebuild planner behavior
 
-Status: **CURRENT — implementation plan pending human acceptance**.
+Status: **GATE BLOCKED — implementation complete; T19 ordering clarification required**.
 
 Planning artifact: [Guided Addition Phase 4 Implementation Plan](./guided_addition_phase_4_implementation_plan.md).
+
+Gate artifact: [Guided Addition Phase 4 Acceptance Report](./guided_addition_phase_4_acceptance_report.md).
 
 Actions:
 

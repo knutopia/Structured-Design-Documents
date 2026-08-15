@@ -23,7 +23,7 @@ z
 ## Fri 8-14
 
 - Phase 3 done, architecture
-- Phase 4 planned 
+- Phase 4 done with issues
 
 ## Thu 8-13
 

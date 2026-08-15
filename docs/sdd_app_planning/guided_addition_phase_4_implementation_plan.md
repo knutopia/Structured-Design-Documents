@@ -1,8 +1,10 @@
 # Guided Addition Phase 4 Implementation Plan
 
-Status: **PROPOSED — PENDING HUMAN ACCEPTANCE**
+Status: **ACCEPTED**
 
-Phase decision: **PENDING HUMAN ACCEPTANCE**
+Phase decision: **ACCEPT**
+
+Human approval: **ACCEPTED on 2026-08-15**
 
 ## 1. Objective And Authority
 
@@ -423,6 +425,6 @@ Phase 4 is acceptable only when:
 - the Phase 4 report separately lists satisfied and violated UX and technical invariants;
 - the human reviewer explicitly accepts the result.
 
-Until this implementation plan is explicitly accepted, no Phase 4 code or bundle change is authorized.
+The explicit acceptance above authorizes the bounded Phase 4 implementation described by this plan.
 
-Phase decision: **PENDING HUMAN ACCEPTANCE**
+Phase decision: **ACCEPT**

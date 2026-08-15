@@ -1,6 +1,7 @@
 import { computeBundleFingerprint, type BundleFingerprint } from "../../bundle/fingerprint.js";
 import {
   getNodeAuthoringForm,
+  getGuidedAdditionDefaultDisplayProfileId,
   getNodeIdSuggestionInputs,
   getPlacementPolicyInputs,
   getRelationshipAuthoringSemantics,
@@ -66,6 +67,8 @@ export interface GuidanceViewRecord {
   view_id: string;
   view_order: number;
   name: string;
+  included_node_types: string[];
+  scope_description: string;
   profile_aliases: Record<string, string>;
   relationships: GuidanceViewRelationshipRecord[];
 }
@@ -117,6 +120,7 @@ export class GuidanceCatalog {
   readonly node_types: GuidanceNodeTypeRecord[];
   readonly relationships: GuidanceRelationshipRecord[];
   readonly views: GuidanceViewRecord[];
+  readonly default_display_profile_id: string;
   readonly placement_policy: AuthoringConfig["placement_policies"]["default"];
 
   readonly #profilesById: Map<string, GuidanceProfileRecord>;
@@ -133,6 +137,7 @@ export class GuidanceCatalog {
     node_types: GuidanceNodeTypeRecord[];
     relationships: GuidanceRelationshipRecord[];
     views: GuidanceViewRecord[];
+    default_display_profile_id: string;
     placement_policy: AuthoringConfig["placement_policies"]["default"];
   }) {
     this.bundle_fingerprint = args.bundle_fingerprint;
@@ -142,6 +147,7 @@ export class GuidanceCatalog {
     this.node_types = deepFreeze(args.node_types);
     this.relationships = deepFreeze(args.relationships);
     this.views = deepFreeze(args.views);
+    this.default_display_profile_id = args.default_display_profile_id;
     this.placement_policy = deepFreeze(args.placement_policy);
     this.#profilesById = new Map(this.profiles.map((profile) => [profile.profile_id, profile]));
     this.#nodesByType = new Map(this.node_types.map((nodeType) => [nodeType.node_type, nodeType]));
@@ -267,6 +273,8 @@ export function createGuidanceCatalog(bundle: Bundle): GuidanceCatalog {
     view_id: view.view_id,
     view_order: viewOrder,
     name: view.name,
+    included_node_types: [...view.included_node_types],
+    scope_description: `Includes ${view.included_node_types.length === 1 ? view.included_node_types[0] : `${view.included_node_types.slice(0, -1).join(", ")}${view.included_node_types.length > 2 ? "," : ""} and ${view.included_node_types.at(-1)}`} nodes.`,
     profile_aliases: { ...view.profile_aliases },
     relationships: view.relationships.map((relationship) => {
       const indexed = relationshipByTriple.get(endpointTripleKey(relationship));
@@ -303,6 +311,7 @@ export function createGuidanceCatalog(bundle: Bundle): GuidanceCatalog {
     node_types: nodeTypes,
     relationships,
     views,
+    default_display_profile_id: getGuidedAdditionDefaultDisplayProfileId(bundle),
     placement_policy: getPlacementPolicyInputs(bundle)
   });
 }

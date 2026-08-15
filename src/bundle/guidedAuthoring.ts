@@ -33,6 +33,7 @@ export interface NodeAuthoringForm {
 export interface GuidedViewDefinition {
   view_id: string;
   name: string;
+  included_node_types: string[];
   profile_aliases: Record<string, string>;
   relationships: GuidedViewRelationship[];
 }
@@ -69,6 +70,10 @@ function tripleKey(triple: AllowedEndpointTriple): string {
 
 export function hasGuidedAdditionSupport(bundle: Bundle): boolean {
   return bundle.authoring !== undefined;
+}
+
+export function getGuidedAdditionDefaultDisplayProfileId(bundle: Bundle): string {
+  return requireAuthoring(bundle).guided_addition.default_display_profile_id;
 }
 
 export function listAllowedEndpointTriples(bundle: Bundle): AllowedEndpointTriple[] {
@@ -168,6 +173,7 @@ export function listGuidedViewDefinitions(bundle: Bundle): GuidedViewDefinition[
   return bundle.views.views.map((view) => ({
     view_id: view.id,
     name: view.name,
+    included_node_types: [...view.projection.include_node_types],
     profile_aliases: { ...(view.conventions.guided_addition?.profile_aliases ?? {}) },
     relationships: listGuidedViewRelationships(bundle, view.id) ?? []
   }));

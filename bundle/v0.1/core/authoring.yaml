@@ -1,5 +1,8 @@
 version: "0.1"
 
+guided_addition:
+  default_display_profile_id: simple
+
 node_id_suggestions:
   sequence_policy: max_numeric_plus_one
   minimum_digits: 3

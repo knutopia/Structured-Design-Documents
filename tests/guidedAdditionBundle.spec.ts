@@ -6,6 +6,7 @@ import {
   collectBundleDiagnostics,
   compileSource,
   getNodeIdSuggestionInputs,
+  getGuidedAdditionDefaultDisplayProfileId,
   getPlacementPolicyInputs,
   getRelationshipAuthoringSemantics,
   getRelationshipEdgeFieldSupport,
@@ -78,6 +79,24 @@ describe("guided addition bundle contract", () => {
       )
     ).toBe(252);
     expect(collectBundleDiagnostics(bundle)).toEqual([]);
+    expect(getGuidedAdditionDefaultDisplayProfileId(bundle)).toBe("simple");
+  });
+
+  it("validates the explicit Guided Addition display-profile default", () => {
+    const strict = cloneBundle();
+    strict.authoring!.guided_addition.default_display_profile_id = "strict";
+    expect(() => validateLoadedBundle(strict)).not.toThrow();
+    expect(getGuidedAdditionDefaultDisplayProfileId(strict)).toBe("strict");
+
+    expectInvalid("bundle.authoring.guided_addition_shape", (cloned) => {
+      delete (cloned.authoring as unknown as Record<string, unknown>).guided_addition;
+    });
+    expectInvalid("bundle.authoring.unknown_default_display_profile", (cloned) => {
+      cloned.authoring!.guided_addition.default_display_profile_id = "missing";
+    });
+    expectInvalid("bundle.guided_view.default_profile_unresolvable", (cloned) => {
+      delete relationshipEntry(cloned, "ia_place_map", "Place", "NAVIGATES_TO", "Place").display_by_profile.simple;
+    });
   });
 
   it("encodes the accepted relationship roles for all six views", () => {

@@ -50,7 +50,7 @@ function ruleForProperty(
   nodeType: string,
   property: string
 ): ProfileRule | undefined {
-  const profile = (profileId ? catalog.getProfile(profileId) : undefined) ?? catalog.profiles[0];
+  const profile = catalog.getProfile(profileId ?? catalog.default_display_profile_id);
   return profile?.rules.find((rule) => {
     const logic = rule.rule_logic;
     return logic?.node_type === nodeType && logic.property === property;
