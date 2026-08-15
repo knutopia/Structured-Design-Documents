@@ -1,8 +1,10 @@
 # Guided Addition Phase 3 UX Addendum
 
-Status: **DRAFT COMPLETE — PENDING UX ACCEPTANCE**
+Status: **ACCEPTED**
 
-Phase decision: **PENDING UX ACCEPTANCE**
+Phase decision: **ACCEPT**
+
+Human approval: **ACCEPTED on 2026-08-14**
 
 This addendum supplies the minimum missing human-facing proof needed before the Guided Addition v1 architecture can be locked. It does not reopen or replace the accepted Phase 1 transcripts. It does not define final API type, field, action, or schema names.
 
@@ -213,11 +215,10 @@ Human acceptance should explicitly confirm or correct:
 - existing-node-first with one valid relationship skips relationship disambiguation;
 - all move and leave-in-place language accurately describes the committed effect.
 
-Until explicit acceptance:
+The explicit acceptance above establishes that:
 
-- this addendum remains **PENDING UX ACCEPTANCE**;
 - the accepted Phase 1 transcripts remain unchanged and accepted;
-- the v1 architecture must not lock behavior for these semantic classes;
+- the v1 architecture may lock behavior for these semantic classes;
 - Phase 4 implementation remains unauthorized.
 
-Phase decision: **PENDING UX ACCEPTANCE**
+Phase decision: **ACCEPT**

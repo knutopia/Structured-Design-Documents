@@ -22,6 +22,10 @@ z
 
 ## Fri 8-14
 
+- Phase 3 done, architecture
+
+## Thu 8-13
+
 - Polished acceptance scripts
 - Remediation phase 1 & 2
 - Phase 2 done
