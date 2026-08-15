@@ -2,7 +2,9 @@
 
 Phase decision: **ACCEPT**
 
-Phase 2 corrects bundle expressiveness and shared relationship-line insertion only. Phase 3 corrective API architecture remains unauthorized.
+Human approval: **ACCEPTED on 2026-08-14**
+
+Phase 2 corrects bundle expressiveness and shared relationship-line insertion only. The human approval above authorizes Phase 3 planning; it does not approve a Phase 3 architecture.
 
 ## UX Invariants In Scope
 

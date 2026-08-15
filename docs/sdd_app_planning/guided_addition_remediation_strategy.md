@@ -2,7 +2,7 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: **Phase 2 — ACCEPT**. Bundle expressiveness is corrected and documented in the [Phase 2 Acceptance Report](./guided_addition_phase_2_acceptance_report.md). Phase 3 remains unauthorized pending separate architecture planning and approval.
+Current phase: **Phase 3 — UX proof addendum pending acceptance**. Phase 2 is human-approved. The [Phase 3 UX Addendum](./guided_addition_phase_3_ux_addendum.md) closes uncovered semantic classes before the v1 architecture is locked.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
@@ -324,6 +324,10 @@ Gate:
 - the current controlled fixture produces properties, relationship lines, a blank separator where present, then nested children.
 
 ### Phase 3 — Approve corrective API architecture
+
+Status: **ACTIVE — UX proof addendum pending explicit human acceptance**.
+
+Supplemental proof artifact: [Guided Addition Phase 3 UX Addendum](./guided_addition_phase_3_ux_addendum.md). The accepted Phase 1 transcripts remain authoritative and unchanged; this addendum covers only previously unproven semantic classes.
 
 Actions:
 

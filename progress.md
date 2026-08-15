@@ -24,6 +24,7 @@ z
 
 - Polished acceptance scripts
 - Remediation phase 1 & 2
+- Phase 2 done
 
 ## Wed 8-12
 
