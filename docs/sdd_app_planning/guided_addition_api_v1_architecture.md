@@ -1,8 +1,10 @@
 # Guided Addition API v1.0 Architecture
 
-Status: **PROPOSED — PENDING HUMAN ARCHITECTURE ACCEPTANCE**
+Status: **ACCEPTED**
 
-Phase decision: **PENDING HUMAN ACCEPTANCE**
+Phase decision: **ACCEPT**
+
+Human approval: **ACCEPTED on 2026-08-14**
 
 Audience: maintainers of the shared guided-authoring core, the initial `sdd add` client, the proposal executor, and later app or MCP adapters
 
@@ -792,6 +794,6 @@ Human architecture acceptance must confirm that:
 - Save/Cancel and concrete-warning acceptance remain at the client/executor boundary;
 - the bundle fields and generic consumers are explicit enough to plan Phase 4 without hardcoded conventions.
 
-Until that explicit acceptance, Phase 4 implementation is unauthorized.
+The explicit acceptance above authorizes Phase 4 planning. Phase 4 implementation remains subject to an approved Phase 4 plan.
 
-Phase decision: **PENDING HUMAN ACCEPTANCE**
+Phase decision: **ACCEPT**

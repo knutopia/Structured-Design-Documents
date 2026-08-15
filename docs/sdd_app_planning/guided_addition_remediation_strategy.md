@@ -2,7 +2,7 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: **Phase 3 — corrective v1.0 API architecture pending human acceptance**. Phase 2 and the [Phase 3 UX Addendum](./guided_addition_phase_3_ux_addendum.md) are human-approved. The proposed [Guided Addition API v1.0 Architecture](./guided_addition_api_v1_architecture.md) is the current review artifact.
+Current phase: **Phase 4 — planning the planner-behavior rebuild**. Phase 3 is human-approved through the accepted [Guided Addition API v1.0 Architecture](./guided_addition_api_v1_architecture.md) and [Phase 3 Acceptance Report](./guided_addition_phase_3_acceptance_report.md). Phase 4 implementation requires an approved Phase 4 plan.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
@@ -325,11 +325,13 @@ Gate:
 
 ### Phase 3 — Approve corrective API architecture
 
-Status: **ACTIVE — corrective v1.0 architecture pending explicit human acceptance**.
+Status: **ACCEPT — explicitly accepted by the human reviewer**.
 
 Accepted supplemental proof artifact: [Guided Addition Phase 3 UX Addendum](./guided_addition_phase_3_ux_addendum.md). The accepted Phase 1 transcripts remain authoritative and unchanged; the accepted addendum covers only previously unproven semantic classes.
 
-Current architecture review artifact: [Guided Addition API v1.0 Architecture](./guided_addition_api_v1_architecture.md).
+Accepted architecture artifact: [Guided Addition API v1.0 Architecture](./guided_addition_api_v1_architecture.md).
+
+Acceptance evidence: [Guided Addition Phase 3 Acceptance Report](./guided_addition_phase_3_acceptance_report.md).
 
 Actions:
 
@@ -349,6 +351,10 @@ Gate:
 - architecture review explicitly lists satisfied and violated UX invariants.
 
 ### Phase 4 — Rebuild planner behavior
+
+Status: **CURRENT — implementation plan pending human acceptance**.
+
+Planning artifact: [Guided Addition Phase 4 Implementation Plan](./guided_addition_phase_4_implementation_plan.md).
 
 Actions:
 
