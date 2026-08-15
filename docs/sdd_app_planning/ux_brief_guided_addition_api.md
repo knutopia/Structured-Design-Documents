@@ -18,6 +18,18 @@ The initial user-facing solution to interface with the API is going to be a CLI 
 
 ### 1. When a Node Is a Known Starting Point: (After User Selected a Node)
 
+(the tool was invoked with a node as an argument, or a previous partial flow as shown in (2) has been used to identify a starting point node)
+
+1.0.1. Browse connection direction
+
+1.0.2.a Choose outgoing: relationship type first - proceed with step 1.1.
+
+1.0.2.b Choose outgoing: existing destination node first - proceed with step 1.2.
+
+1.0.2.c Choose incoming: relationship type first - proceed with step 1.3.
+
+1.0.2.d Choose incoming: choose existing origin node first - proceed with step 1.4.
+
 #### 1.1. Add an *Outgoing* Edge-Node Combo
 
 1.1.1. Browse available "edge-type & node type" combos
@@ -40,11 +52,17 @@ The initial user-facing solution to interface with the API is going to be a CLI 
 
 (Could also be titled: "Connect current node to another existing node that is the destination node")
 
-1.2.1. Browse "edge-type & node" list for existing nodes (constrained to valid nodes: possible destinations based on possible edge-node type combos)
+1.2.1. Browse "edge-type & node" list for existing nodes (constrained to valid nodes: possible destinations based on possible edge-node type combos respecting filter). If more than one possible relationship type per destination node, then show all types on the same line, so that there is one line per destination node. Note: the combining-of-multiple-edges-on-a-line is client responsibility not API responsibility.
 
 1.2.1.1 Filter by diagram type: optionally choose diagram type to narrow the choices
 
-1.2.2 Choose "edge-type & node" combo - exit flow
+1.2.2 Choose "edge-type & node" combo line
+
+1.2.2.a If chosen "edge-type & node" combo line is unambiguous, then exit flow
+
+1.2.2.b If chosen "edge-type & node" combo line contains more than one edge type, then go to 1.2.3
+
+1.2.3 Show relationship type picker menu to disambiguate relationship, then exit flow
 
 #### 1.3. Add an *Incoming* Node-Edge Combo
 
@@ -70,15 +88,29 @@ The initial user-facing solution to interface with the API is going to be a CLI 
 
 1.4.1. Browse valid Existing Nodes. 
 
-Browse "node & edge type" list for existing nodes (constrained to valid nodes: possible origination nodes based on possible incoming node-edge type combos)
+Browse "edge-type & node" list for existing nodes (constrained to valid nodes: possible origination nodes based on possible incoming node-edge type combos respecting filter). If more than one possible relationship type per origination node, then show all types on the same line, so that there is one line per origination node. Note: the combining-of-multiple-edges-on-a-line is client responsibility not API responsibility.
 
 1.4.1.1 Filter by diagram type: optionally choose diagram type to narrow incoming node-edge type combos
 
-1.4.2 Choose "node & edge-type" combo - exit flow
+1.4.2 Choose "node & edge-type" combo line
+
+1.4.2.a If chosen "node & edge-type" combo line is unambiguous, then exit flow
+
+1.4.2.b If chosen "node & edge-type" combo line contains more than one edge type, then go to 1.4.3
+
+1.4.3 Show relationship type picker menu to disambiguate relationship, then exit flow
 
 ### 2. When No Node Is Known As a Starting Point:
 
-2.1. Add a Node
+(the tool was invoked without a node as an argument)
+
+2.0.1. Browse add node and add relationship options
+
+2.0.1.a Choose add node - proceed with step 2.1.
+
+2.0.1.b Choose add relationship - proceed with step 2.2.
+
+#### 2.1. Add a Node
 
 2.1.1. Browse node types
 
@@ -87,6 +119,14 @@ Browse "node & edge type" list for existing nodes (constrained to valid nodes: p
 2.1.2 Choose node type
 
 2.1.3 Create new node (sub-flow, see below) - exit flow
+
+#### 2.2. Add a Relationship
+
+2.2.1. Browse existing nodes for a starting node
+
+2.2.1.1 Filter by diagram type: optionally choose diagram type to narrow node types
+
+2.2.2 Choose existing node as starting node - proceed with step 1.0.1.
 
 ## Representing Variations of "Valid" Edges
 
