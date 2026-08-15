@@ -2,7 +2,7 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: **Phase 4 — implementation gate review**. The accepted [Phase 4 Implementation Plan](./guided_addition_phase_4_implementation_plan.md) has been implemented. The [Phase 4 Acceptance Report](./guided_addition_phase_4_acceptance_report.md) records a `BLOCKED` recommendation pending resolution of the accepted T19 starting-node ordering inconsistency; Phase 5 is not yet authorized.
+Current phase: **Phase 5 — technical acceptance complete; human approval pending**. The [Phase 5 Acceptance Report](./guided_addition_phase_5_acceptance_report.md) records a technical `ACCEPT` decision with human approval still pending. Phase 6 is not authorized.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
@@ -352,7 +352,7 @@ Gate:
 
 ### Phase 4 — Rebuild planner behavior
 
-Status: **GATE BLOCKED — implementation complete; T19 ordering clarification required**.
+Status: **ACCEPTED — implementation and gate approved on 2026-08-15**.
 
 Planning artifact: [Guided Addition Phase 4 Implementation Plan](./guided_addition_phase_4_implementation_plan.md).
 
@@ -379,6 +379,10 @@ Gate:
 
 ### Phase 5 — Repair proposal application and source organization
 
+Status: **TECHNICAL ACCEPT — HUMAN APPROVAL PENDING**.
+
+Evidence: the [Phase 5 Acceptance Report](./guided_addition_phase_5_acceptance_report.md) records the native internal v1 executor, semantic organization verification and translation, exact source proofs, dry-run/commit parity, undo, focused **101/101**, and full serial **841/841** verification. This technical result does not authorize Phase 6 without explicit human acceptance.
+
 Actions:
 
 - make proposal verification understand the corrected organization decisions;
@@ -394,6 +398,8 @@ Gate:
 - no snapshot or golden is updated to conceal formatting or ordering failure.
 
 ### Phase 6 — Replace `sdd add` interaction
+
+Status: **NOT AUTHORIZED — awaits human acceptance of Phase 5**.
 
 Actions:
 

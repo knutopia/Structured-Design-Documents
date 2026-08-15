@@ -1,12 +1,12 @@
 # Guided Addition Phase 4 Acceptance Report
 
-Status: **REVIEW READY — BLOCKED**
+Status: **ACCEPTED**
 
-Technical recommendation: **BLOCKED**
+Technical recommendation: **ACCEPT**
 
-Human phase decision: **PENDING**
+Human phase decision: **ACCEPTED on 2026-08-15**
 
-This recommendation reports the Phase 4 gate; it does not claim human acceptance. The v1.0 planner implementation and technical verification are complete, but one accepted T19 presentation invariant cannot be implemented generically from the accepted controlled fixture without clarification.
+Phase 4 implements and proves the pure Guided Addition v1.0 planner. Human review accepted the composer's generated starting-node order and `P-300: Reports (Place)` spelling as corrections to erroneous T19 reference details.
 
 ## UX Invariants
 
@@ -27,12 +27,12 @@ Satisfied:
 - completion directly returns a v1.0 semantic proposal and display-ready review with no planner-owned Save, Cancel, `review_proposal`, or `complete` action;
 - accepted T16 and T17 review wording is returned for the controlled standalone and duplicate incoming-navigation cases.
 
-Violated or unresolved:
+Accepted reference corrections:
 
-- T19's accepted all-diagram starting-node list orders the exact fixture as `P-100, VS-100, O-100, C-100, A-200, C-200, P-210, P-300`. Parsing the exact accepted fixture yields source order `P-100, C-100, A-200, P-210, P-300, VS-100, C-200, O-100`. Neither the bundle nor the accepted architecture declares a generic starting-node ordering policy that produces the transcript order.
-- The T19 IA and UI filtered lists contain `P-300: Reports — Place)`, while the generic display composer correctly returns `P-300: Reports (Place)`.
+- The composer's generated starting-node list order is accepted in place of T19's erroneous reference ordering.
+- The composer's `P-300: Reports (Place)` list item is accepted in place of T19's malformed `P-300: Reports — Place)` reference text.
 
-The implementation deliberately does not hardcode controlled-fixture node IDs, invent a hidden TypeScript ordering convention, or reproduce malformed display text. Resolving this gate requires deciding whether T19 should use parsed source order, another bundle-expressed generic ordering rule, or corrected accepted transcript order/text.
+Violated: **none identified after the accepted T19 reference corrections**.
 
 ## Technical Invariants
 
@@ -78,7 +78,7 @@ The existing `edge_in_source_body` policy remains owned and consumed by the shar
 | T13–T14 | relationship-first and existing-node-first select/change/clear; exact IA/UI ranking and bridge annotation |
 | T15 | contextual node and relationship fields, accepted disclosures, blank normalization, rejected forged form submissions |
 | T16–T18 planner scope | completion returns review content directly and exposes no Save/Cancel action |
-| T19 | no-anchor relationship path, starting-node filter select/change/clear, then route selection; exact list ordering remains blocked as recorded above |
+| T19 | no-anchor relationship path, composer-generated starting-node order and spelling, filter select/change/clear, then route selection |
 | A01–A04 | wrapper replacement and exact confirmation; leave-current order; zero-sibling auto-order; one-relationship auto-advance |
 
 Commands and results:
@@ -93,7 +93,7 @@ Commands and results:
 
 ## Residual Risks
 
-- T19 starting-node order and two malformed filtered labels require an authority decision before the UX gate can be accepted.
+- The historical T19 transcript retains the superseded ordering and malformed label as reference history; the human acceptance recorded here makes the composer's generated behavior authoritative for implementation evidence.
 - The rejected `0.1` planner remains quarantined because the Phase 5 executor and Phase 6 CLI/public contracts still depend on it; it is not supported v1.0 compatibility.
 - v1.0 remains an internal Phase 4 entrypoint and is intentionally absent from root exports and the CLI until the Phase 6 cutover.
 - Phase 4 proposals are semantic only. Translation, verification, exact source effects, dry-run/commit parity, and undo evidence belong to Phase 5.
@@ -101,6 +101,6 @@ Commands and results:
 
 ## Decision
 
-Recommendation: **BLOCKED pending clarification of T19 starting-node ordering and malformed labels**.
+Decision: **ACCEPT Phase 4**.
 
-Phase 5 planning and implementation must not begin until that UX authority mismatch is resolved and the Phase 4 gate receives explicit human acceptance.
+Phase 5 planning is authorized. Phase 5 implementation remains gated by an accepted Phase 5 plan.

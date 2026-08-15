@@ -455,6 +455,91 @@ describe("authoring mutations", () => {
     });
   });
 
+  it("adds only missing blank boundaries for first, last, before, and after top-level insertion", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const documentPath = "docs/top-level-insert-boundaries.sdd";
+      await writeTempDocument(
+        tempRepoRoot,
+        documentPath,
+        [
+          "SDD-TEXT 0.1",
+          "# alpha documentation",
+          "Place P-100 \"Alpha\"",
+          "END",
+          "# beta documentation",
+          "Place P-200 \"Beta\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const inspected = expectInspectedDocument(await inspectDocument(workspace, bundle, documentPath));
+      const alpha = inspected.resource.nodes.find((node) => node.node_id === "P-100")!.handle;
+      const beta = inspected.resource.nodes.find((node) => node.node_id === "P-200")!.handle;
+      const result = await applyChangeSet(workspace, bundle, {
+        path: documentPath,
+        base_revision: inspected.resource.revision,
+        mode: "commit",
+        operations: [
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-010",
+            name: "First",
+            placement: { mode: "first", stream: "top_level" }
+          },
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-150",
+            name: "Before Beta",
+            placement: { mode: "before", stream: "top_level", anchor_handle: beta }
+          },
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-125",
+            name: "After Alpha",
+            placement: { mode: "after", stream: "top_level", anchor_handle: alpha }
+          },
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-999",
+            name: "Last",
+            placement: { mode: "last", stream: "top_level" }
+          }
+        ]
+      });
+      expect(result.status).toBe("applied");
+      expect(await readTempDocument(tempRepoRoot, documentPath)).toBe(
+        [
+          "SDD-TEXT 0.1",
+          "Place P-010 \"First\"",
+          "END",
+          "",
+          "# alpha documentation",
+          "Place P-100 \"Alpha\"",
+          "END",
+          "",
+          "Place P-125 \"After Alpha\"",
+          "END",
+          "",
+          "Place P-150 \"Before Beta\"",
+          "END",
+          "",
+          "# beta documentation",
+          "Place P-200 \"Beta\"",
+          "END",
+          "",
+          "Place P-999 \"Last\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+    });
+  });
+
   it("inserts edges at the default position and removes edges and nested nodes on commit", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const documentPath = "docs/edge-ops.sdd";

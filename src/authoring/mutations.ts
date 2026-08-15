@@ -66,6 +66,30 @@ interface TriviaLineModel {
   span: SourceSpan;
 }
 
+function blankTriviaLine(): TriviaLineModel {
+  return {
+    raw: "",
+    span: { line: 0, column: 1, endLine: 0, endColumn: 1, startOffset: 0, endOffset: 0 }
+  };
+}
+
+function ensureLeadingBlank(node: NodeModel): void {
+  if (node.leadingTrivia[0]?.raw.trim() !== "") {
+    node.leadingTrivia.unshift(blankTriviaLine());
+  }
+}
+
+function ensureRelationshipToNestedBoundary(parent: NodeModel): void {
+  const firstNestedIndex = parent.bodyItems.findIndex((item) => item.kind === "node_block");
+  if (firstNestedIndex < 0) return;
+  const hasRelationshipBeforeNested = parent.bodyItems
+    .slice(0, firstNestedIndex)
+    .some((item) => item.kind === "edge_line");
+  if (hasRelationshipBeforeNested) {
+    ensureLeadingBlank(parent.bodyItems[firstNestedIndex] as NodeModel);
+  }
+}
+
 interface BaseModelItem {
   kind: "node_block" | "property_line" | "edge_line";
   handle?: Handle;
@@ -780,7 +804,11 @@ function applyInsertNodeBlock(
       return index;
     }
 
-    model.topLevelNodes.splice(index, 0, createNodeModel(syntax, 0, operation));
+    const inserted = createNodeModel(syntax, 0, operation);
+    model.topLevelNodes.splice(index, 0, inserted);
+    if (index > 0) ensureLeadingBlank(inserted);
+    const following = model.topLevelNodes[index + 1];
+    if (following) ensureLeadingBlank(following);
   } else {
     if (!operation.placement.parent_handle) {
       return placementError(documentPath, "Body insertion must specify parent_handle.");
@@ -798,6 +826,7 @@ function applyInsertNodeBlock(
 
     model.topLevelNodes = model.topLevelNodes.map((node) => node);
     parent.bodyItems.splice(index, 0, createNodeModel(syntax, parent.depth + 1, operation));
+    ensureRelationshipToNestedBoundary(parent);
   }
 
   summary.node_insertions.push({
@@ -1443,6 +1472,7 @@ function applyReparentNodeBlock(
   }
   rebaseNodeDepth(target, syntax, newParent ? newParent.depth + 1 : 0);
   destination.splice(insertIndex, 0, target);
+  if (newParent) ensureRelationshipToNestedBoundary(newParent);
 
   summary.ordering_changes.push({
     kind: "reparented_node_block",
@@ -1507,6 +1537,7 @@ function applyInsertEdgeLine(
     commentSuffix: "",
     lineChanged: true
   });
+  ensureRelationshipToNestedBoundary(parent);
 
   summary.edge_insertions.push({
     handle: internalOperation.__internal_handle,

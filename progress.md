@@ -20,10 +20,14 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 8-15
+
+- Phase 4 done with issues
+- Phase 5 done
+
 ## Fri 8-14
 
 - Phase 3 done, architecture
-- Phase 4 done with issues
 
 ## Thu 8-13
 

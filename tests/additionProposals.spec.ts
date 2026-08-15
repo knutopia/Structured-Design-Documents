@@ -298,6 +298,7 @@ describe("addition proposal executor", () => {
       expect(text).toContain([
         "Area A-001 \"New area\"",
         "  CONTAINS P-001 \"Child\"",
+        "",
         "  + Place P-001 \"Child\"",
         "    owner=Design",
         "  END",
