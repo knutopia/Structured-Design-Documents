@@ -1,4 +1,4 @@
-# UX Brief for a Guided Addition API
+# [Done] UX Brief for a Guided Addition API
 
 This document describes the UX flow and related information for an API-driven way for users to add Nodes and Edges to an SDD (Structured Design Document.) This set of interactions will be a core capability for an assisted, manual SDD-authoring capability that may be offered by a future SDD app. 
 

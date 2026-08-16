@@ -1,4 +1,4 @@
-# Guided Addition Phase 7 Acceptance Report
+# [Done] Guided Addition Phase 7 Acceptance Report
 
 Phase decision: **ACCEPT**
 

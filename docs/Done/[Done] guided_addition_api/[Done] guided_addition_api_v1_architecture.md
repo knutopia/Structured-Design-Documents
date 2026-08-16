@@ -1,4 +1,4 @@
-# Guided Addition API v1.0 Architecture
+# [Done] Guided Addition API v1.0 Architecture
 
 Status: **ACCEPTED**
 

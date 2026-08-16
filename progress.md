@@ -3,6 +3,7 @@
 ## Open Issues
 
 -Make "simple" the CLI default
+-Create sdd-info command about a file
 -Update CLI "easy start" paragraph with sdd add
 -fix stale require_event_id_in_recommended in contracts.yaml
 -fix hidden "Component CONTAINS Component" in ui_contracts
@@ -27,6 +28,7 @@ z
 - Added new-document support
 - Updated usage guidance to emphasize sdd-add
 - Examined making simple profile the default
+- Marked guided addition api as done
 
 ## Sat 8-15
 

@@ -1,4 +1,4 @@
-# Guided Addition Remediation Strategy
+# [Done] Guided Addition Remediation Strategy
 
 Status: remediation authority for the failed Guided Addition milestone
 

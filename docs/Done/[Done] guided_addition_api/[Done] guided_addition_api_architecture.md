@@ -1,4 +1,4 @@
-# Guided Addition API Architecture
+# [Done] Guided Addition API Architecture
 
 Status: **REJECTED AS IMPLEMENTATION AUTHORITY**
 

@@ -1,4 +1,4 @@
-# Guided Addition Phase 6 Acceptance Report
+# [Done] Guided Addition Phase 6 Acceptance Report
 
 Phase decision: **ACCEPT**
 

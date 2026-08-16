@@ -1,4 +1,4 @@
-# SDD-Add: Observed Usability Issues
+# [Done] SDD-Add: Observed Usability Issues
 
 This document shows CLI walk-through copies of running the new SDD-Add tool, with inline comments to identify issues.
 

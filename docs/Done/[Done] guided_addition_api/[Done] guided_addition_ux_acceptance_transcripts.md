@@ -1,4 +1,4 @@
-# Guided Addition UX Acceptance Transcripts
+# [Done] Guided Addition UX Acceptance Transcripts
 
 Status: **ACCEPTED**
 

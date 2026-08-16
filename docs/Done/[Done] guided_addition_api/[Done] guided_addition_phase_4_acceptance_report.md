@@ -1,4 +1,4 @@
-# Guided Addition Phase 4 Acceptance Report
+# [Done] Guided Addition Phase 4 Acceptance Report
 
 Status: **ACCEPTED**
 

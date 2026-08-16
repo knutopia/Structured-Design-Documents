@@ -1,4 +1,4 @@
-# Guided Addition Phase 3 UX Addendum
+# [Done] Guided Addition Phase 3 UX Addendum
 
 Status: **ACCEPTED**
 
