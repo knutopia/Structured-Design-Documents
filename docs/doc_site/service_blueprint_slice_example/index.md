@@ -32,7 +32,7 @@ pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --profile stric
 Notes:
 - $PWD points the command to the current directory. Without $PWD the command looks for the input file in the project root.
 - Output is an SVG, by default. Be sure to include .svg in the output filename
-- Uses the `strict` profile adds some detail to the diagram (compared tp `simple')
+- Use of the `strict` profile adds some detail to the diagram (compared to `simple')
 
 To create a PNG as output, add *--format png* to the call and change the output filename to use .png:
 ```bash

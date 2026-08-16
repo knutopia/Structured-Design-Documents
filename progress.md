@@ -30,6 +30,7 @@ z
 - Examined making simple profile the default
 - Marked guided addition api as done
 - Clarified a strict example
+- User-settable defaults architecture
 
 ## Sat 8-15
 
