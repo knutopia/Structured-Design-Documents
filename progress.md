@@ -22,6 +22,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 8-16
+
+- Added new-document support
+- Updated usage guidance to emphasize sdd-add
+
 ## Sat 8-15
 
 - Phase 4 done with issues
@@ -29,7 +34,6 @@ z
 - Phase 6 done
 - Phase 7 done - remediation completed
 - Fixed duplicate prompt
-- Added new-document support
 
 ## Fri 8-14
 
