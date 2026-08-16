@@ -72,6 +72,13 @@ To make diagrams from SDD, remember `sdd show`.
 :::tabs
 
 == sdd add
+Examples:
+
+```bash
+pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
+pnpm sdd add name_of_a_nonexistent_file.sdd
+pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
+```
 
 - Purpose: interactively add content to an SDD file.  Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
 - Use when: you want to create SDD content in a simple way, without writing source code from scratch.
@@ -91,15 +98,17 @@ When a structural relationship could place one node inside another, the command 
 
 At the review, `Cancel` performs no verification and writes nothing. `Save` verifies the unchanged proposal with a dry run. If verification has no warnings, the command commits immediately without a second ordinary confirmation. A concrete warning offers `Save anyway` or `Go back`; `Save anyway` accepts only the exact warning set just reviewed, while `Go back` returns to the unchanged proposal review. If the document, bundle, candidate result, or warning set changed after review, saving is rejected without writing and the command must be restarted.
 
+== sdd show
 Examples:
 
 ```bash
-pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
-pnpm sdd add tmp_app.sdd
-pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple
+pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --profile simple --out ./blueprint.svg
+pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
+pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
+pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
 ```
-
-== sdd show
 
 - Purpose: compile, validate, and generate a preview artifact for a chosen view.
 - Use when: you want a visible result, want to share a diagram, or want to check how a document renders under a given profile.
@@ -112,17 +121,6 @@ By default, the profile is `strict`, but for getting started you should usually 
 
 If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<profile>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 
-Examples:
-
-```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple
-pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --profile simple --out ./blueprint.svg
-pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
-pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
-pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
-```
-
 Advanced note: all six v0.1 preview views default to staged SVG/PNG backends. `--backend legacy_graphviz_preview` selects preserved Graphviz output, for example:
 
 ```bash
@@ -130,6 +128,13 @@ pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --ba
 ```
 
 == sdd validate
+Examples:
+
+```bash
+pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile simple
+pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive
+pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
+```
 
 - Purpose: compile and validate a source `.sdd` file against a chosen profile.
 - Use when: you want to check whether a document passes profile expectations, or you want to see what metadata or structure is still missing.
@@ -139,15 +144,13 @@ pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --ba
 
 This is a good next step after drafting. A common pattern is to start by getting the structure right under `simple`, then move to `permissive` or `strict` as the document becomes more complete.
 
+== sdd compile
 Examples:
 
 ```bash
-pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile simple
-pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive
-pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
+pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd
+pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json
 ```
-
-== sdd compile
 
 - Purpose: compile a source `.sdd` file to canonical graph JSON.
 - Use when: you want machine-readable compiled output, want to inspect the normalized graph shape, or need JSON for another tool.
@@ -156,29 +159,21 @@ pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
 - Output: canonical JSON to `stdout` by default, or to a file when `--out` is provided.
 
 If you are just inspecting the output, `stdout` is often enough. If you want to save or compare the result, use `--out`.
-
-Examples:
-
-```bash
-pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd
-pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json
-```
 :::
 
-## Supported Preview Views
+## Supported Diagrams
 
-The preview-ready views in the CLI today are:
+The diagram types in the CLI today are:
 
 - `ia_place_map`
 - `ui_contracts`
-- `service_blueprint`
 - `scenario_flow`
 - `outcome_opportunity_map`
 - `journey_map`
+- `service_blueprint`
 
-All six v0.1 views are preview-ready through `sdd show`.
-
-Dense Journey Maps can remain difficult to trace. Residual crossings receive deterministic continuity bridges and `renderer.routing.journey_map_unavoidable_crossing` warnings; the artifact is still produced so the diagnosed topology can be reviewed.
+All six v0.1 "views" (= Diagram Types) are preview-ready through `sdd show`.  
+See [Diagram Types](../diagram_types/) for more information.
 
 ## Suggested Starter Flows
 
