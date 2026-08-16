@@ -71,7 +71,7 @@ To make diagrams from SDD, remember `sdd show`.
 
 :::tabs
 
-== `sdd add`
+== sdd add
 
 - Purpose: interactively add content to an SDD file.  Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
 - Use when: you want to create SDD content in a simple way, without writing source code from scratch.
@@ -99,7 +99,7 @@ pnpm sdd add tmp_app.sdd
 pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 ```
 
-== `sdd show`
+== sdd show
 
 - Purpose: compile, validate, and generate a preview artifact for a chosen view.
 - Use when: you want a visible result, want to share a diagram, or want to check how a document renders under a given profile.
@@ -129,7 +129,7 @@ Advanced note: all six v0.1 preview views default to staged SVG/PNG backends. `-
 pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --backend legacy_graphviz_preview --out ./journey-legacy.svg
 ```
 
-== `sdd validate`
+== sdd validate
 
 - Purpose: compile and validate a source `.sdd` file against a chosen profile.
 - Use when: you want to check whether a document passes profile expectations, or you want to see what metadata or structure is still missing.
@@ -147,7 +147,7 @@ pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permiss
 pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
 ```
 
-== `sdd compile`
+== sdd compile
 
 - Purpose: compile a source `.sdd` file to canonical graph JSON.
 - Use when: you want machine-readable compiled output, want to inspect the normalized graph shape, or need JSON for another tool.
@@ -181,6 +181,26 @@ All six v0.1 views are preview-ready through `sdd show`.
 Dense Journey Maps can remain difficult to trace. Residual crossings receive deterministic continuity bridges and `renderer.routing.journey_map_unavoidable_crossing` warnings; the artifact is still produced so the diagnosed topology can be reviewed.
 
 ## Suggested Starter Flows
+
+### I Want to Create an SDD from Scratch
+
+Use `sdd add` with a file name for a new sdd file. The tool will create the empty file and ask you for a node type to add. If you have a specific diagram in mind, you can filter node types by the diagram types that use them. Re-run `sdd add` to add more nodes and relationships between nodes.
+
+```bash
+pnpm sdd add my_sdd_file.sdd
+
+> sdd-toolchain@0.1.0 sdd /home/projects/sdd
+> node dist/cli/main.js add my_new_design.sdd
+
+Creating new file my_sdd_file.sdd.
+
+Choose a node type
+  1. [Filter nodes by diagram type: All diagram types]
+  2. Outcome — Desired change in user or business reality.
+  3. Metric — Measurement definition for an outcome.
+  4. Opportunity — Evidence-backed problem or leverage point.
+(...)
+```
 
 ### I Want A Diagram Quickly
 
