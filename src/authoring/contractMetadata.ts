@@ -911,6 +911,7 @@ const guidedDocumentSnapshotSchema = objectSchema(
     kind: stringSchema(["sdd-guided-document-snapshot"]),
     document_ref: stringSchema(),
     path: stringSchema(),
+    document_precondition: stringSchema(["must_not_exist"]),
     revision: stringSchema(),
     bundle_fingerprint: stringSchema(),
     effective_version: stringSchema(),
@@ -1056,6 +1057,7 @@ const completedAdditionProposalSchema = objectSchema(
       {
         document_ref: stringSchema(),
         path: stringSchema(),
+        document_precondition: stringSchema(["must_not_exist"]),
         base_revision: stringSchema(),
         bundle_fingerprint: stringSchema()
       },
@@ -1220,6 +1222,7 @@ const guidedAdditionStateSchema = objectSchema(
     document_context: objectSchema(
       {
         document_ref: stringSchema(),
+        document_precondition: stringSchema(["must_not_exist"]),
         revision: stringSchema(),
         bundle_fingerprint: stringSchema()
       },
@@ -1414,6 +1417,7 @@ const contractConstraintSpecSchema = objectSchema(
       "commit_safe_continuation",
       "dry_run_informational_only",
       "same_document_revision",
+      "document_presence_precondition",
       "same_bundle_fingerprint",
       "currently_offered_opaque_option",
       "exact_confirmation",
@@ -2299,6 +2303,24 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
     summary: "Caller-carried state is valid only for the exact snapshot document revision."
   },
   {
+    constraint_id: "shared.constraint.guided_addition.advance.document_presence_precondition",
+    applies_to_shape_id: "shared.shape.guided_addition_advance_args",
+    applies_to_json_pointers: [
+      "/snapshot/document_precondition",
+      "/state/document_context/document_precondition"
+    ],
+    kind: "document_presence_precondition",
+    parameters: {
+      equality_group: [
+        "/snapshot/document_precondition",
+        "/state/document_context/document_precondition"
+      ],
+      absent_means: "document_exists_at_revision",
+      must_not_exist_means: "target_path_is_absent"
+    },
+    summary: "Caller-carried state retains whether the exact guided context represents an existing or not-yet-created document."
+  },
+  {
     constraint_id: "shared.constraint.guided_addition.advance.same_bundle_fingerprint",
     applies_to_shape_id: "shared.shape.guided_addition_advance_args",
     applies_to_json_pointers: ["/snapshot/bundle_fingerprint", "/state/document_context/bundle_fingerprint"],
@@ -2342,9 +2364,21 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
     applies_to_json_pointers: ["/proposal/document_context/base_revision"],
     kind: "same_document_revision",
     parameters: {
-      must_equal: "current_document.revision"
+      existing_document_must_equal: "current_document.revision",
+      must_not_exist_must_equal: "bundle_generated_empty_bootstrap.revision"
     },
-    summary: "A proposal applies only to the current persisted document revision."
+    summary: "A proposal applies only to the exact existing revision or the exact bundle-generated bootstrap revision for a missing target."
+  },
+  {
+    constraint_id: "shared.constraint.addition_proposal.apply.document_presence_precondition",
+    applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
+    applies_to_json_pointers: ["/proposal/document_context/document_precondition"],
+    kind: "document_presence_precondition",
+    parameters: {
+      absent_means: "target_must_exist",
+      must_not_exist_means: "target_must_remain_absent_through_exclusive_commit"
+    },
+    summary: "A new-document proposal is valid only while its target path remains absent; existing proposals never recreate deleted files."
   },
   {
     constraint_id: "shared.constraint.addition_proposal.apply.same_bundle_fingerprint",
@@ -2393,7 +2427,15 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
     kind: "bound_warning_acceptance",
     parameters: {
       required_when: "commit_candidate_has_warnings",
-      binds: ["proposal_id", "document_path", "base_revision", "bundle_fingerprint", "resulting_revision", "sorted_warning_set"]
+      binds: [
+        "proposal_id",
+        "document_path",
+        "document_precondition",
+        "base_revision",
+        "bundle_fingerprint",
+        "resulting_revision",
+        "sorted_warning_set"
+      ]
     },
     summary: "A warned commit requires the token returned for the exact proposal, revisions, bundle, result, and warning set."
   }

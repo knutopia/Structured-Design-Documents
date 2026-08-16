@@ -71,6 +71,15 @@ function fixture(name: string): { relative: string; absolute: string; original: 
   return { relative: path.relative(repoRoot, absolute).split(path.sep).join("/"), absolute, original };
 }
 
+function newTarget(name: string): ReturnType<typeof fixture> {
+  const absolute = path.join(fixtureDir, "nested", `${name}.sdd`);
+  return {
+    relative: path.relative(repoRoot, absolute).split(path.sep).join("/"),
+    absolute,
+    original: ""
+  };
+}
+
 async function run(
   target: ReturnType<typeof fixture>,
   prompt: TranscriptPrompt,
@@ -98,6 +107,89 @@ function standaloneRules(finalDecision: "Save" | "Cancel"): SelectionRule[] {
 }
 
 describe("sdd add v1 transcript delivery", () => {
+  it("creates a missing document only after Save and skips redundant empty-document choices", async () => {
+    const target = newTarget("new-save");
+    const prompt = new TranscriptPrompt(
+      [/^Place —/, "Save"],
+      {
+        "New node ID": "P-001",
+        "New node Name": "Home",
+        "New node Description": "Starting place"
+      },
+      [false]
+    );
+    const result = await run(target, prompt);
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(result.transcript).toMatch(/^Creating new file new-save\.sdd\.\n\nChoose a node type\n/);
+    expect(result.transcript).not.toContain("What would you like to add?");
+    expect(result.transcript).not.toContain("Where to place");
+    expect(result.transcript).toContain("Place P-001 as the only top-level node");
+    expect(result.transcript).toContain("Saved new-save.sdd.");
+    expect(fs.readFileSync(target.absolute, "utf8")).toBe([
+      "SDD-TEXT 0.1",
+      'Place P-001 "Home"',
+      '  description="Starting place"',
+      "END",
+      ""
+    ].join("\n"));
+  });
+
+  it("leaves a missing target absent after Cancel, prompt failure, anchored use, or rejected Save", async () => {
+    const cancelTarget = newTarget("new-cancel");
+    const cancel = await run(cancelTarget, new TranscriptPrompt(
+      [/^Place —/, "Cancel"],
+      { "New node ID": "P-001", "New node Name": "Home", "New node Description": "Starting place" },
+      [false]
+    ));
+    expect(cancel.exitCode, cancel.stderr).toBe(0);
+    expect(fs.existsSync(cancelTarget.absolute)).toBe(false);
+
+    const promptFailureTarget = newTarget("new-prompt-failure");
+    const promptFailure = await run(promptFailureTarget, new TranscriptPrompt([]));
+    expect(promptFailure.exitCode).toBe(1);
+    expect(fs.existsSync(promptFailureTarget.absolute)).toBe(false);
+
+    const anchoredTarget = newTarget("new-anchored");
+    const anchored = await run(anchoredTarget, new TranscriptPrompt([]), ["--node", "P-001"]);
+    expect(anchored.exitCode).toBe(1);
+    expect(anchored.stderr).toContain("Anchor node 'P-001' was not found");
+    expect(fs.existsSync(anchoredTarget.absolute)).toBe(false);
+
+    const rejectedTarget = newTarget("new-rejected");
+    const rejected = await run(rejectedTarget, new TranscriptPrompt(
+      [/^Place —/, "Save"],
+      { "New node ID": "P-001", "New node Name": "Home", "New node Description": "Starting place" },
+      [false]
+    ), [], {
+      applyAdditionProposalV1: async (workspace, loadedBundle, args) => {
+        const proposal = structuredClone(args.proposal);
+        proposal.document_context.bundle_fingerprint = "bnd_stale";
+        return applyAdditionProposalV1(workspace, loadedBundle, { ...args, proposal });
+      }
+    });
+    expect(rejected.exitCode).toBe(1);
+    expect(fs.existsSync(rejectedTarget.absolute)).toBe(false);
+  });
+
+  it("does not reinterpret non-ENOENT source failures as new documents", async () => {
+    const target = newTarget("new-read-error");
+    let newSnapshotCalls = 0;
+    const result = await run(target, new TranscriptPrompt([]), [], {
+      readSourceInput: async () => {
+        throw Object.assign(new Error("permission denied"), { code: "EACCES" });
+      },
+      createNewGuidedDocumentSnapshot: (...args) => {
+        newSnapshotCalls += 1;
+        return new (class extends Error {})() as never;
+      }
+    });
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("permission denied");
+    expect(newSnapshotCalls).toBe(0);
+    expect(fs.existsSync(target.absolute)).toBe(false);
+  });
+
   it("matches T16 and writes once after one warning-free Save", async () => {
     const target = fixture("guided-addition-acceptance");
     const applications: ApplyAdditionProposalV1Args[] = [];

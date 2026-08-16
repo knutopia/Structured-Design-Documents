@@ -110,6 +110,7 @@ function choice(
     choice_id: createGuidedOpaqueId(choicePrefix(action), {
       bundle_fingerprint: snapshot.bundle_fingerprint,
       revision: snapshot.revision,
+      ...(snapshot.document_precondition ? { document_precondition: snapshot.document_precondition } : {}),
       display,
       action
     }),
@@ -158,12 +159,17 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
       workflow_version: "1.0",
       document_context: {
         document_ref: snapshot.document_ref,
+        ...(snapshot.document_precondition ? { document_precondition: snapshot.document_precondition } : {}),
         revision: snapshot.revision,
         bundle_fingerprint: snapshot.bundle_fingerprint
       },
       ...(anchor ? { anchor } : {}),
       browse_filters: {},
-      progress: anchor ? { kind: "choose_relationship_route", anchor } : { kind: "choose_addition_kind" },
+      progress: anchor
+        ? { kind: "choose_relationship_route", anchor }
+        : snapshot.document_precondition === "must_not_exist"
+          ? { kind: "standalone.browse_node_type" }
+          : { kind: "choose_addition_kind" },
       accepted_material_effects: []
     };
     return this.#result(snapshot, state);
@@ -208,6 +214,7 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
     }
     if (
       state.document_context.document_ref !== snapshot.document_ref ||
+      state.document_context.document_precondition !== snapshot.document_precondition ||
       state.document_context.revision !== snapshot.revision ||
       state.document_context.bundle_fingerprint !== snapshot.bundle_fingerprint
     ) {
@@ -799,7 +806,7 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
         if (progress.kind === "standalone.choose_details") {
           state.progress = action.disclose
             ? { kind: "standalone.edit_additional", node: progress.node }
-            : { kind: "standalone.choose_order", node: progress.node };
+            : this.#afterStandaloneNode(snapshot, progress.node);
         } else if (progress.kind === "relationship.choose_node_details") {
           state.progress = action.disclose
             ? { kind: "relationship.edit_node_details", draft: progress.draft }
@@ -948,13 +955,27 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
     if (!relationshipDraft) {
       state.progress = group === "primary" && hasAdditional
         ? { kind: "standalone.choose_details", node }
-        : { kind: "standalone.choose_order", node };
+        : this.#afterStandaloneNode(snapshot, node);
       return;
     }
     const draft = { ...relationshipDraft, new_node: node };
     state.progress = group === "primary" && hasAdditional
       ? { kind: "relationship.choose_node_details", draft }
       : this.#afterNodeDetails(draft);
+  }
+
+  #afterStandaloneNode(snapshot: GuidedDocumentSnapshot, node: ProposedNodeV1): GuidedProgressV1 {
+    return snapshot.document_precondition === "must_not_exist"
+      ? {
+          kind: "standalone.ready",
+          node,
+          node_organization: [{
+            kind: "add_new_node_top_level",
+            node: NEW_NODE,
+            order: { kind: "top_level_last" }
+          }]
+        }
+      : { kind: "standalone.choose_order", node };
   }
 
   #submitRelationshipFields(
@@ -1147,6 +1168,7 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
       document_context: {
         document_ref: snapshot.document_ref,
         ...(snapshot.path ? { path: snapshot.path } : {}),
+        ...(snapshot.document_precondition ? { document_precondition: snapshot.document_precondition } : {}),
         base_revision: snapshot.revision,
         bundle_fingerprint: snapshot.bundle_fingerprint
       },
@@ -1184,7 +1206,11 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
         lines: [
           `Add ${progress.node.node_type} ${proposedName(progress.node)}`,
           ...(description ? [`Description: ${description}`] : []),
-          order ? `Place ${progress.node.node_id} at top level, ${order}` : this.#organizationReview(progress.node_organization)
+          snapshot.document_precondition === "must_not_exist"
+            ? `Place ${progress.node.node_id} as the only top-level node`
+            : order
+              ? `Place ${progress.node.node_id} at top level, ${order}`
+              : this.#organizationReview(progress.node_organization)
         ]
       },
       diagnostics: []
@@ -1211,6 +1237,7 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
       document_context: {
         document_ref: snapshot.document_ref,
         ...(snapshot.path ? { path: snapshot.path } : {}),
+        ...(snapshot.document_precondition ? { document_precondition: snapshot.document_precondition } : {}),
         base_revision: snapshot.revision,
         bundle_fingerprint: snapshot.bundle_fingerprint
       },

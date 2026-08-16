@@ -6,6 +6,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import {
   createGuidedDocumentSnapshot,
   createGuidedDocumentSnapshotFromWorkspace,
+  createNewGuidedDocumentSnapshot,
   GuidedAdditionV1DomainError,
   loadBundle
 } from "../src/index.js";
@@ -51,6 +52,41 @@ function captureDomainError(action: () => unknown): GuidedAdditionV1DomainError 
 }
 
 describe("guided document snapshot", () => {
+  it("creates a deterministic immutable new-document snapshot from bundle-owned version metadata", () => {
+    const first = createNewGuidedDocumentSnapshot(bundle, {
+      document_ref: "docs/new.sdd",
+      path: "docs/new.sdd"
+    });
+    const second = createNewGuidedDocumentSnapshot(bundle, {
+      document_ref: "docs/new.sdd",
+      path: "docs/new.sdd"
+    });
+
+    expect(first).toEqual(second);
+    expect(first).toMatchObject({
+      kind: "sdd-guided-document-snapshot",
+      document_ref: "docs/new.sdd",
+      path: "docs/new.sdd",
+      document_precondition: "must_not_exist",
+      revision: expect.stringMatching(/^rev_[a-f0-9]{64}$/),
+      effective_version: bundle.syntax.document.version_declaration.default_effective_version,
+      nodes: [],
+      edges: [],
+      top_level_order: [],
+      body_order_by_parent: {},
+      diagnostics: []
+    });
+    expect(Object.isFrozen(first)).toBe(true);
+    expect(Object.isFrozen(first.nodes)).toBe(true);
+
+    const changedBundle = cloneBundle();
+    changedBundle.syntax.document.version_declaration.literal = "SDD-NEXT";
+    expect(createNewGuidedDocumentSnapshot(changedBundle, {
+      document_ref: "docs/new.sdd",
+      path: "docs/new.sdd"
+    }).revision).not.toBe(first.revision);
+  });
+
   it("combines revision-bound structure with literal compiled graph semantics in source order", () => {
     const snapshot = createGuidedDocumentSnapshot(bundle, {
       document_ref: "docs/proof.sdd",

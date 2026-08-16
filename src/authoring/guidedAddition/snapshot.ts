@@ -4,12 +4,15 @@ import type { Bundle } from "../../bundle/types.js";
 import { compileSource } from "../../compiler/compileSource.js";
 import { sortDiagnostics } from "../../diagnostics/types.js";
 import type { Diagnostic } from "../../types.js";
+import { createEmptyDocumentBootstrap } from "../bootstrap.js";
 import { inspectDocumentText, type InspectedDocument } from "../inspect.js";
 import type { Handle } from "../contracts.js";
+import { computeDocumentRevision } from "../revisions.js";
 import { GuidedAdditionV1DomainError } from "./v1/contracts.js";
 import type {
   GuidedDocumentSnapshot,
   GuidedDocumentSnapshotInput,
+  GuidedNewDocumentSnapshotInput,
   GuidedExistingEdge,
   GuidedExistingNode
 } from "./sharedContracts.js";
@@ -27,6 +30,20 @@ interface GuidedDocumentSnapshotIndexes {
 }
 
 const snapshotIndexes = new WeakMap<GuidedDocumentSnapshot, GuidedDocumentSnapshotIndexes>();
+
+function assertGuidedAdditionSupport(bundle: Bundle, file: string): void {
+  if (!hasGuidedAdditionSupport(bundle)) {
+    const code = "guided_addition.unsupported_bundle";
+    const message = "The loaded bundle does not declare guided authoring metadata";
+    throw new GuidedAdditionV1DomainError(code, message, [authoringDiagnostic(code, message, file)]);
+  }
+}
+
+function finalizeSnapshot(snapshot: GuidedDocumentSnapshot): GuidedDocumentSnapshot {
+  deepFreeze(snapshot);
+  snapshotIndexes.set(snapshot, buildIndexes(snapshot));
+  return snapshot;
+}
 
 function authoringDiagnostic(code: string, message: string, file: string): Diagnostic {
   return {
@@ -170,11 +187,7 @@ function buildIndexes(snapshot: GuidedDocumentSnapshot): GuidedDocumentSnapshotI
 
 export function createGuidedDocumentSnapshot(bundle: Bundle, input: GuidedDocumentSnapshotInput): GuidedDocumentSnapshot {
   const file = input.path ?? input.document_ref;
-  if (!hasGuidedAdditionSupport(bundle)) {
-    const code = "guided_addition.unsupported_bundle";
-    const message = "The loaded bundle does not declare guided authoring metadata";
-    throw new GuidedAdditionV1DomainError(code, message, [authoringDiagnostic(code, message, file)]);
-  }
+  assertGuidedAdditionSupport(bundle, file);
 
   const inspected = inspectDocumentText(bundle, file, input.text);
   if (inspected.kind === "sdd-inspect-load-failure") {
@@ -205,7 +218,28 @@ export function createGuidedDocumentSnapshot(bundle: Bundle, input: GuidedDocume
     ),
     diagnostics: structuredClone(compiled.diagnostics)
   };
-  deepFreeze(snapshot);
-  snapshotIndexes.set(snapshot, buildIndexes(snapshot));
-  return snapshot;
+  return finalizeSnapshot(snapshot);
+}
+
+export function createNewGuidedDocumentSnapshot(
+  bundle: Bundle,
+  input: GuidedNewDocumentSnapshotInput
+): GuidedDocumentSnapshot {
+  const file = input.path ?? input.document_ref;
+  assertGuidedAdditionSupport(bundle, file);
+  const bootstrap = createEmptyDocumentBootstrap(bundle);
+  return finalizeSnapshot({
+    kind: "sdd-guided-document-snapshot",
+    document_ref: input.document_ref,
+    ...(input.path === undefined ? {} : { path: input.path }),
+    document_precondition: "must_not_exist",
+    revision: computeDocumentRevision(bootstrap.text),
+    bundle_fingerprint: computeBundleFingerprint(bundle),
+    effective_version: bootstrap.effectiveVersion,
+    nodes: [],
+    edges: [],
+    top_level_order: [],
+    body_order_by_parent: {},
+    diagnostics: []
+  });
 }

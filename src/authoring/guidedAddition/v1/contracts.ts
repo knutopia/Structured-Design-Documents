@@ -107,6 +107,7 @@ export interface CompletedAdditionProposalV1 {
   document_context: {
     document_ref: string;
     path?: string;
+    document_precondition?: "must_not_exist";
     base_revision: DocumentRevision;
     bundle_fingerprint: BundleFingerprint;
   };
@@ -219,6 +220,7 @@ export interface GuidedAdditionStateV1 {
   workflow_version: "1.0";
   document_context: {
     document_ref: string;
+    document_precondition?: "must_not_exist";
     revision: DocumentRevision;
     bundle_fingerprint: BundleFingerprint;
   };

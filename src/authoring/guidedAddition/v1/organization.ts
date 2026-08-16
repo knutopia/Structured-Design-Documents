@@ -48,6 +48,11 @@ export function createMoveEffect(
   };
   return {
     ...value,
-    effect_id: createGuidedOpaqueId("eff", { bundle_fingerprint: bundleFingerprint, revision: snapshot.revision, value })
+    effect_id: createGuidedOpaqueId("eff", {
+      bundle_fingerprint: bundleFingerprint,
+      revision: snapshot.revision,
+      ...(snapshot.document_precondition ? { document_precondition: snapshot.document_precondition } : {}),
+      value
+    })
   };
 }

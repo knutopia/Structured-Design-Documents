@@ -3,7 +3,10 @@ import path from "node:path";
 import { Command, CommanderError } from "commander";
 import { applyAdditionProposalV1 } from "../authoring/additionProposalsV1.js";
 import { createGuidedAdditionRuntimeV1 } from "../authoring/guidedAddition/v1/planner.js";
-import { createGuidedDocumentSnapshot } from "../authoring/guidedAddition/snapshot.js";
+import {
+  createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot
+} from "../authoring/guidedAddition/snapshot.js";
 import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/workspace.js";
 import { loadBundle } from "../bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
@@ -106,6 +109,7 @@ function createDefaultDeps(): CliDeps {
     findAuthoringRepoRoot,
     createAuthoringWorkspace,
     createGuidedDocumentSnapshot,
+    createNewGuidedDocumentSnapshot,
     createGuidedAdditionRuntimeV1,
     applyAdditionProposalV1,
     createGuidedPrompt: createReadlineGuidedPrompt,
@@ -628,10 +632,11 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .command("add")
     .summary("Interactively add a node or relationship")
     .description("Guide a semantic addition, review a dry run, and Save or Cancel without constructing source text in the CLI.")
-    .argument("<document_path>", "repo-owned source .sdd file")
+    .argument("<document_path>", "repo-owned .sdd path (created on Save if absent)")
     .option("--node <node_id>", "exact anchor node id")
     .option("--bundle <manifest>", "bundle manifest path")
     .addHelpText("after", examplesBlock([
+      "sdd add tmp_app.sdd",
       "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001"
     ]))

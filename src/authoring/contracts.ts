@@ -694,6 +694,7 @@ export interface ContractConstraintSpec {
     | "commit_safe_continuation"
     | "dry_run_informational_only"
     | "same_document_revision"
+    | "document_presence_precondition"
     | "same_bundle_fingerprint"
     | "currently_offered_opaque_option"
     | "exact_confirmation"

@@ -24,7 +24,10 @@ export {
   GuidedAdditionUnsupportedBundleError
 } from "./bundle/guidedAuthoring.js";
 export { createGuidanceCatalog, GuidanceCatalog } from "./authoring/guidedAddition/catalog.js";
-export { createGuidedDocumentSnapshot } from "./authoring/guidedAddition/snapshot.js";
+export {
+  createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot
+} from "./authoring/guidedAddition/snapshot.js";
 export { createGuidedDocumentSnapshotFromWorkspace } from "./authoring/guidedAddition/snapshotFiles.js";
 export { createGuidedAdditionRuntimeV1 } from "./authoring/guidedAddition/v1/planner.js";
 export { applyAdditionProposalV1 } from "./authoring/additionProposalsV1.js";

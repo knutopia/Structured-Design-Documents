@@ -49,10 +49,15 @@ import {
   createRestoreDocumentInverse,
   type ChangeSetJournal
 } from "./journal.js";
-import { computeDocumentRevision, normalizeTextToLf, writeCanonicalLfText } from "./revisions.js";
+import {
+  computeDocumentRevision,
+  normalizeTextToLf,
+  writeCanonicalLfText,
+  writeCanonicalLfTextExclusive
+} from "./revisions.js";
+import { createEmptyDocumentBootstrap } from "./bootstrap.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 
-const EMPTY_TEMPLATE_VERSION = "0.1";
 const MINIMUM_TOP_LEVEL_BLOCKS_CODE = "parse.minimum_top_level_blocks";
 const STRUCTURAL_RELATIONSHIP_TYPES = new Set<StructuralRelationshipType>(["CONTAINS", "COMPOSED_OF"]);
 const TEMP_HANDLE_PREFIX = "tmp_authoring_";
@@ -633,16 +638,12 @@ function createRejectedChangeSet(
   return result;
 }
 
-function isBootstrapMinimumTopLevelFailure(result: InspectLoadFailure, text: string): boolean {
+function isBootstrapMinimumTopLevelFailure(bundle: Bundle, result: InspectLoadFailure, text: string): boolean {
   return (
-    text === emptyDocumentText() &&
+    text === createEmptyDocumentBootstrap(bundle).text &&
     result.diagnostics.length > 0 &&
     result.diagnostics.every((diagnostic) => diagnostic.code === MINIMUM_TOP_LEVEL_BLOCKS_CODE)
   );
-}
-
-function emptyDocumentText(): string {
-  return `SDD-TEXT ${EMPTY_TEMPLATE_VERSION}\n`;
 }
 
 function appendLines(target: string[], lines: TriviaLineModel[] | string[]): void {
@@ -684,11 +685,11 @@ function renderDocumentModel(bundle: Bundle, syntax: AuthoringSyntax, model: Doc
 }
 
 function createEmptyDocumentModel(bundle: Bundle): DocumentModel {
-  const syntax = createAuthoringSyntax(bundle);
+  const bootstrap = createEmptyDocumentBootstrap(bundle);
   return {
-    effectiveVersion: EMPTY_TEMPLATE_VERSION,
+    effectiveVersion: bootstrap.effectiveVersion,
     preVersionTrivia: [],
-    versionLine: `${syntax.versionLiteral} ${EMPTY_TEMPLATE_VERSION}`,
+    versionLine: bootstrap.versionLine,
     topLevelNodes: [],
     trailingTrivia: []
   };
@@ -1808,6 +1809,7 @@ function remapSummaryHandles(
 export interface ExecuteChangeOperationsArgs extends ApplyChangeSetArgs {
   origin?: ChangeSetResult["origin"];
   allowEmptyTemplateBootstrap?: boolean;
+  initialDocument?: { kind: "must_not_exist"; text: string; existsDiagnostic?: Diagnostic };
   preCommitGuard?: (candidate: Readonly<ChangeSetResult>) => Diagnostic[];
 }
 
@@ -1858,12 +1860,13 @@ export async function executeChangeOperations(
     validate_profile: args.validate_profile,
     projection_views: args.projection_views
   };
+  const createsDocument = args.initialDocument?.kind === "must_not_exist";
   const changeSet = createBaseChangeSetResult(
     journal.createChangeSetId(),
     resolvedPath.publicPath,
     args.origin ?? "apply_change_set",
-    "updated",
-    args.base_revision,
+    createsDocument ? "created" : "updated",
+    createsDocument ? null : args.base_revision,
     mode,
     []
   );
@@ -1873,13 +1876,27 @@ export async function executeChangeOperations(
   let rawText: string;
   try {
     rawText = await readFile(resolvedPath.absolutePath, "utf8");
-  } catch {
-    return {
-      changeSet: createRejectedChangeSet(changeSet, [
-        createDiagnostic(resolvedPath.publicPath, "sdd.document_missing", `Document '${resolvedPath.publicPath}' does not exist.`)
-      ]),
-      tempHandleMapping: new Map()
-    };
+    if (createsDocument) {
+      return {
+        changeSet: createRejectedChangeSet(changeSet, [
+          args.initialDocument?.existsDiagnostic ??
+            createDiagnostic(resolvedPath.publicPath, "sdd.document_exists", `Document '${resolvedPath.publicPath}' already exists.`)
+        ]),
+        tempHandleMapping: new Map()
+      };
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    if (createsDocument) {
+      rawText = args.initialDocument!.text;
+    } else {
+      return {
+        changeSet: createRejectedChangeSet(changeSet, [
+          createDiagnostic(resolvedPath.publicPath, "sdd.document_missing", `Document '${resolvedPath.publicPath}' does not exist.`)
+        ]),
+        tempHandleMapping: new Map()
+      };
+    }
   }
 
   const canonicalText = normalizeTextToLf(rawText);
@@ -1915,7 +1932,7 @@ export async function executeChangeOperations(
   const summary = createEmptySummary();
   const model =
     inspected.kind === "sdd-inspect-load-failure"
-      ? isBootstrapMinimumTopLevelFailure(inspected, canonicalText) &&
+      ? isBootstrapMinimumTopLevelFailure(bundle, inspected, canonicalText) &&
         (args.allowEmptyTemplateBootstrap || preparedOperations.every((operation) => isBootstrapInsertOperation(operation)))
         ? createEmptyDocumentModel(bundle)
         : undefined
@@ -1986,9 +2003,26 @@ export async function executeChangeOperations(
 
   if (mode === "commit") {
     await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
-    await writeCanonicalLfText(resolvedPath.absolutePath, candidateText);
+    if (createsDocument) {
+      try {
+        await writeCanonicalLfTextExclusive(resolvedPath.absolutePath, candidateText);
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+        return {
+          changeSet: createRejectedChangeSet(changeSet, [
+            args.initialDocument?.existsDiagnostic ??
+              createDiagnostic(resolvedPath.publicPath, "sdd.document_exists", `Document '${resolvedPath.publicPath}' already exists.`)
+          ], evaluated),
+          tempHandleMapping: new Map()
+        };
+      }
+    } else {
+      await writeCanonicalLfText(resolvedPath.absolutePath, candidateText);
+    }
     await journal.recordChangeSet(changeSet, {
-      inverse: createRestoreDocumentInverse(resolvedPath.publicPath, currentRevision, canonicalText)
+      inverse: createsDocument
+        ? createDeleteDocumentInverse(resolvedPath.publicPath)
+        : createRestoreDocumentInverse(resolvedPath.publicPath, currentRevision, canonicalText)
     });
   } else {
     await journal.recordChangeSet(changeSet);
@@ -2041,7 +2075,8 @@ export async function createDocument(
     ]);
   }
 
-  if ((args.version ?? EMPTY_TEMPLATE_VERSION) !== EMPTY_TEMPLATE_VERSION) {
+  const bootstrap = createEmptyDocumentBootstrap(bundle);
+  if ((args.version ?? bootstrap.effectiveVersion) !== bootstrap.effectiveVersion) {
     createCreateDocumentRejection(journal, resolvedPath.publicPath, [
       createDiagnostic(
         resolvedPath.publicPath,
@@ -2051,7 +2086,7 @@ export async function createDocument(
     ]);
   }
 
-  const canonicalText = emptyDocumentText();
+  const canonicalText = bootstrap.text;
   await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
   await writeCanonicalLfText(resolvedPath.absolutePath, canonicalText);
 

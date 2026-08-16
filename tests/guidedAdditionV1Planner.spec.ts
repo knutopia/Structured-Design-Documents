@@ -5,7 +5,10 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadBundle } from "../src/bundle/loadBundle.js";
 import type { Bundle } from "../src/bundle/types.js";
 import { createGuidanceCatalog } from "../src/authoring/guidedAddition/catalog.js";
-import { createGuidedDocumentSnapshot } from "../src/authoring/guidedAddition/snapshot.js";
+import {
+  createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot
+} from "../src/authoring/guidedAddition/snapshot.js";
 import { createGuidedAdditionRuntimeV1 } from "../src/authoring/guidedAddition/v1/planner.js";
 import type {
   ExistingNodeRefV1,
@@ -96,6 +99,81 @@ function submitNewNode(result: GuidedAdditionResultV1, values: GuidedFieldValueV
 function declineRelationshipDetails(result: GuidedAdditionResultV1): GuidedAdditionResultV1 {
   return choose(result, (action) => action.kind === "set_relationship_detail_disclosure" && !action.disclose);
 }
+
+describe("Guided Addition v1 new-document flow", () => {
+  it("starts at node types, skips placement, and completes the only top-level node", () => {
+    const newSnapshot = createNewGuidedDocumentSnapshot(bundle, {
+      document_ref: "docs/new.sdd",
+      path: "docs/new.sdd"
+    });
+    const runtime = createGuidedAdditionRuntimeV1(bundle);
+    const advanceChoice = (
+      result: GuidedAdditionResultV1,
+      predicate: (action: GuidedAdditionActionV1) => boolean
+    ): GuidedAdditionResultV1 => {
+      const selected = choicePage(result).choices.find((candidate) => predicate(candidate.action));
+      expect(selected).toBeDefined();
+      return runtime.advance(newSnapshot, result.state, selected!.action);
+    };
+
+    let result = runtime.begin(newSnapshot, { workflow_version: "1.0" });
+    expect(choicePage(result).page_kind).toBe("browse_standalone_node_type");
+    expect(result.state.document_context.document_precondition).toBe("must_not_exist");
+    expect(() => runtime.advance(newSnapshot, result.state, {
+      kind: "choose_addition_kind",
+      addition_kind: "relationship"
+    })).toThrowError(expect.objectContaining({ code: "guided_addition.choice_unavailable" }));
+    expect(() => runtime.advance(newSnapshot, result.state, {
+      kind: "choose_same_level_order",
+      order: { kind: "top_level_first" }
+    })).toThrowError(expect.objectContaining({ code: "guided_addition.choice_unavailable" }));
+
+    result = advanceChoice(result, (action) => action.kind === "choose_standalone_node_type" && action.node_type === "Place");
+    expect(formPage(result).page_kind).toBe("edit_new_node");
+    result = runtime.advance(newSnapshot, result.state, {
+      kind: "submit_new_node_fields",
+      local_node_id: "node_1",
+      field_group: "primary",
+      values: primaryValues("P-001", "Home", "Starting place")
+    });
+    result = advanceChoice(result, (action) => action.kind === "set_node_detail_disclosure" && !action.disclose);
+    expect(result.kind).toBe("sdd-guided-addition-complete");
+    if (result.kind === "sdd-guided-addition-complete") {
+      expect(result.proposal.document_context.document_precondition).toBe("must_not_exist");
+      expect(result.proposal.node_organization).toEqual([{
+        kind: "add_new_node_top_level",
+        node: { kind: "new_node", local_node_id: "node_1" },
+        order: { kind: "top_level_last" }
+      }]);
+      expect(result.review.lines.at(-1)).toBe("Place P-001 as the only top-level node");
+    }
+  });
+
+  it("also skips placement after submitting optional details", () => {
+    const newSnapshot = createNewGuidedDocumentSnapshot(bundle, { document_ref: "docs/detailed.sdd" });
+    const runtime = createGuidedAdditionRuntimeV1(bundle);
+    let result = runtime.begin(newSnapshot, { workflow_version: "1.0" });
+    const select = (predicate: (action: GuidedAdditionActionV1) => boolean): void => {
+      const action = choicePage(result).choices.find((candidate) => predicate(candidate.action))!.action;
+      result = runtime.advance(newSnapshot, result.state, action);
+    };
+    select((action) => action.kind === "choose_standalone_node_type" && action.node_type === "Place");
+    result = runtime.advance(newSnapshot, result.state, {
+      kind: "submit_new_node_fields",
+      local_node_id: "node_1",
+      field_group: "primary",
+      values: primaryValues("P-001", "Home", "Starting place")
+    });
+    select((action) => action.kind === "set_node_detail_disclosure" && action.disclose);
+    result = runtime.advance(newSnapshot, result.state, {
+      kind: "submit_new_node_fields",
+      local_node_id: "node_1",
+      field_group: "additional",
+      values: []
+    });
+    expect(result.kind).toBe("sdd-guided-addition-complete");
+  });
+});
 
 describe("Guided Addition v1 route identity and constraint propagation", () => {
   it("reserves page prompts for semantic questions", () => {

@@ -528,6 +528,7 @@ describe("authoring contract metadata", () => {
       "canonical_proposal_identity",
       "commit_safe_continuation",
       "currently_offered_opaque_option",
+      "document_presence_precondition",
       "dry_run_informational_only",
       "exact_confirmation",
       "forbidden_if",

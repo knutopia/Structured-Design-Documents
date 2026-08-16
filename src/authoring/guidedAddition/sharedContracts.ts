@@ -8,6 +8,11 @@ export interface GuidedDocumentSnapshotInput {
   text: string;
 }
 
+export interface GuidedNewDocumentSnapshotInput {
+  document_ref: string;
+  path?: string;
+}
+
 export interface GuidedExistingNode {
   handle: Handle;
   node_id: string;
@@ -30,6 +35,7 @@ export interface GuidedDocumentSnapshot {
   kind: "sdd-guided-document-snapshot";
   document_ref: string;
   path?: string;
+  document_precondition?: "must_not_exist";
   revision: DocumentRevision;
   bundle_fingerprint: BundleFingerprint;
   effective_version: string;
@@ -39,4 +45,3 @@ export interface GuidedDocumentSnapshot {
   body_order_by_parent: Record<Handle, Handle[]>;
   diagnostics: Diagnostic[];
 }
-

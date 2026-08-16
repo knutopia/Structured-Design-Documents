@@ -20,3 +20,9 @@ export async function writeCanonicalLfText(filePath: string, text: string): Prom
   await writeFile(filePath, canonicalText, "utf8");
   return canonicalText;
 }
+
+export async function writeCanonicalLfTextExclusive(filePath: string, text: string): Promise<string> {
+  const canonicalText = normalizeTextToLf(text);
+  await writeFile(filePath, canonicalText, { encoding: "utf8", flag: "wx" });
+  return canonicalText;
+}

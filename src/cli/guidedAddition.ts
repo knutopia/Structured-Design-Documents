@@ -12,7 +12,10 @@ import type {
   ApplyAdditionProposalV1Args,
   ApplyAdditionProposalV1Result
 } from "../authoring/additionProposalsV1.js";
-import type { GuidedDocumentSnapshot } from "../authoring/guidedAddition/sharedContracts.js";
+import type {
+  GuidedDocumentSnapshot,
+  GuidedNewDocumentSnapshotInput
+} from "../authoring/guidedAddition/sharedContracts.js";
 import {
   GuidedAdditionV1DomainError,
   type CompletedAdditionProposalV1,
@@ -63,6 +66,10 @@ export interface GuidedAdditionCliDeps {
   createGuidedDocumentSnapshot: (
     bundle: Bundle,
     input: { document_ref: string; path?: string; text: string }
+  ) => GuidedDocumentSnapshot;
+  createNewGuidedDocumentSnapshot: (
+    bundle: Bundle,
+    input: GuidedNewDocumentSnapshotInput
   ) => GuidedDocumentSnapshot;
   createGuidedAdditionRuntimeV1: (bundle: Bundle) => GuidedAdditionRuntimeV1;
   applyAdditionProposalV1: (
@@ -325,18 +332,30 @@ export async function runGuidedAdditionCommand(
       ? path.resolve(deps.cwd(), options.bundle)
       : path.join(repoRoot, "bundle/v0.1/manifest.yaml");
     const bundle = await deps.loadBundle(bundlePath);
-    const source = await deps.readSourceInput(absoluteDocumentPath);
-    const snapshot = deps.createGuidedDocumentSnapshot(bundle, {
-      document_ref: publicPath,
-      path: publicPath,
-      text: source.text
-    });
+    let snapshot: GuidedDocumentSnapshot;
+    try {
+      const source = await deps.readSourceInput(absoluteDocumentPath);
+      snapshot = deps.createGuidedDocumentSnapshot(bundle, {
+        document_ref: publicPath,
+        path: publicPath,
+        text: source.text
+      });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      snapshot = deps.createNewGuidedDocumentSnapshot(bundle, {
+        document_ref: publicPath,
+        path: publicPath
+      });
+    }
     const runtime = deps.createGuidedAdditionRuntimeV1(bundle);
     const anchor = exactAnchor(snapshot, options.node);
     let result: GuidedAdditionResultV1 = runtime.begin(snapshot, {
       workflow_version: "1.0",
       ...(anchor ? { anchor } : {})
     });
+    if (snapshot.document_precondition === "must_not_exist") {
+      deps.stdout(`Creating new file ${path.basename(publicPath)}.\n\n`);
+    }
 
     for (;;) {
       if (result.kind === "sdd-guided-addition-complete") {

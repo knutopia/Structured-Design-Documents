@@ -11,7 +11,10 @@ import { createChangeSetJournal } from "../src/authoring/journal.js";
 import { undoChangeSet } from "../src/authoring/undo.js";
 import { createAuthoringWorkspace } from "../src/authoring/workspace.js";
 import { createGuidedOpaqueId } from "../src/authoring/guidedAddition/identifiers.js";
-import { createGuidedDocumentSnapshot } from "../src/authoring/guidedAddition/snapshot.js";
+import {
+  createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot
+} from "../src/authoring/guidedAddition/snapshot.js";
 import type { GuidedDocumentSnapshot } from "../src/authoring/guidedAddition/sharedContracts.js";
 import type {
   CompletedAdditionProposalV1,
@@ -122,6 +125,18 @@ function submitNewNode(
 function complete(result: GuidedAdditionResultV1): CompletedAdditionProposalV1 {
   expect(result.kind).toBe("sdd-guided-addition-complete");
   return (result as Extract<GuidedAdditionResultV1, { kind: "sdd-guided-addition-complete" }>).proposal;
+}
+
+function newDocumentProposal(documentPath: string, currentBundle = bundle): CompletedAdditionProposalV1 {
+  const newSnapshot = createNewGuidedDocumentSnapshot(currentBundle, {
+    document_ref: documentPath,
+    path: documentPath
+  });
+  const harness = { bundle: currentBundle, snapshot: newSnapshot };
+  let result = begin(harness);
+  result = choose(harness, result, (action) => action.kind === "choose_standalone_node_type" && action.node_type === "Place");
+  result = submitNewNode(harness, result, "P-001", "Home", "Starting place");
+  return complete(result);
 }
 
 function route(
@@ -242,6 +257,65 @@ function reidentify(proposal: CompletedAdditionProposalV1): CompletedAdditionPro
 }
 
 describe("Guided Addition v1 proposal executor", () => {
+  it("dry-runs an absent target, atomically creates it on commit, and records delete-on-undo", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "sdd-addition-new-v1-"));
+    const documentPath = "nested/app.sdd";
+    const absolutePath = path.join(root, documentPath);
+    try {
+      const workspace = createAuthoringWorkspace(root);
+      const proposal = newDocumentProposal(documentPath);
+      const dryRun = await applyAdditionProposalV1(workspace, bundle, { proposal, mode: "dry_run" });
+      expect(dryRun.status).toBe("applied");
+      expect(dryRun.change_set).toMatchObject({ document_effect: "created", base_revision: null, mode: "dry_run" });
+      await expect(readFile(absolutePath, "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+
+      const committed = await applyAdditionProposalV1(workspace, bundle, { proposal, mode: "commit" });
+      expect(committed.status).toBe("applied");
+      expect(committed.change_set).toMatchObject({ document_effect: "created", base_revision: null, mode: "commit" });
+      expect(committed.resulting_revision).toBe(dryRun.resulting_revision);
+      expect(committed.change_set.operations).toEqual(dryRun.change_set.operations);
+      expect(committed.created_targets).toEqual(dryRun.created_targets);
+      expect(await readFile(absolutePath, "utf8")).toBe([
+        "SDD-TEXT 0.1",
+        'Place P-001 "Home"',
+        '  description="Starting place"',
+        "END",
+        ""
+      ].join("\n"));
+
+      const undone = await undoChangeSet(workspace, bundle, {
+        change_set_id: committed.change_set.change_set_id,
+        mode: "commit"
+      });
+      expect(undone.status).toBe("applied");
+      expect(undone.document_effect).toBe("deleted");
+      await expect(readFile(absolutePath, "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("rejects a new-document proposal when the target appears and preserves its bytes", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "sdd-addition-new-stale-v1-"));
+    const documentPath = "app.sdd";
+    const absolutePath = path.join(root, documentPath);
+    try {
+      const workspace = createAuthoringWorkspace(root);
+      const proposal = newDocumentProposal(documentPath);
+      const dryRun = await applyAdditionProposalV1(workspace, bundle, { proposal, mode: "dry_run" });
+      expect(dryRun.status).toBe("applied");
+      const external = "externally created\n";
+      await writeFile(absolutePath, external, "utf8");
+
+      const committed = await applyAdditionProposalV1(workspace, bundle, { proposal, mode: "commit" });
+      expect(committed.status).toBe("rejected");
+      expect(committed.diagnostics.map((item) => item.code)).toContain("guided_addition.state_stale");
+      expect(await readFile(absolutePath, "utf8")).toBe(external);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
   it("applies outgoing and incoming non-structural source order with exact blank boundaries", async () => {
     for (const direction of ["outgoing", "incoming"] as const) {
       await withTempDocument(async ({ root, documentPath, harness }) => {

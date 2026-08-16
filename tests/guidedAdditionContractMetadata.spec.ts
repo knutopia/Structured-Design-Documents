@@ -7,6 +7,7 @@ import {
   createContractIndex,
   createGuidedAdditionRuntimeV1,
   createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot,
   getBundleResolvedContractSubjectDetail,
   getContractSubjectDetail,
   loadBundle,
@@ -143,17 +144,48 @@ describe("Guided Addition v1 contract metadata", () => {
       diagnostics: [],
       warning_review: { title: "Warning", lines: ["Human warning"], acceptance_token: "warning_example" }
     });
+
+    const newSnapshot = createNewGuidedDocumentSnapshot(bundle, {
+      document_ref: "docs/new.sdd",
+      path: "docs/new.sdd"
+    });
+    const runtime = createGuidedAdditionRuntimeV1(bundle);
+    let newResult = runtime.begin(newSnapshot, { workflow_version: "1.0" });
+    const nodeTypeAction = choicePage(newResult).choices.find((choice) =>
+      choice.action.kind === "choose_standalone_node_type" && choice.action.node_type === "Place")!.action;
+    newResult = runtime.advance(newSnapshot, newResult.state, nodeTypeAction);
+    newResult = runtime.advance(newSnapshot, newResult.state, {
+      kind: "submit_new_node_fields",
+      local_node_id: "node_1",
+      field_group: "primary",
+      values: [
+        { field_id: "node_id", value_kind: "bare_value", raw_value: "P-001" },
+        { field_id: "name", value_kind: "quoted_string", raw_value: "Home" },
+        { field_id: "node_property:description", value_kind: "quoted_string", raw_value: "Starting place" }
+      ]
+    });
+    const declineDetails = choicePage(newResult).choices.find((choice) =>
+      choice.action.kind === "set_node_detail_disclosure" && !choice.action.disclose)!.action;
+    newResult = runtime.advance(newSnapshot, newResult.state, declineDetails);
+    expect(newResult.kind).toBe("sdd-guided-addition-complete");
+    expectValid("shared.shape.guided_document_snapshot", newSnapshot);
+    expectValid("shared.shape.guided_addition_result", newResult);
+    if (newResult.kind === "sdd-guided-addition-complete") {
+      expectValid("shared.shape.completed_addition_proposal", newResult.proposal);
+    }
   });
 
   it("describes replay, exact effect, canonical identity, and bound warning constraints", () => {
     expect(getContractSubjectDetail("domain.service.guided_addition.advance")!.constraints.map((item) => item.kind)).toEqual([
       "same_document_revision",
+      "document_presence_precondition",
       "same_bundle_fingerprint",
       "currently_offered_opaque_option",
       "exact_confirmation"
     ]);
     expect(getContractSubjectDetail("domain.service.addition_proposal.apply")!.constraints.map((item) => item.kind)).toEqual([
       "same_document_revision",
+      "document_presence_precondition",
       "same_bundle_fingerprint",
       "exact_confirmation",
       "proposal_relationship_edge_consistency",

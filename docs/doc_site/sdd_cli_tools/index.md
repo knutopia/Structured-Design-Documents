@@ -78,6 +78,8 @@ If you only remember one command from this page, make it `sdd show`.
 
 `sdd add` will ask you what you want to add and where, presenting only correct choices.
 
+If `<document_path>` does not exist, the command guides the first standalone node without creating an empty intermediate file. The new document is created atomically only after `Save`; `Cancel` and failed saves leave the path absent. In this first-node flow, the command begins at node-type selection and omits relationship and first/last placement questions because there are no existing nodes to relate to or order against. Missing parent directories are created as part of the successful save.
+
 Without `--node`, the command offers a standalone node and, when the document contains nodes, a relationship. Choosing a relationship opens a starting-node browser; `--node` skips that browser by supplying the exact anchor. From a known starting node, outgoing and incoming relationships each support choosing the relationship type first or choosing an existing connected node first. Each choice constrains the next list.
 
 Applicable node and relationship lists include an option to filter by a human-readable diagram type. You can select a diagram, change it, or return to all diagram types without leaving the current browse step. This filtering happens inside the guided interaction; `sdd add` does not accept a `--view` option. Primary fields appear first, and optional details are offered only when they apply.
@@ -90,6 +92,7 @@ Examples:
 
 ```bash
 pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
+pnpm sdd add tmp_app.sdd
 pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 ```
 

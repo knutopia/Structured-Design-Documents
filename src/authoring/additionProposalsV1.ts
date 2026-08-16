@@ -18,6 +18,7 @@ import type {
 } from "./contracts.js";
 import { createChangeSetJournal, type ChangeSetJournal } from "./journal.js";
 import { executeChangeOperations } from "./mutations.js";
+import { createEmptyDocumentBootstrap } from "./bootstrap.js";
 import { computeDocumentRevision, normalizeTextToLf } from "./revisions.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 import { createGuidanceCatalog, type GuidanceCatalog, type GuidanceRelationshipRecord } from "./guidedAddition/catalog.js";
@@ -26,7 +27,10 @@ import {
   normalizeAndValidateNodeFields
 } from "./guidedAddition/forms.js";
 import { createGuidedOpaqueId } from "./guidedAddition/identifiers.js";
-import { createGuidedDocumentSnapshot } from "./guidedAddition/snapshot.js";
+import {
+  createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot
+} from "./guidedAddition/snapshot.js";
 import type { GuidedDocumentSnapshot } from "./guidedAddition/sharedContracts.js";
 import type {
   CompletedAdditionProposalV1,
@@ -682,6 +686,12 @@ function verifyProposal(
   if (proposal.proposal_id !== expectedId) {
     addError(errors, file, "guided_addition.choice_unavailable", "Proposal ID does not match its canonical proposal content");
   }
+  if (proposal.document_context.document_precondition !== snapshot.document_precondition) {
+    addError(errors, file, "guided_addition.state_stale", "Proposal document precondition no longer matches the target");
+  }
+  if (snapshot.document_precondition === "must_not_exist" && proposal.addition.kind !== "standalone_node") {
+    addError(errors, file, "guided_addition.choice_unavailable", "A new document must begin with one standalone node");
+  }
   for (const { ref, label } of collectExistingRefs(proposal)) verifyExistingRef(snapshot, ref, errors, file, label);
   for (const [index, ref] of collectNodeRefs(proposal).entries()) verifyNewRef(ref, errors, file, `Reference ${index}`);
 
@@ -914,13 +924,32 @@ export async function applyAdditionProposalV1(
     ]);
   }
 
+  const documentPrecondition = (proposal.document_context as { document_precondition?: unknown }).document_precondition;
+  if (documentPrecondition !== undefined && documentPrecondition !== "must_not_exist") {
+    return rejectedResult(journal, resolved.publicPath, args, [
+      diagnostic(resolved.publicPath, "guided_addition.choice_unavailable", "Proposal document precondition is unavailable")
+    ]);
+  }
+  const createsDocument = documentPrecondition === "must_not_exist";
+  const stalePresenceDiagnostic = diagnostic(
+    resolved.publicPath,
+    "guided_addition.state_stale",
+    `Proposal requires document '${resolved.publicPath}' not to exist`
+  );
   let text: string;
   try {
     text = normalizeTextToLf(await readFile(resolved.absolutePath, "utf8"));
-  } catch {
-    return rejectedResult(journal, resolved.publicPath, args, [
-      diagnostic(resolved.publicPath, "sdd.document_missing", `Document '${resolved.publicPath}' does not exist.`)
-    ]);
+    if (createsDocument) {
+      return rejectedResult(journal, resolved.publicPath, args, [stalePresenceDiagnostic]);
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    if (!createsDocument) {
+      return rejectedResult(journal, resolved.publicPath, args, [
+        diagnostic(resolved.publicPath, "sdd.document_missing", `Document '${resolved.publicPath}' does not exist.`)
+      ]);
+    }
+    text = createEmptyDocumentBootstrap(bundle).text;
   }
   if (computeDocumentRevision(text) !== proposal.document_context.base_revision) {
     return rejectedResult(journal, resolved.publicPath, args, [
@@ -935,11 +964,16 @@ export async function applyAdditionProposalV1(
 
   let snapshot: GuidedDocumentSnapshot;
   try {
-    snapshot = createGuidedDocumentSnapshot(bundle, {
-      document_ref: resolved.publicPath,
-      path: resolved.publicPath,
-      text
-    });
+    snapshot = createsDocument
+      ? createNewGuidedDocumentSnapshot(bundle, {
+          document_ref: resolved.publicPath,
+          path: resolved.publicPath
+        })
+      : createGuidedDocumentSnapshot(bundle, {
+          document_ref: resolved.publicPath,
+          path: resolved.publicPath,
+          text
+        });
   } catch (error) {
     const diagnostics = diagnosticsFromUnknown(error);
     if (diagnostics) return rejectedResult(journal, resolved.publicPath, args, diagnostics);
@@ -963,6 +997,16 @@ export async function applyAdditionProposalV1(
       validate_profile: args.validate_profile,
       projection_views: args.projection_views,
       origin: "apply_addition_proposal",
+      allowEmptyTemplateBootstrap: createsDocument,
+      ...(createsDocument
+        ? {
+            initialDocument: {
+              kind: "must_not_exist" as const,
+              text,
+              existsDiagnostic: stalePresenceDiagnostic
+            }
+          }
+        : {}),
       ...(mode === "commit"
         ? {
             preCommitGuard: (candidate: Readonly<ChangeSetResult>): Diagnostic[] => {

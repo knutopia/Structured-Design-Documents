@@ -28,7 +28,9 @@ z
 - Phase 5 done
 - Phase 6 done
 - Phase 7 done - remediation completed
-- fixed duplicate prompt
+- Fixed duplicate prompt
+- Added new-document support
+
 ## Fri 8-14
 
 - Phase 3 done, architecture

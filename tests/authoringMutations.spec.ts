@@ -1,11 +1,19 @@
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { Bundle } from "../src/bundle/types.js";
 import type { Diagnostic } from "../src/diagnostics/types.js";
-import { applyChangeSet, AuthoringMutationError, createDocument } from "../src/authoring/mutations.js";
+import {
+  applyChangeSet,
+  AuthoringMutationError,
+  createDocument,
+  executeChangeOperations
+} from "../src/authoring/mutations.js";
+import { createEmptyDocumentBootstrap } from "../src/authoring/bootstrap.js";
+import { computeDocumentRevision } from "../src/authoring/revisions.js";
 import { createChangeSetJournal } from "../src/authoring/journal.js";
 import { inspectDocument, type InspectedDocument } from "../src/authoring/inspect.js";
 import { createAuthoringWorkspace } from "../src/authoring/workspace.js";
@@ -79,6 +87,50 @@ function diagnosticCodes(diagnostics: Diagnostic[]): string[] {
 }
 
 describe("authoring mutations", () => {
+  it("uses exclusive creation when an absent target appears after verification", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const documentPath = "docs/race.sdd";
+      const absolutePath = path.join(tempRepoRoot, documentPath);
+      await mkdir(path.dirname(absolutePath), { recursive: true });
+      const bootstrap = createEmptyDocumentBootstrap(bundle);
+      const external = "external writer won\n";
+      const result = await executeChangeOperations(workspace, bundle, {
+        path: documentPath,
+        base_revision: computeDocumentRevision(bootstrap.text),
+        mode: "commit",
+        origin: "apply_addition_proposal",
+        allowEmptyTemplateBootstrap: true,
+        initialDocument: {
+          kind: "must_not_exist",
+          text: bootstrap.text,
+          existsDiagnostic: {
+            stage: "authoring",
+            code: "guided_addition.state_stale",
+            severity: "error",
+            message: "Target appeared",
+            file: documentPath
+          }
+        },
+        operations: [{
+          kind: "insert_node_block",
+          node_type: "Place",
+          node_id: "P-001",
+          name: "Home",
+          placement: { mode: "last", stream: "top_level" }
+        }],
+        preCommitGuard: () => {
+          fs.writeFileSync(absolutePath, external, "utf8");
+          return [];
+        }
+      });
+
+      expect(result.changeSet.status).toBe("rejected");
+      expect(result.changeSet.diagnostics.map((item) => item.code)).toContain("guided_addition.state_stale");
+      expect(await readFile(absolutePath, "utf8")).toBe(external);
+    });
+  });
+
   it("creates empty documents, returns parse diagnostics, and journals delete-on-undo metadata", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
