@@ -23,6 +23,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sund 8-16
+
+- Edited CLI page for better sdd-add visibility
+
 ## Sun 8-16
 
 - Added new-document support

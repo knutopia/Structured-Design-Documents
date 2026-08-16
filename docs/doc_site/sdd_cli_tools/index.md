@@ -57,18 +57,21 @@ For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.m
 
 ## Public Commands At A Glance
 
-This page focuses on the four public subcommands most people need:
+Four most relevant subcommands:
 
-- `sdd add <document_path>`
-- `sdd show <input> --view <view>`
-- `sdd validate <input>`
-- `sdd compile <input>`
+- `sdd add <document_path>`: add nodes, relationships to an SDD
+- `sdd show <input> --view <view>`: create a diagram
+- `sdd validate <input>`: check that the SDD is self-consistent
+- `sdd compile <input>`: create json from an SDD
 
-If you only remember one command from this page, make it `sdd show`.
+To edit an SDD without getting an LLM incvolved, remember `sdd add`.
+To make diagrams from SDD, remember `sdd show`.
 
 ## Command Reference
 
-### `sdd add`
+:::tabs
+
+== `sdd add`
 
 - Purpose: interactively add content to an SDD file.  Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
 - Use when: you want to create SDD content in a simple way, without writing source code from scratch.
@@ -96,7 +99,7 @@ pnpm sdd add tmp_app.sdd
 pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 ```
 
-### `sdd show`
+== `sdd show`
 
 - Purpose: compile, validate, and generate a preview artifact for a chosen view.
 - Use when: you want a visible result, want to share a diagram, or want to check how a document renders under a given profile.
@@ -126,7 +129,7 @@ Advanced note: all six v0.1 preview views default to staged SVG/PNG backends. `-
 pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --backend legacy_graphviz_preview --out ./journey-legacy.svg
 ```
 
-### `sdd validate`
+== `sdd validate`
 
 - Purpose: compile and validate a source `.sdd` file against a chosen profile.
 - Use when: you want to check whether a document passes profile expectations, or you want to see what metadata or structure is still missing.
@@ -144,7 +147,7 @@ pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permiss
 pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict
 ```
 
-### `sdd compile`
+== `sdd compile`
 
 - Purpose: compile a source `.sdd` file to canonical graph JSON.
 - Use when: you want machine-readable compiled output, want to inspect the normalized graph shape, or need JSON for another tool.
@@ -160,6 +163,7 @@ Examples:
 pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd
 pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json
 ```
+:::
 
 ## Supported Preview Views
 
