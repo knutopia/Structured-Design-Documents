@@ -1,0 +1,82 @@
+SDD-TEXT 0.1
+
+# SDD for SDD
+
+Outcome O-010 "Access to Structural Design Artifacts"
+  owner=Product
+  description="Having structural design artifacts readily available to reference in prototyping and implementation"
+END
+
+Opportunity OP-010 "Low-Friction SDD authoring"
+  owner=Design
+  description="Guided, graphical SDD authoring"
+  SUPPORTS O-010 "Access to Structural Design Artifacts"
+END
+
+Journeys:
+Maintaining a Map of the Existing Product
+Comparing and Consolidating Product Variants
+Placing New Designs in Product Context
+Connecting Product Strategy to Product Structure
+Coordinating Development Across Product Variants
+Aligning New Designs with Existing UI Components
+Guiding Front-End Implementation with Structural References
+Guiding Vibe-Coded Prototypes with Existing UX Structure
+Locating and Triaging Issues in Product Context
+
+
+Initiative I-010 "Basic Layout Structure"
+  owner=Product
+  description="Source- , diagram-, inspector pane"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  IMPLEMENTED_BY P-0 ""
+END
+
+Initiative I-011 "Simple Authoring"
+  owner=Product
+  description="Dynamic, responsive, guided add-node, add-edge"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  IMPLEMENTED_BY P-0 ""
+END
+
+Initiative I-012 "SDD Editing"
+  owner=Product
+  description="Node properties, source order"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  IMPLEMENTED_BY P-0 ""
+END
+
+Opportunity OP-020 "Low-Friction SDD consumption"
+  owner=Design
+  description="Exploring, comparing, annotating SDD diagrams and their relationships"
+  SUPPORTS O-010 "Access to Structural Design Artifacts"
+END
+
+Initiative I-020 "Diagram Navigation"
+  owner=Product
+  description="Pan & zoom, node-pivot, view management"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY P-0 ""
+END
+
+Initiative I-021 "Diagram Comparison"
+  owner=Product
+  description="Overlay, side-by-side, diff"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY P-0 ""
+END
+
+Initiative I-022 "Annotation and Linking"
+  owner=Product
+  description="Add annotations and links, SDD diagrams, states, roll-ups"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY P-0 ""
+END
+
+Initiative I-030 "Infrastructure"
+  owner=Product
+  description="Database-File mapping, concurrent editing, rendering, MCP readyness"
+  ADDRESSES OP-010 "Access to Structural Design Artifacts"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY P-0 ""
+END

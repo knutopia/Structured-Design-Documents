@@ -18,12 +18,12 @@ import type {
   NodeRef
 } from "./contracts.js";
 import { inspectDocumentText, type InspectedDocument } from "./inspect.js";
+import { createEmptyDocumentBootstrap } from "./bootstrap.js";
 import { createChangeSetJournal, type ChangeSetJournal } from "./journal.js";
 import { executeChangeOperations, remapOperationHandles } from "./mutations.js";
 import { computeDocumentRevision, normalizeTextToLf } from "./revisions.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 
-const EMPTY_TEMPLATE_TEXT = "SDD-TEXT 0.1\n";
 const MINIMUM_TOP_LEVEL_BLOCKS_CODE = "parse.minimum_top_level_blocks";
 const TEMP_HANDLE_PREFIX = "tmp_authoring_";
 
@@ -77,9 +77,9 @@ function createTemporaryHandle(kind: "node" | "edge", localId: string): Handle {
   return `${TEMP_HANDLE_PREFIX}${digest}`;
 }
 
-function isEmptyTemplateBootstrapFailure(text: string, diagnostics: Diagnostic[]): boolean {
+function isEmptyTemplateBootstrapFailure(bundle: Bundle, text: string, diagnostics: Diagnostic[]): boolean {
   return (
-    text === EMPTY_TEMPLATE_TEXT &&
+    text === createEmptyDocumentBootstrap(bundle).text &&
     diagnostics.length > 0 &&
     diagnostics.every((diagnostic) => diagnostic.code === MINIMUM_TOP_LEVEL_BLOCKS_CODE)
   );
@@ -568,7 +568,7 @@ export async function applyAuthoringIntent(
   const inspectResult = inspectDocumentText(bundle, resolvedPath.publicPath, canonicalText);
   if (
     inspectResult.kind === "sdd-inspect-load-failure" &&
-    !isEmptyTemplateBootstrapFailure(canonicalText, inspectResult.diagnostics)
+    !isEmptyTemplateBootstrapFailure(bundle, canonicalText, inspectResult.diagnostics)
   ) {
     const changeSet = createBaseChangeSet(journal, resolvedPath.publicPath, args.base_revision, mode, []);
     changeSet.diagnostics = sortDiagnostics([

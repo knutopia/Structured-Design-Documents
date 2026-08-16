@@ -2,7 +2,7 @@
 
 SDD-Text is a compact, human- and LLM-friendly DSL for authoring a typed product/design graph. It compiles deterministically into canonical JSON for validation (e.g., JSON Schema) and rendering into multiple diagram views.
 
-Machine-readable extraction target for source parsing behavior: `bundle/v0.1/core/syntax.yaml`.
+Machine-readable extraction target for source parsing behavior: `bundle/v0.1/core/syntax.yaml`. Machine-readable guided-authoring forms, ID suggestions, and placement inputs live in `bundle/v0.1/core/authoring.yaml`; they do not change source syntax.
 
 This document is intentionally compatible with the EBNF grammar. For extraction into `core/syntax.yaml`, it provides human-oriented operational clarifications such as default version behavior, fixed edge-element order, and canonical compilation expectations; the grammar remains primary for formal parse structure and lexical precision.
 
@@ -45,6 +45,14 @@ To support nested and sub-states cleanly, v0.1 RECOMMENDS allowing optional suff
 - Suffix: `PREFIX-###<suffix>` where `<suffix>` is `[a-z][a-z0-9]*` (e.g., `VS-020a`, `VS-020error`)
 
 If suffixes are allowed, tooling MUST enforce uniqueness across the full ID string.
+
+### 1.3.1 Guided ID suggestions and forms
+
+The bundle authoring artifact is the machine authority for guided ID suggestions. It declares `max_numeric_plus_one`, a minimum numeric width of three, and a complete prefix for every node type. Strict and permissive prefix validation reference that same map through `bundle_refs`; they do not maintain independent prefix copies.
+
+Guided forms expose `node_id`, `name`, and `description` as primary fields. Other bundle-known properties are optional advanced fields in the guided flow. Their formats, enumerations, reference targets, and profile-requiredness remain owned by syntax, contracts, and profile rules rather than being duplicated in the form metadata.
+
+The authoring artifact also supplies generic placement inputs. Relationship-specific placement interpretation comes from each relationship contract's `authoring.graph_role`, `source_representation`, and `source_organization`; authoring tools must not infer those values from literal relationship names.
 
 ### 1.4 Strings
 
@@ -177,6 +185,8 @@ Tooling SHOULD treat two edges as **duplicates** if they have the same `from`, `
 ### 6.1 Purpose
 
 Nesting is purely an authoring affordance: it helps writers place related nodes near each other.
+
+The shared authoring runtime can reparent a complete node block between the top-level stream and nested body streams without changing that rule. Reparenting preserves the moved subtree and its owned source trivia, but it does not create, remove, or infer a semantic relationship. Guided structural additions therefore author the explicit `CONTAINS` or `COMPOSED_OF` edge and treat any existing-node reparent as a separately confirmed source-organization effect.
 
 ### 6.2 Parsing rule
 

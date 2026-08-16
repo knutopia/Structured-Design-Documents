@@ -1,6 +1,6 @@
 # SDD Command Line Tools
 
-The command-line (CLI) tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It validates documents against profiles, compiles documents into canonical JSON, and generates diagrams. 
+The command-line (CLI) tool `sdd` is the entrypoint for working with `.sdd` files in this repository. It guides additions, validates documents against profiles, compiles documents into canonical JSON, and generates diagrams.
 
 (This is different from `sdd-helper`. `sdd` is the normal tool for people running straightforward CLI workflows. `sdd-helper` is the JSON-first tool for automation and structured mutation flows.)
 
@@ -16,7 +16,7 @@ If you want a visual result quickly, start with the next section and use the com
 
 ## Fastest Path To A Result
 
-For most people, `sdd show` is the right first command. It compiles the document, validates it, and generates a preview artifact for a chosen view.
+For most people, `sdd show` is the right first command. It compiles an SDD document, validates it, and generates a preview artifact for a chosen view.
 
 Start with the `simple` profile. The CLI default is `strict`, but `simple` is the better starting point for early work because it is lower-noise and better suited to drafting.
 
@@ -57,8 +57,9 @@ For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.m
 
 ## Public Commands At A Glance
 
-This page focuses on the three public subcommands most people need:
+This page focuses on the four public subcommands most people need:
 
+- `sdd add <document_path>`
 - `sdd show <input> --view <view>`
 - `sdd validate <input>`
 - `sdd compile <input>`
@@ -66,6 +67,34 @@ This page focuses on the three public subcommands most people need:
 If you only remember one command from this page, make it `sdd show`.
 
 ## Command Reference
+
+### `sdd add`
+
+- Purpose: interactively add content to an SDD file.  Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
+- Use when: you want to create SDD content in a simple way, without writing source code from scratch.
+- Invocation: `pnpm sdd add <document_path>`
+- Common options: `--node <node_id>` supplies an exact starting-node anchor, and `--bundle <manifest>` selects a different bundle.
+- Output: guided choices, a plain-language review, and one Save or Cancel decision.
+
+`sdd add` will ask you what you want to add and where, presenting only correct choices.
+
+If `<document_path>` does not exist, the command guides the first standalone node without creating an empty intermediate file. The new document is created atomically only after `Save`; `Cancel` and failed saves leave the path absent. In this first-node flow, the command begins at node-type selection and omits relationship and first/last placement questions because there are no existing nodes to relate to or order against. Missing parent directories are created as part of the successful save.
+
+Without `--node`, the command offers a standalone node and, when the document contains nodes, a relationship. Choosing a relationship opens a starting-node browser; `--node` skips that browser by supplying the exact anchor. From a known starting node, outgoing and incoming relationships each support choosing the relationship type first or choosing an existing connected node first. Each choice constrains the next list.
+
+Applicable node and relationship lists include an option to filter by a human-readable diagram type. You can select a diagram, change it, or return to all diagram types without leaving the current browse step. This filtering happens inside the guided interaction; `sdd add` does not accept a `--view` option. Primary fields appear first, and optional details are offered only when they apply.
+
+When a structural relationship could place one node inside another, the command asks the specific nesting question. A new node can instead remain at top level, and an existing node stays where it is unless you explicitly choose and confirm moving it. Relationship-line placement is handled internally rather than presented as a user choice.
+
+At the review, `Cancel` performs no verification and writes nothing. `Save` verifies the unchanged proposal with a dry run. If verification has no warnings, the command commits immediately without a second ordinary confirmation. A concrete warning offers `Save anyway` or `Go back`; `Save anyway` accepts only the exact warning set just reviewed, while `Go back` returns to the unchanged proposal review. If the document, bundle, candidate result, or warning set changed after review, saving is rejected without writing and the command must be restarted.
+
+Examples:
+
+```bash
+pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
+pnpm sdd add tmp_app.sdd
+pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
+```
 
 ### `sdd show`
 

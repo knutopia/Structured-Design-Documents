@@ -455,6 +455,8 @@ function validateChangeOperation(value: unknown, fieldPath: string): string | un
       return requireStringField(value, "edge_handle", fieldPath) ?? validatePlacement(value.placement, `${fieldPath}.placement`);
     case "move_nested_node_block":
       return requireStringField(value, "node_handle", fieldPath) ?? validatePlacement(value.placement, `${fieldPath}.placement`);
+    case "reparent_node_block":
+      return requireStringField(value, "node_handle", fieldPath) ?? validatePlacement(value.placement, `${fieldPath}.placement`);
     default:
       return `${fieldPath}.kind '${String(value.kind)}' is not supported.`;
   }
@@ -980,6 +982,13 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
         throw new HelperCliError(
           "invalid_args",
           `Unsupported --resolve mode '${options.resolve}'. The only supported value is 'bundle'.`
+        );
+      }
+
+      if (!subjectId.startsWith("helper.command.")) {
+        throw new HelperCliError(
+          "invalid_args",
+          `Contract subject_id '${subjectId}' is not a helper command subject. Domain service metadata is library-visible only.`
         );
       }
 

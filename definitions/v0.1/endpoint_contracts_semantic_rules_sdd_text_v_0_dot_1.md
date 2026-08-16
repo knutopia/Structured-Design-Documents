@@ -6,6 +6,8 @@ This document defines the **semantic contract** for SDD-Text relationships: whic
 
 Machine-readable extraction target: `bundle/v0.1/core/contracts.yaml`.
 
+For guided authoring, every relationship contract also declares a generic graph role, its `edge_line` source representation, a source-organization policy, and one explicit `edge_field_support` rule. These fields guide forms and placement without changing endpoint legality or relationship direction.
+
 ---
 
 ## 1) Conformance Levels
@@ -38,6 +40,16 @@ In v0.1, edge annotations are syntactic affordances that only have defined seman
   - (Optionally) `PRECEDES` when used for conditional flows; otherwise discouraged
 
 For other relationships, annotations are allowed syntactically (to keep the grammar simple) but SHOULD be treated as edge properties (or ignored) unless your project standardizes them.
+
+The current bundle makes guided input support explicit:
+
+- `PRECEDES` supports `event`, `guard`, and `effect` annotations.
+- `NAVIGATES_TO` supports `event` and `guard` annotations.
+- `TRANSITIONS_TO` supports `event`, `guard`, and `effect` annotations.
+- `BINDS_TO` supports edge property `field`; its requiredness remains owned by the separate `required_edge_property` rule.
+- Every other relationship declares empty annotation and property support lists.
+
+An empty guided support list does not narrow the parser's general edge-line syntax. It means the guided form does not offer that field for that relationship.
 
 ### 2.4 Multi-edges
 Multiple edges of the same type between the same endpoints are allowed.

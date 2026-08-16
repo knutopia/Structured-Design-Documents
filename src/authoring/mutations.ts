@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import { access, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import type { Bundle, SyntaxStatementDefinition } from "../bundle/types.js";
+import { getPlacementPolicyInputs } from "../bundle/guidedAuthoring.js";
+import type { AuthoringConfig, Bundle, SyntaxStatementDefinition } from "../bundle/types.js";
 import { sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
 import { stripTrailingComment } from "../parser/classifyLine.js";
 import type {
@@ -48,20 +49,50 @@ import {
   createRestoreDocumentInverse,
   type ChangeSetJournal
 } from "./journal.js";
-import { computeDocumentRevision, normalizeTextToLf, writeCanonicalLfText } from "./revisions.js";
+import {
+  computeDocumentRevision,
+  normalizeTextToLf,
+  writeCanonicalLfText,
+  writeCanonicalLfTextExclusive
+} from "./revisions.js";
+import { createEmptyDocumentBootstrap } from "./bootstrap.js";
 import type { AuthoringWorkspace } from "./workspace.js";
 
-const EMPTY_TEMPLATE_VERSION = "0.1";
 const MINIMUM_TOP_LEVEL_BLOCKS_CODE = "parse.minimum_top_level_blocks";
 const STRUCTURAL_RELATIONSHIP_TYPES = new Set<StructuralRelationshipType>(["CONTAINS", "COMPOSED_OF"]);
 const TEMP_HANDLE_PREFIX = "tmp_authoring_";
 
 type TriviaItem = BlankLine | CommentLine;
 type StructuralModelItem = NodeModel | PropertyModel | EdgeModel;
+type AuthoringPlacementPolicy = AuthoringConfig["placement_policies"]["default"];
 
 interface TriviaLineModel {
   raw: string;
   span: SourceSpan;
+}
+
+function blankTriviaLine(): TriviaLineModel {
+  return {
+    raw: "",
+    span: { line: 0, column: 1, endLine: 0, endColumn: 1, startOffset: 0, endOffset: 0 }
+  };
+}
+
+function ensureLeadingBlank(node: NodeModel): void {
+  if (node.leadingTrivia[0]?.raw.trim() !== "") {
+    node.leadingTrivia.unshift(blankTriviaLine());
+  }
+}
+
+function ensureRelationshipToNestedBoundary(parent: NodeModel): void {
+  const firstNestedIndex = parent.bodyItems.findIndex((item) => item.kind === "node_block");
+  if (firstNestedIndex < 0) return;
+  const hasRelationshipBeforeNested = parent.bodyItems
+    .slice(0, firstNestedIndex)
+    .some((item) => item.kind === "edge_line");
+  if (hasRelationshipBeforeNested) {
+    ensureLeadingBlank(parent.bodyItems[firstNestedIndex] as NodeModel);
+  }
 }
 
 interface BaseModelItem {
@@ -607,16 +638,12 @@ function createRejectedChangeSet(
   return result;
 }
 
-function isBootstrapMinimumTopLevelFailure(result: InspectLoadFailure, text: string): boolean {
+function isBootstrapMinimumTopLevelFailure(bundle: Bundle, result: InspectLoadFailure, text: string): boolean {
   return (
-    text === emptyDocumentText() &&
+    text === createEmptyDocumentBootstrap(bundle).text &&
     result.diagnostics.length > 0 &&
     result.diagnostics.every((diagnostic) => diagnostic.code === MINIMUM_TOP_LEVEL_BLOCKS_CODE)
   );
-}
-
-function emptyDocumentText(): string {
-  return `SDD-TEXT ${EMPTY_TEMPLATE_VERSION}\n`;
 }
 
 function appendLines(target: string[], lines: TriviaLineModel[] | string[]): void {
@@ -658,11 +685,11 @@ function renderDocumentModel(bundle: Bundle, syntax: AuthoringSyntax, model: Doc
 }
 
 function createEmptyDocumentModel(bundle: Bundle): DocumentModel {
-  const syntax = createAuthoringSyntax(bundle);
+  const bootstrap = createEmptyDocumentBootstrap(bundle);
   return {
-    effectiveVersion: EMPTY_TEMPLATE_VERSION,
+    effectiveVersion: bootstrap.effectiveVersion,
     preVersionTrivia: [],
-    versionLine: `${syntax.versionLiteral} ${EMPTY_TEMPLATE_VERSION}`,
+    versionLine: bootstrap.versionLine,
     topLevelNodes: [],
     trailingTrivia: []
   };
@@ -778,7 +805,11 @@ function applyInsertNodeBlock(
       return index;
     }
 
-    model.topLevelNodes.splice(index, 0, createNodeModel(syntax, 0, operation));
+    const inserted = createNodeModel(syntax, 0, operation);
+    model.topLevelNodes.splice(index, 0, inserted);
+    if (index > 0) ensureLeadingBlank(inserted);
+    const following = model.topLevelNodes[index + 1];
+    if (following) ensureLeadingBlank(following);
   } else {
     if (!operation.placement.parent_handle) {
       return placementError(documentPath, "Body insertion must specify parent_handle.");
@@ -796,6 +827,7 @@ function applyInsertNodeBlock(
 
     model.topLevelNodes = model.topLevelNodes.map((node) => node);
     parent.bodyItems.splice(index, 0, createNodeModel(syntax, parent.depth + 1, operation));
+    ensureRelationshipToNestedBoundary(parent);
   }
 
   summary.node_insertions.push({
@@ -963,7 +995,14 @@ function applyRemoveNodeProperty(
   return undefined;
 }
 
-function defaultEdgeInsertIndex(parent: NodeModel): number {
+function defaultEdgeInsertIndex(
+  parent: NodeModel,
+  policy: AuthoringPlacementPolicy["edge_in_source_body"]
+): number {
+  if (policy === "last") {
+    return parent.bodyItems.length;
+  }
+
   for (let index = parent.bodyItems.length - 1; index >= 0; index -= 1) {
     if (parent.bodyItems[index]?.kind === "edge_line") {
       return index + 1;
@@ -1010,6 +1049,53 @@ function moveArrayItem<T>(items: T[], fromIndex: number, insertIndex: number): n
   const normalizedIndex = insertIndex > fromIndex ? insertIndex - 1 : insertIndex;
   items.splice(normalizedIndex, 0, item as T);
   return normalizedIndex;
+}
+
+function shiftLineIndent(raw: string, depthDelta: number): string {
+  if (depthDelta === 0 || raw.trim().length === 0) {
+    return raw;
+  }
+  if (depthDelta > 0) {
+    return `${indentForDepth(depthDelta)}${raw}`;
+  }
+  const removeCount = Math.min(extractLeadingWhitespace(raw).length, Math.abs(depthDelta) * 2);
+  return raw.slice(removeCount);
+}
+
+function shiftTriviaIndent(lines: TriviaLineModel[], depthDelta: number): void {
+  for (const line of lines) {
+    line.raw = shiftLineIndent(line.raw, depthDelta);
+  }
+}
+
+function rebaseNodeDepth(node: NodeModel, syntax: AuthoringSyntax, newDepth: number): void {
+  const depthDelta = newDepth - node.depth;
+  shiftTriviaIndent(node.leadingTrivia, depthDelta);
+  shiftTriviaIndent(node.bodyTrailingTrivia, depthDelta);
+  node.depth = newDepth;
+  node.headerKind = newDepth === 0 ? syntax.topHeaderKind : syntax.nestedHeaderKind;
+  node.rawHeaderLine = null;
+  node.headerChanged = true;
+  if (node.rawEndLine !== null) {
+    node.rawEndLine = shiftLineIndent(node.rawEndLine, depthDelta);
+  }
+
+  for (const item of node.bodyItems) {
+    if (item.kind === "node_block") {
+      rebaseNodeDepth(item, syntax, newDepth + 1);
+      continue;
+    }
+    shiftTriviaIndent(item.leadingTrivia, depthDelta);
+    if (item.rawLine !== null) {
+      item.rawLine = shiftLineIndent(item.rawLine, depthDelta);
+    }
+  }
+}
+
+function nodeContainsHandle(node: NodeModel, handle: Handle): boolean {
+  return node.bodyItems.some((item) =>
+    item.kind === "node_block" && (item.handle === handle || nodeContainsHandle(item, handle))
+  );
 }
 
 function structuralStreamBodyIndexes(parent: NodeModel, relType: StructuralRelationshipType): number[] {
@@ -1302,10 +1388,109 @@ function applyMoveNestedNodeBlock(
   return undefined;
 }
 
+function applyReparentNodeBlock(
+  model: DocumentModel,
+  syntax: AuthoringSyntax,
+  documentPath: DocumentPath,
+  operation: Extract<ChangeOperation, { kind: "reparent_node_block" }>,
+  summary: ChangeSetSummary
+): Diagnostic | undefined {
+  const anchorRequirement = requireAnchorForRelativePlacement(documentPath, operation.placement);
+  if (anchorRequirement) {
+    return anchorRequirement;
+  }
+
+  const topLevelIndex = findTopLevelIndex(model, operation.node_handle);
+  const bodyLocation = topLevelIndex === -1
+    ? findBodyItemLocation(model.topLevelNodes, operation.node_handle)
+    : undefined;
+  const target = topLevelIndex !== -1
+    ? model.topLevelNodes[topLevelIndex]
+    : bodyLocation?.item.kind === "node_block"
+      ? bodyLocation.item
+      : undefined;
+  if (!target) {
+    return handleError(documentPath, operation.node_handle);
+  }
+
+  const oldParent = bodyLocation?.parent ?? null;
+  const oldParentHandle = oldParent?.handle ?? null;
+  const oldIndex = topLevelIndex !== -1 ? topLevelIndex : bodyLocation!.index;
+  let newParent: NodeModel | null;
+  let destination: NodeModel[] | StructuralModelItem[];
+
+  if (operation.placement.stream === "top_level") {
+    if (operation.placement.parent_handle !== undefined) {
+      return placementError(documentPath, "Top-level reparenting must not specify parent_handle.");
+    }
+    newParent = null;
+    destination = model.topLevelNodes;
+  } else {
+    if (!operation.placement.parent_handle) {
+      return placementError(documentPath, "Body reparenting requires parent_handle.");
+    }
+    newParent = findNodeByHandle(model.topLevelNodes, operation.placement.parent_handle) ?? null;
+    if (!newParent) {
+      return handleError(documentPath, operation.placement.parent_handle);
+    }
+    if (newParent.handle === operation.node_handle || nodeContainsHandle(target, newParent.handle!)) {
+      return placementError(documentPath, "A node cannot be reparented under itself or one of its descendants.");
+    }
+    destination = newParent.bodyItems;
+  }
+
+  const newParentHandle = newParent?.handle ?? null;
+  if (oldParentHandle === newParentHandle) {
+    return placementError(documentPath, "Reparenting requires a different destination parent.");
+  }
+
+  let insertIndex: number;
+  switch (operation.placement.mode) {
+    case "first":
+      insertIndex = 0;
+      break;
+    case "last":
+      insertIndex = destination.length;
+      break;
+    case "before":
+    case "after": {
+      if (operation.placement.anchor_handle === operation.node_handle) {
+        return placementError(documentPath, "Placement anchor_handle must differ from the target node.");
+      }
+      const anchorIndex = destination.findIndex((item) => item.handle === operation.placement.anchor_handle);
+      if (anchorIndex === -1) {
+        return placementError(documentPath, "Reparenting anchor must belong to the destination stream.");
+      }
+      insertIndex = operation.placement.mode === "before" ? anchorIndex : anchorIndex + 1;
+      break;
+    }
+  }
+
+  if (topLevelIndex !== -1) {
+    model.topLevelNodes.splice(topLevelIndex, 1);
+  } else {
+    oldParent!.bodyItems.splice(bodyLocation!.index, 1);
+  }
+  rebaseNodeDepth(target, syntax, newParent ? newParent.depth + 1 : 0);
+  destination.splice(insertIndex, 0, target);
+  if (newParent) ensureRelationshipToNestedBoundary(newParent);
+
+  summary.ordering_changes.push({
+    kind: "reparented_node_block",
+    target_handle: operation.node_handle,
+    old_parent_handle: oldParentHandle,
+    new_parent_handle: newParentHandle,
+    old_index: oldIndex,
+    new_index: insertIndex
+  });
+  return undefined;
+}
+
 function applyInsertEdgeLine(
   model: DocumentModel,
   documentPath: DocumentPath,
   operation: InsertEdgeLineOp,
+  placementPolicy: AuthoringPlacementPolicy | undefined,
   summary: ChangeSetSummary
 ): Diagnostic | undefined {
   const internalOperation = operation as InternalInsertEdgeLineOp;
@@ -1316,7 +1501,13 @@ function applyInsertEdgeLine(
 
   let insertIndex: number;
   if (!operation.placement) {
-    insertIndex = defaultEdgeInsertIndex(parent);
+    if (!placementPolicy) {
+      return placementError(
+        documentPath,
+        "Edge insertion without explicit placement requires bundle authoring placement metadata."
+      );
+    }
+    insertIndex = defaultEdgeInsertIndex(parent, placementPolicy.edge_in_source_body);
   } else {
     if (operation.placement.stream !== "body") {
       return placementError(documentPath, "Edge insertion placement must target the body stream.");
@@ -1347,6 +1538,7 @@ function applyInsertEdgeLine(
     commentSuffix: "",
     lineChanged: true
   });
+  ensureRelationshipToNestedBoundary(parent);
 
   summary.edge_insertions.push({
     handle: internalOperation.__internal_handle,
@@ -1388,6 +1580,7 @@ function applyOperation(
   syntax: AuthoringSyntax,
   documentPath: DocumentPath,
   operation: ChangeOperation,
+  placementPolicy: AuthoringPlacementPolicy | undefined,
   summary: ChangeSetSummary
 ): Diagnostic | undefined {
   switch (operation.kind) {
@@ -1402,7 +1595,7 @@ function applyOperation(
     case "remove_node_property":
       return applyRemoveNodeProperty(model, documentPath, operation, summary);
     case "insert_edge_line":
-      return applyInsertEdgeLine(model, documentPath, operation, summary);
+      return applyInsertEdgeLine(model, documentPath, operation, placementPolicy, summary);
     case "remove_edge_line":
       return applyRemoveEdgeLine(model, documentPath, operation, summary);
     case "reposition_top_level_node":
@@ -1411,6 +1604,8 @@ function applyOperation(
       return applyRepositionStructuralEdge(model, documentPath, operation, summary);
     case "move_nested_node_block":
       return applyMoveNestedNodeBlock(model, documentPath, operation, summary);
+    case "reparent_node_block":
+      return applyReparentNodeBlock(model, syntax, documentPath, operation, summary);
     default:
       return createDiagnostic(
         documentPath,
@@ -1546,6 +1741,12 @@ export function remapOperationHandles(
           node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
           placement: remapPlacementHandles(operation.placement, mapping)
         };
+      case "reparent_node_block":
+        return {
+          kind: operation.kind,
+          node_handle: resolveMappedHandle(operation.node_handle, mapping) ?? operation.node_handle,
+          placement: remapPlacementHandles(operation.placement, mapping)
+        };
     }
   });
 }
@@ -1581,17 +1782,35 @@ function remapSummaryHandles(
       handle: resolveMappedHandle(entry.handle, mapping) ?? entry.handle,
       parent_handle: resolveMappedHandle(entry.parent_handle, mapping) ?? entry.parent_handle
     })),
-    ordering_changes: summary.ordering_changes.map((entry) => ({
-      ...entry,
-      target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
-      parent_handle: resolveMappedHandle(entry.parent_handle, mapping)
-    }))
+    ordering_changes: summary.ordering_changes.map((entry) => {
+      if (entry.kind === "reparented_node_block") {
+        return {
+          ...entry,
+          target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
+          old_parent_handle: resolveMappedHandle(entry.old_parent_handle ?? undefined, mapping) ?? null,
+          new_parent_handle: resolveMappedHandle(entry.new_parent_handle ?? undefined, mapping) ?? null
+        };
+      }
+      if (entry.kind === "top_level_node") {
+        return {
+          ...entry,
+          target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle
+        };
+      }
+      return {
+        ...entry,
+        target_handle: resolveMappedHandle(entry.target_handle, mapping) ?? entry.target_handle,
+        parent_handle: resolveMappedHandle(entry.parent_handle, mapping) ?? entry.parent_handle
+      };
+    })
   };
 }
 
 export interface ExecuteChangeOperationsArgs extends ApplyChangeSetArgs {
   origin?: ChangeSetResult["origin"];
   allowEmptyTemplateBootstrap?: boolean;
+  initialDocument?: { kind: "must_not_exist"; text: string; existsDiagnostic?: Diagnostic };
+  preCommitGuard?: (candidate: Readonly<ChangeSetResult>) => Diagnostic[];
 }
 
 export interface ExecuteChangeOperationsResult {
@@ -1641,12 +1860,13 @@ export async function executeChangeOperations(
     validate_profile: args.validate_profile,
     projection_views: args.projection_views
   };
+  const createsDocument = args.initialDocument?.kind === "must_not_exist";
   const changeSet = createBaseChangeSetResult(
     journal.createChangeSetId(),
     resolvedPath.publicPath,
     args.origin ?? "apply_change_set",
-    "updated",
-    args.base_revision,
+    createsDocument ? "created" : "updated",
+    createsDocument ? null : args.base_revision,
     mode,
     []
   );
@@ -1656,13 +1876,27 @@ export async function executeChangeOperations(
   let rawText: string;
   try {
     rawText = await readFile(resolvedPath.absolutePath, "utf8");
-  } catch {
-    return {
-      changeSet: createRejectedChangeSet(changeSet, [
-        createDiagnostic(resolvedPath.publicPath, "sdd.document_missing", `Document '${resolvedPath.publicPath}' does not exist.`)
-      ]),
-      tempHandleMapping: new Map()
-    };
+    if (createsDocument) {
+      return {
+        changeSet: createRejectedChangeSet(changeSet, [
+          args.initialDocument?.existsDiagnostic ??
+            createDiagnostic(resolvedPath.publicPath, "sdd.document_exists", `Document '${resolvedPath.publicPath}' already exists.`)
+        ]),
+        tempHandleMapping: new Map()
+      };
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    if (createsDocument) {
+      rawText = args.initialDocument!.text;
+    } else {
+      return {
+        changeSet: createRejectedChangeSet(changeSet, [
+          createDiagnostic(resolvedPath.publicPath, "sdd.document_missing", `Document '${resolvedPath.publicPath}' does not exist.`)
+        ]),
+        tempHandleMapping: new Map()
+      };
+    }
   }
 
   const canonicalText = normalizeTextToLf(rawText);
@@ -1694,10 +1928,11 @@ export async function executeChangeOperations(
 
   const inspected = inspectDocumentText(bundle, resolvedPath.publicPath, canonicalText);
   const syntax = createAuthoringSyntax(bundle);
+  const placementPolicy = bundle.authoring ? getPlacementPolicyInputs(bundle) : undefined;
   const summary = createEmptySummary();
   const model =
     inspected.kind === "sdd-inspect-load-failure"
-      ? isBootstrapMinimumTopLevelFailure(inspected, canonicalText) &&
+      ? isBootstrapMinimumTopLevelFailure(bundle, inspected, canonicalText) &&
         (args.allowEmptyTemplateBootstrap || preparedOperations.every((operation) => isBootstrapInsertOperation(operation)))
         ? createEmptyDocumentModel(bundle)
         : undefined
@@ -1727,7 +1962,7 @@ export async function executeChangeOperations(
   }
 
   for (const operation of preparedOperations) {
-    const diagnostic = applyOperation(model, syntax, resolvedPath.publicPath, operation, summary);
+    const diagnostic = applyOperation(model, syntax, resolvedPath.publicPath, operation, placementPolicy, summary);
     if (diagnostic) {
       const rejected = createRejectedChangeSet(changeSet, [diagnostic], currentEvaluated);
       if (mode === "dry_run") {
@@ -1756,11 +1991,38 @@ export async function executeChangeOperations(
   changeSet.resulting_revision = evaluated.revision;
   changeSet.undo_eligible = mode === "commit";
 
+  if (mode === "commit" && args.preCommitGuard) {
+    const guardDiagnostics = args.preCommitGuard(changeSet);
+    if (guardDiagnostics.length > 0) {
+      return {
+        changeSet: createRejectedChangeSet(changeSet, guardDiagnostics, evaluated),
+        tempHandleMapping: new Map()
+      };
+    }
+  }
+
   if (mode === "commit") {
     await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
-    await writeCanonicalLfText(resolvedPath.absolutePath, candidateText);
+    if (createsDocument) {
+      try {
+        await writeCanonicalLfTextExclusive(resolvedPath.absolutePath, candidateText);
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+        return {
+          changeSet: createRejectedChangeSet(changeSet, [
+            args.initialDocument?.existsDiagnostic ??
+              createDiagnostic(resolvedPath.publicPath, "sdd.document_exists", `Document '${resolvedPath.publicPath}' already exists.`)
+          ], evaluated),
+          tempHandleMapping: new Map()
+        };
+      }
+    } else {
+      await writeCanonicalLfText(resolvedPath.absolutePath, candidateText);
+    }
     await journal.recordChangeSet(changeSet, {
-      inverse: createRestoreDocumentInverse(resolvedPath.publicPath, currentRevision, canonicalText)
+      inverse: createsDocument
+        ? createDeleteDocumentInverse(resolvedPath.publicPath)
+        : createRestoreDocumentInverse(resolvedPath.publicPath, currentRevision, canonicalText)
     });
   } else {
     await journal.recordChangeSet(changeSet);
@@ -1813,7 +2075,8 @@ export async function createDocument(
     ]);
   }
 
-  if ((args.version ?? EMPTY_TEMPLATE_VERSION) !== EMPTY_TEMPLATE_VERSION) {
+  const bootstrap = createEmptyDocumentBootstrap(bundle);
+  if ((args.version ?? bootstrap.effectiveVersion) !== bootstrap.effectiveVersion) {
     createCreateDocumentRejection(journal, resolvedPath.publicPath, [
       createDiagnostic(
         resolvedPath.publicPath,
@@ -1823,7 +2086,7 @@ export async function createDocument(
     ]);
   }
 
-  const canonicalText = emptyDocumentText();
+  const canonicalText = bootstrap.text;
   await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });
   await writeCanonicalLfText(resolvedPath.absolutePath, canonicalText);
 

@@ -61,7 +61,7 @@ describe("authoring contract metadata", () => {
 
     expect(index.kind).toBe("sdd-contract-index");
     expect(index.contract_version).toBe("0.1");
-    expect(index.subjects.map((subject) => subject.subject_id)).toEqual([
+    expect(index.subjects.filter((subject) => subject.surface_kind === "helper_command").map((subject) => subject.subject_id)).toEqual([
       "helper.command.inspect",
       "helper.command.search",
       "helper.command.create",
@@ -143,6 +143,32 @@ describe("authoring contract metadata", () => {
     for (const shapeId of shapeIds) {
       expectOptionalAssessment(getShapeSchema(shapeId));
     }
+  });
+
+  it("describes reparent operations and discriminated reparent summaries", () => {
+    const applySchema = getShapeSchema("shared.shape.apply_change_set_args") as any;
+    const operationKinds = applySchema.properties.operations.items.oneOf.map(
+      (operation: any) => operation.properties.kind.enum[0]
+    );
+    expect(operationKinds).toContain("reparent_node_block");
+    const reparentOperation = applySchema.properties.operations.items.oneOf.find(
+      (operation: any) => operation.properties.kind.enum[0] === "reparent_node_block"
+    );
+    expect(reparentOperation.required).toEqual(["kind", "node_handle", "placement"]);
+
+    const resultSchema = getShapeSchema("shared.shape.apply_change_set_result") as any;
+    const summaryVariants = resultSchema.properties.summary.properties.ordering_changes.items.oneOf;
+    const reparentSummary = summaryVariants.find(
+      (variant: any) => variant.properties.kind.enum[0] === "reparented_node_block"
+    );
+    expect(reparentSummary.required).toEqual([
+      "kind",
+      "target_handle",
+      "old_parent_handle",
+      "new_parent_handle",
+      "old_index",
+      "new_index"
+    ]);
   });
 
   it("exposes helper error result schema with optional diagnostics and assessment", () => {
@@ -498,11 +524,19 @@ describe("authoring contract metadata", () => {
     );
 
     expect([...kinds].sort()).toEqual([
+      "bound_warning_acceptance",
+      "canonical_proposal_identity",
       "commit_safe_continuation",
+      "currently_offered_opaque_option",
+      "document_presence_precondition",
       "dry_run_informational_only",
+      "exact_confirmation",
       "forbidden_if",
       "must_reference_earlier_local_id",
+      "proposal_relationship_edge_consistency",
       "required_if",
+      "same_bundle_fingerprint",
+      "same_document_revision",
       "same_revision_handle",
       "undo_change_set_eligibility",
       "unique_within_request"

@@ -19,6 +19,7 @@ export type PreviewBackendId =
 export type ChangeSetOrigin =
   | "apply_change_set"
   | "apply_authoring_intent"
+  | "apply_addition_proposal"
   | "undo_change_set"
   | "create_document";
 export type DocumentEffect = "created" | "updated" | "deleted";
@@ -164,6 +165,29 @@ export interface Placement {
   parent_handle?: Handle;
 }
 
+export type OrderingChange =
+  | {
+      kind: "top_level_node";
+      target_handle: Handle;
+      old_index: number;
+      new_index: number;
+    }
+  | {
+      kind: "structural_edge" | "nested_node_block";
+      target_handle: Handle;
+      parent_handle: Handle;
+      old_index: number;
+      new_index: number;
+    }
+  | {
+      kind: "reparented_node_block";
+      target_handle: Handle;
+      old_parent_handle: Handle | null;
+      new_parent_handle: Handle | null;
+      old_index: number;
+      new_index: number;
+    };
+
 export interface ChangeSetSummary {
   node_insertions: Array<{ handle?: Handle; node_id: string; node_type: string }>;
   node_deletions: Array<{ handle: Handle; node_id?: string }>;
@@ -171,13 +195,7 @@ export interface ChangeSetSummary {
   property_changes: Array<{ node_handle: Handle; key: string; from?: string; to?: string }>;
   edge_insertions: Array<{ handle?: Handle; parent_handle: Handle; rel_type: string; to: string }>;
   edge_deletions: Array<{ handle: Handle; parent_handle: Handle; rel_type: string; to: string }>;
-  ordering_changes: Array<{
-    kind: "top_level_node" | "structural_edge" | "nested_node_block";
-    target_handle: Handle;
-    parent_handle?: Handle;
-    old_index: number;
-    new_index: number;
-  }>;
+  ordering_changes: OrderingChange[];
 }
 
 export interface ProjectionResultEntry {
@@ -275,6 +293,12 @@ export interface MoveNestedNodeBlockOp {
   placement: Placement;
 }
 
+export interface ReparentNodeBlockOp {
+  kind: "reparent_node_block";
+  node_handle: Handle;
+  placement: Placement;
+}
+
 export type ChangeOperation =
   | InsertNodeBlockOp
   | DeleteNodeBlockOp
@@ -285,7 +309,8 @@ export type ChangeOperation =
   | RemoveEdgeLineOp
   | RepositionTopLevelNodeOp
   | RepositionStructuralEdgeOp
-  | MoveNestedNodeBlockOp;
+  | MoveNestedNodeBlockOp
+  | ReparentNodeBlockOp;
 
 export interface ListDocumentsArgs {
   under?: string;
@@ -586,6 +611,7 @@ export interface HelperContractArgs {
 
 export type ContractSubjectId =
   | `helper.command.${string}`
+  | `domain.service.${string}`
   | `mcp.tool.${string}`
   | `mcp.resource.${string}`
   | `mcp.prompt.${string}`;
@@ -600,7 +626,7 @@ export type ContractSchemaFormat = "json_schema_2020_12";
 export type ContractResolutionMode = "static" | "bundle_resolved";
 export type ContractPurpose = "request";
 export type ContractStability = "stable" | "experimental" | "deprecated";
-export type ContractSurfaceKind = "helper_command" | "mcp_tool" | "mcp_resource" | "mcp_prompt";
+export type ContractSurfaceKind = "helper_command" | "domain_service" | "mcp_tool" | "mcp_resource" | "mcp_prompt";
 
 export interface ContractIndex {
   kind: "sdd-contract-index";
@@ -666,7 +692,15 @@ export interface ContractConstraintSpec {
     | "same_revision_handle"
     | "undo_change_set_eligibility"
     | "commit_safe_continuation"
-    | "dry_run_informational_only";
+    | "dry_run_informational_only"
+    | "same_document_revision"
+    | "document_presence_precondition"
+    | "same_bundle_fingerprint"
+    | "currently_offered_opaque_option"
+    | "exact_confirmation"
+    | "proposal_relationship_edge_consistency"
+    | "canonical_proposal_identity"
+    | "bound_warning_acceptance";
   parameters: Record<string, unknown>;
   summary: string;
 }
@@ -700,7 +734,10 @@ export interface ContractContinuationSpec {
     | "commit_handles_are_safe_continuation_surfaces"
     | "dry_run_handles_are_informational_only"
     | "create_revision_is_bootstrap_continuation_surface"
-    | "inspect_may_fail_on_empty_bootstrap";
+    | "inspect_may_fail_on_empty_bootstrap"
+    | "caller_carried_state"
+    | "completed_proposal_handoff"
+    | "dry_run_to_commit_same_proposal";
   summary: string;
   parameters?: Record<string, unknown>;
 }

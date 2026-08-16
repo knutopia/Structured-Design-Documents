@@ -1,0 +1,28 @@
+SDD-TEXT 0.1
+
+Place P-100 "Dashboard"
+  COMPOSED_OF C-100 "Status Card"
+
+  + Component C-100 "Status Card"
+  END
+END
+
+Area A-200 "Projects"
+  CONTAINS P-210 "Projects Overview"
+
+  + Place P-210 "Projects Overview"
+    NAVIGATES_TO P-100 "Dashboard"
+  END
+END
+
+Place P-300 "Reports"
+END
+
+ViewState VS-100 "Summary"
+END
+
+Component C-200 "Global Navigation"
+END
+
+Outcome O-100 "Improve project visibility"
+END

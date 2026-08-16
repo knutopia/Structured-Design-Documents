@@ -11,6 +11,7 @@ core:
   # Downstream projection normalization does not change .sdd authoring.
   projection_schema: core/projection_schema.json
   views: core/views.yaml
+  authoring: core/authoring.yaml
 
 profiles:
   - id: simple

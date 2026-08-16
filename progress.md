@@ -2,8 +2,9 @@
 
 ## Open Issues
 
--remove the FOOBAR accordeon scroll expander
--add syntax highlight install / info
+-Make "simple" the CLI default
+-Update CLI "easy start" paragraph with sdd add
+-fix stale require_event_id_in_recommended in contracts.yaml
 -fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
 
@@ -12,7 +13,7 @@
 -service blueprint etc - were did the labels go?
 -effect needs a contract decision, not just a regex. Is the request field a raw source atom, a logical string value, or a typed atom like { kind, value }? Today quoted effects are valid bundle atoms, but a plain JSON string cannot safely distinguish SA-010 from "side effect" without clear serialization rules.
 -Tightening effect can accidentally reject valid quoted-string effects or double-quote/escape them if normalization is unclear.
-
+z
 -generalizing the skill beyond this repository layout
 -remove service_blueprint DOT output
 -how to enrich the diagram type with deeper content (link?)
@@ -20,6 +21,49 @@
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Sat 8-15
+
+- Phase 4 done with issues
+- Phase 5 done
+- Phase 6 done
+- Phase 7 done - remediation completed
+- Fixed duplicate prompt
+- Added new-document support
+
+## Fri 8-14
+
+- Phase 3 done, architecture
+
+## Thu 8-13
+
+- Polished acceptance scripts
+- Remediation phase 1 & 2
+- Phase 2 done
+
+## Wed 8-12
+
+- Manual edit (wip) of acceptance transcripts
+
+## Tue 8-11
+
+- Checkpoint 1 done
+- Checkpoint 2 done
+- Checkpoint 3 done
+- Checkpoint 4 done
+- Checkpoint 5 done
+- Checkpoint 6 done
+- Improving sdd add guidance
+- Captured sdd add usability issues
+- Analyis: permafucked snafu foobar implementation - collapsed the UX brief flows
+- Remediation started
+- Remediation UX is fucked too
+
+## Mon 8-10
+
+- UX Brief for Guided Addition API
+- Matching architecture document
+- Updated AGENTS.md current goal
 
 ## Thu 8-6
 

@@ -1,5 +1,6 @@
 import { getCompiledEdgeSourceSpan, type CompiledEdge, type CompiledNode } from "../compiler/types.js";
 import type { Diagnostic, Severity, SourceSpan } from "../types.js";
+import { resolveProfileRuleField } from "../bundle/bundleReferences.js";
 import type { RuleExecutor, RuleSource, ValidationContext } from "./types.js";
 
 function createDiagnostic(
@@ -688,10 +689,10 @@ export const branchingStepMarker: RuleExecutor = (context, rule, logic, severity
 };
 
 export const idPrefixTypeCoupling: RuleExecutor = (context, rule, _logic, severity) => {
-  const prefixMap =
-    "prefix_map" in rule && rule.prefix_map && typeof rule.prefix_map === "object"
-      ? (rule.prefix_map as Record<string, string>)
-      : {};
+  if (!("source" in rule)) {
+    return [];
+  }
+  const prefixMap = resolveProfileRuleField<Record<string, string>>(context.bundle, rule, "prefix_map") ?? {};
   const diagnostics: Diagnostic[] = [];
 
   for (const node of context.graph.nodes) {

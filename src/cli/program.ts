@@ -1,6 +1,13 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError } from "commander";
+import { applyAdditionProposalV1 } from "../authoring/additionProposalsV1.js";
+import { createGuidedAdditionRuntimeV1 } from "../authoring/guidedAddition/v1/planner.js";
+import {
+  createGuidedDocumentSnapshot,
+  createNewGuidedDocumentSnapshot
+} from "../authoring/guidedAddition/snapshot.js";
+import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/workspace.js";
 import { loadBundle } from "../bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import { compileSource } from "../compiler/compileSource.js";
@@ -37,15 +44,18 @@ import { buildShowPreviewOutputPath } from "../previewArtifactPaths.js";
 import type { Diagnostic, RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import type { ValidationReport } from "../validator/types.js";
+import {
+  createReadlineGuidedPrompt,
+  runGuidedAdditionCommand,
+  type GuidedAdditionCliDeps
+} from "./guidedAddition.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
 
 type DiagnosticsFormat = "pretty" | "json";
 
-export interface CliDeps {
-  loadBundle: (manifestPath: string) => Promise<Bundle>;
-  readSourceInput: (filePath: string) => Promise<SourceInput>;
+export interface CliDeps extends GuidedAdditionCliDeps {
   compileSource: (input: SourceInput, bundle: Bundle) => CompileResult;
   validateGraph: (graph: NonNullable<CompileResult["graph"]>, bundle: Bundle, profileId: string) => ValidationReport;
   renderSource: (input: SourceInput, bundle: Bundle, options: RenderOptions) => RenderResult;
@@ -93,8 +103,16 @@ async function defaultWriteBinaryFile(outputPath: string, content: Uint8Array): 
 
 function createDefaultDeps(): CliDeps {
   return {
+    cwd: () => process.cwd(),
     loadBundle,
     readSourceInput: defaultReadSourceInput,
+    findAuthoringRepoRoot,
+    createAuthoringWorkspace,
+    createGuidedDocumentSnapshot,
+    createNewGuidedDocumentSnapshot,
+    createGuidedAdditionRuntimeV1,
+    applyAdditionProposalV1,
+    createGuidedPrompt: createReadlineGuidedPrompt,
     compileSource,
     validateGraph,
     renderSource,
@@ -609,6 +627,22 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       writeErr: (content) => deps.stderr(content)
     })
     .addHelpText("after", globalHelpText());
+
+  program
+    .command("add")
+    .summary("Interactively add a node or relationship")
+    .description("Guide a semantic addition, review a dry run, and Save or Cancel without constructing source text in the CLI.")
+    .argument("<document_path>", "repo-owned .sdd path (created on Save if absent)")
+    .option("--node <node_id>", "exact anchor node id")
+    .option("--bundle <manifest>", "bundle manifest path")
+    .addHelpText("after", examplesBlock([
+      "sdd add tmp_app.sdd",
+      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001"
+    ]))
+    .action(async (documentPath, options) => {
+      setExitCode(await runGuidedAdditionCommand(deps, documentPath, options));
+    });
 
   program
     .command("compile")

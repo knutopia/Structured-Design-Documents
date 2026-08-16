@@ -1,11 +1,19 @@
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { Bundle } from "../src/bundle/types.js";
 import type { Diagnostic } from "../src/diagnostics/types.js";
-import { applyChangeSet, AuthoringMutationError, createDocument } from "../src/authoring/mutations.js";
+import {
+  applyChangeSet,
+  AuthoringMutationError,
+  createDocument,
+  executeChangeOperations
+} from "../src/authoring/mutations.js";
+import { createEmptyDocumentBootstrap } from "../src/authoring/bootstrap.js";
+import { computeDocumentRevision } from "../src/authoring/revisions.js";
 import { createChangeSetJournal } from "../src/authoring/journal.js";
 import { inspectDocument, type InspectedDocument } from "../src/authoring/inspect.js";
 import { createAuthoringWorkspace } from "../src/authoring/workspace.js";
@@ -79,6 +87,50 @@ function diagnosticCodes(diagnostics: Diagnostic[]): string[] {
 }
 
 describe("authoring mutations", () => {
+  it("uses exclusive creation when an absent target appears after verification", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const documentPath = "docs/race.sdd";
+      const absolutePath = path.join(tempRepoRoot, documentPath);
+      await mkdir(path.dirname(absolutePath), { recursive: true });
+      const bootstrap = createEmptyDocumentBootstrap(bundle);
+      const external = "external writer won\n";
+      const result = await executeChangeOperations(workspace, bundle, {
+        path: documentPath,
+        base_revision: computeDocumentRevision(bootstrap.text),
+        mode: "commit",
+        origin: "apply_addition_proposal",
+        allowEmptyTemplateBootstrap: true,
+        initialDocument: {
+          kind: "must_not_exist",
+          text: bootstrap.text,
+          existsDiagnostic: {
+            stage: "authoring",
+            code: "guided_addition.state_stale",
+            severity: "error",
+            message: "Target appeared",
+            file: documentPath
+          }
+        },
+        operations: [{
+          kind: "insert_node_block",
+          node_type: "Place",
+          node_id: "P-001",
+          name: "Home",
+          placement: { mode: "last", stream: "top_level" }
+        }],
+        preCommitGuard: () => {
+          fs.writeFileSync(absolutePath, external, "utf8");
+          return [];
+        }
+      });
+
+      expect(result.changeSet.status).toBe("rejected");
+      expect(result.changeSet.diagnostics.map((item) => item.code)).toContain("guided_addition.state_stale");
+      expect(await readFile(absolutePath, "utf8")).toBe(external);
+    });
+  });
+
   it("creates empty documents, returns parse diagnostics, and journals delete-on-undo metadata", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const workspace = createAuthoringWorkspace(tempRepoRoot);
@@ -455,6 +507,91 @@ describe("authoring mutations", () => {
     });
   });
 
+  it("adds only missing blank boundaries for first, last, before, and after top-level insertion", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const documentPath = "docs/top-level-insert-boundaries.sdd";
+      await writeTempDocument(
+        tempRepoRoot,
+        documentPath,
+        [
+          "SDD-TEXT 0.1",
+          "# alpha documentation",
+          "Place P-100 \"Alpha\"",
+          "END",
+          "# beta documentation",
+          "Place P-200 \"Beta\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const inspected = expectInspectedDocument(await inspectDocument(workspace, bundle, documentPath));
+      const alpha = inspected.resource.nodes.find((node) => node.node_id === "P-100")!.handle;
+      const beta = inspected.resource.nodes.find((node) => node.node_id === "P-200")!.handle;
+      const result = await applyChangeSet(workspace, bundle, {
+        path: documentPath,
+        base_revision: inspected.resource.revision,
+        mode: "commit",
+        operations: [
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-010",
+            name: "First",
+            placement: { mode: "first", stream: "top_level" }
+          },
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-150",
+            name: "Before Beta",
+            placement: { mode: "before", stream: "top_level", anchor_handle: beta }
+          },
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-125",
+            name: "After Alpha",
+            placement: { mode: "after", stream: "top_level", anchor_handle: alpha }
+          },
+          {
+            kind: "insert_node_block",
+            node_type: "Place",
+            node_id: "P-999",
+            name: "Last",
+            placement: { mode: "last", stream: "top_level" }
+          }
+        ]
+      });
+      expect(result.status).toBe("applied");
+      expect(await readTempDocument(tempRepoRoot, documentPath)).toBe(
+        [
+          "SDD-TEXT 0.1",
+          "Place P-010 \"First\"",
+          "END",
+          "",
+          "# alpha documentation",
+          "Place P-100 \"Alpha\"",
+          "END",
+          "",
+          "Place P-125 \"After Alpha\"",
+          "END",
+          "",
+          "Place P-150 \"Before Beta\"",
+          "END",
+          "",
+          "# beta documentation",
+          "Place P-200 \"Beta\"",
+          "END",
+          "",
+          "Place P-999 \"Last\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+    });
+  });
+
   it("inserts edges at the default position and removes edges and nested nodes on commit", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const documentPath = "docs/edge-ops.sdd";
@@ -545,6 +682,102 @@ describe("authoring mutations", () => {
           ""
         ].join("\n")
       );
+    });
+  });
+
+  it("uses the bundle edge policy for placement-free insertion and preserves explicit overrides", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const source = [
+        "SDD-TEXT 0.1",
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-100 \"Status Card\"",
+        "",
+        "  + Component C-100 \"Status Card\"",
+        "  END",
+        "END",
+        "",
+        "Place P-300 \"Reports\"",
+        "END",
+        ""
+      ].join("\n");
+      const activeExpected = [
+        "SDD-TEXT 0.1",
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-100 \"Status Card\"",
+        "  NAVIGATES_TO P-300 \"Reports\"",
+        "",
+        "  + Component C-100 \"Status Card\"",
+        "  END",
+        "END",
+        "",
+        "Place P-300 \"Reports\"",
+        "END",
+        ""
+      ].join("\n");
+      const lastExpected = [
+        "SDD-TEXT 0.1",
+        "Place P-100 \"Dashboard\"",
+        "  COMPOSED_OF C-100 \"Status Card\"",
+        "",
+        "  + Component C-100 \"Status Card\"",
+        "  END",
+        "  NAVIGATES_TO P-300 \"Reports\"",
+        "END",
+        "",
+        "Place P-300 \"Reports\"",
+        "END",
+        ""
+      ].join("\n");
+
+      const insert = async (
+        documentPath: string,
+        selectedBundle: Bundle,
+        explicitLast = false
+      ) => {
+        await writeTempDocument(tempRepoRoot, documentPath, source);
+        const workspace = createAuthoringWorkspace(tempRepoRoot);
+        const inspected = expectInspectedDocument(await inspectDocument(workspace, selectedBundle, documentPath));
+        const parentHandle = inspected.resource.nodes.find((node) => node.node_id === "P-100")!.handle;
+        const result = await applyChangeSet(workspace, selectedBundle, {
+          path: documentPath,
+          base_revision: inspected.resource.revision,
+          mode: "commit",
+          operations: [
+            {
+              kind: "insert_edge_line",
+              parent_handle: parentHandle,
+              rel_type: "NAVIGATES_TO",
+              to: "P-300",
+              to_name: "Reports",
+              ...(explicitLast
+                ? { placement: { stream: "body" as const, mode: "last" as const, parent_handle: parentHandle } }
+                : {})
+            }
+          ]
+        });
+        return { result, text: await readTempDocument(tempRepoRoot, documentPath) };
+      };
+
+      const active = await insert("docs/semantic-policy.sdd", bundle);
+      expect(active.result.status).toBe("applied");
+      expect(active.text).toBe(activeExpected);
+
+      const legacyBundle = structuredClone(bundle);
+      legacyBundle.authoring!.placement_policies.default.edge_in_source_body = "last";
+      const legacy = await insert("docs/legacy-policy.sdd", legacyBundle);
+      expect(legacy.result.status).toBe("applied");
+      expect(legacy.text).toBe(lastExpected);
+
+      const explicit = await insert("docs/explicit-policy.sdd", bundle, true);
+      expect(explicit.result.status).toBe("applied");
+      expect(explicit.text).toBe(lastExpected);
+
+      const noAuthoringBundle = structuredClone(bundle);
+      delete noAuthoringBundle.authoring;
+      const noAuthoring = await insert("docs/no-authoring-policy.sdd", noAuthoringBundle);
+      expect(noAuthoring.result.status).toBe("rejected");
+      expect(diagnosticCodes(noAuthoring.result.diagnostics)).toContain("sdd.invalid_placement");
+      expect(noAuthoring.text).toBe(source);
     });
   });
 

@@ -4,6 +4,7 @@ import YAML from "yaml";
 import type {
   Bundle,
   BundleManifest,
+  AuthoringConfig,
   ContractsConfig,
   JsonSchema,
   ProfileConfig,
@@ -11,6 +12,7 @@ import type {
   ViewsConfig,
   Vocabulary
 } from "./types.js";
+import { validateLoadedBundle } from "./validateLoadedBundle.js";
 
 function assertRecord(value: unknown, label: string): asserts value is Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -54,14 +56,16 @@ export async function loadBundle(manifestPath: string): Promise<Bundle> {
   const contractsPath = resolveFromManifest(rootDir, manifest.core.contracts);
   const projectionSchemaPath = resolveFromManifest(rootDir, manifest.core.projection_schema);
   const viewsPath = resolveFromManifest(rootDir, manifest.core.views);
+  const authoringPath = manifest.core.authoring ? resolveFromManifest(rootDir, manifest.core.authoring) : undefined;
 
-  const [vocab, syntax, schema, contracts, projectionSchema, views] = await Promise.all([
+  const [vocab, syntax, schema, contracts, projectionSchema, views, authoring] = await Promise.all([
     readYamlFile<Vocabulary>(vocabPath),
     readYamlFile<SyntaxConfig>(syntaxPath),
     readJsonFile<JsonSchema>(schemaPath),
     readYamlFile<ContractsConfig>(contractsPath),
     readJsonFile<JsonSchema>(projectionSchemaPath),
-    readYamlFile<ViewsConfig>(viewsPath)
+    readYamlFile<ViewsConfig>(viewsPath),
+    authoringPath ? readYamlFile<AuthoringConfig>(authoringPath) : Promise.resolve(undefined)
   ]);
 
   const profilesEntries = await Promise.all(
@@ -72,7 +76,7 @@ export async function loadBundle(manifestPath: string): Promise<Bundle> {
     })
   );
 
-  return {
+  const bundle: Bundle = {
     rootDir,
     manifestPath: resolvedManifestPath,
     manifest,
@@ -82,7 +86,10 @@ export async function loadBundle(manifestPath: string): Promise<Bundle> {
     projectionSchema,
     contracts,
     views,
-    profiles: Object.fromEntries(profilesEntries)
+    profiles: Object.fromEntries(profilesEntries),
+    authoring
   };
-}
 
+  validateLoadedBundle(bundle);
+  return bundle;
+}

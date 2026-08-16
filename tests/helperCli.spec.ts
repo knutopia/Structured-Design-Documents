@@ -1343,6 +1343,23 @@ describe("sdd-helper CLI", () => {
     });
   });
 
+  it("rejects library-visible domain service metadata through the helper contract command", async () => {
+    const { deps, stdout, loadBundleMock } = createDeps();
+    const result = await runHelperCli(
+      ["node", "sdd-helper", "contract", "domain.service.guided_addition.begin", "--resolve", "bundle"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+    expect(parseStdoutPayload(stdout)).toMatchObject({
+      kind: "sdd-helper-error",
+      code: "invalid_args",
+      message:
+        "Contract subject_id 'domain.service.guided_addition.begin' is not a helper command subject. Domain service metadata is library-visible only."
+    });
+  });
+
   it("writes inspect results as a single JSON payload on stdout", async () => {
     const { deps, stdout, stderr } = createDeps();
     const result = await runHelperCli(["node", "sdd-helper", "inspect", "docs/example.sdd"], deps);
@@ -2355,6 +2372,38 @@ describe("sdd-helper CLI", () => {
       can_render: false,
       should_stop: true
     });
+  });
+
+  it("accepts reparent_node_block through the existing low-level apply contract", async () => {
+    const request = {
+      path: "docs/example.sdd",
+      base_revision: "rev_base",
+      operations: [
+        {
+          kind: "reparent_node_block",
+          node_handle: "hdl_child",
+          placement: {
+            mode: "last",
+            stream: "body",
+            parent_handle: "hdl_parent"
+          }
+        }
+      ]
+    };
+    const { deps, applyChangeSetMock } = createDeps({
+      readTextFile: vi.fn(async () => JSON.stringify(request))
+    });
+    const result = await runHelperCli([
+      "node",
+      "sdd-helper",
+      "apply",
+      "--request",
+      "/tmp/reparent.json"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(applyChangeSetMock).toHaveBeenCalledTimes(1);
+    expect(applyChangeSetMock.mock.calls[0]?.[2]).toEqual(request);
   });
 
   it("returns structured diagnostics for invalid apply insert fields", async () => {

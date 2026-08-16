@@ -1,0 +1,459 @@
+SDD-TEXT 0.1
+Place P-100 "Guided Addition interaction"
+  owner="Product Experience"
+  description="The human-facing sdd-add flow for creating a semantic addition proposal and deciding whether to save it."
+  surface=terminal
+  route_or_key=sdd-add
+  access=role:document_author
+  CONTAINS VS-100
+  CONTAINS VS-110
+  CONTAINS VS-120
+  CONTAINS VS-200
+  CONTAINS VS-210
+  CONTAINS VS-220
+  CONTAINS VS-230
+  CONTAINS VS-240
+  CONTAINS VS-400
+  CONTAINS VS-500
+  CONTAINS VS-600
+  CONTAINS VS-620
+  CONTAINS VS-700
+  + ViewState VS-100 "Launch choices"
+    owner="Product Experience"
+    description="Choose whether to add a standalone node or a relationship when no starting node is supplied."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-110 "Node type browser"
+    owner="Product Experience"
+    description="Browse node types with an in-menu diagram filter that can be selected, changed, or cleared."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-120 "Starting node browser"
+    owner="Product Experience"
+    description="Browse existing starting nodes while preserving relationship intent across diagram-filter changes."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-200 "Connection route browser"
+    owner="Product Experience"
+    description="Choose one of the four direction-and-order routes for a known starting node."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-210 "Relationship-first browser"
+    owner="Product Experience"
+    description="Browse bundle-valid relationship and endpoint-type combinations with regular choices before annotated cross-diagram choices."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-220 "Existing endpoint choice"
+    owner="Product Experience"
+    description="Choose a matching existing endpoint or continue by creating a new endpoint of the already-constrained type."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-230 "Existing-node-first browser"
+    owner="Product Experience"
+    description="Browse direction-valid named nodes first, with exact identity and optional diagram filtering."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-240 "Relationship disambiguation"
+    owner="Product Experience"
+    description="Choose an exact relationship only when the selected endpoint supports more than one valid relationship."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-400 "New node editor"
+    owner="Product Experience"
+    description="Enter primary node fields before context-specific optional node and relationship details."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-500 "Source organization choices"
+    owner="Product Experience"
+    description="Show only contextually meaningful nesting, movement, or order choices in ordinary language."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-600 "Proposal review"
+    owner="Product Experience"
+    description="Review the proposed semantic addition and choose one ordinary Save or Cancel action."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-620 "Concrete warning"
+    owner="Product Experience"
+    description="Explain a concrete verification warning and offer Save anyway or Go back."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+  + ViewState VS-700 "Completion message"
+    owner="Product Experience"
+    description="Report either a successful save or cancellation with no changes."
+    place_id=P-100
+    data_required=GuidedAdditionContext
+  END
+END
+Stage G-100 "Choose an authoring route"
+  owner="Product Experience"
+  description="Launch context, diagram-filtered browsing, and the four distinct known-node relationship routes."
+  order_index=1
+  CONTAINS J-100
+  CONTAINS J-110
+  CONTAINS J-120
+  CONTAINS J-130
+  CONTAINS J-200
+  CONTAINS J-210
+  CONTAINS J-211
+  CONTAINS J-220
+  CONTAINS J-221
+  CONTAINS J-230
+  CONTAINS J-231
+  CONTAINS J-240
+  CONTAINS J-241
+  CONTAINS J-300
+  + Step J-100 "Begin guided addition"
+    owner="Product Experience"
+    description="Enter with either a known starting node or no preselected node; the launch context determines the next question."
+    actor="Document author"
+    intent="Begin guided addition"
+    success_criteria="Enter with either a known starting node or no preselected node; the launch context determines the next question."
+    kind=decision
+    REALIZED_BY VS-100
+    PRECEDES J-200 {starting node known}
+    PRECEDES J-110 {no starting node}
+  END
+  + Step J-110 "Choose what to add"
+    owner="Product Experience"
+    description="When no node is preselected, choose a standalone node or a relationship without exposing implementation concepts."
+    actor="Document author"
+    intent="Choose what to add"
+    success_criteria="When no node is preselected, choose a standalone node or a relationship without exposing implementation concepts."
+    kind=decision
+    REALIZED_BY VS-100
+    PRECEDES J-120 {standalone node}
+    PRECEDES J-130 {relationship}
+  END
+  + Step J-120 "Browse node types"
+    owner="Product Experience"
+    description="Optionally select, change, or clear the diagram filter in the same node-type browser, then choose a bundle-valid type."
+    actor="Document author"
+    intent="Browse node types"
+    success_criteria="Optionally select, change, or clear the diagram filter in the same node-type browser, then choose a bundle-valid type."
+    REALIZED_BY VS-110
+    PRECEDES J-500
+  END
+  + Step J-130 "Browse starting nodes"
+    owner="Product Experience"
+    description="Optionally filter existing nodes by human-readable diagram type; only selecting a named node advances the relationship flow."
+    actor="Document author"
+    intent="Browse starting nodes"
+    success_criteria="Optionally filter existing nodes by human-readable diagram type; only selecting a named node advances the relationship flow."
+    REALIZED_BY VS-120
+    PRECEDES J-200
+  END
+  + Step J-200 "Choose connection direction and order"
+    owner="Product Experience"
+    description="Preserve four distinct intents: outgoing relationship-first, outgoing existing-node-first, incoming relationship-first, and incoming existing-node-first."
+    actor="Document author"
+    intent="Choose connection direction and order"
+    success_criteria="Preserve four distinct intents: outgoing relationship-first, outgoing existing-node-first, incoming relationship-first, and incoming existing-node-first."
+    kind=decision
+    REALIZED_BY VS-200
+    PRECEDES J-210 {outgoing relationship first}
+    PRECEDES J-220 {outgoing existing node first}
+    PRECEDES J-230 {incoming relationship first}
+    PRECEDES J-240 {incoming existing node first}
+  END
+  + Step J-210 "Browse outgoing relationship combinations"
+    owner="Product Experience"
+    description="Browse valid starting-node to relationship to destination-type combinations; filtering rerenders this same step and retains annotated bridge choices."
+    actor="Document author"
+    intent="Browse outgoing relationship combinations"
+    success_criteria="Browse valid starting-node to relationship to destination-type combinations; filtering rerenders this same step and retains annotated bridge choices."
+    REALIZED_BY VS-210
+    PRECEDES J-211
+  END
+  + Step J-211 "Choose outgoing destination"
+    owner="Product Experience"
+    description="After the relationship and destination type are fixed, choose a matching existing destination or create a new destination of that type."
+    actor="Document author"
+    intent="Choose outgoing destination"
+    success_criteria="After the relationship and destination type are fixed, choose a matching existing destination or create a new destination of that type."
+    kind=decision
+    REALIZED_BY VS-220
+    PRECEDES J-300 {existing destination}
+    PRECEDES J-500 {new destination}
+  END
+  + Step J-220 "Browse outgoing destination nodes"
+    owner="Product Experience"
+    description="Browse only named existing nodes reachable by at least one valid outgoing relationship, with all valid relationships summarized per node."
+    actor="Document author"
+    intent="Browse outgoing destination nodes"
+    success_criteria="Browse only named existing nodes reachable by at least one valid outgoing relationship, with all valid relationships summarized per node."
+    REALIZED_BY VS-230
+    PRECEDES J-221
+  END
+  + Step J-221 "Choose constrained outgoing relationship"
+    owner="Product Experience"
+    description="After choosing the exact destination, select among only the relationships valid for the starting and destination node types."
+    actor="Document author"
+    intent="Choose constrained outgoing relationship"
+    success_criteria="After choosing the exact destination, select among only the relationships valid for the starting and destination node types."
+    REALIZED_BY VS-240
+    PRECEDES J-300
+  END
+  + Step J-230 "Browse incoming relationship combinations"
+    owner="Product Experience"
+    description="Browse valid origin-type to relationship to starting-node combinations; filtering changes choices without changing the incoming relationship-first order."
+    actor="Document author"
+    intent="Browse incoming relationship combinations"
+    success_criteria="Browse valid origin-type to relationship to starting-node combinations; filtering changes choices without changing the incoming relationship-first order."
+    REALIZED_BY VS-210
+    PRECEDES J-231
+  END
+  + Step J-231 "Choose incoming origin"
+    owner="Product Experience"
+    description="After the origin type and relationship are fixed, choose a matching existing origin or create a new origin of that type."
+    actor="Document author"
+    intent="Choose incoming origin"
+    success_criteria="After the origin type and relationship are fixed, choose a matching existing origin or create a new origin of that type."
+    kind=decision
+    REALIZED_BY VS-220
+    PRECEDES J-300 {existing origin}
+    PRECEDES J-500 {new origin}
+  END
+  + Step J-240 "Browse incoming origin nodes"
+    owner="Product Experience"
+    description="Browse only named existing nodes that can connect to the starting node through at least one valid incoming relationship."
+    actor="Document author"
+    intent="Browse incoming origin nodes"
+    success_criteria="Browse only named existing nodes that can connect to the starting node through at least one valid incoming relationship."
+    REALIZED_BY VS-230
+    PRECEDES J-241
+  END
+  + Step J-241 "Choose constrained incoming relationship"
+    owner="Product Experience"
+    description="After choosing the exact origin, select among only the relationships valid for the origin and starting-node types."
+    actor="Document author"
+    intent="Choose constrained incoming relationship"
+    success_criteria="After choosing the exact origin, select among only the relationships valid for the origin and starting-node types."
+    REALIZED_BY VS-240
+    PRECEDES J-300
+  END
+  + Step J-300 "Organize an existing endpoint"
+    owner="Product Experience"
+    description="An existing non-structural endpoint stays where it is; a structural target presents an explicit move-or-leave decision."
+    actor="Document author"
+    intent="Organize an existing endpoint"
+    success_criteria="An existing non-structural endpoint stays where it is; a structural target presents an explicit move-or-leave decision."
+    kind=decision
+    REALIZED_BY VS-500
+    PRECEDES J-600 {non-structural relationship}
+    PRECEDES J-420 {structural relationship}
+  END
+END
+Stage G-200 "Complete and organize the proposal"
+  owner="Product Experience"
+  description="Contextual node details and source-organization choices for structural, non-structural, and standalone additions."
+  order_index=2
+  CONTAINS J-500
+  CONTAINS J-510
+  CONTAINS J-410
+  CONTAINS J-411
+  CONTAINS J-412
+  CONTAINS J-420
+  CONTAINS J-430
+  CONTAINS J-440
+  CONTAINS J-600
+  CONTAINS J-610
+  CONTAINS J-611
+  CONTAINS J-620
+  + Step J-500 "Enter new node fields"
+    owner="Product Experience"
+    description="Accept a collision-safe suggested ID while leaving the final ID to the user, then collect name and description."
+    actor="Document author"
+    intent="Enter new node fields"
+    success_criteria="Accept a collision-safe suggested ID while leaving the final ID to the user, then collect name and description."
+    REALIZED_BY VS-400
+    PRECEDES J-510
+  END
+  + Step J-510 "Offer contextual details"
+    owner="Product Experience"
+    description="Progressively disclose only fields supported by the selected node and relationship types, then continue according to proposal context."
+    actor="Document author"
+    intent="Offer contextual details"
+    success_criteria="Progressively disclose only fields supported by the selected node and relationship types, then continue according to proposal context."
+    kind=decision
+    REALIZED_BY VS-400
+    PRECEDES J-410 {new structural target}
+    PRECEDES J-610 {new outgoing destination}
+    PRECEDES J-611 {new incoming origin}
+    PRECEDES J-620 {standalone node}
+  END
+  + Step J-410 "Choose placement for a new structural target"
+    owner="Product Experience"
+    description="Ask whether to nest the new target in the source before asking any meaningful sibling or top-level order question."
+    actor="Document author"
+    intent="Choose placement for a new structural target"
+    success_criteria="Ask whether to nest the new target in the source before asking any meaningful sibling or top-level order question."
+    kind=decision
+    REALIZED_BY VS-500
+    PRECEDES J-411 {nest under source}
+    PRECEDES J-412 {keep at top level}
+  END
+  + Step J-411 "Choose nested sibling order"
+    owner="Product Experience"
+    description="When the chosen parent already has children, choose first or last within that parent after nesting has been chosen."
+    actor="Document author"
+    intent="Choose nested sibling order"
+    success_criteria="When the chosen parent already has children, choose first or last within that parent after nesting has been chosen."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-412 "Choose top-level order"
+    owner="Product Experience"
+    description="When nesting is declined, choose a meaningful top-level position and retain a blank line between definitions."
+    actor="Document author"
+    intent="Choose top-level order"
+    success_criteria="When nesting is declined, choose a meaningful top-level position and retain a blank line between definitions."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-420 "Decide whether to move an existing structural target"
+    owner="Product Experience"
+    description="Ask explicitly whether to move the existing target into the source or leave its declaration exactly where it is."
+    actor="Document author"
+    intent="Decide whether to move an existing structural target"
+    success_criteria="Ask explicitly whether to move the existing target into the source or leave its declaration exactly where it is."
+    kind=decision
+    REALIZED_BY VS-500
+    PRECEDES J-430 {move into source}
+    PRECEDES J-440 {leave where it is}
+  END
+  + Step J-430 "Choose sibling order and confirm the move"
+    owner="Product Experience"
+    description="Choose order only after accepting the move, then confirm the concrete from-and-to effect because existing source content will move."
+    actor="Document author"
+    intent="Choose sibling order and confirm the move"
+    success_criteria="Choose order only after accepting the move, then confirm the concrete from-and-to effect because existing source content will move."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-440 "Leave the existing target in place"
+    owner="Product Experience"
+    description="Add only the structural relationship; do not ask an order question and do not move or copy the existing declaration."
+    actor="Document author"
+    intent="Leave the existing target in place"
+    success_criteria="Add only the structural relationship; do not ask an order question and do not move or copy the existing declaration."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-600 "Keep the existing endpoint in place"
+    owner="Product Experience"
+    description="For a non-structural relationship, preserve both existing declarations and omit all nesting and source-order prompts."
+    actor="Document author"
+    intent="Keep the existing endpoint in place"
+    success_criteria="For a non-structural relationship, preserve both existing declarations and omit all nesting and source-order prompts."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-610 "Place a new outgoing destination after its origin"
+    owner="Product Experience"
+    description="Offer graph-consistent same-level choices only; recommend immediately after the origin and never offer before-origin placement."
+    actor="Document author"
+    intent="Place a new outgoing destination after its origin"
+    success_criteria="Offer graph-consistent same-level choices only; recommend immediately after the origin and never offer before-origin placement."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-611 "Place a new incoming origin before its destination"
+    owner="Product Experience"
+    description="Offer graph-consistent same-level choices only; recommend immediately before the destination and never offer after-destination placement."
+    actor="Document author"
+    intent="Place a new incoming origin before its destination"
+    success_criteria="Offer graph-consistent same-level choices only; recommend immediately before the destination and never offer after-destination placement."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+  + Step J-620 "Choose standalone top-level order"
+    owner="Product Experience"
+    description="For a standalone node, choose first or last at top level with last recommended for ordinary document authoring."
+    actor="Document author"
+    intent="Choose standalone top-level order"
+    success_criteria="For a standalone node, choose first or last at top level with last recommended for ordinary document authoring."
+    REALIZED_BY VS-500
+    PRECEDES J-900
+  END
+END
+Stage G-300 "Review and decide"
+  owner="Product Experience"
+  description="Plain-language review, one ordinary Save or Cancel decision, and a second decision only for a concrete warning."
+  order_index=3
+  CONTAINS J-900
+  CONTAINS J-910
+  CONTAINS J-920
+  CONTAINS J-930
+  CONTAINS J-980
+  CONTAINS J-990
+  + Step J-900 "Review the proposed addition"
+    owner="Product Experience"
+    description="Review the semantic content and plain-language placement effect, then make one ordinary Save or Cancel decision."
+    actor="Document author"
+    intent="Review the proposed addition"
+    success_criteria="Review the semantic content and plain-language placement effect, then make one ordinary Save or Cancel decision."
+    kind=decision
+    REALIZED_BY VS-600
+    PRECEDES J-910 {save}
+    PRECEDES J-990 {cancel}
+  END
+  + Step J-910 "Check the save outcome"
+    owner="Product Experience"
+    description="The application verifies the unchanged proposal through shared authoring machinery without presenting a second routine commit choice."
+    actor="sdd-add client"
+    intent="Check the save outcome"
+    success_criteria="The application verifies the unchanged proposal through shared authoring machinery without presenting a second routine commit choice."
+    kind=decision
+    REALIZED_BY VS-600
+    PRECEDES J-980 {no warning}
+    PRECEDES J-920 {concrete warning}
+  END
+  + Step J-920 "Respond to a concrete warning"
+    owner="Product Experience"
+    description="After a specific warning such as an exact duplicate relationship, choose Save anyway or Go back; the proposal itself remains unchanged."
+    actor="Document author"
+    intent="Respond to a concrete warning"
+    success_criteria="After a specific warning such as an exact duplicate relationship, choose Save anyway or Go back; the proposal itself remains unchanged."
+    kind=decision
+    REALIZED_BY VS-620
+    PRECEDES J-980 {save anyway}
+    PRECEDES J-930 {go back}
+  END
+  + Step J-930 "Return to proposal review"
+    owner="Product Experience"
+    description="Resume proposal review without writing; the user may revise the decision from the same reviewed proposal."
+    actor="Document author"
+    intent="Return to proposal review"
+    success_criteria="Resume proposal review without writing; the user may revise the decision from the same reviewed proposal."
+    REALIZED_BY VS-600
+  END
+  + Step J-980 "See the saved confirmation"
+    owner="Product Experience"
+    description="Confirm that the reviewed addition was written once after informed consent."
+    actor="Document author"
+    intent="See the saved confirmation"
+    success_criteria="Confirm that the reviewed addition was written once after informed consent."
+    REALIZED_BY VS-700
+  END
+  + Step J-990 "See the cancellation confirmation"
+    owner="Product Experience"
+    description="Confirm that cancellation ended the interaction and made no document changes."
+    actor="Document author"
+    intent="See the cancellation confirmation"
+    success_criteria="Confirm that cancellation ended the interaction and made no document changes."
+    REALIZED_BY VS-700
+  END
+END

@@ -2,8 +2,9 @@
 
 ## Goal
 
-The v0.1 toolchain provides one shared TypeScript engine with three public thin CLI commands:
+The v0.1 toolchain provides one shared TypeScript engine with four public thin CLI commands:
 
+- `sdd add`
 - `sdd compile`
 - `sdd validate`
 - `sdd show`
@@ -37,7 +38,7 @@ The staged renderer migration also introduces an internal-only renderer pipeline
 
 Each stage has a narrow responsibility:
 
-- `loadBundle` resolves the v0.1 manifest and loads vocab, syntax, schema, contracts, profiles, and views.
+- `loadBundle` resolves the v0.1 manifest and loads vocab, syntax, schema, contracts, profiles, views, and the optional authoring artifact, then runs deterministic cross-artifact validation.
 - `parseSource` interprets `syntax.yaml` and produces a source-spanned parse document.
 - `compileSource` flattens authoring blocks into canonical graph JSON, preserves author-order metadata for renderers, and validates the graph against `core/schema.json`.
 - `validateGraph` executes generic validation rules from contracts plus the selected profile.
@@ -118,6 +119,8 @@ The bundle owns:
 - node and relationship vocabularies
 - validation rule selection and rule configuration
 - view scope plus view-specific projection and rendering conventions
+- guided node forms, node-ID suggestion inputs, relationship authoring semantics, supported edge fields, and placement-policy inputs
+- the complete endpoint-triple guidance role and display matrix for every authoring-enabled view
 
 The engine owns:
 
@@ -129,6 +132,91 @@ The engine owns:
 - output formatting for diagnostics and internal DOT/Mermaid emitters
 
 The CLI owns preview artifact generation on top of those internal text renderers and staged preview backends through a backend-aware preview layer.
+
+### Guided authoring bundle substrate
+
+The current v0.1 manifest declares `core/authoring.yaml`. The loaded `Bundle.authoring` field remains optional so older bundles continue to compile, validate, project, and render. Guided consumers must report `guided_addition.unsupported_bundle` when it is absent; they do not substitute TypeScript defaults.
+
+The guided-authoring bundle substrate is split by ownership:
+
+- `authoring.yaml` owns node-ID sequence inputs, the canonical node-type prefix map, primary/advanced form prominence, authoring hints, the default display profile, relationship-field labels, duplicate-relationship warning templates, and source-placement policy.
+- `contracts.yaml` retains endpoint triples as semantic authority and adds relationship graph role, source representation, source organization, and one explicit `edge_field_support` rule per relationship.
+- profile rules retain validation severity but may resolve fields through generic `bundle_refs`. Strict and permissive prefix coupling both resolve `authoring#node_id_suggestions.prefix_by_type`; inline values remain supported only for older bundles, and a rule cannot declare both forms.
+- `views.yaml` contains one `conventions.guided_addition` record for every allowed endpoint triple in every view. Each record owns its `primary`, `supporting`, or `bridge` role and explicit `simple`/`strict` display rules. `permissive` aliases `strict` in bundle data.
+
+`validateLoadedBundle(...)` rejects unresolved bundle references, incomplete vocabulary/form/prefix/relationship/view coverage, duplicate or unknown endpoint triples, missing edge-field rules or labels, invalid warning templates or placeholders, invalid property references, unknown display predicates, invalid aliases, and display rule lists without a final unconditional rule. Diagnostics use the `bundle` stage and are sorted before being attached to `BundleValidationError`.
+
+Generic, read-only accessors expose allowed endpoint triples, node-ID suggestion inputs, relationship authoring semantics, supported edge fields, field labels, warning presentation, placement inputs, view relationship records, and resolved conditional display. Downstream guided-domain code consumes these accessors instead of rereading YAML shapes or supplying relationship/view/profile fallbacks.
+
+### Guided bundle fingerprint and catalog
+
+`computeBundleFingerprint(...)` returns `bnd_` plus SHA-256 over recursively key-sorted canonical JSON. The fingerprint input contains the loaded manifest, vocabulary, syntax, core schema, projection schema, contracts, views, profiles represented in manifest order, and optional authoring configuration. Object-key order is insignificant, array order remains significant, and environment values such as `rootDir` and `manifestPath` are excluded.
+
+`createGuidanceCatalog(...)` consumes the generic bundle accessors and produces one deeply frozen catalog. It indexes node types, endpoint triples, relationship/endpoint order, view/profile records, conditional display rules, syntax/schema constraints, profile rules, edge-field support/requiredness and display labels, and placement inputs. Private `Map` indexes accelerate lookup but are not serialized. The catalog contains no environment paths and no mutable reference back into the loaded bundle.
+
+### Guided document snapshot
+
+`createGuidedDocumentSnapshot(...)` is a pure source-text adapter. It reuses `inspectDocumentText(...)` for revision-bound handles, parentage, and body/source order, then reuses `compileSource(...)` to verify literal graph semantics. It does not run a validation profile, so governance completeness does not restrict choice browsing.
+
+The public snapshot contains only document identity, revision, bundle fingerprint, effective version, source-ordered node/edge records, top-level/body order, and parse/compile warnings. Lookup indexes by handle, ID, type, direction, parent, and used ID remain private in a `WeakMap` and never serialize into caller-carried state. Incoming edges remain literal; the snapshot builder never infers an inverse.
+
+Parse failures, duplicate IDs, schema failures, or other compile errors raise `GuidedAdditionV1DomainError` with code `guided_addition.document_unavailable`, the underlying sorted diagnostics, and an `authoring`-stage boundary diagnostic. A bundle without authoring guidance raises `guided_addition.unsupported_bundle`. The machine-readable shared diagnostic schema includes the `authoring` stage.
+
+`createGuidedDocumentSnapshotFromWorkspace(...)` is the read-only file adapter. It normalizes the requested document through `AuthoringWorkspace`, reads it once, and assigns the same normalized repo-relative value to both `document_ref` and `path`.
+
+### Pure guided addition domain
+
+`createGuidedAdditionRuntimeV1(bundle)` constructs an immutable guidance catalog and retains only that catalog. Its `begin(snapshot, request)` and `advance(snapshot, state, action)` entry points are pure: the caller carries serializable v1 state, and the runtime performs no file access, workspace writes, mutation translation, journaling, helper invocation, or CLI work. Requests, state, and proposals use workflow/proposal version `1.0`.
+
+Every advance rechecks document identity, revision, bundle fingerprint, exact existing-node identities, diagram filters, saved field values, endpoints, semantic organization, and accepted material effects against freshly recomputed offers. Expected rejection raises `GuidedAdditionV1DomainError` with sorted `authoring` diagnostics and the unchanged caller state. A state cannot bypass a page, form, or confirmation by carrying an unavailable or edited action.
+
+The workflow supports standalone-node addition plus relationship addition with or without a preselected anchor. Anchored relationship work preserves four distinct routes: outgoing or incoming direction crossed with relationship-first or existing-node-first selection order. Each selected relationship or node constrains the next page through literal bundle-valid endpoint triples; incoming edges keep their literal direction, and no inverse is inferred.
+
+Diagram filtering is a contextual workflow action, not a caller-supplied initial view. Applicable browse pages expose human-readable select, change, and clear choices. Selecting a diagram recomputes the same browse identity, orders regular relationships before understandable cross-diagram bridges, and clears unavailable downstream selections. The default display profile comes from `authoring.yaml`; profile completeness validation is not part of browsing.
+
+The runtime returns display-ready choice pages, confirmations, forms, selected-value text, and proposal reviews. Choices carry the exact typed actions that clients return; clients do not translate labels back into semantics. Node forms combine authoring descriptors with syntax/schema constraints and profile-owned property formats. Relationship forms consume the selected relationship's field support, required-property rules, and bundle-owned labels. Optional empty values are omitted; prefix mismatch is advisory, while invalid, duplicate, or missing required content blocks progress.
+
+Node organization is semantic and contextual. New nodes may be top-level or nested, existing nodes may remain or move, wrapper replacement is explicit, and sibling order appears only when meaningful. An existing node moves only after its exact material effect is accepted. Guided pages and proposals contain no relationship-line placement recommendation; placement-free relationship mutations delegate that source organization to the loaded bundle policy.
+
+Completed proposals contain canonical nodes and relationships, semantic node organization, accepted material effects, and guidance context. They contain no source text, low-level authoring operations, or guided edge placement. Opaque deterministic identities bind state, actions, effects, and proposals to the document revision and bundle fingerprint; clients render the supplied human content rather than those identities.
+
+### Guided addition proposal execution
+
+`applyAdditionProposalV1(workspace, bundle, args)` is the only guided write-side adapter. It consumes `CompletedAdditionProposalV1` directly, requires a file-backed normalized path, verifies revision and bundle fingerprint, rebuilds the snapshot/catalog, and revalidates proposal identity, exact node references, endpoint triples, fields, route intent, semantic organization, and material effects. Expected stale or invalid proposals return a rejected `sdd-addition-proposal-result`; they do not invoke mutation execution.
+
+Accepted semantic organization translates privately into shared node insertion and subtree-preserving movement operations. Relationship operations omit low-level placement so the shared mutation engine applies `edge_in_source_body`; explicit low-level placement remains available only to other mutation callers. Proposal-local nodes and relationships receive temporary handles and deterministic `node_1`/`edge_1` result mappings. The executor emits no SDD source and performs no direct persistence.
+
+The low-level `reparent_node_block` operation moves an intact node model between top-level and body streams or between different body parents. It preserves the complete subtree, body content, owned comments, blank lines, and trailing comments while rebasing indentation and top-level/nested header form. It rejects stale handles/revisions, same-parent use, self/descendant cycles, missing destination parents, and relative anchors outside the destination stream. Its discriminated ordering summary records `old_parent_handle`, `new_parent_handle`, `old_index`, and `new_index`. Confirmation remains a guided proposal-executor concern; the low-level operation is confirmation-agnostic.
+
+Dry-run computes the exact candidate revision and diagnostics. If warnings exist, the executor returns display-ready warning lines plus an opaque acceptance token bound to the proposal ID, normalized path, base and resulting revisions, bundle fingerprint, and sorted warning set. On commit, the shared generic pre-write guard rejects missing, altered, cross-proposal, or stale warning consent before persistence. Duplicate-relationship wording comes from required bundle templates, including the relationship-specific `NAVIGATES_TO` message.
+
+The existing `sdd-helper apply` request contract still recognizes `reparent_node_block` as a surgical low-level operation. Guided Addition v1 remains a separate library boundary and adds no guided helper or MCP command.
+
+### Interactive guided addition CLI
+
+`sdd add <document_path> [--node <node_id>] [--bundle <manifest>]` is the human presentation adapter over Guided Addition v1. It discovers the repository root, normalizes the document path, loads the bundle, and creates one snapshot from either the existing source or a bundle-derived new-document bootstrap. A new snapshot carries `document_precondition: "must_not_exist"` through caller-carried state and the completed proposal. Existing snapshots omit that field and remain revision-bound as before. The CLI also resolves an optional exact starting-node anchor. Without `--node`, an existing document offers standalone-node or relationship addition and the starting-node browser. A new document begins directly at standalone node-type selection and automatically treats its first node as the only top-level node. Diagram selection, change, and clearing happen inside applicable guided browse pages; `sdd add` has no `--view` option.
+
+The CLI generically renders API-supplied titles, lines, prompts, choices, descriptions, chosen-value text, confirmations, forms, proposal reviews, and warnings. It returns the exact action attached to a choice and sends the completed proposal unchanged to the executor. It does not inspect bundle contracts or views, build semantic choices, translate proposals, construct SDD source, or invoke low-level mutations.
+
+The client owns one ordinary `Save` or `Cancel` decision. Cancel performs no proposal verification and no write, including when the target does not yet exist. Save dry-runs the unchanged proposal with the bundle-defined default display profile. For new documents the dry run uses the bundle-derived bootstrap only in memory; commit uses exclusive creation, creates missing parent directories, records delete-on-undo metadata, and rejects a target that appeared after review without overwriting it. Warning-free verification commits immediately. A concrete warning offers `Save anyway` or `Go back`; `Save anyway` passes the dry-run token with the same proposal, while `Go back` returns to the unchanged review. Stale commits fail without writing and require restarting the command.
+
+Production prompting uses `readline/promises` behind an injected prompt interface. Planner, snapshot, workspace, proposal-executor, and prompt dependencies are injected through the CLI dependency surface so deterministic tests can verify transcripts, Save/Cancel call counts, and proposal identity without moving semantics into terminal code.
+
+### Guided domain contract metadata
+
+The shared contract index exposes three library-visible `domain_service` subjects after the unchanged helper subjects:
+
+- `domain.service.guided_addition.begin`
+- `domain.service.guided_addition.advance`
+- `domain.service.addition_proposal.apply`
+
+Their JSON Schema 2020-12 descriptors cover the guided snapshot, public begin request, caller-carried state, action/result unions, completed proposal, apply arguments/result, and complete begin/advance call envelopes. The metadata describes the existing TypeScript domain API; it does not create a transport, helper command, MCP tool, or alternate executor.
+
+The shared contract index retains `contract_version: "0.1"`; that value versions the overall helper/domain metadata index and is independent of Guided Addition's `workflow_version: "1.0"` and `proposal_version: "1.0"`. Static detail contains only bundle references. Bundle-resolved detail expands diagram IDs, display-profile IDs, node types, relationship types, validation profiles, and projection views in bundle order. It does not duplicate endpoint triples, visibility rules, forms, warnings, or source-placement policy as static metadata.
+
+Constraint metadata records workflow version, same-revision and same-bundle requirements, currently offered actions, canonical proposal identity, literal endpoint consistency, exact material-effect acceptance, and bound warning consent. Continuations record caller-carried state, completed-proposal handoff, and reuse of the exact proposal plus warning token from dry-run to commit. These entries remain descriptive contracts over existing runtime enforcement paths.
+
+`sdd-helper capabilities` remains byte-compatible and lists only helper commands. `sdd-helper contract` accepts only `helper.command.*` subjects and rejects domain subjects before bundle loading, so library metadata cannot become an accidental helper adapter. A future helper or MCP exposure requires a separate implementation plan.
 
 The engine also owns the internal staged-renderer contracts and snapshot-tested staged pipeline that migrated SVG work builds on, while keeping `renderSource` separate from backend-aware CLI preview selection.
 
