@@ -71,7 +71,7 @@ To enable LLM workflow integration with SDD, we recently created a (Codex-) Skil
 
 We also recently transitioned some project documentation from README files in sub-folders of the repo to the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/
 
-The current project goal is to use the `simple` profile as default for CLI tools instead of relying on `strict` profile by default.
+The current project goal is to use the `simple` profile as default for CLI tools instead of relying on `strict` profile by default, with a global, user-settable profile setting. As part of this effort, the use of profiles for rendering detail will be replaced with a dedicated detail setting for renderers to use.
 
 ## Renderer Constraints
 

@@ -274,6 +274,8 @@ Validation must reject:
 - a fallback that does not name a declared and loaded profile;
 - duplicate manifest profile IDs.
 
+Duplicate manifest profile IDs are already rejected by `validateLoadedBundle(...)` at the Stage 0 baseline. Preserve that generic validation and add focused coverage rather than implementing a second duplicate-ID path.
+
 Do not infer a fallback from manifest order. Do not add `simple` as a TypeScript fallback behind malformed bundle data.
 
 The manifest already participates in `createBundleFingerprintInput(...)`; add focused evidence that changing the new field changes the fingerprint. Do not add user/project configuration to that input.
@@ -310,6 +312,8 @@ In the combined text-rendering API:
 Lower-level validation remains profile-explicit.
 
 Treat profile IDs as bundle-declared strings rather than a closed TypeScript union of the three shipped IDs. The shipped bundle still declares only `simple`, `permissive`, and `strict`, but alternate valid bundles must not require a source-code union edit.
+
+At the Stage 0 baseline, `src/authoring/contracts.ts` still declares `ProfileId` as the closed union `"simple" | "permissive" | "strict"`; include that alias in this generic-ID migration without changing Guided Addition behavior.
 
 ### Checkpoint 1.4: Make tests intentional
 
@@ -914,6 +918,7 @@ Verify:
 - no profile/detail collision or duplicate content set remains;
 - README/provenance names the validation profile used for generation;
 - staged and retained legacy backends are present as expected;
+- committed-corpus consumers such as `tests/stagedVisualAcceptance.spec.ts` reference the migrated detail directories;
 - a second generation produces identical sorted hashes.
 
 Visually inspect at least one compact and one detailed generated artifact for each of the six views. Record the LLM verdict in the Stage 5 report.
@@ -936,6 +941,8 @@ Likely live targets include:
 
 - `docs/toolchain/development.md`;
 - `docs/doc_site/sdd_cli_tools/index.md`;
+- `docs/doc_site/sdd-helper/index.md`;
+- `docs/doc_site/diagram_types/index.md`;
 - CLI help assertions;
 - relevant SDD Skill workflow documentation;
 - `AGENTS.md` if its current-project-goal wording is now completed or obsolete.
@@ -1093,3 +1100,50 @@ Subagents:
 Next authorized stage:
 - Stage N+1 | none
 ```
+
+### Stage 0 achievement report
+
+Verdict: APPROVED
+
+Implemented:
+- Read and reconciled the implementation plan, target architecture, actionable inventory, repository instructions, and current CLI, bundle, renderer, helper, and corpus surfaces.
+- Recorded the execution baseline and refreshed the profile/default/rendering blast-radius inventory.
+- Added newly discovered live helper documentation, corpus documentation, and corpus-path test consumers to the appropriate later-stage checkpoints.
+- Recorded that duplicate manifest profile IDs are already rejected generically and that the public `ProfileId` alias remains a closed shipped-ID union.
+
+Changed subsystems:
+- Planning documentation only: `docs/de-strict/user_settable_defaults_implementation_plan.md`.
+- No product code, bundle data, tests, snapshots, goldens, corpus artifacts, generated documentation, or protected user work was changed.
+
+Verification:
+- `git status --short` — baseline branch `de-strict` at `e4afb62779234ff940e33220b27f7d2108a657f9`; existing modified `AGENTS.md` identified and protected.
+- `node --version` — pass, `v22.17.0`.
+- `pnpm --version` — pass, `10.31.0`.
+- `TMPDIR=/tmp pnpm run check:graphviz` — pass, Graphviz `2.43.0` detected.
+- `TMPDIR=/tmp pnpm run build` — pass.
+- `TMPDIR=/tmp pnpm test` — baseline not clean under the default parallel run: 83 of 89 test files and 801 of 809 tests passed; all eight failures were timeouts with no assertion mismatch.
+- `TMPDIR=/tmp pnpm exec vitest run tests/helperCli.integration.spec.ts tests/journeyMapPreRouting.spec.ts tests/journeyMapRenderModel.spec.ts tests/journeyMapRouting.spec.ts tests/stagedVisualAcceptance.spec.ts tests/journeyMapRendererStageSnapshots.spec.ts --maxWorkers=1 --minWorkers=1` — pass, 6 of 6 files and 100 of 100 tests passed.
+- Refreshed inventory — five Commander `strict` defaults, two library `?? "strict"` fallbacks, six bundle `profile_display` policies, three staged scene `profileId` fields, profile-owned SVG metadata, profile-based preview/helper/corpus identities, and three live CLI-default statements.
+- Rendered-corpus baseline — 12 `simple_profile`, 12 `permissive_profile`, and 12 `strict_profile` directories containing 319 committed files.
+
+Satisfied invariants:
+- Authority order is unambiguous: target architecture, actionable inventory, bundle machine behavior, repository guardrails, then current code/tests as evidence.
+- Existing user work in `AGENTS.md` is listed and protected.
+- Baseline tool availability, build status, full-suite result, and focused timeout rerun are known.
+- Current drift and newly discovered consumers are recorded before product implementation.
+- No product files or generated evidence were edited.
+
+Violated invariants:
+- none.
+
+Residual risks:
+- The default parallel full-suite run is contention-sensitive and can exceed existing per-test timeouts; Stage 1 must retain the full-run result and use focused/single-worker reruns to distinguish regressions from this recorded baseline condition.
+
+Snapshots/goldens/corpus:
+- unchanged.
+
+Subagents:
+- none.
+
+Next authorized stage:
+- Stage 1.

@@ -32,6 +32,7 @@ z
 - Clarified a strict example
 - User-settable defaults architecture
 - User-settable defaults implementation plan
+- Stage 0 done
 
 ## Sat 8-15
 
