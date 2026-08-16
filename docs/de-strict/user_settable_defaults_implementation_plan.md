@@ -1147,3 +1147,56 @@ Subagents:
 
 Next authorized stage:
 - Stage 1.
+
+### Stage 1 achievement report
+
+Verdict: APPROVED
+
+Implemented:
+- Added the required bundle-owned `tool_defaults.validation_profile_id` contract and set the shipped fallback to `simple`.
+- Added generic bundle validation, a public fallback accessor, fingerprint evidence, and bundle-only public-runtime mutation proof.
+- Removed the five Commander `strict` defaults and routed one resolved profile through `validate`, `render`, `dot`, `mmd`, and `show`.
+- Removed both hidden library `strict` fallbacks, made compiled-graph rendering profile-explicit, and added the effective profile to every `RenderResult`.
+- Widened profile ID typing to bundle-declared strings without changing Guided Addition runtime behavior.
+- Updated current CLI help and live default-profile documentation while preserving explicit strict examples.
+
+Changed subsystems:
+- Bundle manifest, manifest types, loaded-bundle validation, fingerprint evidence, and public bundle accessors.
+- Human CLI profile resolution and combined text-rendering orchestration.
+- Public rendering/profile types, focused CLI/library/bundle tests, synthetic bundle fixtures, and current CLI documentation.
+
+Verification:
+- `TMPDIR=/tmp pnpm run build` — pass.
+- `TMPDIR=/tmp pnpm exec vitest run tests/bundleToolDefaults.spec.ts tests/cli.spec.ts tests/render_dot.spec.ts tests/render_mermaid.spec.ts` — pass, 4 of 4 files and 62 of 62 tests.
+- `TMPDIR=/tmp pnpm run docs:build` — pass.
+- `TMPDIR=/tmp pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd` — pass with the shipped bundle fallback.
+- `TMPDIR=/tmp pnpm sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict` — pass with the explicit override.
+- `TMPDIR=/tmp pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out /tmp/stage1-default.svg` — pass; output records `profile-simple` and `data-profile-id="simple"`.
+- `TMPDIR=/tmp pnpm test` — baseline-sensitive parallel run: 89 of 90 files and 816 of 818 tests passed; the only failures were two 5-second timeouts in `tests/journeyMapRouting.spec.ts`, with no assertion mismatch.
+- `TMPDIR=/tmp pnpm exec vitest run tests/journeyMapRouting.spec.ts --maxWorkers=1 --minWorkers=1` — pass, 1 of 1 file and 62 of 62 tests.
+- Active-runtime drift search — no Commander `strict` default, `?? "strict"`, equivalent hidden fallback, or `strict governance (default)` wording remains.
+- `git diff --check` — pass.
+
+Satisfied invariants:
+- The loaded bundle is the only authority for omitted profiles, and changing only bundle fallback data changes public runtime behavior.
+- The shipped fallback is `simple`; explicit CLI and library overrides still win and unknown explicit values do not fall through.
+- All five human CLI consumers share one resolution helper after loading the selected bundle.
+- The combined library flow resolves once and uses the same effective profile for validation and still-profile-coupled rendering.
+- Bundle fingerprints include the fallback through the manifest; no user or project configuration was introduced.
+- Parser, compiler, validator rules, raw projection, Guided Addition, renderer layout, routing, and render-detail policy remain unchanged.
+
+Violated invariants:
+- none.
+
+Residual risks:
+- The recorded parallel-suite timeout sensitivity remains; the affected routing file passes in isolation with one worker.
+- Renderer content, scene metadata, SVG metadata, and artifact identity intentionally remain profile-coupled until Stages 3 and 4.
+
+Snapshots/goldens/corpus:
+- unchanged.
+
+Subagents:
+- none.
+
+Next authorized stage:
+- Stage 2.

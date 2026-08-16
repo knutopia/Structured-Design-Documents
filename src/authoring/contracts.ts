@@ -3,7 +3,7 @@ import type { Diagnostic } from "../types.js";
 export type DocumentPath = string;
 export type DocumentUri = string;
 export type DocumentRevision = string;
-export type ProfileId = "simple" | "permissive" | "strict";
+export type ProfileId = string;
 export type ViewId = string;
 export type ChangeSetId = string;
 export type Handle = string;

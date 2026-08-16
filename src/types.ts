@@ -45,6 +45,7 @@ export interface RenderOptions {
 export interface RenderResult {
   format: "dot" | "mermaid";
   viewId: string;
+  profileId: string;
   text?: string;
   notes: string[];
   diagnostics: Diagnostic[];

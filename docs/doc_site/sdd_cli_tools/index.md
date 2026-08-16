@@ -18,7 +18,7 @@ If you want a visual result quickly, start with the next section and use the com
 
 For most people, `sdd show` is the right first command. It compiles an SDD document, validates it, and generates a preview artifact for a chosen view.
 
-Start with the `simple` profile. The CLI default is `strict`, but `simple` is the better starting point for early work because it is lower-noise and better suited to drafting.
+Start with the `simple` profile. When `--profile` is omitted, the CLI uses the selected bundle's fallback; the shipped v0.1 bundle selects `simple` because it is lower-noise and better suited to drafting.
 
 SVG quick-start:
 
@@ -49,7 +49,7 @@ In practice:
 
 - `simple`: low-noise drafting and the best starting point for most new work
 - `permissive`: warning-first completeness when you want guidance without as much blocking
-- `strict`: strict governance and the current CLI default
+- `strict`: strict governance for complete, reviewable specifications
 
 `simple` is especially useful early because it emphasizes design structure without pushing as hard for fuller metadata, and it can reduce visual noise in supported rendering where configured.
 
@@ -105,7 +105,7 @@ pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 - Common options: `--profile`, `--format`, and `--out`.
 - Output: SVG by default, or PNG when `--format png` is provided.
 
-By default, the profile is `strict`, but for getting started you should usually add `--profile simple`.
+When `--profile` is omitted, `sdd show` uses the selected bundle's fallback. The shipped v0.1 bundle selects `simple`; an explicit `--profile` still overrides it for one invocation.
 
 If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<profile>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 

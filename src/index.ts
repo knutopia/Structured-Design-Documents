@@ -1,4 +1,5 @@
 export { loadBundle } from "./bundle/loadBundle.js";
+export { getBundleValidationProfileFallback } from "./bundle/toolDefaults.js";
 export { resolveBundleFieldReference, resolveProfileRuleField } from "./bundle/bundleReferences.js";
 export {
   canonicalizeJson,
@@ -102,6 +103,7 @@ export type {
   ContractStability,
   ContractSurfaceKind,
   OrderingChange,
+  ProfileId,
   ReparentNodeBlockOp
 } from "./authoring/contracts.js";
 export type {
@@ -110,6 +112,8 @@ export type {
   AuthoringNodeForm,
   Bundle,
   BundleFieldReference,
+  BundleManifest,
+  BundleManifestToolDefaults,
   GuidedAdditionViewConfig,
   GuidedDisplayPredicate,
   GuidedDisplayRule,

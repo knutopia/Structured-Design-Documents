@@ -19,6 +19,9 @@ const bundle: Bundle = {
       projection_schema: "core/projection_schema.json",
       views: "core/views.yaml"
     },
+    tool_defaults: {
+      validation_profile_id: "simple"
+    },
     profiles: [],
     examples: [],
     compatibility: {
@@ -155,6 +158,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
   const renderSourceMock = vi.fn((_input, _bundle, options) => ({
     viewId: options.viewId,
     format: options.format,
+    profileId: options.profileId,
     text: options.format === "dot" ? "digraph G {}" : "flowchart TD",
     notes: [],
     diagnostics: []
@@ -284,9 +288,84 @@ function countOccurrences(text: string, pattern: string): number {
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
 
 describe("CLI wrappers", () => {
+  it("resolves the bundle fallback and explicit override for all five profile-consuming commands", async () => {
+    const cases = [
+      {
+        name: "validate",
+        argv: ["node", "sdd", "validate", "bundle/v0.1/examples/outcome_to_ia_trace.sdd"],
+        profileFrom: (deps: Partial<CliDeps>) => vi.mocked(deps.validateGraph!).mock.calls[0]?.[2]
+      },
+      {
+        name: "render",
+        argv: [
+          "node", "sdd", "render", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+          "--view", "ia_place_map", "--format", "dot"
+        ],
+        profileFrom: (deps: Partial<CliDeps>) => vi.mocked(deps.renderSource!).mock.calls[0]?.[2].profileId
+      },
+      {
+        name: "dot",
+        argv: ["node", "sdd", "dot", "bundle/v0.1/examples/outcome_to_ia_trace.sdd"],
+        profileFrom: (deps: Partial<CliDeps>) => vi.mocked(deps.renderSource!).mock.calls[0]?.[2].profileId
+      },
+      {
+        name: "mmd",
+        argv: ["node", "sdd", "mmd", "bundle/v0.1/examples/outcome_to_ia_trace.sdd"],
+        profileFrom: (deps: Partial<CliDeps>) => vi.mocked(deps.renderSource!).mock.calls[0]?.[2].profileId
+      },
+      {
+        name: "show",
+        argv: [
+          "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+          "--view", "ia_place_map", "--out", "/tmp/default-profile.svg"
+        ],
+        profileFrom: (deps: Partial<CliDeps>) => vi.mocked(deps.renderSourcePreview!).mock.calls[0]?.[2].profileId
+      }
+    ] as const;
+
+    for (const testCase of cases) {
+      const fallback = createDeps();
+      const fallbackResult = await runCli([...testCase.argv], fallback.deps);
+      expect(fallbackResult.exitCode, testCase.name).toBe(0);
+      expect(testCase.profileFrom(fallback.deps), testCase.name).toBe("simple");
+
+      const explicit = createDeps();
+      const explicitResult = await runCli([...testCase.argv, "--profile", "strict"], explicit.deps);
+      expect(explicitResult.exitCode, testCase.name).toBe(0);
+      expect(testCase.profileFrom(explicit.deps), testCase.name).toBe("strict");
+    }
+  });
+
+  it("does not fall through when an explicit profile is unknown", async () => {
+    const { deps, stderr } = createDeps({
+      validateGraph: vi.fn((_graph, _bundle, profileId) => ({
+        diagnostics: [{
+          stage: "validate",
+          code: "validate.unknown_profile",
+          severity: "error",
+          message: `Unknown profile '${profileId}'`,
+          file: "/repo/example.sdd"
+        }],
+        errorCount: 1,
+        warningCount: 0
+      }))
+    });
+
+    const result = await runCli([
+      "node", "sdd", "validate", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--profile", "recommended"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(deps.validateGraph).toHaveBeenCalledWith(expect.anything(), bundle, "recommended");
+    expect(stderr.join("")).toContain("Unknown profile 'recommended'");
+  });
+
   it("dot emits DOT text for a valid example", async () => {
     const { deps, stdout, renderSourceMock } = createDeps();
-    const result = await runCli(["node", "sdd", "dot", "bundle/v0.1/examples/outcome_to_ia_trace.sdd"], deps);
+    const result = await runCli([
+      "node", "sdd", "dot", "bundle/v0.1/examples/outcome_to_ia_trace.sdd", "--profile", "strict"
+    ], deps);
 
     expect(result.exitCode).toBe(0);
     expect(stdout.join("")).toContain("digraph G {}");
@@ -298,7 +377,9 @@ describe("CLI wrappers", () => {
 
   it("mmd emits Mermaid text for a valid example", async () => {
     const { deps, stdout, renderSourceMock } = createDeps();
-    const result = await runCli(["node", "sdd", "mmd", "bundle/v0.1/examples/outcome_to_ia_trace.sdd"], deps);
+    const result = await runCli([
+      "node", "sdd", "mmd", "bundle/v0.1/examples/outcome_to_ia_trace.sdd", "--profile", "strict"
+    ], deps);
 
     expect(result.exitCode).toBe(0);
     expect(stdout.join("")).toContain("flowchart TD");
@@ -308,7 +389,7 @@ describe("CLI wrappers", () => {
     });
   });
 
-  it("show derives a sibling SVG path with view and profile by default", async () => {
+  it("show derives a sibling SVG path with the bundle profile fallback", async () => {
     const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([
       "node",
@@ -323,13 +404,14 @@ describe("CLI wrappers", () => {
     expect(renderSourcePreviewMock.mock.calls[0][2]).toMatchObject({
       viewId: "ia_place_map",
       format: "svg",
+      profileId: "simple",
       backendId: "staged_ia_place_map_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith(
-      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg",
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.simple.svg",
       "<svg>staged</svg>"
     );
-    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg");
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.simple.svg");
   });
 
   it("show derives different default output paths for different views of the same source", async () => {
@@ -341,7 +423,9 @@ describe("CLI wrappers", () => {
       "show",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
-      "ia_place_map"
+      "ia_place_map",
+      "--profile",
+      "strict"
     ], deps);
     const journeyResult = await runCli([
       "node",
@@ -349,7 +433,9 @@ describe("CLI wrappers", () => {
       "show",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
-      "journey_map"
+      "journey_map",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(iaResult.exitCode).toBe(0);
@@ -368,7 +454,9 @@ describe("CLI wrappers", () => {
       "show",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
-      "ia_place_map"
+      "ia_place_map",
+      "--profile",
+      "strict"
     ], deps);
     const simpleResult = await runCli([
       "node",
@@ -398,7 +486,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--backend",
-      "legacy_graphviz_preview"
+      "legacy_graphviz_preview",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -424,7 +514,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--out",
-      "/tmp/custom.svg"
+      "/tmp/custom.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -444,7 +536,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "legacy_graphviz_preview",
       "--out",
-      "/tmp/legacy.svg"
+      "/tmp/legacy.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -469,7 +563,9 @@ describe("CLI wrappers", () => {
       "--out",
       "/tmp/custom.svg",
       "--dot-out",
-      "/tmp/custom.dot"
+      "/tmp/custom.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -494,7 +590,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "staged_ia_place_map_preview",
       "--dot-out",
-      "/tmp/custom.dot"
+      "/tmp/custom.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -514,7 +612,9 @@ describe("CLI wrappers", () => {
       "--format",
       "png",
       "--out",
-      "/tmp/custom.png"
+      "/tmp/custom.png",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -537,7 +637,9 @@ describe("CLI wrappers", () => {
       "--view",
       "journey_map",
       "--out",
-      "/tmp/journey.svg"
+      "/tmp/journey.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -555,12 +657,12 @@ describe("CLI wrappers", () => {
     const legacyResult = await runCli([
       "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view", "journey_map", "--backend", "legacy_graphviz_preview",
-      "--out", "/tmp/journey-legacy.svg"
+      "--out", "/tmp/journey-legacy.svg", "--profile", "strict"
     ], deps);
     const dotFallbackResult = await runCli([
       "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view", "journey_map", "--out", "/tmp/journey-dot.svg",
-      "--dot-out", "/tmp/journey.dot"
+      "--dot-out", "/tmp/journey.dot", "--profile", "strict"
     ], deps);
 
     expect(legacyResult.exitCode).toBe(0);
@@ -586,7 +688,9 @@ describe("CLI wrappers", () => {
       "--view",
       "outcome_opportunity_map",
       "--out",
-      "/tmp/outcome-opportunity.svg"
+      "/tmp/outcome-opportunity.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -611,7 +715,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "legacy_graphviz_preview",
       "--out",
-      "/tmp/outcome-opportunity-legacy.svg"
+      "/tmp/outcome-opportunity-legacy.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -636,7 +742,9 @@ describe("CLI wrappers", () => {
       "--out",
       "/tmp/outcome-opportunity.svg",
       "--dot-out",
-      "/tmp/outcome-opportunity.dot"
+      "/tmp/outcome-opportunity.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -659,7 +767,9 @@ describe("CLI wrappers", () => {
       "--view",
       "service_blueprint",
       "--out",
-      "/tmp/blueprint.svg"
+      "/tmp/blueprint.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -684,7 +794,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "legacy_graphviz_preview",
       "--out",
-      "/tmp/blueprint-legacy.svg"
+      "/tmp/blueprint-legacy.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -707,7 +819,9 @@ describe("CLI wrappers", () => {
       "--view",
       "scenario_flow",
       "--out",
-      "/tmp/scenario.svg"
+      "/tmp/scenario.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -732,7 +846,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "legacy_graphviz_preview",
       "--out",
-      "/tmp/scenario-legacy.svg"
+      "/tmp/scenario-legacy.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -757,7 +873,9 @@ describe("CLI wrappers", () => {
       "--out",
       "/tmp/scenario.svg",
       "--dot-out",
-      "/tmp/scenario.dot"
+      "/tmp/scenario.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -780,7 +898,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ui_contracts",
       "--out",
-      "/tmp/ui-contracts.svg"
+      "/tmp/ui-contracts.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -805,7 +925,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "legacy_graphviz_preview",
       "--out",
-      "/tmp/ui-contracts-legacy.svg"
+      "/tmp/ui-contracts-legacy.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -830,7 +952,9 @@ describe("CLI wrappers", () => {
       "--out",
       "/tmp/ui-contracts.svg",
       "--dot-out",
-      "/tmp/ui-contracts.dot"
+      "/tmp/ui-contracts.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -855,7 +979,9 @@ describe("CLI wrappers", () => {
       "--backend",
       "staged_ui_contracts_preview",
       "--dot-out",
-      "/tmp/ui-contracts.dot"
+      "/tmp/ui-contracts.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -871,7 +997,9 @@ describe("CLI wrappers", () => {
       "dot",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--out",
-      "/tmp/outcome.dot"
+      "/tmp/outcome.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -886,7 +1014,9 @@ describe("CLI wrappers", () => {
       "sdd",
       "dot",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "--png"
+      "--png",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -947,7 +1077,9 @@ describe("CLI wrappers", () => {
       "show",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--view",
-      "ia_place_map"
+      "ia_place_map",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(1);
@@ -979,7 +1111,9 @@ describe("CLI wrappers", () => {
       "node",
       "sdd",
       "validate",
-      "bundle/v0.1/examples/outcome_to_ia_trace.sdd"
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -995,7 +1129,9 @@ describe("CLI wrappers", () => {
       "node",
       "sdd",
       "validate",
-      "bundle/v0.1/examples/outcome_to_ia_trace.sdd"
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1007,6 +1143,7 @@ describe("CLI wrappers", () => {
       renderSource: vi.fn((_input, _bundle, options) => ({
         viewId: options.viewId,
         format: options.format,
+        profileId: options.profileId,
         text: "flowchart TD",
         notes: [],
         diagnostics: [
@@ -1031,7 +1168,9 @@ describe("CLI wrappers", () => {
       "--format",
       "mermaid",
       "--diagnostics",
-      "json"
+      "json",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1079,7 +1218,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--diagnostics",
-      "json"
+      "json",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1091,6 +1232,7 @@ describe("CLI wrappers", () => {
       renderSource: vi.fn((_input, _bundle, options) => ({
         viewId: options.viewId,
         format: options.format,
+        profileId: options.profileId,
         text: "digraph G {}",
         notes: [],
         diagnostics: [
@@ -1111,7 +1253,9 @@ describe("CLI wrappers", () => {
       "dot",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--diagnostics",
-      "json"
+      "json",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1123,6 +1267,7 @@ describe("CLI wrappers", () => {
       renderSource: vi.fn((_input, _bundle, options) => ({
         viewId: options.viewId,
         format: options.format,
+        profileId: options.profileId,
         text: "flowchart TD",
         notes: [],
         diagnostics: [
@@ -1143,7 +1288,9 @@ describe("CLI wrappers", () => {
       "mmd",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--diagnostics",
-      "json"
+      "json",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1158,7 +1305,9 @@ describe("CLI wrappers", () => {
       "dot",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--out",
-      "/tmp/outcome.mmd"
+      "/tmp/outcome.mmd",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -1174,7 +1323,9 @@ describe("CLI wrappers", () => {
       "mmd",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--out",
-      "/tmp/outcome.dot"
+      "/tmp/outcome.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -1192,7 +1343,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--out",
-      "/tmp/outcome.dot"
+      "/tmp/outcome.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -1212,7 +1365,9 @@ describe("CLI wrappers", () => {
       "--format",
       "png",
       "--out",
-      "/tmp/outcome.dot"
+      "/tmp/outcome.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -1228,7 +1383,9 @@ describe("CLI wrappers", () => {
       "dot",
       "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
       "--png-out",
-      "/tmp/outcome.dot"
+      "/tmp/outcome.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(2);
@@ -1248,7 +1405,9 @@ describe("CLI wrappers", () => {
       "--format",
       "mermaid",
       "--out",
-      "/tmp/journey.mmd"
+      "/tmp/journey.mmd",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1267,6 +1426,7 @@ describe("CLI wrappers", () => {
     renderSourceMock.mockImplementationOnce((_input, _bundle, options) => ({
       viewId: options.viewId,
       format: options.format,
+      profileId: options.profileId,
       text: "digraph G {}",
       notes: [coverageNote],
       diagnostics: []
@@ -1282,7 +1442,9 @@ describe("CLI wrappers", () => {
       "--format",
       "dot",
       "--out",
-      "/tmp/ui-contracts.dot"
+      "/tmp/ui-contracts.dot",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1324,7 +1486,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ui_contracts",
       "--out",
-      "/tmp/ui-contracts.svg"
+      "/tmp/ui-contracts.svg",
+      "--profile",
+      "strict"
     ], deps);
 
     expect(result.exitCode).toBe(0);
@@ -1355,9 +1519,10 @@ describe("CLI wrappers", () => {
     expect(help).not.toMatch(/\n\s+dot\s+/);
     expect(help).not.toMatch(/\n\s+mmd\s+/);
     expect(help).toContain("show");
-    expect(help).toContain("Profiles:");
+    expect(help).toContain("Profiles (bundle-declared; shipped v0.1 profiles shown):");
     expect(help).toContain("simple");
-    expect(help).toContain("strict       strict governance (default)");
+    expect(help).toContain("strict       strict governance");
+    expect(help).toContain("Omit --profile to use the selected bundle's default.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg");
@@ -1367,6 +1532,11 @@ describe("CLI wrappers", () => {
     expect(help).toContain("`ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default");
     expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging.");
     expect(help).toContain("sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple");
+
+    for (const commandName of ["validate", "render", "dot", "mmd", "show"]) {
+      const commandHelp = program.commands.find((command) => command.name() === commandName)!.helpInformation();
+      expect(commandHelp, commandName).toContain("profile id; omission uses the selected bundle default");
+    }
   });
 
   it("render help labels DOT and Mermaid output as internal/debug artifacts", () => {

@@ -12,6 +12,10 @@ export interface BundleManifestExample {
   projection_snapshots?: string[];
 }
 
+export interface BundleManifestToolDefaults {
+  validation_profile_id: string;
+}
+
 export interface BundleManifest {
   bundle_name: string;
   bundle_version: string;
@@ -26,6 +30,7 @@ export interface BundleManifest {
     views: string;
     authoring?: string;
   };
+  tool_defaults: BundleManifestToolDefaults;
   profiles: BundleManifestProfileEntry[];
   examples: BundleManifestExample[];
   compatibility: {

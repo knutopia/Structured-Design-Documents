@@ -270,6 +270,28 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     add("bundle.profiles.loaded_coverage", "Loaded profiles must match manifest profile declarations exactly");
   }
 
+  const toolDefaults = record(bundle.manifest.tool_defaults);
+  if (!toolDefaults || !sameStringSet(Object.keys(toolDefaults), ["validation_profile_id"])) {
+    add(
+      "bundle.tool_defaults.shape",
+      "tool_defaults must contain exactly validation_profile_id"
+    );
+  }
+  if (toolDefaults) {
+    const validationProfileId = toolDefaults.validation_profile_id;
+    if (typeof validationProfileId !== "string" || validationProfileId.trim().length === 0) {
+      add(
+        "bundle.tool_defaults.invalid_validation_profile_id",
+        "tool_defaults.validation_profile_id must be a non-empty string"
+      );
+    } else if (!profileIds.has(validationProfileId)) {
+      add(
+        "bundle.tool_defaults.unknown_validation_profile",
+        `Tool validation profile '${validationProfileId}' is not declared by the bundle`
+      );
+    }
+  }
+
   validateBundleReferences(bundle, add);
 
   if (!bundle.authoring) {

@@ -41,6 +41,9 @@ function createBundle(view: ViewSpec): Bundle {
         projection_schema: "core/projection_schema.json",
         views: "core/views.yaml"
       },
+      tool_defaults: {
+        validation_profile_id: "simple"
+      },
       profiles: [],
       examples: [],
       compatibility: {

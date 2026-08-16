@@ -13,6 +13,9 @@ core:
   views: core/views.yaml
   authoring: core/authoring.yaml
 
+tool_defaults:
+  validation_profile_id: simple
+
 profiles:
   - id: simple
     path: profiles/simple.yaml
