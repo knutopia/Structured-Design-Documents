@@ -71,7 +71,7 @@ To enable LLM workflow integration with SDD, we recently created a (Codex-) Skil
 
 We also recently transitioned some project documentation from README files in sub-folders of the repo to the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/
 
-The current project goal is to help people (humans) create SDD content by providing a guided authoring experience.
+The current project goal is to use the `simple` profile as default for CLI tools instead of relying on `strict` profile by default.
 
 ## Renderer Constraints
 

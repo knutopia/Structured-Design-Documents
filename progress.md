@@ -29,6 +29,7 @@ z
 - Updated usage guidance to emphasize sdd-add
 - Examined making simple profile the default
 - Marked guided addition api as done
+- Clarified a strict example
 
 ## Sat 8-15
 
