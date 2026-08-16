@@ -1808,6 +1808,7 @@ function remapSummaryHandles(
 export interface ExecuteChangeOperationsArgs extends ApplyChangeSetArgs {
   origin?: ChangeSetResult["origin"];
   allowEmptyTemplateBootstrap?: boolean;
+  preCommitGuard?: (candidate: Readonly<ChangeSetResult>) => Diagnostic[];
 }
 
 export interface ExecuteChangeOperationsResult {
@@ -1972,6 +1973,16 @@ export async function executeChangeOperations(
   changeSet.projection_results = evaluated.projectionResults;
   changeSet.resulting_revision = evaluated.revision;
   changeSet.undo_eligible = mode === "commit";
+
+  if (mode === "commit" && args.preCommitGuard) {
+    const guardDiagnostics = args.preCommitGuard(changeSet);
+    if (guardDiagnostics.length > 0) {
+      return {
+        changeSet: createRejectedChangeSet(changeSet, guardDiagnostics, evaluated),
+        tempHandleMapping: new Map()
+      };
+    }
+  }
 
   if (mode === "commit") {
     await mkdir(path.dirname(resolvedPath.absolutePath), { recursive: true });

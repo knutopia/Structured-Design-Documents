@@ -1,448 +1,292 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { loadBundle, type Bundle, type CompletedAdditionProposal } from "../src/index.js";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { applyAdditionProposalV1, type ApplyAdditionProposalV1Args } from "../src/authoring/additionProposalsV1.js";
 import { runCli, type CliDeps } from "../src/cli/program.js";
-import type {
-  GuidedPromptAdapter,
-  GuidedPromptChoice
-} from "../src/cli/guidedAddition.js";
-import type { ApplyAdditionProposalResult } from "../src/authoring/guidedAddition/contracts.js";
-import type { Diagnostic } from "../src/types.js";
+import type { GuidedPromptAdapter, GuidedPromptChoice } from "../src/cli/guidedAddition.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
-const sourceExample = path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd");
-
-let bundle: Bundle;
+const acceptanceFixture = path.join(repoRoot, "tests/fixtures/guided_addition_acceptance.sdd");
 let fixtureDir: string;
 
-beforeAll(async () => {
-  bundle = await loadBundle(manifestPath);
-  fixtureDir = fs.mkdtempSync(path.join(repoRoot, ".guided-cli-test-"));
+beforeAll(() => {
+  fixtureDir = fs.mkdtempSync(path.join(repoRoot, ".guided-cli-v1-test-"));
 });
 
 afterAll(() => {
   fs.rmSync(fixtureDir, { recursive: true, force: true });
 });
 
-interface ScriptOptions {
-  additionKind?: "standalone" | "relationship";
-  startingNode?: string;
-  operation?: { direction: "outgoing" | "incoming"; endpoint_strategy: "existing_only" | "existing_or_new" };
-  nodeType?: string;
-  relationship?: string;
-  endpoint?: string | "create_new";
-  save?: boolean;
-  advancedNode?: boolean;
-  advancedEdge?: boolean;
-  changeFilters?: boolean;
-  confirmEffect?: boolean;
-  reparentAlternative?: boolean;
-  acceptWarnings?: boolean;
-  confirmCommit?: boolean;
-}
+type SelectionRule = string | RegExp | number;
 
-class ScriptedPrompt implements GuidedPromptAdapter {
-  readonly transcript: Array<{ id: string; message: string; labels?: string[]; defaultValue?: string }> = [];
-  #changedFilters = false;
-  #calls = 0;
+class TranscriptPrompt implements GuidedPromptAdapter {
+  readonly output: string[] = [];
+  readonly selectedIds: string[] = [];
+  #selection = 0;
+  #confirmation = 0;
 
-  constructor(private readonly options: ScriptOptions = {}) {}
+  constructor(
+    private readonly selectionRules: SelectionRule[],
+    private readonly inputValues: Record<string, string> = {},
+    private readonly confirmations: boolean[] = []
+  ) {}
 
   async select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[] }): Promise<T> {
-    if (++this.#calls > 100) {
-      throw new Error(`Prompt script exceeded 100 selections: ${this.transcript.slice(-12).map((entry) => entry.id).join(", ")}`);
+    const rule = this.selectionRules[this.#selection++];
+    if (rule === undefined) throw new Error(`No scripted selection remains for '${request.id}'`);
+    const index = typeof rule === "number"
+      ? rule
+      : request.choices.findIndex((choice) => typeof rule === "string" ? choice.label.includes(rule) : rule.test(choice.label));
+    if (index < 0 || index >= request.choices.length) {
+      throw new Error(`No choice for '${request.id}' matched ${String(rule)}: ${request.choices.map((choice) => choice.label).join(" | ")}`);
     }
-    this.transcript.push({ id: request.id, message: request.message, labels: request.choices.map((choice) => `${choice.label}${choice.description ? ` — ${choice.description}` : ""}`) });
-    const find = (predicate: (choice: GuidedPromptChoice<T>) => boolean): T => {
-      const match = request.choices.find(predicate);
-      if (!match) throw new Error(`Script has no matching choice for ${request.id}`);
-      return match.value;
-    };
-    if (request.id === "addition_kind" && this.options.additionKind) {
-      return find((choice) => choice.value === this.options.additionKind as T);
-    }
-    if (request.id === "starting_node" && this.options.startingNode) {
-      return find((choice) => (choice.value as any).node_id === this.options.startingNode);
-    }
-    if (request.id === "operation" && this.options.operation) {
-      return find((choice) => {
-        const value = choice.value as any;
-        return value.direction === this.options.operation!.direction && value.endpoint_strategy === this.options.operation!.endpoint_strategy;
-      });
-    }
-    if (request.id === "node_type" && this.options.nodeType) return find((choice) => choice.value === this.options.nodeType as T);
-    if (request.id === "relationship") {
-      if (this.options.changeFilters && !this.#changedFilters) {
-        this.#changedFilters = true;
-        return find((choice) => choice.value === "change_filters" as T);
-      }
-      if (this.options.relationship) return find((choice) => choice.label.includes(` ${this.options.relationship} `));
-    }
-    if (request.id === "endpoint") {
-      if (this.options.endpoint === "create_new") return find((choice) => (choice.value as any).kind === "create_new");
-      if (this.options.endpoint) return find((choice) => (choice.value as any).node?.node_id === this.options.endpoint);
-    }
-    if (request.id === "filter_role" || request.id === "filter_presence") return request.choices[0]!.value;
-    if (request.id === "placement") return request.choices[0]!.value;
-    if (request.id === "reparent_refusal") {
-      return this.options.reparentAlternative ? request.choices.at(-2)!.value : request.choices.at(-1)!.value;
-    }
-    if (request.id === "save_or_cancel") return find((choice) => choice.value === (this.options.save ? "save" : "cancel") as T);
-    return request.choices[0]!.value;
+    this.selectedIds.push(request.id);
+    this.output.push(`${request.message}\n${request.choices.map((choice, choiceIndex) =>
+      `  ${choiceIndex + 1}. ${choice.label}${choice.description ? ` — ${choice.description}` : ""}`).join("\n")}\nChoose a number: ${index + 1}\n`);
+    return request.choices[index]!.value;
   }
 
   async input(request: { id: string; message: string; defaultValue?: string; required?: boolean }): Promise<string> {
-    this.transcript.push({ id: request.id, message: request.message, defaultValue: request.defaultValue });
-    if (request.id === "field:name") return "Guided addition";
-    if (request.id === "field:description") return "Created by the guided CLI";
-    if (request.required && !request.defaultValue) return "value";
-    return request.defaultValue ?? "";
+    const value = this.inputValues[request.message] ?? request.defaultValue ?? "";
+    const suffix = request.defaultValue !== undefined ? ` [${request.defaultValue}]` : "";
+    this.output.push(`${request.message}${suffix}: ${value}\n`);
+    return value;
   }
 
   async confirm(request: { id: string; message: string; defaultValue?: boolean }): Promise<boolean> {
-    this.transcript.push({ id: request.id, message: request.message });
-    if (request.id === "disclose_node_advanced") return this.options.advancedNode ?? false;
-    if (request.id === "disclose_edge_advanced") return this.options.advancedEdge ?? false;
-    if (request.id === "confirm_effect") return this.options.confirmEffect ?? true;
-    if (request.id === "accept_warnings") return this.options.acceptWarnings ?? true;
-    if (request.id === "confirm_commit") return this.options.confirmCommit ?? true;
-    return request.defaultValue ?? true;
+    const answer = this.confirmations[this.#confirmation++] ?? request.defaultValue ?? true;
+    const marker = request.defaultValue === false ? "y/N" : "Y/n";
+    this.output.push(`${request.message} [${marker}]: ${answer ? "y" : "n"}\n`);
+    return answer;
   }
 
   close(): void {}
 }
 
-function writeFixture(name: string, text = fs.readFileSync(sourceExample, "utf8")): string {
-  const filePath = path.join(fixtureDir, `${name}.sdd`);
-  fs.writeFileSync(filePath, text, "utf8");
-  return path.relative(repoRoot, filePath).split(path.sep).join("/");
+function fixture(name: string): { relative: string; absolute: string; original: string } {
+  const original = fs.readFileSync(acceptanceFixture, "utf8");
+  const absolute = path.join(fixtureDir, `${name}.sdd`);
+  fs.writeFileSync(absolute, original, "utf8");
+  return { relative: path.relative(repoRoot, absolute).split(path.sep).join("/"), absolute, original };
 }
 
-function appliedResult(
-  proposal: CompletedAdditionProposal,
-  mode: "dry_run" | "commit",
-  status: "applied" | "rejected" = "applied",
-  diagnostics: Diagnostic[] = []
-): ApplyAdditionProposalResult {
-  return {
-    kind: "sdd-addition-proposal-result",
-    proposal,
-    base_revision: proposal.document_context.base_revision,
-    ...(status === "applied" ? { resulting_revision: proposal.document_context.base_revision } : {}),
-    mode,
-    status,
-    change_set: {
-      kind: "sdd-change-set",
-      change_set_id: `cs_${mode}`,
-      path: proposal.document_context.path!,
-      origin: "apply_addition_proposal",
-      document_effect: "updated",
-      base_revision: proposal.document_context.base_revision,
-      ...(status === "applied" ? { resulting_revision: proposal.document_context.base_revision } : {}),
-      mode,
-      status,
-      undo_eligible: mode === "commit" && status === "applied",
-      operations: [],
-      summary: {
-        node_insertions: proposal.new_nodes.map((node) => ({ node_id: node.node_id, node_type: node.node_type })),
-        node_deletions: [],
-        node_renames: [],
-        property_changes: [],
-        edge_insertions: proposal.new_edges.map((edge) => ({ parent_handle: "mock", rel_type: edge.type, to: edge.to.node_id })),
-        edge_deletions: [],
-        ordering_changes: []
-      },
-      diagnostics
-    },
-    created_targets: [],
-    diagnostics
-  };
-}
-
-function cliHarness(prompt: ScriptedPrompt, overrides: Partial<CliDeps> = {}) {
-  const stdout: string[] = [];
+async function run(
+  target: ReturnType<typeof fixture>,
+  prompt: TranscriptPrompt,
+  args: string[] = [],
+  overrides: Partial<CliDeps> = {}
+): Promise<{ exitCode: number; transcript: string; stderr: string }> {
   const stderr: string[] = [];
-  const apply = vi.fn(async (_workspace, _bundle, args) => appliedResult(args.proposal, args.mode ?? "dry_run"));
-  return {
-    stdout,
-    stderr,
-    apply,
-    deps: {
+  const result = await runCli(
+    ["node", "sdd", "add", target.relative, ...args],
+    {
       cwd: () => repoRoot,
       createGuidedPrompt: () => prompt,
-      applyAdditionProposal: apply,
-      stdout: (content: string) => stdout.push(content),
-      stderr: (content: string) => stderr.push(content),
+      stdout: (content) => prompt.output.push(content),
+      stderr: (content) => stderr.push(content),
       ...overrides
-    } satisfies Partial<CliDeps>
-  };
+    }
+  );
+  return { exitCode: result.exitCode, transcript: prompt.output.join(""), stderr: stderr.join("") };
 }
 
-describe("interactive sdd add", () => {
-  it.each([
-    ["standalone", undefined, undefined, undefined, undefined],
-    ["outgoing existing", "O-001", { direction: "outgoing", endpoint_strategy: "existing_only" }, "MEASURED_BY", "M-001"],
-    ["outgoing new", "O-001", { direction: "outgoing", endpoint_strategy: "existing_or_new" }, "MEASURED_BY", "create_new"],
-    ["incoming existing", "O-001", { direction: "incoming", endpoint_strategy: "existing_only" }, "SUPPORTS", "OP-001"],
-    ["incoming new", "O-001", { direction: "incoming", endpoint_strategy: "existing_or_new" }, "SUPPORTS", "create_new"]
-  ] as const)("completes and cancels the %s route without invoking the executor", async (_name, anchor, operation, relationship, endpoint) => {
-    const prompt = new ScriptedPrompt({
-      ...(operation ? { operation } : {}),
-      nodeType: "Outcome",
-      ...(relationship ? { relationship } : {}),
-      ...(endpoint ? { endpoint } : {}),
-      save: false
-    });
-    const harness = cliHarness(prompt);
-    const argv = ["node", "sdd", "add", writeFixture(`route-${_name.replaceAll(" ", "-")}`), ...(anchor ? ["--node", anchor] : [])];
-    const result = await runCli(argv, harness.deps);
+function standaloneRules(finalDecision: "Save" | "Cancel"): SelectionRule[] {
+  return ["Add a standalone node", /^Place —/, "Last position", finalDecision];
+}
 
-    expect(result.exitCode, harness.stderr.join("\n")).toBe(0);
-    expect(harness.apply).not.toHaveBeenCalled();
-    expect(harness.stdout.join("")).toContain("Cancelled. No changes were written.");
-    expect(prompt.transcript.some((entry) => entry.id === "save_or_cancel")).toBe(true);
-  });
-
-  it("offers relationship addition and browses the starting node when --node is omitted", async () => {
-    const prompt = new ScriptedPrompt({
-      additionKind: "relationship",
-      startingNode: "O-001",
-      operation: { direction: "outgoing", endpoint_strategy: "existing_only" },
-      relationship: "MEASURED_BY",
-      endpoint: "M-001",
-      save: false
-    });
-    const harness = cliHarness(prompt);
-    const result = await runCli(["node", "sdd", "add", writeFixture("wrapper-relationship")], harness.deps);
-
-    expect(result.exitCode, harness.stderr.join("\n")).toBe(0);
-    expect(prompt.transcript.find((entry) => entry.id === "addition_kind")?.labels).toEqual([
-      "Add a standalone node — Create a node without a relationship",
-      "Add a relationship — Choose an existing starting node, then connect it"
-    ]);
-    expect(prompt.transcript.find((entry) => entry.id === "starting_node")).toMatchObject({
-      message: "Choose starting node"
-    });
-    expect(prompt.transcript.find((entry) => entry.id === "starting_node")?.labels?.join("\n"))
-      .toContain("O-001: Reduce Abandonment — Outcome");
-    expect(prompt.transcript.find((entry) => entry.id === "operation")?.message).toBe("Choose a relationship route");
-    expect(harness.apply).not.toHaveBeenCalled();
-  });
-
-  it("keeps the prompt open until the deferred Save or Cancel decision settles", async () => {
-    const scripted = new ScriptedPrompt({ nodeType: "Outcome" });
-    let markReviewReached!: () => void;
-    const reviewReached = new Promise<void>((resolve) => {
-      markReviewReached = resolve;
-    });
-    let resolveReview!: (decision: "save" | "cancel") => void;
-    const reviewDecision = new Promise<"save" | "cancel">((resolve) => {
-      resolveReview = resolve;
-    });
-    const close = vi.fn();
-    const prompt: GuidedPromptAdapter = {
-      select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[] }): Promise<T> {
-        if (request.id === "save_or_cancel") {
-          markReviewReached();
-          return reviewDecision as Promise<unknown> as Promise<T>;
-        }
-        return scripted.select(request);
-      },
-      input: (request) => scripted.input(request),
-      confirm: (request) => scripted.confirm(request),
-      close
-    };
-    const harness = cliHarness(scripted, { createGuidedPrompt: () => prompt });
-    const running = runCli(["node", "sdd", "add", writeFixture("deferred-review")], harness.deps);
-
-    await reviewReached;
-    const closeCallsBeforeDecision = close.mock.calls.length;
-    resolveReview("cancel");
-    const result = await running;
-
-    expect(closeCallsBeforeDecision).toBe(0);
-    expect(close).toHaveBeenCalledTimes(1);
-    expect(result.exitCode).toBe(0);
-    expect(harness.stdout.join("")).toContain("Cancelled. No changes were written.");
-  });
-
-  it("uses planner-provided view metadata, filter actions, ID suggestion, and advanced disclosure", async () => {
-    const prompt = new ScriptedPrompt({
-      operation: { direction: "outgoing", endpoint_strategy: "existing_or_new" },
-      relationship: "MEASURED_BY",
-      endpoint: "create_new",
-      changeFilters: true,
-      advancedNode: true,
-      advancedEdge: true,
-      save: false
-    });
-    const harness = cliHarness(prompt);
-    const result = await runCli([
-      "node", "sdd", "add", writeFixture("view-filter"),
-      "--node", "O-001", "--view", "outcome_opportunity_map"
-    ], harness.deps);
-
-    expect(result.exitCode).toBe(0);
-    const relationshipMenu = prompt.transcript.find((entry) => entry.id === "relationship");
-    expect(relationshipMenu?.labels?.join("\n")).toContain("role: primary");
-    expect(relationshipMenu?.labels?.join("\n")).toContain("presence: connector");
-    expect(prompt.transcript.map((entry) => entry.id)).toEqual(expect.arrayContaining([
-      "filter_role", "filter_presence", "disclose_node_advanced"
-    ]));
-    const nodeIdPrompt = prompt.transcript.find((entry) => entry.id === "field:node_id");
-    expect(nodeIdPrompt?.message).toContain("Node ID");
-  });
-
-  it.each([
-    ["accepts the exact effect", true, false],
-    ["routes refusal to a non-reparenting alternative", false, true]
-  ] as const)("%s for a new structural parent and existing child", async (_name, confirmEffect, reparentAlternative) => {
-    const prompt = new ScriptedPrompt({
-      operation: { direction: "incoming", endpoint_strategy: "existing_or_new" },
-      relationship: "CONTAINS",
-      endpoint: "create_new",
-      confirmEffect,
-      reparentAlternative,
-      save: false
-    });
-    const harness = cliHarness(prompt);
-    const result = await runCli([
-      "node", "sdd", "add", writeFixture(`effect-${confirmEffect}`), "--node", "P-001"
-    ], harness.deps);
-
-    expect(result.exitCode, harness.stderr.join("\n")).toBe(0);
-    expect(prompt.transcript.map((entry) => entry.id)).toContain("confirm_effect");
-    if (!confirmEffect) expect(prompt.transcript.map((entry) => entry.id)).toContain("reparent_refusal");
-  });
-
-  it("dry-runs first, requires warning acceptance, and commits the exact proposal object", async () => {
-    const prompt = new ScriptedPrompt({ nodeType: "Outcome", save: true, acceptWarnings: true, confirmCommit: true });
-    const warning: Diagnostic = {
-      stage: "validate",
-      code: "test.warning",
-      severity: "warn",
-      message: "Review this warning",
-      file: "fixture.sdd"
-    };
-    const apply = vi.fn(async (_workspace, _bundle, args) => appliedResult(
-      args.proposal,
-      args.mode ?? "dry_run",
-      "applied",
-      args.mode === "dry_run" ? [warning] : []
-    ));
-    const harness = cliHarness(prompt, { applyAdditionProposal: apply });
-    const result = await runCli(["node", "sdd", "add", writeFixture("save")], harness.deps);
-
-    expect(result.exitCode).toBe(0);
-    expect(apply).toHaveBeenCalledTimes(2);
-    expect(apply.mock.calls[0]![2]).toMatchObject({ mode: "dry_run", validate_profile: "simple" });
-    expect(apply.mock.calls[1]![2]).toMatchObject({ mode: "commit", validate_profile: "simple" });
-    expect(apply.mock.calls[0]![2].proposal).toBe(apply.mock.calls[1]![2].proposal);
-    expect(prompt.transcript.map((entry) => entry.id)).toEqual(expect.arrayContaining(["accept_warnings", "confirm_commit"]));
-  });
-
-  it("blocks commit on dry-run rejection and reports stale drift between review and commit", async () => {
-    const stale: Diagnostic = {
-      stage: "authoring",
-      code: "guided_addition.state_stale",
-      severity: "error",
-      message: "Proposal base revision does not match the current document",
-      file: "fixture.sdd"
-    };
-    const prompt = new ScriptedPrompt({ nodeType: "Outcome", save: true, confirmCommit: true });
-    const apply = vi.fn(async (_workspace, _bundle, args) => args.mode === "dry_run"
-      ? appliedResult(args.proposal, "dry_run")
-      : appliedResult(args.proposal, "commit", "rejected", [stale]));
-    const harness = cliHarness(prompt, { applyAdditionProposal: apply });
-    const result = await runCli(["node", "sdd", "add", writeFixture("stale")], harness.deps);
-
-    expect(result.exitCode).toBe(1);
-    expect(apply).toHaveBeenCalledTimes(2);
-    expect(harness.stderr.join("")).toContain("Restart `sdd add`");
-
-    const rejectedPrompt = new ScriptedPrompt({ nodeType: "Outcome", save: true });
-    const rejectedApply = vi.fn(async (_workspace, _bundle, args) => appliedResult(args.proposal, "dry_run", "rejected", [stale]));
-    const rejectedHarness = cliHarness(rejectedPrompt, { applyAdditionProposal: rejectedApply });
-    const rejected = await runCli(["node", "sdd", "add", writeFixture("dry-rejected")], rejectedHarness.deps);
-    expect(rejected.exitCode).toBe(1);
-    expect(rejectedApply).toHaveBeenCalledTimes(1);
-  });
-
-  it("rejects invalid anchors, views, bundles, and documents before proposal execution", async () => {
-    const cases: Array<{ name: string; argv: string[]; overrides?: Partial<CliDeps>; expected: string }> = [
-      { name: "anchor", argv: ["--node", "missing"], expected: "was not found" },
-      { name: "view", argv: ["--view", "missing_view"], expected: "Unknown guided view" },
+describe("sdd add v1 transcript delivery", () => {
+  it("matches T16 and writes once after one warning-free Save", async () => {
+    const target = fixture("guided-addition-acceptance");
+    const applications: ApplyAdditionProposalV1Args[] = [];
+    const prompt = new TranscriptPrompt(
+      standaloneRules("Save"),
       {
-        name: "bundle",
-        argv: [],
-        overrides: { loadBundle: async () => ({ ...bundle, authoring: undefined }) },
-        expected: "guided authoring metadata"
+        "New node ID": "P-301",
+        "New node Name": "Settings",
+        "New node Description": "Configuration and preferences"
       },
-      {
-        name: "document",
-        argv: [],
-        expected: "unavailable"
+      [false]
+    );
+    const result = await run(target, prompt, [], {
+      applyAdditionProposalV1: async (workspace, loadedBundle, args) => {
+        applications.push(args);
+        return applyAdditionProposalV1(workspace, loadedBundle, args);
       }
-    ];
+    });
 
-    for (const testCase of cases) {
-      const prompt = new ScriptedPrompt();
-      const harness = cliHarness(prompt, testCase.overrides);
-      const document = testCase.name === "document" ? writeFixture("invalid-document", "not sdd") : writeFixture(`invalid-${testCase.name}`);
-      const result = await runCli(["node", "sdd", "add", document, ...testCase.argv], harness.deps);
-      expect(result.exitCode, testCase.name).toBe(1);
-      expect(harness.apply, testCase.name).not.toHaveBeenCalled();
-      expect(harness.stderr.join("").toLowerCase(), testCase.name).toContain(testCase.expected.toLowerCase());
-    }
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(applications.map((args) => args.mode)).toEqual(["dry_run", "commit"]);
+    expect(applications.every((args) => args.accepted_warning_token === undefined)).toBe(true);
+    expect(result.transcript.slice(result.transcript.indexOf("Review proposed addition"))).toBe(
+      `Review proposed addition
+  Add Place P-301: Settings
+  Description: Configuration and preferences
+  Place P-301 at top level, last
+
+Save these changes?
+  1. Save
+  2. Cancel
+Choose a number: 1
+Chosen: Save changes
+
+Saved guided-addition-acceptance.sdd.
+`
+    );
+    const saved = fs.readFileSync(target.absolute, "utf8");
+    expect(saved.match(/Place P-301 "Settings"/g)).toHaveLength(1);
+    expect(saved).toContain(`\n\nPlace P-301 "Settings"\n  description="Configuration and preferences"\nEND\n`);
   });
 
-  it("keeps the CLI semantic boundary free of bundle-shape inspection and mutation translation", () => {
+  it("matches T18 and performs no verification or write on Cancel", async () => {
+    const target = fixture("cancel-acceptance");
+    let executorCalls = 0;
+    const prompt = new TranscriptPrompt(
+      standaloneRules("Cancel"),
+      {
+        "New node ID": "P-301",
+        "New node Name": "Settings",
+        "New node Description": "Configuration and preferences"
+      },
+      [false]
+    );
+    const result = await run(target, prompt, [], {
+      applyAdditionProposalV1: async () => {
+        executorCalls += 1;
+        throw new Error("The executor must not run after Cancel");
+      }
+    });
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(executorCalls).toBe(0);
+    expect(result.transcript.slice(result.transcript.indexOf("Review proposed addition"))).toBe(
+      `Review proposed addition
+  Add Place P-301: Settings
+  Description: Configuration and preferences
+  Place P-301 at top level, last
+
+Save these changes?
+  1. Save
+  2. Cancel
+Choose a number: 2
+Chosen: Cancel
+
+Canceled. No changes were made.
+`
+    );
+    expect(fs.readFileSync(target.absolute, "utf8")).toBe(target.original);
+  });
+
+  it("matches T17 and commits only with the exact duplicate-warning token", async () => {
+    const target = fixture("guided-addition-acceptance");
+    const applications: ApplyAdditionProposalV1Args[] = [];
+    const prompt = new TranscriptPrompt(
+      [
+        "Incoming: another node connects to P-100 [choose by relationship type]",
+        "Place NAVIGATES_TO P-100",
+        /^P-210: Projects Overview/,
+        "Save",
+        "Save anyway"
+      ],
+      {},
+      [false]
+    );
+    const result = await run(target, prompt, ["--node", "P-100"], {
+      applyAdditionProposalV1: async (workspace, loadedBundle, args) => {
+        applications.push(args);
+        return applyAdditionProposalV1(workspace, loadedBundle, args);
+      }
+    });
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(applications.map((args) => args.mode)).toEqual(["dry_run", "commit"]);
+    expect(applications[0]!.accepted_warning_token).toBeUndefined();
+    expect(applications[1]!.accepted_warning_token).toMatch(/^warning_[a-f0-9]{64}$/);
+    expect(result.transcript.slice(result.transcript.indexOf("Review proposed addition"))).toBe(
+      `Review proposed addition
+  Add relationship: P-210: Projects Overview NAVIGATES_TO P-100: Dashboard
+  Leave both existing nodes where they are
+
+Save these changes?
+  1. Save
+  2. Cancel
+Choose a number: 1
+Chosen: Save changes
+
+Warning
+  P-210: Projects Overview already has this exact navigation to P-100: Dashboard.
+
+Save anyway?
+  1. Save anyway
+  2. Go back
+Choose a number: 1
+Chosen: Save anyway
+
+Saved guided-addition-acceptance.sdd.
+`
+    );
+    expect(fs.readFileSync(target.absolute, "utf8").match(/NAVIGATES_TO P-100 "Dashboard"/g)).toHaveLength(2);
+  });
+
+  it("returns Go back to the unchanged review and allows cancellation without writing", async () => {
+    const target = fixture("warning-go-back");
+    const prompt = new TranscriptPrompt(
+      [
+        "Incoming: another node connects to P-100 [choose by relationship type]",
+        "Place NAVIGATES_TO P-100",
+        /^P-210: Projects Overview/,
+        "Save",
+        "Go back",
+        "Cancel"
+      ],
+      {},
+      [false]
+    );
+    const result = await run(target, prompt, ["--node", "P-100"]);
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(result.transcript.match(/Review proposed addition/g)).toHaveLength(2);
+    expect(fs.readFileSync(target.absolute, "utf8")).toBe(target.original);
+  });
+
+  it("renders contextual filter choices and never exposes forbidden implementation language", async () => {
+    const target = fixture("filter-and-cancel");
+    const prompt = new TranscriptPrompt(
+      [
+        "Add a standalone node",
+        "[Filter nodes by diagram type: All diagram types]",
+        "IA Place Map",
+        "[Filter nodes by diagram type: IA Place Map]",
+        "All diagram types",
+        /^Place —/,
+        "Last position",
+        "Cancel"
+      ],
+      {
+        "New node ID": "P-301",
+        "New node Name": "Settings",
+        "New node Description": "Configuration and preferences"
+      },
+      [false]
+    );
+    const result = await run(target, prompt);
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(result.transcript).toContain("Choose a diagram type to filter nodes by");
+    expect(result.transcript).toContain("Chosen: IA Place Map filter");
+    expect(result.transcript).toContain("Chosen: All diagram types filter");
+    expect(result.transcript).not.toMatch(/reason_code|recommendation_id|proposal_[a-f0-9]|choice_[a-f0-9]|role:|presence:|source stream|reparent|\-\[[A-Z_]+\]\>/i);
+  });
+
+  it("rejects hidden --view initialization and keeps the CLI free of semantic reconstruction", async () => {
+    const target = fixture("view-rejected");
+    const prompt = new TranscriptPrompt([]);
+    const result = await run(target, prompt, ["--view", "ia_place_map"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("unknown option '--view'");
+
     const source = fs.readFileSync(path.join(repoRoot, "src/cli/guidedAddition.ts"), "utf8");
     expect(source).not.toMatch(/bundle\.(contracts|views|authoring|profiles|vocab|syntax)/);
-    expect(source).not.toContain("ChangeOperation");
-    expect(source).not.toContain("executeChangeOperations");
-    expect(source).not.toMatch(/SDD-TEXT|insert_node_block|insert_edge/);
-  });
-
-  it("changes presentation from bundle-only description, prefix, and placement mutations", async () => {
-    const mutated = structuredClone(bundle);
-    mutated.vocab.node_types.find((node) => node.token === "Outcome")!.description = "Bundle-mutated outcome description.";
-    mutated.authoring!.node_id_suggestions.prefix_by_type.Outcome = "OX";
-    mutated.authoring!.placement_policies.default.fallback = "first" as "last";
-    const relationship = mutated.views.views
-      .find((view) => view.id === "outcome_opportunity_map")!
-      .conventions.guided_addition!.relationships
-      .find((candidate) => candidate.from === "Outcome" && candidate.type === "MEASURED_BY" && candidate.to === "Metric")!;
-    relationship.role = "bridge";
-    relationship.display_by_profile.simple = [{ presence: "hidden", label: "hidden" }];
-
-    const prompt = new ScriptedPrompt({ nodeType: "Outcome", save: false });
-    const harness = cliHarness(prompt, { loadBundle: async () => mutated });
-    const result = await runCli(["node", "sdd", "add", writeFixture("bundle-presentation")], harness.deps);
-
-    expect(result.exitCode).toBe(0);
-    expect(prompt.transcript.find((entry) => entry.id === "node_type")?.labels?.join("\n"))
-      .toContain("Bundle-mutated outcome description.");
-    expect(prompt.transcript.find((entry) => entry.id === "field:node_id")?.defaultValue).toMatch(/^OX/);
-    expect(prompt.transcript.find((entry) => entry.id === "placement")?.labels?.[0]).toContain("first");
-
-    const relationshipPrompt = new ScriptedPrompt({
-      operation: { direction: "outgoing", endpoint_strategy: "existing_only" },
-      relationship: "MEASURED_BY",
-      endpoint: "M-001",
-      save: false
-    });
-    const relationshipHarness = cliHarness(relationshipPrompt, { loadBundle: async () => mutated });
-    const relationshipResult = await runCli([
-      "node", "sdd", "add", writeFixture("bundle-relationship-presentation"),
-      "--node", "O-001", "--view", "outcome_opportunity_map"
-    ], relationshipHarness.deps);
-    expect(relationshipResult.exitCode).toBe(0);
-    const labels = relationshipPrompt.transcript.find((entry) => entry.id === "relationship")?.labels?.join("\n");
-    expect(labels).toContain("role: bridge (bridge)");
-    expect(labels).toContain("presence: hidden; label: hidden");
+    expect(source).not.toMatch(/insert_node_block|insert_edge_line|reason_code|recommendation_id/);
   });
 });

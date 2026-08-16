@@ -864,7 +864,6 @@ const helperCapabilitiesResultSchema = objectSchema(
   ["kind", "helper_name", "summary", "discovery", "conventions", "commands"]
 );
 
-const nullableStringSchema: JsonSchema = { type: ["string", "null"] };
 const nullableHandleSchema: JsonSchema = { type: ["string", "null"] };
 
 const guidedExistingNodeRefSchema = objectSchema(
@@ -872,22 +871,16 @@ const guidedExistingNodeRefSchema = objectSchema(
     kind: stringSchema(["existing_node"]),
     handle: stringSchema(),
     node_id: stringSchema(),
-    node_type: stringSchema()
+    node_type: stringSchema(),
+    name: stringSchema()
   },
-  ["kind", "handle", "node_id", "node_type"]
+  ["kind", "handle", "node_id", "node_type", "name"]
 );
 
-const guidedFilterSchema = objectSchema({
-  view_id: stringSchema(),
-  display_profile_id: stringSchema(),
-  roles: arraySchema(stringSchema(["primary", "supporting", "bridge"])),
-  presences: arraySchema(stringSchema(["connector", "structural", "annotation", "hidden"]))
-});
-
-const beginGuidedAdditionRequestSchema = objectSchema({
-  anchor: guidedExistingNodeRefSchema,
-  initial_filter: guidedFilterSchema
-});
+const beginGuidedAdditionRequestSchema = objectSchema(
+  { workflow_version: stringSchema(["1.0"]), anchor: guidedExistingNodeRefSchema },
+  ["workflow_version"]
+);
 
 const guidedExistingNodeSchema = objectSchema(
   {
@@ -941,364 +934,123 @@ const guidedDocumentSnapshotSchema = objectSchema(
   ]
 );
 
-const guidedNodePropertyValueSchema = objectSchema(
+const guidedFieldValueSchema = objectSchema(
   {
-    key: stringSchema(),
+    field_id: stringSchema(),
     value_kind: stringSchema(["quoted_string", "bare_value"]),
     raw_value: stringSchema()
   },
-  ["key", "value_kind", "raw_value"]
-);
-
-const guidedNodeFieldValuesSchema = objectSchema(
-  {
-    node_id: stringSchema(),
-    name: stringSchema(),
-    properties: arraySchema(guidedNodePropertyValueSchema)
-  },
-  ["node_id", "name", "properties"]
-);
-
-const guidedEdgeFieldValuesSchema = objectSchema(
-  {
-    event: nullableStringSchema,
-    guard: nullableStringSchema,
-    effect: nullableStringSchema,
-    props: objectSchema({}, [], stringSchema())
-  },
-  ["props"]
+  ["field_id", "value_kind", "raw_value"]
 );
 
 const guidedNewNodeRefSchema = objectSchema(
   {
     kind: stringSchema(["new_node"]),
-    local_id: stringSchema(["node_1"]),
-    node_id: stringSchema(),
-    node_type: stringSchema()
+    local_node_id: stringSchema(["node_1"])
   },
-  ["kind", "local_id", "node_id", "node_type"]
+  ["kind", "local_node_id"]
 );
 
-const guidedExistingOrNewNodeRefSchema: JsonSchema = {
+const guidedNodeRefSchema: JsonSchema = {
   oneOf: [guidedExistingNodeRefSchema, guidedNewNodeRefSchema]
 };
 
-const proposedPlacementSchema = objectSchema(
+const endpointTripleSchema = objectSchema(
   {
-    stream: stringSchema(["top_level", "body"]),
-    mode: stringSchema(["before", "after", "first", "last"]),
-    parent: guidedExistingOrNewNodeRefSchema,
-    anchor: guidedExistingNodeRefSchema
+    from_type: stringSchema(),
+    relationship_type: stringSchema(),
+    to_type: stringSchema()
   },
-  ["stream", "mode"]
+  ["from_type", "relationship_type", "to_type"]
 );
 
-const guidedRelationshipSchema = objectSchema(
-  {
-    from: guidedExistingOrNewNodeRefSchema,
-    type: stringSchema(),
-    to: guidedExistingOrNewNodeRefSchema
-  },
-  ["from", "type", "to"]
-);
-
-const reparentExistingNodeEffectSchema = objectSchema(
-  {
-    kind: stringSchema(["reparent_existing_node"]),
-    effect_id: stringSchema(),
-    document_revision: stringSchema(),
-    target: guidedExistingNodeRefSchema,
-    old_parent_handle: nullableHandleSchema,
-    new_parent: {
-      oneOf: [
-        objectSchema(
-          { kind: stringSchema(["new_node"]), local_id: stringSchema(["node_1"]) },
-          ["kind", "local_id"]
-        ),
-        guidedExistingNodeRefSchema
-      ]
-    },
-    placement: proposedPlacementSchema,
-    relationship: guidedRelationshipSchema
-  },
-  [
-    "kind",
-    "effect_id",
-    "document_revision",
-    "target",
-    "old_parent_handle",
-    "new_parent",
-    "placement",
-    "relationship"
-  ]
-);
-
-const confirmedProposalEffectSchema = objectSchema(
-  {
-    ...(reparentExistingNodeEffectSchema as { properties: Record<string, JsonSchema> }).properties,
-    confirmed: { type: "boolean", const: true }
-  },
-  [
-    "kind",
-    "effect_id",
-    "document_revision",
-    "target",
-    "old_parent_handle",
-    "new_parent",
-    "placement",
-    "relationship",
-    "confirmed"
-  ]
-);
-
-const placementSelectionSchema = objectSchema(
-  {
-    recommendation_id: stringSchema(),
-    selected: proposedPlacementSchema
-  },
-  ["recommendation_id", "selected"]
-);
-
-const selectedPlacementSchema = objectSchema(
-  {
-    recommendation_id: stringSchema(),
-    selected: proposedPlacementSchema,
-    target: {
-      oneOf: [
-        objectSchema(
-          { kind: stringSchema(["node"]), node: guidedExistingOrNewNodeRefSchema },
-          ["kind", "node"]
-        ),
-        objectSchema(
-          { kind: stringSchema(["edge"]), local_id: stringSchema(["edge_1"]) },
-          ["kind", "local_id"]
-        )
-      ]
-    },
-    selected_by: stringSchema(["recommended_default", "user"])
-  },
-  ["recommendation_id", "selected", "target", "selected_by"]
-);
-
-const guidedOperationSelectionSchema: JsonSchema = {
+const semanticSameLevelOrderSchema: JsonSchema = {
   oneOf: [
-    objectSchema({ kind: stringSchema(["add_node"]) }, ["kind"]),
-    objectSchema(
-      {
-        kind: stringSchema(["add_relationship"]),
-        direction: stringSchema(["outgoing", "incoming"]),
-        endpoint_strategy: stringSchema(["existing_only", "existing_or_new"])
-      },
-      ["kind", "direction", "endpoint_strategy"]
-    )
+    objectSchema({ kind: stringSchema(["top_level_first"]) }, ["kind"]),
+    objectSchema({ kind: stringSchema(["top_level_last"]) }, ["kind"]),
+    objectSchema({ kind: stringSchema(["before_existing"]), node: guidedExistingNodeRefSchema }, ["kind", "node"]),
+    objectSchema({ kind: stringSchema(["after_existing"]), node: guidedExistingNodeRefSchema }, ["kind", "node"])
   ]
 };
 
-const guidedEndpointSelectionSchema: JsonSchema = {
+const semanticNodeOrganizationSchema: JsonSchema = {
   oneOf: [
     objectSchema(
-      { kind: stringSchema(["existing"]), node: guidedExistingNodeRefSchema },
+      { kind: stringSchema(["add_new_node_top_level"]), node: guidedNewNodeRefSchema, order: semanticSameLevelOrderSchema },
+      ["kind", "node", "order"]
+    ),
+    objectSchema(
+      {
+        kind: stringSchema(["add_new_node_nested"]),
+        node: guidedNewNodeRefSchema,
+        parent: guidedNodeRefSchema,
+        order: stringSchema(["only", "first", "last"])
+      },
+      ["kind", "node", "parent", "order"]
+    ),
+    objectSchema(
+      {
+        kind: stringSchema(["place_new_source_at_target_position"]),
+        source: guidedNewNodeRefSchema,
+        target: guidedExistingNodeRefSchema
+      },
+      ["kind", "source", "target"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["keep_existing_node"]), node: guidedExistingNodeRefSchema },
       ["kind", "node"]
     ),
     objectSchema(
       {
-        kind: stringSchema(["create_new"]),
-        local_id: stringSchema(["node_1"]),
-        node_type: stringSchema()
-      },
-      ["kind", "local_id", "node_type"]
-    )
-  ]
-};
-
-const guidedSelectionsSchema = objectSchema(
-  {
-    operation: guidedOperationSelectionSchema,
-    node_type: stringSchema(),
-    relationship_choice_id: stringSchema(),
-    endpoint: guidedEndpointSelectionSchema,
-    new_node_fields: guidedNodeFieldValuesSchema,
-    edge_fields: guidedEdgeFieldValuesSchema,
-    placements: arraySchema(placementSelectionSchema)
-  },
-  ["placements"]
-);
-
-const guidedAdditionStateSchema = objectSchema(
-  {
-    kind: stringSchema(["sdd-guided-addition-state"]),
-    workflow_version: stringSchema(["0.1"]),
-    document_context: objectSchema(
-      {
-        document_ref: stringSchema(),
-        revision: stringSchema(),
-        bundle_fingerprint: stringSchema()
-      },
-      ["document_ref", "revision", "bundle_fingerprint"]
-    ),
-    anchor: guidedExistingNodeRefSchema,
-    filter: guidedFilterSchema,
-    selections: guidedSelectionsSchema,
-    confirmed_effects: arraySchema(confirmedProposalEffectSchema)
-  },
-  ["kind", "workflow_version", "document_context", "filter", "selections", "confirmed_effects"]
-);
-
-const guidedFieldDefinitionSchema = objectSchema(
-  {
-    field_id: stringSchema(),
-    source: stringSchema([
-      "node_id",
-      "name",
-      "node_property",
-      "edge_event",
-      "edge_guard",
-      "edge_effect",
-      "edge_property"
-    ]),
-    property: stringSchema(),
-    label: stringSchema(),
-    description: stringSchema(),
-    input_hint: stringSchema(),
-    value_kind: stringSchema(["quoted_string", "bare_value"]),
-    required: booleanSchema(),
-    prominence: stringSchema(["primary", "advanced"]),
-    format: stringSchema(["sdd_node_id", "non_empty_text", "free_text", "enum", "pattern", "node_reference"]),
-    allowed_values: stringArraySchema,
-    pattern: stringSchema(),
-    allowed_target_types: stringArraySchema
-  },
-  ["field_id", "source", "value_kind", "required", "prominence", "format"]
-);
-
-const relationshipDisplaySchema = objectSchema(
-  {
-    presence: stringSchema(["connector", "structural", "annotation", "hidden"]),
-    label: stringSchema(["visible", "hidden", "not_applicable"]),
-    explanation: stringSchema()
-  },
-  ["presence", "label"]
-);
-
-const relationshipChoiceSchema = objectSchema(
-  {
-    choice_id: stringSchema(),
-    from_type: stringSchema(),
-    relationship_type: stringSchema(),
-    to_type: stringSchema(),
-    direction_relative_to_anchor: stringSchema(["outgoing", "incoming"]),
-    meaning: stringSchema(),
-    role_by_view: objectSchema({}, [], stringSchema(["primary", "supporting", "bridge"])),
-    display_by_view: objectSchema({}, [], objectSchema({}, [], relationshipDisplaySchema)),
-    existing_endpoint_count: integerSchema(),
-    required_edge_fields: arraySchema(guidedFieldDefinitionSchema),
-    optional_edge_fields: arraySchema(guidedFieldDefinitionSchema)
-  },
-  [
-    "choice_id",
-    "from_type",
-    "relationship_type",
-    "to_type",
-    "role_by_view",
-    "display_by_view",
-    "existing_endpoint_count",
-    "required_edge_fields",
-    "optional_edge_fields"
-  ]
-);
-
-const guidedNodeTypeChoiceSchema = objectSchema(
-  {
-    option_id: stringSchema(),
-    node_type: stringSchema(),
-    group: stringSchema(),
-    description: stringSchema(),
-    view_role: stringSchema(["native", "bridge"])
-  },
-  ["option_id", "node_type"]
-);
-
-const guidedEndpointChoiceSchema: JsonSchema = {
-  oneOf: [
-    objectSchema(
-      {
-        option_id: stringSchema(),
-        kind: stringSchema(["existing"]),
+        kind: stringSchema(["move_existing_node"]),
         node: guidedExistingNodeRefSchema,
-        existing_edge_count_for_triple_and_endpoints: integerSchema()
+        destination_parent: guidedNodeRefSchema,
+        order: stringSchema(["only", "first", "last"]),
+        accepted_effect_id: stringSchema()
       },
-      ["option_id", "kind", "node", "existing_edge_count_for_triple_and_endpoints"]
-    ),
-    objectSchema(
-      {
-        option_id: stringSchema(),
-        kind: stringSchema(["create_new"]),
-        node_type: stringSchema(),
-        local_id: stringSchema(["node_1"])
-      },
-      ["option_id", "kind", "node_type", "local_id"]
+      ["kind", "node", "destination_parent", "order", "accepted_effect_id"]
     )
   ]
 };
 
-const placementRecommendationSchema = objectSchema(
+const materialEffectSchema = objectSchema(
   {
-    recommendation_id: stringSchema(),
-    target: guidedExistingOrNewNodeRefSchema,
-    recommended: proposedPlacementSchema,
-    alternatives: arraySchema(proposedPlacementSchema),
-    reason_code: stringSchema([
-      "structural_nesting",
-      "outgoing_graph_sequence",
-      "incoming_graph_sequence",
-      "same_source_target_order",
-      "fallback_append"
-    ]),
-    required_effect: reparentExistingNodeEffectSchema
+    effect_id: stringSchema(),
+    kind: stringSchema(["move_existing_node"]),
+    node: guidedExistingNodeRefSchema,
+    from_parent: { oneOf: [guidedExistingNodeRefSchema, { type: "null" }] },
+    destination_parent: guidedNodeRefSchema,
+    order: stringSchema(["only", "first", "last"]),
+    accepted: booleanSchema()
   },
-  ["recommendation_id", "target", "recommended", "alternatives", "reason_code"]
+  ["effect_id", "kind", "node", "from_parent", "destination_parent", "order", "accepted"]
 );
 
 const proposedNodeSchema = objectSchema(
   {
-    local_id: stringSchema(["node_1"]),
+    ref: guidedNewNodeRefSchema,
     node_type: stringSchema(),
     node_id: stringSchema(),
     name: stringSchema(),
-    properties: arraySchema(guidedNodePropertyValueSchema)
+    fields: arraySchema(guidedFieldValueSchema)
   },
-  ["local_id", "node_type", "node_id", "name", "properties"]
-);
-
-const proposedEdgeSchema = objectSchema(
-  {
-    local_id: stringSchema(["edge_1"]),
-    from: guidedExistingOrNewNodeRefSchema,
-    type: stringSchema(),
-    to: guidedExistingOrNewNodeRefSchema,
-    to_name: nullableStringSchema,
-    event: nullableStringSchema,
-    guard: nullableStringSchema,
-    effect: nullableStringSchema,
-    props: objectSchema({}, [], stringSchema())
-  },
-  ["local_id", "from", "type", "to", "to_name", "event", "guard", "effect", "props"]
+  ["ref", "node_type", "node_id", "name", "fields"]
 );
 
 const proposedRelationshipSchema = objectSchema(
   {
-    type: stringSchema(),
-    from: guidedExistingOrNewNodeRefSchema,
-    to: guidedExistingOrNewNodeRefSchema,
-    direction_relative_to_anchor: stringSchema(["outgoing", "incoming"])
+    from: guidedNodeRefSchema,
+    triple: endpointTripleSchema,
+    to: guidedNodeRefSchema,
+    fields: arraySchema(guidedFieldValueSchema)
   },
-  ["type", "from", "to"]
+  ["from", "triple", "to", "fields"]
 );
 
 const completedAdditionProposalSchema = objectSchema(
   {
     kind: stringSchema(["sdd-addition-proposal"]),
-    proposal_version: stringSchema(["0.1"]),
+    proposal_version: stringSchema(["1.0"]),
     proposal_id: stringSchema(),
     document_context: objectSchema(
       {
@@ -1309,144 +1061,261 @@ const completedAdditionProposalSchema = objectSchema(
       },
       ["document_ref", "base_revision", "bundle_fingerprint"]
     ),
-    anchor: guidedExistingNodeRefSchema,
+    intent: objectSchema(
+      {
+        addition_kind: stringSchema(["standalone_node", "relationship"]),
+        direction: stringSchema(["outgoing", "incoming"]),
+        selection_order: stringSchema(["relationship_first", "existing_node_first"])
+      },
+      ["addition_kind"]
+    ),
     guidance_context: objectSchema(
       {
-        view_id: stringSchema(),
-        display_profile_id: stringSchema(),
-        relationship_role: stringSchema(["primary", "supporting", "bridge"])
-      }
+        diagram_filters: arraySchema(objectSchema(
+          { browse_id: stringSchema(), diagram_id: { type: ["string", "null"] } },
+          ["browse_id", "diagram_id"]
+        )),
+        display_profile_id: stringSchema()
+      },
+      ["diagram_filters", "display_profile_id"]
     ),
-    relationship: proposedRelationshipSchema,
-    new_nodes: arraySchema(proposedNodeSchema),
-    new_edges: arraySchema(proposedEdgeSchema),
-    placements: arraySchema(selectedPlacementSchema),
-    confirmed_effects: arraySchema(confirmedProposalEffectSchema)
+    addition: {
+      oneOf: [
+        objectSchema(
+          { kind: stringSchema(["standalone_node"]), node: proposedNodeSchema },
+          ["kind", "node"]
+        ),
+        objectSchema(
+          { kind: stringSchema(["relationship"]), relationship: proposedRelationshipSchema, new_node: proposedNodeSchema },
+          ["kind", "relationship"]
+        )
+      ]
+    },
+    node_organization: arraySchema(semanticNodeOrganizationSchema),
+    accepted_material_effects: arraySchema(materialEffectSchema)
   },
   [
-    "kind",
-    "proposal_version",
-    "proposal_id",
-    "document_context",
-    "guidance_context",
-    "new_nodes",
-    "new_edges",
-    "placements",
-    "confirmed_effects"
+    "kind", "proposal_version", "proposal_id", "document_context", "intent", "guidance_context",
+    "addition", "node_organization", "accepted_material_effects"
   ]
 );
 
-const guidedStepSchema: JsonSchema = {
+const guidedAdditionActionSchema: JsonSchema = {
   oneOf: [
     objectSchema(
-      { kind: stringSchema(["choose_operation"]), options: arraySchema(guidedOperationSelectionSchema) },
-      ["kind", "options"]
+      { kind: stringSchema(["choose_addition_kind"]), addition_kind: stringSchema(["standalone_node", "relationship"]) },
+      ["kind", "addition_kind"]
     ),
     objectSchema(
-      { kind: stringSchema(["choose_node_type"]), options: arraySchema(guidedNodeTypeChoiceSchema) },
-      ["kind", "options"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["choose_relationship"]), options: arraySchema(relationshipChoiceSchema) },
-      ["kind", "options"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["choose_endpoint"]), options: arraySchema(guidedEndpointChoiceSchema) },
-      ["kind", "options"]
+      { kind: stringSchema(["choose_starting_node"]), node: guidedExistingNodeRefSchema },
+      ["kind", "node"]
     ),
     objectSchema(
       {
-        kind: stringSchema(["edit_new_node"]),
-        local_id: stringSchema(["node_1"]),
-        fields: arraySchema(guidedFieldDefinitionSchema),
-        values: guidedNodeFieldValuesSchema,
-        suggested_node_id: stringSchema()
+        kind: stringSchema(["choose_relationship_route"]),
+        direction: stringSchema(["outgoing", "incoming"]),
+        selection_order: stringSchema(["relationship_first", "existing_node_first"])
       },
-      ["kind", "local_id", "fields", "values", "suggested_node_id"]
+      ["kind", "direction", "selection_order"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["open_diagram_filter"]), browse_id: stringSchema() },
+      ["kind", "browse_id"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["set_diagram_filter"]), browse_id: stringSchema(), diagram_id: stringSchema() },
+      ["kind", "browse_id", "diagram_id"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["clear_diagram_filter"]), browse_id: stringSchema() },
+      ["kind", "browse_id"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_standalone_node_type"]), node_type: stringSchema() },
+      ["kind", "node_type"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_relationship_combination"]), triple: endpointTripleSchema },
+      ["kind", "triple"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_existing_endpoint"]), node: guidedExistingNodeRefSchema, triple: endpointTripleSchema },
+      ["kind", "node"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["create_new_endpoint"]), node_type: stringSchema() },
+      ["kind", "node_type"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_relationship_for_endpoint"]), triple: endpointTripleSchema },
+      ["kind", "triple"]
     ),
     objectSchema(
       {
-        kind: stringSchema(["edit_edge_fields"]),
-        local_id: stringSchema(["edge_1"]),
-        fields: arraySchema(guidedFieldDefinitionSchema),
-        values: guidedEdgeFieldValuesSchema
+        kind: stringSchema(["submit_new_node_fields"]),
+        local_node_id: stringSchema(["node_1"]),
+        field_group: stringSchema(["primary", "additional"]),
+        values: arraySchema(guidedFieldValueSchema)
       },
-      ["kind", "local_id", "fields", "values"]
+      ["kind", "local_node_id", "field_group", "values"]
     ),
     objectSchema(
-      { kind: stringSchema(["review_placement"]), recommendations: arraySchema(placementRecommendationSchema) },
-      ["kind", "recommendations"]
+      {
+        kind: stringSchema(["submit_relationship_fields"]),
+        local_edge_id: stringSchema(["edge_1"]),
+        field_group: stringSchema(["required", "additional"]),
+        values: arraySchema(guidedFieldValueSchema)
+      },
+      ["kind", "local_edge_id", "field_group", "values"]
     ),
     objectSchema(
-      { kind: stringSchema(["confirm_effect"]), effect: reparentExistingNodeEffectSchema },
-      ["kind", "effect"]
+      { kind: stringSchema(["set_node_detail_disclosure"]), disclose: booleanSchema() },
+      ["kind", "disclose"]
     ),
     objectSchema(
-      { kind: stringSchema(["review_proposal"]), proposal: completedAdditionProposalSchema },
-      ["kind", "proposal"]
+      { kind: stringSchema(["set_relationship_detail_disclosure"]), disclose: booleanSchema() },
+      ["kind", "disclose"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_new_target_organization"]), organization: stringSchema(["nested", "top_level"]) },
+      ["kind", "organization"]
+    ),
+    objectSchema(
+      {
+        kind: stringSchema(["choose_existing_target_organization"]),
+        organization: stringSchema(["move_under_source", "leave_current"])
+      },
+      ["kind", "organization"]
+    ),
+    objectSchema(
+      {
+        kind: stringSchema(["choose_new_source_organization"]),
+        organization: stringSchema(["wrap_target", "leave_target_current"])
+      },
+      ["kind", "organization"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_sibling_order"]), order: stringSchema(["first", "last"]) },
+      ["kind", "order"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["choose_same_level_order"]), order: semanticSameLevelOrderSchema },
+      ["kind", "order"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["confirm_material_effect"]), effect_id: stringSchema() },
+      ["kind", "effect_id"]
+    ),
+    objectSchema(
+      { kind: stringSchema(["go_back"]), target_page_id: stringSchema() },
+      ["kind", "target_page_id"]
     )
   ]
 };
 
-const guidedAdditionActionSchema: JsonSchema = {
-  oneOf: [
-    objectSchema({ kind: stringSchema(["set_filter"]), filter: guidedFilterSchema }, ["kind", "filter"]),
-    objectSchema(
-      { kind: stringSchema(["choose_operation"]), selection: guidedOperationSelectionSchema },
-      ["kind", "selection"]
+const guidedAdditionStateSchema = objectSchema(
+  {
+    kind: stringSchema(["sdd-guided-addition-state"]),
+    workflow_version: stringSchema(["1.0"]),
+    document_context: objectSchema(
+      {
+        document_ref: stringSchema(),
+        revision: stringSchema(),
+        bundle_fingerprint: stringSchema()
+      },
+      ["document_ref", "revision", "bundle_fingerprint"]
     ),
-    objectSchema(
-      { kind: stringSchema(["choose_node_type"]), node_type: stringSchema() },
-      ["kind", "node_type"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["choose_relationship"]), choice_id: stringSchema() },
-      ["kind", "choice_id"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["choose_existing_endpoint"]), node: guidedExistingNodeRefSchema },
-      ["kind", "node"]
-    ),
-    objectSchema({ kind: stringSchema(["create_new_endpoint"]) }, ["kind"]),
-    objectSchema(
-      { kind: stringSchema(["set_new_node_fields"]), fields: guidedNodeFieldValuesSchema },
-      ["kind", "fields"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["set_edge_fields"]), fields: guidedEdgeFieldValuesSchema },
-      ["kind", "fields"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["select_placement"]), selection: placementSelectionSchema },
-      ["kind", "selection"]
-    ),
-    objectSchema(
-      { kind: stringSchema(["confirm_effect"]), effect: confirmedProposalEffectSchema },
-      ["kind", "effect"]
-    ),
-    objectSchema({ kind: stringSchema(["complete"]) }, ["kind"])
-  ]
-};
+    anchor: guidedExistingNodeRefSchema,
+    browse_filters: objectSchema({}, [], objectSchema({ diagram_id: { type: ["string", "null"] } }, ["diagram_id"])),
+    progress: objectSchema({ kind: stringSchema() }, ["kind"], true),
+    accepted_material_effects: arraySchema(materialEffectSchema)
+  },
+  ["kind", "workflow_version", "document_context", "browse_filters", "progress", "accepted_material_effects"]
+);
+
+const guidedFieldDefinitionSchema = objectSchema(
+  {
+    field_id: stringSchema(),
+    label: stringSchema(),
+    description: stringSchema(),
+    required: booleanSchema(),
+    prominence: stringSchema(["primary", "advanced"]),
+    value_kind: stringSchema(["quoted_string", "bare_value"]),
+    suggested_raw_value: stringSchema(),
+    allowed_values: stringArraySchema
+  },
+  ["field_id", "label", "required", "prominence", "value_kind"]
+);
+
+const guidedPageContentSchema = objectSchema(
+  { title: stringSchema(), prompt: stringSchema(), lines: stringArraySchema },
+  ["title", "lines"]
+);
+
+const guidedChoiceSchema = objectSchema(
+  {
+    choice_id: stringSchema(),
+    display: stringSchema(),
+    description: stringSchema(),
+    chosen: stringSchema(),
+    recommended: booleanSchema(),
+    action: guidedAdditionActionSchema
+  },
+  ["choice_id", "display", "chosen", "recommended", "action"]
+);
+
+const guidedChoicePageSchema = objectSchema(
+  {
+    page_id: stringSchema(),
+    page_kind: stringSchema([
+      "choose_addition_kind", "browse_starting_node", "choose_relationship_route", "browse_standalone_node_type",
+      "browse_relationship_combination", "browse_relationship_endpoint", "browse_existing_endpoint",
+      "choose_relationship_for_endpoint", "choose_node_detail_disclosure", "choose_relationship_detail_disclosure",
+      "choose_new_target_organization", "choose_existing_target_organization", "choose_new_source_organization",
+      "choose_sibling_order", "choose_same_level_order", "confirm_material_effect", "browse_diagram_filter"
+    ]),
+    content: guidedPageContentSchema,
+    choices: arraySchema(guidedChoiceSchema)
+  },
+  ["page_id", "page_kind", "content", "choices"]
+);
+
+const guidedFormPageSchema = objectSchema(
+  {
+    page_id: stringSchema(),
+    page_kind: stringSchema(["edit_new_node", "edit_relationship_details"]),
+    content: guidedPageContentSchema,
+    fields: arraySchema(guidedFieldDefinitionSchema),
+    submit_action: guidedAdditionActionSchema
+  },
+  ["page_id", "page_kind", "content", "fields", "submit_action"]
+);
 
 const guidedAdditionResultSchema: JsonSchema = {
   oneOf: [
     objectSchema(
       {
         kind: stringSchema(["sdd-guided-addition-step"]),
+        api_version: stringSchema(["1.0"]),
         state: guidedAdditionStateSchema,
-        step: guidedStepSchema,
+        page: { oneOf: [guidedChoicePageSchema, guidedFormPageSchema] },
         diagnostics: arraySchema(diagnosticSchema)
       },
-      ["kind", "state", "step", "diagnostics"]
+      ["kind", "api_version", "state", "page", "diagnostics"]
     ),
     objectSchema(
       {
         kind: stringSchema(["sdd-guided-addition-complete"]),
+        api_version: stringSchema(["1.0"]),
         state: guidedAdditionStateSchema,
         proposal: completedAdditionProposalSchema,
+        review: objectSchema(
+          { title: stringSchema(["Review proposed addition"]), lines: stringArraySchema },
+          ["title", "lines"]
+        ),
         diagnostics: arraySchema(diagnosticSchema)
       },
-      ["kind", "state", "proposal", "diagnostics"]
+      ["kind", "api_version", "state", "proposal", "review", "diagnostics"]
     )
   ]
 };
@@ -1473,7 +1342,8 @@ const applyAdditionProposalArgsSchema = objectSchema(
     proposal: completedAdditionProposalSchema,
     mode: stringSchema(["dry_run", "commit"]),
     validate_profile: stringSchema(),
-    projection_views: stringArraySchema
+    projection_views: stringArraySchema,
+    accepted_warning_token: stringSchema()
   },
   ["proposal"]
 );
@@ -1488,7 +1358,15 @@ const applyAdditionProposalResultSchema = objectSchema(
     status: stringSchema(["applied", "rejected"]),
     change_set: changeSetResultSchema,
     created_targets: arraySchema(createdTargetSchema),
-    diagnostics: arraySchema(diagnosticSchema)
+    diagnostics: arraySchema(diagnosticSchema),
+    warning_review: objectSchema(
+      {
+        title: stringSchema(["Warning"]),
+        lines: stringArraySchema,
+        acceptance_token: stringSchema()
+      },
+      ["title", "lines", "acceptance_token"]
+    )
   },
   ["kind", "proposal", "base_revision", "mode", "status", "change_set", "created_targets", "diagnostics"]
 );
@@ -1539,7 +1417,9 @@ const contractConstraintSpecSchema = objectSchema(
       "same_bundle_fingerprint",
       "currently_offered_opaque_option",
       "exact_confirmation",
-      "proposal_relationship_edge_consistency"
+      "proposal_relationship_edge_consistency",
+      "canonical_proposal_identity",
+      "bound_warning_acceptance"
     ]),
     parameters: anySchema,
     summary: stringSchema()
@@ -1883,7 +1763,7 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
   },
   {
     shape_id: "shared.shape.begin_guided_addition_request",
-    summary: "Optional exact anchor and initial bundle-owned filter for beginning guided addition.",
+    summary: "Versioned v1 Guided Addition request with an optional exact starting-node anchor.",
     schema_format: "json_schema_2020_12",
     schema: beginGuidedAdditionRequestSchema,
     stability: "stable"
@@ -1925,7 +1805,7 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
   },
   {
     shape_id: "shared.shape.completed_addition_proposal",
-    summary: "Completed semantic guided addition proposal with placements and exact confirmations.",
+    summary: "Completed v1 semantic proposal with organization decisions and exact accepted material effects.",
     schema_format: "json_schema_2020_12",
     schema: completedAdditionProposalSchema,
     stability: "stable"
@@ -2437,9 +2317,9 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
     parameters: {
       offered_by: "runtime.advance_recomputed_current_step",
       opaque_id_pointers: [
-        "/action/choice_id",
-        "/action/selection/recommendation_id",
-        "/action/effect/effect_id"
+        "/action/browse_id",
+        "/action/effect_id",
+        "/action/target_page_id"
       ]
     },
     summary: "Actions and opaque identifiers must be present in the options recomputed for the exact current step."
@@ -2447,12 +2327,12 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
   {
     constraint_id: "shared.constraint.guided_addition.advance.exact_confirmation",
     applies_to_shape_id: "shared.shape.guided_addition_advance_args",
-    applies_to_json_pointers: ["/action/effect", "/state/confirmed_effects/*"],
+    applies_to_json_pointers: ["/action/effect_id", "/state/accepted_material_effects/*"],
     kind: "exact_confirmation",
     parameters: {
-      action_kind: "confirm_effect",
+      action_kind: "confirm_material_effect",
       must_equal: "recomputed_current_effect",
-      confirmed_literal: true
+      accepted_literal: true
     },
     summary: "A confirmation must be the exact current effect bound to revision, bundle, relationship, target, parents, and placement."
   },
@@ -2479,7 +2359,7 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
   {
     constraint_id: "shared.constraint.addition_proposal.apply.exact_confirmation",
     applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
-    applies_to_json_pointers: ["/proposal/confirmed_effects/*"],
+    applies_to_json_pointers: ["/proposal/accepted_material_effects/*"],
     kind: "exact_confirmation",
     parameters: {
       must_equal: "recomputed_required_effects",
@@ -2490,13 +2370,32 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
   {
     constraint_id: "shared.constraint.addition_proposal.apply.relationship_edge_consistency",
     applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
-    applies_to_json_pointers: ["/proposal/relationship", "/proposal/new_edges/0"],
+    applies_to_json_pointers: ["/proposal/addition/relationship"],
     kind: "proposal_relationship_edge_consistency",
     parameters: {
-      equality_fields: ["from", "type", "to"],
-      relationship_absent_requires_empty_new_edges: true
+      equality_fields: ["from", "triple", "to"],
+      relationship_absent_requires_standalone_intent: true
     },
-    summary: "The proposal relationship and authored edge must carry identical canonical endpoints and relationship type."
+    summary: "Relationship proposals must carry one canonical endpoint triple consistent with their intent and organization."
+  },
+  {
+    constraint_id: "shared.constraint.addition_proposal.apply.canonical_identity",
+    applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
+    applies_to_json_pointers: ["/proposal/proposal_id"],
+    kind: "canonical_proposal_identity",
+    parameters: { canonical_input: "proposal_without_proposal_id" },
+    summary: "proposal_id must be the canonical identity of the complete v1 proposal payload."
+  },
+  {
+    constraint_id: "shared.constraint.addition_proposal.apply.bound_warning_acceptance",
+    applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
+    applies_to_json_pointers: ["/accepted_warning_token"],
+    kind: "bound_warning_acceptance",
+    parameters: {
+      required_when: "commit_candidate_has_warnings",
+      binds: ["proposal_id", "document_path", "base_revision", "bundle_fingerprint", "resulting_revision", "sorted_warning_set"]
+    },
+    summary: "A warned commit requires the token returned for the exact proposal, revisions, bundle, result, and warning set."
   }
 ] as const;
 
@@ -2593,26 +2492,6 @@ const BINDINGS: readonly ContractBindingSpec[] = [
     summary: "Undo validate_profile is optional, bundle-owned, and must be resolved from the active bundle profiles list when supplied."
   },
   {
-    binding_id: "shared.binding.guided_addition.begin.view_id",
-    applies_to_shape_id: "shared.shape.guided_addition_begin_args",
-    applies_to_json_pointer: "/request/initial_filter/view_id",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "views_yaml", selector: "views" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "The initial guided view is selected from bundle-defined views."
-  },
-  {
-    binding_id: "shared.binding.guided_addition.begin.display_profile_id",
-    applies_to_shape_id: "shared.shape.guided_addition_begin_args",
-    applies_to_json_pointer: "/request/initial_filter/display_profile_id",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "manifest_profiles", selector: "profiles" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "The initial display profile is selected from bundle-defined profiles and aliases resolved by the domain."
-  },
-  {
     binding_id: "shared.binding.guided_addition.begin.anchor_node_type",
     applies_to_shape_id: "shared.shape.guided_addition_begin_args",
     applies_to_json_pointer: "/request/anchor/node_type",
@@ -2623,44 +2502,14 @@ const BINDINGS: readonly ContractBindingSpec[] = [
     summary: "An exact anchor carries a bundle-defined node type."
   },
   {
-    binding_id: "shared.binding.guided_addition.advance.view_id",
+    binding_id: "shared.binding.guided_addition.advance.action_diagram_id",
     applies_to_shape_id: "shared.shape.guided_addition_advance_args",
-    applies_to_json_pointer: "/state/filter/view_id",
+    applies_to_json_pointer: "/action/diagram_id",
     kind: "bundle_value_set",
     bundle_source: { artifact: "views_yaml", selector: "views" },
     static_behavior: "reference_only",
     bundle_resolved_behavior: "expand_values",
-    summary: "Caller-carried guided state references a bundle-defined view."
-  },
-  {
-    binding_id: "shared.binding.guided_addition.advance.action_view_id",
-    applies_to_shape_id: "shared.shape.guided_addition_advance_args",
-    applies_to_json_pointer: "/action/filter/view_id",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "views_yaml", selector: "views" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "A set_filter action may select only a bundle-defined view."
-  },
-  {
-    binding_id: "shared.binding.guided_addition.advance.display_profile_id",
-    applies_to_shape_id: "shared.shape.guided_addition_advance_args",
-    applies_to_json_pointer: "/state/filter/display_profile_id",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "manifest_profiles", selector: "profiles" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "Caller-carried guided state references a bundle-defined display profile."
-  },
-  {
-    binding_id: "shared.binding.guided_addition.advance.action_display_profile_id",
-    applies_to_shape_id: "shared.shape.guided_addition_advance_args",
-    applies_to_json_pointer: "/action/filter/display_profile_id",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "manifest_profiles", selector: "profiles" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "A set_filter action may select only a bundle-defined display profile."
+    summary: "A diagram-filter action may select only a bundle-defined diagram."
   },
   {
     binding_id: "shared.binding.guided_addition.advance.node_type",
@@ -2673,44 +2522,34 @@ const BINDINGS: readonly ContractBindingSpec[] = [
     summary: "A choose_node_type action references a bundle-defined node type returned by the planner."
   },
   {
-    binding_id: "shared.binding.guided_addition.result.view_id",
-    applies_to_shape_id: "shared.shape.guided_addition_result",
-    applies_to_json_pointer: "/state/filter/view_id",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "views_yaml", selector: "views" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "Guided results retain the currently selected bundle-defined view."
-  },
-  {
     binding_id: "shared.binding.guided_addition.result.display_profile_id",
     applies_to_shape_id: "shared.shape.guided_addition_result",
-    applies_to_json_pointer: "/state/filter/display_profile_id",
+    applies_to_json_pointer: "/proposal/guidance_context/display_profile_id",
     kind: "bundle_value_set",
     bundle_source: { artifact: "manifest_profiles", selector: "profiles" },
     static_behavior: "reference_only",
     bundle_resolved_behavior: "expand_values",
-    summary: "Guided results retain the currently selected bundle-defined display profile."
+    summary: "Completed guided results record the bundle-defined display profile used for guidance."
   },
   {
-    binding_id: "shared.binding.guided_addition.result.node_type",
+    binding_id: "shared.binding.guided_addition.result.diagram_id",
     applies_to_shape_id: "shared.shape.guided_addition_result",
-    applies_to_json_pointer: "/step/options/*/node_type",
-    kind: "bundle_value_set",
-    bundle_source: { artifact: "vocab_node_types", selector: "node_types" },
-    static_behavior: "reference_only",
-    bundle_resolved_behavior: "expand_values",
-    summary: "Node-type and endpoint options returned by the guided domain use bundle-defined node types."
-  },
-  {
-    binding_id: "shared.binding.addition_proposal.apply.view_id",
-    applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
-    applies_to_json_pointer: "/proposal/guidance_context/view_id",
+    applies_to_json_pointer: "/proposal/guidance_context/diagram_filters/*/diagram_id",
     kind: "bundle_value_set",
     bundle_source: { artifact: "views_yaml", selector: "views" },
     static_behavior: "reference_only",
     bundle_resolved_behavior: "expand_values",
-    summary: "Proposal guidance context may reference a bundle-defined view."
+    summary: "Completed guided results record only bundle-defined diagram filters."
+  },
+  {
+    binding_id: "shared.binding.addition_proposal.apply.diagram_id",
+    applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
+    applies_to_json_pointer: "/proposal/guidance_context/diagram_filters/*/diagram_id",
+    kind: "bundle_value_set",
+    bundle_source: { artifact: "views_yaml", selector: "views" },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "Proposal guidance context may reference only bundle-defined diagrams."
   },
   {
     binding_id: "shared.binding.addition_proposal.apply.display_profile_id",
@@ -2725,12 +2564,22 @@ const BINDINGS: readonly ContractBindingSpec[] = [
   {
     binding_id: "shared.binding.addition_proposal.apply.node_type",
     applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
-    applies_to_json_pointer: "/proposal/new_nodes/*/node_type",
+    applies_to_json_pointer: "/proposal/addition/node/node_type",
     kind: "bundle_value_set",
     bundle_source: { artifact: "vocab_node_types", selector: "node_types" },
     static_behavior: "reference_only",
     bundle_resolved_behavior: "expand_values",
-    summary: "Proposed node types are resolved from the active bundle vocabulary."
+    summary: "Standalone proposed node types are resolved from the active bundle vocabulary."
+  },
+  {
+    binding_id: "shared.binding.addition_proposal.apply.relationship_type",
+    applies_to_shape_id: "shared.shape.apply_addition_proposal_args",
+    applies_to_json_pointer: "/proposal/addition/relationship/triple/relationship_type",
+    kind: "bundle_value_set",
+    bundle_source: { artifact: "vocab_relationship_types", selector: "relationship_types" },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "Proposed relationship types are resolved from the active bundle vocabulary."
   },
   {
     binding_id: "shared.binding.addition_proposal.apply.validate_profile",
@@ -2838,11 +2687,12 @@ const CONTINUATIONS: readonly ContractContinuationSpec[] = [
     continuation_id: "shared.continuation.addition_proposal.apply.dry_run_to_commit_same_proposal",
     applies_to_subject_id: "domain.service.addition_proposal.apply",
     kind: "dry_run_to_commit_same_proposal",
-    summary: "After an accepted dry run, commit must reuse the exact same completed proposal under current revision and bundle fingerprint.",
+    summary: "Commit reuses the exact dry-run proposal and, when warned, the acceptance token bound to that exact candidate.",
     parameters: {
       dry_run_mode: "dry_run",
       commit_mode: "commit",
-      proposal_identity: "same_object_or_byte_identical_canonical_value"
+      proposal_identity: "same_object_or_byte_identical_canonical_value",
+      warning_acceptance: "exact_dry_run_warning_token_when_warnings_exist"
     }
   }
 ] as const;

@@ -2,6 +2,7 @@ import { computeBundleFingerprint, type BundleFingerprint } from "../../bundle/f
 import {
   getNodeAuthoringForm,
   getGuidedAdditionDefaultDisplayProfileId,
+  getGuidedEdgeFieldLabel,
   getNodeIdSuggestionInputs,
   getPlacementPolicyInputs,
   getRelationshipAuthoringSemantics,
@@ -56,6 +57,7 @@ export interface GuidanceRelationshipRecord extends AllowedEndpointTriple {
   authoring: RelationshipAuthoringConfig;
   edge_fields: EdgeFieldSupport;
   required_edge_properties: string[];
+  edge_field_labels: Record<string, string>;
 }
 
 export interface GuidanceViewRelationshipRecord extends GuidedViewRelationship {
@@ -249,7 +251,14 @@ export function createGuidanceCatalog(bundle: Bundle): GuidanceCatalog {
       meaning: contract.meaning,
       authoring,
       edge_fields: edgeFields,
-      required_edge_properties: [...requiredProperties]
+      required_edge_properties: [...requiredProperties],
+      edge_field_labels: Object.fromEntries(
+        [...edgeFields.annotations, ...edgeFields.properties].map((field) => {
+          const label = getGuidedEdgeFieldLabel(bundle, field);
+          if (!label) throw new Error(`Missing guided edge field label '${field}'`);
+          return [field, label];
+        })
+      )
     };
   });
   const relationshipByTriple = new Map(relationships.map((relationship) => [endpointTripleKey(relationship), relationship]));

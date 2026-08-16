@@ -697,7 +697,9 @@ export interface ContractConstraintSpec {
     | "same_bundle_fingerprint"
     | "currently_offered_opaque_option"
     | "exact_confirmation"
-    | "proposal_relationship_edge_consistency";
+    | "proposal_relationship_edge_consistency"
+    | "canonical_proposal_identity"
+    | "bound_warning_acceptance";
   parameters: Record<string, unknown>;
   summary: string;
 }

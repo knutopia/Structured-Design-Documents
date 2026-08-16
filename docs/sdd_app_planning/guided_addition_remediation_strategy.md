@@ -2,7 +2,7 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: **Phase 5 — technical acceptance complete; human approval pending**. The [Phase 5 Acceptance Report](./guided_addition_phase_5_acceptance_report.md) records a technical `ACCEPT` decision with human approval still pending. Phase 6 is not authorized.
+Current phase: **Phase 6 — technical acceptance complete; human approval pending**. The [Phase 6 Acceptance Report](./guided_addition_phase_6_acceptance_report.md) records a technical `ACCEPT` decision. Phase 7 is not authorized.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
@@ -379,9 +379,9 @@ Gate:
 
 ### Phase 5 — Repair proposal application and source organization
 
-Status: **TECHNICAL ACCEPT — HUMAN APPROVAL PENDING**.
+Status: **ACCEPTED — implementation and gate approved on 2026-08-15**.
 
-Evidence: the [Phase 5 Acceptance Report](./guided_addition_phase_5_acceptance_report.md) records the native internal v1 executor, semantic organization verification and translation, exact source proofs, dry-run/commit parity, undo, focused **101/101**, and full serial **841/841** verification. This technical result does not authorize Phase 6 without explicit human acceptance.
+Evidence: the accepted [Phase 5 Acceptance Report](./guided_addition_phase_5_acceptance_report.md) records the native internal v1 executor, semantic organization verification and translation, exact source proofs, dry-run/commit parity, undo, focused **101/101**, and full serial **841/841** verification.
 
 Actions:
 
@@ -399,7 +399,9 @@ Gate:
 
 ### Phase 6 — Replace `sdd add` interaction
 
-Status: **NOT AUTHORIZED — awaits human acceptance of Phase 5**.
+Status: **TECHNICAL ACCEPT — HUMAN APPROVAL PENDING**.
+
+Evidence: the [Phase 6 Acceptance Report](./guided_addition_phase_6_acceptance_report.md) records the v1 public cutover, thin CLI delivery, bound warning consent, bundle-owned warning presentation, legacy removal, focused **95/95**, and full serial **794/794** verification. This technical result does not authorize Phase 7 without explicit human acceptance.
 
 Actions:
 
@@ -420,11 +422,13 @@ Gate:
 - cancellation before Save performs no write; Save verifies and commits the reviewed proposal once;
 - a manual usability replay of every proof transcript is accepted before broader release claims.
 
-### Phase 7 — Regenerate metadata and complete the cutover
+### Phase 7 — Regenerate downstream artifacts and document the cutover
+
+Status: **NOT AUTHORIZED — awaits human acceptance of Phase 6**.
 
 Actions:
 
-- regenerate shared contract schemas and metadata from the corrected public API;
+- regenerate downstream and published contract schemas and metadata from the corrected live public API;
 - update explanatory toolchain, CLI, README, and helper documentation;
 - audit all claims that the rejected API is stable, complete, or available;
 - only then consider future helper, MCP, or app adapters.

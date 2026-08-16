@@ -2,12 +2,36 @@ import type { ProfileRule, RuleLogic } from "../../bundle/types.js";
 import type { Diagnostic } from "../../types.js";
 import type { ValueKind } from "../contracts.js";
 import type { GuidanceCatalog, GuidanceNodeTypeRecord, GuidanceRelationshipRecord } from "./catalog.js";
-import type {
-  GuidedDocumentSnapshot,
-  GuidedEdgeFieldValues,
-  GuidedFieldDefinition,
-  GuidedNodeFieldValues
-} from "./contracts.js";
+import type { GuidedDocumentSnapshot } from "./sharedContracts.js";
+
+export interface GuidedFieldDefinition {
+  field_id: string;
+  source: "node_id" | "name" | "node_property" | "edge_event" | "edge_guard" | "edge_effect" | "edge_property";
+  property?: string;
+  label?: string;
+  description?: string;
+  input_hint?: string;
+  value_kind: ValueKind;
+  required: boolean;
+  prominence: "primary" | "advanced";
+  format: "sdd_node_id" | "non_empty_text" | "free_text" | "enum" | "pattern" | "node_reference";
+  allowed_values?: string[];
+  pattern?: string;
+  allowed_target_types?: string[];
+}
+
+export interface GuidedNodeFieldValues {
+  node_id: string;
+  name: string;
+  properties: Array<{ key: string; value_kind: ValueKind; raw_value: string }>;
+}
+
+export interface GuidedEdgeFieldValues {
+  event?: string | null;
+  guard?: string | null;
+  effect?: string | null;
+  props: Record<string, string>;
+}
 
 interface JsonSchemaRecord {
   [key: string]: unknown;

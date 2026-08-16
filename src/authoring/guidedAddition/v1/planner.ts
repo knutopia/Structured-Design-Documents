@@ -515,16 +515,19 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
     const suggested = suggestNodeId(snapshot, record);
     return createNodeFieldDefinitions(this.#catalog, record, this.#catalog.default_display_profile_id)
       .filter((field) => field.prominence === (group === "primary" ? "primary" : "advanced"))
-      .map((field) => ({
+      .map((field) => {
+        const label = field.label ?? field.property ?? field.source;
+        return {
         field_id: field.field_id,
-        label: field.label ?? field.property ?? field.source,
+        label: group === "primary" ? `New node ${label}` : label,
         ...(field.description ? { description: field.description } : {}),
         required: field.required,
         prominence: field.prominence,
         value_kind: field.value_kind,
         ...(field.field_id === "node_id" ? { suggested_raw_value: suggested } : {}),
         ...(field.allowed_values ? { allowed_values: [...field.allowed_values] } : {})
-      }));
+      };
+      });
   }
 
   #nodeFormPage(
@@ -580,9 +583,10 @@ class GuidedAdditionPlannerV1 implements GuidedAdditionRuntimeV1 {
   }
 
   #relationshipFormPage(snapshot: GuidedDocumentSnapshot, draft: RelationshipDraftV1): GuidedFormPageV1 {
-    const fields = createEdgeFieldDefinitions(this.#relationshipRecord(draft)).map((field) => ({
+    const relationship = this.#relationshipRecord(draft);
+    const fields = createEdgeFieldDefinitions(relationship).map((field) => ({
       field_id: field.field_id,
-      label: field.property ? field.property[0].toUpperCase() + field.property.slice(1) : field.source,
+      label: field.property ? relationship.edge_field_labels[field.property]! : field.source,
       required: field.required,
       prominence: field.prominence,
       value_kind: field.value_kind

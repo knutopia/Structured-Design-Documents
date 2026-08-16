@@ -5,8 +5,10 @@ import {
   BundleValidationError,
   collectBundleDiagnostics,
   compileSource,
+  formatGuidedDuplicateEdgeWarning,
   getNodeIdSuggestionInputs,
   getGuidedAdditionDefaultDisplayProfileId,
+  getGuidedEdgeFieldLabel,
   getPlacementPolicyInputs,
   getRelationshipAuthoringSemantics,
   getRelationshipEdgeFieldSupport,
@@ -96,6 +98,36 @@ describe("guided addition bundle contract", () => {
     });
     expectInvalid("bundle.guided_view.default_profile_unresolvable", (cloned) => {
       delete relationshipEntry(cloned, "ia_place_map", "Place", "NAVIGATES_TO", "Place").display_by_profile.simple;
+    });
+  });
+
+  it("types, validates, and consumes bundle-owned duplicate-edge warning wording", () => {
+    expect(formatGuidedDuplicateEdgeWarning(bundle, {
+      source: "P-210: Projects Overview",
+      relationship: "NAVIGATES_TO",
+      target: "P-100: Dashboard"
+    })).toBe("P-210: Projects Overview already has this exact navigation to P-100: Dashboard.");
+    expect(formatGuidedDuplicateEdgeWarning(bundle, {
+      source: "A-100: Source",
+      relationship: "CONTAINS",
+      target: "P-100: Target"
+    })).toBe("A-100: Source already has this exact CONTAINS relationship to P-100: Target.");
+    expect(getGuidedEdgeFieldLabel(bundle, "event")).toBe("Trigger");
+    expect(getGuidedEdgeFieldLabel(bundle, "guard")).toBe("Condition");
+
+    expectInvalid("bundle.authoring.missing_warning_placeholder", (cloned) => {
+      cloned.authoring!.guided_addition.warning_messages.duplicate_edge.default = "Duplicate {source} to {target}.";
+    });
+    expectInvalid("bundle.authoring.invalid_warning_placeholder", (cloned) => {
+      cloned.authoring!.guided_addition.warning_messages.duplicate_edge.by_relationship.NAVIGATES_TO =
+        "{source} duplicates {unknown} to {target}.";
+    });
+    expectInvalid("bundle.authoring.unknown_warning_relationship", (cloned) => {
+      cloned.authoring!.guided_addition.warning_messages.duplicate_edge.by_relationship.UNKNOWN =
+        "{source} duplicates {target}.";
+    });
+    expectInvalid("bundle.authoring.edge_field_label_coverage", (cloned) => {
+      delete cloned.authoring!.guided_addition.edge_field_labels.guard;
     });
   });
 

@@ -48,6 +48,12 @@ export interface ResolvedGuidedRelationshipDisplay {
   rule: GuidedDisplayRule;
 }
 
+export interface GuidedDuplicateEdgeWarningInputs {
+  source: string;
+  relationship: string;
+  target: string;
+}
+
 export class GuidedAdditionUnsupportedBundleError extends Error {
   readonly code = "guided_addition.unsupported_bundle";
 
@@ -74,6 +80,22 @@ export function hasGuidedAdditionSupport(bundle: Bundle): boolean {
 
 export function getGuidedAdditionDefaultDisplayProfileId(bundle: Bundle): string {
   return requireAuthoring(bundle).guided_addition.default_display_profile_id;
+}
+
+export function formatGuidedDuplicateEdgeWarning(
+  bundle: Bundle,
+  inputs: GuidedDuplicateEdgeWarningInputs
+): string {
+  const duplicate = requireAuthoring(bundle).guided_addition.warning_messages.duplicate_edge;
+  const template = duplicate.by_relationship[inputs.relationship] ?? duplicate.default;
+  return template
+    .replaceAll("{source}", inputs.source)
+    .replaceAll("{relationship}", inputs.relationship)
+    .replaceAll("{target}", inputs.target);
+}
+
+export function getGuidedEdgeFieldLabel(bundle: Bundle, field: string): string | undefined {
+  return requireAuthoring(bundle).guided_addition.edge_field_labels[field];
 }
 
 export function listAllowedEndpointTriples(bundle: Bundle): AllowedEndpointTriple[] {

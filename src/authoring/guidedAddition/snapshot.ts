@@ -6,7 +6,7 @@ import { sortDiagnostics } from "../../diagnostics/types.js";
 import type { Diagnostic } from "../../types.js";
 import { inspectDocumentText, type InspectedDocument } from "../inspect.js";
 import type { Handle } from "../contracts.js";
-import { GuidedAdditionDomainError } from "./contracts.js";
+import { GuidedAdditionV1DomainError } from "./v1/contracts.js";
 import type {
   GuidedDocumentSnapshot,
   GuidedDocumentSnapshotInput,
@@ -40,7 +40,7 @@ function authoringDiagnostic(code: string, message: string, file: string): Diagn
 
 function throwUnavailable(file: string, diagnostics: Diagnostic[], message: string): never {
   const code = "guided_addition.document_unavailable";
-  throw new GuidedAdditionDomainError(
+  throw new GuidedAdditionV1DomainError(
     code,
     message,
     sortDiagnostics([...diagnostics, authoringDiagnostic(code, message, file)])
@@ -173,7 +173,7 @@ export function createGuidedDocumentSnapshot(bundle: Bundle, input: GuidedDocume
   if (!hasGuidedAdditionSupport(bundle)) {
     const code = "guided_addition.unsupported_bundle";
     const message = "The loaded bundle does not declare guided authoring metadata";
-    throw new GuidedAdditionDomainError(code, message, [authoringDiagnostic(code, message, file)]);
+    throw new GuidedAdditionV1DomainError(code, message, [authoringDiagnostic(code, message, file)]);
   }
 
   const inspected = inspectDocumentText(bundle, file, input.text);

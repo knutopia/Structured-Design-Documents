@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import type { Bundle } from "../../bundle/types.js";
 import type { AuthoringWorkspace } from "../workspace.js";
-import type { GuidedDocumentSnapshot } from "./contracts.js";
+import type { GuidedDocumentSnapshot } from "./sharedContracts.js";
 import { createGuidedDocumentSnapshot } from "./snapshot.js";
 
 export async function createGuidedDocumentSnapshotFromWorkspace(

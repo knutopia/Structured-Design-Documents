@@ -2,9 +2,9 @@
 
 Phase decision: **ACCEPT**
 
-Human approval: **PENDING**
+Human approval: **ACCEPTED on 2026-08-15**
 
-Phase 5 adds the internal v1.0 proposal executor, translates accepted semantic organization into shared mutations, and repairs the exact source-organization failures assigned to this phase. This technical decision reports implementation evidence; it does not presume human acceptance or authorize Phase 6.
+Phase 5 adds the internal v1.0 proposal executor, translates accepted semantic organization into shared mutations, and repairs the exact source-organization failures assigned to this phase. The report keeps the technical decision distinct from the human approval now recorded above.
 
 ## UX Invariants In Scope
 
@@ -90,4 +90,4 @@ No new bundle field was introduced. Blank definition boundaries are shared sourc
 
 Phase decision: **ACCEPT**
 
-Human approval remains **PENDING**. Phase 6 is not authorized.
+Human approval: **ACCEPTED on 2026-08-15**. Phase 6 planning is authorized; implementation requires an accepted Phase 6 plan.

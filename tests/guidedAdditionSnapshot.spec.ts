@@ -6,7 +6,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import {
   createGuidedDocumentSnapshot,
   createGuidedDocumentSnapshotFromWorkspace,
-  GuidedAdditionDomainError,
+  GuidedAdditionV1DomainError,
   loadBundle
 } from "../src/index.js";
 import type { Bundle } from "../src/bundle/types.js";
@@ -40,14 +40,14 @@ function cloneBundle(): Bundle {
   return structuredClone(bundle) as Bundle;
 }
 
-function captureDomainError(action: () => unknown): GuidedAdditionDomainError {
+function captureDomainError(action: () => unknown): GuidedAdditionV1DomainError {
   try {
     action();
   } catch (error) {
-    expect(error).toBeInstanceOf(GuidedAdditionDomainError);
-    return error as GuidedAdditionDomainError;
+    expect(error).toBeInstanceOf(GuidedAdditionV1DomainError);
+    return error as GuidedAdditionV1DomainError;
   }
-  throw new Error("Expected GuidedAdditionDomainError");
+  throw new Error("Expected GuidedAdditionV1DomainError");
 }
 
 describe("guided document snapshot", () => {
@@ -195,7 +195,8 @@ describe("guided document snapshot", () => {
   it("keeps catalog and snapshot modules free of write-side and client imports", async () => {
     const files = [
       "src/authoring/guidedAddition/catalog.ts",
-      "src/authoring/guidedAddition/contracts.ts",
+      "src/authoring/guidedAddition/sharedContracts.ts",
+      "src/authoring/guidedAddition/v1/contracts.ts",
       "src/authoring/guidedAddition/snapshot.ts"
     ];
     for (const file of files) {

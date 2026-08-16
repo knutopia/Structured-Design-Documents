@@ -226,6 +226,17 @@ describe("Guided Addition v1 scoped filtering", () => {
 
     result = createGuidedAdditionRuntimeV1(bundle).begin(snapshot, { workflow_version: "1.0" });
     result = choose(result, (action) => action.kind === "choose_addition_kind" && action.addition_kind === "relationship");
+    expect(choicePage(result).choices.map((choice) => choice.display)).toEqual([
+      "[Filter nodes by diagram type: All diagram types]",
+      "P-100: Dashboard (Place)",
+      "C-100: Status Card (Component)",
+      "A-200: Projects (Area)",
+      "P-210: Projects Overview (Place)",
+      "P-300: Reports (Place)",
+      "VS-100: Summary (ViewState)",
+      "C-200: Global Navigation (Component)",
+      "O-100: Improve project visibility (Outcome)"
+    ]);
     result = choose(result, (action) => action.kind === "open_diagram_filter");
     result = choose(result, (action) => action.kind === "set_diagram_filter" && action.diagram_id === "ia_place_map");
     expect(choicePage(result).choices.slice(1).map((item) => item.action).every((action) =>
@@ -479,6 +490,49 @@ describe("Guided Addition v1 forms and semantic organization", () => {
 });
 
 describe("Guided Addition v1 route convergence", () => {
+  it("uses exact zero, singular, and plural existing-relationship wording", () => {
+    const original = fs.readFileSync(fixturePath, "utf8");
+    const relationshipLine = '  NAVIGATES_TO P-100 "Dashboard"\n';
+    const sources = [
+      original.replace(relationshipLine, ""),
+      original,
+      original.replace(relationshipLine, relationshipLine.repeat(2))
+    ];
+    const expected = [
+      "P-210: Projects Overview (Place)",
+      "P-210: Projects Overview (Place) — 1 matching relationship already exists",
+      "P-210: Projects Overview (Place) — 2 matching relationships already exist"
+    ];
+    sources.forEach((text, index) => {
+      const localSnapshot = createGuidedDocumentSnapshot(bundle, {
+        document_ref: `plurality-${index}.sdd`,
+        path: `plurality-${index}.sdd`,
+        text
+      });
+      const runtime = createGuidedAdditionRuntimeV1(bundle);
+      const anchorNode = localSnapshot.nodes.find((node) => node.node_id === "P-100")!;
+      let result = runtime.begin(localSnapshot, {
+        workflow_version: "1.0",
+        anchor: {
+          kind: "existing_node",
+          handle: anchorNode.handle,
+          node_id: anchorNode.node_id,
+          node_type: anchorNode.node_type,
+          name: anchorNode.name
+        }
+      });
+      const chooseLocal = (predicate: (action: GuidedAdditionActionV1) => boolean): void => {
+        const selected = choicePage(result).choices.find((choice) => predicate(choice.action))!;
+        result = runtime.advance(localSnapshot, result.state, selected.action);
+      };
+      chooseLocal((action) => action.kind === "choose_relationship_route" &&
+        action.direction === "incoming" && action.selection_order === "relationship_first");
+      chooseLocal((action) => action.kind === "choose_relationship_combination" &&
+        action.triple.from_type === "Place" && action.triple.relationship_type === "NAVIGATES_TO" && action.triple.to_type === "Place");
+      expect(choicePage(result).choices.find((choice) => choice.display.startsWith("P-210:"))?.display).toBe(expected[index]);
+    });
+  });
+
   function completeOutgoingNavigation(selectionOrder: "relationship_first" | "existing_node_first") {
     let result = choose(begin(), route("outgoing", selectionOrder));
     if (selectionOrder === "relationship_first") {

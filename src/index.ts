@@ -8,6 +8,8 @@ export {
 } from "./bundle/fingerprint.js";
 export {
   getNodeAuthoringForm,
+  formatGuidedDuplicateEdgeWarning,
+  getGuidedEdgeFieldLabel,
   getGuidedAdditionDefaultDisplayProfileId,
   getNodeIdSuggestionInputs,
   getPlacementPolicyInputs,
@@ -24,9 +26,9 @@ export {
 export { createGuidanceCatalog, GuidanceCatalog } from "./authoring/guidedAddition/catalog.js";
 export { createGuidedDocumentSnapshot } from "./authoring/guidedAddition/snapshot.js";
 export { createGuidedDocumentSnapshotFromWorkspace } from "./authoring/guidedAddition/snapshotFiles.js";
-export { createGuidedAdditionRuntime } from "./authoring/guidedAddition/planner.js";
-export { applyAdditionProposal } from "./authoring/additionProposals.js";
-export { GuidedAdditionDomainError } from "./authoring/guidedAddition/contracts.js";
+export { createGuidedAdditionRuntimeV1 } from "./authoring/guidedAddition/v1/planner.js";
+export { applyAdditionProposalV1 } from "./authoring/additionProposalsV1.js";
+export { GuidedAdditionV1DomainError } from "./authoring/guidedAddition/v1/contracts.js";
 export {
   createContractIndex,
   getContractSubjectDescriptor,
@@ -54,6 +56,7 @@ export type {
 export type {
   AllowedEndpointTriple,
   EdgeFieldSupport,
+  GuidedDuplicateEdgeWarningInputs,
   GuidedDisplayContext,
   GuidedViewDefinition,
   NodeAuthoringForm,
@@ -69,7 +72,13 @@ export type {
   GuidanceViewRecord,
   GuidanceViewRelationshipRecord
 } from "./authoring/guidedAddition/catalog.js";
-export type * from "./authoring/guidedAddition/contracts.js";
+export type * from "./authoring/guidedAddition/sharedContracts.js";
+export type * from "./authoring/guidedAddition/v1/contracts.js";
+export type {
+  ApplyAdditionProposalV1Args,
+  ApplyAdditionProposalV1Result,
+  GuidedAdditionWarningReviewV1
+} from "./authoring/additionProposalsV1.js";
 export type {
   ChangeOperation,
   ContractBindingId,

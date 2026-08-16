@@ -36,4 +36,26 @@ describe("Guided Addition v1 architecture boundary", () => {
     expect(contracts).not.toMatch(/endpoint_strategy|PlacementSelection|review_proposal|edge_placement|reason_code/);
     expect(contracts).not.toMatch(/kind: "complete"/);
   });
+
+  it("completes the public cutover without legacy workflow files or exports", () => {
+    for (const file of [
+      "src/authoring/additionProposals.ts",
+      "src/authoring/guidedAddition/contracts.ts",
+      "src/authoring/guidedAddition/placement.ts",
+      "src/authoring/guidedAddition/planner.ts"
+    ]) {
+      expect(fs.existsSync(path.join(repoRoot, file)), file).toBe(false);
+    }
+    const index = fs.readFileSync(path.join(repoRoot, "src/index.ts"), "utf8");
+    expect(index).toContain("createGuidedAdditionRuntimeV1");
+    expect(index).toContain("applyAdditionProposalV1");
+    expect(index).toContain("GuidedAdditionV1DomainError");
+    expect(index).not.toMatch(/createGuidedAdditionRuntime[}\s]|applyAdditionProposal[}\s]|GuidedAdditionDomainError/);
+
+    const sources = fs.readdirSync(path.join(repoRoot, "src"), { recursive: true })
+      .filter((file): file is string => typeof file === "string" && file.endsWith(".ts"))
+      .map((file) => fs.readFileSync(path.join(repoRoot, "src", file), "utf8"))
+      .join("\n");
+    expect(sources).not.toMatch(/additionProposals\.js|guidedAddition\/(contracts|placement|planner)\.js/);
+  });
 });

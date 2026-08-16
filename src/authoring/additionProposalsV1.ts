@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { computeBundleFingerprint, stringifyCanonicalJson } from "../bundle/fingerprint.js";
-import { hasGuidedAdditionSupport } from "../bundle/guidedAuthoring.js";
+import { formatGuidedDuplicateEdgeWarning, hasGuidedAdditionSupport } from "../bundle/guidedAuthoring.js";
 import type { Bundle } from "../bundle/types.js";
 import { sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
 import type {
@@ -51,6 +51,13 @@ export interface ApplyAdditionProposalV1Args {
   mode?: ChangeSetMode;
   validate_profile?: ProfileId;
   projection_views?: ViewId[];
+  accepted_warning_token?: string;
+}
+
+export interface GuidedAdditionWarningReviewV1 {
+  title: "Warning";
+  lines: string[];
+  acceptance_token: string;
 }
 
 export interface ApplyAdditionProposalV1Result {
@@ -68,6 +75,7 @@ export interface ApplyAdditionProposalV1Result {
     parent_local_id?: string;
   }>;
   diagnostics: Diagnostic[];
+  warning_review?: GuidedAdditionWarningReviewV1;
 }
 
 interface InternalOperationTarget {
@@ -828,6 +836,59 @@ function diagnosticsFromUnknown(error: unknown): Diagnostic[] | undefined {
   return Array.isArray(diagnostics) ? diagnostics as Diagnostic[] : undefined;
 }
 
+function proposalNodeLabel(proposal: CompletedAdditionProposalV1, ref: NodeRefV1): string {
+  if (ref.kind === "existing_node") return `${ref.node_id}: ${ref.name}`;
+  const node = proposal.addition.kind === "standalone_node"
+    ? proposal.addition.node
+    : proposal.addition.new_node;
+  return node ? `${node.node_id}: ${node.name}` : ref.local_node_id;
+}
+
+function warningIdentity(diagnostic: Diagnostic): Record<string, unknown> {
+  return {
+    stage: diagnostic.stage,
+    code: diagnostic.code,
+    severity: diagnostic.severity,
+    message: diagnostic.message,
+    file: diagnostic.file,
+    span: diagnostic.span ?? null,
+    rule_id: diagnostic.ruleId ?? null,
+    profile_id: diagnostic.profileId ?? null,
+    related_ids: diagnostic.relatedIds ?? []
+  };
+}
+
+function createWarningReview(
+  bundle: Bundle,
+  proposal: CompletedAdditionProposalV1,
+  candidate: Readonly<ChangeSetResult>
+): GuidedAdditionWarningReviewV1 | undefined {
+  const warnings = sortDiagnostics(candidate.diagnostics.filter((item) => item.severity === "warn"));
+  if (warnings.length === 0 || !candidate.resulting_revision) return undefined;
+  const relationship = proposal.addition.kind === "relationship"
+    ? proposal.addition.relationship
+    : undefined;
+  const lines = warnings.map((item) => {
+    if (item.code === "validate.duplicate_edge_detection" && relationship) {
+      return formatGuidedDuplicateEdgeWarning(bundle, {
+        source: proposalNodeLabel(proposal, relationship.from),
+        relationship: relationship.triple.relationship_type,
+        target: proposalNodeLabel(proposal, relationship.to)
+      });
+    }
+    return item.message;
+  });
+  const acceptanceToken = `warning_${createHash("sha256").update(stringifyCanonicalJson({
+    proposal_id: proposal.proposal_id,
+    document_path: proposal.document_context.path ?? proposal.document_context.document_ref,
+    base_revision: proposal.document_context.base_revision,
+    bundle_fingerprint: proposal.document_context.bundle_fingerprint,
+    resulting_revision: candidate.resulting_revision,
+    warnings: warnings.map(warningIdentity)
+  }), "utf8").digest("hex")}`;
+  return { title: "Warning", lines, acceptance_token: acceptanceToken };
+}
+
 export async function applyAdditionProposalV1(
   workspace: AuthoringWorkspace,
   bundle: Bundle,
@@ -890,6 +951,7 @@ export async function applyAdditionProposalV1(
     return rejectedResult(journal, resolved.publicPath, args, verified.diagnostics);
   }
   const mode = args.mode ?? "dry_run";
+  let guardedWarningReview: GuidedAdditionWarningReviewV1 | undefined;
   const executed = await executeChangeOperations(
     workspace,
     bundle,
@@ -900,7 +962,22 @@ export async function applyAdditionProposalV1(
       operations: verified.operations,
       validate_profile: args.validate_profile,
       projection_views: args.projection_views,
-      origin: "apply_addition_proposal"
+      origin: "apply_addition_proposal",
+      ...(mode === "commit"
+        ? {
+            preCommitGuard: (candidate: Readonly<ChangeSetResult>): Diagnostic[] => {
+              guardedWarningReview = createWarningReview(bundle, proposal, candidate);
+              if (!guardedWarningReview || args.accepted_warning_token === guardedWarningReview.acceptance_token) {
+                return [];
+              }
+              return [diagnostic(
+                resolved.publicPath,
+                "guided_addition.warning_acceptance_required",
+                "The exact current warning set must be accepted before this proposal can be committed"
+              )];
+            }
+          }
+        : {})
     },
     journal
   );
@@ -913,6 +990,7 @@ export async function applyAdditionProposalV1(
       ...(target.parent_local_id ? { parent_local_id: target.parent_local_id } : {})
     }] : [];
   });
+  const warningReview = guardedWarningReview ?? createWarningReview(bundle, proposal, executed.changeSet);
   return {
     kind: "sdd-addition-proposal-result",
     proposal,
@@ -922,6 +1000,7 @@ export async function applyAdditionProposalV1(
     status: executed.changeSet.status,
     change_set: executed.changeSet,
     created_targets: createdTargets,
-    diagnostics: sortDiagnostics([...verified.diagnostics, ...executed.changeSet.diagnostics])
+    diagnostics: sortDiagnostics([...verified.diagnostics, ...executed.changeSet.diagnostics]),
+    ...(warningReview ? { warning_review: warningReview } : {})
   };
 }

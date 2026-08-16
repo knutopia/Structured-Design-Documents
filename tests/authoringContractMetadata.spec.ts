@@ -524,6 +524,8 @@ describe("authoring contract metadata", () => {
     );
 
     expect([...kinds].sort()).toEqual([
+      "bound_warning_acceptance",
+      "canonical_proposal_identity",
       "commit_safe_continuation",
       "currently_offered_opaque_option",
       "dry_run_informational_only",

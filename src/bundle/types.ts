@@ -536,6 +536,13 @@ export interface AuthoringConfig {
   version: string;
   guided_addition: {
     default_display_profile_id: string;
+    warning_messages: {
+      duplicate_edge: {
+        default: string;
+        by_relationship: Record<string, string>;
+      };
+    };
+    edge_field_labels: Record<string, string>;
   };
   node_id_suggestions: {
     sequence_policy: "max_numeric_plus_one";

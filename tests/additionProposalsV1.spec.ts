@@ -172,6 +172,26 @@ function existingNavigationProposal(harness: Harness): CompletedAdditionProposal
   return complete(result);
 }
 
+function duplicateIncomingNavigationProposal(
+  harness: Harness,
+  selectionOrder: "relationship_first" | "existing_node_first" = "relationship_first"
+): CompletedAdditionProposalV1 {
+  let result = begin(harness, "P-100");
+  result = choose(harness, result, (action) => action.kind === "choose_relationship_route" &&
+    action.direction === "incoming" && action.selection_order === selectionOrder);
+  if (selectionOrder === "relationship_first") {
+    result = choose(harness, result, (action) => action.kind === "choose_relationship_combination" &&
+      action.triple.from_type === "Place" && action.triple.relationship_type === "NAVIGATES_TO" && action.triple.to_type === "Place");
+    result = choose(harness, result, (action) => action.kind === "choose_existing_endpoint" && action.node.node_id === "P-210");
+  } else {
+    result = choose(harness, result, (action) => action.kind === "choose_existing_endpoint" && action.node.node_id === "P-210");
+    result = choose(harness, result, (action) => action.kind === "choose_relationship_for_endpoint" &&
+      action.triple.relationship_type === "NAVIGATES_TO");
+  }
+  result = declineRelationshipDetails(harness, result);
+  return complete(result);
+}
+
 function structuralNewTargetProposal(harness: Harness, nested: boolean): CompletedAdditionProposalV1 {
   let result = route(harness, nested ? "P-300" : "P-100", "outgoing", "Place", "CONTAINS", "Place");
   result = chooseNewEndpoint(harness, result);
@@ -443,6 +463,101 @@ describe("Guided Addition v1 proposal executor", () => {
       }, fixture, currentBundle);
     }
     expect(positions[0]).not.toBe(positions[1]);
+  });
+
+  it("binds concrete warning acceptance to the exact proposal, bundle, revisions, result, and warning set", async () => {
+    await withTempDocument(async ({ root, documentPath, harness, original }) => {
+      const workspace = createAuthoringWorkspace(root);
+      const proposal = duplicateIncomingNavigationProposal(harness);
+      const dry = await applyAdditionProposalV1(workspace, harness.bundle, { proposal, mode: "dry_run", validate_profile: "simple" });
+      expect(dry.status).toBe("applied");
+      expect(dry.warning_review).toMatchObject({
+        title: "Warning",
+        lines: ["P-210: Projects Overview already has this exact navigation to P-100: Dashboard."]
+      });
+      expect(dry.warning_review?.acceptance_token).toMatch(/^warning_[a-f0-9]{64}$/);
+      expect(await readFile(path.join(root, documentPath), "utf8")).toBe(original);
+
+      for (const accepted_warning_token of [undefined, "warning_forged"] as const) {
+        const rejected = await applyAdditionProposalV1(workspace, harness.bundle, {
+          proposal,
+          mode: "commit",
+          validate_profile: "simple",
+          ...(accepted_warning_token ? { accepted_warning_token } : {})
+        });
+        expect(rejected.status).toBe("rejected");
+        expect(rejected.diagnostics.map((item) => item.code)).toContain("guided_addition.warning_acceptance_required");
+        expect(await readFile(path.join(root, documentPath), "utf8")).toBe(original);
+      }
+
+      const otherProposal = duplicateIncomingNavigationProposal(harness, "existing_node_first");
+      expect(otherProposal.proposal_id).not.toBe(proposal.proposal_id);
+      const replayed = await applyAdditionProposalV1(workspace, harness.bundle, {
+        proposal: otherProposal,
+        mode: "commit",
+        validate_profile: "simple",
+        accepted_warning_token: dry.warning_review!.acceptance_token
+      });
+      expect(replayed.status).toBe("rejected");
+      expect(await readFile(path.join(root, documentPath), "utf8")).toBe(original);
+
+      const committed = await applyAdditionProposalV1(workspace, harness.bundle, {
+        proposal,
+        mode: "commit",
+        validate_profile: "simple",
+        accepted_warning_token: dry.warning_review!.acceptance_token
+      });
+      expect(committed.status).toBe("applied");
+      const committedText = await readFile(path.join(root, documentPath), "utf8");
+      expect(committedText.match(/NAVIGATES_TO P-100 "Dashboard"/g)).toHaveLength(2);
+
+      const staleReplay = await applyAdditionProposalV1(workspace, harness.bundle, {
+        proposal,
+        mode: "commit",
+        validate_profile: "simple",
+        accepted_warning_token: dry.warning_review!.acceptance_token
+      });
+      expect(staleReplay.status).toBe("rejected");
+      expect(staleReplay.diagnostics.map((item) => item.code)).toContain("guided_addition.state_stale");
+      expect(await readFile(path.join(root, documentPath), "utf8")).toBe(committedText);
+    });
+  });
+
+  it("changes warning wording from bundle-only metadata", async () => {
+    let originalToken = "";
+    await withTempDocument(async ({ root, harness }) => {
+      const proposal = duplicateIncomingNavigationProposal(harness);
+      const dry = await applyAdditionProposalV1(createAuthoringWorkspace(root), harness.bundle, {
+        proposal,
+        validate_profile: "simple"
+      });
+      originalToken = dry.warning_review!.acceptance_token;
+    });
+
+    const changed = structuredClone(bundle);
+    changed.authoring!.guided_addition.warning_messages.duplicate_edge.by_relationship.NAVIGATES_TO =
+      "{source} has the bundle-mutated duplicate route to {target}.";
+    await withTempDocument(async ({ root, documentPath, harness, original }) => {
+      const proposal = duplicateIncomingNavigationProposal(harness);
+      const dry = await applyAdditionProposalV1(createAuthoringWorkspace(root), harness.bundle, {
+        proposal,
+        validate_profile: "simple"
+      });
+      expect(dry.warning_review?.lines).toEqual([
+        "P-210: Projects Overview has the bundle-mutated duplicate route to P-100: Dashboard."
+      ]);
+      expect(dry.warning_review?.acceptance_token).not.toBe(originalToken);
+
+      const rejected = await applyAdditionProposalV1(createAuthoringWorkspace(root), harness.bundle, {
+        proposal,
+        mode: "commit",
+        validate_profile: "simple",
+        accepted_warning_token: originalToken
+      });
+      expect(rejected.status).toBe("rejected");
+      expect(rejected.diagnostics.map((item) => item.code)).toContain("guided_addition.warning_acceptance_required");
+      expect(await readFile(path.join(root, documentPath), "utf8")).toBe(original);
+    }, fixture, changed);
   });
 
   it("rejects stale identity, duplicate IDs, forged organization, and invalid canonical IDs", async () => {

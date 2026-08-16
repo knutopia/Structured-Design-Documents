@@ -281,7 +281,7 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     add("bundle.authoring.artifact_shape", "Authoring artifact must contain only the declared v0.1 sections");
   }
   const guidedAddition = record(authoring.guided_addition);
-  if (!guidedAddition || !sameStringSet(Object.keys(guidedAddition), ["default_display_profile_id"])) {
+  if (!guidedAddition || !sameStringSet(Object.keys(guidedAddition), ["default_display_profile_id", "warning_messages", "edge_field_labels"])) {
     add("bundle.authoring.guided_addition_shape", "guided_addition has unexpected or missing fields");
   }
   const defaultDisplayProfileId = typeof guidedAddition?.default_display_profile_id === "string"
@@ -292,6 +292,70 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
       "bundle.authoring.unknown_default_display_profile",
       `Guided Addition default display profile '${defaultDisplayProfileId}' is not declared by the bundle`
     );
+  }
+  const warningMessages = record(guidedAddition?.warning_messages);
+  const duplicateEdge = record(warningMessages?.duplicate_edge);
+  const duplicateDefault = duplicateEdge?.default;
+  const duplicateOverrides = record(duplicateEdge?.by_relationship);
+  if (!warningMessages || !sameStringSet(Object.keys(warningMessages), ["duplicate_edge"])) {
+    add("bundle.authoring.warning_messages_shape", "guided_addition.warning_messages must contain only duplicate_edge");
+  }
+  if (!duplicateEdge || !sameStringSet(Object.keys(duplicateEdge), ["default", "by_relationship"])) {
+    add("bundle.authoring.duplicate_edge_warning_shape", "duplicate_edge warning metadata has unexpected or missing fields");
+  }
+  const validateWarningTemplate = (
+    value: unknown,
+    label: string,
+    requiredPlaceholders: string[]
+  ): void => {
+    if (typeof value !== "string" || value.trim().length === 0) {
+      add("bundle.authoring.invalid_warning_template", `${label} must be a non-empty string`);
+      return;
+    }
+    const placeholders = [...value.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]!);
+    const allowed = new Set(["source", "relationship", "target"]);
+    const unmatchedBraces = value.replaceAll(/\{[^{}]+\}/g, "").includes("{") ||
+      value.replaceAll(/\{[^{}]+\}/g, "").includes("}");
+    if (unmatchedBraces || placeholders.some((placeholder) => !allowed.has(placeholder))) {
+      add("bundle.authoring.invalid_warning_placeholder", `${label} contains an unsupported placeholder`);
+    }
+    for (const placeholder of requiredPlaceholders) {
+      if (!placeholders.includes(placeholder)) {
+        add("bundle.authoring.missing_warning_placeholder", `${label} must contain {${placeholder}}`);
+      }
+    }
+  };
+  validateWarningTemplate(duplicateDefault, "The default duplicate-edge warning", ["source", "relationship", "target"]);
+  if (!duplicateOverrides) {
+    add("bundle.authoring.duplicate_edge_warning_overrides", "duplicate_edge.by_relationship must be an object");
+  } else {
+    const relationshipTypes = new Set(bundle.contracts.relationships.map((relationship) => relationship.type));
+    for (const [relationshipType, template] of Object.entries(duplicateOverrides)) {
+      if (!relationshipTypes.has(relationshipType)) {
+        add("bundle.authoring.unknown_warning_relationship", `Duplicate-edge warning references unknown relationship '${relationshipType}'`);
+      }
+      validateWarningTemplate(template, `Duplicate-edge warning for '${relationshipType}'`, ["source", "target"]);
+    }
+  }
+  const edgeFieldLabels = record(guidedAddition?.edge_field_labels);
+  const expectedEdgeFields = new Set<string>();
+  for (const relationship of bundle.contracts.relationships) {
+    for (const constraint of relationship.constraints) {
+      const logic = constraint.rule_logic;
+      if (logic?.kind === "edge_field_support") {
+        (strings(logic.annotations) ?? []).forEach((value) => expectedEdgeFields.add(value));
+        (strings(logic.properties) ?? []).forEach((value) => expectedEdgeFields.add(value));
+      }
+    }
+  }
+  if (!edgeFieldLabels || !sameStringSet(Object.keys(edgeFieldLabels), [...expectedEdgeFields])) {
+    add("bundle.authoring.edge_field_label_coverage", "guided_addition.edge_field_labels must cover every supported edge field exactly");
+  } else {
+    for (const [field, label] of Object.entries(edgeFieldLabels)) {
+      if (typeof label !== "string" || label.trim().length === 0) {
+        add("bundle.authoring.invalid_edge_field_label", `Guided edge field '${field}' must have a non-empty label`);
+      }
+    }
   }
   if (
     !sameStringSet(Object.keys(authoring.node_id_suggestions), ["sequence_policy", "minimum_digits", "prefix_by_type"])

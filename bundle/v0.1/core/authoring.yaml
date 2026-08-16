@@ -2,6 +2,16 @@ version: "0.1"
 
 guided_addition:
   default_display_profile_id: simple
+  warning_messages:
+    duplicate_edge:
+      default: "{source} already has this exact {relationship} relationship to {target}."
+      by_relationship:
+        NAVIGATES_TO: "{source} already has this exact navigation to {target}."
+  edge_field_labels:
+    event: Trigger
+    guard: Condition
+    effect: Effect
+    field: Field
 
 node_id_suggestions:
   sequence_policy: max_numeric_plus_one

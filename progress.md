@@ -24,6 +24,7 @@ z
 
 - Phase 4 done with issues
 - Phase 5 done
+- Phase 6 done
 
 ## Fri 8-14
 

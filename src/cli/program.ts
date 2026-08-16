@@ -1,8 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError } from "commander";
-import { applyAdditionProposal } from "../authoring/additionProposals.js";
-import { createGuidedAdditionRuntime } from "../authoring/guidedAddition/planner.js";
+import { applyAdditionProposalV1 } from "../authoring/additionProposalsV1.js";
+import { createGuidedAdditionRuntimeV1 } from "../authoring/guidedAddition/v1/planner.js";
 import { createGuidedDocumentSnapshot } from "../authoring/guidedAddition/snapshot.js";
 import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/workspace.js";
 import { loadBundle } from "../bundle/loadBundle.js";
@@ -106,8 +106,8 @@ function createDefaultDeps(): CliDeps {
     findAuthoringRepoRoot,
     createAuthoringWorkspace,
     createGuidedDocumentSnapshot,
-    createGuidedAdditionRuntime,
-    applyAdditionProposal,
+    createGuidedAdditionRuntimeV1,
+    applyAdditionProposalV1,
     createGuidedPrompt: createReadlineGuidedPrompt,
     compileSource,
     validateGraph,
@@ -630,11 +630,10 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Guide a semantic addition, review a dry run, and Save or Cancel without constructing source text in the CLI.")
     .argument("<document_path>", "repo-owned source .sdd file")
     .option("--node <node_id>", "exact anchor node id")
-    .option("--view <view_id>", "bundle-defined view used to order and filter guidance")
     .option("--bundle <manifest>", "bundle manifest path")
     .addHelpText("after", examplesBlock([
       "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001 --view outcome_opportunity_map"
+      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001"
     ]))
     .action(async (documentPath, options) => {
       setExitCode(await runGuidedAdditionCommand(deps, documentPath, options));

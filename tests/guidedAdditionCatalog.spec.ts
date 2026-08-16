@@ -186,6 +186,7 @@ describe("guided addition catalog", () => {
     const relationship = cloned.contracts.relationships.find((candidate) => candidate.type === "BINDS_TO")!;
     const support = relationship.constraints.find((rule) => rule.rule_logic?.kind === "edge_field_support")!.rule_logic!;
     support.properties = ["field", "format"];
+    cloned.authoring!.guided_addition.edge_field_labels.format = "Format";
     const required = relationship.constraints.find((rule) => rule.rule_logic?.kind === "required_edge_property")!.rule_logic!;
     required.property = "format";
 
