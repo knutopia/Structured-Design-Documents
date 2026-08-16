@@ -34,6 +34,7 @@ z
 - User-settable defaults implementation plan
 - Stage 0 done
 - Stage 1 done
+- Edited CLI tools page
 
 ## Sat 8-15
 

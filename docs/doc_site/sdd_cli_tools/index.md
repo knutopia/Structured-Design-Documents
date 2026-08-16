@@ -57,14 +57,15 @@ For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.m
 
 ## Public Commands At A Glance
 
-This page focuses on the four public subcommands most people need:
+Four most relevant subcommands:
 
-- `sdd add <document_path>`
-- `sdd show <input> --view <view>`
-- `sdd validate <input>`
-- `sdd compile <input>`
+- `sdd add <document_path>`: add nodes, relationships to an SDD
+- `sdd show <input> --view <view>`: create a diagram
+- `sdd validate <input>`: check that the SDD is self-consistent
+- `sdd compile <input>`: create json from an SDD
 
-If you only remember one command from this page, make it `sdd show`.
+To edit an SDD without getting an LLM incvolved, remember `sdd add`.
+To make diagrams from SDD, remember `sdd show`.
 
 ## Command Reference
 
