@@ -31,6 +31,7 @@ z
 - Marked guided addition api as done
 - Clarified a strict example
 - User-settable defaults architecture
+- User-settable defaults implementation plan
 
 ## Sat 8-15
 
