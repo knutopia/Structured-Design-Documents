@@ -26,6 +26,7 @@ z
 
 - Added new-document support
 - Updated usage guidance to emphasize sdd-add
+- Examined making simple profile the default
 
 ## Sat 8-15
 
