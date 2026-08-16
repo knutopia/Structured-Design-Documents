@@ -16,7 +16,7 @@ If you want a visual result quickly, start with the next section and use the com
 
 ## Fastest Path To A Result
 
-For most people, `sdd show` is the right first command. It compiles the document, validates it, and generates a preview artifact for a chosen view.
+For most people, `sdd show` is the right first command. It compiles an SDD document, validates it, and generates a preview artifact for a chosen view.
 
 Start with the `simple` profile. The CLI default is `strict`, but `simple` is the better starting point for early work because it is lower-noise and better suited to drafting.
 
@@ -70,11 +70,13 @@ If you only remember one command from this page, make it `sdd show`.
 
 ### `sdd add`
 
-- Purpose: interactively add content to an SDD file. Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
+- Purpose: interactively add content to an SDD file.  Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
 - Use when: you want to create SDD content in a simple way, without writing source code from scratch.
 - Invocation: `pnpm sdd add <document_path>`
 - Common options: `--node <node_id>` supplies an exact starting-node anchor, and `--bundle <manifest>` selects a different bundle.
 - Output: guided choices, a plain-language review, and one Save or Cancel decision.
+
+`sdd add` will ask you what you want to add and where, presenting only correct choices.
 
 Without `--node`, the command offers a standalone node and, when the document contains nodes, a relationship. Choosing a relationship opens a starting-node browser; `--node` skips that browser by supplying the exact anchor. From a known starting node, outgoing and incoming relationships each support choosing the relationship type first or choosing an existing connected node first. Each choice constrains the next list.
 

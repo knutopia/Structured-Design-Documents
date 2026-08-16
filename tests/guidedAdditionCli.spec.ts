@@ -88,7 +88,9 @@ async function run(
       ...overrides
     }
   );
-  return { exitCode: result.exitCode, transcript: prompt.output.join(""), stderr: stderr.join("") };
+  const transcript = prompt.output.join("");
+  expect(transcript).not.toMatch(/Choose a number:\n  1\./);
+  return { exitCode: result.exitCode, transcript, stderr: stderr.join("") };
 }
 
 function standaloneRules(finalDecision: "Save" | "Cancel"): SelectionRule[] {
@@ -118,6 +120,7 @@ describe("sdd add v1 transcript delivery", () => {
     expect(result.exitCode, result.stderr).toBe(0);
     expect(applications.map((args) => args.mode)).toEqual(["dry_run", "commit"]);
     expect(applications.every((args) => args.accepted_warning_token === undefined)).toBe(true);
+    expect(result.transcript).toMatch(/^What would you like to add\?\n  1\. Add a standalone node\n  2\. Add a relationship\nChoose a number: 1\nChosen: Add a standalone node\n\n/);
     expect(result.transcript.slice(result.transcript.indexOf("Review proposed addition"))).toBe(
       `Review proposed addition
   Add Place P-301: Settings

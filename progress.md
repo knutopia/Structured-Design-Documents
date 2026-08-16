@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-Make "simple" the CLI default
+-Update CLI "easy start" paragraph with sdd add
 -fix stale require_event_id_in_recommended in contracts.yaml
 -fix hidden "Component CONTAINS Component" in ui_contracts
 -feature: "render a diagram from a starting node"
@@ -26,7 +28,7 @@ z
 - Phase 5 done
 - Phase 6 done
 - Phase 7 done - remediation completed
-
+- fixed duplicate prompt
 ## Fri 8-14
 
 - Phase 3 done, architecture

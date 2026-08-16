@@ -98,6 +98,10 @@ function declineRelationshipDetails(result: GuidedAdditionResultV1): GuidedAddit
 }
 
 describe("Guided Addition v1 route identity and constraint propagation", () => {
+  it("reserves page prompts for semantic questions", () => {
+    expect(choicePage(begin(), "choose_relationship_route").content.prompt).toBeUndefined();
+  });
+
   it("preserves four distinct route-first pages", () => {
     const expected = [
       ["outgoing", "relationship_first", "browse_relationship_combination"],
@@ -310,6 +314,7 @@ describe("Guided Addition v1 forms and semantic organization", () => {
     result = choose(result, (action) => action.kind === "set_node_detail_disclosure" && !action.disclose);
     result = choose(result, (action) => action.kind === "choose_new_source_organization" && action.organization === "wrap_target");
     const confirmation = choicePage(result, "confirm_material_effect");
+    expect(confirmation.content.prompt).toBe("Move this node?");
     expect(confirmation.content.lines).toEqual([
       "From top level",
       "To within A-201: Dashboard Workspace, as its only child",

@@ -125,12 +125,12 @@ function choicePage(
   kind: GuidedChoicePageKindV1,
   title: string,
   choices: GuidedChoiceV1[],
-  prompt = "Choose a number:"
+  prompt?: string
 ): GuidedChoicePageV1 {
   return {
     page_id: `guided-v1:${kind}`,
     page_kind: kind,
-    content: { title, prompt, lines: [] },
+    content: { title, ...(prompt !== undefined ? { prompt } : {}), lines: [] },
     choices
   };
 }

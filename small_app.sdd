@@ -21,6 +21,7 @@ Place P-100 "Dashboard"
     description="What needs to be done"
   END
   NAVIGATES_TO P-311 "superPlaceNode"
+  NAVIGATES_TO P-313 "Special Place"
 END
 
 Area A-200 "Current Projects"
@@ -28,6 +29,7 @@ Area A-200 "Current Projects"
   CONTAINS P-210 "Projects Overview"
   CONTAINS P-220 "Project Detail"
   CONTAINS P-230 "Create New Project"
+
   + Place P-210 "Projects Overview"
     description="Selectable list of projects with contextual actions"
     primary_nav=true
@@ -93,6 +95,11 @@ Area A-200 "Current Projects"
     description="So special, really"
   END
   CONTAINS P-312 "Special Projects"
+  CONTAINS P-313 "Special Place"
+
+  + Place P-313 "Special Place"
+    description="It is very special indeed"
+  END
 END
 
 Area A-300 "Vault"
