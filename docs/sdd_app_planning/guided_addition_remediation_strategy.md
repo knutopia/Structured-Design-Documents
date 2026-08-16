@@ -2,11 +2,11 @@
 
 Status: remediation authority for the failed Guided Addition milestone
 
-Current phase: **Phase 6 — technical acceptance complete; human approval pending**. The [Phase 6 Acceptance Report](./guided_addition_phase_6_acceptance_report.md) records a technical `ACCEPT` decision. Phase 7 is not authorized.
+Current status: **REMEDIATION COMPLETE — Phase 7 accepted on 2026-08-15**. The accepted [Phase 7 Acceptance Report](./guided_addition_phase_7_acceptance_report.md) records the technical and human `ACCEPT` decisions. Deployment, publication, release, and adapter work remain unauthorized.
 
 Purpose: record why the initial implementation failed, identify what can be salvaged, and define an acceptance-gated path to a UX-brief-conformant Guided Addition API and `sdd add` client.
 
-This strategy authorizes work only within the active accepted phase. Corrective API architecture and later implementation remain gated by the phase sequence below.
+This strategy gated corrective architecture and implementation through the phase sequence below. Technical and human closeout are complete. Any future adapter, deployment, publication, merge, or release work requires separate authorization.
 
 ## 1. Authority And Evidence
 
@@ -246,11 +246,11 @@ The corrected contract must distinguish at least:
 - sibling order within the already chosen organization;
 - internal edge-line insertion owned by authoring machinery.
 
-The client must never infer that `body` means nesting or that `last` means after all kinds of body content. The proposal may contain exact low-level placement data for the executor, but the guided step must communicate the semantic decision.
+The client must never infer that `body` means nesting or that `last` means after all kinds of body content. The proposal carries semantic node organization and accepted material effects, not low-level relationship-line placement; the executor translates verified semantics privately.
 
-### 5.6 Recommended defaults need not become prompts
+### 5.6 One-outcome continuations do not become prompts
 
-The API may return a recommended placement with alternatives. The client may accept a safe default without creating a user prompt when the choice is not meaningful in the current context. Explicit user choice is required for moving an existing node and for any other material effect identified by the accepted UX.
+When only one valid continuation exists, the workflow advances without displaying a no-op choice. Explicit user choice remains required for moving an existing node and for any other material effect identified by the accepted UX.
 
 ## 6. Remediation Sequence And Gates
 
@@ -258,14 +258,14 @@ Only one phase may be active at a time. A green technical suite cannot advance a
 
 ### Phase 0 — Contain the failed milestone
 
-Status: **ACCEPT — contained by branch isolation**. The broader public-documentation audit is deferred to Phase 7 before cutover.
+Status: **ACCEPT — containment and cutover audit complete**. Branch isolation contained the failed milestone, and Phase 7 corrected and audited the current public documentation before remediation closeout.
 
-Actions:
+Actions completed:
 
-- mark the architecture rejected and the implementation plan failed;
-- treat the current Guided Addition domain metadata as unstable;
-- do not add helper, MCP, app, or other adapters over the rejected workflow;
-- do not describe `sdd add` as ready or usable in project documentation.
+- marked the architecture rejected and the implementation plan failed;
+- treated the rejected Guided Addition domain metadata as unstable until its v1 replacement;
+- added no helper, MCP, app, or other adapter over the rejected workflow;
+- withheld ready or usable `sdd add` claims until the Phase 7 documentation audit.
 
 Gate:
 
@@ -399,9 +399,9 @@ Gate:
 
 ### Phase 6 — Replace `sdd add` interaction
 
-Status: **TECHNICAL ACCEPT — HUMAN APPROVAL PENDING**.
+Status: **ACCEPTED — implementation and gate approved on 2026-08-15**.
 
-Evidence: the [Phase 6 Acceptance Report](./guided_addition_phase_6_acceptance_report.md) records the v1 public cutover, thin CLI delivery, bound warning consent, bundle-owned warning presentation, legacy removal, focused **95/95**, and full serial **794/794** verification. This technical result does not authorize Phase 7 without explicit human acceptance.
+Evidence: the accepted [Phase 6 Acceptance Report](./guided_addition_phase_6_acceptance_report.md) records the v1 public cutover, thin CLI delivery, bound warning consent, bundle-owned warning presentation, legacy removal, focused **95/95**, and full serial **794/794** verification.
 
 Actions:
 
@@ -424,7 +424,9 @@ Gate:
 
 ### Phase 7 — Regenerate downstream artifacts and document the cutover
 
-Status: **NOT AUTHORIZED — awaits human acceptance of Phase 6**.
+Status: **ACCEPTED — implementation and gate approved on 2026-08-15**.
+
+Evidence: the accepted [Phase 7 Acceptance Report](./guided_addition_phase_7_acceptance_report.md) records corrected public and maintainer documentation, serialized static and bundle-resolved v1 metadata, emitted declaration checks, focused **183/183**, VitePress build, and full serial **799/799** verification. No checked-in metadata cache, adapter, deployment, publication, merge, or release was added.
 
 Actions:
 

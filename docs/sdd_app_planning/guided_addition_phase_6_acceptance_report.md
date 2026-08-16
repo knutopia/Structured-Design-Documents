@@ -2,11 +2,11 @@
 
 Phase decision: **ACCEPT**
 
-Human approval: **PENDING**
+Human approval: **ACCEPTED on 2026-08-15**
 
 Phase 6 replaces the rejected `sdd add` workflow with the accepted Guided Addition v1 runtime and executor. The CLI is now a thin renderer of API-supplied interaction content, warned writes require proposal-bound consent, the public package and live contract index describe v1, and the legacy workflow has been removed.
 
-This is a technical acceptance decision. It does not presume human approval or authorize Phase 7.
+This report records the technical decision separately from the human approval now recorded above.
 
 ## UX Invariants In Scope
 
@@ -108,14 +108,13 @@ Violated: **none within the Phase 6 gate**.
 
 ## Residual Risks And Boundary
 
-- Human replay and approval of the Phase 6 interaction remain pending.
 - Public explanatory documentation and downstream generated/published metadata still describe the pre-cutover release until Phase 7 updates them.
 - The bundle currently supplies a relationship-specific duplicate warning only for `NAVIGATES_TO`; the required generic template covers all other relationship types.
 - The terminal adapter is intentionally line-oriented. Other future clients must render the same v1 content contract rather than infer semantics from it.
-- Phase 7 is not authorized by this technical decision.
+- Phase 7 is authorized only through its separately accepted implementation plan.
 
 ## Decision
 
 Phase decision: **ACCEPT**
 
-Human approval: **PENDING**. Phase 7 remains unauthorized until Phase 6 is explicitly accepted.
+Human approval: **ACCEPTED on 2026-08-15**. Phase 7 is authorized through its accepted implementation plan.

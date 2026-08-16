@@ -170,6 +170,25 @@ describe("Guided Addition v1 contract metadata", () => {
     expect(begin.bindings.map((binding) => binding.applies_to_json_pointer).join("\n")).not.toContain("initial_filter");
   });
 
+  it("serializes the published static and bundle-resolved v1 contract surface", () => {
+    const index = createContractIndex();
+    const domainSubjectIds = index.subjects
+      .filter((subject) => subject.surface_kind === "domain_service")
+      .map((subject) => subject.subject_id);
+    const resolved = domainSubjectIds.map((subjectId) =>
+      getBundleResolvedContractSubjectDetail(subjectId, bundle)
+    );
+    const published = JSON.stringify({ index, resolved });
+
+    expect(index.contract_version).toBe("0.1");
+    expect(published).toContain('"workflow_version"');
+    expect(published).toContain('"1.0"');
+    expect(published).toContain("bound_warning_acceptance");
+    expect(published).not.toMatch(
+      /initial_filter|endpoint_strategy|reason_code|recommendation_id|confirmed_effects|choose_operation|set_filter/
+    );
+  });
+
   it("resolves v1 diagram, profile, node, and relationship bindings from a mutated bundle", () => {
     const mutated = structuredClone(bundle);
     mutated.views.views[0]!.id = "mutated_view";

@@ -61,7 +61,8 @@ This probably works with other editors too. The grammar is used for source code 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
 - Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Outcome-Opportunity Map, and Journey Map
-- Interactive `sdd add` guidance for bundle-derived node, relationship, field, and placement choices with explicit Save/Cancel
+- Interactive Guided Addition v1 through `sdd add`
+- sdd-skill for LLM use
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations

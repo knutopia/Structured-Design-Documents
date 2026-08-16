@@ -73,20 +73,22 @@ If you only remember one command from this page, make it `sdd show`.
 - Purpose: interactively add content to an SDD file. Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
 - Use when: you want to create SDD content in a simple way, without writing source code from scratch.
 - Invocation: `pnpm sdd add <document_path>`
-- Common options: `--node <node_id>` anchors a relationship flow, `--view <view_id>` orders and filters guidance using a bundle-defined view, and `--bundle <manifest>` selects a different bundle.
-- Output: a reviewed dry run followed by an explicit Save or Cancel decision.
+- Common options: `--node <node_id>` supplies an exact starting-node anchor, and `--bundle <manifest>` selects a different bundle.
+- Output: guided choices, a plain-language review, and one Save or Cancel decision.
 
-Without `--node`, the command offers a standalone node and, when the document contains nodes, a relationship. Choosing a relationship opens a starting-node browser before the friendly incoming/outgoing routes; `--node` skips that browser by supplying the exact anchor directly. Primary fields appear first; optional advanced fields are disclosed only when requested. Relationship menus explain the bundle-derived role and display behavior for the selected view.
+Without `--node`, the command offers a standalone node and, when the document contains nodes, a relationship. Choosing a relationship opens a starting-node browser; `--node` skips that browser by supplying the exact anchor. From a known starting node, outgoing and incoming relationships each support choosing the relationship type first or choosing an existing connected node first. Each choice constrains the next list.
 
-Save first performs a dry run using `simple` validation. Here `simple` is feedback about the completed candidate, not a restriction on which relationships can be browsed. Errors block saving. Warnings are shown and must be accepted before the final commit prompt. The exact reviewed proposal is then committed; if the document or bundle changed after review, restart the command.
+Applicable node and relationship lists include an option to filter by a human-readable diagram type. You can select a diagram, change it, or return to all diagram types without leaving the current browse step. This filtering happens inside the guided interaction; `sdd add` does not accept a `--view` option. Primary fields appear first, and optional details are offered only when they apply.
 
-Structural additions can recommend moving an existing node under a new parent. That move requires explicit confirmation tied to the reviewed relationship and placement. Refusing it lets you choose a non-reparenting placement when available or Cancel. Cancel exits successfully and writes nothing.
+When a structural relationship could place one node inside another, the command asks the specific nesting question. A new node can instead remain at top level, and an existing node stays where it is unless you explicitly choose and confirm moving it. Relationship-line placement is handled internally rather than presented as a user choice.
+
+At the review, `Cancel` performs no verification and writes nothing. `Save` verifies the unchanged proposal with a dry run. If verification has no warnings, the command commits immediately without a second ordinary confirmation. A concrete warning offers `Save anyway` or `Go back`; `Save anyway` accepts only the exact warning set just reviewed, while `Go back` returns to the unchanged proposal review. If the document, bundle, candidate result, or warning set changed after review, saving is rejected without writing and the command must be restarted.
 
 Examples:
 
 ```bash
 pnpm sdd add docs/doc_site/small_app_example/small_app.sdd
-pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001 --view outcome_opportunity_map
+pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 ```
 
 ### `sdd show`

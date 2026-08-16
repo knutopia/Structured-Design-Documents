@@ -126,15 +126,16 @@ See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slic
 
 - Solid v0.1 SDDT spec bundle
 - Completed initial compile-validate-render pipeline.
-- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, and Outcome-Opportunity Map
+- Completed usable staged SVG renderers for IA / Place Map, UI Contract, Service Blueprint, Scenario Flow, Journey Map and Outcome-Opportunity Map
+- Interactive Guided Addition v1 through `sdd add`
+= sdd-skill available for LLM use
 - sdd-helper app available to assist agentic skills
 
 ### Known Limitations
 
-- Journey Map renderer remains preview-only and is not yet polished staged output.
 - Styling for renderers lives in TypeScript source and should be in CSS files
 - Example corpus is spotty
-- No "simple" non-technical user guidance available yet
+- Guided addition is currently terminal-based; a graphical non-technical authoring interface is not yet available
 
 ### Current Focus
 
@@ -142,7 +143,6 @@ See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slic
 
 ## Planned Additions
 
-- Solve renderers for more diagram types
 - Possibly standalone SDDT file server?
 
 ## License And Contributions

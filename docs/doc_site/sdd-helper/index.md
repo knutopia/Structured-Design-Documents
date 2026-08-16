@@ -38,7 +38,7 @@ pnpm sdd-helper contract helper.command.preview --resolve bundle
 
 `capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
 
-The shared library contract index also contains guided `domain.service.*` metadata for future adapters. This does not add guided helper commands: `capabilities` is unchanged, and `sdd-helper contract` deliberately rejects non-`helper.command.*` subjects. Library callers use the exported contract metadata accessors; any helper or MCP adapter requires separate future work.
+The shared library contract index also contains Guided Addition v1 `domain.service.*` metadata for future adapters. Library callers use the public `createGuidedAdditionRuntimeV1(...)` and `applyAdditionProposalV1(...)` boundary plus the exported static or bundle-resolved contract metadata accessors. This does not add guided helper commands: `capabilities` is unchanged, and `sdd-helper contract` deliberately rejects non-`helper.command.*` subjects. Any helper or MCP adapter requires a separate approved plan.
 
 Use this page when you want the same surface explained in practical terms.
 
@@ -422,7 +422,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 
 - Keep this page aligned with `pnpm sdd-helper capabilities`, `src/cli/helperDiscovery.ts`, `src/cli/helperProgram.ts`, and `src/authoring/contracts.ts`.
 - Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface; keep both aligned to the implemented helper behavior.
-- Keep guided `domain.service.*` metadata library-visible only unless a later approved plan explicitly adds a helper or MCP adapter.
+- Keep Guided Addition v1 `domain.service.*` metadata library-visible only unless a later approved plan explicitly adds a helper or MCP adapter.
 - When behavior changes, update both the machine-readable discovery surface and this human-readable page.
 - Document current implementation limits explicitly. Do not quietly broaden the docs ahead of the implementation.
 - Preserve the distinction between helper-level error behavior and structured domain-level results.
