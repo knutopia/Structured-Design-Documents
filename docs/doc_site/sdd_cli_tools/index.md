@@ -183,18 +183,6 @@ Use `sdd add` with a file name for a new sdd file. The tool will create the empt
 
 ```bash
 pnpm sdd add my_sdd_file.sdd
-
-> sdd-toolchain@0.1.0 sdd /home/projects/sdd
-> node dist/cli/main.js add my_new_design.sdd
-
-Creating new file my_sdd_file.sdd.
-
-Choose a node type
-  1. [Filter nodes by diagram type: All diagram types]
-  2. Outcome — Desired change in user or business reality.
-  3. Metric — Measurement definition for an outcome.
-  4. Opportunity — Evidence-backed problem or leverage point.
-(...)
 ```
 
 ### I Want A Diagram Quickly
