@@ -2,6 +2,9 @@
 
 ## Open Issues
 
+-Journey map needs a title per journey ("lane"?)... scenario flow too
+-Journey map is not integrated with outcome opportunity map
+
 -Make "simple" the CLI default
 -Create sdd-info command about a file
 -Update CLI "easy start" paragraph with sdd add
@@ -22,6 +25,10 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Thu 8-20
+
+- Examined outcome-opportunity map routing issue with open models
 
 ## Sund 8-16
 

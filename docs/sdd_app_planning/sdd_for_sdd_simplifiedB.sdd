@@ -28,7 +28,7 @@ END
 Initiative I-010 "Basic Layout Structure"
   owner=Product
   description="Source- , diagram-, inspector pane"
-  ADDRESSES OP-010 "Low-Friction SDD authoring"
+# ADDRESSES OP-010 "Low-Friction SDD authoring"  ...disabled here in simplifiedB
   # IMPLEMENTED_BY P-0 ""
 END
 
@@ -42,7 +42,7 @@ END
 Initiative I-012 "SDD Editing"
   owner=Product
   description="Node properties, source order"
-  ADDRESSES OP-010 "Low-Friction SDD authoring"
+# ADDRESSES OP-010 "Low-Friction SDD authoring" ...disabled here in simplifiedB
   IMPLEMENTED_BY C-001 "Source Editor"
   IMPLEMENTED_BY C-002 "Graphical Editor"
   # IMPLEMENTED_BY P-0 ""
