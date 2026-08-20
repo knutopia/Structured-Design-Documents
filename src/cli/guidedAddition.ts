@@ -31,6 +31,9 @@ import {
   type GuidedProposalReviewV1
 } from "../authoring/guidedAddition/v1/contracts.js";
 
+export const guidedBack = Symbol("guided-back");
+export type GuidedBack = typeof guidedBack;
+
 export interface GuidedPromptChoice<T> {
   value: T;
   label: string;
@@ -42,7 +45,8 @@ export interface GuidedPromptAdapter {
     id: string;
     message: string;
     choices: GuidedPromptChoice<T>[];
-  }): Promise<T>;
+    back?: boolean;
+  }): Promise<T | GuidedBack>;
   input(request: {
     id: string;
     message: string;
@@ -107,11 +111,13 @@ function parseChoiceIndex(answer: string, choiceCount: number): number | undefin
 export function createReadlineGuidedPrompt(): GuidedPromptAdapter {
   const readline = createInterface({ input, output });
   return {
-    async select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[] }): Promise<T> {
+    async select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[]; back?: boolean }): Promise<T | GuidedBack> {
       if (request.choices.length === 0) throw new Error(`No choices are available for '${request.id}'.`);
       for (;;) {
         output.write(`${request.message}\n${numberedChoiceText(request.choices)}\n`);
-        const answer = await readline.question("Choose a number: ");
+        const promptText = request.back ? "Choose a number (b for back): " : "Choose a number: ";
+        const answer = await readline.question(promptText);
+        if (request.back && (answer.trim() === "b" || answer.trim() === "B")) return guidedBack;
         const index = parseChoiceIndex(answer, request.choices.length);
         if (index !== undefined) return request.choices[index]!.value;
         output.write("Enter one of the listed numbers.\n");
@@ -187,8 +193,9 @@ function disclosureValue(choice: GuidedChoiceV1): boolean | undefined {
 async function actionForChoicePage(
   deps: GuidedAdditionCliDeps,
   prompt: GuidedPromptAdapter,
-  page: GuidedChoicePageV1
-): Promise<GuidedAdditionActionV1> {
+  page: GuidedChoicePageV1,
+  back: boolean
+): Promise<GuidedAdditionActionV1 | GuidedBack> {
   if (isDisclosurePage(page)) {
     const answer = await prompt.confirm({ id: page.page_id, message: page.content.title, defaultValue: false });
     const selected = page.choices.find((choice) => disclosureValue(choice) === answer);
@@ -202,8 +209,13 @@ async function actionForChoicePage(
       value: choice,
       label: choice.display,
       ...(choice.description ? { description: choice.description } : {})
-    }))
+    })),
+    back
   });
+  if (selected === guidedBack) {
+    deps.stdout("Chosen: back\n\n");
+    return guidedBack;
+  }
   deps.stdout(`${selected.chosen}\n\n`);
   return selected.action;
 }
@@ -221,7 +233,7 @@ async function promptField(
 ): Promise<string> {
   const label = fieldPromptLabel(field);
   if (field.allowed_values && field.allowed_values.length > 0) {
-    return prompt.select({
+    const selected = await prompt.select<string>({
       id: `${page.page_id}:${field.field_id}`,
       message: label,
       choices: [
@@ -229,6 +241,8 @@ async function promptField(
         ...(!field.required ? [{ value: "", label: "Leave blank" }] : [])
       ]
     });
+    if (selected === guidedBack) throw new Error("Back is not available on form fields.");
+    return selected;
   }
   return prompt.input({
     id: `${page.page_id}:${field.field_id}`,
@@ -357,13 +371,19 @@ export async function runGuidedAdditionCommand(
       deps.stdout(`Creating new file ${path.basename(publicPath)}.\n\n`);
     }
 
+    const history: GuidedAdditionResultV1[] = [];
     for (;;) {
       if (result.kind === "sdd-guided-addition-complete") {
         return await saveProposal(deps, prompt, workspace, bundle, result.proposal, result.review);
       }
       const action = "fields" in result.page
         ? await actionForFormPage(prompt, result.page)
-        : await actionForChoicePage(deps, prompt, result.page);
+        : await actionForChoicePage(deps, prompt, result.page, history.length > 0);
+      if (action === guidedBack) {
+        result = history.pop()!;
+        continue;
+      }
+      history.push(result);
       result = runtime.advance(snapshot, result.state, action);
     }
   } catch (error) {
