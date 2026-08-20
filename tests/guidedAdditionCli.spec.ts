@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { applyAdditionProposalV1, type ApplyAdditionProposalV1Args } from "../src/authoring/additionProposalsV1.js";
 import { runCli, type CliDeps } from "../src/cli/program.js";
-import type { GuidedPromptAdapter, GuidedPromptChoice } from "../src/cli/guidedAddition.js";
+import { guidedBack, type GuidedBack, type GuidedPromptAdapter, type GuidedPromptChoice } from "../src/cli/guidedAddition.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const acceptanceFixture = path.join(repoRoot, "tests/fixtures/guided_addition_acceptance.sdd");
@@ -18,7 +18,7 @@ afterAll(() => {
   fs.rmSync(fixtureDir, { recursive: true, force: true });
 });
 
-type SelectionRule = string | RegExp | number;
+type SelectionRule = string | RegExp | number | "back";
 
 class TranscriptPrompt implements GuidedPromptAdapter {
   readonly output: string[] = [];
@@ -32,9 +32,16 @@ class TranscriptPrompt implements GuidedPromptAdapter {
     private readonly confirmations: boolean[] = []
   ) {}
 
-  async select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[] }): Promise<T> {
+  async select<T>(request: { id: string; message: string; choices: GuidedPromptChoice<T>[]; back?: boolean }): Promise<T | GuidedBack> {
     const rule = this.selectionRules[this.#selection++];
     if (rule === undefined) throw new Error(`No scripted selection remains for '${request.id}'`);
+    if (rule === "back") {
+      if (!request.back) throw new Error(`Scripted 'back' for '${request.id}' but back was not offered`);
+      this.selectedIds.push(request.id);
+      this.output.push(`${request.message}\n${request.choices.map((choice, choiceIndex) =>
+        `  ${choiceIndex + 1}. ${choice.label}${choice.description ? ` — ${choice.description}` : ""}`).join("\n")}\nChoose a number (b for back): b\nChosen: back\n\n`);
+      return guidedBack;
+    }
     const index = typeof rule === "number"
       ? rule
       : request.choices.findIndex((choice) => typeof rule === "string" ? choice.label.includes(rule) : rule.test(choice.label));
@@ -383,5 +390,48 @@ Saved guided-addition-acceptance.sdd.
     const source = fs.readFileSync(path.join(repoRoot, "src/cli/guidedAddition.ts"), "utf8");
     expect(source).not.toMatch(/bundle\.(contracts|views|authoring|profiles|vocab|syntax)/);
     expect(source).not.toMatch(/insert_node_block|insert_edge_line|reason_code|recommendation_id/);
+  });
+
+  it("offers Back on non-initial menus and returns to the previous menu", async () => {
+    const target = fixture("back-navigation");
+    const prompt = new TranscriptPrompt(
+      ["Add a standalone node", "back", "Add a standalone node", /^Place —/, "Last position", "Cancel"],
+      {
+        "New node ID": "P-301",
+        "New node Name": "Settings",
+        "New node Description": "Configuration and preferences"
+      },
+      [false]
+    );
+    const result = await run(target, prompt);
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    // The first menu offers no Back; the second menu does.
+    expect(result.transcript).toMatch(/What would you like to add\?\n  1\. Add a standalone node\n  2\. Add a relationship\nChoose a number: 1\n/);
+    expect(result.transcript).toContain("Choose a node type\n");
+    expect(result.transcript).toContain("Choose a number (b for back): b\nChosen: back\n\n");
+    // Back returns to the first menu, which again offers no Back.
+    expect(result.transcript.match(/What would you like to add\?/g)).toHaveLength(2);
+    expect(result.transcript).not.toMatch(/What would you like to add\?\n  1\. Add a standalone node\n  2\. Add a relationship\nChoose a number \(b for back\): /);
+    // No write occurred because the flow ended in Cancel.
+    expect(fs.readFileSync(target.absolute, "utf8")).toBe(target.original);
+  });
+
+  it("does not offer Back on the very first menu", async () => {
+    const target = fixture("back-first-menu");
+    const prompt = new TranscriptPrompt(
+      ["Add a standalone node", /^Place —/, "Last position", "Cancel"],
+      {
+        "New node ID": "P-301",
+        "New node Name": "Settings",
+        "New node Description": "Configuration and preferences"
+      },
+      [false]
+    );
+    const result = await run(target, prompt);
+
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(result.transcript).toMatch(/^What would you like to add\?\n  1\. Add a standalone node\n  2\. Add a relationship\nChoose a number: 1\n/);
+    expect(result.transcript).not.toContain("Choose a number (b for back):");
   });
 });

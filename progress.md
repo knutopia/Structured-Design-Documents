@@ -29,6 +29,7 @@ z
 ## Thu 8-20
 
 - Examined outcome-opportunity map routing issue with open models
+- Added back to sdd-add using deepseek
 
 ## Sund 8-16
 
