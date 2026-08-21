@@ -54,11 +54,13 @@ In practice:
 
 `simple` is especially useful early because it emphasizes structural correctness without pushing as hard for fuller metadata.
 
-For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.md).
+For the fuller profile explanation, see [profiles.md](../profiles.md).
 
 ## Persistent Profile And Detail Defaults
 
-You can choose a validation profile and render detail once instead of repeating `--profile` and `--detail`. Each setting resolves independently in this order:
+Both a validation profile and a render detail level can be set when using an sdd tool on the command like, with `--profile simple` and `detail compact` for example. To avoid these repetitive settings, you can choose a validation profile and render detail once, as a global setting.
+
+Each setting resolves independently in this order:
 
 1. `--profile` or `--detail` for the current invocation
 2. the current project's `sdd.config.yaml`
