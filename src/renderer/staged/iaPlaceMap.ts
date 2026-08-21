@@ -12,7 +12,7 @@ import type {
   SceneEdge,
   SceneItem,
   SceneNode,
-  TransitionalStagedRenderSettings
+  StagedRenderSettings
 } from "./contracts.js";
 import { IA_LOCAL_ROUTE_PATTERNS } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
@@ -524,7 +524,7 @@ export function buildIaPlaceMapRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): RendererScene {
   const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
   const displayOptions = resolvePlaceLabelDisplayOptions(displayPolicy);
@@ -543,7 +543,7 @@ export function buildIaPlaceMapRendererScene(
 
   return {
     viewId: "ia_place_map",
-    profileId: settings.profileId,
+    detailId: settings.detailId,
     themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "ia_place_map",
@@ -574,7 +574,7 @@ export async function renderIaPlaceMapStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<IaPlaceMapStagedSvgResult> {
   const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);
@@ -590,7 +590,7 @@ export async function renderIaPlaceMapStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<IaPlaceMapStagedPngResult> {
   const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);

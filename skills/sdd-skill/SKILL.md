@@ -53,7 +53,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 
 - If the document is already named, do not force a search or edit-oriented inspect step.
 - Use `validate` and `project` for persisted-state semantic reads.
-- Use `contract --resolve bundle` only when active bundle-owned values such as `<view_id>` or `<profile_id>` are needed and not already known.
+- Use `contract --resolve bundle` only when active bundle-owned values such as `<view_id>`, `<profile_id>`, or `<detail_id>` are needed and not already known.
 - For create, make, generate, render, draw, show, display, or view diagram requests, produce a saved file artifact by default.
 - Use `sdd show` for saved user-facing diagram artifacts.
 - Use helper `preview` only for transient helper output, raw artifact access, or a chat-safe `artifact_path` for inline image display.

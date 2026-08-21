@@ -570,7 +570,7 @@ async function runShowCommand(
 
     const previewPath = options.out ?? buildShowPreviewOutputPath(input.path, {
       viewId: options.view,
-      profileId,
+      detailId,
       format: requestedPreviewFormat,
       backendId: requestedBackendId ? previewCapability.backendId : undefined
     });
@@ -1010,7 +1010,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--detail <detail>", "render detail id override; omission uses the resolved project/global/bundle default")
     .option("--format <format>", "preview format (svg or png)", "svg")
     .option("--backend <backend>", "preview backend id override")
-    .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<profile>[.<backend>].<format> beside the input")
+    .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<detail>[.<backend>].<format> beside the input")
     .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source in a file")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([

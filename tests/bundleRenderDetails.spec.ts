@@ -96,12 +96,17 @@ describe("bundle-owned render details", () => {
     expect(participants).toEqual(getKnownRenderableViewIds(bundle));
   });
 
-  it("retains equivalent permissive and strict policies and maps details to legacy behavior", () => {
+  it("exposes only the declared compact and detailed display policies", () => {
     for (const view of bundle.views.views) {
-      const profileDisplay = view.conventions.renderer_defaults?.profile_display as Record<string, unknown>;
-      expect(profileDisplay.permissive).toEqual(profileDisplay.strict);
-      expect(resolveDetailDisplayPolicy(view, "compact")).toEqual(profileDisplay.simple);
-      expect(resolveDetailDisplayPolicy(view, "detailed")).toEqual(profileDisplay.permissive);
+      const defaults = view.conventions.renderer_defaults as Record<string, unknown>;
+      expect(defaults).not.toHaveProperty("profile_display");
+      expect(Object.keys(defaults.detail_display as Record<string, unknown>)).toEqual(["compact", "detailed"]);
+      expect(resolveDetailDisplayPolicy(view, "compact")).toEqual(
+        (defaults.detail_display as Record<string, unknown>).compact
+      );
+      expect(resolveDetailDisplayPolicy(view, "detailed")).toEqual(
+        (defaults.detail_display as Record<string, unknown>).detailed
+      );
     }
   });
 

@@ -69,7 +69,7 @@ async function buildFixtureStages(name: string, profileId = "strict"): Promise<J
     compiled.graph!,
     bundle,
     view,
-    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   const measuredScene = measureScene(rendererScene);
   const preRoutingPositionedScene = await positionJourneyMapMeasuredSceneBeforeRouting(measuredScene);
@@ -91,7 +91,7 @@ async function buildFixtureArtifacts(name: string, profileId = "strict"): Promis
     stages.graph,
     stages.bundle,
     stages.view,
-    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
 }
 

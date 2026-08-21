@@ -717,13 +717,13 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
   const svgClasses = buildClassList(
     "staged-svg",
     `view-${sanitizeToken(scene.viewId)}`,
-    `profile-${sanitizeToken(scene.profileId)}`,
+    `detail-${sanitizeToken(scene.detailId)}`,
     `theme-${sanitizeToken(theme.id)}`,
     `theme-revision-${sanitizeToken(theme.revision)}`
   );
 
   const lines = [
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${formatNumber(viewWidth)}" height="${formatNumber(viewHeight)}" viewBox="${formatNumber(scene.root.x)} ${formatNumber(scene.root.y)} ${formatNumber(viewWidth)} ${formatNumber(viewHeight)}" class="${svgClasses}" data-view-id="${escapeXml(scene.viewId)}" data-profile-id="${escapeXml(scene.profileId)}" data-theme-id="${escapeXml(theme.id)}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${formatNumber(viewWidth)}" height="${formatNumber(viewHeight)}" viewBox="${formatNumber(scene.root.x)} ${formatNumber(scene.root.y)} ${formatNumber(viewWidth)} ${formatNumber(viewHeight)}" class="${svgClasses}" data-view-id="${escapeXml(scene.viewId)}" data-detail-id="${escapeXml(scene.detailId)}" data-theme-id="${escapeXml(theme.id)}">`,
     "  <defs>",
     ...defs.flatMap((entry) => indentLines(entry, 4)),
     "  </defs>"

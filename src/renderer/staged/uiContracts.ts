@@ -23,7 +23,7 @@ import type {
   SceneNode,
   PortSpec,
   WidthPolicy,
-  TransitionalStagedRenderSettings
+  StagedRenderSettings
 } from "./contracts.js";
 import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
@@ -671,7 +671,7 @@ export function buildUiContractsRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): RendererScene {
   const prepared = buildUiContractsRenderData(
     projection,
@@ -691,7 +691,7 @@ export function buildUiContractsRendererScene(
 
   return {
     viewId: "ui_contracts",
-    profileId: settings.profileId,
+    detailId: settings.detailId,
     themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "ui_contracts",
@@ -713,7 +713,7 @@ export async function renderUiContractsStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<UiContractsStagedSvgResult> {
   const rendererScene = buildUiContractsRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);
@@ -729,7 +729,7 @@ export async function renderUiContractsStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<UiContractsStagedPngResult> {
   const rendererScene = buildUiContractsRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);

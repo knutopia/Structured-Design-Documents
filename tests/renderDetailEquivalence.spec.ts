@@ -5,8 +5,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import {
   compileSource,
   loadBundle,
-  renderSource,
-  validateLoadedBundle
+  renderSource
 } from "../src/index.js";
 import type { Bundle, ViewSpec } from "../src/bundle/types.js";
 import { projectView } from "../src/projector/projectView.js";
@@ -17,12 +16,7 @@ import { renderOutcomeOpportunityMapStagedPng } from "../src/renderer/staged/out
 import { renderScenarioFlowStagedPng } from "../src/renderer/staged/scenarioFlow.js";
 import { renderServiceBlueprintStagedPng } from "../src/renderer/staged/serviceBlueprint.js";
 import { renderUiContractsStagedPng } from "../src/renderer/staged/uiContracts.js";
-import type { TransitionalStagedRenderSettings } from "../src/renderer/staged/contracts.js";
-import { resolveProfileDisplayPolicy } from "./legacyProfileDisplay.js";
-import {
-  normalizeStage3SceneProfileMetadata,
-  normalizeStage3SvgProfileMetadata
-} from "./stage3ArtifactNormalizer.js";
+import type { StagedRenderSettings } from "../src/renderer/staged/contracts.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const cases = [
@@ -45,30 +39,11 @@ async function inputFor(example: string): Promise<{ path: string; text: string }
   return { path: inputPath, text: await readFile(inputPath, "utf8") };
 }
 
-function createLegacySentinelBundle(): Bundle {
-  const cloned = structuredClone(bundle) as Bundle;
-  const sentinels = [
-    ["legacy_simple", "simple"],
-    ["legacy_permissive", "permissive"],
-    ["legacy_strict", "strict"]
-  ] as const;
-  for (const [detailId, profileId] of sentinels) {
-    cloned.manifest.render_details.push({ id: detailId, intent: `Test-only ${profileId} policy baseline.` });
-    for (const view of cloned.views.views) {
-      const defaults = view.conventions.renderer_defaults as Record<string, unknown>;
-      const detailDisplay = defaults.detail_display as Record<string, Record<string, boolean>>;
-      detailDisplay[detailId] = structuredClone(resolveProfileDisplayPolicy(view, profileId)) as Record<string, boolean>;
-    }
-  }
-  validateLoadedBundle(cloned);
-  return cloned;
-}
-
 async function renderStaged(
   loadedBundle: Bundle,
   view: ViewSpec,
   example: string,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ) {
   const input = await inputFor(example);
   const compiled = compileSource(input, loadedBundle);
@@ -94,68 +69,7 @@ async function renderStaged(
   }
 }
 
-describe("Stage 3 render-detail equivalence", () => {
-  it("normalizes only the transitional profile metadata", () => {
-    const scene = { profileId: "strict", x: 12, nested: { profileId: "simple", label: "profile-strict" } };
-    expect(normalizeStage3SceneProfileMetadata(scene)).toEqual({ x: 12, nested: { label: "profile-strict" } });
-    const svg = '<svg class="renderer profile-strict unrelated" data-profile-id="strict" data-x="12"><text>profile-strict</text></svg>';
-    expect(normalizeStage3SvgProfileMetadata(svg)).toBe(
-      '<svg class="renderer unrelated" data-x="12"><text>profile-strict</text></svg>'
-    );
-  });
-
-  it("preserves simple→compact and permissive|strict→detailed across every renderer path", async () => {
-    const legacy = createLegacySentinelBundle();
-    const mappings = [
-      ["compact", "legacy_simple"],
-      ["detailed", "legacy_permissive"],
-      ["detailed", "legacy_strict"]
-    ] as const;
-
-    for (const [viewId, example] of cases) {
-      const input = await inputFor(example);
-      const view = legacy.views.views.find((candidate) => candidate.id === viewId)!;
-      for (const [detailId, legacyDetailId] of mappings) {
-        for (const format of ["dot", "mermaid"] as const) {
-          const current = renderSource(input, legacy, { viewId, format, profileId: "strict", detailId });
-          const baseline = renderSource(input, legacy, { viewId, format, profileId: "strict", detailId: legacyDetailId });
-          expect(current.text, `${viewId}/${format}/${detailId}`).toBe(baseline.text);
-          expect(current.notes).toEqual(baseline.notes);
-          expect(current.diagnostics).toEqual(baseline.diagnostics);
-        }
-
-        const currentStaged = await renderStaged(legacy, view, example, {
-          profileId: "strict",
-          detailId
-        });
-        const baselineStaged = await renderStaged(legacy, view, example, {
-          profileId: "strict",
-          detailId: legacyDetailId
-        });
-        expect(currentStaged, `${viewId}/staged/${detailId}`).toEqual(baselineStaged);
-
-        for (const format of ["svg", "png"] as const) {
-          const currentLegacy = await renderSourcePreview(input, legacy, {
-            viewId,
-            format,
-            backendId: "legacy_graphviz_preview",
-            profileId: "strict",
-            detailId
-          });
-          const baselineLegacy = await renderSourcePreview(input, legacy, {
-            viewId,
-            format,
-            backendId: "legacy_graphviz_preview",
-            profileId: "strict",
-            detailId: legacyDetailId
-          });
-          expect(currentLegacy.artifact, `${viewId}/graphviz/${format}/${detailId}`).toEqual(baselineLegacy.artifact);
-          expect(currentLegacy.notes).toEqual(baselineLegacy.notes);
-          expect(currentLegacy.diagnostics).toEqual(baselineLegacy.diagnostics);
-        }
-      }
-    }
-  }, 120_000);
+describe("Stage 4 render-detail identity", () => {
 
   it("keeps display independent from successful validation profiles", async () => {
     for (const [viewId, example] of cases) {
@@ -164,23 +78,37 @@ describe("Stage 3 render-detail equivalence", () => {
       const strict = renderSource(input, bundle, { viewId, format: "dot", profileId: "strict", detailId: "detailed" });
       expect(simple.text, `${viewId}/text`).toBe(strict.text);
 
+      const simplePreview = await renderSourcePreview(input, bundle, {
+        viewId,
+        format: "svg",
+        profileId: "simple",
+        detailId: "detailed"
+      });
+      const strictPreview = await renderSourcePreview(input, bundle, {
+        viewId,
+        format: "svg",
+        profileId: "strict",
+        detailId: "detailed"
+      });
+      expect(simplePreview.artifact, `${viewId}/staged-svg`).toEqual(strictPreview.artifact);
+      expect(simplePreview.notes).toEqual(strictPreview.notes);
+      expect(simplePreview.diagnostics).toEqual(strictPreview.diagnostics);
+
+      const artifact = simplePreview.artifact;
+      if (!artifact || artifact.format !== "svg") {
+        throw new Error(`Expected staged SVG artifact for '${viewId}'.`);
+      }
+      const svg = artifact.text;
+      expect(svg).toContain("detail-detailed");
+      expect(svg).toContain('data-detail-id="detailed"');
+      expect(svg).not.toContain("profile-");
+      expect(svg).not.toContain("data-profile-id");
+
       const view = bundle.views.views.find((candidate) => candidate.id === viewId)!;
-      const simpleStaged = await renderStaged(bundle, view, example, { profileId: "simple", detailId: "detailed" });
-      const strictStaged = await renderStaged(bundle, view, example, { profileId: "strict", detailId: "detailed" });
-      expect(normalizeStage3SceneProfileMetadata(simpleStaged.rendererScene)).toEqual(
-        normalizeStage3SceneProfileMetadata(strictStaged.rendererScene)
-      );
-      expect(normalizeStage3SceneProfileMetadata(simpleStaged.measuredScene)).toEqual(
-        normalizeStage3SceneProfileMetadata(strictStaged.measuredScene)
-      );
-      expect(normalizeStage3SceneProfileMetadata(simpleStaged.positionedScene)).toEqual(
-        normalizeStage3SceneProfileMetadata(strictStaged.positionedScene)
-      );
-      expect(normalizeStage3SvgProfileMetadata(simpleStaged.svg)).toBe(
-        normalizeStage3SvgProfileMetadata(strictStaged.svg)
-      );
-      expect(simpleStaged.png).toEqual(strictStaged.png);
-      expect(simpleStaged.diagnostics).toEqual(strictStaged.diagnostics);
+      const staged = await renderStaged(bundle, view, example, { detailId: "detailed" });
+      expect(staged.rendererScene.detailId).toBe("detailed");
+      expect(staged.measuredScene.detailId).toBe("detailed");
+      expect(staged.positionedScene.detailId).toBe("detailed");
     }
   }, 60_000);
 

@@ -1,7 +1,6 @@
 import type { RendererDiagnostic } from "./diagnostics.js";
 
-export interface TransitionalStagedRenderSettings {
-  profileId: string;
+export interface StagedRenderSettings {
   detailId: string;
   themeId?: string;
 }
@@ -373,7 +372,7 @@ export interface SceneEdge {
 
 export interface RendererScene {
   viewId: string;
-  profileId: string;
+  detailId: string;
   themeId: string;
   root: SceneContainer;
   edges: SceneEdge[];
@@ -480,7 +479,7 @@ export interface MeasuredEdge {
 
 export interface MeasuredScene {
   viewId: string;
-  profileId: string;
+  detailId: string;
   themeId: string;
   root: MeasuredContainer;
   edges: MeasuredEdge[];
@@ -605,7 +604,7 @@ export type PositionedDecoration = PositionedLineDecoration | PositionedTextDeco
 
 export interface PositionedScene {
   viewId: string;
-  profileId: string;
+  detailId: string;
   themeId: string;
   root: PositionedContainer;
   edges: PositionedEdge[];

@@ -101,7 +101,7 @@ describe("canonical sdd-skill source", () => {
     expect(helperDocs).toContain("`contract` is deep helper contract detail");
     expect(helperDocs).toContain("`contract --purpose request` is a lossy request-composition view");
     expect(helperDocs).toContain(
-      "`contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values"
+      "`contract --resolve bundle` expands active bundle-owned `view_id`, validation `profile_id`, and render `detail_id` values"
     );
     expect(helperDocs).toContain("authoring_format_card");
     expect(helperDocs).toContain("capabilities` remains static and does not inline this card");
@@ -124,7 +124,7 @@ describe("canonical sdd-skill source", () => {
     expect(helperDocs).toContain(
       "Helper `preview` artifact paths are transient helper output and are not saved artifacts."
     );
-    expect(helperDocs).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>");
+    expect(helperDocs).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id> --detail <detail_id>");
     expect(helperDocs).toContain(
       "Use helper discovery for helper mechanics, bundle files for SDD language, docs for explanation or mismatch investigation, and implementation code for implementation debugging."
     );
@@ -268,7 +268,7 @@ describe("canonical sdd-skill source", () => {
     expect(previewSection).toContain("If the user did not request a specific output path, let `sdd show` write beside the `.sdd`");
     expect(previewSection).toContain("Do not create a new output directory unless the user explicitly named that directory in the requested output path.");
     expect(previewSection).toContain("If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering.");
-    expect(previewSection).toContain("A preview matches only when it came from the same document, committed revision, view, profile, format, and backend in the same workflow context.");
+    expect(previewSection).toContain("A preview matches only when it came from the same document, committed revision, view, profile, detail, format, and backend in the same workflow context.");
     expect(previewSection).toContain("If matching metadata is unavailable, use `sdd show` instead of copying.");
     expect(previewSection).toContain("run `sdd show`");
     expect(previewSection).toContain("link the saved sibling artifact");
@@ -464,7 +464,7 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("Examples, snapshots, and goldens are downstream evidence only.");
     expect(workflowMarkdown).toContain("Do not inspect `.sdd` examples to infer language rules");
     expect(workflowMarkdown).toContain(
-      "`contract --resolve bundle` expands active helper-exposed values such as `view_id` and `profile_id`"
+      "`contract --resolve bundle` expands active helper-exposed values such as `view_id`, validation `profile_id`, and render `detail_id`"
     );
     expect(workflowMarkdown).toContain("It does not replace the bundle files as the general authority");
     expect(workflowMarkdown).not.toContain(

@@ -266,17 +266,17 @@ describe("persistent defaults CLI resolution", () => {
     expect(context.stderr.join("")).toContain("Available values: compact, detailed");
   });
 
-  it("uses the same persistent profile in show rendering and automatic artifact naming", async () => {
+  it("uses the same persistent detail in show rendering and automatic artifact naming", async () => {
     const memory = createMemoryDefaults({
-      project: { version: "1", defaults: { validation_profile_id: "strict" } }
+      project: { version: "1", defaults: { render_detail_id: "detailed" } }
     });
     const context = createCliDeps(memory.runtime);
     const result = await runCli([
       "node", "sdd", "show", "example.sdd", "--view", "ia_place_map"
     ], context.deps);
     expect(result.exitCode).toBe(0);
-    expect(context.renderSourcePreview.mock.calls[0]?.[2].profileId).toBe("strict");
-    expect(vi.mocked(context.deps.writeTextFile!).mock.calls[0]?.[0]).toBe("/repo/example.ia_place_map.strict.svg");
+    expect(context.renderSourcePreview.mock.calls[0]?.[2].detailId).toBe("detailed");
+    expect(vi.mocked(context.deps.writeTextFile!).mock.calls[0]?.[0]).toBe("/repo/example.ia_place_map.detailed.svg");
   });
 
   it("fails profile consumers on malformed configuration but leaves compile and add configuration-free", async () => {

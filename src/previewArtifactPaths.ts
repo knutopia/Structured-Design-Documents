@@ -3,7 +3,7 @@ import type { PreviewFormat, PreviewRendererBackendId } from "./renderer/viewRen
 
 export interface PreviewArtifactPathOptions {
   viewId: string;
-  profileId: string;
+  detailId: string;
   format: PreviewFormat;
   backendId?: PreviewRendererBackendId | string;
 }
@@ -13,7 +13,7 @@ export function buildPreviewArtifactBasename(
   options: PreviewArtifactPathOptions
 ): string {
   const parsed = path.parse(documentPath);
-  const stemParts = [parsed.name, options.viewId, options.profileId];
+  const stemParts = [parsed.name, options.viewId, options.detailId];
   if (options.backendId) {
     stemParts.push(options.backendId);
   }

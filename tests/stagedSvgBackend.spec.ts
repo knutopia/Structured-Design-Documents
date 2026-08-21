@@ -66,6 +66,10 @@ describe("staged SVG backend", () => {
     expect(svg).toContain(`base64,${semiboldWoff.toString("base64")}`);
     expect(svg.indexOf("font-weight: 400")).toBeLessThan(svg.indexOf("font-weight: 600"));
     expect(svg).toContain(".staged-svg { background: transparent; }");
+    expect(svg).toContain('class="staged-svg view-ia_place_map detail-detailed');
+    expect(svg).toContain('data-detail-id="detailed"');
+    expect(svg).not.toContain("profile-");
+    expect(svg).not.toContain("data-profile-id");
     expect(svg).toContain(".scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }");
     expect(svg).toContain(
       '<rect class="scene-container__chrome" x="0" y="0" width="560" height="280" rx="18" ry="18"/>'

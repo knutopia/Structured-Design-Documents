@@ -132,7 +132,7 @@ describe("staged visual acceptance", () => {
     ] as const;
 
     for (const testCase of cases) {
-      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ia_place_map", testCase.profileId);
+      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ia_place_map", testCase.detailId);
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, FORBIDDEN_DIAGNOSTICS);
 
@@ -160,7 +160,7 @@ describe("staged visual acceptance", () => {
     ] as const;
 
     for (const testCase of cases) {
-      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ui_contracts", "strict");
+      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ui_contracts", "detailed");
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, FORBIDDEN_DIAGNOSTICS);
 
@@ -187,7 +187,7 @@ describe("staged visual acceptance", () => {
     const rendered = await renderStagedArtifacts(
       path.join(repoRoot, "bundle/v0.1/examples/scenario_branching.sdd"),
       "scenario_flow",
-      "strict"
+      "detailed"
     );
 
     expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -224,7 +224,7 @@ describe("staged visual acceptance", () => {
     ];
 
     for (const sourcePath of cases) {
-      const rendered = await renderStagedArtifacts(sourcePath, "outcome_opportunity_map", "strict");
+      const rendered = await renderStagedArtifacts(sourcePath, "outcome_opportunity_map", "detailed");
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, OUTCOME_OPPORTUNITY_FORBIDDEN_DIAGNOSTICS);
 

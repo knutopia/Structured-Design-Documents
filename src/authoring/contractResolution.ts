@@ -31,6 +31,15 @@ function resolveAllowedValues(
         }
       }));
 
+    case "manifest_render_details":
+      expectSelector(binding, "render_details");
+      return bundle.manifest.render_details.map((detail) => ({
+        value: detail.id,
+        metadata: {
+          intent: detail.intent
+        }
+      }));
+
     case "views_yaml":
       expectSelector(binding, "views");
       return bundle.views.views.map((view) => ({

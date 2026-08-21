@@ -411,7 +411,7 @@ describe("CLI wrappers", () => {
     });
   });
 
-  it("show derives a sibling SVG path with the bundle profile fallback", async () => {
+  it("show derives a sibling SVG path with the bundle detail fallback", async () => {
     const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([
       "node",
@@ -427,13 +427,14 @@ describe("CLI wrappers", () => {
       viewId: "ia_place_map",
       format: "svg",
       profileId: "simple",
+      detailId: "compact",
       backendId: "staged_ia_place_map_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith(
-      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.simple.svg",
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.svg",
       "<svg>staged</svg>"
     );
-    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.simple.svg");
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.svg");
   });
 
   it("show derives different default output paths for different views of the same source", async () => {
@@ -462,12 +463,12 @@ describe("CLI wrappers", () => {
 
     expect(iaResult.exitCode).toBe(0);
     expect(journeyResult.exitCode).toBe(0);
-    expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg");
-    expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.journey_map.strict.svg");
+    expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.svg");
+    expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.journey_map.compact.svg");
     expect(writeTextFileMock.mock.calls[0]?.[0]).not.toBe(writeTextFileMock.mock.calls[1]?.[0]);
   });
 
-  it("show derives different default output paths for different profiles of the same source and view", async () => {
+  it("show derives different default output paths for different details of the same source and view", async () => {
     const { deps, writeTextFileMock } = createDeps();
 
     const strictResult = await runCli([
@@ -478,7 +479,9 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--profile",
-      "strict"
+      "strict",
+      "--detail",
+      "detailed"
     ], deps);
     const simpleResult = await runCli([
       "node",
@@ -488,13 +491,15 @@ describe("CLI wrappers", () => {
       "--view",
       "ia_place_map",
       "--profile",
-      "simple"
+      "strict",
+      "--detail",
+      "compact"
     ], deps);
 
     expect(strictResult.exitCode).toBe(0);
     expect(simpleResult.exitCode).toBe(0);
-    expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.svg");
-    expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.simple.svg");
+    expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.detailed.svg");
+    expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.svg");
     expect(writeTextFileMock.mock.calls[0]?.[0]).not.toBe(writeTextFileMock.mock.calls[1]?.[0]);
   });
 
@@ -520,10 +525,10 @@ describe("CLI wrappers", () => {
       backendId: "legacy_graphviz_preview"
     });
     expect(deps.writeTextFile).toHaveBeenCalledWith(
-      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.legacy_graphviz_preview.svg",
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.legacy_graphviz_preview.svg",
       "<svg>embedded</svg>"
     );
-    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.strict.legacy_graphviz_preview.svg");
+    expect(stderr.join("")).toContain("Wrote /repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.legacy_graphviz_preview.svg");
   });
 
   it("show respects an explicit SVG output path", async () => {

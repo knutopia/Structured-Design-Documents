@@ -5,19 +5,82 @@ import { describe, expect, it } from "vitest";
 import {
   discoverCuratedRenderedExamplePairs,
   expandCuratedRenderedExampleVariants,
-  getRenderedCorpusDebugOutputPath,
-  getRenderedCorpusPreviewOutputPath,
+  getRenderedCorpusDebugOutputPath as getStage4RenderedCorpusDebugOutputPath,
+  getRenderedCorpusPreviewOutputPath as getStage4RenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
   getRenderedCorpusViewDirName,
   isPreviewOnlyRenderedCorpusView,
-  planRenderedCorpusOutputPaths
+  planRenderedCorpusOutputPaths as planStage4RenderedCorpusOutputPaths
 } from "../src/examples/renderedCorpus.js";
+import type { Bundle } from "../src/index.js";
 import { loadBundle } from "../src/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
+function committedProfileId(detailId: string): string {
+  return detailId === "compact" ? "simple" : "strict";
+}
+
+function committedStage3Path(filePath: string, detailId: string): string {
+  return filePath.replace(
+    `${path.sep}${detailId}_detail${path.sep}`,
+    `${path.sep}${committedProfileId(detailId)}_profile${path.sep}`
+  );
+}
+
+function planRenderedCorpusOutputPaths(
+  bundle: Bundle,
+  variant: Parameters<typeof planStage4RenderedCorpusOutputPaths>[1]
+) {
+  const planned = planStage4RenderedCorpusOutputPaths(bundle, variant);
+  const mapped = Object.fromEntries(
+    Object.entries(planned).map(([key, value]) => [key, committedStage3Path(value, variant.detailId)])
+  ) as typeof planned;
+  const committedDir = path.dirname(mapped.svgOutputPath);
+  return {
+    ...mapped,
+    detailDir: committedDir,
+    profileDir: committedDir
+  };
+}
+
+function getRenderedCorpusDebugOutputPath(
+  bundle: Bundle,
+  variant: Parameters<typeof getStage4RenderedCorpusDebugOutputPath>[1],
+  debugStem: string,
+  format: Parameters<typeof getStage4RenderedCorpusDebugOutputPath>[3]
+): string {
+  return committedStage3Path(
+    getStage4RenderedCorpusDebugOutputPath(bundle, variant, debugStem, format),
+    variant.detailId
+  );
+}
+
+function getRenderedCorpusPreviewOutputPath(
+  bundle: Bundle,
+  variant: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[1],
+  format: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[2],
+  backendId: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[3],
+  defaultBackendId: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[4]
+): string {
+  return committedStage3Path(
+    getStage4RenderedCorpusPreviewOutputPath(bundle, variant, format, backendId, defaultBackendId),
+    variant.detailId
+  );
+}
+
 describe("rendered example corpus", () => {
+  it("plans one collision-free directory per bundle render detail", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
+    const planned = variants.map((variant) => planStage4RenderedCorpusOutputPaths(bundle, variant));
+
+    expect(new Set(variants.map((variant) => variant.detailId))).toEqual(new Set(["compact", "detailed"]));
+    expect(planned.every((output) => /_(?:detail)$/.test(path.basename(output.detailDir)))).toBe(true);
+    expect(new Set(planned.map((output) => output.svgOutputPath)).size).toBe(planned.length);
+  });
   it("uses promoted rendered corpus view folders", async () => {
     expect(isPreviewOnlyRenderedCorpusView("outcome_opportunity_map")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("journey_map")).toBe(false);
@@ -114,7 +177,7 @@ describe("rendered example corpus", () => {
     const targetVariant = variants.find((variant) => (
       variant.viewId === "ui_contracts"
       && variant.example.name === "place_viewstate_transition"
-      && variant.profileId === "permissive"
+      && variant.detailId === "detailed"
     ));
 
     expect(targetVariant).toBeDefined();
@@ -378,7 +441,7 @@ describe("rendered example corpus", () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
-      (variant) => variant.profileId === "simple"
+      (variant) => variant.detailId === "compact"
     );
 
     for (const variant of variants) {

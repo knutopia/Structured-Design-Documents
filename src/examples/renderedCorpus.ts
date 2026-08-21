@@ -16,7 +16,7 @@ export interface CuratedRenderedExamplePair {
 }
 
 export interface CuratedRenderedExampleVariant extends CuratedRenderedExamplePair {
-  profileId: string;
+  detailId: string;
 }
 
 export interface CuratedRenderedExampleDiscovery {
@@ -28,7 +28,7 @@ export interface CuratedRenderedExampleDiscovery {
 
 export interface RenderedCorpusOutputPaths {
   exampleDir: string;
-  profileDir: string;
+  detailDir: string;
   sourceOutputPath: string;
   dotOutputPath: string;
   mermaidOutputPath: string;
@@ -42,13 +42,13 @@ const previewOnlyRenderedCorpusViewDirSuffix = " [preview_only]";
 
 export function getRenderedCorpusDebugOutputPath(
   bundle: Bundle,
-  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">,
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId">,
   debugStem: string,
   format: PreviewFormat
 ): string {
   const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
   const renderedStem = `${variant.example.name}.${variant.viewId}`;
-  return path.join(outputPaths.profileDir, `${renderedStem}.${debugStem}.${format}`);
+  return path.join(outputPaths.detailDir, `${renderedStem}.${debugStem}.${format}`);
 }
 
 function getRepoRoot(bundle: Bundle): string {
@@ -74,16 +74,16 @@ export function getRenderedCorpusExampleDirName(exampleName: string): string {
   return `${exampleName}_example`;
 }
 
-export function getRenderedCorpusProfileDirName(profileId: string): string {
-  return `${profileId}_profile`;
+export function getRenderedCorpusDetailDirName(detailId: string): string {
+  return `${detailId}_detail`;
 }
 
 export function getRenderedCorpusRoot(bundle: Bundle): string {
   return path.join(getRepoRoot(bundle), "examples", "rendered", getVersionedCorpusDirName(bundle));
 }
 
-export function getRenderedCorpusProfileIds(bundle: Bundle): string[] {
-  return bundle.manifest.profiles.map((profile) => profile.id);
+export function getRenderedCorpusDetailIds(bundle: Bundle): string[] {
+  return bundle.manifest.render_details.map((detail) => detail.id);
 }
 
 export async function listCanonicalBundleExampleFiles(bundle: Bundle): Promise<CanonicalBundleExampleFile[]> {
@@ -156,37 +156,37 @@ export function expandCuratedRenderedExampleVariants(
   bundle: Bundle,
   pairs: CuratedRenderedExamplePair[]
 ): CuratedRenderedExampleVariant[] {
-  const profileIds = getRenderedCorpusProfileIds(bundle);
-  return pairs.flatMap((pair) => profileIds.map((profileId) => ({
+  const detailIds = getRenderedCorpusDetailIds(bundle);
+  return pairs.flatMap((pair) => detailIds.map((detailId) => ({
     ...pair,
-    profileId
+    detailId
   })));
 }
 
 export function planRenderedCorpusOutputPaths(
   bundle: Bundle,
-  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId">
 ): RenderedCorpusOutputPaths {
   const rootDir = getRenderedCorpusRoot(bundle);
   const viewDir = path.join(rootDir, getRenderedCorpusViewDirName(variant.viewId));
   const exampleDir = path.join(viewDir, getRenderedCorpusExampleDirName(variant.example.name));
-  const profileDir = path.join(exampleDir, getRenderedCorpusProfileDirName(variant.profileId));
+  const detailDir = path.join(exampleDir, getRenderedCorpusDetailDirName(variant.detailId));
   const renderedStem = `${variant.example.name}.${variant.viewId}`;
 
   return {
     exampleDir,
-    profileDir,
+    detailDir,
     sourceOutputPath: path.join(exampleDir, `${variant.example.name}.sdd`),
-    dotOutputPath: path.join(profileDir, `${renderedStem}.dot`),
-    mermaidOutputPath: path.join(profileDir, `${renderedStem}.mmd`),
-    svgOutputPath: path.join(profileDir, `${renderedStem}.svg`),
-    pngOutputPath: path.join(profileDir, `${renderedStem}.png`)
+    dotOutputPath: path.join(detailDir, `${renderedStem}.dot`),
+    mermaidOutputPath: path.join(detailDir, `${renderedStem}.mmd`),
+    svgOutputPath: path.join(detailDir, `${renderedStem}.svg`),
+    pngOutputPath: path.join(detailDir, `${renderedStem}.png`)
   };
 }
 
 export function getRenderedCorpusPreviewOutputPath(
   bundle: Bundle,
-  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "profileId">,
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId">,
   format: PreviewFormat,
   backendId: PreviewRendererBackendId,
   defaultBackendId: PreviewRendererBackendId
@@ -195,5 +195,5 @@ export function getRenderedCorpusPreviewOutputPath(
   const renderedStem = `${variant.example.name}.${variant.viewId}`;
   const backendSuffix = backendId === defaultBackendId ? "" : `.${backendId}`;
 
-  return path.join(outputPaths.profileDir, `${renderedStem}${backendSuffix}.${format}`);
+  return path.join(outputPaths.detailDir, `${renderedStem}${backendSuffix}.${format}`);
 }

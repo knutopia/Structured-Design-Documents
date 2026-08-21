@@ -24,14 +24,14 @@ describe("authoring preview materialization", () => {
         format: "svg",
         text: "<svg>preview</svg>"
       },
-      "example.ia_place_map.strict.svg"
+      "example.ia_place_map.detailed.svg"
     );
 
     createdDirectories.add(path.dirname(artifactPath));
 
     expect(path.isAbsolute(artifactPath)).toBe(true);
     expect(artifactPath.startsWith(`${DEFAULT_PREVIEW_ARTIFACT_ROOT}/`)).toBe(true);
-    expect(path.basename(artifactPath)).toBe("example.ia_place_map.strict.svg");
+    expect(path.basename(artifactPath)).toBe("example.ia_place_map.detailed.svg");
     await expect(readFile(artifactPath, "utf8")).resolves.toBe("<svg>preview</svg>");
   });
 
@@ -41,13 +41,13 @@ describe("authoring preview materialization", () => {
         format: "png",
         bytes: Buffer.from("89504e470d0a1a0a", "hex")
       },
-      "example.ia_place_map.strict.png"
+      "example.ia_place_map.detailed.png"
     );
 
     createdDirectories.add(path.dirname(artifactPath));
 
     const bytes = await readFile(artifactPath);
-    expect(path.basename(artifactPath)).toBe("example.ia_place_map.strict.png");
+    expect(path.basename(artifactPath)).toBe("example.ia_place_map.detailed.png");
     expect(bytes.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
   });
 
@@ -57,21 +57,21 @@ describe("authoring preview materialization", () => {
         format: "svg",
         text: "<svg>one</svg>"
       },
-      "example.ia_place_map.strict.svg"
+      "example.ia_place_map.detailed.svg"
     );
     const secondPath = await materializePreviewArtifact(
       {
         format: "svg",
         text: "<svg>two</svg>"
       },
-      "example.ia_place_map.strict.svg"
+      "example.ia_place_map.detailed.svg"
     );
 
     createdDirectories.add(path.dirname(firstPath));
     createdDirectories.add(path.dirname(secondPath));
 
-    expect(path.basename(firstPath)).toBe("example.ia_place_map.strict.svg");
-    expect(path.basename(secondPath)).toBe("example.ia_place_map.strict.svg");
+    expect(path.basename(firstPath)).toBe("example.ia_place_map.detailed.svg");
+    expect(path.basename(secondPath)).toBe("example.ia_place_map.detailed.svg");
     expect(path.dirname(firstPath)).not.toBe(path.dirname(secondPath));
   });
 
@@ -94,7 +94,7 @@ describe("authoring preview materialization", () => {
         format: "svg",
         text: "<svg>current</svg>"
       },
-      "example.ia_place_map.strict.svg",
+      "example.ia_place_map.detailed.svg",
       { tempRoot, now }
     );
 

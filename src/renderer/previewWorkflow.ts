@@ -227,7 +227,6 @@ export async function renderSourcePreview(
         kind: "projection",
         graph: compileResult.graph,
         projection: prepared.projection,
-        profileId,
         detailId
       }
     });

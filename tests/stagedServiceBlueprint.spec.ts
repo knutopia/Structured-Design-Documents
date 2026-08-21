@@ -87,7 +87,7 @@ async function buildServiceBlueprintRoutingContext(
     context.projection,
     context.graph,
     context.view,
-    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   const measuredScene = measureScene(rendererScene);
   const positionedScene = await positionSceneBeforeRouting(measuredScene);
@@ -364,7 +364,7 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const customerCell = findRootCells(rendererScene).find((cell) =>
       cell.id === "lane:01:customer__shell__cell__band:anchor:1"
@@ -445,19 +445,19 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -857,20 +857,20 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const measuredScene = measureScene(rendererScene);
     const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", stripViewMetadata(rendererScene));
@@ -1058,7 +1058,7 @@ END
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expect(rendererScene.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
@@ -1106,13 +1106,13 @@ END
       firstContext.projection,
       firstContext.graph,
       firstContext.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const secondScene = buildServiceBlueprintRendererScene(
       secondContext.projection,
       secondContext.graph,
       secondContext.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expect(firstScene).toEqual(secondScene);

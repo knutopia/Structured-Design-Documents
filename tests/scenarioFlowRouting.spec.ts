@@ -317,7 +317,7 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expectNoForbiddenDiagnostics(rendered.diagnostics, [
@@ -356,7 +356,7 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expect(rendered.routingStages.connectorPlans
@@ -424,7 +424,7 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const boxesById = new Map(collectVisibleItemBoxes(rendered.positionedScene.root)
       .map((box) => [box.itemId, box] as const));
@@ -490,7 +490,7 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const ids = edgeIds(rendered.positionedScene.edges);
     const stepFlowIndex = ids.findIndex((id) => id === "J-030__precedes__J-031");
@@ -528,19 +528,19 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const permissive = await renderScenarioFlowStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      { profileId: "permissive", detailId: "permissive" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     const simple = await renderScenarioFlowStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      { profileId: "simple", detailId: "simple" === "simple" ? "compact" : "detailed" }
+      { detailId: "compact" }
     );
 
     expect(strict.positionedScene.edges.filter((edge) => edge.label).map((edge) => edge.id)).toEqual([
@@ -584,7 +584,7 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     expect(collectLabelSnapshot(repeated.positionedScene)).toEqual(collectLabelSnapshot(strict.positionedScene));
   });
@@ -595,7 +595,7 @@ describe("scenario_flow staged routing", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expect(debug.step2PositionedScene.edges.length).toBeGreaterThan(0);

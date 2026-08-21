@@ -86,7 +86,7 @@ async function buildFixture(name: string, profileId = "strict"): Promise<Journey
       compiled.graph!,
       bundle,
       view,
-      { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
+      { detailId: profileId === "simple" ? "compact" : "detailed" }
     )
   };
 }
@@ -135,7 +135,7 @@ describe("staged journey map RendererScene", () => {
 
     expect(scene).toMatchObject({
       viewId: "journey_map",
-      profileId: "strict",
+      detailId: "detailed",
       themeId: "default"
     });
     expect(scene.root).toMatchObject({
@@ -466,7 +466,7 @@ describe("staged journey map RendererScene", () => {
       build.graph,
       build.bundle,
       build.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
     expect(scene.diagnostics.some((diagnostic) =>
       diagnostic.code === "renderer.scene.journey_map_first_parent_selected"

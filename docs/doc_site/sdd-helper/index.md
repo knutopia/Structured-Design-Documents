@@ -36,7 +36,7 @@ pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.preview --resolve bundle
 ```
 
-`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned `view_id` and `profile_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
+`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned `view_id`, validation `profile_id`, and render `detail_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
 
 The shared library contract index also contains Guided Addition v1 `domain.service.*` metadata for future adapters. Library callers use the public `createGuidedAdditionRuntimeV1(...)` and `applyAdditionProposalV1(...)` boundary plus the exported static or bundle-resolved contract metadata accessors. This does not add guided helper commands: `capabilities` is unchanged, and `sdd-helper contract` deliberately rejects non-`helper.command.*` subjects. Any helper or MCP adapter requires a separate approved plan.
 
@@ -60,7 +60,7 @@ Helper mechanics are not SDD language authority. Use the helper surfaces for hel
 - Use helper discovery for helper mechanics: which commands exist, how they are invoked, and what result kind each command returns.
 - Use helper `contract <subject_id>` for deep helper request and result shape, continuation semantics, constraints, and helper-specific bundle bindings.
 - Use helper `contract <subject_id> --purpose request` for supported request-composition payloads when the full result schema is unnecessary. The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`.
-- Use `contract --resolve bundle` when a helper command needs active bundle-owned `view_id` or `profile_id` values exposed through its contract bindings.
+- Use `contract --resolve bundle` when a helper command needs active bundle-owned `view_id`, validation `profile_id`, or render `detail_id` values exposed through its contract bindings.
 - Use `bundle/v0.1/` files for SDD language semantics such as syntax, vocabulary, endpoint rules, profile behavior, and view behavior.
 - Use docs to explain a surface or investigate a mismatch.
 - Use implementation code for implementation debugging, not normal helper request-shape recovery.
@@ -229,7 +229,7 @@ interface HelperCapabilitiesResultCommand {
 - Invocation: `pnpm sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]`
 - Key inputs: one helper `subject_id`, optional `--purpose request`, plus optional `--resolve bundle`.
 - Result kind: `sdd-contract-subject-detail`
-- Important constraints: static full detail is the default and does not require bundle loading; `--purpose request` excludes full result schemas for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id` and `profile_id`. For `helper.command.author` and `helper.command.apply`, resolved request detail also includes an `authoring_format_card`, a compact bundle-derived guide for authoring JSON formatting.
+- Important constraints: static full detail is the default and does not require bundle loading; `--purpose request` excludes full result schemas for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`; `--resolve bundle` is opt-in and expands bundle-bound allowed values such as `view_id`, `profile_id`, and `detail_id`. For `helper.command.author` and `helper.command.apply`, resolved request detail also includes an `authoring_format_card`, a compact bundle-derived guide for authoring JSON formatting.
 - Practical notes: use `capabilities` first to discover the command and its `subject_id`, then use `contract` only for the specific subject that needs deep detail.
 
 #### `sdd-helper inspect <document_path>`
@@ -331,20 +331,20 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 
 ### Preview Generation
 
-#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
+#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]`
 
 - Purpose: render a preview artifact for a repo-relative `.sdd` document.
 - Use when: another tool, UI, or workflow needs preview output directly from the helper surface.
-- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]`
-- Key inputs: document path, `view`, `profile`, and `format`, with optional `backend`.
+- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]`
+- Key inputs: document path, projection `view`, validation `profile`, render `detail`, and `format`, with optional `backend`.
 - Result kind: `sdd-preview`
 - Important constraints: if preview generation cannot produce or materialize an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
-- Practical notes: SVG and PNG previews are materialized to a helper-owned temp file and returned through `artifact_path`; the helper no longer returns inline SVG text or base64 PNG data. `artifact_path` is an absolute, ephemeral local path under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>`, with a unique parent directory for every successful preview invocation and a basename matching the `sdd show` default naming convention. This temp path is for immediate tool/UI consumption and is not the canonical saved preview artifact. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id` or `profile_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
+- Practical notes: SVG and PNG previews are materialized to a helper-owned temp file and returned through `artifact_path`; the helper no longer returns inline SVG text or base64 PNG data. `artifact_path` is an absolute, ephemeral local path under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>`, with a unique parent directory for every successful preview invocation and a detail-based basename matching the `sdd show` default naming convention. The result reports both `profile_id` validation provenance and `detail_id` rendering identity. This temp path is for immediate tool/UI consumption and is not the canonical saved preview artifact. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id`, `profile_id`, or `detail_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
 
 When a durable user-facing SVG or PNG is needed, use the main CLI saved-artifact path instead:
 
 ```bash
-TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id>
+TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id> --detail <detail_id>
 ```
 
 Helper `preview` artifact paths are transient helper output and are not saved artifacts.
@@ -405,7 +405,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 - Start with `capabilities`; it is the canonical discovery surface.
 - Use `contract` when you need nested request-shape detail, semantic constraints, continuation semantics, or binding metadata for one subject.
 - Use `contract --purpose request` on `helper.command.create`, `helper.command.author`, `helper.command.apply`, or `helper.command.undo` when composing a request and the full result schema is unnecessary.
-- Use `contract --resolve bundle` only when you need active bundle-owned values such as `view_id` or `profile_id`.
+- Use `contract --resolve bundle` only when you need active bundle-owned values such as `view_id`, `profile_id`, or `detail_id`.
 - Use bundle files, not helper mechanics, for SDD language semantics.
 - Treat JSON as the public interface. Do not expect human-readable CLI text.
 - Keep path inputs repo-relative and `.sdd`-focused.

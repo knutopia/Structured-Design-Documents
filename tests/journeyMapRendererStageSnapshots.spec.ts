@@ -67,7 +67,7 @@ async function buildFixture(name: JourneyFixtureName, profileId = "strict") {
     compiled.graph!,
     bundle,
     view!,
-    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   return {
     bundle,

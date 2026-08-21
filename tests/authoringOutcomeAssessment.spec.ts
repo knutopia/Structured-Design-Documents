@@ -130,10 +130,11 @@ function previewResult(diagnostics: Diagnostic[] = []): RenderPreviewResult {
     revision: "rev_preview",
     view_id: "ia_place_map",
     profile_id: "strict",
+    detail_id: "detailed",
     backend_id: "staged_ia_place_map_preview",
     format: "svg",
     mime_type: "image/svg+xml",
-    artifact_path: "/tmp/unique-previews/example/example.ia_place_map.strict.svg",
+    artifact_path: "/tmp/unique-previews/example/example.ia_place_map.detailed.svg",
     notes: [],
     diagnostics
   };

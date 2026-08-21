@@ -10,7 +10,7 @@ You do not need to learn the whole terminal to use the `sdd` CLI tool. You can c
 
 - When you see `<input>`, it means “the path to your `.sdd` file”.
 - When you use `--out`, you are choosing where the generated file should be written.
-- If you omit `--out` with `sdd show`, the preview file is written beside the input file as `<source>.<view>.<profile>[.<backend>].<format>`.
+- If you omit `--out` with `sdd show`, the preview file is written beside the input file as `<source>.<view>.<detail>[.<backend>].<format>`.
 
 If you want a visual result quickly, start with the next section and use the commands as written.
 
@@ -149,7 +149,7 @@ pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 
 When `--profile` or `--detail` is omitted, `sdd show` resolves that setting from project, global, then bundle defaults. The shipped v0.1 fallbacks are `simple` and `compact`; an explicit option overrides every persistent source for one invocation. Profile controls validation and detail controls rendering independently.
 
-If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<profile>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
+If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<detail>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 
 Examples:
 

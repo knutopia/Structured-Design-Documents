@@ -140,7 +140,7 @@ describe("service_blueprint pre-routing artifacts", () => {
       context.projection,
       context.graph,
       context.view,
-      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+      { detailId: "detailed" }
     );
 
     expect(rendered.preRoutingDiagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -225,7 +225,7 @@ describe("service_blueprint pre-routing artifacts", () => {
         context.projection,
         context.graph,
         context.view,
-        { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+        { detailId: "detailed" }
       )
     ).resolves.toEqual(expect.objectContaining({
       preRoutingSvg: expect.any(String),
@@ -237,7 +237,7 @@ describe("service_blueprint pre-routing artifacts", () => {
         context.projection,
         context.graph,
         context.view,
-        { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+        { detailId: "detailed" }
       )
     ).resolves.toEqual(expect.objectContaining({
       step2Svg: expect.any(String),
@@ -251,7 +251,7 @@ describe("service_blueprint pre-routing artifacts", () => {
         context.projection,
         context.graph,
         context.view,
-        { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
+        { detailId: "detailed" }
       )
     ).resolves.toEqual(expect.objectContaining({
       svg: expect.any(String)

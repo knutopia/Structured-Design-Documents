@@ -308,10 +308,11 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     revision: "rev_preview",
     view_id: "ia_place_map",
     profile_id: "strict",
+    detail_id: "detailed",
     backend_id: "staged_ia_place_map_preview",
     format: "svg",
     mime_type: "image/svg+xml",
-    artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
+    artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.detailed.svg",
     notes: [],
     diagnostics: []
   }));
@@ -595,7 +596,7 @@ describe("sdd-helper CLI", () => {
         expect.objectContaining({
           name: "preview",
           invocation:
-            "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]",
+            "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]",
           result_kind: "sdd-preview",
           subject_id: "helper.command.preview",
           input_shape_id: "shared.shape.render_preview_args",
@@ -817,13 +818,17 @@ describe("sdd-helper CLI", () => {
         },
         {
           binding_id: "shared.binding.render_preview.profile_id"
+        },
+        {
+          binding_id: "shared.binding.render_preview.detail_id"
         }
       ],
       resolution: {
         mode: "static",
         unresolved_binding_ids: [
           "shared.binding.render_preview.view_id",
-          "shared.binding.render_preview.profile_id"
+          "shared.binding.render_preview.profile_id",
+          "shared.binding.render_preview.detail_id"
         ]
       }
     });
@@ -893,6 +898,23 @@ describe("sdd-helper CLI", () => {
               value: "strict",
               metadata: {
                 intent: "Strict governance for production-ready authoring."
+              }
+            }
+          ]
+        },
+        {
+          binding_id: "shared.binding.render_preview.detail_id",
+          resolved_values: [
+            {
+              value: "compact",
+              metadata: {
+                intent: "low noise"
+              }
+            },
+            {
+              value: "detailed",
+              metadata: {
+                intent: "full detail"
               }
             }
           ]
@@ -2706,6 +2728,8 @@ describe("sdd-helper CLI", () => {
       "ia_place_map",
       "--profile",
       "strict",
+      "--detail",
+      "detailed",
       "--format",
       "svg"
     ], deps);
@@ -2716,7 +2740,8 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-preview",
       format: "svg",
       mime_type: "image/svg+xml",
-      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
+      detail_id: "detailed",
+      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.detailed.svg"
     });
     expectAssessment(payload, {
       outcome: "acceptable",
@@ -2734,10 +2759,11 @@ describe("sdd-helper CLI", () => {
       revision: "rev_preview",
       view_id: "ia_place_map",
       profile_id: "strict",
+      detail_id: "detailed",
       backend_id: "staged_ia_place_map_preview",
       format: "svg",
       mime_type: "image/svg+xml",
-      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg",
+      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.detailed.svg",
       notes: [],
       diagnostics: []
     }));
@@ -2751,6 +2777,8 @@ describe("sdd-helper CLI", () => {
       "ia_place_map",
       "--profile",
       "strict",
+      "--detail",
+      "detailed",
       "--format",
       "svg"
     ], deps);
@@ -2760,6 +2788,7 @@ describe("sdd-helper CLI", () => {
       path: "docs/example.sdd",
       view_id: "ia_place_map",
       profile_id: "strict",
+      detail_id: "detailed",
       format: "svg",
       backend_id: undefined
     });
@@ -2768,7 +2797,8 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-preview",
       format: "svg",
       mime_type: "image/svg+xml",
-      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.strict.svg"
+      detail_id: "detailed",
+      artifact_path: "/tmp/unique-previews/20260417-foo/example.ia_place_map.detailed.svg"
     });
     expectAssessment(payload, {
       outcome: "acceptable",
@@ -2785,6 +2815,7 @@ describe("sdd-helper CLI", () => {
       "revision",
       "view_id",
       "profile_id",
+      "detail_id",
       "backend_id",
       "format",
       "mime_type",
@@ -2803,10 +2834,11 @@ describe("sdd-helper CLI", () => {
       revision: "rev_preview",
       view_id: "scenario_flow",
       profile_id: "simple",
+      detail_id: "compact",
       backend_id: explicitBackend,
       format: "svg",
       mime_type: "image/svg+xml",
-      artifact_path: "/tmp/unique-previews/20260417-foo/scenario_branching.scenario_flow.simple.staged_scenario_flow_preview.svg",
+      artifact_path: "/tmp/unique-previews/20260417-foo/scenario_branching.scenario_flow.compact.staged_scenario_flow_preview.svg",
       notes: [],
       diagnostics: []
     }));
@@ -2820,6 +2852,8 @@ describe("sdd-helper CLI", () => {
       "scenario_flow",
       "--profile",
       "simple",
+      "--detail",
+      "compact",
       "--format",
       "svg",
       "--backend",
@@ -2831,6 +2865,7 @@ describe("sdd-helper CLI", () => {
       path: "bundle/v0.1/examples/scenario_branching.sdd",
       view_id: "scenario_flow",
       profile_id: "simple",
+      detail_id: "compact",
       format: "svg",
       backend_id: explicitBackend
     });
@@ -2838,7 +2873,8 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-preview",
       view_id: "scenario_flow",
       backend_id: "staged_scenario_flow_preview",
-      artifact_path: "/tmp/unique-previews/20260417-foo/scenario_branching.scenario_flow.simple.staged_scenario_flow_preview.svg"
+      detail_id: "compact",
+      artifact_path: "/tmp/unique-previews/20260417-foo/scenario_branching.scenario_flow.compact.staged_scenario_flow_preview.svg"
     });
   });
 
@@ -2850,10 +2886,11 @@ describe("sdd-helper CLI", () => {
       revision: "rev_journey_preview",
       view_id: "journey_map",
       profile_id: "strict",
+      detail_id: "detailed",
       backend_id: explicitBackend,
       format: "svg",
       mime_type: "image/svg+xml",
-      artifact_path: "/tmp/unique-previews/20260716-journey/journey_map_staged_primary.journey_map.strict.staged_journey_map_preview.svg",
+      artifact_path: "/tmp/unique-previews/20260716-journey/journey_map_staged_primary.journey_map.detailed.staged_journey_map_preview.svg",
       notes: [],
       diagnostics: []
     }));
@@ -2863,6 +2900,7 @@ describe("sdd-helper CLI", () => {
       "tests/fixtures/render/journey_map_staged_primary.sdd",
       "--view", "journey_map",
       "--profile", "strict",
+      "--detail", "detailed",
       "--format", "svg",
       "--backend", explicitBackend
     ], deps);
@@ -2872,6 +2910,7 @@ describe("sdd-helper CLI", () => {
       path: "tests/fixtures/render/journey_map_staged_primary.sdd",
       view_id: "journey_map",
       profile_id: "strict",
+      detail_id: "detailed",
       format: "svg",
       backend_id: explicitBackend
     });
@@ -2879,7 +2918,8 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-preview",
       view_id: "journey_map",
       backend_id: explicitBackend,
-      artifact_path: "/tmp/unique-previews/20260716-journey/journey_map_staged_primary.journey_map.strict.staged_journey_map_preview.svg"
+      detail_id: "detailed",
+      artifact_path: "/tmp/unique-previews/20260716-journey/journey_map_staged_primary.journey_map.detailed.staged_journey_map_preview.svg"
     });
   });
 
@@ -2894,6 +2934,8 @@ describe("sdd-helper CLI", () => {
       "ia_place_map",
       "--profile",
       "strict",
+      "--detail",
+      "detailed",
       "--format",
       "svg",
       "--display-copy-name",
@@ -2930,7 +2972,7 @@ describe("sdd-helper CLI", () => {
     const { deps, stdout } = createDeps({
       renderPreview: vi.fn(async () => {
         throw new AuthoringPreviewError(
-          "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict): Node 'P-001' is missing required property 'owner'.",
+          "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict, detail_id=detailed): Node 'P-001' is missing required property 'owner'.",
           diagnostics
         );
       })
@@ -2944,6 +2986,8 @@ describe("sdd-helper CLI", () => {
       "ia_place_map",
       "--profile",
       "strict",
+      "--detail",
+      "detailed",
       "--format",
       "svg"
     ], deps);
@@ -2953,7 +2997,7 @@ describe("sdd-helper CLI", () => {
     expect(payload).toMatchObject({
       kind: "sdd-helper-error",
       code: "runtime_error",
-      message: "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict): Node 'P-001' is missing required property 'owner'.",
+      message: "Preview validate failure for 'docs/example.sdd' (view_id=ia_place_map, profile_id=strict, detail_id=detailed): Node 'P-001' is missing required property 'owner'.",
       diagnostics
     });
     expectAssessment(payload, {

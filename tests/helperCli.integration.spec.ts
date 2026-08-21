@@ -243,7 +243,8 @@ describe("sdd-helper entrypoint integration", () => {
         mode: "static",
         unresolved_binding_ids: [
           "shared.binding.render_preview.view_id",
-          "shared.binding.render_preview.profile_id"
+          "shared.binding.render_preview.profile_id",
+          "shared.binding.render_preview.detail_id"
         ]
       }
     });
@@ -281,6 +282,13 @@ describe("sdd-helper entrypoint integration", () => {
               value: "strict"
             })
           ])
+        }),
+        expect.objectContaining({
+          binding_id: "shared.binding.render_preview.detail_id",
+          resolved_values: [
+            expect.objectContaining({ value: "compact" }),
+            expect.objectContaining({ value: "detailed" })
+          ]
         })
       ])
       });
@@ -585,6 +593,8 @@ describe("sdd-helper entrypoint integration", () => {
         "ia_place_map",
         "--profile",
         "strict",
+        "--detail",
+        "detailed",
         "--format",
         "svg"
       ]);
@@ -640,6 +650,8 @@ describe("sdd-helper entrypoint integration", () => {
         "ia_place_map",
         "--profile",
         "strict",
+        "--detail",
+        "detailed",
         "--format",
         "svg"
       ]);
@@ -649,6 +661,8 @@ describe("sdd-helper entrypoint integration", () => {
       expect(payload).toMatchObject({
         kind: "sdd-preview",
         path: documentPath,
+        profile_id: "strict",
+        detail_id: "detailed",
         format: "svg",
         mime_type: "image/svg+xml",
         artifact_path: expect.stringContaining("/tmp/unique-previews/")
@@ -675,6 +689,8 @@ describe("sdd-helper entrypoint integration", () => {
         "ia_place_map",
         "--profile",
         "strict",
+        "--detail",
+        "detailed",
         "--format",
         "svg"
       ]);
@@ -685,6 +701,8 @@ describe("sdd-helper entrypoint integration", () => {
         "ia_place_map",
         "--profile",
         "strict",
+        "--detail",
+        "detailed",
         "--format",
         "svg"
       ]);
@@ -695,6 +713,8 @@ describe("sdd-helper entrypoint integration", () => {
         "ia_place_map",
         "--profile",
         "strict",
+        "--detail",
+        "detailed",
         "--format",
         "png"
       ]);
@@ -708,6 +728,7 @@ describe("sdd-helper entrypoint integration", () => {
         "revision",
         "view_id",
         "profile_id",
+        "detail_id",
         "backend_id",
         "format",
         "mime_type",
@@ -730,8 +751,8 @@ describe("sdd-helper entrypoint integration", () => {
       const secondSvgPath = secondSvgPayload.artifact_path as string;
       const pngPath = pngPayload.artifact_path as string;
       try {
-        expect(path.basename(svgPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
-        expect(path.basename(secondSvgPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
+        expect(path.basename(svgPath)).toBe("outcome_to_ia_trace.ia_place_map.detailed.svg");
+        expect(path.basename(secondSvgPath)).toBe("outcome_to_ia_trace.ia_place_map.detailed.svg");
         expect(path.dirname(svgPath)).not.toBe(path.dirname(secondSvgPath));
         expect(svgPayload).toMatchObject({
           format: "svg",
@@ -746,7 +767,7 @@ describe("sdd-helper entrypoint integration", () => {
         });
         expect(await readFile(svgPath, "utf8")).toContain("<svg");
 
-        expect(path.basename(pngPath)).toBe("outcome_to_ia_trace.ia_place_map.strict.png");
+        expect(path.basename(pngPath)).toBe("outcome_to_ia_trace.ia_place_map.detailed.png");
         expect(pngPayload).toMatchObject({
           format: "png",
           mime_type: "image/png"

@@ -17,7 +17,7 @@ import type {
   SceneNode,
   ViewMetadata,
   WidthPolicy,
-  TransitionalStagedRenderSettings
+  StagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
 import {
@@ -333,7 +333,7 @@ async function buildServiceBlueprintPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<{
   context: ServiceBlueprintRenderContext;
   rendererScene: RendererScene;
@@ -358,7 +358,7 @@ function buildServiceBlueprintRenderContext(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): ServiceBlueprintRenderContext {
   const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
   const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
@@ -376,7 +376,7 @@ function buildServiceBlueprintRenderContext(
   const columnCount = middleLayer.columns.length;
   const rendererScene: RendererScene = {
     viewId: "service_blueprint",
-    profileId: settings.profileId,
+    detailId: settings.detailId,
     themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "service_blueprint",
@@ -405,7 +405,7 @@ export function buildServiceBlueprintRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): RendererScene {
   return buildServiceBlueprintRenderContext(
     projection,
@@ -419,7 +419,7 @@ export async function renderServiceBlueprintPreRoutingArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintPreRoutingArtifactsResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
@@ -450,7 +450,7 @@ export async function renderServiceBlueprintRoutingDebugArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintRoutingDebugArtifactsResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
@@ -491,7 +491,7 @@ export async function renderServiceBlueprintStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintStagedSvgResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
@@ -520,7 +520,7 @@ export async function renderServiceBlueprintStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: TransitionalStagedRenderSettings
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintStagedPngResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,

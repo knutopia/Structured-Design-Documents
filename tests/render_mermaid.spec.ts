@@ -13,6 +13,14 @@ import { normalizeLineEndings } from "./textNormalization.js";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
+function committedStage3GoldenPath(filePath: string, detailId: string): string {
+  const profileId = detailId === "compact" ? "simple" : "strict";
+  return filePath.replace(
+    `${path.sep}${detailId}_detail${path.sep}`,
+    `${path.sep}${profileId}_profile${path.sep}`
+  );
+}
+
 describe("renderSource mermaid", () => {
   it("renders curated manifest-backed views to stable Mermaid output", async () => {
     const bundle = await loadBundle(manifestPath);
@@ -26,12 +34,15 @@ describe("renderSource mermaid", () => {
         path: examplePath,
         text: await readFile(examplePath, "utf8")
       };
-      const golden = await readFile(outputPaths.mermaidOutputPath, "utf8");
+      const golden = await readFile(
+        committedStage3GoldenPath(outputPaths.mermaidOutputPath, variant.detailId),
+        "utf8"
+      );
       const result = renderSource(input, bundle, {
         viewId: variant.viewId,
         format: "mermaid",
-        profileId: variant.profileId,
-        detailId: variant.profileId === "simple" ? "compact" : "detailed"
+        profileId: bundle.manifest.tool_defaults.validation_profile_id,
+        detailId: variant.detailId
       });
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());

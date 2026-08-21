@@ -1309,3 +1309,62 @@ Subagents:
 
 Next authorized stage:
 - Stage 4.
+
+### Stage 4 achievement report
+
+Verdict: APPROVED
+
+Implemented:
+- Removed all six bundle `profile_display` policies and deleted the test-only profile-display resolver; renderers now consume only bundle-owned `detail_display` policies.
+- Replaced staged renderer settings and scene identity with `detailId` through scene construction, measurement, layout, routing/debug artifacts, SVG, and PNG derivation.
+- Replaced SVG `profile-*` and `data-profile-id` metadata with `detail-*` and `data-detail-id`; validation profile remains only in the surrounding combined result.
+- Migrated projection-backed preview requests and automatic human/helper artifact paths to detail identity, including exact default and explicit-backend path coverage.
+- Made helper preview explicit in both independent dimensions with required `--profile` and `--detail`, both result IDs, generic manifest render-detail contract resolution, detail-aware failure context, and detail-aware SDD Skill matching.
+- Migrated rendered-corpus planning and temporary generation to one variant per bundle render detail, detail directories, and an explicit bundle-fallback validation profile without changing the committed Stage 3 corpus.
+- Added exact post-migration profile-independence coverage and retained narrow test-only compatibility normalization/read mapping solely for the intentionally unchanged Stage 3 goldens and corpus.
+
+Changed subsystems:
+- Bundle view renderer defaults; staged renderer contracts, six staged scene builders, layout propagation, preview backends, SVG metadata, and automatic artifact paths.
+- Helper authoring contracts, contract metadata/resolution, discovery, parsing, preview materialization, documentation, and SDD Skill workflow guidance.
+- Rendered-corpus planning/generation, focused renderer/helper/CLI/corpus tests, and Stage 3 evidence compatibility harnesses.
+- Current helper and CLI documentation plus this implementation-plan execution record.
+
+Verification:
+- Baseline — branch `de-strict` at `018939cfdc20395a811971c31182e48866f2994f`; clean worktree before Stage 4 and no commit created.
+- `TMPDIR=/tmp pnpm run build` — pass.
+- `TMPDIR=/tmp pnpm exec vitest run tests/bundleRenderDetails.spec.ts tests/renderDetailEquivalence.spec.ts tests/previewArtifactPaths.spec.ts tests/helperCli.spec.ts tests/helperCli.integration.spec.ts tests/authoringContractMetadata.spec.ts tests/authoringContractResolution.spec.ts tests/authoringPreviewMaterialization.spec.ts tests/previewWorkflow.spec.ts tests/stagedRenderer.spec.ts tests/stagedSvgBackend.spec.ts tests/renderedCorpus.spec.ts tests/sddSkillSource.spec.ts` — pass, 13 of 13 files and 174 of 174 tests.
+- Final affected-fixture rerun with one worker — pass, `tests/authoringDirectoryServices.spec.ts`, `tests/stagedJourneyMap.spec.ts`, `tests/render_dot.spec.ts`, and `tests/render_mermaid.spec.ts`; 4 of 4 files and 24 of 24 tests.
+- `TMPDIR=/tmp pnpm run docs:build` — pass.
+- `TMPDIR=/tmp pnpm test` — baseline-sensitive parallel run: 94 of 95 files and 870 of 872 tests passed; the only failures were two established 5-second Journey Map routing timeouts, with no assertion mismatch.
+- `TMPDIR=/tmp pnpm exec vitest run tests/journeyMapPreRouting.spec.ts tests/journeyMapRenderModel.spec.ts tests/journeyMapRouting.spec.ts --maxWorkers=1 --minWorkers=1` — pass, 3 of 3 files and 81 of 81 tests.
+- Temporary generation from a copied bundle under `/tmp/sdd-stage4-corpus.iNiGEQ` — pass: exactly 12 `compact_detail` and 12 `detailed_detail` directories, 217 generated files, and README provenance naming the bundle-derived `simple` validation profile.
+- Temporary compact/detailed PNG review — pass for all six views; low-noise/full content differences were preserved with no observed geometry, routing, clipping, or legibility regression.
+- Manual helper discovery, bundle-resolved preview contract, explicit helper preview, automatic `sdd show` naming, and SVG-root inspection — pass; helper results carry both IDs, the default filename uses `.compact`, and SVG roots contain only detail identity.
+- Manual fixed-detail profile comparison — `simple`/`detailed` and `strict`/`detailed` staged SVGs had the identical SHA-256 `0960502304fc22e2f3db742cb0406e8a8457e45022aade38188a76fe42670e69`; fixed `strict` with `compact` produced a distinct artifact.
+- Required production searches — no `profile_display`, profile display resolver/type, `data-profile-id`, staged scene `profileId`, preview-path `profileId`, or helper preview without detail remains in active bundle/renderer/helper code.
+- `git diff --check` — pass; complete implementation diff inspected and no snapshot, golden, or rendered-corpus path is modified.
+
+Satisfied invariants:
+- Profile stops at validation in combined orchestration; detail alone crosses the text/staged rendering boundary and selects display policy.
+- One staged path and one legacy path were traced: staged projection requests carry only detail into renderer settings, while legacy preview receives already detail-shaped DOT before Graphviz invocation.
+- With detail fixed, successful text and staged artifacts are exactly identical across validation profiles without production normalization or compatibility fallback.
+- SVG, automatic filenames, helper materialization, helper matching, and corpus planning use render detail as artifact identity.
+- Helper preview remains explicit, bundle-validated, and independent from global/project configuration; bundle-resolved detail values come from manifest declarations rather than hardcoded helper metadata.
+- Combined library and preview results retain both effective IDs; helper JSON uses `profile_id` and `detail_id` consistently.
+- Corpus planning enumerates render details once, is collision-free, and validates generation with the bundle fallback profile.
+
+Violated invariants:
+- none.
+
+Residual risks:
+- The recorded parallel-suite Journey Map timeout sensitivity remains; all affected tests pass with one worker.
+- Stage 5 still owns evidence migration: committed renderer-stage goldens and SVG assets retain the old profile identity, committed corpus directories remain profile-based, test-only Stage 3 compatibility normalization/mapping remains, and active corpus/diagram documentation still links to the committed profile directories.
+
+Snapshots/goldens/corpus:
+- unchanged; temporary detail-based corpus generation occurred only under `/tmp`.
+
+Subagents:
+- none.
+
+Next authorized stage:
+- Stage 5.

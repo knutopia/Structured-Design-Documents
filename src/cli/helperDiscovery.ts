@@ -207,7 +207,7 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   {
     subject_id: "helper.command.preview",
     invocation:
-      "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --format <svg|png> [--backend <backend_id>]",
+      "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]",
     arguments: [
       {
         name: "document_path",
@@ -226,7 +226,13 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         flag: "--profile",
         required: true,
         value_name: "profile_id",
-        description: "Validation/render profile identifier."
+        description: "Validation profile identifier."
+      },
+      {
+        flag: "--detail",
+        required: true,
+        value_name: "detail_id",
+        description: "Render detail identifier."
       },
       {
         flag: "--format",

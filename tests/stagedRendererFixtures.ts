@@ -3,7 +3,7 @@ import type { RendererScene } from "../src/renderer/staged/contracts.js";
 export function buildFixtureScene(): RendererScene {
   return {
     viewId: "ia_place_map",
-    profileId: "strict",
+    detailId: "detailed",
     themeId: "default",
     root: {
       kind: "container",
