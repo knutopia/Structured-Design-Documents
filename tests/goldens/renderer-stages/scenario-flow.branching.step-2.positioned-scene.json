@@ -1,6 +1,6 @@
 {
   "viewId": "scenario_flow",
-  "profileId": "strict",
+  "detailId": "detailed",
   "themeId": "default",
   "root": {
     "kind": "container",

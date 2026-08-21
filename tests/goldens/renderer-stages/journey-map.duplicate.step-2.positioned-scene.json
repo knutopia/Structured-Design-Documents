@@ -1,6 +1,6 @@
 {
   "viewId": "journey_map",
-  "profileId": "strict",
+  "detailId": "detailed",
   "themeId": "default",
   "root": {
     "kind": "container",

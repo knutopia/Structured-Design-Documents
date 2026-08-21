@@ -5,77 +5,24 @@ import { describe, expect, it } from "vitest";
 import {
   discoverCuratedRenderedExamplePairs,
   expandCuratedRenderedExampleVariants,
-  getRenderedCorpusDebugOutputPath as getStage4RenderedCorpusDebugOutputPath,
-  getRenderedCorpusPreviewOutputPath as getStage4RenderedCorpusPreviewOutputPath,
+  getRenderedCorpusDebugOutputPath,
+  getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
   getRenderedCorpusViewDirName,
   isPreviewOnlyRenderedCorpusView,
-  planRenderedCorpusOutputPaths as planStage4RenderedCorpusOutputPaths
+  planRenderedCorpusOutputPaths
 } from "../src/examples/renderedCorpus.js";
-import type { Bundle } from "../src/index.js";
 import { loadBundle } from "../src/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
-
-function committedProfileId(detailId: string): string {
-  return detailId === "compact" ? "simple" : "strict";
-}
-
-function committedStage3Path(filePath: string, detailId: string): string {
-  return filePath.replace(
-    `${path.sep}${detailId}_detail${path.sep}`,
-    `${path.sep}${committedProfileId(detailId)}_profile${path.sep}`
-  );
-}
-
-function planRenderedCorpusOutputPaths(
-  bundle: Bundle,
-  variant: Parameters<typeof planStage4RenderedCorpusOutputPaths>[1]
-) {
-  const planned = planStage4RenderedCorpusOutputPaths(bundle, variant);
-  const mapped = Object.fromEntries(
-    Object.entries(planned).map(([key, value]) => [key, committedStage3Path(value, variant.detailId)])
-  ) as typeof planned;
-  const committedDir = path.dirname(mapped.svgOutputPath);
-  return {
-    ...mapped,
-    detailDir: committedDir,
-    profileDir: committedDir
-  };
-}
-
-function getRenderedCorpusDebugOutputPath(
-  bundle: Bundle,
-  variant: Parameters<typeof getStage4RenderedCorpusDebugOutputPath>[1],
-  debugStem: string,
-  format: Parameters<typeof getStage4RenderedCorpusDebugOutputPath>[3]
-): string {
-  return committedStage3Path(
-    getStage4RenderedCorpusDebugOutputPath(bundle, variant, debugStem, format),
-    variant.detailId
-  );
-}
-
-function getRenderedCorpusPreviewOutputPath(
-  bundle: Bundle,
-  variant: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[1],
-  format: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[2],
-  backendId: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[3],
-  defaultBackendId: Parameters<typeof getStage4RenderedCorpusPreviewOutputPath>[4]
-): string {
-  return committedStage3Path(
-    getStage4RenderedCorpusPreviewOutputPath(bundle, variant, format, backendId, defaultBackendId),
-    variant.detailId
-  );
-}
 
 describe("rendered example corpus", () => {
   it("plans one collision-free directory per bundle render detail", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
-    const planned = variants.map((variant) => planStage4RenderedCorpusOutputPaths(bundle, variant));
+    const planned = variants.map((variant) => planRenderedCorpusOutputPaths(bundle, variant));
 
     expect(new Set(variants.map((variant) => variant.detailId))).toEqual(new Set(["compact", "detailed"]));
     expect(planned.every((output) => /_(?:detail)$/.test(path.basename(output.detailDir)))).toBe(true);
@@ -108,7 +55,7 @@ describe("rendered example corpus", () => {
       const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
       expect(path.basename(path.dirname(outputPaths.exampleDir))).toBe(getRenderedCorpusViewDirName(variant.viewId));
       expect(path.basename(outputPaths.exampleDir)).toMatch(/_example$/);
-      expect(path.basename(outputPaths.profileDir)).toMatch(/_profile$/);
+      expect(path.basename(outputPaths.detailDir)).toMatch(/_detail$/);
       await access(outputPaths.sourceOutputPath);
       await access(outputPaths.dotOutputPath);
       await access(outputPaths.mermaidOutputPath);
@@ -259,19 +206,19 @@ describe("rendered example corpus", () => {
 
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/strict_profile/ui_state_fallback.ui_contracts_BROKEN.svg"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts_BROKEN.svg"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
     ))).rejects.toThrow();
   });
 

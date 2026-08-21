@@ -339,10 +339,10 @@ The test suite uses the bundle examples as conformance fixtures.
 - compile tests assert stable compiled JSON against bundle snapshots after newline normalization
 - validation tests assert zero errors for current manifest examples under `strict`
 - projection tests assert targeted view behavior and manifest-wide snapshot parity for every declared projection snapshot
-- render tests assert stable internal DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/profile folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/permissive_profile/`
+- render tests assert stable internal DOT and Mermaid output against the committed corpus in `examples/rendered/v0.1/`, using suffixed view/example/detail folders such as `ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/`
 - staged-renderer tests snapshot `RendererScene`, `MeasuredScene`, and `PositionedScene` JSON plus deterministic staged SVG and diagnostic fixtures under `tests/goldens/renderer-stages/` while preserving explicit legacy outputs; accepted Journey Map evidence includes meaningful pre-routing, step-2, step-3, and final stages
 - staged micro-layout tests cover wrapping, width-band escalation, clamping, secondary-area handling, and unknown-theme fallback
-- corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-profile internal `.dot`/`.mmd` artifacts alongside `.svg` and `.png` preview artifacts
+- corpus completeness tests assert every curated manifest-backed render pair has a committed source `.sdd` plus per-detail internal `.dot`/`.mmd` artifacts alongside `.svg` and `.png` preview artifacts
 - negative fixtures cover syntax, compile, and validation failures
 
 Fixture and golden reads should normalize `CRLF` to `LF` before raw string comparison so mixed contributor environments do not create false negatives. The newline policy still lives in `.gitattributes`; test normalization exists to make assertions platform-tolerant, not to permit committed `CRLF` artifacts.

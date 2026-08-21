@@ -23,13 +23,13 @@ Start with the `simple` validation profile and `compact` render detail. When eit
 SVG quick-start:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --out ./outcome.svg
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --detail compact --out ./outcome.svg
 ```
 
 PNG quick-start:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --detail compact --format png --out ./outcome.png
 ```
 
 (Inside this repository, use `pnpm sdd ...`; if the binary is on your `PATH`, the equivalent `sdd ...` commands work too.)
@@ -234,10 +234,10 @@ Dense Journey Maps can remain difficult to trace. Residual crossings receive det
 
 ### I Want A Diagram Quickly
 
-Start with `sdd show`, use `--profile simple`, and stick with SVG unless you specifically need PNG.
+Start with `sdd show`, use `--profile simple --detail compact`, and stick with SVG unless you specifically need PNG.
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --detail compact
 ```
 
 ### I Want To Check Whether My File Is In Good Shape

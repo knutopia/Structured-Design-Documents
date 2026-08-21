@@ -299,7 +299,7 @@ function buildSyntheticCrowdedLaneScene(): RendererScene {
 
   return {
     viewId: "ui_contracts",
-    profileId: "strict",
+    detailId: "detailed",
     themeId: "default",
     root: {
       kind: "container",

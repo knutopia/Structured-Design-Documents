@@ -161,15 +161,18 @@ describe("journey map accepted renderer-stage goldens", () => {
     await expectFinalPngUsesExactSvg(rendered);
   });
 
-  for (const profileId of ["simple", "permissive"] as const) {
-    it(`locks the primary ${profileId} badge-profile final evidence`, async () => {
+  for (const { profileId, detailId } of [
+    { profileId: "simple", detailId: "compact" },
+    { profileId: "permissive", detailId: "detailed" }
+  ] as const) {
+    it(`locks the primary ${detailId} detail final evidence`, async () => {
       const { rendered } = await buildFixture("primary", profileId);
       await expectRendererStageSnapshot(
-        `journey-map.badges.${profileId}.positioned-scene.json`,
+        `journey-map.badges.${detailId}.positioned-scene.json`,
         rendered.routingStages.finalPositionedScene
       );
       await expectRendererStageTextSnapshot(
-        `journey-map.badges.${profileId}.svg`,
+        `journey-map.badges.${detailId}.svg`,
         rendered.finalSvg
       );
       if (profileId === "permissive") {

@@ -214,7 +214,7 @@ describe("staged journey map RendererScene", () => {
     expect(flattenItems(scene.root).filter((item) => item.id === "J-503")).toHaveLength(1);
   });
 
-  it("builds unboxed metadata only from typed references and preserves profile-controlled ordering", async () => {
+  it("builds unboxed metadata only from typed references and preserves detail-controlled ordering", async () => {
     const simple = await buildFixture("primary", "simple");
     const permissive = await buildFixture("primary", "permissive");
     const strict = await buildFixture("primary", "strict");
@@ -559,8 +559,8 @@ describe("staged journey map RendererScene", () => {
   it("matches the accepted Gate 3 RendererScene evidence", async () => {
     const cases = [
       ["primary", "strict", "journey-map.primary.renderer-scene.json"],
-      ["primary", "simple", "journey-map.badges.simple.renderer-scene.json"],
-      ["primary", "permissive", "journey-map.badges.permissive.renderer-scene.json"],
+      ["primary", "simple", "journey-map.badges.compact.renderer-scene.json"],
+      ["primary", "permissive", "journey-map.badges.detailed.renderer-scene.json"],
       ["ordering_ownership", "strict", "journey-map.ordering-ownership.renderer-scene.json"],
       ["topology", "strict", "journey-map.topology.renderer-scene.json"],
       ["duplicate", "strict", "journey-map.duplicate.renderer-scene.json"]

@@ -25,11 +25,12 @@ Curated view/example pairs:
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
 - `ui_contracts_diagram_type/ui_state_fallback_example`
 
-Profiles rendered in each pair directory: `simple_profile`, `permissive_profile`, `strict_profile`.
+Render details generated in each pair directory: `compact_detail`, `detailed_detail`.
 
-Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with internal `.dot` and `.mmd` text artifacts alongside `.svg` and `.png` preview outputs.
-Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
-`simple_profile` may omit optional overlays for readability; `permissive_profile` and `strict_profile` keep the fuller render detail.
+Each pair directory contains the source `.sdd` at the pair root plus suffixed per-detail subfolders with internal `.dot` and `.mmd` text artifacts alongside `.svg` and `.png` preview outputs.
+Unsuffixed `.svg` and `.png` files are the default preview backend for that view/detail when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
+All corpus inputs are validated with the bundle-derived `simple` profile before rendering.
+`compact_detail` omits optional overlays for readability; `detailed_detail` keeps the fuller render detail.
 
 `ia_place_map` visual review checklist:
 
@@ -38,7 +39,7 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 - mixed top-level `Place` and `Area` ordering follows source order
 - same-scope follower places align at one indent level under the earliest preceding hub that navigates to them
 - single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk
-- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
+- `compact_detail` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
 - only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes
 
 `ui_contracts` visual review checklist:
@@ -79,7 +80,7 @@ Unsuffixed `.svg` and `.png` files are the default preview backend for that view
 `journey_map` visual review checklist:
 
 - staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing
-- strict and permissive profiles show resolved opportunity badges while simple remains title-focused
+- detailed detail shows resolved opportunity badges while compact detail remains title-focused
 - explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path
 - focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior
 - residual perpendicular crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings

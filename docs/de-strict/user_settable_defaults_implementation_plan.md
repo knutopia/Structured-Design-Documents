@@ -1368,3 +1368,68 @@ Subagents:
 
 Next authorized stage:
 - Stage 5.
+
+### Stage 5 achievement report
+
+Verdict: APPROVED
+
+Implemented:
+- Replaced the temporary Stage 4 renderer-golden identity normalizer with exact snapshot comparison and migrated focused scene/SVG evidence from profile identity to detail identity.
+- Renamed the profile-keyed Journey Map badge goldens to `compact` and `detailed` evidence names without changing geometry, routing, content, diagnostics, or notes.
+- Removed all committed-corpus compatibility path mapping and regenerated the repository corpus into bundle-declared `compact_detail` and `detailed_detail` directories.
+- Migrated DOT, Mermaid, corpus completeness, and staged visual-acceptance consumers to the production detail paths.
+- Added an explicit happy-path precedence matrix covering bundle, partial/global/project, and CLI profile/detail combinations while retaining the existing invalid-value and malformed-configuration cases across all consumers.
+- Updated live corpus, CLI, helper-skill, diagram-type, development, and repository guidance to distinguish validation profile from render detail and to use detail-based artifact identity.
+- Migrated the live SDD Skill and BillSage example SVG names and root metadata from profile identity to detail identity; preserved unrelated Service Blueprint documentation assets.
+
+Changed subsystems:
+- Focused renderer-stage goldens and their exact-comparison harness.
+- Generated rendered corpus, generated README/provenance, corpus path tests, DOT/Mermaid goldens, and staged visual-acceptance paths.
+- CLI precedence tests and synthetic staged test-scene identities.
+- Current documentation, SDD Skill example evidence, BillSage-linked example evidence, `AGENTS.md`, and this execution record.
+
+Verification:
+- Baseline — branch `de-strict` at `0612c5b9ce1c32d2ac377f125ec771e593b2a29e`; clean worktree before Stage 5 and no commit created.
+- Environment — Node `v22.17.0`, pnpm `10.31.0`, and Graphviz `2.43.0`.
+- Pre-regeneration checks — Graphviz pass; existing committed-corpus, DOT, and Mermaid suites pass, 3 of 3 files and 19 of 19 tests; corpus deletion scope confirmed as exactly `examples/rendered/v0.1/`.
+- Focused golden audit — 132 focused renderer-stage files inspected: 12 byte-identical and 120 differing only by the approved `profileId` -> `detailId`, SVG metadata, or badge-evidence filename mapping; zero unexplained mismatches.
+- `TMPDIR=/tmp pnpm run generate:rendered-examples` — pass twice. Both generations produced 217 files, exactly 12 `compact_detail` and 12 `detailed_detail` directories, no profile directories, and the identical sorted aggregate SHA-256 `b477fbc262901bab26b83a9e4fca61641b08b3311e184a1378380bc5abc5838c`.
+- Corpus equivalence audit — excluding the regenerated README, 162 files are byte-identical to the approved `simple`/`strict` mapping and 54 staged SVGs differ only by detail metadata; zero content mismatches. The README records the bundle-derived `simple` validation profile and both bundle render details.
+- Visual corpus review — pass for compact and detailed PNGs from all six views. Compact preserves the low-noise presentation; detailed preserves the fuller annotations. No geometry, routing, clipping, overflow, or legibility regression was observed.
+- Defaults, CLI, bundle, and independence suites — pass, 6 of 6 files and 108 of 108 tests. `cliDefaults` covers the eight happy-path matrix cases, invalid project values without fallthrough, malformed configuration isolation, all five profile consumers, and all four detail consumers.
+- Helper and SDD Skill suites — pass, 7 of 7 files and 127 of 127 tests; helper preview remains explicit in both IDs and configuration-independent.
+- Focused renderer, exact-golden, corpus, DOT, Mermaid, preview-path, and staged visual suites — pass, 10 of 10 files and 80 of 80 tests.
+- Synthetic staged-scene identity rerun — pass, 3 of 3 files and 31 of 31 tests.
+- `TMPDIR=/tmp pnpm run build` — pass.
+- `TMPDIR=/tmp pnpm run docs:build` — pass.
+- Final `TMPDIR=/tmp pnpm test` — baseline-sensitive parallel run: 93 of 95 files and 870 of 873 tests passed; the only failures were three established 5-second Journey Map timeouts with no assertion mismatch.
+- Final one-worker rerun of the affected Journey Map files — pass, 2 of 2 files and 71 of 71 tests.
+- CLI help audit — `sdd`, `sdd show`, and `sdd defaults` describe independent project/global/bundle omission, profile override, detail override, detail-based automatic names, and defaults management; no strict default is advertised.
+- Required drift searches — no active hardcoded strict runtime fallback, bundle `profile_display`, profile display resolver, staged profile metadata, or profile-based automatic filename remains. Guided Addition's separate display-profile fields remain present and no `src/authoring/` implementation file changed.
+- `git diff --check` — pass; the complete diff was inspected by subsystem.
+
+Satisfied invariants:
+- Shipped omitted human-CLI values are independently resolved as bundle `simple` validation plus `compact` rendering when no higher-precedence preference is present.
+- CLI, project, global, and bundle sources remain independent for both settings; invalid selected values fail without fallthrough.
+- All five profile-consuming commands share profile resolution and all four render commands share detail resolution.
+- Public library omission remains bundle-only and helper preview remains explicit and persistent-configuration-free.
+- Profile controls validation only; detail exclusively controls renderer display policy, scene/SVG identity, automatic paths, helper artifact identity, and corpus organization.
+- Committed compact evidence matches retained simple behavior and committed detailed evidence matches retained strict/permissive behavior with no unexplained renderer change.
+- The corpus is collision-free, deterministic, provenance-labeled, and contains the expected staged and legacy backends.
+- Live documentation and help match runtime behavior, while historical `docs/Done/` material and unrelated Service Blueprint assets remain untouched.
+- Parser, compiler, raw projection, validation rules, Guided Addition behavior, layout, and routing have no unexplained change.
+
+Violated invariants:
+- none.
+
+Residual risks:
+- Parallel Journey Map suites remain sensitive to the repository's 5-second per-test timeout under full-suite load; every affected assertion passes with one worker.
+
+Snapshots/goldens/corpus:
+- Focused renderer goldens and the committed rendered corpus were intentionally migrated under the Stage 5 evidence contract. No unrelated snapshot, golden, or corpus artifact changed.
+
+Subagents:
+- none.
+
+Next authorized stage:
+- none; the user-settable defaults and independent render-detail implementation plan is complete.

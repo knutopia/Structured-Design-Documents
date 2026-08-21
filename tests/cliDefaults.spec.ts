@@ -155,6 +155,87 @@ const profileConsumers = [
 const detailConsumers = profileConsumers.filter((consumer) => consumer.name !== "validate");
 
 describe("persistent defaults CLI resolution", () => {
+  it("resolves the independent happy-path profile/detail matrix", async () => {
+    const cases = [
+      { name: "bundle fallbacks", options: {}, extra: [], expectedProfile: "simple", expectedDetail: "compact" },
+      {
+        name: "global profile only",
+        options: { global: { version: "1" as const, defaults: { validation_profile_id: "permissive" } } },
+        extra: [],
+        expectedProfile: "permissive",
+        expectedDetail: "compact"
+      },
+      {
+        name: "global detail only",
+        options: { global: { version: "1" as const, defaults: { render_detail_id: "detailed" } } },
+        extra: [],
+        expectedProfile: "simple",
+        expectedDetail: "detailed"
+      },
+      {
+        name: "partial project configuration",
+        options: {
+          global: { version: "1" as const, defaults: { render_detail_id: "detailed" } },
+          project: { version: "1" as const, defaults: { validation_profile_id: "strict" } }
+        },
+        extra: [],
+        expectedProfile: "strict",
+        expectedDetail: "detailed"
+      },
+      {
+        name: "full project configuration",
+        options: {
+          project: {
+            version: "1" as const,
+            defaults: { validation_profile_id: "strict", render_detail_id: "detailed" }
+          }
+        },
+        extra: [],
+        expectedProfile: "strict",
+        expectedDetail: "detailed"
+      },
+      {
+        name: "CLI profile only",
+        options: { project: { version: "1" as const, defaults: { render_detail_id: "detailed" } } },
+        extra: ["--profile", "permissive"],
+        expectedProfile: "permissive",
+        expectedDetail: "detailed"
+      },
+      {
+        name: "CLI detail only",
+        options: { project: { version: "1" as const, defaults: { validation_profile_id: "strict" } } },
+        extra: ["--detail", "detailed"],
+        expectedProfile: "strict",
+        expectedDetail: "detailed"
+      },
+      {
+        name: "both CLI flags",
+        options: {
+          project: {
+            version: "1" as const,
+            defaults: { validation_profile_id: "strict", render_detail_id: "compact" }
+          }
+        },
+        extra: ["--profile", "permissive", "--detail", "detailed"],
+        expectedProfile: "permissive",
+        expectedDetail: "detailed"
+      }
+    ];
+
+    for (const matrixCase of cases) {
+      const context = createCliDeps(createMemoryDefaults(matrixCase.options).runtime);
+      const result = await runCli([
+        "node", "sdd", "show", "example.sdd", "--view", "ia_place_map", "--out", "/tmp/example.svg",
+        ...matrixCase.extra
+      ], context.deps);
+      expect(result.exitCode, matrixCase.name).toBe(0);
+      expect(context.renderSourcePreview.mock.calls[0]?.[2]).toMatchObject({
+        profileId: matrixCase.expectedProfile,
+        detailId: matrixCase.expectedDetail
+      });
+    }
+  });
+
   it("applies bundle, global, project, and explicit profile sources to all five consumers", async () => {
     const sourceCases = [
       { name: "bundle", options: {}, expected: "simple", extra: [] },
