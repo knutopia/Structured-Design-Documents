@@ -9,6 +9,7 @@ import {
 } from "../authoring/guidedAddition/snapshot.js";
 import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/workspace.js";
 import { loadBundle } from "../bundle/loadBundle.js";
+import { getBundleValidationProfileFallback } from "../bundle/toolDefaults.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import { compileSource } from "../compiler/compileSource.js";
 import type { CompileResult } from "../compiler/types.js";
@@ -45,6 +46,14 @@ import type { Diagnostic, RenderOptions, RenderResult, SourceInput } from "../ty
 import { validateGraph } from "../validator/validateGraph.js";
 import type { ValidationReport } from "../validator/types.js";
 import {
+  createDefaultsConfigRuntime,
+  validateResolvedDefault,
+  DefaultsConfigError,
+  type DefaultsConfigRuntime,
+  type DefaultsConfigScope,
+  type DefaultsConfigSetting
+} from "../config/index.js";
+import {
   createReadlineGuidedPrompt,
   runGuidedAdditionCommand,
   type GuidedAdditionCliDeps
@@ -57,6 +66,7 @@ const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-rea
 type DiagnosticsFormat = "pretty" | "json";
 
 export interface CliDeps extends GuidedAdditionCliDeps {
+  defaultsConfig: DefaultsConfigRuntime;
   compileSource: (input: SourceInput, bundle: Bundle) => CompileResult;
   validateGraph: (graph: NonNullable<CompileResult["graph"]>, bundle: Bundle, profileId: string) => ValidationReport;
   renderSource: (input: SourceInput, bundle: Bundle, options: RenderOptions) => RenderResult;
@@ -114,6 +124,7 @@ function createDefaultDeps(): CliDeps {
     createGuidedAdditionRuntimeV1,
     applyAdditionProposalV1,
     createGuidedPrompt: createReadlineGuidedPrompt,
+    defaultsConfig: createDefaultsConfigRuntime({ findRepoRoot: findAuthoringRepoRoot }),
     compileSource,
     validateGraph,
     renderSource,
@@ -332,7 +343,7 @@ async function runValidate(
 ): Promise<number> {
   try {
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const profileId = resolveCliValidationProfile(bundle, options.profile);
+    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle, options.profile)).value;
     const compileResult = deps.compileSource(input, bundle);
     const diagnostics = [...compileResult.diagnostics];
     if (compileResult.graph && !hasErrors(diagnostics)) {
@@ -362,7 +373,7 @@ async function runRenderText(
     }
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const profileId = resolveCliValidationProfile(bundle, options.profile);
+    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle, options.profile)).value;
     const supported = ensureTextFormat(bundle, options.view, options.format);
     if (!supported.capability) {
       deps.stderr(appendLine(supported.message ?? `Unsupported render request for view '${options.view}'.`));
@@ -513,7 +524,7 @@ async function runShowCommand(
     }
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const profileId = resolveCliValidationProfile(bundle, options.profile);
+    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle, options.profile)).value;
     const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat, requestedBackendId);
     if (!supported.capability || !supported.view) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
@@ -583,6 +594,175 @@ async function runShowCommand(
   }
 }
 
+type DefaultsCliSetting = "profile" | "detail";
+
+interface DefaultsScopeOptions {
+  global?: boolean;
+  project?: boolean;
+}
+
+function resolveDefaultsScope(
+  deps: Pick<CliDeps, "stderr">,
+  options: DefaultsScopeOptions,
+  required: boolean
+): DefaultsConfigScope | undefined | null {
+  if (options.global && options.project) {
+    deps.stderr("Choose exactly one defaults scope: --global or --project.\n");
+    return null;
+  }
+  if (options.global) return "global";
+  if (options.project) return "project";
+  if (!required) return undefined;
+  deps.stderr("Choose exactly one defaults scope: --global or --project.\n");
+  return null;
+}
+
+function parseDefaultsSetting(deps: Pick<CliDeps, "stderr">, value: string): DefaultsCliSetting | null {
+  if (value === "profile" || value === "detail") return value;
+  deps.stderr(`Unknown defaults setting '${value}'. Choose profile or detail.\n`);
+  return null;
+}
+
+function storedSettingForCli(setting: DefaultsCliSetting): DefaultsConfigSetting {
+  return setting === "profile" ? "validation_profile_id" : "render_detail_id";
+}
+
+async function getDefaultsScopePath(
+  deps: Pick<CliDeps, "cwd" | "defaultsConfig">,
+  scope: DefaultsConfigScope
+): Promise<string> {
+  if (scope === "global") return deps.defaultsConfig.getGlobalConfigPath();
+  const projectPath = await deps.defaultsConfig.getProjectConfigPath(deps.cwd());
+  if (!projectPath) {
+    throw new DefaultsConfigError(
+      "config.project_root",
+      `Cannot use project defaults because no SDD project root was found from '${deps.cwd()}'.`
+    );
+  }
+  return projectPath;
+}
+
+function profileAvailability(bundle: Bundle): string[] {
+  return bundle.manifest.profiles.map((profile) => profile.id);
+}
+
+async function runDefaultsShow(
+  deps: CliDeps,
+  options: { global?: boolean; project?: boolean; bundle: string }
+): Promise<number> {
+  const scope = resolveDefaultsScope(deps, options, false);
+  if (scope === null) return 2;
+
+  try {
+    const bundle = await deps.loadBundle(options.bundle);
+    if (!scope) {
+      const profile = await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle);
+      const lines = [
+        `Bundle: ${bundle.manifestPath}`,
+        `Profile: ${profile.value}`,
+        `Profile source: ${profile.source}`,
+        ...(profile.sourcePath ? [`Profile source path: ${profile.sourcePath}`] : []),
+        `Bundle profile fallback: ${getBundleValidationProfileFallback(bundle)}`
+      ];
+      deps.stdout(`${lines.join("\n")}\n`);
+      return 0;
+    }
+
+    const configPath = await getDefaultsScopePath(deps, scope);
+    const config = await deps.defaultsConfig.read(configPath);
+    const profile = config?.defaults.validation_profile_id;
+    const detail = config?.defaults.render_detail_id;
+    const availableProfiles = profileAvailability(bundle);
+    const profileValid = profile === undefined || availableProfiles.includes(profile);
+    const detailValid = detail === undefined;
+    const profileValidity = profile === undefined
+      ? "not set"
+      : profileValid
+        ? "valid"
+        : `invalid (available: ${availableProfiles.join(", ") || "(none)"})`;
+    const detailValidity = detail === undefined
+      ? "not set"
+      : "unavailable (selected bundle declares no render-detail vocabulary)";
+
+    deps.stdout([
+      `Scope: ${scope}`,
+      `Path: ${configPath}`,
+      `Bundle: ${bundle.manifestPath}`,
+      `Profile: ${profile ?? "unset"}`,
+      `Profile validity: ${profileValidity}`,
+      `Detail: ${detail ?? "unset"}`,
+      `Detail validity: ${detailValidity}`
+    ].join("\n") + "\n");
+    return profileValid && detailValid ? 0 : 1;
+  } catch (error) {
+    deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
+    return 1;
+  }
+}
+
+async function runDefaultsSet(
+  deps: CliDeps,
+  settingValue: string,
+  value: string,
+  options: { global?: boolean; project?: boolean; bundle: string }
+): Promise<number> {
+  const scope = resolveDefaultsScope(deps, options, true);
+  if (scope === null || scope === undefined) return 2;
+  const setting = parseDefaultsSetting(deps, settingValue);
+  if (!setting) return 2;
+
+  try {
+    const bundle = await deps.loadBundle(options.bundle);
+    if (setting === "detail") {
+      throw new DefaultsConfigError(
+        "config.unknown_value",
+        `Cannot set detail to '${value}': selected bundle '${bundle.manifestPath}' declares no render-detail values.`
+      );
+    }
+    validateResolvedDefault({
+      setting: "validation_profile_id",
+      selected: { value, source: "cli" },
+      availableValues: profileAvailability(bundle),
+      bundlePath: bundle.manifestPath
+    });
+
+    const configPath = await getDefaultsScopePath(deps, scope);
+    const result = await deps.defaultsConfig.set(configPath, storedSettingForCli(setting), value, {
+      createParent: scope === "global"
+    });
+    deps.stdout(result.changed
+      ? `Set ${setting} to '${value}' in ${scope} defaults at ${configPath}.\n`
+      : `${setting[0]!.toUpperCase()}${setting.slice(1)} is already '${value}' in ${scope} defaults at ${configPath}; no changes made.\n`);
+    return 0;
+  } catch (error) {
+    deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
+    return 1;
+  }
+}
+
+async function runDefaultsUnset(
+  deps: CliDeps,
+  settingValue: string,
+  options: { global?: boolean; project?: boolean }
+): Promise<number> {
+  const scope = resolveDefaultsScope(deps, options, true);
+  if (scope === null || scope === undefined) return 2;
+  const setting = parseDefaultsSetting(deps, settingValue);
+  if (!setting) return 2;
+
+  try {
+    const configPath = await getDefaultsScopePath(deps, scope);
+    const result = await deps.defaultsConfig.unset(configPath, storedSettingForCli(setting));
+    deps.stdout(result.changed
+      ? `Unset ${setting} in ${scope} defaults at ${configPath}.\n`
+      : `${setting[0]!.toUpperCase()}${setting.slice(1)} is already unset in ${scope} defaults at ${configPath}; no changes made.\n`);
+    return 0;
+  } catch (error) {
+    deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
+    return 1;
+  }
+}
+
 function globalHelpText(): string {
   return [
     "",
@@ -590,10 +770,11 @@ function globalHelpText(): string {
     "  simple       low-noise drafting",
     "  permissive   warning-first completeness",
     "  strict       strict governance",
-    "  Omit --profile to use the selected bundle's default.",
+    "  Omit --profile to resolve project, global, then selected-bundle defaults.",
     "",
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+    "  sdd defaults show",
     "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict",
     "  sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
@@ -665,13 +846,50 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       setExitCode(await runCompile(deps, inputPath, options));
     });
 
+  const defaultsCommand = program
+    .command("defaults")
+    .summary("Show or manage persistent CLI defaults")
+    .description("Show effective defaults or manage user-global and project-scoped preferences.");
+
+  defaultsCommand
+    .command("show")
+    .description("Show the effective profile or inspect one stored defaults scope.")
+    .option("--global", "inspect user-global defaults")
+    .option("--project", "inspect defaults at the discovered SDD project root")
+    .option("--bundle <manifest>", "bundle manifest used to validate stored values", defaultManifestPath)
+    .action(async (options) => {
+      setExitCode(await runDefaultsShow(deps, options));
+    });
+
+  defaultsCommand
+    .command("set")
+    .description("Set one persistent preference in exactly one scope.")
+    .argument("<setting>", "profile or detail")
+    .argument("<value>", "bundle-declared setting value")
+    .option("--global", "write user-global defaults")
+    .option("--project", "write defaults at the discovered SDD project root")
+    .option("--bundle <manifest>", "bundle manifest used to validate the value", defaultManifestPath)
+    .action(async (setting, value, options) => {
+      setExitCode(await runDefaultsSet(deps, setting, value, options));
+    });
+
+  defaultsCommand
+    .command("unset")
+    .description("Remove one persistent preference from exactly one scope.")
+    .argument("<setting>", "profile or detail")
+    .option("--global", "update user-global defaults")
+    .option("--project", "update defaults at the discovered SDD project root")
+    .action(async (setting, options) => {
+      setExitCode(await runDefaultsUnset(deps, setting, options));
+    });
+
   program
     .command("validate")
     .summary("Compile and validate a source .sdd file")
     .description("Compile and validate a source .sdd file against a validation profile.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id; omission uses the selected bundle default")
+    .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd",
@@ -690,7 +908,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .requiredOption("--view <view>", "view id")
     .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id; omission uses the selected bundle default")
+    .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
     .option("--out <file>", "write rendered output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -712,7 +930,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format dot`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id; omission uses the selected bundle default")
+    .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
     .option("--out <file>", "write internal DOT output to a file instead of stdout")
     .option("--png", "also write a sibling PNG preview rendered through the SVG pipeline")
     .option("--png-out <file>", "write PNG output to an explicit file path")
@@ -732,7 +950,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format mermaid`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-    .option("--profile <profile>", "profile id; omission uses the selected bundle default")
+    .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
     .option("--out <file>", "write internal Mermaid output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -755,7 +973,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-      .option("--profile <profile>", "profile id; omission uses the selected bundle default")
+      .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
       .option("--format <format>", "preview format (svg or png)", "svg")
       .option("--backend <backend>", "preview backend id override")
       .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<profile>[.<backend>].<format> beside the input")

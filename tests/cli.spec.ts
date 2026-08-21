@@ -22,7 +22,11 @@ const bundle: Bundle = {
     tool_defaults: {
       validation_profile_id: "simple"
     },
-    profiles: [],
+    profiles: [
+      { id: "simple", path: "profiles/simple.yaml", intent: "drafting" },
+      { id: "permissive", path: "profiles/permissive.yaml", intent: "warning-first" },
+      { id: "strict", path: "profiles/strict.yaml", intent: "governance" }
+    ],
     examples: [],
     compatibility: {
       requires_compiler_min: "0.1.0",
@@ -246,6 +250,14 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
     writeTextFileMock,
     writeBinaryFileMock,
     deps: {
+      cwd: () => "/repo",
+      defaultsConfig: {
+        getGlobalConfigPath: () => "/user/sdd/config.yaml",
+        getProjectConfigPath: vi.fn(async () => null),
+        read: vi.fn(async () => undefined),
+        set: vi.fn(async (filePath: string) => ({ changed: true, path: filePath })),
+        unset: vi.fn(async (filePath: string) => ({ changed: true, path: filePath }))
+      },
       loadBundle: vi.fn(async () => bundle),
       readSourceInput: vi.fn(async (filePath: string) => ({
         path: filePath.startsWith("/") ? filePath : `/repo/${filePath}`,
@@ -336,7 +348,7 @@ describe("CLI wrappers", () => {
     }
   });
 
-  it("does not fall through when an explicit profile is unknown", async () => {
+  it("rejects an unknown explicit profile before validation and does not fall through", async () => {
     const { deps, stderr } = createDeps({
       validateGraph: vi.fn((_graph, _bundle, profileId) => ({
         diagnostics: [{
@@ -357,8 +369,10 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
-    expect(deps.validateGraph).toHaveBeenCalledWith(expect.anything(), bundle, "recommended");
-    expect(stderr.join("")).toContain("Unknown profile 'recommended'");
+    expect(deps.validateGraph).not.toHaveBeenCalled();
+    expect(stderr.join("")).toContain("Unknown value 'recommended'");
+    expect(stderr.join("")).toContain("cli source");
+    expect(stderr.join("")).toContain(bundle.manifestPath);
   });
 
   it("dot emits DOT text for a valid example", async () => {
@@ -1522,7 +1536,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Profiles (bundle-declared; shipped v0.1 profiles shown):");
     expect(help).toContain("simple");
     expect(help).toContain("strict       strict governance");
-    expect(help).toContain("Omit --profile to use the selected bundle's default.");
+    expect(help).toContain("Omit --profile to resolve project, global, then selected-bundle defaults.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg");
@@ -1535,7 +1549,8 @@ describe("CLI wrappers", () => {
 
     for (const commandName of ["validate", "render", "dot", "mmd", "show"]) {
       const commandHelp = program.commands.find((command) => command.name() === commandName)!.helpInformation();
-      expect(commandHelp, commandName).toContain("profile id; omission uses the selected bundle default");
+      expect(commandHelp, commandName).toContain("profile id override; omission uses the resolved");
+      expect(commandHelp, commandName).toContain("project/global/bundle default");
     }
   });
 

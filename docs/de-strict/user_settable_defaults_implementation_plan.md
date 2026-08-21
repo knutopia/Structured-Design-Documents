@@ -1200,3 +1200,55 @@ Subagents:
 
 Next authorized stage:
 - Stage 2.
+
+### Stage 2 achievement report
+
+Verdict: APPROVED
+
+Implemented:
+- Added a versioned application-layer defaults module with strict YAML parsing, platform-native global paths, repository-root project paths, provenance-aware independent resolution, and atomic mutation.
+- Added persistent profile precedence in the human CLI: explicit CLI, project, global, then the selected bundle fallback.
+- Added `sdd defaults show`, `set`, and `unset` with scope validation, actionable value errors, deterministic reporting, idempotent writes, and safe empty-file removal.
+- Kept render detail inactive: the schema can parse and preserve `render_detail_id`, scoped inspection reports it as unavailable, `set detail` fails explicitly, and `unset detail` remains operational.
+- Updated current CLI help and documentation with precedence, configuration locations, and management commands.
+
+Changed subsystems:
+- New `src/config/` parser, path, storage, runtime, resolver, error, and type boundaries.
+- Human `sdd` CLI dependency injection, profile resolution, defaults commands, help, and focused tests.
+- Current CLI documentation and this implementation-plan execution record.
+
+Verification:
+- `TMPDIR=/tmp pnpm run build` — pass.
+- `TMPDIR=/tmp pnpm exec vitest run tests/defaultsConfig.spec.ts tests/cliDefaults.spec.ts tests/cli.spec.ts tests/guidedAdditionCli.spec.ts tests/helperCli.spec.ts tests/render_dot.spec.ts tests/render_mermaid.spec.ts` — pass, 7 of 7 files and 164 of 164 tests.
+- `TMPDIR=/tmp pnpm exec vitest run tests/defaultsConfig.spec.ts tests/cliDefaults.spec.ts tests/cli.spec.ts tests/bundleToolDefaults.spec.ts` — pass after final atomic-write and independence additions, 4 of 4 files and 94 of 94 tests.
+- `TMPDIR=/tmp pnpm run docs:build` — pass.
+- Isolated manual CLI flow under `XDG_CONFIG_HOME=/tmp/sdd-stage2-manual-4de4ee9` — pass for bundle `simple`, global `permissive`, project `strict`, explicit `simple`, scoped mutation, provenance reporting, and removal of both temporary configuration files.
+- `TMPDIR=/tmp pnpm test` — baseline-sensitive parallel run: 88 of 92 files and 847 of 851 tests passed; all four failures were timeouts in Journey Map suites with no assertion mismatch.
+- `TMPDIR=/tmp pnpm exec vitest run tests/journeyMapPreRouting.spec.ts tests/stagedJourneyMap.spec.ts tests/journeyMapRendererStageSnapshots.spec.ts tests/journeyMapRouting.spec.ts --maxWorkers=1 --minWorkers=1` — pass, 4 of 4 files and 96 of 96 tests.
+- Configuration import audit — production configuration reads are confined to `src/cli/program.ts` and its CLI resolver; helper, compiler, validator, renderer, and public library entrypoints do not import the configuration module.
+- Active fallback search — no Commander `strict` default, hidden `?? "strict"` fallback, or obsolete bundle-only CLI omission wording remains.
+
+Satisfied invariants:
+- Schema, paths, reading, mutation, and resolution are independently testable and fully dependency-injectable; tests access only injected or temporary configuration paths.
+- All five human CLI consumers use one effective profile and preserve that value through validation, rendering, preview generation, and automatic artifact naming.
+- Invalid selected values report source, path when applicable, selected bundle, and available bundle declarations, and never fall through.
+- Missing project roots are normal for effective resolution but fail explicit project-scoped management.
+- Malformed preference files fail profile-consuming commands while `compile`, Guided Addition, helper behavior, and direct library rendering remain configuration-independent.
+- Configuration files select bundle-owned IDs only and do not affect bundle fingerprints.
+- Render detail remains inactive and rendering remains profile-coupled.
+
+Violated invariants:
+- none.
+
+Residual risks:
+- The recorded parallel-suite timeout sensitivity remains; every affected file passed in the required single-worker rerun.
+- Windows replacement behavior relies on Node's platform `rename` semantics and is covered at the injected storage boundary rather than on a native Windows executor.
+
+Snapshots/goldens/corpus:
+- unchanged.
+
+Subagents:
+- none.
+
+Next authorized stage:
+- Stage 3.

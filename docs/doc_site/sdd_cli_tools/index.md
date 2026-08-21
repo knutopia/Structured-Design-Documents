@@ -18,7 +18,7 @@ If you want a visual result quickly, start with the next section and use the com
 
 For most people, `sdd show` is the right first command. It compiles an SDD document, validates it, and generates a preview artifact for a chosen view.
 
-Start with the `simple` profile. When `--profile` is omitted, the CLI uses the selected bundle's fallback; the shipped v0.1 bundle selects `simple` because it is lower-noise and better suited to drafting.
+Start with the `simple` profile. When `--profile` is omitted, the CLI checks the current project's preference, then your user-global preference, then the selected bundle's fallback. The shipped v0.1 bundle selects `simple` because it is lower-noise and better suited to drafting.
 
 SVG quick-start:
 
@@ -55,14 +55,50 @@ In practice:
 
 For the fuller profile explanation, see [profiles.md](../../toolchain/profiles.md).
 
+## Persistent Profile Defaults
+
+You can choose a profile once instead of repeating `--profile` on every command. The CLI resolves profiles in this order:
+
+1. `--profile` for the current invocation
+2. the current project's `sdd.config.yaml`
+3. your user-global SDD configuration
+4. the selected bundle's fallback
+
+Use `sdd defaults show` to see the effective profile, its source, and the selected bundle fallback:
+
+```bash
+pnpm sdd defaults show
+```
+
+Set or remove a user-global preference:
+
+```bash
+pnpm sdd defaults set profile simple --global
+pnpm sdd defaults unset profile --global
+```
+
+Set or remove a preference for the discovered SDD project root:
+
+```bash
+pnpm sdd defaults set profile strict --project
+pnpm sdd defaults unset profile --project
+```
+
+Inspect one stored scope with `pnpm sdd defaults show --global` or `pnpm sdd defaults show --project`. Project operations start from the current working directory and require a discoverable SDD repository root.
+
+The global file is `${XDG_CONFIG_HOME}/sdd/config.yaml`, falling back to `~/.config/sdd/config.yaml`, on Linux and WSL. It is `~/Library/Application Support/sdd/config.yaml` on macOS and `%APPDATA%\sdd\config.yaml` on Windows.
+
+The configuration schema reserves a render-detail preference for the next migration stage, but render detail is not active in the current bundle. `sdd defaults set detail ...` therefore fails explicitly instead of storing an unvalidated value; `unset detail` remains available to remove a manually authored value.
+
 ## Public Commands At A Glance
 
-Four most relevant subcommands:
+Five most relevant subcommands:
 
 - `sdd add <document_path>`: add nodes, relationships to an SDD
 - `sdd show <input> --view <view>`: create a diagram
 - `sdd validate <input>`: check that the SDD is self-consistent
 - `sdd compile <input>`: create json from an SDD
+- `sdd defaults show|set|unset`: inspect or manage persistent CLI preferences
 
 To edit an SDD without getting an LLM incvolved, remember `sdd add`.
 To make diagrams from SDD, remember `sdd show`.
@@ -106,7 +142,7 @@ pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 - Common options: `--profile`, `--format`, and `--out`.
 - Output: SVG by default, or PNG when `--format png` is provided.
 
-When `--profile` is omitted, `sdd show` uses the selected bundle's fallback. The shipped v0.1 bundle selects `simple`; an explicit `--profile` still overrides it for one invocation.
+When `--profile` is omitted, `sdd show` uses the resolved project, global, or bundle default. The shipped v0.1 bundle fallback is `simple`; an explicit `--profile` still overrides every persistent source for one invocation.
 
 If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<profile>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 
@@ -161,6 +197,16 @@ Examples:
 pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd
 pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json
 ```
+
+### `sdd defaults`
+
+- Purpose: inspect the effective profile or manage one persistent preference.
+- Show: `pnpm sdd defaults show [--global | --project] [--bundle <manifest>]`
+- Set: `pnpm sdd defaults set <profile|detail> <value> (--global | --project) [--bundle <manifest>]`
+- Unset: `pnpm sdd defaults unset <profile|detail> (--global | --project)`
+- Output: effective values include their source and file path when applicable; scoped output reports stored values and whether the selected bundle accepts them.
+
+`set` and `unset` require exactly one scope. `show` accepts either no scope or one scope. `unset` does not load a bundle because it only removes a stored preference.
 
 ## Supported Preview Views
 
