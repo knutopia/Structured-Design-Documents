@@ -27,16 +27,16 @@ ls
 
 Generate the diagram with the `show` command:
 ```bash
-pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --profile strict --out $PWD/my_service_blueprint.svg
+pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --profile strict --detail detailed --out $PWD/my_service_blueprint.svg
 ```
 Notes:
 - $PWD points the command to the current directory. Without $PWD the command looks for the input file in the project root.
 - Output is an SVG, by default. Be sure to include .svg in the output filename
-- Use of the `strict` profile adds some detail to the diagram (compared to `simple')
+- The `strict` profile applies production-oriented validation, while `--detail detailed` includes supporting diagram labels and annotations.
 
 To create a PNG as output, add *--format png* to the call and change the output filename to use .png:
 ```bash
-pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --profile strict --out $PWD/my_service_blueprint.png --format png
+pnpm sdd show $PWD/claim_flow_slice.sdd --view service_blueprint --profile strict --detail detailed --out $PWD/my_service_blueprint.png --format png
 ```
 
 To see all the details about a command, use the `help`:

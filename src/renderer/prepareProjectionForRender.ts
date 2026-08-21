@@ -1,7 +1,7 @@
 import type { ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "./detailDisplay.js";
 import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
 
 export interface PreparedProjectionForRender {
@@ -13,7 +13,7 @@ export function prepareProjectionForRender(
   view: ViewSpec,
   projection: Projection,
   graph: CompiledGraph,
-  profileId: string
+  detailId: string
 ): PreparedProjectionForRender {
   if (view.id !== "ui_contracts") {
     return {
@@ -22,7 +22,7 @@ export function prepareProjectionForRender(
     };
   }
 
-  const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
   const prepared = buildUiContractsRenderData(projection, graph, displayPolicy);
   return {
     projection: prepared.projection,

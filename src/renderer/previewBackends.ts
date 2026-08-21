@@ -41,6 +41,7 @@ import {
   renderServiceBlueprintStagedSvg
 } from "./staged/serviceBlueprint.js";
 import { registerStagedRendererTheme } from "./staged/theme.js";
+import type { TransitionalStagedRenderSettings } from "./staged/contracts.js";
 
 export const STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID = "staged_ia_place_map_preview";
 export const STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID = "staged_journey_map_preview";
@@ -60,6 +61,7 @@ export type PreviewArtifactSource =
     graph: CompiledGraph;
     projection: Projection;
     profileId: string;
+    detailId: string;
     themeId?: string;
   };
 
@@ -111,8 +113,7 @@ interface StagedProjectionPreviewBackendOptions {
     projection: Projection,
     graph: CompiledGraph,
     view: ViewSpec,
-    profileId: string,
-    themeId: string | undefined,
+    settings: TransitionalStagedRenderSettings,
     bundle: Bundle
   ) => Promise<{
     svg: string;
@@ -122,8 +123,7 @@ interface StagedProjectionPreviewBackendOptions {
     projection: Projection,
     graph: CompiledGraph,
     view: ViewSpec,
-    profileId: string,
-    themeId: string | undefined,
+    settings: TransitionalStagedRenderSettings,
     bundle: Bundle
   ) => Promise<{
     png: Uint8Array;
@@ -153,13 +153,17 @@ function createStagedProjectionPreviewBackend(
         request.source.themeId ?? "default",
         resolveStagedPreviewStyle(request.bundle, request.view)
       );
+      const settings: TransitionalStagedRenderSettings = {
+        profileId: request.source.profileId,
+        detailId: request.source.detailId,
+        themeId
+      };
       if (request.format === "svg") {
         const rendered = await options.renderSvg(
           request.source.projection,
           request.source.graph,
           request.view,
-          request.source.profileId,
-          themeId,
+          settings,
           request.bundle
         );
         return {
@@ -173,8 +177,7 @@ function createStagedProjectionPreviewBackend(
         request.source.projection,
         request.source.graph,
         request.view,
-        request.source.profileId,
-        themeId,
+        settings,
         request.bundle
       );
       return {
@@ -230,10 +233,10 @@ const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor
   [STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
     id: STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID,
     viewId: "journey_map",
-    renderSvg: (projection, graph, view, profileId, themeId, bundle) =>
-      renderJourneyMapStagedSvg(projection, graph, bundle, view, profileId, themeId),
-    renderPng: (projection, graph, view, profileId, themeId, bundle) =>
-      renderJourneyMapStagedPng(projection, graph, bundle, view, profileId, themeId)
+    renderSvg: (projection, graph, view, settings, bundle) =>
+      renderJourneyMapStagedSvg(projection, graph, bundle, view, settings),
+    renderPng: (projection, graph, view, settings, bundle) =>
+      renderJourneyMapStagedPng(projection, graph, bundle, view, settings)
   }),
   [STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
     id: STAGED_UI_CONTRACTS_PREVIEW_BACKEND_ID,

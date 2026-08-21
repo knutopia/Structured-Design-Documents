@@ -11,7 +11,7 @@ import {
   buildJourneyMapRenderModel,
   type JourneyMapRenderModel
 } from "../src/renderer/journeyMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import type {
   JourneyMapItemMetadata,
   RendererScene,
@@ -60,7 +60,7 @@ function buildModel(
     bundle,
     view.projection.hierarchy_edges,
     view.projection.ordering_edges,
-    resolveProfileDisplayPolicy(view, profileId)
+    resolveDetailDisplayPolicy(view, profileId === "simple" ? "compact" : "detailed")
   );
 }
 
@@ -86,7 +86,7 @@ async function buildFixture(name: string, profileId = "strict"): Promise<Journey
       compiled.graph!,
       bundle,
       view,
-      profileId
+      { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
     )
   };
 }
@@ -466,7 +466,7 @@ describe("staged journey map RendererScene", () => {
       build.graph,
       build.bundle,
       build.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     expect(scene.diagnostics.some((diagnostic) =>
       diagnostic.code === "renderer.scene.journey_map_first_parent_selected"

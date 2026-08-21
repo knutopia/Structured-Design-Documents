@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import { buildScenarioFlowRenderModel } from "../src/renderer/scenarioFlowRenderModel.js";
 import { buildScenarioFlowMiddleLayer } from "../src/renderer/staged/scenarioFlowMiddleLayer.js";
 
@@ -35,7 +35,7 @@ async function buildMiddleLayer(sourceText: string, profile = "strict") {
     throw new Error("Could not project inline scenario_flow source.");
   }
 
-  const displayPolicy = resolveProfileDisplayPolicy(view, profile);
+  const displayPolicy = resolveDetailDisplayPolicy(view, profile === "simple" ? "compact" : "detailed");
   const model = buildScenarioFlowRenderModel(projected.projection, compiled.graph, displayPolicy);
   return buildScenarioFlowMiddleLayer(model);
 }

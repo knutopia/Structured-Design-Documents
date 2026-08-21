@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
 import { buildJourneyMapRenderModel } from "../src/renderer/journeyMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import type {
   MeasuredScene,
   PositionedContainer,
@@ -67,7 +67,7 @@ async function buildFixture(name: JourneyFixtureName, profileId = "strict") {
     compiled.graph!,
     bundle,
     view!,
-    profileId
+    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   return {
     bundle,
@@ -269,7 +269,7 @@ describe("journey map degraded diagnostic goldens", () => {
       duplicate.bundle,
       duplicate.view.projection.hierarchy_edges,
       duplicate.view.projection.ordering_edges,
-      resolveProfileDisplayPolicy(duplicate.view, "strict")
+      resolveDetailDisplayPolicy(duplicate.view, "detailed")
     ));
     model.edges[1]!.id = model.edges[0]!.id;
     const duplicateScene = buildJourneyMapRendererSceneFromModel(model, "strict");

@@ -114,7 +114,7 @@ async function buildFixture(name: string, profileId = "strict"): Promise<Journey
     compiled.graph!,
     bundle,
     view,
-    profileId
+    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   const measuredScene = measureScene(rendererScene);
   const preRoutingPositionedScene = await positionJourneyMapMeasuredSceneBeforeRouting(measuredScene);
@@ -392,14 +392,14 @@ describe("journey map Gate 5 basic routing", () => {
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapBasicRoutingArtifacts(
       fixture.projection,
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const direct = await renderPositionedSceneToPng(first.routingStages.step2PositionedScene);
     expect(first.step2Svg).toBe(direct.svg);
@@ -539,7 +539,7 @@ describe("journey map Gate 5 basic routing", () => {
       compiled.graph!,
       bundle,
       journeyView(bundle),
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const plan = rendered.routingStages.connectorPlans.find((candidate) =>
       candidate.from === "J-001" && candidate.to === "J-002"
@@ -780,14 +780,14 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapRoutingArtifacts(
       fixture.projection,
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const direct = await renderPositionedSceneToPng(first.routingStages.finalPositionedScene);
     expect(first.finalSvg).toBe(direct.svg);
@@ -1323,14 +1323,14 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapRoutingArtifacts(
       fixture.projection,
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const direct = await renderPositionedSceneToPng(first.routingStages.provisionalPositionedScene);
     expect(first.provisionalSvg).toBe(direct.svg);
@@ -2323,14 +2323,14 @@ describe("journey map Gate 6 join fan-in routing", () => {
       strict.graph,
       strict.bundle,
       strict.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapRoutingArtifacts(
       strict.projection,
       strict.graph,
       strict.bundle,
       strict.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const directPng = await renderPositionedSceneToPng(first.routingStages.provisionalPositionedScene);
     expect(first.provisionalSvg).toBe(directPng.svg);
@@ -2642,10 +2642,10 @@ describe("journey map Gate 6 backward routing", () => {
     }
 
     const first = await renderJourneyMapRoutingArtifacts(
-      ordering.projection, ordering.graph, ordering.bundle, ordering.view, "strict"
+      ordering.projection, ordering.graph, ordering.bundle, ordering.view, { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapRoutingArtifacts(
-      ordering.projection, ordering.graph, ordering.bundle, ordering.view, "strict"
+      ordering.projection, ordering.graph, ordering.bundle, ordering.view, { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const directPng = await renderPositionedSceneToPng(first.routingStages.provisionalPositionedScene);
     expect(first.provisionalSvg).toBe(directPng.svg);
@@ -3683,14 +3683,14 @@ describe("journey map Gate 6 self-loop routing", () => {
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapRoutingArtifacts(
       fixture.projection,
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const direct = await renderPositionedSceneToPng(
       first.routingStages.provisionalPositionedScene
@@ -4286,14 +4286,14 @@ describe("journey map Gate 6 duplicate occurrence routing", () => {
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const second = await renderJourneyMapRoutingArtifacts(
       fixture.projection,
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const direct = await renderPositionedSceneToPng(
       first.routingStages.provisionalPositionedScene
@@ -4326,14 +4326,14 @@ describe("journey map Gate 8 crossing continuity and terminal diagnostics", () =
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const stagedPng = await renderJourneyMapStagedPng(
       fixture.projection,
       fixture.graph,
       fixture.bundle,
       fixture.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
 
     expect(stagedSvg.svg).toBe(direct.svg);

@@ -72,7 +72,7 @@ Renderer code may use:
 - the compiled graph for renderer-supporting lookup where existing staged
   renderers already use it
 - the `ViewSpec` from the loaded bundle
-- the selected profile id and display policy
+- the selected render-detail id and display policy (with profile retained only as transitional Stage 3 artifact metadata)
 - staged theme tokens
 - author-order metadata that compilation attaches for renderer use
 

@@ -1,5 +1,8 @@
 import type { Bundle } from "../bundle/types.js";
-import { getBundleValidationProfileFallback } from "../bundle/toolDefaults.js";
+import {
+  getBundleRenderDetailFallback,
+  getBundleValidationProfileFallback
+} from "../bundle/toolDefaults.js";
 import { compileSource } from "../compiler/compileSource.js";
 import { getGraphSourcePath, type CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics } from "../diagnostics/types.js";
@@ -8,7 +11,7 @@ import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import { getTextArtifactCapability, getViewTextRenderer } from "./viewRenderers.js";
 
-type ResolvedRenderOptions = RenderOptions & { profileId: string };
+type ResolvedRenderOptions = RenderOptions & { profileId: string; detailId: string };
 
 export function renderCompiledGraphText(
   graph: CompiledGraph,
@@ -22,6 +25,7 @@ export function renderCompiledGraphText(
       format: options.format,
       viewId: options.viewId,
       profileId: options.profileId,
+      detailId: options.detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
@@ -41,6 +45,7 @@ export function renderCompiledGraphText(
       format: options.format,
       viewId: options.viewId,
       profileId: options.profileId,
+      detailId: options.detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
@@ -52,13 +57,14 @@ export function renderCompiledGraphText(
     bundle,
     view,
     options.format,
-    options.profileId
+    options.detailId
   );
 
   return {
     format: options.format,
     viewId: options.viewId,
     profileId: options.profileId,
+    detailId: options.detailId,
     text: rendered.text,
     notes: rendered.notes,
     diagnostics: sortDiagnostics(diagnostics)
@@ -67,6 +73,23 @@ export function renderCompiledGraphText(
 
 export function renderSource(input: SourceInput, bundle: Bundle, options: RenderOptions): RenderResult {
   const profileId = options.profileId ?? getBundleValidationProfileFallback(bundle);
+  const detailId = options.detailId ?? getBundleRenderDetailFallback(bundle);
+  if (!bundle.manifest.render_details.some((detail) => detail.id === detailId)) {
+    return {
+      format: options.format,
+      viewId: options.viewId,
+      profileId,
+      detailId,
+      notes: [],
+      diagnostics: [{
+        stage: "render",
+        code: "render.unknown_detail",
+        severity: "error",
+        message: `Unknown render detail '${detailId}'`,
+        file: input.path
+      }]
+    };
+  }
   const compileResult = compileSource(input, bundle);
   const diagnostics = [...compileResult.diagnostics];
   if (!compileResult.graph || hasErrors(diagnostics)) {
@@ -74,6 +97,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
       format: options.format,
       viewId: options.viewId,
       profileId,
+      detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
@@ -86,6 +110,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
       format: options.format,
       viewId: options.viewId,
       profileId,
+      detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
@@ -93,12 +118,14 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
 
   const rendered = renderCompiledGraphText(compileResult.graph, bundle, {
     ...options,
-    profileId
+    profileId,
+    detailId
   });
   return {
     format: options.format,
     viewId: options.viewId,
     profileId,
+    detailId,
     text: rendered.text,
     notes: rendered.notes,
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])

@@ -9,7 +9,10 @@ import {
 } from "../authoring/guidedAddition/snapshot.js";
 import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/workspace.js";
 import { loadBundle } from "../bundle/loadBundle.js";
-import { getBundleValidationProfileFallback } from "../bundle/toolDefaults.js";
+import {
+  getBundleRenderDetailFallback,
+  getBundleValidationProfileFallback
+} from "../bundle/toolDefaults.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import { compileSource } from "../compiler/compileSource.js";
 import type { CompileResult } from "../compiler/types.js";
@@ -58,7 +61,7 @@ import {
   runGuidedAdditionCommand,
   type GuidedAdditionCliDeps
 } from "./guidedAddition.js";
-import { resolveCliValidationProfile } from "./profileResolution.js";
+import { resolveCliRenderSettings, resolveCliValidationProfile } from "./profileResolution.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
@@ -74,6 +77,7 @@ export interface CliDeps extends GuidedAdditionCliDeps {
     viewId: string;
     format: PreviewFormat;
     profileId: string;
+    detailId: string;
     backendId?: PreviewRendererBackendId;
   }) => Promise<SourcePreviewRenderResult>;
   writeTextFile: (outputPath: string, content: string) => Promise<void>;
@@ -360,7 +364,7 @@ async function runValidate(
 async function runRenderText(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile?: string; view: string; format: string; out?: string; diagnostics: string }
+  options: { bundle: string; profile?: string; detail?: string; view: string; format: string; out?: string; diagnostics: string }
 ): Promise<{ exitCode: number; text?: string; sourcePath?: string; bundle?: Bundle; view?: ViewSpec }> {
   try {
     const expectedExtension = options.format === "dot" ? "dot" : options.format === "mermaid" ? "mmd" : undefined;
@@ -373,7 +377,12 @@ async function runRenderText(
     }
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle, options.profile)).value;
+    const settings = await resolveCliRenderSettings(deps.defaultsConfig, deps.cwd(), bundle, {
+      profileId: options.profile,
+      detailId: options.detail
+    });
+    const profileId = settings.profile.value;
+    const detailId = settings.detail.value;
     const supported = ensureTextFormat(bundle, options.view, options.format);
     if (!supported.capability) {
       deps.stderr(appendLine(supported.message ?? `Unsupported render request for view '${options.view}'.`));
@@ -383,7 +392,8 @@ async function runRenderText(
     const result = deps.renderSource(input, bundle, {
       viewId: options.view,
       format: options.format as TextRenderFormat,
-      profileId
+      profileId,
+      detailId
     });
     writeDiagnostics(deps, result.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
     if (!result.text || hasErrors(result.diagnostics)) {
@@ -421,7 +431,7 @@ async function writePreviewOutput(
 async function runDotCommand(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile?: string; out?: string; png?: boolean; pngOut?: string; diagnostics: string }
+  options: { bundle: string; profile?: string; detail?: string; out?: string; png?: boolean; pngOut?: string; diagnostics: string }
 ): Promise<number> {
   const pngOutputValidation = validateOutputExtension(options.pngOut, "png", "--png-out");
   if (!pngOutputValidation.valid) {
@@ -432,6 +442,7 @@ async function runDotCommand(
   const renderResult = await runRenderText(deps, inputPath, {
     bundle: options.bundle,
     profile: options.profile,
+    detail: options.detail,
     view: "ia_place_map",
     format: "dot",
     out: options.out,
@@ -501,6 +512,7 @@ async function runShowCommand(
   options: {
     bundle: string;
     profile?: string;
+    detail?: string;
     view: string;
     format: string;
     out?: string;
@@ -524,7 +536,12 @@ async function runShowCommand(
     }
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle, options.profile)).value;
+    const settings = await resolveCliRenderSettings(deps.defaultsConfig, deps.cwd(), bundle, {
+      profileId: options.profile,
+      detailId: options.detail
+    });
+    const profileId = settings.profile.value;
+    const detailId = settings.detail.value;
     const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat, requestedBackendId);
     if (!supported.capability || !supported.view) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
@@ -562,7 +579,8 @@ async function runShowCommand(
         backendId: previewCapability.backendId,
         viewId: options.view,
         format: requestedPreviewFormat,
-        profileId
+        profileId,
+        detailId
       });
       writeDiagnostics(deps, renderResult.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
       if (!renderResult.artifact || hasErrors(renderResult.diagnostics)) {
@@ -646,6 +664,10 @@ function profileAvailability(bundle: Bundle): string[] {
   return bundle.manifest.profiles.map((profile) => profile.id);
 }
 
+function detailAvailability(bundle: Bundle): string[] {
+  return bundle.manifest.render_details.map((detail) => detail.id);
+}
+
 async function runDefaultsShow(
   deps: CliDeps,
   options: { global?: boolean; project?: boolean; bundle: string }
@@ -656,13 +678,19 @@ async function runDefaultsShow(
   try {
     const bundle = await deps.loadBundle(options.bundle);
     if (!scope) {
-      const profile = await resolveCliValidationProfile(deps.defaultsConfig, deps.cwd(), bundle);
+      const settings = await resolveCliRenderSettings(deps.defaultsConfig, deps.cwd(), bundle);
+      const profile = settings.profile;
+      const detail = settings.detail;
       const lines = [
         `Bundle: ${bundle.manifestPath}`,
         `Profile: ${profile.value}`,
         `Profile source: ${profile.source}`,
         ...(profile.sourcePath ? [`Profile source path: ${profile.sourcePath}`] : []),
-        `Bundle profile fallback: ${getBundleValidationProfileFallback(bundle)}`
+        `Bundle profile fallback: ${getBundleValidationProfileFallback(bundle)}`,
+        `Detail: ${detail.value}`,
+        `Detail source: ${detail.source}`,
+        ...(detail.sourcePath ? [`Detail source path: ${detail.sourcePath}`] : []),
+        `Bundle detail fallback: ${getBundleRenderDetailFallback(bundle)}`
       ];
       deps.stdout(`${lines.join("\n")}\n`);
       return 0;
@@ -673,8 +701,9 @@ async function runDefaultsShow(
     const profile = config?.defaults.validation_profile_id;
     const detail = config?.defaults.render_detail_id;
     const availableProfiles = profileAvailability(bundle);
+    const availableDetails = detailAvailability(bundle);
     const profileValid = profile === undefined || availableProfiles.includes(profile);
-    const detailValid = detail === undefined;
+    const detailValid = detail === undefined || availableDetails.includes(detail);
     const profileValidity = profile === undefined
       ? "not set"
       : profileValid
@@ -682,7 +711,9 @@ async function runDefaultsShow(
         : `invalid (available: ${availableProfiles.join(", ") || "(none)"})`;
     const detailValidity = detail === undefined
       ? "not set"
-      : "unavailable (selected bundle declares no render-detail vocabulary)";
+      : detailValid
+        ? "valid"
+        : `invalid (available: ${availableDetails.join(", ") || "(none)"})`;
 
     deps.stdout([
       `Scope: ${scope}`,
@@ -713,16 +744,10 @@ async function runDefaultsSet(
 
   try {
     const bundle = await deps.loadBundle(options.bundle);
-    if (setting === "detail") {
-      throw new DefaultsConfigError(
-        "config.unknown_value",
-        `Cannot set detail to '${value}': selected bundle '${bundle.manifestPath}' declares no render-detail values.`
-      );
-    }
     validateResolvedDefault({
-      setting: "validation_profile_id",
+      setting: storedSettingForCli(setting),
       selected: { value, source: "cli" },
-      availableValues: profileAvailability(bundle),
+      availableValues: setting === "profile" ? profileAvailability(bundle) : detailAvailability(bundle),
       bundlePath: bundle.manifestPath
     });
 
@@ -766,11 +791,16 @@ async function runDefaultsUnset(
 function globalHelpText(): string {
   return [
     "",
-    "Profiles (bundle-declared; shipped v0.1 profiles shown):",
+    "Validation profiles (bundle-declared; shipped v0.1 profiles shown):",
     "  simple       low-noise drafting",
     "  permissive   warning-first completeness",
     "  strict       strict governance",
     "  Omit --profile to resolve project, global, then selected-bundle defaults.",
+    "",
+    "Render detail (bundle-declared; shipped v0.1 values shown):",
+    "  compact      low-noise primary structure",
+    "  detailed     supporting annotations and labels",
+    "  Omit --detail to resolve project, global, then selected-bundle defaults.",
     "",
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
@@ -853,7 +883,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
 
   defaultsCommand
     .command("show")
-    .description("Show the effective profile or inspect one stored defaults scope.")
+    .description("Show the effective profile and detail or inspect one stored defaults scope.")
     .option("--global", "inspect user-global defaults")
     .option("--project", "inspect defaults at the discovered SDD project root")
     .option("--bundle <manifest>", "bundle manifest used to validate stored values", defaultManifestPath)
@@ -909,6 +939,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
+    .option("--detail <detail>", "render detail id override; omission uses the resolved project/global/bundle default")
     .option("--out <file>", "write rendered output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -931,6 +962,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
+    .option("--detail <detail>", "render detail id override; omission uses the resolved project/global/bundle default")
     .option("--out <file>", "write internal DOT output to a file instead of stdout")
     .option("--png", "also write a sibling PNG preview rendered through the SVG pipeline")
     .option("--png-out <file>", "write PNG output to an explicit file path")
@@ -951,6 +983,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
+    .option("--detail <detail>", "render detail id override; omission uses the resolved project/global/bundle default")
     .option("--out <file>", "write internal Mermaid output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -973,13 +1006,14 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
-      .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
-      .option("--format <format>", "preview format (svg or png)", "svg")
-      .option("--backend <backend>", "preview backend id override")
-      .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<profile>[.<backend>].<format> beside the input")
-      .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source in a file")
-      .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
-      .addHelpText("after", examplesBlock([
+    .option("--profile <profile>", "profile id override; omission uses the resolved project/global/bundle default")
+    .option("--detail <detail>", "render detail id override; omission uses the resolved project/global/bundle default")
+    .option("--format <format>", "preview format (svg or png)", "svg")
+    .option("--backend <backend>", "preview backend id override")
+    .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<profile>[.<backend>].<format> beside the input")
+    .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source in a file")
+    .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
+    .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg",

@@ -30,7 +30,8 @@ describe("renderSource mermaid", () => {
       const result = renderSource(input, bundle, {
         viewId: variant.viewId,
         format: "mermaid",
-        profileId: variant.profileId
+        profileId: variant.profileId,
+        detailId: variant.profileId === "simple" ? "compact" : "detailed"
       });
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());

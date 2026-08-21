@@ -15,6 +15,7 @@ core:
 
 tool_defaults:
   validation_profile_id: simple
+  render_detail_id: compact
 
 profiles:
   - id: simple
@@ -26,6 +27,12 @@ profiles:
   - id: strict
     path: profiles/strict.yaml
     intent: Strict governance for production-ready authoring.
+
+render_details:
+  - id: compact
+    intent: Low-noise rendering that emphasizes the primary structure.
+  - id: detailed
+    intent: Full rendering that includes supporting annotations and labels.
 
 examples:
   - path: examples/outcome_to_ia_trace.sdd

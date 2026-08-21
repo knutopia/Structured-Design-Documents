@@ -114,17 +114,20 @@ describe("staged visual acceptance", () => {
           repoRoot,
           "real_world_exploration/billSage_example/reference/billSage_structure.ia_place_map.strict.bottomToLeft_connectors.reference.png"
         ),
-        profileId: "strict"
+        profileId: "strict",
+      detailId: "detailed"
       },
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),
         outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.ia_place_map.png"),
-        profileId: "strict"
+        profileId: "strict",
+      detailId: "detailed"
       },
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd"),
         outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ia_place_map.png"),
-        profileId: "strict"
+        profileId: "strict",
+      detailId: "detailed"
       }
     ] as const;
 

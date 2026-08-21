@@ -6,6 +6,11 @@ export interface BundleManifestProfileEntry {
   intent: string;
 }
 
+export interface BundleManifestRenderDetailEntry {
+  id: string;
+  intent: string;
+}
+
 export interface BundleManifestExample {
   path: string;
   compiled_snapshot: string;
@@ -14,6 +19,7 @@ export interface BundleManifestExample {
 
 export interface BundleManifestToolDefaults {
   validation_profile_id: string;
+  render_detail_id: string;
 }
 
 export interface BundleManifest {
@@ -32,6 +38,7 @@ export interface BundleManifest {
   };
   tool_defaults: BundleManifestToolDefaults;
   profiles: BundleManifestProfileEntry[];
+  render_details: BundleManifestRenderDetailEntry[];
   examples: BundleManifestExample[];
   compatibility: {
     requires_compiler_min: string;

@@ -1252,3 +1252,60 @@ Subagents:
 
 Next authorized stage:
 - Stage 3.
+
+### Stage 3 achievement report
+
+Verdict: APPROVED
+
+Implemented:
+- Added the required bundle-owned `compact` and `detailed` render-detail vocabulary, ordered intents, `compact` fallback, public types/accessor, generic contract validation, and renderer-participation coverage.
+- Added complete `detail_display` policies for all six rendering participants by preserving the former `simple` behavior as `compact` and the identical former `permissive`/`strict` behavior as `detailed`; retained `profile_display` unchanged as migration evidence.
+- Activated independent persistent and CLI detail resolution with CLI, project, global, then selected-bundle precedence, while profile continues to select validation only.
+- Migrated text renderers, projection preparation, preview orchestration, and all staged renderers to detail-owned policy selection with no renderer/runtime profile-to-detail fallback.
+- Added detail-explicit lower renderer contracts and a transitional staged settings object; retained profile only in combined validation provenance and the Stage-3 scene/SVG metadata fields scheduled for Stage 4.
+- Added `--detail` to `show`, hidden `render`, `dot`, and `mmd`; activated detail reporting and mutation in `sdd defaults`; left `validate`, `compile`, `add`, helper behavior, and public-library configuration isolation unchanged.
+- Added bundle/detail, policy-equivalence, independence, CLI/configuration, failure-path, and narrow transitional-metadata normalizer coverage; updated current help and documentation without refreshing stored evidence.
+
+Changed subsystems:
+- Bundle manifest and six view renderer policies; manifest types, validation, fingerprints, accessors, and public exports.
+- Human CLI defaults resolution, management commands, help, and rendering-command integration.
+- Combined library rendering/preview results and orchestration, text render models, projection preparation, staged renderer entrypoints, and test-only legacy comparison support.
+- Focused tests, synthetic bundle fixtures, renderer call sites, corpus-generation intent mapping, current CLI/profile documentation, and this execution record.
+
+Verification:
+- Baseline — branch `de-strict` at `24b040babbdd00b9844285cd49adda8126ca2f80`; clean worktree before Stage 3 and no commit created.
+- `TMPDIR=/tmp pnpm run build` — pass.
+- `TMPDIR=/tmp pnpm exec vitest run tests/bundleRenderDetails.spec.ts tests/renderDetailEquivalence.spec.ts` — pass, 2 of 2 files and 13 of 13 tests; covers all six views, full detail-policy objects, DOT, Mermaid, staged scenes/SVG/PNG, diagnostics/notes, direct legacy Graphviz SVG/PNG, fallback mutation, policy mutation, and independence.
+- Focused existing display, preparation, preview, staged, CLI, defaults, helper, DOT, and Mermaid suites — pass without snapshot refresh.
+- `TMPDIR=/tmp pnpm run docs:build` — pass.
+- Isolated CLI exercises under `/tmp/sdd-stage3-manual.bvRMcr` — pass for global and project `detail` set, scoped show/validity, unset, and removal of the last setting without touching real user configuration.
+- `TMPDIR=/tmp pnpm test` — baseline-sensitive parallel run: 91 of 94 files and 867 of 871 tests passed; all four failures were established Journey Map timeouts with no assertion mismatch.
+- `TMPDIR=/tmp pnpm exec vitest run tests/journeyMapPreRouting.spec.ts tests/journeyMapRouting.spec.ts tests/journeyMapRendererStageSnapshots.spec.ts --reporter=dot --poolOptions.forks.minForks=1 --poolOptions.forks.maxForks=1` — pass, 3 of 3 files and 81 of 81 tests.
+- Temporary strict-validation `compact`/`detailed` SVG and PNG generation — pass for all six views, 24 explicit-path artifacts under `/tmp`; visual inspection confirmed preserved low-noise/full behavior and no layout or routing regression.
+- Production import/search audit — no profile display resolver/import/call, hidden strict fallback, or persistent-configuration read below the human CLI; retained `profile_display` is consumed only by test equivalence support.
+- `git diff --check` — pass; complete diff inspected.
+
+Satisfied invariants:
+- The loaded bundle exclusively declares and validates render-detail vocabulary, fallback, participant coverage, and boolean display policy.
+- Profile and detail resolve independently; profile controls validation and detail exclusively controls every renderer display decision.
+- Omitted library settings come only from the loaded bundle, while persistent configuration remains human-CLI-only and is loaded once for combined CLI rendering resolution.
+- `compact` is equivalent to retained `simple`; `detailed` is equivalent to both retained `permissive` and retained `strict` across every applicable renderer path.
+- Fixed detail produces identical text/models and normalized staged artifacts across successful profiles; the only normalization removes the exhaustively allowed transitional profile metadata.
+- Fixed profile plus changed detail leaves validation diagnostics unchanged; invalid and unsupported detail values fail explicitly without fallback.
+- Helper preview contracts, automatic profile-based filenames, scene/SVG profile metadata, parser, compiler, validation rules, raw projection, layout, routing, goldens, and corpus remain unchanged as required for Stage 3.
+
+Violated invariants:
+- none.
+
+Residual risks:
+- The recorded parallel-suite Journey Map timeout sensitivity remains; all affected tests pass with one worker.
+- Exhaustive Stage 4 debt: retained bundle `profile_display`; the test-only profile display resolver; renderer scene `profileId` fields; SVG `profile-*` classes and `data-profile-id`; transitional staged profile provenance; automatic profile-based filenames; and the profile-only helper preview contract.
+
+Snapshots/goldens/corpus:
+- unchanged.
+
+Subagents:
+- none.
+
+Next authorized stage:
+- Stage 4.

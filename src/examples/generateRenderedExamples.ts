@@ -37,6 +37,11 @@ import {
 } from "./renderedCorpus.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
+
+function renderDetailForLegacyProfile(profileId: string): string {
+  return profileId === "simple" ? "compact" : "detailed";
+}
+
 function buildReadmeContent(
   manifestPath: string,
   pairs: Array<{ viewId: string; exampleName: string }>,
@@ -191,7 +196,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { profileId: variant.profileId, detailId: renderDetailForLegacyProfile(variant.profileId) }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
@@ -207,7 +212,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { profileId: variant.profileId, detailId: renderDetailForLegacyProfile(variant.profileId) }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
@@ -250,7 +255,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { profileId: variant.profileId, detailId: renderDetailForLegacyProfile(variant.profileId) }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
@@ -266,7 +271,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { profileId: variant.profileId, detailId: renderDetailForLegacyProfile(variant.profileId) }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
@@ -309,7 +314,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { profileId: variant.profileId, detailId: renderDetailForLegacyProfile(variant.profileId) }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
@@ -325,7 +330,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { profileId: variant.profileId, detailId: renderDetailForLegacyProfile(variant.profileId) }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
@@ -350,12 +355,14 @@ async function main(): Promise<void> {
     const dotResult = renderSource(input, bundle, {
       viewId: variant.viewId,
       format: "dot",
-      profileId: variant.profileId
+      profileId: variant.profileId,
+      detailId: renderDetailForLegacyProfile(variant.profileId)
     });
     const mermaidResult = renderSource(input, bundle, {
       viewId: variant.viewId,
       format: "mermaid",
-      profileId: variant.profileId
+      profileId: variant.profileId,
+      detailId: renderDetailForLegacyProfile(variant.profileId)
     });
 
     const dotErrors = dotResult.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
@@ -389,12 +396,14 @@ async function main(): Promise<void> {
       viewId: variant.viewId,
       format: "svg",
       profileId: variant.profileId,
+      detailId: renderDetailForLegacyProfile(variant.profileId),
       backendId: svgCapability.backendId
     });
     const pngResult = await renderSourcePreview(input, bundle, {
       viewId: variant.viewId,
       format: "png",
       profileId: variant.profileId,
+      detailId: renderDetailForLegacyProfile(variant.profileId),
       backendId: pngCapability.backendId
     });
 
@@ -423,6 +432,7 @@ async function main(): Promise<void> {
         viewId: variant.viewId,
         format: "svg",
         profileId: variant.profileId,
+        detailId: renderDetailForLegacyProfile(variant.profileId),
         backendId: extraSvgCapability.backendId
       });
       if (!extraSvgResult.artifact || extraSvgResult.artifact.format !== "svg" || extraSvgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
@@ -444,6 +454,7 @@ async function main(): Promise<void> {
         viewId: variant.viewId,
         format: "png",
         profileId: variant.profileId,
+        detailId: renderDetailForLegacyProfile(variant.profileId),
         backendId: extraPngCapability.backendId
       });
       if (!extraPngResult.artifact || extraPngResult.artifact.format !== "png" || extraPngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {

@@ -68,7 +68,7 @@ export async function renderStagedArtifacts(
       projected.projection!,
       compiled.graph!,
       view,
-      profileId
+      { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
     );
 
     return {
@@ -83,7 +83,7 @@ export async function renderStagedArtifacts(
       projected.projection!,
       compiled.graph!,
       view,
-      profileId
+      { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
     );
 
     return {
@@ -98,7 +98,7 @@ export async function renderStagedArtifacts(
       projected.projection!,
       compiled.graph!,
       view,
-      profileId
+      { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
     );
 
     return {
@@ -109,8 +109,8 @@ export async function renderStagedArtifacts(
   }
 
   const rendererScene = viewId === "ia_place_map"
-    ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, profileId)
-    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, profileId);
+    ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" })
+    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" });
 
   return runStagedRendererPipeline(rendererScene);
 }

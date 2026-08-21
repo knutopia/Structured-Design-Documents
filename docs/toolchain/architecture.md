@@ -249,7 +249,7 @@ Preview backends now split by view:
 - Public Sans webfont embedding for portable SVG output
 - SVG-to-PNG rasterization with a vendored desktop Public Sans font for image export
 
-Profiles are validation overlays, not language variants. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Projection scope stays profile-agnostic, while render-model builders may use profile-specific display policy to suppress optional overlays in `simple`, including hiding place route/access/entry-point fields while leaving existing `primary_nav` annotations intact. Use `simple` for low-noise drafts, `permissive` for warning-first completeness, and `strict` for strict authoring. See [profiles.md](./profiles.md).
+Profiles are validation overlays, not language variants or rendering modes. The core bundle defines syntax and compiled graph shape; profiles decide how much completeness and governance to enforce on top of that. Projection scope stays setting-agnostic, while render-model builders use the independent bundle-declared `compact` or `detailed` policy. Use `simple` for light-touch validation, `permissive` for warning-first completeness, and `strict` for strict authoring. See [profiles.md](./profiles.md).
 
 ## Renderable Views
 

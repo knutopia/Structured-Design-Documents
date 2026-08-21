@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
 import { buildOutcomeOpportunityMapRenderModel } from "../src/renderer/outcomeOpportunityMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import {
   buildOutcomeOpportunityMapMiddleLayer,
   type OutcomeOpportunityMiddleLayerModel,
@@ -38,7 +38,7 @@ async function buildMiddleLayer(sourceText: string, profileId = "strict"): Promi
     throw new Error("Could not project inline source to outcome_opportunity_map.");
   }
 
-  const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  const displayPolicy = resolveDetailDisplayPolicy(view, profileId === "simple" ? "compact" : "detailed");
   const model = buildOutcomeOpportunityMapRenderModel(projected.projection, compiled.graph, view, displayPolicy);
   return buildOutcomeOpportunityMapMiddleLayer(model);
 }

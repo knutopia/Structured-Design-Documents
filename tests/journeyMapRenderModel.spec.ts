@@ -13,7 +13,7 @@ import {
   type JourneyRenderItem,
   type JourneyRenderStep
 } from "../src/renderer/journeyMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
@@ -48,7 +48,7 @@ function buildModel(
     bundle,
     view.projection.hierarchy_edges,
     view.projection.ordering_edges,
-    resolveProfileDisplayPolicy(view, profileId)
+    resolveDetailDisplayPolicy(view, profileId === "simple" ? "compact" : "detailed")
   );
 }
 
@@ -243,11 +243,11 @@ describe("journey map render model", () => {
     const base = await buildFixture("primary", "simple");
     const mutatedBundle = structuredClone(base.bundle) as Bundle;
     const mutatedView = journeyView(mutatedBundle);
-    const profileDisplay = mutatedView.conventions.renderer_defaults?.profile_display as Record<
+    const detailDisplay = mutatedView.conventions.renderer_defaults?.detail_display as Record<
       string,
       Record<string, unknown>
     >;
-    profileDisplay.simple!.show_reference_badges = true;
+    detailDisplay.compact!.show_reference_badges = true;
 
     const mutated = buildModel(base.projection, base.graph, mutatedBundle, mutatedView, "simple");
     expect(findStep(base.model, "J-201").badges).toEqual([]);

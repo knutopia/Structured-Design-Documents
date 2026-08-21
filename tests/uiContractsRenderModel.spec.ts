@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import {
   buildUiContractsRenderData,
   buildUiContractsRenderModel
@@ -11,6 +12,11 @@ import {
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
+
+function detailedUiPolicy(bundle: Awaited<ReturnType<typeof loadBundle>>) {
+  const view = bundle.views.views.find((candidate) => candidate.id === "ui_contracts")!;
+  return resolveDetailDisplayPolicy(view, "detailed");
+}
 
 async function buildModel(sourceName: string, text: string) {
   const bundle = await loadBundle(manifestPath);
@@ -26,7 +32,11 @@ async function buildModel(sourceName: string, text: string) {
   expect(projected.diagnostics).toEqual([]);
   expect(projected.projection).toBeDefined();
 
-  return buildUiContractsRenderModel(projected.projection!, compiled.graph!);
+  return buildUiContractsRenderModel(
+    projected.projection!,
+    compiled.graph!,
+    detailedUiPolicy(bundle)
+  );
 }
 
 describe("ui_contracts render model ownership", () => {
@@ -90,7 +100,7 @@ END
     expect(projected.diagnostics).toEqual([]);
     expect(projected.projection).toBeDefined();
 
-    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!);
+    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!, detailedUiPolicy(bundle));
     const place = model.rootItems[0];
     if (!place || place.kind !== "place") {
       throw new Error("Expected root place item.");
@@ -182,12 +192,20 @@ END
     expect(projected.projection).toBeDefined();
 
     const simple = buildUiContractsRenderData(projected.projection!, compiled.graph!, {
+      show_place_route_or_key: false,
+      show_place_access: false,
+      show_place_entry_points: false,
+      show_place_primary_nav: true,
       omit_empty_place_containers: true,
       show_view_state_data_required: false,
       show_secondary_state_groups_when_primary_view_state: false,
       show_supporting_contract_lane_when_primary_view_state: false
     });
     const strict = buildUiContractsRenderData(projected.projection!, compiled.graph!, {
+      show_place_route_or_key: true,
+      show_place_access: true,
+      show_place_entry_points: true,
+      show_place_primary_nav: true,
       omit_empty_place_containers: false,
       show_view_state_data_required: true,
       show_secondary_state_groups_when_primary_view_state: true,
@@ -208,7 +226,7 @@ END
       "P-310"
     ]);
     expect(simple.notes).toEqual([
-      "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period."
+      "Omitted empty ui_contracts containers in compact detail: Behavior Details, Dataset Details, Projects by Period."
     ]);
     expect(simple.projection.notes).toContain(simple.notes[0]);
     expect(simple.projection.derived.view_metadata.ui_contracts_coverage).toEqual({
@@ -236,7 +254,7 @@ END
     expect(projected.diagnostics).toEqual([]);
     expect(projected.projection).toBeDefined();
 
-    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!);
+    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!, detailedUiPolicy(bundle));
     const place = model.rootItems[0];
     if (!place || place.kind !== "place") {
       throw new Error("Expected root place item.");
@@ -272,7 +290,7 @@ END
     expect(projected.diagnostics).toEqual([]);
     expect(projected.projection).toBeDefined();
 
-    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!);
+    const model = buildUiContractsRenderModel(projected.projection!, compiled.graph!, detailedUiPolicy(bundle));
 
     expect(
       model.edges

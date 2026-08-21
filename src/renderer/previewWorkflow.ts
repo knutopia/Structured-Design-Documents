@@ -1,4 +1,8 @@
 import type { Bundle, ViewSpec } from "../bundle/types.js";
+import {
+  getBundleRenderDetailFallback,
+  getBundleValidationProfileFallback
+} from "../bundle/toolDefaults.js";
 import { compileSource } from "../compiler/compileSource.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
@@ -25,11 +29,14 @@ import {
 export interface SourcePreviewRenderOptions {
   viewId: string;
   format: PreviewFormat;
-  profileId: string;
+  profileId?: string;
+  detailId?: string;
   backendId?: PreviewRendererBackendId;
 }
 
 export interface SourcePreviewRenderResult {
+  profileId: string;
+  detailId: string;
   view: ViewSpec;
   capability: ViewRenderCapability;
   previewCapability: PreviewArtifactCapability;
@@ -92,7 +99,7 @@ function projectCompiledGraph(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
+  detailId: string,
   diagnostics: Diagnostic[]
 ): { projection?: Projection; notes: string[] } {
   const projected = projectView(graph, bundle, view.id);
@@ -101,7 +108,7 @@ function projectCompiledGraph(
     return { notes: [] };
   }
 
-  return prepareProjectionForRender(view, projected.projection, graph, profileId);
+  return prepareProjectionForRender(view, projected.projection, graph, detailId);
 }
 
 export async function renderSourcePreview(
@@ -109,14 +116,36 @@ export async function renderSourcePreview(
   bundle: Bundle,
   options: SourcePreviewRenderOptions
 ): Promise<SourcePreviewRenderResult> {
+  const profileId = options.profileId ?? getBundleValidationProfileFallback(bundle);
+  const detailId = options.detailId ?? getBundleRenderDetailFallback(bundle);
   const { view, capability } = resolvePreviewView(bundle, options.viewId);
   const previewCapability = resolvePreviewCapability(capability, options.format, options.backendId);
   const previewBackend = getPreviewBackend(previewCapability.backendId);
+
+  if (!bundle.manifest.render_details.some((detail) => detail.id === detailId)) {
+    return {
+      profileId,
+      detailId,
+      view,
+      capability,
+      previewCapability,
+      notes: [],
+      diagnostics: [{
+        stage: "render",
+        code: "render.unknown_detail",
+        severity: "error",
+        message: `Unknown render detail '${detailId}'`,
+        file: input.path
+      }]
+    };
+  }
 
   const compileResult = compileSource(input, bundle);
   const diagnostics: Diagnostic[] = [...compileResult.diagnostics];
   if (!compileResult.graph || hasErrors(diagnostics)) {
     return {
+      profileId,
+      detailId,
       view,
       capability,
       previewCapability,
@@ -125,10 +154,12 @@ export async function renderSourcePreview(
     };
   }
 
-  const validation = validateGraph(compileResult.graph, bundle, options.profileId);
+  const validation = validateGraph(compileResult.graph, bundle, profileId);
   diagnostics.push(...validation.diagnostics);
   if (validation.errorCount > 0) {
     return {
+      profileId,
+      detailId,
       view,
       capability,
       previewCapability,
@@ -143,13 +174,16 @@ export async function renderSourcePreview(
     const renderResult = renderCompiledGraphText(compileResult.graph, bundle, {
       viewId: options.viewId,
       format: previewBackend.inputRequirement.sourceFormat,
-      profileId: options.profileId
+      profileId,
+      detailId
     });
     diagnostics.push(...renderResult.diagnostics);
     notes = [...renderResult.notes];
 
     if (!renderResult.text || hasErrors(diagnostics)) {
       return {
+        profileId,
+        detailId,
         view,
         capability,
         previewCapability,
@@ -170,10 +204,12 @@ export async function renderSourcePreview(
       }
     });
   } else {
-    const prepared = projectCompiledGraph(compileResult.graph, bundle, view, options.profileId, diagnostics);
+    const prepared = projectCompiledGraph(compileResult.graph, bundle, view, detailId, diagnostics);
     notes = [...prepared.notes];
     if (!prepared.projection || hasErrors(diagnostics)) {
       return {
+        profileId,
+        detailId,
         view,
         capability,
         previewCapability,
@@ -191,7 +227,8 @@ export async function renderSourcePreview(
         kind: "projection",
         graph: compileResult.graph,
         projection: prepared.projection,
-        profileId: options.profileId
+        profileId,
+        detailId
       }
     });
   }
@@ -199,6 +236,8 @@ export async function renderSourcePreview(
   diagnostics.push(...(artifact.diagnostics ?? []).map((diagnostic) => mapRendererDiagnostic(input.path, diagnostic)));
 
   return {
+    profileId,
+    detailId,
     view,
     capability,
     previewCapability,

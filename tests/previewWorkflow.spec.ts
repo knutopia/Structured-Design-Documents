@@ -32,7 +32,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ia_place_map",
       format: "svg",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ia_place_map_preview");
@@ -59,7 +60,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ia_place_map",
       format: "png",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ia_place_map_preview");
@@ -80,7 +82,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ia_place_map",
       format: "png",
-      profileId: "permissive"
+      profileId: "permissive",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ia_place_map_preview");
@@ -101,7 +104,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ui_contracts",
       format: "svg",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
@@ -122,7 +126,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ui_contracts",
       format: "png",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
@@ -148,13 +153,14 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "ui_contracts",
       format: "svg",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_ui_contracts_preview");
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(result.notes).toEqual([
-      "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period."
+      "Omitted empty ui_contracts containers in compact detail: Behavior Details, Dataset Details, Projects by Period."
     ]);
     expect(result.artifact?.format).toBe("svg");
     if (!result.artifact || result.artifact.format !== "svg") {
@@ -174,7 +180,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "svg",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_service_blueprint_preview");
@@ -199,7 +206,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "svg",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_service_blueprint_preview");
@@ -225,7 +233,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "service_blueprint",
       format: "png",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_service_blueprint_preview");
@@ -246,7 +255,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "scenario_flow",
       format: "svg",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_scenario_flow_preview");
@@ -268,7 +278,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "scenario_flow",
       format: "png",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_scenario_flow_preview");
@@ -289,7 +300,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "outcome_opportunity_map",
       format: "svg",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_outcome_opportunity_map_preview");
@@ -311,7 +323,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "outcome_opportunity_map",
       format: "png",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_outcome_opportunity_map_preview");
@@ -332,7 +345,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "journey_map",
       format: "svg",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_journey_map_preview");
@@ -360,7 +374,8 @@ describe("preview workflow", () => {
     const result = await renderSourcePreview(input, bundle, {
       viewId: "journey_map",
       format: "png",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(result.previewCapability.backendId).toBe("staged_journey_map_preview");

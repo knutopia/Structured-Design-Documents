@@ -1,7 +1,7 @@
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
-import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import {
   buildUiContractsRenderData,
   type UiContractsComponentItem,
@@ -22,7 +22,8 @@ import type {
   SceneItem,
   SceneNode,
   PortSpec,
-  WidthPolicy
+  WidthPolicy,
+  TransitionalStagedRenderSettings
 } from "./contracts.js";
 import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
@@ -670,13 +671,12 @@ export function buildUiContractsRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): RendererScene {
   const prepared = buildUiContractsRenderData(
     projection,
     graph,
-    resolveProfileDisplayPolicy(view, profileId)
+    resolveDetailDisplayPolicy(view, settings.detailId)
   );
   const context: SceneBuildContext = {
     diagnostics: [],
@@ -691,8 +691,8 @@ export function buildUiContractsRendererScene(
 
   return {
     viewId: "ui_contracts",
-    profileId,
-    themeId,
+    profileId: settings.profileId,
+    themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "ui_contracts",
       layout: {
@@ -713,10 +713,9 @@ export async function renderUiContractsStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<UiContractsStagedSvgResult> {
-  const rendererScene = buildUiContractsRendererScene(projection, graph, view, profileId, themeId);
+  const rendererScene = buildUiContractsRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
 
@@ -730,10 +729,9 @@ export async function renderUiContractsStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<UiContractsStagedPngResult> {
-  const rendererScene = buildUiContractsRendererScene(projection, graph, view, profileId, themeId);
+  const rendererScene = buildUiContractsRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToPng(pipeline.positionedScene);
 

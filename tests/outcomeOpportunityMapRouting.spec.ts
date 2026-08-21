@@ -120,7 +120,7 @@ async function renderOutcomeOpportunitySource(
     projected.projection,
     compiled.graph,
     view,
-    profileId
+    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
   );
 }
 

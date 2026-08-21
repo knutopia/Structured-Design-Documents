@@ -16,7 +16,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const fixturePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_empty_places.sdd");
 const coverageNote =
-  "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period.";
+  "Omitted empty ui_contracts containers in compact detail: Behavior Details, Dataset Details, Projects by Period.";
 
 async function loadFixtureInput(): Promise<{ path: string; text: string }> {
   return {
@@ -38,7 +38,7 @@ describe("projection orchestration reuse", () => {
     expect(fromSource).toEqual(fromGraph);
   });
 
-  it("keeps raw public projection free of renderer-owned simple-profile coverage shaping", async () => {
+  it("keeps raw public projection free of renderer-owned compact-detail coverage shaping", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadFixtureInput();
     const compiled = compileSource(input, bundle);
@@ -51,7 +51,7 @@ describe("projection orchestration reuse", () => {
     expect(projected.projection!.derived.view_metadata.ui_contracts_coverage).toBeUndefined();
   });
 
-  it("applies ui_contracts simple-profile shaping only through prepareProjectionForRender", async () => {
+  it("applies ui_contracts compact-detail shaping only through prepareProjectionForRender", async () => {
     const bundle = await loadBundle(manifestPath);
     const input = await loadFixtureInput();
     const compiled = compileSource(input, bundle);
@@ -63,7 +63,7 @@ describe("projection orchestration reuse", () => {
     expect(projected.projection).toBeDefined();
     expect(view).toBeDefined();
 
-    const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "simple");
+    const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "compact");
 
     expect(prepared.notes).toEqual([coverageNote]);
     expect(prepared.projection.notes).toContain(coverageNote);
@@ -84,7 +84,8 @@ describe("projection orchestration reuse", () => {
     const rendered = renderSource(input, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(rendered.diagnostics).toEqual([]);
@@ -98,7 +99,8 @@ describe("projection orchestration reuse", () => {
     const preview = await renderSourcePreview(input, bundle, {
       viewId: "ui_contracts",
       format: "svg",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(preview.diagnostics).toEqual([]);

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import type { Bundle, ViewSpec } from "../src/bundle/types.js";
 import { projectView } from "../src/projector/projectView.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import {
   buildOutcomeOpportunityMapRenderModel,
   readOutcomeOpportunityRendererDefaults
@@ -40,10 +41,12 @@ async function buildCanonicalModel(viewOverride?: ViewSpec) {
   expect(projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
   expect(projected.projection).toBeDefined();
 
+  const view = viewOverride ?? getOutcomeOpportunityView(bundle);
   return buildOutcomeOpportunityMapRenderModel(
     projected.projection!,
     compiled.graph!,
-    viewOverride ?? getOutcomeOpportunityView(bundle)
+    view,
+    resolveDetailDisplayPolicy(view, "detailed")
   );
 }
 

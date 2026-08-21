@@ -1,5 +1,11 @@
 import type { RendererDiagnostic } from "./diagnostics.js";
 
+export interface TransitionalStagedRenderSettings {
+  profileId: string;
+  detailId: string;
+  themeId?: string;
+}
+
 export type SceneContainerPrimitive = "root" | "cluster" | "lane" | "stack" | "grid";
 export type SceneNodePrimitive =
   | "card"

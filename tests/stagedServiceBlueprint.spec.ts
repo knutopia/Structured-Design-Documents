@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import { buildServiceBlueprintRenderModel } from "../src/renderer/serviceBlueprintRenderModel.js";
 import type {
   PositionedDecoration,
@@ -80,14 +80,14 @@ async function buildServiceBlueprintRoutingContext(
   profileId: string
 ) {
   const context = await resolveServiceBlueprintContext(input, profileId);
-  const displayPolicy = resolveProfileDisplayPolicy(context.view, profileId);
+  const displayPolicy = resolveDetailDisplayPolicy(context.view, profileId === "simple" ? "compact" : "detailed");
   const model = buildServiceBlueprintRenderModel(context.projection, context.graph, displayPolicy);
   const middleLayer = buildServiceBlueprintMiddleLayer(model);
   const rendererScene = buildServiceBlueprintRendererScene(
     context.projection,
     context.graph,
     context.view,
-    profileId
+    { profileId: profileId, detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   const measuredScene = measureScene(rendererScene);
   const positionedScene = await positionSceneBeforeRouting(measuredScene);
@@ -364,7 +364,7 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const customerCell = findRootCells(rendererScene).find((cell) =>
       cell.id === "lane:01:customer__shell__cell__band:anchor:1"
@@ -445,19 +445,19 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
 
     expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -857,20 +857,20 @@ describe("staged service_blueprint", () => {
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const measuredScene = measureScene(rendererScene);
     const routingDebug = await renderServiceBlueprintRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const rendered = await renderServiceBlueprintStagedSvg(
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
 
     await expectRendererStageSnapshot("service-blueprint.slice.renderer-scene.json", stripViewMetadata(rendererScene));
@@ -1058,7 +1058,7 @@ END
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
 
     expect(rendererScene.diagnostics.map((diagnostic) => diagnostic.code)).toContain(
@@ -1106,13 +1106,13 @@ END
       firstContext.projection,
       firstContext.graph,
       firstContext.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
     const secondScene = buildServiceBlueprintRendererScene(
       secondContext.projection,
       secondContext.graph,
       secondContext.view,
-      "strict"
+      { profileId: "strict", detailId: "strict" === "simple" ? "compact" : "detailed" }
     );
 
     expect(firstScene).toEqual(secondScene);

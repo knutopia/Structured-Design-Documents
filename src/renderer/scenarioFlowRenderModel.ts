@@ -1,8 +1,8 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
-import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
 type ScenarioLaneId = "step" | "place" | "view_state";
 
@@ -155,16 +155,16 @@ function edgeDisplay(type: string, label?: string): Pick<ScenarioFlowRenderEdge,
   }
 }
 
-function readScenarioFlowDisplayOptions(policy: ResolvedProfileDisplayPolicy): ScenarioFlowDisplayOptions {
+function readScenarioFlowDisplayOptions(policy: ResolvedDetailDisplayPolicy): ScenarioFlowDisplayOptions {
   return {
-    showBranchLabels: readBooleanProfileDisplaySetting(policy, "show_branch_labels", true)
+    showBranchLabels: readBooleanDetailDisplaySetting(policy, "show_branch_labels")
   };
 }
 
 export function buildScenarioFlowRenderModel(
   projection: Projection,
   graph: CompiledGraph,
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): ScenarioFlowRenderModel {
   const displayOptions = readScenarioFlowDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));

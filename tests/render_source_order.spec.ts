@@ -21,7 +21,8 @@ describe("source-ordered IA rendering", () => {
     const result = renderSource(input, bundle, {
       viewId: "ia_place_map",
       format: "dot",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -40,7 +41,8 @@ describe("source-ordered IA rendering", () => {
     const result = renderSource(input, bundle, {
       viewId: "ia_place_map",
       format: "mermaid",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
 
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);

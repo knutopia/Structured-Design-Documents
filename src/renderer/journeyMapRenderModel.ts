@@ -3,8 +3,8 @@ import type { Bundle } from "../bundle/types.js";
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import { getCompiledEdgeSourceSpan, type CompiledEdge, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
-import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
 export interface JourneyRenderReferenceBadge {
   kind: "reference";
@@ -192,9 +192,9 @@ function buildJourneyRenderEdges(
   return modelEdges;
 }
 
-function readJourneyMapDisplayOptions(policy: ResolvedProfileDisplayPolicy): JourneyMapDisplayOptions {
+function readJourneyMapDisplayOptions(policy: ResolvedDetailDisplayPolicy): JourneyMapDisplayOptions {
   return {
-    showReferenceBadges: readBooleanProfileDisplaySetting(policy, "show_reference_badges", true)
+    showReferenceBadges: readBooleanDetailDisplaySetting(policy, "show_reference_badges")
   };
 }
 
@@ -204,7 +204,7 @@ export function buildJourneyMapRenderModel(
   bundle: Bundle,
   hierarchyEdgeTypes: string[],
   orderingEdgeTypes: string[],
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): JourneyMapRenderModel {
   const displayOptions = readJourneyMapDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));

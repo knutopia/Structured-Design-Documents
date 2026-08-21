@@ -1,5 +1,5 @@
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
-import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
 export interface PlaceLabelMetadata {
   key: string;
@@ -17,7 +17,7 @@ export interface PlaceLabelOptions {
   includeSubtitle?: boolean;
   includeBadge?: boolean;
   includeMetadata?: boolean;
-  displayPolicy?: ResolvedProfileDisplayPolicy;
+  displayPolicy: ResolvedDetailDisplayPolicy;
 }
 
 export interface ResolvedPlaceLabelDisplayOptions {
@@ -28,13 +28,13 @@ export interface ResolvedPlaceLabelDisplayOptions {
 }
 
 export function resolvePlaceLabelDisplayOptions(
-  policy: ResolvedProfileDisplayPolicy = {}
+  policy: ResolvedDetailDisplayPolicy
 ): ResolvedPlaceLabelDisplayOptions {
   return {
-    showPlaceRouteOrKey: readBooleanProfileDisplaySetting(policy, "show_place_route_or_key", true),
-    showPlaceAccess: readBooleanProfileDisplaySetting(policy, "show_place_access", true),
-    showPlaceEntryPoints: readBooleanProfileDisplaySetting(policy, "show_place_entry_points", true),
-    showPlacePrimaryNav: readBooleanProfileDisplaySetting(policy, "show_place_primary_nav", true)
+    showPlaceRouteOrKey: readBooleanDetailDisplaySetting(policy, "show_place_route_or_key"),
+    showPlaceAccess: readBooleanDetailDisplaySetting(policy, "show_place_access"),
+    showPlaceEntryPoints: readBooleanDetailDisplaySetting(policy, "show_place_entry_points"),
+    showPlacePrimaryNav: readBooleanDetailDisplaySetting(policy, "show_place_primary_nav")
   };
 }
 
@@ -54,7 +54,7 @@ function shouldIncludeMetadata(
 
 export function buildIaStylePlaceLabelLines(
   parts: PlaceLabelParts,
-  options: PlaceLabelOptions = {}
+  options: PlaceLabelOptions
 ): string[] {
   const displayOptions = resolvePlaceLabelDisplayOptions(options.displayPolicy);
   const lines = [parts.name];

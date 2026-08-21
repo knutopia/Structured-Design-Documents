@@ -21,7 +21,7 @@ import {
 } from "./mermaid.js";
 import { buildOutcomeOpportunityMapRenderModel } from "./outcomeOpportunityMapRenderModel.js";
 import { prepareProjectionForRender } from "./prepareProjectionForRender.js";
-import { resolveProfileDisplayPolicy } from "./profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "./detailDisplay.js";
 import { resolveLegacyDotPreviewStyle } from "./previewStyle.js";
 import type {
   PreviewArtifactCapability,
@@ -63,7 +63,7 @@ interface ViewTextRenderer {
     bundle: Bundle,
     view: ViewSpec,
     format: TextRenderFormat,
-    profileId: string
+    detailId: string
   ) => ViewTextRenderOutput;
 }
 
@@ -198,8 +198,8 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
       png: "staged_ia_place_map_preview"
     }
   },
-  render: (projection, graph, bundle, view, format, profileId) => {
-    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  render: (projection, graph, bundle, view, format, detailId) => {
+    const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
     const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
     if (format === "dot") {
       return {
@@ -228,8 +228,8 @@ const journeyMapRenderer: ViewTextRenderer = {
       png: "staged_journey_map_preview"
     }
   },
-  render: (projection, graph, bundle, view, format, profileId) => {
-    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  render: (projection, graph, bundle, view, format, detailId) => {
+    const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
     const model = buildJourneyMapRenderModel(
       projection,
       graph,
@@ -265,8 +265,8 @@ const outcomeOpportunityMapRenderer: ViewTextRenderer = {
       png: "staged_outcome_opportunity_map_preview"
     }
   },
-  render: (projection, graph, bundle, view, format, profileId) => {
-    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  render: (projection, graph, bundle, view, format, detailId) => {
+    const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
     const model = buildOutcomeOpportunityMapRenderModel(projection, graph, view, displayPolicy);
     if (format === "dot") {
       return {
@@ -295,8 +295,8 @@ const serviceBlueprintRenderer: ViewTextRenderer = {
       png: "staged_service_blueprint_preview"
     }
   },
-  render: (projection, graph, bundle, view, format, profileId) => {
-    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  render: (projection, graph, bundle, view, format, detailId) => {
+    const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
     const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
       return {
@@ -325,8 +325,8 @@ const scenarioFlowRenderer: ViewTextRenderer = {
       png: "staged_scenario_flow_preview"
     }
   },
-  render: (projection, graph, bundle, view, format, profileId) => {
-    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  render: (projection, graph, bundle, view, format, detailId) => {
+    const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
     const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
     if (format === "dot") {
       return {
@@ -355,9 +355,9 @@ const uiContractsRenderer: ViewTextRenderer = {
       png: "staged_ui_contracts_preview"
     }
   },
-  render: (projection, graph, bundle, view, format, profileId) => {
-    const prepared = prepareProjectionForRender(view, projection, graph, profileId);
-    const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  render: (projection, graph, bundle, view, format, detailId) => {
+    const prepared = prepareProjectionForRender(view, projection, graph, detailId);
+    const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
     const model = buildUiContractsRenderModel(prepared.projection, graph, displayPolicy);
     if (format === "dot") {
       return {

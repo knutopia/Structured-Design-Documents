@@ -9,7 +9,7 @@ import { prepareProjectionForRender } from "../src/renderer/prepareProjectionFor
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const uiContractsCoverageNote =
-  "Omitted empty ui_contracts containers in simple profile: Behavior Details, Dataset Details, Projects by Period.";
+  "Omitted empty ui_contracts containers in compact detail: Behavior Details, Dataset Details, Projects by Period.";
 
 async function loadExampleInput(fileName: string): Promise<{ path: string; text: string }> {
   const filePath = path.join(repoRoot, "bundle/v0.1/examples", fileName);
@@ -32,13 +32,13 @@ describe("prepareProjectionForRender", () => {
     expect(view).toBeDefined();
     expect(projected.projection).toBeDefined();
 
-    const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "simple");
+    const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "compact");
 
     expect(prepared.projection).toBe(projected.projection);
     expect(prepared.notes).toEqual([]);
   });
 
-  it("adds ui_contracts coverage notes and metadata in simple profiles", async () => {
+  it("adds ui_contracts coverage notes and metadata in compact detail", async () => {
     const bundle = await loadBundle(manifestPath);
     const fixturePath = path.join(repoRoot, "tests/fixtures/render/ui_contracts_empty_places.sdd");
     const input = {
@@ -54,7 +54,7 @@ describe("prepareProjectionForRender", () => {
     expect(view).toBeDefined();
     expect(projected.projection).toBeDefined();
 
-    const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "simple");
+    const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "compact");
 
     expect(prepared.projection).not.toBe(projected.projection);
     expect(prepared.notes).toEqual([uiContractsCoverageNote]);
@@ -87,7 +87,7 @@ describe("prepareProjectionForRender", () => {
     const rawProjection = projected.projection!;
     const rawSnapshot = structuredClone(rawProjection);
 
-    prepareProjectionForRender(view!, rawProjection, compiled.graph!, "simple");
+    prepareProjectionForRender(view!, rawProjection, compiled.graph!, "compact");
 
     expect(rawProjection).toEqual(rawSnapshot);
     expect(rawProjection.notes).not.toContain(uiContractsCoverageNote);

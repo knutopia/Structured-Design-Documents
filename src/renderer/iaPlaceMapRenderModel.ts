@@ -2,7 +2,7 @@ import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } fro
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import { buildIaStylePlaceLabelLines } from "./placeLabelLines.js";
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
 
 export interface IaRenderArea {
   kind: "area";
@@ -53,7 +53,7 @@ export function buildIaPlaceMapRenderModel(
   projection: Projection,
   graph: CompiledGraph,
   hierarchyEdgeTypes: string[],
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): IaPlaceMapRenderModel {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));

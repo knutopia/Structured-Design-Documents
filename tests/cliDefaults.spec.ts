@@ -78,11 +78,14 @@ function createCliDeps(defaultsConfig: DefaultsConfigRuntime): {
     viewId: options.viewId,
     format: options.format,
     profileId: options.profileId,
+    detailId: options.detailId,
     text: options.format === "dot" ? "digraph G {}" : "flowchart TD",
     notes: [],
     diagnostics: []
   }));
   const renderSourcePreview = vi.fn(async (_input, loadedBundle, options) => ({
+    profileId: options.profileId,
+    detailId: options.detailId,
     view: loadedBundle.views.views.find((view) => view.id === options.viewId)!,
     capability: { textArtifacts: [], previewArtifacts: [], defaultPreviewFormat: "svg" as const },
     previewCapability: {
@@ -149,6 +152,8 @@ const profileConsumers = [
   }
 ] as const;
 
+const detailConsumers = profileConsumers.filter((consumer) => consumer.name !== "validate");
+
 describe("persistent defaults CLI resolution", () => {
   it("applies bundle, global, project, and explicit profile sources to all five consumers", async () => {
     const sourceCases = [
@@ -190,6 +195,49 @@ describe("persistent defaults CLI resolution", () => {
     }
   });
 
+  it("applies bundle, global, project, and explicit detail sources to all four rendering consumers", async () => {
+    const sourceCases = [
+      { name: "bundle", options: {}, expected: "compact", extra: [] },
+      {
+        name: "global",
+        options: { global: { version: "1" as const, defaults: { render_detail_id: "detailed" } } },
+        expected: "detailed",
+        extra: []
+      },
+      {
+        name: "project",
+        options: {
+          global: { version: "1" as const, defaults: { render_detail_id: "compact" } },
+          project: { version: "1" as const, defaults: { render_detail_id: "detailed" } }
+        },
+        expected: "detailed",
+        extra: []
+      },
+      {
+        name: "explicit",
+        options: {
+          global: { version: "1" as const, defaults: { render_detail_id: "compact" } },
+          project: { version: "1" as const, defaults: { render_detail_id: "compact" } }
+        },
+        expected: "detailed",
+        extra: ["--detail", "detailed"]
+      }
+    ];
+
+    for (const consumer of detailConsumers) {
+      for (const sourceCase of sourceCases) {
+        const memory = createMemoryDefaults(sourceCase.options);
+        const context = createCliDeps(memory.runtime);
+        const result = await runCli([...consumer.argv, ...sourceCase.extra], context.deps);
+        expect(result.exitCode, `${consumer.name}/${sourceCase.name}`).toBe(0);
+        const call = consumer.name === "show"
+          ? context.renderSourcePreview.mock.calls[0]?.[2]
+          : context.renderSource.mock.calls[0]?.[2];
+        expect(call.detailId, `${consumer.name}/${sourceCase.name}`).toBe(sourceCase.expected);
+      }
+    }
+  });
+
   it("reports an invalid project profile without falling through to valid global configuration", async () => {
     const memory = createMemoryDefaults({
       global: { version: "1", defaults: { validation_profile_id: "permissive" } },
@@ -202,6 +250,20 @@ describe("persistent defaults CLI resolution", () => {
     expect(context.stderr.join("")).toContain("Unknown value 'unknown'");
     expect(context.stderr.join("")).toContain("/repo/sdd.config.yaml");
     expect(context.stderr.join("")).toContain(bundle.manifestPath);
+  });
+
+  it("reports an invalid project detail without falling through to valid global configuration", async () => {
+    const memory = createMemoryDefaults({
+      global: { version: "1", defaults: { render_detail_id: "compact" } },
+      project: { version: "1", defaults: { render_detail_id: "unknown" } }
+    });
+    const context = createCliDeps(memory.runtime);
+    const result = await runCli(["node", "sdd", "show", "example.sdd", "--view", "ia_place_map"], context.deps);
+    expect(result.exitCode).toBe(1);
+    expect(context.renderSourcePreview).not.toHaveBeenCalled();
+    expect(context.stderr.join("")).toContain("setting 'render_detail_id'");
+    expect(context.stderr.join("")).toContain("/repo/sdd.config.yaml");
+    expect(context.stderr.join("")).toContain("Available values: compact, detailed");
   });
 
   it("uses the same persistent profile in show rendering and automatic artifact naming", async () => {
@@ -248,6 +310,9 @@ describe("sdd defaults commands", () => {
       "Profile: simple",
       "Profile source: bundle",
       "Bundle profile fallback: simple",
+      "Detail: compact",
+      "Detail source: bundle",
+      "Bundle detail fallback: compact",
       ""
     ].join("\n"));
 
@@ -317,21 +382,25 @@ describe("sdd defaults commands", () => {
     expect(memory.set).not.toHaveBeenCalled();
   });
 
-  it("rejects unavailable detail writes while allowing detail removal without loading a bundle", async () => {
+  it("sets active detail values and allows detail removal without loading a bundle", async () => {
     const memory = createMemoryDefaults({
       global: { version: "1", defaults: { render_detail_id: "compact" } }
     });
     const setContext = createCliDeps(memory.runtime);
     expect((await runCli([
       "node", "sdd", "defaults", "set", "detail", "compact", "--global"
-    ], setContext.deps)).exitCode).toBe(1);
-    expect(setContext.stderr.join("")).toContain("declares no render-detail values");
-    expect(memory.set).not.toHaveBeenCalled();
+    ], setContext.deps)).exitCode).toBe(0);
+    expect(memory.set).toHaveBeenCalledWith(
+      "/user/config/sdd/config.yaml",
+      "render_detail_id",
+      "compact",
+      { createParent: true }
+    );
 
     const showContext = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "show", "--global"], showContext.deps)).exitCode).toBe(1);
+    expect((await runCli(["node", "sdd", "defaults", "show", "--global"], showContext.deps)).exitCode).toBe(0);
     expect(showContext.stdout.join("")).toContain("Detail: compact");
-    expect(showContext.stdout.join("")).toContain("Detail validity: unavailable");
+    expect(showContext.stdout.join("")).toContain("Detail validity: valid");
 
     const unsetContext = createCliDeps(memory.runtime);
     const loadBundleMock = vi.fn(async () => bundle);

@@ -5,7 +5,7 @@ import {
   buildOutcomeOpportunityMapRenderModel,
   type OutcomeOpportunityRenderNode
 } from "../outcomeOpportunityMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import type {
   ContentBlock,
   MeasuredScene,
@@ -17,7 +17,8 @@ import type {
   SceneItem,
   SceneNode,
   ViewMetadata,
-  WidthPolicy
+  WidthPolicy,
+  TransitionalStagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
@@ -375,10 +376,9 @@ function buildOutcomeOpportunityRenderContext(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): OutcomeOpportunityRenderContext {
-  const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
   const model = buildOutcomeOpportunityMapRenderModel(projection, graph, view, displayPolicy);
   const middleLayer = buildOutcomeOpportunityMapMiddleLayer(model);
   const context: SceneBuildContext = {
@@ -396,8 +396,8 @@ function buildOutcomeOpportunityRenderContext(
 
   const rendererScene: RendererScene = {
     viewId: "outcome_opportunity_map",
-    profileId,
-    themeId,
+    profileId: settings.profileId,
+    themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "outcome_opportunity_map",
       layout: {
@@ -424,15 +424,13 @@ export function buildOutcomeOpportunityMapRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): RendererScene {
   return buildOutcomeOpportunityRenderContext(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   ).rendererScene;
 }
 
@@ -440,15 +438,14 @@ async function buildOutcomeOpportunityPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<{
   context: OutcomeOpportunityRenderContext;
   rendererScene: RendererScene;
   measuredScene: MeasuredScene;
   basePositionedScene: PositionedScene;
 }> {
-  const context = buildOutcomeOpportunityRenderContext(projection, graph, view, profileId, themeId);
+  const context = buildOutcomeOpportunityRenderContext(projection, graph, view, settings);
   const measuredScene = measureScene(context.rendererScene);
   const basePositionedScene = decorateOutcomeOpportunityPositionedScene(
     await positionMeasuredSceneBeforeRouting(measuredScene)
@@ -466,15 +463,13 @@ export async function renderOutcomeOpportunityMapPreRoutingArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<OutcomeOpportunityMapPreRoutingArtifactsResult> {
   const pipeline = await buildOutcomeOpportunityPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const preRoutingPositionedScene = {
     ...pipeline.basePositionedScene,
@@ -500,15 +495,13 @@ export async function renderOutcomeOpportunityMapRoutingDebugArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<OutcomeOpportunityMapRoutingDebugArtifactsResult> {
   const pipeline = await buildOutcomeOpportunityPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const preRoutingPositionedScene = {
     ...pipeline.basePositionedScene,
@@ -547,15 +540,13 @@ async function renderOutcomeOpportunityMapStaged(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<OutcomeOpportunityMapStagedRenderResult> {
   const pipeline = await buildOutcomeOpportunityPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routingStages = buildOutcomeOpportunityMapRoutingStages(
     pipeline.measuredScene,
@@ -577,10 +568,9 @@ export async function renderOutcomeOpportunityMapStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<OutcomeOpportunityMapStagedSvgResult> {
-  const rendered = await renderOutcomeOpportunityMapStaged(projection, graph, view, profileId, themeId);
+  const rendered = await renderOutcomeOpportunityMapStaged(projection, graph, view, settings);
   const svgRendered = await renderPositionedSceneToSvg(rendered.positionedScene);
 
   return {
@@ -593,10 +583,9 @@ export async function renderOutcomeOpportunityMapStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<OutcomeOpportunityMapStagedPngResult> {
-  const renderedSvg = await renderOutcomeOpportunityMapStagedSvg(projection, graph, view, profileId, themeId);
+  const renderedSvg = await renderOutcomeOpportunityMapStagedSvg(projection, graph, view, settings);
   const pngRendered = await renderPositionedSceneToPng(renderedSvg.positionedScene);
 
   return {

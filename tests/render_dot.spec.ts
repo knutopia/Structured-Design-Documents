@@ -30,7 +30,8 @@ describe("renderSource dot", () => {
       const result = renderSource(input, bundle, {
         viewId: variant.viewId,
         format: "dot",
-        profileId: variant.profileId
+        profileId: variant.profileId,
+        detailId: variant.profileId === "simple" ? "compact" : "detailed"
       });
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expect(normalizeLineEndings(result.text!)).toBe(normalizeLineEndings(golden).trimEnd());
@@ -48,7 +49,8 @@ describe("renderSource dot", () => {
     const result = renderSource(input, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "permissive"
+      profileId: "permissive",
+    detailId: "detailed"
     });
 
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -73,12 +75,14 @@ describe("renderSource dot", () => {
     const simple = renderSource(input, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
     const permissive = renderSource(input, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "permissive"
+      profileId: "permissive",
+    detailId: "detailed"
     });
 
     expect(simple.text).not.toContain("subgraph cluster_C_010 {");
@@ -100,7 +104,8 @@ describe("renderSource dot", () => {
       const result = renderSource(input, bundle, {
         viewId: "ui_contracts",
         format: "dot",
-        profileId: "permissive"
+        profileId: "permissive",
+      detailId: "detailed"
       });
 
       expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -115,7 +120,8 @@ describe("renderSource dot", () => {
     }, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "permissive"
+      profileId: "permissive",
+    detailId: "detailed"
     });
     expect(placeResult.text).toContain("[Submit] {payment_valid} / SA-010");
 
@@ -126,7 +132,8 @@ describe("renderSource dot", () => {
     }, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "permissive"
+      profileId: "permissive",
+    detailId: "detailed"
     });
     expect(fallbackResult.text).toContain("[Submit Review] / SA-060");
     expect(fallbackResult.text).toContain("[Submit Review] {draft_ready}");
@@ -143,7 +150,8 @@ describe("renderSource dot", () => {
     const result = renderSource(input, bundle, {
       viewId: "ui_contracts",
       format: "dot",
-      profileId: "permissive"
+      profileId: "permissive",
+    detailId: "detailed"
     });
 
     expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);

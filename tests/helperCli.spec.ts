@@ -88,9 +88,14 @@ function createContractResolutionBundle(
         views: "core/views.yaml"
       },
       tool_defaults: {
-        validation_profile_id: profiles[0]?.id ?? "simple"
+        validation_profile_id: profiles[0]?.id ?? "simple",
+        render_detail_id: "compact"
       },
-      profiles
+      profiles,
+      render_details: [
+        { id: "compact", intent: "low noise" },
+        { id: "detailed", intent: "full detail" }
+      ]
     },
     syntax: {
       lexical: {

@@ -1,4 +1,7 @@
-import { getBundleValidationProfileFallback } from "../bundle/toolDefaults.js";
+import {
+  getBundleRenderDetailFallback,
+  getBundleValidationProfileFallback
+} from "../bundle/toolDefaults.js";
 import type { Bundle } from "../bundle/types.js";
 import { loadDefaultsSources, resolveDefault } from "../config/resolver.js";
 import type { DefaultsConfigRuntime } from "../config/runtime.js";
@@ -19,4 +22,36 @@ export async function resolveCliValidationProfile(
     availableValues: bundle.manifest.profiles.map((profile) => profile.id),
     bundlePath: bundle.manifestPath
   });
+}
+
+export interface ResolvedCliRenderSettings {
+  profile: ResolvedDefault;
+  detail: ResolvedDefault;
+}
+
+export async function resolveCliRenderSettings(
+  runtime: DefaultsConfigRuntime,
+  cwd: string,
+  bundle: Bundle,
+  explicit?: { profileId?: string; detailId?: string }
+): Promise<ResolvedCliRenderSettings> {
+  const sources = await loadDefaultsSources(runtime, cwd);
+  return {
+    profile: resolveDefault({
+      setting: "validation_profile_id",
+      explicitValue: explicit?.profileId,
+      sources,
+      bundleValue: getBundleValidationProfileFallback(bundle),
+      availableValues: bundle.manifest.profiles.map((profile) => profile.id),
+      bundlePath: bundle.manifestPath
+    }),
+    detail: resolveDefault({
+      setting: "render_detail_id",
+      explicitValue: explicit?.detailId,
+      sources,
+      bundleValue: getBundleRenderDetailFallback(bundle),
+      availableValues: bundle.manifest.render_details.map((detail) => detail.id),
+      bundlePath: bundle.manifestPath
+    })
+  };
 }

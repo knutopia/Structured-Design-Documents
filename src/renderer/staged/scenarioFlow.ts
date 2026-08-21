@@ -1,7 +1,7 @@
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
-import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import {
   buildScenarioFlowRenderModel,
   type ScenarioFlowRenderNode
@@ -16,7 +16,8 @@ import type {
   SceneItem,
   SceneNode,
   ViewMetadata,
-  WidthPolicy
+  WidthPolicy,
+  TransitionalStagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
@@ -387,10 +388,9 @@ function buildScenarioFlowRenderContext(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): ScenarioFlowRenderContext {
-  const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
   const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
   const middleLayer = buildScenarioFlowMiddleLayer(model);
   const context: SceneBuildContext = {
@@ -408,8 +408,8 @@ function buildScenarioFlowRenderContext(
 
   const rendererScene: RendererScene = {
     viewId: "scenario_flow",
-    profileId,
-    themeId,
+    profileId: settings.profileId,
+    themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "scenario_flow",
       layout: {
@@ -436,15 +436,14 @@ async function buildScenarioFlowPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<{
   context: ScenarioFlowRenderContext;
   rendererScene: RendererScene;
   measuredScene: MeasuredScene;
   basePositionedScene: PositionedScene;
 }> {
-  const context = buildScenarioFlowRenderContext(projection, graph, view, profileId, themeId);
+  const context = buildScenarioFlowRenderContext(projection, graph, view, settings);
   const measuredScene = measureScene(context.rendererScene);
   const positionedScene = await positionMeasuredSceneBeforeRouting(measuredScene);
   const basePositionedScene = decorateScenarioFlowPositionedScene(positionedScene, context.middleLayer);
@@ -461,15 +460,13 @@ export function buildScenarioFlowRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): RendererScene {
   return buildScenarioFlowRenderContext(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   ).rendererScene;
 }
 
@@ -477,15 +474,13 @@ export async function renderScenarioFlowPreRoutingArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<ScenarioFlowPreRoutingArtifactsResult> {
   const pipeline = await buildScenarioFlowPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const preRoutingPositionedScene = {
     ...pipeline.basePositionedScene,
@@ -511,8 +506,7 @@ async function buildScenarioFlowRoutedPipeline(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<{
   rendererScene: RendererScene;
   measuredScene: MeasuredScene;
@@ -524,8 +518,7 @@ async function buildScenarioFlowRoutedPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routingStages = buildScenarioFlowRoutingStages(
     pipeline.measuredScene,
@@ -546,15 +539,13 @@ export async function renderScenarioFlowRoutingDebugArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<ScenarioFlowRoutingDebugArtifactsResult> {
   const pipeline = await buildScenarioFlowRoutedPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const [step2Svg, step2Png, step3Svg, step3Png] = await Promise.all([
     renderPositionedSceneToSvg(pipeline.routingStages.step2PositionedScene),
@@ -583,15 +574,13 @@ export async function renderScenarioFlowStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<ScenarioFlowStagedSvgResult> {
   const pipeline = await buildScenarioFlowRoutedPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const rendered = await renderPositionedSceneToSvg(pipeline.routingStages.finalPositionedScene);
 
@@ -610,15 +599,13 @@ export async function renderScenarioFlowStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: TransitionalStagedRenderSettings
 ): Promise<ScenarioFlowStagedPngResult> {
   const renderedSvg = await renderScenarioFlowStagedSvg(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const renderedPng = await renderPositionedSceneToPng(renderedSvg.positionedScene);
 

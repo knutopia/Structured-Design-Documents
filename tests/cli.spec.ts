@@ -20,12 +20,17 @@ const bundle: Bundle = {
       views: "core/views.yaml"
     },
     tool_defaults: {
-      validation_profile_id: "simple"
+      validation_profile_id: "simple",
+      render_detail_id: "compact"
     },
     profiles: [
       { id: "simple", path: "profiles/simple.yaml", intent: "drafting" },
       { id: "permissive", path: "profiles/permissive.yaml", intent: "warning-first" },
       { id: "strict", path: "profiles/strict.yaml", intent: "governance" }
+    ],
+    render_details: [
+      { id: "compact", intent: "low noise" },
+      { id: "detailed", intent: "full detail" }
     ],
     examples: [],
     compatibility: {
@@ -163,6 +168,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
     viewId: options.viewId,
     format: options.format,
     profileId: options.profileId,
+    detailId: options.detailId,
     text: options.format === "dot" ? "digraph G {}" : "flowchart TD",
     notes: [],
     diagnostics: []
@@ -222,6 +228,8 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       };
 
     return {
+      profileId: options.profileId,
+      detailId: options.detailId,
       view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
       capability: {
         textArtifacts: [],
@@ -1533,10 +1541,12 @@ describe("CLI wrappers", () => {
     expect(help).not.toMatch(/\n\s+dot\s+/);
     expect(help).not.toMatch(/\n\s+mmd\s+/);
     expect(help).toContain("show");
-    expect(help).toContain("Profiles (bundle-declared; shipped v0.1 profiles shown):");
+    expect(help).toContain("Validation profiles (bundle-declared; shipped v0.1 profiles shown):");
     expect(help).toContain("simple");
     expect(help).toContain("strict       strict governance");
     expect(help).toContain("Omit --profile to resolve project, global, then selected-bundle defaults.");
+    expect(help).toContain("Render detail (bundle-declared; shipped v0.1 values shown):");
+    expect(help).toContain("Omit --detail to resolve project, global, then selected-bundle defaults.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg");

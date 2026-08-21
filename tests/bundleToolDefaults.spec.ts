@@ -92,12 +92,14 @@ describe("bundle tool defaults", () => {
     const explicitSimple = renderSource(input, bundle, {
       viewId: "ia_place_map",
       format: "dot",
-      profileId: "simple"
+      profileId: "simple",
+    detailId: "compact"
     });
     const explicitStrict = renderSource(input, bundle, {
       viewId: "ia_place_map",
       format: "dot",
-      profileId: "strict"
+      profileId: "strict",
+    detailId: "detailed"
     });
 
     expect(omitted.profileId).toBe("simple");
@@ -149,7 +151,8 @@ describe("bundle tool defaults", () => {
       const explicitStrict = renderSource(input, mutatedBundle, {
         viewId: "ia_place_map",
         format: "dot",
-        profileId: "strict"
+        profileId: "strict",
+        detailId: "compact"
       });
 
       expect(getBundleValidationProfileFallback(mutatedBundle)).toBe("strict");

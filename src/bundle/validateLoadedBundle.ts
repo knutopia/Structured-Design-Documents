@@ -270,11 +270,40 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     add("bundle.profiles.loaded_coverage", "Loaded profiles must match manifest profile declarations exactly");
   }
 
+  const renderDetailEntries = Array.isArray(bundle.manifest.render_details)
+    ? bundle.manifest.render_details
+    : undefined;
+  const declaredRenderDetailIds: string[] = [];
+  if (!renderDetailEntries) {
+    add("bundle.render_details.shape", "render_details must be an array");
+  } else {
+    for (const [index, rawEntry] of renderDetailEntries.entries()) {
+      const entry = record(rawEntry);
+      if (!entry || !sameStringSet(Object.keys(entry), ["id", "intent"])) {
+        add("bundle.render_details.shape", `render_details[${index}] must contain exactly id and intent`);
+        continue;
+      }
+      const id = entry.id;
+      if (typeof id !== "string" || id.trim().length === 0) {
+        add("bundle.render_details.invalid_id", `render_details[${index}].id must be a non-empty string`);
+      } else {
+        declaredRenderDetailIds.push(id);
+      }
+      if (typeof entry.intent !== "string" || entry.intent.trim().length === 0) {
+        add("bundle.render_details.invalid_intent", `Render detail '${String(id)}' must have a non-empty intent`);
+      }
+    }
+    for (const duplicate of duplicateValues(declaredRenderDetailIds)) {
+      add("bundle.render_details.duplicate_id", `Render detail '${duplicate}' is declared more than once`);
+    }
+  }
+  const renderDetailIds = new Set(declaredRenderDetailIds);
+
   const toolDefaults = record(bundle.manifest.tool_defaults);
-  if (!toolDefaults || !sameStringSet(Object.keys(toolDefaults), ["validation_profile_id"])) {
+  if (!toolDefaults || !sameStringSet(Object.keys(toolDefaults), ["validation_profile_id", "render_detail_id"])) {
     add(
       "bundle.tool_defaults.shape",
-      "tool_defaults must contain exactly validation_profile_id"
+      "tool_defaults must contain exactly validation_profile_id and render_detail_id"
     );
   }
   if (toolDefaults) {
@@ -289,6 +318,66 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         "bundle.tool_defaults.unknown_validation_profile",
         `Tool validation profile '${validationProfileId}' is not declared by the bundle`
       );
+    }
+    const renderDetailId = toolDefaults.render_detail_id;
+    if (typeof renderDetailId !== "string" || renderDetailId.trim().length === 0) {
+      add(
+        "bundle.tool_defaults.invalid_render_detail_id",
+        "tool_defaults.render_detail_id must be a non-empty string"
+      );
+    } else if (!renderDetailIds.has(renderDetailId)) {
+      add(
+        "bundle.tool_defaults.unknown_render_detail",
+        `Tool render detail '${renderDetailId}' is not declared by the bundle`
+      );
+    }
+  }
+
+  for (const view of bundle.views.views) {
+    if (view.conventions.renderer_defaults === undefined) {
+      continue;
+    }
+    const rendererDefaults = record(view.conventions.renderer_defaults);
+    const detailDisplay = record(rendererDefaults?.detail_display);
+    if (!rendererDefaults || !detailDisplay) {
+      add(
+        "bundle.render_details.policy_shape",
+        `Rendering view '${view.id}' must declare renderer_defaults.detail_display as an object`
+      );
+      continue;
+    }
+    for (const policyId of Object.keys(detailDisplay)) {
+      if (!renderDetailIds.has(policyId)) {
+        add(
+          "bundle.render_details.unknown_policy_id",
+          `Rendering view '${view.id}' declares policy for unknown render detail '${policyId}'`
+        );
+      }
+    }
+    for (const detailId of declaredRenderDetailIds) {
+      if (!Object.prototype.hasOwnProperty.call(detailDisplay, detailId)) {
+        add(
+          "bundle.render_details.policy_coverage",
+          `Rendering view '${view.id}' is missing detail_display policy '${detailId}'`
+        );
+        continue;
+      }
+      const policy = record(detailDisplay[detailId]);
+      if (!policy) {
+        add(
+          "bundle.render_details.policy_shape",
+          `Rendering view '${view.id}' detail_display.${detailId} must be an object`
+        );
+        continue;
+      }
+      for (const [setting, value] of Object.entries(policy)) {
+        if (typeof value !== "boolean") {
+          add(
+            "bundle.render_details.invalid_display_value",
+            `Rendering view '${view.id}' detail_display.${detailId}.${setting} must be boolean`
+          );
+        }
+      }
     }
   }
 

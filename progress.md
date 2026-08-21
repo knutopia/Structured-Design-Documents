@@ -26,6 +26,7 @@ z
 ## Fri 8-21
 
 - Stage 2 done
+- Stage 3 done
 ------
 
 
