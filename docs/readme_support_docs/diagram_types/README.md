@@ -8,7 +8,7 @@ This page collects the current diagram families, their status, and links to avai
 
   This view shows Areas and Place nested with `CONTAINS`, with `NAVIGATES_TO` connections between Places.
   
-  Examples: [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/), [place_viewstate_transition_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/), [billSage_simple_structure](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.simple.svg), [billSage_structure](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.strict.svg)
+  Examples: [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/), [place_viewstate_transition_example](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/), [billSage_simple_structure](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.svg), [billSage_structure](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.detailed.svg)
 
 ## UI Contract
 
@@ -47,7 +47,7 @@ This page collects the current diagram families, their status, and links to avai
 
   Experience intent from above: stages and steps, needs, friction, moments of truth.
 
-  Stages contain source-ordered Steps, while `PRECEDES` relationships overlay journey flow and resolved `opportunity_refs` appear as profile-controlled inline badges.
+  Stages contain source-ordered Steps, while `PRECEDES` relationships overlay journey flow and resolved `opportunity_refs` appear as detail-controlled inline badges.
 
   Examples: [branching_journey_example](../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/), [outcome_to_ia_trace_example](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/), [service_blueprint_slice_example](../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/)
 

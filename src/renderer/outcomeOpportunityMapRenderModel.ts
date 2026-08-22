@@ -2,8 +2,8 @@ import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { RendererConnectorChannelConfig, ViewSpec } from "../bundle/types.js";
 import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
-import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
 type OutcomeOpportunityLaneId = string;
 
@@ -299,11 +299,11 @@ export function readOutcomeOpportunityRendererDefaults(view: ViewSpec): OutcomeO
 }
 
 function readOutcomeOpportunityMapDisplayOptions(
-  policy: ResolvedProfileDisplayPolicy
+  policy: ResolvedDetailDisplayPolicy
 ): OutcomeOpportunityMapDisplayOptions {
   return {
-    showInstrumentationAnnotations: readBooleanProfileDisplaySetting(policy, "show_instrumentation_annotations", true),
-    showImplementationAnnotations: readBooleanProfileDisplaySetting(policy, "show_implementation_annotations", true)
+    showInstrumentationAnnotations: readBooleanDetailDisplaySetting(policy, "show_instrumentation_annotations"),
+    showImplementationAnnotations: readBooleanDetailDisplaySetting(policy, "show_implementation_annotations")
   };
 }
 
@@ -367,7 +367,7 @@ export function buildOutcomeOpportunityMapRenderModel(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): OutcomeOpportunityMapRenderModel {
   const rendererDefaults = readOutcomeOpportunityRendererDefaults(view);
   const displayOptions = readOutcomeOpportunityMapDisplayOptions(displayPolicy);

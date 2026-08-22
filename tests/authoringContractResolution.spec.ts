@@ -39,6 +39,9 @@ describe("authoring contract resolution", () => {
     const resolvedProfileBinding = resolvedDetail?.bindings.find(
       (binding) => binding.binding_id === "shared.binding.render_preview.profile_id"
     );
+    const resolvedDetailBinding = resolvedDetail?.bindings.find(
+      (binding) => binding.binding_id === "shared.binding.render_preview.detail_id"
+    );
 
     expect(resolvedViewBinding?.resolved_values).toEqual(
       bundle.views.views.map((view) => ({
@@ -54,6 +57,14 @@ describe("authoring contract resolution", () => {
         value: profile.id,
         metadata: {
           intent: profile.intent
+        }
+      }))
+    );
+    expect(resolvedDetailBinding?.resolved_values).toEqual(
+      bundle.manifest.render_details.map((detail) => ({
+        value: detail.id,
+        metadata: {
+          intent: detail.intent
         }
       }))
     );

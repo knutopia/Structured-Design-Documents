@@ -1,16 +1,16 @@
 # Validation Profiles
 
-Profiles change validation strictness without changing `.sdd` syntax, compiled graph shape, or projection scope. They can also adjust optional render detail, with `simple` using a lower-noise display policy where configured.
+Profiles change validation strictness without changing `.sdd` syntax, compiled graph shape, projection scope, or rendering. Render detail is selected independently as `compact` or `detailed`.
 
 Think of `simple` as useful for expressing design structure and intent. Consider `strict` as requiring lots of specification-type detail that is great as a reference for using the .sdd file as an engineering reference, but repetitive to author. `permissive` is in-between, providing results and feedback warnings, where `strict` would stop with errors instead.
 
 ## Profile Ladder
 
-- `simple`: low-noise drafting for early diagrams; keeps structural integrity strict and checks optional property formats only when those properties are authored
+- `simple`: light-touch validation for early drafts; keeps structural integrity strict and checks optional property formats only when those properties are authored
 - `permissive`: warning-first completeness; keeps the current governance-oriented rules active, mostly as warnings
 - `strict`: strict governance, enforcing presence of detailed metadata
 
-In v0.1 rendering, `simple` suppresses place `route_or_key`, `access`, and `entry_points` wherever a renderer could otherwise show them. `primary_nav` remains visible only in views that already render it.
+In v0.1 rendering, `compact` suppresses optional annotations such as place `route_or_key`, `access`, and `entry_points`; `detailed` includes the fuller bundle-declared display policy. `primary_nav` remains visible in views that render it. Either detail can be combined with any successful validation profile.
 
 ## When To Use Which
 

@@ -691,6 +691,7 @@ const renderPreviewResultSchema = objectSchema(
     revision: stringSchema(),
     view_id: stringSchema(),
     profile_id: stringSchema(),
+    detail_id: stringSchema(),
     backend_id: stringSchema(),
     format: stringSchema(["svg", "png"]),
     mime_type: stringSchema(["image/svg+xml", "image/png"]),
@@ -705,6 +706,7 @@ const renderPreviewResultSchema = objectSchema(
     "revision",
     "view_id",
     "profile_id",
+    "detail_id",
     "backend_id",
     "format",
     "mime_type",
@@ -1448,7 +1450,13 @@ const contractBindingSpecSchema = objectSchema(
     kind: stringSchema(["bundle_value_set"]),
     bundle_source: objectSchema(
       {
-        artifact: stringSchema(["manifest_profiles", "views_yaml", "vocab_node_types", "vocab_relationship_types"]),
+        artifact: stringSchema([
+          "manifest_profiles",
+          "manifest_render_details",
+          "views_yaml",
+          "vocab_node_types",
+          "vocab_relationship_types"
+        ]),
         selector: stringSchema()
       },
       ["artifact", "selector"]
@@ -1744,10 +1752,11 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
         path: stringSchema(),
         view_id: stringSchema(),
         profile_id: stringSchema(),
+        detail_id: stringSchema(),
         format: stringSchema(["svg", "png"]),
         backend_id: stringSchema()
       },
-      ["path", "view_id", "profile_id", "format"]
+      ["path", "view_id", "profile_id", "detail_id", "format"]
     ),
     stability: "stable"
   },
@@ -2493,6 +2502,19 @@ const BINDINGS: readonly ContractBindingSpec[] = [
     static_behavior: "reference_only",
     bundle_resolved_behavior: "expand_values",
     summary: "Preview profile_id is bundle-owned and must be resolved from the active bundle profiles list."
+  },
+  {
+    binding_id: "shared.binding.render_preview.detail_id",
+    applies_to_shape_id: "shared.shape.render_preview_args",
+    applies_to_json_pointer: "/detail_id",
+    kind: "bundle_value_set",
+    bundle_source: {
+      artifact: "manifest_render_details",
+      selector: "render_details"
+    },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "Preview detail_id is bundle-owned and must be resolved from the active bundle render-details list."
   },
   {
     binding_id: "shared.binding.apply_change_set.validate_profile",

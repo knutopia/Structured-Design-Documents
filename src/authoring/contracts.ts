@@ -3,7 +3,8 @@ import type { Diagnostic } from "../types.js";
 export type DocumentPath = string;
 export type DocumentUri = string;
 export type DocumentRevision = string;
-export type ProfileId = "simple" | "permissive" | "strict";
+export type ProfileId = string;
+export type RenderDetailId = string;
 export type ViewId = string;
 export type ChangeSetId = string;
 export type Handle = string;
@@ -477,6 +478,7 @@ export interface RenderPreviewArgs {
   path: DocumentPath;
   view_id: ViewId;
   profile_id: ProfileId;
+  detail_id: RenderDetailId;
   format: "svg" | "png";
   backend_id?: PreviewBackendId;
 }
@@ -487,6 +489,7 @@ export interface RenderPreviewResult {
   revision: DocumentRevision;
   view_id: ViewId;
   profile_id: ProfileId;
+  detail_id: RenderDetailId;
   backend_id: PreviewBackendId | string;
   format: "svg" | "png";
   mime_type: "image/svg+xml" | "image/png";
@@ -717,7 +720,7 @@ export interface ContractBindingSpec {
   applies_to_json_pointer: string;
   kind: "bundle_value_set";
   bundle_source: {
-    artifact: "manifest_profiles" | "views_yaml" | "vocab_node_types" | "vocab_relationship_types";
+    artifact: "manifest_profiles" | "manifest_render_details" | "views_yaml" | "vocab_node_types" | "vocab_relationship_types";
     selector: string;
   };
   static_behavior: "reference_only";

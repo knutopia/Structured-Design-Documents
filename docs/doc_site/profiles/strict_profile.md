@@ -244,7 +244,7 @@ Key relationships include:
 - `Component|ViewState|Process|SystemAction EMITS Event`
 - `Metric INSTRUMENTED_AT Step|Place|ViewState|Event`
 
-Strict diagrams display instrumentation annotations that the low-noise profile suppresses. This can guide analytics hooks, event naming, payload construction, and where measurement should occur.
+Detailed diagrams display instrumentation annotations that compact detail suppresses. This can guide analytics hooks, event naming, payload construction, and where measurement should occur; the `strict` profile independently validates whether the required information is present.
 
 ## 9. Structural and governance checks
 
@@ -297,7 +297,7 @@ One SDD graph can produce six focused implementation views:
 - Scenario Flow: ordered user flow, navigation, view-state transitions, and decision branches.
 - UI Contracts: places, view states, components, state machines, events, data bindings, and system dependencies.
 
-Strict mode generally shows the richer annotations; it does not change the underlying syntax or projection scope. Profiles are validation overlays, not different document variants ([profile guidance](/home/knut/projects/sdd/docs/toolchain/profiles.md:1)).
+Use `--detail detailed` to show richer annotations; `strict` does not change rendering, the underlying syntax, or projection scope. Profiles are validation overlays, not different document variants ([profile guidance](/home/knut/projects/sdd/docs/toolchain/profiles.md:1)).
 
 ## Important boundaries
 

@@ -137,8 +137,8 @@ async function buildIaArtifacts(examplePath: string, profileId: string) {
     throw new Error(`Could not project ${examplePath} to ia_place_map.`);
   }
 
-  const rendererScene = buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, profileId);
-  const rendered = await renderIaPlaceMapStagedSvg(projected.projection, compiled.graph, view, profileId);
+  const rendererScene = buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
+  const rendered = await renderIaPlaceMapStagedSvg(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
 
   return {
     rendererScene,
@@ -167,7 +167,7 @@ async function buildIaRendererSceneFromSource(sourceText: string, profileId = "s
     throw new Error("Could not project inline ia_place_map source.");
   }
 
-  return buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, profileId);
+  return buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
 }
 
 describe("staged ia_place_map", () => {

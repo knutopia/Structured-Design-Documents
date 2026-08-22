@@ -18,6 +18,16 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("rendered example corpus", () => {
+  it("plans one collision-free directory per bundle render detail", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
+    const planned = variants.map((variant) => planRenderedCorpusOutputPaths(bundle, variant));
+
+    expect(new Set(variants.map((variant) => variant.detailId))).toEqual(new Set(["compact", "detailed"]));
+    expect(planned.every((output) => /_(?:detail)$/.test(path.basename(output.detailDir)))).toBe(true);
+    expect(new Set(planned.map((output) => output.svgOutputPath)).size).toBe(planned.length);
+  });
   it("uses promoted rendered corpus view folders", async () => {
     expect(isPreviewOnlyRenderedCorpusView("outcome_opportunity_map")).toBe(false);
     expect(isPreviewOnlyRenderedCorpusView("journey_map")).toBe(false);
@@ -45,7 +55,7 @@ describe("rendered example corpus", () => {
       const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
       expect(path.basename(path.dirname(outputPaths.exampleDir))).toBe(getRenderedCorpusViewDirName(variant.viewId));
       expect(path.basename(outputPaths.exampleDir)).toMatch(/_example$/);
-      expect(path.basename(outputPaths.profileDir)).toMatch(/_profile$/);
+      expect(path.basename(outputPaths.detailDir)).toMatch(/_detail$/);
       await access(outputPaths.sourceOutputPath);
       await access(outputPaths.dotOutputPath);
       await access(outputPaths.mermaidOutputPath);
@@ -114,7 +124,7 @@ describe("rendered example corpus", () => {
     const targetVariant = variants.find((variant) => (
       variant.viewId === "ui_contracts"
       && variant.example.name === "place_viewstate_transition"
-      && variant.profileId === "permissive"
+      && variant.detailId === "detailed"
     ));
 
     expect(targetVariant).toBeDefined();
@@ -196,19 +206,19 @@ describe("rendered example corpus", () => {
 
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/strict_profile/ui_state_fallback.ui_contracts_BROKEN.svg"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts_BROKEN.svg"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.external_anchor_experiment.svg"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.external_anchor_experiment.png"
     ))).rejects.toThrow();
     await expect(access(path.join(
       repoRoot,
-      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
+      "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.external_anchor_experiment.dot"
     ))).rejects.toThrow();
   });
 
@@ -378,7 +388,7 @@ describe("rendered example corpus", () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs).filter(
-      (variant) => variant.profileId === "simple"
+      (variant) => variant.detailId === "compact"
     );
 
     for (const variant of variants) {

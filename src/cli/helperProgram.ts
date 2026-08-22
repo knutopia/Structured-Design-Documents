@@ -1164,6 +1164,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .argument("<document_path>", "repo-relative .sdd document path")
     .requiredOption("--view <view_id>", "view id")
     .requiredOption("--profile <profile_id>", "profile id")
+    .requiredOption("--detail <detail_id>", "render detail id")
     .requiredOption("--format <format>", "preview format")
     .option("--backend <backend_id>", "preview backend id")
     .action(async (
@@ -1171,6 +1172,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       options: {
         view: string;
         profile: RenderPreviewArgs["profile_id"];
+        detail: RenderPreviewArgs["detail_id"];
         format: RenderPreviewArgs["format"];
         backend?: RenderPreviewArgs["backend_id"];
       }
@@ -1181,6 +1183,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
         path: normalizedPath,
         view_id: options.view,
         profile_id: options.profile,
+        detail_id: options.detail,
         format: options.format,
         backend_id: options.backend
       });

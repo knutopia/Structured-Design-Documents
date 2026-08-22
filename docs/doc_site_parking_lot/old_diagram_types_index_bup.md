@@ -21,12 +21,12 @@ This page collects the current diagram families, their status, and links to avai
   :::
   ::: details billSage app
   <Badge type="info" text="Simple Profile" vertical="top" />
-  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.simple.svg)
+  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.svg)
   <IconFile/>[Read SDD Source](../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd) <IconGitHub/>[Browse Repo Folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/real_world_exploration/billSage_example)
   <br>
   <br>
   <Badge type="info" text="Strict Profile" vertical="middle" />
-  ![svg](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.strict.svg)
+  ![svg](../../../real_world_exploration/billSage_example/billSage_structure.ia_place_map.detailed.svg)
   *strict profile* <IconFile/>[Read SDD Source](../../../real_world_exploration/billSage_example/billSage_structure.sdd) <IconGitHub/>[Browse Repo Folder](https://github.com/knutopia/Structured-Design-Documents/tree/main/real_world_exploration/billSage_example)
   ::: 
 

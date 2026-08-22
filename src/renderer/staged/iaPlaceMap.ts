@@ -2,7 +2,7 @@ import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection, ProjectionNodeAnnotation } from "../../projector/types.js";
 import { resolvePlaceLabelDisplayOptions } from "../placeLabelLines.js";
-import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import { buildIaPlaceMapRenderModel, type IaRenderArea, type IaRenderItem, type IaRenderPlace } from "../iaPlaceMapRenderModel.js";
 import type {
   ContentBlock,
@@ -11,7 +11,8 @@ import type {
   SceneContainer,
   SceneEdge,
   SceneItem,
-  SceneNode
+  SceneNode,
+  StagedRenderSettings
 } from "./contracts.js";
 import { IA_LOCAL_ROUTE_PATTERNS } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
@@ -523,11 +524,11 @@ export function buildIaPlaceMapRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): RendererScene {
-  const displayOptions = resolvePlaceLabelDisplayOptions(resolveProfileDisplayPolicy(view, profileId));
-  const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? []);
+  const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
+  const displayOptions = resolvePlaceLabelDisplayOptions(displayPolicy);
+  const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
   const placeOrderById = new Map<string, number>();
   buildPlaceOrderIndex(model.rootItems, placeOrderById, { next: 0 });
 
@@ -542,8 +543,8 @@ export function buildIaPlaceMapRendererScene(
 
   return {
     viewId: "ia_place_map",
-    profileId,
-    themeId,
+    detailId: settings.detailId,
+    themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "ia_place_map",
       layout: {
@@ -573,10 +574,9 @@ export async function renderIaPlaceMapStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<IaPlaceMapStagedSvgResult> {
-  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, profileId, themeId);
+  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
 
@@ -590,10 +590,9 @@ export async function renderIaPlaceMapStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<IaPlaceMapStagedPngResult> {
-  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, profileId, themeId);
+  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings);
   const pipeline = await runStagedRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToPng(pipeline.positionedScene);
 

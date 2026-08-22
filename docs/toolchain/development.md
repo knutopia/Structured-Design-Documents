@@ -22,7 +22,7 @@ Current renderable views:
 - Supported preview output via `sdd show`: `ia_place_map`, `ui_contracts`, `service_blueprint`, `scenario_flow`, `outcome_opportunity_map`, `journey_map`
 - Internal `.dot` and `.mmd` text artifacts are retained for all renderable views for tests, corpus generation, and debugging.
 
-Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under suffixed profile subfolders such as `simple_profile/`, `permissive_profile/`, and `strict_profile/`, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. Unsuffixed preview files represent the default preview backend for that view/profile. Preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
+Committed rendered examples live under `examples/rendered/v0.1/`. Each view/example pair keeps the source `.sdd` at the pair root and stores rendered artifacts under the bundle-declared `compact_detail/` and `detailed_detail/` subfolders, nested under suffixed view and example folders such as `ia_place_map_diagram_type/outcome_to_ia_trace_example/`. The corpus generator validates every input with the bundle fallback validation profile (`simple` in v0.1), independently of render detail. Unsuffixed preview files represent the default preview backend for that view/detail. Preserved non-default preview artifacts are committed as backend-suffixed siblings when a view keeps parallel preview backends. Keep that corpus separate from `tests/goldens/`, which remains focused on small test-only fixtures and focused regression assets.
 
 The CLI preview pipeline is SVG-first:
 
@@ -204,7 +204,7 @@ Profile guidance lives in [profiles.md](./profiles.md).
 
 - `preview_defaults`: shared preview artifact defaults for CLI previews, including backends that still route through DOT internally, such as fonts and DPI. These affect SVG/PNG generation, not `.sdd` authoring.
 - `normative_defaults`: descriptive statements about the default semantic reading of a view. They explain how a contributor or projection consumer should interpret the view, but they do not by themselves validate source files or mutate compiled graphs.
-- `renderer_defaults`: machine-readable downstream conventions consumed by projection builders, render-model builders, and preview-style resolution. These can change derived annotations, node groups, view metadata, shapes, labels, lane assignment, preview styling, or profile-specific display density without changing `.sdd` syntax.
+- `renderer_defaults`: machine-readable downstream conventions consumed by projection builders, render-model builders, and preview-style resolution. These can change derived annotations, node groups, view metadata, shapes, labels, lane assignment, preview styling, or detail-specific display density without changing `.sdd` syntax.
 
 Practical rule of thumb:
 

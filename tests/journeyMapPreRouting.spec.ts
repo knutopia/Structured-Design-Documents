@@ -69,7 +69,7 @@ async function buildFixtureStages(name: string, profileId = "strict"): Promise<J
     compiled.graph!,
     bundle,
     view,
-    profileId
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   const measuredScene = measureScene(rendererScene);
   const preRoutingPositionedScene = await positionJourneyMapMeasuredSceneBeforeRouting(measuredScene);
@@ -91,7 +91,7 @@ async function buildFixtureArtifacts(name: string, profileId = "strict"): Promis
     stages.graph,
     stages.bundle,
     stages.view,
-    profileId
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
 }
 
@@ -477,8 +477,8 @@ describe("journey map measurement and pre-routing placement", () => {
     const cases = [
       ["primary", "strict", "measuredScene", "journey-map.primary.measured-scene.json"],
       ["primary", "strict", "preRoutingPositionedScene", "journey-map.primary.pre-routing.positioned-scene.json"],
-      ["primary", "simple", "measuredScene", "journey-map.badges.simple.measured-scene.json"],
-      ["primary", "permissive", "measuredScene", "journey-map.badges.permissive.measured-scene.json"],
+      ["primary", "simple", "measuredScene", "journey-map.badges.compact.measured-scene.json"],
+      ["primary", "permissive", "measuredScene", "journey-map.badges.detailed.measured-scene.json"],
       ["ordering_ownership", "strict", "preRoutingPositionedScene", "journey-map.ordering-ownership.pre-routing.positioned-scene.json"],
       ["topology", "strict", "preRoutingPositionedScene", "journey-map.topology.pre-routing.positioned-scene.json"],
       ["duplicate", "strict", "preRoutingPositionedScene", "journey-map.duplicate.pre-routing.positioned-scene.json"]

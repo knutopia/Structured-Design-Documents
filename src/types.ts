@@ -1,4 +1,5 @@
 export type Severity = "error" | "warn" | "info";
+export type RenderDetailId = string;
 
 export type DiagnosticStage =
   | "bundle"
@@ -40,11 +41,14 @@ export interface RenderOptions {
   viewId: string;
   format: "dot" | "mermaid";
   profileId?: string;
+  detailId?: RenderDetailId;
 }
 
 export interface RenderResult {
   format: "dot" | "mermaid";
   viewId: string;
+  profileId: string;
+  detailId: RenderDetailId;
   text?: string;
   notes: string[];
   diagnostics: Diagnostic[];

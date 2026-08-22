@@ -2,8 +2,8 @@ import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } fro
 import type { CompiledEdge, CompiledGraph } from "../compiler/types.js";
 import type { Projection, ProjectionNodeGroup } from "../projector/types.js";
 import { buildIaStylePlaceLabelLines } from "./placeLabelLines.js";
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
-import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
 type UiContractsNodeType = "Component" | "DataEntity" | "Event" | "State" | "SystemAction" | "ViewState";
 type RenderedTransitionType = "State" | "ViewState";
@@ -136,20 +136,18 @@ function getTransitionGraphPriorityMetadata(projection: Projection): TransitionG
   };
 }
 
-function readUiContractsDisplayOptions(policy: ResolvedProfileDisplayPolicy): UiContractsDisplayOptions {
+function readUiContractsDisplayOptions(policy: ResolvedDetailDisplayPolicy): UiContractsDisplayOptions {
   return {
-    includeViewStateDataRequired: readBooleanProfileDisplaySetting(policy, "show_view_state_data_required", true),
-    showSecondaryStateGroupsWhenPrimaryViewState: readBooleanProfileDisplaySetting(
+    includeViewStateDataRequired: readBooleanDetailDisplaySetting(policy, "show_view_state_data_required"),
+    showSecondaryStateGroupsWhenPrimaryViewState: readBooleanDetailDisplaySetting(
       policy,
-      "show_secondary_state_groups_when_primary_view_state",
-      true
+      "show_secondary_state_groups_when_primary_view_state"
     ),
-    showSupportingContractLaneWhenPrimaryViewState: readBooleanProfileDisplaySetting(
+    showSupportingContractLaneWhenPrimaryViewState: readBooleanDetailDisplaySetting(
       policy,
-      "show_supporting_contract_lane_when_primary_view_state",
-      true
+      "show_supporting_contract_lane_when_primary_view_state"
     ),
-    omitEmptyPlaceContainers: readBooleanProfileDisplaySetting(policy, "omit_empty_place_containers", false)
+    omitEmptyPlaceContainers: readBooleanDetailDisplaySetting(policy, "omit_empty_place_containers")
   };
 }
 
@@ -300,7 +298,7 @@ function contractEdgeDisplay(
 function buildPlaceLabelLines(
   placeId: string,
   graphNodesById: Map<string, { name: string; props: Record<string, string> }>,
-  displayPolicy: ResolvedProfileDisplayPolicy
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): string[] {
   const place = graphNodesById.get(placeId);
   if (!place) {
@@ -344,7 +342,7 @@ function formatUiContractsCoverageNote(omittedPlaceItems: UiContractsCoverageIte
     (duplicateNameCounts.get(item.name) ?? 0) > 1 ? `${item.name} (${item.id})` : item.name
   );
 
-  return `Omitted empty ui_contracts containers in simple profile: ${labels.join(", ")}.`;
+  return `Omitted empty ui_contracts containers in compact detail: ${labels.join(", ")}.`;
 }
 
 function withUiContractsCoverage(
@@ -494,7 +492,7 @@ function collectSiblingOrderChains(rootItems: UiContractsRootItem[]): string[][]
 export function buildUiContractsRenderData(
   projection: Projection,
   graph: CompiledGraph,
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): UiContractsRenderData {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectedNodeIds = new Set(projection.nodes.map((node) => node.id));
@@ -913,7 +911,7 @@ export function buildUiContractsRenderData(
 export function buildUiContractsRenderModel(
   projection: Projection,
   graph: CompiledGraph,
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): UiContractsRenderModel {
   return buildUiContractsRenderData(projection, graph, displayPolicy).model;
 }

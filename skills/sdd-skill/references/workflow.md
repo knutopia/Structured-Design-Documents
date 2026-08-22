@@ -64,7 +64,7 @@ Projection checks and rendered views are checks and presentation boundaries; the
 
 Examples, snapshots, and goldens are downstream evidence only. Do not inspect `.sdd` examples to infer language rules; use them only for comparison, regression investigation, or user-requested reuse after bundle authority is known.
 
-`contract --resolve bundle` expands active helper-exposed values such as `view_id` and `profile_id` for commands that declare those bundle bindings. It does not replace the bundle files as the general authority for node or relationship vocabulary, relationship endpoint rules, source syntax, or view behavior.
+`contract --resolve bundle` expands active helper-exposed values such as `view_id`, validation `profile_id`, and render `detail_id` for commands that declare those bundle bindings. It does not replace the bundle files as the general authority for node or relationship vocabulary, relationship endpoint rules, source syntax, or view behavior.
 
 ## 4. Read Outcome Assessment
 
@@ -157,7 +157,7 @@ Use persisted-state semantic reads when you want confirmation without issuing a 
 
 Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state diagram artifact work.
 
-If the relevant `view_id` or `profile_id` is not already known, use `contract --resolve bundle` to expand the active helper-exposed values before choosing command arguments:
+If the relevant `view_id`, `profile_id`, or `detail_id` is not already known, use `contract --resolve bundle` to expand the active helper-exposed values before choosing command arguments:
 
 ```bash
 <helper> contract helper.command.validate --resolve bundle
@@ -170,7 +170,8 @@ For normal human-facing diagram requests, produce a durable saved file. Use `sdd
 ```bash
 TMPDIR=/tmp pnpm sdd show <document_path> \
   --view <view_id> \
-  --profile <profile_id>
+  --profile <profile_id> \
+  --detail <detail_id>
 ```
 
 If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
@@ -187,7 +188,7 @@ Inline-image branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- call helper `preview` with the same document, view, profile, and format
+- call helper `preview` with the same document, view, profile, detail, and format
 - use the returned `artifact_path` as the Markdown image source in the final response
 - keep the saved sibling artifact as the canonical file link
 
@@ -197,6 +198,7 @@ Inline-image command:
 <helper> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
+  --detail <detail_id> \
   --format <format>
 ```
 
@@ -279,7 +281,7 @@ Readable source pass:
 
 For `author`, put parent-child edges in the parent's `node.edges` and nested child blocks in `node.children`; helper authoring compiles edges before children. For low-level `apply`, insert semantic edge lines before nested child blocks. Do not use `placement.mode: "last"` for semantic edge lines that introduce or describe nested child blocks.
 
-Use `contract --resolve bundle` for active helper-exposed `view_id` and `profile_id` values. Use the targeted bundle files in section 3 for bundle-owned relationship names, node tokens, endpoint rules, source syntax, profile behavior, and view semantics.
+Use `contract --resolve bundle` for active helper-exposed `view_id`, validation `profile_id`, and render `detail_id` values. Use the targeted bundle files in section 3 for bundle-owned relationship names, node tokens, endpoint rules, source syntax, profile behavior, render-detail behavior, and view semantics.
 
 ## 10. Commit A Change Set
 
@@ -312,12 +314,13 @@ Use `sdd show` after the last committed persisted-state assessment has `assessme
 ```bash
 TMPDIR=/tmp pnpm sdd show <document_path> \
   --view <view_id> \
-  --profile <profile_id>
+  --profile <profile_id> \
+  --detail <detail_id>
 ```
 
-If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<profile>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
+If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<detail>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
 
-If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering. A preview matches only when it came from the same document, committed revision, view, profile, format, and backend in the same workflow context. If matching metadata is unavailable, use `sdd show` instead of copying. The default durable path still stays beside the `.sdd`.
+If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering. A preview matches only when it came from the same document, committed revision, view, profile, detail, format, and backend in the same workflow context. If matching metadata is unavailable, use `sdd show` instead of copying. The default durable path still stays beside the `.sdd`.
 
 Use one of these branches and stop after the one that matches the final response:
 
@@ -331,7 +334,7 @@ Inline-image branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- call helper `preview` with the same document, view, profile, and format
+- call helper `preview` with the same document, view, profile, detail, and format
 - use the returned `artifact_path` as the Markdown image source in the final response
 - keep the saved sibling artifact as the canonical file link
 
@@ -341,12 +344,13 @@ Inline-image command:
 <helper> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
+  --detail <detail_id> \
   --format <format>
 ```
 
 Do not present `artifact_path` as the real saved artifact. Use the canonical sibling file for file links and the returned `artifact_path` for the Markdown image. The temp preview artifact under `/tmp/unique-previews` is only a presentation/workflow path for chat path caching and transient consumers, while the sibling artifact remains the real preview identity.
 
-If the relevant `view_id` or `profile_id` is unknown, use `contract --resolve bundle` to expand the active helper-exposed values before choosing arguments for `preview` or `sdd show`. Read `views.yaml` or profile files when you need behavior beyond the IDs.
+If the relevant `view_id`, `profile_id`, or `detail_id` is unknown, use `contract --resolve bundle` to expand the active helper-exposed values before choosing arguments for `preview` or `sdd show`. Read `views.yaml`, profile files, or detail policies when you need behavior beyond the IDs.
 
 Use helper preview alone only when the user explicitly asks for preview-only, inline-only, transient raw artifact output, or a chat-safe artifact path rather than the normal saved deliverable:
 
@@ -354,12 +358,13 @@ Use helper preview alone only when the user explicitly asks for preview-only, in
 <helper> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
+  --detail <detail_id> \
   --format <format> \
   --backend <backend_id>
 ```
 
 `sdd-helper preview` is for transient rendered confirmation, not for structured mutation or the default saved deliverable.
-It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the profile used in the persisted-state assessment gate, and the rendered output should come from that same committed state. Treat the returned `artifact_path` as a temp presentation/workflow path only, not as the canonical preview artifact path.
+It is not a substitute for validation or projection. The profile used for `sdd show` or `preview` should match the profile used in the persisted-state assessment gate, the selected detail should match the intended rendering, and the rendered output should come from that same committed state. Treat the returned `artifact_path` as a temp presentation/workflow path only, not as the canonical preview artifact path.
 If preview returns `sdd-helper-error`, read `assessment.layer`, `assessment.next_action`, and any attached `diagnostics`. An invalid intermediate document under the requested profile can fail in the helper-error lane even when the preview environment itself is healthy.
 
 ## 13. Undo A Helper-Managed Commit
@@ -430,7 +435,7 @@ Use `contract` in static mode when:
 
 Use `contract --resolve bundle` only when:
 
-- the task needs active helper-exposed values for `view_id` or `profile_id`
+- the task needs active helper-exposed values for `view_id`, `profile_id`, or `detail_id`
 - the relevant values are not already known from the user request or current workflow context
 
 Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery. Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when helper contract introspection already provides it.

@@ -199,7 +199,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       compiled.graph!,
       bundle,
       view!,
-      "strict"
+      { detailId: "detailed" }
     );
     const scene = rendered.routingStages.provisionalPositionedScene;
     expect(scene.edges).toHaveLength(3);
@@ -266,7 +266,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       compiled.graph!,
       bundle,
       view!,
-      "strict"
+      { detailId: "detailed" }
     );
     const scene = rendered.routingStages.provisionalPositionedScene;
     expect(scene.edges).toHaveLength(9);
@@ -347,7 +347,7 @@ describe("journey map Gate 6 visual acceptance", () => {
         compiled.graph!,
         bundle,
         view!,
-        "strict"
+        { detailId: "detailed" }
       );
     };
 
@@ -452,7 +452,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       compiled.graph!,
       bundle,
       view!,
-      "strict"
+      { detailId: "detailed" }
     );
     const scene = rendered.routingStages.provisionalPositionedScene;
     expect(scene.edges).toHaveLength(9);
@@ -513,7 +513,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       expect(projected.diagnostics).toEqual([]);
       expect(projected.projection).toBeDefined();
       return renderJourneyMapRoutingArtifacts(
-        projected.projection!, compiled.graph!, bundle, view!, "strict"
+        projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
       );
     };
 
@@ -610,7 +610,7 @@ describe("journey map Gate 6 visual acceptance", () => {
       expect(projected.diagnostics).toEqual([]);
       expect(projected.projection).toBeDefined();
       return renderJourneyMapRoutingArtifacts(
-        projected.projection!, compiled.graph!, bundle, view!, "strict"
+        projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
       );
     };
 
@@ -716,7 +716,7 @@ describe("journey map Gate 6 self-loop visual acceptance", () => {
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
     const rendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const scene = rendered.routingStages.provisionalPositionedScene;
     expect(scene.edges).toHaveLength(9);
@@ -799,10 +799,10 @@ describe("journey map Gate 6 duplicate occurrence visual acceptance", () => {
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
     const rendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const rerendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     expect(rendered.provisionalSvg).toBe(rerendered.provisionalSvg);
     const scene = rendered.routingStages.provisionalPositionedScene;
@@ -918,10 +918,10 @@ describe("journey map Gate 7 duplicate endpoint visual proof", () => {
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
     const rendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const rerendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const scene = rendered.routingStages.finalPositionedScene;
     expect(scene.root).toMatchObject({ x: 0, y: 0, width: 552, height: 112 });
@@ -981,7 +981,7 @@ describe("journey map Gate 7 ordering and primary endpoint visual proof", () => 
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
     return renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
   }
 
@@ -1049,10 +1049,10 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
     const rendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const rerendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const scene = rendered.routingStages.finalPositionedScene;
     const edge = (from: string, to: string) => scene.edges.find((candidate) =>
@@ -1133,10 +1133,10 @@ describe("journey map dense remediation stop proof", () => {
     const view = bundle.views.views.find((candidate) => candidate.id === "journey_map");
     expect(view).toBeDefined();
     const rendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const rerendered = await renderJourneyMapRoutingArtifacts(
-      projected.projection!, compiled.graph!, bundle, view!, "strict"
+      projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const scene = rendered.routingStages.finalPositionedScene;
     expect(scene.edges).toHaveLength(18);

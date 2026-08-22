@@ -114,22 +114,25 @@ describe("staged visual acceptance", () => {
           repoRoot,
           "real_world_exploration/billSage_example/reference/billSage_structure.ia_place_map.strict.bottomToLeft_connectors.reference.png"
         ),
-        profileId: "strict"
+        profileId: "strict",
+      detailId: "detailed"
       },
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),
-        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.ia_place_map.png"),
-        profileId: "strict"
+        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/detailed_detail/outcome_to_ia_trace.ia_place_map.png"),
+        profileId: "strict",
+      detailId: "detailed"
       },
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd"),
-        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ia_place_map.png"),
-        profileId: "strict"
+        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ia_place_map.png"),
+        profileId: "strict",
+      detailId: "detailed"
       }
     ] as const;
 
     for (const testCase of cases) {
-      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ia_place_map", testCase.profileId);
+      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ia_place_map", testCase.detailId);
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, FORBIDDEN_DIAGNOSTICS);
 
@@ -148,16 +151,16 @@ describe("staged visual acceptance", () => {
     const cases = [
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/place_viewstate_transition.sdd"),
-        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.png")
+        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.png")
       },
       {
         sourcePath: path.join(repoRoot, "bundle/v0.1/examples/ui_state_fallback.sdd"),
-        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/strict_profile/ui_state_fallback.ui_contracts.png")
+        outputArtifactPath: path.join(repoRoot, "examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.png")
       }
     ] as const;
 
     for (const testCase of cases) {
-      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ui_contracts", "strict");
+      const rendered = await renderStagedArtifacts(testCase.sourcePath, "ui_contracts", "detailed");
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, FORBIDDEN_DIAGNOSTICS);
 
@@ -184,7 +187,7 @@ describe("staged visual acceptance", () => {
     const rendered = await renderStagedArtifacts(
       path.join(repoRoot, "bundle/v0.1/examples/scenario_branching.sdd"),
       "scenario_flow",
-      "strict"
+      "detailed"
     );
 
     expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
@@ -221,7 +224,7 @@ describe("staged visual acceptance", () => {
     ];
 
     for (const sourcePath of cases) {
-      const rendered = await renderStagedArtifacts(sourcePath, "outcome_opportunity_map", "strict");
+      const rendered = await renderStagedArtifacts(sourcePath, "outcome_opportunity_map", "detailed");
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, OUTCOME_OPPORTUNITY_FORBIDDEN_DIAGNOSTICS);
 

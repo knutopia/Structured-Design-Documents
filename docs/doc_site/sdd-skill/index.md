@@ -34,7 +34,7 @@ The prompt generates the SDD file (Structured Design Document) and the informati
 :::tabs
 == Information Architecture Diagram
 Information architecture from that first prompt:
-![](examples/shop_sched_exploration.ia_place_map.simple.svg)
+![](examples/shop_sched_exploration.ia_place_map.compact.svg)
 == Source
 showSource examples/shop_sched_exploration.sdd
 :::
@@ -66,7 +66,7 @@ Also add descriptions. Update the IA.
 :::tabs
 == Information Architecture Diagram
 Rendered output from the admin-area follow-up:
-![](examples/shop_sched_exploration_2.ia_place_map.simple.svg)
+![](examples/shop_sched_exploration_2.ia_place_map.compact.svg)
 == Source
 showSource examples/shop_sched_exploration_2.sdd {35-51}
 == Source Detail
@@ -109,7 +109,7 @@ Show the UI contracts.
 :::tabs
 == UI Contracts Diagram
 Rendered output from the UI-contracts follow-up, showing the viewState sequence:
-![](examples/shop_sched_exploration_3.ui_contracts.simple.svg)
+![](examples/shop_sched_exploration_3.ui_contracts.compact.svg)
 == Source
 showSource examples/shop_sched_exploration_3.sdd {26-39}
 == Source Detail
@@ -147,7 +147,7 @@ The same style also works for smaller follow-ups:
 :::tabs
 == Information Architecture Diagram
 Renamed "Open Shifts" in "Mechanic's Scheduling" to "Available Shifts":
-![](examples/shop_sched_exploration_4.ia_place_map.simple.svg)
+![](examples/shop_sched_exploration_4.ia_place_map.compact.svg)
 == Source
 showSource examples/shop_sched_exploration_4.sdd {15}
 == Source Detail
@@ -179,7 +179,7 @@ Using $sdd-skill, show the information architecture.
 The agent, guided by the skill, then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
 
 ```console
-bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --format png --out "shop_sched_exploration_IA_as_a.png"
+bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --detail compact --format png --out "shop_sched_exploration_IA_as_a.png"
 
 Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
@@ -223,4 +223,3 @@ pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. For first-pass `author` JSON, the agent should prefer the bundle-resolved request-purpose contract and read its `authoring_format_card`, which gives compact bundle-derived guidance for IDs, relationship tokens, events, effects, and raw SDD values.
 
 For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used by the skill.
-

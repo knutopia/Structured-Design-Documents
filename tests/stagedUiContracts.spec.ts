@@ -194,8 +194,8 @@ async function buildUiContractsArtifactsFromInput(
     throw new Error(`Could not project ${input.path} to ui_contracts.`);
   }
 
-  const rendererScene = buildUiContractsRendererScene(projected.projection, compiled.graph, view, profileId);
-  const rendered = await renderUiContractsStagedSvg(projected.projection, compiled.graph, view, profileId);
+  const rendererScene = buildUiContractsRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
+  const rendered = await renderUiContractsStagedSvg(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
 
   return {
     rendererScene,
@@ -299,7 +299,7 @@ function buildSyntheticCrowdedLaneScene(): RendererScene {
 
   return {
     viewId: "ui_contracts",
-    profileId: "strict",
+    detailId: "detailed",
     themeId: "default",
     root: {
       kind: "container",

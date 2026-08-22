@@ -47,7 +47,7 @@ export interface EdgeLabelBox extends Rect {
 export async function renderStagedArtifacts(
   sourcePath: string,
   viewId: "ia_place_map" | "service_blueprint" | "scenario_flow" | "ui_contracts" | "outcome_opportunity_map",
-  profileId: string
+  detailId: string
 ): Promise<RenderedStagedArtifacts> {
   const bundle = await loadBundle(manifestPath);
   const input = {
@@ -68,7 +68,7 @@ export async function renderStagedArtifacts(
       projected.projection!,
       compiled.graph!,
       view,
-      profileId
+      { detailId }
     );
 
     return {
@@ -83,7 +83,7 @@ export async function renderStagedArtifacts(
       projected.projection!,
       compiled.graph!,
       view,
-      profileId
+      { detailId }
     );
 
     return {
@@ -98,7 +98,7 @@ export async function renderStagedArtifacts(
       projected.projection!,
       compiled.graph!,
       view,
-      profileId
+      { detailId }
     );
 
     return {
@@ -109,8 +109,8 @@ export async function renderStagedArtifacts(
   }
 
   const rendererScene = viewId === "ia_place_map"
-    ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, profileId)
-    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, profileId);
+    ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, { detailId })
+    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, { detailId });
 
   return runStagedRendererPipeline(rendererScene);
 }

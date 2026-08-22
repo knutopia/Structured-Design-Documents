@@ -5,7 +5,6 @@
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
 
--Make "simple" the CLI default
 -Create sdd-info command about a file
 -Update CLI "easy start" paragraph with sdd add
 -fix stale require_event_id_in_recommended in contracts.yaml
@@ -26,14 +25,19 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 8-21
+
+- Stage 2 done
+- Stage 3 done
+- Stage 4 done
+- Stage 5 done
+- Correcting documentation. two-level-defaults is too complicated.
+- Simplified defaults
+
 ## Thu 8-20
 
 - Examined outcome-opportunity map routing issue with open models
 - Added back to sdd-add using deepseek
-
-## Sund 8-16
-
-- Edited CLI page for better sdd-add visibility
 
 ## Sun 8-16
 
@@ -41,6 +45,12 @@ z
 - Updated usage guidance to emphasize sdd-add
 - Examined making simple profile the default
 - Marked guided addition api as done
+- Clarified a strict example
+- User-settable defaults architecture
+- User-settable defaults implementation plan
+- Stage 0 done
+- Stage 1 done
+- Edited CLI tools page for better sdd-add visibility
 
 ## Sat 8-15
 

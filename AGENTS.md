@@ -65,13 +65,13 @@ Elk documentation: https://eclipse.dev/elk/reference.html
 - In this WSL setup, default temp resolution may point at `/mnt/c/TEMP`, which can fail with `EACCES`.
 - `TMPDIR=/tmp` avoids that problem and should be the default for test runs.
 
-## Current Project Goal: Guided Human SDD Authoring
+## Recently Completed Default and Render-Detail Migration
 
 To enable LLM workflow integration with SDD, we recently created a (Codex-) Skill, a helper-app that assists the skill, and shared authoring infrastructure that supports the helper app and the future future MCP server. 
 
 We also recently transitioned some project documentation from README files in sub-folders of the repo to the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/
 
-The current project goal is to help people (humans) create SDD content by providing a guided authoring experience.
+The CLI now uses the bundle's `simple` validation-profile fallback and `compact` render-detail fallback, with one user-global preference scope and per-invocation overrides. Validation profiles govern validation only; bundle-owned render detail governs renderer display policy and artifact identity.
 
 ## Renderer Constraints
 
@@ -118,4 +118,3 @@ The current project goal is to help people (humans) create SDD content by provid
   stop and surface the problem instead of coding through it when output contradicts cited invariants, when goldens would need updating to hide quality regressions, or when the current strategy is producing structurally wrong output and further tuning is speculative.
 - Also stop when a feature appears to require spec behavior that the bundle cannot yet express:
   extend the bundle contract first instead of silently moving the rule into code.
-

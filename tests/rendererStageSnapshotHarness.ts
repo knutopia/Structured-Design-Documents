@@ -9,7 +9,9 @@ const rendererStageGoldensRoot = path.join(repoRoot, "tests", "goldens", "render
 
 export async function expectRendererStageSnapshot(snapshotFileName: string, value: unknown): Promise<void> {
   const expected = await readFile(path.join(rendererStageGoldensRoot, snapshotFileName), "utf8");
-  expect(normalizeLineEndings(JSON.stringify(value, null, 2))).toBe(normalizeLineEndings(expected).trimEnd());
+  expect(normalizeLineEndings(JSON.stringify(value, null, 2))).toBe(
+    normalizeLineEndings(JSON.stringify(JSON.parse(expected), null, 2))
+  );
 }
 
 export async function expectRendererStageTextSnapshot(snapshotFileName: string, value: string): Promise<void> {

@@ -252,7 +252,7 @@ describe("staged outcome_opportunity_map", () => {
       context.projection,
       context.graph,
       context.view,
-      context.profileId
+      { detailId: context.profileId === "simple" ? "compact" : "detailed" }
     );
 
     expect(scene.viewId).toBe("outcome_opportunity_map");
@@ -331,7 +331,7 @@ describe("staged outcome_opportunity_map", () => {
       context.projection,
       context.graph,
       context.view,
-      context.profileId
+      { detailId: context.profileId === "simple" ? "compact" : "detailed" }
     );
 
     expect(rendered.preRoutingPositionedScene.edges).toEqual([]);
@@ -397,14 +397,14 @@ describe("staged outcome_opportunity_map", () => {
       strictContext.projection,
       strictContext.graph,
       strictContext.view,
-      strictContext.profileId
+      { detailId: strictContext.profileId === "simple" ? "compact" : "detailed" }
     );
     const simpleContext = await resolveOutcomeOpportunityContext("outcome_to_ia_trace", "simple");
     const simpleRendered = await renderOutcomeOpportunityMapPreRoutingArtifacts(
       simpleContext.projection,
       simpleContext.graph,
       simpleContext.view,
-      simpleContext.profileId
+      { detailId: simpleContext.profileId === "simple" ? "compact" : "detailed" }
     );
 
     const strictMetric = flattenMeasuredItems(strictRendered.measuredScene.root).find((item) => item.id === "M-001");
@@ -538,26 +538,26 @@ describe("staged outcome_opportunity_map", () => {
         context.projection,
         context.graph,
         context.view,
-        "strict"
+        { detailId: "detailed" }
       );
       const measuredScene = measureScene(rendererScene);
       const preRouting = await renderOutcomeOpportunityMapPreRoutingArtifacts(
         context.projection,
         context.graph,
         context.view,
-        "strict"
+        { detailId: "detailed" }
       );
       const routingDebug = await renderOutcomeOpportunityMapRoutingDebugArtifacts(
         context.projection,
         context.graph,
         context.view,
-        "strict"
+        { detailId: "detailed" }
       );
       const rendered = await renderOutcomeOpportunityMapStagedSvg(
         context.projection,
         context.graph,
         context.view,
-        "strict"
+        { detailId: "detailed" }
       );
 
       expect(routingDebug.routingStages.connectorPlans.map((plan) => plan.edgeId)).toEqual(testCase.expectedEdges);
@@ -706,7 +706,7 @@ END
         context.projection,
         context.graph,
         context.view,
-        "strict"
+        { detailId: "detailed" }
       );
 
       expect(rendered.positionedScene.edges.length).toBeGreaterThan(0);

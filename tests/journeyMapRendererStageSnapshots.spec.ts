@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
 import { buildJourneyMapRenderModel } from "../src/renderer/journeyMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import type {
   MeasuredScene,
   PositionedContainer,
@@ -67,7 +67,7 @@ async function buildFixture(name: JourneyFixtureName, profileId = "strict") {
     compiled.graph!,
     bundle,
     view!,
-    profileId
+    { detailId: profileId === "simple" ? "compact" : "detailed" }
   );
   return {
     bundle,
@@ -161,15 +161,18 @@ describe("journey map accepted renderer-stage goldens", () => {
     await expectFinalPngUsesExactSvg(rendered);
   });
 
-  for (const profileId of ["simple", "permissive"] as const) {
-    it(`locks the primary ${profileId} badge-profile final evidence`, async () => {
+  for (const { profileId, detailId } of [
+    { profileId: "simple", detailId: "compact" },
+    { profileId: "permissive", detailId: "detailed" }
+  ] as const) {
+    it(`locks the primary ${detailId} detail final evidence`, async () => {
       const { rendered } = await buildFixture("primary", profileId);
       await expectRendererStageSnapshot(
-        `journey-map.badges.${profileId}.positioned-scene.json`,
+        `journey-map.badges.${detailId}.positioned-scene.json`,
         rendered.routingStages.finalPositionedScene
       );
       await expectRendererStageTextSnapshot(
-        `journey-map.badges.${profileId}.svg`,
+        `journey-map.badges.${detailId}.svg`,
         rendered.finalSvg
       );
       if (profileId === "permissive") {
@@ -269,7 +272,7 @@ describe("journey map degraded diagnostic goldens", () => {
       duplicate.bundle,
       duplicate.view.projection.hierarchy_edges,
       duplicate.view.projection.ordering_edges,
-      resolveProfileDisplayPolicy(duplicate.view, "strict")
+      resolveDetailDisplayPolicy(duplicate.view, "detailed")
     ));
     model.edges[1]!.id = model.edges[0]!.id;
     const duplicateScene = buildJourneyMapRendererSceneFromModel(model, "strict");

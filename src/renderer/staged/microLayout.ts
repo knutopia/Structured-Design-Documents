@@ -1158,7 +1158,7 @@ export function measureRendererScene(scene: RendererScene): MeasuredScene {
 
   const measuredScene: MeasuredScene = {
     viewId: scene.viewId,
-    profileId: scene.profileId,
+    detailId: scene.detailId,
     themeId: resolvedTheme.theme.id,
     root: measureContainer(scene.root, context),
     edges: scene.edges.map((edge) => measureEdge(edge, context)),

@@ -461,15 +461,20 @@ describe("authoring contract metadata", () => {
 
     expect(previewDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
       "shared.binding.render_preview.view_id",
-      "shared.binding.render_preview.profile_id"
+      "shared.binding.render_preview.profile_id",
+      "shared.binding.render_preview.detail_id"
     ]);
     expect(previewDetail?.resolution.unresolved_binding_ids).toEqual([
       "shared.binding.render_preview.view_id",
-      "shared.binding.render_preview.profile_id"
+      "shared.binding.render_preview.profile_id",
+      "shared.binding.render_preview.detail_id"
     ]);
     expect(
       ((previewDetail?.input_shape?.schema as { properties?: Record<string, unknown> })?.properties ?? {})
     ).not.toHaveProperty("display_copy_name");
+    expect(
+      (previewDetail?.input_shape?.schema as { required?: string[] })?.required
+    ).toContain("detail_id");
     expect(previewDetail?.output_shape?.schema).toMatchObject({
       properties: {
         format: {
@@ -499,6 +504,7 @@ describe("authoring contract metadata", () => {
       "revision",
       "view_id",
       "profile_id",
+      "detail_id",
       "backend_id",
       "format",
       "mime_type",

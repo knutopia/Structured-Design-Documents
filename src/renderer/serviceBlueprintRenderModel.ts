@@ -1,8 +1,8 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import type { ResolvedProfileDisplayPolicy } from "./profileDisplay.js";
-import { readBooleanProfileDisplaySetting } from "./profileDisplay.js";
+import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
 export interface ServiceBlueprintRenderNode {
   id: string;
@@ -80,9 +80,9 @@ function nodeDisplay(type: string): Pick<ServiceBlueprintRenderNode, "shape" | "
   }
 }
 
-function readServiceBlueprintDisplayOptions(policy: ResolvedProfileDisplayPolicy): ServiceBlueprintDisplayOptions {
+function readServiceBlueprintDisplayOptions(policy: ResolvedDetailDisplayPolicy): ServiceBlueprintDisplayOptions {
   return {
-    showSecondaryEdgeLabels: readBooleanProfileDisplaySetting(policy, "show_secondary_edge_labels", true)
+    showSecondaryEdgeLabels: readBooleanDetailDisplaySetting(policy, "show_secondary_edge_labels")
   };
 }
 
@@ -140,7 +140,7 @@ function edgeDisplay(
 export function buildServiceBlueprintRenderModel(
   projection: Projection,
   graph: CompiledGraph,
-  displayPolicy: ResolvedProfileDisplayPolicy = {}
+  displayPolicy: ResolvedDetailDisplayPolicy
 ): ServiceBlueprintRenderModel {
   const displayOptions = readServiceBlueprintDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));

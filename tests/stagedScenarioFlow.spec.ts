@@ -56,13 +56,13 @@ describe("staged scenario_flow", () => {
       context.projection,
       context.graph,
       context.view,
-      context.profileId
+      { detailId: context.profileId === "simple" ? "compact" : "detailed" }
     );
     const debug = await renderScenarioFlowRoutingDebugArtifacts(
       context.projection,
       context.graph,
       context.view,
-      context.profileId
+      { detailId: context.profileId === "simple" ? "compact" : "detailed" }
     );
 
     expectNoForbiddenDiagnostics(rendered.diagnostics, [

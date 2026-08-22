@@ -1,4 +1,5 @@
 export { loadBundle } from "./bundle/loadBundle.js";
+export { getBundleRenderDetailFallback, getBundleValidationProfileFallback } from "./bundle/toolDefaults.js";
 export { resolveBundleFieldReference, resolveProfileRuleField } from "./bundle/bundleReferences.js";
 export {
   canonicalizeJson,
@@ -51,6 +52,11 @@ export { projectSource } from "./projector/projectSource.js";
 export { projectView } from "./projector/projectView.js";
 export { validateGraph } from "./validator/validateGraph.js";
 export { renderSource } from "./renderer/renderView.js";
+export {
+  readBooleanDetailDisplaySetting,
+  resolveDetailDisplayPolicy
+} from "./renderer/detailDisplay.js";
+export type { ResolvedDetailDisplayPolicy } from "./renderer/detailDisplay.js";
 export type {
   BundleFingerprint,
   BundleFingerprintInput,
@@ -102,6 +108,7 @@ export type {
   ContractStability,
   ContractSurfaceKind,
   OrderingChange,
+  ProfileId,
   ReparentNodeBlockOp
 } from "./authoring/contracts.js";
 export type {
@@ -110,6 +117,9 @@ export type {
   AuthoringNodeForm,
   Bundle,
   BundleFieldReference,
+  BundleManifest,
+  BundleManifestRenderDetailEntry,
+  BundleManifestToolDefaults,
   GuidedAdditionViewConfig,
   GuidedDisplayPredicate,
   GuidedDisplayRule,
@@ -129,4 +139,12 @@ export type {
   ProjectionResult
 } from "./projector/types.js";
 export type { ValidationReport } from "./validator/types.js";
-export type { Diagnostic, DiagnosticStage, RenderOptions, RenderResult, SourceInput, SourceSpan } from "./types.js";
+export type {
+  Diagnostic,
+  DiagnosticStage,
+  RenderDetailId,
+  RenderOptions,
+  RenderResult,
+  SourceInput,
+  SourceSpan
+} from "./types.js";

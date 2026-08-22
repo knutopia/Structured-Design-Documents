@@ -11,7 +11,7 @@ import {
   buildJourneyMapRenderModel,
   type JourneyMapRenderModel
 } from "../src/renderer/journeyMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../src/renderer/profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import type {
   JourneyMapItemMetadata,
   RendererScene,
@@ -60,7 +60,7 @@ function buildModel(
     bundle,
     view.projection.hierarchy_edges,
     view.projection.ordering_edges,
-    resolveProfileDisplayPolicy(view, profileId)
+    resolveDetailDisplayPolicy(view, profileId === "simple" ? "compact" : "detailed")
   );
 }
 
@@ -86,7 +86,7 @@ async function buildFixture(name: string, profileId = "strict"): Promise<Journey
       compiled.graph!,
       bundle,
       view,
-      profileId
+      { detailId: profileId === "simple" ? "compact" : "detailed" }
     )
   };
 }
@@ -135,7 +135,7 @@ describe("staged journey map RendererScene", () => {
 
     expect(scene).toMatchObject({
       viewId: "journey_map",
-      profileId: "strict",
+      detailId: "detailed",
       themeId: "default"
     });
     expect(scene.root).toMatchObject({
@@ -214,7 +214,7 @@ describe("staged journey map RendererScene", () => {
     expect(flattenItems(scene.root).filter((item) => item.id === "J-503")).toHaveLength(1);
   });
 
-  it("builds unboxed metadata only from typed references and preserves profile-controlled ordering", async () => {
+  it("builds unboxed metadata only from typed references and preserves detail-controlled ordering", async () => {
     const simple = await buildFixture("primary", "simple");
     const permissive = await buildFixture("primary", "permissive");
     const strict = await buildFixture("primary", "strict");
@@ -466,7 +466,7 @@ describe("staged journey map RendererScene", () => {
       build.graph,
       build.bundle,
       build.view,
-      "strict"
+      { detailId: "detailed" }
     );
     expect(scene.diagnostics.some((diagnostic) =>
       diagnostic.code === "renderer.scene.journey_map_first_parent_selected"
@@ -559,8 +559,8 @@ describe("staged journey map RendererScene", () => {
   it("matches the accepted Gate 3 RendererScene evidence", async () => {
     const cases = [
       ["primary", "strict", "journey-map.primary.renderer-scene.json"],
-      ["primary", "simple", "journey-map.badges.simple.renderer-scene.json"],
-      ["primary", "permissive", "journey-map.badges.permissive.renderer-scene.json"],
+      ["primary", "simple", "journey-map.badges.compact.renderer-scene.json"],
+      ["primary", "permissive", "journey-map.badges.detailed.renderer-scene.json"],
       ["ordering_ownership", "strict", "journey-map.ordering-ownership.renderer-scene.json"],
       ["topology", "strict", "journey-map.topology.renderer-scene.json"],
       ["duplicate", "strict", "journey-map.duplicate.renderer-scene.json"]

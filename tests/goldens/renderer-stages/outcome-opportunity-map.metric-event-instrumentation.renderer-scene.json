@@ -1,6 +1,6 @@
 {
   "viewId": "outcome_opportunity_map",
-  "profileId": "strict",
+  "detailId": "detailed",
   "themeId": "default",
   "root": {
     "kind": "container",

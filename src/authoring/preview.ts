@@ -39,11 +39,11 @@ function normalizePreviewFailureStage(stage: Diagnostic["stage"]): string {
 
 function buildPreviewFailureMessage(
   path: string,
-  args: Pick<RenderPreviewArgs, "view_id" | "profile_id">,
+  args: Pick<RenderPreviewArgs, "view_id" | "profile_id" | "detail_id">,
   diagnostics: Diagnostic[]
 ): string {
   const primaryDiagnostic = diagnostics.find((diagnostic) => diagnostic.severity === "error");
-  const context = `'${path}' (view_id=${args.view_id}, profile_id=${args.profile_id})`;
+  const context = `'${path}' (view_id=${args.view_id}, profile_id=${args.profile_id}, detail_id=${args.detail_id})`;
 
   if (primaryDiagnostic) {
     return `Preview ${normalizePreviewFailureStage(primaryDiagnostic.stage)} failure for ${context}: ${primaryDiagnostic.message}`;
@@ -71,6 +71,7 @@ export async function renderPreview(
       viewId: args.view_id,
       format: args.format,
       profileId: args.profile_id,
+      detailId: args.detail_id,
       backendId: args.backend_id
     }
   );
@@ -91,14 +92,14 @@ export async function renderPreview(
       previewResult.artifact,
       buildPreviewArtifactBasename(resolvedPath.publicPath, {
         viewId: args.view_id,
-        profileId: args.profile_id,
+        detailId: args.detail_id,
         format,
         backendId: args.backend_id ? previewResult.previewCapability.backendId : undefined
       })
     );
   } catch (error) {
     throw new AuthoringPreviewError(
-      `Preview materialization failure for '${resolvedPath.publicPath}' (view_id=${args.view_id}, profile_id=${args.profile_id}): ${
+      `Preview materialization failure for '${resolvedPath.publicPath}' (view_id=${args.view_id}, profile_id=${args.profile_id}, detail_id=${args.detail_id}): ${
         error instanceof Error ? error.message : String(error)
       }`
     );
@@ -110,6 +111,7 @@ export async function renderPreview(
     revision,
     view_id: args.view_id,
     profile_id: args.profile_id,
+    detail_id: args.detail_id,
     backend_id: previewResult.previewCapability.backendId,
     format,
     mime_type: mimeType,

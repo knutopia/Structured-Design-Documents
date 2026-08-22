@@ -115,6 +115,7 @@ describe("authoring directory services", () => {
         path: "docs/outcome_to_ia_trace.sdd",
         view_id: "ia_place_map",
         profile_id: "strict",
+        detail_id: "detailed",
         format: "svg"
       });
       expect(svgResult.kind).toBe("sdd-preview");
@@ -124,6 +125,7 @@ describe("authoring directory services", () => {
         "revision",
         "view_id",
         "profile_id",
+        "detail_id",
         "backend_id",
         "format",
         "mime_type",
@@ -134,7 +136,7 @@ describe("authoring directory services", () => {
       expect(svgResult.format).toBe("svg");
       expect(svgResult.mime_type).toBe("image/svg+xml");
       expect(svgResult.artifact_path.startsWith(`${DEFAULT_PREVIEW_ARTIFACT_ROOT}/`)).toBe(true);
-      expect(path.basename(svgResult.artifact_path)).toBe("outcome_to_ia_trace.ia_place_map.strict.svg");
+      expect(path.basename(svgResult.artifact_path)).toBe("outcome_to_ia_trace.ia_place_map.detailed.svg");
       expect(await readFile(svgResult.artifact_path, "utf8")).toContain("<svg");
       await rm(path.dirname(svgResult.artifact_path), { recursive: true, force: true });
 
@@ -142,6 +144,7 @@ describe("authoring directory services", () => {
         path: "docs/outcome_to_ia_trace.sdd",
         view_id: "ia_place_map",
         profile_id: "strict",
+        detail_id: "detailed",
         format: "png"
       });
       expect(Object.keys(pngResult)).toEqual([
@@ -150,6 +153,7 @@ describe("authoring directory services", () => {
         "revision",
         "view_id",
         "profile_id",
+        "detail_id",
         "backend_id",
         "format",
         "mime_type",
@@ -160,7 +164,7 @@ describe("authoring directory services", () => {
       expect(pngResult.format).toBe("png");
       expect(pngResult.mime_type).toBe("image/png");
       expect(pngResult.artifact_path.startsWith(`${DEFAULT_PREVIEW_ARTIFACT_ROOT}/`)).toBe(true);
-      expect(path.basename(pngResult.artifact_path)).toBe("outcome_to_ia_trace.ia_place_map.strict.png");
+      expect(path.basename(pngResult.artifact_path)).toBe("outcome_to_ia_trace.ia_place_map.detailed.png");
       expect((await readFile(pngResult.artifact_path)).subarray(0, 4).toString("hex")).toBe("89504e47");
       await rm(path.dirname(pngResult.artifact_path), { recursive: true, force: true });
 
@@ -168,11 +172,12 @@ describe("authoring directory services", () => {
         path: "docs/outcome_to_ia_trace.sdd",
         view_id: "ia_place_map",
         profile_id: "strict",
+        detail_id: "detailed",
         format: "svg",
         backend_id: "staged_ia_place_map_preview"
       });
       expect(path.basename(explicitBackendResult.artifact_path)).toBe(
-        "outcome_to_ia_trace.ia_place_map.strict.staged_ia_place_map_preview.svg"
+        "outcome_to_ia_trace.ia_place_map.detailed.staged_ia_place_map_preview.svg"
       );
       await rm(path.dirname(explicitBackendResult.artifact_path), { recursive: true, force: true });
 
@@ -180,11 +185,12 @@ describe("authoring directory services", () => {
         path: "docs/journey_map_staged_primary.sdd",
         view_id: "journey_map",
         profile_id: "strict",
+        detail_id: "detailed",
         format: "svg"
       });
       expect(journeyResult.backend_id).toBe("staged_journey_map_preview");
       expect(path.basename(journeyResult.artifact_path)).toBe(
-        "journey_map_staged_primary.journey_map.strict.svg"
+        "journey_map_staged_primary.journey_map.detailed.svg"
       );
       expect(await readFile(journeyResult.artifact_path, "utf8"))
         .toContain('class="staged-svg view-journey_map');

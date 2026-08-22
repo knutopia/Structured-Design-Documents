@@ -1,4 +1,8 @@
 import type { Bundle } from "../bundle/types.js";
+import {
+  getBundleRenderDetailFallback,
+  getBundleValidationProfileFallback
+} from "../bundle/toolDefaults.js";
 import { compileSource } from "../compiler/compileSource.js";
 import { getGraphSourcePath, type CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics } from "../diagnostics/types.js";
@@ -7,13 +11,21 @@ import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import { getTextArtifactCapability, getViewTextRenderer } from "./viewRenderers.js";
 
-export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, options: RenderOptions): RenderResult {
+type ResolvedRenderOptions = RenderOptions & { profileId: string; detailId: string };
+
+export function renderCompiledGraphText(
+  graph: CompiledGraph,
+  bundle: Bundle,
+  options: ResolvedRenderOptions
+): RenderResult {
   const projected = projectView(graph, bundle, options.viewId);
   const diagnostics = [...projected.diagnostics];
   if (!projected.projection) {
     return {
       format: options.format,
       viewId: options.viewId,
+      profileId: options.profileId,
+      detailId: options.detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
@@ -32,6 +44,8 @@ export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, op
     return {
       format: options.format,
       viewId: options.viewId,
+      profileId: options.profileId,
+      detailId: options.detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
@@ -43,12 +57,14 @@ export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, op
     bundle,
     view,
     options.format,
-    options.profileId ?? "strict"
+    options.detailId
   );
 
   return {
     format: options.format,
     viewId: options.viewId,
+    profileId: options.profileId,
+    detailId: options.detailId,
     text: rendered.text,
     notes: rendered.notes,
     diagnostics: sortDiagnostics(diagnostics)
@@ -56,32 +72,60 @@ export function renderCompiledGraphText(graph: CompiledGraph, bundle: Bundle, op
 }
 
 export function renderSource(input: SourceInput, bundle: Bundle, options: RenderOptions): RenderResult {
+  const profileId = options.profileId ?? getBundleValidationProfileFallback(bundle);
+  const detailId = options.detailId ?? getBundleRenderDetailFallback(bundle);
+  if (!bundle.manifest.render_details.some((detail) => detail.id === detailId)) {
+    return {
+      format: options.format,
+      viewId: options.viewId,
+      profileId,
+      detailId,
+      notes: [],
+      diagnostics: [{
+        stage: "render",
+        code: "render.unknown_detail",
+        severity: "error",
+        message: `Unknown render detail '${detailId}'`,
+        file: input.path
+      }]
+    };
+  }
   const compileResult = compileSource(input, bundle);
   const diagnostics = [...compileResult.diagnostics];
   if (!compileResult.graph || hasErrors(diagnostics)) {
     return {
       format: options.format,
       viewId: options.viewId,
+      profileId,
+      detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
 
-  const validation = validateGraph(compileResult.graph, bundle, options.profileId ?? "strict");
+  const validation = validateGraph(compileResult.graph, bundle, profileId);
   diagnostics.push(...validation.diagnostics);
   if (validation.errorCount > 0) {
     return {
       format: options.format,
       viewId: options.viewId,
+      profileId,
+      detailId,
       notes: [],
       diagnostics: sortDiagnostics(diagnostics)
     };
   }
 
-  const rendered = renderCompiledGraphText(compileResult.graph, bundle, options);
+  const rendered = renderCompiledGraphText(compileResult.graph, bundle, {
+    ...options,
+    profileId,
+    detailId
+  });
   return {
     format: options.format,
     viewId: options.viewId,
+    profileId,
+    detailId,
     text: rendered.text,
     notes: rendered.notes,
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])

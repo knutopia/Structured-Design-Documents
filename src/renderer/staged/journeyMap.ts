@@ -8,7 +8,7 @@ import {
   type JourneyRenderStage,
   type JourneyRenderStep
 } from "../journeyMapRenderModel.js";
-import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import type {
   JourneyMapItemMetadata,
   MeasuredScene,
@@ -17,7 +17,8 @@ import type {
   SceneContainer,
   SceneEdge,
   SceneItem,
-  SceneNode
+  SceneNode,
+  StagedRenderSettings
 } from "./contracts.js";
 import {
   createSceneDiagnostic,
@@ -472,7 +473,7 @@ export async function positionJourneyMapMeasuredSceneBeforeRouting(
 
 export function buildJourneyMapRendererSceneFromModel(
   model: JourneyMapRenderModel,
-  profileId: string,
+  detailId: string,
   themeId = "default",
   diagnostics: readonly RendererDiagnostic[] = []
 ): RendererScene {
@@ -503,7 +504,7 @@ export function buildJourneyMapRendererSceneFromModel(
 
   return {
     viewId: "journey_map",
-    profileId,
+    detailId,
     themeId,
     root,
     edges,
@@ -519,8 +520,7 @@ export function buildJourneyMapRendererScene(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): RendererScene {
   const model = buildJourneyMapRenderModel(
     projection,
@@ -528,10 +528,10 @@ export function buildJourneyMapRendererScene(
     bundle,
     view.projection.hierarchy_edges,
     view.projection.ordering_edges,
-    resolveProfileDisplayPolicy(view, profileId)
+    resolveDetailDisplayPolicy(view, settings.detailId)
   );
   const placement = buildJourneyScenePlacement(model);
-  return buildJourneyMapRendererSceneFromModel(model, profileId, themeId, [
+  return buildJourneyMapRendererSceneFromModel(model, settings.detailId, settings.themeId ?? "default", [
     ...buildFirstParentDiagnostics(projection, view, placement),
     ...buildStepOnlyDiagnostics(placement),
     ...buildDisconnectedChainDiagnostics(model, placement)
@@ -543,8 +543,7 @@ async function buildJourneyMapPreRoutingPipeline(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<{
   rendererScene: RendererScene;
   measuredScene: MeasuredScene;
@@ -555,8 +554,7 @@ async function buildJourneyMapPreRoutingPipeline(
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
   const measuredScene = measureScene(rendererScene);
   const preRoutingPositionedScene = await positionJourneyMapMeasuredSceneBeforeRouting(measuredScene);
@@ -572,16 +570,14 @@ async function buildJourneyMapRoutedPipeline(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<JourneyMapStagedRenderResult> {
   const pipeline = await buildJourneyMapPreRoutingPipeline(
     projection,
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routingStages = buildJourneyMapRoutingStages(
     pipeline.measuredScene,
@@ -601,16 +597,14 @@ export async function renderJourneyMapPreRoutingArtifacts(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<JourneyMapPreRoutingArtifactsResult> {
   const pipeline = await buildJourneyMapPreRoutingPipeline(
     projection,
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
   const rendered = await renderPositionedSceneToPng(pipeline.preRoutingPositionedScene);
 
@@ -627,16 +621,14 @@ export async function renderJourneyMapRoutingArtifacts(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<JourneyMapRoutingArtifactsResult> {
   const preRouting = await renderJourneyMapPreRoutingArtifacts(
     projection,
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routingStages = buildJourneyMapRoutingStages(
     preRouting.measuredScene,
@@ -671,16 +663,14 @@ export async function renderJourneyMapStagedSvg(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<JourneyMapStagedSvgResult> {
   const pipeline = await buildJourneyMapRoutedPipeline(
     projection,
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
   const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
   return {
@@ -694,16 +684,14 @@ export async function renderJourneyMapStagedPng(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<JourneyMapStagedPngResult> {
   const renderedSvg = await renderJourneyMapStagedSvg(
     projection,
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
   const renderedPng = await renderPositionedSceneToPng(renderedSvg.positionedScene);
   return {
@@ -717,15 +705,13 @@ export async function renderJourneyMapBasicRoutingArtifacts(
   graph: CompiledGraph,
   bundle: Bundle,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<JourneyMapBasicRoutingArtifactsResult> {
   return renderJourneyMapRoutingArtifacts(
     projection,
     graph,
     bundle,
     view,
-    profileId,
-    themeId
+    settings
   );
 }

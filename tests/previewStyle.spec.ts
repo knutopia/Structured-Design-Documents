@@ -41,7 +41,15 @@ function createBundle(view: ViewSpec): Bundle {
         projection_schema: "core/projection_schema.json",
         views: "core/views.yaml"
       },
+      tool_defaults: {
+        validation_profile_id: "simple",
+        render_detail_id: "compact"
+      },
       profiles: [],
+      render_details: [
+        { id: "compact", intent: "low noise" },
+        { id: "detailed", intent: "full detail" }
+      ],
       examples: [],
       compatibility: {
         requires_compiler_min: "0.1.0",

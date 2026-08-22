@@ -12,11 +12,11 @@ for a compact list of content available to each diagram type.
   This view shows Areas and Place nested with `CONTAINS`, with `NAVIGATES_TO` connections between Places.
   
   Examples:
-  :::: details outcome_to_ia_trace_example <Badge type="info" text="Simple Profile" vertical="top" /> {open}
+  :::: details outcome_to_ia_trace_example <Badge type="info" text="Detail: Compact" vertical="top" /> {open}
   
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.ia_place_map.svg)
+  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/compact_detail/outcome_to_ia_trace.ia_place_map.svg)
   == Source
   Area- and Place nodes: 
   showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example {pos: up}
@@ -24,20 +24,20 @@ for a compact list of content available to each diagram type.
   :::
   ::::
 
-  :::: details place_viewstate_transition_example <Badge type="info" text="Strict Profile" vertical="top" />
+  :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ia_place_map.svg)
+  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ia_place_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example  
   showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 18, 35}
   :::
   ::::
 
-  :::: details billSage app <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details billSage app <Badge type="info" text="Detail: Compact" vertical="top" />
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.simple.svg)
+  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.svg)
   == Source
   showRepoLink /real_world_exploration/billSage_example
   showSource ../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd {3, 8, 13, 15-18, 26, 27, 37, 39, 40, 44, 47, 49, 50, 59, 64, 76, 78, 79, 86, 88, 89, 95, 98, 99, 106, 108, 109}
@@ -51,22 +51,22 @@ for a compact list of content available to each diagram type.
   In this view, Places and View States act as containers for UI structure; View State or component State transitions show behavior inside those scopes, with events, data bindings, and system dependencies shown as supporting contracts.
 
   Examples: 
-  :::: details place_viewstate_transition_example <Badge type="info" text="Strict Profile" vertical="top" />
+  :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
   :::tabs
   == UI Contracts Diagram
-  ![svg](../../../examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/strict_profile/place_viewstate_transition.ui_contracts.svg)
+  ![svg](../../../examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/
   showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 14-15,19-32, 66-73, 75-80, 43, 51-63, 82-89, 91-96}
   :::
   ::::
 
-  :::: details ui_state_fallback_example <Badge type="info" text="Strict Profile" vertical="top" />
+  :::: details ui_state_fallback_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
   :::tabs
   == Ui Contracts Diagram
-  ![svg](../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/strict_profile/ui_state_fallback.ui_contracts.svg)
+  ![svg](../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/
   showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
@@ -80,11 +80,11 @@ for a compact list of content available to each diagram type.
   The x-axis shows horizontal progressions ("bands"). The y-axis shows lanes for Steps, Places and View States, with tracks for branch alternatives.
 
   Example: 
-  :::: details scenario_branching_example <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details scenario_branching_example <Badge type="info" text="Detail: Compact" vertical="top" />
   
   :::tabs
   == Scenario Flow Diagram
-  ![svg](../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/simple_profile/scenario_branching.scenario_flow.svg)
+  ![svg](../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/compact_detail/scenario_branching.scenario_flow.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/
   showSource ../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/scenario_branching.sdd
@@ -98,22 +98,22 @@ for a compact list of content available to each diagram type.
   Stages contain source-ordered Steps, while `PRECEDES` relationships define journey flow.
 
   Examples:
-  :::: details branching_journey_example <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details branching_journey_example <Badge type="info" text="Detail: Compact" vertical="top" />
 
   :::tabs
   == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/simple_profile/branching_journey.journey_map.svg)
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/compact_detail/branching_journey.journey_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/
   showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/branching_journey.sdd
   :::
   ::::
 
-  :::: details outcome_to_ia_trace_example <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details outcome_to_ia_trace_example <Badge type="info" text="Detail: Compact" vertical="top" />
 
   :::tabs
   == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/simple_profile/outcome_to_ia_trace.journey_map.svg)
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/compact_detail/outcome_to_ia_trace.journey_map.svg)
   == Source
   (Same source file is used in outcome-opportunity maps examples.)
   showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/
@@ -121,11 +121,11 @@ for a compact list of content available to each diagram type.
   :::
   ::::
 
-  :::: details service_blueprint_slice_example <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details service_blueprint_slice_example <Badge type="info" text="Detail: Compact" vertical="top" />
 
   :::tabs
   == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/simple_profile/service_blueprint_slice.journey_map.svg)
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/compact_detail/service_blueprint_slice.journey_map.svg)
   == Source
   (Same source file is used in service blueprint examples.)
   showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/
@@ -140,33 +140,33 @@ for a compact list of content available to each diagram type.
   The x-axis shows columns for Initiatives, Opportunities, Outcomes, Metrics. The y-axis displays a band for each Outcome, stacking rows when a column contains multiple entries.
 
   Examples: 
-  :::: details outcome_to_ia_trace_example <Badge type="info" text="Strict Profile" vertical="top" />
+  :::: details outcome_to_ia_trace_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
   :::tabs
   == Outcome-Opportunity Map Diagram
-  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/strict_profile/outcome_to_ia_trace.outcome_opportunity_map.svg)
+  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/detailed_detail/outcome_to_ia_trace.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/
   showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {3, 9, 12, 19, 20, 23, 29, 32, 37, 38, 84}
   :::
   ::::
 
-  :::: details metric_event_instrumentation_example <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details metric_event_instrumentation_example <Badge type="info" text="Detail: Compact" vertical="top" />
   
   :::tabs
   == Outcome-Opportunity Map Diagram
-  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/simple_profile/metric_event_instrumentation.outcome_opportunity_map.svg)
+  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/compact_detail/metric_event_instrumentation.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/
   showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd {3, 9, 10, 13, 20, 21, 24, 31, 32, 35, 41, 44, 49, 50}
   :::
   ::::
 
-  :::: details multiple_outcomes <Badge type="info" text="Simple Profile" vertical="top" />
+  :::: details multiple_outcomes <Badge type="info" text="Detail: Compact" vertical="top" />
   
   :::tabs
   == Outcome-Opportunity Map Diagram
-  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/simple_profile/multiple_outcomes.outcome_opportunity_map.svg)
+  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/compact_detail/multiple_outcomes.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/
   showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd
@@ -182,11 +182,11 @@ for a compact list of content available to each diagram type.
   Note: a single column is sometimes called a *slice*, but a slice can also be broader, covering an entire feature.
 
   Example:
-  :::: details Service Blueprint Slice example <Badge type="info" text="Strict Profile" vertical="top" />
+  :::: details Service Blueprint Slice example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
   :::tabs
   == Service Blueprint Diagram
-  ![svg](../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/strict_profile/service_blueprint_slice.service_blueprint.svg)
+  ![svg](../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/detailed_detail/service_blueprint_slice.service_blueprint.svg)
   == Source
   showRepoLink /examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/
   showSource ../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd

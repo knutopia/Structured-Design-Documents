@@ -7,7 +7,7 @@ The outcome-opportunity map diagrams omit most node properties and some edges. T
 (This general approach is present in the other staged renderers too.)
 
 For example: 
-In [outcome_to_ia_trace.outcome_opportunity_map.svg](examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/permissive_profile/outcome_to_ia_trace.outcome_opportunity_map.svg) (from [outcome_to_ia_trace.sdd](bundle/v0.1/examples/outcome_to_ia_trace.sdd) ) the node I-001 shows ONLY the node title and the IMPLEMENTED_BY edge.
+In [outcome_to_ia_trace.outcome_opportunity_map.svg](examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/detailed_detail/outcome_to_ia_trace.outcome_opportunity_map.svg) (from [outcome_to_ia_trace.sdd](bundle/v0.1/examples/outcome_to_ia_trace.sdd) ) the node I-001 shows ONLY the node title and the IMPLEMENTED_BY edge.
 
 While it's sometimes good to have a diagram that is this clean, at other times it is desirable to also show properties like "Description" and "Non-Goals", and the IMPLEMTED_BY edge.
 

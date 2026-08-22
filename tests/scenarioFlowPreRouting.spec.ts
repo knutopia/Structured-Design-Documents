@@ -142,7 +142,7 @@ describe("scenario_flow pre-routing artifacts", () => {
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { detailId: "detailed" }
     );
 
     expect(rendererScene.viewId).toBe("scenario_flow");
@@ -208,7 +208,7 @@ describe("scenario_flow pre-routing artifacts", () => {
       context.projection,
       context.graph,
       context.view,
-      "strict"
+      { detailId: "detailed" }
     );
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);

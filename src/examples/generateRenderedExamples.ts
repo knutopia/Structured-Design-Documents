@@ -29,7 +29,7 @@ import {
   expandCuratedRenderedExampleVariants,
   getRenderedCorpusExampleDirName,
   getRenderedCorpusDebugOutputPath,
-  getRenderedCorpusProfileDirName,
+  getRenderedCorpusDetailDirName,
   getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
   getRenderedCorpusViewDirName,
@@ -37,10 +37,12 @@ import {
 } from "./renderedCorpus.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
+
 function buildReadmeContent(
   manifestPath: string,
   pairs: Array<{ viewId: string; exampleName: string }>,
-  profileIds: string[]
+  detailIds: string[],
+  validationProfileId: string
 ): string {
   const lines = [
     "# Rendered Example Corpus",
@@ -67,16 +69,17 @@ function buildReadmeContent(
 
   lines.push("");
   lines.push(
-    `Profiles rendered in each pair directory: ${profileIds.map((profileId) => `\`${getRenderedCorpusProfileDirName(profileId)}\``).join(", ")}.`
+    `Render details generated in each pair directory: ${detailIds.map((detailId) => `\`${getRenderedCorpusDetailDirName(detailId)}\``).join(", ")}.`
   );
   lines.push("");
   lines.push(
-    "Each pair directory contains the source `.sdd` at the pair root plus suffixed per-profile subfolders with internal `.dot` and `.mmd` text artifacts alongside `.svg` and `.png` preview outputs."
+    "Each pair directory contains the source `.sdd` at the pair root plus suffixed per-detail subfolders with internal `.dot` and `.mmd` text artifacts alongside `.svg` and `.png` preview outputs."
   );
   lines.push(
-    "Unsuffixed `.svg` and `.png` files are the default preview backend for that view/profile when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings."
+    "Unsuffixed `.svg` and `.png` files are the default preview backend for that view/detail when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings."
   );
-  lines.push("`simple_profile` may omit optional overlays for readability; `permissive_profile` and `strict_profile` keep the fuller render detail.");
+  lines.push(`All corpus inputs are validated with the bundle-derived \`${validationProfileId}\` profile before rendering.`);
+  lines.push("`compact_detail` omits optional overlays for readability; `detailed_detail` keeps the fuller render detail.");
   lines.push("");
   lines.push("`ia_place_map` visual review checklist:");
   lines.push("");
@@ -85,7 +88,7 @@ function buildReadmeContent(
   lines.push("- mixed top-level `Place` and `Area` ordering follows source order");
   lines.push("- same-scope follower places align at one indent level under the earliest preceding hub that navigates to them");
   lines.push("- single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk");
-  lines.push("- `simple_profile` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
+  lines.push("- `compact_detail` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
   lines.push("- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes");
   lines.push("");
   lines.push("`ui_contracts` visual review checklist:");
@@ -126,7 +129,7 @@ function buildReadmeContent(
   lines.push("`journey_map` visual review checklist:");
   lines.push("");
   lines.push("- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing");
-  lines.push("- strict and permissive profiles show resolved opportunity badges while simple remains title-focused");
+  lines.push("- detailed detail shows resolved opportunity badges while compact detail remains title-focused");
   lines.push("- explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path");
   lines.push("- focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior");
   lines.push("- residual perpendicular crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings");
@@ -141,6 +144,7 @@ async function main(): Promise<void> {
   assertPreviewBackendAvailable("legacy_graphviz_preview");
 
   const bundle = await loadBundle(manifestPath);
+  const validationProfileId = bundle.manifest.tool_defaults.validation_profile_id;
   const discovery = await discoverCuratedRenderedExamplePairs(bundle);
   const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
   const outputRoot = getRenderedCorpusRoot(bundle);
@@ -162,7 +166,7 @@ async function main(): Promise<void> {
 
     const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
     await mkdir(outputPaths.exampleDir, { recursive: true });
-    await mkdir(outputPaths.profileDir, { recursive: true });
+    await mkdir(outputPaths.detailDir, { recursive: true });
     await copyFile(variant.example.absolutePath, outputPaths.sourceOutputPath);
 
     const input = {
@@ -175,7 +179,7 @@ async function main(): Promise<void> {
       const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (compileErrors.length > 0 || !compiled.graph) {
         throw new Error(
-          `Failed to compile service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
+          `Failed to compile service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
         );
       }
 
@@ -183,7 +187,7 @@ async function main(): Promise<void> {
       const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (projectionErrors.length > 0 || !projected.projection) {
         throw new Error(
-          `Failed to project service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
+          `Failed to project service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
         );
       }
 
@@ -191,7 +195,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { detailId: variant.detailId }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
@@ -207,7 +211,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { detailId: variant.detailId }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
@@ -234,7 +238,7 @@ async function main(): Promise<void> {
       const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (compileErrors.length > 0 || !compiled.graph) {
         throw new Error(
-          `Failed to compile scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
+          `Failed to compile scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
         );
       }
 
@@ -242,7 +246,7 @@ async function main(): Promise<void> {
       const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (projectionErrors.length > 0 || !projected.projection) {
         throw new Error(
-          `Failed to project scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
+          `Failed to project scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
         );
       }
 
@@ -250,7 +254,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { detailId: variant.detailId }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
@@ -266,7 +270,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { detailId: variant.detailId }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
@@ -293,7 +297,7 @@ async function main(): Promise<void> {
       const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (compileErrors.length > 0 || !compiled.graph) {
         throw new Error(
-          `Failed to compile outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
+          `Failed to compile outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
         );
       }
 
@@ -301,7 +305,7 @@ async function main(): Promise<void> {
       const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (projectionErrors.length > 0 || !projected.projection) {
         throw new Error(
-          `Failed to project outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (profile=${variant.profileId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
+          `Failed to project outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(projected.diagnostics)}`
         );
       }
 
@@ -309,7 +313,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { detailId: variant.detailId }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "pre_routing", "svg"),
@@ -325,7 +329,7 @@ async function main(): Promise<void> {
         projected.projection,
         compiled.graph,
         view,
-        variant.profileId
+        { detailId: variant.detailId }
       );
       await writeFile(
         getRenderedCorpusDebugOutputPath(bundle, variant, "routing_step_2_edges", "svg"),
@@ -350,25 +354,27 @@ async function main(): Promise<void> {
     const dotResult = renderSource(input, bundle, {
       viewId: variant.viewId,
       format: "dot",
-      profileId: variant.profileId
+      profileId: validationProfileId,
+      detailId: variant.detailId
     });
     const mermaidResult = renderSource(input, bundle, {
       viewId: variant.viewId,
       format: "mermaid",
-      profileId: variant.profileId
+      profileId: validationProfileId,
+      detailId: variant.detailId
     });
 
     const dotErrors = dotResult.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
     if (dotErrors.length > 0 || !dotResult.text) {
       throw new Error(
-        `Failed to render DOT for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}).\n${formatPrettyDiagnostics(dotResult.diagnostics)}`
+        `Failed to render DOT for ${variant.example.relativePath} (${variant.viewId}, detail=${variant.detailId}, validation_profile=${validationProfileId}).\n${formatPrettyDiagnostics(dotResult.diagnostics)}`
       );
     }
 
     const mermaidErrors = mermaidResult.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
     if (mermaidErrors.length > 0 || !mermaidResult.text) {
       throw new Error(
-        `Failed to render Mermaid for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}).\n${formatPrettyDiagnostics(mermaidResult.diagnostics)}`
+        `Failed to render Mermaid for ${variant.example.relativePath} (${variant.viewId}, detail=${variant.detailId}, validation_profile=${validationProfileId}).\n${formatPrettyDiagnostics(mermaidResult.diagnostics)}`
       );
     }
 
@@ -388,24 +394,26 @@ async function main(): Promise<void> {
     const svgResult = await renderSourcePreview(input, bundle, {
       viewId: variant.viewId,
       format: "svg",
-      profileId: variant.profileId,
+      profileId: validationProfileId,
+      detailId: variant.detailId,
       backendId: svgCapability.backendId
     });
     const pngResult = await renderSourcePreview(input, bundle, {
       viewId: variant.viewId,
       format: "png",
-      profileId: variant.profileId,
+      profileId: validationProfileId,
+      detailId: variant.detailId,
       backendId: pngCapability.backendId
     });
 
     if (!svgResult.artifact || svgResult.artifact.format !== "svg" || svgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
       throw new Error(
-        `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${svgCapability.backendId}).\n${formatPrettyDiagnostics(svgResult.diagnostics)}`
+        `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, detail=${variant.detailId}, validation_profile=${validationProfileId}, backend=${svgCapability.backendId}).\n${formatPrettyDiagnostics(svgResult.diagnostics)}`
       );
     }
     if (!pngResult.artifact || pngResult.artifact.format !== "png" || pngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
       throw new Error(
-        `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${pngCapability.backendId}).\n${formatPrettyDiagnostics(pngResult.diagnostics)}`
+        `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, detail=${variant.detailId}, validation_profile=${validationProfileId}, backend=${pngCapability.backendId}).\n${formatPrettyDiagnostics(pngResult.diagnostics)}`
       );
     }
 
@@ -422,12 +430,13 @@ async function main(): Promise<void> {
       const extraSvgResult = await renderSourcePreview(input, bundle, {
         viewId: variant.viewId,
         format: "svg",
-        profileId: variant.profileId,
+        profileId: validationProfileId,
+        detailId: variant.detailId,
         backendId: extraSvgCapability.backendId
       });
       if (!extraSvgResult.artifact || extraSvgResult.artifact.format !== "svg" || extraSvgResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
         throw new Error(
-          `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${extraSvgCapability.backendId}).\n${formatPrettyDiagnostics(extraSvgResult.diagnostics)}`
+          `Failed to render SVG preview for ${variant.example.relativePath} (${variant.viewId}, detail=${variant.detailId}, validation_profile=${validationProfileId}, backend=${extraSvgCapability.backendId}).\n${formatPrettyDiagnostics(extraSvgResult.diagnostics)}`
         );
       }
       await writeFile(
@@ -443,12 +452,13 @@ async function main(): Promise<void> {
       const extraPngResult = await renderSourcePreview(input, bundle, {
         viewId: variant.viewId,
         format: "png",
-        profileId: variant.profileId,
+        profileId: validationProfileId,
+        detailId: variant.detailId,
         backendId: extraPngCapability.backendId
       });
       if (!extraPngResult.artifact || extraPngResult.artifact.format !== "png" || extraPngResult.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
         throw new Error(
-          `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, profile=${variant.profileId}, backend=${extraPngCapability.backendId}).\n${formatPrettyDiagnostics(extraPngResult.diagnostics)}`
+          `Failed to render PNG preview for ${variant.example.relativePath} (${variant.viewId}, detail=${variant.detailId}, validation_profile=${validationProfileId}, backend=${extraPngCapability.backendId}).\n${formatPrettyDiagnostics(extraPngResult.diagnostics)}`
         );
       }
       await writeFile(
@@ -464,14 +474,19 @@ async function main(): Promise<void> {
       });
     }
     console.log(
-      `Generated ${getRenderedCorpusViewDirName(variant.viewId)}/${getRenderedCorpusExampleDirName(variant.example.name)}/${getRenderedCorpusProfileDirName(variant.profileId)}`
+      `Generated ${getRenderedCorpusViewDirName(variant.viewId)}/${getRenderedCorpusExampleDirName(variant.example.name)}/${getRenderedCorpusDetailDirName(variant.detailId)}`
     );
   }
 
   const displayManifestPath = path.relative(process.cwd(), manifestPath) || path.basename(manifestPath);
   await writeFile(
     path.join(outputRoot, "README.md"),
-    buildReadmeContent(displayManifestPath, outputIndex, bundle.manifest.profiles.map((profile) => profile.id)),
+    buildReadmeContent(
+      displayManifestPath,
+      outputIndex,
+      bundle.manifest.render_details.map((detail) => detail.id),
+      validationProfileId
+    ),
     "utf8"
   );
 }

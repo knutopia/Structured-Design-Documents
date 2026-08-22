@@ -1428,7 +1428,7 @@ export async function positionMeasuredSceneBeforeRouting(
 
   return {
     viewId: measuredScene.viewId,
-    profileId: measuredScene.profileId,
+    detailId: measuredScene.detailId,
     themeId: measuredScene.themeId,
     root: laidOut.root,
     edges: [],
@@ -1460,7 +1460,7 @@ export async function positionMeasuredScene(measuredScene: MeasuredScene): Promi
 
   return {
     viewId: measuredScene.viewId,
-    profileId: measuredScene.profileId,
+    detailId: measuredScene.detailId,
     themeId: measuredScene.themeId,
     root,
     edges,

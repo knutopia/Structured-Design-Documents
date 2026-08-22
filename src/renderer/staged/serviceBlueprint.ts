@@ -1,7 +1,7 @@
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
-import { resolveProfileDisplayPolicy } from "../profileDisplay.js";
+import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import {
   buildServiceBlueprintRenderModel,
   type ServiceBlueprintRenderNode
@@ -16,7 +16,8 @@ import type {
   SceneItem,
   SceneNode,
   ViewMetadata,
-  WidthPolicy
+  WidthPolicy,
+  StagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
 import {
@@ -332,15 +333,14 @@ async function buildServiceBlueprintPreRoutingPipeline(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<{
   context: ServiceBlueprintRenderContext;
   rendererScene: RendererScene;
   measuredScene: MeasuredScene;
   basePositionedScene: PositionedScene;
 }> {
-  const context = buildServiceBlueprintRenderContext(projection, graph, view, profileId, themeId);
+  const context = buildServiceBlueprintRenderContext(projection, graph, view, settings);
   const measuredScene = measureScene(context.rendererScene);
   const positionedScene = await positionMeasuredSceneBeforeRouting(measuredScene);
   applyServiceBlueprintPostLayoutStep(positionedScene.root, positionedScene.diagnostics);
@@ -358,10 +358,9 @@ function buildServiceBlueprintRenderContext(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): ServiceBlueprintRenderContext {
-  const displayPolicy = resolveProfileDisplayPolicy(view, profileId);
+  const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
   const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
   const middleLayer = buildServiceBlueprintMiddleLayer(model);
   const context: SceneBuildContext = {
@@ -377,8 +376,8 @@ function buildServiceBlueprintRenderContext(
   const columnCount = middleLayer.columns.length;
   const rendererScene: RendererScene = {
     viewId: "service_blueprint",
-    profileId,
-    themeId,
+    detailId: settings.detailId,
+    themeId: settings.themeId ?? "default",
     root: buildDiagramRootContainer({
       viewId: "service_blueprint",
       layout: {
@@ -406,15 +405,13 @@ export function buildServiceBlueprintRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): RendererScene {
   return buildServiceBlueprintRenderContext(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   ).rendererScene;
 }
 
@@ -422,15 +419,13 @@ export async function renderServiceBlueprintPreRoutingArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintPreRoutingArtifactsResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const preRoutingPositionedScene = {
     ...pipeline.basePositionedScene,
@@ -455,15 +450,13 @@ export async function renderServiceBlueprintRoutingDebugArtifacts(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintRoutingDebugArtifactsResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routedStages = buildServiceBlueprintRoutingStages(
     pipeline.basePositionedScene,
@@ -498,15 +491,13 @@ export async function renderServiceBlueprintStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintStagedSvgResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routedStages = buildServiceBlueprintRoutingStages(
     pipeline.basePositionedScene,
@@ -529,15 +520,13 @@ export async function renderServiceBlueprintStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  profileId: string,
-  themeId = "default"
+  settings: StagedRenderSettings
 ): Promise<ServiceBlueprintStagedPngResult> {
   const pipeline = await buildServiceBlueprintPreRoutingPipeline(
     projection,
     graph,
     view,
-    profileId,
-    themeId
+    settings
   );
   const routedStages = buildServiceBlueprintRoutingStages(
     pipeline.basePositionedScene,

@@ -43,7 +43,7 @@ function buildGridScene(
 ): RendererScene {
   return {
     viewId: "grid_test",
-    profileId: "strict",
+    detailId: "detailed",
     themeId: "default",
     root: {
       kind: "container",
