@@ -33,6 +33,7 @@ z
 - Stage 5 done
 - Correcting documentation. two-level-defaults is too complicated.
 - Simplified defaults
+- Polishing CLI page
 
 ## Thu 8-20
 

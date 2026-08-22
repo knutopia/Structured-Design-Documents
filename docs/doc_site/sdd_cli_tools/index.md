@@ -21,71 +21,26 @@ For most people, `sdd show` is the right first command. It compiles an SDD docum
 SVG quick-start:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --detail compact --out ./outcome.svg
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg
 ```
 
 PNG quick-start:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --detail compact --format png --out ./outcome.png
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png
 ```
 
 (Inside this repository, use `pnpm sdd ...`; if the binary is on your `PATH`, the equivalent `sdd ...` commands work too.)
 
 What to expect:
 
-- `sdd show` is the preferred preview command.
+- `sdd show` renders a diagram.
 - SVG is the default output format.
 - PNG is available with `--format png`.
-- `simple` is the best starting validation profile for early drafts.
-- `compact` is the best starting render detail for low-noise diagrams.
+- `simple` is the default validation profile.
+- `compact` is the default render detail.
 
-## Profiles In Plain Language
-
-One of the options is `--profile`. Profiles are validation overlays, not different SDD languages and not rendering modes. You do not rewrite your `.sdd` file to switch profiles. Instead, you choose how strongly completeness and governance are checked for the same source.
-
-In practice:
-
-- `simple`: low-noise drafting and the best starting point for most new work
-- `permissive`: warning-first completeness when you want guidance without as much blocking
-- `strict`: strict governance for complete, reviewable specifications
-
-`simple` is especially useful early because it emphasizes structural correctness without pushing as hard for fuller metadata.
-
-For the fuller profile explanation, see [profiles.md](../profiles.md).
-
-## Persistent Profile And Detail Defaults
-
-The shipped v0.1 bundle sets validation profile to `simple` and render detail to `compact` as global default settings. The global defaults are used by command line tools, unless a `--profile` or `--detail` setting is specified with the tool call.
-
-Each setting resolves independently in this order:
-
-1. `--profile` or `--detail` for the current invocation (command line option)
-2. your user-global SDD configuration
-3. the selected bundle's fallback
-
-To see the current global defaults, use either of these two commands:
-
-```bash
-pnpm sdd defaults
-pnpm sdd defaults show
-```
-
-To set a global default, us this:
-
-```bash
-pnpm sdd defaults set profile simple
-pnpm sdd defaults set detail compact
-```
-
-You can un-set your global defaults, to revert to the bundle-provided values:
-
-```bash
-pnpm sdd defaults unset profile
-pnpm sdd defaults unset detail
-```
-
-The global file is `${XDG_CONFIG_HOME}/sdd/config.yaml`, falling back to `~/.config/sdd/config.yaml`, on Linux and WSL. It is `~/Library/Application Support/sdd/config.yaml` on macOS and `%APPDATA%\sdd\config.yaml` on Windows.
+For what it's worth, the [profile](../profiles.md) determines how much the completeness of an SDD is checked. The render detail determines how much detail is shown in the diagram.
 
 ## Public Commands At A Glance
 
@@ -135,8 +90,8 @@ At the review, `Cancel` performs no verification and writes nothing. `Save` veri
 Examples:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple
-pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --profile simple --out ./blueprint.svg
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg
+pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --detail detailed --out ./blueprint.svg
 pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
 pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
 pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
@@ -154,20 +109,10 @@ When `--profile` or `--detail` is omitted, `sdd show` resolves that setting from
 
 If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<detail>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 
-Advanced note: all six v0.1 preview views default to staged SVG/PNG backends. `--backend legacy_graphviz_preview` selects preserved Graphviz output, for example:
+Detail Choice
+(...)
 
-```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile strict --detail compact --out ./strictly-validated-compact.svg
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --detail detailed --out ./light-validation-detailed.svg
-pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --profile simple --out ./blueprint.svg
-pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
-pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
-pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
-```
-
-### `sdd validate`
+== sdd validate
 
 - Purpose: compile and validate a source `.sdd` file against a chosen profile.
 - Use when: you want to check whether a document passes profile expectations, or you want to see what metadata or structure is still missing.
@@ -192,6 +137,37 @@ pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.js
 - Output: canonical JSON to `stdout` by default, or to a file when `--out` is provided.
 
 If you are just inspecting the output, `stdout` is often enough. If you want to save or compare the result, use `--out`.
+
+== sdd defaults
+See current global defaults:
+
+```bash
+pnpm sdd defaults show
+```
+
+To set a global default:
+
+```bash
+pnpm sdd defaults set profile simple
+pnpm sdd defaults set detail compact
+```
+
+Revert to the bundle-provided values:
+
+```bash
+pnpm sdd defaults unset profile
+pnpm sdd defaults unset detail
+```
+
+Validation profile is set to `simple` and render detail to `compact` as global defaults. Those global defaults are used by command line tools, unless a `--profile` or `--detail` setting is specified with the tool call.
+
+Each setting resolves independently in this order:
+
+1. `--profile` or `--detail` for the current invocation (command line option)
+2. your user-global SDD configuration
+3. the selected bundle's fallback
+
+The global file is `${XDG_CONFIG_HOME}/sdd/config.yaml`, falling back to `~/.config/sdd/config.yaml`, on Linux and WSL. It is `~/Library/Application Support/sdd/config.yaml` on macOS and `%APPDATA%\sdd\config.yaml` on Windows.
 :::
 
 ## Supported Diagrams

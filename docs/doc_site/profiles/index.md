@@ -34,4 +34,4 @@ Not to be confused with profiles, there also is a rendering detail setting:
 
 - Rendering detail is used to determine (you guessed it) the amount of detail that is shown in a diagram, distinquishing between `compact` and `detailed`.
 
-See `show`, `compile`, `validate`, `render` in [SDD Command Line Tools](../sdd_cli_tools).
+See `show`, `compile`, `validate`, `render`, `defaults` in [SDD Command Line Tools](../sdd_cli_tools).
