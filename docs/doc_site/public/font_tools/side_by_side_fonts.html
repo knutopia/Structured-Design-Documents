@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="fonts.css">
+  <script src="font-tools-shared.js"></script>
+  <title>Font Comparison</title>
+  <style>
+    /* Embedded from the typefaces' official free/open webfont releases for this local comparison tool. */
+
+    :root {
+      color-scheme: light;
+      --background: #f8f9fa;
+      --surface: #ffffff;
+      --text: #333333;
+      --muted: #666666;
+      --border: #e2e5e8;
+      --accent: #e7a318;
+      --accent-soft: #fff5d9;
+      --focus: #2563eb;
+      --control-border: #cfd3d7;
+      --divider: #eeeeee;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --star-empty: #9ba0a5;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --background: #15171a;
+      --surface: #22252a;
+      --text: #eef0f3;
+      --muted: #aeb4bd;
+      --border: #3d424a;
+      --accent: #f1b84b;
+      --accent-soft: #40351d;
+      --focus: #78a9ff;
+      --control-border: #505761;
+      --divider: #3d424a;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --star-empty: #7f8791;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 30%, transparent);
+      outline-offset: 2px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: 1rem 2rem;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+
+    .control {
+      display: flex;
+      gap: 0.5rem;
+      min-width: 12rem;
+    }
+
+    .control-label {
+      font-weight: 600;
+    }
+
+    .filter-note {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .tool-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-height: 2.65rem;
+      font-weight: 500;
+    }
+
+    .tool-links a {
+      color: var(--text);
+      text-underline-offset: 2px;
+    }
+
+    .theme-tools {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-left: auto;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    select {
+      width: 100%;
+      min-height: 2.65rem;
+      padding: 0.55rem 2rem 0.55rem 0.7rem;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--control-border);
+      border-radius: 6px;
+    }
+
+    .comparison {
+      display: flex;
+      align-items: stretch;
+      gap: 2rem;
+    }
+
+    .panel {
+      flex: 1 1 0;
+      min-width: 0;
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+
+    .panel-header {
+      display: grid;
+      gap: 0.9rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .font-field {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .font-field label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .font-picker-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .font-picker-row .font-select {
+      min-width: 0;
+    }
+
+    .step-font {
+      min-height: 2.65rem;
+      padding: 0.55rem 0.7rem;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--control-border);
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .step-font:hover:not(:disabled) {
+      background: var(--background);
+    }
+
+    .step-font:disabled {
+      color: var(--muted);
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .step-buttons {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.65rem 1rem;
+    }
+
+    .font-weight-field {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .font-weight-field select {
+      width: auto;
+      min-width: 5rem;
+    }
+
+    .font-options {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem 0.9rem;
+    }
+
+    .font-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .font-toggle input {
+      margin: 0;
+      accent-color: var(--focus);
+    }
+
+    .rating-copy {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .rating-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .stars {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .star-button,
+    .clear-rating {
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .star-button {
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      padding: 0;
+      border-radius: 5px;
+      color: var(--star-empty);
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .star-button:hover,
+    .star-button.is-filled {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .clear-rating {
+      margin-left: 0.3rem;
+      padding: 0.3rem 0.45rem;
+      color: var(--muted);
+      border-radius: 4px;
+      font-size: 0.78rem;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .clear-rating:disabled {
+      opacity: 0.4;
+      cursor: default;
+      text-decoration: none;
+    }
+
+    .preview-text {
+      line-height: 1.5;
+      margin-top: 1.5rem;
+      overflow-wrap: anywhere;
+    }
+
+    .preview-title {
+      letter-spacing: -0.035em;
+    }
+
+    .theme-control {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 2.65rem;
+      padding: 0.55rem 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .theme-control input {
+      width: 1.1rem;
+      height: 1.1rem;
+      margin: 0;
+      accent-color: var(--focus);
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 1rem;
+      }
+
+      .comparison {
+        flex-direction: column;
+      }
+
+      .panel {
+        padding: 1.25rem;
+      }
+
+      .control {
+        flex: 1 1 12rem;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .font-picker-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .font-picker-row .font-select {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      .font-picker-row .step-buttons {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <label class="control">
+      <span class="control-label">Size: <span id="size-val">24px</span></span>
+      <input type="range" id="size" min="10" max="72" value="24">
+    </label>
+
+    <label class="control" for="rating-filter">
+      <span class="control-label">Filter</span>
+      <select id="rating-filter">
+        <option value="0">All fonts</option>
+        <option value="1">★ and up</option>
+        <option value="2">★★ and up</option>
+        <option value="3">★★★ only</option>
+      </select>
+      <span class="filter-note" id="filter-note" aria-live="polite">48 fonts in each menu</span>
+    </label>
+
+    <div class="theme-tools">
+      <nav class="tool-links" aria-label="Font tools navigation">
+        <a href="fonts_in_context.html">Fonts in context</a>
+      </nav>
+
+      <label class="theme-control" for="dark-mode">
+        <input type="checkbox" id="dark-mode">
+        <span>Dark mode</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="comparison">
+    <section class="panel" data-side="left" aria-label="Left font comparison panel">
+      <div class="panel-header">
+        <div class="font-field">
+          <label for="left-font">Left font</label>
+          <div class="font-picker-row">
+            <select id="left-font" class="font-select"></select>
+            <div class="step-buttons" aria-label="Left font navigation">
+              <button type="button" class="step-font previous-font" data-direction="-1">← Previous</button>
+              <button type="button" class="step-font next-font" data-direction="1">Next →</button>
+            </div>
+          </div>
+        </div>
+        <div class="rating-row">
+          <label class="font-weight-field">Style
+            <select class="font-style-select" aria-label="Style for the selected left font"></select>
+          </label>
+          <label class="font-weight-field">Weight
+            <select class="font-weight-select" aria-label="Weight for the selected left font">
+              <option>100</option><option>200</option><option>300</option><option selected>400</option>
+              <option>500</option><option>600</option><option>700</option><option>800</option>
+            </select>
+          </label>
+          <div class="font-options">
+            <label class="font-toggle">
+              <input type="checkbox" class="natural-title-spacing-toggle">
+              <span>Natural title spacing</span>
+            </label>
+            <label class="font-toggle">
+              <input type="checkbox" class="font-kerning-toggle" checked>
+              <span>Kerning</span>
+            </label>
+          </div>
+          <span class="rating-copy" aria-live="polite">Unrated</span>
+          <div class="rating-controls">
+            <div class="stars" role="radiogroup" aria-label="Rate the left font"></div>
+            <button type="button" class="clear-rating" disabled>Clear</button>
+          </div>
+        </div>
+      </div>
+      <div class="preview-text">
+        <span class="preview-title">SDD Structured Design Documents</span><br>
+        The quick brown fox jumps over the lazy dog.
+        <br><br>
+        1234567890
+        <br><br>
+        Illusion: I l (Uppercase i, lowercase L)
+      </div>
+    </section>
+
+    <section class="panel" data-side="right" aria-label="Right font comparison panel">
+      <div class="panel-header">
+        <div class="font-field">
+          <label for="right-font">Right font</label>
+          <div class="font-picker-row">
+            <select id="right-font" class="font-select"></select>
+            <div class="step-buttons" aria-label="Right font navigation">
+              <button type="button" class="step-font previous-font" data-direction="-1">← Previous</button>
+              <button type="button" class="step-font next-font" data-direction="1">Next →</button>
+            </div>
+          </div>
+        </div>
+        <div class="rating-row">
+          <label class="font-weight-field">Style
+            <select class="font-style-select" aria-label="Style for the selected right font"></select>
+          </label>
+          <label class="font-weight-field">Weight
+            <select class="font-weight-select" aria-label="Weight for the selected right font">
+              <option>100</option><option>200</option><option>300</option><option selected>400</option>
+              <option>500</option><option>600</option><option>700</option><option>800</option>
+            </select>
+          </label>
+          <div class="font-options">
+            <label class="font-toggle">
+              <input type="checkbox" class="natural-title-spacing-toggle">
+              <span>Natural title spacing</span>
+            </label>
+            <label class="font-toggle">
+              <input type="checkbox" class="font-kerning-toggle" checked>
+              <span>Kerning</span>
+            </label>
+          </div>
+          <span class="rating-copy" aria-live="polite">Unrated</span>
+          <div class="rating-controls">
+            <div class="stars" role="radiogroup" aria-label="Rate the right font"></div>
+            <button type="button" class="clear-rating" disabled>Clear</button>
+          </div>
+        </div>
+      </div>
+      <div class="preview-text">
+        <span class="preview-title">SDD Structured Design Documents</span><br>
+        The quick brown fox jumps over the lazy dog.
+        <br><br>
+        1234567890
+        <br><br>
+        Illusion: I l (Uppercase i, lowercase L)
+      </div>
+    </section>
+  </div>
+
+  <script src="font-manifest.js"></script>
+  <script>
+    const fonts = window.SDD_FONT_MANIFEST;
+
+    const sizeSlider = document.getElementById('size');
+    const sizeVal = document.getElementById('size-val');
+    const ratingFilter = document.getElementById('rating-filter');
+    const filterNote = document.getElementById('filter-note');
+    const darkModeToggle = document.getElementById('dark-mode');
+    const panels = [...document.querySelectorAll('.panel')];
+    const appearanceStore = window.SDD_FONT_TOOLS.createAppearanceStore();
+    const selectionStore = window.SDD_FONT_TOOLS.createSelectionStore();
+
+    function storedFont(key, fallback) {
+      const savedFont = selectionStore.get(key);
+      return fonts.some(font => font.name === savedFont) ? savedFont : fallback;
+    }
+
+    const state = {
+      left: storedFont('side-by-side-left', 'Open Sans'),
+      right: storedFont('side-by-side-right', 'Inter'),
+      minRating: 0
+    };
+
+    const preferenceStore = window.SDD_FONT_TOOLS.createPreferenceStore();
+
+    function preferenceFor(fontName) {
+      return preferenceStore.get(fontName);
+    }
+
+    function ratingFor(fontName) {
+      return preferenceFor(fontName).rating;
+    }
+
+    function weightFor(fontName) {
+      return preferenceFor(fontName).weight;
+    }
+
+    function stylesFor(font) {
+      return [
+        { value: 'normal', label: 'Normal' },
+        ...(font.styles?.includes('italic') ? [{ value: 'italic', label: 'Italic' }] : [])
+      ];
+    }
+
+    function styleFor(fontName) {
+      const font = fonts.find(item => item.name === fontName);
+      const style = preferenceFor(fontName).style;
+      return stylesFor(font).some(option => option.value === style) ? style : 'normal';
+    }
+
+    function updatePreference(fontName, changes) {
+      preferenceStore.update(fontName, changes);
+    }
+
+    function savePreferences() {
+      preferenceStore.save();
+    }
+
+    function saveSelection(side) {
+      selectionStore.set(`side-by-side-${side}`, state[side]);
+      selectionStore.save();
+    }
+
+    function renderTheme(isDark) {
+      darkModeToggle.checked = isDark;
+    }
+
+    function getEligibleFonts() {
+      if (state.minRating === 0) return fonts;
+      return fonts.filter(font => ratingFor(font.name) >= state.minRating);
+    }
+
+    function createFontOption(font) {
+      const option = document.createElement('option');
+      const rating = ratingFor(font.name);
+      option.value = font.name;
+      option.textContent = font.name + (rating ? `  ${'★'.repeat(rating)}` : '');
+      return option;
+    }
+
+    function updateFontSelect(side) {
+      const select = document.getElementById(`${side}-font`);
+      const currentName = state[side];
+      const eligible = getEligibleFonts();
+      select.replaceChildren();
+
+      if (!eligible.some(font => font.name === currentName)) {
+        const currentGroup = document.createElement('optgroup');
+        currentGroup.label = 'Current selection';
+        const currentFont = fonts.find(font => font.name === currentName);
+        currentGroup.appendChild(createFontOption(currentFont));
+        select.appendChild(currentGroup);
+      }
+
+      const matchingGroup = document.createElement('optgroup');
+      matchingGroup.label = state.minRating === 0
+        ? 'All fonts'
+        : `Rated ${state.minRating} star${state.minRating > 1 ? 's' : ''} or higher`;
+
+      if (eligible.length) {
+        eligible.forEach(font => matchingGroup.appendChild(createFontOption(font)));
+      } else {
+        const emptyOption = document.createElement('option');
+        emptyOption.disabled = true;
+        emptyOption.textContent = 'No fonts match this filter yet';
+        matchingGroup.appendChild(emptyOption);
+      }
+
+      select.appendChild(matchingGroup);
+      select.value = currentName;
+    }
+
+    function updateStyleSelect(side) {
+      const panel = document.querySelector(`[data-side="${side}"]`);
+      const font = fonts.find(item => item.name === state[side]);
+      const select = panel.querySelector('.font-style-select');
+      select.replaceChildren(
+        ...stylesFor(font).map(({ value, label }) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = label;
+          return option;
+        })
+      );
+      select.value = styleFor(font.name);
+    }
+
+    function renderRating(panel, fontName) {
+      const rating = ratingFor(fontName);
+      const ratingCopy = panel.querySelector('.rating-copy');
+      const stars = panel.querySelector('.stars');
+      const clearButton = panel.querySelector('.clear-rating');
+
+      ratingCopy.textContent = rating
+        ? `${fontName}: ${rating} star${rating > 1 ? 's' : ''}`
+        : `${fontName}: unrated`;
+      stars.setAttribute('aria-label', `Rate ${fontName}`);
+      stars.replaceChildren();
+
+      for (let value = 1; value <= 3; value += 1) {
+        const star = document.createElement('button');
+        star.type = 'button';
+        star.className = `star-button${value <= rating ? ' is-filled' : ''}`;
+        star.dataset.rating = value;
+        star.setAttribute('role', 'radio');
+        star.setAttribute('aria-checked', String(value === rating));
+        star.setAttribute('aria-label', `${value} star${value > 1 ? 's' : ''}`);
+        star.textContent = value <= rating ? '★' : '☆';
+        stars.appendChild(star);
+      }
+
+      clearButton.disabled = rating === 0;
+      clearButton.setAttribute('aria-label', `Clear rating for ${fontName}`);
+    }
+
+    function updateStepButtons(side) {
+      const panel = document.querySelector(`[data-side="${side}"]`);
+      const eligible = getEligibleFonts();
+      const currentIndex = eligible.findIndex(font => font.name === state[side]);
+      const hasAnotherChoice = eligible.length > 0 && !(eligible.length === 1 && currentIndex === 0);
+
+      panel.querySelectorAll('.step-font').forEach(button => {
+        const direction = Number(button.dataset.direction);
+        const directionLabel = direction < 0 ? 'Previous' : 'Next';
+        button.disabled = !hasAnotherChoice;
+        button.setAttribute(
+          'aria-label',
+          `${directionLabel} font for the ${side} panel${state.minRating ? ', respecting the active rating filter' : ''}`
+        );
+      });
+    }
+
+    function stepFont(side, direction) {
+      const eligible = getEligibleFonts();
+      if (!eligible.length) return;
+
+      const currentIndex = eligible.findIndex(font => font.name === state[side]);
+      let nextIndex;
+      if (currentIndex === -1) {
+        nextIndex = direction < 0 ? eligible.length - 1 : 0;
+      } else {
+        nextIndex = (currentIndex + direction + eligible.length) % eligible.length;
+      }
+
+      state[side] = eligible[nextIndex].name;
+      saveSelection(side);
+      updateFontSelect(side);
+      updatePanel(side);
+    }
+
+    function updatePanel(side) {
+      const panel = document.querySelector(`[data-side="${side}"]`);
+      const font = fonts.find(item => item.name === state[side]);
+      const preference = preferenceFor(font.name);
+      const style = styleFor(font.name);
+      const preview = panel.querySelector('.preview-text');
+      preview.style.fontFamily = `'${font.family}', sans-serif`;
+      preview.style.fontWeight = preference.weight;
+      preview.style.fontStyle = style;
+      preview.style.fontKerning = preference.kerning ? 'normal' : 'none';
+      preview.querySelector('.preview-title').style.letterSpacing = preference.naturalTitleSpacing
+        ? 'normal'
+        : '-0.035em';
+      panel.querySelector('.font-weight-select').value = String(preference.weight);
+      updateStyleSelect(side);
+      panel.querySelector('.natural-title-spacing-toggle').checked = preference.naturalTitleSpacing;
+      panel.querySelector('.font-kerning-toggle').checked = preference.kerning;
+      renderRating(panel, font.name);
+      updateStepButtons(side);
+    }
+
+    function updateMenus() {
+      updateFontSelect('left');
+      updateFontSelect('right');
+      updateStepButtons('left');
+      updateStepButtons('right');
+      const count = getEligibleFonts().length;
+      filterNote.textContent = `${count} font${count === 1 ? '' : 's'} in each menu`;
+    }
+
+    function updateTypography() {
+      const size = `${sizeSlider.value}px`;
+
+      sizeVal.textContent = size;
+
+      document.querySelectorAll('.preview-text').forEach(preview => {
+        preview.style.fontSize = size;
+      });
+    }
+
+    document.querySelectorAll('.font-select').forEach(select => {
+      select.addEventListener('change', event => {
+        const side = event.currentTarget.id.startsWith('left') ? 'left' : 'right';
+        state[side] = event.currentTarget.value;
+        saveSelection(side);
+        updatePanel(side);
+      });
+    });
+
+    panels.forEach(panel => {
+      const side = panel.dataset.side;
+      panel.querySelectorAll('.step-font').forEach(button => {
+        button.addEventListener('click', () => {
+          stepFont(side, Number(button.dataset.direction));
+        });
+      });
+
+      panel.querySelector('.stars').addEventListener('click', event => {
+        const star = event.target.closest('.star-button');
+        if (!star) return;
+        updatePreference(state[side], { rating: Number(star.dataset.rating) });
+        savePreferences();
+        updateMenus();
+        updatePanel('left');
+        updatePanel('right');
+      });
+
+      panel.querySelector('.clear-rating').addEventListener('click', () => {
+        updatePreference(state[side], { rating: 0 });
+        savePreferences();
+        updateMenus();
+        updatePanel('left');
+        updatePanel('right');
+      });
+
+      panel.querySelector('.font-weight-select').addEventListener('change', event => {
+        updatePreference(state[side], { weight: Number(event.currentTarget.value) });
+        savePreferences();
+        updatePanel('left');
+        updatePanel('right');
+      });
+
+      panel.querySelector('.font-style-select').addEventListener('change', event => {
+        updatePreference(state[side], { style: event.currentTarget.value });
+        savePreferences();
+        updatePanel(side);
+      });
+
+      panel.querySelector('.natural-title-spacing-toggle').addEventListener('change', event => {
+        updatePreference(state[side], { naturalTitleSpacing: event.currentTarget.checked });
+        savePreferences();
+        updatePanel(side);
+      });
+
+      panel.querySelector('.font-kerning-toggle').addEventListener('change', event => {
+        updatePreference(state[side], { kerning: event.currentTarget.checked });
+        savePreferences();
+        updatePanel(side);
+      });
+    });
+
+    ratingFilter.addEventListener('change', event => {
+      state.minRating = Number(event.currentTarget.value);
+      updateMenus();
+    });
+
+    darkModeToggle.addEventListener('change', event => {
+      appearanceStore.setDark(event.currentTarget.checked);
+    });
+
+    sizeSlider.addEventListener('input', updateTypography);
+
+    appearanceStore.subscribe(renderTheme);
+    renderTheme(appearanceStore.isDark());
+
+    preferenceStore.subscribe(() => {
+      updateMenus();
+      updatePanel('left');
+      updatePanel('right');
+    });
+
+    updateMenus();
+    updatePanel('left');
+    updatePanel('right');
+    updateTypography();
+  </script>
+</body>
+</html>

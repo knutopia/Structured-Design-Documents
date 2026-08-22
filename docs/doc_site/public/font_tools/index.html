@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Font Explorations</title>
+    <script src="font-tools-shared.js"></script>
+    <style>
+      :root {
+        color-scheme: light;
+        --background: #ffffff;
+        --surface: #f6f6f7;
+        --text: #3c3c43;
+        --muted: #67676c;
+        --border: #e2e2e3;
+        --brand: hsl(200, 65%, 48%);
+      }
+
+      html[data-theme="dark"] {
+        color-scheme: dark;
+        --background: #1b1b1f;
+        --surface: #202127;
+        --text: #dfdfd6;
+        --muted: #98989f;
+        --border: #3c3f44;
+        --brand: hsl(200, 98%, 59%);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        max-width: 48rem;
+        margin: 0 auto;
+        padding: 2rem;
+        background: var(--background);
+        color: var(--text);
+        font-family: system-ui, sans-serif;
+      }
+
+      a {
+        color: var(--brand);
+      }
+
+      .page-header {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .theme-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .theme-control input {
+        accent-color: var(--brand);
+      }
+
+      .font-tools {
+        margin: 2rem 0 0;
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: var(--surface);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="page-header">
+        <h1>Font Explorations</h1>
+        <label class="theme-control" for="dark-mode">
+          <input type="checkbox" id="dark-mode">
+          <span>Dark mode</span>
+        </label>
+      </div>
+
+      <nav class="font-tools" aria-label="Font exploration pages">
+        <ul>
+          <li>
+            <a href="fonts_in_context.html">Fonts in context</a>
+          </li>
+          <li>
+            <a href="side_by_side_fonts.html">Side-by-side fonts</a>
+          </li>
+        </ul>
+      </nav>
+    </main>
+    <script>
+      const appearanceStore = window.SDD_FONT_TOOLS.createAppearanceStore();
+      const darkModeToggle = document.getElementById('dark-mode');
+
+      function renderAppearance(isDark) {
+        darkModeToggle.checked = isDark;
+      }
+
+      darkModeToggle.addEventListener('change', event => {
+        appearanceStore.setDark(event.currentTarget.checked);
+      });
+      appearanceStore.subscribe(renderAppearance);
+      renderAppearance(appearanceStore.isDark());
+    </script>
+  </body>
+</html>

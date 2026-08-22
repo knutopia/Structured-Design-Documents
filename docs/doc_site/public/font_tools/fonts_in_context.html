@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="fonts.css">
+  <title>Structured Design Documents — Font Variation</title>
+  <meta name="description" content="A font-switchable static variation of the Structured Design Documents homepage.">
+  <script src="font-tools-shared.js"></script>
+  <style>
+    /* Embedded from the typefaces' official free/open webfont releases for this local comparison tool. */
+
+    :root {
+      color-scheme: light;
+      --lab-height: 76px;
+      --page-font: "Inter", sans-serif;
+      --page-weight: 400;
+      --page-style: normal;
+      --page-kerning: normal;
+      --title-letter-spacing: -0.035em;
+      --vp-bg: #ffffff;
+      --vp-bg-soft: #f6f6f7;
+      --vp-bg-alt: #f6f6f7;
+      --vp-bg-elv: #ffffff;
+      --vp-text: #3c3c43;
+      --vp-text-2: #67676c;
+      --vp-text-3: #929295;
+      --vp-border: #c2c2c4;
+      --vp-divider: #e2e2e3;
+      --vp-brand-1: hsl(200, 65%, 48%);
+      --vp-brand-2: hwb(194 20% 23%);
+      --vp-brand-3: hsl(200, 29%, 37%);
+      --vp-brand: var(--vp-brand-1);
+      --vp-brand-hover: var(--vp-brand-2);
+      --vp-brand-soft: hsla(125, 100%, 70%, 0.14);
+      --vp-code: var(--vp-brand-1);
+      --lab-bg: rgba(255, 255, 255, 0.96);
+      --lab-shadow: 0 10px 30px rgba(20, 24, 40, 0.12);
+      --star: #915930;
+      --star-soft: rgba(234, 179, 8, 0.14);
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --vp-bg: #1b1b1f;
+      --vp-bg-soft: #202127;
+      --vp-bg-alt: #161618;
+      --vp-bg-elv: #202127;
+      --vp-text: #dfdfd6;
+      --vp-text-2: #98989f;
+      --vp-text-3: #6a6a71;
+      --vp-border: #3c3f44;
+      --vp-divider: #2e2e32;
+      --vp-brand-1: hsl(200, 98%, 59%);
+      --vp-brand-2: hsl(200, 29%, 37%);
+      --vp-brand-3: hwb(186 19% 43%);
+      --vp-brand: var(--vp-brand-1);
+      --vp-brand-hover: var(--vp-brand-2);
+      --vp-brand-soft: hsla(124, 100%, 70%, 0.16);
+      --vp-code: var(--vp-brand-1);
+      --lab-bg: rgba(27, 27, 31, 0.96);
+      --lab-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      --star: #f9b44e;
+      --star-soft: rgba(234, 179, 8, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--vp-bg);
+      color: var(--vp-text);
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--vp-brand) 36%, transparent);
+      outline-offset: 2px;
+    }
+
+    .font-lab {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 16px;
+      color: var(--vp-text);
+      background: var(--lab-bg);
+      border-bottom: 1px solid var(--vp-divider);
+      box-shadow: var(--lab-shadow);
+      backdrop-filter: blur(14px);
+      transform: translateY(0);
+      transition: transform 180ms ease;
+    }
+
+    .font-lab.is-hidden {
+      transform: translateY(calc(-100% - 2px));
+    }
+
+    .font-lab-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .lab-title {
+      margin-right: auto;
+      font: 700 0.78rem/1.2 system-ui, sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .lab-field {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .lab-field label,
+    .rating-status {
+      font: 600 0.76rem/1.2 system-ui, sans-serif;
+      color: var(--vp-text-2);
+      white-space: nowrap;
+    }
+
+    .lab-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--vp-text-2);
+      font: 600 0.76rem/1.2 system-ui, sans-serif;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .lab-toggle input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .lab-switch {
+      position: relative;
+      flex: 0 0 auto;
+      width: 36px;
+      height: 20px;
+      background: var(--vp-border);
+      border-radius: 999px;
+      transition: background 120ms ease;
+    }
+
+    .lab-switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      background: var(--vp-bg-elv);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+      transition: transform 120ms ease;
+    }
+
+    .lab-toggle input:checked + .lab-switch {
+      background: var(--vp-brand);
+    }
+
+    .lab-toggle input:checked + .lab-switch::after {
+      transform: translateX(16px);
+    }
+
+    .lab-toggle input:focus-visible + .lab-switch {
+      outline: 3px solid color-mix(in srgb, var(--vp-brand) 36%, transparent);
+      outline-offset: 2px;
+    }
+
+    .lab-select,
+    .lab-button,
+    .star-button {
+      min-height: 38px;
+      color: var(--vp-text);
+      background: var(--vp-bg);
+      border: 1px solid var(--vp-border);
+      border-radius: 8px;
+    }
+
+    .lab-select {
+      padding: 7px 32px 7px 10px;
+    }
+
+    #font-select {
+      min-width: 190px;
+    }
+
+    #font-weight {
+      min-width: 78px;
+    }
+
+    #rating-filter {
+      min-width: 118px;
+    }
+
+    .lab-button {
+      padding: 7px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .step-buttons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lab-button:hover:not(:disabled) {
+      color: var(--vp-brand);
+      background: var(--vp-brand-soft);
+      border-color: color-mix(in srgb, var(--vp-brand) 42%, var(--vp-border));
+    }
+
+    .lab-button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .duplicate-button {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      padding: 0;
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+
+    .rating-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .stars {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .star-button {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      padding: 0;
+      color: var(--vp-text-3);
+      cursor: pointer;
+      font-size: 1.15rem;
+    }
+
+    .star-button:hover,
+    .star-button.is-filled {
+      color: var(--star);
+      background: var(--star-soft);
+      border-color: color-mix(in srgb, var(--star) 45%, var(--vp-border));
+    }
+
+    .clear-rating {
+      padding-inline: 8px;
+      font: 600 0.72rem/1 system-ui, sans-serif;
+    }
+
+    .theme-button {
+      width: 38px;
+      padding: 0;
+    }
+
+    .sdd-site {
+      min-height: 100vh;
+      padding-top: var(--lab-height);
+      font-family: var(--page-font);
+      font-style: var(--page-style);
+      font-kerning: var(--page-kerning);
+      transition: padding-top 120ms ease;
+    }
+
+    .sdd-site,
+    .sdd-site h1,
+    .sdd-site h2,
+    .sdd-site a,
+    .sdd-site button,
+    .sdd-site .badge {
+      font-weight: var(--page-weight);
+    }
+
+    .site-nav {
+      border-bottom: 1px solid var(--vp-divider);
+      background: var(--vp-bg);
+    }
+
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      min-height: 64px;
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 0 24px;
+      gap: 28px;
+    }
+
+    .site-title {
+      margin-right: auto;
+      color: var(--vp-text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .site-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .site-links a,
+    .github-link {
+      color: var(--vp-text-2);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .site-links a:hover,
+    .github-link:hover {
+      color: var(--vp-brand);
+    }
+
+    .hero {
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 88px 24px 64px;
+    }
+
+    .hero h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.7rem, 7vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: var(--title-letter-spacing);
+    }
+
+    .hero-name {
+      display: block;
+      color: var(--vp-brand-1);
+    }
+
+    .hero-tagline {
+      max-width: 660px;
+      margin: 24px 0 0;
+      color: var(--vp-text-2);
+      font-size: 1.35rem;
+      line-height: 1.45;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .hero-action {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 20px;
+      color: #ffffff;
+      background: var(--vp-brand-3);
+      border-radius: 22px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .hero-action:hover {
+      background: var(--vp-brand-hover);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 0 24px 72px;
+    }
+
+    .feature {
+      padding: 24px;
+      background: var(--vp-bg-soft);
+      border-radius: 12px;
+    }
+
+    .feature h2 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .feature p {
+      margin: 8px 0 0;
+      color: var(--vp-text-2);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .doc-content {
+      max-width: 736px;
+      margin: 0 auto;
+      padding: 0 24px 96px;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .sdd-site .doc-content p,
+    .sdd-site .doc-content li,
+    .sdd-site .doc-content p a,
+    .sdd-site .doc-content li a {
+      font-weight: 400;
+    }
+
+    .doc-content h2 {
+      margin: 48px 0 16px;
+      padding-top: 24px;
+      border-top: 1px solid var(--vp-divider);
+      font-size: 1.55rem;
+      line-height: 1.35;
+      letter-spacing: -0.015em;
+    }
+
+    .doc-content p,
+    .doc-content ul {
+      margin: 16px 0;
+    }
+
+    .doc-content li + li {
+      margin-top: 8px;
+    }
+
+    .doc-content a {
+      color: var(--vp-brand);
+      font-weight: 500;
+      text-underline-offset: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 6px;
+      padding: 2px 8px;
+      color: var(--vp-brand);
+      background: var(--vp-brand-soft);
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .example-tabs {
+      margin: 24px 0;
+      border: 1px solid var(--vp-border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .tab-strip {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px 0;
+      background: var(--vp-bg-soft);
+      border-bottom: 1px solid var(--vp-divider);
+    }
+
+    .static-tab {
+      padding: 8px 10px;
+      color: var(--vp-text-2);
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      font-weight: 600;
+    }
+
+    .static-tab.is-active {
+      color: var(--vp-brand);
+      border-bottom-color: var(--vp-brand);
+    }
+
+    .diagram-frame {
+      padding: 16px;
+      background: var(--vp-bg);
+    }
+
+    .diagram-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    code {
+      padding: 2px 5px;
+      color: var(--vp-code);
+      background: var(--vp-bg-soft);
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    .source-note {
+      margin-top: 72px;
+      padding: 16px;
+      color: var(--vp-text-2);
+      background: var(--vp-bg-soft);
+      border-radius: 8px;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 980px) {
+      .font-lab-inner {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+
+      .lab-title {
+        width: 100%;
+      }
+
+      .site-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .font-lab {
+        padding: 8px;
+      }
+
+      .lab-field {
+        flex: 1 1 210px;
+      }
+
+      .lab-field .lab-select {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .weight-field {
+        flex: 0 1 auto;
+      }
+
+      .rating-group {
+        order: 5;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 64px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .font-lab-inner {
+        gap: 7px;
+      }
+
+      .lab-title,
+      .rating-status,
+      .lab-field > label {
+        display: none;
+      }
+
+      .font-field {
+        flex-basis: 100%;
+      }
+
+      .step-buttons {
+        flex: 1 1 auto;
+      }
+
+      .rating-group {
+        flex: 1 1 auto;
+      }
+
+      .lab-toggle-label {
+        display: none;
+      }
+
+      .site-nav-inner,
+      .hero,
+      .features,
+      .doc-content {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .font-lab {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="font-lab" id="font-lab" aria-label="Font variation controls">
+    <div class="font-lab-inner">
+      <div class="lab-title">Font variation</div>
+
+      <div class="lab-field font-field">
+        <label for="font-select">Font</label>
+        <select class="lab-select" id="font-select"></select>
+      </div>
+
+      <div class="step-buttons" aria-label="Font navigation">
+        <button type="button" class="lab-button previous-font" id="previous-font">← Previous</button>
+        <button type="button" class="lab-button next-font" id="next-font">Next →</button>
+      </div>
+
+      <div class="lab-field weight-field">
+        <label for="font-weight">Weight</label>
+        <select class="lab-select" id="font-weight">
+          <option>100</option><option>200</option><option>300</option><option selected>400</option>
+          <option>500</option><option>600</option><option>700</option><option>800</option>
+        </select>
+      </div>
+
+      <div class="lab-field style-field">
+        <label for="font-style">Style</label>
+        <select class="lab-select" id="font-style"></select>
+      </div>
+
+      <label class="lab-toggle" title="Remove the custom negative letter-spacing from the main title">
+        <input type="checkbox" id="natural-title-spacing" aria-label="Use natural spacing in the main title">
+        <span class="lab-switch" aria-hidden="true"></span>
+        <span class="lab-toggle-label">Natural title spacing</span>
+      </label>
+
+      <label class="lab-toggle" title="Use the kerning information built into the selected font">
+        <input type="checkbox" id="font-kerning" aria-label="Use font kerning" checked>
+        <span class="lab-switch" aria-hidden="true"></span>
+        <span class="lab-toggle-label">Kerning</span>
+      </label>
+
+      <div class="rating-group">
+        <span class="rating-status" id="rating-status" aria-live="polite">Unrated</span>
+        <div class="stars" id="stars" role="radiogroup" aria-label="Rate selected font"></div>
+        <button type="button" class="lab-button clear-rating" id="clear-rating" disabled>Clear</button>
+      </div>
+
+      <div class="lab-field">
+        <label for="rating-filter">Filter</label>
+        <select class="lab-select" id="rating-filter">
+          <option value="0">All fonts</option>
+          <option value="1">★ and up</option>
+          <option value="2">★★ and up</option>
+          <option value="3">★★★ only</option>
+        </select>
+      </div>
+
+      <button type="button" class="lab-button theme-button" id="theme-button" aria-pressed="false" aria-label="Use dark mode">☾</button>
+      <button type="button" class="lab-button duplicate-button" id="duplicate-button" aria-label="Open a copy in a new tab" title="Open a copy in a new tab">+</button>
+    </div>
+  </aside>
+
+  <div class="sdd-site" id="sdd-site">
+    <header class="site-nav">
+      <div class="site-nav-inner">
+        <a class="site-title" href="https://knutopia.github.io/Structured-Design-Documents/">Structured Design Documents</a>
+        <nav class="site-links" aria-label="Documentation navigation">
+          <a href="https://knutopia.github.io/Structured-Design-Documents/">Home</a>
+          <a href="https://knutopia.github.io/Structured-Design-Documents/strategic_potential/">Impact</a>
+          <a href="https://knutopia.github.io/Structured-Design-Documents/diagram_types/">Diagram Types</a>
+          <a href="https://knutopia.github.io/Structured-Design-Documents/using_sdd/">Using SDD</a>
+          <a href="https://knutopia.github.io/Structured-Design-Documents/service_blueprint_slice_example/">Examples</a>
+          <a href="side_by_side_fonts.html">Side by side fonts</a>
+        </nav>
+        <a class="github-link" href="https://github.com/knutopia/Structured-Design-Documents" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1><span class="hero-name">SDD</span>Structured Design Documents</h1>
+        <p class="hero-tagline">Semantically Defined Structural Design for Better Products</p>
+        <div class="hero-actions">
+          <a class="hero-action" href="#example-small-app">Example</a>
+          <a class="hero-action" href="https://github.com/knutopia/Structured-Design-Documents/tree/main" target="_blank" rel="noreferrer">Repo</a>
+          <a class="hero-action" href="https://knutopia.github.io/Structured-Design-Documents/strategic_potential/">Impact</a>
+        </div>
+      </section>
+
+      <section class="features" aria-label="Highlights">
+        <article class="feature">
+          <h2>Product Design Graph</h2>
+          <p>Nodes and edges, from high-level opportunities to low-level details, prepared to evolve</p>
+        </article>
+        <article class="feature">
+          <h2>Simple Markup, Rendered Diagrams</h2>
+          <p>Easy to read, easy to write, validated and rendered to diagrams as output</p>
+        </article>
+        <article class="feature">
+          <h2>For Us and for Our Machines</h2>
+          <p>Use SDD to talk to an LLM about structural design</p>
+        </article>
+      </section>
+
+      <article class="doc-content">
+        <p>SDD <em>(Structured Design Documents)</em> is a compact language for describing software product design as a structured map. SDD is easy to read and write, for people and for LLMs.</p>
+
+        <p>SDD makes design elements and their relationships explicit, in a unified “Product Design Graph”, which captures a variety of product design perspectives as a single, interconnected set of nodes. In technical terms, it is a DSL (Domain Specific Language) for authoring a structured graph of design information.</p>
+
+        <p>The project includes tools for compiling and validating SDD source files and for generating diagrams from them. Different parts of the unified graph can be rendered as distinct diagrams: IA / Place Map, UI Contracts, Scenario Flow, Journey Map, Outcome-Opportunity Map, and Service Blueprint. See <a href="https://knutopia.github.io/Structured-Design-Documents/diagram_types/">Diagram Types</a>.</p>
+
+        <h2 id="why-it-exists">Why It Exists</h2>
+        <ul>
+          <li>To provide a structured source of truth for product design instead of fragmented diagrams and documents.</li>
+          <li>To make design structure machine-readable for validation, tooling, and deterministic rendering.</li>
+          <li>To create design artifacts that AI and LLM workflows can consume without relying on image interpretation.</li>
+          <li>To provide a means to AI and LLM workflows to “speak design”, so they can create structural design information outside blobs of code.</li>
+          <li>To give “traditional” product, design, and diagramming tools a shared semantic layer they can integrate with.</li>
+        </ul>
+
+        <h2 id="example-small-app">Example: Small App <span class="badge">Simple Profile</span></h2>
+        <p>Here is a small SDD example showing a dashboard, a project area, and a few linked places and view states. From this source file, an Information Architecture / Place Map and a UI Contracts diagram are generated.</p>
+
+        <div class="example-tabs" aria-label="Static Information Architecture example">
+          <div class="tab-strip" aria-hidden="true">
+            <span class="static-tab is-active">Information Architecture</span>
+            <span class="static-tab">UI Contracts Diagram</span>
+          </div>
+          <div class="tab-strip" aria-hidden="true">
+            <span class="static-tab is-active">Diagram</span>
+            <span class="static-tab">SDD Source</span>
+          </div>
+          <div class="diagram-frame">
+            <img src="https://knutopia.github.io/Structured-Design-Documents/assets/small_app_ia_1.BLpBHNGw.png" alt="Small app information architecture diagram">
+          </div>
+        </div>
+
+        <p>See also: <a href="https://knutopia.github.io/Structured-Design-Documents/service_blueprint_slice_example/">Service Blueprint Slice example</a>, connecting customer steps to frontstage, backstage, support, system, and policy lanes. This example also shows how to create the diagram from an SDD file on the command line.</p>
+
+        <h2 id="using-sdd">Using SDD</h2>
+        <p>The SDD Skill helps when using SDD with an LLM: <a href="https://knutopia.github.io/Structured-Design-Documents/sdd-skill/">SDD Skill Guide</a></p>
+        <p>Using SDD command line tools manually (<code>sdd show</code> etc): <a href="https://knutopia.github.io/Structured-Design-Documents/sdd_cli_tools/">SDD CLI User Guide</a></p>
+
+        <h2 id="technical-core">Technical Core</h2>
+        <p>Two folders define the language:</p>
+        <ul>
+          <li>The <em>bundle/v0.1/</em> folder houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling. <a href="https://github.com/knutopia/Structured-Design-Documents/tree/main/bundle/v0.1" target="_blank" rel="noreferrer">bundle/v0.1/ repo folder</a></li>
+          <li>The <em>definitions/v0.1/</em> houses explanatory definitions and rationale for version 0.1 and should stay consistent with the bundle. <a href="https://github.com/knutopia/Structured-Design-Documents/tree/main/definitions/v0.1" target="_blank" rel="noreferrer">definitions/v0.1/ repo folder</a></li>
+        </ul>
+        <p>The <em>Authoring Spec</em> guides changes to the language: <a href="https://knutopia.github.io/Structured-Design-Documents/definitions/v0.1/authoring_spec_type_first_dsl_sdd_text_v_0_dot_1.html" target="_blank" rel="noreferrer">SDD-Text v0.1 — Authoring Spec (Type-first DSL)</a></p>
+        <p>The <em>SDD Helper Guide</em> describes how the sdd-helper supports the sdd-skill behind the scenes: <a href="https://knutopia.github.io/Structured-Design-Documents/sdd-helper/">SDD Helper Guide</a></p>
+
+        <h2 id="background-origins">Background / Origins</h2>
+        <ul>
+          <li><a href="https://knutopia.github.io/Structured-Design-Documents/initial_concepts/Initial%20Concepts1%20a%206-Diagram%20Suite%20v0dot1">Initial Concepts 1: a 6-Diagram Suite v0.1</a></li>
+          <li><a href="https://knutopia.github.io/Structured-Design-Documents/initial_concepts/Initial%20Concepts2%20One-page%20Schema%20v0dot1">Initial Concepts 2: One-page Schema v0.1</a></li>
+          <li>Original document outlining the idea: <a href="https://knutopia.github.io/Structured-Design-Documents/initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice">Structured Design Artifacts to Advance the Software Product Design Practice</a></li>
+          <li><a href="https://knutopia.github.io/Structured-Design-Documents/strategic_potential/">Strategic Potential of SDD in the Product Lifecycle</a></li>
+        </ul>
+
+        <p class="source-note">Static homepage copy captured from the Structured Design Documents documentation on August 5, 2026. Navigation links open the published documentation.</p>
+      </article>
+    </main>
+  </div>
+
+  <script src="font-manifest.js"></script>
+  <script>
+    const fonts = window.SDD_FONT_MANIFEST;
+
+    const fontLab = document.getElementById('font-lab');
+    const sddSite = document.getElementById('sdd-site');
+    const fontSelect = document.getElementById('font-select');
+    const fontWeightSelect = document.getElementById('font-weight');
+    const fontStyleSelect = document.getElementById('font-style');
+    const naturalTitleSpacingToggle = document.getElementById('natural-title-spacing');
+    const fontKerningToggle = document.getElementById('font-kerning');
+    const ratingFilter = document.getElementById('rating-filter');
+    const ratingStatus = document.getElementById('rating-status');
+    const stars = document.getElementById('stars');
+    const clearRating = document.getElementById('clear-rating');
+    const previousFont = document.getElementById('previous-font');
+    const nextFont = document.getElementById('next-font');
+    const duplicateButton = document.getElementById('duplicate-button');
+    const themeButton = document.getElementById('theme-button');
+    const appearanceStore = window.SDD_FONT_TOOLS.createAppearanceStore();
+
+    const initialUrl = new URL(window.location.href);
+    const requestedFont = initialUrl.searchParams.get('font');
+    const requestedFilter = Number(initialUrl.searchParams.get('filter'));
+    const selectionStore = window.SDD_FONT_TOOLS.createSelectionStore();
+    const savedFont = selectionStore.get('context');
+    const state = {
+      font: fonts.some(font => font.name === requestedFont)
+        ? requestedFont
+        : fonts.some(font => font.name === savedFont) ? savedFont : 'Inter',
+      minRating: [1, 2, 3].includes(requestedFilter) ? requestedFilter : 0
+    };
+
+    const preferenceStore = window.SDD_FONT_TOOLS.createPreferenceStore();
+
+    function preferenceFor(fontName) {
+      return preferenceStore.get(fontName);
+    }
+
+    function ratingFor(fontName) {
+      return preferenceFor(fontName).rating;
+    }
+
+    function weightFor(fontName) {
+      return preferenceFor(fontName).weight;
+    }
+
+    function stylesFor(font) {
+      return [
+        { value: 'normal', label: 'Normal' },
+        ...(font.styles?.includes('italic') ? [{ value: 'italic', label: 'Italic' }] : [])
+      ];
+    }
+
+    function styleFor(fontName) {
+      const font = fonts.find(item => item.name === fontName);
+      const style = preferenceFor(fontName).style;
+      return stylesFor(font).some(option => option.value === style) ? style : 'normal';
+    }
+
+    function updatePreference(fontName, changes) {
+      preferenceStore.update(fontName, changes);
+    }
+
+    function savePreferences() {
+      preferenceStore.save();
+    }
+
+    function eligibleFonts() {
+      if (state.minRating === 0) return fonts;
+      return fonts.filter(font => ratingFor(font.name) >= state.minRating);
+    }
+
+    function createFontOption(font) {
+      const option = document.createElement('option');
+      const rating = ratingFor(font.name);
+      option.value = font.name;
+      option.textContent = font.name + (rating ? `  ${'★'.repeat(rating)}` : '');
+      return option;
+    }
+
+    function renderFontMenu() {
+      const eligible = eligibleFonts();
+      fontSelect.replaceChildren();
+
+      if (!eligible.some(font => font.name === state.font)) {
+        const currentGroup = document.createElement('optgroup');
+        currentGroup.label = 'Current selection';
+        currentGroup.appendChild(createFontOption(fonts.find(font => font.name === state.font)));
+        fontSelect.appendChild(currentGroup);
+      }
+
+      const matchingGroup = document.createElement('optgroup');
+      matchingGroup.label = state.minRating === 0
+        ? 'All fonts'
+        : `Rated ${state.minRating} star${state.minRating > 1 ? 's' : ''} or higher`;
+
+      if (eligible.length) {
+        eligible.forEach(font => matchingGroup.appendChild(createFontOption(font)));
+      } else {
+        const emptyOption = document.createElement('option');
+        emptyOption.disabled = true;
+        emptyOption.textContent = 'No fonts match this filter yet';
+        matchingGroup.appendChild(emptyOption);
+      }
+
+      fontSelect.appendChild(matchingGroup);
+      fontSelect.value = state.font;
+    }
+
+    function renderStyleMenu() {
+      const font = fonts.find(item => item.name === state.font);
+      fontStyleSelect.replaceChildren(
+        ...stylesFor(font).map(({ value, label }) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = label;
+          return option;
+        })
+      );
+      fontStyleSelect.value = styleFor(state.font);
+    }
+
+    function renderStars() {
+      const rating = ratingFor(state.font);
+      ratingStatus.textContent = rating
+        ? `${rating} star${rating > 1 ? 's' : ''}`
+        : 'Unrated';
+      stars.setAttribute('aria-label', `Rate ${state.font}`);
+      stars.replaceChildren();
+
+      for (let value = 1; value <= 3; value += 1) {
+        const star = document.createElement('button');
+        star.type = 'button';
+        star.className = `star-button${value <= rating ? ' is-filled' : ''}`;
+        star.dataset.rating = value;
+        star.setAttribute('role', 'radio');
+        star.setAttribute('aria-checked', String(value === rating));
+        star.setAttribute('aria-label', `${value} star${value > 1 ? 's' : ''} for ${state.font}`);
+        star.textContent = value <= rating ? '★' : '☆';
+        stars.appendChild(star);
+      }
+
+      clearRating.disabled = rating === 0;
+      clearRating.setAttribute('aria-label', `Clear rating for ${state.font}`);
+    }
+
+    function renderStepButtons() {
+      const eligible = eligibleFonts();
+      const currentIndex = eligible.findIndex(font => font.name === state.font);
+      const canStep = eligible.length > 0 && !(eligible.length === 1 && currentIndex === 0);
+      previousFont.disabled = !canStep;
+      nextFont.disabled = !canStep;
+      previousFont.setAttribute('aria-label', `Previous font${state.minRating ? ', respecting the active rating filter' : ''}`);
+      nextFont.setAttribute('aria-label', `Next font${state.minRating ? ', respecting the active rating filter' : ''}`);
+    }
+
+    function syncUrlState() {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('font', state.font);
+      currentUrl.searchParams.set('filter', String(state.minRating));
+      selectionStore.set('context', state.font);
+      selectionStore.save();
+      try {
+        window.history.replaceState(null, '', currentUrl.toString());
+      } catch (error) {
+        // Font selection still works if URL history cannot be updated.
+      }
+    }
+
+    function applyFont() {
+      const font = fonts.find(item => item.name === state.font);
+      const preference = preferenceFor(font.name);
+      const style = styleFor(font.name);
+      sddSite.style.setProperty('--page-font', `"${font.family}", ${font.fallback}`);
+      sddSite.style.setProperty('--page-weight', preference.weight);
+      sddSite.style.setProperty('--page-style', style);
+      sddSite.style.setProperty('--page-kerning', preference.kerning ? 'normal' : 'none');
+      sddSite.style.setProperty(
+        '--title-letter-spacing',
+        preference.naturalTitleSpacing ? 'normal' : '-0.035em'
+      );
+      document.title = `Structured Design Documents — ${font.name}`;
+      fontSelect.value = font.name;
+      fontWeightSelect.value = String(preference.weight);
+      fontStyleSelect.value = style;
+      naturalTitleSpacingToggle.checked = preference.naturalTitleSpacing;
+      fontKerningToggle.checked = preference.kerning;
+      syncUrlState();
+      renderStars();
+      renderStepButtons();
+    }
+
+    function renderControls() {
+      ratingFilter.value = String(state.minRating);
+      renderFontMenu();
+      renderStyleMenu();
+      applyFont();
+    }
+
+    function stepFont(direction) {
+      const eligible = eligibleFonts();
+      if (!eligible.length) return;
+
+      const currentIndex = eligible.findIndex(font => font.name === state.font);
+      const nextIndex = currentIndex === -1
+        ? (direction < 0 ? eligible.length - 1 : 0)
+        : (currentIndex + direction + eligible.length) % eligible.length;
+
+      state.font = eligible[nextIndex].name;
+      renderControls();
+    }
+
+    fontSelect.addEventListener('change', event => {
+      state.font = event.currentTarget.value;
+      applyFont();
+    });
+
+    fontWeightSelect.addEventListener('change', event => {
+      updatePreference(state.font, { weight: Number(event.currentTarget.value) });
+      savePreferences();
+      applyFont();
+    });
+
+    fontStyleSelect.addEventListener('change', event => {
+      updatePreference(state.font, { style: event.currentTarget.value });
+      savePreferences();
+      applyFont();
+    });
+
+    naturalTitleSpacingToggle.addEventListener('change', event => {
+      updatePreference(state.font, { naturalTitleSpacing: event.currentTarget.checked });
+      savePreferences();
+      applyFont();
+    });
+
+    fontKerningToggle.addEventListener('change', event => {
+      updatePreference(state.font, { kerning: event.currentTarget.checked });
+      savePreferences();
+      applyFont();
+    });
+
+    ratingFilter.addEventListener('change', event => {
+      state.minRating = Number(event.currentTarget.value);
+      renderControls();
+    });
+
+    previousFont.addEventListener('click', () => stepFont(-1));
+    nextFont.addEventListener('click', () => stepFont(1));
+
+    stars.addEventListener('click', event => {
+      const star = event.target.closest('.star-button');
+      if (!star) return;
+      updatePreference(state.font, { rating: Number(star.dataset.rating) });
+      savePreferences();
+      renderControls();
+    });
+
+    clearRating.addEventListener('click', () => {
+      updatePreference(state.font, { rating: 0 });
+      savePreferences();
+      renderControls();
+    });
+
+    duplicateButton.addEventListener('click', () => {
+      const duplicateUrl = new URL(window.location.href);
+      duplicateUrl.searchParams.set('font', state.font);
+      duplicateUrl.searchParams.set('filter', String(state.minRating));
+      const duplicateTab = window.open(duplicateUrl.toString(), '_blank');
+      if (duplicateTab) duplicateTab.opener = null;
+    });
+
+    function renderTheme(isDark) {
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      themeButton.textContent = isDark ? '☀' : '☾';
+      themeButton.setAttribute('aria-pressed', String(isDark));
+      themeButton.setAttribute('aria-label', isDark ? 'Use light mode' : 'Use dark mode');
+    }
+
+    themeButton.addEventListener('click', () => {
+      appearanceStore.setDark(!appearanceStore.isDark());
+    });
+
+    appearanceStore.subscribe(renderTheme);
+    renderTheme(appearanceStore.isDark());
+
+    function syncLabHeight() {
+      document.documentElement.style.setProperty('--lab-height', `${fontLab.offsetHeight}px`);
+    }
+
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(syncLabHeight).observe(fontLab);
+    }
+    window.addEventListener('resize', syncLabHeight);
+    syncLabHeight();
+
+    let lastScrollY = window.scrollY;
+    let scrollFrame = null;
+
+    function showLab() {
+      fontLab.classList.remove('is-hidden');
+    }
+
+    function hideLab() {
+      if (!fontLab.contains(document.activeElement)) {
+        fontLab.classList.add('is-hidden');
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        if (currentY <= 16 || currentY < lastScrollY - 6) {
+          showLab();
+        } else if (currentY > lastScrollY + 6) {
+          hideLab();
+        }
+        lastScrollY = currentY;
+        scrollFrame = null;
+      });
+    }, { passive: true });
+
+    window.addEventListener('pointermove', event => {
+      if (event.clientY <= 12) showLab();
+    }, { passive: true });
+
+    fontLab.addEventListener('focusin', showLab);
+
+    preferenceStore.subscribe(renderControls);
+
+    renderControls();
+  </script>
+</body>
+</html>
