@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <title>Structured Design Documents — Font Variation</title>
   <meta name="description" content="A font-switchable static variation of the Structured Design Documents homepage.">
   <script src="font-tools-shared.js"></script>
@@ -213,6 +214,127 @@
       padding: 7px 32px 7px 10px;
     }
 
+    .font-menu-field,
+    .rating-filter-menu-field {
+      position: relative;
+    }
+
+    .font-menu-native {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .font-menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 190px;
+      padding: 7px 10px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .font-menu-toggle:hover,
+    .font-menu-toggle[aria-expanded="true"] {
+      color: var(--vp-brand);
+      background: var(--vp-brand-soft);
+      border-color: color-mix(in srgb, var(--vp-brand) 42%, var(--vp-border));
+    }
+
+    .font-menu-toggle-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .font-menu-caret {
+      color: var(--vp-text-3);
+      font-size: 0.75rem;
+    }
+
+    .font-menu-options {
+      position: absolute;
+      z-index: 1010;
+      top: calc(100% + 4px);
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      min-width: 270px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding: 5px;
+      background: var(--lab-bg);
+      border: 1px solid var(--vp-border);
+      border-radius: 8px;
+      box-shadow: var(--lab-shadow);
+    }
+
+    .font-menu-options[hidden] {
+      display: none;
+    }
+
+    .font-menu-group-label {
+      padding: 5px 8px 3px;
+      color: var(--vp-text-3);
+      font: 600 0.68rem/1.2 system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .font-menu-option,
+    .rating-filter-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-height: 34px;
+      padding: 6px 8px;
+      color: var(--vp-text);
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .font-menu-option:hover,
+    .font-menu-option:focus-visible,
+    .font-menu-option.is-selected,
+    .rating-filter-option:hover,
+    .rating-filter-option:focus-visible,
+    .rating-filter-option.is-selected {
+      color: var(--vp-brand);
+      background: var(--vp-brand-soft);
+    }
+
+    .font-menu-option:disabled {
+      color: var(--vp-text-3);
+      cursor: default;
+    }
+
+    .font-menu-option-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rating-icons {
+      display: inline-flex;
+      flex: 0 0 auto;
+      gap: 3px;
+      color: var(--star);
+      font-size: 0.78rem;
+    }
+
     #title-font-select,
     #body-font-select {
       min-width: 190px;
@@ -231,6 +353,11 @@
 
     #body-rating-filter {
       min-width: 118px;
+    }
+
+    #rating-filter-menu-toggle,
+    #body-rating-filter-menu-toggle {
+      min-width: 150px;
     }
 
     .lab-button {
@@ -269,6 +396,7 @@
       display: flex;
       align-items: center;
       gap: 3px;
+      justify-content: flex-end;
     }
 
     .rating-label {
@@ -284,10 +412,12 @@
       gap: 6px 10px;
       min-width: 0;
       flex: 0 1 auto;
+      width: max-content;
     }
 
     .rating-tools .lab-field {
       min-width: 0;
+      justify-content: flex-end;
     }
 
     .toolbar-actions {
@@ -724,9 +854,14 @@
 
       <section class="font-choice-group" aria-labelledby="title-font-heading">
         <h2 class="choice-heading" id="title-font-heading">Title font</h2>
-        <div class="lab-field font-field">
-          <label for="title-font-select">Font</label>
-          <select class="lab-select" id="title-font-select"></select>
+        <div class="lab-field font-field font-menu-field">
+          <label for="title-font-menu-toggle">Font</label>
+          <select class="lab-select font-menu-native" id="title-font-select" tabindex="-1" aria-hidden="true"></select>
+          <button type="button" class="lab-select font-menu-toggle" id="title-font-menu-toggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="font-menu-toggle-label" id="title-font-menu-label"></span>
+            <span class="font-menu-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="font-menu-options" id="title-font-menu-options" role="listbox" hidden></div>
         </div>
 
         <div class="step-buttons" aria-label="Title font navigation">
@@ -762,9 +897,14 @@
 
       <section class="font-choice-group" aria-labelledby="body-font-heading">
         <h2 class="choice-heading" id="body-font-heading">Body font</h2>
-        <div class="lab-field font-field">
-          <label for="body-font-select">Font</label>
-          <select class="lab-select" id="body-font-select"></select>
+        <div class="lab-field font-field font-menu-field">
+          <label for="body-font-menu-toggle">Font</label>
+          <select class="lab-select font-menu-native" id="body-font-select" tabindex="-1" aria-hidden="true"></select>
+          <button type="button" class="lab-select font-menu-toggle" id="body-font-menu-toggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="font-menu-toggle-label" id="body-font-menu-label"></span>
+            <span class="font-menu-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="font-menu-options" id="body-font-menu-options" role="listbox" hidden></div>
         </div>
 
         <div class="step-buttons" aria-label="Body font navigation">
@@ -800,14 +940,19 @@
           <button type="button" class="lab-button clear-rating" id="clear-rating" disabled>Clear</button>
         </div>
 
-        <div class="lab-field">
-          <label for="rating-filter">Combination filter</label>
-          <select class="lab-select" id="rating-filter">
+        <div class="lab-field rating-filter-menu-field">
+          <label for="rating-filter-menu-toggle">Combination filter</label>
+          <select class="lab-select font-menu-native" id="rating-filter" tabindex="-1" aria-hidden="true">
             <option value="0">All fonts</option>
             <option value="1">★ and up</option>
             <option value="2">★★ and up</option>
             <option value="3">★★★ only</option>
           </select>
+          <button type="button" class="lab-select font-menu-toggle" id="rating-filter-menu-toggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="font-menu-toggle-label" id="rating-filter-menu-label"></span>
+            <span class="font-menu-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="font-menu-options" id="rating-filter-menu-options" role="listbox" hidden></div>
         </div>
 
         <div class="rating-group">
@@ -817,14 +962,19 @@
           <button type="button" class="lab-button clear-rating" id="clear-body-rating" disabled>Clear</button>
         </div>
 
-        <div class="lab-field">
-          <label for="body-rating-filter">Body font filter</label>
-          <select class="lab-select" id="body-rating-filter">
+        <div class="lab-field rating-filter-menu-field">
+          <label for="body-rating-filter-menu-toggle">Body font filter</label>
+          <select class="lab-select font-menu-native" id="body-rating-filter" tabindex="-1" aria-hidden="true">
             <option value="0">All body fonts</option>
             <option value="1">★ and up</option>
             <option value="2">★★ and up</option>
             <option value="3">★★★ only</option>
           </select>
+          <button type="button" class="lab-select font-menu-toggle" id="body-rating-filter-menu-toggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="font-menu-toggle-label" id="body-rating-filter-menu-label"></span>
+            <span class="font-menu-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="font-menu-options" id="body-rating-filter-menu-options" role="listbox" hidden></div>
         </div>
       </div>
 
@@ -945,7 +1095,13 @@
     const fontLab = document.getElementById('font-lab');
     const sddSite = document.getElementById('sdd-site');
     const titleFontSelect = document.getElementById('title-font-select');
+    const titleFontMenuToggle = document.getElementById('title-font-menu-toggle');
+    const titleFontMenuLabel = document.getElementById('title-font-menu-label');
+    const titleFontMenuOptions = document.getElementById('title-font-menu-options');
     const bodyFontSelect = document.getElementById('body-font-select');
+    const bodyFontMenuToggle = document.getElementById('body-font-menu-toggle');
+    const bodyFontMenuLabel = document.getElementById('body-font-menu-label');
+    const bodyFontMenuOptions = document.getElementById('body-font-menu-options');
     const titleFontWeightSelect = document.getElementById('title-font-weight');
     const bodyFontWeightSelect = document.getElementById('body-font-weight');
     const titleFontStyleSelect = document.getElementById('title-font-style');
@@ -954,7 +1110,13 @@
     const titleFontKerningToggle = document.getElementById('title-font-kerning');
     const bodyFontKerningToggle = document.getElementById('body-font-kerning');
     const ratingFilter = document.getElementById('rating-filter');
+    const ratingFilterMenuToggle = document.getElementById('rating-filter-menu-toggle');
+    const ratingFilterMenuLabel = document.getElementById('rating-filter-menu-label');
+    const ratingFilterMenuOptions = document.getElementById('rating-filter-menu-options');
     const bodyRatingFilter = document.getElementById('body-rating-filter');
+    const bodyRatingFilterMenuToggle = document.getElementById('body-rating-filter-menu-toggle');
+    const bodyRatingFilterMenuLabel = document.getElementById('body-rating-filter-menu-label');
+    const bodyRatingFilterMenuOptions = document.getElementById('body-rating-filter-menu-options');
     const ratingStatus = document.getElementById('rating-status');
     const stars = document.getElementById('stars');
     const clearRating = document.getElementById('clear-rating');
@@ -1047,6 +1209,35 @@
       return ratingStore.getBody(configurationFor('body', fontName));
     }
 
+    function createRatingIcon(className) {
+      const icon = document.createElement('i');
+      icon.className = className;
+      icon.setAttribute('aria-hidden', 'true');
+      return icon;
+    }
+
+    function createRatingIcons(rating, iconClass, label = '') {
+      const icons = document.createElement('span');
+      icons.className = 'rating-icons';
+      if (label) icons.setAttribute('aria-label', label);
+      for (let value = 1; value <= rating; value += 1) {
+        icons.appendChild(createRatingIcon(iconClass));
+      }
+      return icons;
+    }
+
+    function createBodyRatingIcon() {
+      return createRatingIcon('fa-solid fa-star-of-life');
+    }
+
+    function createBodyRatingIcons(rating, label = '') {
+      return createRatingIcons(rating, 'fa-solid fa-star-of-life', label);
+    }
+
+    function createCombinationRatingIcons(rating, label = '') {
+      return createRatingIcons(rating, 'fa-solid fa-star', label);
+    }
+
     function setCombinationRating(rating) {
       const titleConfiguration = configurationFor('title', state.titleFont);
       ratingStore.set(
@@ -1082,12 +1273,143 @@
 
     function createFontOption(font, role) {
       const option = document.createElement('option');
-      const rating = role === 'title'
-        ? titleRating(font.name)
-        : bodyRating(font.name);
       option.value = font.name;
-      option.textContent = font.name + (rating ? `  ${'★'.repeat(rating)}` : '');
+      option.textContent = font.name;
       return option;
+    }
+
+    function anchorFontMenuOption(menuOptions) {
+      const selectedOption = menuOptions.querySelector('.font-menu-option.is-selected');
+      if (!selectedOption) return;
+      selectedOption.scrollIntoView?.({ block: 'center', inline: 'nearest' });
+    }
+
+    function renderFontMenuOptions(select, menuOptions, currentName, ratingFor, createIcons, ratingLabel) {
+      menuOptions.replaceChildren();
+      select.querySelectorAll('optgroup').forEach(group => {
+        const groupLabel = document.createElement('div');
+        groupLabel.className = 'font-menu-group-label';
+        groupLabel.textContent = group.label;
+        menuOptions.appendChild(groupLabel);
+
+        group.querySelectorAll('option').forEach(option => {
+          const menuOption = document.createElement('button');
+          menuOption.type = 'button';
+          menuOption.className = `font-menu-option${option.value === currentName ? ' is-selected' : ''}`;
+          menuOption.dataset.font = option.value;
+          menuOption.setAttribute('role', 'option');
+          menuOption.setAttribute('aria-selected', String(option.value === currentName));
+          if (option.disabled) menuOption.disabled = true;
+
+          const name = document.createElement('span');
+          name.className = 'font-menu-option-name';
+          name.textContent = option.textContent;
+          menuOption.appendChild(name);
+          if (!option.disabled) {
+            const rating = ratingFor(option.value);
+            if (rating) menuOption.appendChild(createIcons(rating, ratingLabel(rating)));
+          }
+          menuOptions.appendChild(menuOption);
+        });
+      });
+    }
+
+    function renderTitleFontMenu() {
+      renderFontMenuOptions(
+        titleFontSelect,
+        titleFontMenuOptions,
+        state.titleFont,
+        titleRating,
+        createCombinationRatingIcons,
+        rating => `${rating} of 3 combination-rating stars`
+      );
+      titleFontMenuLabel.replaceChildren(
+        document.createTextNode(state.titleFont),
+        ...(titleRating(state.titleFont)
+          ? [createCombinationRatingIcons(titleRating(state.titleFont), `${titleRating(state.titleFont)} of 3 combination-rating stars`)]
+          : [])
+      );
+      if (!titleFontMenuOptions.hidden) requestAnimationFrame(() => anchorFontMenuOption(titleFontMenuOptions));
+    }
+
+    function renderBodyFontMenu() {
+      renderFontMenuOptions(
+        bodyFontSelect,
+        bodyFontMenuOptions,
+        state.bodyFont,
+        bodyRating,
+        createBodyRatingIcons,
+        rating => `${rating} of 3 body-rating stars`
+      );
+      bodyFontMenuLabel.replaceChildren(
+        document.createTextNode(state.bodyFont),
+        ...(bodyRating()
+          ? [createBodyRatingIcons(bodyRating(), `${bodyRating()} of 3 body-rating stars`)]
+          : [])
+      );
+      if (!bodyFontMenuOptions.hidden) requestAnimationFrame(() => anchorFontMenuOption(bodyFontMenuOptions));
+    }
+
+    function ratingFilterLabel(value, allLabel) {
+      if (value === 0) return allLabel;
+      return `${value} star${value > 1 ? 's' : ''} ${value === 3 ? 'only' : 'and up'}`;
+    }
+
+    function renderRatingFilterMenu(menuOptions, menuLabel, rating, allLabel, createIcons) {
+      menuOptions.replaceChildren();
+      [0, 1, 2, 3].forEach(value => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = `rating-filter-option${value === rating ? ' is-selected' : ''}`;
+        option.dataset.rating = value;
+        option.setAttribute('role', 'option');
+        option.setAttribute('aria-selected', String(value === rating));
+
+        const label = document.createElement('span');
+        label.className = 'font-menu-option-name';
+        label.textContent = ratingFilterLabel(value, allLabel);
+        option.appendChild(label);
+        if (value > 0) option.appendChild(createIcons(value));
+        menuOptions.appendChild(option);
+      });
+
+      menuLabel.replaceChildren(document.createTextNode(ratingFilterLabel(rating, allLabel)));
+      if (rating > 0) menuLabel.appendChild(createIcons(rating));
+    }
+
+    function renderCombinationRatingFilterMenu() {
+      renderRatingFilterMenu(
+        ratingFilterMenuOptions,
+        ratingFilterMenuLabel,
+        state.minRating,
+        'All fonts',
+        createCombinationRatingIcons
+      );
+    }
+
+    function renderBodyRatingFilterMenu() {
+      renderRatingFilterMenu(
+        bodyRatingFilterMenuOptions,
+        bodyRatingFilterMenuLabel,
+        state.minBodyRating,
+        'All body fonts',
+        createBodyRatingIcons
+      );
+    }
+
+    function setMenuOpen(toggle, menu, isOpen) {
+      menu.hidden = !isOpen;
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen && (menu === titleFontMenuOptions || menu === bodyFontMenuOptions)) {
+        requestAnimationFrame(() => anchorFontMenuOption(menu));
+      }
+    }
+
+    function closeFontMenus() {
+      setMenuOpen(titleFontMenuToggle, titleFontMenuOptions, false);
+      setMenuOpen(bodyFontMenuToggle, bodyFontMenuOptions, false);
+      setMenuOpen(ratingFilterMenuToggle, ratingFilterMenuOptions, false);
+      setMenuOpen(bodyRatingFilterMenuToggle, bodyRatingFilterMenuOptions, false);
     }
 
     function anchorSelectedOption(select) {
@@ -1143,7 +1465,11 @@
 
       select.appendChild(matchingGroup);
       select.value = currentName;
-      anchorSelectedOption(select);
+      if (role === 'body') {
+        renderBodyFontMenu();
+      } else {
+        renderTitleFontMenu();
+      }
     }
 
     function renderStyleMenu(role) {
@@ -1198,7 +1524,7 @@
         star.setAttribute('role', 'radio');
         star.setAttribute('aria-checked', String(value === rating));
         star.setAttribute('aria-label', `${value} star${value > 1 ? 's' : ''} for this body font`);
-        star.textContent = value <= rating ? '★' : '☆';
+        star.appendChild(createBodyRatingIcon());
         bodyStars.appendChild(star);
       }
 
@@ -1296,6 +1622,8 @@
       bodyRatingFilter.value = String(state.minBodyRating);
       renderFontMenu('title');
       renderFontMenu('body');
+      renderCombinationRatingFilterMenu();
+      renderBodyRatingFilterMenu();
       renderStyleMenu('title');
       renderStyleMenu('body');
       applyFonts();
@@ -1325,6 +1653,76 @@
 
     bodyFontSelect.addEventListener('change', event => {
       selectFont('body', event.currentTarget.value);
+    });
+
+    titleFontMenuToggle.addEventListener('click', () => {
+      const isOpen = titleFontMenuOptions.hidden;
+      setMenuOpen(bodyFontMenuToggle, bodyFontMenuOptions, false);
+      setMenuOpen(ratingFilterMenuToggle, ratingFilterMenuOptions, false);
+      setMenuOpen(bodyRatingFilterMenuToggle, bodyRatingFilterMenuOptions, false);
+      setMenuOpen(titleFontMenuToggle, titleFontMenuOptions, isOpen);
+    });
+
+    titleFontMenuOptions.addEventListener('click', event => {
+      const option = event.target.closest('.font-menu-option');
+      if (!option || option.disabled) return;
+      selectFont('title', option.dataset.font);
+      setMenuOpen(titleFontMenuToggle, titleFontMenuOptions, false);
+    });
+
+    bodyFontMenuToggle.addEventListener('click', () => {
+      const isOpen = bodyFontMenuOptions.hidden;
+      setMenuOpen(titleFontMenuToggle, titleFontMenuOptions, false);
+      setMenuOpen(ratingFilterMenuToggle, ratingFilterMenuOptions, false);
+      setMenuOpen(bodyRatingFilterMenuToggle, bodyRatingFilterMenuOptions, false);
+      setMenuOpen(bodyFontMenuToggle, bodyFontMenuOptions, isOpen);
+    });
+
+    bodyFontMenuOptions.addEventListener('click', event => {
+      const option = event.target.closest('.font-menu-option');
+      if (!option || option.disabled) return;
+      selectFont('body', option.dataset.font);
+      setMenuOpen(bodyFontMenuToggle, bodyFontMenuOptions, false);
+    });
+
+    bodyRatingFilterMenuToggle.addEventListener('click', () => {
+      const isOpen = bodyRatingFilterMenuOptions.hidden;
+      setMenuOpen(titleFontMenuToggle, titleFontMenuOptions, false);
+      setMenuOpen(bodyFontMenuToggle, bodyFontMenuOptions, false);
+      setMenuOpen(ratingFilterMenuToggle, ratingFilterMenuOptions, false);
+      setMenuOpen(bodyRatingFilterMenuToggle, bodyRatingFilterMenuOptions, isOpen);
+    });
+
+    bodyRatingFilterMenuOptions.addEventListener('click', event => {
+      const option = event.target.closest('.rating-filter-option');
+      if (!option) return;
+      state.minBodyRating = Number(option.dataset.rating);
+      renderControls();
+      setMenuOpen(bodyRatingFilterMenuToggle, bodyRatingFilterMenuOptions, false);
+    });
+
+    ratingFilterMenuToggle.addEventListener('click', () => {
+      const isOpen = ratingFilterMenuOptions.hidden;
+      setMenuOpen(titleFontMenuToggle, titleFontMenuOptions, false);
+      setMenuOpen(bodyFontMenuToggle, bodyFontMenuOptions, false);
+      setMenuOpen(bodyRatingFilterMenuToggle, bodyRatingFilterMenuOptions, false);
+      setMenuOpen(ratingFilterMenuToggle, ratingFilterMenuOptions, isOpen);
+    });
+
+    ratingFilterMenuOptions.addEventListener('click', event => {
+      const option = event.target.closest('.rating-filter-option');
+      if (!option) return;
+      state.minRating = Number(option.dataset.rating);
+      renderControls();
+      setMenuOpen(ratingFilterMenuToggle, ratingFilterMenuOptions, false);
+    });
+
+    document.addEventListener('pointerdown', event => {
+      if (!event.target.closest('.font-menu-field, .rating-filter-menu-field')) closeFontMenus();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeFontMenus();
     });
 
     [titleFontSelect, bodyFontSelect].forEach(select => {

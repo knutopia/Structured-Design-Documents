@@ -1,0 +1,702 @@
+# Human-editable font source registry.
+#
+# Each [font] block defines one family. A face line is:
+#   face = WEIGHT STYLE [optional per-face URL or local path]
+# For css sources, url is a stylesheet and is shared by all face lines unless
+# a face line supplies its own URL. For local sources, each face supplies a
+# path relative to docs/doc_site/public/font_tools/.
+#
+# kind values: css, font, local
+
+[font]
+name = Absans
+fallback = sans-serif
+kind = local
+format = woff2
+face = 400 normal fonts/04-Absans.woff2
+
+[font]
+name = Alegreya Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Apfel Grotezk
+fallback = sans-serif
+kind = local
+format = woff2
+face = 400 normal fonts/12-Apfel-Grotezk.woff2
+
+[font]
+name = Atkinson Hyperlegible
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap
+face = 400 italic
+face = 400 normal
+face = 700 italic
+face = 700 normal
+
+[font]
+name = Bluu Next
+fallback = sans-serif
+kind = local
+format = opentype
+face = 700 normal fonts/21-Bluu-Next.otf
+
+[font]
+name = Bricolage Grotesque
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap
+face = 250 normal
+face = 300 normal
+face = 400 normal
+face = 500 normal
+face = 600 normal
+face = 700 normal
+face = 800 normal
+
+[font]
+name = Butler
+fallback = sans-serif
+kind = local
+format = woff
+face = 400 normal fonts/19-Butler.woff
+
+[font]
+name = Cardo
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap
+face = 400 italic
+face = 400 normal
+face = 700 normal
+
+[font]
+name = DM Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Fira Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Fraunces
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Geist
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap
+face = 250 normal
+face = 250 italic
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+
+[font]
+name = Glacial Indifference
+fallback = sans-serif
+kind = local
+format = woff2
+face = 400 normal fonts/17-Glacial-Indifference.woff2
+
+[font]
+name = Hanken Grotesk
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap
+face = 250 normal
+face = 250 italic
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+
+[font]
+name = IBM Plex Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+
+[font]
+name = Infini
+fallback = sans-serif
+kind = local
+format = woff
+face = 400 normal fonts/20-Infini.woff
+
+[font]
+name = Inknut Antiqua
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap
+face = 300 normal
+face = 400 normal
+face = 500 normal
+face = 600 normal
+face = 700 normal
+face = 800 normal
+face = 900 normal
+
+[font]
+name = Inter
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Josefin Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap
+face = 250 italic
+face = 250 normal
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+
+[font]
+name = Karla
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+
+[font]
+name = Lato
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 700 italic
+face = 700 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Libre Franklin
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Lora
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+
+[font]
+name = Manrope
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap
+face = 300 normal
+face = 400 normal
+face = 500 normal
+face = 600 normal
+face = 700 normal
+face = 800 normal
+
+[font]
+name = Merriweather
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Metropolis
+fallback = sans-serif
+kind = css
+format = css
+face = 400 normal https://cdn.jsdelivr.net/npm/@fontsource/metropolis@5.3.0/400.css
+
+[font]
+name = Montserrat
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Noto Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Onest
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap
+face = 300 normal
+face = 400 normal
+face = 500 normal
+face = 600 normal
+face = 700 normal
+face = 800 normal
+face = 900 normal
+
+[font]
+name = Open Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+
+[font]
+name = Open Sauce Sans
+fallback = sans-serif
+kind = css
+format = css
+face = 400 normal https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-sans@5.3.0/400.css
+
+[font]
+name = OpenDyslexic
+fallback = sans-serif
+kind = local
+format = opentype
+face = 400 normal fonts/02-OpenDyslexic.otf
+face = 700 normal fonts/03-OpenDyslexic.otf
+
+[font]
+name = Ortica
+fallback = serif
+kind = local
+format = woff2
+face = 300 normal fonts/06-Ortica.woff2
+face = 400 normal fonts/07-Ortica.woff2
+face = 700 normal fonts/08-Ortica.woff2
+
+[font]
+name = Playfair Display
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Poppins
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = PT Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap
+face = 400 italic
+face = 400 normal
+face = 700 italic
+face = 700 normal
+
+[font]
+name = PT Serif
+fallback = serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap
+face = 400 italic
+face = 400 normal
+face = 700 italic
+face = 700 normal
+
+[font]
+name = Public Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Raleway
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Reforma
+fallback = sans-serif
+kind = local
+format = woff
+face = 500 normal fonts/18-Reforma.woff
+
+[font]
+name = Roboto
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Ronzino
+fallback = serif
+kind = local
+format = woff2
+face = 400 normal fonts/09-Ronzino.woff2
+face = 500 normal fonts/10-Ronzino.woff2
+face = 700 normal fonts/11-Ronzino.woff2
+
+[font]
+name = Salome
+fallback = serif
+kind = local
+format = woff2
+face = 400 normal fonts/14-Salome.woff2
+
+[font]
+name = Sneaky Times
+fallback = serif
+kind = local
+format = woff2
+face = 400 normal fonts/05-Sneaky-Times.woff2
+
+[font]
+name = Source Sans Pro
+fallback = sans-serif
+kind = css
+format = css
+face = 300 italic https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/300-italic.css
+face = 300 normal https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/300.css
+face = 400 italic https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/400-italic.css
+face = 400 normal https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/400.css
+face = 600 italic https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/600-italic.css
+face = 600 normal https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/600.css
+face = 700 italic https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/700-italic.css
+face = 700 normal https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/700.css
+face = 900 italic https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/900-italic.css
+face = 900 normal https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/900.css
+
+[font]
+name = Space Grotesk
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap
+face = 300 normal
+face = 400 normal
+face = 500 normal
+face = 600 normal
+face = 700 normal
+
+[font]
+name = Work Sans
+fallback = sans-serif
+kind = css
+format = css
+url = https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
+face = 300 italic
+face = 300 normal
+face = 400 italic
+face = 400 normal
+face = 500 italic
+face = 500 normal
+face = 600 italic
+face = 600 normal
+face = 700 italic
+face = 700 normal
+face = 800 italic
+face = 800 normal
+face = 900 italic
+face = 900 normal
+
+[font]
+name = Wremena
+fallback = serif
+kind = local
+format = woff
+face = 400 normal fonts/16-Wremena.woff

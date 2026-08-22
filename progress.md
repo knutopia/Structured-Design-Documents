@@ -29,6 +29,7 @@ z
 
 - Font explorer tools improved
 - Title-body separation in font tool
+- Enabled hybrid font caching to shrink the local font collection size
 
 ## Fri 8-21
 

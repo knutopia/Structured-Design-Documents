@@ -22,6 +22,7 @@
     "sdd": "node dist/cli/main.js",
     "sdd-helper": "node dist/cli/helperMain.js",
     "font-tools:generate": "node scripts/generate-font-tools-assets.mjs",
+    "font-tools:prune": "node scripts/prune-font-tools-assets.mjs",
     "predocs:dev": "pnpm run font-tools:generate",
     "predocs:build": "pnpm run font-tools:generate",
     "docs:dev": "vitepress dev docs/doc_site",

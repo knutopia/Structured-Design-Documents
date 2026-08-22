@@ -9,6 +9,15 @@ window.SDD_FONT_MANIFEST = [
     "weights": [
       400
     ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/04-Absans.woff2"
+      }
+    ],
     "files": [
       {
         "file": "04-Absans.woff2",
@@ -33,68 +42,93 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Alegreya-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Alegreya-Sans-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Apfel Grotezk",
@@ -105,6 +139,15 @@ window.SDD_FONT_MANIFEST = [
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/12-Apfel-Grotezk.woff2"
+      }
     ],
     "files": [
       {
@@ -126,28 +169,37 @@ window.SDD_FONT_MANIFEST = [
       400,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Atkinson-Hyperlegible-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "Atkinson-Hyperlegible-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "Atkinson-Hyperlegible-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "Atkinson-Hyperlegible-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Bluu Next",
@@ -158,6 +210,15 @@ window.SDD_FONT_MANIFEST = [
     ],
     "weights": [
       700
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 700,
+        "kind": "local",
+        "format": "opentype",
+        "url": "fonts/21-Bluu-Next.otf"
+      }
     ],
     "files": [
       {
@@ -183,43 +244,58 @@ window.SDD_FONT_MANIFEST = [
       700,
       800
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Bricolage-Grotesque-200.ttf",
         "style": "normal",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Bricolage-Grotesque-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Bricolage-Grotesque-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Bricolage-Grotesque-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Bricolage-Grotesque-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Bricolage-Grotesque-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Bricolage-Grotesque-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Butler",
@@ -230,6 +306,15 @@ window.SDD_FONT_MANIFEST = [
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff",
+        "url": "fonts/19-Butler.woff"
+      }
     ],
     "files": [
       {
@@ -242,7 +327,7 @@ window.SDD_FONT_MANIFEST = [
   {
     "name": "Cardo",
     "family": "Cardo",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "italic",
       "normal"
@@ -251,23 +336,30 @@ window.SDD_FONT_MANIFEST = [
       400,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Cardo-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap"
       },
       {
-        "file": "Cardo-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap"
       },
       {
-        "file": "Cardo-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "DM Sans",
@@ -286,78 +378,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "DM-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "DM-Sans-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Fira Sans",
@@ -376,83 +497,112 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Fira-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fira-Sans-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Fraunces",
     "family": "Fraunces",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "italic",
       "normal"
@@ -466,78 +616,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Fraunces-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Fraunces-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Geist",
@@ -556,101 +735,107 @@ window.SDD_FONT_MANIFEST = [
       700,
       800
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Geist-100.ttf",
         "style": "normal",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-200-Italic.ttf",
         "style": "italic",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-200.ttf",
-        "style": "normal",
-        "weight": 250
-      },
-      {
-        "file": "Geist-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Geist-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       }
-    ]
-  },
-  {
-    "name": "Geist Sans",
-    "family": "Geist Sans",
-    "fallback": "sans-serif",
-    "styles": [
-      "normal"
     ],
-    "weights": [
-      400
-    ],
-    "files": [
-      {
-        "file": "01-Geist-Sans.woff2",
-        "style": "normal",
-        "weight": 400
-      }
-    ]
+    "files": []
   },
   {
     "name": "Glacial Indifference",
@@ -661,6 +846,15 @@ window.SDD_FONT_MANIFEST = [
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/17-Glacial-Indifference.woff2"
+      }
     ],
     "files": [
       {
@@ -687,83 +881,107 @@ window.SDD_FONT_MANIFEST = [
       700,
       800
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Hanken-Grotesk-100.ttf",
         "style": "normal",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-200-Italic.ttf",
         "style": "italic",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-200.ttf",
-        "style": "normal",
-        "weight": 250
-      },
-      {
-        "file": "Hanken-Grotesk-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Hanken-Grotesk-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "IBM Plex Sans",
@@ -780,58 +998,79 @@ window.SDD_FONT_MANIFEST = [
       600,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "IBM-Plex-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "IBM-Plex-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Infini",
@@ -842,6 +1081,15 @@ window.SDD_FONT_MANIFEST = [
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff",
+        "url": "fonts/20-Infini.woff"
+      }
     ],
     "files": [
       {
@@ -854,7 +1102,7 @@ window.SDD_FONT_MANIFEST = [
   {
     "name": "Inknut Antiqua",
     "family": "Inknut Antiqua",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "normal"
     ],
@@ -867,43 +1115,58 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Inknut-Antiqua-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Inknut-Antiqua-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Inknut-Antiqua-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Inknut-Antiqua-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Inknut-Antiqua-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Inknut-Antiqua-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Inknut-Antiqua-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Inter",
@@ -922,78 +1185,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Inter-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Inter-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Josefin Sans",
@@ -1011,78 +1303,93 @@ window.SDD_FONT_MANIFEST = [
       600,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Josefin-Sans-100-Italic.ttf",
         "style": "italic",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-100.ttf",
         "style": "normal",
-        "weight": 250
+        "weight": 250,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-200-Italic.ttf",
         "style": "italic",
-        "weight": 250
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-200.ttf",
         "style": "normal",
-        "weight": 250
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Josefin-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
-      },
-      {
-        "file": "Josefin-Sans-700-Italic.ttf",
-        "style": "italic",
-        "weight": 700
-      },
-      {
-        "file": "Josefin-Sans-700.ttf",
-        "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Karla",
@@ -1100,68 +1407,93 @@ window.SDD_FONT_MANIFEST = [
       700,
       800
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Karla-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Karla-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Lato",
@@ -1177,48 +1509,65 @@ window.SDD_FONT_MANIFEST = [
       700,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Lato-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       },
       {
-        "file": "Lato-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Libre Franklin",
@@ -1237,83 +1586,112 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Libre-Franklin-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Libre-Franklin-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Lora",
     "family": "Lora",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "italic",
       "normal"
@@ -1324,48 +1702,65 @@ window.SDD_FONT_MANIFEST = [
       600,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Lora-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       },
       {
-        "file": "Lora-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Manrope",
@@ -1382,43 +1777,56 @@ window.SDD_FONT_MANIFEST = [
       700,
       800
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Manrope-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Manrope-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Manrope-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Manrope-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Manrope-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       },
       {
-        "file": "Manrope-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Merriweather",
     "family": "Merriweather",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "italic",
       "normal"
@@ -1432,78 +1840,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Merriweather-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Merriweather-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Metropolis",
@@ -1515,13 +1952,16 @@ window.SDD_FONT_MANIFEST = [
     "weights": [
       400
     ],
-    "files": [
+    "faces": [
       {
-        "file": "13-Metropolis.woff2",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/metropolis@5.3.0/400.css"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Montserrat",
@@ -1540,78 +1980,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Montserrat-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Montserrat-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Noto Sans",
@@ -1630,78 +2099,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Noto-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Noto-Sans-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Onest",
@@ -1719,43 +2217,58 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Onest-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Onest-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Onest-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Onest-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Onest-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Onest-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       },
       {
-        "file": "Onest-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Open Sans",
@@ -1773,68 +2286,93 @@ window.SDD_FONT_MANIFEST = [
       700,
       800
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Open-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       },
       {
-        "file": "Open-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Open Sauce Sans",
@@ -1846,13 +2384,16 @@ window.SDD_FONT_MANIFEST = [
     "weights": [
       400
     ],
-    "files": [
+    "faces": [
       {
-        "file": "15-Open-Sauce-Sans.otf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-sans@5.3.0/400.css"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "OpenDyslexic",
@@ -1864,6 +2405,22 @@ window.SDD_FONT_MANIFEST = [
     "weights": [
       400,
       700
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "opentype",
+        "url": "fonts/02-OpenDyslexic.otf"
+      },
+      {
+        "style": "normal",
+        "weight": 700,
+        "kind": "local",
+        "format": "opentype",
+        "url": "fonts/03-OpenDyslexic.otf"
+      }
     ],
     "files": [
       {
@@ -1881,7 +2438,7 @@ window.SDD_FONT_MANIFEST = [
   {
     "name": "Ortica",
     "family": "Ortica",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "normal"
     ],
@@ -1889,6 +2446,29 @@ window.SDD_FONT_MANIFEST = [
       300,
       400,
       700
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 300,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/06-Ortica.woff2"
+      },
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/07-Ortica.woff2"
+      },
+      {
+        "style": "normal",
+        "weight": 700,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/08-Ortica.woff2"
+      }
     ],
     "files": [
       {
@@ -1911,7 +2491,7 @@ window.SDD_FONT_MANIFEST = [
   {
     "name": "Playfair Display",
     "family": "Playfair Display",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "italic",
       "normal"
@@ -1924,68 +2504,93 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Playfair-Display-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Playfair-Display-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Poppins",
@@ -2004,78 +2609,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Poppins-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Poppins-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "PT Sans",
@@ -2089,33 +2723,42 @@ window.SDD_FONT_MANIFEST = [
       400,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "PT-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "PT-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "PT-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "PT-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "PT Serif",
     "family": "PT Serif",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "italic",
       "normal"
@@ -2124,28 +2767,37 @@ window.SDD_FONT_MANIFEST = [
       400,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "PT-Serif-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "PT-Serif-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "PT-Serif-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       },
       {
-        "file": "PT-Serif-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Public Sans",
@@ -2164,78 +2816,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Public-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Public-Sans-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Raleway",
@@ -2254,78 +2935,107 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Raleway-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Raleway-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Reforma",
@@ -2336,6 +3046,15 @@ window.SDD_FONT_MANIFEST = [
     ],
     "weights": [
       500
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 500,
+        "kind": "local",
+        "format": "woff",
+        "url": "fonts/18-Reforma.woff"
+      }
     ],
     "files": [
       {
@@ -2362,83 +3081,112 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Roboto-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Roboto-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Ronzino",
     "family": "Ronzino",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "normal"
     ],
@@ -2446,6 +3194,29 @@ window.SDD_FONT_MANIFEST = [
       400,
       500,
       700
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/09-Ronzino.woff2"
+      },
+      {
+        "style": "normal",
+        "weight": 500,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/10-Ronzino.woff2"
+      },
+      {
+        "style": "normal",
+        "weight": 700,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/11-Ronzino.woff2"
+      }
     ],
     "files": [
       {
@@ -2468,12 +3239,21 @@ window.SDD_FONT_MANIFEST = [
   {
     "name": "Salome",
     "family": "Salome",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "normal"
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/14-Salome.woff2"
+      }
     ],
     "files": [
       {
@@ -2486,12 +3266,21 @@ window.SDD_FONT_MANIFEST = [
   {
     "name": "Sneaky Times",
     "family": "Sneaky Times",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "normal"
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff2",
+        "url": "fonts/05-Sneaky-Times.woff2"
+      }
     ],
     "files": [
       {
@@ -2516,58 +3305,79 @@ window.SDD_FONT_MANIFEST = [
       700,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Source-Sans-Pro-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/300-italic.css"
       },
       {
-        "file": "Source-Sans-Pro-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/300.css"
       },
       {
-        "file": "Source-Sans-Pro-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/400-italic.css"
       },
       {
-        "file": "Source-Sans-Pro-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/400.css"
       },
       {
-        "file": "Source-Sans-Pro-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/600-italic.css"
       },
       {
-        "file": "Source-Sans-Pro-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/600.css"
       },
       {
-        "file": "Source-Sans-Pro-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/700-italic.css"
       },
       {
-        "file": "Source-Sans-Pro-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/700.css"
       },
       {
-        "file": "Source-Sans-Pro-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/900-italic.css"
       },
       {
-        "file": "Source-Sans-Pro-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-pro@5.3.0/900.css"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Space Grotesk",
@@ -2583,33 +3393,44 @@ window.SDD_FONT_MANIFEST = [
       600,
       700
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Space-Grotesk-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       },
       {
-        "file": "Space-Grotesk-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       },
       {
-        "file": "Space-Grotesk-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       },
       {
-        "file": "Space-Grotesk-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       },
       {
-        "file": "Space-Grotesk-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Work Sans",
@@ -2628,88 +3449,126 @@ window.SDD_FONT_MANIFEST = [
       800,
       900
     ],
-    "files": [
+    "faces": [
       {
-        "file": "Work-Sans-300-Italic.ttf",
         "style": "italic",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-300.ttf",
         "style": "normal",
-        "weight": 300
+        "weight": 300,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-400-Italic.ttf",
         "style": "italic",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-400.ttf",
         "style": "normal",
-        "weight": 400
+        "weight": 400,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-500-Italic.ttf",
         "style": "italic",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-500.ttf",
         "style": "normal",
-        "weight": 500
+        "weight": 500,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-600-Italic.ttf",
         "style": "italic",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-600.ttf",
         "style": "normal",
-        "weight": 600
+        "weight": 600,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-700-Italic.ttf",
         "style": "italic",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-700.ttf",
         "style": "normal",
-        "weight": 700
+        "weight": 700,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-800-Italic.ttf",
         "style": "italic",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-800.ttf",
         "style": "normal",
-        "weight": 800
+        "weight": 800,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-900-Italic.ttf",
         "style": "italic",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       },
       {
-        "file": "Work-Sans-900.ttf",
         "style": "normal",
-        "weight": 900
+        "weight": 900,
+        "kind": "css",
+        "format": "css",
+        "url": "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       }
-    ]
+    ],
+    "files": []
   },
   {
     "name": "Wremena",
     "family": "Wremena",
-    "fallback": "sans-serif",
+    "fallback": "serif",
     "styles": [
       "normal"
     ],
     "weights": [
       400
+    ],
+    "faces": [
+      {
+        "style": "normal",
+        "weight": 400,
+        "kind": "local",
+        "format": "woff",
+        "url": "fonts/16-Wremena.woff"
+      }
     ],
     "files": [
       {
