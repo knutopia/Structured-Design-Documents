@@ -30,6 +30,7 @@ z
 - Font explorer tools improved
 - Title-body separation in font tool
 - Enabled hybrid font caching to shrink the local font collection size
+- Recent additions in main README
 
 ## Fri 8-21
 

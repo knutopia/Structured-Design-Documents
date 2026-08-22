@@ -56,6 +56,11 @@ This probably works with other editors too. The grammar is used for source code 
 
 ## Current Status
 
+### Recent Additions
+
+- 'sdd-add' for adding nodes and relationships
+- 'sdd-defaults' for global profile setting, rendering detail setting
+
 ### Working Now
 
 - Solid v0.1 SDDT spec bundle
