@@ -7,21 +7,14 @@ import {
 } from "./types.js";
 
 export async function loadDefaultsSources(
-  runtime: DefaultsConfigRuntime,
-  cwd: string
+  runtime: DefaultsConfigRuntime
 ): Promise<LoadedDefaultsSources> {
   const globalPath = runtime.getGlobalConfigPath();
-  const projectPath = await runtime.getProjectConfigPath(cwd);
-  const [globalConfig, projectConfig] = await Promise.all([
-    runtime.read(globalPath),
-    projectPath ? runtime.read(projectPath) : Promise.resolve(undefined)
-  ]);
+  const globalConfig = await runtime.read(globalPath);
 
   return {
     globalPath,
-    ...(globalConfig ? { global: { path: globalPath, config: globalConfig } } : {}),
-    ...(projectPath ? { projectPath } : {}),
-    ...(projectPath && projectConfig ? { project: { path: projectPath, config: projectConfig } } : {})
+    ...(globalConfig ? { global: { path: globalPath, config: globalConfig } } : {})
   };
 }
 
@@ -59,19 +52,13 @@ export function validateResolvedDefault(options: ValidateResolvedDefaultOptions)
 export function resolveDefault(options: ResolveDefaultOptions): ResolvedDefault {
   const selected: ResolvedDefault = options.explicitValue !== undefined
     ? { value: options.explicitValue, source: "cli" }
-    : options.sources.project?.config.defaults[options.setting] !== undefined
+    : options.sources.global?.config.defaults[options.setting] !== undefined
       ? {
-        value: options.sources.project.config.defaults[options.setting]!,
-        source: "project",
-        sourcePath: options.sources.project.path
+        value: options.sources.global.config.defaults[options.setting]!,
+        source: "global",
+        sourcePath: options.sources.global.path
       }
-      : options.sources.global?.config.defaults[options.setting] !== undefined
-        ? {
-          value: options.sources.global.config.defaults[options.setting]!,
-          source: "global",
-          sourcePath: options.sources.global.path
-        }
-        : { value: options.bundleValue, source: "bundle" };
+      : { value: options.bundleValue, source: "bundle" };
 
   return validateResolvedDefault({
     setting: options.setting,

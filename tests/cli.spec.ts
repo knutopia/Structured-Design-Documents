@@ -261,7 +261,6 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       cwd: () => "/repo",
       defaultsConfig: {
         getGlobalConfigPath: () => "/user/sdd/config.yaml",
-        getProjectConfigPath: vi.fn(async () => null),
         read: vi.fn(async () => undefined),
         set: vi.fn(async (filePath: string) => ({ changed: true, path: filePath })),
         unset: vi.fn(async (filePath: string) => ({ changed: true, path: filePath }))
@@ -1549,9 +1548,9 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Validation profiles (bundle-declared; shipped v0.1 profiles shown):");
     expect(help).toContain("simple");
     expect(help).toContain("strict       strict governance");
-    expect(help).toContain("Omit --profile to resolve project, global, then selected-bundle defaults.");
+    expect(help).toContain("Omit --profile to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Render detail (bundle-declared; shipped v0.1 values shown):");
-    expect(help).toContain("Omit --detail to resolve project, global, then selected-bundle defaults.");
+    expect(help).toContain("Omit --detail to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg");
@@ -1565,7 +1564,7 @@ describe("CLI wrappers", () => {
     for (const commandName of ["validate", "render", "dot", "mmd", "show"]) {
       const commandHelp = program.commands.find((command) => command.name() === commandName)!.helpInformation();
       expect(commandHelp, commandName).toContain("profile id override; omission uses the resolved");
-      expect(commandHelp, commandName).toContain("project/global/bundle default");
+      expect(commandHelp, commandName).toContain("user/bundle default");
     }
   });
 

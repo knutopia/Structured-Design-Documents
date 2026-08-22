@@ -1,7 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { findAuthoringRepoRoot } from "../authoring/workspace.js";
-import { getGlobalDefaultsConfigPath, getProjectDefaultsConfigPath, type FindDefaultsRepoRoot } from "./paths.js";
+import { getGlobalDefaultsConfigPath } from "./paths.js";
 import {
   nodeDefaultsConfigFileSystem,
   readDefaultsConfig,
@@ -13,7 +12,6 @@ import type { DefaultsConfigSetting, DefaultsConfigV1, DefaultsMutationResult } 
 
 export interface DefaultsConfigRuntime {
   getGlobalConfigPath(): string;
-  getProjectConfigPath(cwd: string): Promise<string | null>;
   read(filePath: string): Promise<DefaultsConfigV1 | undefined>;
   set(filePath: string, setting: DefaultsConfigSetting, value: string, options?: { createParent?: boolean }): Promise<DefaultsMutationResult>;
   unset(filePath: string, setting: DefaultsConfigSetting): Promise<DefaultsMutationResult>;
@@ -24,7 +22,6 @@ export interface DefaultsConfigRuntimeOptions {
   env?: Readonly<Record<string, string | undefined>>;
   homedir?: () => string;
   pathApi?: typeof path;
-  findRepoRoot?: FindDefaultsRepoRoot;
   fileSystem?: DefaultsConfigFileSystem;
   temporarySuffix?: () => string;
 }
@@ -33,7 +30,6 @@ export function createDefaultsConfigRuntime(options: DefaultsConfigRuntimeOption
   const platform = options.platform ?? process.platform;
   const pathApi = options.pathApi ?? (platform === "win32" ? path.win32 : path);
   const fileSystem = options.fileSystem ?? nodeDefaultsConfigFileSystem;
-  const findRepoRoot = options.findRepoRoot ?? findAuthoringRepoRoot;
   const writeOptions = {
     fileSystem,
     pathApi,
@@ -47,7 +43,6 @@ export function createDefaultsConfigRuntime(options: DefaultsConfigRuntimeOption
       homedir: options.homedir ?? os.homedir,
       pathApi
     }),
-    getProjectConfigPath: (cwd) => getProjectDefaultsConfigPath(cwd, findRepoRoot, pathApi),
     read: (filePath) => readDefaultsConfig(filePath, fileSystem),
     set: (filePath, setting, value, mutationOptions = {}) => setStoredDefault(filePath, setting, value, {
       ...writeOptions,

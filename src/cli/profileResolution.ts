@@ -9,11 +9,10 @@ import type { ResolvedDefault } from "../config/types.js";
 
 export async function resolveCliValidationProfile(
   runtime: DefaultsConfigRuntime,
-  cwd: string,
   bundle: Bundle,
   explicitProfileId?: string
 ): Promise<ResolvedDefault> {
-  const sources = await loadDefaultsSources(runtime, cwd);
+  const sources = await loadDefaultsSources(runtime);
   return resolveDefault({
     setting: "validation_profile_id",
     explicitValue: explicitProfileId,
@@ -31,11 +30,10 @@ export interface ResolvedCliRenderSettings {
 
 export async function resolveCliRenderSettings(
   runtime: DefaultsConfigRuntime,
-  cwd: string,
   bundle: Bundle,
   explicit?: { profileId?: string; detailId?: string }
 ): Promise<ResolvedCliRenderSettings> {
-  const sources = await loadDefaultsSources(runtime, cwd);
+  const sources = await loadDefaultsSources(runtime);
   return {
     profile: resolveDefault({
       setting: "validation_profile_id",

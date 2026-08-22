@@ -13,8 +13,6 @@ beforeAll(async () => {
 
 interface MemoryDefaultsOptions {
   global?: DefaultsConfigV1;
-  project?: DefaultsConfigV1;
-  projectRoot?: string | null;
 }
 
 function createMemoryDefaults(options: MemoryDefaultsOptions = {}): {
@@ -25,11 +23,8 @@ function createMemoryDefaults(options: MemoryDefaultsOptions = {}): {
   unset: ReturnType<typeof vi.fn>;
 } {
   const globalPath = "/user/config/sdd/config.yaml";
-  const projectRoot = options.projectRoot === undefined ? "/repo" : options.projectRoot;
-  const projectPath = projectRoot ? `${projectRoot}/sdd.config.yaml` : undefined;
   const files = new Map<string, DefaultsConfigV1>();
   if (options.global) files.set(globalPath, structuredClone(options.global));
-  if (options.project && projectPath) files.set(projectPath, structuredClone(options.project));
 
   const read = vi.fn(async (filePath: string) => files.get(filePath));
   const set = vi.fn(async (filePath: string, setting: "validation_profile_id" | "render_detail_id", value: string) => {
@@ -55,7 +50,6 @@ function createMemoryDefaults(options: MemoryDefaultsOptions = {}): {
     unset,
     runtime: {
       getGlobalConfigPath: () => globalPath,
-      getProjectConfigPath: vi.fn(async () => projectPath ?? null),
       read,
       set,
       unset
@@ -63,7 +57,7 @@ function createMemoryDefaults(options: MemoryDefaultsOptions = {}): {
   };
 }
 
-function createCliDeps(defaultsConfig: DefaultsConfigRuntime): {
+function createCliDeps(defaultsConfig: DefaultsConfigRuntime, cwd = "/repo/subdir"): {
   deps: Partial<CliDeps>;
   stdout: string[];
   stderr: string[];
@@ -105,7 +99,7 @@ function createCliDeps(defaultsConfig: DefaultsConfigRuntime): {
     renderSource,
     renderSourcePreview,
     deps: {
-      cwd: () => "/repo/subdir",
+      cwd: () => cwd,
       defaultsConfig,
       loadBundle: vi.fn(async () => bundle),
       readSourceInput: vi.fn(async () => ({ path: "/repo/example.sdd", text: "PLACE home" })),
@@ -173,19 +167,9 @@ describe("persistent defaults CLI resolution", () => {
         expectedDetail: "detailed"
       },
       {
-        name: "partial project configuration",
+        name: "full global configuration",
         options: {
-          global: { version: "1" as const, defaults: { render_detail_id: "detailed" } },
-          project: { version: "1" as const, defaults: { validation_profile_id: "strict" } }
-        },
-        extra: [],
-        expectedProfile: "strict",
-        expectedDetail: "detailed"
-      },
-      {
-        name: "full project configuration",
-        options: {
-          project: {
+          global: {
             version: "1" as const,
             defaults: { validation_profile_id: "strict", render_detail_id: "detailed" }
           }
@@ -196,14 +180,24 @@ describe("persistent defaults CLI resolution", () => {
       },
       {
         name: "CLI profile only",
-        options: { project: { version: "1" as const, defaults: { render_detail_id: "detailed" } } },
+        options: {
+          global: {
+            version: "1" as const,
+            defaults: { validation_profile_id: "strict", render_detail_id: "detailed" }
+          }
+        },
         extra: ["--profile", "permissive"],
         expectedProfile: "permissive",
         expectedDetail: "detailed"
       },
       {
         name: "CLI detail only",
-        options: { project: { version: "1" as const, defaults: { validation_profile_id: "strict" } } },
+        options: {
+          global: {
+            version: "1" as const,
+            defaults: { validation_profile_id: "strict", render_detail_id: "compact" }
+          }
+        },
         extra: ["--detail", "detailed"],
         expectedProfile: "strict",
         expectedDetail: "detailed"
@@ -211,7 +205,7 @@ describe("persistent defaults CLI resolution", () => {
       {
         name: "both CLI flags",
         options: {
-          project: {
+          global: {
             version: "1" as const,
             defaults: { validation_profile_id: "strict", render_detail_id: "compact" }
           }
@@ -236,7 +230,7 @@ describe("persistent defaults CLI resolution", () => {
     }
   });
 
-  it("applies bundle, global, project, and explicit profile sources to all five consumers", async () => {
+  it("applies bundle, global, and explicit profile sources to all five consumers", async () => {
     const sourceCases = [
       { name: "bundle", options: {}, expected: "simple", extra: [] },
       {
@@ -246,20 +240,8 @@ describe("persistent defaults CLI resolution", () => {
         extra: []
       },
       {
-        name: "project",
-        options: {
-          global: { version: "1" as const, defaults: { validation_profile_id: "permissive" } },
-          project: { version: "1" as const, defaults: { validation_profile_id: "strict" } }
-        },
-        expected: "strict",
-        extra: []
-      },
-      {
         name: "explicit",
-        options: {
-          global: { version: "1" as const, defaults: { validation_profile_id: "permissive" } },
-          project: { version: "1" as const, defaults: { validation_profile_id: "strict" } }
-        },
+        options: { global: { version: "1" as const, defaults: { validation_profile_id: "permissive" } } },
         expected: "simple",
         extra: ["--profile", "simple"]
       }
@@ -276,7 +258,7 @@ describe("persistent defaults CLI resolution", () => {
     }
   });
 
-  it("applies bundle, global, project, and explicit detail sources to all four rendering consumers", async () => {
+  it("applies bundle, global, and explicit detail sources to all four rendering consumers", async () => {
     const sourceCases = [
       { name: "bundle", options: {}, expected: "compact", extra: [] },
       {
@@ -286,20 +268,8 @@ describe("persistent defaults CLI resolution", () => {
         extra: []
       },
       {
-        name: "project",
-        options: {
-          global: { version: "1" as const, defaults: { render_detail_id: "compact" } },
-          project: { version: "1" as const, defaults: { render_detail_id: "detailed" } }
-        },
-        expected: "detailed",
-        extra: []
-      },
-      {
         name: "explicit",
-        options: {
-          global: { version: "1" as const, defaults: { render_detail_id: "compact" } },
-          project: { version: "1" as const, defaults: { render_detail_id: "compact" } }
-        },
+        options: { global: { version: "1" as const, defaults: { render_detail_id: "compact" } } },
         expected: "detailed",
         extra: ["--detail", "detailed"]
       }
@@ -319,37 +289,35 @@ describe("persistent defaults CLI resolution", () => {
     }
   });
 
-  it("reports an invalid project profile without falling through to valid global configuration", async () => {
+  it("reports an invalid global profile without falling through to the bundle", async () => {
     const memory = createMemoryDefaults({
-      global: { version: "1", defaults: { validation_profile_id: "permissive" } },
-      project: { version: "1", defaults: { validation_profile_id: "unknown" } }
+      global: { version: "1", defaults: { validation_profile_id: "unknown" } }
     });
     const context = createCliDeps(memory.runtime);
     const result = await runCli(["node", "sdd", "validate", "example.sdd"], context.deps);
     expect(result.exitCode).toBe(1);
     expect(context.validateGraph).not.toHaveBeenCalled();
     expect(context.stderr.join("")).toContain("Unknown value 'unknown'");
-    expect(context.stderr.join("")).toContain("/repo/sdd.config.yaml");
+    expect(context.stderr.join("")).toContain("/user/config/sdd/config.yaml");
     expect(context.stderr.join("")).toContain(bundle.manifestPath);
   });
 
-  it("reports an invalid project detail without falling through to valid global configuration", async () => {
+  it("reports an invalid global detail without falling through to the bundle", async () => {
     const memory = createMemoryDefaults({
-      global: { version: "1", defaults: { render_detail_id: "compact" } },
-      project: { version: "1", defaults: { render_detail_id: "unknown" } }
+      global: { version: "1", defaults: { render_detail_id: "unknown" } }
     });
     const context = createCliDeps(memory.runtime);
     const result = await runCli(["node", "sdd", "show", "example.sdd", "--view", "ia_place_map"], context.deps);
     expect(result.exitCode).toBe(1);
     expect(context.renderSourcePreview).not.toHaveBeenCalled();
     expect(context.stderr.join("")).toContain("setting 'render_detail_id'");
-    expect(context.stderr.join("")).toContain("/repo/sdd.config.yaml");
+    expect(context.stderr.join("")).toContain("/user/config/sdd/config.yaml");
     expect(context.stderr.join("")).toContain("Available values: compact, detailed");
   });
 
   it("uses the same persistent detail in show rendering and automatic artifact naming", async () => {
     const memory = createMemoryDefaults({
-      project: { version: "1", defaults: { render_detail_id: "detailed" } }
+      global: { version: "1", defaults: { render_detail_id: "detailed" } }
     });
     const context = createCliDeps(memory.runtime);
     const result = await runCli([
@@ -358,6 +326,26 @@ describe("persistent defaults CLI resolution", () => {
     expect(result.exitCode).toBe(0);
     expect(context.renderSourcePreview.mock.calls[0]?.[2].detailId).toBe("detailed");
     expect(vi.mocked(context.deps.writeTextFile!).mock.calls[0]?.[0]).toBe("/repo/example.ia_place_map.detailed.svg");
+  });
+
+  it("uses only the user configuration regardless of working directory", async () => {
+    const memory = createMemoryDefaults({
+      global: { version: "1", defaults: { validation_profile_id: "permissive" } }
+    });
+    memory.files.set("/repo-a/sdd.config.yaml", {
+      version: "1",
+      defaults: { validation_profile_id: "strict", render_detail_id: "detailed" }
+    });
+
+    for (const cwd of ["/repo-a/subdir", "/repo-b/subdir"]) {
+      const context = createCliDeps(memory.runtime, cwd);
+      expect((await runCli(["node", "sdd", "validate", "example.sdd"], context.deps)).exitCode).toBe(0);
+      expect(context.validateGraph.mock.calls[0]?.[2]).toBe("permissive");
+    }
+    expect(memory.read.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "/user/config/sdd/config.yaml",
+      "/user/config/sdd/config.yaml"
+    ]);
   });
 
   it("fails profile consumers on malformed configuration but leaves compile and add configuration-free", async () => {
@@ -383,33 +371,28 @@ describe("persistent defaults CLI resolution", () => {
 });
 
 describe("sdd defaults commands", () => {
-  it("shows the effective bundle fallback and file-backed provenance deterministically", async () => {
-    const bundleContext = createCliDeps(createMemoryDefaults({ projectRoot: null }).runtime);
-    expect((await runCli(["node", "sdd", "defaults", "show"], bundleContext.deps)).exitCode).toBe(0);
-    expect(bundleContext.stdout.join("")).toBe([
-      `Bundle: ${bundle.manifestPath}`,
-      "Profile: simple",
-      "Profile source: bundle",
-      "Bundle profile fallback: simple",
-      "Detail: compact",
-      "Detail source: bundle",
-      "Bundle detail fallback: compact",
-      ""
-    ].join("\n"));
+  it("makes bare defaults and defaults show equivalent and compact", async () => {
+    for (const suffix of [[], ["show"]]) {
+      const context = createCliDeps(createMemoryDefaults().runtime);
+      expect((await runCli(["node", "sdd", "defaults", ...suffix], context.deps)).exitCode).toBe(0);
+      expect(context.stdout.join("")).toBe(
+        "Profile: simple (bundle fallback)\nDetail: compact (bundle fallback)\n"
+      );
+    }
 
-    const global = createMemoryDefaults({
-      projectRoot: null,
+    const globalContext = createCliDeps(createMemoryDefaults({
       global: { version: "1", defaults: { validation_profile_id: "permissive" } }
-    });
-    const globalContext = createCliDeps(global.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "show"], globalContext.deps)).exitCode).toBe(0);
-    expect(globalContext.stdout.join("")).toContain("Profile source: global\nProfile source path: /user/config/sdd/config.yaml");
+    }).runtime);
+    expect((await runCli(["node", "sdd", "defaults"], globalContext.deps)).exitCode).toBe(0);
+    expect(globalContext.stdout.join("")).toBe(
+      "Profile: permissive (user default)\nDetail: compact (bundle fallback)\n"
+    );
   });
 
-  it("sets, idempotently sets, inspects, and unsets a global profile", async () => {
-    const memory = createMemoryDefaults({ projectRoot: null });
+  it("sets, idempotently sets, inspects, and unsets a user profile", async () => {
+    const memory = createMemoryDefaults();
     const first = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "set", "profile", "strict", "--global"], first.deps)).exitCode).toBe(0);
+    expect((await runCli(["node", "sdd", "defaults", "set", "profile", "strict"], first.deps)).exitCode).toBe(0);
     expect(memory.files.get("/user/config/sdd/config.yaml")?.defaults.validation_profile_id).toBe("strict");
     expect(memory.set).toHaveBeenCalledWith(
       "/user/config/sdd/config.yaml",
@@ -419,47 +402,50 @@ describe("sdd defaults commands", () => {
     );
 
     const second = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "set", "profile", "strict", "--global"], second.deps)).exitCode).toBe(0);
+    expect((await runCli(["node", "sdd", "defaults", "set", "profile", "strict"], second.deps)).exitCode).toBe(0);
     expect(second.stdout.join("")).toContain("no changes made");
 
     const show = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "show", "--global"], show.deps)).exitCode).toBe(0);
-    expect(show.stdout.join("")).toContain("Scope: global\nPath: /user/config/sdd/config.yaml");
-    expect(show.stdout.join("")).toContain("Profile: strict\nProfile validity: valid");
-    expect(show.stdout.join("")).toContain("Detail: unset\nDetail validity: not set");
-
-    const unset = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "unset", "profile", "--global"], unset.deps)).exitCode).toBe(0);
-    expect(memory.files.has("/user/config/sdd/config.yaml")).toBe(false);
-  });
-
-  it("sets and unsets a project profile without requesting global parent creation", async () => {
-    const memory = createMemoryDefaults();
-    const setContext = createCliDeps(memory.runtime);
-    expect((await runCli([
-      "node", "sdd", "defaults", "set", "profile", "permissive", "--project"
-    ], setContext.deps)).exitCode).toBe(0);
-    expect(memory.set).toHaveBeenCalledWith(
-      "/repo/sdd.config.yaml",
-      "validation_profile_id",
-      "permissive",
-      { createParent: false }
+    expect((await runCli(["node", "sdd", "defaults", "show"], show.deps)).exitCode).toBe(0);
+    expect(show.stdout.join("")).toBe(
+      "Profile: strict (user default)\nDetail: compact (bundle fallback)\n"
     );
 
-    const unsetContext = createCliDeps(memory.runtime);
-    expect((await runCli([
-      "node", "sdd", "defaults", "unset", "profile", "--project"
-    ], unsetContext.deps)).exitCode).toBe(0);
-    expect(memory.files.has("/repo/sdd.config.yaml")).toBe(false);
+    const unset = createCliDeps(memory.runtime);
+    expect((await runCli(["node", "sdd", "defaults", "unset", "profile"], unset.deps)).exitCode).toBe(0);
+    expect(memory.files.has("/user/config/sdd/config.yaml")).toBe(false);
   });
 
   it("rejects an unknown profile before mutating configuration", async () => {
     const memory = createMemoryDefaults();
     const context = createCliDeps(memory.runtime);
     expect((await runCli([
-      "node", "sdd", "defaults", "set", "profile", "unknown", "--global"
+      "node", "sdd", "defaults", "set", "profile", "unknown"
     ], context.deps)).exitCode).toBe(1);
     expect(context.stderr.join("")).toContain("Available values: simple, permissive, strict");
+    expect(memory.set).not.toHaveBeenCalled();
+  });
+
+  it("validates a saved value against the explicitly selected bundle", async () => {
+    const memory = createMemoryDefaults();
+    const context = createCliDeps(memory.runtime);
+    const alternateBundle: Bundle = {
+      ...bundle,
+      manifestPath: "/alternate/manifest.yaml",
+      manifest: {
+        ...bundle.manifest,
+        profiles: bundle.manifest.profiles.filter((profile) => profile.id === "simple")
+      }
+    };
+    const result = await runCli([
+      "node", "sdd", "defaults", "set", "profile", "strict", "--bundle", "/alternate/manifest.yaml"
+    ], {
+      ...context.deps,
+      loadBundle: vi.fn(async () => alternateBundle)
+    });
+    expect(result.exitCode).toBe(1);
+    expect(context.stderr.join("")).toContain("Selected bundle: '/alternate/manifest.yaml'");
+    expect(context.stderr.join("")).toContain("Available values: simple");
     expect(memory.set).not.toHaveBeenCalled();
   });
 
@@ -469,7 +455,7 @@ describe("sdd defaults commands", () => {
     });
     const setContext = createCliDeps(memory.runtime);
     expect((await runCli([
-      "node", "sdd", "defaults", "set", "detail", "compact", "--global"
+      "node", "sdd", "defaults", "set", "detail", "compact"
     ], setContext.deps)).exitCode).toBe(0);
     expect(memory.set).toHaveBeenCalledWith(
       "/user/config/sdd/config.yaml",
@@ -479,49 +465,39 @@ describe("sdd defaults commands", () => {
     );
 
     const showContext = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "show", "--global"], showContext.deps)).exitCode).toBe(0);
-    expect(showContext.stdout.join("")).toContain("Detail: compact");
-    expect(showContext.stdout.join("")).toContain("Detail validity: valid");
+    expect((await runCli(["node", "sdd", "defaults", "show"], showContext.deps)).exitCode).toBe(0);
+    expect(showContext.stdout.join("")).toContain("Detail: compact (user default)");
 
     const unsetContext = createCliDeps(memory.runtime);
     const loadBundleMock = vi.fn(async () => bundle);
-    expect((await runCli(["node", "sdd", "defaults", "unset", "detail", "--global"], {
+    expect((await runCli(["node", "sdd", "defaults", "unset", "detail"], {
       ...unsetContext.deps,
       loadBundle: loadBundleMock
     })).exitCode).toBe(0);
     expect(loadBundleMock).not.toHaveBeenCalled();
   });
 
-  it("returns usage failures for invalid scopes and operational failures without a project root", async () => {
-    const memory = createMemoryDefaults({ projectRoot: null });
+  it("rejects the removed scope flags", async () => {
+    const memory = createMemoryDefaults();
     for (const argv of [
-      ["node", "sdd", "defaults", "set", "profile", "simple"],
-      ["node", "sdd", "defaults", "unset", "profile"],
-      ["node", "sdd", "defaults", "show", "--global", "--project"]
-    ]) {
-      const context = createCliDeps(memory.runtime);
-      expect((await runCli(argv, context.deps)).exitCode).toBe(2);
-      expect(context.stderr.join("")).toContain("exactly one defaults scope");
-    }
-
-    for (const argv of [
-      ["node", "sdd", "defaults", "show", "--project"],
+      ["node", "sdd", "defaults", "show", "--global"],
       ["node", "sdd", "defaults", "set", "profile", "simple", "--project"],
-      ["node", "sdd", "defaults", "unset", "profile", "--project"]
+      ["node", "sdd", "defaults", "unset", "profile", "--global"]
     ]) {
       const context = createCliDeps(memory.runtime);
-      expect((await runCli(argv, context.deps)).exitCode).toBe(1);
-      expect(context.stderr.join("")).toContain("no SDD project root");
+      expect((await runCli(argv, context.deps)).exitCode).not.toBe(0);
+      expect(context.stderr.join("")).toContain("unknown option");
     }
   });
 
-  it("reports schema-valid unknown stored values in scoped show", async () => {
+  it("reports schema-valid unknown stored values in show", async () => {
     const memory = createMemoryDefaults({
       global: { version: "1", defaults: { validation_profile_id: "unknown" } }
     });
     const context = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "defaults", "show", "--global"], context.deps)).exitCode).toBe(1);
-    expect(context.stdout.join("")).toContain("Profile: unknown\nProfile validity: invalid");
-    expect(context.stdout.join("")).toContain("simple, permissive, strict");
+    expect((await runCli(["node", "sdd", "defaults", "show"], context.deps)).exitCode).toBe(1);
+    expect(context.stdout.join("")).toBe("");
+    expect(context.stderr.join("")).toContain("Unknown value 'unknown'");
+    expect(context.stderr.join("")).toContain("simple, permissive, strict");
   });
 });

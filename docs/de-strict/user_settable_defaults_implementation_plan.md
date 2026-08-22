@@ -2,7 +2,9 @@
 
 Date: 2026-08-16
 
-Status: Ready for linear execution
+Status: Completed; project-scope behavior superseded on 2026-08-21
+
+> Historical implementation record: Stages 0–5 below describe the architecture as it was originally implemented, including user-global and project-scoped preferences. The subsequent single-scope amendment in [`user_settable_defaults_architecture.md`](user_settable_defaults_architecture.md) removed project defaults, repository-root discovery, and the `--global`/`--project` flags. The execution history is intentionally preserved rather than rewritten as if the original implementation had not occurred.
 
 ## Purpose
 

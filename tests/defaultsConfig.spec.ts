@@ -9,7 +9,6 @@ import {
   createDefaultsConfigRuntime,
   DefaultsConfigError,
   getGlobalDefaultsConfigPath,
-  getProjectDefaultsConfigPath,
   loadDefaultsSources,
   nodeDefaultsConfigFileSystem,
   parseDefaultsConfig,
@@ -121,13 +120,6 @@ describe("defaults configuration paths", () => {
       homedir: () => "C:\\Users\\test"
     })).toThrow("APPDATA");
   });
-
-  it("uses only the discovered repository root for project configuration", async () => {
-    const finder = vi.fn(async () => "/repo/nearest");
-    await expect(getProjectDefaultsConfigPath("/repo/nearest/deep", finder)).resolves.toBe("/repo/nearest/sdd.config.yaml");
-    expect(finder).toHaveBeenCalledWith("/repo/nearest/deep");
-    await expect(getProjectDefaultsConfigPath("/outside", async () => null)).resolves.toBeNull();
-  });
 });
 
 describe("defaults precedence and provenance", () => {
@@ -136,11 +128,6 @@ describe("defaults precedence and provenance", () => {
     global: {
       path: "/user/config.yaml",
       config: { version: "1", defaults: { validation_profile_id: "permissive", render_detail_id: "compact" } }
-    },
-    projectPath: "/repo/sdd.config.yaml",
-    project: {
-      path: "/repo/sdd.config.yaml",
-      config: { version: "1", defaults: { validation_profile_id: "strict" } }
     }
   };
 
@@ -155,10 +142,9 @@ describe("defaults precedence and provenance", () => {
     });
   }
 
-  it("resolves CLI, project, global, and bundle independently with provenance", () => {
+  it("resolves CLI, global, and bundle independently with provenance", () => {
     expect(resolve(baseSources, "simple")).toEqual({ value: "simple", source: "cli" });
-    expect(resolve(baseSources)).toEqual({ value: "strict", source: "project", sourcePath: "/repo/sdd.config.yaml" });
-    expect(resolve({ globalPath: baseSources.globalPath, global: baseSources.global })).toEqual({
+    expect(resolve(baseSources)).toEqual({
       value: "permissive", source: "global", sourcePath: "/user/config.yaml"
     });
     expect(resolve({ globalPath: "/user/config.yaml" })).toEqual({ value: "simple", source: "bundle" });
@@ -167,14 +153,6 @@ describe("defaults precedence and provenance", () => {
 
   it("rejects an invalid value at every source and never falls through", () => {
     expect(() => resolve(baseSources, "unknown")).toThrow(/cli source/);
-    const invalidProject: LoadedDefaultsSources = {
-      ...baseSources,
-      project: {
-        path: "/repo/sdd.config.yaml",
-        config: { version: "1", defaults: { validation_profile_id: "unknown" } }
-      }
-    };
-    expect(() => resolve(invalidProject)).toThrow(/project configuration '\/repo\/sdd.config.yaml'/);
     expect(() => resolve({
       globalPath: "/user/config.yaml",
       global: {
@@ -191,7 +169,6 @@ describe("defaults precedence and provenance", () => {
       platform: "linux",
       env: { XDG_CONFIG_HOME: "/isolated" },
       homedir: () => "/unused",
-      findRepoRoot: async () => "/repo",
       fileSystem: {
         ...nodeDefaultsConfigFileSystem,
         readText: async (filePath) => {
@@ -200,11 +177,10 @@ describe("defaults precedence and provenance", () => {
         }
       }
     });
-    await expect(loadDefaultsSources(runtime, "/repo/subdir")).resolves.toMatchObject({
-      globalPath: "/isolated/sdd/config.yaml",
-      projectPath: "/repo/sdd.config.yaml"
+    await expect(loadDefaultsSources(runtime)).resolves.toMatchObject({
+      globalPath: "/isolated/sdd/config.yaml"
     });
-    expect(reads.sort()).toEqual(["/isolated/sdd/config.yaml", "/repo/sdd.config.yaml"]);
+    expect(reads).toEqual(["/isolated/sdd/config.yaml"]);
   });
 });
 
@@ -282,18 +258,18 @@ describe("defaults configuration mutation", () => {
     });
   });
 
-  it("does not include global or project configuration in bundle fingerprints", async () => {
+  it("does not include global configuration in bundle fingerprints", async () => {
     await withTempDirectory(async (directory) => {
       const bundle = await loadBundle(path.resolve("bundle/v0.1/manifest.yaml"));
       const before = computeBundleFingerprint(bundle);
-      await setStoredDefault(path.join(directory, "sdd.config.yaml"), "validation_profile_id", "strict");
+      await setStoredDefault(path.join(directory, "user-config.yaml"), "validation_profile_id", "strict");
       expect(computeBundleFingerprint(bundle)).toBe(before);
     });
   });
 
   it("leaves direct library rendering configuration-independent", async () => {
     await withTempDirectory(async (directory) => {
-      await setStoredDefault(path.join(directory, "sdd.config.yaml"), "validation_profile_id", "strict");
+      await setStoredDefault(path.join(directory, "user-config.yaml"), "validation_profile_id", "strict");
       const bundle = await loadBundle(path.resolve("bundle/v0.1/manifest.yaml"));
       const sourcePath = path.resolve("bundle/v0.1/examples/outcome_to_ia_trace.sdd");
       const result = renderSource({ path: sourcePath, text: await readFile(sourcePath, "utf8") }, bundle, {

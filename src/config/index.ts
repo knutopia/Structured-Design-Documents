@@ -1,5 +1,5 @@
 export { parseDefaultsConfig, serializeDefaultsConfig } from "./parser.js";
-export { getGlobalDefaultsConfigPath, getProjectDefaultsConfigPath } from "./paths.js";
+export { getGlobalDefaultsConfigPath } from "./paths.js";
 export { createDefaultsConfigRuntime } from "./runtime.js";
 export { loadDefaultsSources, resolveDefault, validateResolvedDefault } from "./resolver.js";
 export {

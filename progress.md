@@ -30,6 +30,7 @@ z
 - Stage 4 done
 - Stage 5 done
 - Correcting documentation. two-level-defaults is too complicated.
+- Simplified defaults
 
 ------
 

@@ -71,7 +71,7 @@ To enable LLM workflow integration with SDD, we recently created a (Codex-) Skil
 
 We also recently transitioned some project documentation from README files in sub-folders of the repo to the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/
 
-The CLI now uses the bundle's `simple` validation-profile fallback and `compact` render-detail fallback, with independent global and project preferences. Validation profiles govern validation only; bundle-owned render detail governs renderer display policy and artifact identity.
+The CLI now uses the bundle's `simple` validation-profile fallback and `compact` render-detail fallback, with one user-global preference scope and per-invocation overrides. Validation profiles govern validation only; bundle-owned render detail governs renderer display policy and artifact identity.
 
 ## Renderer Constraints
 

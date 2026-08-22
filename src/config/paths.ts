@@ -12,8 +12,6 @@ export interface GlobalDefaultsPathOptions {
   pathApi?: DefaultsPathApi;
 }
 
-export type FindDefaultsRepoRoot = (startDir: string) => Promise<string | null>;
-
 export function getGlobalDefaultsConfigPath(options: GlobalDefaultsPathOptions): string {
   const pathApi = options.pathApi ?? (options.platform === "win32" ? path.win32 : path);
   if (options.platform === "win32") {
@@ -35,13 +33,4 @@ export function getGlobalDefaultsConfigPath(options: GlobalDefaultsPathOptions):
     return pathApi.join(home, "Library", "Application Support", "sdd", "config.yaml");
   }
   return pathApi.join(options.env.XDG_CONFIG_HOME || pathApi.join(home, ".config"), "sdd", "config.yaml");
-}
-
-export async function getProjectDefaultsConfigPath(
-  cwd: string,
-  findRepoRoot: FindDefaultsRepoRoot,
-  pathApi: DefaultsPathApi = path
-): Promise<string | null> {
-  const repoRoot = await findRepoRoot(cwd);
-  return repoRoot ? pathApi.join(repoRoot, "sdd.config.yaml") : null;
 }

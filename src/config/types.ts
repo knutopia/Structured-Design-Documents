@@ -1,6 +1,5 @@
 export type DefaultsConfigSetting = "validation_profile_id" | "render_detail_id";
-export type DefaultsConfigSource = "cli" | "project" | "global" | "bundle";
-export type DefaultsConfigScope = "global" | "project";
+export type DefaultsConfigSource = "cli" | "global" | "bundle";
 
 export interface DefaultsConfigValues {
   validation_profile_id?: string;
@@ -20,8 +19,6 @@ export interface LoadedDefaultsConfig {
 export interface LoadedDefaultsSources {
   globalPath: string;
   global?: LoadedDefaultsConfig;
-  projectPath?: string;
-  project?: LoadedDefaultsConfig;
 }
 
 export interface ResolvedDefault<T extends string = string> {
@@ -44,7 +41,6 @@ export type DefaultsConfigErrorCode =
   | "config.unknown_key"
   | "config.invalid_id"
   | "config.unknown_value"
-  | "config.project_root"
   | "config.write";
 
 export class DefaultsConfigError extends Error {
