@@ -31,6 +31,7 @@ z
 - Title-body separation in font tool
 - Enabled hybrid font caching to shrink the local font collection size
 - Recent additions in main README
+- Font tool guidance
 
 ## Fri 8-21
 

@@ -50,17 +50,78 @@
         gap: 1rem;
       }
 
-      .theme-control {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--muted);
+      .theme-switch {
+        position: relative;
+        display: block;
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+        padding: 0;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        background: var(--surface);
         cursor: pointer;
-        white-space: nowrap;
+        transition: border-color 0.25s;
       }
 
-      .theme-control input {
-        accent-color: var(--brand);
+      .theme-switch:hover {
+        border-color: var(--brand);
+      }
+
+      .theme-switch:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--brand) 36%, transparent);
+        outline-offset: 2px;
+      }
+
+      .theme-switch-check {
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        display: block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--text);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+        transition: transform 0.25s;
+      }
+
+      .theme-switch-icon {
+        position: relative;
+        display: block;
+        width: 18px;
+        height: 18px;
+        overflow: hidden;
+      }
+
+      .theme-switch-icon svg {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 12px;
+        height: 12px;
+        fill: none;
+        stroke: var(--surface);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2;
+        transition: opacity 0.25s;
+      }
+
+      .theme-switch-icon .moon {
+        opacity: 0;
+      }
+
+      html[data-theme="dark"] .theme-switch-check {
+        transform: translateX(18px);
+      }
+
+      html[data-theme="dark"] .theme-switch-icon .sun {
+        opacity: 0;
+      }
+
+      html[data-theme="dark"] .theme-switch-icon .moon {
+        opacity: 1;
       }
 
       .font-tools {
@@ -76,21 +137,30 @@
     <main>
       <div class="page-header">
         <h1>Font Explorations</h1>
-        <label class="theme-control" for="dark-mode">
-          <input type="checkbox" id="dark-mode">
-          <span>Dark mode</span>
-        </label>
+        <button type="button" class="theme-switch" id="dark-mode" role="switch" aria-checked="false" aria-label="Switch to dark theme">
+          <span class="theme-switch-check" aria-hidden="true">
+            <span class="theme-switch-icon">
+              <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+              <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9"></path></svg>
+            </span>
+          </span>
+        </button>
       </div>
 
-      <nav class="font-tools" aria-label="Font exploration pages">
+      <nav class="font-tools" aria-label="Font exploration tools">
         <ul>
           <li>
+            Title-body font pairings in a copy of the home page:<br>
             <a href="fonts_in_context.html">Fonts in context</a>
           </li>
           <li>
+            Title fonts side by side:<br>
             <a href="side_by_side_fonts.html">Side-by-side fonts</a>
           </li>
         </ul>
+        These tools do not change live fonts on the site.<br>
+        Choices are persistent though, shared across users.<br>
+        Font list is hardcoded, but can be updated in the source code.
       </nav>
     </main>
     <script>
@@ -98,11 +168,12 @@
       const darkModeToggle = document.getElementById('dark-mode');
 
       function renderAppearance(isDark) {
-        darkModeToggle.checked = isDark;
+        darkModeToggle.setAttribute('aria-checked', String(isDark));
+        darkModeToggle.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
       }
 
-      darkModeToggle.addEventListener('change', event => {
-        appearanceStore.setDark(event.currentTarget.checked);
+      darkModeToggle.addEventListener('click', () => {
+        appearanceStore.setDark(!appearanceStore.isDark());
       });
       appearanceStore.subscribe(renderAppearance);
       renderAppearance(appearanceStore.isDark());
