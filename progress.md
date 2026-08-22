@@ -2,7 +2,9 @@
 
 ## Open Issues
 
--Make "simple" the CLI default
+-Journey map needs a title per journey ("lane"?)... scenario flow too
+-Journey map is not integrated with outcome opportunity map
+
 -Create sdd-info command about a file
 -Update CLI "easy start" paragraph with sdd add
 -fix stale require_event_id_in_recommended in contracts.yaml
@@ -32,10 +34,11 @@ z
 - Correcting documentation. two-level-defaults is too complicated.
 - Simplified defaults
 
-------
+## Thu 8-20
 
+- Examined outcome-opportunity map routing issue with open models
+- Added back to sdd-add using deepseek
 
-------
 ## Sun 8-16
 
 - Added new-document support
@@ -47,7 +50,7 @@ z
 - User-settable defaults implementation plan
 - Stage 0 done
 - Stage 1 done
-- Edited CLI tools page
+- Edited CLI tools page for better sdd-add visibility
 
 ## Sat 8-15
 
