@@ -90,12 +90,11 @@ At the review, `Cancel` performs no verification and writes nothing. `Save` veri
 Examples:
 
 ```bash
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --out ./outcome.svg
-pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --detail detailed --out ./blueprint.svg
+pnpm sdd show real_world_exploration/billSage_example/billSage_structure.sdd --view ia_place_map --detail compact --out ./compact_example.svg
+pnpm sdd show real_world_exploration/billSage_example/billSage_structure.sdd --view ia_place_map --detail detailed --out ./detailed_example.svg
+pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg
 pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
-pnpm sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --profile simple --out ./ui-contracts.svg
 pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
-pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --profile simple --format png --out ./outcome.png
 ```
 
 - Purpose: compile, validate, and generate a preview artifact for a chosen view.
@@ -107,10 +106,12 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map -
 
 When `--profile` or `--detail` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.1 fallbacks are `simple` and `compact`; an explicit option overrides the saved preference for one invocation. Profile controls validation and detail controls rendering independently.
 
-If you omit `--out`, `sdd show` writes the preview beside the input file using the default name `<source>.<view>.<detail>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
+If you omit `--out`, `sdd show` writes the output beside the input file using the default name `<source>.<view>.<detail>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
 
-Detail Choice
-(...)
+### Detail Choice
+
+- `compact`: cleaner, easier-to-scan diagram
+- `detailed`: adds supporting labels and context
 
 == sdd validate
 
@@ -181,7 +182,6 @@ The diagram types in the CLI today are:
 - `journey_map`
 - `service_blueprint`
 
-All six v0.1 "views" (= Diagram Types) are preview-ready through `sdd show`.  
 See [Diagram Types](../diagram_types/) for more information.
 
 ## Suggested Starter Flows
