@@ -28,6 +28,7 @@ z
 ## Sat 8-22
 
 - Font explorer tools improved
+- Title-body separation in font tool
 
 ## Fri 8-21
 

@@ -507,11 +507,21 @@
     const panels = [...document.querySelectorAll('.panel')];
     const appearanceStore = window.SDD_FONT_TOOLS.createAppearanceStore();
     const selectionStore = window.SDD_FONT_TOOLS.createSelectionStore();
+    const ratingStore = window.SDD_FONT_TOOLS.createCombinationRatingStore();
 
     function storedFont(key, fallback) {
       const savedFont = selectionStore.get(key);
       return fonts.some(font => font.name === savedFont) ? savedFont : fallback;
     }
+
+    function storedSize(fallback) {
+      const savedSize = Number(selectionStore.get('side-by-side-size'));
+      return Number.isInteger(savedSize) && savedSize >= 10 && savedSize <= 72
+        ? savedSize
+        : fallback;
+    }
+
+    sizeSlider.value = String(storedSize(Number(sizeSlider.value)));
 
     const state = {
       left: storedFont('side-by-side-left', 'Open Sans'),
@@ -522,11 +532,21 @@
     const preferenceStore = window.SDD_FONT_TOOLS.createPreferenceStore();
 
     function preferenceFor(fontName) {
-      return preferenceStore.get(fontName);
+      return preferenceStore.get(fontName, 'title');
     }
 
     function ratingFor(fontName) {
-      return preferenceFor(fontName).rating;
+      const preference = preferenceFor(fontName);
+      const titleConfiguration = {
+        font: fontName,
+        weight: preference.weight,
+        style: styleFor(fontName),
+        kerning: preference.kerning,
+        naturalTitleSpacing: preference.naturalTitleSpacing
+      };
+      return ratingStore.hasTitle(titleConfiguration)
+        ? ratingStore.getTitle(titleConfiguration)
+        : ratingStore.hasAnyTitle(fontName) ? 0 : preference.rating;
     }
 
     function weightFor(fontName) {
@@ -547,11 +567,32 @@
     }
 
     function updatePreference(fontName, changes) {
-      preferenceStore.update(fontName, changes);
+      preferenceStore.update(fontName, changes, 'title');
     }
 
     function savePreferences() {
       preferenceStore.save();
+    }
+
+    function saveRating(fontName, rating) {
+      const preference = preferenceFor(fontName);
+      const titleConfiguration = {
+        font: fontName,
+        weight: preference.weight,
+        style: styleFor(fontName),
+        kerning: preference.kerning,
+        naturalTitleSpacing: preference.naturalTitleSpacing
+      };
+      const preferredCombination = ratingStore.getPreferredCombinationForTitle(fontName);
+      if (preferredCombination) {
+        ratingStore.set(titleConfiguration, preferredCombination.body, rating);
+      }
+      ratingStore.setTitle({
+        ...titleConfiguration
+      }, rating);
+      ratingStore.save();
+      updatePreference(fontName, { rating });
+      savePreferences();
     }
 
     function saveSelection(side) {
@@ -574,6 +615,20 @@
       option.value = font.name;
       option.textContent = font.name + (rating ? `  ${'★'.repeat(rating)}` : '');
       return option;
+    }
+
+    function anchorSelectedOption(select) {
+      const selectedOption = select.options[select.selectedIndex];
+      if (!selectedOption) return;
+
+      const position = () => {
+        const targetScrollTop = selectedOption.offsetTop
+          - Math.max(0, (select.clientHeight - selectedOption.offsetHeight) / 2);
+        if (Number.isFinite(targetScrollTop)) select.scrollTop = Math.max(0, targetScrollTop);
+        selectedOption.scrollIntoView?.({ block: 'center', inline: 'nearest' });
+      };
+      position();
+      requestAnimationFrame(position);
     }
 
     function updateFontSelect(side) {
@@ -606,6 +661,7 @@
 
       select.appendChild(matchingGroup);
       select.value = currentName;
+      anchorSelectedOption(select);
     }
 
     function updateStyleSelect(side) {
@@ -726,7 +782,18 @@
       });
     }
 
+    function saveSize() {
+      selectionStore.set('side-by-side-size', sizeSlider.value);
+      selectionStore.save();
+    }
+
     document.querySelectorAll('.font-select').forEach(select => {
+      ['focus', 'mousedown', 'click'].forEach(eventName => {
+        select.addEventListener(eventName, () => anchorSelectedOption(select));
+      });
+      select.addEventListener('keydown', () => {
+        window.setTimeout(() => anchorSelectedOption(select), 0);
+      });
       select.addEventListener('change', event => {
         const side = event.currentTarget.id.startsWith('left') ? 'left' : 'right';
         state[side] = event.currentTarget.value;
@@ -746,16 +813,14 @@
       panel.querySelector('.stars').addEventListener('click', event => {
         const star = event.target.closest('.star-button');
         if (!star) return;
-        updatePreference(state[side], { rating: Number(star.dataset.rating) });
-        savePreferences();
+        saveRating(state[side], Number(star.dataset.rating));
         updateMenus();
         updatePanel('left');
         updatePanel('right');
       });
 
       panel.querySelector('.clear-rating').addEventListener('click', () => {
-        updatePreference(state[side], { rating: 0 });
-        savePreferences();
+        saveRating(state[side], 0);
         updateMenus();
         updatePanel('left');
         updatePanel('right');
@@ -796,12 +861,21 @@
       appearanceStore.setDark(event.currentTarget.checked);
     });
 
-    sizeSlider.addEventListener('input', updateTypography);
+    sizeSlider.addEventListener('input', () => {
+      saveSize();
+      updateTypography();
+    });
 
     appearanceStore.subscribe(renderTheme);
     renderTheme(appearanceStore.isDark());
 
     preferenceStore.subscribe(() => {
+      updateMenus();
+      updatePanel('left');
+      updatePanel('right');
+    });
+
+    ratingStore.subscribe(() => {
       updateMenus();
       updatePanel('left');
       updatePanel('right');
