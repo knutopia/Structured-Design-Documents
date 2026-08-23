@@ -3,7 +3,13 @@ import type { Diagnostic, SourceInput, SourceSpan } from "../types.js";
 import { compareDiagnostics } from "../diagnostics/types.js";
 import { classifyLine, statementKindForClassifiedLine, type ClassifiedLine, type LineRecord } from "./classifyLine.js";
 import { parseNodeBlock } from "./parseBlock.js";
-import { createParserSyntaxRuntime, getBlock, getStatement, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import {
+  createParserSyntaxRuntime,
+  getBlock,
+  getStatement,
+  syntaxTextStartsWith,
+  type ParserSyntaxRuntime
+} from "./syntaxRuntime.js";
 import { getCapturePrimary, interpretStatement } from "./statementInterpreter.js";
 import type { BlankLine, CommentLine, ParseDocument, ParseResult } from "./types.js";
 
@@ -117,7 +123,23 @@ function createDocumentDiagnostic(
 }
 
 function isVersionDeclarationCandidate(record: LineRecord, runtime: ParserSyntaxRuntime): boolean {
-  return record.raw.trimStart().startsWith(runtime.syntax.document.version_declaration.literal);
+  return syntaxTextStartsWith(runtime, record.raw.trimStart(), runtime.syntax.document.version_declaration.literal);
+}
+
+function tokenCaseMismatchDiagnostic(
+  input: SourceInput,
+  record: LineRecord,
+  classifiedLine: ClassifiedLine
+): Diagnostic | undefined {
+  const mismatch = classifiedLine.tokenCaseMismatch;
+  return mismatch
+    ? createDiagnostic(
+      input,
+      record,
+      "parse.token_case_mismatch",
+      `Token '${mismatch.actual}' has non-canonical casing; use '${mismatch.canonical}'.`
+    )
+    : undefined;
 }
 
 function parseVersionDeclaration(
@@ -284,6 +306,7 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
     }
 
     diagnostics.push(
+      tokenCaseMismatchDiagnostic(input, record, classifiedLine) ??
       createDiagnostic(
         input,
         record,

@@ -1,6 +1,14 @@
 import type { SyntaxLineClassifierClause, SyntaxLineKindDefinition } from "../bundle/types.js";
 import type { SourceSpan } from "../types.js";
-import { getPattern, getStatement, getTokenSource, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import {
+  findTokenSourceCaseMismatch,
+  getPattern,
+  getStatement,
+  resolveTokenSourceToken,
+  syntaxTextEquals,
+  syntaxTextStartsWith,
+  type ParserSyntaxRuntime
+} from "./syntaxRuntime.js";
 
 export type ClassifiedLineKind = string | "unknown";
 
@@ -16,6 +24,11 @@ export interface ClassifiedLine {
   content: string;
   span: SourceSpan;
   commentText?: string;
+  tokenCaseMismatch?: {
+    actual: string;
+    canonical: string;
+    tokenSource: string;
+  };
 }
 
 function makeSpan(record: LineRecord): SourceSpan {
@@ -92,13 +105,15 @@ function firstToken(text: string): string | undefined {
   return text.trimStart().split(/\s+/, 1)[0] || undefined;
 }
 
-function nextTokenAfterPrefix(text: string, prefix?: string): string | undefined {
+function nextTokenAfterPrefix(text: string, runtime: ParserSyntaxRuntime, prefix?: string): string | undefined {
   const trimmedStart = text.trimStart();
   if (trimmedStart === "") {
     return undefined;
   }
 
-  const remainder = prefix && trimmedStart.startsWith(prefix) ? trimmedStart.slice(prefix.length) : trimmedStart.slice(1);
+  const remainder = prefix && syntaxTextStartsWith(runtime, trimmedStart, prefix)
+    ? trimmedStart.slice(prefix.length)
+    : trimmedStart.slice(1);
   return firstToken(remainder);
 }
 
@@ -124,18 +139,18 @@ function classifierMatches(clause: SyntaxLineClassifierClause, text: string, run
 
   if ("trimmed_equals" in clause) {
     matched = true;
-    matches &&= trimmedText === clause.trimmed_equals;
+    matches &&= syntaxTextEquals(runtime, trimmedText, clause.trimmed_equals);
   }
 
   if ("first_non_whitespace" in clause) {
     matched = true;
-    matches &&= trimmedStart.startsWith(clause.first_non_whitespace);
+    matches &&= syntaxTextStartsWith(runtime, trimmedStart, clause.first_non_whitespace);
   }
 
   if ("first_token_source" in clause) {
     matched = true;
     const token = firstToken(text);
-    matches &&= token !== undefined && getTokenSource(runtime, clause.first_token_source).tokenSet.has(token);
+    matches &&= token !== undefined && resolveTokenSourceToken(runtime, clause.first_token_source, token) !== undefined;
   }
 
   if ("next_token_source" in clause) {
@@ -144,8 +159,8 @@ function classifierMatches(clause: SyntaxLineClassifierClause, text: string, run
       "first_non_whitespace" in clause && typeof clause.first_non_whitespace === "string"
         ? clause.first_non_whitespace
         : undefined;
-    const token = nextTokenAfterPrefix(text, prefix);
-    matches &&= token !== undefined && getTokenSource(runtime, clause.next_token_source).tokenSet.has(token);
+    const token = nextTokenAfterPrefix(text, runtime, prefix);
+    matches &&= token !== undefined && resolveTokenSourceToken(runtime, clause.next_token_source, token) !== undefined;
   }
 
   if ("leading_identifier_before_equals" in clause) {
@@ -156,6 +171,64 @@ function classifierMatches(clause: SyntaxLineClassifierClause, text: string, run
   }
 
   return matched && matches;
+}
+
+function classifierTokenCaseMismatch(
+  clause: SyntaxLineClassifierClause,
+  text: string,
+  runtime: ParserSyntaxRuntime
+): ClassifiedLine["tokenCaseMismatch"] {
+  if ("any_of" in clause) {
+    const matches = clause.any_of
+      .map((candidate) => classifierTokenCaseMismatch(candidate, text, runtime))
+      .filter((candidate): candidate is NonNullable<ClassifiedLine["tokenCaseMismatch"]> => candidate !== undefined);
+    return matches.length === 1 ? matches[0] : undefined;
+  }
+
+  const trimmedText = text.trim();
+  const trimmedStart = text.trimStart();
+  if ("trimmed_equals" in clause && !syntaxTextEquals(runtime, trimmedText, clause.trimmed_equals)) {
+    return undefined;
+  }
+  if ("first_non_whitespace" in clause && !syntaxTextStartsWith(runtime, trimmedStart, clause.first_non_whitespace)) {
+    return undefined;
+  }
+  if (
+    "leading_identifier_before_equals" in clause &&
+    (!clause.leading_identifier_before_equals ||
+      !leadingIdentifierBeforeEquals(trimmedText, getPattern(runtime, "lexical.identifier_pattern")))
+  ) {
+    return undefined;
+  }
+
+  let mismatch: ClassifiedLine["tokenCaseMismatch"];
+  if ("first_token_source" in clause) {
+    const actual = firstToken(text);
+    const canonical = actual
+      ? findTokenSourceCaseMismatch(runtime, clause.first_token_source, actual)
+      : undefined;
+    if (!actual || !canonical) {
+      return undefined;
+    }
+    mismatch = { actual, canonical, tokenSource: clause.first_token_source };
+  }
+
+  if ("next_token_source" in clause) {
+    const prefix =
+      "first_non_whitespace" in clause && typeof clause.first_non_whitespace === "string"
+        ? clause.first_non_whitespace
+        : undefined;
+    const actual = nextTokenAfterPrefix(text, runtime, prefix);
+    const canonical = actual
+      ? findTokenSourceCaseMismatch(runtime, clause.next_token_source, actual)
+      : undefined;
+    if (!actual || !canonical || mismatch) {
+      return undefined;
+    }
+    mismatch = { actual, canonical, tokenSource: clause.next_token_source };
+  }
+
+  return mismatch;
 }
 
 function statementNamesForLineKind(lineKind: SyntaxLineKindDefinition): string[] {
@@ -320,6 +393,19 @@ export function classifyLine(record: LineRecord, runtime: ParserSyntaxRuntime): 
       matched.commentText,
       runtime
     );
+  }
+
+  for (const lineKind of runtime.lineKindsInPrecedenceOrder) {
+    const tokenCaseMismatch = classifierTokenCaseMismatch(lineKind.classifier, record.raw, runtime);
+    if (tokenCaseMismatch) {
+      return {
+        kind: "unknown",
+        lineKindKind: "unknown",
+        content: record.raw.trimEnd(),
+        span,
+        tokenCaseMismatch
+      };
+    }
   }
 
   return {

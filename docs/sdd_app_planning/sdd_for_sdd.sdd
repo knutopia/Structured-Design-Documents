@@ -1,6 +1,10 @@
 SDD-TEXT 0.1
 
 # SDD for SDD
+# Structural Design Document for the Structural Design Documents application
+# covering editing, viewing, comparing SDDs
+# and working with SDDs in the context of the product structure and product variants
+# by linking external content and tracking comments in some form (tbd)
 
 Outcome O-010 "Access to Structural Design Artifacts"
   owner=Product
@@ -43,17 +47,78 @@ Initiative I-012 "SDD Editing"
   owner=Product
   description="Node properties, source order"
   ADDRESSES OP-010 "Low-Friction SDD authoring"
-  IMPLEMENTED_BY C-001 "Source Editor"
-  IMPLEMENTED_BY C-002 "Graphical Editor"
+  IMPLEMENTED_BY C-010 "Source Editor"
+  IMPLEMENTED_BY C-020 "Graphical Editor"
   # IMPLEMENTED_BY P-0 ""
 END
 
-Component C-002 "Graphical Editor"
-  description="Interactive graphical diagram editor"
+Place P-010 "SDD Viewer/Editor"
+  description="Work with SDD content in source and diagram form"
+  CONTAINS P-012 "Source Pane"
+  CONTAINS P-014 "Diagram Pane"
+  CONTAINS P-016 "Inspector Pane"
 END
 
-Component C-001 "Source Editor"
+Place P-012 "Source Pane"
+  description="Source code view"
+  COMPOSED_OF C-010 "Source Editor"
+END
+
+Place P-014 "Diagram Pane"
+  description="Graphical diagram view"
+  COMPOSED_OF C-020 "Graphical Editor"
+  COMPOSED_OF C-070 "View Selector"
+END
+
+Place P-016 "Inspector Pane"
+  description="Conmtext-driven properties view"
+  COMPOSED_OF C-050 "Node Properties Inspector"
+  COMPOSED_OF C-060 "Edge Properties Inspector"
+END
+
+Component C-010 "Source Editor"
   description="SDD source code editor"
+END
+
+Component C-020 "Graphical Editor"
+  description="Interactive graphical diagram editor"
+  CONTAINS C-022 "Node Action Menu"
+  CONTAINS C-024 "Edge Action Menu"
+  CONTAINS C-026 "Selection Actions"
+END
+
+Component C-022 "Node Action Menu"
+  description="Actions for a selected node"
+END
+
+Component C-024 "Edge Action Menu"
+  description="Actions for a selected edge"
+END
+
+Component C-026 "Selection Actions"
+  description="Contextual actions for selected nodes and edges"
+END
+
+Component C-050 "Node Properties Inspector"
+  description="Properties for a selected node"
+END
+
+Component C-060 "Edge Properties Inspector"
+  description="Properties for a selected edge"
+END
+
+Component C-070 "View Selector"
+  description="Manages different views of the SDD"
+  CONTAINS C-071 "Diagram Type Selector"
+  CONTAINS C-072 "View Mode Selector"
+END
+
+Component C-071 "Diagram Type Selector"
+  description="Select from the diagrams available for the current SDD file"
+END
+
+Component C-072 "View Mode Selector"
+  description="Overlay, side-by-side, diff"
 END
 
 Opportunity OP-020 "Low-Friction SDD consumption"
@@ -66,6 +131,8 @@ Initiative I-020 "Diagram Navigation"
   owner=Product
   description="Pan & zoom, node-pivot, view management"
   ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY C-022 "Node Action Menu"
+  IMPLEMENTED_BY C-070 "View Selector"
   # IMPLEMENTED_BY P-0 ""
 END
 
@@ -73,14 +140,15 @@ Initiative I-021 "Diagram Comparison"
   owner=Product
   description="Overlay, side-by-side, diff"
   ADDRESSES OP-020 "Low-Friction SDD consumption"
-  # IMPLEMENTED_BY P-0 ""
+  IMPLEMENTED_BY C-072 "View Mode Selector"
 END
 
 Initiative I-022 "Annotation and Linking"
   owner=Product
   description="Add annotations and links, SDD diagrams, states, roll-ups"
   ADDRESSES OP-020 "Low-Friction SDD consumption"
-  # IMPLEMENTED_BY P-0 ""
+  IMPLEMENTED_BY C-022 "Node Action Menu"
+  IMPLEMENTED_BY P-016 "Inspector Pane"
 END
 
 Initiative I-030 "Infrastructure"
@@ -93,4 +161,69 @@ END
 
 Stage G-001 "Maintain Product Map"
   description="Maintain a map of the existing product"
+END
+
+Step J-010 "Select a Node"
+  description="Select a Node in Source viewer or in Diagram viewer"
+  PRECEDES J-020 "Review Diagrams Using Current Node"
+  PRECEDES J-040 "Add Relationship"
+END
+
+Step J-040 "Add Relationship"
+  description="Add a relationship to an existing node"
+  PRECEDES J-041 "Add relationship, by node"
+  PRECEDES J-042 "Add outgoing relationship, by type"
+  PRECEDES J-043 "Add outgoing relationship, by node"
+  PRECEDES J-044 "Add incoming relationship, by type"
+  PRECEDES J-045 "Add incoming relationship, by node"
+END
+
+Step J-041 "Add relationship, by node"
+  description="Add relationship, by choosing another node first (incoming or outgoing)"
+END
+
+Step J-042 "Add outgoing relationship, by type"
+  description="Add outgoing relationship, by choosing the relationship type first"
+END
+
+Step J-043 "Add outgoing relationship, by node"
+  description="Add outgoing relationship, by choosing a target node first"
+END
+
+Step J-044 "Add incoming relationship, by type"
+  description="Add incoming relationship, by choosing the relationship type first"
+END
+
+Step J-045 "Add incoming relationship, by node"
+  description="Add incoming relationship, by choosing a target node first"
+END
+
+Step J-020 "Review Diagrams Using Current Node"
+  description="See the set of diagrams in which the current node appears"
+  PRECEDES J-021 "Select Diagram"
+END
+
+Step J-021 "Select Diagram"
+  description="Choose a diagram in which the node is used"
+  PRECEDES J-022 "View Node in New Diagram Context"
+END
+
+Step J-022 "View Node in New Diagram Context"
+  description="View the chosen diagram using the current node"
+END
+
+Step J-030 "Select Diagram Content"
+  description="Select a node or multiple nodes in a diagram"
+  PRECEDES J-031 "Adjust View"
+  PRECEDES J-032 "Name the New View"
+END
+
+Step J-031 "Adjust View"
+  description="Make the view just right"
+  opportunity_refs="OP-020"
+  PRECEDES J-032 "Name the New View"
+END
+
+Step J-032 "Name the New View"
+  description="Enter a name for the new view"
 END

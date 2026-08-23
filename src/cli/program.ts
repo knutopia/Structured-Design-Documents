@@ -151,6 +151,14 @@ function normalizeDiagnosticsFormat(value: string): DiagnosticsFormat {
   return value === "json" ? "json" : "pretty";
 }
 
+function formatValidationSummary(graph: NonNullable<CompileResult["graph"]>): string {
+  const nodeCount = graph.nodes.length;
+  const edgeCount = graph.edges.length;
+  return `Validated ${nodeCount} node${nodeCount === 1 ? "" : "s"} and ${edgeCount} edge${
+    edgeCount === 1 ? "" : "s"
+  }.`;
+}
+
 function writeDiagnostics(io: Pick<CliDeps, "stderr">, diagnostics: Diagnostic[], format: DiagnosticsFormat): void {
   if (diagnostics.length === 0) {
     return;
@@ -348,8 +356,13 @@ async function runValidate(
     if (compileResult.graph && !hasErrors(diagnostics)) {
       diagnostics.push(...deps.validateGraph(compileResult.graph, bundle, profileId).diagnostics);
     }
-    writeDiagnostics(deps, diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
-    return hasErrors(diagnostics) ? 1 : 0;
+    const diagnosticsFormat = normalizeDiagnosticsFormat(options.diagnostics);
+    const failed = hasErrors(diagnostics);
+    writeDiagnostics(deps, diagnostics, diagnosticsFormat);
+    if (compileResult.graph && !failed && diagnosticsFormat === "pretty") {
+      deps.stdout(appendLine(formatValidationSummary(compileResult.graph)));
+    }
+    return failed ? 1 : 0;
   } catch (error) {
     deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
     return 1;

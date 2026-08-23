@@ -119,7 +119,9 @@ If you omit `--out`, `sdd show` writes the output beside the input file using th
 - Use when: you want to check whether a document passes profile expectations, or you want to see what metadata or structure is still missing.
 - Invocation: `pnpm sdd validate <input>`
 - Key inputs: an input `.sdd` file, with optional `--profile`.
-- Output: validation feedback and diagnostics in terminal output.
+- Output: validation feedback and diagnostics in terminal output. A successful default-format run writes
+  `Validated N nodes and M edges.` to stdout, including when non-blocking warnings are present. The human
+  summary is suppressed with `--diagnostics json` so machine-oriented output remains free of plain text.
 
 This is a good next step after drafting. A common pattern is to start by getting the structure right under `simple`, then move to `permissive` or `strict` as the document becomes more complete.
 

@@ -4,6 +4,7 @@
 
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
+-Need a way to connect a flow to a component
 
 -Create sdd-info command about a file
 -Update CLI "easy start" paragraph with sdd add
@@ -24,6 +25,12 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Sun 8-23
+
+- sdd-for-sdd concept work
+- Edge case-mismatch output for parser/validator
+- Dummary output for validator
 
 ## Sat 8-22
 

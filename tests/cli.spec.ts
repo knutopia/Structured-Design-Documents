@@ -1,4 +1,5 @@
 import type { Bundle } from "../src/bundle/types.js";
+import type { CompiledGraph } from "../src/compiler/types.js";
 import { describe, expect, it, vi } from "vitest";
 import { createProgram, runCli, type CliDeps } from "../src/cli/program.js";
 import { createMockSyntaxConfig } from "./mockSyntaxConfig.js";
@@ -151,6 +152,29 @@ const bundle: Bundle = {
   },
   profiles: {}
 };
+
+function createCompiledGraph(nodeCount: number, edgeCount: number): CompiledGraph {
+  return {
+    schema: "sdd-text",
+    version: "0.1",
+    nodes: Array.from({ length: nodeCount }, (_, index) => ({
+      id: `P-${String(index + 1).padStart(3, "0")}`,
+      type: "Place",
+      name: `Place ${index + 1}`,
+      props: {}
+    })),
+    edges: Array.from({ length: edgeCount }, (_, index) => ({
+      from: "P-001",
+      type: "NAVIGATES_TO",
+      to: `P-${String(index + 2).padStart(3, "0")}`,
+      to_name: null,
+      event: null,
+      guard: null,
+      effect: null,
+      props: {}
+    }))
+  };
+}
 
 function createDeps(overrides: Partial<CliDeps> = {}): {
   deps: Partial<CliDeps>;
@@ -1117,7 +1141,7 @@ describe("CLI wrappers", () => {
   });
 
   it("validate pretty diagnostics include the json hint exactly once", async () => {
-    const { deps, stderr } = createDeps({
+    const { deps, stdout, stderr } = createDeps({
       validateGraph: vi.fn(() => ({
         diagnostics: [
           {
@@ -1147,10 +1171,20 @@ describe("CLI wrappers", () => {
     expect(stderrText).toContain("WARN validate.warning (1 instance): warning text");
     expect(stderrText).toContain(`\n\n${jsonDiagnosticsHint}\n`);
     expect(countOccurrences(stderrText, jsonDiagnosticsHint)).toBe(1);
+    expect(stdout.join("")).toBe("Validated 0 nodes and 0 edges.\n");
   });
 
-  it("validate without diagnostics does not print the json hint", async () => {
-    const { deps, stderr } = createDeps();
+  it.each([
+    [0, 0, "Validated 0 nodes and 0 edges.\n"],
+    [1, 1, "Validated 1 node and 1 edge.\n"],
+    [12, 17, "Validated 12 nodes and 17 edges.\n"]
+  ] as const)("summarizes a successful graph with %i nodes and %i edges", async (nodeCount, edgeCount, expected) => {
+    const { deps, stdout, stderr } = createDeps({
+      compileSource: vi.fn(() => ({
+        diagnostics: [],
+        graph: createCompiledGraph(nodeCount, edgeCount)
+      }))
+    });
     const result = await runCli([
       "node",
       "sdd",
@@ -1161,8 +1195,70 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
+    expect(stdout.join("")).toBe(expected);
     expect(stderr.join("")).not.toContain(jsonDiagnosticsHint);
   });
+
+  it("does not summarize a validation error", async () => {
+    const { deps, stdout } = createDeps({
+      validateGraph: vi.fn(() => ({
+        diagnostics: [{
+          stage: "validate",
+          code: "validate.failed",
+          severity: "error",
+          message: "validation failed",
+          file: "/repo/example.sdd"
+        }],
+        errorCount: 1,
+        warningCount: 0
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "validate",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(stdout.join("")).toBe("");
+  });
+
+  it.each([false, true])(
+    "keeps json validation free of a human summary when warnings=%s",
+    async (withWarning) => {
+      const diagnostics = withWarning
+        ? [{
+          stage: "validate" as const,
+          code: "validate.warning",
+          severity: "warn" as const,
+          message: "warning text",
+          file: "/repo/example.sdd"
+        }]
+        : [];
+      const { deps, stdout, stderr } = createDeps({
+        validateGraph: vi.fn(() => ({
+          diagnostics,
+          errorCount: 0,
+          warningCount: diagnostics.length
+        }))
+      });
+
+      const result = await runCli([
+        "node",
+        "sdd",
+        "validate",
+        "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+        "--diagnostics",
+        "json"
+      ], deps);
+
+      expect(result.exitCode).toBe(0);
+      expect(stdout.join("")).toBe("");
+      expect(stderr.join("")).toBe(withWarning ? `${JSON.stringify(diagnostics, null, 2)}\n` : "");
+    }
+  );
 
   it("render supports json diagnostics output", async () => {
     const { deps, stderr } = createDeps({

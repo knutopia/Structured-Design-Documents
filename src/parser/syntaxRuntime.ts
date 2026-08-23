@@ -19,6 +19,7 @@ export interface ResolvedTokenSource {
   entries: Array<Record<string, unknown>>;
   tokens: string[];
   tokenSet: Set<string>;
+  tokensByFoldedValue: Map<string, string[]>;
 }
 
 export interface ParserSyntaxRuntime {
@@ -75,14 +76,68 @@ function resolveTokenSource(bundle: Bundle, name: string, config: SyntaxTokenSou
   const tokens = entries
     .map((entry) => entry[config.token_field])
     .filter((value): value is string => typeof value === "string");
+  const tokensByFoldedValue = new Map<string, string[]>();
+  for (const token of tokens) {
+    const folded = token.toLowerCase();
+    tokensByFoldedValue.set(folded, [...(tokensByFoldedValue.get(folded) ?? []), token]);
+  }
 
   return {
     name,
     config,
     entries,
     tokens,
-    tokenSet: new Set(tokens)
+    tokenSet: new Set(tokens),
+    tokensByFoldedValue
   };
+}
+
+export function syntaxTextEquals(runtime: ParserSyntaxRuntime, left: string, right: string): boolean {
+  return runtime.syntax.parsing_model.case_sensitive
+    ? left === right
+    : left.toLowerCase() === right.toLowerCase();
+}
+
+export function syntaxTextStartsWith(
+  runtime: ParserSyntaxRuntime,
+  text: string,
+  expected: string,
+  cursor = 0
+): boolean {
+  const candidate = text.slice(cursor, cursor + expected.length);
+  return syntaxTextEquals(runtime, candidate, expected);
+}
+
+export function resolveTokenSourceToken(
+  runtime: ParserSyntaxRuntime,
+  tokenSourceName: string,
+  candidate: string
+): string | undefined {
+  const tokenSource = getTokenSource(runtime, tokenSourceName);
+  if (runtime.syntax.parsing_model.case_sensitive) {
+    return tokenSource.tokenSet.has(candidate) ? candidate : undefined;
+  }
+
+  const matches = tokenSource.tokensByFoldedValue.get(candidate.toLowerCase()) ?? [];
+  return matches.length === 1 ? matches[0] : undefined;
+}
+
+export function findTokenSourceCaseMismatch(
+  runtime: ParserSyntaxRuntime,
+  tokenSourceName: string,
+  candidate: string
+): string | undefined {
+  if (!runtime.syntax.parsing_model.case_sensitive) {
+    return undefined;
+  }
+
+  const tokenSource = getTokenSource(runtime, tokenSourceName);
+  if (tokenSource.tokenSet.has(candidate)) {
+    return undefined;
+  }
+
+  const matches = tokenSource.tokensByFoldedValue.get(candidate.toLowerCase()) ?? [];
+  return matches.length === 1 ? matches[0] : undefined;
 }
 
 function buildPatterns(syntax: SyntaxConfig): Map<string, RegExp> {

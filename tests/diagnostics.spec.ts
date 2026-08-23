@@ -38,6 +38,28 @@ function createDiagnostic(overrides: Partial<Diagnostic> = {}): Diagnostic {
 }
 
 describe("diagnostics", () => {
+  it("groups repeated token-case diagnostics while retaining every source location", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const file = "/repo/lowercase-edges.sdd";
+    const result = compileSource({
+      path: file,
+      text: `Place P-010 "Source"
+  composed_of C-010 "One"
+  composed_of C-020 "Two"
+  composed_of C-030 "Three"
+END
+`
+    }, bundle);
+
+    expect(formatPrettyDiagnostics(result.diagnostics)).toBe([
+      file,
+      "  ERROR parse.token_case_mismatch (3 instances): Token 'composed_of' has non-canonical casing; use 'COMPOSED_OF'.",
+      "    2:1",
+      "    3:1",
+      "    4:1"
+    ].join("\n"));
+  });
+
   it("reports syntax diagnostics for missing END", async () => {
     const bundle = await loadBundle(manifestPath);
     const result = compileSource(await fixtureInput("missing_end.sdd"), bundle);

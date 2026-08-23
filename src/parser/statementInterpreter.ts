@@ -7,7 +7,14 @@ import type {
   SyntaxWhitespaceSequenceItem
 } from "../bundle/types.js";
 import { stripTrailingComment } from "./classifyLine.js";
-import { getAtom, getPattern, getStatement, getTokenSource, type ParserSyntaxRuntime } from "./syntaxRuntime.js";
+import {
+  getAtom,
+  getPattern,
+  getStatement,
+  getTokenSource,
+  syntaxTextStartsWith,
+  type ParserSyntaxRuntime
+} from "./syntaxRuntime.js";
 
 export interface ParsedCaptureValue {
   value: unknown;
@@ -269,7 +276,7 @@ function parseTokenSourceCandidates(
   const tokenSource = getTokenSource(runtime, tokenSourceName);
   return [...tokenSource.tokens]
     .sort((left, right) => right.length - left.length)
-    .filter((token) => text.startsWith(token, cursor))
+    .filter((token) => syntaxTextStartsWith(runtime, text, token, cursor))
     .map((token) => ({
       nextCursor: cursor + token.length,
       value: {
@@ -516,7 +523,7 @@ function advanceSequenceItem(
   runtime: ParserSyntaxRuntime
 ): ParseState[] {
   if ("literal" in item) {
-    return text.startsWith(item.literal, state.cursor)
+    return syntaxTextStartsWith(runtime, text, item.literal, state.cursor)
       ? [{ ...state, cursor: state.cursor + item.literal.length }]
       : [];
   }
