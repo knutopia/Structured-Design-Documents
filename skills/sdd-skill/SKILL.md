@@ -56,6 +56,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 - Use `contract --resolve bundle` only when active bundle-owned values such as `<view_id>`, `<profile_id>`, or `<detail_id>` are needed and not already known.
 - For create, make, generate, render, draw, show, display, or view diagram requests, produce a saved file artifact by default.
 - Use `sdd show` for saved user-facing diagram artifacts.
+- When the user explicitly requests every applicable diagram type, use `sdd show --view all`; detail-aware empty views are skipped and explicit output names receive per-view modifiers.
 - Use helper `preview` only for transient helper output, raw artifact access, or a chat-safe `artifact_path` for inline image display.
 - If no output path is specified, save beside the `.sdd`; do not invent a new output directory.
 - Render only from a committed persisted state whose returned assessment says `assessment.can_render` is true.

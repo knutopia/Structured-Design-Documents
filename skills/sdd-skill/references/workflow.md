@@ -176,6 +176,8 @@ TMPDIR=/tmp pnpm sdd show <document_path> \
 
 If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
 
+When the user explicitly asks for every applicable diagram type, use `--view all` after the persisted document passes the intended validation gate. The command skips views with no visible semantic content at the selected detail. If `--out` is present, treat it as a template whose filename receives each generated view ID; do not combine this mode with `--dot-out`.
+
 Use one of these branches and stop after the one that matches the final response:
 
 File-link-only branch:
@@ -319,6 +321,8 @@ TMPDIR=/tmp pnpm sdd show <document_path> \
 ```
 
 If the user did not request a specific output path, let `sdd show` write beside the `.sdd` using its default sibling filename `<source>.<view>.<detail>[.<backend>].<format>`. If the prompt names a destination or filename, pass `--out` and honor it. Do not create a new output directory unless the user explicitly named that directory in the requested output path.
+
+For an explicit request to render every applicable diagram type, use `--view all`. Applicability is resolved after detail policy, so views without visible semantic content are skipped. An explicit `--out` is a filename template with per-view modifiers, and `--dot-out` remains single-view only.
 
 If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering. A preview matches only when it came from the same document, committed revision, view, profile, detail, format, and backend in the same workflow context. If matching metadata is unavailable, use `sdd show` instead of copying. The default durable path still stays beside the `.sdd`.
 

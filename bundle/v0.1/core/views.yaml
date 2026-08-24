@@ -510,6 +510,9 @@ views:
         - id: include_edge_only_when_both_endpoints_included
           description: Edge is included only if both endpoints pass node-type filter.
       renderer_defaults:
+        batch_applicability:
+          kind: visible_semantic_node_count
+          minimum: 1
         semantic_columns:
           fixed_order:
             - id: initiative
@@ -1071,6 +1074,9 @@ views:
         - id: stage_step_hierarchy
           description: Stage CONTAINS Step edges define hierarchy.
       renderer_defaults:
+        batch_applicability:
+          kind: visible_semantic_node_count
+          minimum: 1
         reference_annotations:
           source_prop: opportunity_refs
           target_type: Opportunity
@@ -1562,6 +1568,9 @@ views:
         - id: process_sequence
           description: PRECEDES edges provide optional process ordering overlays.
       renderer_defaults:
+        batch_applicability:
+          kind: visible_semantic_node_count
+          minimum: 1
         lane_mapping:
           lane_order: [customer, frontstage, backstage, support, system, policy]
           process_visibility_values: [frontstage, backstage, support]
@@ -2061,6 +2070,9 @@ views:
         - id: source_order_place_chains
           description: At any rendered structural level, consecutive sibling Place nodes form an author-ordered lower-level place chain (siblings on the same lower level, not recursively lower) until a non-Place sibling boundary breaks the chain.
       renderer_defaults:
+        batch_applicability:
+          kind: visible_semantic_node_count
+          minimum: 1
         node_annotations:
           subtitle_prop: route_or_key
           badge_prop: access
@@ -2557,6 +2569,9 @@ views:
         - id: step_ordering_primary
           description: PRECEDES on Step is the primary flow spine.
       renderer_defaults:
+        batch_applicability:
+          kind: visible_semantic_node_count
+          minimum: 1
         decision_nodes:
           kind_prop: kind
           decision_value: decision
@@ -3082,6 +3097,9 @@ views:
         - id: ui_contract_scope
           description: Place and ViewState are containers for component and transition contracts.
       renderer_defaults:
+        batch_applicability:
+          kind: visible_semantic_node_count
+          minimum: 1
         transition_graph_priority:
           primary: ViewState
           secondary: State

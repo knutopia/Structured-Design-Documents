@@ -11,7 +11,7 @@ import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/wo
 import { loadBundle } from "../bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import { compileSource } from "../compiler/compileSource.js";
-import type { CompileResult } from "../compiler/types.js";
+import type { CompiledGraph, CompileResult } from "../compiler/types.js";
 import { formatJsonDiagnostics } from "../diagnostics/formatJson.js";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
 import { hasErrors } from "../diagnostics/types.js";
@@ -22,7 +22,11 @@ import {
   type RenderPreviewArtifactRequest
 } from "../renderer/previewBackends.js";
 import {
+  prepareCompiledGraphPreview,
+  renderPreparedCompiledGraphPreview,
   renderSourcePreview,
+  type CompiledPreviewRenderOptions,
+  type PreparedCompiledGraphPreview,
   type SourcePreviewRenderResult
 } from "../renderer/previewWorkflow.js";
 import { renderSource } from "../renderer/renderView.js";
@@ -40,7 +44,11 @@ import {
   type TextRenderFormat,
   type ViewRenderCapability
 } from "../renderer/viewRenderers.js";
-import { buildShowPreviewOutputPath } from "../previewArtifactPaths.js";
+import {
+  buildExplicitBatchPreviewOutputPath,
+  buildShowPreviewOutputPath
+} from "../previewArtifactPaths.js";
+import { isBatchApplicable } from "../renderer/prepareProjectionForRender.js";
 import type { Diagnostic, RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import type { ValidationReport } from "../validator/types.js";
@@ -75,6 +83,18 @@ export interface CliDeps extends GuidedAdditionCliDeps {
     detailId: string;
     backendId?: PreviewRendererBackendId;
   }) => Promise<SourcePreviewRenderResult>;
+  prepareCompiledGraphPreview: (
+    sourcePath: string,
+    graph: CompiledGraph,
+    bundle: Bundle,
+    options: CompiledPreviewRenderOptions
+  ) => PreparedCompiledGraphPreview;
+  renderPreparedCompiledGraphPreview: (
+    sourcePath: string,
+    graph: CompiledGraph,
+    bundle: Bundle,
+    prepared: PreparedCompiledGraphPreview
+  ) => Promise<SourcePreviewRenderResult>;
   writeTextFile: (outputPath: string, content: string) => Promise<void>;
   writeBinaryFile: (outputPath: string, content: Uint8Array) => Promise<void>;
   renderPreviewArtifact: (request: RenderPreviewArtifactRequest) => Promise<PreviewArtifactResult>;
@@ -128,6 +148,8 @@ function createDefaultDeps(): CliDeps {
     validateGraph,
     renderSource,
     renderSourcePreview,
+    prepareCompiledGraphPreview,
+    renderPreparedCompiledGraphPreview,
     writeTextFile: defaultWriteTextFile,
     writeBinaryFile: defaultWriteBinaryFile,
     renderPreviewArtifact,
@@ -514,6 +536,172 @@ function resolveShowPreviewCapability(
   });
 }
 
+interface ShowAllCandidate {
+  view: ViewSpec;
+  capability: ViewRenderCapability;
+  previewCapability: NonNullable<ReturnType<typeof resolveShowPreviewCapability>>;
+}
+
+async function runShowAllCommand(
+  deps: CliDeps,
+  bundle: Bundle,
+  input: SourceInput,
+  options: {
+    profileId: string;
+    detailId: string;
+    format: PreviewFormat;
+    backendId?: PreviewRendererBackendId;
+    out?: string;
+    diagnostics: string;
+  }
+): Promise<number> {
+  const candidates: ShowAllCandidate[] = bundle.views.views.flatMap((view) => {
+    if (view.status !== "operational") return [];
+    const capability = getViewRenderCapability(view.id);
+    if (!capability || !getSupportedPreviewFormats(capability).includes(options.format)) return [];
+    const previewCapability = resolveShowPreviewCapability(
+      capability,
+      options.format,
+      options.backendId,
+      false
+    );
+    return previewCapability ? [{ view, capability, previewCapability }] : [];
+  });
+
+  if (options.backendId) {
+    const backendIncompatible = bundle.views.views.flatMap((view) => {
+      if (view.status !== "operational") return [];
+      const capability = getViewRenderCapability(view.id);
+      if (!capability || !getSupportedPreviewFormats(capability).includes(options.format)) return [];
+      return getPreviewArtifactCapability(capability, options.format, options.backendId) ? [] : [view.id];
+    });
+    if (backendIncompatible.length > 0) {
+      deps.stderr(appendLine(
+        `Preview backend '${options.backendId}' is not supported for every available ${options.format} view. Incompatible views: ${formatList(backendIncompatible)}.`
+      ));
+      return 2;
+    }
+  }
+
+  if (candidates.length === 0) {
+    deps.stderr(appendLine(`No operational renderable views support preview format '${options.format}'.`));
+    return 2;
+  }
+
+  const compileResult = deps.compileSource(input, bundle);
+  const sourceDiagnostics = [...compileResult.diagnostics];
+  if (!compileResult.graph || hasErrors(sourceDiagnostics)) {
+    writeDiagnostics(deps, sourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+    return 1;
+  }
+  const validation = deps.validateGraph(compileResult.graph, bundle, options.profileId);
+  sourceDiagnostics.push(...validation.diagnostics);
+  if (validation.errorCount > 0) {
+    writeDiagnostics(deps, sourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+    return 1;
+  }
+
+  const preparedCandidates = candidates.map((candidate) => ({
+    candidate,
+    prepared: deps.prepareCompiledGraphPreview(input.path, compileResult.graph!, bundle, {
+      viewId: candidate.view.id,
+      format: options.format,
+      profileId: options.profileId,
+      detailId: options.detailId,
+      backendId: candidate.previewCapability.backendId
+    })
+  }));
+  const preparationDiagnostics = preparedCandidates.flatMap(({ prepared }) => prepared.diagnostics);
+  if (hasErrors(preparationDiagnostics)) {
+    writeDiagnostics(
+      deps,
+      [...sourceDiagnostics, ...preparationDiagnostics],
+      normalizeDiagnosticsFormat(options.diagnostics)
+    );
+    return 1;
+  }
+
+  const applicable = preparedCandidates.filter(({ candidate, prepared }) =>
+    prepared.prepared && isBatchApplicable(candidate.view, prepared.prepared)
+  );
+  const skipped = preparedCandidates.filter(({ candidate, prepared }) =>
+    !prepared.prepared || !isBatchApplicable(candidate.view, prepared.prepared)
+  );
+
+  if (applicable.length === 0) {
+    writeDiagnostics(
+      deps,
+      [...sourceDiagnostics, ...preparationDiagnostics],
+      normalizeDiagnosticsFormat(options.diagnostics)
+    );
+    for (const { prepared } of skipped) writeNotes(deps, prepared.prepared?.notes ?? []);
+    deps.stderr(appendLine(
+      `No applicable diagrams found for detail '${options.detailId}'. Considered ${candidates.length} view(s).`
+    ));
+    return 0;
+  }
+
+  const outputEntries = applicable.map(({ candidate, prepared }) => ({
+    candidate,
+    prepared,
+    outputPath: options.out
+      ? buildExplicitBatchPreviewOutputPath(options.out, candidate.view.id)
+      : buildShowPreviewOutputPath(input.path, {
+        viewId: candidate.view.id,
+        detailId: options.detailId,
+        format: options.format,
+        backendId: options.backendId ? candidate.previewCapability.backendId : undefined
+      })
+  }));
+  const outputPaths = outputEntries.map(({ outputPath }) => path.resolve(outputPath));
+  if (new Set(outputPaths).size !== outputPaths.length) {
+    deps.stderr(appendLine("Batch preview output paths collide after view modifiers are applied."));
+    return 2;
+  }
+
+  const renderedEntries: Array<{
+    outputPath: string;
+    result: SourcePreviewRenderResult;
+  }> = [];
+  for (const entry of outputEntries) {
+    try {
+      const result = await deps.renderPreparedCompiledGraphPreview(
+        input.path,
+        compileResult.graph,
+        bundle,
+        entry.prepared
+      );
+      renderedEntries.push({ outputPath: entry.outputPath, result });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      deps.stderr(appendLine(appendInstallHint(message, entry.candidate.previewCapability.backendId)));
+      return 1;
+    }
+  }
+
+  const renderDiagnostics = renderedEntries.flatMap(({ result }) => result.diagnostics);
+  const allDiagnostics = [
+    ...sourceDiagnostics,
+    ...skipped.flatMap(({ prepared }) => prepared.diagnostics),
+    ...renderDiagnostics
+  ];
+  writeDiagnostics(deps, allDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+  if (hasErrors(renderDiagnostics) || renderedEntries.some(({ result }) => !result.artifact)) {
+    return 1;
+  }
+
+  for (const { outputPath, result } of renderedEntries) {
+    writeNotes(deps, result.notes);
+    await writePreviewOutput(deps, outputPath, result.artifact!);
+    announceFileWrite(deps, outputPath);
+  }
+  const skippedSuffix = skipped.length > 0
+    ? ` Skipped ${skipped.length} without visible content: ${formatList(skipped.map(({ candidate }) => candidate.view.id))}.`
+    : "";
+  deps.stderr(appendLine(`Generated ${renderedEntries.length} diagram(s).${skippedSuffix}`));
+  return 0;
+}
+
 async function runShowCommand(
   deps: CliDeps,
   inputPath: string,
@@ -532,6 +720,10 @@ async function runShowCommand(
   try {
     const requestedPreviewFormat = (options.format || getViewRenderCapability(options.view)?.defaultPreviewFormat || "svg") as PreviewFormat;
     const requestedBackendId = options.backend as PreviewRendererBackendId | undefined;
+    if (options.view === "all" && options.dotOut) {
+      deps.stderr(appendLine("--dot-out cannot be used with '--view all'. Select one view to keep an intermediate DOT file."));
+      return 2;
+    }
     const previewOutputValidation = validateOutputExtension(options.out, requestedPreviewFormat, "--out");
     if (!previewOutputValidation.valid) {
       deps.stderr(appendLine(previewOutputValidation.message ?? "Invalid preview output path."));
@@ -550,6 +742,16 @@ async function runShowCommand(
     });
     const profileId = settings.profile.value;
     const detailId = settings.detail.value;
+    if (options.view === "all") {
+      return runShowAllCommand(deps, bundle, input, {
+        profileId,
+        detailId,
+        format: requestedPreviewFormat,
+        backendId: requestedBackendId,
+        out: options.out,
+        diagnostics: options.diagnostics
+      });
+    }
     const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat, requestedBackendId);
     if (!supported.capability || !supported.view) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
@@ -736,6 +938,7 @@ function globalHelpText(): string {
     "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict",
     "  sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg",
     "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
@@ -743,7 +946,7 @@ function globalHelpText(): string {
     "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
     "",
     "Notes:",
-    "  `show` defaults to SVG preview output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.",
+    "  `show` defaults to SVG preview output. Use `--view all` to save every applicable view after render-detail filtering. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.",
     "  Internal DOT and Mermaid text artifacts remain available for tests and debugging.",
     "  Use `sdd help <command>` or `<command> --help` for required and optional flags.",
   ].join("\n");
@@ -927,20 +1130,22 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
 
   program
     .command("show")
-    .summary("Compile, validate, and produce a preview artifact for a view")
-    .description("Preferred preview command for renderable views. In v0.1 it defaults to SVG output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
+    .summary("Compile, validate, and produce preview artifacts for one or all applicable views")
+    .description("Preferred preview command for renderable views. Use `--view all` to generate every operational view with visible content after applying render detail. In v0.1 it defaults to SVG output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
     .argument("<input>", "source .sdd file")
-    .requiredOption("--view <view>", "view id")
+    .requiredOption("--view <view>", "view id, or all for every applicable view")
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--format <format>", "preview format (svg or png)", "svg")
     .option("--backend <backend>", "preview backend id override")
-    .option("--out <file>", "write the preview artifact to a file; defaults to <input>.<view>.<detail>[.<backend>].<format> beside the input")
-    .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source in a file")
+    .option("--out <file>", "write preview output; with --view all, insert each view id before the extension; omission defaults to <input>.<view>.<detail>[.<backend>].<format> beside the input")
+    .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source for one selected view; incompatible with --view all")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --backend legacy_graphviz_preview --out ./outcome-opportunity-legacy.svg",

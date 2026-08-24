@@ -388,12 +388,25 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     }
     const rendererDefaults = record(view.conventions.renderer_defaults);
     const detailDisplay = record(rendererDefaults?.detail_display);
+    const batchApplicability = record(rendererDefaults?.batch_applicability);
     if (!rendererDefaults || !detailDisplay) {
       add(
         "bundle.render_details.policy_shape",
         `Rendering view '${view.id}' must declare renderer_defaults.detail_display as an object`
       );
       continue;
+    }
+    if (
+      !batchApplicability
+      || !sameStringSet(Object.keys(batchApplicability), ["kind", "minimum"])
+      || batchApplicability.kind !== "visible_semantic_node_count"
+      || !Number.isInteger(batchApplicability.minimum)
+      || (batchApplicability.minimum as number) < 1
+    ) {
+      add(
+        "bundle.render_batch.applicability_shape",
+        `Rendering view '${view.id}' must declare batch_applicability as { kind: visible_semantic_node_count, minimum: positive integer }`
+      );
     }
     for (const policyId of Object.keys(detailDisplay)) {
       if (!renderDetailIds.has(policyId)) {

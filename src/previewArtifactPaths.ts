@@ -27,3 +27,11 @@ export function buildShowPreviewOutputPath(
   const parsed = path.parse(path.resolve(filePath));
   return path.join(parsed.dir, buildPreviewArtifactBasename(parsed.base, options));
 }
+
+export function buildExplicitBatchPreviewOutputPath(
+  filePath: string,
+  viewId: string
+): string {
+  const parsed = path.parse(path.resolve(filePath));
+  return path.join(parsed.dir, `${parsed.name}.${viewId}${parsed.ext}`);
+}

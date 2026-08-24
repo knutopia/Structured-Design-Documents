@@ -89,6 +89,24 @@ describe("bundle-owned render details", () => {
     });
   });
 
+  it("requires a positive bundle-owned visible semantic node threshold for batch rendering", () => {
+    for (const view of bundle.views.views) {
+      expect(view.conventions.renderer_defaults?.batch_applicability).toEqual({
+        kind: "visible_semantic_node_count",
+        minimum: 1
+      });
+    }
+    expectInvalid("bundle.render_batch.applicability_shape", (cloned) => {
+      delete (cloned.views.views[0]!.conventions.renderer_defaults as Record<string, unknown>).batch_applicability;
+    });
+    expectInvalid("bundle.render_batch.applicability_shape", (cloned) => {
+      cloned.views.views[0]!.conventions.renderer_defaults!.batch_applicability = {
+        kind: "visible_semantic_node_count",
+        minimum: 0
+      };
+    });
+  });
+
   it("cross-checks the renderer registry without embedding view IDs in bundle validation", () => {
     const participants = bundle.views.views
       .filter((view) => view.conventions.renderer_defaults !== undefined)
@@ -119,6 +137,10 @@ describe("bundle-owned render details", () => {
     const policy = policyChanged.views.views[0]!.conventions.renderer_defaults!.detail_display as Record<string, Record<string, boolean>>;
     policy.compact!.show_instrumentation_annotations = true;
     expect(computeBundleFingerprint(policyChanged)).not.toBe(computeBundleFingerprint(bundle));
+
+    const applicabilityChanged = cloneBundle();
+    applicabilityChanged.views.views[0]!.conventions.renderer_defaults!.batch_applicability!.minimum = 2;
+    expect(computeBundleFingerprint(applicabilityChanged)).not.toBe(computeBundleFingerprint(bundle));
   });
 
   it("fails unsupported view/detail resolution rather than falling back", () => {

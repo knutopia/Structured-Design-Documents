@@ -30,7 +30,8 @@ z
 
 - sdd-for-sdd concept work
 - Edge case-mismatch output for parser/validator
-- Dummary output for validator
+- Summary output for validator
+- --view all option for sdd show
 
 ## Sat 8-22
 

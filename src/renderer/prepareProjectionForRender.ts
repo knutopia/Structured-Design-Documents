@@ -6,6 +6,7 @@ import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
 
 export interface PreparedProjectionForRender {
   projection: Projection;
+  visibleSemanticNodeIds: string[];
   notes: string[];
 }
 
@@ -18,6 +19,7 @@ export function prepareProjectionForRender(
   if (view.id !== "ui_contracts") {
     return {
       projection,
+      visibleSemanticNodeIds: projection.nodes.map((node) => node.id),
       notes: []
     };
   }
@@ -26,6 +28,18 @@ export function prepareProjectionForRender(
   const prepared = buildUiContractsRenderData(projection, graph, displayPolicy);
   return {
     projection: prepared.projection,
+    visibleSemanticNodeIds: prepared.visibleSemanticNodeIds,
     notes: prepared.notes
   };
+}
+
+export function isBatchApplicable(
+  view: ViewSpec,
+  prepared: PreparedProjectionForRender
+): boolean {
+  const policy = view.conventions.renderer_defaults?.batch_applicability;
+  if (!policy || policy.kind !== "visible_semantic_node_count") {
+    throw new Error(`View '${view.id}' does not declare renderer_defaults.batch_applicability`);
+  }
+  return prepared.visibleSemanticNodeIds.length >= policy.minimum;
 }
