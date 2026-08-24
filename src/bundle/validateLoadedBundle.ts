@@ -50,6 +50,46 @@ function duplicateValues(values: string[]): string[] {
   return [...duplicates].sort();
 }
 
+function caseInsensitiveTokenCollisions(bundle: Bundle): Array<{ source: string; tokens: string[] }> {
+  if (bundle.syntax.parsing_model.case_sensitive) {
+    return [];
+  }
+
+  const vocabulary = bundle.vocab as unknown as Record<string, unknown>;
+  const collisions: Array<{ source: string; tokens: string[] }> = [];
+  for (const [source, config] of Object.entries(bundle.syntax.token_sources)) {
+    const entries = vocabulary[config.key];
+    if (!Array.isArray(entries)) {
+      continue;
+    }
+
+    const byFoldedValue = new Map<string, Set<string>>();
+    for (const entry of entries) {
+      if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+        continue;
+      }
+      const token = (entry as Record<string, unknown>)[config.token_field];
+      if (typeof token !== "string") {
+        continue;
+      }
+      const folded = token.toLowerCase();
+      const values = byFoldedValue.get(folded) ?? new Set<string>();
+      values.add(token);
+      byFoldedValue.set(folded, values);
+    }
+
+    for (const tokens of byFoldedValue.values()) {
+      if (tokens.size > 1) {
+        collisions.push({ source, tokens: [...tokens].sort() });
+      }
+    }
+  }
+
+  return collisions.sort((left, right) =>
+    left.source.localeCompare(right.source) || left.tokens.join("\0").localeCompare(right.tokens.join("\0"))
+  );
+}
+
 export class BundleValidationError extends Error {
   readonly code = "bundle.invalid";
   readonly diagnostics: Diagnostic[];
@@ -221,6 +261,15 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
   const nodeTypes = new Set(nodeTokens);
   const relationshipTypes = new Set(relationshipTokens);
 
+  for (const collision of caseInsensitiveTokenCollisions(bundle)) {
+    add(
+      "bundle.syntax.case_insensitive_token_collision",
+      `Token source '${collision.source}' has case-insensitive collision between ${collision.tokens
+        .map((token) => `'${token}'`)
+        .join(" and ")}`
+    );
+  }
+
   for (const duplicate of duplicateValues(nodeTokens)) {
     add("bundle.vocab.duplicate_node_type", `Node type '${duplicate}' is declared more than once`);
   }
@@ -339,12 +388,25 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     }
     const rendererDefaults = record(view.conventions.renderer_defaults);
     const detailDisplay = record(rendererDefaults?.detail_display);
+    const batchApplicability = record(rendererDefaults?.batch_applicability);
     if (!rendererDefaults || !detailDisplay) {
       add(
         "bundle.render_details.policy_shape",
         `Rendering view '${view.id}' must declare renderer_defaults.detail_display as an object`
       );
       continue;
+    }
+    if (
+      !batchApplicability
+      || !sameStringSet(Object.keys(batchApplicability), ["kind", "minimum"])
+      || batchApplicability.kind !== "visible_semantic_node_count"
+      || !Number.isInteger(batchApplicability.minimum)
+      || (batchApplicability.minimum as number) < 1
+    ) {
+      add(
+        "bundle.render_batch.applicability_shape",
+        `Rendering view '${view.id}' must declare batch_applicability as { kind: visible_semantic_node_count, minimum: positive integer }`
+      );
     }
     for (const policyId of Object.keys(detailDisplay)) {
       if (!renderDetailIds.has(policyId)) {

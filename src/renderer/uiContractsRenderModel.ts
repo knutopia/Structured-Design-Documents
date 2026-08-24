@@ -117,7 +117,34 @@ interface UiContractsCoverageItem {
 export interface UiContractsRenderData {
   projection: Projection;
   model: UiContractsRenderModel;
+  visibleSemanticNodeIds: string[];
   notes: string[];
+}
+
+function collectVisibleSemanticNodeIds(model: UiContractsRenderModel): string[] {
+  const ids = new Set(model.nodes.map((node) => node.id));
+  const visit = (
+    item: UiContractsRootItem | UiContractsViewStateItem | UiContractsComponentItem | UiContractsStateGroupItem | UiContractsLeafNodeItem
+  ): void => {
+    if (item.kind === "place") {
+      ids.add(item.id);
+      item.childItems.forEach(visit);
+      return;
+    }
+    if (item.kind === "view_state" || item.kind === "component") {
+      ids.add(item.nodeId);
+      item.childItems.forEach(visit);
+      return;
+    }
+    if (item.kind === "state_group" || item.kind === "support_group") {
+      item.nodeIds.forEach((nodeId) => ids.add(nodeId));
+      return;
+    }
+    ids.add(item.nodeId);
+  };
+
+  model.rootItems.forEach(visit);
+  return [...ids].sort((left, right) => left.localeCompare(right));
 }
 
 function getTransitionGraphPriorityMetadata(projection: Projection): TransitionGraphPriorityViewMetadata {
@@ -896,14 +923,17 @@ export function buildUiContractsRenderData(
     ? withUiContractsCoverage(projection, omittedEmptyPlaceItems, coverageNote)
     : projection;
 
+  const model: UiContractsRenderModel = {
+    rootItems,
+    nodes,
+    edges,
+    siblingOrderChains: collectSiblingOrderChains(rootItems)
+  };
+
   return {
     projection: preparedProjection,
-    model: {
-      rootItems,
-      nodes,
-      edges,
-      siblingOrderChains: collectSiblingOrderChains(rootItems)
-    },
+    model,
+    visibleSemanticNodeIds: collectVisibleSemanticNodeIds(model),
     notes: coverageNote ? [coverageNote] : []
   };
 }

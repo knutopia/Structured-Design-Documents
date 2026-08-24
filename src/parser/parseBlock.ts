@@ -40,6 +40,18 @@ function createDiagnostic(
   };
 }
 
+function createUnexpectedLineDiagnostic(file: string, classifiedLine: ClassifiedLine): Diagnostic {
+  const mismatch = classifiedLine.tokenCaseMismatch;
+  return mismatch
+    ? createDiagnostic(
+      file,
+      classifiedLine,
+      "parse.token_case_mismatch",
+      `Token '${mismatch.actual}' has non-canonical casing; use '${mismatch.canonical}'.`
+    )
+    : createDiagnostic(file, classifiedLine, "parse.unexpected_line_in_block", "Unexpected line in node block");
+}
+
 function toBlankLine(classifiedLine: ClassifiedLine): BlankLine {
   return {
     kind: "BlankLine",
@@ -306,9 +318,7 @@ function parseBodyLine(
       return edge;
     }
     default:
-      diagnostics.push(
-        createDiagnostic(file, classifiedLine, "parse.unexpected_line_in_block", "Unexpected line in node block")
-      );
+      diagnostics.push(createUnexpectedLineDiagnostic(file, classifiedLine));
       return undefined;
   }
 }
@@ -415,9 +425,7 @@ export function parseNodeBlock(
     }
 
     if (!statementKind || !allowedBodyStatementKinds.has(statementKind)) {
-      diagnostics.push(
-        createDiagnostic(file, classifiedLine, "parse.unexpected_line_in_block", "Unexpected line in node block")
-      );
+      diagnostics.push(createUnexpectedLineDiagnostic(file, classifiedLine));
       index += 1;
       continue;
     }

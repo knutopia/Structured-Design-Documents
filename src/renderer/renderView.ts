@@ -1,4 +1,4 @@
-import type { Bundle } from "../bundle/types.js";
+import type { Bundle, ViewSpec } from "../bundle/types.js";
 import {
   getBundleRenderDetailFallback,
   getBundleValidationProfileFallback
@@ -7,11 +7,57 @@ import { compileSource } from "../compiler/compileSource.js";
 import { getGraphSourcePath, type CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics } from "../diagnostics/types.js";
 import { projectView } from "../projector/projectView.js";
+import type { Projection } from "../projector/types.js";
 import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
 import { getTextArtifactCapability, getViewTextRenderer } from "./viewRenderers.js";
 
 type ResolvedRenderOptions = RenderOptions & { profileId: string; detailId: string };
+
+export function renderPreparedProjectionText(
+  graph: CompiledGraph,
+  bundle: Bundle,
+  view: ViewSpec,
+  projection: Projection,
+  options: ResolvedRenderOptions
+): RenderResult {
+  const renderer = getViewTextRenderer(options.viewId);
+  if (!renderer || !getTextArtifactCapability(renderer.capability, options.format)) {
+    return {
+      format: options.format,
+      viewId: options.viewId,
+      profileId: options.profileId,
+      detailId: options.detailId,
+      notes: [],
+      diagnostics: [{
+        stage: "render",
+        code: "render.unsupported_view",
+        severity: "error",
+        message: `View '${options.viewId}' is not supported in v0.1`,
+        file: getGraphSourcePath(graph) ?? "<compiled>"
+      }]
+    };
+  }
+
+  const rendered = renderer.render(
+    projection,
+    graph,
+    bundle,
+    view,
+    options.format,
+    options.detailId
+  );
+
+  return {
+    format: options.format,
+    viewId: options.viewId,
+    profileId: options.profileId,
+    detailId: options.detailId,
+    text: rendered.text,
+    notes: rendered.notes,
+    diagnostics: []
+  };
+}
 
 export function renderCompiledGraphText(
   graph: CompiledGraph,
@@ -32,8 +78,7 @@ export function renderCompiledGraphText(
   }
 
   const view = bundle.views.views.find((candidate) => candidate.id === options.viewId);
-  const renderer = getViewTextRenderer(options.viewId);
-  if (!view || !renderer || !getTextArtifactCapability(renderer.capability, options.format)) {
+  if (!view) {
     diagnostics.push({
       stage: "render",
       code: "render.unsupported_view",
@@ -51,23 +96,10 @@ export function renderCompiledGraphText(
     };
   }
 
-  const rendered = renderer.render(
-    projected.projection,
-    graph,
-    bundle,
-    view,
-    options.format,
-    options.detailId
-  );
-
+  const rendered = renderPreparedProjectionText(graph, bundle, view, projected.projection, options);
   return {
-    format: options.format,
-    viewId: options.viewId,
-    profileId: options.profileId,
-    detailId: options.detailId,
-    text: rendered.text,
-    notes: rendered.notes,
-    diagnostics: sortDiagnostics(diagnostics)
+    ...rendered,
+    diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])
   };
 }
 

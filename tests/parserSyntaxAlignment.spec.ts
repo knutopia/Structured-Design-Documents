@@ -15,8 +15,16 @@ beforeAll(async () => {
   bundle = await loadBundle(manifestPath);
 });
 
-function parseText(text: string, file = "/virtual/parser-syntax-alignment.sdd"): ParseResult {
-  return parseSource({ path: file, text }, bundle);
+function parseText(
+  text: string,
+  inputBundle = bundle,
+  file = "/virtual/parser-syntax-alignment.sdd"
+): ParseResult {
+  return parseSource({ path: file, text }, inputBundle);
+}
+
+function cloneBundle(): Bundle {
+  return structuredClone(bundle) as Bundle;
 }
 
 function expectParseFailure(result: ParseResult, code: string): void {
@@ -104,6 +112,64 @@ END
     expectParseFailure(result, "parse.invalid_edge_line");
   });
 
+  it.each(["composed_of", "Composed_Of"])(
+    "reports the canonical bundle spelling for a non-canonical relationship token '%s'",
+    (token) => {
+      const result = parseText(topLevelBlockWithBody(`${token} C-010 "Editor"`));
+      const diagnostic = result.diagnostics.find((candidate) => candidate.code === "parse.token_case_mismatch");
+
+      expect(result.document).toBeUndefined();
+      expect(diagnostic).toMatchObject({
+        stage: "parse",
+        severity: "error",
+        message: `Token '${token}' has non-canonical casing; use 'COMPOSED_OF'.`,
+        span: {
+          line: 2,
+          column: 1,
+          endLine: 2
+        }
+      });
+    }
+  );
+
+  it("keeps unrelated relationship typos on the existing unexpected-line diagnostic", () => {
+    const result = parseText(topLevelBlockWithBody(`composedof C-010 "Editor"`));
+
+    expectParseFailure(result, "parse.unexpected_line_in_block");
+    expect(result.diagnostics.some((diagnostic) => diagnostic.code === "parse.token_case_mismatch")).toBe(false);
+  });
+
+  it("derives the suggested spelling from the selected bundle vocabulary", () => {
+    const renamedBundle = cloneBundle();
+    renamedBundle.vocab.relationship_types.find(({ token }) => token === "COMPOSED_OF")!.token = "Composes";
+
+    const result = parseText(topLevelBlockWithBody(`composes C-010 "Editor"`), renamedBundle);
+
+    expectParseFailure(result, "parse.token_case_mismatch");
+    expect(result.diagnostics).toContainEqual(expect.objectContaining({
+      message: "Token 'composes' has non-canonical casing; use 'Composes'."
+    }));
+  });
+
+  it("uses a case-insensitive syntax contract while emitting canonical vocabulary tokens", () => {
+    const caseInsensitiveBundle = cloneBundle();
+    caseInsensitiveBundle.syntax.parsing_model.case_sensitive = false;
+
+    const result = parseText(`sdd-text 0.1
+
+place P-010 "Billing"
+  composed_of C-010 "Editor"
+end
+`, caseInsensitiveBundle);
+    const document = expectParseSuccess(result);
+    const block = singleTopLevelBlock(document);
+    const edge = singleEdgeLine(block);
+
+    expect(document.declaredVersion).toBe("0.1");
+    expect(block.nodeType).toBe("Place");
+    expect(edge.relType).toBe("COMPOSED_OF");
+  });
+
   it("parses quoted edge-property values with spaces", () => {
     const result = parseText(topLevelBlockWithBody(`BINDS_TO D-010 "Subscription" label="hello world"`));
     const document = expectParseSuccess(result);
@@ -121,7 +187,7 @@ END
   it("parses every manifest example without parse diagnostics", async () => {
     for (const example of bundle.manifest.examples) {
       const examplePath = path.join(bundle.rootDir, example.path);
-      const result = parseText(await readFile(examplePath, "utf8"), examplePath);
+      const result = parseText(await readFile(examplePath, "utf8"), bundle, examplePath);
 
       expect(result.document, `expected parse document for ${example.path}`).toBeDefined();
       expect(result.diagnostics, `expected zero parse diagnostics for ${example.path}`).toEqual([]);

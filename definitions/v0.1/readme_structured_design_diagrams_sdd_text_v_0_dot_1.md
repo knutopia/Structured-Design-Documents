@@ -19,7 +19,7 @@ For v0.1, this markdown document is explanatory and normative for extraction, wh
 
 - Core machine artifacts: `core/vocab.yaml`, `core/schema.json`, `core/contracts.yaml`, `core/views.yaml`, `core/projection_schema.json`
 - Governance overlays: `profiles/permissive.yaml`, `profiles/strict.yaml`
-- `core/views.yaml` now contains executable projection filters plus renderer defaults for annotations, lane mapping, branching, and state-emphasis conventions.
+- `core/views.yaml` now contains executable projection filters plus renderer defaults for annotations, lane mapping, branching, state-emphasis conventions, and the visible-semantic-node threshold used when batch rendering applicable views.
 - `core/projection_schema.json` defines the normalized downstream contract for view projection outputs.
 
 ## Design Notes

@@ -1,4 +1,5 @@
 import type { Bundle } from "../src/bundle/types.js";
+import type { CompiledGraph } from "../src/compiler/types.js";
 import { describe, expect, it, vi } from "vitest";
 import { createProgram, runCli, type CliDeps } from "../src/cli/program.js";
 import { createMockSyntaxConfig } from "./mockSyntaxConfig.js";
@@ -74,7 +75,9 @@ const bundle: Bundle = {
           ordering_edges: []
         },
         conventions: {
-          renderer_defaults: {}
+          renderer_defaults: {
+            batch_applicability: { kind: "visible_semantic_node_count", minimum: 1 }
+          }
         }
       },
       {
@@ -88,7 +91,9 @@ const bundle: Bundle = {
           ordering_edges: []
         },
         conventions: {
-          renderer_defaults: {}
+          renderer_defaults: {
+            batch_applicability: { kind: "visible_semantic_node_count", minimum: 1 }
+          }
         }
       },
       {
@@ -102,7 +107,9 @@ const bundle: Bundle = {
           ordering_edges: []
         },
         conventions: {
-          renderer_defaults: {}
+          renderer_defaults: {
+            batch_applicability: { kind: "visible_semantic_node_count", minimum: 1 }
+          }
         }
       },
       {
@@ -116,7 +123,9 @@ const bundle: Bundle = {
           ordering_edges: []
         },
         conventions: {
-          renderer_defaults: {}
+          renderer_defaults: {
+            batch_applicability: { kind: "visible_semantic_node_count", minimum: 1 }
+          }
         }
       },
       {
@@ -130,7 +139,9 @@ const bundle: Bundle = {
           ordering_edges: []
         },
         conventions: {
-          renderer_defaults: {}
+          renderer_defaults: {
+            batch_applicability: { kind: "visible_semantic_node_count", minimum: 1 }
+          }
         }
       },
       {
@@ -144,13 +155,38 @@ const bundle: Bundle = {
           ordering_edges: []
         },
         conventions: {
-          renderer_defaults: {}
+          renderer_defaults: {
+            batch_applicability: { kind: "visible_semantic_node_count", minimum: 1 }
+          }
         }
       }
     ]
   },
   profiles: {}
 };
+
+function createCompiledGraph(nodeCount: number, edgeCount: number): CompiledGraph {
+  return {
+    schema: "sdd-text",
+    version: "0.1",
+    nodes: Array.from({ length: nodeCount }, (_, index) => ({
+      id: `P-${String(index + 1).padStart(3, "0")}`,
+      type: "Place",
+      name: `Place ${index + 1}`,
+      props: {}
+    })),
+    edges: Array.from({ length: edgeCount }, (_, index) => ({
+      from: "P-001",
+      type: "NAVIGATES_TO",
+      to: `P-${String(index + 2).padStart(3, "0")}`,
+      to_name: null,
+      event: null,
+      guard: null,
+      effect: null,
+      props: {}
+    }))
+  };
+}
 
 function createDeps(overrides: Partial<CliDeps> = {}): {
   deps: Partial<CliDeps>;
@@ -302,6 +338,81 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
 
 function countOccurrences(text: string, pattern: string): number {
   return text.split(pattern).length - 1;
+}
+
+function createBatchPreviewMocks(
+  visibleByView: Record<string, string[]>,
+  failingViewId?: string
+): {
+  prepare: ReturnType<typeof vi.fn>;
+  render: ReturnType<typeof vi.fn>;
+} {
+  const prepare = vi.fn((_sourcePath, _graph, loadedBundle, options) => {
+    const view = loadedBundle.views.views.find((candidate) => candidate.id === options.viewId)!;
+    const visibleSemanticNodeIds = visibleByView[options.viewId] ?? [];
+    return {
+      profileId: options.profileId,
+      detailId: options.detailId,
+      view,
+      capability: {
+        textArtifacts: [],
+        previewArtifacts: [],
+        defaultPreviewFormat: "svg" as const
+      },
+      previewCapability: {
+        format: options.format,
+        backendId: options.backendId,
+        backendClass: options.backendId === "legacy_graphviz_preview" ? "legacy" as const : "staged" as const
+      },
+      prepared: {
+        projection: {
+          schema: "sdd-text-view-projection" as const,
+          version: "0.1",
+          view_id: options.viewId,
+          source_example: "example",
+          nodes: visibleSemanticNodeIds.map((id) => ({ id, type: "Place", name: id })),
+          edges: [],
+          derived: {
+            node_annotations: [],
+            edge_annotations: [],
+            node_groups: [],
+            view_metadata: {}
+          },
+          omissions: [],
+          notes: []
+        },
+        visibleSemanticNodeIds,
+        notes: []
+      },
+      diagnostics: []
+    };
+  });
+  const render = vi.fn(async (_sourcePath, _graph, _bundle, prepared) => {
+    const diagnostics = prepared.view.id === failingViewId
+      ? [{
+        stage: "render" as const,
+        code: "render.synthetic_failure",
+        severity: "error" as const,
+        message: `Failed ${prepared.view.id}`,
+        file: "/repo/example.sdd"
+      }]
+      : [];
+    return {
+      profileId: prepared.profileId,
+      detailId: prepared.detailId,
+      view: prepared.view,
+      capability: prepared.capability,
+      previewCapability: prepared.previewCapability,
+      artifact: diagnostics.length > 0
+        ? undefined
+        : prepared.previewCapability.format === "png"
+          ? { format: "png" as const, bytes: Uint8Array.from([1, 2, 3]) }
+          : { format: "svg" as const, text: `<svg>${prepared.view.id}</svg>` },
+      notes: [],
+      diagnostics
+    };
+  });
+  return { prepare, render };
 }
 
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
@@ -500,6 +611,121 @@ describe("CLI wrappers", () => {
     expect(writeTextFileMock.mock.calls[0]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.detailed.svg");
     expect(writeTextFileMock.mock.calls[1]?.[0]).toBe("/repo/bundle/v0.1/examples/outcome_to_ia_trace.ia_place_map.compact.svg");
     expect(writeTextFileMock.mock.calls[0]?.[0]).not.toBe(writeTextFileMock.mock.calls[1]?.[0]);
+  });
+
+  it("show --view all compiles once and writes only applicable views using explicit view modifiers", async () => {
+    const batch = createBatchPreviewMocks({
+      ia_place_map: ["P-001"],
+      journey_map: ["J-001"]
+    });
+    const { deps, stderr, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--out", "/tmp/diagram.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(deps.compileSource).toHaveBeenCalledTimes(1);
+    expect(deps.validateGraph).toHaveBeenCalledTimes(1);
+    expect(batch.prepare).toHaveBeenCalledTimes(6);
+    expect(batch.render.mock.calls.map((call) => call[3].view.id)).toEqual(["ia_place_map", "journey_map"]);
+    expect(writeTextFileMock.mock.calls.map((call) => call[0])).toEqual([
+      "/tmp/diagram.ia_place_map.svg",
+      "/tmp/diagram.journey_map.svg"
+    ]);
+    expect(stderr.join("")).toContain("Generated 2 diagram(s).");
+    expect(stderr.join("")).toContain("Skipped 4 without visible content");
+  });
+
+  it("show --view all preserves automatic detail naming for PNG artifacts", async () => {
+    const batch = createBatchPreviewMocks({ outcome_opportunity_map: ["O-001"] });
+    const { deps, writeBinaryFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--format", "png"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(writeBinaryFileMock).toHaveBeenCalledWith(
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.outcome_opportunity_map.compact.png",
+      Uint8Array.from([1, 2, 3])
+    );
+  });
+
+  it("show --view all succeeds without writes when no view meets bundle applicability", async () => {
+    const batch = createBatchPreviewMocks({ ia_place_map: ["P-001"] });
+    const thresholdBundle = structuredClone(bundle) as Bundle;
+    thresholdBundle.views.views.find((view) => view.id === "ia_place_map")!
+      .conventions.renderer_defaults!.batch_applicability!.minimum = 2;
+    const { deps, stderr, writeTextFileMock, writeBinaryFileMock } = createDeps({
+      loadBundle: vi.fn(async () => thresholdBundle),
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd", "--view", "all"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(batch.render).not.toHaveBeenCalled();
+    expect(writeTextFileMock).not.toHaveBeenCalled();
+    expect(writeBinaryFileMock).not.toHaveBeenCalled();
+    expect(stderr.join("")).toContain("No applicable diagrams found for detail 'compact'");
+  });
+
+  it("show --view all rejects an incompatible explicit backend before compiling", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--backend", "staged_ia_place_map_preview"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(deps.compileSource).not.toHaveBeenCalled();
+    expect(stderr.join("")).toContain("Incompatible views:");
+    expect(stderr.join("")).toContain("journey_map");
+  });
+
+  it("show --view all rejects --dot-out", async () => {
+    const { deps, stderr } = createDeps();
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--dot-out", "/tmp/all.dot"
+    ], deps);
+
+    expect(result.exitCode).toBe(2);
+    expect(deps.readSourceInput).not.toHaveBeenCalled();
+    expect(stderr.join("")).toContain("--dot-out cannot be used with '--view all'");
+  });
+
+  it("show --view all writes no partial batch when an applicable renderer fails", async () => {
+    const batch = createBatchPreviewMocks({
+      ia_place_map: ["P-001"],
+      journey_map: ["J-001"]
+    }, "journey_map");
+    const { deps, stderr, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--out", "/tmp/diagram.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(batch.render).toHaveBeenCalledTimes(2);
+    expect(writeTextFileMock).not.toHaveBeenCalled();
+    expect(stderr.join("")).toContain("render.synthetic_failure");
   });
 
   it("show appends an explicit backend override to the default output path", async () => {
@@ -1117,7 +1343,7 @@ describe("CLI wrappers", () => {
   });
 
   it("validate pretty diagnostics include the json hint exactly once", async () => {
-    const { deps, stderr } = createDeps({
+    const { deps, stdout, stderr } = createDeps({
       validateGraph: vi.fn(() => ({
         diagnostics: [
           {
@@ -1147,10 +1373,20 @@ describe("CLI wrappers", () => {
     expect(stderrText).toContain("WARN validate.warning (1 instance): warning text");
     expect(stderrText).toContain(`\n\n${jsonDiagnosticsHint}\n`);
     expect(countOccurrences(stderrText, jsonDiagnosticsHint)).toBe(1);
+    expect(stdout.join("")).toBe("Validated 0 nodes and 0 edges.\n");
   });
 
-  it("validate without diagnostics does not print the json hint", async () => {
-    const { deps, stderr } = createDeps();
+  it.each([
+    [0, 0, "Validated 0 nodes and 0 edges.\n"],
+    [1, 1, "Validated 1 node and 1 edge.\n"],
+    [12, 17, "Validated 12 nodes and 17 edges.\n"]
+  ] as const)("summarizes a successful graph with %i nodes and %i edges", async (nodeCount, edgeCount, expected) => {
+    const { deps, stdout, stderr } = createDeps({
+      compileSource: vi.fn(() => ({
+        diagnostics: [],
+        graph: createCompiledGraph(nodeCount, edgeCount)
+      }))
+    });
     const result = await runCli([
       "node",
       "sdd",
@@ -1161,8 +1397,70 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(0);
+    expect(stdout.join("")).toBe(expected);
     expect(stderr.join("")).not.toContain(jsonDiagnosticsHint);
   });
+
+  it("does not summarize a validation error", async () => {
+    const { deps, stdout } = createDeps({
+      validateGraph: vi.fn(() => ({
+        diagnostics: [{
+          stage: "validate",
+          code: "validate.failed",
+          severity: "error",
+          message: "validation failed",
+          file: "/repo/example.sdd"
+        }],
+        errorCount: 1,
+        warningCount: 0
+      }))
+    });
+
+    const result = await runCli([
+      "node",
+      "sdd",
+      "validate",
+      "bundle/v0.1/examples/outcome_to_ia_trace.sdd"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(stdout.join("")).toBe("");
+  });
+
+  it.each([false, true])(
+    "keeps json validation free of a human summary when warnings=%s",
+    async (withWarning) => {
+      const diagnostics = withWarning
+        ? [{
+          stage: "validate" as const,
+          code: "validate.warning",
+          severity: "warn" as const,
+          message: "warning text",
+          file: "/repo/example.sdd"
+        }]
+        : [];
+      const { deps, stdout, stderr } = createDeps({
+        validateGraph: vi.fn(() => ({
+          diagnostics,
+          errorCount: 0,
+          warningCount: diagnostics.length
+        }))
+      });
+
+      const result = await runCli([
+        "node",
+        "sdd",
+        "validate",
+        "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+        "--diagnostics",
+        "json"
+      ], deps);
+
+      expect(result.exitCode).toBe(0);
+      expect(stdout.join("")).toBe("");
+      expect(stderr.join("")).toBe(withWarning ? `${JSON.stringify(diagnostics, null, 2)}\n` : "");
+    }
+  );
 
   it("render supports json diagnostics output", async () => {
     const { deps, stderr } = createDeps({
@@ -1553,11 +1851,13 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Omit --detail to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
+    expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png");
-    expect(help).toContain("`ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` now select staged preview backends by default");
+    expect(help).toContain("Use `--view all` to save every applicable view after render-detail filtering.");
+    expect(help).toContain("`ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default");
     expect(help).toContain("Internal DOT and Mermaid text artifacts remain available for tests and debugging.");
     expect(help).toContain("sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple");
 
@@ -1611,9 +1911,10 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Preferred preview command for renderable views.");
     expect(help).toContain("select staged preview");
     expect(help).toContain("backends by default");
-    expect(help).toContain("Legacy Graphviz preview remains available");
+    expect(help).toContain("Legacy Graphviz");
+    expect(help).toContain("preview remains available");
     expect(help).toContain("internal/debug: also keep the intermediate DOT source");
-    expect(help).toContain("in a file");
+    expect(help).toContain("incompatible with --view all");
     expect(help).not.toContain("--dot-out ./outcome.dot");
   });
 });

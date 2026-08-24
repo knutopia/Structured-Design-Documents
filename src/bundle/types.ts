@@ -423,11 +423,17 @@ export interface RendererConnectorsConfig {
   [key: string]: unknown;
 }
 
+export interface RendererBatchApplicabilityConfig {
+  kind: "visible_semantic_node_count";
+  minimum: number;
+}
+
 export interface RendererDefaultsConfig {
   preview?: PreviewDefaultsConfig;
   semantic_columns?: RendererSemanticColumnsConfig;
   node_chrome?: Record<string, RendererNodeChromeConfig>;
   connectors?: RendererConnectorsConfig;
+  batch_applicability?: RendererBatchApplicabilityConfig;
   [key: string]: unknown;
 }
 

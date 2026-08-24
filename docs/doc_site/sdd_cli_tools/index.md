@@ -95,18 +95,21 @@ pnpm sdd show real_world_exploration/billSage_example/billSage_structure.sdd --v
 pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg
 pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
 pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --profile simple --out ./journey.svg
+pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg
 ```
 
-- Purpose: compile, validate, and generate a preview artifact for a chosen view.
-- Use when: you want a visible result, want to share a diagram, or want to check how a document renders at a given detail level.
+- Purpose: compile, validate, and generate preview artifacts for one chosen view or every applicable view.
+- Use when: you want a visible result, want to share diagrams, or want to check how a document renders at a given detail level.
 - Invocation: `pnpm sdd show <input> --view <view>`
-- Key inputs: an input `.sdd` file and a required `--view`.
+- Key inputs: an input `.sdd` file and a required `--view`; use `--view all` to render all diagram types covered by the document content
 - Common options: `--profile`, `--detail`, `--format`, and `--out`.
 - Output: SVG by default, or PNG when `--format png` is provided.
 
 When `--profile` or `--detail` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.1 fallbacks are `simple` and `compact`; an explicit option overrides the saved preference for one invocation. Profile controls validation and detail controls rendering independently.
 
-If you omit `--out`, `sdd show` writes the output beside the input file using the default name `<source>.<view>.<detail>[.<backend>].<format>`. If you want the output somewhere specific, provide `--out`.
+With `--view all`, `sdd show` generates only views that retain visible semantic content after the selected detail policy. Finding no applicable views is successful and writes no files. An explicit backend must support every available view, and `--dot-out` cannot be combined with `--view all`.
+
+If you omit `--out`, `sdd show` writes output beside the input file using `<source>.<view>.<detail>[.<backend>].<format>`. With `--view all --out ./diagram.svg`, the output template becomes files such as `diagram.ia_place_map.svg` and `diagram.journey_map.svg`.
 
 ### Detail Choice
 
@@ -119,7 +122,9 @@ If you omit `--out`, `sdd show` writes the output beside the input file using th
 - Use when: you want to check whether a document passes profile expectations, or you want to see what metadata or structure is still missing.
 - Invocation: `pnpm sdd validate <input>`
 - Key inputs: an input `.sdd` file, with optional `--profile`.
-- Output: validation feedback and diagnostics in terminal output.
+- Output: validation feedback and diagnostics in terminal output. A successful default-format run writes
+  `Validated N nodes and M edges.` to stdout, including when non-blocking warnings are present. The human
+  summary is suppressed with `--diagnostics json` so machine-oriented output remains free of plain text.
 
 This is a good next step after drafting. A common pattern is to start by getting the structure right under `simple`, then move to `permissive` or `strict` as the document becomes more complete.
 

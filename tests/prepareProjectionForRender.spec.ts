@@ -35,6 +35,7 @@ describe("prepareProjectionForRender", () => {
     const prepared = prepareProjectionForRender(view!, projected.projection!, compiled.graph!, "compact");
 
     expect(prepared.projection).toBe(projected.projection);
+    expect(prepared.visibleSemanticNodeIds).toEqual(projected.projection!.nodes.map((node) => node.id));
     expect(prepared.notes).toEqual([]);
   });
 
@@ -66,6 +67,24 @@ describe("prepareProjectionForRender", () => {
         { id: "P-310", name: "Projects by Period" }
       ]
     });
+    expect(prepared.visibleSemanticNodeIds).not.toEqual(expect.arrayContaining(["P-221", "P-222", "P-310"]));
+  });
+
+  it("makes ui_contracts applicability detail-aware for an otherwise empty Place", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = {
+      path: "/tmp/ui_contracts_place_only.sdd",
+      text: 'SDD-TEXT 0.1\n\nPlace P-001 "Empty Place"\nEND\n'
+    };
+    const compiled = compileSource(input, bundle);
+    const projected = projectView(compiled.graph!, bundle, "ui_contracts");
+    const view = bundle.views.views.find((candidate) => candidate.id === "ui_contracts")!;
+
+    const compact = prepareProjectionForRender(view, projected.projection!, compiled.graph!, "compact");
+    const detailed = prepareProjectionForRender(view, projected.projection!, compiled.graph!, "detailed");
+
+    expect(compact.visibleSemanticNodeIds).toEqual([]);
+    expect(detailed.visibleSemanticNodeIds).toEqual(["P-001"]);
   });
 
   it("does not mutate the raw projectView result when renderer preparation is applied", async () => {
