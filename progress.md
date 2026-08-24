@@ -26,13 +26,16 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 8-24
+
+- Edited cli tools page
+
 ## Sun 8-23
 
 - sdd-for-sdd concept work
 - Edge case-mismatch output for parser/validator
 - Summary output for validator
 - --view all option for sdd show
-- Tracking rendering issues in journey_map vs scenario_flow
 
 ## Sat 8-22
 

@@ -101,7 +101,7 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./ou
 - Purpose: compile, validate, and generate preview artifacts for one chosen view or every applicable view.
 - Use when: you want a visible result, want to share diagrams, or want to check how a document renders at a given detail level.
 - Invocation: `pnpm sdd show <input> --view <view>`
-- Key inputs: an input `.sdd` file and a required `--view`; use `--view all` to consider every operational renderable view.
+- Key inputs: an input `.sdd` file and a required `--view`; use `--view all` to render all diagram types covered by the document content
 - Common options: `--profile`, `--detail`, `--format`, and `--out`.
 - Output: SVG by default, or PNG when `--format png` is provided.
 
