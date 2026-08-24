@@ -32,6 +32,7 @@ z
 - Edge case-mismatch output for parser/validator
 - Summary output for validator
 - --view all option for sdd show
+- Tracking rendering issues in journey_map vs scenario_flow
 
 ## Sat 8-22
 
