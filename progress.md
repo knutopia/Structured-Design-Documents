@@ -27,6 +27,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 8-26
+
+- Examined the reuse of Step node type in flow and journey, blueprint
+
 ## Tue 8-25
 
 - Planning scenario flow layout capability improvement
