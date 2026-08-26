@@ -1,0 +1,3001 @@
+{
+  "viewId": "scenario_flow",
+  "detailId": "detailed",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "scenario_flow",
+      "scenario_flow"
+    ],
+    "layout": {
+      "strategy": "grid",
+      "gap": 24,
+      "columns": 4,
+      "crossAlignment": "stretch"
+    },
+    "chrome": {
+      "padding": {
+        "top": 28,
+        "right": 28,
+        "bottom": 28,
+        "left": 132
+      },
+      "gutter": 24,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "step__cell__band:1__component:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "component:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
+            "rowOrder": 0,
+            "columnOrder": 0
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-010",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:1",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:1__component:1__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-010__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Select a Node"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 105.184,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 142,
+            "y": 38,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 132,
+        "y": 28,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:2__component:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "component:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
+            "rowOrder": 0,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-020",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:2",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:2__component:1__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-020__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Review Diagrams",
+                  "Containing Current Node"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 187.8,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 32
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 32
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 64
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 410,
+            "y": 38,
+            "width": 224,
+            "height": 64
+          }
+        ],
+        "ports": [],
+        "x": 400,
+        "y": 28,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:3__component:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "branch_target",
+            "bandOrder": 2,
+            "trackId": "component:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
+            "rowOrder": 0,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-021",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:3",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:3__component:1__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-021__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Select Diagram"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 116.112,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 710,
+            "y": 38,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 700,
+        "y": 28,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:4__component:1__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-linear",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "linear",
+            "bandOrder": 3,
+            "trackId": "component:1__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
+            "rowOrder": 0,
+            "columnOrder": 3
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-022",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:4",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:4__component:1__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-022__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "View Node in New",
+                  "Diagram Context"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 135.072,
+                "height": 40,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 32
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 32
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 32
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 64
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 978,
+            "y": 38,
+            "width": 224,
+            "height": 64
+          }
+        ],
+        "ports": [],
+        "x": 968,
+        "y": 28,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:1__row:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "component:1__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "rowOrder": 1,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 132,
+        "y": 136,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:2__component:1__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "component:1__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:2",
+            "rowOrder": 1,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-040",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-branch_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:2",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:2",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "step__cell__band:2__component:1__track:1",
+                "placementRole": "branch_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-040__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Add Relationship"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 128.28,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 410,
+            "y": 146,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 400,
+        "y": 136,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:3__component:1__track:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-branch_target",
+          "track-1"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "branch_target",
+            "bandOrder": 2,
+            "trackId": "component:1__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:2",
+            "rowOrder": 1,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-041",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-branch_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:3",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:2",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "step__cell__band:3__component:1__track:1",
+                "placementRole": "branch_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-041__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Add relationship, by node"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 191.008,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 710,
+            "y": 146,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 700,
+        "y": 136,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:4__row:1",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-linear",
+          "track-1",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "linear",
+            "bandOrder": 3,
+            "trackId": "component:1__track:1",
+            "trackLabel": "T1",
+            "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "rowOrder": 1,
+            "columnOrder": 3,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 968,
+        "y": 136,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:1__row:2",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-2",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "component:1__track:2",
+            "trackLabel": "T2",
+            "trackOrder": 2,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 2,
+            "rowOrder": 2,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 132,
+        "y": 244,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:2__row:2",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-2",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "component:1__track:2",
+            "trackLabel": "T2",
+            "trackOrder": 2,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 2,
+            "rowOrder": 2,
+            "columnOrder": 1,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 400,
+        "y": 244,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:3__component:1__track:2",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-branch_target",
+          "track-2"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "branch_target",
+            "bandOrder": 2,
+            "trackId": "component:1__track:2",
+            "trackLabel": "T2",
+            "trackOrder": 2,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 2,
+            "lineageId": "component:1__lineage:3",
+            "rowOrder": 2,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-042",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-branch_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:3",
+                "trackId": "component:1__track:2",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:3",
+                "trackOrder": 2,
+                "rowOrder": 2,
+                "cellId": "step__cell__band:3__component:1__track:2",
+                "placementRole": "branch_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-042__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Add outgoing relationship"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 195.152,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 710,
+            "y": 254,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 700,
+        "y": 244,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:4__row:2",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-linear",
+          "track-2",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "linear",
+            "bandOrder": 3,
+            "trackId": "component:1__track:2",
+            "trackLabel": "T2",
+            "trackOrder": 2,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 2,
+            "rowOrder": 2,
+            "columnOrder": 3,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 968,
+        "y": 244,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:1__row:3",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-3",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "component:1__track:3",
+            "trackLabel": "T3",
+            "trackOrder": 3,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 3,
+            "rowOrder": 3,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 132,
+        "y": 352,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:2__row:3",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-3",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "component:1__track:3",
+            "trackLabel": "T3",
+            "trackOrder": 3,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 3,
+            "rowOrder": 3,
+            "columnOrder": 1,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 400,
+        "y": 352,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:3__component:1__track:3",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-branch_target",
+          "track-3"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "branch_target",
+            "bandOrder": 2,
+            "trackId": "component:1__track:3",
+            "trackLabel": "T3",
+            "trackOrder": 3,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 3,
+            "lineageId": "component:1__lineage:4",
+            "rowOrder": 3,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-043",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-branch_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:3",
+                "trackId": "component:1__track:3",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:4",
+                "trackOrder": 3,
+                "rowOrder": 3,
+                "cellId": "step__cell__band:3__component:1__track:3",
+                "placementRole": "branch_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-043__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Add incoming relationship"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 196.752,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 710,
+            "y": 362,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 700,
+        "y": 352,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:4__row:3",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-linear",
+          "track-3",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "linear",
+            "bandOrder": 3,
+            "trackId": "component:1__track:3",
+            "trackLabel": "T3",
+            "trackOrder": 3,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 3,
+            "rowOrder": 3,
+            "columnOrder": 3,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 968,
+        "y": 352,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:1__row:4",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-4",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "band:1__placeholder_track:4",
+            "trackLabel": "T4",
+            "trackOrder": 4,
+            "physicalRowOrder": 4,
+            "rowOrder": 4,
+            "columnOrder": 0,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 132,
+        "y": 460,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:2__row:4",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-4",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "band:2__placeholder_track:4",
+            "trackLabel": "T4",
+            "trackOrder": 4,
+            "physicalRowOrder": 4,
+            "rowOrder": 4,
+            "columnOrder": 1,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 400,
+        "y": 460,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:3__row:4",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-branch_target",
+          "track-4",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "branch_target",
+            "bandOrder": 2,
+            "trackId": "band:3__placeholder_track:4",
+            "trackLabel": "T4",
+            "trackOrder": 4,
+            "physicalRowOrder": 4,
+            "rowOrder": 4,
+            "columnOrder": 2,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 700,
+        "y": 460,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:4__row:4",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-linear",
+          "track-4",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "linear",
+            "bandOrder": 3,
+            "trackId": "band:4__placeholder_track:4",
+            "trackLabel": "T4",
+            "trackOrder": 4,
+            "physicalRowOrder": 4,
+            "rowOrder": 4,
+            "columnOrder": 3,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 968,
+        "y": 460,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:1__component:2__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c1",
+          "band-kind-entry",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:1",
+            "bandLabel": "C1",
+            "bandKind": "entry",
+            "bandOrder": 0,
+            "trackId": "component:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:2",
+            "componentOrder": 1,
+            "physicalRowOrder": 5,
+            "lineageId": "component:2__lineage:1",
+            "rowOrder": 5,
+            "columnOrder": 0
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-030",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:1",
+                "trackId": "component:2__track:0",
+                "componentId": "component:2",
+                "lineageId": "component:2__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 5,
+                "cellId": "step__cell__band:1__component:2__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-030__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Select Diagram Content"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 180.208,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 142,
+            "y": 578,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 132,
+        "y": 568,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:2__component:2__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c2",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:2",
+            "bandLabel": "C2",
+            "bandKind": "branch_target",
+            "bandOrder": 1,
+            "trackId": "component:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:2",
+            "componentOrder": 1,
+            "physicalRowOrder": 5,
+            "lineageId": "component:2__lineage:1",
+            "rowOrder": 5,
+            "columnOrder": 1
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-031",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:2",
+                "trackId": "component:2__track:0",
+                "componentId": "component:2",
+                "lineageId": "component:2__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 5,
+                "cellId": "step__cell__band:2__component:2__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-031__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Adjust View"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 89.504,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 410,
+            "y": 578,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 400,
+        "y": 568,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__cell__band:3__component:2__track:0",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c3",
+          "band-kind-branch_target",
+          "track-0"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:3",
+            "bandLabel": "C3",
+            "bandKind": "branch_target",
+            "bandOrder": 2,
+            "trackId": "component:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:2",
+            "componentOrder": 1,
+            "physicalRowOrder": 5,
+            "lineageId": "component:2__lineage:1",
+            "rowOrder": 5,
+            "columnOrder": 2
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "J-032",
+            "role": "step",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "scenario_flow_node",
+              "scenario-flow-lane-step",
+              "scenario-flow-role-spine_step",
+              "shape-box",
+              "type-step"
+            ],
+            "viewMetadata": {
+              "scenarioFlow": {
+                "kind": "semantic_node",
+                "laneId": "step",
+                "bandId": "band:3",
+                "trackId": "component:2__track:0",
+                "componentId": "component:2",
+                "lineageId": "component:2__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 5,
+                "cellId": "step__cell__band:3__component:2__track:0",
+                "placementRole": "spine_step"
+              }
+            },
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "narrow",
+                "standard",
+                "wide"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "escalate_width_band",
+              "maxLines": 2
+            },
+            "content": [
+              {
+                "id": "J-032__content__line_0",
+                "kind": "text",
+                "textStyleRole": "title",
+                "lines": [
+                  "Name the New View"
+                ],
+                "x": 12,
+                "y": 12,
+                "width": 150.504,
+                "height": 20,
+                "lineHeight": 20,
+                "region": "primary",
+                "priority": "primary"
+              }
+            ],
+            "ports": [
+              {
+                "id": "flow_in",
+                "role": "flow_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "flow_out",
+                "role": "flow_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "mirror_in",
+                "role": "mirror_in",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              },
+              {
+                "id": "mirror_out",
+                "role": "mirror_out",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "realization_in",
+                "role": "realization_in",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "realization_out",
+                "role": "realization_out",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "x": 710,
+            "y": 578,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 700,
+        "y": 568,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:semantic",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      },
+      {
+        "kind": "container",
+        "id": "step__placeholder_cell__band:4__row:5",
+        "role": "scenario_flow_cell",
+        "primitive": "stack",
+        "classes": [
+          "scenario_flow_cell",
+          "lane-step",
+          "band-c4",
+          "band-kind-linear",
+          "track-0",
+          "scenario_flow_placeholder_cell"
+        ],
+        "viewMetadata": {
+          "scenarioFlow": {
+            "kind": "cell",
+            "laneId": "step",
+            "bandId": "band:4",
+            "bandLabel": "C4",
+            "bandKind": "linear",
+            "bandOrder": 3,
+            "trackId": "component:2__track:0",
+            "trackLabel": "T0",
+            "trackOrder": 0,
+            "componentId": "component:2",
+            "componentOrder": 1,
+            "physicalRowOrder": 5,
+            "rowOrder": 5,
+            "columnOrder": 3,
+            "placeholder": true
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 10
+        },
+        "chrome": {
+          "padding": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          },
+          "gutter": 10,
+          "headerBandHeight": 0
+        },
+        "headerContent": [],
+        "children": [],
+        "ports": [],
+        "x": 968,
+        "y": 568,
+        "width": 244,
+        "height": 84,
+        "sharedWidthGroup": "scenario_flow:cell:placeholder",
+        "sharedHeightGroup": "scenario_flow:lane:step"
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 1240,
+    "height": 680
+  },
+  "edges": [
+    {
+      "id": "J-010__precedes__J-020",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-010",
+        "portId": "flow_out",
+        "x": 366,
+        "y": 62
+      },
+      "to": {
+        "itemId": "J-020",
+        "portId": "flow_in",
+        "x": 410,
+        "y": 62
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 366,
+            "y": 62
+          },
+          {
+            "x": 410,
+            "y": 62
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-010__precedes__J-040",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-010",
+        "portId": "flow_out",
+        "x": 366,
+        "y": 78
+      },
+      "to": {
+        "itemId": "J-040",
+        "portId": "flow_in",
+        "x": 410,
+        "y": 170
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 366,
+            "y": 78
+          },
+          {
+            "x": 394,
+            "y": 78
+          },
+          {
+            "x": 394,
+            "y": 170
+          },
+          {
+            "x": 410,
+            "y": 170
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-020__precedes__J-021",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-020",
+        "portId": "flow_out",
+        "x": 634,
+        "y": 62
+      },
+      "to": {
+        "itemId": "J-021",
+        "portId": "flow_in",
+        "x": 710,
+        "y": 62
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 634,
+            "y": 62
+          },
+          {
+            "x": 710,
+            "y": 62
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-040__precedes__J-041",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-040",
+        "portId": "flow_out",
+        "x": 634,
+        "y": 154
+      },
+      "to": {
+        "itemId": "J-041",
+        "portId": "flow_in",
+        "x": 710,
+        "y": 154
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 634,
+            "y": 154
+          },
+          {
+            "x": 710,
+            "y": 154
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-040__precedes__J-042",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-040",
+        "portId": "flow_out",
+        "x": 634,
+        "y": 170
+      },
+      "to": {
+        "itemId": "J-042",
+        "portId": "flow_in",
+        "x": 710,
+        "y": 278
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 634,
+            "y": 170
+          },
+          {
+            "x": 672,
+            "y": 170
+          },
+          {
+            "x": 672,
+            "y": 278
+          },
+          {
+            "x": 710,
+            "y": 278
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-040__precedes__J-043",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-040",
+        "portId": "flow_out",
+        "x": 634,
+        "y": 186
+      },
+      "to": {
+        "itemId": "J-043",
+        "portId": "flow_in",
+        "x": 710,
+        "y": 386
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 634,
+            "y": 186
+          },
+          {
+            "x": 656,
+            "y": 186
+          },
+          {
+            "x": 656,
+            "y": 386
+          },
+          {
+            "x": 710,
+            "y": 386
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-021__precedes__J-022",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-021",
+        "portId": "flow_out",
+        "x": 934,
+        "y": 70
+      },
+      "to": {
+        "itemId": "J-022",
+        "portId": "flow_in",
+        "x": 978,
+        "y": 70
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 934,
+            "y": 70
+          },
+          {
+            "x": 978,
+            "y": 70
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-030__precedes__J-031",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-030",
+        "portId": "flow_out",
+        "x": 366,
+        "y": 602
+      },
+      "to": {
+        "itemId": "J-031",
+        "portId": "flow_in",
+        "x": 410,
+        "y": 602
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 366,
+            "y": 602
+          },
+          {
+            "x": 410,
+            "y": 602
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "J-031__precedes__J-032",
+      "role": "precedes",
+      "classes": [
+        "scenario_flow_edge",
+        "scenario_flow_semantic_edge",
+        "edge-type-precedes",
+        "edge-channel-step_flow"
+      ],
+      "from": {
+        "itemId": "J-031",
+        "portId": "flow_out",
+        "x": 634,
+        "y": 602
+      },
+      "to": {
+        "itemId": "J-032",
+        "portId": "flow_in",
+        "x": 710,
+        "y": 602
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 634,
+            "y": 602
+          },
+          {
+            "x": 710,
+            "y": 602
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "decorations": [
+    {
+      "kind": "text",
+      "id": "lane-step__title",
+      "classes": [
+        "scenario_flow_lane_title",
+        "lane-step"
+      ],
+      "paintGroup": "labels",
+      "x": 24,
+      "y": 330,
+      "text": "Steps",
+      "textStyleRole": "label"
+    }
+  ],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ]
+}

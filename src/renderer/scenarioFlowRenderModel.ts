@@ -1,4 +1,5 @@
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
+import type { RendererScenarioFlowLayoutConfig, ViewSpec } from "../bundle/types.js";
 import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
@@ -37,6 +38,8 @@ export interface ScenarioFlowRenderEdge {
 }
 
 export interface ScenarioFlowRenderModel {
+  layout: RendererScenarioFlowLayoutConfig;
+  orderingEdgeTypes: string[];
   lanes: ScenarioFlowRenderLane[];
   nodes: ScenarioFlowRenderNode[];
   edges: ScenarioFlowRenderEdge[];
@@ -47,11 +50,13 @@ interface ScenarioFlowDisplayOptions {
   showBranchLabels: boolean;
 }
 
-const laneSpecs: Array<{ id: ScenarioLaneId; label: string; type: string }> = [
-  { id: "step", label: "Steps", type: "Step" },
-  { id: "place", label: "Places", type: "Place" },
-  { id: "view_state", label: "View States", type: "ViewState" }
-];
+function readScenarioFlowLayout(view: ViewSpec): RendererScenarioFlowLayoutConfig {
+  const layout = view.conventions.renderer_defaults?.scenario_flow_layout;
+  if (!layout) {
+    throw new Error(`View '${view.id}' does not declare renderer_defaults.scenario_flow_layout`);
+  }
+  return layout;
+}
 
 function orderNodeIds(graph: CompiledGraph, nodeIds: string[]): string[] {
   return getTopLevelNodeIdsInAuthorOrder(graph, nodeIds);
@@ -164,8 +169,10 @@ function readScenarioFlowDisplayOptions(policy: ResolvedDetailDisplayPolicy): Sc
 export function buildScenarioFlowRenderModel(
   projection: Projection,
   graph: CompiledGraph,
+  view: ViewSpec,
   displayPolicy: ResolvedDetailDisplayPolicy
 ): ScenarioFlowRenderModel {
+  const layout = readScenarioFlowLayout(view);
   const displayOptions = readScenarioFlowDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const authorOrderByNodeId = buildAuthorOrderByNodeId(
@@ -182,13 +189,13 @@ export function buildScenarioFlowRenderModel(
       .map((annotation) => [edgeAnnotationKey(annotation.from, annotation.to), annotation])
   );
 
-  const lanes = laneSpecs
+  const lanes = layout.lanes
     .map<ScenarioFlowRenderLane | undefined>((lane) => {
       const nodeIds = orderNodeIds(
         graph,
-        projection.nodes.filter((node) => node.type === lane.type).map((node) => node.id)
+        projection.nodes.filter((node) => lane.node_types.includes(node.type)).map((node) => node.id)
       );
-      if (nodeIds.length === 0) {
+      if (nodeIds.length === 0 && layout.empty_lane_policy === "omit") {
         return undefined;
       }
 
@@ -237,6 +244,8 @@ export function buildScenarioFlowRenderModel(
   ];
 
   return {
+    layout,
+    orderingEdgeTypes: [...view.projection.ordering_edges],
     lanes,
     nodes,
     edges,

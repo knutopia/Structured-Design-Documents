@@ -30,11 +30,31 @@ export interface ScenarioFlowBand {
   kind: ScenarioFlowBandKind;
 }
 
+export interface ScenarioFlowComponent {
+  id: string;
+  order: number;
+  nodeIds: string[];
+  rowStart: number;
+  rowSpan: number;
+  hasCycle: boolean;
+}
+
 export interface ScenarioFlowTrack {
   id: string;
   label: string;
-  bandId: string;
-  trackOrder: number;
+  componentId: string;
+  componentOrder: number;
+  localTrackOrder: number;
+  rowOrder: number;
+}
+
+export interface ScenarioFlowLineage {
+  id: string;
+  componentId: string;
+  trackId: string;
+  localTrackOrder: number;
+  startBandOrder: number;
+  endBandOrder: number;
   originatingDecisionNodeId?: string;
   branchLabel?: string;
   branchLabelSource?: string;
@@ -51,6 +71,8 @@ export interface ScenarioFlowCell {
   laneId: ScenarioFlowLaneId;
   bandId: string;
   trackId: string;
+  componentId: string;
+  lineageId?: string;
   rowOrder: number;
   columnOrder: number;
   trackOrder: number;
@@ -65,6 +87,10 @@ export interface ScenarioFlowNodePlacement {
   laneId: ScenarioFlowLaneId;
   bandId: string;
   trackId: string;
+  componentId: string;
+  lineageId: string;
+  trackOrder: number;
+  rowOrder: number;
   cellId: string;
   placementRole: ScenarioFlowPlacementRole;
   sourceAuthorOrder: number;
@@ -94,7 +120,11 @@ export interface ScenarioFlowConnectorPlan {
 
 export interface ScenarioFlowMiddleLayerModel {
   bands: ScenarioFlowBand[];
+  components: ScenarioFlowComponent[];
   tracks: ScenarioFlowTrack[];
+  lineages: ScenarioFlowLineage[];
+  totalTrackRows: number;
+  componentGapRows: number;
   laneGuides: ScenarioFlowLaneGuide[];
   cells: ScenarioFlowCell[];
   placements: ScenarioFlowNodePlacement[];
@@ -106,17 +136,16 @@ export interface ScenarioFlowMiddleLayerModel {
 interface StepPlacementSeed {
   node: ScenarioFlowRenderNode;
   position: number;
+  componentId: string;
+  componentOrder: number;
+  lineageId: string;
+  trackId: string;
   trackOrder: number;
+  rowOrder: number;
   originatingDecisionNodeId?: string;
   branchLabel?: string;
   branchLabelSource?: string;
 }
-
-const FIXED_LANES: Array<{ id: ScenarioFlowLaneId; label: string }> = [
-  { id: "step", label: "Steps" },
-  { id: "place", label: "Places" },
-  { id: "view_state", label: "View States" }
-];
 
 function compareNodeOrder(
   left: Pick<ScenarioFlowRenderNode, "authorOrder" | "id">,
@@ -132,9 +161,14 @@ function compareEdgeOrder(
   return left.authorOrder - right.authorOrder || left.to.localeCompare(right.to) || left.id.localeCompare(right.id);
 }
 
-function compareBranchEdges(left: ScenarioFlowRenderEdge, right: ScenarioFlowRenderEdge): number {
-  return (left.branchLabelSource ?? "").localeCompare(right.branchLabelSource ?? "")
-    || left.authorOrder - right.authorOrder
+function compareBranchEdges(
+  left: ScenarioFlowRenderEdge,
+  right: ScenarioFlowRenderEdge,
+  nodeMap: ReadonlyMap<string, ScenarioFlowRenderNode>
+): number {
+  return left.authorOrder - right.authorOrder
+    || (nodeMap.get(left.to)?.authorOrder ?? Number.MAX_SAFE_INTEGER)
+      - (nodeMap.get(right.to)?.authorOrder ?? Number.MAX_SAFE_INTEGER)
     || left.to.localeCompare(right.to)
     || left.id.localeCompare(right.id);
 }
@@ -162,21 +196,8 @@ function buildLaneByNodeId(model: ScenarioFlowRenderModel): Map<string, Scenario
   return laneByNodeId;
 }
 
-function fallbackLaneForType(nodeType: string): ScenarioFlowLaneId | undefined {
-  switch (nodeType) {
-    case "Step":
-      return "step";
-    case "Place":
-      return "place";
-    case "ViewState":
-      return "view_state";
-    default:
-      return undefined;
-  }
-}
-
-function buildLaneGuides(): ScenarioFlowLaneGuide[] {
-  return FIXED_LANES.map((lane, order) => ({
+function buildLaneGuides(model: ScenarioFlowRenderModel): ScenarioFlowLaneGuide[] {
+  return model.lanes.map((lane, order) => ({
     laneId: lane.id,
     label: lane.label,
     order
@@ -237,129 +258,318 @@ function topologicalStepOrder(
   };
 }
 
-function deriveStepPlacementSeeds(
+interface StepComponentDraft {
+  nodes: ScenarioFlowRenderNode[];
+  edges: ScenarioFlowRenderEdge[];
+}
+
+interface LineageDraft {
+  id: string;
+  componentId: string;
+  nodeIds: string[];
+  startPosition: number;
+  endPosition: number;
+  localTrackOrder: number;
+  originatingDecisionNodeId?: string;
+  branchLabel?: string;
+  branchLabelSource?: string;
+  sourceOrder: number;
+}
+
+interface DerivedStepLayout {
+  seeds: StepPlacementSeed[];
+  components: ScenarioFlowComponent[];
+  tracks: ScenarioFlowTrack[];
+  lineages: ScenarioFlowLineage[];
+  totalTrackRows: number;
+}
+
+function findStepComponents(
+  nodes: readonly ScenarioFlowRenderNode[],
+  edges: readonly ScenarioFlowRenderEdge[]
+): StepComponentDraft[] {
+  const nodeMap = createNodeMap(nodes);
+  const adjacency = new Map(nodes.map((node) => [node.id, new Set<string>()]));
+  for (const edge of edges) {
+    if (!nodeMap.has(edge.from) || !nodeMap.has(edge.to)) {
+      continue;
+    }
+    adjacency.get(edge.from)?.add(edge.to);
+    adjacency.get(edge.to)?.add(edge.from);
+  }
+
+  const visited = new Set<string>();
+  const components: StepComponentDraft[] = [];
+  for (const root of [...nodes].sort(compareNodeOrder)) {
+    if (visited.has(root.id)) {
+      continue;
+    }
+    const queue = [root.id];
+    const componentNodeIds = new Set<string>();
+    visited.add(root.id);
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (!current) {
+        continue;
+      }
+      componentNodeIds.add(current);
+      const neighbors = [...(adjacency.get(current) ?? [])]
+        .map((id) => nodeMap.get(id))
+        .filter((node): node is ScenarioFlowRenderNode => node !== undefined)
+        .sort(compareNodeOrder);
+      for (const neighbor of neighbors) {
+        if (!visited.has(neighbor.id)) {
+          visited.add(neighbor.id);
+          queue.push(neighbor.id);
+        }
+      }
+    }
+    components.push({
+      nodes: [...componentNodeIds]
+        .map((id) => nodeMap.get(id))
+        .filter((node): node is ScenarioFlowRenderNode => node !== undefined)
+        .sort(compareNodeOrder),
+      edges: edges
+        .filter((edge) => componentNodeIds.has(edge.from) && componentNodeIds.has(edge.to))
+        .sort(compareEdgeOrder)
+    });
+  }
+  return components;
+}
+
+function intervalsOverlap(
+  left: Pick<LineageDraft, "startPosition" | "endPosition">,
+  right: Pick<LineageDraft, "startPosition" | "endPosition">
+): boolean {
+  return left.startPosition <= right.endPosition && right.startPosition <= left.endPosition;
+}
+
+function deriveStepLayout(
   model: ScenarioFlowRenderModel,
-  nodeMap: ReadonlyMap<string, ScenarioFlowRenderNode>,
   diagnostics: RendererDiagnostic[]
-): StepPlacementSeed[] {
+): DerivedStepLayout {
+  const primaryLane = model.lanes.find((lane) => lane.id === model.layout.primary_lane_id);
+  const primaryNodeIds = new Set(primaryLane?.nodeIds ?? []);
   const stepNodes = model.nodes
-    .filter((node) => node.type === "Step")
+    .filter((node) => primaryNodeIds.has(node.id))
     .sort(compareNodeOrder);
-  const stepNodeIds = new Set(stepNodes.map((node) => node.id));
+  const orderingEdgeTypes = new Set(model.orderingEdgeTypes);
   const stepEdges = model.edges
-    .filter((edge) => edge.type === "PRECEDES" && stepNodeIds.has(edge.from) && stepNodeIds.has(edge.to))
+    .filter((edge) => orderingEdgeTypes.has(edge.type)
+      && primaryNodeIds.has(edge.from)
+      && primaryNodeIds.has(edge.to))
     .sort(compareEdgeOrder);
 
   if (stepNodes.length === 0) {
     diagnostics.push(
       createSceneDiagnostic(
         "renderer.scene.scenario_flow_missing_step_spine",
-        "Scenario flow projection did not include Step nodes. Parking scoped nodes deterministically.",
+        "Scenario flow projection did not include primary-lane nodes. Parking scoped nodes deterministically.",
         { severity: "info" }
       )
     );
-    return [];
+    return { seeds: [], components: [], tracks: [], lineages: [], totalTrackRows: 0 };
   }
 
   if (stepEdges.length === 0) {
     diagnostics.push(
       createSceneDiagnostic(
         "renderer.scene.scenario_flow_no_step_flow",
-        "Scenario flow projection did not include Step PRECEDES edges. Falling back to author-order chronology.",
+        "Scenario flow projection did not include primary ordering edges. Treating primary-lane nodes as independent flows.",
         { severity: "info" }
       )
     );
-    return stepNodes.map((node, index) => ({
-      node,
-      position: index,
-      trackOrder: 0
-    }));
   }
 
-  const { ordered, hasCycle } = topologicalStepOrder(stepNodes, stepEdges);
-  if (hasCycle) {
-    diagnostics.push(
-      createSceneDiagnostic(
-        "renderer.scene.scenario_flow_step_cycle",
-        "Scenario flow Step PRECEDES edges contain a cycle. Falling back to author-order chronology.",
-        { severity: "warn" }
-      )
-    );
-    return stepNodes.map((node, index) => ({
-      node,
-      position: index,
-      trackOrder: 0
-    }));
-  }
+  const componentDrafts = findStepComponents(stepNodes, stepEdges);
+  const seeds: StepPlacementSeed[] = [];
+  const components: ScenarioFlowComponent[] = [];
+  const tracks: ScenarioFlowTrack[] = [];
+  const lineages: ScenarioFlowLineage[] = [];
+  let rowCursor = 0;
 
-  const incomingCountByNodeId = new Map(stepNodes.map((node) => [node.id, 0]));
-  const outgoingBySourceId = new Map<string, ScenarioFlowRenderEdge[]>();
-  for (const edge of stepEdges) {
-    incomingCountByNodeId.set(edge.to, (incomingCountByNodeId.get(edge.to) ?? 0) + 1);
-    const outgoing = outgoingBySourceId.get(edge.from) ?? [];
-    outgoing.push(edge);
-    outgoingBySourceId.set(edge.from, outgoing);
-  }
+  componentDrafts.forEach((componentDraft, componentOrder) => {
+    const componentId = `component:${componentOrder + 1}`;
+    const { ordered, hasCycle } = topologicalStepOrder(componentDraft.nodes, componentDraft.edges);
+    const orderedNodes = hasCycle ? [...componentDraft.nodes].sort(compareNodeOrder) : ordered;
+    const positionByNodeId = new Map<string, number>();
+    const incomingByTargetId = new Map<string, ScenarioFlowRenderEdge[]>();
+    const outgoingBySourceId = new Map<string, ScenarioFlowRenderEdge[]>();
+    const componentNodeMap = createNodeMap(componentDraft.nodes);
 
-  const positionByNodeId = new Map<string, number>();
-  for (const node of ordered) {
-    if ((incomingCountByNodeId.get(node.id) ?? 0) === 0) {
-      positionByNodeId.set(node.id, 0);
+    for (const edge of componentDraft.edges) {
+      const incoming = incomingByTargetId.get(edge.to) ?? [];
+      incoming.push(edge);
+      incomingByTargetId.set(edge.to, incoming);
+      const outgoing = outgoingBySourceId.get(edge.from) ?? [];
+      outgoing.push(edge);
+      outgoingBySourceId.set(edge.from, outgoing);
     }
-    const sourcePosition = positionByNodeId.get(node.id) ?? 0;
-    for (const edge of [...(outgoingBySourceId.get(node.id) ?? [])].sort(compareEdgeOrder)) {
-      const candidate = sourcePosition + 1;
-      const current = positionByNodeId.get(edge.to);
-      if (current === undefined || candidate > current) {
-        positionByNodeId.set(edge.to, candidate);
-      }
+    for (const edges of incomingByTargetId.values()) {
+      edges.sort((left, right) => compareBranchEdges(left, right, componentNodeMap));
     }
-  }
-
-  const branchSeedByTargetId = new Map<string, Pick<StepPlacementSeed,
-    "trackOrder" | "originatingDecisionNodeId" | "branchLabel" | "branchLabelSource"
-  >>();
-  for (const [sourceId, outgoing] of outgoingBySourceId.entries()) {
-    if (outgoing.length < 2) {
-      continue;
+    for (const edges of outgoingBySourceId.values()) {
+      edges.sort((left, right) => compareBranchEdges(left, right, componentNodeMap));
     }
-    [...outgoing].sort(compareBranchEdges).forEach((edge, index) => {
-      branchSeedByTargetId.set(edge.to, {
-        trackOrder: index,
-        originatingDecisionNodeId: sourceId,
-        branchLabel: edge.branchLabel,
-        branchLabelSource: edge.branchLabelSource
-      });
-    });
-  }
 
-  const connectedStepIds = new Set(stepEdges.flatMap((edge) => [edge.from, edge.to]));
-  for (const node of stepNodes) {
-    if (!connectedStepIds.has(node.id)) {
+    if (hasCycle) {
       diagnostics.push(
         createSceneDiagnostic(
-          "renderer.scene.scenario_flow_disconnected_step",
-          `Step "${node.id}" is disconnected from the Step PRECEDES spine. Placing it deterministically in chronology.`,
-          {
-            targetId: node.id,
-            severity: "info"
-          }
+          "renderer.scene.scenario_flow_step_cycle",
+          `Scenario flow component "${componentId}" contains a primary ordering cycle. Falling back to source-order chronology for that component.`,
+          { targetId: orderedNodes[0]?.id, severity: "warn" }
         )
       );
+      orderedNodes.forEach((node, index) => positionByNodeId.set(node.id, index));
+    } else {
+      for (const node of orderedNodes) {
+        const incoming = incomingByTargetId.get(node.id) ?? [];
+        const position = incoming.length === 0
+          ? 0
+          : Math.max(...incoming.map((edge) => (positionByNodeId.get(edge.from) ?? 0) + 1));
+        positionByNodeId.set(node.id, position);
+      }
     }
-  }
 
-  return stepNodes.map((node) => {
-    const branchSeed = branchSeedByTargetId.get(node.id);
-    return {
-      node,
-      position: positionByNodeId.get(node.id) ?? 0,
-      trackOrder: branchSeed?.trackOrder ?? 0,
-      originatingDecisionNodeId: branchSeed?.originatingDecisionNodeId,
-      branchLabel: branchSeed?.branchLabel,
-      branchLabelSource: branchSeed?.branchLabelSource
+    const lineageDrafts: LineageDraft[] = [];
+    const lineageByNodeId = new Map<string, LineageDraft>();
+    if (hasCycle) {
+      lineageDrafts.push({
+        id: `${componentId}__lineage:1`,
+        componentId,
+        nodeIds: orderedNodes.map((node) => node.id),
+        startPosition: 0,
+        endPosition: Math.max(0, orderedNodes.length - 1),
+        localTrackOrder: 0,
+        sourceOrder: orderedNodes[0]?.authorOrder ?? 0
+      });
+      for (const node of orderedNodes) {
+        lineageByNodeId.set(node.id, lineageDrafts[0]!);
+      }
+    } else {
+      const continuationEdgeIds = new Set<string>();
+      for (const edge of componentDraft.edges) {
+        if (incomingByTargetId.get(edge.to)?.[0]?.id === edge.id
+          && outgoingBySourceId.get(edge.from)?.[0]?.id === edge.id) {
+          continuationEdgeIds.add(edge.id);
+        }
+      }
+
+      for (const node of orderedNodes) {
+        const incoming = incomingByTargetId.get(node.id) ?? [];
+        const continuationEdge = incoming.find((edge) => continuationEdgeIds.has(edge.id));
+        const inherited = continuationEdge ? lineageByNodeId.get(continuationEdge.from) : undefined;
+        if (inherited) {
+          inherited.nodeIds.push(node.id);
+          inherited.endPosition = Math.max(inherited.endPosition, positionByNodeId.get(node.id) ?? 0);
+          lineageByNodeId.set(node.id, inherited);
+          continue;
+        }
+
+        const originEdge = incoming[0];
+        const sourceOutgoing = originEdge ? outgoingBySourceId.get(originEdge.from) ?? [] : [];
+        const position = positionByNodeId.get(node.id) ?? 0;
+        const lineage: LineageDraft = {
+          id: `${componentId}__lineage:${lineageDrafts.length + 1}`,
+          componentId,
+          nodeIds: [node.id],
+          startPosition: position,
+          endPosition: position,
+          localTrackOrder: 0,
+          originatingDecisionNodeId: sourceOutgoing.length > 1 ? originEdge?.from : undefined,
+          branchLabel: sourceOutgoing.length > 1 ? originEdge?.branchLabel : undefined,
+          branchLabelSource: sourceOutgoing.length > 1 ? originEdge?.branchLabelSource : undefined,
+          sourceOrder: originEdge?.authorOrder ?? node.authorOrder
+        };
+        lineageDrafts.push(lineage);
+        lineageByNodeId.set(node.id, lineage);
+      }
+
+      const assignedByTrack = new Map<number, LineageDraft[]>();
+      for (const lineage of [...lineageDrafts].sort((left, right) =>
+        left.startPosition - right.startPosition
+        || left.sourceOrder - right.sourceOrder
+        || left.id.localeCompare(right.id))) {
+        let trackOrder = 0;
+        while ((assignedByTrack.get(trackOrder) ?? []).some((assigned) => intervalsOverlap(assigned, lineage))) {
+          trackOrder += 1;
+        }
+        lineage.localTrackOrder = trackOrder;
+        const assigned = assignedByTrack.get(trackOrder) ?? [];
+        assigned.push(lineage);
+        assignedByTrack.set(trackOrder, assigned);
+      }
+    }
+
+    const rowSpan = Math.max(1, ...lineageDrafts.map((lineage) => lineage.localTrackOrder + 1));
+    const component: ScenarioFlowComponent = {
+      id: componentId,
+      order: componentOrder,
+      nodeIds: orderedNodes.map((node) => node.id),
+      rowStart: rowCursor,
+      rowSpan,
+      hasCycle
     };
+    components.push(component);
+
+    for (let localTrackOrder = 0; localTrackOrder < rowSpan; localTrackOrder += 1) {
+      tracks.push({
+        id: `${componentId}__track:${localTrackOrder}`,
+        label: `T${localTrackOrder}`,
+        componentId,
+        componentOrder,
+        localTrackOrder,
+        rowOrder: rowCursor + localTrackOrder
+      });
+    }
+    const trackByLocalOrder = new Map(tracks
+      .filter((track) => track.componentId === componentId)
+      .map((track) => [track.localTrackOrder, track] as const));
+    for (const lineage of lineageDrafts) {
+      const track = trackByLocalOrder.get(lineage.localTrackOrder)!;
+      lineages.push({
+        id: lineage.id,
+        componentId,
+        trackId: track.id,
+        localTrackOrder: lineage.localTrackOrder,
+        startBandOrder: lineage.startPosition,
+        endBandOrder: lineage.endPosition,
+        originatingDecisionNodeId: lineage.originatingDecisionNodeId,
+        branchLabel: lineage.branchLabel,
+        branchLabelSource: lineage.branchLabelSource
+      });
+    }
+    for (const node of orderedNodes) {
+      const lineage = lineageByNodeId.get(node.id)!;
+      const track = trackByLocalOrder.get(lineage.localTrackOrder)!;
+      seeds.push({
+        node,
+        position: positionByNodeId.get(node.id) ?? 0,
+        componentId,
+        componentOrder,
+        lineageId: lineage.id,
+        trackId: track.id,
+        trackOrder: lineage.localTrackOrder,
+        rowOrder: track.rowOrder,
+        originatingDecisionNodeId: lineage.originatingDecisionNodeId,
+        branchLabel: lineage.branchLabel,
+        branchLabelSource: lineage.branchLabelSource
+      });
+    }
+
+    rowCursor += rowSpan;
+    if (componentOrder < componentDrafts.length - 1) {
+      rowCursor += model.layout.component_gap_rows;
+    }
   });
+
+  return {
+    seeds,
+    components,
+    tracks,
+    lineages,
+    totalTrackRows: Math.max(1, rowCursor)
+  };
 }
 
 function buildBands(
@@ -372,7 +582,8 @@ function buildBands(
   const incomingCountByStepId = new Map<string, number>();
   const outgoingCountByStepId = new Map<string, number>();
 
-  for (const edge of model.edges.filter((candidate) => candidate.type === "PRECEDES")) {
+  const orderingEdgeTypes = new Set(model.orderingEdgeTypes);
+  for (const edge of model.edges.filter((candidate) => orderingEdgeTypes.has(candidate.type))) {
     const targetPosition = positionByStepId.get(edge.to);
     if (targetPosition !== undefined) {
       const incoming = incomingByPosition.get(targetPosition) ?? [];
@@ -425,57 +636,6 @@ function needsParkingBand(
     : !realizedTargetIds.has(node.id));
 }
 
-function buildTracks(
-  bands: readonly ScenarioFlowBand[],
-  seeds: readonly StepPlacementSeed[]
-): ScenarioFlowTrack[] {
-  const bandByPosition = new Map<number, ScenarioFlowBand>();
-  [...new Set(seeds.map((seed) => seed.position))]
-    .sort((left, right) => left - right)
-    .forEach((position, index) => {
-      const band = bands[index];
-      if (band) {
-        bandByPosition.set(position, band);
-      }
-    });
-
-  const trackSeedByKey = new Map<string, StepPlacementSeed>();
-  for (const seed of seeds) {
-    const band = bandByPosition.get(seed.position);
-    if (!band) {
-      continue;
-    }
-    const key = `${band.id}::${seed.trackOrder}`;
-    const existing = trackSeedByKey.get(key);
-    if (!existing || compareNodeOrder(seed.node, existing.node) < 0) {
-      trackSeedByKey.set(key, seed);
-    }
-  }
-
-  return [...trackSeedByKey.entries()]
-    .sort((left, right) => {
-      const [leftBandId, leftTrackOrder] = left[0].split("::");
-      const [rightBandId, rightTrackOrder] = right[0].split("::");
-      const leftBand = bands.find((band) => band.id === leftBandId);
-      const rightBand = bands.find((band) => band.id === rightBandId);
-      return (leftBand?.bandOrder ?? 0) - (rightBand?.bandOrder ?? 0)
-        || Number(leftTrackOrder) - Number(rightTrackOrder);
-    })
-    .map(([key, seed]) => {
-      const [bandId, trackOrderText] = key.split("::");
-      const trackOrder = Number(trackOrderText);
-      return {
-        id: `${bandId}__track:${trackOrder}`,
-        label: `T${trackOrder}`,
-        bandId,
-        trackOrder,
-        originatingDecisionNodeId: seed.originatingDecisionNodeId,
-        branchLabel: seed.branchLabel,
-        branchLabelSource: seed.branchLabelSource
-      } satisfies ScenarioFlowTrack;
-    });
-}
-
 function resolveEdgeChannel(edge: ScenarioFlowRenderEdge): ScenarioFlowEdgeChannel {
   switch (edge.type) {
     case "PRECEDES":
@@ -509,6 +669,7 @@ function buildCellsAndPlacements(
   laneByNodeId: ReadonlyMap<string, ScenarioFlowLaneId>,
   bands: readonly ScenarioFlowBand[],
   tracks: readonly ScenarioFlowTrack[],
+  lineages: readonly ScenarioFlowLineage[],
   seeds: readonly StepPlacementSeed[],
   diagnostics: RendererDiagnostic[]
 ): {
@@ -524,21 +685,37 @@ function buildCellsAndPlacements(
         bandByPosition.set(position, band);
       }
     });
-  const trackByBandAndOrder = new Map(tracks.map((track) => [`${track.bandId}::${track.trackOrder}`, track] as const));
   const parkingBand = bands.find((band) => band.kind === "parking");
-  const parkingTrack = parkingBand ? tracks.find((track) => track.bandId === parkingBand.id) : undefined;
-  const stepPlacementByNodeId = new Map<string, { bandId: string; trackId: string; trackOrder: number }>();
+  const parkingTrack = parkingBand ? tracks[0] : undefined;
+  const trackById = new Map(tracks.map((track) => [track.id, track] as const));
+  const activeLineageByTrackAndBand = new Map<string, ScenarioFlowLineage>();
+  for (const lineage of lineages) {
+    for (let bandOrder = lineage.startBandOrder; bandOrder <= lineage.endBandOrder; bandOrder += 1) {
+      activeLineageByTrackAndBand.set(`${lineage.trackId}::${bandOrder}`, lineage);
+    }
+  }
+  const stepPlacementByNodeId = new Map<string, {
+    bandId: string;
+    trackId: string;
+    componentId: string;
+    lineageId: string;
+    trackOrder: number;
+    rowOrder: number;
+  }>();
 
   for (const seed of seeds) {
     const band = bandByPosition.get(seed.position);
-    const track = band ? trackByBandAndOrder.get(`${band.id}::${seed.trackOrder}`) : undefined;
+    const track = trackById.get(seed.trackId);
     if (!band || !track) {
       continue;
     }
     stepPlacementByNodeId.set(seed.node.id, {
       bandId: band.id,
       trackId: track.id,
-      trackOrder: track.trackOrder
+      componentId: seed.componentId,
+      lineageId: seed.lineageId,
+      trackOrder: track.localTrackOrder,
+      rowOrder: track.rowOrder
     });
   }
 
@@ -546,7 +723,10 @@ function buildCellsAndPlacements(
     laneId: ScenarioFlowLaneId;
     bandId: string;
     trackId: string;
+    componentId: string;
+    lineageId: string;
     trackOrder: number;
+    rowOrder: number;
     placementRole: ScenarioFlowPlacementRole;
   }>();
 
@@ -559,7 +739,10 @@ function buildCellsAndPlacements(
       laneId: "step",
       bandId: placement.bandId,
       trackId: placement.trackId,
+      componentId: placement.componentId,
+      lineageId: placement.lineageId,
       trackOrder: placement.trackOrder,
+      rowOrder: placement.rowOrder,
       placementRole: resolvePlacementRole(seed.node.type, placement.trackOrder)
     });
   }
@@ -570,7 +753,7 @@ function buildCellsAndPlacements(
   for (const edge of realizationEdges) {
     const sourcePlacement = stepPlacementByNodeId.get(edge.from);
     const target = nodeMap.get(edge.to);
-    const laneId = laneByNodeId.get(edge.to) ?? (target ? fallbackLaneForType(target.type) : undefined);
+    const laneId = laneByNodeId.get(edge.to);
     if (!sourcePlacement || !target || !laneId || laneId === "step") {
       continue;
     }
@@ -578,7 +761,10 @@ function buildCellsAndPlacements(
       laneId,
       bandId: sourcePlacement.bandId,
       trackId: sourcePlacement.trackId,
+      componentId: sourcePlacement.componentId,
+      lineageId: sourcePlacement.lineageId,
       trackOrder: sourcePlacement.trackOrder,
+      rowOrder: sourcePlacement.rowOrder,
       placementRole: resolvePlacementRole(target.type, sourcePlacement.trackOrder)
     });
   }
@@ -587,7 +773,7 @@ function buildCellsAndPlacements(
     if (nodePlacementTargetByNodeId.has(node.id)) {
       continue;
     }
-    const laneId = laneByNodeId.get(node.id) ?? fallbackLaneForType(node.type);
+    const laneId = laneByNodeId.get(node.id);
     if (!laneId) {
       continue;
     }
@@ -606,7 +792,10 @@ function buildCellsAndPlacements(
         laneId,
         bandId: parkingBand.id,
         trackId: parkingTrack.id,
-        trackOrder: parkingTrack.trackOrder,
+        componentId: parkingTrack.componentId,
+        lineageId: "lineage:parking",
+        trackOrder: parkingTrack.localTrackOrder,
+        rowOrder: parkingTrack.rowOrder,
         placementRole: "parking"
       });
     }
@@ -618,59 +807,68 @@ function buildCellsAndPlacements(
     if (!node) {
       continue;
     }
-    const cellId = `${target.laneId}__cell__${target.trackId}`;
+    const cellId = `${target.laneId}__cell__${target.bandId}__${target.trackId}`;
     const nodes = nodesByCellId.get(cellId) ?? [];
     nodes.push(node);
     nodesByCellId.set(cellId, nodes);
   }
 
-  const laneOrderById = new Map(FIXED_LANES.map((lane, index) => [lane.id, index] as const));
-  const bandById = new Map(bands.map((band) => [band.id, band] as const));
   const cells: ScenarioFlowCell[] = [];
   const placements: ScenarioFlowNodePlacement[] = [];
 
   for (const track of tracks) {
-    const band = bandById.get(track.bandId);
-    if (!band) {
-      continue;
-    }
-    for (const lane of FIXED_LANES) {
-      const cellId = `${lane.id}__cell__${track.id}`;
-      const nodeIds = (nodesByCellId.get(cellId) ?? [])
-        .sort(compareNodeOrder)
-        .map((node) => node.id);
-      cells.push({
-        id: cellId,
-        laneId: lane.id,
-        bandId: track.bandId,
-        trackId: track.id,
-        rowOrder: laneOrderById.get(lane.id) ?? 0,
-        columnOrder: band.bandOrder,
-        trackOrder: track.trackOrder,
-        nodeIds,
-      sharedWidthGroup: band.kind === "parking"
-        ? "scenario_flow:cell:parking"
-        : "scenario_flow:cell:semantic",
-      sharedHeightGroup: `scenario_flow:lane:${lane.id}`
-      });
-
-      nodeIds.forEach((nodeId) => {
-        const node = nodeMap.get(nodeId);
-        const target = nodePlacementTargetByNodeId.get(nodeId);
-        if (!node || !target) {
-          return;
-        }
-        placements.push({
-          nodeId,
-          nodeType: node.type,
-          laneId: target.laneId,
-          bandId: target.bandId,
-          trackId: target.trackId,
-          cellId,
-          placementRole: target.placementRole,
-          sourceAuthorOrder: node.authorOrder
+    for (const band of bands) {
+      const activeLineage = activeLineageByTrackAndBand.get(`${track.id}::${band.bandOrder}`);
+      if (!activeLineage) {
+        continue;
+      }
+      for (const lane of model.lanes) {
+        const cellId = `${lane.id}__cell__${band.id}__${track.id}`;
+        const nodeIds = (nodesByCellId.get(cellId) ?? [])
+          .sort(compareNodeOrder)
+          .map((node) => node.id);
+        const lineageId = nodeIds
+          .map((nodeId) => nodePlacementTargetByNodeId.get(nodeId)?.lineageId)
+          .find((value): value is string => value !== undefined) ?? activeLineage.id;
+        cells.push({
+          id: cellId,
+          laneId: lane.id,
+          bandId: band.id,
+          trackId: track.id,
+          componentId: track.componentId,
+          lineageId,
+          rowOrder: track.rowOrder,
+          columnOrder: band.bandOrder,
+          trackOrder: track.localTrackOrder,
+          nodeIds,
+          sharedWidthGroup: band.kind === "parking"
+            ? "scenario_flow:cell:parking"
+            : "scenario_flow:cell:semantic",
+          sharedHeightGroup: `scenario_flow:lane:${lane.id}`
         });
-      });
+
+        nodeIds.forEach((nodeId) => {
+          const node = nodeMap.get(nodeId);
+          const target = nodePlacementTargetByNodeId.get(nodeId);
+          if (!node || !target) {
+            return;
+          }
+          placements.push({
+            nodeId,
+            nodeType: node.type,
+            laneId: target.laneId,
+            bandId: target.bandId,
+            trackId: target.trackId,
+            componentId: target.componentId,
+            lineageId: target.lineageId,
+            trackOrder: target.trackOrder,
+            rowOrder: target.rowOrder,
+            cellId,
+            placementRole: target.placementRole,
+            sourceAuthorOrder: node.authorOrder
+          });
+        });
+      }
     }
   }
 
@@ -737,7 +935,8 @@ export function buildScenarioFlowMiddleLayer(
   const nodeMap = createNodeMap(model.nodes);
   const laneByNodeId = buildLaneByNodeId(model);
   const diagnostics: RendererDiagnostic[] = [];
-  const stepPlacementSeeds = deriveStepPlacementSeeds(model, nodeMap, diagnostics);
+  const stepLayout = deriveStepLayout(model, diagnostics);
+  const stepPlacementSeeds = stepLayout.seeds;
   const semanticBands = buildBands(stepPlacementSeeds, model);
   const parkingBand: ScenarioFlowBand[] = needsParkingBand(model, stepPlacementSeeds)
     ? [{
@@ -748,20 +947,35 @@ export function buildScenarioFlowMiddleLayer(
       }]
     : [];
   const bands = [...semanticBands, ...parkingBand];
-  const semanticTracks = buildTracks(semanticBands, stepPlacementSeeds);
-  const parkingTracks: ScenarioFlowTrack[] = parkingBand.map((band) => ({
-    id: `${band.id}__track:0`,
-    label: "T0",
-    bandId: band.id,
-    trackOrder: 0
-  }));
-  const tracks = [...semanticTracks, ...parkingTracks];
+  const tracks = [...stepLayout.tracks];
+  if (tracks.length === 0 && parkingBand.length > 0) {
+    tracks.push({
+      id: "component:parking__track:0",
+      label: "T0",
+      componentId: "component:parking",
+      componentOrder: stepLayout.components.length,
+      localTrackOrder: 0,
+      rowOrder: 0
+    });
+  }
+  const lineages = [...stepLayout.lineages];
+  if (parkingBand.length > 0 && tracks[0]) {
+    lineages.push({
+      id: "lineage:parking",
+      componentId: tracks[0].componentId,
+      trackId: tracks[0].id,
+      localTrackOrder: tracks[0].localTrackOrder,
+      startBandOrder: parkingBand[0]!.bandOrder,
+      endBandOrder: parkingBand[0]!.bandOrder
+    });
+  }
   const { cells, placements } = buildCellsAndPlacements(
     model,
     nodeMap,
     laneByNodeId,
     bands,
     tracks,
+    lineages,
     stepPlacementSeeds,
     diagnostics
   );
@@ -770,8 +984,12 @@ export function buildScenarioFlowMiddleLayer(
 
   return {
     bands,
+    components: stepLayout.components,
     tracks,
-    laneGuides: buildLaneGuides(),
+    lineages,
+    totalTrackRows: Math.max(stepLayout.totalTrackRows, tracks.length > 0 ? 1 : 0),
+    componentGapRows: model.layout.component_gap_rows,
+    laneGuides: buildLaneGuides(model),
     cells,
     placements,
     edges,

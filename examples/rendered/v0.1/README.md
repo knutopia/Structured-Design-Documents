@@ -13,6 +13,7 @@ Source manifest: `bundle/v0.1/manifest.yaml`
 Curated view/example pairs:
 
 - `journey_map_diagram_type/branching_journey_example`
+- `scenario_flow_diagram_type/flow_journey_topology_challenge_example`
 - `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
 - `outcome_opportunity_map_diagram_type/multiple_outcomes_example`
 - `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`

@@ -77,7 +77,7 @@ for a compact list of content available to each diagram type.
 
   Step-by-step UI-level activities (but *without* collapsing the world into screens). 
 
-  The x-axis shows horizontal progressions ("bands"). The y-axis shows lanes for Steps, Places and View States, with tracks for branch alternatives.
+  The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty lanes for Steps, Places and View States, with persistent rows for branch alternatives and separated row groups for independent flows.
 
   Example: 
   :::: details scenario_branching_example <Badge type="info" text="Detail: Compact" vertical="top" />
@@ -88,6 +88,18 @@ for a compact list of content available to each diagram type.
   == Source
   showRepoLink /examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/
   showSource ../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/scenario_branching.sdd
+  :::
+  ::::
+
+  :::: details flow_journey_topology_challenge_example <Badge type="info" text="Advanced topology" vertical="top" />
+
+  :::tabs
+  == Scenario Flow Diagram
+  ![svg](../../../examples/rendered/v0.1/scenario_flow_diagram_type/flow_journey_topology_challenge_example/detailed_detail/flow_journey_topology_challenge.scenario_flow.svg)
+  == Source
+  This example combines nested branching with a separate parallel flow and intentionally contains no Place or ViewState nodes.
+  showRepoLink /examples/rendered/v0.1/scenario_flow_diagram_type/flow_journey_topology_challenge_example/
+  showSource ../../../examples/rendered/v0.1/scenario_flow_diagram_type/flow_journey_topology_challenge_example/flow_journey_topology_challenge.sdd
   :::
   ::::
 

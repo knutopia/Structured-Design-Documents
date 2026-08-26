@@ -1,0 +1,118 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "scenario_flow",
+  "source_example": "flow_journey_topology_challenge",
+  "nodes": [
+    {
+      "id": "J-010",
+      "type": "Step",
+      "name": "Select a Node"
+    },
+    {
+      "id": "J-020",
+      "type": "Step",
+      "name": "Review Diagrams Containing Current Node"
+    },
+    {
+      "id": "J-021",
+      "type": "Step",
+      "name": "Select Diagram"
+    },
+    {
+      "id": "J-022",
+      "type": "Step",
+      "name": "View Node in New Diagram Context"
+    },
+    {
+      "id": "J-030",
+      "type": "Step",
+      "name": "Select Diagram Content"
+    },
+    {
+      "id": "J-031",
+      "type": "Step",
+      "name": "Adjust View"
+    },
+    {
+      "id": "J-032",
+      "type": "Step",
+      "name": "Name the New View"
+    },
+    {
+      "id": "J-040",
+      "type": "Step",
+      "name": "Add Relationship"
+    },
+    {
+      "id": "J-041",
+      "type": "Step",
+      "name": "Add relationship, by node"
+    },
+    {
+      "id": "J-042",
+      "type": "Step",
+      "name": "Add outgoing relationship"
+    },
+    {
+      "id": "J-043",
+      "type": "Step",
+      "name": "Add incoming relationship"
+    }
+  ],
+  "edges": [
+    {
+      "from": "J-010",
+      "type": "PRECEDES",
+      "to": "J-020"
+    },
+    {
+      "from": "J-010",
+      "type": "PRECEDES",
+      "to": "J-040"
+    },
+    {
+      "from": "J-020",
+      "type": "PRECEDES",
+      "to": "J-021"
+    },
+    {
+      "from": "J-021",
+      "type": "PRECEDES",
+      "to": "J-022"
+    },
+    {
+      "from": "J-030",
+      "type": "PRECEDES",
+      "to": "J-031"
+    },
+    {
+      "from": "J-031",
+      "type": "PRECEDES",
+      "to": "J-032"
+    },
+    {
+      "from": "J-040",
+      "type": "PRECEDES",
+      "to": "J-041"
+    },
+    {
+      "from": "J-040",
+      "type": "PRECEDES",
+      "to": "J-042"
+    },
+    {
+      "from": "J-040",
+      "type": "PRECEDES",
+      "to": "J-043"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

@@ -107,6 +107,37 @@ describe("bundle-owned render details", () => {
     });
   });
 
+  it("requires a valid bundle-owned scenario-flow layout policy", () => {
+    const scenarioView = bundle.views.views.find((view) => view.id === "scenario_flow")!;
+    expect(scenarioView.conventions.renderer_defaults?.scenario_flow_layout).toEqual({
+      primary_lane_id: "step",
+      lanes: [
+        { id: "step", label: "Steps", node_types: ["Step"] },
+        { id: "place", label: "Places", node_types: ["Place"] },
+        { id: "view_state", label: "View States", node_types: ["ViewState"] }
+      ],
+      empty_lane_policy: "omit",
+      component_order: "source",
+      component_gap_rows: 1,
+      branch_order: "source"
+    });
+
+    expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
+      delete (view.conventions.renderer_defaults as Record<string, unknown>).scenario_flow_layout;
+    });
+    expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
+      view.conventions.renderer_defaults!.scenario_flow_layout!.component_gap_rows = -1;
+    });
+    expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
+      view.conventions.renderer_defaults!.scenario_flow_layout!.lanes.push({
+        ...view.conventions.renderer_defaults!.scenario_flow_layout!.lanes[0]!
+      });
+    });
+  });
+
   it("cross-checks the renderer registry without embedding view IDs in bundle validation", () => {
     const participants = bundle.views.views
       .filter((view) => view.conventions.renderer_defaults !== undefined)
@@ -141,6 +172,11 @@ describe("bundle-owned render details", () => {
     const applicabilityChanged = cloneBundle();
     applicabilityChanged.views.views[0]!.conventions.renderer_defaults!.batch_applicability!.minimum = 2;
     expect(computeBundleFingerprint(applicabilityChanged)).not.toBe(computeBundleFingerprint(bundle));
+
+    const scenarioLayoutChanged = cloneBundle();
+    const scenarioView = scenarioLayoutChanged.views.views.find((view) => view.id === "scenario_flow")!;
+    scenarioView.conventions.renderer_defaults!.scenario_flow_layout!.component_gap_rows = 2;
+    expect(computeBundleFingerprint(scenarioLayoutChanged)).not.toBe(computeBundleFingerprint(bundle));
   });
 
   it("fails unsupported view/detail resolution rather than falling back", () => {

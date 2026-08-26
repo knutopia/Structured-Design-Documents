@@ -327,7 +327,7 @@ const scenarioFlowRenderer: ViewTextRenderer = {
   },
   render: (projection, graph, bundle, view, format, detailId) => {
     const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
-    const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
+    const model = buildScenarioFlowRenderModel(projection, graph, view, displayPolicy);
     if (format === "dot") {
       return {
         text: renderScenarioFlowDot(model, resolveLegacyDotPreviewStyle(bundle, view)),

@@ -77,6 +77,10 @@ export type ScenarioFlowItemMetadata =
       trackId: string;
       trackLabel: string;
       trackOrder: number;
+      componentId?: string;
+      componentOrder?: number;
+      physicalRowOrder: number;
+      lineageId?: string;
       rowOrder: number;
       columnOrder: number;
       placeholder?: boolean;
@@ -86,6 +90,10 @@ export type ScenarioFlowItemMetadata =
       laneId: "step" | "place" | "view_state";
       bandId: string;
       trackId: string;
+      componentId: string;
+      lineageId: string;
+      trackOrder: number;
+      rowOrder: number;
       cellId: string;
       placementRole: "spine_step" | "branch_step" | "realized_place" | "realized_view_state" | "parking";
     };

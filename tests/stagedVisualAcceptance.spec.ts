@@ -216,6 +216,37 @@ describe("staged visual acceptance", () => {
     expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
   });
 
+  it("keeps nested branches and a parallel scenario flow in separated horizontal row groups", async () => {
+    const rendered = await renderStagedArtifacts(
+      path.join(repoRoot, "bundle/v0.1/examples/flow_journey_topology_challenge.sdd"),
+      "scenario_flow",
+      "detailed"
+    );
+
+    expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, SCENARIO_FLOW_FORBIDDEN_DIAGNOSTICS);
+
+    const semanticEdges = rendered.positionedScene.edges.filter((edge) =>
+      edge.classes.includes("scenario_flow_semantic_edge")
+    );
+    const nodeBoxes = getVisibleNodeBoxes(rendered.positionedScene.root);
+    const boxById = new Map(nodeBoxes.map((box) => [box.itemId, box]));
+    const y = (nodeId: string) => boxById.get(nodeId)!.y;
+
+    expect(["J-010", "J-020", "J-021", "J-022"].map(y)).toEqual([y("J-010"), y("J-010"), y("J-010"), y("J-010")]);
+    expect(y("J-040")).toBe(y("J-041"));
+    expect(["J-030", "J-031", "J-032"].map(y)).toEqual([y("J-030"), y("J-030"), y("J-030")]);
+    expect(y("J-030")).toBeGreaterThan(y("J-043") + boxById.get("J-043")!.height);
+
+    const labelBoxes = collectEdgeLabelBoxes(semanticEdges);
+    expectNoRouteIntersectionsWithNonEndpointBoxes(semanticEdges, nodeBoxes);
+    expectRoutesDoNotEnterEndpointBoxes(semanticEdges, nodeBoxes);
+    expectSameOrientationSegmentsSeparated(semanticEdges);
+    expectLabelsDoNotOverlapBoxes(labelBoxes, nodeBoxes);
+    expectLabelsDoNotOverlapEachOther(labelBoxes);
+    expectRoutesDoNotCrossLabels(semanticEdges, labelBoxes);
+  });
+
   it("keeps outcome_opportunity_map proof cases free of forbidden diagnostics, node-crossing routes, and label collisions", async () => {
     const cases = [
       path.join(repoRoot, "bundle/v0.1/examples/outcome_to_ia_trace.sdd"),

@@ -7,17 +7,24 @@ import { projectView } from "../src/projector/projectView.js";
 import { resolveDetailDisplayPolicy } from "../src/renderer/detailDisplay.js";
 import { buildScenarioFlowRenderModel } from "../src/renderer/scenarioFlowRenderModel.js";
 import { buildScenarioFlowMiddleLayer } from "../src/renderer/staged/scenarioFlowMiddleLayer.js";
+import type { ViewSpec } from "../src/bundle/types.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const scenarioBranchingPath = path.join(repoRoot, "bundle/v0.1/examples/scenario_branching.sdd");
+const topologyChallengePath = path.join(repoRoot, "bundle/v0.1/examples/flow_journey_topology_challenge.sdd");
 
-async function buildMiddleLayer(sourceText: string, profile = "strict") {
+async function buildMiddleLayer(
+  sourceText: string,
+  profile = "strict",
+  mutateView?: (view: ViewSpec) => void
+) {
   const bundle = await loadBundle(manifestPath);
   const view = bundle.views.views.find((candidate) => candidate.id === "scenario_flow");
   if (!view) {
     throw new Error("Could not resolve the scenario_flow view.");
   }
+  mutateView?.(view);
 
   const input = {
     path: path.join(repoRoot, "tests/fixtures/render/__inline_scenario_flow_middle_layer__.sdd"),
@@ -36,7 +43,7 @@ async function buildMiddleLayer(sourceText: string, profile = "strict") {
   }
 
   const displayPolicy = resolveDetailDisplayPolicy(view, profile === "simple" ? "compact" : "detailed");
-  const model = buildScenarioFlowRenderModel(projected.projection, compiled.graph, displayPolicy);
+  const model = buildScenarioFlowRenderModel(projected.projection, compiled.graph, view, displayPolicy);
   return buildScenarioFlowMiddleLayer(model);
 }
 
@@ -118,62 +125,45 @@ describe("scenario_flow middle layer", () => {
       trackOrder: cell.trackOrder,
       nodeIds: cell.nodeIds
     }))).toContainEqual({
-      id: "step__cell__band:2__track:1",
-      rowOrder: 0,
+      id: "step__cell__band:2__component:1__track:1",
+      rowOrder: 1,
       columnOrder: 1,
       trackOrder: 1,
       nodeIds: ["J-032"]
     });
   });
 
-  it("derives branch-track order from branch metadata, edge author order, and stable ids", async () => {
+  it("derives persistent lineages in source order and reuses ended physical rows", async () => {
     const middle = await buildMiddleLayer(fs.readFileSync(scenarioBranchingPath, "utf8"));
 
-    expect(middle.tracks.map((track) => ({
-      bandId: track.bandId,
-      label: track.label,
-      originatingDecisionNodeId: track.originatingDecisionNodeId,
-      branchLabel: track.branchLabel,
-      branchLabelSource: track.branchLabelSource
+    expect(middle.lineages.map((lineage) => ({
+      trackId: lineage.trackId,
+      startBandOrder: lineage.startBandOrder,
+      endBandOrder: lineage.endBandOrder,
+      originatingDecisionNodeId: lineage.originatingDecisionNodeId,
+      branchLabel: lineage.branchLabel,
+      branchLabelSource: lineage.branchLabelSource
     }))).toEqual([
       {
-        bandId: "band:1",
-        label: "T0",
+        trackId: "component:1__track:0",
+        startBandOrder: 0,
+        endBandOrder: 3,
         originatingDecisionNodeId: undefined,
         branchLabel: undefined,
         branchLabelSource: undefined
       },
       {
-        bandId: "band:2",
-        label: "T0",
-        originatingDecisionNodeId: "J-030",
-        branchLabel: "delivery selected",
-        branchLabelSource: "guard"
-      },
-      {
-        bandId: "band:2",
-        label: "T1",
+        trackId: "component:1__track:1",
+        startBandOrder: 1,
+        endBandOrder: 1,
         originatingDecisionNodeId: "J-030",
         branchLabel: "pickup selected",
         branchLabelSource: "guard"
       },
       {
-        bandId: "band:3",
-        label: "T0",
-        originatingDecisionNodeId: undefined,
-        branchLabel: undefined,
-        branchLabelSource: undefined
-      },
-      {
-        bandId: "band:4",
-        label: "T0",
-        originatingDecisionNodeId: "J-033",
-        branchLabel: "e-032",
-        branchLabelSource: "event"
-      },
-      {
-        bandId: "band:4",
-        label: "T1",
+        trackId: "component:1__track:1",
+        startBandOrder: 3,
+        endBandOrder: 3,
         originatingDecisionNodeId: "J-033",
         branchLabel: "review pickup instructions",
         branchLabelSource: "to_name"
@@ -243,14 +233,112 @@ END
     expect(middle.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
       "renderer.scene.scenario_flow_no_step_flow"
     ]);
-    expect(middle.bands.map((band) => band.label)).toEqual(["C1", "C2"]);
+    expect(middle.bands.map((band) => band.label)).toEqual(["C1"]);
+    expect(middle.components.map((component) => ({
+      nodeIds: component.nodeIds,
+      rowStart: component.rowStart,
+      rowSpan: component.rowSpan
+    }))).toEqual([
+      { nodeIds: ["J-100"], rowStart: 0, rowSpan: 1 },
+      { nodeIds: ["J-101"], rowStart: 2, rowSpan: 1 }
+    ]);
 
     const bandById = new Map(middle.bands.map((band) => [band.id, band]));
     const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
     expect(bandById.get(placementByNodeId.get("J-100")!.bandId)?.label).toBe("C1");
     expect(bandById.get(placementByNodeId.get("P-100")!.bandId)?.label).toBe("C1");
-    expect(bandById.get(placementByNodeId.get("J-101")!.bandId)?.label).toBe("C2");
-    expect(bandById.get(placementByNodeId.get("P-101")!.bandId)?.label).toBe("C2");
+    expect(bandById.get(placementByNodeId.get("J-101")!.bandId)?.label).toBe("C1");
+    expect(bandById.get(placementByNodeId.get("P-101")!.bandId)?.label).toBe("C1");
+  });
+
+  it("places the canonical nested-branch and parallel-flow challenge into separated component rows", async () => {
+    const source = fs.readFileSync(topologyChallengePath, "utf8");
+    const middle = await buildMiddleLayer(source);
+    expect(middle.diagnostics).toEqual([]);
+    expect(middle.laneGuides).toEqual([{ laneId: "step", label: "Steps", order: 0 }]);
+    expect(middle.components.map((component) => ({
+      id: component.id,
+      rowStart: component.rowStart,
+      rowSpan: component.rowSpan
+    }))).toEqual([
+      { id: "component:1", rowStart: 0, rowSpan: 4 },
+      { id: "component:2", rowStart: 5, rowSpan: 1 }
+    ]);
+    expect(middle.totalTrackRows).toBe(6);
+
+    const bandById = new Map(middle.bands.map((band) => [band.id, band.label]));
+    const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
+    const position = (nodeId: string) => {
+      const placement = placementByNodeId.get(nodeId)!;
+      return `${placement.componentId}/${placement.trackOrder}/${bandById.get(placement.bandId)}`;
+    };
+    expect(Object.fromEntries([
+      "J-010", "J-020", "J-021", "J-022", "J-040", "J-041", "J-042", "J-043", "J-030", "J-031", "J-032"
+    ].map((nodeId) => [nodeId, position(nodeId)]))).toEqual({
+      "J-010": "component:1/0/C1",
+      "J-020": "component:1/0/C2",
+      "J-021": "component:1/0/C3",
+      "J-022": "component:1/0/C4",
+      "J-040": "component:1/1/C2",
+      "J-041": "component:1/1/C3",
+      "J-042": "component:1/2/C3",
+      "J-043": "component:1/3/C3",
+      "J-030": "component:2/0/C1",
+      "J-031": "component:2/0/C2",
+      "J-032": "component:2/0/C3"
+    });
+    expect(await buildMiddleLayer(source)).toEqual(middle);
+  });
+
+  it("uses bundle-owned lane visibility, lane order, labels, and component spacing", async () => {
+    const middle = await buildMiddleLayer(`
+SDD-TEXT 0.1
+
+Step J-110 "First"
+END
+
+Step J-111 "Second"
+END
+`, "strict", (view) => {
+      const layout = view.conventions.renderer_defaults!.scenario_flow_layout!;
+      layout.empty_lane_policy = "show";
+      layout.component_gap_rows = 3;
+      layout.lanes = [layout.lanes[1]!, { ...layout.lanes[0]!, label: "Actions" }, layout.lanes[2]!];
+    });
+
+    expect(middle.laneGuides).toEqual([
+      { laneId: "place", label: "Places", order: 0 },
+      { laneId: "step", label: "Actions", order: 1 },
+      { laneId: "view_state", label: "View States", order: 2 }
+    ]);
+    expect(middle.components.map((component) => component.rowStart)).toEqual([0, 4]);
+    expect(middle.totalTrackRows).toBe(5);
+  });
+
+  it("keeps joins on the earliest incoming lineage", async () => {
+    const middle = await buildMiddleLayer(`
+SDD-TEXT 0.1
+
+Step J-120 "Split"
+  PRECEDES J-121 "Primary"
+  PRECEDES J-122 "Secondary"
+END
+
+Step J-121 "Primary"
+  PRECEDES J-123 "Join"
+END
+
+Step J-122 "Secondary"
+  PRECEDES J-123 "Join"
+END
+
+Step J-123 "Join"
+END
+`);
+    const placement = new Map(middle.placements.map((item) => [item.nodeId, item]));
+    expect(placement.get("J-120")?.lineageId).toBe(placement.get("J-121")?.lineageId);
+    expect(placement.get("J-121")?.lineageId).toBe(placement.get("J-123")?.lineageId);
+    expect(placement.get("J-122")?.lineageId).not.toBe(placement.get("J-123")?.lineageId);
   });
 
   it("parks disconnected scoped nodes with deterministic diagnostics", async () => {
@@ -333,5 +421,39 @@ END
     const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
     expect(bandById.get(placementByNodeId.get("J-300")!.bandId)?.label).toBe("C1");
     expect(bandById.get(placementByNodeId.get("J-301")!.bandId)?.label).toBe("C2");
+  });
+
+  it("limits cycle fallback to the affected component", async () => {
+    const middle = await buildMiddleLayer(`
+SDD-TEXT 0.1
+
+Step J-310 "Cycle A"
+  PRECEDES J-311 "Cycle B"
+END
+
+Step J-311 "Cycle B"
+  PRECEDES J-310 "Cycle A"
+END
+
+Step J-320 "Linear A"
+  PRECEDES J-321 "Linear B"
+END
+
+Step J-321 "Linear B"
+END
+`);
+    expect(middle.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
+      "renderer.scene.scenario_flow_step_cycle"
+    ]);
+    expect(middle.components.map((component) => ({
+      nodeIds: component.nodeIds,
+      rowStart: component.rowStart,
+      hasCycle: component.hasCycle
+    }))).toEqual([
+      { nodeIds: ["J-310", "J-311"], rowStart: 0, hasCycle: true },
+      { nodeIds: ["J-320", "J-321"], rowStart: 2, hasCycle: false }
+    ]);
+    const placement = new Map(middle.placements.map((item) => [item.nodeId, item]));
+    expect(placement.get("J-320")?.lineageId).toBe(placement.get("J-321")?.lineageId);
   });
 });

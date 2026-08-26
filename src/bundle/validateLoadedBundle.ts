@@ -408,6 +408,48 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         `Rendering view '${view.id}' must declare batch_applicability as { kind: visible_semantic_node_count, minimum: positive integer }`
       );
     }
+    if (view.id === "scenario_flow") {
+      const layout = record(rendererDefaults.scenario_flow_layout);
+      const lanes = Array.isArray(layout?.lanes) ? layout.lanes : undefined;
+      const laneRecords = lanes?.map(record);
+      const laneIds = laneRecords?.map((lane) => lane?.id).filter((id): id is string => typeof id === "string");
+      const validLanes = laneRecords !== undefined
+        && laneRecords.length > 0
+        && laneRecords.every((lane) => lane
+          && sameStringSet(Object.keys(lane), ["id", "label", "node_types"])
+          && typeof lane.id === "string"
+          && lane.id.trim().length > 0
+          && typeof lane.label === "string"
+          && lane.label.trim().length > 0
+          && strings(lane.node_types) !== undefined
+          && (lane.node_types as string[]).length > 0);
+      if (
+        !layout
+        || !sameStringSet(Object.keys(layout), [
+          "primary_lane_id",
+          "lanes",
+          "empty_lane_policy",
+          "component_order",
+          "component_gap_rows",
+          "branch_order"
+        ])
+        || !validLanes
+        || !laneIds
+        || duplicateValues(laneIds).length > 0
+        || typeof layout.primary_lane_id !== "string"
+        || !laneIds.includes(layout.primary_lane_id)
+        || (layout.empty_lane_policy !== "omit" && layout.empty_lane_policy !== "show")
+        || layout.component_order !== "source"
+        || !Number.isInteger(layout.component_gap_rows)
+        || (layout.component_gap_rows as number) < 0
+        || layout.branch_order !== "source"
+      ) {
+        add(
+          "bundle.scenario_flow.layout_shape",
+          "Rendering view 'scenario_flow' must declare a valid renderer_defaults.scenario_flow_layout"
+        );
+      }
+    }
     for (const policyId of Object.keys(detailDisplay)) {
       if (!renderDetailIds.has(policyId)) {
         add(

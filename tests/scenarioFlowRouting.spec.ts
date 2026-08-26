@@ -345,6 +345,10 @@ describe("scenario_flow staged routing", () => {
     expect(firstPrecedes.classes).toContain("edge-channel-step_flow");
     expect(firstRealization.classes).toContain("edge-channel-realization");
     expect(firstRealization.classes).toContain("edge-dotted");
+    expect(rendered.routingStages.connectorPlans.find((plan) => plan.id === firstPrecedes.id)?.pattern)
+      .toBe("same_track_forward");
+    expect(rendered.routingStages.connectorPlans.find((plan) => plan.id === "J-030__precedes__J-032")?.pattern)
+      .toBe("cross_track_branch_bridge");
     expect(rendered.routingStages.connectorPlans.find((plan) => plan.id === firstRealization.id)?.pattern)
       .toBe("realization_vertical");
     expectDirectVerticalRoute(firstRealization);

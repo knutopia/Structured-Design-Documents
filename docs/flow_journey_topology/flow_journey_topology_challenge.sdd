@@ -1,0 +1,62 @@
+SDD-TEXT 0.1
+
+# derived from `SDD for SDD`
+# to capture scenario flow and journey map node placement problems
+
+Stage G-001 "Maintain Product Map"
+  description="Maintain a map of the existing product"
+END
+
+Step J-010 "Select a Node"
+  description="Select a Node in Source viewer or in Diagram viewer"
+  PRECEDES J-020 "Review Diagrams Containing Current Node"
+  PRECEDES J-040 "Add Relationship"
+END
+
+Step J-020 "Review Diagrams Containing Current Node"
+  description="See the set of diagrams in which the current node appears"
+  PRECEDES J-021 "Select Diagram"
+END
+
+Step J-040 "Add Relationship"
+  description="Add a relationship to an existing node"
+  PRECEDES J-041 "Add relationship, by node"
+  PRECEDES J-042 "Add outgoing relationship"
+  PRECEDES J-043 "Add incoming relationship"
+END
+
+Step J-041 "Add relationship, by node"
+  description="Add relationship, by choosing another node first (incoming or outgoing)"
+END
+
+Step J-042 "Add outgoing relationship"
+  description="Add outgoing relationship, by choosing the relationship type or a node first"
+END
+
+Step J-043 "Add incoming relationship"
+  description="Add incoming relationship, by choosing the relationship type or a node first"
+END
+
+Step J-021 "Select Diagram"
+  description="Choose a diagram in which the node is used"
+  PRECEDES J-022 "View Node in New Diagram Context"
+END
+
+Step J-022 "View Node in New Diagram Context"
+  description="View the chosen diagram using the current node"
+END
+
+Step J-030 "Select Diagram Content"
+  description="Select a node or multiple nodes in a diagram"
+  PRECEDES J-031 "Adjust View"
+  # PRECEDES J-032 "Name the New View" ...this crashes scenario_flow renderer
+END
+
+Step J-031 "Adjust View"
+  description="Make the view just right"
+  PRECEDES J-032 "Name the New View"
+END
+
+Step J-032 "Name the New View"
+  description="Enter a name for the new view"
+END

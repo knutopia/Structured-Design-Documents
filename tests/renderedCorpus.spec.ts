@@ -79,7 +79,9 @@ describe("rendered example corpus", () => {
     expect(readme).toContain("journey_map_diagram_type/service_blueprint_slice_example");
     expect(readme).toContain("`journey_map` visual review checklist:");
     expect(readme).toContain("scenario_flow_diagram_type/scenario_branching_example");
+    expect(readme).toContain("scenario_flow_diagram_type/flow_journey_topology_challenge_example");
     expect(readme).not.toContain("scenario_flow_diagram_type [preview_only]/scenario_branching_example");
+    expect(readme).not.toContain("journey_map_diagram_type/flow_journey_topology_challenge_example");
   });
 
   it("keeps staged journey_map previews as the default corpus artifacts while preserving legacy siblings", async () => {
