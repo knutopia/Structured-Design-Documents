@@ -1,0 +1,36 @@
+digraph scenario_flow {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "J-010" [shape="box", style="rounded", label="Select a Node"];
+    "J-020" [shape="box", style="rounded", label="Review Diagrams Containing Current Node"];
+    "J-040" [shape="box", style="rounded", label="Add Relationship"];
+    "J-041" [shape="box", style="rounded", label="Add relationship, by node"];
+    "J-042" [shape="box", style="rounded", label="Add outgoing relationship"];
+    "J-043" [shape="box", style="rounded", label="Add incoming relationship"];
+    "J-021" [shape="box", style="rounded", label="Select Diagram"];
+    "J-022" [shape="box", style="rounded", label="View Node in New Diagram Context"];
+    "J-030" [shape="box", style="rounded", label="Select Diagram Content"];
+    "J-031" [shape="box", style="rounded", label="Adjust View"];
+    "J-032" [shape="box", style="rounded", label="Name the New View"];
+  }
+  "lane_step" -> "J-010" [style=invis, weight=100];
+  "J-020" -> "J-040" [style=invis, weight=100];
+  "J-041" -> "J-042" [style=invis, weight=100];
+  "J-042" -> "J-043" [style=invis, weight=100];
+  "J-043" -> "J-021" [style=invis, weight=100];
+  "J-022" -> "J-030" [style=invis, weight=100];
+  "J-010" -> "J-020" [weight=4];
+  "J-010" -> "J-040" [weight=4];
+  "J-020" -> "J-021" [weight=4];
+  "J-021" -> "J-022" [weight=4];
+  "J-030" -> "J-031" [weight=4];
+  "J-031" -> "J-032" [weight=4];
+  "J-040" -> "J-041" [weight=4];
+  "J-040" -> "J-042" [weight=4];
+  "J-040" -> "J-043" [weight=4];
+}

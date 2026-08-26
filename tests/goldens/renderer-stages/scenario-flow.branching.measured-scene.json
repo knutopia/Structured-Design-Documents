@@ -32,7 +32,7 @@
     "children": [
       {
         "kind": "container",
-        "id": "step__cell__band:1__track:0",
+        "id": "step__cell__band:1__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -50,9 +50,13 @@
             "bandLabel": "C1",
             "bandKind": "entry",
             "bandOrder": 0,
-            "trackId": "band:1__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 0,
             "columnOrder": 0
           }
@@ -92,8 +96,12 @@
                 "kind": "semantic_node",
                 "laneId": "step",
                 "bandId": "band:1",
-                "trackId": "band:1__track:0",
-                "cellId": "step__cell__band:1__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:1__component:1__track:0",
                 "placementRole": "spine_step"
               }
             },
@@ -186,7 +194,7 @@
       },
       {
         "kind": "container",
-        "id": "step__cell__band:2__track:0",
+        "id": "step__cell__band:2__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -204,9 +212,13 @@
             "bandLabel": "C2",
             "bandKind": "branch_target",
             "bandOrder": 1,
-            "trackId": "band:2__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 0,
             "columnOrder": 1
           }
@@ -246,8 +258,12 @@
                 "kind": "semantic_node",
                 "laneId": "step",
                 "bandId": "band:2",
-                "trackId": "band:2__track:0",
-                "cellId": "step__cell__band:2__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:2__component:1__track:0",
                 "placementRole": "spine_step"
               }
             },
@@ -340,7 +356,7 @@
       },
       {
         "kind": "container",
-        "id": "step__cell__band:3__track:0",
+        "id": "step__cell__band:3__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -358,9 +374,13 @@
             "bandLabel": "C3",
             "bandKind": "linear",
             "bandOrder": 2,
-            "trackId": "band:3__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 0,
             "columnOrder": 2
           }
@@ -400,8 +420,12 @@
                 "kind": "semantic_node",
                 "laneId": "step",
                 "bandId": "band:3",
-                "trackId": "band:3__track:0",
-                "cellId": "step__cell__band:3__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:3__component:1__track:0",
                 "placementRole": "spine_step"
               }
             },
@@ -494,7 +518,7 @@
       },
       {
         "kind": "container",
-        "id": "step__cell__band:4__track:0",
+        "id": "step__cell__band:4__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -512,9 +536,13 @@
             "bandLabel": "C4",
             "bandKind": "branch_target",
             "bandOrder": 3,
-            "trackId": "band:4__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 0,
             "columnOrder": 3
           }
@@ -554,8 +582,12 @@
                 "kind": "semantic_node",
                 "laneId": "step",
                 "bandId": "band:4",
-                "trackId": "band:4__track:0",
-                "cellId": "step__cell__band:4__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "step__cell__band:4__component:1__track:0",
                 "placementRole": "spine_step"
               }
             },
@@ -648,7 +680,7 @@
       },
       {
         "kind": "container",
-        "id": "step__placeholder_cell__band:1__track:1",
+        "id": "step__placeholder_cell__band:1__row:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -667,9 +699,12 @@
             "bandLabel": "C1",
             "bandKind": "entry",
             "bandOrder": 0,
-            "trackId": "band:1__placeholder_track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
             "rowOrder": 1,
             "columnOrder": 0,
             "placeholder": true
@@ -700,7 +735,7 @@
       },
       {
         "kind": "container",
-        "id": "step__cell__band:2__track:1",
+        "id": "step__cell__band:2__component:1__track:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -718,9 +753,13 @@
             "bandLabel": "C2",
             "bandKind": "branch_target",
             "bandOrder": 1,
-            "trackId": "band:2__track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:2",
             "rowOrder": 1,
             "columnOrder": 1
           }
@@ -760,8 +799,12 @@
                 "kind": "semantic_node",
                 "laneId": "step",
                 "bandId": "band:2",
-                "trackId": "band:2__track:1",
-                "cellId": "step__cell__band:2__track:1",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:2",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "step__cell__band:2__component:1__track:1",
                 "placementRole": "branch_step"
               }
             },
@@ -854,7 +897,7 @@
       },
       {
         "kind": "container",
-        "id": "step__placeholder_cell__band:3__track:1",
+        "id": "step__placeholder_cell__band:3__row:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -873,9 +916,12 @@
             "bandLabel": "C3",
             "bandKind": "linear",
             "bandOrder": 2,
-            "trackId": "band:3__placeholder_track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
             "rowOrder": 1,
             "columnOrder": 2,
             "placeholder": true
@@ -906,7 +952,7 @@
       },
       {
         "kind": "container",
-        "id": "step__cell__band:4__track:1",
+        "id": "step__cell__band:4__component:1__track:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -924,9 +970,13 @@
             "bandLabel": "C4",
             "bandKind": "branch_target",
             "bandOrder": 3,
-            "trackId": "band:4__track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:3",
             "rowOrder": 1,
             "columnOrder": 3
           }
@@ -966,8 +1016,12 @@
                 "kind": "semantic_node",
                 "laneId": "step",
                 "bandId": "band:4",
-                "trackId": "band:4__track:1",
-                "cellId": "step__cell__band:4__track:1",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:3",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "step__cell__band:4__component:1__track:1",
                 "placementRole": "branch_step"
               }
             },
@@ -1061,7 +1115,7 @@
       },
       {
         "kind": "container",
-        "id": "place__cell__band:1__track:0",
+        "id": "place__cell__band:1__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1079,9 +1133,13 @@
             "bandLabel": "C1",
             "bandKind": "entry",
             "bandOrder": 0,
-            "trackId": "band:1__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 2,
             "columnOrder": 0
           }
@@ -1121,8 +1179,12 @@
                 "kind": "semantic_node",
                 "laneId": "place",
                 "bandId": "band:1",
-                "trackId": "band:1__track:0",
-                "cellId": "place__cell__band:1__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "place__cell__band:1__component:1__track:0",
                 "placementRole": "realized_place"
               }
             },
@@ -1215,7 +1277,7 @@
       },
       {
         "kind": "container",
-        "id": "place__cell__band:2__track:0",
+        "id": "place__cell__band:2__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1233,9 +1295,13 @@
             "bandLabel": "C2",
             "bandKind": "branch_target",
             "bandOrder": 1,
-            "trackId": "band:2__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 2,
             "columnOrder": 1
           }
@@ -1275,8 +1341,12 @@
                 "kind": "semantic_node",
                 "laneId": "place",
                 "bandId": "band:2",
-                "trackId": "band:2__track:0",
-                "cellId": "place__cell__band:2__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "place__cell__band:2__component:1__track:0",
                 "placementRole": "realized_place"
               }
             },
@@ -1369,7 +1439,7 @@
       },
       {
         "kind": "container",
-        "id": "place__cell__band:3__track:0",
+        "id": "place__cell__band:3__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1387,9 +1457,13 @@
             "bandLabel": "C3",
             "bandKind": "linear",
             "bandOrder": 2,
-            "trackId": "band:3__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 2,
             "columnOrder": 2
           }
@@ -1429,8 +1503,12 @@
                 "kind": "semantic_node",
                 "laneId": "place",
                 "bandId": "band:3",
-                "trackId": "band:3__track:0",
-                "cellId": "place__cell__band:3__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "place__cell__band:3__component:1__track:0",
                 "placementRole": "realized_place"
               }
             },
@@ -1523,7 +1601,7 @@
       },
       {
         "kind": "container",
-        "id": "place__cell__band:4__track:0",
+        "id": "place__cell__band:4__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1541,9 +1619,13 @@
             "bandLabel": "C4",
             "bandKind": "branch_target",
             "bandOrder": 3,
-            "trackId": "band:4__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 2,
             "columnOrder": 3
           }
@@ -1583,8 +1665,12 @@
                 "kind": "semantic_node",
                 "laneId": "place",
                 "bandId": "band:4",
-                "trackId": "band:4__track:0",
-                "cellId": "place__cell__band:4__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "place__cell__band:4__component:1__track:0",
                 "placementRole": "realized_place"
               }
             },
@@ -1678,7 +1764,7 @@
       },
       {
         "kind": "container",
-        "id": "place__placeholder_cell__band:1__track:1",
+        "id": "place__placeholder_cell__band:1__row:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1697,9 +1783,12 @@
             "bandLabel": "C1",
             "bandKind": "entry",
             "bandOrder": 0,
-            "trackId": "band:1__placeholder_track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
             "rowOrder": 3,
             "columnOrder": 0,
             "placeholder": true
@@ -1730,7 +1819,7 @@
       },
       {
         "kind": "container",
-        "id": "place__cell__band:2__track:1",
+        "id": "place__cell__band:2__component:1__track:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1748,9 +1837,13 @@
             "bandLabel": "C2",
             "bandKind": "branch_target",
             "bandOrder": 1,
-            "trackId": "band:2__track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:2",
             "rowOrder": 3,
             "columnOrder": 1
           }
@@ -1790,8 +1883,12 @@
                 "kind": "semantic_node",
                 "laneId": "place",
                 "bandId": "band:2",
-                "trackId": "band:2__track:1",
-                "cellId": "place__cell__band:2__track:1",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:2",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "place__cell__band:2__component:1__track:1",
                 "placementRole": "realized_place"
               }
             },
@@ -1884,7 +1981,7 @@
       },
       {
         "kind": "container",
-        "id": "place__placeholder_cell__band:3__track:1",
+        "id": "place__placeholder_cell__band:3__row:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1903,9 +2000,12 @@
             "bandLabel": "C3",
             "bandKind": "linear",
             "bandOrder": 2,
-            "trackId": "band:3__placeholder_track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
             "rowOrder": 3,
             "columnOrder": 2,
             "placeholder": true
@@ -1936,7 +2036,7 @@
       },
       {
         "kind": "container",
-        "id": "place__cell__band:4__track:1",
+        "id": "place__cell__band:4__component:1__track:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -1954,9 +2054,13 @@
             "bandLabel": "C4",
             "bandKind": "branch_target",
             "bandOrder": 3,
-            "trackId": "band:4__track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:3",
             "rowOrder": 3,
             "columnOrder": 3
           }
@@ -1996,8 +2100,12 @@
                 "kind": "semantic_node",
                 "laneId": "place",
                 "bandId": "band:4",
-                "trackId": "band:4__track:1",
-                "cellId": "place__cell__band:4__track:1",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:3",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "place__cell__band:4__component:1__track:1",
                 "placementRole": "realized_place"
               }
             },
@@ -2091,7 +2199,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__cell__band:1__track:0",
+        "id": "view_state__cell__band:1__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2109,9 +2217,13 @@
             "bandLabel": "C1",
             "bandKind": "entry",
             "bandOrder": 0,
-            "trackId": "band:1__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 4,
             "columnOrder": 0
           }
@@ -2152,8 +2264,12 @@
                 "kind": "semantic_node",
                 "laneId": "view_state",
                 "bandId": "band:1",
-                "trackId": "band:1__track:0",
-                "cellId": "view_state__cell__band:1__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "view_state__cell__band:1__component:1__track:0",
                 "placementRole": "realized_view_state"
               }
             },
@@ -2246,7 +2362,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__cell__band:2__track:0",
+        "id": "view_state__cell__band:2__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2264,9 +2380,13 @@
             "bandLabel": "C2",
             "bandKind": "branch_target",
             "bandOrder": 1,
-            "trackId": "band:2__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 4,
             "columnOrder": 1
           }
@@ -2307,8 +2427,12 @@
                 "kind": "semantic_node",
                 "laneId": "view_state",
                 "bandId": "band:2",
-                "trackId": "band:2__track:0",
-                "cellId": "view_state__cell__band:2__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "view_state__cell__band:2__component:1__track:0",
                 "placementRole": "realized_view_state"
               }
             },
@@ -2402,7 +2526,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__cell__band:3__track:0",
+        "id": "view_state__cell__band:3__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2420,9 +2544,13 @@
             "bandLabel": "C3",
             "bandKind": "linear",
             "bandOrder": 2,
-            "trackId": "band:3__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 4,
             "columnOrder": 2
           }
@@ -2463,8 +2591,12 @@
                 "kind": "semantic_node",
                 "laneId": "view_state",
                 "bandId": "band:3",
-                "trackId": "band:3__track:0",
-                "cellId": "view_state__cell__band:3__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "view_state__cell__band:3__component:1__track:0",
                 "placementRole": "realized_view_state"
               }
             },
@@ -2558,7 +2690,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__cell__band:4__track:0",
+        "id": "view_state__cell__band:4__component:1__track:0",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2576,9 +2708,13 @@
             "bandLabel": "C4",
             "bandKind": "branch_target",
             "bandOrder": 3,
-            "trackId": "band:4__track:0",
+            "trackId": "component:1__track:0",
             "trackLabel": "T0",
             "trackOrder": 0,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 0,
+            "lineageId": "component:1__lineage:1",
             "rowOrder": 4,
             "columnOrder": 3
           }
@@ -2619,8 +2755,12 @@
                 "kind": "semantic_node",
                 "laneId": "view_state",
                 "bandId": "band:4",
-                "trackId": "band:4__track:0",
-                "cellId": "view_state__cell__band:4__track:0",
+                "trackId": "component:1__track:0",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:1",
+                "trackOrder": 0,
+                "rowOrder": 0,
+                "cellId": "view_state__cell__band:4__component:1__track:0",
                 "placementRole": "realized_view_state"
               }
             },
@@ -2714,7 +2854,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__placeholder_cell__band:1__track:1",
+        "id": "view_state__placeholder_cell__band:1__row:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2733,9 +2873,12 @@
             "bandLabel": "C1",
             "bandKind": "entry",
             "bandOrder": 0,
-            "trackId": "band:1__placeholder_track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
             "rowOrder": 5,
             "columnOrder": 0,
             "placeholder": true
@@ -2766,7 +2909,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__cell__band:2__track:1",
+        "id": "view_state__cell__band:2__component:1__track:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2784,9 +2927,13 @@
             "bandLabel": "C2",
             "bandKind": "branch_target",
             "bandOrder": 1,
-            "trackId": "band:2__track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:2",
             "rowOrder": 5,
             "columnOrder": 1
           }
@@ -2827,8 +2974,12 @@
                 "kind": "semantic_node",
                 "laneId": "view_state",
                 "bandId": "band:2",
-                "trackId": "band:2__track:1",
-                "cellId": "view_state__cell__band:2__track:1",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:2",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "view_state__cell__band:2__component:1__track:1",
                 "placementRole": "realized_view_state"
               }
             },
@@ -2922,7 +3073,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__placeholder_cell__band:3__track:1",
+        "id": "view_state__placeholder_cell__band:3__row:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2941,9 +3092,12 @@
             "bandLabel": "C3",
             "bandKind": "linear",
             "bandOrder": 2,
-            "trackId": "band:3__placeholder_track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
             "rowOrder": 5,
             "columnOrder": 2,
             "placeholder": true
@@ -2974,7 +3128,7 @@
       },
       {
         "kind": "container",
-        "id": "view_state__cell__band:4__track:1",
+        "id": "view_state__cell__band:4__component:1__track:1",
         "role": "scenario_flow_cell",
         "primitive": "stack",
         "classes": [
@@ -2992,9 +3146,13 @@
             "bandLabel": "C4",
             "bandKind": "branch_target",
             "bandOrder": 3,
-            "trackId": "band:4__track:1",
+            "trackId": "component:1__track:1",
             "trackLabel": "T1",
             "trackOrder": 1,
+            "componentId": "component:1",
+            "componentOrder": 0,
+            "physicalRowOrder": 1,
+            "lineageId": "component:1__lineage:3",
             "rowOrder": 5,
             "columnOrder": 3
           }
@@ -3035,8 +3193,12 @@
                 "kind": "semantic_node",
                 "laneId": "view_state",
                 "bandId": "band:4",
-                "trackId": "band:4__track:1",
-                "cellId": "view_state__cell__band:4__track:1",
+                "trackId": "component:1__track:1",
+                "componentId": "component:1",
+                "lineageId": "component:1__lineage:3",
+                "trackOrder": 1,
+                "rowOrder": 1,
+                "cellId": "view_state__cell__band:4__component:1__track:1",
                 "placementRole": "realized_view_state"
               }
             },

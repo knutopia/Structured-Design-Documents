@@ -62,6 +62,10 @@ examples:
     compiled_snapshot: snapshots/scenario_branching.compiled.json
     projection_snapshots:
       - snapshots/scenario_branching.scenario_flow.projection.json
+  - path: examples/flow_journey_topology_challenge.sdd
+    compiled_snapshot: snapshots/flow_journey_topology_challenge.compiled.json
+    projection_snapshots:
+      - snapshots/flow_journey_topology_challenge.scenario_flow.projection.json
   - path: examples/branching_journey.sdd
     compiled_snapshot: snapshots/branching_journey.compiled.json
     projection_snapshots:

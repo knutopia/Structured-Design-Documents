@@ -1,0 +1,361 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "G-001",
+      "type": "Stage",
+      "name": "Maintain Product Map",
+      "props": {
+        "description": "Maintain a map of the existing product",
+        "order_index": "1",
+        "owner": "Product"
+      }
+    },
+    {
+      "id": "J-010",
+      "type": "Step",
+      "name": "Select a Node",
+      "props": {
+        "actor": "Designer",
+        "description": "Select a Node in Source viewer or in Diagram viewer",
+        "intent": "Select product-map content for inspection",
+        "owner": "Product",
+        "success_criteria": "A node is selected"
+      }
+    },
+    {
+      "id": "J-020",
+      "type": "Step",
+      "name": "Review Diagrams Containing Current Node",
+      "props": {
+        "actor": "Designer",
+        "description": "See the set of diagrams in which the current node appears",
+        "intent": "Review diagrams containing the selected node",
+        "owner": "Product",
+        "success_criteria": "Relevant diagrams are visible"
+      }
+    },
+    {
+      "id": "J-021",
+      "type": "Step",
+      "name": "Select Diagram",
+      "props": {
+        "actor": "Designer",
+        "description": "Choose a diagram in which the node is used",
+        "intent": "Choose a diagram containing the node",
+        "owner": "Product",
+        "success_criteria": "A diagram is selected"
+      }
+    },
+    {
+      "id": "J-022",
+      "type": "Step",
+      "name": "View Node in New Diagram Context",
+      "props": {
+        "actor": "Designer",
+        "description": "View the chosen diagram using the current node",
+        "intent": "View the node in the chosen diagram",
+        "owner": "Product",
+        "success_criteria": "The selected context is displayed"
+      }
+    },
+    {
+      "id": "J-030",
+      "type": "Step",
+      "name": "Select Diagram Content",
+      "props": {
+        "actor": "Designer",
+        "description": "Select a node or multiple nodes in a diagram",
+        "intent": "Select diagram content for a saved view",
+        "owner": "Product",
+        "success_criteria": "The intended content is selected"
+      }
+    },
+    {
+      "id": "J-031",
+      "type": "Step",
+      "name": "Adjust View",
+      "props": {
+        "actor": "Designer",
+        "description": "Make the view just right",
+        "intent": "Adjust the diagram view",
+        "owner": "Product",
+        "success_criteria": "The view is ready to save"
+      }
+    },
+    {
+      "id": "J-032",
+      "type": "Step",
+      "name": "Name the New View",
+      "props": {
+        "actor": "Designer",
+        "description": "Enter a name for the new view",
+        "intent": "Name the adjusted view",
+        "owner": "Product",
+        "success_criteria": "The new view has a name"
+      }
+    },
+    {
+      "id": "J-040",
+      "type": "Step",
+      "name": "Add Relationship",
+      "props": {
+        "actor": "Designer",
+        "description": "Add a relationship to an existing node",
+        "intent": "Add a relationship to an existing node",
+        "owner": "Product",
+        "success_criteria": "A relationship-creation path is chosen"
+      }
+    },
+    {
+      "id": "J-041",
+      "type": "Step",
+      "name": "Add relationship, by node",
+      "props": {
+        "actor": "Designer",
+        "description": "Add relationship, by choosing another node first (incoming or outgoing)",
+        "intent": "Choose another node before setting direction",
+        "owner": "Product",
+        "success_criteria": "The related node is selected"
+      }
+    },
+    {
+      "id": "J-042",
+      "type": "Step",
+      "name": "Add outgoing relationship",
+      "props": {
+        "actor": "Designer",
+        "description": "Add outgoing relationship, by choosing the relationship type or a node first",
+        "intent": "Create an outgoing relationship",
+        "owner": "Product",
+        "success_criteria": "An outgoing relationship is defined"
+      }
+    },
+    {
+      "id": "J-043",
+      "type": "Step",
+      "name": "Add incoming relationship",
+      "props": {
+        "actor": "Designer",
+        "description": "Add incoming relationship, by choosing the relationship type or a node first",
+        "intent": "Create an incoming relationship",
+        "owner": "Product",
+        "success_criteria": "An incoming relationship is defined"
+      }
+    },
+    {
+      "id": "PR-001",
+      "type": "Process",
+      "name": "Support Product Map Interaction",
+      "props": {
+        "description": "Support the product-map interaction steps represented by this topology example",
+        "owner": "Product",
+        "sla": "interactive",
+        "visibility": "frontstage"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "J-010",
+      "type": "PRECEDES",
+      "to": "J-020",
+      "to_name": "Review Diagrams Containing Current Node",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-010",
+      "type": "PRECEDES",
+      "to": "J-040",
+      "to_name": "Add Relationship",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-010",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-020",
+      "type": "PRECEDES",
+      "to": "J-021",
+      "to_name": "Select Diagram",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-020",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-021",
+      "type": "PRECEDES",
+      "to": "J-022",
+      "to_name": "View Node in New Diagram Context",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-021",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-022",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-030",
+      "type": "PRECEDES",
+      "to": "J-031",
+      "to_name": "Adjust View",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-030",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-031",
+      "type": "PRECEDES",
+      "to": "J-032",
+      "to_name": "Name the New View",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-031",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-032",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-040",
+      "type": "PRECEDES",
+      "to": "J-041",
+      "to_name": "Add relationship, by node",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-040",
+      "type": "PRECEDES",
+      "to": "J-042",
+      "to_name": "Add outgoing relationship",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-040",
+      "type": "PRECEDES",
+      "to": "J-043",
+      "to_name": "Add incoming relationship",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-040",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-041",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-042",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-043",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": "Support Product Map Interaction",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

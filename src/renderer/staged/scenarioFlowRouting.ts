@@ -179,10 +179,12 @@ export interface ScenarioFlowConnectorPlan {
   sourcePortId: string;
   targetPortId: string;
   sourceLaneOrder: number;
+  sourceComponentOrder: number;
   sourceBandOrder: number;
   sourceTrackOrder: number;
   sourceAuthorOrder: number;
   outgoingOrder: number;
+  sourceBridgeOrder: number;
   targetStableId: string;
   pattern: ScenarioFlowRoutePattern;
   classes: string[];
@@ -301,6 +303,7 @@ function updateRootSize(
 
 function compareConnectorPlans(left: ScenarioFlowConnectorPlan, right: ScenarioFlowConnectorPlan): number {
   return CHANNEL_PRIORITY[left.channel] - CHANNEL_PRIORITY[right.channel]
+    || left.sourceComponentOrder - right.sourceComponentOrder
     || left.sourceLaneOrder - right.sourceLaneOrder
     || left.sourceBandOrder - right.sourceBandOrder
     || left.sourceTrackOrder - right.sourceTrackOrder
@@ -414,23 +417,29 @@ function resolveForwardBridgeX(
   target: IndexedScenarioFlowNode,
   sourceStub: Point,
   targetStub: Point,
-  index: ScenarioFlowPositionedIndex
+  index: ScenarioFlowPositionedIndex,
+  bridgeOrder: number
 ): number {
   const sourceCell = index.cellById.get(source.placement.cellId);
   const targetCell = index.cellById.get(target.placement.cellId);
   const minBridgeX = roundMetric(sourceStub.x + FIXED_SEPARATION_DISTANCE);
   const maxBridgeX = roundMetric(targetStub.x - FIXED_SEPARATION_DISTANCE);
+  let baseBridgeX: number;
 
   if (sourceCell && targetCell && targetCell.columnOrder > sourceCell.columnOrder) {
     const sourceRight = index.columnRightByOrder.get(sourceCell.columnOrder) ?? (sourceCell.cell.x + sourceCell.cell.width);
     const targetLeft = index.columnLeftByOrder.get(targetCell.columnOrder) ?? targetCell.cell.x;
     const gutterMidpoint = roundMetric((sourceRight + targetLeft) / 2);
     if (maxBridgeX >= minBridgeX) {
-      return Math.min(maxBridgeX, Math.max(minBridgeX, gutterMidpoint));
+      baseBridgeX = Math.min(maxBridgeX, Math.max(minBridgeX, gutterMidpoint));
+      return Math.max(sourceStub.x, baseBridgeX - bridgeOrder * FIXED_SEPARATION_DISTANCE);
     }
   }
 
-  return maxBridgeX >= minBridgeX ? roundMetric((minBridgeX + maxBridgeX) / 2) : targetStub.x;
+  baseBridgeX = maxBridgeX >= minBridgeX
+    ? roundMetric((minBridgeX + maxBridgeX) / 2)
+    : targetStub.x;
+  return Math.max(sourceStub.x, baseBridgeX - bridgeOrder * FIXED_SEPARATION_DISTANCE);
 }
 
 function resolveRealizationCorridorX(
@@ -515,7 +524,7 @@ function determinePattern(
       : "realization_corridor";
   }
 
-  return source.placement.trackId === target.placement.trackId
+  return source.placement.lineageId === target.placement.lineageId
     ? "same_track_forward"
     : "cross_track_branch_bridge";
 }
@@ -529,8 +538,10 @@ function buildConnectorPlans(
   const measuredEdgeById = new Map(measuredScene.edges.map((edge) => [edge.id, edge] as const));
   const laneOrderById = new Map(middleLayer.laneGuides.map((lane) => [lane.laneId, lane.order] as const));
   const bandOrderById = new Map(middleLayer.bands.map((band) => [band.id, band.bandOrder] as const));
-  const trackOrderById = new Map(middleLayer.tracks.map((track) => [track.id, track.trackOrder] as const));
+  const trackOrderById = new Map(middleLayer.tracks.map((track) => [track.id, track.rowOrder] as const));
+  const componentOrderById = new Map(middleLayer.components.map((component) => [component.id, component.order] as const));
   const outgoingBySource = new Map<string, number>();
+  const bridgeOrderBySource = new Map<string, number>();
   const plans: ScenarioFlowConnectorPlan[] = [];
 
   for (const edge of middleLayer.edges) {
@@ -556,6 +567,13 @@ function buildConnectorPlans(
 
     const outgoingOrder = outgoingBySource.get(edge.from) ?? 0;
     outgoingBySource.set(edge.from, outgoingOrder + 1);
+    const pattern = determinePattern(edge, source, target);
+    const sourceBridgeOrder = pattern === "cross_track_branch_bridge"
+      ? bridgeOrderBySource.get(edge.from) ?? 0
+      : 0;
+    if (pattern === "cross_track_branch_bridge") {
+      bridgeOrderBySource.set(edge.from, sourceBridgeOrder + 1);
+    }
     plans.push({
       id: edge.id,
       semanticEdgeIds: [...edge.semanticEdgeIds],
@@ -568,12 +586,14 @@ function buildConnectorPlans(
       sourcePortId: from.portId,
       targetPortId: to.portId,
       sourceLaneOrder: laneOrderById.get(source.placement.laneId) ?? 999,
+      sourceComponentOrder: componentOrderById.get(source.placement.componentId) ?? 999,
       sourceBandOrder: bandOrderById.get(source.placement.bandId) ?? 999,
       sourceTrackOrder: trackOrderById.get(source.placement.trackId) ?? 999,
       sourceAuthorOrder: source.placement.sourceAuthorOrder,
       outgoingOrder,
+      sourceBridgeOrder,
       targetStableId: edge.to,
-      pattern: determinePattern(edge, source, target),
+      pattern,
       classes: [...measuredEdge.classes],
       role: measuredEdge.role,
       markers: measuredEdge.markers,
@@ -992,7 +1012,14 @@ function buildTemplateRoute(
     return applySegmentCoordinates(buildRoute(points, "orthogonal"), plan.id, segmentCoordinateByKey, plan, index);
   }
 
-  const bridgeX = resolveForwardBridgeX(source, target, sourceStub, targetStub, index);
+  const bridgeX = resolveForwardBridgeX(
+    source,
+    target,
+    sourceStub,
+    targetStub,
+    index,
+    plan.pattern === "cross_track_branch_bridge" ? plan.sourceBridgeOrder : 0
+  );
   if (Math.abs(sourceStub.y - targetStub.y) <= EPSILON && sourceStub.x <= targetStub.x) {
     points.push(targetStub, targetPoint);
   } else {
@@ -2929,7 +2956,9 @@ function resolveRequiredEndpointGapExpansions(
     }
     if (plan.sourceSide === "east" && plan.targetSide === "west" && targetCell.columnOrder > sourceCell.columnOrder) {
       const gap = roundMetric(target.node.x - (source.node.x + source.node.width));
-      const required = FIXED_SEPARATION_DISTANCE * 2;
+      const required = FIXED_SEPARATION_DISTANCE * (
+        plan.pattern === "cross_track_branch_bridge" ? 2 + plan.sourceBridgeOrder : 2
+      );
       const overflow = roundMetric(required - gap);
       if (overflow > 0) {
         columnExpansions[sourceCell.columnOrder] = roundUpToSeparationDistance(

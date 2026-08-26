@@ -72,6 +72,7 @@ interface RootGridCell {
   band: ScenarioFlowBand;
   track?: ScenarioFlowTrack;
   trackOrder: number;
+  physicalRowOrder: number;
   rowOrder: number;
   columnOrder: number;
 }
@@ -185,6 +186,10 @@ function buildNodeViewMetadata(placement: ScenarioFlowNodePlacement): ViewMetada
       laneId: placement.laneId,
       bandId: placement.bandId,
       trackId: placement.trackId,
+      componentId: placement.componentId,
+      lineageId: placement.lineageId,
+      trackOrder: placement.trackOrder,
+      rowOrder: placement.rowOrder,
       cellId: placement.cellId,
       placementRole: placement.placementRole
     }
@@ -231,6 +236,10 @@ function buildCellViewMetadata(cell: RootGridCell): ViewMetadata {
       trackId: cell.track?.id ?? `${cell.band.id}__placeholder_track:${cell.trackOrder}`,
       trackLabel: cell.track?.label ?? `T${cell.trackOrder}`,
       trackOrder: cell.trackOrder,
+      componentId: cell.track?.componentId,
+      componentOrder: cell.track?.componentOrder,
+      physicalRowOrder: cell.physicalRowOrder,
+      lineageId: cell.cell?.lineageId,
       rowOrder: cell.rowOrder,
       columnOrder: cell.columnOrder,
       placeholder: cell.cell === undefined ? true : undefined
@@ -258,7 +267,7 @@ function buildCellContainer(
 
   return {
     kind: "container",
-    id: gridCell.cell?.id ?? `${gridCell.laneId}__placeholder_cell__${gridCell.band.id}__track:${gridCell.trackOrder}`,
+    id: gridCell.cell?.id ?? `${gridCell.laneId}__placeholder_cell__${gridCell.band.id}__row:${gridCell.physicalRowOrder}`,
     role: "scenario_flow_cell",
     primitive: "stack",
     classes: cellClasses,
@@ -290,26 +299,29 @@ function buildRootGridCells(middleLayer: ScenarioFlowMiddleLayerModel): RootGrid
     .sort((left, right) => left.bandOrder - right.bandOrder || left.id.localeCompare(right.id));
   const laneGuides = [...middleLayer.laneGuides]
     .sort((left, right) => left.order - right.order || left.laneId.localeCompare(right.laneId));
-  const trackByBandAndOrder = new Map(middleLayer.tracks.map((track) =>
-    [`${track.bandId}::${track.trackOrder}`, track] as const
+  const trackByRowOrder = new Map(middleLayer.tracks.map((track) =>
+    [track.rowOrder, track] as const
   ));
   const cellByLaneBandAndTrack = new Map(middleLayer.cells.map((cell) =>
-    [`${cell.laneId}::${cell.bandId}::${cell.trackOrder}`, cell] as const
+    [`${cell.laneId}::${cell.bandId}::${cell.trackId}`, cell] as const
   ));
-  const maxTrackOrder = Math.max(0, ...middleLayer.tracks.map((track) => track.trackOrder));
+  const totalTrackRows = Math.max(1, middleLayer.totalTrackRows);
   const cells: RootGridCell[] = [];
 
   laneGuides.forEach((laneGuide, laneIndex) => {
-    for (let trackOrder = 0; trackOrder <= maxTrackOrder; trackOrder += 1) {
-      const rowOrder = laneIndex * (maxTrackOrder + 1) + trackOrder;
+    for (let physicalRowOrder = 0; physicalRowOrder < totalTrackRows; physicalRowOrder += 1) {
+      const track = trackByRowOrder.get(physicalRowOrder);
+      const rowOrder = laneIndex * totalTrackRows + physicalRowOrder;
       bands.forEach((band) => {
-        const track = trackByBandAndOrder.get(`${band.id}::${trackOrder}`);
         cells.push({
-          cell: cellByLaneBandAndTrack.get(`${laneGuide.laneId}::${band.id}::${trackOrder}`),
+          cell: track
+            ? cellByLaneBandAndTrack.get(`${laneGuide.laneId}::${band.id}::${track.id}`)
+            : undefined,
           laneId: laneGuide.laneId,
           band,
           track,
-          trackOrder,
+          trackOrder: track?.localTrackOrder ?? physicalRowOrder,
+          physicalRowOrder,
           rowOrder,
           columnOrder: band.bandOrder
         });
@@ -391,7 +403,7 @@ function buildScenarioFlowRenderContext(
   settings: StagedRenderSettings
 ): ScenarioFlowRenderContext {
   const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
-  const model = buildScenarioFlowRenderModel(projection, graph, displayPolicy);
+  const model = buildScenarioFlowRenderModel(projection, graph, view, displayPolicy);
   const middleLayer = buildScenarioFlowMiddleLayer(model);
   const context: SceneBuildContext = {
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node] as const)),

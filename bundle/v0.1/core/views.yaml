@@ -2577,6 +2577,22 @@ views:
           decision_value: decision
           branch_label_precedence: [guard, event, to_name]
           render_shape: diamond
+        scenario_flow_layout:
+          primary_lane_id: step
+          lanes:
+            - id: step
+              label: Steps
+              node_types: [Step]
+            - id: place
+              label: Places
+              node_types: [Place]
+            - id: view_state
+              label: View States
+              node_types: [ViewState]
+          empty_lane_policy: omit
+          component_order: source
+          component_gap_rows: 1
+          branch_order: source
         detail_display:
           compact:
             show_branch_labels: false

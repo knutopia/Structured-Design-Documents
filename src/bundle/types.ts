@@ -428,12 +428,28 @@ export interface RendererBatchApplicabilityConfig {
   minimum: number;
 }
 
+export interface RendererScenarioFlowLaneConfig {
+  id: "step" | "place" | "view_state";
+  label: string;
+  node_types: string[];
+}
+
+export interface RendererScenarioFlowLayoutConfig {
+  primary_lane_id: "step" | "place" | "view_state";
+  lanes: RendererScenarioFlowLaneConfig[];
+  empty_lane_policy: "omit" | "show";
+  component_order: "source";
+  component_gap_rows: number;
+  branch_order: "source";
+}
+
 export interface RendererDefaultsConfig {
   preview?: PreviewDefaultsConfig;
   semantic_columns?: RendererSemanticColumnsConfig;
   node_chrome?: Record<string, RendererNodeChromeConfig>;
   connectors?: RendererConnectorsConfig;
   batch_applicability?: RendererBatchApplicabilityConfig;
+  scenario_flow_layout?: RendererScenarioFlowLayoutConfig;
   [key: string]: unknown;
 }
 

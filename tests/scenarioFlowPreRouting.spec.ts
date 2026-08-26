@@ -176,8 +176,12 @@ describe("scenario_flow pre-routing artifacts", () => {
         kind: "semantic_node",
         laneId: "step",
         bandId: "band:1",
-        trackId: "band:1__track:0",
-        cellId: "step__cell__band:1__track:0",
+        trackId: "component:1__track:0",
+        componentId: "component:1",
+        lineageId: "component:1__lineage:1",
+        trackOrder: 0,
+        rowOrder: 0,
+        cellId: "step__cell__band:1__component:1__track:0",
         placementRole: "spine_step"
       }
     });
