@@ -30,6 +30,7 @@ z
 ## Wed 8-26
 
 - Examined the reuse of Step node type in flow and journey, blueprint
+- Added vertical branching to journey map
 
 ## Tue 8-25
 

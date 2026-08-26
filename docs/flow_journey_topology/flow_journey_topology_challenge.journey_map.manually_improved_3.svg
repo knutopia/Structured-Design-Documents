@@ -1,0 +1,140 @@
+<svg width="1327" height="507" viewBox="0 0 1327 507" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1327" height="507" fill="#1E1E1E"/>
+<g id="Journey Map - detailed">
+<path d="M-131 -519C-131 -520.105 -130.105 -521 -129 -521H3887C3888.1 -521 3889 -520.105 3889 -519V1681C3889 1682.1 3888.1 1683 3887 1683H-129C-130.105 1683 -131 1682.1 -131 1681V-519Z" fill="#444444"/>
+<path d="M-129 -521V-520H3887V-521V-522H-129V-521ZM3889 -519H3888V1681H3889H3890V-519H3889ZM3887 1683V1682H-129V1683V1684H3887V1683ZM-131 1681H-130V-519H-131H-132V1681H-131ZM-129 1683V1682C-129.552 1682 -130 1681.55 -130 1681H-131H-132C-132 1682.66 -130.657 1684 -129 1684V1683ZM3889 1681H3888C3888 1681.55 3887.55 1682 3887 1682V1683V1684C3888.66 1684 3890 1682.66 3890 1681H3889ZM3887 -521V-520C3887.55 -520 3888 -519.552 3888 -519H3889H3890C3890 -520.657 3888.66 -522 3887 -522V-521ZM-129 -521V-522C-130.657 -522 -132 -520.657 -132 -519H-131H-130C-130 -519.552 -129.552 -520 -129 -520V-521Z" fill="white" fill-opacity="0.1"/>
+<g id="flow_journey_topology_challenge.journey_map.manually_improved_3" clip-path="url(#clip0_0_1)">
+<g id="Group">
+<g id="scene-container-root">
+<g id="Vector">
+<mask id="path-3-inside-1_0_1" fill="white">
+<path d="M1308.5 0L18 2.52724e-05C8.05887 2.52724e-05 0 8.0589 0 18V489C0 498.941 8.05887 507 18 507H1308.5C1318.44 507 1326.5 498.941 1326.5 489V18C1326.5 8.05887 1318.44 0 1308.5 0Z"/>
+</mask>
+<path d="M1308.5 0L18 2.52724e-05C8.05887 2.52724e-05 0 8.0589 0 18V489C0 498.941 8.05887 507 18 507H1308.5C1318.44 507 1326.5 498.941 1326.5 489V18C1326.5 8.05887 1318.44 0 1308.5 0Z" fill="#EEF2F7" stroke="#94A3B8" stroke-width="3" mask="url(#path-3-inside-1_0_1)"/>
+</g>
+</g>
+<g id="scene-container-g-001">
+<path id="Vector_2" d="M221.816 32H48C39.1634 32 32 39.1634 32 48V96C32 104.837 39.1634 112 48 112H221.816C230.653 112 237.816 104.837 237.816 96V48C237.816 39.1634 230.653 32 221.816 32Z" fill="#EEF2F7" stroke="#94A3B8" stroke-width="1.5"/>
+<path id="Vector_3" d="M221.816 32H48C39.1634 32 32 39.1634 32 48V56C32 64.8366 39.1634 72 48 72H221.816C230.653 72 237.816 64.8366 237.816 56V48C237.816 39.1634 230.653 32 221.816 32Z" fill="#DBE4F0" stroke="#94A3B8" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_2">
+<g id="scene-node-j-010">
+<path id="Vector_4" d="M487.816 92H291.816C284.084 92 277.816 98.268 277.816 106V126C277.816 133.732 284.084 140 291.816 140H487.816C495.548 140 501.816 133.732 501.816 126V106C501.816 98.268 495.548 92 487.816 92Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-040">
+<path id="Vector_5" d="M751.816 92H555.816C548.084 92 541.816 98.268 541.816 106V126C541.816 133.732 548.084 140 555.816 140H751.816C759.548 140 765.816 133.732 765.816 126V106C765.816 98.268 759.548 92 751.816 92Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-041">
+<path id="Vector_6" d="M1016 92H820C812.268 92 806 98.268 806 106V126C806 133.732 812.268 140 820 140H1016C1023.73 140 1030 133.732 1030 126V106C1030 98.268 1023.73 92 1016 92Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-042">
+<path id="Vector_7" d="M1016 157H820C812.268 157 806 163.268 806 171V191C806 198.732 812.268 205 820 205H1016C1023.73 205 1030 198.732 1030 191V171C1030 163.268 1023.73 157 1016 157Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-043">
+<path id="Vector_8" d="M1016 222H820C812.268 222 806 228.268 806 236V256C806 263.732 812.268 270 820 270H1016C1023.73 270 1030 263.732 1030 256V236C1030 228.268 1023.73 222 1016 222Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-020">
+<path id="Vector_9" d="M752 287H556C548.268 287 542 293.268 542 301V337C542 344.732 548.268 351 556 351H752C759.732 351 766 344.732 766 337V301C766 293.268 759.732 287 752 287Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-021">
+<path id="Vector_10" d="M1016 287H820C812.268 287 806 293.268 806 301V321C806 328.732 812.268 335 820 335H1016C1023.73 335 1030 328.732 1030 321V301C1030 293.268 1023.73 287 1016 287Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-022">
+<path id="Vector_11" d="M1280 287H1084C1076.27 287 1070 293.268 1070 301V337C1070 344.732 1076.27 351 1084 351H1280C1287.73 351 1294 344.732 1294 337V301C1294 293.268 1287.73 287 1280 287Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-030">
+<path id="Vector_12" d="M488 393H292C284.268 393 278 399.268 278 407V427C278 434.732 284.268 441 292 441H488C495.732 441 502 434.732 502 427V407C502 399.268 495.732 393 488 393Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-031">
+<path id="Vector_13" d="M752 393H556C548.268 393 542 399.268 542 407V426C542 433.732 548.268 440 556 440H752C759.732 440 766 433.732 766 426V407C766 399.268 759.732 393 752 393Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+<g id="scene-node-j-032">
+<path id="Vector_14" d="M1016 393H820C812.268 393 806 399.268 806 407V427C806 434.732 812.268 441 820 441H1016C1023.73 441 1030 434.732 1030 427V407C1030 399.268 1023.73 393 1016 393Z" fill="white" stroke="#64748B" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_3">
+<g id="Group_4">
+<text id="Maintain Product Map" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="52" y="57.3">Maintain Product Map</tspan></text>
+</g>
+<g id="Group_5">
+<text id="Select a Node" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="289.816" y="119.3">Select a Node</tspan></text>
+</g>
+<g id="Group_6">
+<text id="Add Relationship" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="553.816" y="119.3">Add Relationship</tspan></text>
+</g>
+<g id="Group_7">
+<text id="Add relationship, by node" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="818" y="119.3">Add relationship, by node</tspan></text>
+</g>
+<g id="Group_8">
+<g id="Group_9">
+<text id="Add outgoing relationship" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="818" y="184.3">Add outgoing relationship</tspan></text>
+</g>
+</g>
+<g id="Group_10">
+<g id="Group_11">
+<text id="Add incoming relationship" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="818" y="249.3">Add incoming relationship</tspan></text>
+</g>
+</g>
+<g id="Group_12">
+<g id="Group_13">
+<text id="Review Diagrams" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="554" y="314.3">Review Diagrams</tspan></text>
+<text id="Containing Current Node" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="554" y="334.3">Containing Current Node</tspan></text>
+</g>
+</g>
+<g id="Group_14">
+<text id="Select Diagram" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="818" y="314.3">Select Diagram</tspan></text>
+</g>
+<g id="Group_15">
+<g id="Group_16">
+<text id="View Node in New" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="1082" y="314.3">View Node in New</tspan></text>
+<text id="Diagram Context" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="1082" y="334.3">Diagram Context</tspan></text>
+</g>
+</g>
+<g id="Group_17">
+<text id="Select Diagram Content" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="290" y="420.3">Select Diagram Content</tspan></text>
+</g>
+<g id="Group_18">
+<text id="Adjust View" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="554" y="420.3">Adjust View</tspan></text>
+</g>
+<g id="Group_19">
+<text id="Name the New View" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="818" y="420.3">Name the New View</tspan></text>
+</g>
+</g>
+<g id="Group_20">
+<g id="scene-edge-j-020__precedes__j-021__46eee8d43c6d776b1dcc753aa338faec816b97554b7003e617b75fe86a975a36__0">
+<path id="Vector_15" d="M766 311H806" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-021__precedes__j-022__84df0e61ab61b8543263f49908472ace2a2b519578cadca8570812d4f3301422__0">
+<path id="Vector_16" d="M1030 311H1070" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-010__precedes__j-020__bd5b4702ee4578ba61d9321a99e2c57ecd9eb8c9def1cf16df06db2a612f7b43__0">
+<path id="Vector_17" d="M502 136H521.908V311H542" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-010__precedes__j-040__0969a1b8b474097395cda04a683c6f5bd486b6ca60a8ef92085bd6742118cafd__0">
+<path id="Vector_18" d="M501.816 116H541.816" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-040__precedes__j-041__1044dad5678dc742c6791e2a250651f3723e36db5662773c4e221866c4ef6491__0">
+<path id="Vector_19" d="M766 116H807" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-040__precedes__j-042__ec5169d09142273bad793dffd5096600b67407a113c32447ba424feb417c6e10__0">
+<path id="Vector_20" d="M703 140V181H806" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-040__precedes__j-043__516ff555b414b6cd05c89a504ded928336c61a450faa1c1efaeb3f75d697869f__0">
+<path id="Vector_21" d="M687 140V262H806" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-030__precedes__j-031__0e3ab4d720f49fe2fe8b7d13b91ee34595e6149e7a4523176d7009e8cf2431ee__0">
+<path id="Vector_22" d="M502 417H542" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-j-031__precedes__j-032__ffb6d6bea03c29e7695a6b97e57ab54c58ff0ad87be80be1299a9e83e228b7fd__0">
+<path id="Vector_23" d="M766 417H806" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_1">
+<rect width="1327" height="507" fill="white"/>
+</clipPath>
+</defs>
+</svg>

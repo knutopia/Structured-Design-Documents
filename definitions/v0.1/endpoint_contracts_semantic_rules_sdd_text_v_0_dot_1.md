@@ -109,6 +109,7 @@ Each relationship below defines:
 **Additional constraints:**
 - If `PRECEDES` is used to represent a *linear* flow, tooling MAY warn on cycles.
 - For loops (retry/recovery), cycles are allowed but each cyclic component SHOULD contain an annotated edge (for example, edge prop `kind=loop`) (recommended). The bundle encodes this as `loop_annotation_target=edge` with `loop_annotation_coverage=each_cyclic_component`; tools must consume the configured target, property, value, and coverage generically.
+- The `journey_map` renderer-default policy stacks explicit same-parent Step branches in source order. Linear and disconnected components remain source-sequential; unsupported branch topology retains the source row.
 
 ---
 

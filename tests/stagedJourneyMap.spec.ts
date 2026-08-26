@@ -130,6 +130,28 @@ function diagnosticSummary(scene: RendererScene): Array<{
 }
 
 describe("staged journey map RendererScene", () => {
+  it("reads branch stacking from the loaded bundle rather than a renderer default", async () => {
+    const built = await buildFixture("primary");
+    expect(findContainer(built.scene, "G-200").layout.strategy).toBe("grid");
+
+    const inlineBundle = structuredClone(built.bundle) as Bundle;
+    const inlineView = journeyView(inlineBundle);
+    inlineView.conventions.renderer_defaults!.journey_map_layout!.branch_placement = "inline";
+    const inlineScene = buildJourneyMapRendererScene(
+      built.projection,
+      built.graph,
+      inlineBundle,
+      inlineView,
+      { detailId: "detailed" }
+    );
+    expect(findContainer(inlineScene, "G-200").layout).toEqual({
+      strategy: "stack",
+      direction: "horizontal",
+      gap: 24,
+      crossAlignment: "start"
+    });
+  });
+
   it("preserves the exact source-ordered root and Stage hierarchy, including empty, single, and root Steps", async () => {
     const { scene } = await buildFixture("primary");
 
@@ -273,7 +295,11 @@ describe("staged journey map RendererScene", () => {
     delete step!.badges[0]!.targetName;
     step!.badges.push({ ...step!.badges[0]! });
 
-    const scene = buildJourneyMapRendererSceneFromModel(model, "strict");
+    const scene = buildJourneyMapRendererSceneFromModel(
+      model,
+      "strict",
+      build.view.conventions.renderer_defaults!.journey_map_layout!
+    );
     expect(findNode(scene, "J-201").content.slice(1).map(({ id, text }) => ({ id, text }))).toEqual([
       { id: "J-201__badge__OP-100__0", text: "OP-100" },
       { id: "J-201__badge__OP-200__0", text: "Confidence before commitment" },
@@ -477,7 +503,11 @@ describe("staged journey map RendererScene", () => {
     const build = await buildFixture("duplicate");
     const model = structuredClone(build.model) as JourneyMapRenderModel;
     model.edges[1]!.id = model.edges[0]!.id;
-    const scene = buildJourneyMapRendererSceneFromModel(model, "strict");
+    const scene = buildJourneyMapRendererSceneFromModel(
+      model,
+      "strict",
+      build.view.conventions.renderer_defaults!.journey_map_layout!
+    );
 
     expect(scene.edges).toHaveLength(3);
     expect(scene.edges.filter((edge) => edge.id === model.edges[0]!.id)).toHaveLength(2);

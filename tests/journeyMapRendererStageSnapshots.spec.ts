@@ -275,7 +275,11 @@ describe("journey map degraded diagnostic goldens", () => {
       resolveDetailDisplayPolicy(duplicate.view, "detailed")
     ));
     model.edges[1]!.id = model.edges[0]!.id;
-    const duplicateScene = buildJourneyMapRendererSceneFromModel(model, "strict");
+    const duplicateScene = buildJourneyMapRendererSceneFromModel(
+      model,
+      "strict",
+      duplicate.view.conventions.renderer_defaults!.journey_map_layout!
+    );
 
     const primary = await buildFixture("primary");
     const missingEndpointScene = structuredClone(primary.rendered.measuredScene) as MeasuredScene;

@@ -153,7 +153,14 @@ export type JourneyMapItemMetadata =
       uncontained: boolean;
       progressionColumn?: number;
       laneOrder?: number;
-      placementRole?: "linear" | "diamond_split" | "diamond_option" | "diamond_join";
+      placementRole?:
+        | "linear"
+        | "diamond_split"
+        | "diamond_option"
+        | "diamond_join"
+        | "branch_split"
+        | "branch_step"
+        | "branch_join";
       branchGroupId?: string;
     };
 

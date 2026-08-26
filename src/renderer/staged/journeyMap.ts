@@ -1,4 +1,4 @@
-import type { Bundle, ViewSpec } from "../../bundle/types.js";
+import type { Bundle, RendererJourneyMapLayoutConfig, ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
 import {
@@ -443,19 +443,34 @@ function alignUncontainedStepsWithStageContent(root: PositionedScene["root"]): v
     .flatMap((item) => item.kind === "container" && item.viewMetadata?.journeyMap?.kind === "stage"
       ? [item.y + item.chrome.padding.top + (item.chrome.headerBandHeight ?? 0)]
       : []);
-  if (stageContentTops.length === 0) {
-    return;
-  }
-
-  const contentTop = Math.max(...stageContentTops);
+  const uncontainedByLane = new Map<number, PositionedScene["root"]["children"]>();
   for (const item of root.children) {
     if (item.kind !== "node") {
       continue;
     }
     const metadata = item.viewMetadata?.journeyMap;
-    if (metadata?.kind === "step" && metadata.uncontained) {
-      item.y = contentTop;
+    if (metadata?.kind !== "step" || !metadata.uncontained) {
+      continue;
     }
+    const laneOrder = metadata.laneOrder ?? 0;
+    const laneItems = uncontainedByLane.get(laneOrder) ?? [];
+    laneItems.push(item);
+    uncontainedByLane.set(laneOrder, laneItems);
+  }
+  if (uncontainedByLane.size === 0) {
+    return;
+  }
+
+  const firstLaneItems = uncontainedByLane.get(Math.min(...uncontainedByLane.keys())) ?? [];
+  let laneTop = stageContentTops.length > 0
+    ? Math.max(...stageContentTops)
+    : Math.min(...firstLaneItems.map((item) => item.y));
+  for (const laneOrder of [...uncontainedByLane.keys()].sort((left, right) => left - right)) {
+    const laneItems = uncontainedByLane.get(laneOrder) ?? [];
+    for (const item of laneItems) {
+      item.y = laneTop;
+    }
+    laneTop += Math.max(...laneItems.map((item) => item.height)) + ROOT_GAP;
   }
 
   const contentBottom = Math.max(...root.children.map((item) => item.y + item.height));
@@ -474,20 +489,32 @@ export async function positionJourneyMapMeasuredSceneBeforeRouting(
 export function buildJourneyMapRendererSceneFromModel(
   model: JourneyMapRenderModel,
   detailId: string,
+  layout: RendererJourneyMapLayoutConfig,
   themeId = "default",
   diagnostics: readonly RendererDiagnostic[] = []
 ): RendererScene {
-  const placement = buildJourneyScenePlacement(model);
+  const placement = buildJourneyScenePlacement(model, layout);
   const edges = model.edges.map((edge) => buildJourneyEdge(edge, placement));
+  const rootLayout: SceneContainer["layout"] = placement.rootGridPlacements
+    ? {
+      strategy: "grid",
+      columns: Math.max(...placement.rootGridPlacements.map((cell) => cell.column)) + 1,
+      gap: ROOT_GAP,
+      crossAlignment: "start",
+      grid: {
+        placements: placement.rootGridPlacements.map((cell) => ({ ...cell }))
+      }
+    }
+    : {
+      strategy: "stack",
+      direction: "horizontal",
+      gap: ROOT_GAP,
+      crossAlignment: "start"
+    };
   const root = {
     ...buildDiagramRootContainer({
       viewId: "journey_map",
-      layout: {
-        strategy: "stack",
-        direction: "horizontal",
-        gap: ROOT_GAP,
-        crossAlignment: "start"
-      },
+      layout: rootLayout,
       chrome: buildRootChrome(),
       children: model.rootItems.map((item) => buildJourneyRootItem(item, placement)),
       classes: ["journey_map"]
@@ -522,6 +549,10 @@ export function buildJourneyMapRendererScene(
   view: ViewSpec,
   settings: StagedRenderSettings
 ): RendererScene {
+  const layout = view.conventions.renderer_defaults?.journey_map_layout;
+  if (layout === undefined) {
+    throw new Error("Journey-map rendering requires renderer_defaults.journey_map_layout from the loaded bundle.");
+  }
   const model = buildJourneyMapRenderModel(
     projection,
     graph,
@@ -530,8 +561,8 @@ export function buildJourneyMapRendererScene(
     view.projection.ordering_edges,
     resolveDetailDisplayPolicy(view, settings.detailId)
   );
-  const placement = buildJourneyScenePlacement(model);
-  return buildJourneyMapRendererSceneFromModel(model, settings.detailId, settings.themeId ?? "default", [
+  const placement = buildJourneyScenePlacement(model, layout);
+  return buildJourneyMapRendererSceneFromModel(model, settings.detailId, layout, settings.themeId ?? "default", [
     ...buildFirstParentDiagnostics(projection, view, placement),
     ...buildStepOnlyDiagnostics(placement),
     ...buildDisconnectedChainDiagnostics(model, placement)

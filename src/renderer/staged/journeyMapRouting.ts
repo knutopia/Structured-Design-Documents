@@ -1219,11 +1219,18 @@ function resolveRouteEligibility(
     if (target.metadata.rootOrder <= source.metadata.rootOrder) {
       return undefined;
     }
-    if (!branch && target.metadata.rootOrder !== source.metadata.rootOrder + 1) {
+    const sharesBranchLayout = source.metadata.branchGroupId !== undefined
+      && source.metadata.branchGroupId === target.metadata.branchGroupId;
+    const visuallyAdjacent = sharesBranchLayout
+      && sourceProgressionColumn !== undefined
+      && targetProgressionColumn === sourceProgressionColumn + 1;
+    if (!branch
+      && target.metadata.rootOrder !== source.metadata.rootOrder + 1
+      && !visuallyAdjacent) {
       return undefined;
     }
     return {
-      archetype: target.metadata.rootOrder === source.metadata.rootOrder + 1
+      archetype: target.metadata.rootOrder === source.metadata.rootOrder + 1 || visuallyAdjacent
         ? "adjacent_forward_root_step"
         : "long_forward_root_step",
       source,
@@ -1734,9 +1741,12 @@ function minimalLCandidates(
 ): JourneyMapRouteCandidate[] {
   const sourceGroupId = eligibility.source.metadata.branchGroupId;
   const targetGroupId = eligibility.target.metadata.branchGroupId;
-  if (eligibility.archetype !== "adjacent_forward_same_stage"
-    || !eligibility.sourceStage
-    || eligibility.sourceStage.stage.id !== eligibility.targetStage?.stage.id
+  const sameStage = eligibility.sourceStage !== undefined
+    && eligibility.sourceStage.stage.id === eligibility.targetStage?.stage.id;
+  const bothAtRoot = eligibility.sourceStage === undefined && eligibility.targetStage === undefined;
+  if ((eligibility.archetype !== "adjacent_forward_same_stage"
+      && eligibility.archetype !== "adjacent_forward_root_step")
+    || (!sameStage && !bothAtRoot)
     || sourceGroupId === undefined
     || sourceGroupId !== targetGroupId
     || (eligibility.source.metadata.laneOrder ?? 0)
@@ -1749,7 +1759,7 @@ function minimalLCandidates(
   ];
   return endpointPairs.flatMap(({ sourceSide, targetSide }) => {
     const ignoredDiagnostics: RendererDiagnostic[] = [];
-    const source = resolveEndpoint(
+    let source = resolveEndpoint(
       edge,
       eligibility.source,
       "source",
@@ -1757,7 +1767,7 @@ function minimalLCandidates(
       sourceSide,
       ignoredDiagnostics
     );
-    const target = resolveEndpoint(
+    let target = resolveEndpoint(
       edge,
       eligibility.target,
       "target",
@@ -1765,20 +1775,34 @@ function minimalLCandidates(
       targetSide,
       ignoredDiagnostics
     );
+    if (source && sourceSide === "south" && eligibility.branch) {
+      const lowerBranchCount = Math.max(1, eligibility.branch.sourceOutdegree - 1);
+      const lowerBranchOrder = Math.max(0, eligibility.branch.sourceOrdinal - 1);
+      const sourceCoordinate = eligibility.source.node.x + eligibility.source.node.width / 2
+        + ((lowerBranchCount - 1) / 2 - lowerBranchOrder) * JOURNEY_MAP_TRACK_SEPARATION;
+      source = resolvedEndpointAtTangentialCoordinate(source, eligibility.source, sourceCoordinate);
+    }
+    if (target && targetSide === "south" && eligibility.join) {
+      const lowerJoinCount = Math.max(1, eligibility.join.targetIndegree - 1);
+      const lowerJoinOrder = Math.max(0, eligibility.join.targetOrdinal - 1);
+      const targetCoordinate = eligibility.target.node.x + eligibility.target.node.width / 2
+        + ((lowerJoinCount - 1) / 2 - lowerJoinOrder) * JOURNEY_MAP_TRACK_SEPARATION;
+      target = resolvedEndpointAtTangentialCoordinate(target, eligibility.target, targetCoordinate);
+    }
     const route = source && target ? minimalLRoute(source, target) : undefined;
     if (!source || !target || !route
       || index.allNodes.some((candidate) => intersectsRoute(route, nodeRect(candidate)))) {
       return [];
     }
-    const owningStage = eligibility.sourceStage!.stage;
-    const headerRect: Rect = {
-      id: owningStage.id,
-      x: owningStage.x,
-      y: owningStage.y,
-      width: owningStage.width,
-      height: owningStage.chrome.headerBandHeight ?? 0
-    };
-    if (intersectsRoute(route, headerRect)
+    const owningStage = eligibility.sourceStage?.stage;
+    const intersectsOwningStageChrome = owningStage !== undefined && (
+      intersectsRoute(route, {
+        id: owningStage.id,
+        x: owningStage.x,
+        y: owningStage.y,
+        width: owningStage.width,
+        height: owningStage.chrome.headerBandHeight ?? 0
+      })
       || owningStage.headerContent.some((block) =>
         intersectsRoute(route, containerContentRect(owningStage, block)))
       || route.points.some((point) =>
@@ -1786,8 +1810,10 @@ function minimalLCandidates(
         || point.x > owningStage.x + owningStage.width
         || point.y < owningStage.y
         || point.y > owningStage.y + owningStage.height)
+    );
+    if (intersectsOwningStageChrome
       || index.allStages.some((stage) =>
-        stage.stage.id !== owningStage.id
+        stage.stage.id !== owningStage?.id
         && intersectsRoute(route, {
           id: stage.stage.id,
           x: stage.stage.x,
