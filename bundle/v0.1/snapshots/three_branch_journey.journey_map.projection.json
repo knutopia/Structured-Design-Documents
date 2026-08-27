@@ -2,7 +2,7 @@
   "schema": "sdd-text-view-projection",
   "version": "0.1",
   "view_id": "journey_map",
-  "source_example": "home_energy_upgrade",
+  "source_example": "three_branch_journey",
   "nodes": [
     {
       "id": "G-400",

@@ -70,10 +70,10 @@ examples:
     compiled_snapshot: snapshots/branching_journey.compiled.json
     projection_snapshots:
       - snapshots/branching_journey.journey_map.projection.json
-  - path: examples/home_energy_upgrade.sdd
-    compiled_snapshot: snapshots/home_energy_upgrade.compiled.json
+  - path: examples/three_branch_journey.sdd
+    compiled_snapshot: snapshots/three_branch_journey.compiled.json
     projection_snapshots:
-      - snapshots/home_energy_upgrade.journey_map.projection.json
+      - snapshots/three_branch_journey.journey_map.projection.json
   - path: examples/service_blueprint_slice.sdd
     compiled_snapshot: snapshots/service_blueprint_slice.compiled.json
     projection_snapshots:

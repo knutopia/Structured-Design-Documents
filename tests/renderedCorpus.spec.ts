@@ -72,7 +72,7 @@ describe("rendered example corpus", () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const homeEnergyUpgradePairs = discovery.pairs.filter(
-      (pair) => pair.example.name === "home_energy_upgrade"
+      (pair) => pair.example.name === "three_branch_journey"
     );
 
     expect(homeEnergyUpgradePairs.map((pair) => pair.viewId)).toEqual(["journey_map"]);
@@ -86,7 +86,7 @@ describe("rendered example corpus", () => {
     expect(readme).toContain("outcome_opportunity_map_diagram_type/metric_event_instrumentation_example");
     expect(readme).not.toContain("outcome_opportunity_map_diagram_type [preview_only]/metric_event_instrumentation_example");
     expect(readme).toContain("journey_map_diagram_type/branching_journey_example");
-    expect(readme).toContain("journey_map_diagram_type/home_energy_upgrade_example");
+    expect(readme).toContain("journey_map_diagram_type/three_branch_journey_example");
     expect(readme).toContain("journey_map_diagram_type/service_blueprint_slice_example");
     expect(readme).not.toContain("workspace_onboarding");
     expect(readme).not.toContain("trip_recovery");
