@@ -443,12 +443,21 @@ export interface RendererScenarioFlowLayoutConfig {
   branch_order: "source";
 }
 
+export interface RendererJourneyMapLayoutConfig {
+  branch_placement: "stacked" | "inline";
+  branch_order: "source";
+  scope: "sibling_steps";
+  disconnected_components: "source_sequential";
+  unsupported_branch_fallback: "source_row";
+}
+
 export interface RendererDefaultsConfig {
   preview?: PreviewDefaultsConfig;
   semantic_columns?: RendererSemanticColumnsConfig;
   node_chrome?: Record<string, RendererNodeChromeConfig>;
   connectors?: RendererConnectorsConfig;
   batch_applicability?: RendererBatchApplicabilityConfig;
+  journey_map_layout?: RendererJourneyMapLayoutConfig;
   scenario_flow_layout?: RendererScenarioFlowLayoutConfig;
   [key: string]: unknown;
 }

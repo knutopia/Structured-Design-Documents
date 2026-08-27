@@ -40,6 +40,65 @@
           "J-250",
           "J-260",
           "J-401"
+        ],
+        "branchGroups": [
+          {
+            "id": "G-200__branch__J-201",
+            "scopeId": "G-200",
+            "stageId": "G-200",
+            "splitStepId": "J-201",
+            "targetStepIds": [
+              "J-202",
+              "J-203"
+            ],
+            "joinStepId": "J-204",
+            "entryLineageId": "G-200__lineage__entry",
+            "returnLineageId": "G-200__lineage__entry",
+            "arms": [
+              {
+                "ordinal": 0,
+                "targetStepId": "J-202",
+                "lineageId": "G-200__lineage__entry",
+                "branchPath": []
+              },
+              {
+                "ordinal": 1,
+                "targetStepId": "J-203",
+                "lineageId": "G-200__lineage__1",
+                "branchPath": [
+                  1
+                ]
+              }
+            ],
+            "envelope": {
+              "startColumn": 0,
+              "endColumn": 2,
+              "minRow": 0,
+              "maxRow": 1
+            }
+          }
+        ],
+        "branchLineages": [
+          {
+            "id": "G-200__lineage__entry",
+            "scopeId": "G-200",
+            "stageId": "G-200",
+            "branchPath": [],
+            "row": 0,
+            "startColumn": 0,
+            "endColumn": 2
+          },
+          {
+            "id": "G-200__lineage__1",
+            "scopeId": "G-200",
+            "stageId": "G-200",
+            "branchPath": [
+              1
+            ],
+            "row": 1,
+            "startColumn": 1,
+            "endColumn": 1
+          }
         ]
       }
     },
@@ -488,7 +547,9 @@
                 "progressionColumn": 0,
                 "laneOrder": 0,
                 "placementRole": "diamond_split",
-                "branchGroupId": "G-200__diamond__J-201__J-204"
+                "branchGroupId": "G-200__diamond__J-201__J-204",
+                "branchLineageId": "G-200__lineage__entry",
+                "branchPath": []
               }
             },
             "widthPolicy": {
@@ -581,7 +642,9 @@
                 "progressionColumn": 1,
                 "laneOrder": 0,
                 "placementRole": "diamond_option",
-                "branchGroupId": "G-200__diamond__J-201__J-204"
+                "branchGroupId": "G-200__diamond__J-201__J-204",
+                "branchLineageId": "G-200__lineage__entry",
+                "branchPath": []
               }
             },
             "widthPolicy": {
@@ -673,7 +736,11 @@
                 "progressionColumn": 1,
                 "laneOrder": 1,
                 "placementRole": "diamond_option",
-                "branchGroupId": "G-200__diamond__J-201__J-204"
+                "branchGroupId": "G-200__diamond__J-201__J-204",
+                "branchLineageId": "G-200__lineage__1",
+                "branchPath": [
+                  1
+                ]
               }
             },
             "widthPolicy": {
@@ -766,7 +833,9 @@
                 "progressionColumn": 2,
                 "laneOrder": 0,
                 "placementRole": "diamond_join",
-                "branchGroupId": "G-200__diamond__J-201__J-204"
+                "branchGroupId": "G-200__diamond__J-201__J-204",
+                "branchLineageId": "G-200__lineage__entry",
+                "branchPath": []
               }
             },
             "widthPolicy": {

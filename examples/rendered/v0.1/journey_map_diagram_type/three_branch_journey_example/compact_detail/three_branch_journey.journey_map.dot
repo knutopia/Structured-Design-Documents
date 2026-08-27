@@ -1,0 +1,27 @@
+digraph journey_map {
+  rankdir=LR;
+  graph [fontname="Public Sans"];
+  node [shape=box, style="rounded", fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph cluster_G_400 {
+    label="Choose a home improvement path";
+    style="rounded";
+    "G-400__anchor" [label="", shape=point, width=0, height=0, style=invis];
+    "J-400" [label="Choose the main priority"];
+    "J-410" [label="Explore lower energy bills"];
+    "J-411" [label="Review usage opportunities"];
+    "J-420" [label="Explore better home comfort"];
+    "J-421" [label="Identify comfort problem areas"];
+    "J-430" [label="Explore lower emissions"];
+    "J-431" [label="Estimate upgrade impact"];
+  }
+  "G-400__anchor" -> "J-400" [style=invis, weight=100];
+  "J-411" -> "J-420" [style=invis, weight=100];
+  "J-421" -> "J-430" [style=invis, weight=100];
+  "J-400" -> "J-410";
+  "J-400" -> "J-420";
+  "J-400" -> "J-430";
+  "J-410" -> "J-411";
+  "J-420" -> "J-421";
+  "J-430" -> "J-431";
+}

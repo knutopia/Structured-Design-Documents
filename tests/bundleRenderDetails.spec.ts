@@ -138,6 +138,26 @@ describe("bundle-owned render details", () => {
     });
   });
 
+  it("requires a valid bundle-owned journey-map layout policy", () => {
+    const journeyView = bundle.views.views.find((view) => view.id === "journey_map")!;
+    expect(journeyView.conventions.renderer_defaults?.journey_map_layout).toEqual({
+      branch_placement: "stacked",
+      branch_order: "source",
+      scope: "sibling_steps",
+      disconnected_components: "source_sequential",
+      unsupported_branch_fallback: "source_row"
+    });
+
+    expectInvalid("bundle.journey_map.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "journey_map")!;
+      delete (view.conventions.renderer_defaults as Record<string, unknown>).journey_map_layout;
+    });
+    expectInvalid("bundle.journey_map.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "journey_map")!;
+      view.conventions.renderer_defaults!.journey_map_layout!.branch_placement = "sideways" as "stacked";
+    });
+  });
+
   it("cross-checks the renderer registry without embedding view IDs in bundle validation", () => {
     const participants = bundle.views.views
       .filter((view) => view.conventions.renderer_defaults !== undefined)
@@ -177,6 +197,11 @@ describe("bundle-owned render details", () => {
     const scenarioView = scenarioLayoutChanged.views.views.find((view) => view.id === "scenario_flow")!;
     scenarioView.conventions.renderer_defaults!.scenario_flow_layout!.component_gap_rows = 2;
     expect(computeBundleFingerprint(scenarioLayoutChanged)).not.toBe(computeBundleFingerprint(bundle));
+
+    const journeyLayoutChanged = cloneBundle();
+    const journeyView = journeyLayoutChanged.views.views.find((view) => view.id === "journey_map")!;
+    journeyView.conventions.renderer_defaults!.journey_map_layout!.branch_placement = "inline";
+    expect(computeBundleFingerprint(journeyLayoutChanged)).not.toBe(computeBundleFingerprint(bundle));
   });
 
   it("fails unsupported view/detail resolution rather than falling back", () => {

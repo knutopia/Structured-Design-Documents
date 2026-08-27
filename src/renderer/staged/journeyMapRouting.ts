@@ -29,6 +29,7 @@ export const MAX_JOURNEY_MAP_EXPANSION_ATTEMPTS = 4;
 export type JourneyMapRouteFamily =
   | "archetype_template"
   | "direct_horizontal"
+  | "branch_join_return"
   | "long_forward_east_egress"
   | "minimal_l"
   | "early_south_egress";
@@ -219,6 +220,20 @@ export interface JourneyMapJoinPlan {
   arrivalControl?: JourneyMapJoinArrivalControl;
 }
 
+export interface JourneyMapBranchJoinCorridor {
+  branchGroupId: string;
+  armOrdinal: number;
+  armCount: number;
+  trackOrdinal: number;
+  trackCount: number;
+  axis: "vertical";
+  nominalCoordinate: number;
+  span: {
+    start: number;
+    end: number;
+  };
+}
+
 export type JourneyMapCycleComponentKind = "simple_reciprocal" | "complex";
 export type JourneyMapCycleComponentRole = "ordinary" | "forward" | "return";
 
@@ -354,6 +369,12 @@ export type JourneyMapOccupancyResource =
     kind: "arrival_stem";
     nodeId: string;
     side: PortSide;
+  }
+  | {
+    kind: "branch_join_track";
+    branchGroupId: string;
+    targetItemId: string;
+    armOrdinal: number;
   };
 
 export type JourneyMapOccupancyLock =
@@ -448,6 +469,9 @@ export interface JourneyMapConnectorPlan {
   topologyModifiers?: ["branch"] | ["join"];
   branch?: JourneyMapBranchPlan;
   join?: JourneyMapJoinPlan;
+  branchJoinCorridor?: JourneyMapBranchJoinCorridor;
+  branchRouteRole?: JourneyMapEdgeMetadata["branchRouteRole"];
+  branchGroupId?: string;
   role: string;
   classes: string[];
   markers?: EdgeMarkers;
@@ -548,6 +572,10 @@ interface RouteEligibility {
     targetIndegree: number;
     targetOrdinal: number;
   };
+  branchRouteRole?: JourneyMapEdgeMetadata["branchRouteRole"];
+  branchGroupId?: string;
+  branchArmOrdinal?: number;
+  branchArmCount?: number;
   duplicate?: {
     groupEdgeIds: string[];
     groupSize: number;
@@ -569,6 +597,7 @@ interface JourneyMapRouteCandidate {
   signature: string;
   rootSpanBypass?: JourneyMapRootSpanBypass;
   rootOuterBypass?: JourneyMapRootOuterBypass;
+  branchJoinCorridor?: JourneyMapBranchJoinCorridor;
   usedFullRowEastEgressFallback?: boolean;
 }
 
@@ -1014,6 +1043,7 @@ function resolveRouteEligibility(
   if (!source || !target) {
     return undefined;
   }
+  const branchIntent = edge.viewMetadata?.journeyMap;
   const endpointKey = `${source.node.id}\u0000${target.node.id}`;
   const sameEndpointCount = fullDegrees.sameEndpointCountByKey.get(endpointKey) ?? 0;
   if (sameEndpointCount < 1) {
@@ -1156,7 +1186,11 @@ function resolveRouteEligibility(
   const targetIndegree = routeDegrees.incomingByNodeId.get(target.node.id) ?? 0;
   const isBranch = sourceOutdegree > 1;
   const sourceOrdinal = isBranch
-    ? (routeDegrees.outgoingEdgeIdsByNodeId.get(source.node.id) ?? []).indexOf(edge.id)
+    ? source.metadata.placementRole !== "diamond_split"
+      && branchIntent?.branchRouteRole !== undefined
+      && branchIntent.branchArmOrdinal !== undefined
+      ? branchIntent.branchArmOrdinal
+      : (routeDegrees.outgoingEdgeIdsByNodeId.get(source.node.id) ?? []).indexOf(edge.id)
     : -1;
   if (isBranch && sourceOrdinal < 0) {
     return undefined;
@@ -1204,13 +1238,23 @@ function resolveRouteEligibility(
     return undefined;
   }
   const targetOrdinal = isJoin
-    ? (routeDegrees.incomingEdgeIdsByNodeId.get(target.node.id) ?? []).indexOf(edge.id)
+    ? target.metadata.placementRole !== "diamond_join"
+      && branchIntent?.branchRouteRole !== undefined
+      && branchIntent.branchArmOrdinal !== undefined
+      ? branchIntent.branchArmOrdinal
+      : (routeDegrees.incomingEdgeIdsByNodeId.get(target.node.id) ?? []).indexOf(edge.id)
     : -1;
   if (isJoin && targetOrdinal < 0) {
     return undefined;
   }
   const join = isJoin ? { targetIndegree, targetOrdinal } : undefined;
-  if (join && (!sourceStage
+  const typedRootJoin = join !== undefined
+    && !sourceStage
+    && !targetStage
+    && branchIntent?.branchGroupId !== undefined
+    && (branchIntent.branchRouteRole === "continuation"
+      || branchIntent.branchRouteRole === "join_return");
+  if (join && !typedRootJoin && (!sourceStage
     || !targetStage
     || sourceStage.stage.id !== targetStage.stage.id)) {
     return undefined;
@@ -1219,11 +1263,24 @@ function resolveRouteEligibility(
     if (target.metadata.rootOrder <= source.metadata.rootOrder) {
       return undefined;
     }
-    if (!branch && target.metadata.rootOrder !== source.metadata.rootOrder + 1) {
+    const sharesBranchLayout = source.metadata.branchGroupId !== undefined
+      && source.metadata.branchGroupId === target.metadata.branchGroupId;
+    const visuallyAdjacent = sharesBranchLayout
+      && sourceProgressionColumn !== undefined
+      && targetProgressionColumn === sourceProgressionColumn + 1;
+    const sameLineageContinuation = branchIntent?.branchRouteRole === "continuation"
+      && branchIntent.sourceLineageId !== undefined
+      && branchIntent.sourceLineageId === branchIntent.targetLineageId;
+    if (!branch
+      && target.metadata.rootOrder !== source.metadata.rootOrder + 1
+      && !visuallyAdjacent
+      && !sameLineageContinuation) {
       return undefined;
     }
     return {
       archetype: target.metadata.rootOrder === source.metadata.rootOrder + 1
+        || visuallyAdjacent
+        || sameLineageContinuation
         ? "adjacent_forward_root_step"
         : "long_forward_root_step",
       source,
@@ -1231,6 +1288,19 @@ function resolveRouteEligibility(
       sourceStepOrder: 0,
       targetStepOrder: 0,
       ...(branch ? { branch } : {}),
+      ...(join ? { join } : {}),
+      ...(branchIntent?.branchRouteRole
+        ? {
+          branchRouteRole: branchIntent.branchRouteRole,
+          ...(branchIntent.branchGroupId ? { branchGroupId: branchIntent.branchGroupId } : {}),
+          ...(branchIntent.branchArmOrdinal !== undefined
+            ? { branchArmOrdinal: branchIntent.branchArmOrdinal }
+            : {}),
+          ...(branchIntent.branchArmCount !== undefined
+            ? { branchArmCount: branchIntent.branchArmCount }
+            : {})
+        }
+        : {}),
       ...(cycleComponent ? { cycleComponent } : {})
     };
   }
@@ -1286,8 +1356,11 @@ function resolveRouteEligibility(
       return undefined;
     }
     return {
-      archetype: sourceProgressionColumn !== undefined
-        && targetProgressionColumn === sourceProgressionColumn + 1
+      archetype: (sourceProgressionColumn !== undefined
+        && targetProgressionColumn === sourceProgressionColumn + 1)
+        || (branchIntent?.branchRouteRole === "continuation"
+          && branchIntent.sourceLineageId !== undefined
+          && branchIntent.sourceLineageId === branchIntent.targetLineageId)
         ? "adjacent_forward_same_stage"
         : "non_adjacent_forward_same_stage",
       source,
@@ -1298,6 +1371,18 @@ function resolveRouteEligibility(
       targetStepOrder,
       ...(branch ? { branch } : {}),
       ...(join ? { join } : {}),
+      ...(branchIntent?.branchRouteRole
+        ? {
+          branchRouteRole: branchIntent.branchRouteRole,
+          ...(branchIntent.branchGroupId ? { branchGroupId: branchIntent.branchGroupId } : {}),
+          ...(branchIntent.branchArmOrdinal !== undefined
+            ? { branchArmOrdinal: branchIntent.branchArmOrdinal }
+            : {}),
+          ...(branchIntent.branchArmCount !== undefined
+            ? { branchArmCount: branchIntent.branchArmCount }
+            : {})
+        }
+        : {}),
       ...(cycleComponent ? { cycleComponent } : {})
     };
   }
@@ -1509,6 +1594,20 @@ function reserveDirectEndpointCoordinate(
   reservations.set(key, [...(reservations.get(key) ?? []), roundMetric(coordinate)]);
 }
 
+function orderedBranchJoinEndpointCoordinate(
+  node: PositionedNode,
+  armOrdinal: number,
+  armCount: number
+): number {
+  const inset = JOURNEY_MAP_TRACK_SEPARATION / 4;
+  const usable = Math.max(0, node.height - inset * 2);
+  const spacing = armCount > 1
+    ? Math.min(JOURNEY_MAP_TRACK_SEPARATION, usable / (armCount - 1))
+    : 0;
+  const start = node.y + node.height / 2 - spacing * (armCount - 1) / 2;
+  return roundMetric(start + spacing * armOrdinal);
+}
+
 function directHorizontalCandidate(
   edge: MeasuredEdge,
   eligibility: RouteEligibility,
@@ -1550,12 +1649,28 @@ function directHorizontalCandidate(
     targetNode.id,
     targetEndpoint.side
   );
-  const sharedY = selectJourneyMapBalancedDirectCoordinate({
-    source: { y: sourceNode.y, height: sourceNode.height },
-    target: { y: targetNode.y, height: targetNode.height },
-    sourceReservations,
-    targetReservations
-  });
+  const genericJoinContinuation = eligibility.branchRouteRole === "continuation"
+    && eligibility.join !== undefined
+    && eligibility.target.metadata.placementRole === "branch_join"
+    && eligibility.branchArmOrdinal !== undefined
+    && eligibility.branchArmCount !== undefined;
+  const requestedJoinCoordinate = genericJoinContinuation
+    ? orderedBranchJoinEndpointCoordinate(
+      targetNode,
+      eligibility.branchArmOrdinal!,
+      eligibility.branchArmCount!
+    )
+    : undefined;
+  const sharedY = requestedJoinCoordinate !== undefined
+    && [...sourceReservations, ...targetReservations].every((reserved) =>
+      Math.abs(reserved - requestedJoinCoordinate) >= JOURNEY_MAP_TRACK_SEPARATION - 0.001)
+    ? requestedJoinCoordinate
+    : selectJourneyMapBalancedDirectCoordinate({
+      source: { y: sourceNode.y, height: sourceNode.height },
+      target: { y: targetNode.y, height: targetNode.height },
+      sourceReservations,
+      targetReservations
+    });
   if (sharedY === undefined) {
     return undefined;
   }
@@ -1601,6 +1716,87 @@ function directHorizontalCandidate(
     crossings: 0,
     desiredFamilyRank: 0,
     signature: `${edge.viewMetadata?.journeyMap?.authorOrder ?? Number.MAX_SAFE_INTEGER}:${edge.id}:direct_horizontal:${sharedY}`
+  };
+}
+
+function branchJoinReturnCandidate(
+  edge: MeasuredEdge,
+  eligibility: RouteEligibility,
+  sourceEndpoint: JourneyMapResolvedEndpoint,
+  targetEndpoint: JourneyMapResolvedEndpoint
+): JourneyMapRouteCandidate | undefined {
+  if (eligibility.branchRouteRole !== "join_return"
+    || eligibility.branchGroupId === undefined
+    || eligibility.branchArmOrdinal === undefined
+    || eligibility.branchArmCount === undefined
+    || eligibility.branchArmOrdinal <= 0
+    || eligibility.target.metadata.placementRole === "diamond_join"
+    || sourceEndpoint.side !== "east"
+    || targetEndpoint.side !== "west"
+    || sourceEndpoint.x >= targetEndpoint.x) {
+    return undefined;
+  }
+  const targetCoordinate = orderedBranchJoinEndpointCoordinate(
+    eligibility.target.node,
+    eligibility.branchArmOrdinal,
+    eligibility.branchArmCount
+  );
+  const target = resolvedEndpointAtTangentialCoordinate(
+    targetEndpoint,
+    eligibility.target,
+    targetCoordinate
+  );
+  if (!target) {
+    return undefined;
+  }
+  const trackCount = Math.max(1, eligibility.branchArmCount - 1);
+  const trackOrdinal = Math.max(0, eligibility.branchArmOrdinal - 1);
+  const desiredTrackX = roundMetric(
+    target.x
+      - JOURNEY_MAP_PREFERRED_TERMINAL_LEG
+      - (trackCount - trackOrdinal - 1) * JOURNEY_MAP_TRACK_SEPARATION
+  );
+  const minimumTrackX = roundMetric(sourceEndpoint.x + MIN_ARROW_MARKER_LEG);
+  const maximumTrackX = roundMetric(target.x - MIN_ARROW_MARKER_LEG);
+  if (minimumTrackX > maximumTrackX) {
+    return undefined;
+  }
+  const trackX = roundMetric(clamp(desiredTrackX, minimumTrackX, maximumTrackX));
+  const route: PositionedRoute = {
+    style: "orthogonal",
+    points: collapseRoutePoints([
+      sourceEndpoint,
+      { x: trackX, y: sourceEndpoint.y },
+      { x: trackX, y: target.y },
+      target
+    ])
+  };
+  if (route.points.length !== 4) {
+    return undefined;
+  }
+  return {
+    routeFamily: "branch_join_return",
+    sourceEndpoint: structuredClone(sourceEndpoint),
+    targetEndpoint: target,
+    route,
+    unrelatedInteriorTraversals: 0,
+    separationViolations: 0,
+    crossings: 0,
+    desiredFamilyRank: 0,
+    signature: `${edge.viewMetadata?.journeyMap?.authorOrder ?? Number.MAX_SAFE_INTEGER}:${edge.id}:branch_join_return:${trackOrdinal}`,
+    branchJoinCorridor: {
+      branchGroupId: eligibility.branchGroupId,
+      armOrdinal: eligibility.branchArmOrdinal,
+      armCount: eligibility.branchArmCount,
+      trackOrdinal,
+      trackCount,
+      axis: "vertical",
+      nominalCoordinate: trackX,
+      span: {
+        start: Math.min(sourceEndpoint.y, target.y),
+        end: Math.max(sourceEndpoint.y, target.y)
+      }
+    }
   };
 }
 
@@ -1734,9 +1930,12 @@ function minimalLCandidates(
 ): JourneyMapRouteCandidate[] {
   const sourceGroupId = eligibility.source.metadata.branchGroupId;
   const targetGroupId = eligibility.target.metadata.branchGroupId;
-  if (eligibility.archetype !== "adjacent_forward_same_stage"
-    || !eligibility.sourceStage
-    || eligibility.sourceStage.stage.id !== eligibility.targetStage?.stage.id
+  const sameStage = eligibility.sourceStage !== undefined
+    && eligibility.sourceStage.stage.id === eligibility.targetStage?.stage.id;
+  const bothAtRoot = eligibility.sourceStage === undefined && eligibility.targetStage === undefined;
+  if ((eligibility.archetype !== "adjacent_forward_same_stage"
+      && eligibility.archetype !== "adjacent_forward_root_step")
+    || (!sameStage && !bothAtRoot)
     || sourceGroupId === undefined
     || sourceGroupId !== targetGroupId
     || (eligibility.source.metadata.laneOrder ?? 0)
@@ -1749,7 +1948,7 @@ function minimalLCandidates(
   ];
   return endpointPairs.flatMap(({ sourceSide, targetSide }) => {
     const ignoredDiagnostics: RendererDiagnostic[] = [];
-    const source = resolveEndpoint(
+    let source = resolveEndpoint(
       edge,
       eligibility.source,
       "source",
@@ -1757,7 +1956,7 @@ function minimalLCandidates(
       sourceSide,
       ignoredDiagnostics
     );
-    const target = resolveEndpoint(
+    let target = resolveEndpoint(
       edge,
       eligibility.target,
       "target",
@@ -1765,20 +1964,34 @@ function minimalLCandidates(
       targetSide,
       ignoredDiagnostics
     );
+    if (source && sourceSide === "south" && eligibility.branch) {
+      const lowerBranchCount = Math.max(1, eligibility.branch.sourceOutdegree - 1);
+      const lowerBranchOrder = Math.max(0, eligibility.branch.sourceOrdinal - 1);
+      const sourceCoordinate = eligibility.source.node.x + eligibility.source.node.width / 2
+        + ((lowerBranchCount - 1) / 2 - lowerBranchOrder) * JOURNEY_MAP_TRACK_SEPARATION;
+      source = resolvedEndpointAtTangentialCoordinate(source, eligibility.source, sourceCoordinate);
+    }
+    if (target && targetSide === "south" && eligibility.join) {
+      const lowerJoinCount = Math.max(1, eligibility.join.targetIndegree - 1);
+      const lowerJoinOrder = Math.max(0, eligibility.join.targetOrdinal - 1);
+      const targetCoordinate = eligibility.target.node.x + eligibility.target.node.width / 2
+        + ((lowerJoinCount - 1) / 2 - lowerJoinOrder) * JOURNEY_MAP_TRACK_SEPARATION;
+      target = resolvedEndpointAtTangentialCoordinate(target, eligibility.target, targetCoordinate);
+    }
     const route = source && target ? minimalLRoute(source, target) : undefined;
     if (!source || !target || !route
       || index.allNodes.some((candidate) => intersectsRoute(route, nodeRect(candidate)))) {
       return [];
     }
-    const owningStage = eligibility.sourceStage!.stage;
-    const headerRect: Rect = {
-      id: owningStage.id,
-      x: owningStage.x,
-      y: owningStage.y,
-      width: owningStage.width,
-      height: owningStage.chrome.headerBandHeight ?? 0
-    };
-    if (intersectsRoute(route, headerRect)
+    const owningStage = eligibility.sourceStage?.stage;
+    const intersectsOwningStageChrome = owningStage !== undefined && (
+      intersectsRoute(route, {
+        id: owningStage.id,
+        x: owningStage.x,
+        y: owningStage.y,
+        width: owningStage.width,
+        height: owningStage.chrome.headerBandHeight ?? 0
+      })
       || owningStage.headerContent.some((block) =>
         intersectsRoute(route, containerContentRect(owningStage, block)))
       || route.points.some((point) =>
@@ -1786,8 +1999,10 @@ function minimalLCandidates(
         || point.x > owningStage.x + owningStage.width
         || point.y < owningStage.y
         || point.y > owningStage.y + owningStage.height)
+    );
+    if (intersectsOwningStageChrome
       || index.allStages.some((stage) =>
-        stage.stage.id !== owningStage.id
+        stage.stage.id !== owningStage?.id
         && intersectsRoute(route, {
           id: stage.stage.id,
           x: stage.stage.x,
@@ -1942,6 +2157,7 @@ function selectInitialRouteFamily(
   | "route"
   | "rootSpanBypass"
   | "rootOuterBypass"
+  | "branchJoinCorridor"
   | "usedFullRowEastEgressFallback"
 >
   | undefined {
@@ -1983,8 +2199,15 @@ function selectInitialRouteFamily(
     targetEndpoint
   );
   const minimalL = minimalLCandidates(edge, eligibility, index);
+  const branchJoinReturn = branchJoinReturnCandidate(
+    edge,
+    eligibility,
+    sourceEndpoint,
+    targetEndpoint
+  );
   const selected = selectJourneyMapRouteCandidate([
     ...(direct ? [direct] : []),
+    ...(branchJoinReturn ? [branchJoinReturn] : []),
     ...eastEgress,
     ...minimalL,
     ...(!requiresEastEgress && eastEgress.length === 0 && fallback ? [fallback] : [])
@@ -1999,6 +2222,9 @@ function selectInitialRouteFamily(
       : {}),
     ...(selected.rootOuterBypass
       ? { rootOuterBypass: structuredClone(selected.rootOuterBypass) }
+      : {}),
+    ...(selected.branchJoinCorridor
+      ? { branchJoinCorridor: structuredClone(selected.branchJoinCorridor) }
       : {}),
     ...(selected.usedFullRowEastEgressFallback
       ? { usedFullRowEastEgressFallback: true }
@@ -2033,6 +2259,12 @@ function routeFamilyShapeMatches(
   switch (plan.routeFamily) {
     case "direct_horizontal":
       return directHorizontalShape;
+    case "branch_join_return":
+      return plan.sourceEndpoint.side === "east"
+        && plan.targetEndpoint.side === "west"
+        && plan.branchJoinCorridor !== undefined
+        && route.points.length === 4
+        && routeBendCount(route) === 2;
     case "minimal_l":
       return minimalLShape;
     case "long_forward_east_egress":
@@ -4256,6 +4488,8 @@ function occupancyResourceKey(
       return `stem:${resource.nodeId}:${resource.side}`;
     case "arrival_stem":
       return `stem:${resource.nodeId}:${resource.side}`;
+    case "branch_join_track":
+      return `branch-join:${resource.branchGroupId}`;
   }
 }
 
@@ -4398,6 +4632,17 @@ function primaryOccupancyResourceForRun(
   run: JourneyMapRouteSegmentRun,
   positionedScene: PositionedScene
 ): JourneyMapOccupancyResource {
+  if (plan.branchJoinCorridor
+    && run.axis === plan.branchJoinCorridor.axis
+    && Math.abs(run.coordinate - plan.branchJoinCorridor.nominalCoordinate) <= 0.001
+    && spansOverlap(run.span, plan.branchJoinCorridor.span)) {
+    return {
+      kind: "branch_join_track",
+      branchGroupId: plan.branchJoinCorridor.branchGroupId,
+      targetItemId: plan.to,
+      armOrdinal: plan.branchJoinCorridor.armOrdinal
+    };
+  }
   const stage = plan.stageLocalBypass
     ? flattenItems(positionedScene.root).find((item): item is PositionedContainer =>
       item.kind === "container" && item.id === plan.stageLocalBypass?.stageId
@@ -4467,6 +4712,19 @@ function resolvedPrimaryOccupancyResourceForRun(
   resolvedState: JourneyMapResolvedConnectorState | undefined,
   nominalOccupancy: readonly JourneyMapOccupancyRecord[]
 ): JourneyMapOccupancyResource {
+  if (plan.branchJoinCorridor
+    && run.axis === plan.branchJoinCorridor.axis
+    && run.segmentRunIndex > 0
+    && run.segmentRunIndex < buildJourneyMapRouteSegmentRuns(
+      resolvedState?.finalRoute ?? plan.provisionalRoute
+    ).length - 1) {
+    return {
+      kind: "branch_join_track",
+      branchGroupId: plan.branchJoinCorridor.branchGroupId,
+      targetItemId: plan.to,
+      armOrdinal: plan.branchJoinCorridor.armOrdinal
+    };
+  }
   const geometricResource = primaryOccupancyResourceForRun(plan, run, positionedScene);
   if (geometricResource.kind === "stage_local_bypass"
     || geometricResource.kind === "root_outer_bypass"
@@ -4484,7 +4742,8 @@ function resolvedPrimaryOccupancyResourceForRun(
       "inter_root_item_gutter",
       "root_outer_bypass",
       "root_span_bypass",
-      "obstacle_swerve"
+      "obstacle_swerve",
+      "branch_join_track"
     ]);
     const candidates = nominalOccupancy.filter((record) =>
       record.connectorId === plan.id
@@ -4866,8 +5125,14 @@ function buildLateEndpointOffsetAssignments(
           planById.get(candidate.connectorId)?.routeFamily !== "direct_horizontal"
         )) {
           const state = stateById.get(claim.connectorId);
+          const claimPlan = planById.get(claim.connectorId);
+          const branchJoinTarget = state
+            && claim.endpointRole === "target"
+            && claimPlan?.routeFamily === "branch_join_return";
           const preferred = state
-            ? preparedStemCoordinate(state.preparedRoute, claim.endpointRole, side)
+            ? branchJoinTarget
+              ? tangentialCoordinateForSide(state.targetEndpoint, side)
+              : preparedStemCoordinate(state.preparedRoute, claim.endpointRole, side)
             : sideStart + sideLength / 2;
           const inset = JOURNEY_MAP_TRACK_SEPARATION / 4;
           const minimum = sideStart + inset;
@@ -5229,7 +5494,8 @@ type JourneyMapResolvableTrackResource = Extract<JourneyMapOccupancyResource, {
     | "inter_root_item_gutter"
     | "root_outer_bypass"
     | "root_span_bypass"
-    | "obstacle_swerve";
+    | "obstacle_swerve"
+    | "branch_join_track";
 }>;
 
 interface JourneyMapTrackOccupancyClaim {
@@ -5256,7 +5522,8 @@ function isResolvableTrackResource(
     || resource.kind === "inter_root_item_gutter"
     || resource.kind === "root_outer_bypass"
     || resource.kind === "root_span_bypass"
-    || resource.kind === "obstacle_swerve";
+    || resource.kind === "obstacle_swerve"
+    || resource.kind === "branch_join_track";
 }
 
 function trackLaneOffset(
@@ -5265,7 +5532,8 @@ function trackLaneOffset(
 ): number {
   if (resource.kind === "stage_local_bypass"
     || resource.kind === "root_outer_bypass"
-    || resource.kind === "root_span_bypass") {
+    || resource.kind === "root_span_bypass"
+    || resource.kind === "branch_join_track") {
     return lane;
   }
   if (lane === 0) {
@@ -5320,6 +5588,9 @@ function physicalTrackResource(
 ): JourneyMapResolvableTrackResource | undefined {
   if (resource.kind === "inter_root_item_gutter") {
     return resource.beforeRootItemId && resource.afterRootItemId ? resource : undefined;
+  }
+  if (resource.kind === "branch_join_track") {
+    return resource;
   }
   if (resource.kind !== "obstacle_swerve") {
     return resource;
@@ -5412,6 +5683,9 @@ function expansionForResolvedTrackGroup(
       afterRootOrder: beforeOrder,
       amount: roundedExpansionAmount(deficit)
     } : undefined;
+  }
+  if (resource.kind === "branch_join_track") {
+    return undefined;
   }
 
   const obstacleNode = index.nodeById.get(resource.obstacleItemId);
@@ -5752,6 +6026,110 @@ function preferredTerminalLegExpansionRequests(
           amount
         });
       }
+    }
+  }
+  return canonicalExpansionRequests(requests);
+}
+
+function branchJoinProgressionExpansionRequest(
+  target: IndexedJourneyNode,
+  amount: number
+): JourneyMapExpansionRequest | undefined {
+  const progressionColumn = progressionColumnOf(target.metadata);
+  if (target.metadata.stageId !== undefined
+    && progressionColumn !== undefined
+    && progressionColumn > 0) {
+    return {
+      kind: "stage_progression_gap",
+      stageId: target.metadata.stageId,
+      afterProgressionColumn: progressionColumn - 1,
+      amount: roundedExpansionAmount(amount)
+    };
+  }
+  if (target.metadata.stageId === undefined && target.metadata.rootOrder > 0) {
+    return {
+      kind: "root_item_gap",
+      afterRootOrder: target.metadata.rootOrder - 1,
+      amount: roundedExpansionAmount(amount)
+    };
+  }
+  return undefined;
+}
+
+function branchJoinCorridorExpansionRequests(
+  plans: readonly JourneyMapConnectorPlan[],
+  states: readonly JourneyMapResolvedConnectorState[],
+  index: JourneyMapPositionedIndex
+): JourneyMapExpansionRequest[] {
+  const stateById = new Map(states.map((state) => [state.connectorId, state] as const));
+  const groups = new Map<string, JourneyMapConnectorPlan[]>();
+  for (const plan of plans) {
+    const corridor = plan.branchJoinCorridor;
+    if (!corridor) {
+      continue;
+    }
+    groups.set(corridor.branchGroupId, [
+      ...(groups.get(corridor.branchGroupId) ?? []),
+      plan
+    ]);
+  }
+  const requests: JourneyMapExpansionRequest[] = [];
+  for (const groupPlans of groups.values()) {
+    const firstPlan = groupPlans[0];
+    const firstCorridor = firstPlan?.branchJoinCorridor;
+    const target = firstPlan ? index.nodeById.get(firstPlan.to) : undefined;
+    const statesForGroup = groupPlans.flatMap((plan) => {
+      const state = stateById.get(plan.id);
+      return state ? [state] : [];
+    });
+    if (!firstCorridor || !target || statesForGroup.length !== groupPlans.length) {
+      continue;
+    }
+    const rightmostSourceX = Math.max(...statesForGroup.map((state) => state.sourceEndpoint.x));
+    const targetX = Math.min(...statesForGroup.map((state) => state.targetEndpoint.x));
+    const requiredGap = MIN_ARROW_MARKER_LEG
+      + JOURNEY_MAP_PREFERRED_TERMINAL_LEG
+      + (firstCorridor.trackCount - 1) * JOURNEY_MAP_TRACK_SEPARATION;
+    const deficit = requiredGap - (targetX - rightmostSourceX);
+    const request = deficit > 0.001
+      ? branchJoinProgressionExpansionRequest(target, deficit)
+      : undefined;
+    if (request) {
+      requests.push(request);
+    }
+  }
+  return canonicalExpansionRequests(requests);
+}
+
+function branchJoinIntersectionRepairRequests(
+  plans: readonly JourneyMapConnectorPlan[],
+  states: readonly JourneyMapResolvedConnectorState[],
+  index: JourneyMapPositionedIndex
+): JourneyMapExpansionRequest[] {
+  const stateById = new Map(states.map((state) => [state.connectorId, state] as const));
+  const repairedGroups = new Set<string>();
+  const requests: JourneyMapExpansionRequest[] = [];
+  for (const plan of plans) {
+    const corridor = plan.branchJoinCorridor;
+    const state = stateById.get(plan.id);
+    const target = index.nodeById.get(plan.to);
+    if (!corridor || !state || !target || repairedGroups.has(corridor.branchGroupId)) {
+      continue;
+    }
+    const intersectsNode = index.allNodes.some((candidate) =>
+      candidate.node.id !== plan.from
+      && candidate.node.id !== plan.to
+      && intersectsRoute(state.finalRoute, nodeRect(candidate)));
+    if (!intersectsNode) {
+      continue;
+    }
+    const request = branchJoinProgressionExpansionRequest(
+      target,
+      JOURNEY_MAP_TRACK_SEPARATION
+    );
+    if (request) {
+      repairedGroups.add(corridor.branchGroupId);
+      requests.push(request);
     }
   }
   return canonicalExpansionRequests(requests);
@@ -7856,6 +8234,7 @@ export function validateJourneyMapRoutes(
     const bypass = plan.stageLocalBypass;
     const expectedStageLocalBypass = expectedEligibility
       ? plan.routeFamily === "early_south_egress"
+        || plan.routeFamily === "branch_join_return"
         ? undefined
         : buildStageLocalBypass(expectedEligibility, plan.sourceEndpoint, plan.targetEndpoint)
           ?? buildBoundaryStageLocalBypass(
@@ -7867,10 +8246,12 @@ export function validateJourneyMapRoutes(
       : undefined;
     const bypassExpected = expectedEligibility
       ? expectedStageLocalBypass !== undefined
-      : plan.archetype === "non_adjacent_forward_same_stage"
+      : plan.routeFamily !== "branch_join_return" && (
+        plan.archetype === "non_adjacent_forward_same_stage"
         || plan.archetype === "backward_same_stage"
         || plan.archetype === "cycle_forward_same_stage"
-        || plan.archetype === "cycle_return_same_stage";
+        || plan.archetype === "cycle_return_same_stage"
+      );
     if (bypassExpected) {
       const stage = bypass ? index.stageById.get(bypass.stageId) : undefined;
       const sourceProgressionColumn = progressionColumnOf(source.metadata);
@@ -8865,6 +9246,8 @@ function buildJourneyMapRoutingStagesInternal(
       || eligibility.archetype === "cycle_return_cross_stage";
     const isSelfLoop = eligibility.archetype === "self_loop";
     const isDuplicate = eligibility.duplicate !== undefined;
+    const isGenericJoinReturn = eligibility.branchRouteRole === "join_return"
+      && eligibility.target.metadata.placementRole === "branch_join";
     const usesStageLocalBypass = eligibility.archetype === "non_adjacent_forward_same_stage"
       || eligibility.archetype === "backward_same_stage"
       || eligibility.archetype === "cycle_forward_same_stage"
@@ -8880,7 +9263,8 @@ function buildJourneyMapRoutingStagesInternal(
       || eligibility.archetype === "long_forward_root_step"
       || eligibility.archetype === "backward_root_step"
       || eligibility.archetype === "cycle_return_cross_stage";
-    const sourceUsesSouthEndpoint = isBackward || isCyclePeripheral || (!eligibility.branch
+    const sourceUsesSouthEndpoint = isBackward || isCyclePeripheral || (!isGenericJoinReturn
+      && !eligibility.branch
       && (usesStageLocalBypass || usesRootOuterBypass));
     const targetUsesSouthEndpoint = isBackward || isCyclePeripheral || (!eligibility.join
       && (usesStageLocalBypass || usesRootOuterBypass));
@@ -8963,7 +9347,9 @@ function buildJourneyMapRoutingStagesInternal(
         })
       ));
     }
-    const selectedFamilyRoute = routeFamily === "direct_horizontal" || routeFamily === "minimal_l"
+    const selectedFamilyRoute = routeFamily === "direct_horizontal"
+      || routeFamily === "minimal_l"
+      || routeFamily === "branch_join_return"
       ? {
         style: initialRouteSelection.route.style,
         points: cloneRoutePoints(initialRouteSelection.route.points)
@@ -8976,6 +9362,7 @@ function buildJourneyMapRoutingStagesInternal(
       routeFamily
     );
     const stageLocalBypass = routeFamily === "early_south_egress"
+      || routeFamily === "branch_join_return"
       ? undefined
       : buildStageLocalBypass(
         eligibility,
@@ -9001,6 +9388,9 @@ function buildJourneyMapRoutingStagesInternal(
           targetEndpoint,
           routeFamily
         );
+    const branchJoinCorridor = initialRouteSelection.branchJoinCorridor
+      ? structuredClone(initialRouteSelection.branchJoinCorridor)
+      : undefined;
     const selfLoopTrack = buildSelfLoopTrack(
       eligibility,
       sourceEndpoint,
@@ -9222,6 +9612,9 @@ function buildJourneyMapRoutingStagesInternal(
       ...(rootOuterBypass ? { rootOuterBypass } : {}),
       ...(selfLoopTrack ? { selfLoopTrack } : {}),
       ...(duplicateFan ? { duplicateFan } : {}),
+      ...(branchJoinCorridor ? { branchJoinCorridor } : {}),
+      ...(eligibility.branchRouteRole ? { branchRouteRole: eligibility.branchRouteRole } : {}),
+      ...(eligibility.branchGroupId ? { branchGroupId: eligibility.branchGroupId } : {}),
       ...(eligibility.cycleComponent
         ? { cycleComponent: structuredClone(eligibility.cycleComponent) }
         : {}),
@@ -9378,6 +9771,16 @@ function buildJourneyMapRoutingStagesInternal(
     ...reciprocalTrackResolution.expansionRequests,
     ...trackOccupancyResolution.expansionRequests,
     ...preparedStemResolution.expansionRequests,
+    ...branchJoinCorridorExpansionRequests(
+      connectorPlans,
+      resolvedConnectors,
+      index
+    ),
+    ...branchJoinIntersectionRepairRequests(
+      connectorPlans,
+      resolvedConnectors,
+      index
+    ),
     ...preferredTerminalLegExpansionRequests(
       connectorPlans,
       resolvedConnectors,
@@ -9462,6 +9865,16 @@ function buildJourneyMapRoutingStagesInternal(
           stageId: gate.stageId, side: gate.side, order: gate.order, locked: gate.locked
         })),
         topologyModifiers: plan.topologyModifiers,
+        branchRouteRole: plan.branchRouteRole,
+        branchGroupId: plan.branchGroupId,
+        branchJoinCorridor: plan.branchJoinCorridor ? {
+          branchGroupId: plan.branchJoinCorridor.branchGroupId,
+          armOrdinal: plan.branchJoinCorridor.armOrdinal,
+          armCount: plan.branchJoinCorridor.armCount,
+          trackOrdinal: plan.branchJoinCorridor.trackOrdinal,
+          trackCount: plan.branchJoinCorridor.trackCount,
+          axis: plan.branchJoinCorridor.axis
+        } : undefined,
         cycleComponent: plan.cycleComponent,
         duplicateFan: plan.duplicateFan ? {
           policy: plan.duplicateFan.policy,

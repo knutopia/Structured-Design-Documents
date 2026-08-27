@@ -1,15 +1,38 @@
 import { describe, expect, it } from "vitest";
+import type { RendererJourneyMapLayoutConfig } from "../src/bundle/types.js";
 import type {
   JourneyMapRenderModel,
   JourneyRenderEdge,
   JourneyRenderStep
 } from "../src/renderer/journeyMapRenderModel.js";
 import {
-  buildJourneyMapRendererSceneFromModel,
+  buildJourneyMapRendererSceneFromModel as buildJourneyMapRendererSceneFromModelWithLayout,
   positionJourneyMapMeasuredSceneBeforeRouting
 } from "../src/renderer/staged/journeyMap.js";
-import { buildJourneyScenePlacement } from "../src/renderer/staged/journeyMapMiddleLayer.js";
+import { buildJourneyScenePlacement as buildJourneyScenePlacementWithLayout } from "../src/renderer/staged/journeyMapMiddleLayer.js";
 import { measureScene } from "../src/renderer/staged/pipeline.js";
+
+const STACKED_LAYOUT: RendererJourneyMapLayoutConfig = {
+  branch_placement: "stacked",
+  branch_order: "source",
+  scope: "sibling_steps",
+  disconnected_components: "source_sequential",
+  unsupported_branch_fallback: "source_row"
+};
+
+function buildJourneyScenePlacement(
+  renderModel: JourneyMapRenderModel,
+  layout: RendererJourneyMapLayoutConfig = STACKED_LAYOUT
+) {
+  return buildJourneyScenePlacementWithLayout(renderModel, layout);
+}
+
+function buildJourneyMapRendererSceneFromModel(
+  renderModel: JourneyMapRenderModel,
+  detailId: string
+) {
+  return buildJourneyMapRendererSceneFromModelWithLayout(renderModel, detailId, STACKED_LAYOUT);
+}
 
 function step(id: string): JourneyRenderStep {
   return {
@@ -128,7 +151,7 @@ describe("Journey middle-layer placement", () => {
     ]);
   });
 
-  it("rejects an entire Stage when recognized diamonds share a join/split", () => {
+  it("stacks sequential splits even when the first join is the next split", () => {
     const renderModel = model(
       ["S", "A", "B", "J", "C", "D", "K"],
       [
@@ -138,7 +161,16 @@ describe("Journey middle-layer placement", () => {
     );
     const placement = buildJourneyScenePlacement(renderModel);
     expect(placement.diamondGroups).toEqual([]);
-    expect(placement.gridPlacementsByStageId.has("G")).toBe(false);
+    expect(placement.branchGroups.map((group) => group.splitStepId)).toEqual(["S", "J"]);
+    expect(placement.gridPlacementsByStageId.get("G")).toEqual([
+      { itemId: "S", row: 0, column: 0 },
+      { itemId: "A", row: 0, column: 1 },
+      { itemId: "B", row: 1, column: 1 },
+      { itemId: "J", row: 0, column: 2 },
+      { itemId: "C", row: 0, column: 3 },
+      { itemId: "D", row: 1, column: 3 },
+      { itemId: "K", row: 0, column: 4 }
+    ]);
   });
 
   it("escapes delimiter-bearing semantic IDs so group IDs remain distinct", () => {
@@ -179,10 +211,7 @@ describe("Journey middle-layer placement", () => {
   });
 
   it.each([
-    ["duplicate", ["S", "A", "B", "J"], [...simpleDiamondPairs, ["S", "A"]]],
     ["cycle", ["S", "A", "B", "J"], [...simpleDiamondPairs, ["J", "S"]]],
-    ["incomplete option", ["S", "A", "B", "J"], simpleDiamondPairs.slice(0, -1)],
-    ["non-contiguous options", ["S", "X", "A", "B", "J"], simpleDiamondPairs],
     ["cross-stage target", ["S", "A", "B", "J"], [...simpleDiamondPairs, ["S", "OUTSIDE"]]],
     ["nested option", ["S", "A", "B", "J"], [...simpleDiamondPairs, ["A", "B"]]]
   ] as const)("keeps %s topology on the existing horizontal stack", (_name, stepIds, pairs) => {
@@ -203,6 +232,86 @@ describe("Journey middle-layer placement", () => {
       });
     }
     expect(scene.diagnostics).toEqual([]);
+  });
+
+  it.each([
+    ["duplicate edge occurrence", ["S", "A", "B", "J"], [...simpleDiamondPairs, ["S", "A"]]],
+    ["open branch", ["S", "A", "B", "J"], simpleDiamondPairs.slice(0, -1)],
+    ["source-interleaved unrelated Step", ["S", "X", "A", "B", "J"], simpleDiamondPairs]
+  ] as const)("stacks %s without inventing another branch target", (_name, stepIds, pairs) => {
+    const placement = buildJourneyScenePlacement(
+      model([...stepIds], [...pairs] as Array<[string, string]>)
+    );
+    expect(placement.gridPlacementsByStageId.has("G")).toBe(true);
+    expect(placement.branchGroups[0]?.targetStepIds).toEqual(["A", "B"]);
+  });
+
+  it("allocates nested branch rows before the next outer arm", () => {
+    const placement = buildJourneyScenePlacement(model(
+      ["S", "A", "B", "B1", "B2", "C"],
+      [["S", "A"], ["S", "B"], ["S", "C"], ["B", "B1"], ["B", "B2"]]
+    ));
+    expect(placement.gridPlacementsByStageId.get("G")).toEqual([
+      { itemId: "S", row: 0, column: 0 },
+      { itemId: "A", row: 0, column: 1 },
+      { itemId: "B", row: 1, column: 1 },
+      { itemId: "B1", row: 1, column: 2 },
+      { itemId: "B2", row: 2, column: 2 },
+      { itemId: "C", row: 3, column: 1 }
+    ]);
+  });
+
+  it("keeps the bundle-selectable inline policy on the source row", () => {
+    const renderModel = model(["S", "A", "B", "J"], simpleDiamondPairs);
+    const placement = buildJourneyScenePlacement(renderModel, {
+      ...STACKED_LAYOUT,
+      branch_placement: "inline"
+    });
+    expect(placement.gridPlacementsByStageId.has("G")).toBe(false);
+    expect(placement.branchGroups).toEqual([]);
+  });
+
+  it("stacks the topology-challenge branches while keeping the disconnected journey sequential", () => {
+    const stepIds = [
+      "J-010", "J-020", "J-040", "J-041", "J-042", "J-043",
+      "J-021", "J-022", "J-030", "J-031", "J-032"
+    ];
+    const renderModel: JourneyMapRenderModel = {
+      rootItems: [
+        {
+          kind: "stage",
+          id: "G-001",
+          label: "Maintain Product Map",
+          anchorId: "G-001",
+          orderAnchorId: "G-001",
+          items: []
+        },
+        ...stepIds.map(step)
+      ],
+      edges: [
+        ["J-010", "J-020"], ["J-010", "J-040"],
+        ["J-020", "J-021"], ["J-021", "J-022"],
+        ["J-040", "J-041"], ["J-040", "J-042"], ["J-040", "J-043"],
+        ["J-030", "J-031"], ["J-031", "J-032"]
+      ].map(([from, to], authorOrder) => edge(from!, to!, authorOrder)),
+      siblingOrderChains: [["G-001", ...stepIds]]
+    };
+
+    const placement = buildJourneyScenePlacement(renderModel);
+    expect(placement.rootGridPlacements).toEqual([
+      { itemId: "G-001", row: 0, column: 0 },
+      { itemId: "J-010", row: 0, column: 1 },
+      { itemId: "J-020", row: 0, column: 2 },
+      { itemId: "J-040", row: 1, column: 2 },
+      { itemId: "J-041", row: 1, column: 3 },
+      { itemId: "J-042", row: 2, column: 3 },
+      { itemId: "J-043", row: 3, column: 3 },
+      { itemId: "J-021", row: 0, column: 3 },
+      { itemId: "J-022", row: 0, column: 4 },
+      { itemId: "J-030", row: 0, column: 5 },
+      { itemId: "J-031", row: 0, column: 6 },
+      { itemId: "J-032", row: 0, column: 7 }
+    ]);
   });
 
   it("falls back from malformed Journey grid intent to the former one-row geometry", async () => {

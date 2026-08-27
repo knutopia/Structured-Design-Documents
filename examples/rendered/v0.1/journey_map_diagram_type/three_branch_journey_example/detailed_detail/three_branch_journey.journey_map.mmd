@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph n_G_400["Choose a home improvement path"]
+    n_J_400["Choose the main priority"]
+    n_J_410["Explore lower energy bills"]
+    n_J_411["Review usage opportunities"]
+    n_J_420["Explore better home comfort"]
+    n_J_421["Identify comfort problem areas"]
+    n_J_430["Explore lower emissions"]
+    n_J_431["Estimate upgrade impact"]
+  end
+  n_J_400 --> n_J_410
+  n_J_400 --> n_J_420
+  n_J_400 --> n_J_430
+  n_J_410 --> n_J_411
+  n_J_420 --> n_J_421
+  n_J_430 --> n_J_431

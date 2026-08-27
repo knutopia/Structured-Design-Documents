@@ -110,6 +110,18 @@ for a compact list of content available to each diagram type.
   Stages contain source-ordered Steps, while `PRECEDES` relationships define journey flow.
 
   Examples:
+  :::: details three_branch_journey_example <Badge type="info" text="Three-way branch" vertical="top" />
+
+  :::tabs
+  == Journey Map Diagram
+  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/three_branch_journey_example/compact_detail/three_branch_journey.journey_map.svg)
+  == Source
+  This example follows three source-ordered journey branches from one customer decision.
+  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/three_branch_journey_example/
+  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/three_branch_journey_example/three_branch_journey.sdd
+  :::
+  ::::
+
   :::: details branching_journey_example <Badge type="info" text="Detail: Compact" vertical="top" />
 
   :::tabs

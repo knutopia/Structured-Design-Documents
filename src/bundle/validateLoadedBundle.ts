@@ -450,6 +450,29 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         );
       }
     }
+    if (view.id === "journey_map") {
+      const layout = record(rendererDefaults.journey_map_layout);
+      if (
+        !layout
+        || !sameStringSet(Object.keys(layout), [
+          "branch_placement",
+          "branch_order",
+          "scope",
+          "disconnected_components",
+          "unsupported_branch_fallback"
+        ])
+        || (layout.branch_placement !== "stacked" && layout.branch_placement !== "inline")
+        || layout.branch_order !== "source"
+        || layout.scope !== "sibling_steps"
+        || layout.disconnected_components !== "source_sequential"
+        || layout.unsupported_branch_fallback !== "source_row"
+      ) {
+        add(
+          "bundle.journey_map.layout_shape",
+          "Rendering view 'journey_map' must declare a valid renderer_defaults.journey_map_layout"
+        );
+      }
+    }
     for (const policyId of Object.keys(detailDisplay)) {
       if (!renderDetailIds.has(policyId)) {
         add(

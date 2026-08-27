@@ -1077,6 +1077,12 @@ views:
         batch_applicability:
           kind: visible_semantic_node_count
           minimum: 1
+        journey_map_layout:
+          branch_placement: stacked
+          branch_order: source
+          scope: sibling_steps
+          disconnected_components: source_sequential
+          unsupported_branch_fallback: source_row
         reference_annotations:
           source_prop: opportunity_refs
           target_type: Opportunity
