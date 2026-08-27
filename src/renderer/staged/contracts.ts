@@ -131,12 +131,51 @@ export type OutcomeOpportunityItemMetadata =
       parking: boolean;
     };
 
+export interface JourneyMapBranchArmMetadata {
+  ordinal: number;
+  targetStepId: string;
+  lineageId: string;
+  branchPath: number[];
+}
+
+export interface JourneyMapBranchEnvelopeMetadata {
+  startColumn: number;
+  endColumn: number;
+  minRow: number;
+  maxRow: number;
+}
+
+export interface JourneyMapBranchGroupMetadata {
+  id: string;
+  scopeId: string;
+  stageId?: string;
+  splitStepId: string;
+  targetStepIds: string[];
+  joinStepId?: string;
+  entryLineageId: string;
+  returnLineageId: string;
+  arms: JourneyMapBranchArmMetadata[];
+  envelope: JourneyMapBranchEnvelopeMetadata;
+}
+
+export interface JourneyMapBranchLineageMetadata {
+  id: string;
+  scopeId: string;
+  stageId?: string;
+  branchPath: number[];
+  row: number;
+  startColumn: number;
+  endColumn: number;
+}
+
 export type JourneyMapItemMetadata =
   | {
       kind: "root";
       rootItemIds: string[];
       stageIds: string[];
       globalStepIds: string[];
+      branchGroups?: JourneyMapBranchGroupMetadata[];
+      branchLineages?: JourneyMapBranchLineageMetadata[];
     }
   | {
       kind: "stage";
@@ -162,6 +201,8 @@ export type JourneyMapItemMetadata =
         | "branch_step"
         | "branch_join";
       branchGroupId?: string;
+      branchLineageId?: string;
+      branchPath?: number[];
     };
 
 export interface ViewMetadata {
@@ -202,11 +243,35 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
       ? {
         journeyMap: {
           ...viewMetadata.journeyMap,
+          ...(viewMetadata.journeyMap.kind === "step" && viewMetadata.journeyMap.branchPath
+            ? { branchPath: [...viewMetadata.journeyMap.branchPath] }
+            : {}),
           ...(viewMetadata.journeyMap.kind === "root"
             ? {
               rootItemIds: [...viewMetadata.journeyMap.rootItemIds],
               stageIds: [...viewMetadata.journeyMap.stageIds],
-              globalStepIds: [...viewMetadata.journeyMap.globalStepIds]
+              globalStepIds: [...viewMetadata.journeyMap.globalStepIds],
+              ...(viewMetadata.journeyMap.branchGroups
+                ? {
+                  branchGroups: viewMetadata.journeyMap.branchGroups.map((group) => ({
+                    ...group,
+                    targetStepIds: [...group.targetStepIds],
+                    arms: group.arms.map((arm) => ({
+                      ...arm,
+                      branchPath: [...arm.branchPath]
+                    })),
+                    envelope: { ...group.envelope }
+                  }))
+                }
+                : {}),
+              ...(viewMetadata.journeyMap.branchLineages
+                ? {
+                  branchLineages: viewMetadata.journeyMap.branchLineages.map((lineage) => ({
+                    ...lineage,
+                    branchPath: [...lineage.branchPath]
+                  }))
+                }
+                : {})
             }
             : {})
         }
@@ -215,11 +280,19 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
   };
 }
 
+export type JourneyMapBranchRouteRole = "continuation" | "fork" | "join_return";
+
 export interface JourneyMapEdgeMetadata {
   kind: "precedes";
   authorOrder: number;
   sameEndpointOrdinal: number;
   exactIdentityOrdinal: number;
+  branchRouteRole?: JourneyMapBranchRouteRole;
+  branchGroupId?: string;
+  sourceLineageId?: string;
+  targetLineageId?: string;
+  branchArmOrdinal?: number;
+  branchArmCount?: number;
 }
 
 export interface EdgeViewMetadata {

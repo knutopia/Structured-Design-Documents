@@ -1,0 +1,123 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "journey_map",
+  "source_example": "home_energy_upgrade",
+  "nodes": [
+    {
+      "id": "G-400",
+      "type": "Stage",
+      "name": "Choose a home improvement path"
+    },
+    {
+      "id": "J-400",
+      "type": "Step",
+      "name": "Choose the main priority"
+    },
+    {
+      "id": "J-410",
+      "type": "Step",
+      "name": "Explore lower energy bills"
+    },
+    {
+      "id": "J-411",
+      "type": "Step",
+      "name": "Review usage opportunities"
+    },
+    {
+      "id": "J-420",
+      "type": "Step",
+      "name": "Explore better home comfort"
+    },
+    {
+      "id": "J-421",
+      "type": "Step",
+      "name": "Identify comfort problem areas"
+    },
+    {
+      "id": "J-430",
+      "type": "Step",
+      "name": "Explore lower emissions"
+    },
+    {
+      "id": "J-431",
+      "type": "Step",
+      "name": "Estimate upgrade impact"
+    }
+  ],
+  "edges": [
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-400"
+    },
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-410"
+    },
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-411"
+    },
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-420"
+    },
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-421"
+    },
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-430"
+    },
+    {
+      "from": "G-400",
+      "type": "CONTAINS",
+      "to": "J-431"
+    },
+    {
+      "from": "J-400",
+      "type": "PRECEDES",
+      "to": "J-410"
+    },
+    {
+      "from": "J-400",
+      "type": "PRECEDES",
+      "to": "J-420"
+    },
+    {
+      "from": "J-400",
+      "type": "PRECEDES",
+      "to": "J-430"
+    },
+    {
+      "from": "J-410",
+      "type": "PRECEDES",
+      "to": "J-411"
+    },
+    {
+      "from": "J-420",
+      "type": "PRECEDES",
+      "to": "J-421"
+    },
+    {
+      "from": "J-430",
+      "type": "PRECEDES",
+      "to": "J-431"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

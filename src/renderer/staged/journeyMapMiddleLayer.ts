@@ -5,7 +5,15 @@ import type {
   JourneyRenderStage,
   JourneyRenderStep
 } from "../journeyMapRenderModel.js";
-import type { GridCellPlacement, JourneyMapItemMetadata } from "./contracts.js";
+import type {
+  GridCellPlacement,
+  JourneyMapBranchArmMetadata,
+  JourneyMapBranchEnvelopeMetadata,
+  JourneyMapBranchGroupMetadata,
+  JourneyMapBranchLineageMetadata,
+  JourneyMapBranchRouteRole,
+  JourneyMapItemMetadata
+} from "./contracts.js";
 
 export interface JourneyMapDiamondGroup {
   id: string;
@@ -15,13 +23,18 @@ export interface JourneyMapDiamondGroup {
   joinStepId: string;
 }
 
-export interface JourneyMapBranchGroup {
-  id: string;
-  scopeId: string;
-  stageId?: string;
-  splitStepId: string;
-  targetStepIds: string[];
-  joinStepId?: string;
+export type JourneyMapBranchGroup = JourneyMapBranchGroupMetadata;
+export type JourneyMapBranchArm = JourneyMapBranchArmMetadata;
+export type JourneyMapBranchEnvelope = JourneyMapBranchEnvelopeMetadata;
+export type JourneyMapBranchLineage = JourneyMapBranchLineageMetadata;
+
+export interface JourneyMapEdgeRouteIntent {
+  role: JourneyMapBranchRouteRole;
+  branchGroupId?: string;
+  sourceLineageId: string;
+  targetLineageId: string;
+  branchArmOrdinal?: number;
+  branchArmCount?: number;
 }
 
 export interface JourneyScenePlacement {
@@ -31,6 +44,8 @@ export interface JourneyScenePlacement {
   rootGridPlacements?: GridCellPlacement[];
   diamondGroups: JourneyMapDiamondGroup[];
   branchGroups: JourneyMapBranchGroup[];
+  branchLineages: JourneyMapBranchLineage[];
+  edgeRouteIntentByEdgeId: ReadonlyMap<string, JourneyMapEdgeRouteIntent>;
   rootItemIds: string[];
   stageIds: string[];
   globalStepIds: string[];
@@ -53,6 +68,8 @@ interface ScopeStepPlacement {
   row: number;
   placementRole: Extract<JourneyMapItemMetadata, { kind: "step" }>["placementRole"];
   branchGroupId?: string;
+  branchLineageId?: string;
+  branchPath?: number[];
 }
 
 interface ScopeLayout {
@@ -60,6 +77,7 @@ interface ScopeLayout {
   width: number;
   hasStacking: boolean;
   branchGroups: JourneyMapBranchGroup[];
+  branchLineages: JourneyMapBranchLineage[];
   diamondGroups: JourneyMapDiamondGroup[];
 }
 
@@ -73,6 +91,11 @@ function diamondGroupId(scopeId: string, splitStepId: string, joinStepId: string
 
 function branchComponentId(scopeId: string, splitStepId: string): string {
   return `${escapeGroupPart(scopeId)}__branch__${escapeGroupPart(splitStepId)}`;
+}
+
+function branchLineageId(scopeId: string, branchPath: readonly number[]): string {
+  const suffix = branchPath.length === 0 ? "entry" : branchPath.join("_");
+  return `${escapeGroupPart(scopeId)}__lineage__${suffix}`;
 }
 
 function uniqueScopeEdges(
@@ -220,6 +243,32 @@ function compareBranchPath(left: readonly number[], right: readonly number[]): n
   return left.length - right.length;
 }
 
+function branchPathStartsWith(path: readonly number[], prefix: readonly number[]): boolean {
+  return prefix.length <= path.length
+    && prefix.every((ordinal, index) => path[index] === ordinal);
+}
+
+function branchRegionStepIds(
+  splitStepId: string,
+  targets: readonly string[],
+  joinStepId: string | undefined,
+  outgoing: ReadonlyMap<string, readonly ScopeEdge[]>
+): Set<string> {
+  const region = new Set<string>([splitStepId]);
+  const pending = [...targets];
+  while (pending.length > 0) {
+    const current = pending.shift()!;
+    if (region.has(current)) {
+      continue;
+    }
+    region.add(current);
+    if (current !== joinStepId) {
+      pending.push(...(outgoing.get(current) ?? []).map((edge) => edge.to));
+    }
+  }
+  return region;
+}
+
 function firstCommonJoin(
   targets: readonly string[],
   ordered: readonly string[],
@@ -354,6 +403,7 @@ function layoutStepScope(
   const components = findScopeComponents(stepIds, scopeEdges);
   const placements: ScopeStepPlacement[] = [];
   const branchGroups: JourneyMapBranchGroup[] = [];
+  const branchLineages: JourneyMapBranchLineage[] = [];
   const diamondGroups: JourneyMapDiamondGroup[] = [];
   let columnCursor = 0;
   let hasStacking = false;
@@ -403,6 +453,24 @@ function layoutStepScope(
       .map((key) => JSON.parse(key) as number[])
       .sort(compareBranchPath);
     const rowByPathKey = new Map(pathKeys.map((path, row) => [JSON.stringify(path), row] as const));
+    const lineageIdByPathKey = new Map(pathKeys.map((path) => [
+      JSON.stringify(path),
+      branchLineageId(scopeId, path)
+    ] as const));
+    for (const path of pathKeys) {
+      const members = component.stepIds.filter((stepId) =>
+        JSON.stringify(branchPathByStepId.get(stepId) ?? []) === JSON.stringify(path));
+      const columns = members.map((stepId) => columnCursor + (positionByStepId.get(stepId) ?? 0));
+      branchLineages.push({
+        id: lineageIdByPathKey.get(JSON.stringify(path))!,
+        scopeId,
+        ...(stageId ? { stageId } : {}),
+        branchPath: [...path],
+        row: rowByPathKey.get(JSON.stringify(path))!,
+        startColumn: Math.min(...columns),
+        endColumn: Math.max(...columns)
+      });
+    }
     const componentDiamondGroups = recognizeDiamondGroups(scopeId, stageId, stepIds, incidence);
     diamondGroups.push(...componentDiamondGroups);
     const diamondByStepId = new Map<string, { group: JourneyMapDiamondGroup; role: ScopeStepPlacement["placementRole"] }>();
@@ -417,13 +485,41 @@ function layoutStepScope(
     for (const splitStepId of splitStepIds) {
       const targets = (incidence.outgoing.get(splitStepId) ?? []).map((edge) => edge.to);
       const joinStepId = firstCommonJoin(targets, ordered, incidence.outgoing);
+      const entryPath = branchPathByStepId.get(splitStepId) ?? [];
+      const regionStepIds = branchRegionStepIds(
+        splitStepId,
+        targets,
+        joinStepId,
+        incidence.outgoing
+      );
+      const regionColumns = [...regionStepIds].map((stepId) =>
+        columnCursor + (positionByStepId.get(stepId) ?? 0));
+      const regionRows = [...regionStepIds].map((stepId) =>
+        rowByPathKey.get(JSON.stringify(branchPathByStepId.get(stepId) ?? [])) ?? 0);
       branchGroups.push({
         id: branchComponentId(scopeId, splitStepId),
         scopeId,
         ...(stageId ? { stageId } : {}),
         splitStepId,
         targetStepIds: targets,
-        ...(joinStepId ? { joinStepId } : {})
+        ...(joinStepId ? { joinStepId } : {}),
+        entryLineageId: lineageIdByPathKey.get(JSON.stringify(entryPath))!,
+        returnLineageId: lineageIdByPathKey.get(JSON.stringify(entryPath))!,
+        arms: targets.map((targetStepId, ordinal) => {
+          const branchPath = branchPathByStepId.get(targetStepId) ?? entryPath;
+          return {
+            ordinal,
+            targetStepId,
+            lineageId: lineageIdByPathKey.get(JSON.stringify(branchPath))!,
+            branchPath: [...branchPath]
+          };
+        }),
+        envelope: {
+          startColumn: Math.min(...regionColumns),
+          endColumn: Math.max(...regionColumns),
+          minRow: Math.min(...regionRows),
+          maxRow: Math.max(...regionRows)
+        }
       });
     }
 
@@ -441,7 +537,9 @@ function layoutStepScope(
         column: columnCursor + (positionByStepId.get(stepId) ?? 0),
         row: rowByPathKey.get(JSON.stringify(branchPathByStepId.get(stepId) ?? [])) ?? 0,
         placementRole: diamond?.role ?? genericRole,
-        branchGroupId: diamond?.group.id ?? componentGroupId
+        branchGroupId: diamond?.group.id ?? componentGroupId,
+        branchLineageId: lineageIdByPathKey.get(JSON.stringify(branchPathByStepId.get(stepId) ?? [])),
+        branchPath: [...(branchPathByStepId.get(stepId) ?? [])]
       });
     }
     const componentWidth = Math.max(...component.stepIds.map((stepId) => positionByStepId.get(stepId) ?? 0)) + 1;
@@ -454,8 +552,72 @@ function layoutStepScope(
     width: columnCursor,
     hasStacking,
     branchGroups,
+    branchLineages,
     diamondGroups
   };
+}
+
+function branchArmOrdinalForPath(
+  group: JourneyMapBranchGroup,
+  sourcePath: readonly number[]
+): number {
+  const noncanonicalMatch = [...group.arms]
+    .filter((arm) => arm.ordinal > 0 && branchPathStartsWith(sourcePath, arm.branchPath))
+    .sort((left, right) => right.branchPath.length - left.branchPath.length
+      || left.ordinal - right.ordinal)[0];
+  return noncanonicalMatch?.ordinal ?? 0;
+}
+
+function buildEdgeRouteIntents(
+  edges: readonly JourneyRenderEdge[],
+  metadataByItemId: ReadonlyMap<string, JourneyMapItemMetadata>,
+  branchGroups: readonly JourneyMapBranchGroup[]
+): Map<string, JourneyMapEdgeRouteIntent> {
+  const result = new Map<string, JourneyMapEdgeRouteIntent>();
+  for (const edge of edges) {
+    const source = metadataByItemId.get(edge.from);
+    const target = metadataByItemId.get(edge.to);
+    if (source?.kind !== "step" || target?.kind !== "step"
+      || source.branchLineageId === undefined || target.branchLineageId === undefined
+      || source.branchPath === undefined || target.branchPath === undefined) {
+      continue;
+    }
+    const splitGroup = branchGroups.find((group) =>
+      group.splitStepId === edge.from && group.targetStepIds.includes(edge.to));
+    const joinGroup = branchGroups
+      .filter((group) => group.joinStepId === edge.to)
+      .sort((left, right) => right.arms[0]!.branchPath.length - left.arms[0]!.branchPath.length
+        || left.id.localeCompare(right.id))[0];
+    const group = joinGroup ?? splitGroup;
+    const branchArmOrdinal = group
+      ? splitGroup
+        ? group.targetStepIds.indexOf(edge.to)
+        : branchArmOrdinalForPath(group, source.branchPath)
+      : undefined;
+    const role: JourneyMapBranchRouteRole | undefined = source.branchLineageId === target.branchLineageId
+      ? "continuation"
+      : joinGroup && target.branchLineageId === joinGroup.returnLineageId
+        ? "join_return"
+        : splitGroup
+          ? "fork"
+          : undefined;
+    if (!role) {
+      continue;
+    }
+    result.set(edge.id, {
+      role,
+      ...(group ? { branchGroupId: group.id } : {}),
+      sourceLineageId: source.branchLineageId,
+      targetLineageId: target.branchLineageId,
+      ...(branchArmOrdinal !== undefined && branchArmOrdinal >= 0
+        ? {
+          branchArmOrdinal,
+          branchArmCount: group!.arms.length
+        }
+        : {})
+    });
+  }
+  return result;
 }
 
 function rootStepRuns(model: JourneyMapRenderModel): Array<{ start: number; steps: JourneyRenderStep[] }> {
@@ -484,6 +646,7 @@ export function buildJourneyScenePlacement(
   const gridPlacementsByStageId = new Map<string, GridCellPlacement[]>();
   const diamondGroups: JourneyMapDiamondGroup[] = [];
   const branchGroups: JourneyMapBranchGroup[] = [];
+  const branchLineages: JourneyMapBranchLineage[] = [];
   const rootItemIds = model.rootItems.map((item) => item.id);
   const stageIds = model.rootItems.filter((item): item is JourneyRenderStage => item.kind === "stage").map((stage) => stage.id);
   const globalStepIds = model.rootItems.flatMap((item) => item.kind === "stage"
@@ -499,6 +662,7 @@ export function buildJourneyScenePlacement(
       const scopeLayout = layoutStepScope(item.id, item.id, item.items, model.edges, layout);
       diamondGroups.push(...scopeLayout.diamondGroups);
       branchGroups.push(...scopeLayout.branchGroups);
+      branchLineages.push(...scopeLayout.branchLineages);
       const placementByStepId = new Map(scopeLayout.placements.map((placement) => [placement.stepId, placement] as const));
       for (const [stepOrder, step] of item.items.entries()) {
         const placement = placementByStepId.get(step.id)!;
@@ -514,7 +678,9 @@ export function buildJourneyScenePlacement(
           progressionColumn: placement.column,
           laneOrder: placement.row,
           placementRole: placement.placementRole,
-          ...(placement.branchGroupId ? { branchGroupId: placement.branchGroupId } : {})
+          ...(placement.branchGroupId ? { branchGroupId: placement.branchGroupId } : {}),
+          ...(placement.branchLineageId ? { branchLineageId: placement.branchLineageId } : {}),
+          ...(placement.branchPath ? { branchPath: [...placement.branchPath] } : {})
         });
       }
       if (scopeLayout.hasStacking) {
@@ -550,7 +716,22 @@ export function buildJourneyScenePlacement(
     const run = runByStart.get(rootOrder)!;
     const scopeId = `root:${rootOrder}`;
     const scopeLayout = layoutStepScope(scopeId, undefined, run.steps, model.edges, layout);
-    branchGroups.push(...scopeLayout.branchGroups);
+    branchGroups.push(...scopeLayout.branchGroups.map((group) => ({
+      ...group,
+      targetStepIds: [...group.targetStepIds],
+      arms: group.arms.map((arm) => ({ ...arm, branchPath: [...arm.branchPath] })),
+      envelope: {
+        ...group.envelope,
+        startColumn: group.envelope.startColumn + rootColumn,
+        endColumn: group.envelope.endColumn + rootColumn
+      }
+    })));
+    branchLineages.push(...scopeLayout.branchLineages.map((lineage) => ({
+      ...lineage,
+      branchPath: [...lineage.branchPath],
+      startColumn: lineage.startColumn + rootColumn,
+      endColumn: lineage.endColumn + rootColumn
+    })));
     rootHasStacking ||= scopeLayout.hasStacking;
     for (const placement of scopeLayout.placements) {
       const offsetPlacement = { ...placement, column: placement.column + rootColumn };
@@ -580,7 +761,9 @@ export function buildJourneyScenePlacement(
         progressionColumn: placement.column,
         laneOrder: placement.row,
         placementRole: placement.placementRole,
-        ...(placement.branchGroupId ? { branchGroupId: placement.branchGroupId } : {})
+        ...(placement.branchGroupId ? { branchGroupId: placement.branchGroupId } : {}),
+        ...(placement.branchLineageId ? { branchLineageId: placement.branchLineageId } : {}),
+        ...(placement.branchPath ? { branchPath: [...placement.branchPath] } : {})
       });
     }
   }
@@ -592,6 +775,8 @@ export function buildJourneyScenePlacement(
     ...(rootHasStacking ? { rootGridPlacements: rootPlacements } : {}),
     diamondGroups,
     branchGroups,
+    branchLineages,
+    edgeRouteIntentByEdgeId: buildEdgeRouteIntents(model.edges, metadataByItemId, branchGroups),
     rootItemIds,
     stageIds,
     globalStepIds

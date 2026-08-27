@@ -27,10 +27,16 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 8-27
+
+- New canonical journey map example
+
 ## Wed 8-26
 
 - Examined the reuse of Step node type in flow and journey, blueprint
 - Added vertical branching to journey map
+- Routing remediation for journey map based on scenario flow
+- Journey Map branch-join routing remediation done
 
 ## Tue 8-25
 

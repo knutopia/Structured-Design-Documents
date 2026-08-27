@@ -231,6 +231,7 @@ function buildJourneyRootItem(item: JourneyMapRenderModel["rootItems"][number], 
 function buildJourneyEdge(edge: JourneyRenderEdge, placement: JourneyScenePlacement): SceneEdge {
   const sourceStageId = placement.parentStageByStepId.get(edge.from);
   const targetStageId = placement.parentStageByStepId.get(edge.to);
+  const routeIntent = placement.edgeRouteIntentByEdgeId.get(edge.id);
   return {
     id: edge.id,
     role: "precedes",
@@ -259,7 +260,21 @@ function buildJourneyEdge(edge: JourneyRenderEdge, placement: JourneyScenePlacem
         kind: "precedes",
         authorOrder: edge.authorOrder,
         sameEndpointOrdinal: edge.sameEndpointOrdinal,
-        exactIdentityOrdinal: edge.exactIdentityOrdinal
+        exactIdentityOrdinal: edge.exactIdentityOrdinal,
+        ...(routeIntent
+          ? {
+            branchRouteRole: routeIntent.role,
+            ...(routeIntent.branchGroupId ? { branchGroupId: routeIntent.branchGroupId } : {}),
+            sourceLineageId: routeIntent.sourceLineageId,
+            targetLineageId: routeIntent.targetLineageId,
+            ...(routeIntent.branchArmOrdinal !== undefined
+              ? { branchArmOrdinal: routeIntent.branchArmOrdinal }
+              : {}),
+            ...(routeIntent.branchArmCount !== undefined
+              ? { branchArmCount: routeIntent.branchArmCount }
+              : {})
+          }
+          : {})
       }
     }
   };
@@ -524,7 +539,21 @@ export function buildJourneyMapRendererSceneFromModel(
         kind: "root" as const,
         rootItemIds: [...placement.rootItemIds],
         stageIds: [...placement.stageIds],
-        globalStepIds: [...placement.globalStepIds]
+        globalStepIds: [...placement.globalStepIds],
+        ...(placement.branchGroups.length > 0
+          ? {
+            branchGroups: placement.branchGroups.map((group) => ({
+              ...group,
+              targetStepIds: [...group.targetStepIds],
+              arms: group.arms.map((arm) => ({ ...arm, branchPath: [...arm.branchPath] })),
+              envelope: { ...group.envelope }
+            })),
+            branchLineages: placement.branchLineages.map((lineage) => ({
+              ...lineage,
+              branchPath: [...lineage.branchPath]
+            }))
+          }
+          : {})
       }
     }
   };
