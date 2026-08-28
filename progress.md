@@ -30,6 +30,7 @@ z
 ## Thu 8-27
 
 - New canonical journey map example
+- Git branches cleanup
 
 ## Wed 8-26
 
