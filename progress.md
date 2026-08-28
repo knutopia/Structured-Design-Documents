@@ -31,6 +31,7 @@ z
 
 - New canonical journey map example
 - Git branches cleanup
+- Removed duplicate Codex project
 
 ## Wed 8-26
 
