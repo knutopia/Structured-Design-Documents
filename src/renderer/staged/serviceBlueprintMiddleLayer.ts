@@ -1032,9 +1032,7 @@ function buildCellsAndPlacements(
         sharedWidthGroup: column.slotKind === "parking"
           ? "service_blueprint:column:parking"
           : "service_blueprint:column:semantic",
-        sharedHeightGroup: laneShell.laneId === "lane:99:ungrouped"
-          ? "service_blueprint:row:ungrouped"
-          : "service_blueprint:row:semantic"
+        sharedHeightGroup: `service_blueprint:row:${laneShell.index}`
       };
       cells.push(cell);
       laneShell.cellIds.push(cell.id);

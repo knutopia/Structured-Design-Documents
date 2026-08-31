@@ -35,6 +35,7 @@ import {
   validatePrimitiveContent
 } from "./primitives.js";
 import { resolveGridCells } from "./gridLayout.js";
+import { reservedStackSlotHeight } from "./stackSlots.js";
 import { createTextMeasurementService, type TextMeasurementService } from "./textMeasurement.js";
 import { resolveRendererTheme, WIDTH_BAND_ORDER, type RendererTheme, type TextStyleToken } from "./theme.js";
 
@@ -916,6 +917,13 @@ function estimateGridContentSize(
 
 function estimateContainerContentSize(container: MeasuredContainer): MeasuredSize {
   const gap = resolveContainerGap(container.chrome, container.layout);
+  const slotHeight = reservedStackSlotHeight(container);
+  if (slotHeight !== undefined) {
+    return {
+      width: Math.max(0, ...container.children.map(child => child.width)),
+      height: slotHeight
+    };
+  }
 
   switch (container.layout.strategy) {
     case "grid":
@@ -1014,6 +1022,40 @@ function normalizeMeasuredSceneSharedSizes(
   scene: MeasuredScene,
   context: MeasureContext
 ): MeasuredScene {
+  const slotGroups = new Map<string, number>();
+  const slotContainers: MeasuredContainer[] = [];
+  function collectSlots(item: MeasuredItem): void {
+    if (item.kind !== "container") return;
+    const slots = item.layout.slots;
+    if (slots) {
+      if (item.layout.strategy !== "stack" || item.layout.direction !== "vertical"
+        || !slots.heightGroup || !Number.isInteger(slots.minimumCount) || slots.minimumCount < 0
+        || (slots.alignment !== "start" && slots.alignment !== "center")) {
+        throw new Error(`Invalid vertical stack slots for '${item.id}'`);
+      }
+      slotContainers.push(item);
+      slotGroups.set(slots.heightGroup, Math.max(
+        slotGroups.get(slots.heightGroup) ?? 0,
+        getNodePrimitiveTheme(context.theme, slots.minimumHeightPrimitive).minHeight,
+        ...item.children.map(child => child.height)
+      ));
+    }
+    item.children.forEach(collectSlots);
+  }
+  collectSlots(scene.root);
+  if (slotContainers.length > 0) {
+    for (const item of slotContainers) {
+      item.resolvedSlotHeight = roundMetric(slotGroups.get(item.layout.slots!.heightGroup)!);
+    }
+    // Rebuild intrinsic containers before collecting whole-row size groups.
+    // Old container heights must never contribute to an individual node tier.
+    function recomputeSlots(item: MeasuredItem): void {
+      if (item.kind !== "container") return;
+      item.children.forEach(recomputeSlots);
+      Object.assign(item, resolveMeasuredContainerSize(item));
+    }
+    recomputeSlots(scene.root);
+  }
   const widthGroups = new Map<string, number>();
   const heightGroups = new Map<string, number>();
   collectSharedSizeGroups(scene.root, widthGroups, heightGroups);
@@ -1060,6 +1102,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     viewMetadata: cloneViewMetadata(container.viewMetadata),
     layout: {
       ...container.layout,
+      ...(container.layout.slots ? { slots: { ...container.layout.slots } } : {}),
       ...(container.layout.grid
         ? { grid: {
           placements: container.layout.grid.placements.map((placement) => ({ ...placement }))

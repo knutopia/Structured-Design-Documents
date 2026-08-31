@@ -259,6 +259,10 @@ Required fields:
 
 Cells should be invisible in normal SVG output, following the service-blueprint cell pattern.
 
+Cell sizing follows the bundle's `renderer_defaults.cell_sizing`: individual node tiers share a height within each lane, while full cell heights are shared only within a physical row. Stacks and nodes start at the top of their tiers. Nodes retain their measured sizes.
+
+`scenario_flow_layout.trailing_track_policy: trim` realizes each visible lane through its last occupied logical row, preserving leading rows, internal gaps, semantic track identities, and cell ids. A shown empty lane retains one tier. Physical root row indices are cumulative across these retained lane ranges; semantic track indices do not change. `preserve` realizes the complete logical track range in every lane. Lane labels and separators use the retained cell bounds. See [the shared spacing contract](../../toolchain/renderer_spacing.md).
+
 ### 7.5 Node Placements
 
 Placements map semantic nodes to cells and should carry:

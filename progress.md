@@ -27,6 +27,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 8-31
+
+- Node design improvement exploration
+- Identified, addressed excessive height issue for scenario_flow, journey_map, service_blueprint
+
 ## Thu 8-27
 
 - New canonical journey map example

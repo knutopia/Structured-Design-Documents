@@ -33,6 +33,7 @@ import {
 } from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
 import { resolveGridCells } from "./gridLayout.js";
+import { alignPositionedStackSlots, reservedStackSlotHeight } from "./stackSlots.js";
 import {
   buildLocalPatternRoute,
   offsetParallelOrthogonalRoute,
@@ -111,6 +112,7 @@ function roundMetric(value: number): number {
 function cloneLayoutIntent(layout: LayoutIntent): LayoutIntent {
   return {
     ...layout,
+    ...(layout.slots ? { slots: { ...layout.slots } } : {}),
     ...(layout.grid
       ? { grid: {
         placements: layout.grid.placements.map((placement) => ({ ...placement }))
@@ -338,6 +340,7 @@ function resizeContainerToCell(
   item.width = roundMetric(width);
   item.height = roundMetric(height);
   item.ports = resolveContainerPorts(item, context.theme);
+  alignPositionedStackSlots(item);
 }
 
 function translatePositionedSubtree(item: PositionedItem, dx: number, dy: number): void {
@@ -397,11 +400,12 @@ function layoutLinearContainer(
   const direction = container.layout.direction ?? options.defaultDirection;
   const gap = resolveGap(container);
   const crossAlignment = container.layout.crossAlignment ?? "start";
+  const reservedSlots = reservedStackSlotHeight(container);
 
   if (children.length === 0) {
     return {
       contentWidth: 0,
-      contentHeight: 0
+      contentHeight: reservedSlots ?? 0
     };
   }
 
@@ -432,7 +436,7 @@ function layoutLinearContainer(
       child.y = roundMetric(mainOffset);
     }
 
-    mainOffset += childMain + gap;
+    mainOffset += (container.resolvedSlotHeight ?? childMain) + gap;
     maxResolvedCross = Math.max(maxResolvedCross, childCross);
   }
 
@@ -446,7 +450,7 @@ function layoutLinearContainer(
     }
     : {
       contentWidth: crossSize,
-      contentHeight: mainSize
+      contentHeight: reservedSlots ?? mainSize
     };
 }
 
@@ -807,11 +811,13 @@ async function layoutContainer(
     y: 0,
     width: Math.max(width, headerWidth, container.width),
     height: Math.max(height, container.height),
+    ...(container.resolvedSlotHeight !== undefined ? { resolvedSlotHeight: container.resolvedSlotHeight } : {}),
     sharedWidthGroup: container.sharedWidthGroup,
     sharedHeightGroup: container.sharedHeightGroup
   };
 
   positioned.ports = resolveContainerPorts(positioned, context.theme);
+  alignPositionedStackSlots(positioned);
 
   if (layoutResult.routeHints) {
     mergeRouteHints(descendantRouteHints, offsetLocalRouteHints(layoutResult.routeHints, contentOrigin.x, contentOrigin.y));
@@ -1217,6 +1223,10 @@ export function normalizeServiceBlueprintCellContents(root: PositionedContainer)
   const laneCells = root.children.filter(isServiceBlueprintCell);
 
   for (const cell of laneCells) {
+    if (cell.layout.slots) {
+      alignPositionedStackSlots(cell);
+      continue;
+    }
     if (cell.children.length === 0) {
       continue;
     }

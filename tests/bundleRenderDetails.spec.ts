@@ -119,7 +119,8 @@ describe("bundle-owned render details", () => {
       empty_lane_policy: "omit",
       component_order: "source",
       component_gap_rows: 1,
-      branch_order: "source"
+      branch_order: "source",
+      trailing_track_policy: "trim"
     });
 
     expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
@@ -130,6 +131,12 @@ describe("bundle-owned render details", () => {
       const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
       view.conventions.renderer_defaults!.scenario_flow_layout!.component_gap_rows = -1;
     });
+    for (const value of [undefined, "compact", 0]) {
+      expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
+        const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
+        (view.conventions.renderer_defaults!.scenario_flow_layout as unknown as Record<string, unknown>).trailing_track_policy = value;
+      });
+    }
     expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
       const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
       view.conventions.renderer_defaults!.scenario_flow_layout!.lanes.push({
@@ -156,6 +163,37 @@ describe("bundle-owned render details", () => {
       const view = cloned.views.views.find((candidate) => candidate.id === "journey_map")!;
       view.conventions.renderer_defaults!.journey_map_layout!.branch_placement = "sideways" as "stacked";
     });
+  });
+
+  it("requires exact cell-sizing contracts for the two tiered grid backends", () => {
+    for (const viewId of ["scenario_flow", "service_blueprint"]) {
+      const view = bundle.views.views.find(candidate => candidate.id === viewId)!;
+      expect(view.conventions.renderer_defaults!.cell_sizing).toEqual(viewId === "scenario_flow"
+        ? { node_tier_scope: "lane", stack_alignment: "start" }
+        : { node_tier_scope: "diagram", stack_alignment: "center" });
+      for (const value of [undefined, [], {},
+        { node_tier_scope: "row", stack_alignment: "start" },
+        { node_tier_scope: "lane", stack_alignment: "end" },
+        { node_tier_scope: "lane", stack_alignment: "start", extra: true }
+      ]) {
+        expectInvalid("bundle.renderer.cell_sizing_shape", cloned => {
+          const defaults = cloned.views.views.find(candidate => candidate.id === viewId)!.conventions.renderer_defaults!;
+          (defaults as Record<string, unknown>).cell_sizing = value;
+        });
+      }
+    }
+  });
+
+  it("fingerprints tier scope, alignment, and trailing-track policy independently", () => {
+    for (const key of ["scope", "alignment", "trailing"] as const) {
+      const cloned = cloneBundle();
+      const defaults = cloned.views.views.find(view => view.id === "scenario_flow")!.conventions.renderer_defaults!;
+      if (key === "scope") defaults.cell_sizing!.node_tier_scope = "diagram";
+      if (key === "alignment") defaults.cell_sizing!.stack_alignment = "center";
+      if (key === "trailing") defaults.scenario_flow_layout!.trailing_track_policy = "preserve";
+      validateLoadedBundle(cloned);
+      expect(computeBundleFingerprint(cloned)).not.toBe(computeBundleFingerprint(bundle));
+    }
   });
 
   it("cross-checks the renderer registry without embedding view IDs in bundle validation", () => {
