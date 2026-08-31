@@ -45,7 +45,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -134,7 +141,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -152,7 +159,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -167,7 +181,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -185,7 +199,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -200,7 +221,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -218,7 +239,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -307,7 +335,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -325,7 +353,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -413,7 +448,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -431,7 +466,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -446,7 +488,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -464,7 +506,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -479,7 +528,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -497,7 +546,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -512,7 +568,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -530,7 +586,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -545,7 +608,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -563,7 +626,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -578,7 +648,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -596,7 +666,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -684,7 +761,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -702,7 +779,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -717,7 +801,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -735,7 +819,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -750,7 +841,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -768,7 +859,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -783,7 +881,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -801,7 +899,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -816,7 +921,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -834,7 +939,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -922,7 +1034,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -940,7 +1052,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1029,7 +1148,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1047,7 +1166,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1136,7 +1262,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1154,7 +1280,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1243,7 +1376,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1261,7 +1394,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1350,7 +1490,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1368,7 +1508,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1456,7 +1603,7 @@
         ],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       },
       {
         "kind": "container",
@@ -1474,7 +1621,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1489,7 +1643,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       },
       {
         "kind": "container",
@@ -1507,7 +1661,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1522,7 +1683,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       },
       {
         "kind": "container",
@@ -1540,7 +1701,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1555,7 +1723,7 @@
         "children": [],
         "ports": [],
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       }
     ],
     "ports": []

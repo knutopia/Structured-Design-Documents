@@ -844,7 +844,7 @@ function buildCellsAndPlacements(
           sharedWidthGroup: band.kind === "parking"
             ? "scenario_flow:cell:parking"
             : "scenario_flow:cell:semantic",
-          sharedHeightGroup: `scenario_flow:lane:${lane.id}`
+          sharedHeightGroup: `scenario_flow:lane:${lane.id}:row:${track.rowOrder}`
         });
 
         nodeIds.forEach((nodeId) => {

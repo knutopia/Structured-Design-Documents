@@ -489,7 +489,12 @@ function alignUncontainedStepsWithStageContent(root: PositionedScene["root"]): v
   }
 
   const contentBottom = Math.max(...root.children.map((item) => item.y + item.height));
-  root.height = Math.max(root.height, contentBottom - root.y + root.chrome.padding.bottom);
+  // Alignment can move branches upward. Refit before routing, which owns any
+  // subsequent clearance expansion; the old grid extent is no longer a floor.
+  root.height = Math.max(
+    root.chrome.padding.top + (root.chrome.headerBandHeight ?? 0),
+    contentBottom - root.y
+  ) + root.chrome.padding.bottom;
 }
 
 export async function positionJourneyMapMeasuredSceneBeforeRouting(

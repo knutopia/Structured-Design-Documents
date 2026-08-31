@@ -35,7 +35,7 @@ Support nodes may also be realized in auxiliary spill slots owned by a semantic 
 - Rows and Columns are invisible. (No per-row / per-column containers shown.)
 - The "Line of Interaction" and "Line of Visibility" separators have left-aligned titles in the reference layout. In the staged renderer, those titles should use small non-bold connector-label typography rather than the bold lettering seen in the older reference artwork.
 
-- All rows have the same height. All columns have the same width.
+- Individual node tiers have the same height across the diagram, based on the tallest measured node (at least the theme's card minimum). A lane with one node per cell has one tier; a lane with a stacked cell reserves enough tiers for that stack. Only cells in that physical row share the resulting full height. This includes the synthetic ungrouped lane. All columns retain the same width.
 
 -Additional space between rows or between columns may be introduced by connector routing if necessary (see below.)
 
@@ -43,7 +43,7 @@ Support nodes may also be realized in auxiliary spill slots owned by a semantic 
 
 - Line wrapping is applied to text content when text content width supercedes maximum width.
 
-- A node is placed vertically centered in its row.
+- A stack is vertically centered in its row, and each node is centered within its tier. Node boxes retain their measured heights. The bundle's `renderer_defaults.cell_sizing` declares diagram-wide tiers and centered alignment; see [the shared spacing contract](../../../toolchain/renderer_spacing.md).
 
 - A node is placed horizontally centered in its column.
 

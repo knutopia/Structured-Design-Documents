@@ -441,6 +441,12 @@ export interface RendererScenarioFlowLayoutConfig {
   component_order: "source";
   component_gap_rows: number;
   branch_order: "source";
+  trailing_track_policy: "trim" | "preserve";
+}
+
+export interface RendererCellSizingConfig {
+  node_tier_scope: "lane" | "diagram";
+  stack_alignment: "start" | "center";
 }
 
 export interface RendererJourneyMapLayoutConfig {
@@ -459,6 +465,7 @@ export interface RendererDefaultsConfig {
   batch_applicability?: RendererBatchApplicabilityConfig;
   journey_map_layout?: RendererJourneyMapLayoutConfig;
   scenario_flow_layout?: RendererScenarioFlowLayoutConfig;
+  cell_sizing?: RendererCellSizingConfig;
   [key: string]: unknown;
 }
 

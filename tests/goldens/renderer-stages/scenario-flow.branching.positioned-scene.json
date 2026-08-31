@@ -64,7 +64,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -193,8 +199,9 @@
         "y": 28,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:0"
       },
       {
         "kind": "container",
@@ -230,7 +237,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -359,8 +372,9 @@
         "y": 28,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:0"
       },
       {
         "kind": "container",
@@ -396,7 +410,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -525,8 +545,9 @@
         "y": 28,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:0"
       },
       {
         "kind": "container",
@@ -562,7 +583,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -691,8 +718,9 @@
         "y": 28,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:0"
       },
       {
         "kind": "container",
@@ -729,7 +757,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -748,8 +782,9 @@
         "y": 136,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:1"
       },
       {
         "kind": "container",
@@ -785,7 +820,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -914,8 +955,9 @@
         "y": 136,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:1"
       },
       {
         "kind": "container",
@@ -952,7 +994,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -971,8 +1019,9 @@
         "y": 136,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:1"
       },
       {
         "kind": "container",
@@ -1008,7 +1057,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"step\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -1138,8 +1193,9 @@
         "y": 136,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:step"
+        "sharedHeightGroup": "scenario_flow:row:1"
       },
       {
         "kind": "container",
@@ -1175,7 +1231,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -1304,8 +1366,9 @@
         "y": 276,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:2"
       },
       {
         "kind": "container",
@@ -1341,7 +1404,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -1470,8 +1539,9 @@
         "y": 276,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:2"
       },
       {
         "kind": "container",
@@ -1507,7 +1577,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -1636,8 +1712,9 @@
         "y": 276,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:2"
       },
       {
         "kind": "container",
@@ -1673,7 +1750,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -1803,8 +1886,9 @@
         "y": 276,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:2"
       },
       {
         "kind": "container",
@@ -1841,7 +1925,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -1860,8 +1950,9 @@
         "y": 384,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:3"
       },
       {
         "kind": "container",
@@ -1897,7 +1988,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2026,8 +2123,9 @@
         "y": 384,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:3"
       },
       {
         "kind": "container",
@@ -2064,7 +2162,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2083,8 +2187,9 @@
         "y": 384,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:3"
       },
       {
         "kind": "container",
@@ -2120,7 +2225,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"place\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2250,8 +2361,9 @@
         "y": 384,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:place"
+        "sharedHeightGroup": "scenario_flow:row:3"
       },
       {
         "kind": "container",
@@ -2287,7 +2399,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2417,8 +2535,9 @@
         "y": 492,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:4"
       },
       {
         "kind": "container",
@@ -2454,7 +2573,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2585,8 +2710,9 @@
         "y": 492,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:4"
       },
       {
         "kind": "container",
@@ -2622,7 +2748,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2753,8 +2885,9 @@
         "y": 492,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:4"
       },
       {
         "kind": "container",
@@ -2790,7 +2923,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2921,8 +3060,9 @@
         "y": 492,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:4"
       },
       {
         "kind": "container",
@@ -2959,7 +3099,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -2978,8 +3124,9 @@
         "y": 600,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:5"
       },
       {
         "kind": "container",
@@ -3015,7 +3162,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -3146,8 +3299,9 @@
         "y": 600,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:5"
       },
       {
         "kind": "container",
@@ -3184,7 +3338,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -3203,8 +3363,9 @@
         "y": 600,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:5"
       },
       {
         "kind": "container",
@@ -3240,7 +3401,13 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 10
+          "gap": 10,
+          "slots": {
+            "heightGroup": "[\"scenario_flow\",\"view_state\"]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "start"
+          }
         },
         "chrome": {
           "padding": {
@@ -3371,8 +3538,9 @@
         "y": 600,
         "width": 244,
         "height": 84,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
-        "sharedHeightGroup": "scenario_flow:lane:view_state"
+        "sharedHeightGroup": "scenario_flow:row:5"
       }
     ],
     "ports": [],

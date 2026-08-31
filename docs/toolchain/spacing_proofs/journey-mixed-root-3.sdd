@@ -1,0 +1,100 @@
+SDD-TEXT 0.1
+Stage G-400 "Choose a home improvement path"
+  owner=EnergyServices
+  description="Turn a household priority into a practical next step"
+  order_index=10
+  CONTAINS J-400 "Choose the main priority"
+  CONTAINS J-410 "Explore lower energy bills"
+  CONTAINS J-411 "Review usage opportunities"
+  CONTAINS J-420 "Explore better home comfort"
+  CONTAINS J-421 "Identify comfort problem areas"
+  CONTAINS J-430 "Explore lower emissions"
+  CONTAINS J-431 "Estimate upgrade impact"
+
+  + Step J-400 "Choose the main priority"
+    owner=EnergyServices
+    description="Choose the household outcome that matters most right now"
+    actor=Homeowner
+    intent="Focus the planning effort on a meaningful goal"
+    success_criteria="One priority guides the next exploration"
+    kind=decision
+    PRECEDES J-410 "Explore lower energy bills" {cost is the priority}
+    PRECEDES J-420 "Explore better home comfort" {comfort is the priority}
+    PRECEDES J-430 "Explore lower emissions" {emissions are the priority}
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+  + Step J-410 "Explore lower energy bills"
+    owner=EnergyServices
+    description="Examine where household energy costs are concentrated"
+    actor=Homeowner
+    intent="Find realistic ways to reduce recurring costs"
+    success_criteria="The major cost drivers are understood"
+    PRECEDES J-411 "Review usage opportunities"
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+  + Step J-411 "Review usage opportunities"
+    owner=EnergyServices
+    description="Compare behavior and equipment changes that could lower usage"
+    actor=Homeowner
+    intent="Choose a manageable cost-saving action"
+    success_criteria="A credible savings opportunity is identified"
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+  + Step J-420 "Explore better home comfort"
+    owner=EnergyServices
+    description="Describe rooms that are too hot, cold, damp, or drafty"
+    actor=Homeowner
+    intent="Understand why the home feels uncomfortable"
+    success_criteria="The most important comfort symptoms are captured"
+    PRECEDES J-421 "Identify comfort problem areas"
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+  + Step J-421 "Identify comfort problem areas"
+    owner=EnergyServices
+    description="Connect comfort symptoms to likely areas for inspection"
+    actor=Homeowner
+    intent="Know where a professional assessment should focus"
+    success_criteria="Priority rooms and building systems are identified"
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+  + Step J-430 "Explore lower emissions"
+    owner=EnergyServices
+    description="Review the home's largest sources of operational emissions"
+    actor=Homeowner
+    intent="Focus on changes with meaningful climate impact"
+    success_criteria="The largest emissions sources are understood"
+    PRECEDES J-431 "Estimate upgrade impact"
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+  + Step J-431 "Estimate upgrade impact"
+    owner=EnergyServices
+    description="Compare the likely impact of electrification and efficiency upgrades"
+    actor=Homeowner
+    intent="Choose an upgrade worth investigating further"
+    success_criteria="A promising emissions-reduction path is identified"
+    REALIZED_BY P-400 "Home Energy Planner"
+  END
+END
+
+Place P-400 "Home Energy Planner"
+  owner=EnergyServices
+  description="Public planning surface for exploring household energy priorities"
+  surface=web
+  route_or_key=/home-energy/plan
+  access=public
+END
+
+Step J-900 "Root decision"
+  PRECEDES J-901 "Root branch 1"
+  PRECEDES J-902 "Root branch 2"
+  PRECEDES J-903 "Root branch 3"
+END
+
+Step J-901 "Root branch 1"
+END
+
+Step J-902 "Root branch 2"
+END
+
+Step J-903 "Root branch 3"
+END

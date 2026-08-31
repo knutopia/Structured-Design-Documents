@@ -590,6 +590,7 @@ function buildPositionedSubtree(
     viewMetadata: cloneViewMetadata(item.viewMetadata),
     layout: {
       ...item.layout,
+      ...(item.layout.slots ? { slots: { ...item.layout.slots } } : {}),
       elk: item.layout.elk
         ? {
           ...item.layout.elk,
@@ -615,6 +616,7 @@ function buildPositionedSubtree(
     y: frame.y,
     width: frame.width,
     height: frame.height,
+    ...(item.resolvedSlotHeight !== undefined ? { resolvedSlotHeight: item.resolvedSlotHeight } : {}),
     sharedWidthGroup: item.sharedWidthGroup,
     sharedHeightGroup: item.sharedHeightGroup
   };

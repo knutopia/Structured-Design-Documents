@@ -1,4 +1,6 @@
-import type { ViewSpec } from "../../bundle/types.js";
+import type { RendererCellSizingConfig, ViewSpec } from "../../bundle/types.js";
+import { resolveCellSizingPolicy } from "../../bundle/rendererCellSizing.js";
+import { buildCellSlots } from "./stackSlots.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
 import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
@@ -54,6 +56,7 @@ const CELL_GAP = 12;
 const CELL_PADDING = 12;
 
 interface SceneBuildContext {
+  cellSizing: RendererCellSizingConfig;
   renderNodesById: ReadonlyMap<string, ServiceBlueprintRenderNode>;
 }
 
@@ -239,7 +242,9 @@ function buildCellContainer(
     layout: {
       strategy: "stack",
       direction: "vertical",
-      gap: CELL_GAP
+      gap: CELL_GAP,
+      crossAlignment: "center",
+      slots: buildCellSlots(context.cellSizing, "service_blueprint", cell.laneId)
     },
     chrome: {
       padding: {
@@ -364,6 +369,7 @@ function buildServiceBlueprintRenderContext(
   const model = buildServiceBlueprintRenderModel(projection, graph, displayPolicy);
   const middleLayer = buildServiceBlueprintMiddleLayer(model);
   const context: SceneBuildContext = {
+    cellSizing: resolveCellSizingPolicy(view),
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node]))
   };
   const rootChildren: SceneItem[] = [...middleLayer.cells]

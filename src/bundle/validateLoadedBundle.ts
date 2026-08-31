@@ -1,4 +1,5 @@
 import { sortDiagnostics } from "../diagnostics/types.js";
+import { isRendererCellSizingConfig } from "./rendererCellSizing.js";
 import type { Diagnostic } from "../types.js";
 import { resolveBundleFieldReference, resolveProfileRuleField } from "./bundleReferences.js";
 import type {
@@ -408,6 +409,12 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         `Rendering view '${view.id}' must declare batch_applicability as { kind: visible_semantic_node_count, minimum: positive integer }`
       );
     }
+    // These staged backends require the shared cell-sizing contract.
+    if ((view.id === "scenario_flow" || view.id === "service_blueprint"
+      || rendererDefaults.cell_sizing !== undefined)
+      && !isRendererCellSizingConfig(rendererDefaults.cell_sizing)) {
+      add("bundle.renderer.cell_sizing_shape", `Rendering view '${view.id}' must declare valid renderer_defaults.cell_sizing`);
+    }
     if (view.id === "scenario_flow") {
       const layout = record(rendererDefaults.scenario_flow_layout);
       const lanes = Array.isArray(layout?.lanes) ? layout.lanes : undefined;
@@ -431,7 +438,8 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
           "empty_lane_policy",
           "component_order",
           "component_gap_rows",
-          "branch_order"
+          "branch_order",
+          "trailing_track_policy"
         ])
         || !validLanes
         || !laneIds
@@ -443,6 +451,7 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         || !Number.isInteger(layout.component_gap_rows)
         || (layout.component_gap_rows as number) < 0
         || layout.branch_order !== "source"
+        || (layout.trailing_track_policy !== "trim" && layout.trailing_track_policy !== "preserve")
       ) {
         add(
           "bundle.scenario_flow.layout_shape",

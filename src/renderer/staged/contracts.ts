@@ -334,6 +334,13 @@ export interface LayoutIntent {
   gap?: number;
   crossAlignment?: CrossAlignment;
   columns?: number;
+  /** Reserve equal-height slots without resizing their children. Vertical stacks only. */
+  slots?: {
+    heightGroup: string;
+    minimumCount: number;
+    minimumHeightPrimitive: SceneNodePrimitive;
+    alignment: "start" | "center";
+  };
   grid?: {
     placements: GridCellPlacement[];
   };
@@ -511,6 +518,7 @@ export interface MeasuredContainer {
   ports: MeasuredPort[];
   width: number;
   height: number;
+  resolvedSlotHeight?: number;
   sharedWidthGroup?: string;
   sharedHeightGroup?: string;
 }
@@ -595,6 +603,7 @@ export interface PositionedContainer {
   y: number;
   width: number;
   height: number;
+  resolvedSlotHeight?: number;
   sharedWidthGroup?: string;
   sharedHeightGroup?: string;
 }

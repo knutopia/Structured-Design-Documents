@@ -46,7 +46,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -167,8 +174,9 @@
         "y": 28,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -186,7 +194,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -205,8 +220,9 @@
         "y": 28,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -224,7 +240,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -243,8 +266,9 @@
         "y": 28,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -262,7 +286,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -384,8 +415,9 @@
         "y": 28,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:0"
       },
       {
         "kind": "container",
@@ -403,7 +435,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -523,8 +562,9 @@
         "y": 140,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -542,7 +582,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -561,8 +608,9 @@
         "y": 140,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -580,7 +628,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -599,8 +654,9 @@
         "y": 140,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -618,7 +674,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -637,8 +700,9 @@
         "y": 140,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:1"
       },
       {
         "kind": "container",
@@ -656,7 +720,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -675,8 +746,9 @@
         "y": 252,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -694,7 +766,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -713,8 +792,9 @@
         "y": 252,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -732,7 +812,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -852,8 +939,9 @@
         "y": 252,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -871,7 +959,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -890,8 +985,9 @@
         "y": 252,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:2"
       },
       {
         "kind": "container",
@@ -909,7 +1005,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -928,8 +1031,9 @@
         "y": 364,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -947,7 +1051,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -966,8 +1077,9 @@
         "y": 364,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -985,7 +1097,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1004,8 +1123,9 @@
         "y": 364,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -1023,7 +1143,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1143,8 +1270,9 @@
         "y": 364,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:3"
       },
       {
         "kind": "container",
@@ -1162,7 +1290,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1283,8 +1418,9 @@
         "y": 476,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1302,7 +1438,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1423,8 +1566,9 @@
         "y": 476,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1442,7 +1586,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1563,8 +1714,9 @@
         "y": 476,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1582,7 +1734,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1703,8 +1862,9 @@
         "y": 476,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:4"
       },
       {
         "kind": "container",
@@ -1722,7 +1882,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1842,8 +2009,9 @@
         "y": 588,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       },
       {
         "kind": "container",
@@ -1861,7 +2029,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1880,8 +2055,9 @@
         "y": 588,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       },
       {
         "kind": "container",
@@ -1899,7 +2075,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1918,8 +2101,9 @@
         "y": 588,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       },
       {
         "kind": "container",
@@ -1937,7 +2121,14 @@
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
-          "gap": 12
+          "gap": 12,
+          "crossAlignment": "center",
+          "slots": {
+            "heightGroup": "[\"service_blueprint\",null]",
+            "minimumCount": 1,
+            "minimumHeightPrimitive": "card",
+            "alignment": "center"
+          }
         },
         "chrome": {
           "padding": {
@@ -1956,8 +2147,9 @@
         "y": 588,
         "width": 248,
         "height": 88,
+        "resolvedSlotHeight": 64,
         "sharedWidthGroup": "service_blueprint:column:semantic",
-        "sharedHeightGroup": "service_blueprint:row:semantic"
+        "sharedHeightGroup": "service_blueprint:row:5"
       }
     ],
     "ports": [],

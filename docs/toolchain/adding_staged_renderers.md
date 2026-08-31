@@ -103,6 +103,10 @@ Use shared primitives and helpers first. The staged renderer contracts live in
 `src/renderer/staged/primitives.ts`, and theme tokens live in
 `src/renderer/staged/theme.ts`.
 
+For tiered grids, use [the shared spacing contract](renderer_spacing.md). Share
+individual node-tier heights independently from full cell heights, and refit
+bounds after placement adjustments before routing reserves additional space.
+
 Declare layout intent, not geometry. A scene builder may choose a layout strategy
 and routing preferences, but it should not compute final coordinates, final line
 breaks, measured dimensions, or route polylines.

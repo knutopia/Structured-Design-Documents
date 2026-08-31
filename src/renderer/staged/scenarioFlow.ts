@@ -1,4 +1,6 @@
-import type { ViewSpec } from "../../bundle/types.js";
+import type { RendererCellSizingConfig, RendererScenarioFlowLayoutConfig, ViewSpec } from "../../bundle/types.js";
+import { resolveCellSizingPolicy } from "../../bundle/rendererCellSizing.js";
+import { buildCellSlots } from "./stackSlots.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
 import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
@@ -62,6 +64,7 @@ interface ScenarioFlowRenderContext {
 }
 
 interface SceneBuildContext {
+  cellSizing: RendererCellSizingConfig;
   renderNodesById: ReadonlyMap<string, ScenarioFlowRenderNode>;
   placementByNodeId: ReadonlyMap<string, ScenarioFlowNodePlacement>;
 }
@@ -275,7 +278,8 @@ function buildCellContainer(
     layout: {
       strategy: "stack",
       direction: "vertical",
-      gap: CELL_GAP
+      gap: CELL_GAP,
+      slots: buildCellSlots(context.cellSizing, "scenario_flow", gridCell.laneId)
     },
     chrome: {
       padding: {
@@ -290,11 +294,17 @@ function buildCellContainer(
     children: semanticNodes,
     ports: [],
     sharedWidthGroup: gridCell.cell?.sharedWidthGroup ?? "scenario_flow:cell:placeholder",
-    sharedHeightGroup: gridCell.cell?.sharedHeightGroup ?? `scenario_flow:lane:${gridCell.laneId}`
+    sharedHeightGroup: `scenario_flow:row:${gridCell.rowOrder}`
   };
 }
 
-function buildRootGridCells(middleLayer: ScenarioFlowMiddleLayerModel): RootGridCell[] {
+function buildRootGridCells(
+  middleLayer: ScenarioFlowMiddleLayerModel,
+  trailingTrackPolicy: RendererScenarioFlowLayoutConfig["trailing_track_policy"]
+): RootGridCell[] {
+  if (trailingTrackPolicy !== "trim" && trailingTrackPolicy !== "preserve") {
+    throw new Error("Scenario-flow layout requires a valid bundle-owned trailing_track_policy");
+  }
   const bands = [...middleLayer.bands]
     .sort((left, right) => left.bandOrder - right.bandOrder || left.id.localeCompare(right.id));
   const laneGuides = [...middleLayer.laneGuides]
@@ -308,10 +318,17 @@ function buildRootGridCells(middleLayer: ScenarioFlowMiddleLayerModel): RootGrid
   const totalTrackRows = Math.max(1, middleLayer.totalTrackRows);
   const cells: RootGridCell[] = [];
 
-  laneGuides.forEach((laneGuide, laneIndex) => {
-    for (let physicalRowOrder = 0; physicalRowOrder < totalTrackRows; physicalRowOrder += 1) {
+  let rowOffset = 0;
+  laneGuides.forEach((laneGuide) => {
+    const retainedRowCount = trailingTrackPolicy === "preserve" ? totalTrackRows : Math.max(
+      1,
+      ...middleLayer.cells
+        .filter(cell => cell.laneId === laneGuide.laneId && cell.nodeIds.length > 0)
+        .map(cell => cell.rowOrder + 1)
+    );
+    for (let physicalRowOrder = 0; physicalRowOrder < retainedRowCount; physicalRowOrder += 1) {
       const track = trackByRowOrder.get(physicalRowOrder);
-      const rowOrder = laneIndex * totalTrackRows + physicalRowOrder;
+      const rowOrder = rowOffset + physicalRowOrder;
       bands.forEach((band) => {
         cells.push({
           cell: track
@@ -327,6 +344,7 @@ function buildRootGridCells(middleLayer: ScenarioFlowMiddleLayerModel): RootGrid
         });
       });
     }
+    rowOffset += retainedRowCount;
   });
 
   return cells;
@@ -406,10 +424,11 @@ function buildScenarioFlowRenderContext(
   const model = buildScenarioFlowRenderModel(projection, graph, view, displayPolicy);
   const middleLayer = buildScenarioFlowMiddleLayer(model);
   const context: SceneBuildContext = {
+    cellSizing: resolveCellSizingPolicy(view),
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node] as const)),
     placementByNodeId: new Map(middleLayer.placements.map((placement) => [placement.nodeId, placement] as const))
   };
-  const rootChildren: SceneItem[] = buildRootGridCells(middleLayer)
+  const rootChildren: SceneItem[] = buildRootGridCells(middleLayer, model.layout.trailing_track_policy)
     .sort((left, right) =>
       left.rowOrder - right.rowOrder
       || left.columnOrder - right.columnOrder

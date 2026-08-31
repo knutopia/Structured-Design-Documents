@@ -1577,6 +1577,9 @@ views:
         batch_applicability:
           kind: visible_semantic_node_count
           minimum: 1
+        cell_sizing:
+          node_tier_scope: diagram
+          stack_alignment: center
         lane_mapping:
           lane_order: [customer, frontstage, backstage, support, system, policy]
           process_visibility_values: [frontstage, backstage, support]
@@ -2583,6 +2586,9 @@ views:
           decision_value: decision
           branch_label_precedence: [guard, event, to_name]
           render_shape: diamond
+        cell_sizing:
+          node_tier_scope: lane
+          stack_alignment: start
         scenario_flow_layout:
           primary_lane_id: step
           lanes:
@@ -2599,6 +2605,7 @@ views:
           component_order: source
           component_gap_rows: 1
           branch_order: source
+          trailing_track_policy: trim
         detail_display:
           compact:
             show_branch_labels: false
