@@ -52,7 +52,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram journey_map journey_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="576" height="214" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="574.5" height="212.5" rx="17.25" ry="17.25"/>
     </g>
     <g id="scene-container-g-001" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-001" data-role="journey_stage">
       <rect class="scene-container__chrome" x="32" y="32" width="512" height="150" rx="16" ry="16"/>

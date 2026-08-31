@@ -53,7 +53,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram scenario_flow scenario_flow" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1248" height="680" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="1246.5" height="678.5" rx="17.25" ry="17.25"/>
     </g>
     <g id="scene-decoration-lane-step__separator" class="scene-decoration scene-decoration-line paint-chrome scenario_flow_lane_separator lane-step" data-decoration-id="lane-step__separator">
       <line class="scene-decoration__line" x1="24" y1="220" x2="1220" y2="220"/>

@@ -52,7 +52,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram scenario_flow scenario_flow" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1240" height="680" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="1238.5" height="678.5" rx="17.25" ry="17.25"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">

@@ -57,7 +57,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram service_blueprint service_blueprint" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1224" height="704" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="1222.5" height="702.5" rx="17.25" ry="17.25"/>
     </g>
     <g id="scene-container-lane-01-customer__shell__cell__band-anchor-1" class="scene-container primitive-cluster role-service_blueprint_cell paint-chrome service_blueprint_cell lane-customer band-a1 column-1 cell-kind-anchor slot-kind-primary" data-item-id="lane:01:customer__shell__cell__band:anchor:1" data-role="service_blueprint_cell">
       <rect class="scene-container__chrome" x="132" y="28" width="248" height="88" rx="16" ry="16"/>
