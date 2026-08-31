@@ -30,7 +30,8 @@ z
 ## Mon 8-31
 
 - Node design improvement exploration
-- Identified, addressed excessive height issue for scenario_flow, journey_map, service_blueprint
+- Fixed excessive height issue for scenario_flow, journey_map, service_blueprint
+- Changed diagram edge stroke to inside
 
 ## Thu 8-27
 

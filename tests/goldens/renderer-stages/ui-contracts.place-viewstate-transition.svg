@@ -52,7 +52,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ui_contracts" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1436.848" height="620" rx="18" ry="18"/>
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="1435.348" height="618.5" rx="17.25" ry="17.25"/>
     </g>
     <g id="scene-container-p-010" class="scene-container primitive-cluster role-place paint-chrome place scope" data-item-id="P-010" data-role="place">
       <rect class="scene-container__chrome" x="24" y="24" width="1388.848" height="434" rx="16" ry="16"/>

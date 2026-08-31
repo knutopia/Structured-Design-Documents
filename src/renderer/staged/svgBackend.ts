@@ -201,24 +201,43 @@ function renderCenteredTextBlock(
 function renderContainerChrome(
   container: PositionedContainer,
   diagnostics: RendererDiagnostic[],
-  theme: RendererTheme
+  theme: RendererTheme,
+  isSceneRoot: boolean
 ): string | undefined {
   const classList = buildItemClassList("container", container.primitive, container.role, container.classes, "chrome");
   const lines = [
     `<g id="scene-container-${sanitizeToken(container.id)}" class="${classList}" data-item-id="${escapeXml(container.id)}" data-role="${escapeXml(container.role)}">`
   ];
 
+  const appendChromeRect = (className: string, height: number, radius: number): void => {
+    // Keep root paint inside the viewport without changing positioned geometry.
+    // Nested outlines retain their centered strokes.
+    const inset = isSceneRoot ? theme.paint.strokeWidth / 2 : 0;
+    const width = isSceneRoot ? Math.max(0, container.width - 2 * inset) : container.width;
+    const paintHeight = isSceneRoot ? Math.max(0, height - 2 * inset) : height;
+    if (isSceneRoot && (width === 0 || paintHeight === 0)) {
+      if (container.width > 0 && height > 0) {
+        diagnostics.push(createBackendDiagnostic(
+          "renderer.backend.root_chrome_collapsed",
+          "Root chrome is too small for its inside stroke. Omitting the rectangle.",
+          { targetId: container.id, details: className }
+        ));
+      }
+      return;
+    }
+    const paintRadius = isSceneRoot ? Math.max(0, radius - inset) : radius;
+    lines.push(
+      `  <rect class="${className}" x="${formatNumber(container.x + inset)}" y="${formatNumber(container.y + inset)}" width="${formatNumber(width)}" height="${formatNumber(paintHeight)}" rx="${formatNumber(paintRadius)}" ry="${formatNumber(paintRadius)}"/>`
+    );
+  };
+
   if (isVisibleContainerPrimitive(container.primitive)) {
     const radius = getContainerRadius(theme, container.primitive);
-    lines.push(
-      `  <rect class="scene-container__chrome" x="${formatNumber(container.x)}" y="${formatNumber(container.y)}" width="${formatNumber(container.width)}" height="${formatNumber(container.height)}" rx="${formatNumber(radius)}" ry="${formatNumber(radius)}"/>`
-    );
+    appendChromeRect("scene-container__chrome", container.height, radius);
 
     if (container.chrome.headerBandHeight && container.chrome.headerBandHeight > 0) {
       const headerRadius = Math.min(radius, container.chrome.headerBandHeight / 2);
-      lines.push(
-        `  <rect class="scene-container__header-band" x="${formatNumber(container.x)}" y="${formatNumber(container.y)}" width="${formatNumber(container.width)}" height="${formatNumber(container.chrome.headerBandHeight)}" rx="${formatNumber(headerRadius)}" ry="${formatNumber(headerRadius)}"/>`
-      );
+      appendChromeRect("scene-container__header-band", container.chrome.headerBandHeight, headerRadius);
     }
   }
 
@@ -367,10 +386,11 @@ function collectPaintElements(
   item: PositionedItem,
   groups: PaintElementMap,
   diagnostics: RendererDiagnostic[],
-  theme: RendererTheme
+  theme: RendererTheme,
+  isSceneRoot = false
 ): void {
   if (item.kind === "container") {
-    const chrome = renderContainerChrome(item, diagnostics, theme);
+    const chrome = renderContainerChrome(item, diagnostics, theme, isSceneRoot);
     if (chrome) {
       groups.chrome.push(chrome);
     }
@@ -690,7 +710,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
     ));
   }
 
-  collectPaintElements(scene.root, groups, diagnostics, theme);
+  collectPaintElements(scene.root, groups, diagnostics, theme, true);
 
   for (const edge of scene.edges) {
     const rendered = renderEdge(edge, diagnostics);

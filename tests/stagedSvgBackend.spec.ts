@@ -72,7 +72,7 @@ describe("staged SVG backend", () => {
     expect(svg).not.toContain("data-profile-id");
     expect(svg).toContain(".scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }");
     expect(svg).toContain(
-      '<rect class="scene-container__chrome" x="0" y="0" width="560" height="280" rx="18" ry="18"/>'
+      '<rect class="scene-container__chrome" x="0.75" y="0.75" width="558.5" height="278.5" rx="17.25" ry="17.25"/>'
     );
     expect(svg).not.toContain("isolation: isolate");
     expect(svg.match(/id="scene-marker-arrow-end"/g)).toHaveLength(1);
