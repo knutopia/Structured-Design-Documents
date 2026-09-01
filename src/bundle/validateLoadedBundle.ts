@@ -349,11 +349,57 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
   }
   const renderDetailIds = new Set(declaredRenderDetailIds);
 
+  const nodeDecoratorModeEntries = Array.isArray(bundle.manifest.node_decorator_modes)
+    ? bundle.manifest.node_decorator_modes
+    : undefined;
+  const declaredNodeDecoratorModeIds: string[] = [];
+  if (!nodeDecoratorModeEntries) {
+    add("bundle.node_decorator_modes.shape", "node_decorator_modes must be an array");
+  } else {
+    for (const [index, rawEntry] of nodeDecoratorModeEntries.entries()) {
+      const entry = record(rawEntry);
+      if (!entry || !sameStringSet(Object.keys(entry), ["id", "intent", "show_node_type", "show_node_id"])) {
+        add(
+          "bundle.node_decorator_modes.shape",
+          `node_decorator_modes[${index}] must contain exactly id, intent, show_node_type, and show_node_id`
+        );
+        continue;
+      }
+      const id = entry.id;
+      if (typeof id !== "string" || id.trim().length === 0) {
+        add("bundle.node_decorator_modes.invalid_id", `node_decorator_modes[${index}].id must be a non-empty string`);
+      } else {
+        declaredNodeDecoratorModeIds.push(id);
+      }
+      if (typeof entry.intent !== "string" || entry.intent.trim().length === 0) {
+        add(
+          "bundle.node_decorator_modes.invalid_intent",
+          `Node decorator mode '${String(id)}' must have a non-empty intent`
+        );
+      }
+      for (const field of ["show_node_type", "show_node_id"] as const) {
+        if (typeof entry[field] !== "boolean") {
+          add(
+            "bundle.node_decorator_modes.invalid_display_value",
+            `Node decorator mode '${String(id)}' field '${field}' must be boolean`
+          );
+        }
+      }
+    }
+    for (const duplicate of duplicateValues(declaredNodeDecoratorModeIds)) {
+      add("bundle.node_decorator_modes.duplicate_id", `Node decorator mode '${duplicate}' is declared more than once`);
+    }
+  }
+  const nodeDecoratorModeIds = new Set(declaredNodeDecoratorModeIds);
+
   const toolDefaults = record(bundle.manifest.tool_defaults);
-  if (!toolDefaults || !sameStringSet(Object.keys(toolDefaults), ["validation_profile_id", "render_detail_id"])) {
+  if (!toolDefaults || !sameStringSet(
+    Object.keys(toolDefaults),
+    ["validation_profile_id", "render_detail_id", "node_decorator_mode_id"]
+  )) {
     add(
       "bundle.tool_defaults.shape",
-      "tool_defaults must contain exactly validation_profile_id and render_detail_id"
+      "tool_defaults must contain exactly validation_profile_id, render_detail_id, and node_decorator_mode_id"
     );
   }
   if (toolDefaults) {
@@ -379,6 +425,18 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
       add(
         "bundle.tool_defaults.unknown_render_detail",
         `Tool render detail '${renderDetailId}' is not declared by the bundle`
+      );
+    }
+    const nodeDecoratorModeId = toolDefaults.node_decorator_mode_id;
+    if (typeof nodeDecoratorModeId !== "string" || nodeDecoratorModeId.trim().length === 0) {
+      add(
+        "bundle.tool_defaults.invalid_node_decorator_mode_id",
+        "tool_defaults.node_decorator_mode_id must be a non-empty string"
+      );
+    } else if (!nodeDecoratorModeIds.has(nodeDecoratorModeId)) {
+      add(
+        "bundle.tool_defaults.unknown_node_decorator_mode",
+        `Tool node decorator mode '${nodeDecoratorModeId}' is not declared by the bundle`
       );
     }
   }

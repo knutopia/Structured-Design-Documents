@@ -42,11 +42,11 @@ describe("defaults configuration schema", () => {
       defaults: { validation_profile_id: "simple" }
     });
     const parsed = parseDefaultsConfig(
-      'version: "1"\ndefaults:\n  render_detail_id: compact\n  validation_profile_id: strict\n',
+      'version: "1"\ndefaults:\n  node_decorator_mode_id: type,id\n  render_detail_id: compact\n  validation_profile_id: strict\n',
       "/config.yaml"
     );
     expect(serializeDefaultsConfig(parsed)).toBe(
-      'version: "1"\ndefaults:\n  validation_profile_id: strict\n  render_detail_id: compact\n'
+      'version: "1"\ndefaults:\n  validation_profile_id: strict\n  render_detail_id: compact\n  node_decorator_mode_id: type,id\n'
     );
   });
 
@@ -191,8 +191,9 @@ describe("defaults configuration mutation", () => {
       const first = await setStoredDefault(configPath, "render_detail_id", "compact", { createParent: true });
       expect(first.changed).toBe(true);
       await setStoredDefault(configPath, "validation_profile_id", "simple");
+      await setStoredDefault(configPath, "node_decorator_mode_id", "type,id");
       expect(await readFile(configPath, "utf8")).toBe(
-        'version: "1"\ndefaults:\n  validation_profile_id: simple\n  render_detail_id: compact\n'
+        'version: "1"\ndefaults:\n  validation_profile_id: simple\n  render_detail_id: compact\n  node_decorator_mode_id: type,id\n'
       );
 
       const writeSpy = vi.fn(nodeDefaultsConfigFileSystem.writeTextExclusive);
@@ -203,10 +204,17 @@ describe("defaults configuration mutation", () => {
       expect(writeSpy).not.toHaveBeenCalled();
 
       await unsetStoredDefault(configPath, "validation_profile_id");
-      expect(parseDefaultsConfig(await readFile(configPath, "utf8"), configPath).defaults).toEqual({ render_detail_id: "compact" });
+      expect(parseDefaultsConfig(await readFile(configPath, "utf8"), configPath).defaults).toEqual({
+        render_detail_id: "compact",
+        node_decorator_mode_id: "type,id"
+      });
       await unsetStoredDefault(configPath, "render_detail_id");
+      expect(parseDefaultsConfig(await readFile(configPath, "utf8"), configPath).defaults).toEqual({
+        node_decorator_mode_id: "type,id"
+      });
+      await unsetStoredDefault(configPath, "node_decorator_mode_id");
       await expect(readFile(configPath, "utf8")).rejects.toMatchObject({ code: "ENOENT" });
-      await expect(unsetStoredDefault(configPath, "render_detail_id")).resolves.toMatchObject({ changed: false });
+      await expect(unsetStoredDefault(configPath, "node_decorator_mode_id")).resolves.toMatchObject({ changed: false });
     });
   });
 

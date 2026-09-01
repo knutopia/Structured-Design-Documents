@@ -64,7 +64,11 @@ import {
   runGuidedAdditionCommand,
   type GuidedAdditionCliDeps
 } from "./guidedAddition.js";
-import { resolveCliRenderSettings, resolveCliValidationProfile } from "./profileResolution.js";
+import {
+  resolveCliRenderSettings,
+  resolveCliShowSettings,
+  resolveCliValidationProfile
+} from "./profileResolution.js";
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
@@ -81,6 +85,7 @@ export interface CliDeps extends GuidedAdditionCliDeps {
     format: PreviewFormat;
     profileId: string;
     detailId: string;
+    nodeDecoratorModeId?: string;
     backendId?: PreviewRendererBackendId;
   }) => Promise<SourcePreviewRenderResult>;
   prepareCompiledGraphPreview: (
@@ -549,6 +554,7 @@ async function runShowAllCommand(
   options: {
     profileId: string;
     detailId: string;
+    nodeDecoratorModeId: string;
     format: PreviewFormat;
     backendId?: PreviewRendererBackendId;
     out?: string;
@@ -608,6 +614,7 @@ async function runShowAllCommand(
       format: options.format,
       profileId: options.profileId,
       detailId: options.detailId,
+      nodeDecoratorModeId: options.nodeDecoratorModeId,
       backendId: candidate.previewCapability.backendId
     })
   }));
@@ -649,6 +656,7 @@ async function runShowAllCommand(
       : buildShowPreviewOutputPath(input.path, {
         viewId: candidate.view.id,
         detailId: options.detailId,
+        nodeDecoratorModeId: options.nodeDecoratorModeId,
         format: options.format,
         backendId: options.backendId ? candidate.previewCapability.backendId : undefined
       })
@@ -709,6 +717,7 @@ async function runShowCommand(
     bundle: string;
     profile?: string;
     detail?: string;
+    decorators?: string;
     view: string;
     format: string;
     out?: string;
@@ -736,16 +745,19 @@ async function runShowCommand(
     }
 
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const settings = await resolveCliRenderSettings(deps.defaultsConfig, bundle, {
+    const settings = await resolveCliShowSettings(deps.defaultsConfig, bundle, {
       profileId: options.profile,
-      detailId: options.detail
+      detailId: options.detail,
+      nodeDecoratorModeId: options.decorators
     });
     const profileId = settings.profile.value;
     const detailId = settings.detail.value;
+    const nodeDecoratorModeId = settings.decorators.value;
     if (options.view === "all") {
       return runShowAllCommand(deps, bundle, input, {
         profileId,
         detailId,
+        nodeDecoratorModeId,
         format: requestedPreviewFormat,
         backendId: requestedBackendId,
         out: options.out,
@@ -781,6 +793,7 @@ async function runShowCommand(
     const previewPath = options.out ?? buildShowPreviewOutputPath(input.path, {
       viewId: options.view,
       detailId,
+      nodeDecoratorModeId,
       format: requestedPreviewFormat,
       backendId: requestedBackendId ? previewCapability.backendId : undefined
     });
@@ -790,7 +803,8 @@ async function runShowCommand(
         viewId: options.view,
         format: requestedPreviewFormat,
         profileId,
-        detailId
+        detailId,
+        nodeDecoratorModeId
       });
       writeDiagnostics(deps, renderResult.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
       if (!renderResult.artifact || hasErrors(renderResult.diagnostics)) {
@@ -822,16 +836,18 @@ async function runShowCommand(
   }
 }
 
-type DefaultsCliSetting = "profile" | "detail";
+type DefaultsCliSetting = "profile" | "detail" | "decorators";
 
 function parseDefaultsSetting(deps: Pick<CliDeps, "stderr">, value: string): DefaultsCliSetting | null {
-  if (value === "profile" || value === "detail") return value;
-  deps.stderr(`Unknown defaults setting '${value}'. Choose profile or detail.\n`);
+  if (value === "profile" || value === "detail" || value === "decorators") return value;
+  deps.stderr(`Unknown defaults setting '${value}'. Choose profile, detail, or decorators.\n`);
   return null;
 }
 
 function storedSettingForCli(setting: DefaultsCliSetting): DefaultsConfigSetting {
-  return setting === "profile" ? "validation_profile_id" : "render_detail_id";
+  if (setting === "profile") return "validation_profile_id";
+  if (setting === "detail") return "render_detail_id";
+  return "node_decorator_mode_id";
 }
 
 function profileAvailability(bundle: Bundle): string[] {
@@ -840,6 +856,16 @@ function profileAvailability(bundle: Bundle): string[] {
 
 function detailAvailability(bundle: Bundle): string[] {
   return bundle.manifest.render_details.map((detail) => detail.id);
+}
+
+function decoratorAvailability(bundle: Bundle): string[] {
+  return bundle.manifest.node_decorator_modes.map((mode) => mode.id);
+}
+
+function defaultsAvailability(bundle: Bundle, setting: DefaultsCliSetting): string[] {
+  if (setting === "profile") return profileAvailability(bundle);
+  if (setting === "detail") return detailAvailability(bundle);
+  return decoratorAvailability(bundle);
 }
 
 function defaultsSourceLabel(source: DefaultsConfigSource): string {
@@ -854,10 +880,11 @@ async function runDefaultsShow(
 ): Promise<number> {
   try {
     const bundle = await deps.loadBundle(options.bundle);
-    const settings = await resolveCliRenderSettings(deps.defaultsConfig, bundle);
+    const settings = await resolveCliShowSettings(deps.defaultsConfig, bundle);
     deps.stdout([
       `Profile: ${settings.profile.value} (${defaultsSourceLabel(settings.profile.source)})`,
-      `Detail: ${settings.detail.value} (${defaultsSourceLabel(settings.detail.source)})`
+      `Detail: ${settings.detail.value} (${defaultsSourceLabel(settings.detail.source)})`,
+      `Decorators: ${settings.decorators.value} (${defaultsSourceLabel(settings.decorators.source)})`
     ].join("\n") + "\n");
     return 0;
   } catch (error) {
@@ -880,7 +907,7 @@ async function runDefaultsSet(
     validateResolvedDefault({
       setting: storedSettingForCli(setting),
       selected: { value, source: "cli" },
-      availableValues: setting === "profile" ? profileAvailability(bundle) : detailAvailability(bundle),
+      availableValues: defaultsAvailability(bundle, setting),
       bundlePath: bundle.manifestPath
     });
 
@@ -931,6 +958,13 @@ function globalHelpText(): string {
     "  compact      low-noise primary structure",
     "  detailed     supporting annotations and labels",
     "  Omit --detail to resolve your user default, then the selected-bundle fallback.",
+    "",
+    "Node decorators (bundle-declared; shipped v0.1 values shown):",
+    "  none         no node decorators",
+    "  type         semantic node type",
+    "  id           stable node ID",
+    "  type,id      semantic node type and stable node ID",
+    "  Omit --decorators to resolve your user default, then the selected-bundle fallback.",
     "",
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
@@ -1010,7 +1044,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   const defaultsCommand = program
     .command("defaults")
     .summary("Show or manage persistent CLI defaults")
-    .description("Show or manage your user defaults for validation profile and render detail.")
+    .description("Show or manage your user defaults for validation profile, render detail, and node decorators.")
     .option("--bundle <manifest>", "bundle manifest used to validate stored values", defaultManifestPath)
     .action(async (options) => {
       setExitCode(await runDefaultsShow(deps, options));
@@ -1018,7 +1052,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
 
   defaultsCommand
     .command("show")
-    .description("Show the effective profile and detail.")
+    .description("Show the effective profile, detail, and node decorators.")
     .option("--bundle <manifest>", "bundle manifest used to validate stored values", defaultManifestPath)
     .action(async (options) => {
       setExitCode(await runDefaultsShow(deps, options));
@@ -1027,7 +1061,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   defaultsCommand
     .command("set")
     .description("Set one user default.")
-    .argument("<setting>", "profile or detail")
+    .argument("<setting>", "profile, detail, or decorators")
     .argument("<value>", "bundle-declared setting value")
     .option("--bundle <manifest>", "bundle manifest used to validate the value", defaultManifestPath)
     .action(async (setting, value, options) => {
@@ -1037,7 +1071,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   defaultsCommand
     .command("unset")
     .description("Remove one user default.")
-    .argument("<setting>", "profile or detail")
+    .argument("<setting>", "profile, detail, or decorators")
     .action(async (setting) => {
       setExitCode(await runDefaultsUnset(deps, setting));
     });
@@ -1137,13 +1171,15 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
+    .option("--decorators <mode>", "node decorator mode override; omission uses the resolved user/bundle default")
     .option("--format <format>", "preview format (svg or png)", "svg")
     .option("--backend <backend>", "preview backend id override")
-    .option("--out <file>", "write preview output; with --view all, insert each view id before the extension; omission defaults to <input>.<view>.<detail>[.<backend>].<format> beside the input")
+    .option("--out <file>", "write preview output; with --view all, insert each view id before the extension; omission defaults to <input>.<view>.<detail>[.decorators-<mode>][.<backend>].<format> beside the input")
     .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source for one selected view; incompatible with --view all")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --decorators type,id",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",

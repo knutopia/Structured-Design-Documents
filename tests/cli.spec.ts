@@ -22,7 +22,8 @@ const bundle: Bundle = {
     },
     tool_defaults: {
       validation_profile_id: "simple",
-      render_detail_id: "compact"
+      render_detail_id: "compact",
+      node_decorator_mode_id: "none"
     },
     profiles: [
       { id: "simple", path: "profiles/simple.yaml", intent: "drafting" },
@@ -32,6 +33,12 @@ const bundle: Bundle = {
     render_details: [
       { id: "compact", intent: "low noise" },
       { id: "detailed", intent: "full detail" }
+    ],
+    node_decorator_modes: [
+      { id: "none", intent: "no decorators", show_node_type: false, show_node_id: false },
+      { id: "type", intent: "node type", show_node_type: true, show_node_id: false },
+      { id: "id", intent: "node id", show_node_type: false, show_node_id: true },
+      { id: "type,id", intent: "node type and id", show_node_type: true, show_node_id: true }
     ],
     examples: [],
     compatibility: {
@@ -657,6 +664,26 @@ describe("CLI wrappers", () => {
     expect(writeBinaryFileMock).toHaveBeenCalledWith(
       "/repo/bundle/v0.1/examples/outcome_to_ia_trace.outcome_opportunity_map.compact.png",
       Uint8Array.from([1, 2, 3])
+    );
+  });
+
+  it("show --view all passes decorators to preparation and automatic artifact identity", async () => {
+    const batch = createBatchPreviewMocks({ outcome_opportunity_map: ["O-001"] });
+    const { deps, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--decorators", "type,id"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(batch.prepare.mock.calls.every((call) => call[3].nodeDecoratorModeId === "type,id")).toBe(true);
+    expect(writeTextFileMock).toHaveBeenCalledWith(
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.outcome_opportunity_map.compact.decorators-type-id.svg",
+      "<svg>outcome_opportunity_map</svg>"
     );
   });
 
@@ -1849,6 +1876,9 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Omit --profile to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Render detail (bundle-declared; shipped v0.1 values shown):");
     expect(help).toContain("Omit --detail to resolve your user default, then the selected-bundle fallback.");
+    expect(help).toContain("Node decorators (bundle-declared; shipped v0.1 values shown):");
+    expect(help).toContain("type,id      semantic node type and stable node ID");
+    expect(help).toContain("Omit --decorators to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all");
@@ -1866,6 +1896,12 @@ describe("CLI wrappers", () => {
       expect(commandHelp, commandName).toContain("profile id override; omission uses the resolved");
       expect(commandHelp, commandName).toContain("user/bundle default");
     }
+
+    const showHelp = program.commands.find((command) => command.name() === "show")!.helpInformation();
+    expect(showHelp).toContain("--decorators <mode>");
+    expect(showHelp).toContain("node decorator mode override; omission uses the");
+    expect(showHelp).toContain("resolved user/bundle default");
+    expect(showHelp).toContain("[.decorators-<mode>]");
   });
 
   it("render help labels DOT and Mermaid output as internal/debug artifacts", () => {

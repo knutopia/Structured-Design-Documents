@@ -33,6 +33,7 @@ z
 - Fixed excessive height issue for scenario_flow, journey_map, service_blueprint
 - Changed diagram edge stroke to inside
 - Regenerated examples
+- CLI --decorator option, default
 
 ## Thu 8-27
 

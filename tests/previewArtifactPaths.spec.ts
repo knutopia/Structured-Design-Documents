@@ -30,6 +30,38 @@ describe("preview artifact paths", () => {
     })).toBe("design.journey_map.detailed.legacy_graphviz_preview.png");
   });
 
+  it("adds canonical decorator identity while preserving none", () => {
+    expect(buildPreviewArtifactBasename("design.sdd", {
+      viewId: "ia_place_map",
+      detailId: "compact",
+      nodeDecoratorModeId: "none",
+      format: "svg"
+    })).toBe("design.ia_place_map.compact.svg");
+
+    for (const [mode, suffix] of [
+      ["type", "type"],
+      ["id", "id"],
+      ["type,id", "type-id"]
+    ] as const) {
+      expect(buildPreviewArtifactBasename("design.sdd", {
+        viewId: "ia_place_map",
+        detailId: "compact",
+        nodeDecoratorModeId: mode,
+        format: "svg"
+      })).toBe(`design.ia_place_map.compact.decorators-${suffix}.svg`);
+    }
+  });
+
+  it("places decorator identity before an explicit backend", () => {
+    expect(buildPreviewArtifactBasename("design.sdd", {
+      viewId: "journey_map",
+      detailId: "detailed",
+      nodeDecoratorModeId: "type,id",
+      backendId: "legacy_graphviz_preview",
+      format: "png"
+    })).toBe("design.journey_map.detailed.decorators-type-id.legacy_graphviz_preview.png");
+  });
+
   it("inserts a batch view modifier before an explicit extension", () => {
     expect(buildExplicitBatchPreviewOutputPath("/work/diagram.svg", "journey_map"))
       .toBe(path.join("/work", "diagram.journey_map.svg"));

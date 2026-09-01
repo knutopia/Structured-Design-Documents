@@ -34,6 +34,7 @@ export interface SourcePreviewRenderOptions {
   format: PreviewFormat;
   profileId?: string;
   detailId?: string;
+  nodeDecoratorModeId?: string;
   backendId?: PreviewRendererBackendId;
 }
 
@@ -53,6 +54,7 @@ export interface CompiledPreviewRenderOptions {
   format: PreviewFormat;
   profileId: string;
   detailId: string;
+  nodeDecoratorModeId?: string;
   backendId?: PreviewRendererBackendId;
 }
 

@@ -9,7 +9,8 @@ import {
 const ROOT_KEYS = new Set(["version", "defaults"]);
 const DEFAULT_KEYS = new Set<DefaultsConfigSetting>([
   "validation_profile_id",
-  "render_detail_id"
+  "render_detail_id",
+  "node_decorator_mode_id"
 ]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -116,6 +117,9 @@ export function serializeDefaultsConfig(config: DefaultsConfigV1): string {
   }
   if (config.defaults.render_detail_id !== undefined) {
     defaults.render_detail_id = config.defaults.render_detail_id;
+  }
+  if (config.defaults.node_decorator_mode_id !== undefined) {
+    defaults.node_decorator_mode_id = config.defaults.node_decorator_mode_id;
   }
 
   const serializable: { version: "1"; defaults?: DefaultsConfigValues } = { version: "1" };

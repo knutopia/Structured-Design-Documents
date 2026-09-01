@@ -8,12 +8,18 @@ import {
   BundleValidationError,
   collectBundleDiagnostics,
   computeBundleFingerprint,
+  getBundleNodeDecoratorModeFallback,
   getBundleValidationProfileFallback,
   loadBundle,
   renderSource,
   validateLoadedBundle
 } from "../src/index.js";
-import type { Bundle, BundleManifestToolDefaults, ProfileId } from "../src/index.js";
+import type {
+  Bundle,
+  BundleManifestNodeDecoratorModeEntry,
+  BundleManifestToolDefaults,
+  ProfileId
+} from "../src/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const bundleRoot = path.join(repoRoot, "bundle/v0.1");
@@ -71,6 +77,41 @@ describe("bundle tool defaults", () => {
     });
   });
 
+  it("loads bundle-owned node decorator modes and their none fallback", () => {
+    const modes: BundleManifestNodeDecoratorModeEntry[] = bundle.manifest.node_decorator_modes;
+    expect(modes).toEqual([
+      { id: "none", intent: expect.any(String), show_node_type: false, show_node_id: false },
+      { id: "type", intent: expect.any(String), show_node_type: true, show_node_id: false },
+      { id: "id", intent: expect.any(String), show_node_type: false, show_node_id: true },
+      { id: "type,id", intent: expect.any(String), show_node_type: true, show_node_id: true }
+    ]);
+    expect(getBundleNodeDecoratorModeFallback(bundle)).toBe("none");
+  });
+
+  it("rejects malformed decorator declarations and invalid decorator fallbacks", () => {
+    expectInvalid("bundle.node_decorator_modes.shape", (cloned) => {
+      delete (cloned.manifest as unknown as Record<string, unknown>).node_decorator_modes;
+    });
+    expectInvalid("bundle.node_decorator_modes.invalid_id", (cloned) => {
+      cloned.manifest.node_decorator_modes[0]!.id = "";
+    });
+    expectInvalid("bundle.node_decorator_modes.duplicate_id", (cloned) => {
+      cloned.manifest.node_decorator_modes.push({ ...cloned.manifest.node_decorator_modes[0]! });
+    });
+    expectInvalid("bundle.node_decorator_modes.invalid_intent", (cloned) => {
+      cloned.manifest.node_decorator_modes[0]!.intent = "";
+    });
+    expectInvalid("bundle.node_decorator_modes.invalid_display_value", (cloned) => {
+      (cloned.manifest.node_decorator_modes[0] as unknown as Record<string, unknown>).show_node_type = "yes";
+    });
+    expectInvalid("bundle.tool_defaults.invalid_node_decorator_mode_id", (cloned) => {
+      cloned.manifest.tool_defaults.node_decorator_mode_id = "";
+    });
+    expectInvalid("bundle.tool_defaults.unknown_node_decorator_mode", (cloned) => {
+      cloned.manifest.tool_defaults.node_decorator_mode_id = "all";
+    });
+  });
+
   it("preserves duplicate manifest profile rejection", () => {
     expectInvalid("bundle.profiles.duplicate_manifest_id", (cloned) => {
       cloned.manifest.profiles.push({ ...cloned.manifest.profiles[0]! });
@@ -81,6 +122,16 @@ describe("bundle tool defaults", () => {
     const changed = cloneBundle();
     changed.manifest.tool_defaults.validation_profile_id = "strict";
     expect(computeBundleFingerprint(changed)).not.toBe(computeBundleFingerprint(bundle));
+  });
+
+  it("includes decorator declarations and fallback in the bundle fingerprint", () => {
+    const policyChanged = cloneBundle();
+    policyChanged.manifest.node_decorator_modes[0]!.show_node_id = true;
+    expect(computeBundleFingerprint(policyChanged)).not.toBe(computeBundleFingerprint(bundle));
+
+    const fallbackChanged = cloneBundle();
+    fallbackChanged.manifest.tool_defaults.node_decorator_mode_id = "type";
+    expect(computeBundleFingerprint(fallbackChanged)).not.toBe(computeBundleFingerprint(bundle));
   });
 
   it("uses one effective profile for omitted and explicit library rendering", async () => {

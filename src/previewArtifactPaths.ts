@@ -4,6 +4,7 @@ import type { PreviewFormat, PreviewRendererBackendId } from "./renderer/viewRen
 export interface PreviewArtifactPathOptions {
   viewId: string;
   detailId: string;
+  nodeDecoratorModeId?: string;
   format: PreviewFormat;
   backendId?: PreviewRendererBackendId | string;
 }
@@ -14,6 +15,9 @@ export function buildPreviewArtifactBasename(
 ): string {
   const parsed = path.parse(documentPath);
   const stemParts = [parsed.name, options.viewId, options.detailId];
+  if (options.nodeDecoratorModeId && options.nodeDecoratorModeId !== "none") {
+    stemParts.push(`decorators-${options.nodeDecoratorModeId.replaceAll(",", "-")}`);
+  }
   if (options.backendId) {
     stemParts.push(options.backendId);
   }
