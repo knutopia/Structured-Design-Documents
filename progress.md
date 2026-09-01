@@ -27,6 +27,12 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 9-1
+
+- authored unified node renderer spec
+- created unified node figma reference
+- created unified node sdd
+
 ## Mon 8-31
 
 - Node design improvement exploration

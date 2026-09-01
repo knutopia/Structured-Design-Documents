@@ -1,0 +1,32 @@
+SDD-TEXT 0.1
+Component C-010 "Node"
+  description="Reusable Node for SDD Diagrams. Shows node content preceeded by optional decorator header. Node content vertically stacks title and optional attribute groups."
+
+  CONTAINS C-020 "Decorator Header"
+  CONTAINS C-040 "Node Body"
+
+  + Component C-020 "Decorator Header"
+    description="Optional node type, node ID display"
+    CONTAINS C-030 "Node Type"
+    CONTAINS C-031 "Node ID"
+
+    + Component C-030 "Node Type"
+      description="Shown for \\"--decorators type\\", \\"--decorators type,id\\""
+    END
+    + Component C-031 "Node ID"
+      description="Shown for \\"--decorators id\\", \\"--decorators type,id\\""
+    END
+  END
+  + Component C-040 "Node Body"
+    description="Vertical layout showing Node Title and Node Attributes (if present)"
+    CONTAINS C-050 "Node Title"
+    CONTAINS C-060 "Attribute Group"
+
+    + Component C-050 "Node Title"
+      description="Node title text as list item, or vertically centered if alone."
+    END
+    + Component C-060 "Attribute Group"
+      description="Node attribute label-content combo, single or multiple content line items per label"
+    END
+  END
+END
