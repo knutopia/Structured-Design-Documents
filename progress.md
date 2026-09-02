@@ -31,7 +31,8 @@ z
 
 ## Wed 9-2
 
-- Visual issues correction
+- Visual issues correction successful
+- Created note for future connector label improvement
 
 ## Tue 9-1
 
