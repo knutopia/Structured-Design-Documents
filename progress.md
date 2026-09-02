@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-nasty error in cli for forgotten dash
+-containment display for ui_contracts
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -32,6 +34,7 @@ z
 - authored unified node renderer spec
 - created unified node figma reference
 - created unified node sdd
+- better cli error feedback for `-view` type syntax
 
 ## Mon 8-31
 

@@ -1,6 +1,11 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { Command, CommanderError } from "commander";
+import {
+  Command,
+  CommanderError,
+  type ErrorOptions,
+  type Option
+} from "commander";
 import { applyAdditionProposalV1 } from "../authoring/additionProposalsV1.js";
 import { createGuidedAdditionRuntimeV1 } from "../authoring/guidedAddition/v1/planner.js";
 import {
@@ -69,6 +74,78 @@ import {
   resolveCliShowSettings,
   resolveCliValidationProfile
 } from "./profileResolution.js";
+
+const commanderUnknownOption = (Command.prototype as unknown as {
+  unknownOption(flag: string): never;
+}).unknownOption;
+
+class SddCommand extends Command {
+  private parsedUnknown: string[] = [];
+
+  override createCommand(name?: string): Command {
+    return new SddCommand(name);
+  }
+
+  override parseOptions(argv: string[]): { operands: string[]; unknown: string[] } {
+    const parsed = super.parseOptions(argv);
+    this.parsedUnknown = parsed.unknown;
+    return parsed;
+  }
+
+  override error(message: string, errorOptions?: ErrorOptions): never {
+    const commandPath: string[] = [];
+    let command: Command | null = this;
+    while (command !== null) {
+      commandPath.unshift(command.name());
+      command = command.parent;
+    }
+
+    this.showHelpAfterError(`Run '${commandPath.join(" ")} --help' for usage.`);
+    return super.error(message, errorOptions);
+  }
+
+  missingMandatoryOptionValue(option: Option): never {
+    const unknownOptionTokens = this.parsedUnknown.filter((token) => token.length > 1 && token.startsWith("-"));
+    if (
+      option.long !== undefined
+      && unknownOptionTokens.length === 1
+      && !unknownOptionTokens[0]!.startsWith("--")
+      && `-${unknownOptionTokens[0]}` === option.long
+    ) {
+      return this.unknownOption(unknownOptionTokens[0]!);
+    }
+
+    return this.error(
+      `error: required option '${option.flags}' not specified`,
+      { code: "commander.missingMandatoryOptionValue" }
+    );
+  }
+
+  unknownOption(flag: string): never {
+    if (flag.length > 2 && flag.startsWith("-") && !flag.startsWith("--")) {
+      const candidate = `-${flag}`;
+      const matches = new Set<string>();
+      let command: Command | null = this;
+      while (command !== null) {
+        for (const option of command.createHelp().visibleOptions(command)) {
+          if (option.long === candidate) {
+            matches.add(option.long);
+          }
+        }
+        command = command.parent;
+      }
+
+      if (matches.size === 1) {
+        return this.error(
+          `error: unknown option '${flag}'. Did you mean '${candidate}'?`,
+          { code: "commander.unknownOption" }
+        );
+      }
+    }
+
+    return commanderUnknownOption.call(this, flag);
+  }
+}
 
 const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
@@ -997,11 +1074,10 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     commandExitCode = value;
   };
 
-  const program = new Command();
+  const program = new SddCommand();
   program
     .name("sdd")
     .description("Structured Design Document toolchain CLI")
-    .showHelpAfterError()
     .showSuggestionAfterError()
     .configureOutput({
       writeOut: (content) => deps.stdout(content),
@@ -1203,11 +1279,18 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   return program;
 }
 
+function applyExitOverride(command: Command): void {
+  command.exitOverride();
+  for (const subcommand of command.commands) {
+    applyExitOverride(subcommand);
+  }
+}
+
 export async function runCli(argv: string[] = process.argv, overrides: Partial<CliDeps> = {}): Promise<RunCliResult> {
   const program = createProgram(overrides);
   let exitCode = 0;
 
-  program.exitOverride();
+  applyExitOverride(program);
 
   try {
     await program.parseAsync(argv);

@@ -425,6 +425,107 @@ function createBatchPreviewMocks(
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
 
 describe("CLI wrappers", () => {
+  it("suggests the registered long option for an unambiguous single-dash typo", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+
+    const result = await runCli(
+      ["node", "sdd", "show", "arbitrary.sdd", "-view", "arbitrary_value"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(stderr.join("")).toBe(
+      "error: unknown option '-view'. Did you mean '--view'?\n"
+      + "Run 'sdd show --help' for usage.\n"
+    );
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+  });
+
+  it("keeps genuine missing-option errors concise", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+
+    const result = await runCli(["node", "sdd", "show", "arbitrary.sdd"], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(stderr.join("")).toBe(
+      "error: required option '--view <view>' not specified\n"
+      + "Run 'sdd show --help' for usage.\n"
+    );
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+  });
+
+  it("does not suggest a single-dash correction for ambiguous or non-option tokens", async () => {
+    for (const argv of [
+      ["node", "sdd", "show", "arbitrary.sdd", "-view", "arbitrary_value", "--bogus"],
+      ["node", "sdd", "show", "arbitrary.sdd", "--out", "-view"],
+      ["node", "sdd", "show", "arbitrary.sdd", "--", "-view", "arbitrary_value"]
+    ]) {
+      const { deps, stderr, renderSourcePreviewMock } = createDeps();
+      const result = await runCli(argv, deps);
+      const error = stderr.join("");
+
+      expect(result.exitCode).toBe(1);
+      expect(error).toContain("required option '--view <view>' not specified");
+      expect(error).toContain("Run 'sdd show --help' for usage.");
+      expect(error).not.toContain("Did you mean '--view'?");
+      expect(error).not.toContain("Usage:");
+      expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+    }
+  });
+
+  it("uses concise command-specific hints while preserving Commander long-option suggestions", async () => {
+    const singleDash = createDeps();
+    const singleDashResult = await runCli(
+      ["node", "sdd", "compile", "arbitrary.sdd", "-bundle", "manifest.yaml"],
+      singleDash.deps
+    );
+
+    expect(singleDashResult.exitCode).toBe(1);
+    expect(singleDash.stderr.join("")).toBe(
+      "error: unknown option '-bundle'. Did you mean '--bundle'?\n"
+      + "Run 'sdd compile --help' for usage.\n"
+    );
+
+    const compile = createDeps();
+    const compileResult = await runCli(
+      ["node", "sdd", "compile", "arbitrary.sdd", "--bundl", "manifest.yaml"],
+      compile.deps
+    );
+    const compileError = compile.stderr.join("");
+
+    expect(compileResult.exitCode).toBe(1);
+    expect(compileError).toContain("error: unknown option '--bundl'");
+    expect(compileError).toContain("Did you mean --bundle?");
+    expect(compileError).toContain("Run 'sdd compile --help' for usage.");
+    expect(compileError).not.toContain("Usage:");
+    expect(compileError).not.toContain("Examples:");
+
+    const nested = createDeps();
+    const nestedResult = await runCli(
+      ["node", "sdd", "defaults", "show", "--global"],
+      nested.deps
+    );
+    const nestedError = nested.stderr.join("");
+
+    expect(nestedResult.exitCode).toBe(1);
+    expect(nestedError).toContain("error: unknown option '--global'");
+    expect(nestedError).toContain("Run 'sdd defaults show --help' for usage.");
+    expect(nestedError).not.toContain("Usage:");
+  });
+
+  it("keeps explicit command help comprehensive", async () => {
+    const { deps, stdout, stderr } = createDeps();
+
+    const result = await runCli(["node", "sdd", "show", "--help"], deps);
+    const help = stdout.join("");
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).toBe("");
+    expect(help).toContain("Usage: sdd show [options] <input>");
+    expect(help).toContain("Options:");
+    expect(help).toContain("Examples:");
+  });
+
   it("resolves the bundle fallback and explicit override for all five profile-consuming commands", async () => {
     const cases = [
       {
