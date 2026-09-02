@@ -64,6 +64,7 @@ export interface PreparedCompiledGraphPreview {
   view: ViewSpec;
   capability: ViewRenderCapability;
   previewCapability: PreviewArtifactCapability;
+  nodeDecoratorModeId?: string;
   prepared?: PreparedProjectionForRender;
   diagnostics: Diagnostic[];
 }
@@ -164,6 +165,7 @@ export function prepareCompiledGraphPreview(
     view,
     capability,
     previewCapability,
+    nodeDecoratorModeId: options.nodeDecoratorModeId,
     prepared,
     diagnostics: sortDiagnostics(diagnostics)
   };
@@ -182,7 +184,8 @@ export async function renderPreparedCompiledGraphPreview(
     view,
     capability,
     previewCapability,
-    prepared
+    prepared,
+    nodeDecoratorModeId
   } = preparedResult;
   const notes = [...(prepared?.notes ?? [])];
 
@@ -241,7 +244,8 @@ export async function renderPreparedCompiledGraphPreview(
         kind: "projection",
         graph,
         projection: prepared.projection,
-        detailId
+        detailId,
+        nodeDecoratorModeId
       }
     });
   }
@@ -334,6 +338,7 @@ export async function renderSourcePreview(
     format: options.format,
     profileId,
     detailId,
+    nodeDecoratorModeId: options.nodeDecoratorModeId,
     backendId: options.backendId
   });
   return {

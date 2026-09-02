@@ -253,6 +253,37 @@ function renderBadgeChrome(node: PositionedNode, block: MeasuredContentBlock): s
   return `<rect class="scene-badge__chrome" x="${formatNumber(node.x + block.x)}" y="${formatNumber(node.y + block.y)}" width="${formatNumber(block.width)}" height="${formatNumber(block.height)}" rx="${formatNumber(999)}" ry="${formatNumber(999)}"/>`;
 }
 
+function renderSharedNodeChrome(node: PositionedNode, theme: RendererTheme, classList: string): string {
+  const nodeTheme = theme.sharedNode;
+  const borderInset = nodeTheme.strokeWidth / 2;
+  const strokeInset = nodeTheme.strokeWidth;
+  const lines = [
+    `<g id="scene-node-${sanitizeToken(node.id)}" class="${classList}" data-item-id="${escapeXml(node.id)}" data-role="${escapeXml(node.role)}" data-node-density="${node.sharedNode!.density}">`,
+    `  <rect class="shared-node__chrome" x="${formatNumber(node.x + borderInset)}" y="${formatNumber(node.y + borderInset)}" width="${formatNumber(Math.max(0, node.width - nodeTheme.strokeWidth))}" height="${formatNumber(Math.max(0, node.height - nodeTheme.strokeWidth))}" rx="${formatNumber(Math.max(0, nodeTheme.cornerRadius - borderInset))}" ry="${formatNumber(Math.max(0, nodeTheme.cornerRadius - borderInset))}"/>`
+  ];
+
+  if (node.sharedNode!.decorator) {
+    const left = node.x + strokeInset;
+    const top = node.y + strokeInset;
+    const right = node.x + node.width - strokeInset;
+    const bottom = top + node.sharedNode!.decorator.height;
+    const radius = Math.max(0, nodeTheme.cornerRadius - strokeInset);
+    const path = [
+      `M ${formatNumber(left)} ${formatNumber(bottom)}`,
+      `L ${formatNumber(left)} ${formatNumber(top + radius)}`,
+      `Q ${formatNumber(left)} ${formatNumber(top)} ${formatNumber(left + radius)} ${formatNumber(top)}`,
+      `L ${formatNumber(right - radius)} ${formatNumber(top)}`,
+      `Q ${formatNumber(right)} ${formatNumber(top)} ${formatNumber(right)} ${formatNumber(top + radius)}`,
+      `L ${formatNumber(right)} ${formatNumber(bottom)}`,
+      "Z"
+    ].join(" ");
+    lines.push(`  <path class="shared-node__decorator-header" d="${path}"/>`);
+  }
+
+  lines.push("</g>");
+  return lines.join("\n");
+}
+
 function renderNodeChrome(
   node: PositionedNode,
   diagnostics: RendererDiagnostic[],
@@ -262,6 +293,10 @@ function renderNodeChrome(
   const lines = [
     `<g id="scene-node-${sanitizeToken(node.id)}" class="${classList}" data-item-id="${escapeXml(node.id)}" data-role="${escapeXml(node.role)}">`
   ];
+
+  if (node.sharedNode) {
+    return renderSharedNodeChrome(node, theme, classList);
+  }
 
   if (node.primitive === "connector_port") {
     const cx = node.x + node.width / 2;
@@ -327,6 +362,46 @@ function renderNodeLabels(
   }
 
   const classList = buildItemClassList("node", node.primitive, node.role, node.classes, "labels");
+  if (node.sharedNode) {
+    const renderSharedBlock = (block: MeasuredContentBlock, roleClass: string): string[] => {
+      const style = getTextStyleForBackend(theme, block.textStyleRole, node.id, diagnostics);
+      const markup = renderCenteredTextBlock(
+        node.x + block.x,
+        node.y + block.y,
+        block.height,
+        block.lines,
+        block.lineHeight,
+        buildClassList(
+          buildTextClassList(block.textStyleRole, block.kind, block.region),
+          roleClass
+        )
+      );
+      return indentLines(markup, 4);
+    };
+    const lines = [
+      `<g class="${classList} shared-node__labels" data-item-id="${escapeXml(node.id)}" data-role="${escapeXml(node.role)}">`
+    ];
+    if (node.sharedNode.decorator) {
+      lines.push("  <g class=\"shared-node__decorator\">");
+      node.sharedNode.decorator.items.forEach((block) => lines.push(...renderSharedBlock(block, "shared-node__decorator-item")));
+      lines.push("  </g>");
+    }
+    lines.push("  <g class=\"shared-node__body\">");
+    lines.push("    <g class=\"shared-node__title\">");
+    lines.push(...renderSharedBlock(node.sharedNode.body.title, "shared-node__title-text").map((line) => `  ${line}`));
+    lines.push("    </g>");
+    node.sharedNode.body.attributeGroups.forEach((group) => {
+      lines.push(`    <g class="shared-node__attribute-group" data-attribute-group="${escapeXml(group.id)}">`);
+      lines.push(...renderSharedBlock(group.label, "shared-node__attribute-label").map((line) => `  ${line}`));
+      group.values.forEach((value) => {
+        lines.push(...renderSharedBlock(value, "shared-node__attribute-value").map((line) => `  ${line}`));
+      });
+      lines.push("    </g>");
+    });
+    lines.push("  </g>", "</g>");
+    return lines.join("\n");
+  }
+
   const lines = [
     `<g class="${classList}" data-item-id="${escapeXml(node.id)}" data-role="${escapeXml(node.role)}">`
   ];
@@ -630,9 +705,19 @@ function renderTextDecoration(
 
 function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[] {
   const { paint } = theme;
+  const shared = theme.sharedNode;
+  const decoratorText = theme.textStyles[shared.decorator.textStyleRole];
+  const titleText = theme.textStyles[shared.titleTextStyleRole];
+  const attributeLabelText = theme.textStyles[shared.attribute.labelTextStyleRole];
+  const attributeValueText = theme.textStyles[shared.attribute.valueTextStyleRole];
   const hasBoldEdges = scene.edges.some((edge) => edge.classes.some((className) => sanitizeToken(className) === "edge-bold"));
   const hasLineDecorations = scene.decorations.some((decoration) => decoration.kind === "line");
   const isServiceBlueprint = scene.viewId === "service_blueprint";
+  const hasSharedNodes = (() => {
+    const visit = (item: PositionedItem): boolean =>
+      item.kind === "node" ? item.sharedNode !== undefined : item.children.some(visit);
+    return visit(scene.root);
+  })();
   const lines = [
     `.staged-svg { background: ${paint.canvasBackground}; }`,
     `.scene-container__chrome { fill: ${paint.palette.containerFill}; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
@@ -670,10 +755,24 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
     );
   }
 
-  for (const role of Object.keys(theme.textStyles).sort()) {
+  if (hasSharedNodes) {
+    lines.push(
+      `.staged-svg { --sdd-shared-node-font-family: '${theme.fontFamily}'; --sdd-shared-node-width: ${formatNumber(shared.width)}px; --sdd-shared-node-min-height: ${formatNumber(shared.minHeight)}px; --sdd-shared-node-container-padding-top: ${formatNumber(shared.container.padding.top)}px; --sdd-shared-node-container-padding-right: ${formatNumber(shared.container.padding.right)}px; --sdd-shared-node-container-padding-bottom: ${formatNumber(shared.container.padding.bottom)}px; --sdd-shared-node-container-padding-left: ${formatNumber(shared.container.padding.left)}px; --sdd-shared-node-container-gap: ${formatNumber(shared.container.gap)}px; --sdd-shared-node-radius: ${formatNumber(shared.cornerRadius)}px; --sdd-shared-node-stroke-width: ${formatNumber(shared.strokeWidth)}px; --sdd-shared-node-stroke-placement: ${shared.strokePlacement}; --sdd-shared-node-fill: ${shared.fill}; --sdd-shared-node-stroke: ${shared.stroke}; --sdd-shared-node-text: ${shared.text}; --sdd-shared-node-decorator-height: ${formatNumber(shared.decorator.height)}px; --sdd-shared-node-decorator-gap: ${formatNumber(shared.decorator.gap)}px; --sdd-shared-node-decorator-padding-top: ${formatNumber(shared.decorator.padding.top)}px; --sdd-shared-node-decorator-padding-right: ${formatNumber(shared.decorator.padding.right)}px; --sdd-shared-node-decorator-padding-bottom: ${formatNumber(shared.decorator.padding.bottom)}px; --sdd-shared-node-decorator-padding-left: ${formatNumber(shared.decorator.padding.left)}px; --sdd-shared-node-decorator-fill: ${shared.decorator.fill}; --sdd-shared-node-body-padding-top: ${formatNumber(shared.body.padding.top)}px; --sdd-shared-node-body-padding-right: ${formatNumber(shared.body.padding.right)}px; --sdd-shared-node-body-padding-bottom: ${formatNumber(shared.body.padding.bottom)}px; --sdd-shared-node-body-padding-left: ${formatNumber(shared.body.padding.left)}px; --sdd-shared-node-body-gap: ${formatNumber(shared.body.gap)}px; --sdd-shared-node-attribute-padding-top: ${formatNumber(shared.attribute.padding.top)}px; --sdd-shared-node-attribute-padding-right: ${formatNumber(shared.attribute.padding.right)}px; --sdd-shared-node-attribute-padding-bottom: ${formatNumber(shared.attribute.padding.bottom)}px; --sdd-shared-node-attribute-padding-left: ${formatNumber(shared.attribute.padding.left)}px; --sdd-shared-node-attribute-gap: ${formatNumber(shared.attribute.gap)}px; --sdd-shared-node-decorator-font-size: ${formatNumber(decoratorText.fontSize)}px; --sdd-shared-node-decorator-font-weight: ${decoratorText.fontWeight}; --sdd-shared-node-decorator-line-height: ${formatNumber(decoratorText.lineHeight)}px; --sdd-shared-node-decorator-letter-spacing: ${formatNumber(decoratorText.letterSpacing ?? 0)}px; --sdd-shared-node-title-font-size: ${formatNumber(titleText.fontSize)}px; --sdd-shared-node-title-font-weight: ${titleText.fontWeight}; --sdd-shared-node-title-line-height: ${formatNumber(titleText.lineHeight)}px; --sdd-shared-node-title-letter-spacing: ${formatNumber(titleText.letterSpacing ?? 0)}px; --sdd-shared-node-attribute-label-font-size: ${formatNumber(attributeLabelText.fontSize)}px; --sdd-shared-node-attribute-label-font-weight: ${attributeLabelText.fontWeight}; --sdd-shared-node-attribute-label-line-height: ${formatNumber(attributeLabelText.lineHeight)}px; --sdd-shared-node-attribute-label-letter-spacing: ${formatNumber(attributeLabelText.letterSpacing ?? 0)}px; --sdd-shared-node-attribute-value-font-size: ${formatNumber(attributeValueText.fontSize)}px; --sdd-shared-node-attribute-value-font-weight: ${attributeValueText.fontWeight}; --sdd-shared-node-attribute-value-line-height: ${formatNumber(attributeValueText.lineHeight)}px; --sdd-shared-node-attribute-value-letter-spacing: ${formatNumber(attributeValueText.letterSpacing ?? 0)}px; }`,
+      `.shared-node__chrome { fill: ${shared.fill}; stroke: ${shared.stroke}; stroke-width: ${formatNumber(shared.strokeWidth)}; }`,
+      `.shared-node__decorator-header { fill: ${shared.decorator.fill}; }`,
+      `.shared-node .scene-text { fill: ${shared.text}; }`
+    );
+    if (scene.viewId === "shared_node") {
+      lines.push(`.view-shared_node .standalone_node_harness .scene-container__chrome { fill: #ffffff; stroke: transparent; }`);
+    }
+  }
+
+  for (const role of Object.keys(theme.textStyles).filter((role) => hasSharedNodes || !role.startsWith("shared_node_")).sort()) {
     const style = theme.textStyles[role];
     lines.push(
-      `.text-role-${sanitizeToken(role)} { font-family: '${theme.fontFamily}'; font-size: ${formatNumber(style.fontSize)}px; font-weight: ${style.fontWeight}; }`
+      role.startsWith("shared_node_")
+        ? `.text-role-${sanitizeToken(role)} { font-family: '${style.fontFamily}'; font-size: ${formatNumber(style.fontSize)}px; font-weight: ${style.fontWeight}; line-height: ${formatNumber(style.lineHeight)}px; letter-spacing: ${formatNumber(style.letterSpacing ?? 0)}px; }`
+        : `.text-role-${sanitizeToken(role)} { font-family: '${theme.fontFamily}'; font-size: ${formatNumber(style.fontSize)}px; font-weight: ${style.fontWeight}; }`
     );
   }
 

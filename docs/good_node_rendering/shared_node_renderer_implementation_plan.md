@@ -1,5 +1,9 @@
 # Shared Node Renderer Implementation Plan
 
+## Implementation Status
+
+Phases 1 through 5 are implemented: the canonical Figma metrics are recorded, the shared structured contracts and renderer theme exist, measurement and SVG composition are implemented, the standalone production-path acceptance harness is covered by a committed SVG proof, and `ui_contracts` is the first adopted renderer. Phase 6 remains the deliberate renderer-by-renderer migration sequence; the other staged renderers still use their existing card-node path. Phase 7 is complete for the implemented vertical slice and remains open for the eventual all-renderer migration.
+
 ## Objective
 
 Build one renderer-owned node component that accepts structured semantic content and produces a fully composed, measured, and drawable node for every staged diagram renderer.

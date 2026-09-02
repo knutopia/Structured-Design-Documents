@@ -3,6 +3,13 @@ import type { RendererDiagnostic } from "./diagnostics.js";
 export interface StagedRenderSettings {
   detailId: string;
   themeId?: string;
+  nodeDecoratorMode?: NodeDecoratorMode;
+}
+
+export interface NodeDecoratorMode {
+  id: string;
+  showNodeType: boolean;
+  showNodeId: boolean;
 }
 
 export type SceneContainerPrimitive = "root" | "cluster" | "lane" | "stack" | "grid";
@@ -381,6 +388,21 @@ export interface ContentBlock {
   priority?: ContentPriority;
 }
 
+export interface SharedNodeAttribute {
+  groupId: string;
+  label: string;
+  value: string;
+}
+
+/** Semantic input for the renderer-owned shared node composition. */
+export interface SharedNodeContent {
+  title: string;
+  decoratorMode: NodeDecoratorMode;
+  nodeType?: string;
+  nodeId?: string;
+  attributes: SharedNodeAttribute[];
+}
+
 export interface PortSpec {
   id: string;
   role: string;
@@ -444,6 +466,7 @@ export interface SceneNode {
   widthPolicy: WidthPolicy;
   overflowPolicy: OverflowPolicy;
   content: ContentBlock[];
+  sharedNode?: SharedNodeContent;
   ports: PortSpec[];
   fixedSize?: FixedSize;
   sharedWidthGroup?: string;
@@ -499,6 +522,34 @@ export interface MeasuredContentBlock {
   priority?: ContentPriority;
 }
 
+export interface MeasuredSharedNodeAttributeGroup {
+  id: string;
+  label: MeasuredContentBlock;
+  values: MeasuredContentBlock[];
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface MeasuredSharedNodeRegion {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface MeasuredSharedNodeLayout {
+  density: "plain" | "dense";
+  decorator?: MeasuredSharedNodeRegion & {
+    items: MeasuredContentBlock[];
+  };
+  body: MeasuredSharedNodeRegion & {
+    title: MeasuredContentBlock;
+    attributeGroups: MeasuredSharedNodeAttributeGroup[];
+  };
+}
+
 export interface OverflowResult {
   status: OverflowStatus;
   detail?: string;
@@ -534,6 +585,7 @@ export interface MeasuredNode {
   widthBand: WidthBand;
   overflowPolicy: OverflowPolicy;
   content: MeasuredContentBlock[];
+  sharedNode?: MeasuredSharedNodeLayout;
   ports: MeasuredPort[];
   overflow: OverflowResult;
   width: number;
@@ -619,6 +671,7 @@ export interface PositionedNode {
   widthBand: WidthBand;
   overflowPolicy: OverflowPolicy;
   content: MeasuredContentBlock[];
+  sharedNode?: MeasuredSharedNodeLayout;
   ports: MeasuredPort[];
   overflow: OverflowResult;
   x: number;

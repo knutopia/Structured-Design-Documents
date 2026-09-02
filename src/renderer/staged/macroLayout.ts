@@ -34,6 +34,7 @@ import {
 import { getContainerPrimitiveTheme } from "./primitives.js";
 import { resolveGridCells } from "./gridLayout.js";
 import { alignPositionedStackSlots, reservedStackSlotHeight } from "./stackSlots.js";
+import { cloneMeasuredSharedNodeLayout } from "./sharedNode.js";
 import {
   buildLocalPatternRoute,
   offsetParallelOrthogonalRoute,
@@ -185,6 +186,7 @@ function clonePositionedNode(node: MeasuredNode): PositionedNode {
     widthBand: node.widthBand,
     overflowPolicy: cloneOverflowPolicy(node.overflowPolicy),
     content: node.content.map((block) => cloneMeasuredContentBlock(block)),
+    ...(node.sharedNode ? { sharedNode: cloneMeasuredSharedNodeLayout(node.sharedNode) } : {}),
     ports: node.ports.map((port) => cloneMeasuredPort(port)),
     overflow: {
       ...node.overflow

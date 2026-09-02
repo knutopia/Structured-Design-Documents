@@ -281,38 +281,59 @@
                             "primitive": "card",
                             "classes": [
                               "semantic_node",
-                              "shape-oval"
+                              "shared-node",
+                              "shared-node-plain"
                             ],
                             "widthPolicy": {
-                              "preferred": "chip",
+                              "preferred": "standard",
                               "allowed": [
-                                "chip",
-                                "narrow",
                                 "standard"
                               ]
                             },
-                            "widthBand": "chip",
+                            "widthBand": "standard",
                             "overflowPolicy": {
-                              "kind": "escalate_width_band",
-                              "maxLines": 2
+                              "kind": "grow_height"
                             },
                             "content": [
                               {
-                                "id": "E-010__content__line_0",
+                                "id": "E-010__title",
                                 "kind": "text",
-                                "textStyleRole": "title",
+                                "textStyleRole": "shared_node_title",
                                 "lines": [
                                   "Submit"
                                 ],
-                                "x": 12,
-                                "y": 12,
-                                "width": 54.744,
-                                "height": 20,
-                                "lineHeight": 20,
-                                "region": "primary",
-                                "priority": "primary"
+                                "x": 15.5,
+                                "y": 14.5,
+                                "width": 53.144,
+                                "height": 19,
+                                "lineHeight": 19,
+                                "region": "primary"
                               }
                             ],
+                            "sharedNode": {
+                              "density": "plain",
+                              "body": {
+                                "x": 1.5,
+                                "y": 1.5,
+                                "width": 221,
+                                "height": 45,
+                                "title": {
+                                  "id": "E-010__title",
+                                  "kind": "text",
+                                  "textStyleRole": "shared_node_title",
+                                  "lines": [
+                                    "Submit"
+                                  ],
+                                  "x": 15.5,
+                                  "y": 14.5,
+                                  "width": 53.144,
+                                  "height": 19,
+                                  "lineHeight": 19,
+                                  "region": "primary"
+                                },
+                                "attributeGroups": []
+                              }
+                            },
                             "ports": [
                               {
                                 "id": "E-010__contract_in",
@@ -325,12 +346,12 @@
                             "overflow": {
                               "status": "fits"
                             },
-                            "width": 96,
+                            "width": 224,
                             "height": 48
                           }
                         ],
                         "ports": [],
-                        "width": 224,
+                        "width": 352,
                         "height": 48
                       }
                     ],
@@ -344,7 +365,7 @@
                         "y": 0
                       }
                     ],
-                    "width": 248,
+                    "width": 376,
                     "height": 112
                   }
                 ],
@@ -372,7 +393,7 @@
                     "y": 0
                   }
                 ],
-                "width": 272,
+                "width": 400,
                 "height": 196
               },
               {
@@ -382,54 +403,125 @@
                 "primitive": "card",
                 "classes": [
                   "semantic_node",
-                  "shape-box",
-                  "chrome-dashed"
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
-                    "id": "VS-010b__content__line_0",
+                    "id": "VS-010b__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Billing Success"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 115.528,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 111.048,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "VS-010b__content__line_1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "VS-010b__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "data: Receipt"
+                      "data"
                     ],
-                    "x": 12,
-                    "y": 38,
-                    "width": 72.924,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 20.665,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "VS-010b__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "Receipt"
+                    ],
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 42.582,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 63,
+                    "title": {
+                      "id": "VS-010b__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Billing Success"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 111.048,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "data_required",
+                        "label": {
+                          "id": "VS-010b__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "data"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 20.665,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "VS-010b__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "Receipt"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 42.582,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "VS-010b__transition_in",
@@ -442,19 +534,19 @@
                     "id": "VS-010b__transition_out",
                     "role": "transition_out",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 33
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "width": 168,
+                "width": 224,
                 "height": 66
               }
             ],
             "ports": [],
-            "width": 488,
+            "width": 672,
             "height": 260
           },
           {
@@ -533,38 +625,59 @@
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-component"
+                      "shared-node",
+                      "shared-node-plain"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "widthBand": "standard",
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
                     "content": [
                       {
-                        "id": "SA-010__content__line_0",
+                        "id": "SA-010__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
                           "Save Subscription"
                         ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 136.32,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 131.2,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       }
                     ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "SA-010__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Save Subscription"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 131.2,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
                     "ports": [
                       {
                         "id": "SA-010__contract_in",
@@ -587,38 +700,59 @@
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-cylinder"
+                      "shared-node",
+                      "shared-node-plain"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "widthBand": "standard",
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
                     "content": [
                       {
-                        "id": "D-010__content__line_0",
+                        "id": "D-010__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
                           "Subscription"
                         ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 96,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 92.48,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       }
                     ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "D-010__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Subscription"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 92.48,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
                     "ports": [
                       {
                         "id": "D-010__contract_in",
@@ -701,39 +835,59 @@
                         "primitive": "card",
                         "classes": [
                           "semantic_node",
-                          "shape-ellipse",
-                          "chrome-dashed"
+                          "shared-node",
+                          "shared-node-plain"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
-                        "widthBand": "narrow",
+                        "widthBand": "standard",
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
                         "content": [
                           {
-                            "id": "ST-010a__content__line_0",
+                            "id": "ST-010a__title",
                             "kind": "text",
-                            "textStyleRole": "title",
+                            "textStyleRole": "shared_node_title",
                             "lines": [
                               "Form Ready"
                             ],
-                            "x": 12,
-                            "y": 12,
-                            "width": 90.008,
-                            "height": 20,
-                            "lineHeight": 20,
-                            "region": "primary",
-                            "priority": "primary"
+                            "x": 15.5,
+                            "y": 14.5,
+                            "width": 87.128,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
                           }
                         ],
+                        "sharedNode": {
+                          "density": "plain",
+                          "body": {
+                            "x": 1.5,
+                            "y": 1.5,
+                            "width": 221,
+                            "height": 45,
+                            "title": {
+                              "id": "ST-010a__title",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_title",
+                              "lines": [
+                                "Form Ready"
+                              ],
+                              "x": 15.5,
+                              "y": 14.5,
+                              "width": 87.128,
+                              "height": 19,
+                              "lineHeight": 19,
+                              "region": "primary"
+                            },
+                            "attributeGroups": []
+                          }
+                        },
                         "ports": [
                           {
                             "id": "ST-010a__transition_in",
@@ -746,14 +900,14 @@
                             "id": "ST-010a__transition_out",
                             "role": "transition_out",
                             "side": "east",
-                            "x": 168,
+                            "x": 224,
                             "y": 24
                           }
                         ],
                         "overflow": {
                           "status": "fits"
                         },
-                        "width": 168,
+                        "width": 224,
                         "height": 48
                       },
                       {
@@ -763,39 +917,59 @@
                         "primitive": "card",
                         "classes": [
                           "semantic_node",
-                          "shape-ellipse",
-                          "chrome-dashed"
+                          "shared-node",
+                          "shared-node-plain"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
-                        "widthBand": "narrow",
+                        "widthBand": "standard",
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
                         "content": [
                           {
-                            "id": "ST-010b__content__line_0",
+                            "id": "ST-010b__title",
                             "kind": "text",
-                            "textStyleRole": "title",
+                            "textStyleRole": "shared_node_title",
                             "lines": [
                               "Submitting"
                             ],
-                            "x": 12,
-                            "y": 12,
-                            "width": 84.136,
-                            "height": 20,
-                            "lineHeight": 20,
-                            "region": "primary",
-                            "priority": "primary"
+                            "x": 15.5,
+                            "y": 14.5,
+                            "width": 81.256,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
                           }
                         ],
+                        "sharedNode": {
+                          "density": "plain",
+                          "body": {
+                            "x": 1.5,
+                            "y": 1.5,
+                            "width": 221,
+                            "height": 45,
+                            "title": {
+                              "id": "ST-010b__title",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_title",
+                              "lines": [
+                                "Submitting"
+                              ],
+                              "x": 15.5,
+                              "y": 14.5,
+                              "width": 81.256,
+                              "height": 19,
+                              "lineHeight": 19,
+                              "region": "primary"
+                            },
+                            "attributeGroups": []
+                          }
+                        },
                         "ports": [
                           {
                             "id": "ST-010b__transition_in",
@@ -808,24 +982,24 @@
                             "id": "ST-010b__transition_out",
                             "role": "transition_out",
                             "side": "east",
-                            "x": 168,
+                            "x": 224,
                             "y": 24
                           }
                         ],
                         "overflow": {
                           "status": "fits"
                         },
-                        "width": 168,
+                        "width": 224,
                         "height": 48
                       }
                     ],
                     "ports": [],
-                    "width": 384,
+                    "width": 496,
                     "height": 132
                   }
                 ],
                 "ports": [],
-                "width": 512,
+                "width": 624,
                 "height": 260
               }
             ],
@@ -839,7 +1013,7 @@
                 "y": 0
               }
             ],
-            "width": 536,
+            "width": 648,
             "height": 324
           }
         ],
@@ -853,7 +1027,7 @@
             "y": 0
           }
         ],
-        "width": 1064,
+        "width": 1360,
         "height": 434
       },
       {
@@ -944,7 +1118,7 @@
       }
     ],
     "ports": [],
-    "width": 1112,
+    "width": 1408,
     "height": 620
   },
   "edges": [

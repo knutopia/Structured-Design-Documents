@@ -44,7 +44,9 @@ export function createTextMeasurementService(
       }
       const glyphRun = font.layout(text);
       const advance = glyphRun.positions.reduce((sum, position) => sum + position.xAdvance, 0);
-      return roundMetric((advance / font.unitsPerEm) * style.fontSize);
+      const letterSpacing = style.letterSpacing ?? 0;
+      const spacingAdvance = Math.max(glyphRun.positions.length - 1, 0) * letterSpacing;
+      return roundMetric((advance / font.unitsPerEm) * style.fontSize + spacingAdvance);
     }
   };
 }

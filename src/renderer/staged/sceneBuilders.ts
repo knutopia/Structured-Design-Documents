@@ -8,6 +8,8 @@ import type {
   SceneContainer,
   SceneItem,
   SceneNode,
+  SharedNodeAttribute,
+  NodeDecoratorMode,
   WidthPolicy
 } from "./contracts.js";
 
@@ -38,6 +40,19 @@ interface CardNodeOptions {
   content: ContentBlock[];
   ports?: PortSpec[];
   overflowPolicy?: OverflowPolicy;
+}
+
+export interface SharedNodeRequest {
+  title: string;
+  decoratorMode: NodeDecoratorMode;
+  nodeType: string;
+  nodeId: string;
+  attributes: SharedNodeAttribute[];
+}
+
+interface SharedNodeIntegrationOptions {
+  classes?: string[];
+  ports?: PortSpec[];
 }
 
 function cloneWidthPolicy(widthPolicy: WidthPolicy): WidthPolicy {
@@ -143,5 +158,34 @@ export function buildCardNode(options: CardNodeOptions): SceneNode {
     overflowPolicy: cloneOverflowPolicy(options.overflowPolicy ?? DEFAULT_CARD_OVERFLOW_POLICY),
     content: [...options.content],
     ports: [...(options.ports ?? [])]
+  };
+}
+
+export function buildSharedNode(
+  request: SharedNodeRequest,
+  integration: SharedNodeIntegrationOptions = {}
+): SceneNode {
+  return {
+    kind: "node",
+    id: request.nodeId,
+    role: request.nodeType.toLowerCase(),
+    primitive: "card",
+    classes: ["semantic_node", ...(integration.classes ?? [])],
+    widthPolicy: {
+      preferred: "standard",
+      allowed: ["standard"]
+    },
+    overflowPolicy: {
+      kind: "grow_height"
+    },
+    content: [],
+    sharedNode: {
+      title: request.title,
+      decoratorMode: { ...request.decoratorMode },
+      nodeType: request.nodeType,
+      nodeId: request.nodeId,
+      attributes: request.attributes.map((attribute) => ({ ...attribute }))
+    },
+    ports: [...(integration.ports ?? [])]
   };
 }

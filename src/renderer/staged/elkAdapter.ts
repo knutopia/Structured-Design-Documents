@@ -18,6 +18,7 @@ import type {
   PositionedNode,
   WidthPolicy
 } from "./contracts.js";
+import { cloneMeasuredSharedNodeLayout } from "./sharedNode.js";
 
 export type ElkLayoutOptions = Record<string, string>;
 
@@ -567,6 +568,7 @@ function buildPositionedSubtree(
       widthBand: item.widthBand,
       overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
       content: item.content.map((block) => cloneMeasuredContentBlock(block)),
+      ...(item.sharedNode ? { sharedNode: cloneMeasuredSharedNodeLayout(item.sharedNode) } : {}),
       ports: item.ports.map((port) => cloneMeasuredPort(port)),
       overflow: {
         ...item.overflow

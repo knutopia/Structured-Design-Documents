@@ -218,30 +218,29 @@
                             "role": "event",
                             "primitive": "card",
                             "classes": [
-                              "semantic_node",
-                              "shape-oval"
+                              "semantic_node"
                             ],
                             "widthPolicy": {
-                              "preferred": "chip",
+                              "preferred": "standard",
                               "allowed": [
-                                "chip",
-                                "narrow",
                                 "standard"
                               ]
                             },
                             "overflowPolicy": {
-                              "kind": "escalate_width_band",
-                              "maxLines": 2
+                              "kind": "grow_height"
                             },
-                            "content": [
-                              {
-                                "id": "E-010__content__line_0",
-                                "kind": "text",
-                                "text": "Submit",
-                                "textStyleRole": "title",
-                                "priority": "primary"
-                              }
-                            ],
+                            "content": [],
+                            "sharedNode": {
+                              "title": "Submit",
+                              "decoratorMode": {
+                                "id": "none",
+                                "showNodeType": false,
+                                "showNodeId": false
+                              },
+                              "nodeType": "Event",
+                              "nodeId": "E-010",
+                              "attributes": []
+                            },
                             "ports": [
                               {
                                 "id": "E-010__contract_in",
@@ -289,38 +288,35 @@
                 "role": "viewstate",
                 "primitive": "card",
                 "classes": [
-                  "semantic_node",
-                  "shape-box",
-                  "chrome-dashed"
+                  "semantic_node"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "VS-010b__content__line_0",
-                    "kind": "text",
-                    "text": "Billing Success",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "title": "Billing Success",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "VS-010b__content__line_1",
-                    "kind": "metadata",
-                    "text": "data: Receipt",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
+                  "nodeType": "ViewState",
+                  "nodeId": "VS-010b",
+                  "attributes": [
+                    {
+                      "groupId": "data_required",
+                      "label": "data",
+                      "value": "Receipt"
+                    }
+                  ]
+                },
                 "ports": [
                   {
                     "id": "VS-010b__transition_in",
@@ -402,30 +398,29 @@
                     "role": "systemaction",
                     "primitive": "card",
                     "classes": [
-                      "semantic_node",
-                      "shape-component"
+                      "semantic_node"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "SA-010__content__line_0",
-                        "kind": "text",
-                        "text": "Save Subscription",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Save Subscription",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "SystemAction",
+                      "nodeId": "SA-010",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "SA-010__contract_in",
@@ -440,30 +435,29 @@
                     "role": "dataentity",
                     "primitive": "card",
                     "classes": [
-                      "semantic_node",
-                      "shape-cylinder"
+                      "semantic_node"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "D-010__content__line_0",
-                        "kind": "text",
-                        "text": "Subscription",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Subscription",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "DataEntity",
+                      "nodeId": "D-010",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "D-010__contract_in",
@@ -521,31 +515,29 @@
                         "role": "state",
                         "primitive": "card",
                         "classes": [
-                          "semantic_node",
-                          "shape-ellipse",
-                          "chrome-dashed"
+                          "semantic_node"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
-                        "content": [
-                          {
-                            "id": "ST-010a__content__line_0",
-                            "kind": "text",
-                            "text": "Form Ready",
-                            "textStyleRole": "title",
-                            "priority": "primary"
-                          }
-                        ],
+                        "content": [],
+                        "sharedNode": {
+                          "title": "Form Ready",
+                          "decoratorMode": {
+                            "id": "none",
+                            "showNodeType": false,
+                            "showNodeId": false
+                          },
+                          "nodeType": "State",
+                          "nodeId": "ST-010a",
+                          "attributes": []
+                        },
                         "ports": [
                           {
                             "id": "ST-010a__transition_in",
@@ -565,31 +557,29 @@
                         "role": "state",
                         "primitive": "card",
                         "classes": [
-                          "semantic_node",
-                          "shape-ellipse",
-                          "chrome-dashed"
+                          "semantic_node"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
-                        "content": [
-                          {
-                            "id": "ST-010b__content__line_0",
-                            "kind": "text",
-                            "text": "Submitting",
-                            "textStyleRole": "title",
-                            "priority": "primary"
-                          }
-                        ],
+                        "content": [],
+                        "sharedNode": {
+                          "title": "Submitting",
+                          "decoratorMode": {
+                            "id": "none",
+                            "showNodeType": false,
+                            "showNodeId": false
+                          },
+                          "nodeType": "State",
+                          "nodeId": "ST-010b",
+                          "attributes": []
+                        },
                         "ports": [
                           {
                             "id": "ST-010b__transition_in",

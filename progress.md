@@ -36,6 +36,7 @@ z
 - Created unified node sdd
 - Better cli error feedback for `-view` type syntax
 - Good-node plan created
+- Goof-node implemented, tracking visual issues
 
 ## Mon 8-31
 

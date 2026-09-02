@@ -20,6 +20,41 @@ export interface TextStyleToken {
   fontSize: number;
   fontWeight: number;
   lineHeight: number;
+  /** Resolved pixel spacing added between adjacent glyphs. */
+  letterSpacing?: number;
+}
+
+export interface SharedNodeTheme {
+  width: number;
+  minHeight: number;
+  container: {
+    padding: BoxSpacing;
+    gap: number;
+  };
+  cornerRadius: number;
+  strokeWidth: number;
+  strokePlacement: "inside";
+  fill: string;
+  stroke: string;
+  text: string;
+  decorator: {
+    height: number;
+    padding: BoxSpacing;
+    gap: number;
+    fill: string;
+    textStyleRole: string;
+  };
+  body: {
+    padding: BoxSpacing;
+    gap: number;
+  };
+  titleTextStyleRole: string;
+  attribute: {
+    padding: BoxSpacing;
+    gap: number;
+    labelTextStyleRole: string;
+    valueTextStyleRole: string;
+  };
 }
 
 export interface PrimitiveTextRule {
@@ -95,6 +130,7 @@ export interface RendererTheme {
   widthBands: Record<WidthBand, number>;
   edgeLabelMaxWidth: number;
   textStyles: Record<string, TextStyleToken>;
+  sharedNode: SharedNodeTheme;
   nodePrimitives: Record<SceneNodePrimitive, NodePrimitiveTheme>;
   containerPrimitives: Record<SceneContainerPrimitive, ContainerPrimitiveTheme>;
   paint: RendererPaintTheme;
@@ -176,6 +212,66 @@ const defaultTheme: RendererTheme = {
       fontSize: 12,
       fontWeight: 400,
       lineHeight: 14
+    },
+    shared_node_decorator: {
+      fontFamily: "Public Sans",
+      fontSize: 10,
+      fontWeight: 600,
+      lineHeight: 12,
+      letterSpacing: 0
+    },
+    shared_node_title: {
+      fontFamily: "Public Sans",
+      fontSize: 16,
+      fontWeight: 600,
+      lineHeight: 19,
+      letterSpacing: -0.32
+    },
+    shared_node_attribute_label: {
+      fontFamily: "Public Sans",
+      fontSize: 10,
+      fontWeight: 400,
+      lineHeight: 12,
+      letterSpacing: 0
+    },
+    shared_node_attribute_value: {
+      fontFamily: "Public Sans",
+      fontSize: 12,
+      fontWeight: 400,
+      lineHeight: 14,
+      letterSpacing: 0
+    }
+  },
+  sharedNode: {
+    width: 224,
+    minHeight: 48,
+    container: {
+      padding: defaultBoxSpacing(0),
+      gap: 0
+    },
+    cornerRadius: 14,
+    strokeWidth: 1.5,
+    strokePlacement: "inside",
+    fill: "#ffffff",
+    stroke: "#387575",
+    text: "#0f172a",
+    decorator: {
+      height: 19,
+      padding: defaultBoxSpacing(0, 14, 0, 14),
+      gap: 4,
+      fill: "#dbe4f0",
+      textStyleRole: "shared_node_decorator"
+    },
+    body: {
+      padding: defaultBoxSpacing(6, 14, 6, 14),
+      gap: 4
+    },
+    titleTextStyleRole: "shared_node_title",
+    attribute: {
+      padding: defaultBoxSpacing(0),
+      gap: 2,
+      labelTextStyleRole: "shared_node_attribute_label",
+      valueTextStyleRole: "shared_node_attribute_value"
     }
   },
   nodePrimitives: {
@@ -362,6 +458,23 @@ function getRequiredFontWeights(theme: RendererTheme): number[] {
   return [...new Set(
     Object.values(theme.textStyles).map((style) => style.fontWeight)
   )].sort((left, right) => left - right);
+}
+
+/** Registers a fully resolved renderer-owned theme for measurement and backend use. */
+export function registerRendererTheme(theme: RendererTheme): string {
+  if (!theme.id.trim()) {
+    throw new Error("Renderer themes require a non-empty id.");
+  }
+  const copied = structuredClone(theme);
+  const availableWeights = new Set(copied.fontFaces.map((face) => face.fontWeight));
+  const incompleteFontWeights = getRequiredFontWeights(copied).filter(
+    (fontWeight) => !availableWeights.has(fontWeight)
+  );
+  themeRegistry.set(copied.id, {
+    theme: copied,
+    incompleteFontWeights
+  });
+  return copied.id;
 }
 
 function isCompleteStagedFontFace(
