@@ -31,10 +31,11 @@ z
 
 ## Tue 9-1
 
-- authored unified node renderer spec
-- created unified node figma reference
-- created unified node sdd
-- better cli error feedback for `-view` type syntax
+- Authored unified node renderer spec
+- Created unified node figma reference
+- Created unified node sdd
+- Better cli error feedback for `-view` type syntax
+- Good-node plan created
 
 ## Mon 8-31
 

@@ -45,6 +45,8 @@ Design-defining details that should be available via CSS or similar:
 Figma Reference (use with Figma MCP):
 https://www.figma.com/design/XugYvQ9C0qi0Hwl88k43Wm/SDD-Node-Visuals?node-id=2002-194&t=WYXVfO7Vz0AbvoPT-1
 
+Note: In the Figma file, the "Components" section contains a full set of line height definitions. Refer to this section when encountering a line height that is set to Figma's "Auto" in the "Node Reference Visuals" section. Do keep in mind that the line heights must be part of the exposed CSS values.
+
 # Proposed Composition of a Node
 
 based on a set of Figma-created Visuals
