@@ -124,20 +124,20 @@ END
     expectBounds(result.positionedScene);
   });
 
-  it.each([{ count: 0, height: 704 }, { count: 4, height: 932 }, { count: 10, height: 1388 }])(
+  it.each([{ count: 0, height: 608 }, { count: 4, height: 788 }, { count: 10, height: 1148 }])(
     "grows only the occupied Service Blueprint lane for $count parked policies", async ({ count, height }) => {
       const c = context(parkedPolicies(count), "service_blueprint");
       const result = await renderServiceBlueprintStagedSvg(c.projection, c.graph, c.view, { detailId: "compact" });
       const before = await positionMeasuredSceneBeforeRouting(result.measuredScene);
       expect(before.root.height).toBe(height);
       const cells = before.root.children as PositionedContainer[];
-      expect(new Set(cells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([64]));
+      expect(new Set(cells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([48]));
       const policyCells = cells.filter(cell => cell.viewMetadata?.serviceBlueprint?.kind === "cell"
         && cell.viewMetadata.serviceBlueprint.laneId.endsWith(":policy"));
-      expect(cells.filter(cell => !policyCells.includes(cell)).every(cell => cell.height === 88)).toBe(true);
+      expect(cells.filter(cell => !policyCells.includes(cell)).every(cell => cell.height === 72)).toBe(true);
       if (count > 1) {
         const stack = policyCells.find(cell => cell.children.length === count)!;
-        expect(stack.children.slice(1).every((child, index) => child.y - stack.children[index]!.y === 76)).toBe(true);
+        expect(stack.children.slice(1).every((child, index) => child.y - stack.children[index]!.y === 60)).toBe(true);
         const single = policyCells.find(cell => cell.children.length === 1)!;
         expect(single.children[0]!.y + single.children[0]!.height / 2).toBe(single.y + single.height / 2);
       }
@@ -146,10 +146,10 @@ END
   );
 
   it("consumes both bundle tier scope and alignment at runtime, including the ungrouped lane", async () => {
-    const c = context(parkedPolicies(4) + '\nProcess PR-999 "Ungrouped"\nEND\n', "service_blueprint");
+    const c = context(parkedPolicies(4) + '\nProcess PR-999 "Ungrouped process with a deliberately long title"\nEND\n', "service_blueprint");
     const initial = await renderServiceBlueprintStagedSvg(c.projection, c.graph, c.view, { detailId: "compact" });
     const diagramCells = initial.measuredScene.root.children as MeasuredContainer[];
-    expect(new Set(diagramCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([64]));
+    expect(new Set(diagramCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([53]));
     expect(diagramCells.some(cell => cell.viewMetadata?.serviceBlueprint?.kind === "cell"
       && cell.viewMetadata.serviceBlueprint.laneId.endsWith(":ungrouped"))).toBe(true);
 
@@ -164,7 +164,7 @@ END
     c.view.conventions.renderer_defaults!.cell_sizing!.node_tier_scope = "lane";
     const scoped = await renderServiceBlueprintStagedSvg(c.projection, c.graph, c.view, { detailId: "compact" });
     expect(scoped.measuredScene.root.height).toBeLessThan(initial.measuredScene.root.height);
-    expect(new Set((scoped.measuredScene.root.children as MeasuredContainer[]).map(cell => cell.resolvedSlotHeight))).toEqual(new Set([48, 64]));
+    expect(new Set((scoped.measuredScene.root.children as MeasuredContainer[]).map(cell => cell.resolvedSlotHeight))).toEqual(new Set([48, 53]));
     expect(geometry(scoped.positionedScene).map(({ id, width, height }) => ({ id, width, height })))
       .toEqual(geometry(initial.positionedScene).map(({ id, width, height }) => ({ id, width, height })));
   });

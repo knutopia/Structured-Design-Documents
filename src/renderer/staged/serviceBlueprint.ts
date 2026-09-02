@@ -10,6 +10,7 @@ import {
 } from "../serviceBlueprintRenderModel.js";
 import type {
   MeasuredScene,
+  NodeDecoratorMode,
   PositionedScene,
   RendererScene,
   RoutingIntent,
@@ -18,7 +19,6 @@ import type {
   SceneItem,
   SceneNode,
   ViewMetadata,
-  WidthPolicy,
   StagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
@@ -30,7 +30,6 @@ import {
 } from "./serviceBlueprintMiddleLayer.js";
 import { decorateServiceBlueprintPositionedScene } from "./serviceBlueprintDecorations.js";
 import { buildServiceBlueprintRoutingStages } from "./serviceBlueprintRouting.js";
-import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import {
   measureScene,
   type StagedRendererPipelineResult
@@ -40,7 +39,7 @@ import {
   positionMeasuredSceneBeforeRouting,
   validateServiceBlueprintCellContents
 } from "./macroLayout.js";
-import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
+import { buildDiagramRootContainer, buildPortSpec, buildSharedNode } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
   renderPositionedSceneToPng,
@@ -57,6 +56,7 @@ const CELL_PADDING = 12;
 
 interface SceneBuildContext {
   cellSizing: RendererCellSizingConfig;
+  nodeDecoratorMode: NodeDecoratorMode;
   renderNodesById: ReadonlyMap<string, ServiceBlueprintRenderNode>;
 }
 
@@ -110,27 +110,6 @@ function buildRootChrome(): SceneContainer["chrome"] {
   };
 }
 
-function buildNodeWidthPolicy(nodeType: string): WidthPolicy {
-  switch (nodeType) {
-    case "Step":
-      return {
-        preferred: "narrow",
-        allowed: ["narrow", "standard", "wide"]
-      };
-    case "SystemAction":
-    case "DataEntity":
-      return {
-        preferred: "standard",
-        allowed: ["narrow", "standard", "wide"]
-      };
-    default:
-      return {
-        preferred: "standard",
-        allowed: ["standard", "wide"]
-      };
-  }
-}
-
 function buildServiceBlueprintNodePorts(): SceneNode["ports"] {
   return [
     buildPortSpec("flow_in", "flow_in", "west"),
@@ -148,7 +127,6 @@ function buildServiceBlueprintNodePorts(): SceneNode["ports"] {
 
 function buildNodeClasses(node: ServiceBlueprintRenderNode, extraClasses: string[] = []): string[] {
   return [
-    "semantic_node",
     "service_blueprint_node",
     `shape-${sanitizeToken(node.shape)}`,
     `type-${sanitizeToken(node.type)}`,
@@ -160,15 +138,18 @@ function buildNodeClasses(node: ServiceBlueprintRenderNode, extraClasses: string
 function buildBlueprintNode(
   node: ServiceBlueprintRenderNode,
   cell: ServiceBlueprintMiddleCell,
+  nodeDecoratorMode: NodeDecoratorMode,
   extraClasses: string[] = []
 ): SceneNode {
   return {
-    ...buildCardNode({
-      id: node.id,
-      role: node.type.toLowerCase(),
+    ...buildSharedNode({
+      title: node.title,
+      decoratorMode: nodeDecoratorMode,
+      nodeType: node.type,
+      nodeId: node.id,
+      attributes: []
+    }, {
       classes: buildNodeClasses(node, extraClasses),
-      widthPolicy: buildNodeWidthPolicy(node.type),
-      content: buildContentBlocksFromLabelLines(`${node.id}__content`, node.labelLines),
       ports: buildServiceBlueprintNodePorts()
     }),
     viewMetadata: {
@@ -229,7 +210,7 @@ function buildCellContainer(
     .map((nodeId) => context.renderNodesById.get(nodeId))
     .filter((node): node is ServiceBlueprintRenderNode => node !== undefined)
     .sort((left, right) => left.authorOrder - right.authorOrder || left.id.localeCompare(right.id))
-    .map((node) => buildBlueprintNode(node, cell, cellClasses));
+    .map((node) => buildBlueprintNode(node, cell, context.nodeDecoratorMode, cellClasses));
   const children: SceneItem[] = [...semanticNodes];
 
   return {
@@ -370,6 +351,11 @@ function buildServiceBlueprintRenderContext(
   const middleLayer = buildServiceBlueprintMiddleLayer(model);
   const context: SceneBuildContext = {
     cellSizing: resolveCellSizingPolicy(view),
+    nodeDecoratorMode: settings.nodeDecoratorMode ?? {
+      id: "none",
+      showNodeType: false,
+      showNodeId: false
+    },
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node]))
   };
   const rootChildren: SceneItem[] = [...middleLayer.cells]

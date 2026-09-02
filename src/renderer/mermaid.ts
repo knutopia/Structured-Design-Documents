@@ -315,7 +315,7 @@ function renderServiceBlueprintLane(
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, node.labelLines, display.shape, display.dashed, `${indent}  `);
+    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }
@@ -349,7 +349,7 @@ export function renderServiceBlueprintMermaid(model: ServiceBlueprintRenderModel
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, node.labelLines, display.shape, display.dashed, "  ");
+    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, "  ");
   }
 
   for (const edge of model.edges) {

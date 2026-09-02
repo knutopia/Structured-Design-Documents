@@ -259,8 +259,20 @@ function renderContainerChrome(
       return;
     }
     const paintRadius = isSceneRoot ? Math.max(0, radius - inset) : radius;
+    const portabilityClass = (() => {
+      if (container.classes.includes("service_blueprint_cell")) {
+        return "scene-container__chrome--hidden";
+      }
+      if (container.classes.includes("service_blueprint_band_column")) {
+        return "scene-container__chrome--transparent";
+      }
+      if (isSceneRoot && container.classes.includes("service_blueprint")) {
+        return "scene-container__chrome--canvas";
+      }
+      return undefined;
+    })();
     lines.push(
-      `  <rect class="${className}" x="${formatNumber(container.x + inset)}" y="${formatNumber(container.y + inset)}" width="${formatNumber(width)}" height="${formatNumber(paintHeight)}" rx="${formatNumber(paintRadius)}" ry="${formatNumber(paintRadius)}"/>`
+      `  <rect class="${buildClassList(className, portabilityClass)}" x="${formatNumber(container.x + inset)}" y="${formatNumber(container.y + inset)}" width="${formatNumber(width)}" height="${formatNumber(paintHeight)}" rx="${formatNumber(paintRadius)}" ry="${formatNumber(paintRadius)}"/>`
     );
   };
 
@@ -700,17 +712,22 @@ function renderEdgeLabel(
   ].join("\n");
 }
 
-function renderLineDecoration(decoration: Extract<PositionedDecoration, { kind: "line" }>): string {
+function renderLineDecoration(
+  decoration: Extract<PositionedDecoration, { kind: "line" }>
+): string {
   const classList = buildClassList(
     "scene-decoration",
     "scene-decoration-line",
     `paint-${sanitizeToken(decoration.paintGroup)}`,
     ...decoration.classes.map((className) => sanitizeToken(className))
   );
+  const portabilityClass = decoration.classes.includes("service_blueprint_separator")
+    ? "scene-decoration__line--service-blueprint-separator"
+    : undefined;
 
   return [
     `<g id="scene-decoration-${sanitizeToken(decoration.id)}" class="${classList}" data-decoration-id="${escapeXml(decoration.id)}">`,
-    `  <line class="scene-decoration__line" x1="${formatNumber(decoration.from.x)}" y1="${formatNumber(decoration.from.y)}" x2="${formatNumber(decoration.to.x)}" y2="${formatNumber(decoration.to.y)}"/>`,
+    `  <line class="${buildClassList("scene-decoration__line", portabilityClass)}" x1="${formatNumber(decoration.from.x)}" y1="${formatNumber(decoration.from.y)}" x2="${formatNumber(decoration.to.x)}" y2="${formatNumber(decoration.to.y)}"/>`,
     "</g>"
   ].join("\n");
 }
@@ -734,7 +751,14 @@ function renderTextDecoration(
     [decoration.text],
     style,
     style.lineHeight,
-    buildTextClassList(resolvedRole, "text")
+    buildClassList(
+      buildTextClassList(resolvedRole, "text"),
+      decoration.classes.some((className) =>
+        className === "service_blueprint_lane_title" || className === "service_blueprint_separator_title"
+      )
+        ? "scene-text--service-blueprint-secondary"
+        : undefined
+    )
   );
 
   return [
@@ -799,6 +823,11 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   }
   if (isServiceBlueprint) {
     lines.push(
+      `.scene-container__chrome--canvas { fill: ${paint.palette.canvas}; }`,
+      `.scene-container__chrome--hidden { display: none; }`,
+      `.scene-container__chrome--transparent { fill: transparent; stroke: transparent; }`,
+      `.scene-decoration__line--service-blueprint-separator { stroke: ${paint.palette.containerStroke}; stroke-dasharray: 6 4; }`,
+      `.scene-text--service-blueprint-secondary { fill: ${paint.palette.secondaryText}; }`,
       `.view-service_blueprint .service_blueprint_cell .scene-container__chrome, .view-service_blueprint .service_blueprint_cell .scene-container__header-band { display: none; }`,
       `.view-service_blueprint .service_blueprint_band_column .scene-container__chrome, .view-service_blueprint .service_blueprint_band_column .scene-container__header-band { fill: transparent; stroke: transparent; }`,
       `.view-service_blueprint .service_blueprint_separator .scene-decoration__line { stroke: ${paint.palette.containerStroke}; stroke-dasharray: 6 4; }`,

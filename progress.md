@@ -35,6 +35,7 @@ z
 - Created note for future connector label improvement
 - Planned new node adoption
 - Phase 1 of new node adoption done
+- Phase 2 done
 
 ## Tue 9-1
 

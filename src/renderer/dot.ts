@@ -263,7 +263,7 @@ function renderServiceBlueprintNode(node: ServiceBlueprintRenderNode, indent: st
     `${indent}${quoteId(node.id)}${formatAttributes({
       shape: node.shape,
       style: node.style,
-      label: formatMultilineLabel(node.labelLines)
+      label: formatMultilineLabel([node.title])
     })};`
   );
 }
