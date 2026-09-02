@@ -10,6 +10,7 @@ import {
 } from "../scenarioFlowRenderModel.js";
 import type {
   MeasuredScene,
+  NodeDecoratorMode,
   PositionedScene,
   RendererScene,
   RoutingIntent,
@@ -18,17 +19,15 @@ import type {
   SceneItem,
   SceneNode,
   ViewMetadata,
-  WidthPolicy,
   StagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
-import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import { positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
 import { measureScene } from "./pipeline.js";
 import {
-  buildCardNode,
   buildDiagramRootContainer,
-  buildPortSpec
+  buildPortSpec,
+  buildSharedNode
 } from "./sceneBuilders.js";
 import { decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
 import {
@@ -65,6 +64,7 @@ interface ScenarioFlowRenderContext {
 
 interface SceneBuildContext {
   cellSizing: RendererCellSizingConfig;
+  nodeDecoratorMode: NodeDecoratorMode;
   renderNodesById: ReadonlyMap<string, ScenarioFlowRenderNode>;
   placementByNodeId: ReadonlyMap<string, ScenarioFlowNodePlacement>;
 }
@@ -138,27 +138,6 @@ function buildRootChrome(): SceneContainer["chrome"] {
   };
 }
 
-function buildNodeWidthPolicy(nodeType: string): WidthPolicy {
-  switch (nodeType) {
-    case "Step":
-      return {
-        preferred: "standard",
-        allowed: ["narrow", "standard", "wide"]
-      };
-    case "Place":
-    case "ViewState":
-      return {
-        preferred: "narrow",
-        allowed: ["narrow", "standard", "wide"]
-      };
-    default:
-      return {
-        preferred: "standard",
-        allowed: ["standard", "wide"]
-      };
-  }
-}
-
 function buildScenarioFlowNodePorts(): SceneNode["ports"] {
   return [
     buildPortSpec("flow_in", "flow_in", "west"),
@@ -172,7 +151,6 @@ function buildScenarioFlowNodePorts(): SceneNode["ports"] {
 
 function buildNodeClasses(node: ScenarioFlowRenderNode, placement: ScenarioFlowNodePlacement): string[] {
   return [
-    "semantic_node",
     "scenario_flow_node",
     `scenario-flow-lane-${sanitizeToken(placement.laneId)}`,
     `scenario-flow-role-${sanitizeToken(placement.placementRole)}`,
@@ -201,15 +179,18 @@ function buildNodeViewMetadata(placement: ScenarioFlowNodePlacement): ViewMetada
 
 function buildScenarioFlowNode(
   node: ScenarioFlowRenderNode,
-  placement: ScenarioFlowNodePlacement
+  placement: ScenarioFlowNodePlacement,
+  nodeDecoratorMode: NodeDecoratorMode
 ): SceneNode {
   return {
-    ...buildCardNode({
-      id: node.id,
-      role: node.type.toLowerCase(),
+    ...buildSharedNode({
+      title: node.title,
+      decoratorMode: nodeDecoratorMode,
+      nodeType: node.type,
+      nodeId: node.id,
+      attributes: []
+    }, {
       classes: buildNodeClasses(node, placement),
-      widthPolicy: buildNodeWidthPolicy(node.type),
-      content: buildContentBlocksFromLabelLines(`${node.id}__content`, node.labelLines),
       ports: buildScenarioFlowNodePorts()
     }),
     viewMetadata: buildNodeViewMetadata(placement)
@@ -264,7 +245,7 @@ function buildCellContainer(
       if (!placement) {
         return undefined;
       }
-      return buildScenarioFlowNode(node, placement);
+      return buildScenarioFlowNode(node, placement, context.nodeDecoratorMode);
     })
     .filter((node): node is SceneNode => node !== undefined);
 
@@ -425,6 +406,11 @@ function buildScenarioFlowRenderContext(
   const middleLayer = buildScenarioFlowMiddleLayer(model);
   const context: SceneBuildContext = {
     cellSizing: resolveCellSizingPolicy(view),
+    nodeDecoratorMode: settings.nodeDecoratorMode ?? {
+      id: "none",
+      showNodeType: false,
+      showNodeId: false
+    },
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node] as const)),
     placementByNodeId: new Map(middleLayer.placements.map((placement) => [placement.nodeId, placement] as const))
   };

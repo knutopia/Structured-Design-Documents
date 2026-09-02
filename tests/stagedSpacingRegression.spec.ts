@@ -74,13 +74,13 @@ describe("spacing regression proof cases", () => {
   it.each(["compact", "detailed"])("trims the sdd_for_sdd Scenario Flow to occupied lane rows (%s)", async detailId => {
     const c = context(scenarioSource, "scenario_flow");
     const result = await renderScenarioFlowStagedSvg(c.projection, c.graph, c.view, { detailId });
-    expect(result.positionedScene.root).toMatchObject({ width: 1452, height: 946 });
+    expect(result.positionedScene.root).toMatchObject({ width: 1508, height: 880 });
     expect(geometry(result.positionedScene)).toHaveLength(15);
     const stepCells = scenarioCells(result.positionedScene, "step");
     const placeCells = scenarioCells(result.positionedScene, "place");
     expect(new Set(stepCells.map(cell => cell.y)).size).toBe(6); // includes the internal component separator
     expect(new Set(placeCells.map(cell => cell.y)).size).toBe(1);
-    expect(new Set(stepCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([64]));
+    expect(new Set(stepCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([53]));
     expect(new Set(placeCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([48]));
     expect(placeCells[0]!.height).toBe(242);
     expectBounds(result.positionedScene);

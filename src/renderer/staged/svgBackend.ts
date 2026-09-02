@@ -759,6 +759,13 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
       item.kind === "node" ? item.sharedNode !== undefined : item.children.some(visit);
     return visit(scene.root);
   })();
+  const hasDashedSharedNodes = (() => {
+    const visit = (item: PositionedItem): boolean =>
+      item.kind === "node"
+        ? item.sharedNode !== undefined && item.classes.some((className) => sanitizeToken(className) === "chrome-dashed")
+        : item.children.some(visit);
+    return visit(scene.root);
+  })();
   const lines = [
     `.staged-svg { background: ${paint.canvasBackground}; }`,
     `.scene-container__chrome { fill: ${paint.palette.containerFill}; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`,
@@ -786,6 +793,9 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   }
   if (hasLineDecorations) {
     lines.push(`.scene-decoration__line { fill: none; stroke: ${paint.palette.containerStroke}; stroke-width: ${formatNumber(paint.strokeWidth)}; }`);
+  }
+  if (hasDashedSharedNodes) {
+    lines.push(`.scene-node.chrome-dashed .shared-node__outline { stroke-dasharray: 8 6; }`);
   }
   if (isServiceBlueprint) {
     lines.push(

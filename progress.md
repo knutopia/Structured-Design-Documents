@@ -33,6 +33,8 @@ z
 
 - Visual issues correction successful
 - Created note for future connector label improvement
+- Planned new node adoption
+- Phase 1 of new node adoption done
 
 ## Tue 9-1
 
