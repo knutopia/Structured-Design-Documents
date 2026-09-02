@@ -12,6 +12,11 @@ import {
 } from "../src/renderer/staged/sharedNodeRenderer.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import {
+  normalizeSharedNodeAttributes,
+  titleCaseSharedNodeAttributeLabel
+} from "../src/renderer/staged/sharedNode.js";
+import type { RendererDiagnostic } from "../src/renderer/staged/diagnostics.js";
+import {
   getRendererTheme,
   registerRendererTheme
 } from "../src/renderer/staged/theme.js";
@@ -22,9 +27,9 @@ const none: NodeDecoratorMode = { id: "none", showNodeType: false, showNodeId: f
 const typeOnly: NodeDecoratorMode = { id: "type", showNodeType: true, showNodeId: false };
 const typeAndId: NodeDecoratorMode = { id: "type,id", showNodeType: true, showNodeId: true };
 const acceptanceAttributes = [
-  { groupId: "description", label: "description", value: "First value" },
-  { groupId: "owner", label: "owner", value: "Design" },
-  { groupId: "description", label: "description", value: "Second value" }
+  { groupId: "event", label: "event:", value: "E-050 Alert Emitted" },
+  { groupId: "experience", label: "experience:", value: "J-050 Review Risk Alert" },
+  { groupId: "event", label: "event:", value: "E-051 Review Completed Event" }
 ];
 const acceptanceRequests = [
   { title: "Node Title", decoratorMode: typeAndId, nodeType: "Component", nodeId: "C-010a", attributes: [] },
@@ -143,15 +148,40 @@ describe("shared node renderer", () => {
     }))).toEqual([
       {
         id: "description",
-        label: ["description"],
+        label: ["Description"],
         values: [["First value"], ["Second value"]]
       },
       {
         id: "owner",
-        label: ["owner"],
+        label: ["Owner"],
         values: [["Design"]]
       }
     ]);
+  });
+
+  it("owns deterministic editorial title casing for attribute labels", () => {
+    const examples = [
+      ["implemented by:", "Implemented by:"],
+      ["API URL for iOS:", "API URL for iOS:"],
+      ["state-of-the-art outcome:", "State-of-the-Art Outcome:"],
+      ["the owner and a reviewer", "The Owner and a Reviewer"]
+    ] as const;
+    for (const [input, expected] of examples) {
+      expect(titleCaseSharedNodeAttributeLabel(input)).toBe(expected);
+      expect(titleCaseSharedNodeAttributeLabel(expected)).toBe(expected);
+    }
+
+    const diagnostics: RendererDiagnostic[] = [];
+    const groups = normalizeSharedNodeAttributes("C-CASE", [
+      { groupId: "event", label: "event:", value: "E-050 Alert Emitted" },
+      { groupId: "event", label: "Event:", value: "E-051 Review Completed Event" }
+    ], diagnostics);
+    expect(groups).toEqual([{
+      id: "event",
+      label: "Event:",
+      values: ["E-050 Alert Emitted", "E-051 Review Completed Event"]
+    }]);
+    expect(diagnostics).toEqual([]);
   });
 
   it("emits stable structural SVG and exposes all canonical line heights as CSS values", async () => {
@@ -171,10 +201,23 @@ describe("shared node renderer", () => {
     expect(rendered.svg).toContain('class="shared-node__attribute-group" data-attribute-group="description"');
     expect(rendered.svg).toContain("--sdd-shared-node-decorator-line-height: 12px");
     expect(rendered.svg).toContain("--sdd-shared-node-title-line-height: 19px");
+    expect(rendered.svg).toContain("--sdd-shared-node-title-font-weight: 600");
     expect(rendered.svg).toContain("--sdd-shared-node-attribute-label-line-height: 12px");
     expect(rendered.svg).toContain("--sdd-shared-node-attribute-value-line-height: 14px");
     expect(rendered.svg).toContain("--sdd-shared-node-title-letter-spacing: -0.32px");
-    expect(rendered.svg).toContain('<tspan x="31.5" dy="19">destination</tspan>');
+    expect(rendered.svg).toContain('<tspan x="31.5" y="57.8">Book a flight to a chosen</tspan>');
+    expect(rendered.svg).toContain('<tspan x="31.5" y="76.8">destination</tspan>');
+    expect(rendered.svg).not.toContain("dominant-baseline");
+    expect(rendered.svg).not.toMatch(/<tspan[^>]+\bdy=/);
+
+    const chrome = rendered.svg.indexOf('class="shared-node__chrome"');
+    const decorator = rendered.svg.indexOf('class="shared-node__decorator-header"');
+    const outline = rendered.svg.indexOf('class="shared-node__outline"');
+    expect(chrome).toBeGreaterThan(-1);
+    expect(decorator).toBeGreaterThan(chrome);
+    expect(outline).toBeGreaterThan(decorator);
+    expect(rendered.svg).toContain(".shared-node__chrome { fill: #ffffff; stroke: none; }");
+    expect(rendered.svg).toContain(".shared-node__outline { fill: none; stroke: #387575; stroke-width: 1.5; }");
   });
 
   it("matches the committed standalone Figma acceptance matrix", async () => {

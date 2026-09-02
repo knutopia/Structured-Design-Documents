@@ -29,6 +29,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 9-2
+
+- Visual issues correction
+
 ## Tue 9-1
 
 - Authored unified node renderer spec
@@ -36,7 +40,7 @@ z
 - Created unified node sdd
 - Better cli error feedback for `-view` type syntax
 - Good-node plan created
-- Goof-node implemented, tracking visual issues
+- Good-node implemented, tracking visual issues
 
 ## Mon 8-31
 

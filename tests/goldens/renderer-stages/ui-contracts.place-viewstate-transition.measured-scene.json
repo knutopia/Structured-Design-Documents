@@ -436,11 +436,11 @@
                     "kind": "text",
                     "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "data"
+                      "Data"
                     ],
                     "x": 15.5,
                     "y": 30.5,
-                    "width": 20.665,
+                    "width": 21.635,
                     "height": 12,
                     "lineHeight": 12,
                     "region": "primary"
@@ -489,11 +489,11 @@
                           "kind": "text",
                           "textStyleRole": "shared_node_attribute_label",
                           "lines": [
-                            "data"
+                            "Data"
                           ],
                           "x": 15.5,
                           "y": 30.5,
-                          "width": 20.665,
+                          "width": 21.635,
                           "height": 12,
                           "lineHeight": 12,
                           "region": "primary"

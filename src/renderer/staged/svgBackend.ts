@@ -20,6 +20,11 @@ import {
 import { getContainerPrimitiveTheme, getNodePrimitiveTheme, resolveTextRoleForBlock } from "./primitives.js";
 import { resolveRendererTheme, type RendererTheme, type TextStyleToken } from "./theme.js";
 import { buildEmbeddedFontFaceStyleElements, renderSvgToPng } from "../svgArtifacts.js";
+import {
+  calculateAlphabeticBaselineOffset,
+  createTextMeasurementService,
+  type TextMeasurementService
+} from "./textMeasurement.js";
 
 export interface StagedSvgArtifact {
   svg: string;
@@ -198,6 +203,34 @@ function renderCenteredTextBlock(
   ].join("\n");
 }
 
+function renderSharedTextBlock(
+  x: number,
+  y: number,
+  height: number,
+  lines: string[],
+  style: TextStyleToken,
+  lineHeight: number,
+  classes: string,
+  measurement: TextMeasurementService
+): string {
+  const totalLineHeight = lines.length * lineHeight;
+  const firstLineTop = y + (height - totalLineHeight) / 2;
+  const baselineOffset = calculateAlphabeticBaselineOffset(
+    measurement.getVerticalMetrics(style),
+    lineHeight
+  );
+  const baselines = lines.map((_, index) => firstLineTop + baselineOffset + index * lineHeight);
+  const lineMarkup = lines.map((line, index) =>
+    `    <tspan x="${formatNumber(x)}" y="${formatNumber(baselines[index])}">${escapeXml(line)}</tspan>`
+  );
+
+  return [
+    `<text class="${classes}" x="${formatNumber(x)}" y="${formatNumber(baselines[0] ?? firstLineTop + baselineOffset)}">`,
+    ...lineMarkup,
+    "  </text>"
+  ].join("\n");
+}
+
 function renderContainerChrome(
   container: PositionedContainer,
   diagnostics: RendererDiagnostic[],
@@ -280,6 +313,10 @@ function renderSharedNodeChrome(node: PositionedNode, theme: RendererTheme, clas
     lines.push(`  <path class="shared-node__decorator-header" d="${path}"/>`);
   }
 
+  lines.push(
+    `  <rect class="shared-node__outline" x="${formatNumber(node.x + borderInset)}" y="${formatNumber(node.y + borderInset)}" width="${formatNumber(Math.max(0, node.width - nodeTheme.strokeWidth))}" height="${formatNumber(Math.max(0, node.height - nodeTheme.strokeWidth))}" rx="${formatNumber(Math.max(0, nodeTheme.cornerRadius - borderInset))}" ry="${formatNumber(Math.max(0, nodeTheme.cornerRadius - borderInset))}"/>`
+  );
+
   lines.push("</g>");
   return lines.join("\n");
 }
@@ -355,7 +392,8 @@ function resolveBlockTextOrigin(
 function renderNodeLabels(
   node: PositionedNode,
   diagnostics: RendererDiagnostic[],
-  theme: RendererTheme
+  theme: RendererTheme,
+  measurement: TextMeasurementService
 ): string | undefined {
   if (node.content.length === 0) {
     return undefined;
@@ -365,16 +403,18 @@ function renderNodeLabels(
   if (node.sharedNode) {
     const renderSharedBlock = (block: MeasuredContentBlock, roleClass: string): string[] => {
       const style = getTextStyleForBackend(theme, block.textStyleRole, node.id, diagnostics);
-      const markup = renderCenteredTextBlock(
+      const markup = renderSharedTextBlock(
         node.x + block.x,
         node.y + block.y,
         block.height,
         block.lines,
+        style,
         block.lineHeight,
         buildClassList(
           buildTextClassList(block.textStyleRole, block.kind, block.region),
           roleClass
-        )
+        ),
+        measurement
       );
       return indentLines(markup, 4);
     };
@@ -462,6 +502,7 @@ function collectPaintElements(
   groups: PaintElementMap,
   diagnostics: RendererDiagnostic[],
   theme: RendererTheme,
+  measurement: TextMeasurementService,
   isSceneRoot = false
 ): void {
   if (item.kind === "container") {
@@ -476,7 +517,7 @@ function collectPaintElements(
     }
 
     for (const child of item.children) {
-      collectPaintElements(child, groups, diagnostics, theme);
+      collectPaintElements(child, groups, diagnostics, theme, measurement);
     }
     return;
   }
@@ -486,7 +527,7 @@ function collectPaintElements(
     groups.nodes.push(nodeChrome);
   }
 
-  const nodeLabels = renderNodeLabels(item, diagnostics, theme);
+  const nodeLabels = renderNodeLabels(item, diagnostics, theme, measurement);
   if (nodeLabels) {
     groups.labels.push(nodeLabels);
   }
@@ -758,8 +799,9 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   if (hasSharedNodes) {
     lines.push(
       `.staged-svg { --sdd-shared-node-font-family: '${theme.fontFamily}'; --sdd-shared-node-width: ${formatNumber(shared.width)}px; --sdd-shared-node-min-height: ${formatNumber(shared.minHeight)}px; --sdd-shared-node-container-padding-top: ${formatNumber(shared.container.padding.top)}px; --sdd-shared-node-container-padding-right: ${formatNumber(shared.container.padding.right)}px; --sdd-shared-node-container-padding-bottom: ${formatNumber(shared.container.padding.bottom)}px; --sdd-shared-node-container-padding-left: ${formatNumber(shared.container.padding.left)}px; --sdd-shared-node-container-gap: ${formatNumber(shared.container.gap)}px; --sdd-shared-node-radius: ${formatNumber(shared.cornerRadius)}px; --sdd-shared-node-stroke-width: ${formatNumber(shared.strokeWidth)}px; --sdd-shared-node-stroke-placement: ${shared.strokePlacement}; --sdd-shared-node-fill: ${shared.fill}; --sdd-shared-node-stroke: ${shared.stroke}; --sdd-shared-node-text: ${shared.text}; --sdd-shared-node-decorator-height: ${formatNumber(shared.decorator.height)}px; --sdd-shared-node-decorator-gap: ${formatNumber(shared.decorator.gap)}px; --sdd-shared-node-decorator-padding-top: ${formatNumber(shared.decorator.padding.top)}px; --sdd-shared-node-decorator-padding-right: ${formatNumber(shared.decorator.padding.right)}px; --sdd-shared-node-decorator-padding-bottom: ${formatNumber(shared.decorator.padding.bottom)}px; --sdd-shared-node-decorator-padding-left: ${formatNumber(shared.decorator.padding.left)}px; --sdd-shared-node-decorator-fill: ${shared.decorator.fill}; --sdd-shared-node-body-padding-top: ${formatNumber(shared.body.padding.top)}px; --sdd-shared-node-body-padding-right: ${formatNumber(shared.body.padding.right)}px; --sdd-shared-node-body-padding-bottom: ${formatNumber(shared.body.padding.bottom)}px; --sdd-shared-node-body-padding-left: ${formatNumber(shared.body.padding.left)}px; --sdd-shared-node-body-gap: ${formatNumber(shared.body.gap)}px; --sdd-shared-node-attribute-padding-top: ${formatNumber(shared.attribute.padding.top)}px; --sdd-shared-node-attribute-padding-right: ${formatNumber(shared.attribute.padding.right)}px; --sdd-shared-node-attribute-padding-bottom: ${formatNumber(shared.attribute.padding.bottom)}px; --sdd-shared-node-attribute-padding-left: ${formatNumber(shared.attribute.padding.left)}px; --sdd-shared-node-attribute-gap: ${formatNumber(shared.attribute.gap)}px; --sdd-shared-node-decorator-font-size: ${formatNumber(decoratorText.fontSize)}px; --sdd-shared-node-decorator-font-weight: ${decoratorText.fontWeight}; --sdd-shared-node-decorator-line-height: ${formatNumber(decoratorText.lineHeight)}px; --sdd-shared-node-decorator-letter-spacing: ${formatNumber(decoratorText.letterSpacing ?? 0)}px; --sdd-shared-node-title-font-size: ${formatNumber(titleText.fontSize)}px; --sdd-shared-node-title-font-weight: ${titleText.fontWeight}; --sdd-shared-node-title-line-height: ${formatNumber(titleText.lineHeight)}px; --sdd-shared-node-title-letter-spacing: ${formatNumber(titleText.letterSpacing ?? 0)}px; --sdd-shared-node-attribute-label-font-size: ${formatNumber(attributeLabelText.fontSize)}px; --sdd-shared-node-attribute-label-font-weight: ${attributeLabelText.fontWeight}; --sdd-shared-node-attribute-label-line-height: ${formatNumber(attributeLabelText.lineHeight)}px; --sdd-shared-node-attribute-label-letter-spacing: ${formatNumber(attributeLabelText.letterSpacing ?? 0)}px; --sdd-shared-node-attribute-value-font-size: ${formatNumber(attributeValueText.fontSize)}px; --sdd-shared-node-attribute-value-font-weight: ${attributeValueText.fontWeight}; --sdd-shared-node-attribute-value-line-height: ${formatNumber(attributeValueText.lineHeight)}px; --sdd-shared-node-attribute-value-letter-spacing: ${formatNumber(attributeValueText.letterSpacing ?? 0)}px; }`,
-      `.shared-node__chrome { fill: ${shared.fill}; stroke: ${shared.stroke}; stroke-width: ${formatNumber(shared.strokeWidth)}; }`,
+      `.shared-node__chrome { fill: ${shared.fill}; stroke: none; }`,
       `.shared-node__decorator-header { fill: ${shared.decorator.fill}; }`,
+      `.shared-node__outline { fill: none; stroke: ${shared.stroke}; stroke-width: ${formatNumber(shared.strokeWidth)}; }`,
       `.shared-node .scene-text { fill: ${shared.text}; }`
     );
     if (scene.viewId === "shared_node") {
@@ -800,6 +842,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
   const theme = resolvedTheme.theme;
   const diagnostics: RendererDiagnostic[] = [...scene.diagnostics, ...resolvedTheme.diagnostics];
   const groups = buildPaintElementMap();
+  const measurement = createTextMeasurementService(theme.fontFaces);
 
   if (scene.root.width <= 0 || scene.root.height <= 0) {
     diagnostics.push(createBackendDiagnostic(
@@ -809,7 +852,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
     ));
   }
 
-  collectPaintElements(scene.root, groups, diagnostics, theme, true);
+  collectPaintElements(scene.root, groups, diagnostics, theme, measurement, true);
 
   for (const edge of scene.edges) {
     const rendered = renderEdge(edge, diagnostics);

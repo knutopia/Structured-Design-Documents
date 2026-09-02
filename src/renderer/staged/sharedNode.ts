@@ -36,6 +36,44 @@ interface MeasureSharedNodeOptions {
   wrapText: (text: string, maxWidth: number, style: TextStyleToken) => WrappedSharedNodeText;
 }
 
+const ATTRIBUTE_LABEL_MINOR_WORDS = new Set([
+  "a", "an", "and", "as", "at", "but", "by", "for", "in", "nor", "of", "on", "or",
+  "per", "the", "to", "via", "vs"
+]);
+
+function isProtectedCase(word: string): boolean {
+  const letters = word.replace(/[^A-Za-z]/g, "");
+  if (letters.length < 2) return false;
+  if (letters === letters.toUpperCase()) return true;
+  return /[A-Z]/.test(letters.slice(1)) && /[a-z]/.test(letters);
+}
+
+function titleCaseLexicalPart(part: string, isFirstWord: boolean): string {
+  const match = part.match(/^([^A-Za-z]*)(.*?)([^A-Za-z]*)$/);
+  if (!match || !match[2]) return part;
+  const [, prefix, lexical, suffix] = match;
+  if (isProtectedCase(lexical)) return `${prefix}${lexical}${suffix}`;
+
+  const lowercase = lexical.toLowerCase();
+  const formatted = !isFirstWord && ATTRIBUTE_LABEL_MINOR_WORDS.has(lowercase)
+    ? lowercase
+    : lowercase.replace(/[A-Za-z]/, (letter) => letter.toUpperCase());
+  return `${prefix}${formatted}${suffix}`;
+}
+
+export function titleCaseSharedNodeAttributeLabel(label: string): string {
+  let lexicalWordIndex = 0;
+  return label.trim().replace(/\S+/g, (word) => {
+    const formatted = word.split(/(-)/).map((part) => {
+      if (part === "-") return part;
+      const isFirstWord = lexicalWordIndex === 0;
+      if (/[A-Za-z]/.test(part)) lexicalWordIndex += 1;
+      return titleCaseLexicalPart(part, isFirstWord);
+    }).join("");
+    return formatted;
+  });
+}
+
 function roundMetric(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
@@ -70,7 +108,7 @@ export function normalizeSharedNodeAttributes(
 
   attributes.forEach((attribute, index) => {
     const groupId = attribute.groupId.trim();
-    const label = attribute.label.trim();
+    const label = titleCaseSharedNodeAttributeLabel(attribute.label);
     const value = attribute.value.trim();
     if (!groupId || !label || !value) {
       diagnostics.push(createMeasureDiagnostic(

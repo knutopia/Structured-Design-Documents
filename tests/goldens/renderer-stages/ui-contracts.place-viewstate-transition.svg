@@ -37,8 +37,9 @@
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
     .staged-svg { --sdd-shared-node-font-family: 'Public Sans'; --sdd-shared-node-width: 224px; --sdd-shared-node-min-height: 48px; --sdd-shared-node-container-padding-top: 0px; --sdd-shared-node-container-padding-right: 0px; --sdd-shared-node-container-padding-bottom: 0px; --sdd-shared-node-container-padding-left: 0px; --sdd-shared-node-container-gap: 0px; --sdd-shared-node-radius: 14px; --sdd-shared-node-stroke-width: 1.5px; --sdd-shared-node-stroke-placement: inside; --sdd-shared-node-fill: #ffffff; --sdd-shared-node-stroke: #387575; --sdd-shared-node-text: #0f172a; --sdd-shared-node-decorator-height: 19px; --sdd-shared-node-decorator-gap: 4px; --sdd-shared-node-decorator-padding-top: 0px; --sdd-shared-node-decorator-padding-right: 14px; --sdd-shared-node-decorator-padding-bottom: 0px; --sdd-shared-node-decorator-padding-left: 14px; --sdd-shared-node-decorator-fill: #dbe4f0; --sdd-shared-node-body-padding-top: 6px; --sdd-shared-node-body-padding-right: 14px; --sdd-shared-node-body-padding-bottom: 6px; --sdd-shared-node-body-padding-left: 14px; --sdd-shared-node-body-gap: 4px; --sdd-shared-node-attribute-padding-top: 0px; --sdd-shared-node-attribute-padding-right: 0px; --sdd-shared-node-attribute-padding-bottom: 0px; --sdd-shared-node-attribute-padding-left: 0px; --sdd-shared-node-attribute-gap: 2px; --sdd-shared-node-decorator-font-size: 10px; --sdd-shared-node-decorator-font-weight: 600; --sdd-shared-node-decorator-line-height: 12px; --sdd-shared-node-decorator-letter-spacing: 0px; --sdd-shared-node-title-font-size: 16px; --sdd-shared-node-title-font-weight: 600; --sdd-shared-node-title-line-height: 19px; --sdd-shared-node-title-letter-spacing: -0.32px; --sdd-shared-node-attribute-label-font-size: 10px; --sdd-shared-node-attribute-label-font-weight: 400; --sdd-shared-node-attribute-label-line-height: 12px; --sdd-shared-node-attribute-label-letter-spacing: 0px; --sdd-shared-node-attribute-value-font-size: 12px; --sdd-shared-node-attribute-value-font-weight: 400; --sdd-shared-node-attribute-value-line-height: 14px; --sdd-shared-node-attribute-value-letter-spacing: 0px; }
-    .shared-node__chrome { fill: #ffffff; stroke: #387575; stroke-width: 1.5; }
+    .shared-node__chrome { fill: #ffffff; stroke: none; }
     .shared-node__decorator-header { fill: #dbe4f0; }
+    .shared-node__outline { fill: none; stroke: #387575; stroke-width: 1.5; }
     .shared-node .scene-text { fill: #0f172a; }
     .text-role-badge { font-family: 'Public Sans'; font-size: 12px; font-weight: 600; }
     .text-role-edge_label { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; }
@@ -94,21 +95,27 @@
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
     <g id="scene-node-e-010" class="scene-node primitive-card role-event paint-nodes semantic_node shared-node shared-node-plain" data-item-id="E-010" data-role="event" data-node-density="plain">
       <rect class="shared-node__chrome" x="201.75" y="298.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="201.75" y="298.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-vs-010b" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shared-node shared-node-dense" data-item-id="VS-010b" data-role="viewstate" data-node-density="dense">
       <rect class="shared-node__chrome" x="634.174" y="239.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="634.174" y="239.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-sa-010" class="scene-node primitive-card role-systemaction paint-nodes semantic_node shared-node shared-node-plain" data-item-id="SA-010" data-role="systemaction" data-node-density="plain">
       <rect class="shared-node__chrome" x="1027.174" y="174.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="1027.174" y="174.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-d-010" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shared-node shared-node-plain" data-item-id="D-010" data-role="dataentity" data-node-density="plain">
       <rect class="shared-node__chrome" x="1027.174" y="238.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="1027.174" y="238.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-st-010a" class="scene-node primitive-card role-state paint-nodes semantic_node shared-node shared-node-plain" data-item-id="ST-010a" data-role="state" data-node-density="plain">
       <rect class="shared-node__chrome" x="1040.174" y="374.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="1040.174" y="374.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-st-010b" class="scene-node primitive-card role-state paint-nodes semantic_node shared-node shared-node-plain" data-item-id="ST-010b" data-role="state" data-node-density="plain">
       <rect class="shared-node__chrome" x="1448.598" y="374.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="1448.598" y="374.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -144,8 +151,8 @@
     <g class="scene-node primitive-card role-event paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="E-010" data-role="event">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="216.5" y="322" dominant-baseline="middle">
-              <tspan x="216.5" dy="0">Submit</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="216.5" y="327.8">
+              <tspan x="216.5" y="327.8">Submit</tspan>
             </text>
         </g>
       </g>
@@ -153,16 +160,16 @@
     <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="VS-010b" data-role="viewstate">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="648.924" y="256" dominant-baseline="middle">
-              <tspan x="648.924" dy="0">Billing Success</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="648.924" y="261.8">
+              <tspan x="648.924" y="261.8">Billing Success</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="data_required">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="648.924" y="275.5" dominant-baseline="middle">
-              <tspan x="648.924" dy="0">data</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="648.924" y="279.125">
+              <tspan x="648.924" y="279.125">Data</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="648.924" y="290.5" dominant-baseline="middle">
-              <tspan x="648.924" dy="0">Receipt</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="648.924" y="294.85">
+              <tspan x="648.924" y="294.85">Receipt</tspan>
             </text>
         </g>
       </g>
@@ -175,8 +182,8 @@
     <g class="scene-node primitive-card role-systemaction paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="SA-010" data-role="systemaction">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1041.924" y="198" dominant-baseline="middle">
-              <tspan x="1041.924" dy="0">Save Subscription</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1041.924" y="203.8">
+              <tspan x="1041.924" y="203.8">Save Subscription</tspan>
             </text>
         </g>
       </g>
@@ -184,8 +191,8 @@
     <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="D-010" data-role="dataentity">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1041.924" y="262" dominant-baseline="middle">
-              <tspan x="1041.924" dy="0">Subscription</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1041.924" y="267.8">
+              <tspan x="1041.924" y="267.8">Subscription</tspan>
             </text>
         </g>
       </g>
@@ -201,8 +208,8 @@
     <g class="scene-node primitive-card role-state paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="ST-010a" data-role="state">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1054.924" y="398" dominant-baseline="middle">
-              <tspan x="1054.924" dy="0">Form Ready</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1054.924" y="403.8">
+              <tspan x="1054.924" y="403.8">Form Ready</tspan>
             </text>
         </g>
       </g>
@@ -210,8 +217,8 @@
     <g class="scene-node primitive-card role-state paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="ST-010b" data-role="state">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1463.348" y="398" dominant-baseline="middle">
-              <tspan x="1463.348" dy="0">Submitting</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1463.348" y="403.8">
+              <tspan x="1463.348" y="403.8">Submitting</tspan>
             </text>
         </g>
       </g>
