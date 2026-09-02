@@ -42,10 +42,8 @@ Design-defining details that should be available via CSS or similar:
 
 ![Node Reference Visuals](<node_visual_reference/Node Master Overview.png>), showing nodes with decorator header on the left, without header on the right.
 
-Figma Reference:
-https://www.figma.com/design/XugYvQ9C0qi0Hwl88k43Wm/SDD-Node-Visuals?node-id=0-1&t=6wpXf6j3ZFTW3QKF-1
-
-
+Figma Reference (use with Figma MCP):
+https://www.figma.com/design/XugYvQ9C0qi0Hwl88k43Wm/SDD-Node-Visuals?node-id=2002-194&t=WYXVfO7Vz0AbvoPT-1
 
 # Proposed Composition of a Node
 
@@ -199,3 +197,7 @@ Content Notes
 - attribute content font size
 - attribute content font weight
 - attribute content line height
+
+# Structural Reference
+
+Here is a ui_contracs sdd file capturing the composition: [unified_node.sdd](unified_node.sdd)

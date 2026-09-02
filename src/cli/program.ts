@@ -104,15 +104,51 @@ class SddCommand extends Command {
     return super.error(message, errorOptions);
   }
 
+  private exactLongOptionSuggestion(flag: string): string | undefined {
+    if (flag.length <= 2 || !flag.startsWith("-") || flag.startsWith("--")) {
+      return undefined;
+    }
+
+    const candidate = `-${flag}`;
+    const matches = new Set<string>();
+    let command: Command | null = this;
+    while (command !== null) {
+      for (const option of command.createHelp().visibleOptions(command)) {
+        if (option.long === candidate) {
+          matches.add(option.long);
+        }
+      }
+      command = command.parent;
+    }
+
+    return matches.size === 1 ? candidate : undefined;
+  }
+
+  private unambiguousUnknownOptionSuggestions(): Array<{ flag: string; suggestion: string }> | undefined {
+    const optionTokens = this.parsedUnknown.filter((token) => token.length > 1 && token.startsWith("-"));
+    if (optionTokens.length === 0 || new Set(optionTokens).size !== optionTokens.length) {
+      return undefined;
+    }
+
+    const suggestions: Array<{ flag: string; suggestion: string }> = [];
+    for (const flag of optionTokens) {
+      const suggestion = this.exactLongOptionSuggestion(flag);
+      if (suggestion === undefined) {
+        return undefined;
+      }
+      suggestions.push({ flag, suggestion });
+    }
+
+    return suggestions;
+  }
+
   missingMandatoryOptionValue(option: Option): never {
-    const unknownOptionTokens = this.parsedUnknown.filter((token) => token.length > 1 && token.startsWith("-"));
+    const suggestions = this.unambiguousUnknownOptionSuggestions();
     if (
       option.long !== undefined
-      && unknownOptionTokens.length === 1
-      && !unknownOptionTokens[0]!.startsWith("--")
-      && `-${unknownOptionTokens[0]}` === option.long
+      && suggestions?.some(({ suggestion }) => suggestion === option.long)
     ) {
-      return this.unknownOption(unknownOptionTokens[0]!);
+      return this.unknownOption(suggestions[0]!.flag);
     }
 
     return this.error(
@@ -122,25 +158,25 @@ class SddCommand extends Command {
   }
 
   unknownOption(flag: string): never {
-    if (flag.length > 2 && flag.startsWith("-") && !flag.startsWith("--")) {
-      const candidate = `-${flag}`;
-      const matches = new Set<string>();
-      let command: Command | null = this;
-      while (command !== null) {
-        for (const option of command.createHelp().visibleOptions(command)) {
-          if (option.long === candidate) {
-            matches.add(option.long);
-          }
-        }
-        command = command.parent;
-      }
-
-      if (matches.size === 1) {
+    const suggestions = this.unambiguousUnknownOptionSuggestions();
+    if (suggestions?.some(({ flag: unknownFlag }) => unknownFlag === flag)) {
+      if (suggestions.length === 1) {
+        const [{ suggestion }] = suggestions;
         return this.error(
-          `error: unknown option '${flag}'. Did you mean '${candidate}'?`,
+          `error: unknown option '${flag}'. Did you mean '${suggestion}'?`,
           { code: "commander.unknownOption" }
         );
       }
+
+      return this.error(
+        [
+          "errors:",
+          ...suggestions.map(({ flag: unknownFlag, suggestion }) => (
+            `  unknown option '${unknownFlag}'. Did you mean '${suggestion}'?`
+          ))
+        ].join("\n"),
+        { code: "commander.unknownOption" }
+      );
     }
 
     return commanderUnknownOption.call(this, flag);

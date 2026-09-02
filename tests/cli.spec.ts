@@ -441,6 +441,28 @@ describe("CLI wrappers", () => {
     expect(renderSourcePreviewMock).not.toHaveBeenCalled();
   });
 
+  it("aggregates multiple unambiguous single-dash option typos in authored order", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+
+    const result = await runCli(
+      [
+        "node", "sdd", "show", "arbitrary.sdd",
+        "-view", "arbitrary_view",
+        "-detail", "arbitrary_detail"
+      ],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(stderr.join("")).toBe(
+      "errors:\n"
+      + "  unknown option '-view'. Did you mean '--view'?\n"
+      + "  unknown option '-detail'. Did you mean '--detail'?\n"
+      + "Run 'sdd show --help' for usage.\n"
+    );
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+  });
+
   it("keeps genuine missing-option errors concise", async () => {
     const { deps, stderr, renderSourcePreviewMock } = createDeps();
 
@@ -457,6 +479,7 @@ describe("CLI wrappers", () => {
   it("does not suggest a single-dash correction for ambiguous or non-option tokens", async () => {
     for (const argv of [
       ["node", "sdd", "show", "arbitrary.sdd", "-view", "arbitrary_value", "--bogus"],
+      ["node", "sdd", "show", "arbitrary.sdd", "-view", "first_value", "-view", "second_value"],
       ["node", "sdd", "show", "arbitrary.sdd", "--out", "-view"],
       ["node", "sdd", "show", "arbitrary.sdd", "--", "-view", "arbitrary_value"]
     ]) {

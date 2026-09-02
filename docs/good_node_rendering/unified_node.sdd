@@ -1,4 +1,7 @@
 SDD-TEXT 0.1
+
+# Unified node for rendering SDD diagrams, envisioned as a component with sub-components.
+
 Component C-010 "Node"
   description="Reusable Node for SDD Diagrams. Shows node content preceeded by optional decorator header. Node content vertically stacks title and optional attribute groups."
 
