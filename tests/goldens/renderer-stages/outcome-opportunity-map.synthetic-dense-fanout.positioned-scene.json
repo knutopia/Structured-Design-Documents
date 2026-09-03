@@ -73,38 +73,60 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-901__content__line_0",
+                "id": "I-901__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Dense Initiative"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 92.482,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 111.288,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "I-901__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Dense Initiative"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 111.288,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -209,37 +231,60 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-901__content__line_0",
+                "id": "OP-901__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Dense Opportunity"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 113.366,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 136.888,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "OP-901__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Dense Opportunity"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 136.888,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -344,37 +389,60 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-900__content__line_0",
+                "id": "O-900__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Dense Outcome"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 119.552,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 115.712,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "O-900__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Dense Outcome"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 115.712,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -479,38 +547,60 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-901__content__line_0",
+                "id": "M-901__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Metric One"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 66.3,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 79.992,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "M-901__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Metric One"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 79.992,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -732,38 +822,60 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-902__content__line_0",
+                "id": "M-902__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Metric Two"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 66.502,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 80.04,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "M-902__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Metric Two"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 80.04,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -985,38 +1097,60 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-903__content__line_0",
+                "id": "M-903__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Metric Three"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 76.902,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 92.752,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "M-903__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Metric Three"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 92.752,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",

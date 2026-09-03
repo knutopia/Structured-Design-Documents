@@ -151,37 +151,60 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-990__content__line_0",
+                "id": "O-990__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Anchored Outcome"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 145.616,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 140.816,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "O-990__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Anchored Outcome"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 140.816,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -367,37 +390,60 @@
               "column-opportunity",
               "placement-role-parking",
               "band-band-parking-1-op-991",
-              "parking-node"
+              "parking-node",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-991__content__line_0",
+                "id": "OP-991__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Orphan Opportunity"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 120.133,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 144.968,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "OP-991__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Orphan Opportunity"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 144.968,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -584,38 +630,60 @@
               "column-initiative",
               "placement-role-parking",
               "band-band-parking-2-i-991",
-              "parking-node"
+              "parking-node",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-991__content__line_0",
+                "id": "I-991__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Orphan Initiative"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 99.249,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 119.368,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "I-991__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Orphan Initiative"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 119.368,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",

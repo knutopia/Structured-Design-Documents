@@ -1,4 +1,5 @@
 import type { IaPlaceMapRenderModel, IaRenderItem, IaRenderPlace } from "./iaPlaceMapRenderModel.js";
+import { buildLegacyIaPlaceLabelLines } from "./placeLabelLines.js";
 import type {
   JourneyMapRenderModel,
   JourneyRenderItem,
@@ -119,7 +120,9 @@ function renderInvisibleOrderChains(
 }
 
 function renderPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(place.id)}${formatAttributes({ label: formatMultilineLabel(place.labelLines) })};`);
+  lines.push(`${indent}${quoteId(place.id)}${formatAttributes({
+    label: formatMultilineLabel(buildLegacyIaPlaceLabelLines(place.title, place.attributes))
+  })};`);
   renderItems(place.items, indent, lines);
 }
 

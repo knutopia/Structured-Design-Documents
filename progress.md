@@ -37,6 +37,7 @@ z
 - Phase 1 of new node adoption done
 - Phase 2 done
 - Phase 3 done
+- Phase 4 done
 
 ## Tue 9-1
 

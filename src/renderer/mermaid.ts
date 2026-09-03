@@ -1,4 +1,5 @@
 import type { IaPlaceMapRenderModel, IaRenderItem, IaRenderPlace } from "./iaPlaceMapRenderModel.js";
+import { buildLegacyIaPlaceLabelLines } from "./placeLabelLines.js";
 import type {
   JourneyMapRenderModel,
   JourneyRenderItem,
@@ -199,7 +200,7 @@ function pushContainerTitleStyles(lines: string[], containerTitleIds: string[]):
 }
 
 function renderIaPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
-  pushNode(lines, [], place.id, place.labelLines, "box", false, indent);
+  pushNode(lines, [], place.id, buildLegacyIaPlaceLabelLines(place.title, place.attributes), "box", false, indent);
   renderIaItems(place.items, indent, lines);
 }
 

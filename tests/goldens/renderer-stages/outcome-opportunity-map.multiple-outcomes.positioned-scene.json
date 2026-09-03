@@ -73,66 +73,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-001__content__line_0",
+                "id": "I-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Guided setup priority planner"
+                  "Guided setup priority",
+                  "planner"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 176.566,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 152.816,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Guided setup priority",
+                    "planner"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 152.816,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -146,7 +170,7 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
@@ -155,14 +179,14 @@
             "x": 38,
             "y": 66,
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "x": 28,
         "y": 56,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -209,66 +233,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-001__content__line_0",
+                "id": "OP-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Users cannot see which setup",
-                  "steps matter"
+                  "Users cannot see which",
+                  "setup steps matter"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 178.841,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 169.912,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Users cannot see which",
+                    "setup steps matter"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 169.912,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -282,23 +330,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
+            "x": 475.336,
             "y": 66,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 481.336,
+        "x": 465.336,
         "y": 56,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -345,37 +393,60 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-001__content__line_0",
+                "id": "O-001__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Shorten time to first value"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 196.4,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 188.4,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "O-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Shorten time to first value"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 188.4,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -423,17 +494,17 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 968.77,
+            "x": 952.77,
             "y": 66,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 958.77,
+        "x": 942.77,
         "y": 56,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -480,67 +551,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-001__content__line_0",
+                "id": "M-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Median days to first completed",
-                  "workflow"
+                  "Median days to first",
+                  "completed workflow"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 186.076,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 148.04,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Median days to first",
+                    "completed workflow"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 148.04,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -554,24 +648,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
-              "status": "overflowed",
-              "detail": "Exceeded maxLines=1 even after moving secondary blocks."
+              "status": "fits"
             },
-            "x": 1356.524,
+            "x": 1340.524,
             "y": 66,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 1346.524,
+        "x": 1330.524,
         "y": 56,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -618,38 +711,60 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-002__content__line_0",
+                "id": "I-002__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Data readiness preflight"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 145.314,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 174.824,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "I-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Data readiness preflight"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 174.824,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -698,16 +813,16 @@
               "status": "fits"
             },
             "x": 38,
-            "y": 170,
+            "y": 167,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 28,
-        "y": 160,
+        "y": 157,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -754,66 +869,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-002__content__line_0",
+                "id": "OP-002__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Imported data quality issues",
-                  "appear too late"
+                  "Imported data quality",
+                  "issues appear too late"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 170.248,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 157.984,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Imported data quality",
+                    "issues appear too late"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 157.984,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -827,23 +966,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
-            "y": 170,
+            "x": 475.336,
+            "y": 167,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 481.336,
-        "y": 160,
+        "x": 465.336,
+        "y": 157,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -879,10 +1018,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 958.77,
-        "y": 160,
+        "x": 942.77,
+        "y": 157,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -929,38 +1068,60 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-002__content__line_0",
+                "id": "M-002__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Activation completion rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 157.853,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 189.632,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "M-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Activation completion rate"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 189.632,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1008,17 +1169,17 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1356.524,
-            "y": 170,
+            "x": 1340.524,
+            "y": 167,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1346.524,
-        "y": 160,
+        "x": 1330.524,
+        "y": 157,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -1065,66 +1226,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-007__content__line_0",
+                "id": "I-007__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Operational handoff checklist"
+                  "Operational handoff",
+                  "checklist"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 178.386,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 145.104,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-007__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Operational handoff",
+                    "checklist"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 145.104,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1138,23 +1323,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 38,
-            "y": 274,
+            "y": 268,
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "x": 28,
-        "y": 264,
+        "y": 258,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1201,66 +1386,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-007__content__line_0",
+                "id": "OP-007__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Handoff gaps hide next",
                   "ownership"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 140.472,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 168.088,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-007__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Handoff gaps hide next",
+                    "ownership"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 168.088,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1274,23 +1483,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
-            "y": 274,
+            "x": 475.336,
+            "y": 268,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 481.336,
-        "y": 264,
+        "x": 465.336,
+        "y": 258,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1326,10 +1535,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 958.77,
-        "y": 264,
+        "x": 942.77,
+        "y": 258,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1365,10 +1574,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 1346.524,
-        "y": 264,
+        "x": 1330.524,
+        "y": 258,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1415,67 +1624,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-003__content__line_0",
+                "id": "I-003__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Vocabulary mapping and",
                   "templates"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 149.825,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 179.976,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Vocabulary mapping and",
+                    "templates"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 179.976,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1489,23 +1721,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 38,
-            "y": 378,
+            "y": 369,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "x": 28,
-        "y": 368,
+        "y": 359,
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1552,66 +1784,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-003__content__line_0",
+                "id": "OP-003__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Terminology does not match the",
-                  "team workflow"
+                  "Terminology does not",
+                  "match the team workflow"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 193.031,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 184.08,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Terminology does not",
+                    "match the team workflow"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 184.08,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1625,23 +1881,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
-            "y": 378,
+            "x": 475.336,
+            "y": 369,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 481.336,
-        "y": 368,
+        "x": 465.336,
+        "y": 359,
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1688,66 +1944,90 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-002__content__line_0",
+                "id": "O-002__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Increase self-serve task",
                   "completion"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 180.448,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 173.088,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "O-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Increase self-serve task",
+                    "completion"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 173.088,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1761,23 +2041,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 64
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 968.77,
-            "y": 378,
+            "x": 952.77,
+            "y": 369,
             "width": 224,
-            "height": 64
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 958.77,
-        "y": 368,
+        "x": 942.77,
+        "y": 359,
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1824,66 +2104,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-003__content__line_0",
+                "id": "M-003__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Self-serve task completion rate"
+                  "Self-serve task",
+                  "completion rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 189.079,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 113.6,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Self-serve task",
+                    "completion rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 113.6,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1897,23 +2201,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1356.524,
-            "y": 378,
+            "x": 1340.524,
+            "y": 369,
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 1346.524,
-        "y": 368,
+        "x": 1330.524,
+        "y": 359,
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1960,66 +2264,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-004__content__line_0",
+                "id": "I-004__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Exception triage workspace"
+                  "Exception triage",
+                  "workspace"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 167.323,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 118.92,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-004__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Exception triage",
+                    "workspace"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 118.92,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2033,23 +2361,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 38,
-            "y": 490,
+            "y": 470,
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "x": 28,
-        "y": 480,
+        "y": 460,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2096,66 +2424,92 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-004__content__line_0",
+                "id": "OP-004__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Exception handling requires",
-                  "support escalation"
+                  "Exception handling",
+                  "requires support",
+                  "escalation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 168.974,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 139.296,
+                "height": 57,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 69,
+                "title": {
+                  "id": "OP-004__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Exception handling",
+                    "requires support",
+                    "escalation"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 139.296,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "secondary_in",
@@ -2169,23 +2523,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 72
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
-            "y": 490,
+            "x": 475.336,
+            "y": 470,
             "width": 224,
-            "height": 56
+            "height": 72
           }
         ],
         "ports": [],
-        "x": 481.336,
-        "y": 480,
+        "x": 465.336,
+        "y": 460,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2221,10 +2575,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 958.77,
-        "y": 480,
+        "x": 942.77,
+        "y": 460,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2271,67 +2625,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-004__content__line_0",
+                "id": "M-004__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Support deflection for",
                   "recoverable tasks"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 133.614,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 160.448,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-004__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Support deflection for",
+                    "recoverable tasks"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 160.448,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2345,24 +2722,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
-              "status": "overflowed",
-              "detail": "Exceeded maxLines=1 even after moving secondary blocks."
+              "status": "fits"
             },
-            "x": 1356.524,
-            "y": 490,
+            "x": 1340.524,
+            "y": 470,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 1346.524,
-        "y": 480,
+        "x": 1330.524,
+        "y": 460,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2409,66 +2785,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-006__content__line_0",
+                "id": "I-006__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Controlled automation rollout"
+                  "Controlled automation",
+                  "rollout"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 177.541,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 162.568,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-006__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Controlled automation",
+                    "rollout"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 162.568,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2482,23 +2882,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 38,
-            "y": 594,
+            "y": 590,
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "x": 28,
-        "y": 584,
+        "y": 580,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2545,66 +2945,92 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-006__content__line_0",
+                "id": "OP-006__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Teams need rollout controls",
-                  "before trusting automation"
+                  "Teams need rollout",
+                  "controls before trusting",
+                  "automation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 167.213,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 171.96,
+                "height": 57,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 69,
+                "title": {
+                  "id": "OP-006__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Teams need rollout",
+                    "controls before trusting",
+                    "automation"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 171.96,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "secondary_in",
@@ -2618,23 +3044,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 72
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
-            "y": 594,
+            "x": 475.336,
+            "y": 590,
             "width": 224,
-            "height": 56
+            "height": 72
           }
         ],
         "ports": [],
-        "x": 481.336,
-        "y": 584,
+        "x": 465.336,
+        "y": 580,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2670,10 +3096,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 958.77,
-        "y": 584,
+        "x": 942.77,
+        "y": 580,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2709,10 +3135,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 1346.524,
-        "y": 584,
+        "x": 1330.524,
+        "y": 580,
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2759,67 +3185,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-005__content__line_0",
+                "id": "I-005__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation evidence",
-                  "drawer"
+                  "Recommendation",
+                  "evidence drawer"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 162.468,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 127.648,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-005__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation",
+                    "evidence drawer"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 127.648,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2833,23 +3282,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 38,
-            "y": 698,
+            "y": 710,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "x": 28,
-        "y": 688,
+        "y": 700,
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -2896,66 +3345,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-005__content__line_0",
+                "id": "OP-005__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation evidence is",
-                  "hard to audit"
+                  "Recommendation",
+                  "evidence is hard to audit"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 175.338,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 175.064,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-005__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation",
+                    "evidence is hard to audit"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 175.064,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2969,23 +3442,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
-            "y": 698,
+            "x": 475.336,
+            "y": 710,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 481.336,
-        "y": 688,
+        "x": 465.336,
+        "y": 700,
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -3032,67 +3505,92 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-003__content__line_0",
+                "id": "O-003__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Improve trust in",
                   "automated",
                   "recommendations"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 135.664,
-                "height": 60,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 131.184,
+                "height": 57,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 69,
+                "title": {
+                  "id": "O-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Improve trust in",
+                    "automated",
+                    "recommendations"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 131.184,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "secondary_in",
@@ -3106,23 +3604,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 84
+                "y": 72
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 968.77,
-            "y": 698,
+            "x": 952.77,
+            "y": 710,
             "width": 224,
-            "height": 84
+            "height": 72
           }
         ],
         "ports": [],
-        "x": 958.77,
-        "y": 688,
+        "x": 942.77,
+        "y": 700,
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -3169,67 +3667,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-005__content__line_0",
+                "id": "M-005__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation acceptance",
-                  "rate"
+                  "Recommendation",
+                  "acceptance rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 178.743,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 127.648,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-005__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation",
+                    "acceptance rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 127.648,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -3243,24 +3764,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
-              "status": "overflowed",
-              "detail": "Exceeded maxLines=1 even after moving secondary blocks."
+              "status": "fits"
             },
-            "x": 1356.524,
-            "y": 698,
+            "x": 1340.524,
+            "y": 710,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 1346.524,
-        "y": 688,
+        "x": 1330.524,
+        "y": 700,
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -3299,7 +3819,7 @@
         "x": 28,
         "y": 820,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       },
@@ -3346,66 +3866,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-008__content__line_0",
+                "id": "OP-008__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Outcome history is not visible at",
-                  "review time"
+                  "Outcome history is not",
+                  "visible at review time"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 191.75,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 162.456,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-008__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Outcome history is not",
+                    "visible at review time"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 162.456,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -3419,23 +3963,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 491.336,
+            "x": 475.336,
             "y": 830,
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 481.336,
+        "x": 465.336,
         "y": 820,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       },
@@ -3471,10 +4015,10 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 958.77,
+        "x": 942.77,
         "y": 820,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       },
@@ -3521,66 +4065,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-006__content__line_0",
+                "id": "M-006__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation reversal rate"
+                  "Recommendation reversal",
+                  "rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 184.555,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 189.72,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-006__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation reversal",
+                    "rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 189.72,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -3594,23 +4162,23 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1356.524,
+            "x": 1340.524,
             "y": 830,
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 1346.524,
+        "x": 1330.524,
         "y": 820,
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       }
@@ -3618,8 +4186,8 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1618.524,
-    "height": 924
+    "width": 1602.524,
+    "height": 921
   },
   "edges": [
     {
@@ -3635,32 +4203,32 @@
       "from": {
         "itemId": "OP-001",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 94
+        "x": 699.336,
+        "y": 92.5
       },
       "to": {
         "itemId": "O-001",
         "portId": "intent_in",
-        "x": 968.77,
+        "x": 952.77,
         "y": 74
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 94
+            "x": 699.336,
+            "y": 92.5
           },
           {
-            "x": 904.77,
-            "y": 94
+            "x": 888.77,
+            "y": 92.5
           },
           {
-            "x": 904.77,
+            "x": 888.77,
             "y": 74
           },
           {
-            "x": 968.77,
+            "x": 952.77,
             "y": 74
           }
         ]
@@ -3683,33 +4251,33 @@
       "from": {
         "itemId": "OP-001",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 110
+        "x": 699.336,
+        "y": 108.5
       },
       "to": {
         "itemId": "O-002",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 394
+        "x": 952.77,
+        "y": 379.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 110
+            "x": 699.336,
+            "y": 108.5
           },
           {
-            "x": 888.77,
-            "y": 110
+            "x": 840.77,
+            "y": 108.5
           },
           {
-            "x": 888.77,
-            "y": 394
+            "x": 840.77,
+            "y": 379.5
           },
           {
-            "x": 968.77,
-            "y": 394
+            "x": 952.77,
+            "y": 379.5
           }
         ]
       },
@@ -3731,32 +4299,32 @@
       "from": {
         "itemId": "OP-002",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 198
+        "x": 699.336,
+        "y": 193.5
       },
       "to": {
         "itemId": "O-001",
         "portId": "intent_in",
-        "x": 968.77,
+        "x": 952.77,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 198
+            "x": 699.336,
+            "y": 193.5
           },
           {
-            "x": 920.77,
-            "y": 198
+            "x": 904.77,
+            "y": 193.5
           },
           {
-            "x": 920.77,
+            "x": 904.77,
             "y": 90
           },
           {
-            "x": 968.77,
+            "x": 952.77,
             "y": 90
           }
         ]
@@ -3779,33 +4347,33 @@
       "from": {
         "itemId": "OP-002",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 214
+        "x": 699.336,
+        "y": 209.5
       },
       "to": {
         "itemId": "O-003",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 732
+        "x": 952.77,
+        "y": 738
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 214
+            "x": 699.336,
+            "y": 209.5
           },
           {
-            "x": 872.77,
-            "y": 214
+            "x": 856.77,
+            "y": 209.5
           },
           {
-            "x": 872.77,
-            "y": 732
+            "x": 856.77,
+            "y": 738
           },
           {
-            "x": 968.77,
-            "y": 732
+            "x": 952.77,
+            "y": 738
           }
         ]
       },
@@ -3827,32 +4395,32 @@
       "from": {
         "itemId": "OP-007",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 302
+        "x": 699.336,
+        "y": 294.5
       },
       "to": {
         "itemId": "O-001",
         "portId": "intent_in",
-        "x": 968.77,
+        "x": 952.77,
         "y": 106
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 302
+            "x": 699.336,
+            "y": 294.5
           },
           {
-            "x": 936.77,
-            "y": 302
+            "x": 920.77,
+            "y": 294.5
           },
           {
-            "x": 936.77,
+            "x": 920.77,
             "y": 106
           },
           {
-            "x": 968.77,
+            "x": 952.77,
             "y": 106
           }
         ]
@@ -3875,33 +4443,33 @@
       "from": {
         "itemId": "OP-007",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 318
+        "x": 699.336,
+        "y": 310.5
       },
       "to": {
         "itemId": "O-002",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 410
+        "x": 952.77,
+        "y": 395.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 318
+            "x": 699.336,
+            "y": 310.5
           },
           {
-            "x": 856.77,
-            "y": 318
+            "x": 824.77,
+            "y": 310.5
           },
           {
-            "x": 856.77,
-            "y": 410
+            "x": 824.77,
+            "y": 395.5
           },
           {
-            "x": 968.77,
-            "y": 410
+            "x": 952.77,
+            "y": 395.5
           }
         ]
       },
@@ -3923,33 +4491,41 @@
       "from": {
         "itemId": "OP-003",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 406
+        "x": 699.336,
+        "y": 395.5
       },
       "to": {
         "itemId": "O-002",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 378
+        "x": 952.77,
+        "y": 363.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
+            "x": 699.336,
+            "y": 395.5
+          },
+          {
             "x": 715.336,
-            "y": 406
+            "y": 395.5
           },
           {
-            "x": 840.77,
-            "y": 406
+            "x": 715.336,
+            "y": 411.5
           },
           {
-            "x": 840.77,
-            "y": 378
+            "x": 872.77,
+            "y": 411.5
           },
           {
-            "x": 968.77,
-            "y": 378
+            "x": 872.77,
+            "y": 363.5
+          },
+          {
+            "x": 952.77,
+            "y": 363.5
           }
         ]
       },
@@ -3971,33 +4547,33 @@
       "from": {
         "itemId": "OP-004",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 518
+        "x": 699.336,
+        "y": 506
       },
       "to": {
         "itemId": "O-002",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 426
+        "x": 952.77,
+        "y": 411.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 518
+            "x": 699.336,
+            "y": 506
           },
           {
-            "x": 856.77,
-            "y": 518
+            "x": 840.77,
+            "y": 506
           },
           {
-            "x": 856.77,
-            "y": 426
+            "x": 840.77,
+            "y": 411.5
           },
           {
-            "x": 968.77,
-            "y": 426
+            "x": 952.77,
+            "y": 411.5
           }
         ]
       },
@@ -4019,33 +4595,33 @@
       "from": {
         "itemId": "OP-006",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 622
+        "x": 699.336,
+        "y": 626
       },
       "to": {
         "itemId": "O-002",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 442
+        "x": 952.77,
+        "y": 427.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 622
+            "x": 699.336,
+            "y": 626
           },
           {
-            "x": 888.77,
-            "y": 622
+            "x": 872.77,
+            "y": 626
           },
           {
-            "x": 888.77,
-            "y": 442
+            "x": 872.77,
+            "y": 427.5
           },
           {
-            "x": 968.77,
-            "y": 442
+            "x": 952.77,
+            "y": 427.5
           }
         ]
       },
@@ -4067,33 +4643,33 @@
       "from": {
         "itemId": "OP-006",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 638
+        "x": 699.336,
+        "y": 642
       },
       "to": {
         "itemId": "O-003",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 748
+        "x": 952.77,
+        "y": 754
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 638
+            "x": 699.336,
+            "y": 642
           },
           {
-            "x": 856.77,
-            "y": 638
+            "x": 840.77,
+            "y": 642
           },
           {
-            "x": 856.77,
-            "y": 748
+            "x": 840.77,
+            "y": 754
           },
           {
-            "x": 968.77,
-            "y": 748
+            "x": 952.77,
+            "y": 754
           }
         ]
       },
@@ -4115,33 +4691,33 @@
       "from": {
         "itemId": "OP-005",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 726
+        "x": 699.336,
+        "y": 736.5
       },
       "to": {
         "itemId": "O-003",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 716
+        "x": 952.77,
+        "y": 722
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 726
+            "x": 699.336,
+            "y": 736.5
           },
           {
-            "x": 840.77,
-            "y": 726
+            "x": 824.77,
+            "y": 736.5
           },
           {
-            "x": 840.77,
-            "y": 716
+            "x": 824.77,
+            "y": 722
           },
           {
-            "x": 968.77,
-            "y": 716
+            "x": 952.77,
+            "y": 722
           }
         ]
       },
@@ -4163,33 +4739,33 @@
       "from": {
         "itemId": "OP-008",
         "portId": "intent_out",
-        "x": 715.336,
-        "y": 858
+        "x": 699.336,
+        "y": 856.5
       },
       "to": {
         "itemId": "O-003",
         "portId": "intent_in",
-        "x": 968.77,
-        "y": 764
+        "x": 952.77,
+        "y": 770
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 715.336,
-            "y": 858
+            "x": 699.336,
+            "y": 856.5
           },
           {
-            "x": 842.053,
-            "y": 858
+            "x": 826.053,
+            "y": 856.5
           },
           {
-            "x": 842.053,
-            "y": 764
+            "x": 826.053,
+            "y": 770
           },
           {
-            "x": 968.77,
-            "y": 764
+            "x": 952.77,
+            "y": 770
           }
         ]
       },
@@ -4212,24 +4788,24 @@
         "itemId": "I-001",
         "portId": "intent_out",
         "x": 262,
-        "y": 90
+        "y": 92.5
       },
       "to": {
         "itemId": "OP-001",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 90
+        "x": 475.336,
+        "y": 92.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 90
+            "y": 92.5
           },
           {
-            "x": 491.336,
-            "y": 90
+            "x": 475.336,
+            "y": 92.5
           }
         ]
       },
@@ -4252,32 +4828,32 @@
         "itemId": "I-001",
         "portId": "intent_out",
         "x": 262,
-        "y": 106
+        "y": 108.5
       },
       "to": {
         "itemId": "OP-007",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 318
+        "x": 475.336,
+        "y": 310.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 106
+            "y": 108.5
           },
           {
-            "x": 443.336,
-            "y": 106
+            "x": 427.336,
+            "y": 108.5
           },
           {
-            "x": 443.336,
-            "y": 318
+            "x": 427.336,
+            "y": 310.5
           },
           {
-            "x": 491.336,
-            "y": 318
+            "x": 475.336,
+            "y": 310.5
           }
         ]
       },
@@ -4300,24 +4876,24 @@
         "itemId": "I-002",
         "portId": "intent_out",
         "x": 262,
-        "y": 194
+        "y": 191
       },
       "to": {
         "itemId": "OP-002",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 194
+        "x": 475.336,
+        "y": 191
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 194
+            "y": 191
           },
           {
-            "x": 491.336,
-            "y": 194
+            "x": 475.336,
+            "y": 191
           }
         ]
       },
@@ -4340,24 +4916,24 @@
         "itemId": "I-007",
         "portId": "intent_out",
         "x": 262,
-        "y": 298
+        "y": 294.5
       },
       "to": {
         "itemId": "OP-007",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 298
+        "x": 475.336,
+        "y": 294.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 298
+            "y": 294.5
           },
           {
-            "x": 491.336,
-            "y": 298
+            "x": 475.336,
+            "y": 294.5
           }
         ]
       },
@@ -4380,32 +4956,32 @@
         "itemId": "I-007",
         "portId": "intent_out",
         "x": 262,
-        "y": 314
+        "y": 310.5
       },
       "to": {
         "itemId": "OP-004",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 534
+        "x": 475.336,
+        "y": 522
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 314
+            "y": 310.5
           },
           {
-            "x": 427.336,
-            "y": 314
+            "x": 411.336,
+            "y": 310.5
           },
           {
-            "x": 427.336,
-            "y": 534
+            "x": 411.336,
+            "y": 522
           },
           {
-            "x": 491.336,
-            "y": 534
+            "x": 475.336,
+            "y": 522
           }
         ]
       },
@@ -4428,24 +5004,24 @@
         "itemId": "I-003",
         "portId": "intent_out",
         "x": 262,
-        "y": 406
+        "y": 395.5
       },
       "to": {
         "itemId": "OP-003",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 406
+        "x": 475.336,
+        "y": 395.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 406
+            "y": 395.5
           },
           {
-            "x": 491.336,
-            "y": 406
+            "x": 475.336,
+            "y": 395.5
           }
         ]
       },
@@ -4468,32 +5044,32 @@
         "itemId": "I-003",
         "portId": "intent_out",
         "x": 262,
-        "y": 422
+        "y": 411.5
       },
       "to": {
         "itemId": "OP-001",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 110
+        "x": 475.336,
+        "y": 108.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 422
+            "y": 411.5
           },
           {
-            "x": 459.336,
-            "y": 422
+            "x": 443.336,
+            "y": 411.5
           },
           {
-            "x": 459.336,
-            "y": 110
+            "x": 443.336,
+            "y": 108.5
           },
           {
-            "x": 491.336,
-            "y": 110
+            "x": 475.336,
+            "y": 108.5
           }
         ]
       },
@@ -4516,24 +5092,24 @@
         "itemId": "I-004",
         "portId": "intent_out",
         "x": 262,
-        "y": 514
+        "y": 496.5
       },
       "to": {
         "itemId": "OP-004",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 514
+        "x": 475.336,
+        "y": 496.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 514
+            "y": 496.5
           },
           {
-            "x": 491.336,
-            "y": 514
+            "x": 475.336,
+            "y": 496.5
           }
         ]
       },
@@ -4556,32 +5132,32 @@
         "itemId": "I-004",
         "portId": "intent_out",
         "x": 262,
-        "y": 530
+        "y": 512.5
       },
       "to": {
         "itemId": "OP-006",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 638
+        "x": 475.336,
+        "y": 642
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 530
+            "y": 512.5
           },
           {
-            "x": 411.336,
-            "y": 530
+            "x": 395.336,
+            "y": 512.5
           },
           {
-            "x": 411.336,
-            "y": 638
+            "x": 395.336,
+            "y": 642
           },
           {
-            "x": 491.336,
-            "y": 638
+            "x": 475.336,
+            "y": 642
           }
         ]
       },
@@ -4604,24 +5180,24 @@
         "itemId": "I-006",
         "portId": "intent_out",
         "x": 262,
-        "y": 618
+        "y": 616.5
       },
       "to": {
         "itemId": "OP-006",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 618
+        "x": 475.336,
+        "y": 616.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 618
+            "y": 616.5
           },
           {
-            "x": 491.336,
-            "y": 618
+            "x": 475.336,
+            "y": 616.5
           }
         ]
       },
@@ -4644,32 +5220,32 @@
         "itemId": "I-006",
         "portId": "intent_out",
         "x": 262,
-        "y": 634
+        "y": 632.5
       },
       "to": {
         "itemId": "OP-005",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 742
+        "x": 475.336,
+        "y": 752.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 634
+            "y": 632.5
           },
           {
-            "x": 395.336,
-            "y": 634
+            "x": 379.336,
+            "y": 632.5
           },
           {
-            "x": 395.336,
-            "y": 742
+            "x": 379.336,
+            "y": 752.5
           },
           {
-            "x": 491.336,
-            "y": 742
+            "x": 475.336,
+            "y": 752.5
           }
         ]
       },
@@ -4692,24 +5268,24 @@
         "itemId": "I-005",
         "portId": "intent_out",
         "x": 262,
-        "y": 726
+        "y": 736.5
       },
       "to": {
         "itemId": "OP-005",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 726
+        "x": 475.336,
+        "y": 736.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 726
+            "y": 736.5
           },
           {
-            "x": 491.336,
-            "y": 726
+            "x": 475.336,
+            "y": 736.5
           }
         ]
       },
@@ -4732,32 +5308,32 @@
         "itemId": "I-005",
         "portId": "intent_out",
         "x": 262,
-        "y": 742
+        "y": 752.5
       },
       "to": {
         "itemId": "OP-008",
         "portId": "intent_in",
-        "x": 491.336,
-        "y": 858
+        "x": 475.336,
+        "y": 856.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 262,
-            "y": 742
+            "y": 752.5
           },
           {
-            "x": 379.336,
-            "y": 742
+            "x": 363.336,
+            "y": 752.5
           },
           {
-            "x": 379.336,
-            "y": 858
+            "x": 363.336,
+            "y": 856.5
           },
           {
-            "x": 491.336,
-            "y": 858
+            "x": 475.336,
+            "y": 856.5
           }
         ]
       },
@@ -4779,24 +5355,24 @@
       "from": {
         "itemId": "O-001",
         "portId": "measure_out",
-        "x": 1192.77,
+        "x": 1176.77,
         "y": 90
       },
       "to": {
         "itemId": "M-001",
         "portId": "measure_in",
-        "x": 1356.524,
+        "x": 1340.524,
         "y": 90
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1192.77,
+            "x": 1176.77,
             "y": 90
           },
           {
-            "x": 1356.524,
+            "x": 1340.524,
             "y": 90
           }
         ]
@@ -4819,33 +5395,33 @@
       "from": {
         "itemId": "O-001",
         "portId": "measure_out",
-        "x": 1192.77,
+        "x": 1176.77,
         "y": 106
       },
       "to": {
         "itemId": "M-002",
         "portId": "measure_in",
-        "x": 1356.524,
-        "y": 194
+        "x": 1340.524,
+        "y": 191
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1192.77,
+            "x": 1176.77,
             "y": 106
           },
           {
-            "x": 1290.647,
+            "x": 1274.647,
             "y": 106
           },
           {
-            "x": 1290.647,
-            "y": 194
+            "x": 1274.647,
+            "y": 191
           },
           {
-            "x": 1356.524,
-            "y": 194
+            "x": 1340.524,
+            "y": 191
           }
         ]
       },
@@ -4867,25 +5443,25 @@
       "from": {
         "itemId": "O-002",
         "portId": "measure_out",
-        "x": 1192.77,
-        "y": 410
+        "x": 1176.77,
+        "y": 395.5
       },
       "to": {
         "itemId": "M-003",
         "portId": "measure_in",
-        "x": 1356.524,
-        "y": 410
+        "x": 1340.524,
+        "y": 395.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1192.77,
-            "y": 410
+            "x": 1176.77,
+            "y": 395.5
           },
           {
-            "x": 1356.524,
-            "y": 410
+            "x": 1340.524,
+            "y": 395.5
           }
         ]
       },
@@ -4907,33 +5483,33 @@
       "from": {
         "itemId": "O-002",
         "portId": "measure_out",
-        "x": 1192.77,
-        "y": 426
+        "x": 1176.77,
+        "y": 411.5
       },
       "to": {
         "itemId": "M-004",
         "portId": "measure_in",
-        "x": 1356.524,
-        "y": 518
+        "x": 1340.524,
+        "y": 496.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1192.77,
-            "y": 426
+            "x": 1176.77,
+            "y": 411.5
           },
           {
-            "x": 1290.647,
-            "y": 426
+            "x": 1274.647,
+            "y": 411.5
           },
           {
-            "x": 1290.647,
-            "y": 518
+            "x": 1274.647,
+            "y": 496.5
           },
           {
-            "x": 1356.524,
-            "y": 518
+            "x": 1340.524,
+            "y": 496.5
           }
         ]
       },
@@ -4955,25 +5531,25 @@
       "from": {
         "itemId": "O-003",
         "portId": "measure_out",
-        "x": 1192.77,
-        "y": 740
+        "x": 1176.77,
+        "y": 746
       },
       "to": {
         "itemId": "M-005",
         "portId": "measure_in",
-        "x": 1356.524,
-        "y": 740
+        "x": 1340.524,
+        "y": 746
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1192.77,
-            "y": 740
+            "x": 1176.77,
+            "y": 746
           },
           {
-            "x": 1356.524,
-            "y": 740
+            "x": 1340.524,
+            "y": 746
           }
         ]
       },
@@ -4995,33 +5571,33 @@
       "from": {
         "itemId": "O-003",
         "portId": "measure_out",
-        "x": 1192.77,
-        "y": 756
+        "x": 1176.77,
+        "y": 762
       },
       "to": {
         "itemId": "M-006",
         "portId": "measure_in",
-        "x": 1356.524,
-        "y": 854
+        "x": 1340.524,
+        "y": 856.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1192.77,
-            "y": 756
+            "x": 1176.77,
+            "y": 762
           },
           {
-            "x": 1290.647,
-            "y": 756
+            "x": 1274.647,
+            "y": 762
           },
           {
-            "x": 1290.647,
-            "y": 854
+            "x": 1274.647,
+            "y": 856.5
           },
           {
-            "x": 1356.524,
-            "y": 854
+            "x": 1340.524,
+            "y": 856.5
           }
         ]
       },
@@ -5053,7 +5629,7 @@
         "column-opportunity"
       ],
       "paintGroup": "labels",
-      "x": 503.336,
+      "x": 487.336,
       "y": 26,
       "text": "Opportunity",
       "textStyleRole": "label"
@@ -5066,7 +5642,7 @@
         "column-outcome"
       ],
       "paintGroup": "labels",
-      "x": 980.77,
+      "x": 964.77,
       "y": 26,
       "text": "Outcome",
       "textStyleRole": "label"
@@ -5079,7 +5655,7 @@
         "column-metric"
       ],
       "paintGroup": "labels",
-      "x": 1368.524,
+      "x": 1352.524,
       "y": 26,
       "text": "Metric",
       "textStyleRole": "label"
@@ -5095,7 +5671,7 @@
         "role-supports"
       ],
       "paintGroup": "labels",
-      "x": 739.336,
+      "x": 723.336,
       "y": 26,
       "text": "supports",
       "textStyleRole": "label"
@@ -5127,35 +5703,13 @@
         "role-measured_by"
       ],
       "paintGroup": "labels",
-      "x": 1216.77,
+      "x": 1200.77,
       "y": 26,
       "text": "measured by",
       "textStyleRole": "label"
     }
   ],
-  "diagnostics": [
-    {
-      "phase": "measure",
-      "code": "renderer.measure.secondary_area_exhausted",
-      "severity": "warn",
-      "message": "Node still exceeded maxLines=1 after moving secondary blocks. Falling back to grow_height.",
-      "targetId": "M-001"
-    },
-    {
-      "phase": "measure",
-      "code": "renderer.measure.secondary_area_exhausted",
-      "severity": "warn",
-      "message": "Node still exceeded maxLines=1 after moving secondary blocks. Falling back to grow_height.",
-      "targetId": "M-004"
-    },
-    {
-      "phase": "measure",
-      "code": "renderer.measure.secondary_area_exhausted",
-      "severity": "warn",
-      "message": "Node still exceeded maxLines=1 after moving secondary blocks. Falling back to grow_height.",
-      "targetId": "M-005"
-    }
-  ],
+  "diagnostics": [],
   "paintOrder": [
     "chrome",
     "nodes",

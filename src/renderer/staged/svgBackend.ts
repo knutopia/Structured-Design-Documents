@@ -271,6 +271,7 @@ function renderContainerChrome(
         && (
           container.classes.includes("service_blueprint")
           || container.classes.includes("outcome_opportunity_map")
+          || container.classes.includes("ia_place_map")
         )
       ) {
         return "scene-container__chrome--canvas";
@@ -785,6 +786,7 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   const hasLineDecorations = scene.decorations.some((decoration) => decoration.kind === "line");
   const isServiceBlueprint = scene.viewId === "service_blueprint";
   const isOutcomeOpportunityMap = scene.viewId === "outcome_opportunity_map";
+  const isIaPlaceMap = scene.viewId === "ia_place_map";
   const hasSharedNodes = (() => {
     const visit = (item: PositionedItem): boolean =>
       item.kind === "node" ? item.sharedNode !== undefined : item.children.some(visit);
@@ -828,7 +830,7 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   if (hasDashedSharedNodes) {
     lines.push(`.scene-node.chrome-dashed .shared-node__outline { stroke-dasharray: 8 6; }`);
   }
-  if (isServiceBlueprint || isOutcomeOpportunityMap) {
+  if (isServiceBlueprint || isOutcomeOpportunityMap || isIaPlaceMap) {
     lines.push(`.scene-container__chrome--canvas { fill: ${paint.palette.canvas}; }`);
   }
   if (isServiceBlueprint) {
