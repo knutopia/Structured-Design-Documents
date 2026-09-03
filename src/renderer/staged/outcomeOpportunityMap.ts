@@ -7,8 +7,8 @@ import {
 } from "../outcomeOpportunityMapRenderModel.js";
 import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import type {
-  ContentBlock,
   MeasuredScene,
+  NodeDecoratorMode,
   PositionedScene,
   RendererScene,
   RoutingIntent,
@@ -17,11 +17,9 @@ import type {
   SceneItem,
   SceneNode,
   ViewMetadata,
-  WidthPolicy,
   StagedRenderSettings
 } from "./contracts.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
-import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import {
   buildOutcomeOpportunityMapMiddleLayer,
   type OutcomeOpportunityCell,
@@ -38,9 +36,9 @@ import {
 import { positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
 import { measureScene } from "./pipeline.js";
 import {
-  buildCardNode,
   buildDiagramRootContainer,
-  buildPortSpec
+  buildPortSpec,
+  buildSharedNode
 } from "./sceneBuilders.js";
 import {
   renderPositionedSceneToPng,
@@ -60,6 +58,7 @@ interface OutcomeOpportunityRenderContext {
 }
 
 interface SceneBuildContext {
+  nodeDecoratorMode: NodeDecoratorMode;
   renderNodesById: ReadonlyMap<string, OutcomeOpportunityRenderNode>;
   placementByNodeId: ReadonlyMap<string, OutcomeOpportunityNodePlacement>;
   columnById: ReadonlyMap<string, OutcomeOpportunityColumn>;
@@ -124,24 +123,6 @@ function buildRootChrome(): SceneContainer["chrome"] {
   };
 }
 
-function buildNodeWidthPolicy(nodeType: string): WidthPolicy {
-  switch (nodeType) {
-    case "Initiative":
-    case "Metric":
-      return {
-        preferred: "standard",
-        allowed: ["narrow", "standard", "wide"]
-      };
-    case "Opportunity":
-    case "Outcome":
-    default:
-      return {
-        preferred: "standard",
-        allowed: ["standard", "wide"]
-      };
-  }
-}
-
 function buildOutcomeOpportunityNodePorts(): SceneNode["ports"] {
   return [
     buildPortSpec("intent_in", "intent_in", "west"),
@@ -158,7 +139,6 @@ function buildNodeClasses(
   placement: OutcomeOpportunityNodePlacement
 ): string[] {
   return [
-    "semantic_node",
     "outcome_opportunity_node",
     `type-${sanitizeToken(node.type)}`,
     `visual-role-${sanitizeToken(node.visualRole)}`,
@@ -168,13 +148,6 @@ function buildNodeClasses(
     `band-${sanitizeToken(placement.semanticBandId)}`,
     ...(placement.parking ? ["parking-node"] : [])
   ];
-}
-
-function buildNodeContent(node: OutcomeOpportunityRenderNode): ContentBlock[] {
-  return buildContentBlocksFromLabelLines(`${node.id}__content`, node.labelLines, {
-    titleTextStyleRole: node.type === "Outcome" ? "title" : "label",
-    defaultTextStyleRole: "metadata"
-  });
 }
 
 function buildNodeViewMetadata(placement: OutcomeOpportunityNodePlacement): ViewMetadata {
@@ -194,25 +167,19 @@ function buildNodeViewMetadata(placement: OutcomeOpportunityNodePlacement): View
 
 function buildOutcomeOpportunityNode(
   node: OutcomeOpportunityRenderNode,
-  placement: OutcomeOpportunityNodePlacement
+  placement: OutcomeOpportunityNodePlacement,
+  nodeDecoratorMode: NodeDecoratorMode
 ): SceneNode {
   return {
-    ...buildCardNode({
-      id: node.id,
-      role: node.type.toLowerCase(),
+    ...buildSharedNode({
+      title: node.title,
+      decoratorMode: nodeDecoratorMode,
+      nodeType: node.type,
+      nodeId: node.id,
+      attributes: node.attributes
+    }, {
       classes: buildNodeClasses(node, placement),
-      widthPolicy: buildNodeWidthPolicy(node.type),
-      content: buildNodeContent(node),
-      ports: buildOutcomeOpportunityNodePorts(),
-      overflowPolicy: node.type === "Metric"
-        ? {
-          kind: "secondary_area",
-          maxLines: 1
-        }
-        : {
-          kind: "escalate_width_band",
-          maxLines: 3
-        }
+      ports: buildOutcomeOpportunityNodePorts()
     }),
     viewMetadata: buildNodeViewMetadata(placement)
   };
@@ -273,7 +240,7 @@ function buildCellContainer(
       if (!placement) {
         return undefined;
       }
-      return buildOutcomeOpportunityNode(node, placement);
+      return buildOutcomeOpportunityNode(node, placement, context.nodeDecoratorMode);
     })
     .filter((node): node is SceneNode => node !== undefined);
 
@@ -382,6 +349,11 @@ function buildOutcomeOpportunityRenderContext(
   const model = buildOutcomeOpportunityMapRenderModel(projection, graph, view, displayPolicy);
   const middleLayer = buildOutcomeOpportunityMapMiddleLayer(model);
   const context: SceneBuildContext = {
+    nodeDecoratorMode: settings.nodeDecoratorMode ?? {
+      id: "none",
+      showNodeType: false,
+      showNodeId: false
+    },
     renderNodesById: new Map(model.nodes.map((node) => [node.id, node] as const)),
     placementByNodeId: new Map(middleLayer.placements.map((placement) => [placement.nodeId, placement] as const)),
     columnById: new Map(middleLayer.columns.map((column) => [column.id, column] as const))

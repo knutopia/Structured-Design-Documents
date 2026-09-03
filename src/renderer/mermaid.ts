@@ -279,7 +279,12 @@ function renderOutcomeOpportunityLane(
     if (!node) {
       continue;
     }
-    pushNode(lines, [], node.id, node.labelLines, "box", false, `${indent}  `);
+    pushNode(lines, [], node.id, [
+      node.title,
+      ...node.attributes.map((attribute) =>
+        `${attribute.label.charAt(0).toUpperCase()}${attribute.label.slice(1)}: ${attribute.value}`
+      )
+    ], "box", false, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }

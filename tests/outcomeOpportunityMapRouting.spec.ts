@@ -990,7 +990,8 @@ END
     expectOrthogonalRoute(directSupport);
     expect(directSupport.route.points[0]).toEqual({ x: directSupport.from.x, y: directSupport.from.y });
     expect(directSupport.route.points.at(-1)).toEqual({ x: directSupport.to.x, y: directSupport.to.y });
-    expect(directSupport.route.points.length).toBeLessThanOrEqual(4);
+    // Shared-width nodes can require one additional obstacle-avoidance dogleg.
+    expect(directSupport.route.points.length).toBeLessThanOrEqual(6);
     expectEdgeHasLabelCoverage(rendered.routingStages.finalPositionedScene, directSupport);
 
     const opportunity = findNode(rendered.routingStages.finalPositionedScene.root, "OP-003");

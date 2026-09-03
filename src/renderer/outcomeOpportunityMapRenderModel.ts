@@ -14,7 +14,12 @@ export interface OutcomeOpportunityRenderNode {
   authorOrder: number;
   visualRole: string;
   shape: string;
-  labelLines: string[];
+  title: string;
+  attributes: Array<{
+    groupId: string;
+    label: string;
+    value: string;
+  }>;
 }
 
 export interface OutcomeOpportunityRenderColumn {
@@ -90,13 +95,6 @@ const expectedFixedColumns: OutcomeOpportunitySemanticColumn[] = [
   { id: "outcome", label: "Outcomes" },
   { id: "metric", label: "Metrics" }
 ];
-
-function capitalize(text: string | undefined): string {
-  if (!text || text.length === 0) {
-    return "Reference";
-  }
-  return `${text[0].toUpperCase()}${text.slice(1)}`;
-}
 
 function formatReferenceTarget(targetId: string, targetName?: string): string {
   if (targetName && targetName.length > 0 && targetName !== targetId) {
@@ -307,17 +305,21 @@ function readOutcomeOpportunityMapDisplayOptions(
   };
 }
 
-function formatReferenceLine(
+function formatReferenceAttribute(
   reference: NonNullable<Projection["derived"]["node_annotations"][number]["references"]>[number],
   rendererDefaults: OutcomeOpportunityRendererDefaults,
   displayOptions: OutcomeOpportunityMapDisplayOptions
-): string | undefined {
+): OutcomeOpportunityRenderNode["attributes"][number] | undefined {
   if (reference.role === "instrumented_at") {
-    if (!displayOptions.showInstrumentationAnnotations) {
+    if (!displayOptions.showInstrumentationAnnotations || !reference.group) {
       return undefined;
     }
 
-    return `${capitalize(reference.group)}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`;
+    return {
+      groupId: reference.group,
+      label: reference.group,
+      value: formatReferenceTarget(reference.target_id, reference.target_name)
+    };
   }
 
   if (reference.role === "implemented_by") {
@@ -325,7 +327,11 @@ function formatReferenceLine(
       return undefined;
     }
 
-    return `${rendererDefaults.implementationAnnotationLabel}: ${formatReferenceTarget(reference.target_id, reference.target_name)}`;
+    return {
+      groupId: "implemented_by",
+      label: rendererDefaults.implementationAnnotationLabel,
+      value: formatReferenceTarget(reference.target_id, reference.target_name)
+    };
   }
 
   return undefined;
@@ -400,11 +406,11 @@ export function buildOutcomeOpportunityMapRenderModel(
     return laneNodeIds.map<OutcomeOpportunityRenderNode>((nodeId) => {
       const node = projectionNodesById.get(nodeId)!;
       const chrome = rendererDefaults.nodeChrome[node.type];
-      const labelLines = [node.name];
+      const attributes: OutcomeOpportunityRenderNode["attributes"] = [];
       for (const reference of annotationsByNodeId.get(nodeId)?.references ?? []) {
-        const referenceLine = formatReferenceLine(reference, rendererDefaults, displayOptions);
-        if (referenceLine) {
-          labelLines.push(referenceLine);
+        const attribute = formatReferenceAttribute(reference, rendererDefaults, displayOptions);
+        if (attribute) {
+          attributes.push(attribute);
         }
       }
 
@@ -415,7 +421,8 @@ export function buildOutcomeOpportunityMapRenderModel(
         authorOrder: nodeRankById.get(node.id) ?? Number.MAX_SAFE_INTEGER,
         visualRole: chrome.visualRole,
         shape: chrome.legacyDotShape,
-        labelLines
+        title: node.name,
+        attributes
       };
     });
   });

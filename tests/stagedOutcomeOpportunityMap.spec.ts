@@ -301,27 +301,27 @@ describe("staged outcome_opportunity_map", () => {
       "secondary_in",
       "secondary_out"
     ]);
-    expect(metricNode.content.map((block) => ({
-      text: block.text,
-      priority: block.priority
-    }))).toEqual([
-      { text: "Checkout Completion Rate", priority: "primary" },
-      { text: "Experience: J-002 Confirm Payment", priority: "secondary" },
-      { text: "Event: E-001 Payment Submitted", priority: "secondary" }
-    ]);
+    expect(metricNode.content).toEqual([]);
+    expect(metricNode.sharedNode).toEqual(expect.objectContaining({
+      title: "Checkout Completion Rate",
+      attributes: [
+        { groupId: "experience", label: "experience", value: "J-002 Confirm Payment" },
+        { groupId: "event", label: "event", value: "E-001 Payment Submitted" }
+      ]
+    }));
 
     const initiativeNode = findSceneItem(scene, "I-001");
     expect(initiativeNode.kind).toBe("node");
     if (initiativeNode.kind !== "node") {
       throw new Error("Expected I-001 to be a node.");
     }
-    expect(initiativeNode.content.map((block) => ({
-      text: block.text,
-      priority: block.priority
-    }))).toEqual([
-      { text: "Billing Simplification", priority: "primary" },
-      { text: "Implemented by: P-001 Billing", priority: "secondary" }
-    ]);
+    expect(initiativeNode.content).toEqual([]);
+    expect(initiativeNode.sharedNode).toEqual(expect.objectContaining({
+      title: "Billing Simplification",
+      attributes: [
+        { groupId: "implemented_by", label: "Implemented by", value: "P-001 Billing" }
+      ]
+    }));
     expect(JSON.stringify(scene)).not.toMatch(/"x"|"y"|"points"|"svg"|"dot"|"mermaid"|"elk"/i);
   });
 
@@ -391,7 +391,7 @@ describe("staged outcome_opportunity_map", () => {
     ]);
   });
 
-  it("keeps outcome annotations in measured secondary blocks according to profile display", async () => {
+  it("keeps outcome annotations in measured shared attributes according to detail display", async () => {
     const strictContext = await resolveOutcomeOpportunityContext("outcome_to_ia_trace", "strict");
     const strictRendered = await renderOutcomeOpportunityMapPreRoutingArtifacts(
       strictContext.projection,
@@ -424,49 +424,25 @@ describe("staged outcome_opportunity_map", () => {
       throw new Error("Expected M-001 and I-001 to be measured as nodes.");
     }
 
-    expect(strictMetric.content.map((block) => ({
-      lines: block.lines,
-      kind: block.kind,
-      priority: block.priority
+    expect(strictMetric.sharedNode?.body.title.lines).toEqual(["Checkout Completion", "Rate"]);
+    expect(strictMetric.sharedNode?.body.attributeGroups.map((group) => ({
+      id: group.id,
+      label: group.label.lines,
+      values: group.values.map((value) => value.lines)
     }))).toEqual([
-      {
-        lines: ["Checkout Completion Rate"],
-        kind: "text",
-        priority: "primary"
-      },
-      {
-        lines: ["Experience: J-002 Confirm Payment"],
-        kind: "metadata",
-        priority: "secondary"
-      },
-      {
-        lines: ["Event: E-001 Payment Submitted"],
-        kind: "metadata",
-        priority: "secondary"
-      }
+      { id: "experience", label: ["Experience"], values: [["J-002 Confirm Payment"]] },
+      { id: "event", label: ["Event"], values: [["E-001 Payment Submitted"]] }
     ]);
-    expect(simpleMetric.content.map((block) => block.lines.join(" "))).toEqual([
-      "Checkout Completion Rate"
-    ]);
-    expect(strictInitiative.content.map((block) => ({
-      lines: block.lines,
-      kind: block.kind,
-      priority: block.priority
+    expect(simpleMetric.sharedNode?.body.title.lines).toEqual(["Checkout Completion", "Rate"]);
+    expect(simpleMetric.sharedNode?.body.attributeGroups).toEqual([]);
+    expect(strictInitiative.sharedNode?.body.attributeGroups.map((group) => ({
+      id: group.id,
+      label: group.label.lines,
+      values: group.values.map((value) => value.lines)
     }))).toEqual([
-      {
-        lines: ["Billing Simplification"],
-        kind: "text",
-        priority: "primary"
-      },
-      {
-        lines: ["Implemented by: P-001 Billing"],
-        kind: "metadata",
-        priority: "secondary"
-      }
+      { id: "implemented_by", label: ["Implemented by"], values: [["P-001 Billing"]] }
     ]);
-    expect(simpleInitiative.content.map((block) => block.lines.join(" "))).toEqual([
-      "Billing Simplification"
-    ]);
+    expect(simpleInitiative.sharedNode?.body.attributeGroups).toEqual([]);
   });
 
   it("matches renderer-stage snapshots for canonical proof cases and routing debug stages", async () => {

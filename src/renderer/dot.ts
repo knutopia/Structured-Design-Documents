@@ -208,7 +208,13 @@ export function renderJourneyMapDot(model: JourneyMapRenderModel, style?: Legacy
 }
 
 function renderOutcomeOpportunityNode(node: OutcomeOpportunityRenderNode, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(node.id)}${formatAttributes({ shape: node.shape, label: formatMultilineLabel(node.labelLines) })};`);
+  const labelLines = [
+    node.title,
+    ...node.attributes.map((attribute) =>
+      `${attribute.label.charAt(0).toUpperCase()}${attribute.label.slice(1)}: ${attribute.value}`
+    )
+  ];
+  lines.push(`${indent}${quoteId(node.id)}${formatAttributes({ shape: node.shape, label: formatMultilineLabel(labelLines) })};`);
 }
 
 function renderOutcomeOpportunityLane(
