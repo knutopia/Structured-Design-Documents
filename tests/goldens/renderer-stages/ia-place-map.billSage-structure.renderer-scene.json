@@ -61,59 +61,53 @@
             "role": "place",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "place",
               "root_place",
               "depth-0"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "P-100__title",
-                "kind": "text",
-                "text": "Dashboard",
-                "textStyleRole": "title",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Dashboard",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "P-100__subtitle",
-                "kind": "text",
-                "text": "/dashboard",
-                "textStyleRole": "subtitle",
-                "priority": "secondary"
-              },
-              {
-                "id": "P-100__badge",
-                "kind": "badge_text",
-                "text": "auth",
-                "textStyleRole": "badge",
-                "priority": "secondary"
-              },
-              {
-                "id": "P-100__metadata__entry_points__0",
-                "kind": "metadata",
-                "text": "entry_points: nav:global_nav",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              },
-              {
-                "id": "P-100__metadata__primary_nav__1",
-                "kind": "metadata",
-                "text": "primary_nav: true",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Place",
+              "nodeId": "P-100",
+              "attributes": [
+                {
+                  "groupId": "route_or_key",
+                  "label": "route or key",
+                  "value": "/dashboard"
+                },
+                {
+                  "groupId": "access",
+                  "label": "access",
+                  "value": "auth"
+                },
+                {
+                  "groupId": "entry_points",
+                  "label": "entry_points",
+                  "value": "nav:global_nav"
+                },
+                {
+                  "groupId": "primary_nav",
+                  "label": "primary_nav",
+                  "value": "true"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "north_chain",
@@ -198,45 +192,43 @@
                     "role": "place",
                     "primitive": "card",
                     "classes": [
+                      "semantic_node",
                       "place",
                       "nested_place",
                       "depth-1"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "P-110__title",
-                        "kind": "text",
-                        "text": "Report View",
-                        "textStyleRole": "title",
-                        "priority": "primary"
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Report View",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
                       },
-                      {
-                        "id": "P-110__subtitle",
-                        "kind": "text",
-                        "text": "/dashboard/report-view",
-                        "textStyleRole": "subtitle",
-                        "priority": "secondary"
-                      },
-                      {
-                        "id": "P-110__badge",
-                        "kind": "badge_text",
-                        "text": "auth",
-                        "textStyleRole": "badge",
-                        "priority": "secondary"
-                      }
-                    ],
+                      "nodeType": "Place",
+                      "nodeId": "P-110",
+                      "attributes": [
+                        {
+                          "groupId": "route_or_key",
+                          "label": "route or key",
+                          "value": "/dashboard/report-view"
+                        },
+                        {
+                          "groupId": "access",
+                          "label": "access",
+                          "value": "auth"
+                        }
+                      ]
+                    },
                     "ports": [
                       {
                         "id": "north_chain",
@@ -337,59 +329,53 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-210__title",
-                    "kind": "text",
-                    "text": "Projections Overview",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "title": "Projections Overview",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "P-210__subtitle",
-                    "kind": "text",
-                    "text": "/projections",
-                    "textStyleRole": "subtitle",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-210__badge",
-                    "kind": "badge_text",
-                    "text": "auth",
-                    "textStyleRole": "badge",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-210__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "text": "entry_points: nav:global_nav",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-210__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "text": "primary_nav: true",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
+                  "nodeType": "Place",
+                  "nodeId": "P-210",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "route or key",
+                      "value": "/projections"
+                    },
+                    {
+                      "groupId": "access",
+                      "label": "access",
+                      "value": "auth"
+                    },
+                    {
+                      "groupId": "entry_points",
+                      "label": "entry_points",
+                      "value": "nav:global_nav"
+                    },
+                    {
+                      "groupId": "primary_nav",
+                      "label": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -474,45 +460,43 @@
                         "role": "place",
                         "primitive": "card",
                         "classes": [
+                          "semantic_node",
                           "place",
                           "nested_place",
                           "depth-1"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
-                        "content": [
-                          {
-                            "id": "P-220__title",
-                            "kind": "text",
-                            "text": "Projection",
-                            "textStyleRole": "title",
-                            "priority": "primary"
+                        "content": [],
+                        "sharedNode": {
+                          "title": "Projection",
+                          "decoratorMode": {
+                            "id": "none",
+                            "showNodeType": false,
+                            "showNodeId": false
                           },
-                          {
-                            "id": "P-220__subtitle",
-                            "kind": "text",
-                            "text": "/projections/projection",
-                            "textStyleRole": "subtitle",
-                            "priority": "secondary"
-                          },
-                          {
-                            "id": "P-220__badge",
-                            "kind": "badge_text",
-                            "text": "auth",
-                            "textStyleRole": "badge",
-                            "priority": "secondary"
-                          }
-                        ],
+                          "nodeType": "Place",
+                          "nodeId": "P-220",
+                          "attributes": [
+                            {
+                              "groupId": "route_or_key",
+                              "label": "route or key",
+                              "value": "/projections/projection"
+                            },
+                            {
+                              "groupId": "access",
+                              "label": "access",
+                              "value": "auth"
+                            }
+                          ]
+                        },
                         "ports": [
                           {
                             "id": "north_chain",
@@ -597,45 +581,43 @@
                                 "role": "place",
                                 "primitive": "card",
                                 "classes": [
+                                  "semantic_node",
                                   "place",
                                   "nested_place",
                                   "depth-2"
                                 ],
                                 "widthPolicy": {
-                                  "preferred": "narrow",
+                                  "preferred": "standard",
                                   "allowed": [
-                                    "narrow",
-                                    "standard",
-                                    "wide"
+                                    "standard"
                                   ]
                                 },
                                 "overflowPolicy": {
-                                  "kind": "escalate_width_band",
-                                  "maxLines": 2
+                                  "kind": "grow_height"
                                 },
-                                "content": [
-                                  {
-                                    "id": "P-221__title",
-                                    "kind": "text",
-                                    "text": "Fee Schedule Scenario Details",
-                                    "textStyleRole": "title",
-                                    "priority": "primary"
+                                "content": [],
+                                "sharedNode": {
+                                  "title": "Fee Schedule Scenario Details",
+                                  "decoratorMode": {
+                                    "id": "none",
+                                    "showNodeType": false,
+                                    "showNodeId": false
                                   },
-                                  {
-                                    "id": "P-221__subtitle",
-                                    "kind": "text",
-                                    "text": "/projections/projection/fee-schedule-scenario-details",
-                                    "textStyleRole": "subtitle",
-                                    "priority": "secondary"
-                                  },
-                                  {
-                                    "id": "P-221__badge",
-                                    "kind": "badge_text",
-                                    "text": "auth",
-                                    "textStyleRole": "badge",
-                                    "priority": "secondary"
-                                  }
-                                ],
+                                  "nodeType": "Place",
+                                  "nodeId": "P-221",
+                                  "attributes": [
+                                    {
+                                      "groupId": "route_or_key",
+                                      "label": "route or key",
+                                      "value": "/projections/projection/fee-schedule-scenario-details"
+                                    },
+                                    {
+                                      "groupId": "access",
+                                      "label": "access",
+                                      "value": "auth"
+                                    }
+                                  ]
+                                },
                                 "ports": [
                                   {
                                     "id": "north_chain",
@@ -697,45 +679,43 @@
                                 "role": "place",
                                 "primitive": "card",
                                 "classes": [
+                                  "semantic_node",
                                   "place",
                                   "nested_place",
                                   "depth-2"
                                 ],
                                 "widthPolicy": {
-                                  "preferred": "narrow",
+                                  "preferred": "standard",
                                   "allowed": [
-                                    "narrow",
-                                    "standard",
-                                    "wide"
+                                    "standard"
                                   ]
                                 },
                                 "overflowPolicy": {
-                                  "kind": "escalate_width_band",
-                                  "maxLines": 2
+                                  "kind": "grow_height"
                                 },
-                                "content": [
-                                  {
-                                    "id": "P-222__title",
-                                    "kind": "text",
-                                    "text": "Funding Scenario Details",
-                                    "textStyleRole": "title",
-                                    "priority": "primary"
+                                "content": [],
+                                "sharedNode": {
+                                  "title": "Funding Scenario Details",
+                                  "decoratorMode": {
+                                    "id": "none",
+                                    "showNodeType": false,
+                                    "showNodeId": false
                                   },
-                                  {
-                                    "id": "P-222__subtitle",
-                                    "kind": "text",
-                                    "text": "/projections/projection/funding-scenario-details",
-                                    "textStyleRole": "subtitle",
-                                    "priority": "secondary"
-                                  },
-                                  {
-                                    "id": "P-222__badge",
-                                    "kind": "badge_text",
-                                    "text": "auth",
-                                    "textStyleRole": "badge",
-                                    "priority": "secondary"
-                                  }
-                                ],
+                                  "nodeType": "Place",
+                                  "nodeId": "P-222",
+                                  "attributes": [
+                                    {
+                                      "groupId": "route_or_key",
+                                      "label": "route or key",
+                                      "value": "/projections/projection/funding-scenario-details"
+                                    },
+                                    {
+                                      "groupId": "access",
+                                      "label": "access",
+                                      "value": "auth"
+                                    }
+                                  ]
+                                },
                                 "ports": [
                                   {
                                     "id": "north_chain",
@@ -803,45 +783,43 @@
                         "role": "place",
                         "primitive": "card",
                         "classes": [
+                          "semantic_node",
                           "place",
                           "nested_place",
                           "depth-1"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
-                        "content": [
-                          {
-                            "id": "P-230__title",
-                            "kind": "text",
-                            "text": "Create New Projection",
-                            "textStyleRole": "title",
-                            "priority": "primary"
+                        "content": [],
+                        "sharedNode": {
+                          "title": "Create New Projection",
+                          "decoratorMode": {
+                            "id": "none",
+                            "showNodeType": false,
+                            "showNodeId": false
                           },
-                          {
-                            "id": "P-230__subtitle",
-                            "kind": "text",
-                            "text": "/projections/create-new-projection",
-                            "textStyleRole": "subtitle",
-                            "priority": "secondary"
-                          },
-                          {
-                            "id": "P-230__badge",
-                            "kind": "badge_text",
-                            "text": "auth",
-                            "textStyleRole": "badge",
-                            "priority": "secondary"
-                          }
-                        ],
+                          "nodeType": "Place",
+                          "nodeId": "P-230",
+                          "attributes": [
+                            {
+                              "groupId": "route_or_key",
+                              "label": "route or key",
+                              "value": "/projections/create-new-projection"
+                            },
+                            {
+                              "groupId": "access",
+                              "label": "access",
+                              "value": "auth"
+                            }
+                          ]
+                        },
                         "ports": [
                           {
                             "id": "north_chain",
@@ -945,59 +923,53 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-310__title",
-                    "kind": "text",
-                    "text": "Current Bills",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "title": "Current Bills",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "P-310__subtitle",
-                    "kind": "text",
-                    "text": "/current-bills",
-                    "textStyleRole": "subtitle",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-310__badge",
-                    "kind": "badge_text",
-                    "text": "auth",
-                    "textStyleRole": "badge",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-310__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "text": "entry_points: nav:global_nav",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-310__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "text": "primary_nav: true",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
+                  "nodeType": "Place",
+                  "nodeId": "P-310",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "route or key",
+                      "value": "/current-bills"
+                    },
+                    {
+                      "groupId": "access",
+                      "label": "access",
+                      "value": "auth"
+                    },
+                    {
+                      "groupId": "entry_points",
+                      "label": "entry_points",
+                      "value": "nav:global_nav"
+                    },
+                    {
+                      "groupId": "primary_nav",
+                      "label": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -1095,59 +1067,53 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-410__title",
-                    "kind": "text",
-                    "text": "Review Past Bills",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "title": "Review Past Bills",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "P-410__subtitle",
-                    "kind": "text",
-                    "text": "/review",
-                    "textStyleRole": "subtitle",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-410__badge",
-                    "kind": "badge_text",
-                    "text": "auth",
-                    "textStyleRole": "badge",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-410__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "text": "entry_points: nav:global_nav",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-410__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "text": "primary_nav: true",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
+                  "nodeType": "Place",
+                  "nodeId": "P-410",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "route or key",
+                      "value": "/review"
+                    },
+                    {
+                      "groupId": "access",
+                      "label": "access",
+                      "value": "auth"
+                    },
+                    {
+                      "groupId": "entry_points",
+                      "label": "entry_points",
+                      "value": "nav:global_nav"
+                    },
+                    {
+                      "groupId": "primary_nav",
+                      "label": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -1245,59 +1211,53 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-510__title",
-                    "kind": "text",
-                    "text": "Manage Accounts",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "title": "Manage Accounts",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "P-510__subtitle",
-                    "kind": "text",
-                    "text": "/accounts",
-                    "textStyleRole": "subtitle",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-510__badge",
-                    "kind": "badge_text",
-                    "text": "auth",
-                    "textStyleRole": "badge",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-510__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "text": "entry_points: nav:global_nav",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-510__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "text": "primary_nav: true",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
+                  "nodeType": "Place",
+                  "nodeId": "P-510",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "route or key",
+                      "value": "/accounts"
+                    },
+                    {
+                      "groupId": "access",
+                      "label": "access",
+                      "value": "auth"
+                    },
+                    {
+                      "groupId": "entry_points",
+                      "label": "entry_points",
+                      "value": "nav:global_nav"
+                    },
+                    {
+                      "groupId": "primary_nav",
+                      "label": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -1395,59 +1355,53 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-610__title",
-                    "kind": "text",
-                    "text": "Manage Fee Schedules",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "title": "Manage Fee Schedules",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "P-610__subtitle",
-                    "kind": "text",
-                    "text": "/fee-schedules",
-                    "textStyleRole": "subtitle",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-610__badge",
-                    "kind": "badge_text",
-                    "text": "auth",
-                    "textStyleRole": "badge",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-610__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "text": "entry_points: nav:global_nav",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  },
-                  {
-                    "id": "P-610__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "text": "primary_nav: true",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
+                  "nodeType": "Place",
+                  "nodeId": "P-610",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "route or key",
+                      "value": "/fee-schedules"
+                    },
+                    {
+                      "groupId": "access",
+                      "label": "access",
+                      "value": "auth"
+                    },
+                    {
+                      "groupId": "entry_points",
+                      "label": "entry_points",
+                      "value": "nav:global_nav"
+                    },
+                    {
+                      "groupId": "primary_nav",
+                      "label": "primary_nav",
+                      "value": "true"
+                    }
+                  ]
+                },
                 "ports": [
                   {
                     "id": "north_chain",

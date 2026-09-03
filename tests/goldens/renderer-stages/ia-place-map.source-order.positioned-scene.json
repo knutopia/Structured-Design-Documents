@@ -63,40 +63,63 @@
             "role": "place",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "place",
               "root_place",
-              "depth-0"
+              "depth-0",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "P-700__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Dashboard"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 81.536,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 78.976,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-700__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Dashboard"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 78.976,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "north_chain",
@@ -118,7 +141,7 @@
                 "id": "east",
                 "role": "east",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
@@ -134,7 +157,7 @@
             },
             "x": 24,
             "y": 24,
-            "width": 168,
+            "width": 224,
             "height": 48
           },
           {
@@ -198,40 +221,63 @@
                     "role": "place",
                     "primitive": "card",
                     "classes": [
+                      "semantic_node",
                       "place",
                       "nested_place",
-                      "depth-1"
+                      "depth-1",
+                      "shared-node",
+                      "shared-node-plain"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
-                    "widthBand": "narrow",
+                    "widthBand": "standard",
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
                     "content": [
                       {
                         "id": "P-900__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
                           "Reports"
                         ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 59.632,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 57.712,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       }
                     ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "P-900__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Reports"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 57.712,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
                     "ports": [
                       {
                         "id": "north_chain",
@@ -253,7 +299,7 @@
                         "id": "east",
                         "role": "east",
                         "side": "east",
-                        "x": 168,
+                        "x": 224,
                         "y": 24
                       },
                       {
@@ -269,28 +315,28 @@
                     },
                     "x": 24,
                     "y": 104,
-                    "width": 168,
+                    "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 24,
                 "y": 104,
-                "width": 168,
+                "width": 224,
                 "height": 48
               }
             ],
             "ports": [],
             "x": 24,
             "y": 104,
-            "width": 168,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 24,
         "y": 24,
-        "width": 168,
+        "width": 224,
         "height": 128
       },
       {
@@ -369,40 +415,63 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-plain"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-300__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Zeta"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 34.504,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 33.544,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "P-300__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Zeta"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 33.544,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -424,7 +493,7 @@
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 24
                   },
                   {
@@ -438,16 +507,16 @@
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 256,
+                "x": 312,
                 "y": 80,
-                "width": 168,
+                "width": 224,
                 "height": 48
               }
             ],
             "ports": [],
-            "x": 256,
+            "x": 312,
             "y": 80,
-            "width": 168,
+            "width": 224,
             "height": 48
           },
           {
@@ -484,40 +553,63 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-plain"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-100__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Alpha"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 44.408,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 43.128,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "P-100__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Alpha"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 43.128,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -539,7 +631,7 @@
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 24
                   },
                   {
@@ -553,16 +645,16 @@
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 256,
+                "x": 312,
                 "y": 148,
-                "width": 168,
+                "width": 224,
                 "height": 48
               }
             ],
             "ports": [],
-            "x": 256,
+            "x": 312,
             "y": 148,
-            "width": 168,
+            "width": 224,
             "height": 48
           },
           {
@@ -599,40 +691,63 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-plain"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-200__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Beta"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 35.16,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 34.2,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "P-200__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Beta"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 34.2,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -654,7 +769,7 @@
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 24
                   },
                   {
@@ -668,23 +783,23 @@
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 256,
+                "x": 312,
                 "y": 216,
-                "width": 168,
+                "width": 224,
                 "height": 48
               }
             ],
             "ports": [],
-            "x": 256,
+            "x": 312,
             "y": 216,
-            "width": 168,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 240,
+        "x": 296,
         "y": 24,
-        "width": 200,
+        "width": 256,
         "height": 256
       },
       {
@@ -763,40 +878,63 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-plain"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-050__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Archive Home"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 105.344,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 101.824,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "P-050__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Archive Home"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 101.824,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -818,7 +956,7 @@
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 24
                   },
                   {
@@ -832,30 +970,30 @@
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 504,
+                "x": 616,
                 "y": 80,
-                "width": 168,
+                "width": 224,
                 "height": 48
               }
             ],
             "ports": [],
-            "x": 504,
+            "x": 616,
             "y": 80,
-            "width": 168,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 488,
+        "x": 600,
         "y": 24,
-        "width": 200,
+        "width": 256,
         "height": 120
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 712,
+    "width": 880,
     "height": 304
   },
   "edges": [

@@ -6,6 +6,7 @@ import type {
   JourneyRenderStage,
   JourneyRenderStep
 } from "./journeyMapRenderModel.js";
+import { buildLegacyJourneyStepLabelLines } from "./journeyStepLabelLines.js";
 import type {
   OutcomeOpportunityMapRenderModel,
   OutcomeOpportunityRenderLane,
@@ -163,7 +164,9 @@ export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: Legacy
 }
 
 function renderJourneyStep(step: JourneyRenderStep, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(step.id)}${formatAttributes({ label: formatMultilineLabel(step.labelLines) })};`);
+  lines.push(`${indent}${quoteId(step.id)}${formatAttributes({
+    label: formatMultilineLabel(buildLegacyJourneyStepLabelLines(step))
+  })};`);
 }
 
 function renderJourneyStage(stage: JourneyRenderStage, indent: string, lines: string[]): void {

@@ -63,101 +63,324 @@
             "role": "place",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "place",
               "root_place",
-              "depth-0"
+              "depth-0",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "P-100__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Dashboard"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 81.536,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 78.976,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               },
               {
-                "id": "P-100__subtitle",
+                "id": "P-100__attribute_0_label",
                 "kind": "text",
-                "textStyleRole": "subtitle",
+                "textStyleRole": "shared_node_attribute_label",
+                "lines": [
+                  "Route or Key"
+                ],
+                "x": 15.5,
+                "y": 30.5,
+                "width": 59.175,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "P-100__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
                 "lines": [
                   "/dashboard"
                 ],
-                "x": 12,
-                "y": 38,
-                "width": 68.452,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 44.5,
+                "width": 63.186,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               },
               {
-                "id": "P-100__badge",
-                "kind": "badge_text",
-                "textStyleRole": "badge",
+                "id": "P-100__attribute_1_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
+                "lines": [
+                  "Access"
+                ],
+                "x": 15.5,
+                "y": 62.5,
+                "width": 33.5,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "P-100__attribute_1_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
                 "lines": [
                   "auth"
                 ],
-                "x": 12,
-                "y": 60,
-                "width": 41.65,
-                "height": 22,
+                "x": 15.5,
+                "y": 76.5,
+                "width": 25.188,
+                "height": 14,
                 "lineHeight": 14,
-                "region": "primary",
-                "priority": "secondary"
+                "region": "primary"
               },
               {
-                "id": "P-100__metadata__entry_points__0",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "P-100__attribute_2_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "entry_points:",
+                  "Entry_points"
+                ],
+                "x": 15.5,
+                "y": 94.5,
+                "width": 58.23,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "P-100__attribute_2_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
                   "nav:global_nav"
                 ],
-                "x": 12,
-                "y": 88,
+                "x": 15.5,
+                "y": 108.5,
                 "width": 82.956,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               },
               {
-                "id": "P-100__metadata__primary_nav__1",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "P-100__attribute_3_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "primary_nav: true"
+                  "Primary_nav"
                 ],
-                "x": 12,
-                "y": 126,
-                "width": 96.834,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 126.5,
+                "width": 57.215,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "P-100__attribute_3_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "true"
+                ],
+                "x": 15.5,
+                "y": 140.5,
+                "width": 23.124,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 159,
+                "title": {
+                  "id": "P-100__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Dashboard"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 78.976,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "route_or_key",
+                    "label": {
+                      "id": "P-100__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Route or Key"
+                      ],
+                      "x": 15.5,
+                      "y": 30.5,
+                      "width": 59.175,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "P-100__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "/dashboard"
+                        ],
+                        "x": 15.5,
+                        "y": 44.5,
+                        "width": 63.186,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 193,
+                    "height": 28
+                  },
+                  {
+                    "id": "access",
+                    "label": {
+                      "id": "P-100__attribute_1_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Access"
+                      ],
+                      "x": 15.5,
+                      "y": 62.5,
+                      "width": 33.5,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "P-100__attribute_1_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "auth"
+                        ],
+                        "x": 15.5,
+                        "y": 76.5,
+                        "width": 25.188,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 62.5,
+                    "width": 193,
+                    "height": 28
+                  },
+                  {
+                    "id": "entry_points",
+                    "label": {
+                      "id": "P-100__attribute_2_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Entry_points"
+                      ],
+                      "x": 15.5,
+                      "y": 94.5,
+                      "width": 58.23,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "P-100__attribute_2_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "nav:global_nav"
+                        ],
+                        "x": 15.5,
+                        "y": 108.5,
+                        "width": 82.956,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 94.5,
+                    "width": 193,
+                    "height": 28
+                  },
+                  {
+                    "id": "primary_nav",
+                    "label": {
+                      "id": "P-100__attribute_3_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Primary_nav"
+                      ],
+                      "x": 15.5,
+                      "y": 126.5,
+                      "width": 57.215,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "P-100__attribute_3_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "true"
+                        ],
+                        "x": 15.5,
+                        "y": 140.5,
+                        "width": 23.124,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 126.5,
+                    "width": 193,
+                    "height": 28
+                  }
+                ]
+              }
+            },
             "ports": [
               {
                 "id": "north_chain",
@@ -173,21 +396,21 @@
                 "side": "south",
                 "offset": 24,
                 "x": 24,
-                "y": 154
+                "y": 162
               },
               {
                 "id": "east",
                 "role": "east",
                 "side": "east",
-                "x": 168,
-                "y": 77
+                "x": 224,
+                "y": 81
               },
               {
                 "id": "west",
                 "role": "west",
                 "side": "west",
                 "x": 0,
-                "y": 77
+                "y": 81
               }
             ],
             "overflow": {
@@ -195,8 +418,8 @@
             },
             "x": 24,
             "y": 24,
-            "width": 168,
-            "height": 154
+            "width": 224,
+            "height": 162
           },
           {
             "kind": "container",
@@ -259,70 +482,194 @@
                     "role": "place",
                     "primitive": "card",
                     "classes": [
+                      "semantic_node",
                       "place",
                       "nested_place",
-                      "depth-1"
+                      "depth-1",
+                      "shared-node",
+                      "shared-node-dense"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
-                    "widthBand": "narrow",
+                    "widthBand": "standard",
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
                     "content": [
                       {
                         "id": "P-110__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
                           "Report View"
                         ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 91.512,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
+                        "x": 15.5,
+                        "y": 7.5,
+                        "width": 88.312,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       },
                       {
-                        "id": "P-110__subtitle",
+                        "id": "P-110__attribute_0_label",
                         "kind": "text",
-                        "textStyleRole": "subtitle",
+                        "textStyleRole": "shared_node_attribute_label",
+                        "lines": [
+                          "Route or Key"
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 59.175,
+                        "height": 12,
+                        "lineHeight": 12,
+                        "region": "primary"
+                      },
+                      {
+                        "id": "P-110__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
                         "lines": [
                           "/dashboard/report-view"
                         ],
-                        "x": 12,
-                        "y": 38,
-                        "width": 141.947,
-                        "height": 16,
-                        "lineHeight": 16,
-                        "region": "primary",
-                        "priority": "secondary"
+                        "x": 15.5,
+                        "y": 44.5,
+                        "width": 131.028,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
                       },
                       {
-                        "id": "P-110__badge",
-                        "kind": "badge_text",
-                        "textStyleRole": "badge",
+                        "id": "P-110__attribute_1_label",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_label",
+                        "lines": [
+                          "Access"
+                        ],
+                        "x": 15.5,
+                        "y": 62.5,
+                        "width": 33.5,
+                        "height": 12,
+                        "lineHeight": 12,
+                        "region": "primary"
+                      },
+                      {
+                        "id": "P-110__attribute_1_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
                         "lines": [
                           "auth"
                         ],
-                        "x": 12,
-                        "y": 60,
-                        "width": 41.65,
-                        "height": 22,
+                        "x": 15.5,
+                        "y": 76.5,
+                        "width": 25.188,
+                        "height": 14,
                         "lineHeight": 14,
-                        "region": "primary",
-                        "priority": "secondary"
+                        "region": "primary"
                       }
                     ],
+                    "sharedNode": {
+                      "density": "dense",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 95,
+                        "title": {
+                          "id": "P-110__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Report View"
+                          ],
+                          "x": 15.5,
+                          "y": 7.5,
+                          "width": 88.312,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": [
+                          {
+                            "id": "route_or_key",
+                            "label": {
+                              "id": "P-110__attribute_0_label",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_label",
+                              "lines": [
+                                "Route or Key"
+                              ],
+                              "x": 15.5,
+                              "y": 30.5,
+                              "width": 59.175,
+                              "height": 12,
+                              "lineHeight": 12,
+                              "region": "primary"
+                            },
+                            "values": [
+                              {
+                                "id": "P-110__attribute_0_value_0",
+                                "kind": "text",
+                                "textStyleRole": "shared_node_attribute_value",
+                                "lines": [
+                                  "/dashboard/report-view"
+                                ],
+                                "x": 15.5,
+                                "y": 44.5,
+                                "width": 131.028,
+                                "height": 14,
+                                "lineHeight": 14,
+                                "region": "primary"
+                              }
+                            ],
+                            "x": 15.5,
+                            "y": 30.5,
+                            "width": 193,
+                            "height": 28
+                          },
+                          {
+                            "id": "access",
+                            "label": {
+                              "id": "P-110__attribute_1_label",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_label",
+                              "lines": [
+                                "Access"
+                              ],
+                              "x": 15.5,
+                              "y": 62.5,
+                              "width": 33.5,
+                              "height": 12,
+                              "lineHeight": 12,
+                              "region": "primary"
+                            },
+                            "values": [
+                              {
+                                "id": "P-110__attribute_1_value_0",
+                                "kind": "text",
+                                "textStyleRole": "shared_node_attribute_value",
+                                "lines": [
+                                  "auth"
+                                ],
+                                "x": 15.5,
+                                "y": 76.5,
+                                "width": 25.188,
+                                "height": 14,
+                                "lineHeight": 14,
+                                "region": "primary"
+                              }
+                            ],
+                            "x": 15.5,
+                            "y": 62.5,
+                            "width": 193,
+                            "height": 28
+                          }
+                        ]
+                      }
+                    },
                     "ports": [
                       {
                         "id": "north_chain",
@@ -338,51 +685,51 @@
                         "side": "south",
                         "offset": 24,
                         "x": 24,
-                        "y": 94
+                        "y": 98
                       },
                       {
                         "id": "east",
                         "role": "east",
                         "side": "east",
-                        "x": 168,
-                        "y": 47
+                        "x": 224,
+                        "y": 49
                       },
                       {
                         "id": "west",
                         "role": "west",
                         "side": "west",
                         "x": 0,
-                        "y": 47
+                        "y": 49
                       }
                     ],
                     "overflow": {
                       "status": "fits"
                     },
                     "x": 24,
-                    "y": 210,
-                    "width": 168,
-                    "height": 94
+                    "y": 218,
+                    "width": 224,
+                    "height": 98
                   }
                 ],
                 "ports": [],
                 "x": 24,
-                "y": 210,
-                "width": 168,
-                "height": 94
+                "y": 218,
+                "width": 224,
+                "height": 98
               }
             ],
             "ports": [],
             "x": 24,
-            "y": 210,
-            "width": 168,
-            "height": 94
+            "y": 218,
+            "width": 224,
+            "height": 98
           }
         ],
         "ports": [],
         "x": 24,
         "y": 24,
-        "width": 168,
-        "height": 280
+        "width": 224,
+        "height": 292
       },
       {
         "kind": "container",
@@ -460,102 +807,324 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-210__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
-                      "Projections",
-                      "Overview"
+                      "Projections Overview"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 85.112,
-                    "height": 40,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 152.32,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-210__subtitle",
+                    "id": "P-210__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "subtitle",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Route or Key"
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 59.175,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-210__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "/projections"
                     ],
-                    "x": 12,
-                    "y": 58,
-                    "width": 71.812,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 66.288,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-210__badge",
-                    "kind": "badge_text",
-                    "textStyleRole": "badge",
+                    "id": "P-210__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Access"
+                    ],
+                    "x": 15.5,
+                    "y": 62.5,
+                    "width": 33.5,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-210__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "auth"
                     ],
-                    "x": 12,
-                    "y": 80,
-                    "width": 41.65,
-                    "height": 22,
+                    "x": 15.5,
+                    "y": 76.5,
+                    "width": 25.188,
+                    "height": 14,
                     "lineHeight": 14,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "region": "primary"
                   },
                   {
-                    "id": "P-210__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-210__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "entry_points:",
+                      "Entry_points"
+                    ],
+                    "x": 15.5,
+                    "y": 94.5,
+                    "width": 58.23,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-210__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
                       "nav:global_nav"
                     ],
-                    "x": 12,
-                    "y": 108,
+                    "x": 15.5,
+                    "y": 108.5,
                     "width": 82.956,
-                    "height": 32,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-210__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-210__attribute_3_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "primary_nav: true"
+                      "Primary_nav"
                     ],
-                    "x": 12,
-                    "y": 146,
-                    "width": 96.834,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 126.5,
+                    "width": 57.215,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-210__attribute_3_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "true"
+                    ],
+                    "x": 15.5,
+                    "y": 140.5,
+                    "width": 23.124,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 159,
+                    "title": {
+                      "id": "P-210__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Projections Overview"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 152.32,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "route_or_key",
+                        "label": {
+                          "id": "P-210__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Route or Key"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 59.175,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-210__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "/projections"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 66.288,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "access",
+                        "label": {
+                          "id": "P-210__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Access"
+                          ],
+                          "x": 15.5,
+                          "y": 62.5,
+                          "width": 33.5,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-210__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 25.188,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 62.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "entry_points",
+                        "label": {
+                          "id": "P-210__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Entry_points"
+                          ],
+                          "x": 15.5,
+                          "y": 94.5,
+                          "width": 58.23,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-210__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "nav:global_nav"
+                            ],
+                            "x": 15.5,
+                            "y": 108.5,
+                            "width": 82.956,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 94.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "primary_nav",
+                        "label": {
+                          "id": "P-210__attribute_3_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Primary_nav"
+                          ],
+                          "x": 15.5,
+                          "y": 126.5,
+                          "width": 57.215,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-210__attribute_3_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "true"
+                            ],
+                            "x": 15.5,
+                            "y": 140.5,
+                            "width": 23.124,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 126.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -571,30 +1140,30 @@
                     "side": "south",
                     "offset": 24,
                     "x": 24,
-                    "y": 174
+                    "y": 162
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
-                    "y": 87
+                    "x": 224,
+                    "y": 81
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 87
+                    "y": 81
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 256,
+                "x": 312,
                 "y": 80,
-                "width": 168,
-                "height": 174
+                "width": 224,
+                "height": 162
               },
               {
                 "kind": "container",
@@ -657,70 +1226,194 @@
                         "role": "place",
                         "primitive": "card",
                         "classes": [
+                          "semantic_node",
                           "place",
                           "nested_place",
-                          "depth-1"
+                          "depth-1",
+                          "shared-node",
+                          "shared-node-dense"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
-                        "widthBand": "narrow",
+                        "widthBand": "standard",
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
                         "content": [
                           {
                             "id": "P-220__title",
                             "kind": "text",
-                            "textStyleRole": "title",
+                            "textStyleRole": "shared_node_title",
                             "lines": [
                               "Projection"
                             ],
-                            "x": 12,
-                            "y": 12,
-                            "width": 76.912,
-                            "height": 20,
-                            "lineHeight": 20,
-                            "region": "primary",
-                            "priority": "primary"
+                            "x": 15.5,
+                            "y": 7.5,
+                            "width": 74.032,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
                           },
                           {
-                            "id": "P-220__subtitle",
+                            "id": "P-220__attribute_0_label",
                             "kind": "text",
-                            "textStyleRole": "subtitle",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Route or Key"
+                            ],
+                            "x": 15.5,
+                            "y": 30.5,
+                            "width": 59.175,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          {
+                            "id": "P-220__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
                             "lines": [
                               "/projections/projection"
                             ],
-                            "x": 12,
-                            "y": 38,
-                            "width": 137.111,
-                            "height": 16,
-                            "lineHeight": 16,
-                            "region": "primary",
-                            "priority": "secondary"
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 126.564,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
                           },
                           {
-                            "id": "P-220__badge",
-                            "kind": "badge_text",
-                            "textStyleRole": "badge",
+                            "id": "P-220__attribute_1_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Access"
+                            ],
+                            "x": 15.5,
+                            "y": 62.5,
+                            "width": 33.5,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          {
+                            "id": "P-220__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
                             "lines": [
                               "auth"
                             ],
-                            "x": 12,
-                            "y": 60,
-                            "width": 41.65,
-                            "height": 22,
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 25.188,
+                            "height": 14,
                             "lineHeight": 14,
-                            "region": "primary",
-                            "priority": "secondary"
+                            "region": "primary"
                           }
                         ],
+                        "sharedNode": {
+                          "density": "dense",
+                          "body": {
+                            "x": 1.5,
+                            "y": 1.5,
+                            "width": 221,
+                            "height": 95,
+                            "title": {
+                              "id": "P-220__title",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_title",
+                              "lines": [
+                                "Projection"
+                              ],
+                              "x": 15.5,
+                              "y": 7.5,
+                              "width": 74.032,
+                              "height": 19,
+                              "lineHeight": 19,
+                              "region": "primary"
+                            },
+                            "attributeGroups": [
+                              {
+                                "id": "route_or_key",
+                                "label": {
+                                  "id": "P-220__attribute_0_label",
+                                  "kind": "text",
+                                  "textStyleRole": "shared_node_attribute_label",
+                                  "lines": [
+                                    "Route or Key"
+                                  ],
+                                  "x": 15.5,
+                                  "y": 30.5,
+                                  "width": 59.175,
+                                  "height": 12,
+                                  "lineHeight": 12,
+                                  "region": "primary"
+                                },
+                                "values": [
+                                  {
+                                    "id": "P-220__attribute_0_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
+                                    "lines": [
+                                      "/projections/projection"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 44.5,
+                                    "width": 126.564,
+                                    "height": 14,
+                                    "lineHeight": 14,
+                                    "region": "primary"
+                                  }
+                                ],
+                                "x": 15.5,
+                                "y": 30.5,
+                                "width": 193,
+                                "height": 28
+                              },
+                              {
+                                "id": "access",
+                                "label": {
+                                  "id": "P-220__attribute_1_label",
+                                  "kind": "text",
+                                  "textStyleRole": "shared_node_attribute_label",
+                                  "lines": [
+                                    "Access"
+                                  ],
+                                  "x": 15.5,
+                                  "y": 62.5,
+                                  "width": 33.5,
+                                  "height": 12,
+                                  "lineHeight": 12,
+                                  "region": "primary"
+                                },
+                                "values": [
+                                  {
+                                    "id": "P-220__attribute_1_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
+                                    "lines": [
+                                      "auth"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 76.5,
+                                    "width": 25.188,
+                                    "height": 14,
+                                    "lineHeight": 14,
+                                    "region": "primary"
+                                  }
+                                ],
+                                "x": 15.5,
+                                "y": 62.5,
+                                "width": 193,
+                                "height": 28
+                              }
+                            ]
+                          }
+                        },
                         "ports": [
                           {
                             "id": "north_chain",
@@ -736,30 +1429,30 @@
                             "side": "south",
                             "offset": 24,
                             "x": 24,
-                            "y": 94
+                            "y": 98
                           },
                           {
                             "id": "east",
                             "role": "east",
                             "side": "east",
-                            "x": 168,
-                            "y": 47
+                            "x": 224,
+                            "y": 49
                           },
                           {
                             "id": "west",
                             "role": "west",
                             "side": "west",
                             "x": 0,
-                            "y": 47
+                            "y": 49
                           }
                         ],
                         "overflow": {
                           "status": "fits"
                         },
-                        "x": 304,
-                        "y": 286,
-                        "width": 168,
-                        "height": 94
+                        "x": 360,
+                        "y": 274,
+                        "width": 224,
+                        "height": 98
                       },
                       {
                         "kind": "container",
@@ -822,72 +1515,198 @@
                                 "role": "place",
                                 "primitive": "card",
                                 "classes": [
+                                  "semantic_node",
                                   "place",
                                   "nested_place",
-                                  "depth-2"
+                                  "depth-2",
+                                  "shared-node",
+                                  "shared-node-dense"
                                 ],
                                 "widthPolicy": {
-                                  "preferred": "narrow",
+                                  "preferred": "standard",
                                   "allowed": [
-                                    "narrow",
-                                    "standard",
-                                    "wide"
+                                    "standard"
                                   ]
                                 },
                                 "widthBand": "standard",
                                 "overflowPolicy": {
-                                  "kind": "escalate_width_band",
-                                  "maxLines": 2
+                                  "kind": "grow_height"
                                 },
                                 "content": [
                                   {
                                     "id": "P-221__title",
                                     "kind": "text",
-                                    "textStyleRole": "title",
+                                    "textStyleRole": "shared_node_title",
                                     "lines": [
                                       "Fee Schedule Scenario",
                                       "Details"
                                     ],
-                                    "x": 12,
-                                    "y": 12,
-                                    "width": 172.656,
-                                    "height": 40,
-                                    "lineHeight": 20,
-                                    "region": "primary",
-                                    "priority": "primary"
+                                    "x": 15.5,
+                                    "y": 7.5,
+                                    "width": 166.256,
+                                    "height": 38,
+                                    "lineHeight": 19,
+                                    "region": "primary"
                                   },
                                   {
-                                    "id": "P-221__subtitle",
+                                    "id": "P-221__attribute_0_label",
                                     "kind": "text",
-                                    "textStyleRole": "subtitle",
+                                    "textStyleRole": "shared_node_attribute_label",
                                     "lines": [
-                                      "/projections/projection/fee-sche",
-                                      "dule-scenario-details"
+                                      "Route or Key"
                                     ],
-                                    "x": 12,
-                                    "y": 58,
-                                    "width": 194.961,
-                                    "height": 32,
-                                    "lineHeight": 16,
-                                    "region": "primary",
-                                    "priority": "secondary"
+                                    "x": 15.5,
+                                    "y": 49.5,
+                                    "width": 59.175,
+                                    "height": 12,
+                                    "lineHeight": 12,
+                                    "region": "primary"
                                   },
                                   {
-                                    "id": "P-221__badge",
-                                    "kind": "badge_text",
-                                    "textStyleRole": "badge",
+                                    "id": "P-221__attribute_0_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
+                                    "lines": [
+                                      "/projections/projection/fee-sched",
+                                      "ule-scenario-details"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 63.5,
+                                    "width": 187.122,
+                                    "height": 28,
+                                    "lineHeight": 14,
+                                    "region": "primary"
+                                  },
+                                  {
+                                    "id": "P-221__attribute_1_label",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_label",
+                                    "lines": [
+                                      "Access"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 95.5,
+                                    "width": 33.5,
+                                    "height": 12,
+                                    "lineHeight": 12,
+                                    "region": "primary"
+                                  },
+                                  {
+                                    "id": "P-221__attribute_1_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
                                     "lines": [
                                       "auth"
                                     ],
-                                    "x": 12,
-                                    "y": 96,
-                                    "width": 41.65,
-                                    "height": 22,
+                                    "x": 15.5,
+                                    "y": 109.5,
+                                    "width": 25.188,
+                                    "height": 14,
                                     "lineHeight": 14,
-                                    "region": "primary",
-                                    "priority": "secondary"
+                                    "region": "primary"
                                   }
                                 ],
+                                "sharedNode": {
+                                  "density": "dense",
+                                  "body": {
+                                    "x": 1.5,
+                                    "y": 1.5,
+                                    "width": 221,
+                                    "height": 128,
+                                    "title": {
+                                      "id": "P-221__title",
+                                      "kind": "text",
+                                      "textStyleRole": "shared_node_title",
+                                      "lines": [
+                                        "Fee Schedule Scenario",
+                                        "Details"
+                                      ],
+                                      "x": 15.5,
+                                      "y": 7.5,
+                                      "width": 166.256,
+                                      "height": 38,
+                                      "lineHeight": 19,
+                                      "region": "primary"
+                                    },
+                                    "attributeGroups": [
+                                      {
+                                        "id": "route_or_key",
+                                        "label": {
+                                          "id": "P-221__attribute_0_label",
+                                          "kind": "text",
+                                          "textStyleRole": "shared_node_attribute_label",
+                                          "lines": [
+                                            "Route or Key"
+                                          ],
+                                          "x": 15.5,
+                                          "y": 49.5,
+                                          "width": 59.175,
+                                          "height": 12,
+                                          "lineHeight": 12,
+                                          "region": "primary"
+                                        },
+                                        "values": [
+                                          {
+                                            "id": "P-221__attribute_0_value_0",
+                                            "kind": "text",
+                                            "textStyleRole": "shared_node_attribute_value",
+                                            "lines": [
+                                              "/projections/projection/fee-sched",
+                                              "ule-scenario-details"
+                                            ],
+                                            "x": 15.5,
+                                            "y": 63.5,
+                                            "width": 187.122,
+                                            "height": 28,
+                                            "lineHeight": 14,
+                                            "region": "primary"
+                                          }
+                                        ],
+                                        "x": 15.5,
+                                        "y": 49.5,
+                                        "width": 193,
+                                        "height": 42
+                                      },
+                                      {
+                                        "id": "access",
+                                        "label": {
+                                          "id": "P-221__attribute_1_label",
+                                          "kind": "text",
+                                          "textStyleRole": "shared_node_attribute_label",
+                                          "lines": [
+                                            "Access"
+                                          ],
+                                          "x": 15.5,
+                                          "y": 95.5,
+                                          "width": 33.5,
+                                          "height": 12,
+                                          "lineHeight": 12,
+                                          "region": "primary"
+                                        },
+                                        "values": [
+                                          {
+                                            "id": "P-221__attribute_1_value_0",
+                                            "kind": "text",
+                                            "textStyleRole": "shared_node_attribute_value",
+                                            "lines": [
+                                              "auth"
+                                            ],
+                                            "x": 15.5,
+                                            "y": 109.5,
+                                            "width": 25.188,
+                                            "height": 14,
+                                            "lineHeight": 14,
+                                            "region": "primary"
+                                          }
+                                        ],
+                                        "x": 15.5,
+                                        "y": 95.5,
+                                        "width": 193,
+                                        "height": 28
+                                      }
+                                    ]
+                                  }
+                                },
                                 "ports": [
                                   {
                                     "id": "north_chain",
@@ -903,37 +1722,37 @@
                                     "side": "south",
                                     "offset": 24,
                                     "x": 24,
-                                    "y": 130
+                                    "y": 131
                                   },
                                   {
                                     "id": "east",
                                     "role": "east",
                                     "side": "east",
                                     "x": 224,
-                                    "y": 65
+                                    "y": 65.5
                                   },
                                   {
                                     "id": "west",
                                     "role": "west",
                                     "side": "west",
                                     "x": 0,
-                                    "y": 65
+                                    "y": 65.5
                                   }
                                 ],
                                 "overflow": {
-                                  "status": "escalated_width_band"
+                                  "status": "fits"
                                 },
-                                "x": 352,
-                                "y": 412,
+                                "x": 408,
+                                "y": 404,
                                 "width": 224,
-                                "height": 130
+                                "height": 131
                               }
                             ],
                             "ports": [],
-                            "x": 352,
-                            "y": 412,
+                            "x": 408,
+                            "y": 404,
                             "width": 224,
-                            "height": 130
+                            "height": 131
                           },
                           {
                             "kind": "container",
@@ -969,71 +1788,196 @@
                                 "role": "place",
                                 "primitive": "card",
                                 "classes": [
+                                  "semantic_node",
                                   "place",
                                   "nested_place",
-                                  "depth-2"
+                                  "depth-2",
+                                  "shared-node",
+                                  "shared-node-dense"
                                 ],
                                 "widthPolicy": {
-                                  "preferred": "narrow",
+                                  "preferred": "standard",
                                   "allowed": [
-                                    "narrow",
-                                    "standard",
-                                    "wide"
+                                    "standard"
                                   ]
                                 },
                                 "widthBand": "standard",
                                 "overflowPolicy": {
-                                  "kind": "escalate_width_band",
-                                  "maxLines": 2
+                                  "kind": "grow_height"
                                 },
                                 "content": [
                                   {
                                     "id": "P-222__title",
                                     "kind": "text",
-                                    "textStyleRole": "title",
+                                    "textStyleRole": "shared_node_title",
                                     "lines": [
                                       "Funding Scenario Details"
                                     ],
-                                    "x": 12,
-                                    "y": 12,
-                                    "width": 188.68,
-                                    "height": 20,
-                                    "lineHeight": 20,
-                                    "region": "primary",
-                                    "priority": "primary"
+                                    "x": 15.5,
+                                    "y": 7.5,
+                                    "width": 181.32,
+                                    "height": 19,
+                                    "lineHeight": 19,
+                                    "region": "primary"
                                   },
                                   {
-                                    "id": "P-222__subtitle",
+                                    "id": "P-222__attribute_0_label",
                                     "kind": "text",
-                                    "textStyleRole": "subtitle",
+                                    "textStyleRole": "shared_node_attribute_label",
                                     "lines": [
-                                      "/projections/projection/funding-s",
-                                      "cenario-details"
+                                      "Route or Key"
                                     ],
-                                    "x": 12,
-                                    "y": 38,
-                                    "width": 199.693,
-                                    "height": 32,
-                                    "lineHeight": 16,
-                                    "region": "primary",
-                                    "priority": "secondary"
+                                    "x": 15.5,
+                                    "y": 30.5,
+                                    "width": 59.175,
+                                    "height": 12,
+                                    "lineHeight": 12,
+                                    "region": "primary"
                                   },
                                   {
-                                    "id": "P-222__badge",
-                                    "kind": "badge_text",
-                                    "textStyleRole": "badge",
+                                    "id": "P-222__attribute_0_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
+                                    "lines": [
+                                      "/projections/projection/funding-sc",
+                                      "enario-details"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 44.5,
+                                    "width": 190.854,
+                                    "height": 28,
+                                    "lineHeight": 14,
+                                    "region": "primary"
+                                  },
+                                  {
+                                    "id": "P-222__attribute_1_label",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_label",
+                                    "lines": [
+                                      "Access"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 76.5,
+                                    "width": 33.5,
+                                    "height": 12,
+                                    "lineHeight": 12,
+                                    "region": "primary"
+                                  },
+                                  {
+                                    "id": "P-222__attribute_1_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
                                     "lines": [
                                       "auth"
                                     ],
-                                    "x": 12,
-                                    "y": 76,
-                                    "width": 41.65,
-                                    "height": 22,
+                                    "x": 15.5,
+                                    "y": 90.5,
+                                    "width": 25.188,
+                                    "height": 14,
                                     "lineHeight": 14,
-                                    "region": "primary",
-                                    "priority": "secondary"
+                                    "region": "primary"
                                   }
                                 ],
+                                "sharedNode": {
+                                  "density": "dense",
+                                  "body": {
+                                    "x": 1.5,
+                                    "y": 1.5,
+                                    "width": 221,
+                                    "height": 109,
+                                    "title": {
+                                      "id": "P-222__title",
+                                      "kind": "text",
+                                      "textStyleRole": "shared_node_title",
+                                      "lines": [
+                                        "Funding Scenario Details"
+                                      ],
+                                      "x": 15.5,
+                                      "y": 7.5,
+                                      "width": 181.32,
+                                      "height": 19,
+                                      "lineHeight": 19,
+                                      "region": "primary"
+                                    },
+                                    "attributeGroups": [
+                                      {
+                                        "id": "route_or_key",
+                                        "label": {
+                                          "id": "P-222__attribute_0_label",
+                                          "kind": "text",
+                                          "textStyleRole": "shared_node_attribute_label",
+                                          "lines": [
+                                            "Route or Key"
+                                          ],
+                                          "x": 15.5,
+                                          "y": 30.5,
+                                          "width": 59.175,
+                                          "height": 12,
+                                          "lineHeight": 12,
+                                          "region": "primary"
+                                        },
+                                        "values": [
+                                          {
+                                            "id": "P-222__attribute_0_value_0",
+                                            "kind": "text",
+                                            "textStyleRole": "shared_node_attribute_value",
+                                            "lines": [
+                                              "/projections/projection/funding-sc",
+                                              "enario-details"
+                                            ],
+                                            "x": 15.5,
+                                            "y": 44.5,
+                                            "width": 190.854,
+                                            "height": 28,
+                                            "lineHeight": 14,
+                                            "region": "primary"
+                                          }
+                                        ],
+                                        "x": 15.5,
+                                        "y": 30.5,
+                                        "width": 193,
+                                        "height": 42
+                                      },
+                                      {
+                                        "id": "access",
+                                        "label": {
+                                          "id": "P-222__attribute_1_label",
+                                          "kind": "text",
+                                          "textStyleRole": "shared_node_attribute_label",
+                                          "lines": [
+                                            "Access"
+                                          ],
+                                          "x": 15.5,
+                                          "y": 76.5,
+                                          "width": 33.5,
+                                          "height": 12,
+                                          "lineHeight": 12,
+                                          "region": "primary"
+                                        },
+                                        "values": [
+                                          {
+                                            "id": "P-222__attribute_1_value_0",
+                                            "kind": "text",
+                                            "textStyleRole": "shared_node_attribute_value",
+                                            "lines": [
+                                              "auth"
+                                            ],
+                                            "x": 15.5,
+                                            "y": 90.5,
+                                            "width": 25.188,
+                                            "height": 14,
+                                            "lineHeight": 14,
+                                            "region": "primary"
+                                          }
+                                        ],
+                                        "x": 15.5,
+                                        "y": 76.5,
+                                        "width": 193,
+                                        "height": 28
+                                      }
+                                    ]
+                                  }
+                                },
                                 "ports": [
                                   {
                                     "id": "north_chain",
@@ -1049,51 +1993,51 @@
                                     "side": "south",
                                     "offset": 24,
                                     "x": 24,
-                                    "y": 110
+                                    "y": 112
                                   },
                                   {
                                     "id": "east",
                                     "role": "east",
                                     "side": "east",
                                     "x": 224,
-                                    "y": 55
+                                    "y": 56
                                   },
                                   {
                                     "id": "west",
                                     "role": "west",
                                     "side": "west",
                                     "x": 0,
-                                    "y": 55
+                                    "y": 56
                                   }
                                 ],
                                 "overflow": {
-                                  "status": "escalated_width_band"
+                                  "status": "fits"
                                 },
-                                "x": 352,
-                                "y": 574,
+                                "x": 408,
+                                "y": 567,
                                 "width": 224,
-                                "height": 110
+                                "height": 112
                               }
                             ],
                             "ports": [],
-                            "x": 352,
-                            "y": 574,
+                            "x": 408,
+                            "y": 567,
                             "width": 224,
-                            "height": 110
+                            "height": 112
                           }
                         ],
                         "ports": [],
-                        "x": 304,
-                        "y": 412,
+                        "x": 360,
+                        "y": 404,
                         "width": 272,
-                        "height": 272
+                        "height": 275
                       }
                     ],
                     "ports": [],
-                    "x": 304,
-                    "y": 286,
+                    "x": 360,
+                    "y": 274,
                     "width": 272,
-                    "height": 398
+                    "height": 405
                   },
                   {
                     "kind": "container",
@@ -1129,72 +2073,196 @@
                         "role": "place",
                         "primitive": "card",
                         "classes": [
+                          "semantic_node",
                           "place",
                           "nested_place",
-                          "depth-1"
+                          "depth-1",
+                          "shared-node",
+                          "shared-node-dense"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
-                        "widthBand": "narrow",
+                        "widthBand": "standard",
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
                         "content": [
                           {
                             "id": "P-230__title",
                             "kind": "text",
-                            "textStyleRole": "title",
+                            "textStyleRole": "shared_node_title",
                             "lines": [
-                              "Create New",
-                              "Projection"
+                              "Create New Projection"
                             ],
-                            "x": 12,
-                            "y": 12,
-                            "width": 88.08,
-                            "height": 40,
-                            "lineHeight": 20,
-                            "region": "primary",
-                            "priority": "primary"
+                            "x": 15.5,
+                            "y": 7.5,
+                            "width": 162.24,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
                           },
                           {
-                            "id": "P-230__subtitle",
+                            "id": "P-230__attribute_0_label",
                             "kind": "text",
-                            "textStyleRole": "subtitle",
+                            "textStyleRole": "shared_node_attribute_label",
                             "lines": [
-                              "/projections/create-ne",
-                              "w-projection"
+                              "Route or Key"
                             ],
-                            "x": 12,
-                            "y": 58,
-                            "width": 134.667,
-                            "height": 32,
-                            "lineHeight": 16,
-                            "region": "primary",
-                            "priority": "secondary"
+                            "x": 15.5,
+                            "y": 30.5,
+                            "width": 59.175,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
                           },
                           {
-                            "id": "P-230__badge",
-                            "kind": "badge_text",
-                            "textStyleRole": "badge",
+                            "id": "P-230__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "/projections/create-new-projectio",
+                              "n"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 187.2,
+                            "height": 28,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          },
+                          {
+                            "id": "P-230__attribute_1_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Access"
+                            ],
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 33.5,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          {
+                            "id": "P-230__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
                             "lines": [
                               "auth"
                             ],
-                            "x": 12,
-                            "y": 96,
-                            "width": 41.65,
-                            "height": 22,
+                            "x": 15.5,
+                            "y": 90.5,
+                            "width": 25.188,
+                            "height": 14,
                             "lineHeight": 14,
-                            "region": "primary",
-                            "priority": "secondary"
+                            "region": "primary"
                           }
                         ],
+                        "sharedNode": {
+                          "density": "dense",
+                          "body": {
+                            "x": 1.5,
+                            "y": 1.5,
+                            "width": 221,
+                            "height": 109,
+                            "title": {
+                              "id": "P-230__title",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_title",
+                              "lines": [
+                                "Create New Projection"
+                              ],
+                              "x": 15.5,
+                              "y": 7.5,
+                              "width": 162.24,
+                              "height": 19,
+                              "lineHeight": 19,
+                              "region": "primary"
+                            },
+                            "attributeGroups": [
+                              {
+                                "id": "route_or_key",
+                                "label": {
+                                  "id": "P-230__attribute_0_label",
+                                  "kind": "text",
+                                  "textStyleRole": "shared_node_attribute_label",
+                                  "lines": [
+                                    "Route or Key"
+                                  ],
+                                  "x": 15.5,
+                                  "y": 30.5,
+                                  "width": 59.175,
+                                  "height": 12,
+                                  "lineHeight": 12,
+                                  "region": "primary"
+                                },
+                                "values": [
+                                  {
+                                    "id": "P-230__attribute_0_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
+                                    "lines": [
+                                      "/projections/create-new-projectio",
+                                      "n"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 44.5,
+                                    "width": 187.2,
+                                    "height": 28,
+                                    "lineHeight": 14,
+                                    "region": "primary"
+                                  }
+                                ],
+                                "x": 15.5,
+                                "y": 30.5,
+                                "width": 193,
+                                "height": 42
+                              },
+                              {
+                                "id": "access",
+                                "label": {
+                                  "id": "P-230__attribute_1_label",
+                                  "kind": "text",
+                                  "textStyleRole": "shared_node_attribute_label",
+                                  "lines": [
+                                    "Access"
+                                  ],
+                                  "x": 15.5,
+                                  "y": 76.5,
+                                  "width": 33.5,
+                                  "height": 12,
+                                  "lineHeight": 12,
+                                  "region": "primary"
+                                },
+                                "values": [
+                                  {
+                                    "id": "P-230__attribute_1_value_0",
+                                    "kind": "text",
+                                    "textStyleRole": "shared_node_attribute_value",
+                                    "lines": [
+                                      "auth"
+                                    ],
+                                    "x": 15.5,
+                                    "y": 90.5,
+                                    "width": 25.188,
+                                    "height": 14,
+                                    "lineHeight": 14,
+                                    "region": "primary"
+                                  }
+                                ],
+                                "x": 15.5,
+                                "y": 76.5,
+                                "width": 193,
+                                "height": 28
+                              }
+                            ]
+                          }
+                        },
                         "ports": [
                           {
                             "id": "north_chain",
@@ -1210,58 +2278,58 @@
                             "side": "south",
                             "offset": 24,
                             "x": 24,
-                            "y": 130
+                            "y": 112
                           },
                           {
                             "id": "east",
                             "role": "east",
                             "side": "east",
-                            "x": 168,
-                            "y": 65
+                            "x": 224,
+                            "y": 56
                           },
                           {
                             "id": "west",
                             "role": "west",
                             "side": "west",
                             "x": 0,
-                            "y": 65
+                            "y": 56
                           }
                         ],
                         "overflow": {
                           "status": "fits"
                         },
-                        "x": 304,
-                        "y": 716,
-                        "width": 168,
-                        "height": 130
+                        "x": 360,
+                        "y": 711,
+                        "width": 224,
+                        "height": 112
                       }
                     ],
                     "ports": [],
-                    "x": 304,
-                    "y": 716,
-                    "width": 168,
-                    "height": 130
+                    "x": 360,
+                    "y": 711,
+                    "width": 224,
+                    "height": 112
                   }
                 ],
                 "ports": [],
-                "x": 256,
-                "y": 286,
+                "x": 312,
+                "y": 274,
                 "width": 320,
-                "height": 560
+                "height": 549
               }
             ],
             "ports": [],
-            "x": 256,
+            "x": 312,
             "y": 80,
             "width": 320,
-            "height": 766
+            "height": 743
           }
         ],
         "ports": [],
-        "x": 240,
+        "x": 296,
         "y": 24,
         "width": 352,
-        "height": 838
+        "height": 815
       },
       {
         "kind": "container",
@@ -1339,101 +2407,324 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-310__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Current Bills"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 95.016,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 91.176,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-310__subtitle",
+                    "id": "P-310__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "subtitle",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Route or Key"
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 59.175,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-310__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "/current-bills"
                     ],
-                    "x": 12,
-                    "y": 38,
-                    "width": 78.644,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 72.594,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-310__badge",
-                    "kind": "badge_text",
-                    "textStyleRole": "badge",
+                    "id": "P-310__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Access"
+                    ],
+                    "x": 15.5,
+                    "y": 62.5,
+                    "width": 33.5,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-310__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "auth"
                     ],
-                    "x": 12,
-                    "y": 60,
-                    "width": 41.65,
-                    "height": 22,
+                    "x": 15.5,
+                    "y": 76.5,
+                    "width": 25.188,
+                    "height": 14,
                     "lineHeight": 14,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "region": "primary"
                   },
                   {
-                    "id": "P-310__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-310__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "entry_points:",
+                      "Entry_points"
+                    ],
+                    "x": 15.5,
+                    "y": 94.5,
+                    "width": 58.23,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-310__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
                       "nav:global_nav"
                     ],
-                    "x": 12,
-                    "y": 88,
+                    "x": 15.5,
+                    "y": 108.5,
                     "width": 82.956,
-                    "height": 32,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-310__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-310__attribute_3_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "primary_nav: true"
+                      "Primary_nav"
                     ],
-                    "x": 12,
-                    "y": 126,
-                    "width": 96.834,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 126.5,
+                    "width": 57.215,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-310__attribute_3_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "true"
+                    ],
+                    "x": 15.5,
+                    "y": 140.5,
+                    "width": 23.124,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 159,
+                    "title": {
+                      "id": "P-310__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Current Bills"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 91.176,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "route_or_key",
+                        "label": {
+                          "id": "P-310__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Route or Key"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 59.175,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-310__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "/current-bills"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 72.594,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "access",
+                        "label": {
+                          "id": "P-310__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Access"
+                          ],
+                          "x": 15.5,
+                          "y": 62.5,
+                          "width": 33.5,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-310__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 25.188,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 62.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "entry_points",
+                        "label": {
+                          "id": "P-310__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Entry_points"
+                          ],
+                          "x": 15.5,
+                          "y": 94.5,
+                          "width": 58.23,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-310__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "nav:global_nav"
+                            ],
+                            "x": 15.5,
+                            "y": 108.5,
+                            "width": 82.956,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 94.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "primary_nav",
+                        "label": {
+                          "id": "P-310__attribute_3_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Primary_nav"
+                          ],
+                          "x": 15.5,
+                          "y": 126.5,
+                          "width": 57.215,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-310__attribute_3_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "true"
+                            ],
+                            "x": 15.5,
+                            "y": 140.5,
+                            "width": 23.124,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 126.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -1449,44 +2740,44 @@
                     "side": "south",
                     "offset": 24,
                     "x": 24,
-                    "y": 154
+                    "y": 162
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
-                    "y": 77
+                    "x": 224,
+                    "y": 81
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 77
+                    "y": 81
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 656,
+                "x": 712,
                 "y": 80,
-                "width": 168,
-                "height": 154
+                "width": 224,
+                "height": 162
               }
             ],
             "ports": [],
-            "x": 656,
+            "x": 712,
             "y": 80,
-            "width": 168,
-            "height": 154
+            "width": 224,
+            "height": 162
           }
         ],
         "ports": [],
-        "x": 640,
+        "x": 696,
         "y": 24,
-        "width": 200,
-        "height": 226
+        "width": 256,
+        "height": 234
       },
       {
         "kind": "container",
@@ -1564,101 +2855,324 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-410__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Review Past Bills"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 127.6,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 122.48,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-410__subtitle",
+                    "id": "P-410__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "subtitle",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Route or Key"
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 59.175,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-410__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "/review"
                     ],
-                    "x": 12,
-                    "y": 38,
-                    "width": 43.96,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 40.578,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-410__badge",
-                    "kind": "badge_text",
-                    "textStyleRole": "badge",
+                    "id": "P-410__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Access"
+                    ],
+                    "x": 15.5,
+                    "y": 62.5,
+                    "width": 33.5,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-410__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "auth"
                     ],
-                    "x": 12,
-                    "y": 60,
-                    "width": 41.65,
-                    "height": 22,
+                    "x": 15.5,
+                    "y": 76.5,
+                    "width": 25.188,
+                    "height": 14,
                     "lineHeight": 14,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "region": "primary"
                   },
                   {
-                    "id": "P-410__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-410__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "entry_points:",
+                      "Entry_points"
+                    ],
+                    "x": 15.5,
+                    "y": 94.5,
+                    "width": 58.23,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-410__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
                       "nav:global_nav"
                     ],
-                    "x": 12,
-                    "y": 88,
+                    "x": 15.5,
+                    "y": 108.5,
                     "width": 82.956,
-                    "height": 32,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-410__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-410__attribute_3_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "primary_nav: true"
+                      "Primary_nav"
                     ],
-                    "x": 12,
-                    "y": 126,
-                    "width": 96.834,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 126.5,
+                    "width": 57.215,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-410__attribute_3_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "true"
+                    ],
+                    "x": 15.5,
+                    "y": 140.5,
+                    "width": 23.124,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 159,
+                    "title": {
+                      "id": "P-410__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Review Past Bills"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 122.48,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "route_or_key",
+                        "label": {
+                          "id": "P-410__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Route or Key"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 59.175,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-410__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "/review"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 40.578,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "access",
+                        "label": {
+                          "id": "P-410__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Access"
+                          ],
+                          "x": 15.5,
+                          "y": 62.5,
+                          "width": 33.5,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-410__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 25.188,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 62.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "entry_points",
+                        "label": {
+                          "id": "P-410__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Entry_points"
+                          ],
+                          "x": 15.5,
+                          "y": 94.5,
+                          "width": 58.23,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-410__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "nav:global_nav"
+                            ],
+                            "x": 15.5,
+                            "y": 108.5,
+                            "width": 82.956,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 94.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "primary_nav",
+                        "label": {
+                          "id": "P-410__attribute_3_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Primary_nav"
+                          ],
+                          "x": 15.5,
+                          "y": 126.5,
+                          "width": 57.215,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-410__attribute_3_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "true"
+                            ],
+                            "x": 15.5,
+                            "y": 140.5,
+                            "width": 23.124,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 126.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -1674,44 +3188,44 @@
                     "side": "south",
                     "offset": 24,
                     "x": 24,
-                    "y": 154
+                    "y": 162
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
-                    "y": 77
+                    "x": 224,
+                    "y": 81
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 77
+                    "y": 81
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 904,
+                "x": 1016,
                 "y": 80,
-                "width": 168,
-                "height": 154
+                "width": 224,
+                "height": 162
               }
             ],
             "ports": [],
-            "x": 904,
+            "x": 1016,
             "y": 80,
-            "width": 168,
-            "height": 154
+            "width": 224,
+            "height": 162
           }
         ],
         "ports": [],
-        "x": 888,
+        "x": 1000,
         "y": 24,
-        "width": 200,
-        "height": 226
+        "width": 256,
+        "height": 234
       },
       {
         "kind": "container",
@@ -1789,101 +3303,324 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-510__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Manage Accounts"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 135.232,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 130.752,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-510__subtitle",
+                    "id": "P-510__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "subtitle",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Route or Key"
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 59.175,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-510__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "/accounts"
                     ],
-                    "x": 12,
-                    "y": 38,
-                    "width": 59.585,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 55.002,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-510__badge",
-                    "kind": "badge_text",
-                    "textStyleRole": "badge",
+                    "id": "P-510__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Access"
+                    ],
+                    "x": 15.5,
+                    "y": 62.5,
+                    "width": 33.5,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-510__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "auth"
                     ],
-                    "x": 12,
-                    "y": 60,
-                    "width": 41.65,
-                    "height": 22,
+                    "x": 15.5,
+                    "y": 76.5,
+                    "width": 25.188,
+                    "height": 14,
                     "lineHeight": 14,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "region": "primary"
                   },
                   {
-                    "id": "P-510__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-510__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "entry_points:",
+                      "Entry_points"
+                    ],
+                    "x": 15.5,
+                    "y": 94.5,
+                    "width": 58.23,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-510__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
                       "nav:global_nav"
                     ],
-                    "x": 12,
-                    "y": 88,
+                    "x": 15.5,
+                    "y": 108.5,
                     "width": 82.956,
-                    "height": 32,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-510__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-510__attribute_3_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "primary_nav: true"
+                      "Primary_nav"
                     ],
-                    "x": 12,
-                    "y": 126,
-                    "width": 96.834,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 126.5,
+                    "width": 57.215,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-510__attribute_3_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "true"
+                    ],
+                    "x": 15.5,
+                    "y": 140.5,
+                    "width": 23.124,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 159,
+                    "title": {
+                      "id": "P-510__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Manage Accounts"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 130.752,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "route_or_key",
+                        "label": {
+                          "id": "P-510__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Route or Key"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 59.175,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-510__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "/accounts"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 55.002,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "access",
+                        "label": {
+                          "id": "P-510__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Access"
+                          ],
+                          "x": 15.5,
+                          "y": 62.5,
+                          "width": 33.5,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-510__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 25.188,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 62.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "entry_points",
+                        "label": {
+                          "id": "P-510__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Entry_points"
+                          ],
+                          "x": 15.5,
+                          "y": 94.5,
+                          "width": 58.23,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-510__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "nav:global_nav"
+                            ],
+                            "x": 15.5,
+                            "y": 108.5,
+                            "width": 82.956,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 94.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "primary_nav",
+                        "label": {
+                          "id": "P-510__attribute_3_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Primary_nav"
+                          ],
+                          "x": 15.5,
+                          "y": 126.5,
+                          "width": 57.215,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-510__attribute_3_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "true"
+                            ],
+                            "x": 15.5,
+                            "y": 140.5,
+                            "width": 23.124,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 126.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -1899,44 +3636,44 @@
                     "side": "south",
                     "offset": 24,
                     "x": 24,
-                    "y": 154
+                    "y": 162
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
-                    "y": 77
+                    "x": 224,
+                    "y": 81
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 77
+                    "y": 81
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 1152,
+                "x": 1320,
                 "y": 80,
-                "width": 168,
-                "height": 154
+                "width": 224,
+                "height": 162
               }
             ],
             "ports": [],
-            "x": 1152,
+            "x": 1320,
             "y": 80,
-            "width": 168,
-            "height": 154
+            "width": 224,
+            "height": 162
           }
         ],
         "ports": [],
-        "x": 1136,
+        "x": 1304,
         "y": 24,
-        "width": 200,
-        "height": 226
+        "width": 256,
+        "height": 234
       },
       {
         "kind": "container",
@@ -2014,102 +3751,324 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
-                  "depth-0"
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
                     "id": "P-610__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
-                      "Manage Fee",
-                      "Schedules"
+                      "Manage Fee Schedules"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 91.944,
-                    "height": 40,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 168.712,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-610__subtitle",
+                    "id": "P-610__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "subtitle",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Route or Key"
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 59.175,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-610__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "/fee-schedules"
                     ],
-                    "x": 12,
-                    "y": 58,
-                    "width": 90.747,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 83.766,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-610__badge",
-                    "kind": "badge_text",
-                    "textStyleRole": "badge",
+                    "id": "P-610__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Access"
+                    ],
+                    "x": 15.5,
+                    "y": 62.5,
+                    "width": 33.5,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-610__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
                     "lines": [
                       "auth"
                     ],
-                    "x": 12,
-                    "y": 80,
-                    "width": 41.65,
-                    "height": 22,
+                    "x": 15.5,
+                    "y": 76.5,
+                    "width": 25.188,
+                    "height": 14,
                     "lineHeight": 14,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "region": "primary"
                   },
                   {
-                    "id": "P-610__metadata__entry_points__0",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-610__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "entry_points:",
+                      "Entry_points"
+                    ],
+                    "x": 15.5,
+                    "y": 94.5,
+                    "width": 58.23,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-610__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
                       "nav:global_nav"
                     ],
-                    "x": 12,
-                    "y": 108,
+                    "x": 15.5,
+                    "y": 108.5,
                     "width": 82.956,
-                    "height": 32,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   },
                   {
-                    "id": "P-610__metadata__primary_nav__1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "P-610__attribute_3_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "primary_nav: true"
+                      "Primary_nav"
                     ],
-                    "x": 12,
-                    "y": 146,
-                    "width": 96.834,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 126.5,
+                    "width": 57.215,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "P-610__attribute_3_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "true"
+                    ],
+                    "x": 15.5,
+                    "y": 140.5,
+                    "width": 23.124,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 159,
+                    "title": {
+                      "id": "P-610__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Manage Fee Schedules"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 168.712,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "route_or_key",
+                        "label": {
+                          "id": "P-610__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Route or Key"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 59.175,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-610__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "/fee-schedules"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 83.766,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "access",
+                        "label": {
+                          "id": "P-610__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Access"
+                          ],
+                          "x": 15.5,
+                          "y": 62.5,
+                          "width": 33.5,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-610__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 15.5,
+                            "y": 76.5,
+                            "width": 25.188,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 62.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "entry_points",
+                        "label": {
+                          "id": "P-610__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Entry_points"
+                          ],
+                          "x": 15.5,
+                          "y": 94.5,
+                          "width": 58.23,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-610__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "nav:global_nav"
+                            ],
+                            "x": 15.5,
+                            "y": 108.5,
+                            "width": 82.956,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 94.5,
+                        "width": 193,
+                        "height": 28
+                      },
+                      {
+                        "id": "primary_nav",
+                        "label": {
+                          "id": "P-610__attribute_3_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Primary_nav"
+                          ],
+                          "x": 15.5,
+                          "y": 126.5,
+                          "width": 57.215,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "P-610__attribute_3_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "true"
+                            ],
+                            "x": 15.5,
+                            "y": 140.5,
+                            "width": 23.124,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 126.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -2125,51 +4084,51 @@
                     "side": "south",
                     "offset": 24,
                     "x": 24,
-                    "y": 174
+                    "y": 162
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
-                    "x": 168,
-                    "y": 87
+                    "x": 224,
+                    "y": 81
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 87
+                    "y": 81
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 1400,
+                "x": 1624,
                 "y": 80,
-                "width": 168,
-                "height": 174
+                "width": 224,
+                "height": 162
               }
             ],
             "ports": [],
-            "x": 1400,
+            "x": 1624,
             "y": 80,
-            "width": 168,
-            "height": 174
+            "width": 224,
+            "height": 162
           }
         ],
         "ports": [],
-        "x": 1384,
+        "x": 1608,
         "y": 24,
-        "width": 200,
-        "height": 246
+        "width": 256,
+        "height": 234
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1608,
-    "height": 886
+    "width": 1888,
+    "height": 863
   },
   "edges": [
     {
@@ -2185,24 +4144,24 @@
         "itemId": "P-100",
         "portId": "south_chain",
         "x": 48,
-        "y": 178
+        "y": 186
       },
       "to": {
         "itemId": "P-110",
         "portId": "north_chain",
         "x": 48,
-        "y": 210
+        "y": 218
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 48,
-            "y": 178
+            "y": 186
           },
           {
             "x": 48,
-            "y": 210
+            "y": 218
           }
         ]
       },
@@ -2223,29 +4182,29 @@
       "from": {
         "itemId": "P-220",
         "portId": "south_chain",
-        "x": 328,
-        "y": 380
+        "x": 384,
+        "y": 372
       },
       "to": {
         "itemId": "P-221",
         "portId": "west",
-        "x": 352,
-        "y": 477
+        "x": 408,
+        "y": 469.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 328,
-            "y": 380
+            "x": 384,
+            "y": 372
           },
           {
-            "x": 328,
-            "y": 477
+            "x": 384,
+            "y": 469.5
           },
           {
-            "x": 352,
-            "y": 477
+            "x": 408,
+            "y": 469.5
           }
         ]
       },
@@ -2266,29 +4225,29 @@
       "from": {
         "itemId": "P-220",
         "portId": "south_chain",
-        "x": 328,
-        "y": 380
+        "x": 384,
+        "y": 372
       },
       "to": {
         "itemId": "P-222",
         "portId": "west",
-        "x": 352,
-        "y": 629
+        "x": 408,
+        "y": 623
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 328,
-            "y": 380
+            "x": 384,
+            "y": 372
           },
           {
-            "x": 328,
-            "y": 629
+            "x": 384,
+            "y": 623
           },
           {
-            "x": 352,
-            "y": 629
+            "x": 408,
+            "y": 623
           }
         ]
       },
@@ -2309,29 +4268,29 @@
       "from": {
         "itemId": "P-210",
         "portId": "south_chain",
-        "x": 280,
-        "y": 254
+        "x": 336,
+        "y": 242
       },
       "to": {
         "itemId": "P-220",
         "portId": "west",
-        "x": 304,
-        "y": 333
+        "x": 360,
+        "y": 323
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 280,
-            "y": 254
+            "x": 336,
+            "y": 242
           },
           {
-            "x": 280,
-            "y": 333
+            "x": 336,
+            "y": 323
           },
           {
-            "x": 304,
-            "y": 333
+            "x": 360,
+            "y": 323
           }
         ]
       },
@@ -2352,29 +4311,29 @@
       "from": {
         "itemId": "P-210",
         "portId": "south_chain",
-        "x": 280,
-        "y": 254
+        "x": 336,
+        "y": 242
       },
       "to": {
         "itemId": "P-230",
         "portId": "west",
-        "x": 304,
-        "y": 781
+        "x": 360,
+        "y": 767
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 280,
-            "y": 254
+            "x": 336,
+            "y": 242
           },
           {
-            "x": 280,
-            "y": 781
+            "x": 336,
+            "y": 767
           },
           {
-            "x": 304,
-            "y": 781
+            "x": 360,
+            "y": 767
           }
         ]
       },

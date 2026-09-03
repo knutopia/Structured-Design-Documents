@@ -5828,11 +5828,16 @@ export function resolveJourneyMapTrackOccupancy(
       const rightPlan = planById.get(right.connectorId);
       const rootOuterGroup = left.resource.kind === "root_outer_bypass"
         && right.resource.kind === "root_outer_bypass";
+      const stageLocalGroup = left.resource.kind === "stage_local_bypass"
+        && right.resource.kind === "stage_local_bypass";
       const leftPeripheral = leftPlan ? isLockedPeripheralTrack(leftPlan) : false;
       const rightPeripheral = rightPlan ? isLockedPeripheralTrack(rightPlan) : false;
       return (rootOuterGroup && leftPeripheral !== rightPeripheral
         ? leftPeripheral ? -1 : 1
-        : comparePriorities(left.priority, right.priority))
+        : stageLocalGroup
+          ? (left.span.end - left.span.start) - (right.span.end - right.span.start)
+          : comparePriorities(left.priority, right.priority))
+        || comparePriorities(left.priority, right.priority)
         || left.segmentRunIndex - right.segmentRunIndex
         || left.connectorId.localeCompare(right.connectorId);
     });

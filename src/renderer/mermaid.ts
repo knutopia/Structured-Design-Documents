@@ -6,6 +6,7 @@ import type {
   JourneyRenderStage,
   JourneyRenderStep
 } from "./journeyMapRenderModel.js";
+import { buildLegacyJourneyStepLabelLines } from "./journeyStepLabelLines.js";
 import type {
   OutcomeOpportunityMapRenderModel,
   OutcomeOpportunityRenderLane,
@@ -232,7 +233,7 @@ export function renderIaPlaceMapMermaid(model: IaPlaceMapRenderModel): string {
 }
 
 function renderJourneyStep(step: JourneyRenderStep, indent: string, lines: string[]): void {
-  pushNode(lines, [], step.id, step.labelLines, "box", false, indent);
+  pushNode(lines, [], step.id, buildLegacyJourneyStepLabelLines(step), "box", false, indent);
 }
 
 function renderJourneyStage(stage: JourneyRenderStage, indent: string, lines: string[]): void {

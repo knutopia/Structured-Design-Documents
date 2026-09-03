@@ -281,12 +281,12 @@ describe("journey map Gate 5 basic routing", () => {
       ownerContainerId: "G-100",
       archetype: "adjacent_forward_same_stage",
       routeFamily: "direct_horizontal",
-      sourceEndpoint: { x: 608, y: 116 },
-      targetEndpoint: { x: 632, y: 116 }
+      sourceEndpoint: { x: 524, y: 116 },
+      targetEndpoint: { x: 548, y: 116 }
     });
     expect(second?.step2Route.points).toEqual([
-      { x: 608, y: 116 },
-      { x: 632, y: 116 }
+      { x: 524, y: 116 },
+      { x: 548, y: 116 }
     ]);
     expect(cross).toMatchObject({
       from: "J-103",
@@ -295,20 +295,20 @@ describe("journey map Gate 5 basic routing", () => {
       archetype: "adjacent_forward_cross_stage",
       routeFamily: "direct_horizontal",
       authorOrder: 2,
-      sourceEndpoint: { itemId: "J-103", portId: "J-103__flow_out", side: "east", x: 856, y: 116 },
-      targetEndpoint: { itemId: "J-201", portId: "J-201__flow_in", side: "west", x: 936, y: 116 },
+      sourceEndpoint: { itemId: "J-103", portId: "J-103__flow_out", side: "east", x: 772, y: 116 },
+      targetEndpoint: { itemId: "J-201", portId: "J-201__flow_in", side: "west", x: 852, y: 116 },
       stageGates: [
-        { stageId: "G-100", side: "east", x: 876, y: 116, order: 0, locked: true },
-        { stageId: "G-200", side: "west", x: 916, y: 116, order: 0, locked: true }
+        { stageId: "G-100", side: "east", x: 792, y: 116, order: 0, locked: true },
+        { stageId: "G-200", side: "west", x: 832, y: 116, order: 0, locked: true }
       ]
     });
     expect(cross?.step2Route.points).toEqual([
-      { x: 856, y: 116 },
-      { x: 936, y: 116 }
+      { x: 772, y: 116 },
+      { x: 852, y: 116 }
     ]);
     expect(cross?.finalBasicRoute.points).toEqual([
-      { x: 856, y: 116 },
-      { x: 936, y: 116 }
+      { x: 772, y: 116 },
+      { x: 852, y: 116 }
     ]);
     expect(routingStages.connectorPlans.slice(0, 3).map((plan) => plan.priority.archetypeRank)).toEqual([0, 0, 1]);
     expect(first?.finalBasicRoute).toEqual(first?.step2Route);
@@ -824,8 +824,8 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       JOURNEY_MAP_TRACK_SEPARATION
     );
     expect(incoming.finalRoute.points).toEqual([
-      { x: 980, y: 156 }, { x: 980, y: 174 },
-      { x: 1492, y: 174 }, { x: 1492, y: 140 }
+      { x: 980, y: 145 }, { x: 980, y: 179 },
+      { x: 1492, y: 179 }, { x: 1492, y: 140 }
     ]);
     expect(outgoing.finalRoute.points).toEqual([
       { x: 1476, y: 140 }, { x: 1476, y: 158 },
@@ -860,17 +860,17 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
 
     expect([nearBranch.sourceEndpoint.side, farBranch.sourceEndpoint.side]).toEqual(["east", "south"]);
     expect([upperJoin.targetEndpoint.side, lowerJoin.targetEndpoint.side]).toEqual(["south", "west"]);
-    expect(nearBranch.finalRoute.points).toEqual([{ x: 1160, y: 116 }, { x: 1184, y: 116 }]);
+    expect(nearBranch.finalRoute.points).toEqual([{ x: 1076, y: 116 }, { x: 1100, y: 116 }]);
     expect(farBranch.finalRoute.points).toEqual([
-      { x: 1048, y: 204 }, { x: 1048, y: 260 }, { x: 1184, y: 260 }
+      { x: 964, y: 193 }, { x: 964, y: 243.5 }, { x: 1100, y: 243.5 }
     ]);
     expect(upperJoin.finalRoute.points).toEqual([
-      { x: 1408, y: 260 }, { x: 1544, y: 260 }, { x: 1544, y: 140 }
+      { x: 1324, y: 243.5 }, { x: 1460, y: 243.5 }, { x: 1460, y: 140 }
     ]);
-    expect(lowerJoin.finalRoute.points).toEqual([{ x: 1408, y: 116 }, { x: 1432, y: 116 }]);
+    expect(lowerJoin.finalRoute.points).toEqual([{ x: 1324, y: 116 }, { x: 1348, y: 116 }]);
     expect(fixture.routingStages.expansionAttempts).toEqual([]);
-    expect(findNode(fixture.routingStages.finalPositionedScene, "J-203").x).toBe(1184);
-    expect(findNode(fixture.routingStages.finalPositionedScene, "J-204").x).toBe(1432);
+    expect(findNode(fixture.routingStages.finalPositionedScene, "J-203").x).toBe(1100);
+    expect(findNode(fixture.routingStages.finalPositionedScene, "J-204").x).toBe(1348);
     expect(fixture.routingStages.finalPositionedScene.root.width).toBe(
       fixture.preRoutingPositionedScene.root.width
     );
@@ -905,12 +905,12 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       { x: 428, y: 174 }, { x: 428, y: 140 }
     ]);
     expect(state("J-711->J-712").finalRoute.points).toEqual([
-      { x: 940, y: 140 }, { x: 940, y: 174 },
-      { x: 1172, y: 174 }, { x: 1172, y: 156 }
+      { x: 940, y: 140 }, { x: 940, y: 163 },
+      { x: 1172, y: 163 }, { x: 1172, y: 145 }
     ]);
     expect(state("J-712->J-711").finalRoute.points).toEqual([
-      { x: 1188, y: 156 }, { x: 1188, y: 190 },
-      { x: 924, y: 190 }, { x: 924, y: 140 }
+      { x: 1188, y: 145 }, { x: 1188, y: 179 },
+      { x: 924, y: 179 }, { x: 924, y: 140 }
     ]);
     expect(state("J-713->J-713").finalRoute.points).toEqual([
       { x: 1532, y: 116 }, { x: 1544, y: 116 }, { x: 1544, y: 80 },
@@ -920,7 +920,7 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       { x: 1668, y: 140 }, { x: 1668, y: 158 },
       { x: 1420, y: 158 }, { x: 1420, y: 140 }
     ]);
-    expect(state("J-790->J-791").finalRoute.points).toContainEqual({ x: 276, y: 226 });
+    expect(state("J-790->J-791").finalRoute.points).toContainEqual({ x: 276, y: 215 });
     expect(fixture.routingStages.expansionAttempts).toEqual([{
       attempt: 1,
       requests: [{ kind: "stage_bypass_gutter", stageId: "G-700", amount: 32 }]
@@ -954,8 +954,8 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
     ])).toEqual(expect.arrayContaining([
       [planByPair.get("J-701->J-702")!.id, 158, 158],
       [planByPair.get("J-702->J-701")!.id, 158, 174],
-      [planByPair.get("J-711->J-712")!.id, 174, 174],
-      [planByPair.get("J-712->J-711")!.id, 174, 190]
+      [planByPair.get("J-711->J-712")!.id, 163, 163],
+      [planByPair.get("J-712->J-711")!.id, 163, 179]
     ]));
 
     const rerun = buildJourneyMapRoutingStages(
@@ -994,10 +994,10 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       plan.routeFamily === "early_south_egress"
     )).toBe(false);
 
-    expect(routingStages.residualCrossings).toHaveLength(58);
-    expect(crossingDiagnostics).toHaveLength(58);
-    expect(continuityMarks).toHaveLength(56);
-    expect(continuityMarks).not.toHaveLength(routingStages.residualCrossings.length);
+    expect(routingStages.residualCrossings).toHaveLength(55);
+    expect(crossingDiagnostics).toHaveLength(55);
+    expect(continuityMarks).toHaveLength(55);
+    expect(continuityMarks).toHaveLength(routingStages.residualCrossings.length);
     expect(preferredLegDiagnostics).toHaveLength(1);
     expect(preferredLegDiagnostics[0]?.details).toContain('"desiredLength":18');
     expect(preferredLegDiagnostics[0]?.details).toContain('"hardMinimum":12');
@@ -1181,7 +1181,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
         portId: "J-503__escape_out",
         side: "south",
         x: 980,
-        y: 156,
+        y: 145,
         offset: 112
       },
       targetEndpoint: {
@@ -1196,7 +1196,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       stageLocalBypass: {
         stageId: "G-500",
         axis: "horizontal",
-        nominalCoordinate: 174,
+        nominalCoordinate: 163,
         span: { start: 980, end: 1476 },
         intermediateStepIds: ["J-502"],
         obstacleControls: [
@@ -1250,17 +1250,17 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       candidate.from === "J-503" && candidate.to === "J-501"
     );
     expect(plan?.step2Route.points).toEqual([
-      { x: 980, y: 156 },
-      { x: 980, y: 174 },
-      { x: 1476, y: 174 },
+      { x: 980, y: 145 },
+      { x: 980, y: 163 },
+      { x: 1476, y: 163 },
       { x: 1476, y: 140 }
     ]);
     expect(plan?.provisionalRoute.points).toEqual([
-      { x: 980, y: 156 },
-      { x: 980, y: 174 },
-      { x: 1116, y: 174 },
-      { x: 1340, y: 174 },
-      { x: 1476, y: 174 },
+      { x: 980, y: 145 },
+      { x: 980, y: 163 },
+      { x: 1116, y: 163 },
+      { x: 1340, y: 163 },
+      { x: 1476, y: 163 },
       { x: 1476, y: 140 }
     ]);
     expect(plan?.provisionalRoute).not.toEqual(plan?.step2Route);
@@ -1356,13 +1356,13 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       },
       {
         edge: "J-102→J-103",
-        step2: [{ x: 608, y: 116 }, { x: 632, y: 116 }],
-        provisional: [{ x: 608, y: 116 }, { x: 632, y: 116 }]
+        step2: [{ x: 524, y: 116 }, { x: 548, y: 116 }],
+        provisional: [{ x: 524, y: 116 }, { x: 548, y: 116 }]
       },
       {
         edge: "J-103→J-201",
-        step2: [{ x: 856, y: 116 }, { x: 936, y: 116 }],
-        provisional: [{ x: 856, y: 116 }, { x: 936, y: 116 }]
+        step2: [{ x: 772, y: 116 }, { x: 852, y: 116 }],
+        provisional: [{ x: 772, y: 116 }, { x: 852, y: 116 }]
       }
     ]);
   });
@@ -1383,7 +1383,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
     ]));
 
     const insufficientSpaceScene = structuredClone(fixture.preRoutingPositionedScene) as PositionedScene;
-    findContainer(insufficientSpaceScene, "G-500").height = 132;
+    findContainer(insufficientSpaceScene, "G-500").height = 131;
     const insufficientSpace = buildJourneyMapRoutingStages(
       fixture.measuredScene,
       insufficientSpaceScene
@@ -1417,31 +1417,31 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
         itemId: "J-204",
         portId: "J-204__flow_out",
         side: "east",
-        x: 1656,
+        x: 1572,
         y: 116
       },
       targetEndpoint: {
         itemId: "J-401",
         portId: "J-401__escape_in",
         side: "south",
-        x: 2617.592,
+        x: 2533.592,
         y: 140
       },
       stageGates: [
-        { stageId: "G-200", side: "east", x: 1676, y: 116, order: 0, locked: true },
-        { stageId: "G-400", side: "south", x: 2617.592, y: 160, order: 0, locked: true }
+        { stageId: "G-200", side: "east", x: 1592, y: 116, order: 0, locked: true },
+        { stageId: "G-400", side: "south", x: 2533.592, y: 160, order: 0, locked: true }
       ],
       rootSpanBypass: {
         ownerContainerId: "root",
         axis: "horizontal",
         nominalCoordinate: 178,
-        span: { start: 1694, end: 2617.592 },
+        span: { start: 1610, end: 2533.592 },
         clearanceRootItemIds: ["J-250", "J-260", "G-300", "G-400"],
         intermediateRootItemIds: ["J-250", "J-260", "G-300"],
         obstacleControls: [
-          { rootItemId: "J-250", entryX: 1716, exitX: 1940 },
-          { rootItemId: "J-260", entryX: 1980, exitX: 2204 },
-          { rootItemId: "G-300", entryX: 2244, exitX: 2445.592 }
+          { rootItemId: "J-250", entryX: 1632, exitX: 1856 },
+          { rootItemId: "J-260", entryX: 1896, exitX: 2120 },
+          { rootItemId: "G-300", entryX: 2160, exitX: 2361.592 }
         ],
         order: 0,
         locked: false
@@ -1469,14 +1469,14 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
         itemId: "J-250",
         portId: "J-250__flow_out",
         side: "east",
-        x: 1940,
+        x: 1856,
         y: 116
       },
       targetEndpoint: {
         itemId: "J-260",
         portId: "J-260__flow_in",
         side: "west",
-        x: 1980,
+        x: 1896,
         y: 116
       },
       stageGates: []
@@ -1503,30 +1503,30 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
     const fixture = await buildFixture("primary");
     const [longCross, rootDirect] = fixture.routingStages.connectorPlans.slice(3);
     expect(longCross?.step2Route.points).toEqual([
-      { x: 1656, y: 116 },
-      { x: 1694, y: 116 },
-      { x: 1694, y: 178 },
-      { x: 2617.592, y: 178 },
-      { x: 2617.592, y: 140 }
+      { x: 1572, y: 116 },
+      { x: 1610, y: 116 },
+      { x: 1610, y: 178 },
+      { x: 2533.592, y: 178 },
+      { x: 2533.592, y: 140 }
     ]);
     expect(longCross?.provisionalRoute.points).toEqual([
-      { x: 1656, y: 116 },
-      { x: 1676, y: 116 },
-      { x: 1694, y: 116 },
-      { x: 1694, y: 178 },
-      { x: 1716, y: 178 },
-      { x: 1940, y: 178 },
-      { x: 1980, y: 178 },
-      { x: 2204, y: 178 },
-      { x: 2244, y: 178 },
-      { x: 2445.592, y: 178 },
-      { x: 2617.592, y: 178 },
-      { x: 2617.592, y: 160 },
-      { x: 2617.592, y: 140 }
+      { x: 1572, y: 116 },
+      { x: 1592, y: 116 },
+      { x: 1610, y: 116 },
+      { x: 1610, y: 178 },
+      { x: 1632, y: 178 },
+      { x: 1856, y: 178 },
+      { x: 1896, y: 178 },
+      { x: 2120, y: 178 },
+      { x: 2160, y: 178 },
+      { x: 2361.592, y: 178 },
+      { x: 2533.592, y: 178 },
+      { x: 2533.592, y: 160 },
+      { x: 2533.592, y: 140 }
     ]);
     expect(rootDirect?.step2Route.points).toEqual([
-      { x: 1940, y: 116 },
-      { x: 1980, y: 116 }
+      { x: 1856, y: 116 },
+      { x: 1896, y: 116 }
     ]);
     expect(rootDirect?.provisionalRoute).toEqual(rootDirect?.step2Route);
     expect(validateJourneyMapRoutes(
@@ -1583,7 +1583,7 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
       strictLong.rootSpanBypass?.obstacleControls
     );
     expect(simple.routingStages.connectorPlans[4]?.step2Route.points).toEqual([
-      { x: 1940, y: 116 }, { x: 1980, y: 116 }
+      { x: 1856, y: 116 }, { x: 1896, y: 116 }
     ]);
   });
 
@@ -1803,13 +1803,13 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
       ownerContainerId: "root",
       axis: "horizontal",
       nominalCoordinate: 330,
-      span: { start: 1694, end: 2617.592 },
-      endpointSpan: { start: 1656, end: 2617.592 },
+      span: { start: 1610, end: 2533.592 },
+      endpointSpan: { start: 1572, end: 2533.592 },
       intermediateRootItemIds: ["J-250", "J-260", "G-300"],
       obstacleControls: [
-        { rootItemId: "J-250", entryX: 1716, exitX: 1940 },
-        { rootItemId: "J-260", entryX: 1980, exitX: 2204 },
-        { rootItemId: "G-300", entryX: 2244, exitX: 2445.592 }
+        { rootItemId: "J-250", entryX: 1632, exitX: 1856 },
+        { rootItemId: "J-260", entryX: 1896, exitX: 2120 },
+        { rootItemId: "G-300", entryX: 2160, exitX: 2361.592 }
       ],
       order: 0,
       locked: false
@@ -1913,7 +1913,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
           departureControl: {
             axis: "vertical",
             nominalCoordinate: 276,
-            span: { start: 116, end: 194 },
+            span: { start: 116, end: 183 },
             obstacleItemId: "G-700",
             obstacleBoundaryCoordinate: 296,
             order: 0,
@@ -1976,27 +1976,27 @@ describe("journey map Gate 6 branch fan-out routing", () => {
     expect(direct).toMatchObject({
       routeFamily: "direct_horizontal",
       sourceEndpoint: {
-        itemId: "J-201", portId: "J-201__flow_out", side: "east", x: 1160, y: 116
+        itemId: "J-201", portId: "J-201__flow_out", side: "east", x: 1076, y: 116
       },
       targetEndpoint: {
-        itemId: "J-202", portId: "J-202__flow_in", side: "west", x: 1184, y: 116
+        itemId: "J-202", portId: "J-202__flow_in", side: "west", x: 1100, y: 116
       },
       stageGates: []
     });
-    expect(direct?.step2Route.points).toEqual([{ x: 1160, y: 116 }, { x: 1184, y: 116 }]);
+    expect(direct?.step2Route.points).toEqual([{ x: 1076, y: 116 }, { x: 1100, y: 116 }]);
     expect(direct?.provisionalRoute).toEqual(direct?.step2Route);
     expect(lower).toMatchObject({
       routeFamily: "minimal_l",
       sourceEndpoint: {
-        itemId: "J-201", portId: "J-201__escape_out", side: "south", x: 1048, y: 204
+        itemId: "J-201", portId: "J-201__escape_out", side: "south", x: 964, y: 193
       },
       targetEndpoint: {
-        itemId: "J-203", portId: "J-203__flow_in", side: "west", x: 1184, y: 260
+        itemId: "J-203", portId: "J-203__flow_in", side: "west", x: 1100, y: 243.5
       },
       stageGates: []
     });
     expect(lower?.step2Route.points).toEqual([
-      { x: 1048, y: 204 }, { x: 1048, y: 260 }, { x: 1184, y: 260 }
+      { x: 964, y: 193 }, { x: 964, y: 243.5 }, { x: 1100, y: 243.5 }
     ]);
     expect(lower?.provisionalRoute).toEqual(lower?.step2Route);
     const buckets = new Map(fixture.routingStages.nodeEdgeBuckets.map((bucket) => [bucket.nodeId, bucket]));
@@ -2041,7 +2041,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
       rootOuterBypass: {
         ownerContainerId: "root",
         axis: "horizontal",
-        nominalCoordinate: 194,
+        nominalCoordinate: 183,
         span: { start: 276, end: 1952 },
         endpointSpan: { start: 256, end: 1952 },
         intermediateRootItemIds: ["G-700"],
@@ -2051,13 +2051,13 @@ describe("journey map Gate 6 branch fan-out routing", () => {
       }
     });
     expect(outer?.step2Route.points).toEqual([
-      { x: 256, y: 116 }, { x: 276, y: 116 }, { x: 276, y: 194 },
-      { x: 1952, y: 194 }, { x: 1952, y: 140 }
+      { x: 256, y: 116 }, { x: 276, y: 116 }, { x: 276, y: 183 },
+      { x: 1952, y: 183 }, { x: 1952, y: 140 }
     ]);
     expect(outer?.provisionalRoute.points).toEqual([
-      { x: 256, y: 116 }, { x: 276, y: 116 }, { x: 276, y: 194 },
-      { x: 296, y: 194 }, { x: 1800, y: 194 },
-      { x: 1952, y: 194 }, { x: 1952, y: 140 }
+      { x: 256, y: 116 }, { x: 276, y: 116 }, { x: 276, y: 183 },
+      { x: 296, y: 183 }, { x: 1800, y: 183 },
+      { x: 1952, y: 183 }, { x: 1952, y: 140 }
     ]);
     expect(exitStage).toMatchObject({
       sourceEndpoint: { itemId: "J-714", portId: "J-714__flow_out", side: "east", x: 1780, y: 116 },
@@ -2123,7 +2123,7 @@ describe("journey map Gate 6 branch fan-out routing", () => {
 
     const topology = await buildFixture("topology");
     const insufficientRootScene = structuredClone(topology.preRoutingPositionedScene) as PositionedScene;
-    insufficientRootScene.root.height = 188;
+    insufficientRootScene.root.height = 177;
     const insufficientRoot = buildJourneyMapRoutingStages(topology.measuredScene, insufficientRootScene);
     expect(insufficientRoot.failedConnectorIds).toContain(topology.routingStages.connectorPlans[1]!.id);
 
@@ -2271,27 +2271,27 @@ describe("journey map Gate 6 join fan-in routing", () => {
     expect(direct).toMatchObject({
       routeFamily: "direct_horizontal",
       sourceEndpoint: {
-        itemId: "J-202", portId: "J-202__flow_out", side: "east", x: 1408, y: 116
+        itemId: "J-202", portId: "J-202__flow_out", side: "east", x: 1324, y: 116
       },
       targetEndpoint: {
-        itemId: "J-204", portId: "J-204__flow_in", side: "west", x: 1432, y: 116
+        itemId: "J-204", portId: "J-204__flow_in", side: "west", x: 1348, y: 116
       },
       stageGates: []
     });
-    expect(direct?.step2Route.points).toEqual([{ x: 1408, y: 116 }, { x: 1432, y: 116 }]);
+    expect(direct?.step2Route.points).toEqual([{ x: 1324, y: 116 }, { x: 1348, y: 116 }]);
     expect(direct?.provisionalRoute).toEqual(direct?.step2Route);
     expect(lower).toMatchObject({
       routeFamily: "minimal_l",
       sourceEndpoint: {
-        itemId: "J-203", portId: "J-203__flow_out", side: "east", x: 1408, y: 260
+        itemId: "J-203", portId: "J-203__flow_out", side: "east", x: 1324, y: 243.5
       },
       targetEndpoint: {
-        itemId: "J-204", portId: "J-204__escape_in", side: "south", x: 1544, y: 140
+        itemId: "J-204", portId: "J-204__escape_in", side: "south", x: 1460, y: 140
       },
       stageGates: []
     });
     expect(lower?.step2Route.points).toEqual([
-      { x: 1408, y: 260 }, { x: 1544, y: 260 }, { x: 1544, y: 140 }
+      { x: 1324, y: 243.5 }, { x: 1460, y: 243.5 }, { x: 1460, y: 140 }
     ]);
     expect(lower?.provisionalRoute).toEqual(lower?.step2Route);
 
@@ -2585,7 +2585,7 @@ describe("journey map Gate 6 backward routing", () => {
       rootOuterBypass: {
         ownerContainerId: "root",
         axis: "horizontal",
-        nominalCoordinate: 194,
+        nominalCoordinate: 183,
         span: { start: 696, end: 1760 },
         intermediateRootItemIds: ["G-500"],
         obstacleControls: [{ rootItemId: "G-500", entryX: 848, exitX: 1608 }],
@@ -2594,13 +2594,13 @@ describe("journey map Gate 6 backward routing", () => {
       }
     });
     expect(rootReturn?.step2Route.points).toEqual([
-      { x: 1760, y: 140 }, { x: 1760, y: 194 },
-      { x: 696, y: 194 }, { x: 696, y: 140 }
+      { x: 1760, y: 140 }, { x: 1760, y: 183 },
+      { x: 696, y: 183 }, { x: 696, y: 140 }
     ]);
     expect(rootReturn?.provisionalRoute.points).toEqual([
-      { x: 1760, y: 140 }, { x: 1760, y: 194 },
-      { x: 1608, y: 194 }, { x: 848, y: 194 },
-      { x: 696, y: 194 }, { x: 696, y: 140 }
+      { x: 1760, y: 140 }, { x: 1760, y: 183 },
+      { x: 1608, y: 183 }, { x: 848, y: 183 },
+      { x: 696, y: 183 }, { x: 696, y: 140 }
     ]);
 
     const topology = await buildFixture("topology");
@@ -2679,7 +2679,7 @@ describe("journey map Gate 6 backward routing", () => {
     expect(buildJourneyMapRoutingStages(ordering.measuredScene, insufficientStage).failedConnectorIds)
       .toContain(sameStage.id);
     const insufficientRoot = structuredClone(ordering.preRoutingPositionedScene) as PositionedScene;
-    insufficientRoot.root.height = 188;
+    insufficientRoot.root.height = 177;
     expect(buildJourneyMapRoutingStages(ordering.measuredScene, insufficientRoot).failedConnectorIds)
       .toContain(rootReturn.id);
 
@@ -2843,8 +2843,8 @@ describe("journey map Gate 6 shape-aware cycle routing", () => {
     expect(cyclePlans.map((plan) => plan.provisionalRoute.points)).toEqual([
       [{ x: 428, y: 140 }, { x: 428, y: 158 }, { x: 676, y: 158 }, { x: 676, y: 140 }],
       [{ x: 676, y: 140 }, { x: 676, y: 158 }, { x: 428, y: 158 }, { x: 428, y: 140 }],
-      [{ x: 924, y: 140 }, { x: 924, y: 174 }, { x: 1172, y: 174 }, { x: 1172, y: 156 }],
-      [{ x: 1172, y: 156 }, { x: 1172, y: 174 }, { x: 924, y: 174 }, { x: 924, y: 140 }]
+      [{ x: 924, y: 140 }, { x: 924, y: 163 }, { x: 1172, y: 163 }, { x: 1172, y: 145 }],
+      [{ x: 1172, y: 145 }, { x: 1172, y: 163 }, { x: 924, y: 163 }, { x: 924, y: 140 }]
     ]);
     expect(fixture.routingStages.deferredConnectors).toEqual([]);
     expect(fixture.routingStages.failedConnectorIds).toEqual([]);
@@ -4376,10 +4376,10 @@ describe("journey map Gate 8 crossing continuity and terminal diagnostics", () =
     expect(codes(duplicate.routingStages)).toEqual([
       "renderer.scene.journey_map_step_only"
     ]);
-    expect(compressed.routingStages.residualCrossings).toHaveLength(58);
+    expect(compressed.routingStages.residualCrossings).toHaveLength(55);
     expect(codes(compressed.routingStages)).toEqual([
       "renderer.routing.journey_map_preferred_terminal_leg_unmet",
-      ...Array.from({ length: 58 }, () => "renderer.routing.journey_map_unavoidable_crossing"),
+      ...Array.from({ length: 55 }, () => "renderer.routing.journey_map_unavoidable_crossing"),
       "renderer.routing.journey_map_peripheral_backward_edge",
       "renderer.routing.journey_map_peripheral_backward_edge",
       "renderer.routing.journey_map_peripheral_cycle"
@@ -4389,8 +4389,8 @@ describe("journey map Gate 8 crossing continuity and terminal diagnostics", () =
       const routing = fixture.routingStages;
       const marks = routing.finalPositionedScene.edges.flatMap((edge) => edge.continuityMarks ?? []);
       if (fixture === compressed) {
-        expect(marks).toHaveLength(56);
-        expect(marks).not.toHaveLength(routing.residualCrossings.length);
+        expect(marks).toHaveLength(55);
+        expect(marks).toHaveLength(routing.residualCrossings.length);
       } else {
         expect(marks).toHaveLength(routing.residualCrossings.length);
       }

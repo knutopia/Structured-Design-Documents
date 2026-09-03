@@ -6,21 +6,23 @@ import type { Projection } from "../projector/types.js";
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
 import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
 
-export interface JourneyRenderReferenceBadge {
+export interface JourneyRenderReference {
   kind: "reference";
   role: string;
   targetId: string;
   targetType?: string;
   targetName?: string;
   sourceProp?: string;
+  groupId: string;
   label: string;
+  value: string;
 }
 
 export interface JourneyRenderStep {
   kind: "step";
   id: string;
-  labelLines: string[];
-  badges: JourneyRenderReferenceBadge[];
+  title: string;
+  references: JourneyRenderReference[];
   orderAnchorId: string;
 }
 
@@ -56,6 +58,10 @@ interface JourneyMapDisplayOptions {
   showReferenceBadges: boolean;
 }
 
+export function journeyReferenceRoleToAttributeLabel(role: string): string {
+  return role.trim().split("_").filter((part) => part.length > 0).join(" ");
+}
+
 function collectSiblingOrderChains(items: JourneyRenderItem[]): string[][] {
   const chains: string[][] = [];
   const rootAnchors = items.map((item) => item.orderAnchorId);
@@ -75,10 +81,6 @@ function collectSiblingOrderChains(items: JourneyRenderItem[]): string[][] {
   }
 
   return chains;
-}
-
-function buildReferenceBadge(targetId: string, targetName?: string): string {
-  return `[${targetName && targetName.length > 0 ? targetName : targetId}]`;
 }
 
 function duplicateEdgeIdentityFields(bundle: Bundle): string[] {
@@ -234,20 +236,21 @@ export function buildJourneyMapRenderModel(
       return undefined;
     }
 
-    const labelLines = [projectionNode.name];
-    const badges: JourneyRenderReferenceBadge[] = [];
+    const references: JourneyRenderReference[] = [];
     if (displayOptions.showReferenceBadges) {
       for (const reference of annotationsByNodeId.get(stepId)?.references ?? []) {
-        const label = buildReferenceBadge(reference.target_id, reference.target_name);
-        labelLines.push(label);
-        badges.push({
+        references.push({
           kind: "reference",
           role: reference.role,
           targetId: reference.target_id,
           targetType: reference.target_type,
           targetName: reference.target_name,
           sourceProp: reference.source_prop,
-          label
+          groupId: reference.role,
+          label: journeyReferenceRoleToAttributeLabel(reference.role),
+          value: reference.target_name && reference.target_name.length > 0
+            ? reference.target_name
+            : reference.target_id
         });
       }
     }
@@ -255,8 +258,8 @@ export function buildJourneyMapRenderModel(
     return {
       kind: "step",
       id: stepId,
-      labelLines,
-      badges,
+      title: projectionNode.name,
+      references,
       orderAnchorId: stepId
     };
   };
