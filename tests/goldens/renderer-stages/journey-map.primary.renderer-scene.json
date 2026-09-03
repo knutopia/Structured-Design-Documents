@@ -73,9 +73,10 @@
           {
             "kind": "node",
             "id": "J-101",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -83,23 +84,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-101__title",
-                "kind": "text",
-                "text": "Recognize a need",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Recognize a need",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-101",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-101__flow_in",
@@ -140,9 +142,10 @@
           {
             "kind": "node",
             "id": "J-102",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -150,23 +153,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-102__title",
-                "kind": "text",
-                "text": "Compare plans, eligibility details, and expected total cost before choosing",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Compare plans, eligibility details, and expected total cost before choosing",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-102",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-102__flow_in",
@@ -207,9 +211,10 @@
           {
             "kind": "node",
             "id": "J-103",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -217,23 +222,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-103__title",
-                "kind": "text",
-                "text": "Shortlist an option",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Shortlist an option",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-103",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-103__flow_in",
@@ -343,9 +349,10 @@
           {
             "kind": "node",
             "id": "J-201",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -353,39 +360,35 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-201__title",
-                "kind": "text",
-                "text": "Review the recommendation",
-                "textStyleRole": "title",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Review the recommendation",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "J-201__badge__OP-100__0",
-                "kind": "metadata",
-                "text": "Clear total cost",
-                "textStyleRole": "metadata",
-                "region": "secondary",
-                "priority": "secondary"
-              },
-              {
-                "id": "J-201__badge__OP-200__0",
-                "kind": "metadata",
-                "text": "Confidence before commitment",
-                "textStyleRole": "metadata",
-                "region": "secondary",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Step",
+              "nodeId": "J-201",
+              "attributes": [
+                {
+                  "groupId": "opportunity_ref",
+                  "label": "opportunity ref",
+                  "value": "Clear total cost"
+                },
+                {
+                  "groupId": "opportunity_ref",
+                  "label": "opportunity ref",
+                  "value": "Confidence before commitment"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "J-201__flow_in",
@@ -429,9 +432,10 @@
           {
             "kind": "node",
             "id": "J-202",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -439,23 +443,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-202__title",
-                "kind": "text",
-                "text": "Compare the tradeoffs",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Compare the tradeoffs",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-202",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-202__flow_in",
@@ -499,9 +504,10 @@
           {
             "kind": "node",
             "id": "J-203",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -509,23 +515,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-203__title",
-                "kind": "text",
-                "text": "Resolve remaining concerns",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Resolve remaining concerns",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-203",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-203__flow_in",
@@ -571,9 +578,10 @@
           {
             "kind": "node",
             "id": "J-204",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -581,23 +589,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-204__title",
-                "kind": "text",
-                "text": "Choose a path",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Choose a path",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-204",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-204__flow_in",
@@ -644,9 +653,10 @@
       {
         "kind": "node",
         "id": "J-250",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
           "journey_step_root"
@@ -654,23 +664,24 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
-        "content": [
-          {
-            "id": "J-250__title",
-            "kind": "text",
-            "text": "Ask for human guidance",
-            "textStyleRole": "title",
-            "priority": "primary"
-          }
-        ],
+        "content": [],
+        "sharedNode": {
+          "title": "Ask for human guidance",
+          "decoratorMode": {
+            "id": "none",
+            "showNodeType": false,
+            "showNodeId": false
+          },
+          "nodeType": "Step",
+          "nodeId": "J-250",
+          "attributes": []
+        },
         "ports": [
           {
             "id": "J-250__flow_in",
@@ -705,9 +716,10 @@
       {
         "kind": "node",
         "id": "J-260",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
           "journey_step_root"
@@ -715,23 +727,24 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
-        "content": [
-          {
-            "id": "J-260__title",
-            "kind": "text",
-            "text": "Receive human guidance",
-            "textStyleRole": "title",
-            "priority": "primary"
-          }
-        ],
+        "content": [],
+        "sharedNode": {
+          "title": "Receive human guidance",
+          "decoratorMode": {
+            "id": "none",
+            "showNodeType": false,
+            "showNodeId": false
+          },
+          "nodeType": "Step",
+          "nodeId": "J-260",
+          "attributes": []
+        },
         "ports": [
           {
             "id": "J-260__flow_in",
@@ -852,9 +865,10 @@
           {
             "kind": "node",
             "id": "J-401",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -862,23 +876,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-401__title",
-                "kind": "text",
-                "text": "Complete enrollment",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Complete enrollment",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-401",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-401__flow_in",

@@ -2,7 +2,9 @@
 
 ## Implementation Status
 
-Phases 1 through 5 are implemented: the canonical Figma metrics are recorded, the shared structured contracts and renderer theme exist, measurement and SVG composition are implemented, the standalone production-path acceptance harness is covered by a committed SVG proof, and `ui_contracts` is the first adopted renderer. Phase 6 remains the deliberate renderer-by-renderer migration sequence; the other staged renderers still use their existing card-node path. Phase 7 is complete for the implemented vertical slice and remains open for the eventual all-renderer migration.
+Phases 1 through 6 are implemented. The canonical Figma metrics, structured contracts, renderer theme, measurement, SVG composition, and standalone production-path harness are in place. `ui_contracts`, `scenario_flow`, `service_blueprint`, `outcome_opportunity_map`, `ia_place_map`, and `journey_map` now use the shared component for every eligible semantic leaf, and each renderer's migration proof has been visually accepted before its goldens were refreshed.
+
+Phase 7 cleanup has removed the unconsumed generic `buildCardNode` formatting helper and documented the final semantic-leaf/container boundary. Final verification exposed a real outcome-opportunity routing invariant violation in `multiple_outcomes.sdd`: the final `OP-003 -> O-002` and `OP-004 -> O-002` support routes retain a 32px collinear horizontal overlap. The issue is managed as a separate remediation handoff in [`outcome_opportunity_routing_overlap_remediation_handoff.md`](outcome_opportunity_routing_overlap_remediation_handoff.md), so it no longer blocks continuation of this adoption thread. It remains unresolved: the acceptance assertion and outcome-map artifacts must not be relaxed or refreshed to conceal it, and the remediation is not complete until final occupancy handles displacement-created conflicts. The separately recorded dense Journey Map readability debt also remains open and is not reclassified by this migration.
 
 ## Objective
 

@@ -177,7 +177,8 @@ describe("journey map accepted renderer-stage goldens", () => {
       );
       if (profileId === "permissive") {
         expect(rendered.finalSvg).not.toContain('<rect class="scene-badge__chrome"');
-        expect(rendered.finalSvg).toContain("block-kind-metadata block-region-secondary");
+        expect(rendered.finalSvg).toContain('data-attribute-group="opportunity_ref"');
+        expect(rendered.finalSvg).toContain("shared-node__attribute-value");
       }
       await expectFinalPngUsesExactSvg(rendered);
     });
@@ -250,7 +251,7 @@ describe("journey map accepted renderer-stage goldens", () => {
   it("withholds compressed visual evidence while the dense acceptance gate is rejected", async () => {
     const { rendered } = await buildFixture("compressed");
     const stage900 = findContainer(rendered.routingStages.finalPositionedScene, "G-900");
-    expect(rendered.routingStages.residualCrossings).toHaveLength(58);
+    expect(rendered.routingStages.residualCrossings).toHaveLength(55);
     expect(rendered.routingStages.finalPositionedScene.root).toMatchObject({
       width: 2064,
       height: 400
@@ -359,7 +360,10 @@ describe("journey map degraded diagnostic goldens", () => {
       unrelatedStage.y + (unrelatedStage.chrome.headerBandHeight ?? 0) / 2
     );
     const secondaryNode = findNode(positioned, "J-201");
-    const secondaryContent = secondaryNode.content.find((block) => block.region === "secondary")!;
+    const secondaryContent = secondaryNode.content.find((block) =>
+      block.id !== `${secondaryNode.id}__title`
+    )!;
+    secondaryContent.region = "secondary";
     const throughSecondaryContent = routeVia(
       secondaryNode.x + secondaryContent.x + secondaryContent.width / 2,
       secondaryNode.y + secondaryContent.y + secondaryContent.height / 2

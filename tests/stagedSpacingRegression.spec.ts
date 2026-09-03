@@ -169,7 +169,7 @@ END
       .toEqual(geometry(initial.positionedScene).map(({ id, width, height }) => ({ id, width, height })));
   });
 
-  it.each([{ branches: 1, raw: 368, height: 368 }, { branches: 3, raw: 544, height: 368 }, { branches: 8, raw: 984, height: 788 }])(
+  it.each([{ branches: 1, raw: 346, height: 346 }, { branches: 3, raw: 522, height: 348 }, { branches: 8, raw: 962, height: 788 }])(
     "refits Journey Map bounds after aligning $branches root branches without changing Stage geometry", async ({ branches, raw, height }) => {
       const source = journeySource + '\nStep J-900 "Root decision"\n'
         + Array.from({ length: branches }, (_, index) => `  PRECEDES J-${901 + index} "Root branch ${index + 1}"`).join("\n") + "\nEND\n"

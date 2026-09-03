@@ -203,6 +203,23 @@ interface PositionedNode extends MeasuredNode {
 
 The important point is the boundary, not the exact spelling.
 
+### Shared semantic-node boundary
+
+Every staged leaf that presents one semantic entity uses `buildSharedNode`. The diagram builder supplies only the semantic title, decorator mode, node type, node ID, ordered structured attributes, and integration metadata such as ports, placement classes, and view metadata. The shared component owns its fixed width, grow-height overflow behavior, repeated-attribute grouping, wrapping, typography, internal spacing and alignment, plain-versus-dense composition, and SVG structure.
+
+The adopted leaf set is:
+
+- `ui_contracts` semantic leaves;
+- scenario-flow `Step`, `Place`, and `ViewState` leaves;
+- service-blueprint semantic leaves, including `Step`, `SystemAction`, `DataEntity`, and `Policy`;
+- outcome-opportunity `Outcome`, `Opportunity`, `Initiative`, and `Metric` leaves;
+- IA place-map `Place` leaves; and
+- journey-map `Step` leaves, whether contained in a Stage or placed at the root.
+
+Scene responsibility determines the boundary. An item remains a `SceneContainer` when it contains children, establishes macro layout or routing scope, or owns a header band. This includes IA `Area` and structural Place wrappers, journey `Stage`, diagram roots, and the lane, band, track, cell, column, parking, and routing-only structures used by the other renderers. Container chrome and headers therefore continue to use generic content blocks. Generic blocks also remain valid for connector labels, annotations, diagnostics, and specialized non-shared primitives; they are not an alternate leaf-card formatting path.
+
+Macro layout receives the shared node's measured allocation and may enlarge it through a shared-height policy. It owns placement, containment, ports, and relationship routing, while the shared component finalizes internal alignment inside the allocated box. Geometry-affecting theme or CSS customization must be resolved before measurement and must rerun measurement; paint-only customization may remain an SVG concern.
+
 ## Shared renderer primitives
 
 The new renderer should not let each view invent bespoke visual logic for common diagram elements.

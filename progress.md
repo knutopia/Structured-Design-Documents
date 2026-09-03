@@ -39,6 +39,7 @@ z
 - Phase 3 done
 - Phase 4 done
 - Phase 5 done
+- Encountered blocking routing issue, captured in remediation document
 
 ## Tue 9-1
 

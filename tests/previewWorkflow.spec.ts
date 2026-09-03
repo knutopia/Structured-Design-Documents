@@ -312,7 +312,9 @@ describe("preview workflow", () => {
     }
 
     expect(result.artifact.text).toContain('class="staged-svg');
-    expect(result.artifact.text).toContain("Checkout Completion Rate");
+    expect(result.artifact.text).toContain('data-item-id="M-001"');
+    expect(result.artifact.text).toContain(">Checkout Completion</tspan>");
+    expect(result.artifact.text).toContain(">Rate</tspan>");
     expect(result.artifact.text).toContain('class="scene-edge');
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });

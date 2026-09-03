@@ -269,11 +269,12 @@ These views share one pattern:
 The per-view render models keep semantics centralized:
 
 - IA organizes source-ordered area and place hierarchies plus place annotations
-- journey maps turn `Stage CONTAINS Step` into stage containers and inline `opportunity_refs` badges
+- journey maps turn `Stage CONTAINS Step` into stage containers and retain structured Step references for shared-node attributes
 - outcome-opportunity maps turn type scope plus derived instrumentation annotations into deterministic semantic lanes
 - service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter and inside the staged scene builder
+- every eligible semantic leaf in these staged views uses the shared node component; structural containers, headers, connector labels, annotations, and routing-only items remain on their existing container or generic-content paths
 - inside the staged renderer, `ia_place_map` now uses manual hub/follower grouping and bottom-up owned-scope sizing: explicit containment creates owned child scope, forward local navigation may create same-scope follower scope, and local structure connectors use deterministic direct-vertical or shared-trunk routing without IA-specific ELK fallback
 - inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges, assigns those edges to an invisible label lane inside that gutter, and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
 - inside the staged renderer, `scenario_flow` now uses a custom lane-and-band layout with staged branch routing and debug corpus artifacts for pre-routing, edge-side selection, and gutter occupancy

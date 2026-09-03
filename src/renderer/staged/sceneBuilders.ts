@@ -1,7 +1,5 @@
 import type {
-  ContentBlock,
   LayoutIntent,
-  OverflowPolicy,
   PortOffsetPolicy,
   PortSide,
   PortSpec,
@@ -9,14 +7,8 @@ import type {
   SceneItem,
   SceneNode,
   SharedNodeAttribute,
-  NodeDecoratorMode,
-  WidthPolicy
+  NodeDecoratorMode
 } from "./contracts.js";
-
-const DEFAULT_CARD_OVERFLOW_POLICY: OverflowPolicy = {
-  kind: "escalate_width_band",
-  maxLines: 2
-};
 
 interface PortSpecOptions {
   offset?: number;
@@ -32,16 +24,6 @@ interface DiagramRootContainerOptions {
   classes?: string[];
 }
 
-interface CardNodeOptions {
-  id: string;
-  role: string;
-  classes: string[];
-  widthPolicy: WidthPolicy;
-  content: ContentBlock[];
-  ports?: PortSpec[];
-  overflowPolicy?: OverflowPolicy;
-}
-
 export interface SharedNodeRequest {
   title: string;
   decoratorMode: NodeDecoratorMode;
@@ -53,20 +35,6 @@ export interface SharedNodeRequest {
 interface SharedNodeIntegrationOptions {
   classes?: string[];
   ports?: PortSpec[];
-}
-
-function cloneWidthPolicy(widthPolicy: WidthPolicy): WidthPolicy {
-  return {
-    preferred: widthPolicy.preferred,
-    allowed: [...widthPolicy.allowed]
-  };
-}
-
-function cloneOverflowPolicy(overflowPolicy: OverflowPolicy): OverflowPolicy {
-  return {
-    kind: overflowPolicy.kind,
-    maxLines: overflowPolicy.maxLines
-  };
 }
 
 export function buildPortSpec(
@@ -143,20 +111,6 @@ export function buildDiagramRootContainer(options: DiagramRootContainerOptions):
       headerBandHeight: options.chrome.headerBandHeight
     },
     children: [...options.children],
-    ports: [...(options.ports ?? [])]
-  };
-}
-
-export function buildCardNode(options: CardNodeOptions): SceneNode {
-  return {
-    kind: "node",
-    id: options.id,
-    role: options.role,
-    primitive: "card",
-    classes: [...options.classes],
-    widthPolicy: cloneWidthPolicy(options.widthPolicy),
-    overflowPolicy: cloneOverflowPolicy(options.overflowPolicy ?? DEFAULT_CARD_OVERFLOW_POLICY),
-    content: [...options.content],
     ports: [...(options.ports ?? [])]
   };
 }

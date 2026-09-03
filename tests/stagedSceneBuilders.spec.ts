@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  buildCardNode,
   buildCardinalPorts,
   buildContainerContractPorts,
   buildContractTargetPorts,
@@ -55,34 +54,6 @@ describe("staged scene builders", () => {
       children: [],
       ports: []
     });
-  });
-
-  it("builds staged card nodes with the shared overflow default", () => {
-    expect(buildCardNode({
-      id: "P-010",
-      role: "place",
-      classes: ["place"],
-      widthPolicy: {
-        preferred: "narrow",
-        allowed: ["narrow", "standard", "wide"]
-      },
-      content: [],
-      ports: buildCardinalPorts()
-    })).toEqual(expect.objectContaining({
-      kind: "node",
-      id: "P-010",
-      role: "place",
-      primitive: "card",
-      classes: ["place"],
-      widthPolicy: {
-        preferred: "narrow",
-        allowed: ["narrow", "standard", "wide"]
-      },
-      overflowPolicy: {
-        kind: "escalate_width_band",
-        maxLines: 2
-      }
-    }));
   });
 
   it("builds the shared reusable port families", () => {
