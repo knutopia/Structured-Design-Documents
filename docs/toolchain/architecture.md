@@ -76,12 +76,11 @@ The staged artifact backend sits on top of those contracts:
 - staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
 - backend-aware preview routing selects staged backends for accepted migrated views while keeping legacy backends selectable where preserved
 
-The staged macro-layout boundary now owns both manual placement and the first shared routed edge behaviors:
+The staged macro-layout boundary owns manual placement and the first shared routed edge behaviors. The remaining `elk_layered` UI transition-graph path is migration debt and must not be expanded:
 
-- `src/renderer/staged/macroLayout.ts` owns the recursive strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
+- `src/renderer/staged/macroLayout.ts` owns the recursive renderer-managed strategies for `stack`, `grid`, and `lanes`; `elk_layered` remains only until UI Contracts moves to renderer-owned layered placement
 - container chrome, padding, header bands, bounds, and container-port offsets are resolved during layout rather than left at placeholder values
 - staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, target-biased bends where requested, minimum marker-leg clearance for arrow-ended routes when geometry allows, and segment-aware edge-label placement before SVG emission
-- `elk_layered` spacing now reserves room for owned edge labels so horizontal transition graphs can remain readable without view-specific SVG hacks
 
 Ports in those staged scene contracts are semantic routing anchors, not normal painted output. The staged SVG backend keeps explicit `connector_port` primitives visible when a view intentionally uses them, but ordinary node and container ports are internal geometry only.
 
@@ -238,7 +237,7 @@ Preview backends now split by view:
 
 - `staged_ia_place_map_preview` is the default preview backend for `ia_place_map`; it owns staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
 - `staged_ui_contracts_preview` is the default preview backend for `ui_contracts`; it owns the routed and balanced staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
-- `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, ELK-authoritative staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
+- `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, deterministic lane/column placement, custom staged routing, staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_scenario_flow_preview` is the default selected preview backend for `scenario_flow`; it owns the accepted custom staged lane-and-routing SVG emission and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_outcome_opportunity_map_preview` is the default selected preview backend for `outcome_opportunity_map`; it owns the staged semantic-lane scene, custom opportunity routing, staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_journey_map_preview` is the default selected preview backend for `journey_map`; it owns source-ordered Stage/Step placement, dedicated orthogonal `PRECEDES` routing, deterministic crossing-continuity marks, staged SVG emission, and staged PNG derivation from that exact SVG

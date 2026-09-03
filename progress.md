@@ -2,7 +2,8 @@
 
 ## Open Issues
 
--nasty error in cli for forgotten dash
+-routing remediation
+-close out new node adoption after routing fix
 -containment display for ui_contracts
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
@@ -41,6 +42,7 @@ z
 - Phase 5 done
 - Encountered blocking routing issue in phase 6, captured in remediation document
 - Phase 7 shared-node cleanup and verification completed
+- Planned routing unification
 
 ## Tue 9-1
 
