@@ -39,7 +39,8 @@ z
 - Phase 3 done
 - Phase 4 done
 - Phase 5 done
-- Encountered blocking routing issue, captured in remediation document
+- Encountered blocking routing issue in phase 6, captured in remediation document
+- Phase 7 shared-node cleanup and verification completed
 
 ## Tue 9-1
 

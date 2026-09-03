@@ -348,6 +348,19 @@ Complete final verification:
 - comparison of representative nodes across all diagram types
 - confirmation that legacy paths are unchanged
 
+### Phase 7 Verification Record
+
+Verification on 2026-09-03 established the following state:
+
+- TypeScript compilation passes.
+- Focused shared-node, renderer-stage, routing, preview, SVG/PNG, and rendered-corpus coverage for the migrated behavior passes across all adopted renderers. The sole known visual-invariant exception is the managed outcome-opportunity overlap described below.
+- The Journey suites affected by the final migration pass in focused and serial runs. During the fully parallel repository run, six individual Journey tests exceeded their 5-second timeout under load; all six passed when the four affected files were rerun serially (`98/98`). These are load-related timeouts, not assertion failures.
+- The broad repository run produced `1006` passing tests and one substantive assertion failure: the managed `multiple_outcomes.sdd` route overlap recorded in [`outcome_opportunity_routing_overlap_remediation_handoff.md`](outcome_opportunity_routing_overlap_remediation_handoff.md). The remaining six failures in that run were the serially cleared timeouts above.
+- Legacy DOT and Mermaid suites pass. Preview backend selection, vendored-font regression, deterministic staged SVG, rendered-corpus inventory, and SVG-derived PNG coverage pass.
+- No outcome-opportunity golden or public corpus artifact was refreshed after discovery of the overlap.
+
+The documentation and cleanup work assigned to this adoption thread is complete. The repository-wide all-tests-green completion gate remains explicitly unsatisfied until the managed routing remediation lands; this status must not be represented as resolution of that defect.
+
 ## Acceptance and Stop Conditions
 
 After every substantial phase, report:

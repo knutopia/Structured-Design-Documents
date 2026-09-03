@@ -8,7 +8,7 @@ This document records the routing defect exposed during the shared-node renderer
 
 The defect is considered managed for purposes of continuing and closing the shared-node adoption work because it now has a durable, scoped handoff. It must not be described as fixed, accepted, or harmless. The routing remediation is complete only when the final routed scene satisfies the existing separation invariant without weakening tests or hiding the failure in refreshed artifacts.
 
-Investigation was performed against repository `HEAD` `1a58a1b524a035754e602079202caff168c583ee` plus the uncommitted shared-node Phase 7 cleanup present in the adoption thread. That cleanup does not modify `outcomeOpportunityMapRouting.ts`; the routing failure is reproducible from the current renderer path.
+Investigation began against Phase 5 commit `1a58a1b524a035754e602079202caff168c583ee` plus the shared-node Phase 7 cleanup then present in the adoption thread. That combined state, including this handoff, was subsequently captured in commit `a7a367ff5153240d8f1e3c2137fd40ea463dc88e`. The cleanup does not modify `outcomeOpportunityMapRouting.ts`; the routing failure is reproducible from the current renderer path.
 
 ## Executive Summary
 
@@ -391,4 +391,3 @@ The remediation may be called complete only when all of the following are true:
 - affected goldens are refreshed only as evidence of the passing behavior;
 - the stale public outcome-opportunity corpus artifacts are regenerated after acceptance; and
 - this handoff and the shared-node implementation status are updated from **managed/unresolved** to **resolved**, with the remediation approach and tests cited.
-
