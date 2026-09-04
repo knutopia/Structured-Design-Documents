@@ -2326,8 +2326,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2352,8 +2351,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2378,8 +2376,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2404,8 +2401,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2430,8 +2426,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2456,8 +2451,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2482,8 +2476,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2508,8 +2501,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2534,8 +2526,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"

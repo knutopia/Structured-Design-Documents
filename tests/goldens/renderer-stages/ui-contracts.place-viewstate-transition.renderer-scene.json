@@ -87,7 +87,7 @@
               "view_state_graph"
             ],
             "layout": {
-              "strategy": "elk_layered",
+              "strategy": "layered",
               "direction": "horizontal",
               "gap": 24,
               "crossAlignment": "start"
@@ -478,7 +478,7 @@
                       "chrome-dashed"
                     ],
                     "layout": {
-                      "strategy": "elk_layered",
+                      "strategy": "layered",
                       "direction": "horizontal",
                       "gap": 24,
                       "crossAlignment": "start"

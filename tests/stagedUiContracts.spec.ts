@@ -608,6 +608,23 @@ END
         .filter((edge) => edge.role === "emits" && edge.to.itemId === "E-200")
         .map((edge) => edge.from.itemId)
     ).toEqual(["C-200", "C-201"]);
+    const root = rendered.positionedScene.root;
+    const routedEmits = rendered.positionedScene.edges.filter((edge) =>
+      edge.role === "emits" && edge.to.itemId === "E-200"
+    );
+    for (const edge of routedEmits) {
+      expect(edge.route.points.every((point) =>
+        point.x >= root.x
+        && point.x <= root.x + root.width
+        && point.y >= root.y
+        && point.y <= root.y + root.height
+      )).toBe(true);
+      expect(edge.label).toBeDefined();
+      expect(edge.label!.x).toBeGreaterThanOrEqual(root.x);
+      expect(edge.label!.y).toBeGreaterThanOrEqual(root.y);
+      expect(edge.label!.x + edge.label!.width).toBeLessThanOrEqual(root.x + root.width);
+      expect(edge.label!.y + edge.label!.height).toBeLessThanOrEqual(root.y + root.height);
+    }
   });
 
   it("packs crowded contract-lane pills around their routes without overlap", async () => {

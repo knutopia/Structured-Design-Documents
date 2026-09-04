@@ -964,7 +964,7 @@ function estimateContainerContentSize(container: MeasuredContainer): MeasuredSiz
       return estimateGridContentSize(container.children, container.layout, gap);
     case "stack":
     case "lanes":
-    case "elk_layered":
+    case "layered":
       return estimateLinearContentSize(container.children, container.layout.direction ?? "vertical", gap);
     case "manual":
       return {

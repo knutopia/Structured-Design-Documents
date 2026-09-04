@@ -24,6 +24,10 @@ import {
 } from "./connectorLabelPlacement.js";
 import { createRoutingDiagnostic, sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
 import { collapseRoutePoints } from "./routing.js";
+import {
+  resolveAndReconstructRouteOccupancy,
+  validatePositionedSceneRouting
+} from "./routingCore/index.js";
 import { decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
 import type {
   ScenarioFlowEdgeChannel,
@@ -3793,14 +3797,67 @@ export function buildScenarioFlowRoutingStages(
   );
 
   const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
+  const sharedOccupancy = resolveAndReconstructRouteOccupancy(
+    finalPrepared.connectorPlans.map((plan, priority) => ({
+      connectorId: plan.id,
+      route: plan.finalRoute,
+      priority
+    })),
+    {
+      buildSegmentKey: (connectorId, routeSegmentIndex) => `${connectorId}|${routeSegmentIndex}`,
+      policy: {
+        minSeparation: FIXED_SEPARATION_DISTANCE,
+        epsilon: 0.5,
+        maxExpansionPasses: MAX_FINAL_ROUTING_ATTEMPTS
+      }
+    }
+  );
+  if (sharedOccupancy.status !== "resolved") {
+    finalDiagnostics.push(createRoutingDiagnostic(
+      "renderer.routing.scenario_flow_constraint_unsatisfiable",
+      "Scenario-flow routing could not find a globally separated final track assignment within the bounded solve lifecycle.",
+      "scenario_flow",
+      "error"
+    ));
+  }
+  finalPrepared = {
+    ...finalPrepared,
+    connectorPlans: finalPrepared.connectorPlans.map((plan) => ({
+      ...plan,
+      finalRoute: sharedOccupancy.routeByConnectorId.get(plan.id) ?? plan.finalRoute
+    }))
+  };
   emitFinalIntersectionDiagnostics(finalPrepared.connectorPlans, workingIndex.nodeBoxes, finalDiagnostics);
   const labelsByPlanId = placeLabels(finalPrepared.connectorPlans, workingScene, middleLayer, finalDiagnostics);
-  const finalPositionedScene = withEdgesAndDiagnostics(
+  let finalPositionedScene = withEdgesAndDiagnostics(
     workingScene,
     buildPositionedEdges(finalPrepared.connectorPlans, (plan) => plan.finalRoute, labelsByPlanId),
     finalDiagnostics,
     middleLayer
   );
+  const sharedViolationKinds = new Set([
+    "non_orthogonal_segment",
+    "endpoint_mismatch",
+    "endpoint_intrusion",
+    "node_intersection"
+  ]);
+  const sharedViolations = validatePositionedSceneRouting(finalPositionedScene, {
+    includeEdgeInteractions: false,
+    policy: { minTerminalLeg: 0, crossingTreatment: "allow" }
+  }).filter((violation) => sharedViolationKinds.has(violation.kind));
+  if (sharedViolations.length > 0) {
+    const sharedDiagnostics = sharedViolations.map((violation) => createRoutingDiagnostic(
+      `renderer.routing.scenario_flow_${violation.kind}`,
+      violation.message,
+      violation.connectorIds[0] ?? "scenario_flow",
+      "error"
+    ));
+    finalDiagnostics.push(...sharedDiagnostics);
+    finalPositionedScene = {
+      ...finalPositionedScene,
+      diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...sharedDiagnostics])
+    };
+  }
   const finalBucketsByNodeId = buildNodeEdgeBuckets(finalPrepared.connectorPlans, workingIndex);
 
   return {

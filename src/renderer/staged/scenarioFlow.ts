@@ -338,24 +338,21 @@ function buildRoutingIntent(edge: ScenarioFlowMiddleEdge): RoutingIntent {
         style: "orthogonal",
         sourcePortRole: "flow_out",
         targetPortRole: "flow_in",
-        labelPlacement: edge.label ? "segment" : undefined,
-        authority: "flexible"
+        labelPlacement: edge.label ? "segment" : undefined
       };
     case "place_navigation":
     case "view_transition":
       return {
         style: "orthogonal",
         sourcePortRole: "mirror_out",
-        targetPortRole: "mirror_in",
-        authority: "flexible"
+        targetPortRole: "mirror_in"
       };
     case "realization":
     default:
       return {
         style: "straight",
         sourcePortRole: "realization_out",
-        targetPortRole: "realization_in",
-        authority: "flexible"
+        targetPortRole: "realization_in"
       };
   }
 }

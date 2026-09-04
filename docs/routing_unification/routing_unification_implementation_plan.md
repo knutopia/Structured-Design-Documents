@@ -1,6 +1,43 @@
 # Routing Unification Implementation Plan
 
-**Status:** Approved for implementation.
+**Status:** Implementation checkpoint complete on 2026-09-04. The proof wave and five
+renderer adoptions are complete; Journey Map track-assignment convergence remains a
+separate blocked follow-on for the reason recorded below.
+
+## Implementation Record
+
+The implementation established `src/renderer/staged/routingCore/` with shared route
+geometry, stable physical-segment identity, observation aggregation, deterministic
+track assignment, reconstruction, candidate selection, typed validation, expansion
+requests, and a bounded solve-validate-repair lifecycle.
+
+The current adoption state is:
+
+| View | Implemented state |
+| --- | --- |
+| Outcome-Opportunity | Shared claims, assignment, reconstruction, and final validation. The detailed `multiple_outcomes` overlap is fixed. |
+| Service Blueprint | Shared candidate selection, claims, assignment, reconstruction, and final validation. The two `sdd_for_sdd.sdd` node intersections are fixed in compact and detailed output. |
+| Scenario Flow | Shared claims, assignment, reconstruction, and structural validation after view-owned semantic expansion. |
+| Journey Map | Shared geometry is used by final acceptance; view-owned archetypes, occupancy assignment, expansion, crossings, and continuity marks remain intact. |
+| IA Place Map | Shared final validation with explicit intentional shared-trunk declarations. |
+| UI Contracts | Renderer-owned SCC/longest-path layered placement, shared exterior route repair, and shared final validation. ELK and `elkjs` are removed. |
+
+The proof SVGs and SVG-derived PNGs were inspected before artifact refresh. Repeated
+Outcome-Opportunity and Service Blueprint renders were byte-identical and emitted no
+proof-case routing errors.
+
+One planned convergence step is intentionally not claimed complete. Replacing Journey
+Map's mature resource-specific assignment with the generic solver changed accepted
+reciprocal and endpoint routes and reduced the dense proof's 55 continuity-marked
+crossings to 29. That is a structural behavior change, not acceptable evidence of an
+improvement. The experiment was reverted under the stop conditions in this plan.
+Journey's solver should migrate only after the shared core can express its directional
+resource lane order, endpoint overload exemptions, and continuity-mark preservation as
+first-class policies. Goldens were not refreshed for that failed experiment.
+
+Label placement also remains downstream and view-owned as assumed in Section 12.
+Shared final validation covers route geometry; the existing independent visual oracle
+continues to enforce label clearance.
 
 ## 1. Summary
 

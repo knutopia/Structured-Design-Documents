@@ -3877,8 +3877,7 @@
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3917,8 +3916,7 @@
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3957,8 +3955,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -3988,8 +3985,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4018,8 +4014,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -4049,8 +4044,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4080,8 +4074,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4111,8 +4104,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4142,8 +4134,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4173,8 +4164,7 @@
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4213,8 +4203,7 @@
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
         "targetPortRole": "flow_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4253,8 +4242,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4284,8 +4272,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4315,8 +4302,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4346,8 +4332,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4377,8 +4362,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4408,8 +4392,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "realization_out",
-        "targetPortRole": "realization_in",
-        "authority": "flexible"
+        "targetPortRole": "realization_in"
       },
       "markers": {
         "end": "arrow"
@@ -4438,8 +4421,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4468,8 +4450,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4498,8 +4479,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4528,8 +4508,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4558,8 +4537,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4588,8 +4566,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4618,8 +4595,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"
@@ -4648,8 +4624,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "mirror_out",
-        "targetPortRole": "mirror_in",
-        "authority": "flexible"
+        "targetPortRole": "mirror_in"
       },
       "markers": {
         "end": "arrow"

@@ -23,6 +23,10 @@ import {
 } from "./connectorLabelPlacement.js";
 import { createRoutingDiagnostic, sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
 import { collapseRoutePoints } from "./routing.js";
+import {
+  resolveAndReconstructRouteOccupancy,
+  validatePositionedSceneRouting
+} from "./routingCore/index.js";
 import type {
   OutcomeOpportunityEdgeChannel,
   OutcomeOpportunityMiddleEdge,
@@ -4977,18 +4981,50 @@ export function buildOutcomeOpportunityMapRoutingStages(
     finalBucketsByNodeId,
     finalDiagnostics
   );
-  const finalDisplacementBySegmentKey = resolveOccupancyDisplacements(
+  const initialFinalDisplacementBySegmentKey = resolveOccupancyDisplacements(
     preparedRoutesFinal.connectorPlansWithOccupancy,
     preparedRoutesFinal.occupancyResult.occupancy,
     preparedRoutesFinal.lockedSegmentKeys
   );
-  const finalRouteStates = buildRouteStatesForPlans(
+  const provisionalFinalRouteStates = buildRouteStatesForPlans(
     preparedRoutesFinal.connectorPlansWithOccupancy,
     workingIndex,
     finalEndpointOffsetsByNodeId,
-    finalDisplacementBySegmentKey,
+    initialFinalDisplacementBySegmentKey,
     preparedRoutesFinal.bundleEndpointCoordinateByEndpointKey,
     preparedRoutesFinal.preparedSegmentCoordinateBySegmentKey
+  );
+  const finalOccupancyResolution = resolveAndReconstructRouteOccupancy(
+    preparedRoutesFinal.connectorPlansWithOccupancy.map((plan) => ({
+      connectorId: plan.id,
+      route: provisionalFinalRouteStates.get(plan.id)?.route ?? plan.step3Route,
+      priority: plan.priority
+    })),
+    {
+      buildSegmentKey: buildSegmentDisplacementKey,
+      policy: {
+        minSeparation: ENDPOINT_SPACING,
+        epsilon: 0.5,
+        maxExpansionPasses: MAX_GLOBAL_GUTTER_ATTEMPTS
+      }
+    }
+  );
+  if (finalOccupancyResolution.status !== "resolved") {
+    finalDiagnostics.push(createRoutingDiagnostic(
+      "renderer.routing.outcome_opportunity_constraint_unsatisfiable",
+      "Outcome-opportunity routing could not find a globally separated final track assignment within the bounded solve lifecycle.",
+      "outcome_opportunity_map",
+      "error"
+    ));
+  }
+  const finalRouteStates = new Map(
+    [...provisionalFinalRouteStates.entries()].map(([connectorId, state]) => [
+      connectorId,
+      {
+        ...state,
+        route: finalOccupancyResolution.routeByConnectorId.get(connectorId) ?? state.route
+      }
+    ] as const)
   );
   const finalOccupancyResult = extractGutterOccupancyByConnector(
     preparedRoutesFinal.connectorPlansWithOccupancy,
@@ -5010,7 +5046,7 @@ export function buildOutcomeOpportunityMapRoutingStages(
     suppressedPlanIds: aggregateLabels.suppressedPlanIds,
     additionalBlockedBoxes: aggregateLabels.blockingBoxes
   });
-  const finalPositionedScene = withStep2EdgesAndDiagnostics(
+  let finalPositionedScene = withStep2EdgesAndDiagnostics(
     workingScene,
     buildPositionedEdges(finalPlans, (plan) => plan.finalRoute, labelsByPlanId),
     finalDiagnostics,
@@ -5019,6 +5055,30 @@ export function buildOutcomeOpportunityMapRoutingStages(
       aggregateLabels: aggregateLabels.decorations
     }
   );
+  const sharedViolationKinds = new Set([
+    "non_orthogonal_segment",
+    "endpoint_mismatch",
+    "endpoint_intrusion",
+    "node_intersection",
+    "collinear_overlap",
+    "track_separation"
+  ]);
+  const sharedViolations = validatePositionedSceneRouting(finalPositionedScene, {
+    policy: { minTerminalLeg: 0, crossingTreatment: "allow" }
+  }).filter((violation) => sharedViolationKinds.has(violation.kind));
+  if (sharedViolations.length > 0) {
+    const sharedDiagnostics = sharedViolations.map((violation) => createRoutingDiagnostic(
+      `renderer.routing.outcome_opportunity_${violation.kind}`,
+      violation.message,
+      violation.connectorIds[0] ?? "outcome_opportunity_map",
+      "error"
+    ));
+    finalDiagnostics.push(...sharedDiagnostics);
+    finalPositionedScene = {
+      ...finalPositionedScene,
+      diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...sharedDiagnostics])
+    };
+  }
 
   return {
     connectorPlans: finalPlans,

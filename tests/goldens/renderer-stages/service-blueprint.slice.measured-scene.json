@@ -2334,8 +2334,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2366,8 +2365,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2407,8 +2405,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2448,8 +2445,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2488,8 +2484,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2527,8 +2522,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2558,8 +2552,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2597,8 +2590,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2628,8 +2620,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2669,8 +2660,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2710,8 +2700,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2751,8 +2740,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -2792,8 +2780,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [

@@ -937,6 +937,8 @@ END
 
     const supportsOverlapSegments = [
       findEdge(finalEdges, "OP-002__supports__O-003"),
+      findEdge(finalEdges, "OP-003__supports__O-002"),
+      findEdge(finalEdges, "OP-004__supports__O-002"),
       findEdge(finalEdges, "OP-007__supports__O-001"),
       findEdge(finalEdges, "OP-007__supports__O-002")
     ].flatMap((edge) =>

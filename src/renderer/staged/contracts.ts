@@ -21,11 +21,10 @@ export type SceneNodePrimitive =
   | "annotation_list"
   | "edge_label"
   | "connector_port";
-export type LayoutStrategy = "stack" | "grid" | "lanes" | "elk_layered" | "manual";
+export type LayoutStrategy = "stack" | "grid" | "lanes" | "layered" | "manual";
 export type LayoutDirection = "horizontal" | "vertical";
 export type CrossAlignment = "start" | "center" | "stretch";
 export type WidthBand = "chip" | "narrow" | "standard" | "wide";
-export type ElkHierarchyHandling = "include_children";
 export type OverflowPolicyKind =
   | "grow_height"
   | "escalate_width_band"
@@ -46,7 +45,6 @@ export type EdgeLabelPlacement = "segment" | "segment_strict" | "source_contract
 export type LocalRoutePattern = "ia_direct_vertical" | "ia_shared_trunk";
 export type PaintGroup = "chrome" | "nodes" | "labels" | "edges" | "edge_labels";
 export type EdgeMarkerKind = "none" | "arrow";
-export type RouteAuthority = "flexible" | "require_elk";
 
 export const IA_LOCAL_ROUTE_PATTERNS = {
   directVertical: "ia_direct_vertical",
@@ -351,11 +349,6 @@ export interface LayoutIntent {
   grid?: {
     placements: GridCellPlacement[];
   };
-  elk?: {
-    hierarchyHandling?: ElkHierarchyHandling;
-    strict?: boolean;
-    layoutOptions?: Record<string, string>;
-  };
 }
 
 export interface ChromeSpec {
@@ -426,8 +419,6 @@ export interface RoutingIntent {
   sourcePortRole?: string;
   targetPortRole?: string;
   localPattern?: LocalRoutePattern;
-  authority?: RouteAuthority;
-  elkLayoutOptions?: Record<string, string>;
 }
 
 export interface EdgeLabelSpec {

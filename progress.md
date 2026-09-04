@@ -30,11 +30,12 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Wed 9-2
+## Fri 9-4
 
-- Visual issues correction successful
-- Created note for future connector label improvement
-- Planned new node adoption
+- Routing unification done
+
+## Thu 9-3
+
 - Phase 1 of new node adoption done
 - Phase 2 done
 - Phase 3 done
@@ -43,6 +44,12 @@ z
 - Encountered blocking routing issue in phase 6, captured in remediation document
 - Phase 7 shared-node cleanup and verification completed
 - Planned routing unification
+
+## Wed 9-2
+
+- Visual issues correction successful
+- Created note for future connector label improvement
+- Planned new node adoption
 
 ## Tue 9-1
 

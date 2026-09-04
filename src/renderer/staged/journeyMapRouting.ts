@@ -21,6 +21,10 @@ import {
   type RendererDiagnostic
 } from "./diagnostics.js";
 import { collapseRoutePoints, MIN_ARROW_MARKER_LEG, resolvePortOnItem } from "./routing.js";
+import {
+  getSegmentAxis as getSharedSegmentAxis,
+  segmentIntersectsBoxInterior as sharedSegmentIntersectsBoxInterior
+} from "./routingCore/index.js";
 
 export const JOURNEY_MAP_TRACK_SEPARATION = 16;
 export const JOURNEY_MAP_PREFERRED_TERMINAL_LEG = 18;
@@ -7703,33 +7707,18 @@ function applyPreferredTerminalLegConstruction(
 }
 
 function segmentLength(start: Point, end: Point): number | undefined {
-  if (start.x === end.x) {
+  const axis = getSharedSegmentAxis(start, end, 0);
+  if (axis === "vertical") {
     return Math.abs(end.y - start.y);
   }
-  if (start.y === end.y) {
+  if (axis === "horizontal") {
     return Math.abs(end.x - start.x);
   }
   return undefined;
 }
 
 function segmentIntersectsRectInterior(start: Point, end: Point, rect: Rect): boolean {
-  if (start.y === end.y) {
-    const spanStart = Math.min(start.x, end.x);
-    const spanEnd = Math.max(start.x, end.x);
-    return start.y > rect.y
-      && start.y < rect.y + rect.height
-      && spanStart < rect.x + rect.width
-      && spanEnd > rect.x;
-  }
-  if (start.x === end.x) {
-    const spanStart = Math.min(start.y, end.y);
-    const spanEnd = Math.max(start.y, end.y);
-    return start.x > rect.x
-      && start.x < rect.x + rect.width
-      && spanStart < rect.y + rect.height
-      && spanEnd > rect.y;
-  }
-  return true;
+  return sharedSegmentIntersectsBoxInterior(start, end, rect, 0);
 }
 
 function nodeRect(indexedNode: IndexedJourneyNode): Rect {

@@ -250,24 +250,21 @@ function buildRoutingIntent(edge: ServiceBlueprintMiddleEdge): RoutingIntent {
       return {
         style: "straight",
         sourcePortRole: "flow_out",
-        targetPortRole: "flow_in",
-        authority: "flexible"
+        targetPortRole: "flow_in"
       };
     case "support":
       return {
         style: "straight",
         sourcePortRole: "support_out",
         targetPortRole: "support_in",
-        labelPlacement: edge.label ? "segment" : undefined,
-        authority: "flexible"
+        labelPlacement: edge.label ? "segment" : undefined
       };
     case "resource_policy":
       return {
         style: "straight",
         sourcePortRole: "resource_out",
         targetPortRole: "resource_in",
-        labelPlacement: edge.label ? "segment" : undefined,
-        authority: "flexible"
+        labelPlacement: edge.label ? "segment" : undefined
       };
   }
 }

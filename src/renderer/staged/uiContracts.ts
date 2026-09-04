@@ -261,7 +261,7 @@ function buildViewStateGraphContainer(
     ["ViewState Graph"],
     items.map((item) => buildViewStateScene(item, context)),
     {
-      strategy: "elk_layered",
+      strategy: "layered",
       direction: "horizontal",
       gap: TRANSITION_GRAPH_GAP,
       crossAlignment: "start"
@@ -285,7 +285,7 @@ function buildStateGroupScene(
     item.labelLines,
     item.nodeIds.map((nodeId) => buildRenderableLeafNode(nodeId, context)),
     {
-      strategy: "elk_layered",
+      strategy: "layered",
       direction: "horizontal",
       gap: TRANSITION_GRAPH_GAP,
       crossAlignment: "start"

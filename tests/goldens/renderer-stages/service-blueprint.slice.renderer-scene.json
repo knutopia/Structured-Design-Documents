@@ -1751,8 +1751,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -1779,8 +1778,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "realized by",
@@ -1811,8 +1809,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "realized by",
@@ -1843,8 +1840,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "constrained by",
@@ -1874,8 +1870,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "depends on",
@@ -1904,8 +1899,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -1931,8 +1925,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "depends on",
@@ -1961,8 +1954,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -1988,8 +1980,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "depends on",
@@ -2020,8 +2011,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "constrained by",
@@ -2052,8 +2042,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "reads, writes",
@@ -2084,8 +2073,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "reads",
@@ -2116,8 +2104,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "reads",

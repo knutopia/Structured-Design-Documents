@@ -112,6 +112,14 @@ async function loadExampleInput(fileName: string): Promise<{ path: string; text:
   };
 }
 
+async function loadDocumentationInput(relativePath: string): Promise<{ path: string; text: string }> {
+  const filePath = path.join(repoRoot, "docs", relativePath);
+  return {
+    path: filePath,
+    text: await readFile(filePath, "utf8")
+  };
+}
+
 function findNestedPositionedItem(children: PositionedItem[], id: string): PositionedItem | undefined {
   for (const child of children) {
     if (child.id === id) {
@@ -354,7 +362,34 @@ function recomputeRootBounds(root: { children: PositionedItem[]; width: number; 
 }
 
 describe("staged service_blueprint", () => {
-  it("builds a fixed root grid for service_blueprint_slice instead of using root ELK placement", async () => {
+  it.each(["compact", "detailed"])(
+    "renders the Step-only sdd_for_sdd blueprint without node intersections (%s)",
+    async (detailId) => {
+      const input = await loadDocumentationInput("sdd_app_planning/sdd_for_sdd.sdd");
+      const context = await resolveServiceBlueprintContext(input, "simple");
+      const rendered = await renderServiceBlueprintStagedSvg(
+        context.projection,
+        context.graph,
+        context.view,
+        { detailId }
+      );
+
+      expect(rendered.positionedScene.diagnostics.filter((diagnostic) =>
+        diagnostic.severity === "error"
+      )).toEqual([]);
+      expectNoRouteIntersectionsWithNonEndpointBoxes(
+        rendered.positionedScene.edges,
+        collectVisibleItemBoxes(rendered.positionedScene.root).filter((box) =>
+          box.itemId !== "root" && box.kind === "node"
+        )
+      );
+      for (const connectorId of ["J-020__precedes__J-021", "J-040__precedes__J-043"]) {
+        expect(findSemanticEdge(rendered.positionedScene.edges, connectorId)).toBeDefined();
+      }
+    }
+  );
+
+  it("builds a fixed renderer-owned root grid for service_blueprint_slice", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
       "strict"

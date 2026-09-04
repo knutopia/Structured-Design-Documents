@@ -76,11 +76,12 @@ The staged artifact backend sits on top of those contracts:
 - staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
 - backend-aware preview routing selects staged backends for accepted migrated views while keeping legacy backends selectable where preserved
 
-The staged macro-layout boundary owns manual placement and the first shared routed edge behaviors. The remaining `elk_layered` UI transition-graph path is migration debt and must not be expanded:
+The staged macro-layout boundary owns renderer-managed placement and shared routed-edge behavior. No staged view delegates placement or routing to ELK:
 
-- `src/renderer/staged/macroLayout.ts` owns the recursive renderer-managed strategies for `stack`, `grid`, and `lanes`; `elk_layered` remains only until UI Contracts moves to renderer-owned layered placement
+- `src/renderer/staged/macroLayout.ts` owns the recursive renderer-managed strategies for `stack`, `grid`, `lanes`, and `layered`; the layered strategy ranks strongly connected components and then places ranks deterministically
 - container chrome, padding, header bands, bounds, and container-port offsets are resolved during layout rather than left at placeholder values
 - staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, target-biased bends where requested, minimum marker-leg clearance for arrow-ended routes when geometry allows, and segment-aware edge-label placement before SVG emission
+- `src/renderer/staged/routingCore/` owns backend-neutral route geometry, physical-segment claims, deterministic track solving, bounded solve/validate/repair coordination, and final validation; view adapters retain semantic topology and routing policy
 
 Ports in those staged scene contracts are semantic routing anchors, not normal painted output. The staged SVG backend keeps explicit `connector_port` primitives visible when a view intentionally uses them, but ordinary node and container ports are internal geometry only.
 

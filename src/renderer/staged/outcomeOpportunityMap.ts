@@ -281,16 +281,14 @@ function buildRoutingIntent(edge: OutcomeOpportunityMiddleEdge): RoutingIntent {
         style: "orthogonal",
         sourcePortRole: "intent_out",
         targetPortRole: "intent_in",
-        labelPlacement: edge.label ? "segment" : undefined,
-        authority: "flexible"
+        labelPlacement: edge.label ? "segment" : undefined
       };
     case "outcome_measurement":
       return {
         style: "orthogonal",
         sourcePortRole: "measure_out",
         targetPortRole: "measure_in",
-        labelPlacement: edge.label ? "segment" : undefined,
-        authority: "flexible"
+        labelPlacement: edge.label ? "segment" : undefined
       };
     case "implementation_reference":
     case "instrumentation_reference":
@@ -299,8 +297,7 @@ function buildRoutingIntent(edge: OutcomeOpportunityMiddleEdge): RoutingIntent {
         style: "orthogonal",
         sourcePortRole: "secondary_out",
         targetPortRole: "secondary_in",
-        labelPlacement: edge.label ? "segment" : undefined,
-        authority: "flexible"
+        labelPlacement: edge.label ? "segment" : undefined
       };
   }
 }
