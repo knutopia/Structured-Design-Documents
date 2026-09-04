@@ -1,8 +1,7 @@
 # Routing Unification Implementation Plan
 
-**Status:** Implementation checkpoint complete on 2026-09-04. The proof wave and five
-renderer adoptions are complete; Journey Map track-assignment convergence remains a
-separate blocked follow-on for the reason recorded below.
+**Status:** Implemented on 2026-09-04. The proof wave and all six renderer adoptions,
+including Journey Map physical-track assignment, are complete.
 
 ## Implementation Record
 
@@ -18,7 +17,7 @@ The current adoption state is:
 | Outcome-Opportunity | Shared claims, assignment, reconstruction, and final validation. The detailed `multiple_outcomes` overlap is fixed. |
 | Service Blueprint | Shared candidate selection, claims, assignment, reconstruction, and final validation. The two `sdd_for_sdd.sdd` node intersections are fixed in compact and detailed output. |
 | Scenario Flow | Shared claims, assignment, reconstruction, and structural validation after view-owned semantic expansion. |
-| Journey Map | Shared geometry is used by final acceptance; view-owned archetypes, occupancy assignment, expansion, crossings, and continuity marks remain intact. |
+| Journey Map | Shared physical-segment aggregation and bounded assignment with view-owned archetypes, directional corridors, reciprocal-pair constraints, expansion ownership, crossing minimization, and continuity marks. |
 | IA Place Map | Shared final validation with explicit intentional shared-trunk declarations. |
 | UI Contracts | Renderer-owned SCC/longest-path layered placement, shared exterior route repair, and shared final validation. ELK and `elkjs` are removed. |
 
@@ -26,14 +25,26 @@ The proof SVGs and SVG-derived PNGs were inspected before artifact refresh. Repe
 Outcome-Opportunity and Service Blueprint renders were byte-identical and emitted no
 proof-case routing errors.
 
-One planned convergence step is intentionally not claimed complete. Replacing Journey
-Map's mature resource-specific assignment with the generic solver changed accepted
-reciprocal and endpoint routes and reduced the dense proof's 55 continuity-marked
-crossings to 29. That is a structural behavior change, not acceptable evidence of an
-improvement. The experiment was reverted under the stop conditions in this plan.
-Journey's solver should migrate only after the shared core can express its directional
-resource lane order, endpoint overload exemptions, and continuity-mark preservation as
-first-class policies. Goldens were not refreshed for that failed experiment.
+The initial Journey convergence experiment was rejected because it consumed partial
+assignments, treated peripheral routes as uniformly locked, omitted outward-only
+corridor bounds, and allowed view-owned endpoint and crossing passes to invalidate an
+earlier shared assignment. The implemented adapter now runs shared assignment after
+Journey topology and endpoint construction; admits only outward coordinates for Stage,
+root-span, root-outer, and branch/join resources; locks only the paired tracks whose
+relative reciprocal topology is view-owned; converts displacement into absolute
+view-owned expansion requests; and never consumes a non-`resolved` solver result.
+The core keeps stable claim-order search as its cross-renderer default; Journey opts
+into a bounded most-constrained-first search for its dense peripheral corridor
+components, without imposing that cost or ordering policy on other adapters.
+
+Journey's crossing minimizer remains view-owned and may only permute legal assignments
+without worsening track separation, collinear merging, or Stage-gate traversal.
+Coincident logical crossings share one physical continuity mark. The accepted dense
+proof has 57 logical crossing pairs at 55 physical crossing points, retains 55 visible
+continuity marks, emits no track-separation, constraint-unsatisfiable, or boundary-gate
+diagnostic, and is byte-deterministic. The accepted endpoint-order proof retains its
+ports and exact 16px minimum track separation with a small permitted Y-coordinate
+change. Goldens were refreshed only after SVG and SVG-derived PNG inspection.
 
 Label placement also remains downstream and view-owned as assumed in Section 12.
 Shared final validation covers route geometry; the existing independent visual oracle

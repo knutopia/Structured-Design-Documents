@@ -20,6 +20,7 @@ export interface SolveRoutingClaimsOptions {
   policy?: Partial<RoutingPolicy>;
   priorViolations?: readonly RoutingViolation[];
   maxSearchStates?: number;
+  searchOrder?: "stable" | "most_constrained";
 }
 
 interface SearchState {
@@ -30,6 +31,18 @@ interface SearchState {
     cost: number[];
     lexical: string;
   };
+}
+
+function assignmentCostContribution(
+  claim: RoutingTrackClaim,
+  coordinate: number,
+  maxPriority: number
+): [number, number] {
+  const displacement = Math.abs(coordinate - claim.segment.coordinate);
+  return [
+    displacement * (maxPriority - claim.priority + 1),
+    displacement
+  ];
 }
 
 function claimsCompete(left: RoutingTrackClaim, right: RoutingTrackClaim, epsilon: number): boolean {
@@ -237,20 +250,60 @@ function searchAssignments(
   claims: readonly RoutingTrackClaim[],
   candidatesById: ReadonlyMap<RoutingSegmentId, number[]>,
   policy: RoutingPolicy,
-  maxSearchStates: number
+  maxSearchStates: number,
+  searchOrder: NonNullable<SolveRoutingClaimsOptions["searchOrder"]>
 ): SearchState {
   const ordered = [...claims].sort(compareClaims);
   const claimById = new Map(ordered.map((claim) => [claim.segment.id, claim] as const));
+  const conflictDegreeById = new Map(ordered.map((claim) => [
+    claim.segment.id,
+    ordered.filter((candidate) => claimsCompete(claim, candidate, policy.epsilon)).length
+  ] as const));
   const state: SearchState = { visited: 0, exhausted: false };
   const assigned = new Map<RoutingSegmentId, number>();
+  const maxPriority = Math.max(0, ...ordered.map((claim) => claim.priority));
+  const compatibleCandidates = (
+    claim: RoutingTrackClaim,
+    coordinates: ReadonlyMap<RoutingSegmentId, number>
+  ): number[] => (candidatesById.get(claim.segment.id) ?? []).filter((candidate) =>
+    assignmentCompatible(claim, candidate, coordinates, claimById, policy)
+  );
+  const selectNextClaim = (
+    coordinates: ReadonlyMap<RoutingSegmentId, number>
+  ): { claim: RoutingTrackClaim; candidates: number[] } | undefined => ordered
+    .filter((claim) => !coordinates.has(claim.segment.id))
+    .map((claim) => ({ claim, candidates: compatibleCandidates(claim, coordinates) }))
+    .sort((left, right) =>
+      left.candidates.length - right.candidates.length
+      || (conflictDegreeById.get(right.claim.segment.id) ?? 0)
+        - (conflictDegreeById.get(left.claim.segment.id) ?? 0)
+      || compareClaims(left.claim, right.claim)
+    )[0];
+  const greedy = new Map<RoutingSegmentId, number>();
+  let greedyComplete = true;
+  while (greedy.size < ordered.length) {
+    const next = selectNextClaim(greedy);
+    const coordinate = next?.candidates[0];
+    if (!next || coordinate === undefined) {
+      greedyComplete = false;
+      break;
+    }
+    greedy.set(next.claim.segment.id, coordinate);
+  }
+  if (greedyComplete) {
+    state.best = {
+      assignments: greedy,
+      ...scoreAssignments(ordered, greedy)
+    };
+  }
 
-  const visit = (index: number): void => {
+  const visit = (weightedDisplacement: number, totalDisplacement: number): void => {
     if (state.visited >= maxSearchStates) {
       state.exhausted = true;
       return;
     }
     state.visited += 1;
-    if (index >= ordered.length) {
+    if (assigned.size >= ordered.length) {
       const score = scoreAssignments(ordered, assigned);
       if (!state.best || compareScore(score, state.best) < 0) {
         state.best = {
@@ -261,13 +314,33 @@ function searchAssignments(
       return;
     }
 
-    const claim = ordered[index]!;
-    for (const coordinate of candidatesById.get(claim.segment.id) ?? []) {
-      if (!assignmentCompatible(claim, coordinate, assigned, claimById, policy)) {
+    const next = searchOrder === "most_constrained"
+      ? selectNextClaim(assigned)
+      : (() => {
+          const claim = ordered[assigned.size];
+          return claim
+            ? { claim, candidates: compatibleCandidates(claim, assigned) }
+            : undefined;
+        })();
+    if (!next || next.candidates.length === 0) {
+      return;
+    }
+    const claim = next.claim;
+    for (const coordinate of next.candidates) {
+      const [weightedContribution, totalContribution] = assignmentCostContribution(
+        claim,
+        coordinate,
+        maxPriority
+      );
+      const nextWeighted = weightedDisplacement + weightedContribution;
+      const nextTotal = totalDisplacement + totalContribution;
+      if (state.best && (nextWeighted > state.best.cost[0]! + 0.0001
+        || (Math.abs(nextWeighted - state.best.cost[0]!) <= 0.0001
+          && nextTotal > state.best.cost[1]! + 0.0001))) {
         continue;
       }
       assigned.set(claim.segment.id, coordinate);
-      visit(index + 1);
+      visit(nextWeighted, nextTotal);
       assigned.delete(claim.segment.id);
       if (state.exhausted) {
         return;
@@ -275,7 +348,7 @@ function searchAssignments(
     }
   };
 
-  visit(0);
+  visit(0, 0);
   return state;
 }
 
@@ -418,7 +491,8 @@ export function solveRoutingClaims(
       component,
       candidatesById,
       policy,
-      options.maxSearchStates ?? 100_000
+      options.maxSearchStates ?? 100_000,
+      options.searchOrder ?? "stable"
     );
     if (search.best) {
       for (const [segmentId, coordinate] of search.best.assignments) {

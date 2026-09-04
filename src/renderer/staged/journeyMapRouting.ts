@@ -22,13 +22,20 @@ import {
 } from "./diagnostics.js";
 import { collapseRoutePoints, MIN_ARROW_MARKER_LEG, resolvePortOnItem } from "./routing.js";
 import {
+  aggregateRoutingObservations,
+  createRoutingSegmentId,
   getSegmentAxis as getSharedSegmentAxis,
-  segmentIntersectsBoxInterior as sharedSegmentIntersectsBoxInterior
+  segmentIntersectsBoxInterior as sharedSegmentIntersectsBoxInterior,
+  solveRoutingClaims,
+  type RoutingObservation,
+  type RoutingSegment,
+  type RoutingViolation
 } from "./routingCore/index.js";
 
 export const JOURNEY_MAP_TRACK_SEPARATION = 16;
 export const JOURNEY_MAP_PREFERRED_TERMINAL_LEG = 18;
 export const MAX_JOURNEY_MAP_EXPANSION_ATTEMPTS = 4;
+const JOURNEY_MAP_SHARED_SOLVER_SEARCH_STATES = 250;
 
 export type JourneyMapRouteFamily =
   | "archetype_template"
@@ -5515,8 +5522,10 @@ interface JourneyMapTrackOccupancyClaim {
 }
 
 export interface JourneyMapTrackOccupancyResolution {
+  status: "resolved" | "needs_expansion" | "needs_alternate_candidate" | "unsatisfiable";
   resolvedConnectors: JourneyMapResolvedConnectorState[];
   expansionRequests: JourneyMapExpansionRequest[];
+  violations: RoutingViolation[];
 }
 
 function isResolvableTrackResource(
@@ -5545,6 +5554,13 @@ function trackLaneOffset(
   }
   const magnitude = Math.ceil(lane / 2);
   return lane % 2 === 1 ? -magnitude : magnitude;
+}
+
+function isOutwardOnlyTrackResource(resource: JourneyMapResolvableTrackResource): boolean {
+  return resource.kind === "stage_local_bypass"
+    || resource.kind === "root_outer_bypass"
+    || resource.kind === "root_span_bypass"
+    || resource.kind === "branch_join_track";
 }
 
 function matchingPreparedRun(
@@ -5824,9 +5840,8 @@ export function resolveJourneyMapTrackOccupancy(
     claimsByResource.set(groupKey, [...(claimsByResource.get(groupKey) ?? []), claim]);
   }
 
-  const resolvedCoordinateByClaim = new Map<string, number>();
-  const expansionRequests: JourneyMapExpansionRequest[] = [];
-  for (const claims of claimsByResource.values()) {
+  const orderedClaimsByResource = new Map<string, JourneyMapTrackOccupancyClaim[]>();
+  for (const [groupKey, claims] of claimsByResource) {
     const ordered = [...claims].sort((left, right) => {
       const leftPlan = planById.get(left.connectorId);
       const rightPlan = planById.get(right.connectorId);
@@ -5845,31 +5860,105 @@ export function resolveJourneyMapTrackOccupancy(
         || left.segmentRunIndex - right.segmentRunIndex
         || left.connectorId.localeCompare(right.connectorId);
     });
-    const assigned: Array<{ claim: JourneyMapTrackOccupancyClaim; coordinate: number }> = [];
-    for (const claim of ordered) {
-      const conflictsAt = (coordinate: number): boolean => assigned.some((entry) =>
-        spansOverlap(claim.span, entry.claim.span)
-        && Math.abs(coordinate - entry.coordinate) < JOURNEY_MAP_TRACK_SEPARATION - 0.001
-      );
-      let coordinate = claim.currentCoordinate;
-      if (conflictsAt(coordinate)) {
-        for (let lane = 0; lane <= ordered.length; lane += 1) {
-          const candidate = roundMetric(
-            claim.nominalCoordinate
-              + trackLaneOffset(claim.resource, lane) * JOURNEY_MAP_TRACK_SEPARATION
-          );
-          if (!conflictsAt(candidate)) {
-            coordinate = candidate;
-            break;
-          }
-        }
+    orderedClaimsByResource.set(groupKey, ordered);
+  }
+
+  const segmentByIdentity = new Map<string, RoutingSegment>();
+  const observations: RoutingObservation[] = [];
+  const maximumTrackLane = new Set([...orderedClaimsByResource.values()].flatMap((claims) =>
+    claims.map((claim) => `${claim.connectorId}|${claim.segmentRunIndex}|${claim.axis}`)
+  )).size;
+  for (const [groupKey, ordered] of orderedClaimsByResource) {
+    ordered.forEach((claim, groupPriority) => {
+      const logicalRunId = `run-${claim.segmentRunIndex}-${claim.axis}`;
+      const segmentId = createRoutingSegmentId(claim.connectorId, "journey-map", logicalRunId);
+      const identity = String(segmentId);
+      const plan = planById.get(claim.connectorId);
+      const locked = isLockedJourneyAssignmentClaim(plan, claim);
+      if (!segmentByIdentity.has(identity)) {
+        segmentByIdentity.set(identity, {
+          id: segmentId,
+          connectorId: claim.connectorId,
+          candidateId: "journey-map",
+          logicalRunId,
+          routeSegmentIndex: claim.segmentRunIndex,
+          axis: claim.axis,
+          coordinate: claim.currentCoordinate,
+          spanStart: claim.span.start,
+          spanEnd: claim.span.end,
+          start: claim.axis === "horizontal"
+            ? { x: claim.span.start, y: claim.currentCoordinate }
+            : { x: claim.currentCoordinate, y: claim.span.start },
+          end: claim.axis === "horizontal"
+            ? { x: claim.span.end, y: claim.currentCoordinate }
+            : { x: claim.currentCoordinate, y: claim.span.end },
+          movable: !locked,
+          priority: groupPriority
+        });
       }
-      assigned.push({ claim, coordinate });
+      // Different Journey resources can describe the same physical corridor.
+      // Size the directional domain for the complete competing population so
+      // each claim remains movable far enough for global aggregation to work.
+      const coordinates = Array.from({ length: maximumTrackLane + 1 }, (_, lane) => roundMetric(
+        claim.nominalCoordinate
+          + trackLaneOffset(claim.resource, lane) * JOURNEY_MAP_TRACK_SEPARATION
+      ));
+      const allowedCoordinates = isOutwardOnlyTrackResource(claim.resource)
+        ? coordinates
+        : [claim.currentCoordinate, ...coordinates];
+      observations.push({
+        segmentId,
+        resourceId: groupKey,
+        allowedRange: {
+          min: Math.min(...allowedCoordinates),
+          max: Math.max(...allowedCoordinates)
+        },
+        lockedCoordinate: locked ? claim.currentCoordinate : undefined,
+        movable: !locked,
+        priority: groupPriority
+      });
+    });
+  }
+
+  const segments = [...segmentByIdentity.values()];
+  const aggregated = aggregateRoutingObservations(segments, observations, 0.001);
+  const solved = solveRoutingClaims(aggregated.claims, {
+    policy: {
+      minSeparation: JOURNEY_MAP_TRACK_SEPARATION,
+      epsilon: 0.001,
+      maxExpansionPasses: MAX_JOURNEY_MAP_EXPANSION_ATTEMPTS
+    },
+    maxSearchStates: JOURNEY_MAP_SHARED_SOLVER_SEARCH_STATES,
+    searchOrder: "most_constrained"
+  });
+  if (solved.status !== "resolved") {
+    return {
+      status: solved.status,
+      resolvedConnectors: states.map((state) => structuredClone(state)),
+      expansionRequests: [],
+      violations: [...aggregated.violations, ...solved.violations]
+    };
+  }
+
+  const resolvedCoordinateByClaim = new Map<string, number>();
+  for (const segment of segments) {
+    const assignment = solved.assignments.get(segment.id);
+    if (assignment) {
       resolvedCoordinateByClaim.set(
-        `${claim.connectorId}|${claim.segmentRunIndex}|${claim.axis}`,
-        coordinate
+        `${segment.connectorId}|${segment.routeSegmentIndex}|${segment.axis}`,
+        assignment.coordinate
       );
     }
+  }
+
+  const expansionRequests: JourneyMapExpansionRequest[] = [];
+  for (const ordered of orderedClaimsByResource.values()) {
+    const assigned = ordered.map((claim) => ({
+      claim,
+      coordinate: resolvedCoordinateByClaim.get(
+        `${claim.connectorId}|${claim.segmentRunIndex}|${claim.axis}`
+      ) ?? claim.currentCoordinate
+    }));
     if (assigned.some((entry) =>
       Math.abs(entry.coordinate - entry.claim.currentCoordinate) > 0.001
     )) {
@@ -5913,7 +6002,12 @@ export function resolveJourneyMapTrackOccupancy(
       finalRoute: structuredClone(preparedRoute)
     } : structuredClone(state);
   });
-  return { resolvedConnectors, expansionRequests };
+  return {
+    status: "resolved",
+    resolvedConnectors,
+    expansionRequests,
+    violations: []
+  };
 }
 
 interface JourneyMapPreparedStemClaim {
@@ -6622,6 +6716,21 @@ function isLockedPeripheralTrack(plan: JourneyMapConnectorPlan): boolean {
     || plan.archetype === "cycle_return_cross_stage";
 }
 
+function isLockedJourneyAssignmentClaim(
+  plan: JourneyMapConnectorPlan | undefined,
+  claim: JourneyMapTrackOccupancyClaim
+): boolean {
+  if (!plan) {
+    return false;
+  }
+  // The paired inner/outer coordinates are part of Journey's reciprocal-cycle
+  // topology contract. Other peripheral routes are directional, not immovable:
+  // the shared solver may push them farther into their outward corridor.
+  return plan.cycleComponent?.componentKind === "simple_reciprocal"
+    && claim.resource.kind === "stage_local_bypass"
+    && claim.axis === "horizontal";
+}
+
 function swapJourneyMapResolvedCoordinates(
   states: readonly JourneyMapResolvedConnectorState[],
   left: JourneyMapSwappableCoordinateClaim,
@@ -6731,6 +6840,34 @@ function crossingMinimizationDisplacement(
   ), 0);
 }
 
+function preservesJourneyStageGateTraversal(
+  plan: JourneyMapConnectorPlan,
+  state: JourneyMapResolvedConnectorState,
+  index: JourneyMapPositionedIndex
+): boolean {
+  if (state.stageGates.length !== plan.stageGates.length) {
+    return false;
+  }
+  return resolvedStageGatesForRoute(state, index).every((gate, gateIndex) => {
+    const accepted = plan.stageGates[gateIndex];
+    const stage = index.stageById.get(gate.stageId)?.stage;
+    if (!accepted || !stage
+      || gate.stageId !== accepted.stageId
+      || gate.side !== accepted.side
+      || gate.order !== accepted.order) {
+      return false;
+    }
+    const onBorder = gate.side === "east"
+      ? Math.abs(gate.x - (stage.x + stage.width)) <= 0.001
+      : gate.side === "west"
+        ? Math.abs(gate.x - stage.x) <= 0.001
+        : gate.side === "south"
+          ? Math.abs(gate.y - (stage.y + stage.height)) <= 0.001
+          : Math.abs(gate.y - stage.y) <= 0.001;
+    return onBorder && routeContainsPoint(state.finalRoute, gate);
+  });
+}
+
 function minimizeJourneyMapCrossings(
   plans: readonly JourneyMapConnectorPlan[],
   states: readonly JourneyMapResolvedConnectorState[],
@@ -6811,7 +6948,10 @@ function minimizeJourneyMapCrossings(
       group.claims.forEach((left, leftIndex) => {
         for (const right of group.claims.slice(leftIndex + 1)) {
           const candidate = swapJourneyMapResolvedCoordinates(current, left, right);
-          if (!candidate) {
+          if (!candidate || candidate.some((state) => {
+            const plan = planById.get(state.connectorId);
+            return plan ? !preservesJourneyStageGateTraversal(plan, state, index) : true;
+          })) {
             continue;
           }
           const mergedSpans = crossingMinimizationMergedSpanScore(candidate);
@@ -9099,20 +9239,27 @@ function withJourneyMapContinuityMarks(
         continue;
       }
       const horizontal = Math.abs(start.y - end.y) <= 0.001;
-      const ordered = [...segmentCrossings].sort((left, right) =>
-        (horizontal ? left.point.x - right.point.x : left.point.y - right.point.y)
-        || left.id.localeCompare(right.id)
-      );
-      ordered.forEach((crossing, crossingIndex) => {
+      const physicalCrossings = new Map<number, JourneyMapResidualCrossing[]>();
+      for (const crossing of segmentCrossings) {
         const along = horizontal ? crossing.point.x : crossing.point.y;
+        physicalCrossings.set(along, [...(physicalCrossings.get(along) ?? []), crossing]);
+      }
+      const ordered = [...physicalCrossings]
+        .map(([along, coincident]) => ({
+          along,
+          crossing: [...coincident].sort((left, right) => left.id.localeCompare(right.id))[0]!
+        }))
+        .sort((left, right) => left.along - right.along
+          || left.crossing.id.localeCompare(right.crossing.id));
+      ordered.forEach(({ along, crossing }, crossingIndex) => {
         const startAlong = horizontal ? start.x : start.y;
         const endAlong = horizontal ? end.x : end.y;
         const endpointClearance = Math.min(Math.abs(along - startAlong), Math.abs(endAlong - along));
         const before = ordered[crossingIndex - 1];
         const after = ordered[crossingIndex + 1];
         const neighborClearance = Math.min(
-          before ? Math.abs(along - (horizontal ? before.point.x : before.point.y)) : Number.POSITIVE_INFINITY,
-          after ? Math.abs((horizontal ? after.point.x : after.point.y) - along) : Number.POSITIVE_INFINITY
+          before ? Math.abs(along - before.along) : Number.POSITIVE_INFINITY,
+          after ? Math.abs(after.along - along) : Number.POSITIVE_INFINITY
         );
         const halfSpan = roundMetric(Math.min(3, endpointClearance / 3, neighborClearance / 3));
         if (halfSpan <= 0.001) {
@@ -9724,15 +9871,9 @@ function buildJourneyMapRoutingStagesInternal(
     preferredInitialConnectors,
     index
   );
-  const trackOccupancyResolution = resolveJourneyMapTrackOccupancy(
-    connectorPlans,
-    reciprocalTrackResolution.resolvedConnectors,
-    nominalOccupancy,
-    preRoutingPositionedScene
-  );
   const lateOrderedConnectors = applyLateEndpointOrdering(
     connectorPlans,
-    trackOccupancyResolution.resolvedConnectors,
+    reciprocalTrackResolution.resolvedConnectors,
     index
   );
   const topologyOrderedConnectors = applySimpleReciprocalEndpointOrdering(
@@ -9750,9 +9891,34 @@ function buildJourneyMapRoutingStagesInternal(
     preparedStemResolution.resolvedConnectors,
     index
   );
-  const crossingMinimizedConnectors = minimizeJourneyMapCrossings(
+  // View-owned topology and endpoint-order passes may rebuild physical runs.
+  // Shared assignment therefore owns the final track coordinates only after
+  // those passes have completed; otherwise later Journey transforms can
+  // silently invalidate an otherwise legal assignment.
+  const trackOccupancyResolution = resolveJourneyMapTrackOccupancy(
     connectorPlans,
     lateSeparatedConnectors,
+    nominalOccupancy,
+    preRoutingPositionedScene
+  );
+  const trackOccupancyDiagnostics = trackOccupancyResolution.status === "resolved"
+    ? []
+    : [createRoutingDiagnostic(
+        "renderer.routing.journey_map_constraint_unsatisfiable",
+        "Journey-map physical track claims could not be resolved within the bounded shared solver.",
+        trackOccupancyResolution.violations[0]?.connectorIds[0] ?? "root",
+        "error",
+        JSON.stringify({
+          status: trackOccupancyResolution.status,
+          violations: trackOccupancyResolution.violations
+        })
+      )];
+  // Journey retains its crossing policy as a constrained permutation of the
+  // legal shared assignments. The minimizer rejects any swap that worsens
+  // collinear merging or track separation.
+  const crossingMinimizedConnectors = minimizeJourneyMapCrossings(
+    connectorPlans,
+    trackOccupancyResolution.resolvedConnectors,
     nominalOccupancy,
     preRoutingPositionedScene,
     index
@@ -9783,6 +9949,7 @@ function buildJourneyMapRoutingStagesInternal(
   ]);
   const resolutionDiagnostics = sortRendererDiagnostics([
     ...sortedDiagnostics,
+    ...trackOccupancyDiagnostics,
     ...validateJourneyMapExpansionBound(expansionAttempts, expansionRequests)
   ]);
   const step3PositionedScene = withResolvedRoutes(

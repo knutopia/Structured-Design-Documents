@@ -33,7 +33,7 @@ z
 ## Fri 9-4
 
 - Routing unification done
-
+- Journey adapter updated to use universal solver
 ## Thu 9-3
 
 - Phase 1 of new node adoption done

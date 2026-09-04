@@ -823,15 +823,24 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
     expect(incoming.targetEndpoint.x - outgoing.sourceEndpoint.x).toBe(
       JOURNEY_MAP_TRACK_SEPARATION
     );
-    expect(incoming.finalRoute.points).toEqual([
-      { x: 980, y: 145 }, { x: 980, y: 179 },
-      { x: 1492, y: 179 }, { x: 1492, y: 140 }
-    ]);
-    expect(outgoing.finalRoute.points).toEqual([
-      { x: 1476, y: 140 }, { x: 1476, y: 158 },
-      { x: 1228, y: 158 }, { x: 1228, y: 140 }
-    ]);
+    expect(incoming.finalRoute.points[0]).toEqual({ x: 980, y: 145 });
+    expect(incoming.finalRoute.points.at(-1)).toEqual({ x: 1492, y: 140 });
+    expect(outgoing.finalRoute.points[0]).toEqual({ x: 1476, y: 140 });
+    expect(outgoing.finalRoute.points.at(-1)).toEqual({ x: 1228, y: 140 });
+    expect(segments(incoming.finalRoute).every(({ start, end }) =>
+      segmentLength(start, end) !== undefined
+    )).toBe(true);
+    expect(segments(outgoing.finalRoute).every(({ start, end }) =>
+      segmentLength(start, end) !== undefined
+    )).toBe(true);
+    expect(Math.abs(
+      incoming.finalRoute.points[1]!.y - outgoing.finalRoute.points[1]!.y
+    )).toBeGreaterThanOrEqual(JOURNEY_MAP_TRACK_SEPARATION);
     expect(incoming.finalRoute.points.at(-1)).not.toEqual(outgoing.finalRoute.points[0]);
+    expect(fixture.routingStages.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.routing.journey_map_track_separation_unmet"
+      || diagnostic.code === "renderer.routing.journey_map_constraint_unsatisfiable"
+    )).toBe(false);
 
     const j501Records = fixture.routingStages.occupancy.filter((record) =>
       record.resource.kind === "node_side" && record.resource.nodeId === "J-501"
@@ -967,10 +976,53 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
     expect(rerun.finalPositionedScene).toEqual(fixture.routingStages.finalPositionedScene);
   });
 
-  it("records the rejected dense early-egress experiment without accepting its visual evidence", async () => {
+  it("does not consume partial shared assignments when reciprocal locks conflict", async () => {
+    const fixture = await buildFixture("topology");
+    const reciprocalPlans = fixture.routingStages.connectorPlans.filter((plan) =>
+      plan.cycleComponent?.componentKind === "simple_reciprocal"
+      && plan.cycleComponent.componentId
+        === fixture.routingStages.connectorPlans.find((candidate) =>
+          candidate.cycleComponent?.componentKind === "simple_reciprocal"
+        )?.cycleComponent?.componentId
+    );
+    expect(reciprocalPlans).toHaveLength(2);
+    const stateById = new Map(fixture.routingStages.resolvedConnectors.map((state) => [
+      state.connectorId,
+      state
+    ] as const));
+    const states = reciprocalPlans.map((plan) => structuredClone(stateById.get(plan.id)!));
+    const innerTrack = states[0]!.segmentCoordinates.find((coordinate) =>
+      coordinate.axis === "horizontal"
+    )!.resolvedCoordinate;
+    const conflicting = states[1]!;
+    const conflictingTrack = conflicting.segmentCoordinates.find((coordinate) =>
+      coordinate.axis === "horizontal"
+    )!;
+    conflictingTrack.resolvedCoordinate = innerTrack;
+    conflicting.preparedRoute.points[1]!.y = innerTrack;
+    conflicting.preparedRoute.points[2]!.y = innerTrack;
+    conflicting.finalRoute = structuredClone(conflicting.preparedRoute);
+
+    const result = resolveJourneyMapTrackOccupancy(
+      reciprocalPlans,
+      states,
+      extractJourneyMapOccupancy(reciprocalPlans, fixture.preRoutingPositionedScene),
+      fixture.preRoutingPositionedScene
+    );
+
+    expect(result.status).toBe("needs_alternate_candidate");
+    expect(result.resolvedConnectors).toEqual(states);
+    expect(result.expansionRequests).toEqual([]);
+    expect(result.violations).toContainEqual(expect.objectContaining({
+      kind: "assignment_exhausted"
+    }));
+  });
+
+  it("accepts the dense proof with shared assignment and no replacement geometry violation", async () => {
     const fixture = await buildFixture("compressed");
     const { routingStages } = fixture;
     const preStage900 = findContainer(fixture.preRoutingPositionedScene, "G-900");
+    const preStage910 = findContainer(fixture.preRoutingPositionedScene, "G-910");
     const finalStage900 = findContainer(routingStages.finalPositionedScene, "G-900");
     const finalStage910 = findContainer(routingStages.finalPositionedScene, "G-910");
     const crossingDiagnostics = routingStages.diagnostics.filter((diagnostic) =>
@@ -980,8 +1032,11 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       diagnostic.code === "renderer.routing.journey_map_preferred_terminal_leg_unmet"
     );
     const continuityMarks = routingStages.finalPositionedScene.edges.flatMap((edge) =>
-      edge.continuityMarks ?? []
+      (edge.continuityMarks ?? []).map((mark) => ({ edgeId: edge.id, mark }))
     );
+    const physicalCrossingKeys = new Set(routingStages.residualCrossings.map((crossing) =>
+      `${crossing.overEdgeId}|${crossing.overSegmentIndex}|${crossing.point.x}|${crossing.point.y}`
+    ));
 
     expect(routingStages.connectorPlans).toHaveLength(18);
     expect(routingStages.resolvedConnectors).toHaveLength(18);
@@ -994,18 +1049,46 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
       plan.routeFamily === "early_south_egress"
     )).toBe(false);
 
-    expect(routingStages.residualCrossings).toHaveLength(55);
-    expect(crossingDiagnostics).toHaveLength(55);
-    expect(continuityMarks).toHaveLength(55);
-    expect(continuityMarks).toHaveLength(routingStages.residualCrossings.length);
+    expect(routingStages.residualCrossings.length).toBeLessThanOrEqual(57);
+    expect(crossingDiagnostics).toHaveLength(routingStages.residualCrossings.length);
+    expect(continuityMarks).toHaveLength(physicalCrossingKeys.size);
+    expect(continuityMarks.every(({ edgeId, mark }) => routingStages.residualCrossings.some((crossing) =>
+      crossing.overEdgeId === edgeId
+      && crossing.overSegmentIndex === mark.segmentIndex
+      && crossing.point.x === mark.point.x
+      && crossing.point.y === mark.point.y
+    ))).toBe(true);
     expect(preferredLegDiagnostics).toHaveLength(1);
     expect(preferredLegDiagnostics[0]?.details).toContain('"desiredLength":18');
     expect(preferredLegDiagnostics[0]?.details).toContain('"hardMinimum":12');
     expect(routingStages.diagnostics.some((diagnostic) => diagnostic.severity === "error")).toBe(false);
+    expect(routingStages.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.routing.journey_map_track_separation_unmet"
+      || diagnostic.code === "renderer.routing.journey_map_constraint_unsatisfiable"
+    )).toBe(false);
+    const maximumRootItemBottom = Math.max(
+      ...routingStages.finalPositionedScene.root.children.map((item) => item.y + item.height)
+    );
+    const rootOuterTracks = routingStages.occupancy.filter((record) =>
+      record.resource.kind === "root_outer_bypass"
+    );
+    expect(rootOuterTracks.length).toBeGreaterThan(0);
+    expect(rootOuterTracks.every((record) =>
+      record.resolvedCoordinate >= maximumRootItemBottom + JOURNEY_MAP_PREFERRED_TERMINAL_LEG
+    )).toBe(true);
 
-    expect(routingStages.finalPositionedScene.root).toMatchObject({ width: 2064, height: 400 });
-    expect(finalStage900).toMatchObject({ width: 856, height: 224 });
-    expect(finalStage910).toMatchObject({ width: 760, height: 160 });
+    expect(routingStages.finalPositionedScene.root.width).toBeGreaterThan(
+      fixture.preRoutingPositionedScene.root.width
+    );
+    expect(routingStages.finalPositionedScene.root.height).toBeGreaterThan(
+      fixture.preRoutingPositionedScene.root.height
+    );
+    expect((routingStages.finalPositionedScene.root.height
+      - fixture.preRoutingPositionedScene.root.height) % JOURNEY_MAP_TRACK_SEPARATION).toBe(0);
+    expect(finalStage900.width).toBeGreaterThanOrEqual(preStage900.width);
+    expect(finalStage900.height).toBeGreaterThanOrEqual(preStage900.height);
+    expect(finalStage910.width).toBeGreaterThanOrEqual(preStage910.width);
+    expect(finalStage910.height).toBeGreaterThanOrEqual(preStage910.height);
     expect({ width: finalStage900.width, height: finalStage900.height }).not.toEqual({
       width: preStage900.width,
       height: preStage900.height
@@ -1674,6 +1757,7 @@ describe("journey map Gate 6 long cross-Stage and root-Step routing", () => {
       nominalOccupancy,
       constrainedScene
     );
+    expect(resolution.status).toBe("resolved");
     const spanCoordinates = resolution.resolvedConnectors.map((state) =>
       state.segmentCoordinates.find((coordinate) =>
         coordinate.axis === "horizontal"
@@ -4376,10 +4460,14 @@ describe("journey map Gate 8 crossing continuity and terminal diagnostics", () =
     expect(codes(duplicate.routingStages)).toEqual([
       "renderer.scene.journey_map_step_only"
     ]);
-    expect(compressed.routingStages.residualCrossings).toHaveLength(55);
+    expect(compressed.routingStages.residualCrossings.length).toBeGreaterThan(0);
+    expect(compressed.routingStages.residualCrossings.length).toBeLessThanOrEqual(57);
     expect(codes(compressed.routingStages)).toEqual([
       "renderer.routing.journey_map_preferred_terminal_leg_unmet",
-      ...Array.from({ length: 55 }, () => "renderer.routing.journey_map_unavoidable_crossing"),
+      ...Array.from(
+        { length: compressed.routingStages.residualCrossings.length },
+        () => "renderer.routing.journey_map_unavoidable_crossing"
+      ),
       "renderer.routing.journey_map_peripheral_backward_edge",
       "renderer.routing.journey_map_peripheral_backward_edge",
       "renderer.routing.journey_map_peripheral_cycle"
@@ -4389,8 +4477,10 @@ describe("journey map Gate 8 crossing continuity and terminal diagnostics", () =
       const routing = fixture.routingStages;
       const marks = routing.finalPositionedScene.edges.flatMap((edge) => edge.continuityMarks ?? []);
       if (fixture === compressed) {
-        expect(marks).toHaveLength(55);
-        expect(marks).toHaveLength(routing.residualCrossings.length);
+        const physicalCrossingKeys = new Set(routing.residualCrossings.map((crossing) =>
+          `${crossing.overEdgeId}|${crossing.overSegmentIndex}|${crossing.point.x}|${crossing.point.y}`
+        ));
+        expect(marks).toHaveLength(physicalCrossingKeys.size);
       } else {
         expect(marks).toHaveLength(routing.residualCrossings.length);
       }

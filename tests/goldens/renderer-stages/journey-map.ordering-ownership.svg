@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1904" height="213" viewBox="0 0 1904 213" class="staged-svg view-journey_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="journey_map" data-detail-id="detailed" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1904" height="229" viewBox="0 0 1904 229" class="staged-svg view-journey_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="journey_map" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -62,7 +62,7 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram journey_map journey_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="1902.5" height="211.5" rx="17.25" ry="17.25"/>
+      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="1902.5" height="227.5" rx="17.25" ry="17.25"/>
     </g>
     <g id="scene-container-g-600" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-600" data-role="journey_stage">
       <rect class="scene-container__chrome" x="32" y="32" width="512" height="128" rx="16" ry="16"/>
@@ -181,7 +181,7 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-j-503__precedes__j-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-503__PRECEDES__J-501__c8f35bbd840d5e1bff1eb4eed771c5362ef16bd9c7f80e653a3aa392b25477c8__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 980 145 L 980 179 L 1492 179 L 1492 140" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 980 145 L 980 174 L 1492 174 L 1492 140" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-501__precedes__j-502__51e0788a6e29bb43634e865529e007ccee051ad1e572b8494b89efdd4ae46b2c__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-501__PRECEDES__J-502__51e0788a6e29bb43634e865529e007ccee051ad1e572b8494b89efdd4ae46b2c__0" data-role="precedes">
       <path class="scene-edge__path" d="M 1476 140 L 1476 158 L 1228 158 L 1228 140" marker-end="url(#scene-marker-arrow-end)"/>

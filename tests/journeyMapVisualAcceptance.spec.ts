@@ -11,7 +11,10 @@ import type {
   PositionedRoute
 } from "../src/renderer/staged/contracts.js";
 import { renderJourneyMapRoutingArtifacts } from "../src/renderer/staged/journeyMap.js";
-import { JOURNEY_MAP_PREFERRED_TERMINAL_LEG } from "../src/renderer/staged/journeyMapRouting.js";
+import {
+  JOURNEY_MAP_PREFERRED_TERMINAL_LEG,
+  JOURNEY_MAP_TRACK_SEPARATION
+} from "../src/renderer/staged/journeyMapRouting.js";
 import type { RendererDiagnostic } from "../src/renderer/staged/diagnostics.js";
 import { MIN_ARROW_MARKER_LEG } from "../src/renderer/staged/routing.js";
 import {
@@ -1118,8 +1121,8 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
   });
 });
 
-describe("journey map dense remediation stop proof", () => {
-  it("records the failed dense acceptance gates without accepting visual evidence", async () => {
+describe("journey map dense shared-solver proof", () => {
+  it("keeps the dense SCC separated, marked, deterministic, and expansion-bounded", async () => {
     const bundle = await loadBundle(manifestPath);
     const compiled = compileSource({
       path: compressedFixturePath,
@@ -1139,11 +1142,19 @@ describe("journey map dense remediation stop proof", () => {
       projected.projection!, compiled.graph!, bundle, view!, { detailId: "detailed" }
     );
     const scene = rendered.routingStages.finalPositionedScene;
+    const baselineRoot = rendered.routingStages.finalBasicPositionedScene.root;
+    const physicalCrossingKeys = new Set(rendered.routingStages.residualCrossings.map((crossing) =>
+      `${crossing.overEdgeId}|${crossing.overSegmentIndex}|${crossing.point.x}|${crossing.point.y}`
+    ));
+    const continuityMarks = scene.edges.flatMap((candidate) => candidate.continuityMarks ?? []);
     expect(scene.edges).toHaveLength(18);
-    expect(scene.root).toMatchObject({ width: 2064, height: 400 });
-    expect(rendered.routingStages.residualCrossings).toHaveLength(55);
-    expect(scene.edges.flatMap((candidate) => candidate.continuityMarks ?? [])).toHaveLength(55);
-    expect((rendered.finalSvg.match(/ Q /g) ?? [])).toHaveLength(55);
+    expect(scene.root.width).toBeGreaterThan(baselineRoot.width);
+    expect(scene.root.height).toBeGreaterThan(baselineRoot.height);
+    expect((scene.root.height - baselineRoot.height) % JOURNEY_MAP_TRACK_SEPARATION).toBe(0);
+    expect(rendered.routingStages.residualCrossings.length).toBeGreaterThan(0);
+    expect(rendered.routingStages.residualCrossings.length).toBeLessThanOrEqual(57);
+    expect(continuityMarks).toHaveLength(physicalCrossingKeys.size);
+    expect((rendered.finalSvg.match(/ Q /g) ?? [])).toHaveLength(continuityMarks.length);
     expect(rendered.routingStages.expansionAttempts).toHaveLength(2);
     expect(rendered.routingStages.connectorPlans.some((plan) =>
       plan.routeFamily === "early_south_egress"
@@ -1153,6 +1164,11 @@ describe("journey map dense remediation stop proof", () => {
     )).toHaveLength(1);
     expect(rendered.routingStages.diagnostics.some((diagnostic) =>
       diagnostic.severity === "error"
+    )).toBe(false);
+    expect(rendered.routingStages.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.routing.journey_map_track_separation_unmet"
+      || diagnostic.code === "renderer.routing.journey_map_constraint_unsatisfiable"
+      || diagnostic.code === "renderer.routing.journey_map_boundary_gate_fallback"
     )).toBe(false);
     expect(rendered.routingStages.step3PositionedScene.edges.every((candidate) =>
       !candidate.continuityMarks

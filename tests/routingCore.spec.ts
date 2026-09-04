@@ -269,6 +269,35 @@ describe("shared routing track solver", () => {
     expect(solve(segments)).toBe(solve([...segments].reverse()));
   });
 
+  it("keeps a deterministic feasible incumbent when bounded optimization is exhausted", () => {
+    const segments = Array.from({ length: 14 }, (_, index) =>
+      oneSegment(`dense-${String(index).padStart(2, "0")}`, 0, { priority: index })
+    );
+    const observations = segments.map((segment): RoutingObservation => ({
+      segmentId: segment.id,
+      resourceId: "dense-corridor",
+      allowedRange: { min: 0, max: (segments.length - 1) * 16 }
+    }));
+    const solve = (ordered: RoutingSegment[]): string => {
+      const result = solveRoutingClaims(claimsFor(ordered, observations), {
+        maxSearchStates: 1
+      });
+      expect(result.status).toBe("resolved");
+      if (result.status !== "resolved") {
+        return "";
+      }
+      const coordinates = [...result.assignments.values()]
+        .map((assignment) => assignment.coordinate)
+        .sort((left, right) => left - right);
+      expect(coordinates).toEqual(Array.from({ length: 14 }, (_, index) => index * 16));
+      return [...result.assignments.values()]
+        .sort((left, right) => String(left.segmentId).localeCompare(String(right.segmentId)))
+        .map((assignment) => `${assignment.segmentId}=${assignment.coordinate}`)
+        .join("|");
+    };
+    expect(solve(segments)).toBe(solve([...segments].reverse()));
+  });
+
   it("reconstructs adjacent bends from segment assignments", () => {
     const original = route([
       { x: 0, y: 0 },

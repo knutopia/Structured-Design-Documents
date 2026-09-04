@@ -279,11 +279,11 @@ The per-view render models keep semantics centralized:
 - inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges, assigns those edges to an invisible label lane inside that gutter, and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
 - inside the staged renderer, `scenario_flow` now uses a custom lane-and-band layout with staged branch routing and debug corpus artifacts for pre-routing, edge-side selection, and gutter occupancy
 - inside the staged renderer, `outcome_opportunity_map` now uses deterministic semantic lanes plus staged opportunity routing with debug corpus artifacts for pre-routing, endpoint/template selection, and final gutter occupancy
-- inside the staged renderer, `journey_map` preserves source-ordered Stage/Step placement and first-parent ownership, then applies dedicated journey-only orthogonal routing, occupancy, bounded expansion, late endpoint ordering, and final crossing-continuity marks without an external routing engine
+- inside the staged renderer, `journey_map` preserves source-ordered Stage/Step placement and first-parent ownership; its adapter retains route archetypes, directional corridors, reciprocal-pair topology, Stage gates, bounded expansion ownership, late endpoint ordering, crossing minimization, and continuity marks while shared routing infrastructure aggregates physical-segment claims and assigns legal tracks
 
 Inside the staged renderer, `journey_map`, `outcome_opportunity_map`, `ui_contracts`, and `scenario_flow` keep renderer-stage goldens as internal contract coverage, and their accepted staged paths also serve their public staged preview backends.
 
-Dense Journey Maps may remain visually poor even when hard geometry passes; residual perpendicular crossings receive deterministic continuity marks and `renderer.routing.journey_map_unavoidable_crossing` warnings. A later shared-routing task must prefer a straight, single horizontal segment between unobstructed horizontally adjacent nodes. That is global staged-routing debt, not a journey-only patch.
+Dense Journey Maps may remain crossing-rich even when hard geometry passes; residual perpendicular crossings receive deterministic continuity marks and `renderer.routing.journey_map_unavoidable_crossing` warnings. Coincident logical crossings on the same painted segment share one physical continuity mark. The shared solver enforces track separation and bounded capacity, while reducing residual perpendicular crossings further remains a candidate/topology concern owned by the Journey adapter.
 
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 
