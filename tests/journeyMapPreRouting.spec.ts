@@ -35,6 +35,7 @@ import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const fixtureRoot = path.join(repoRoot, "tests/fixtures/render");
+const bundlePromise = loadBundle(manifestPath);
 
 interface JourneyFixtureStages {
   bundle: Bundle;
@@ -55,7 +56,7 @@ function journeyView(bundle: Bundle): ViewSpec {
 }
 
 async function buildFixtureStages(name: string, profileId = "strict"): Promise<JourneyFixtureStages> {
-  const bundle = await loadBundle(manifestPath);
+  const bundle = await bundlePromise;
   const fixturePath = path.join(fixtureRoot, `journey_map_staged_${name}.sdd`);
   const compiled = compileSource({ path: fixturePath, text: await readFile(fixturePath, "utf8") }, bundle);
   expect(compiled.diagnostics).toEqual([]);
@@ -279,18 +280,17 @@ describe("journey map measurement and pre-routing placement", () => {
     );
   });
 
-  it("preserves source order for every fixture and aligns root Steps with the Stage content row", async () => {
-    const cases = [
-      ["primary", "simple"],
-      ["primary", "permissive"],
-      ["primary", "strict"],
-      ["ordering_ownership", "strict"],
-      ["topology", "strict"],
-      ["duplicate", "strict"],
-      ["compressed", "strict"]
-    ] as const;
-
-    for (const [fixture, profileId] of cases) {
+  it.each([
+    ["primary", "simple"],
+    ["primary", "permissive"],
+    ["primary", "strict"],
+    ["ordering_ownership", "strict"],
+    ["topology", "strict"],
+    ["duplicate", "strict"],
+    ["compressed", "strict"]
+  ] as const)(
+    "preserves source order for %s/%s and aligns root Steps with the Stage content row",
+    async (fixture, profileId) => {
       const { rendererScene, measuredScene, preRoutingPositionedScene } = await buildFixtureStages(
         fixture,
         profileId
@@ -355,7 +355,7 @@ describe("journey map measurement and pre-routing placement", () => {
       }
       expect(preRoutingPositionedScene.root.height).toBeLessThanOrEqual(1050);
     }
-  });
+  );
 
   it("exposes deterministic adjacent, Stage-local, inter-item, and root-outer whitespace", async () => {
     const first = await buildFixtureStages("primary");

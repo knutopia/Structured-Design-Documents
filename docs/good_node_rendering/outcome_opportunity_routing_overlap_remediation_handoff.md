@@ -2,11 +2,38 @@
 
 ## Status
 
-**Managed handoff; defect remains unresolved.**
+**Resolved and verified on 2026-09-05.**
 
-This document records the routing defect exposed during the shared-node renderer adoption, the evidence gathered in the adoption thread, the applicable architectural constraints, and the acceptance conditions for a separate remediation thread.
+The routing-unification implementation replaced the affected outcome-opportunity
+last-writer displacement behavior with shared physical-segment identity, observation
+aggregation, deterministic track assignment, route reconstruction, and final shared
+validation. The detailed `multiple_outcomes` proof no longer contains the 32px
+`OP-003__supports__O-002` / `OP-004__supports__O-002` overlap. The correction is
+generic and contains no proof-ID exception.
 
-The defect is considered managed for purposes of continuing and closing the shared-node adoption work because it now has a durable, scoped handoff. It must not be described as fixed, accepted, or harmless. The routing remediation is complete only when the final routed scene satisfies the existing separation invariant without weakening tests or hiding the failure in refreshed artifacts.
+Regression coverage is provided by:
+
+- [`../../tests/routingCore.spec.ts`](../../tests/routingCore.spec.ts), including
+  aggregation of multiple observations, displacement-created collision avoidance,
+  exact-16px separation, locked-claim handling, bounded capacity failure,
+  reconstruction, and deterministic assignment;
+- [`../../tests/outcomeOpportunityMapRouting.spec.ts`](../../tests/outcomeOpportunityMapRouting.spec.ts),
+  including the dense multi-outcome orthogonality, separation, and label-visibility
+  integration case; and
+- [`../../tests/stagedVisualAcceptance.spec.ts`](../../tests/stagedVisualAcceptance.spec.ts),
+  whose unchanged diagram-level oracle checks final separation, node clearance,
+  endpoint entry, and label clearance for `multiple_outcomes`.
+
+The corrected SVG and SVG-derived PNG were visually accepted before renderer-stage
+goldens were refreshed. The stale detailed public SVG and PNG were regenerated through
+the canonical rendered-corpus workflow and inspected on 2026-09-05. Focused suites,
+the TypeScript build, and the final full repository run pass; that run completed with
+109 test files and 1,040 tests passing. The completed implementation is recorded in
+[`../routing_unification/routing_unification_implementation_plan.md`](../routing_unification/routing_unification_implementation_plan.md).
+
+The remainder of this document preserves the original defect evidence and working
+diagnosis as a historical remediation record. Statements below describing the defect
+as current refer to the pre-remediation state.
 
 Investigation began against Phase 5 commit `1a58a1b524a035754e602079202caff168c583ee` plus the shared-node Phase 7 cleanup then present in the adoption thread. That combined state, including this handoff, was subsequently captured in commit `a7a367ff5153240d8f1e3c2137fd40ea463dc88e`. The cleanup does not modify `outcomeOpportunityMapRouting.ts`; the routing failure is reproducible from the current renderer path.
 
@@ -363,9 +390,10 @@ Before changing goldens or corpus artifacts:
 
 Only after those checks pass should affected renderer-stage goldens and public rendered examples be refreshed.
 
-## Artifact Drift Warning
+## Artifact Refresh Record
 
-The committed public corpus artifact below is stale relative to the current shared-node renderer-stage output:
+The committed public corpus artifact below was stale relative to the shared-node
+renderer-stage output when this handoff was written:
 
 ```text
 examples/rendered/v0.1/outcome_opportunity_map_diagram_type/
@@ -373,9 +401,15 @@ examples/rendered/v0.1/outcome_opportunity_map_diagram_type/
   multiple_outcomes.outcome_opportunity_map.svg
 ```
 
-It contains the pre-adoption separated routes at `y=378` and `y=426` and therefore does not reproduce the blocker. This stale artifact caused an incorrect visual to be shown during diagnosis.
+It contained the pre-adoption separated routes at `y=378` and `y=426` and therefore
+did not reproduce the blocker. This stale artifact caused an incorrect visual to be
+shown during diagnosis.
 
-Use the current production render or the current renderer-stage golden when reproducing the defect. After the routing fix is accepted, regenerate the affected public SVG and PNG from the corrected production path so the corpus no longer disagrees with the renderer-stage output. Do not refresh it earlier merely to make the defect visible.
+After remediation acceptance, the detailed public SVG and PNG were regenerated from
+the corrected production path on 2026-09-05. They now carry the current shared-node
+measurements and the resolved routes; `OP-003__supports__O-002` uses the repaired
+horizontal track at `y=427.336`, while `OP-004__supports__O-002` remains at `y=411.5`.
+The original 32px coincident run is absent.
 
 ## Completion Criteria
 
@@ -391,3 +425,7 @@ The remediation may be called complete only when all of the following are true:
 - affected goldens are refreshed only as evidence of the passing behavior;
 - the stale public outcome-opportunity corpus artifacts are regenerated after acceptance; and
 - this handoff and the shared-node implementation status are updated from **managed/unresolved** to **resolved**, with the remediation approach and tests cited.
+
+All completion criteria were satisfied on 2026-09-05. The acceptance assertions were
+not weakened, the correction was implemented through the shared routing architecture,
+and artifact refresh followed visual acceptance.

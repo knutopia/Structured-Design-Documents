@@ -4,7 +4,16 @@
 
 Phases 1 through 6 are implemented. The canonical Figma metrics, structured contracts, renderer theme, measurement, SVG composition, and standalone production-path harness are in place. `ui_contracts`, `scenario_flow`, `service_blueprint`, `outcome_opportunity_map`, `ia_place_map`, and `journey_map` now use the shared component for every eligible semantic leaf, and each renderer's migration proof has been visually accepted before its goldens were refreshed.
 
-Phase 7 cleanup has removed the unconsumed generic `buildCardNode` formatting helper and documented the final semantic-leaf/container boundary. Final verification exposed a real outcome-opportunity routing invariant violation in `multiple_outcomes.sdd`: the final `OP-003 -> O-002` and `OP-004 -> O-002` support routes retain a 32px collinear horizontal overlap. The issue is managed as a separate remediation handoff in [`outcome_opportunity_routing_overlap_remediation_handoff.md`](outcome_opportunity_routing_overlap_remediation_handoff.md), so it no longer blocks continuation of this adoption thread. It remains unresolved: the acceptance assertion and outcome-map artifacts must not be relaxed or refreshed to conceal it, and the remediation is not complete until final occupancy handles displacement-created conflicts. The separately recorded dense Journey Map readability debt also remains open and is not reclassified by this migration.
+Phase 7 cleanup removed the unconsumed generic `buildCardNode` formatting helper and
+documented the final semantic-leaf/container boundary. Its final verification exposed
+a real outcome-opportunity routing invariant violation in `multiple_outcomes.sdd`.
+That defect is now resolved through the shared routing architecture and verified as
+recorded in
+[`outcome_opportunity_routing_overlap_remediation_handoff.md`](outcome_opportunity_routing_overlap_remediation_handoff.md).
+The unchanged visual oracle passes, corrected artifacts were accepted before refresh,
+and the final repository run passes all 1,040 tests. The separately recorded dense
+Journey Map readability debt remains outside this migration and is not reclassified
+by the routing correction.
 
 ## Objective
 
@@ -359,7 +368,16 @@ Verification on 2026-09-03 established the following state:
 - Legacy DOT and Mermaid suites pass. Preview backend selection, vendored-font regression, deterministic staged SVG, rendered-corpus inventory, and SVG-derived PNG coverage pass.
 - No outcome-opportunity golden or public corpus artifact was refreshed after discovery of the overlap.
 
-The documentation and cleanup work assigned to this adoption thread is complete. The repository-wide all-tests-green completion gate remains explicitly unsatisfied until the managed routing remediation lands; this status must not be represented as resolution of that defect.
+At the 2026-09-03 Phase 7 checkpoint, the documentation and cleanup work assigned to
+the adoption thread was complete, but the repository-wide all-tests-green completion
+gate remained explicitly unsatisfied pending the managed routing remediation.
+
+Resolution addendum, 2026-09-05: the managed outcome-opportunity defect was corrected
+through shared physical-segment aggregation, deterministic assignment,
+reconstruction, and final validation. The focused routing and unchanged visual suites
+pass, the accepted public proof was regenerated, and the repository-wide completion
+gate is now satisfied with 109 test files and 1,040 tests passing. The preceding Phase
+7 verification bullets are retained as the historical pre-remediation record.
 
 ## Acceptance and Stop Conditions
 

@@ -29,6 +29,7 @@ import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const fixtureRoot = path.join(repoRoot, "tests/fixtures/render");
+const bundlePromise = loadBundle(manifestPath);
 
 interface JourneyFixtureBuild {
   bundle: Bundle;
@@ -65,7 +66,7 @@ function buildModel(
 }
 
 async function buildFixture(name: string, profileId = "strict"): Promise<JourneyFixtureBuild> {
-  const bundle = await loadBundle(manifestPath);
+  const bundle = await bundlePromise;
   const fixturePath = path.join(fixtureRoot, `journey_map_staged_${name}.sdd`);
   const compiled = compileSource({ path: fixturePath, text: await readFile(fixturePath, "utf8") }, bundle);
   expect(compiled.diagnostics).toEqual([]);
@@ -574,21 +575,20 @@ describe("staged journey map RendererScene", () => {
     expect(new Set(contentIds).size).toBe(contentIds.length);
   });
 
-  it("matches the accepted Gate 3 RendererScene evidence", async () => {
-    const cases = [
-      ["primary", "strict", "journey-map.primary.renderer-scene.json"],
-      ["primary", "simple", "journey-map.badges.compact.renderer-scene.json"],
-      ["primary", "permissive", "journey-map.badges.detailed.renderer-scene.json"],
-      ["ordering_ownership", "strict", "journey-map.ordering-ownership.renderer-scene.json"],
-      ["topology", "strict", "journey-map.topology.renderer-scene.json"],
-      ["duplicate", "strict", "journey-map.duplicate.renderer-scene.json"]
-    ] as const;
-
-    for (const [fixture, profileId, snapshotFileName] of cases) {
+  it.each([
+    ["primary", "strict", "journey-map.primary.renderer-scene.json"],
+    ["primary", "simple", "journey-map.badges.compact.renderer-scene.json"],
+    ["primary", "permissive", "journey-map.badges.detailed.renderer-scene.json"],
+    ["ordering_ownership", "strict", "journey-map.ordering-ownership.renderer-scene.json"],
+    ["topology", "strict", "journey-map.topology.renderer-scene.json"],
+    ["duplicate", "strict", "journey-map.duplicate.renderer-scene.json"]
+  ] as const)(
+    "matches the accepted Gate 3 RendererScene evidence for %s/%s",
+    async (fixture, profileId, snapshotFileName) => {
       const { scene } = await buildFixture(fixture, profileId);
       await expectRendererStageSnapshot(snapshotFileName, scene);
     }
-  });
+  );
 
   it("deep-clones journey root metadata without aliasing its ordered arrays", async () => {
     const { scene } = await buildFixture("primary");
