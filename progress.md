@@ -32,6 +32,11 @@ z
 
 - Caught 2 missing artifact updates
 
+## Sat 9-5
+
+- Updated, reviewed canonical examples
+- Updated README recent items
+
 ## Fri 9-4
 
 - Routing unification done
