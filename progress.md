@@ -2,6 +2,8 @@
 
 ## Open Issues
 
+-doc examples updates to new routing, nodes
+-containment display for ui_contracts
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
