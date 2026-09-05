@@ -14,7 +14,6 @@ Curated view/example pairs:
 
 - `journey_map_diagram_type/branching_journey_example`
 - `scenario_flow_diagram_type/flow_journey_topology_challenge_example`
-- `journey_map_diagram_type/three_branch_journey_example`
 - `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
 - `outcome_opportunity_map_diagram_type/multiple_outcomes_example`
 - `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`
@@ -25,6 +24,7 @@ Curated view/example pairs:
 - `scenario_flow_diagram_type/scenario_branching_example`
 - `journey_map_diagram_type/service_blueprint_slice_example`
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
+- `journey_map_diagram_type/three_branch_journey_example`
 - `ui_contracts_diagram_type/ui_state_fallback_example`
 
 Render details generated in each pair directory: `compact_detail`, `detailed_detail`.

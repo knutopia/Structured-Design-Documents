@@ -61,31 +61,32 @@
             "role": "place",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "place",
               "root_place",
               "depth-0"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "P-800__title",
-                "kind": "text",
-                "text": "Overview",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Overview",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Place",
+              "nodeId": "P-800",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "north_chain",
@@ -170,31 +171,32 @@
                     "role": "place",
                     "primitive": "card",
                     "classes": [
+                      "semantic_node",
                       "place",
                       "nested_place",
                       "depth-1"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "P-801__title",
-                        "kind": "text",
-                        "text": "Details",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Details",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "Place",
+                      "nodeId": "P-801",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "north_chain",
@@ -279,31 +281,32 @@
                             "role": "place",
                             "primitive": "card",
                             "classes": [
+                              "semantic_node",
                               "place",
                               "nested_place",
                               "depth-2"
                             ],
                             "widthPolicy": {
-                              "preferred": "narrow",
+                              "preferred": "standard",
                               "allowed": [
-                                "narrow",
-                                "standard",
-                                "wide"
+                                "standard"
                               ]
                             },
                             "overflowPolicy": {
-                              "kind": "escalate_width_band",
-                              "maxLines": 2
+                              "kind": "grow_height"
                             },
-                            "content": [
-                              {
-                                "id": "P-802__title",
-                                "kind": "text",
-                                "text": "Review",
-                                "textStyleRole": "title",
-                                "priority": "primary"
-                              }
-                            ],
+                            "content": [],
+                            "sharedNode": {
+                              "title": "Review",
+                              "decoratorMode": {
+                                "id": "none",
+                                "showNodeType": false,
+                                "showNodeId": false
+                              },
+                              "nodeType": "Place",
+                              "nodeId": "P-802",
+                              "attributes": []
+                            },
                             "ports": [
                               {
                                 "id": "north_chain",

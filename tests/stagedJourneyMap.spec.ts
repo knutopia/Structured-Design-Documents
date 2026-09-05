@@ -29,6 +29,7 @@ import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const fixtureRoot = path.join(repoRoot, "tests/fixtures/render");
+const bundlePromise = loadBundle(manifestPath);
 
 interface JourneyFixtureBuild {
   bundle: Bundle;
@@ -65,7 +66,7 @@ function buildModel(
 }
 
 async function buildFixture(name: string, profileId = "strict"): Promise<JourneyFixtureBuild> {
-  const bundle = await loadBundle(manifestPath);
+  const bundle = await bundlePromise;
   const fixturePath = path.join(fixtureRoot, `journey_map_staged_${name}.sdd`);
   const compiled = compileSource({ path: fixturePath, text: await readFile(fixturePath, "utf8") }, bundle);
   expect(compiled.diagnostics).toEqual([]);
@@ -194,7 +195,7 @@ describe("staged journey map RendererScene", () => {
     expect(findContainer(scene, "G-300").headerContent?.map((block) => block.text)).toEqual([
       "Pause and reconsider"
     ]);
-    expect(findNode(scene, "J-250").role).toBe("journey_step");
+    expect(findNode(scene, "J-250").role).toBe("step");
     expect(findNode(scene, "J-101").classes).toContain("journey_step_contained");
     expect(findNode(scene, "J-101").classes).not.toContain("journey_step_root");
     expect(findNode(scene, "J-250").classes).toContain("journey_step_root");
@@ -236,46 +237,33 @@ describe("staged journey map RendererScene", () => {
     expect(flattenItems(scene.root).filter((item) => item.id === "J-503")).toHaveLength(1);
   });
 
-  it("builds unboxed metadata only from typed references and preserves detail-controlled ordering", async () => {
+  it("builds shared attributes only from typed references and preserves detail-controlled ordering", async () => {
     const simple = await buildFixture("primary", "simple");
     const permissive = await buildFixture("primary", "permissive");
     const strict = await buildFixture("primary", "strict");
 
-    expect(findNode(simple.scene, "J-201").content).toEqual([
-      {
-        id: "J-201__title",
-        kind: "text",
-        text: "Review the recommendation",
-        textStyleRole: "title",
-        priority: "primary"
-      }
-    ]);
+    expect(findNode(simple.scene, "J-201").content).toEqual([]);
+    expect(findNode(simple.scene, "J-201").sharedNode).toEqual(expect.objectContaining({
+      title: "Review the recommendation",
+      attributes: []
+    }));
     for (const build of [permissive, strict]) {
-      expect(findNode(build.scene, "J-201").content).toEqual([
+      expect(findNode(build.scene, "J-201").content).toEqual([]);
+      expect(findNode(build.scene, "J-201").sharedNode).toEqual(expect.objectContaining({
+        title: "Review the recommendation",
+        attributes: [
         {
-          id: "J-201__title",
-          kind: "text",
-          text: "Review the recommendation",
-          textStyleRole: "title",
-          priority: "primary"
+          groupId: "opportunity_ref",
+          label: "opportunity ref",
+          value: "Clear total cost"
         },
         {
-          id: "J-201__badge__OP-100__0",
-          kind: "metadata",
-          text: "Clear total cost",
-          textStyleRole: "metadata",
-          region: "secondary",
-          priority: "secondary"
-        },
-        {
-          id: "J-201__badge__OP-200__0",
-          kind: "metadata",
-          text: "Confidence before commitment",
-          textStyleRole: "metadata",
-          region: "secondary",
-          priority: "secondary"
+          groupId: "opportunity_ref",
+          label: "opportunity ref",
+          value: "Confidence before commitment"
         }
-      ]);
+        ]
+      }));
     }
     expect(simple.scene.edges).toEqual(strict.scene.edges);
     expect(permissive.scene.edges).toEqual(strict.scene.edges);
@@ -285,25 +273,26 @@ describe("staged journey map RendererScene", () => {
     expect(JSON.stringify(strict.scene)).not.toContain("[Clear total cost]");
   });
 
-  it("uses target IDs for nameless typed badges and gives duplicate target badges stable occurrence IDs", async () => {
+  it("uses target IDs for nameless typed references and preserves repeated-role attribute order", async () => {
     const build = await buildFixture("primary");
     const model = structuredClone(build.model) as JourneyMapRenderModel;
     const stage = model.rootItems.find((item) => item.kind === "stage" && item.id === "G-200");
     expect(stage?.kind).toBe("stage");
     const step = stage?.kind === "stage" ? stage.items.find((candidate) => candidate.id === "J-201") : undefined;
     expect(step).toBeDefined();
-    delete step!.badges[0]!.targetName;
-    step!.badges.push({ ...step!.badges[0]! });
+    delete step!.references[0]!.targetName;
+    step!.references[0]!.value = "OP-100";
+    step!.references.push({ ...step!.references[0]! });
 
     const scene = buildJourneyMapRendererSceneFromModel(
       model,
       "strict",
       build.view.conventions.renderer_defaults!.journey_map_layout!
     );
-    expect(findNode(scene, "J-201").content.slice(1).map(({ id, text }) => ({ id, text }))).toEqual([
-      { id: "J-201__badge__OP-100__0", text: "OP-100" },
-      { id: "J-201__badge__OP-200__0", text: "Confidence before commitment" },
-      { id: "J-201__badge__OP-100__1", text: "OP-100" }
+    expect(findNode(scene, "J-201").sharedNode?.attributes).toEqual([
+      { groupId: "opportunity_ref", label: "opportunity ref", value: "OP-100" },
+      { groupId: "opportunity_ref", label: "opportunity ref", value: "Confidence before commitment" },
+      { groupId: "opportunity_ref", label: "opportunity ref", value: "OP-100" }
     ]);
   });
 
@@ -586,21 +575,20 @@ describe("staged journey map RendererScene", () => {
     expect(new Set(contentIds).size).toBe(contentIds.length);
   });
 
-  it("matches the accepted Gate 3 RendererScene evidence", async () => {
-    const cases = [
-      ["primary", "strict", "journey-map.primary.renderer-scene.json"],
-      ["primary", "simple", "journey-map.badges.compact.renderer-scene.json"],
-      ["primary", "permissive", "journey-map.badges.detailed.renderer-scene.json"],
-      ["ordering_ownership", "strict", "journey-map.ordering-ownership.renderer-scene.json"],
-      ["topology", "strict", "journey-map.topology.renderer-scene.json"],
-      ["duplicate", "strict", "journey-map.duplicate.renderer-scene.json"]
-    ] as const;
-
-    for (const [fixture, profileId, snapshotFileName] of cases) {
+  it.each([
+    ["primary", "strict", "journey-map.primary.renderer-scene.json"],
+    ["primary", "simple", "journey-map.badges.compact.renderer-scene.json"],
+    ["primary", "permissive", "journey-map.badges.detailed.renderer-scene.json"],
+    ["ordering_ownership", "strict", "journey-map.ordering-ownership.renderer-scene.json"],
+    ["topology", "strict", "journey-map.topology.renderer-scene.json"],
+    ["duplicate", "strict", "journey-map.duplicate.renderer-scene.json"]
+  ] as const)(
+    "matches the accepted Gate 3 RendererScene evidence for %s/%s",
+    async (fixture, profileId, snapshotFileName) => {
       const { scene } = await buildFixture(fixture, profileId);
       await expectRendererStageSnapshot(snapshotFileName, scene);
     }
-  });
+  );
 
   it("deep-clones journey root metadata without aliasing its ordered arrays", async () => {
     const { scene } = await buildFixture("primary");

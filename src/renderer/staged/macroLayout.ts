@@ -26,14 +26,10 @@ import {
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
-import {
-  runElkLayeredLayout,
-  runElkLayeredSubtreeLayout,
-  type ElkAdaptedEdge
-} from "./elkAdapter.js";
 import { getContainerPrimitiveTheme } from "./primitives.js";
 import { resolveGridCells } from "./gridLayout.js";
 import { alignPositionedStackSlots, reservedStackSlotHeight } from "./stackSlots.js";
+import { cloneMeasuredSharedNodeLayout } from "./sharedNode.js";
 import {
   buildLocalPatternRoute,
   offsetParallelOrthogonalRoute,
@@ -185,6 +181,7 @@ function clonePositionedNode(node: MeasuredNode): PositionedNode {
     widthBand: node.widthBand,
     overflowPolicy: cloneOverflowPolicy(node.overflowPolicy),
     content: node.content.map((block) => cloneMeasuredContentBlock(block)),
+    ...(node.sharedNode ? { sharedNode: cloneMeasuredSharedNodeLayout(node.sharedNode) } : {}),
     ports: node.ports.map((port) => cloneMeasuredPort(port)),
     overflow: {
       ...node.overflow
@@ -568,38 +565,7 @@ async function layoutGridContainer(
   };
 }
 
-function buildElkAdaptedEdges(
-  children: PositionedItem[],
-  ownedEdges: MeasuredEdge[]
-): ElkAdaptedEdge[] {
-  const childIds = new Set(children.map((child) => child.id));
-  const childItems = new Map(children.map((child) => [child.id, child]));
-
-  return ownedEdges.flatMap((edge) => {
-    if (!childIds.has(edge.from.itemId) || !childIds.has(edge.to.itemId)) {
-      return [];
-    }
-
-    const sourceItem = childItems.get(edge.from.itemId);
-    const targetItem = childItems.get(edge.to.itemId);
-    if (!sourceItem || !targetItem) {
-      return [];
-    }
-
-    const sourcePort = resolvePortOnItem(sourceItem, edge.from, edge.routing.sourcePortRole);
-    const targetPort = resolvePortOnItem(targetItem, edge.to, edge.routing.targetPortRole);
-
-    return [{
-      id: edge.id,
-      sourceItemId: edge.from.itemId,
-      targetItemId: edge.to.itemId,
-      sourcePortId: sourcePort?.id,
-      targetPortId: targetPort?.id
-    }];
-  });
-}
-
-function resolveElkLayerGap(
+function resolveLayerGap(
   container: MeasuredContainer,
   ownedEdges: MeasuredEdge[]
 ): number {
@@ -619,52 +585,160 @@ function resolveElkLayerGap(
   return roundMetric(Math.max(baseGap, maxLabelSpan > 0 ? maxLabelSpan + baseGap : 0));
 }
 
-async function layoutElkLayeredContainer(
+function buildStronglyConnectedComponents(
+  childIds: readonly string[],
+  outgoingById: ReadonlyMap<string, readonly string[]>
+): string[][] {
+  const orderById = new Map(childIds.map((id, index) => [id, index] as const));
+  const indexById = new Map<string, number>();
+  const lowLinkById = new Map<string, number>();
+  const stack: string[] = [];
+  const onStack = new Set<string>();
+  const components: string[][] = [];
+  let nextIndex = 0;
+
+  const visit = (id: string): void => {
+    indexById.set(id, nextIndex);
+    lowLinkById.set(id, nextIndex);
+    nextIndex += 1;
+    stack.push(id);
+    onStack.add(id);
+
+    for (const targetId of outgoingById.get(id) ?? []) {
+      if (!indexById.has(targetId)) {
+        visit(targetId);
+        lowLinkById.set(id, Math.min(lowLinkById.get(id)!, lowLinkById.get(targetId)!));
+      } else if (onStack.has(targetId)) {
+        lowLinkById.set(id, Math.min(lowLinkById.get(id)!, indexById.get(targetId)!));
+      }
+    }
+
+    if (lowLinkById.get(id) !== indexById.get(id)) {
+      return;
+    }
+    const component: string[] = [];
+    while (stack.length > 0) {
+      const member = stack.pop()!;
+      onStack.delete(member);
+      component.push(member);
+      if (member === id) {
+        break;
+      }
+    }
+    component.sort((left, right) => orderById.get(left)! - orderById.get(right)!);
+    components.push(component);
+  };
+
+  for (const id of childIds) {
+    if (!indexById.has(id)) {
+      visit(id);
+    }
+  }
+  return components.sort((left, right) => orderById.get(left[0]!)! - orderById.get(right[0]!)!);
+}
+
+async function layoutLayeredContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
   ownedEdges: MeasuredEdge[],
   _context: LayoutContext
 ): Promise<ContainerLayoutResult> {
   if (children.length === 0) {
-    return {
-      contentWidth: 0,
-      contentHeight: 0
-    };
+    return { contentWidth: 0, contentHeight: 0 };
   }
-
-  const direction = container.layout.direction ?? "horizontal";
-  const adaptedEdges = buildElkAdaptedEdges(children, ownedEdges);
-  const elkResult = await runElkLayeredLayout({
-    containerId: container.id,
-    direction,
-    nodeGap: resolveGap(container),
-    layerGap: resolveElkLayerGap(container, ownedEdges),
-    children,
-    edges: adaptedEdges
-  });
-
-  for (const child of children) {
-    const positioned = elkResult.childPositions.get(child.id);
-    if (!positioned) {
-      throw new Error(`ELK did not return child coordinates for "${child.id}".`);
+  const childById = new Map(children.map((child) => [child.id, child] as const));
+  const childIds = children.map((child) => child.id);
+  const orderById = new Map(childIds.map((id, index) => [id, index] as const));
+  const outgoingById = new Map<string, string[]>();
+  for (const id of childIds) {
+    outgoingById.set(id, []);
+  }
+  for (const edge of ownedEdges) {
+    if (!childById.has(edge.from.itemId) || !childById.has(edge.to.itemId)) {
+      continue;
     }
-
-    child.x = roundMetric(positioned.x);
-    child.y = roundMetric(positioned.y);
+    const outgoing = outgoingById.get(edge.from.itemId)!;
+    if (!outgoing.includes(edge.to.itemId)) {
+      outgoing.push(edge.to.itemId);
+      outgoing.sort((left, right) => orderById.get(left)! - orderById.get(right)!);
+    }
   }
 
-  return {
-    contentWidth: elkResult.contentWidth,
-    contentHeight: elkResult.contentHeight,
-    routeHints: elkResult.edgeRoutes
-  };
+  const components = buildStronglyConnectedComponents(childIds, outgoingById);
+  const componentByNodeId = new Map<string, number>();
+  components.forEach((component, componentIndex) => {
+    component.forEach((id) => componentByNodeId.set(id, componentIndex));
+  });
+  const componentOutgoing = components.map(() => new Set<number>());
+  const componentIndegree = components.map(() => 0);
+  for (const [sourceId, targetIds] of outgoingById) {
+    const sourceComponent = componentByNodeId.get(sourceId)!;
+    for (const targetId of targetIds) {
+      const targetComponent = componentByNodeId.get(targetId)!;
+      if (sourceComponent === targetComponent || componentOutgoing[sourceComponent]!.has(targetComponent)) {
+        continue;
+      }
+      componentOutgoing[sourceComponent]!.add(targetComponent);
+      componentIndegree[targetComponent] += 1;
+    }
+  }
+  const componentOrder = (componentIndex: number): number =>
+    Math.min(...components[componentIndex]!.map((id) => orderById.get(id)!));
+  const ready = componentIndegree
+    .map((indegree, index) => ({ indegree, index }))
+    .filter(({ indegree }) => indegree === 0)
+    .map(({ index }) => index)
+    .sort((left, right) => componentOrder(left) - componentOrder(right));
+  const rankByComponent = components.map(() => 0);
+  while (ready.length > 0) {
+    const componentIndex = ready.shift()!;
+    for (const target of [...componentOutgoing[componentIndex]!].sort((left, right) => componentOrder(left) - componentOrder(right))) {
+      rankByComponent[target] = Math.max(rankByComponent[target]!, rankByComponent[componentIndex]! + 1);
+      componentIndegree[target] -= 1;
+      if (componentIndegree[target] === 0) {
+        ready.push(target);
+        ready.sort((left, right) => componentOrder(left) - componentOrder(right));
+      }
+    }
+  }
+
+  const rankByNodeId = new Map<string, number>();
+  components.forEach((component, componentIndex) => {
+    component.forEach((id) => rankByNodeId.set(id, rankByComponent[componentIndex]!));
+  });
+  const maxRank = Math.max(0, ...rankByComponent);
+  const ranks = Array.from({ length: maxRank + 1 }, () => [] as PositionedItem[]);
+  for (const child of children) {
+    ranks[rankByNodeId.get(child.id) ?? 0]!.push(child);
+  }
+  const nodeGap = resolveGap(container);
+  const layerGap = resolveLayerGap(container, ownedEdges);
+  const horizontal = (container.layout.direction ?? "horizontal") === "horizontal";
+  let mainOffset = 0;
+  let maximumCross = 0;
+  for (const rank of ranks) {
+    const mainSize = Math.max(0, ...rank.map((child) => horizontal ? child.width : child.height));
+    let crossOffset = 0;
+    for (const child of rank) {
+      child.x = roundMetric(horizontal ? mainOffset : crossOffset);
+      child.y = roundMetric(horizontal ? crossOffset : mainOffset);
+      crossOffset += (horizontal ? child.height : child.width) + nodeGap;
+    }
+    const crossSize = Math.max(0, crossOffset - (rank.length > 0 ? nodeGap : 0));
+    maximumCross = Math.max(maximumCross, crossSize);
+    mainOffset += mainSize + layerGap;
+  }
+  const mainSize = Math.max(0, mainOffset - layerGap);
+  return horizontal
+    ? { contentWidth: roundMetric(mainSize), contentHeight: roundMetric(maximumCross) }
+    : { contentWidth: roundMetric(maximumCross), contentHeight: roundMetric(mainSize) };
 }
 
 const strategyRegistry: ReadonlyMap<LayoutStrategy, LayoutStrategyHandler> = new Map([
   ["stack", layoutStackContainer],
   ["grid", layoutGridContainer],
   ["lanes", layoutLanesContainer],
-  ["elk_layered", layoutElkLayeredContainer]
+  ["layered", layoutLayeredContainer]
 ]);
 
 function resolveLayoutHandler(container: MeasuredContainer, context: LayoutContext): LayoutStrategyHandler {
@@ -705,52 +779,11 @@ async function layoutItem(
   return layoutContainer(item, context, ownedEdgesByContainer);
 }
 
-function collectSubtreeOwnedEdges(
-  container: MeasuredContainer,
-  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
-): MeasuredEdge[] {
-  const collected = [...(ownedEdgesByContainer.get(container.id) ?? [])];
-
-  for (const child of container.children) {
-    if (child.kind === "container") {
-      collected.push(...collectSubtreeOwnedEdges(child, ownedEdgesByContainer));
-    }
-  }
-
-  return collected;
-}
-
 async function layoutContainer(
   container: MeasuredContainer,
   context: LayoutContext,
   ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
 ): Promise<LayoutItemResult> {
-  if (container.layout.strategy === "elk_layered" && container.layout.elk?.hierarchyHandling === "include_children") {
-    const subtreeEdges = collectSubtreeOwnedEdges(container, ownedEdgesByContainer);
-
-    try {
-      const laidOut = await runElkLayeredSubtreeLayout({
-        root: container,
-        edges: subtreeEdges
-      });
-
-      return {
-        item: laidOut.root,
-        routeHints: laidOut.edgeRoutes
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      context.diagnostics.push(createLayoutDiagnostic(
-        "renderer.layout.elk_failure",
-        `ELK layout failed for container "${container.id}". Falling back to "stack". ${message}`,
-        {
-          targetId: container.id,
-          severity: container.layout.elk?.strict ? "error" : "warn"
-        }
-      ));
-    }
-  }
-
   const childResults: LayoutItemResult[] = [];
   for (const child of container.children) {
     childResults.push(await layoutItem(child, context, ownedEdgesByContainer));
@@ -775,14 +808,7 @@ async function layoutContainer(
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    const usesElk = container.layout.strategy === "elk_layered";
-    const diagnosticCode = usesElk
-      ? "renderer.layout.elk_failure"
-      : "renderer.layout.strategy_failure";
-    const diagnosticMessage = usesElk
-      ? `ELK layout failed for container "${container.id}". Falling back to "stack". ${message}`
-      : `Layout strategy "${container.layout.strategy}" failed for container "${container.id}". Falling back to "stack". ${message}`;
-    context.diagnostics.push(createLayoutDiagnostic(diagnosticCode, diagnosticMessage, {
+    context.diagnostics.push(createLayoutDiagnostic("renderer.layout.strategy_failure", `Layout strategy "${container.layout.strategy}" failed for container "${container.id}". Falling back to "stack". ${message}`, {
       targetId: container.id
     }));
     layoutResult = await layoutStackContainer(container, positionedChildren, ownedEdges, context);
@@ -1325,7 +1351,7 @@ function positionMeasuredEdge(
 
   const owner = resolveOwnerContainer(edge, root, index, ownerContainerByEdgeId);
   const localHint = routeHints.get(edge.id);
-  const canUseElkRoute = edge.routing.style === "orthogonal" && Array.isArray(localHint) && localHint.length > 0;
+  const canUseRouteHint = edge.routing.style === "orthogonal" && Array.isArray(localHint) && localHint.length > 0;
   const contractLabelLane = contractLabelLanes.get(edge.id);
   const localPatternRoute = buildLocalPatternRoute(edge, from, to, diagnostics);
   const contractLaneOrigin = contractLabelLane
@@ -1335,7 +1361,9 @@ function positionMeasuredEdge(
     ? buildSourceContractLaneRoute(edge, contractLaneOrigin, to, diagnostics)
     : undefined;
 
-  if (edge.routing.avoidNodeBoxes && !canUseElkRoute) {
+  if (edge.routing.avoidNodeBoxes
+    && !canUseRouteHint
+    && owner.layout.strategy !== "layered") {
     diagnostics.push(
       createRoutingDiagnostic(
         "renderer.routing.preference_fallback",
@@ -1346,20 +1374,14 @@ function positionMeasuredEdge(
     );
   }
 
-  if (edge.routing.authority === "require_elk" && !canUseElkRoute) {
-    throw new Error(
-      `Edge "${edge.id}" requires ELK-authored routing geometry, but no ELK route sections were returned.`
-    );
-  }
-
-  const baseRoute = canUseElkRoute
+  const baseRoute = canUseRouteHint
     ? buildRouteFromLocalHint(edge, from, to, owner, localHint, diagnostics)
     : localPatternRoute
       ? localPatternRoute
     : contractLaneRoute
       ? contractLaneRoute
       : buildSharedRoute(edge, from, to, diagnostics);
-  const route = !canUseElkRoute && !localPatternRoute && !contractLaneRoute
+  const route = !canUseRouteHint && !localPatternRoute && !contractLaneRoute
     ? offsetParallelOrthogonalRoute(baseRoute, sharedRouteOffsets.get(edge.id) ?? 0)
     : baseRoute;
   const positionedFrom = {

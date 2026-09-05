@@ -1,10 +1,12 @@
 import type { IaPlaceMapRenderModel, IaRenderItem, IaRenderPlace } from "./iaPlaceMapRenderModel.js";
+import { buildLegacyIaPlaceLabelLines } from "./placeLabelLines.js";
 import type {
   JourneyMapRenderModel,
   JourneyRenderItem,
   JourneyRenderStage,
   JourneyRenderStep
 } from "./journeyMapRenderModel.js";
+import { buildLegacyJourneyStepLabelLines } from "./journeyStepLabelLines.js";
 import type {
   OutcomeOpportunityMapRenderModel,
   OutcomeOpportunityRenderLane,
@@ -199,7 +201,7 @@ function pushContainerTitleStyles(lines: string[], containerTitleIds: string[]):
 }
 
 function renderIaPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
-  pushNode(lines, [], place.id, place.labelLines, "box", false, indent);
+  pushNode(lines, [], place.id, buildLegacyIaPlaceLabelLines(place.title, place.attributes), "box", false, indent);
   renderIaItems(place.items, indent, lines);
 }
 
@@ -231,7 +233,7 @@ export function renderIaPlaceMapMermaid(model: IaPlaceMapRenderModel): string {
 }
 
 function renderJourneyStep(step: JourneyRenderStep, indent: string, lines: string[]): void {
-  pushNode(lines, [], step.id, step.labelLines, "box", false, indent);
+  pushNode(lines, [], step.id, buildLegacyJourneyStepLabelLines(step), "box", false, indent);
 }
 
 function renderJourneyStage(stage: JourneyRenderStage, indent: string, lines: string[]): void {
@@ -279,7 +281,12 @@ function renderOutcomeOpportunityLane(
     if (!node) {
       continue;
     }
-    pushNode(lines, [], node.id, node.labelLines, "box", false, `${indent}  `);
+    pushNode(lines, [], node.id, [
+      node.title,
+      ...node.attributes.map((attribute) =>
+        `${attribute.label.charAt(0).toUpperCase()}${attribute.label.slice(1)}: ${attribute.value}`
+      )
+    ], "box", false, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }
@@ -315,7 +322,7 @@ function renderServiceBlueprintLane(
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, node.labelLines, display.shape, display.dashed, `${indent}  `);
+    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }
@@ -349,7 +356,7 @@ export function renderServiceBlueprintMermaid(model: ServiceBlueprintRenderModel
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, node.labelLines, display.shape, display.dashed, "  ");
+    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, "  ");
   }
 
   for (const edge of model.edges) {
@@ -375,7 +382,7 @@ function renderScenarioFlowLane(
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, node.labelLines, display.shape, display.dashed, `${indent}  `);
+    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }

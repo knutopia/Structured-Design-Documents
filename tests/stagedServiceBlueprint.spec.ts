@@ -112,6 +112,14 @@ async function loadExampleInput(fileName: string): Promise<{ path: string; text:
   };
 }
 
+async function loadDocumentationInput(relativePath: string): Promise<{ path: string; text: string }> {
+  const filePath = path.join(repoRoot, "docs", relativePath);
+  return {
+    path: filePath,
+    text: await readFile(filePath, "utf8")
+  };
+}
+
 function findNestedPositionedItem(children: PositionedItem[], id: string): PositionedItem | undefined {
   for (const child of children) {
     if (child.id === id) {
@@ -354,7 +362,34 @@ function recomputeRootBounds(root: { children: PositionedItem[]; width: number; 
 }
 
 describe("staged service_blueprint", () => {
-  it("builds a fixed root grid for service_blueprint_slice instead of using root ELK placement", async () => {
+  it.each(["compact", "detailed"])(
+    "renders the Step-only sdd_for_sdd blueprint without node intersections (%s)",
+    async (detailId) => {
+      const input = await loadDocumentationInput("sdd_app_planning/sdd_for_sdd.sdd");
+      const context = await resolveServiceBlueprintContext(input, "simple");
+      const rendered = await renderServiceBlueprintStagedSvg(
+        context.projection,
+        context.graph,
+        context.view,
+        { detailId }
+      );
+
+      expect(rendered.positionedScene.diagnostics.filter((diagnostic) =>
+        diagnostic.severity === "error"
+      )).toEqual([]);
+      expectNoRouteIntersectionsWithNonEndpointBoxes(
+        rendered.positionedScene.edges,
+        collectVisibleItemBoxes(rendered.positionedScene.root).filter((box) =>
+          box.itemId !== "root" && box.kind === "node"
+        )
+      );
+      for (const connectorId of ["J-020__precedes__J-021", "J-040__precedes__J-043"]) {
+        expect(findSemanticEdge(rendered.positionedScene.edges, connectorId)).toBeDefined();
+      }
+    }
+  );
+
+  it("builds a fixed renderer-owned root grid for service_blueprint_slice", async () => {
     const context = await resolveServiceBlueprintContext(
       await loadExampleInput("service_blueprint_slice.sdd"),
       "strict"
@@ -478,10 +513,10 @@ describe("staged service_blueprint", () => {
     const interactionLine = findLineDecoration(rendered.positionedScene.decorations, "lane-customer__separator");
     const visibilityLine = findLineDecoration(rendered.positionedScene.decorations, "lane-frontstage__separator");
     expect(rendered.svg).toContain(
-      `<text class="scene-text text-role-edge_label block-kind-text" x="24" y="${interactionLine.from.y}">`
+      `<text class="scene-text text-role-edge_label block-kind-text scene-text--service-blueprint-secondary" x="24" y="${interactionLine.from.y}">`
     );
     expect(rendered.svg).toContain(
-      `<text class="scene-text text-role-edge_label block-kind-text" x="24" y="${visibilityLine.from.y}">`
+      `<text class="scene-text text-role-edge_label block-kind-text scene-text--service-blueprint-secondary" x="24" y="${visibilityLine.from.y}">`
     );
 
     for (const edge of rendered.positionedScene.edges.filter((candidate) =>
@@ -558,23 +593,22 @@ describe("staged service_blueprint", () => {
       throw new Error("Could not resolve SA-020 for obstacle-clearance assertions.");
     }
     expect(step2ConstrainedBy.route.points).toHaveLength(2);
-    expect(step3ConstrainedBy.route.points).toHaveLength(6);
+    expect(step3ConstrainedBy.route.points).toHaveLength(5);
     expect(step3ConstrainedBy.route.points[0]!.x).toBe(step3ConstrainedBy.route.points[1]!.x);
     expect(step3ConstrainedBy.route.points[1]!.x).toBeLessThan(step3ConstrainedBy.route.points[2]!.x);
     expect(step3ConstrainedBy.route.points[2]!.x).toBe(step3ConstrainedBy.route.points[3]!.x);
     expect(step3ConstrainedBy.route.points[3]!.y).toBe(step3ConstrainedBy.route.points[4]!.y);
-    expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[5]!.x);
     expect(step3ConstrainedBy.route.points[4]!.x).toBe(step3ConstrainedBy.route.points[0]!.x);
-    expect(step3ConstrainedBy.route.points[1]!.y).toBe(464);
-    expect(step3ConstrainedBy.route.points[3]!.y).toBe(592);
+    expect(step3ConstrainedBy.route.points[1]!.y).toBe(392);
+    expect(step3ConstrainedBy.route.points[3]!.y).toBe(520);
     expect(step3Sa020.y - step3ConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(32);
     expect(step3ConstrainedBy.route.points[3]!.y - (step3Sa020.y + step3Sa020.height)).toBeGreaterThanOrEqual(48);
     expect(step3ConstrainedBy.route.points[2]!.x - (step3Sa020.x + step3Sa020.width)).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points).toHaveLength(6);
     expect(finalConstrainedBy.route.points[0]!.x).toBe(finalConstrainedBy.route.points[1]!.x);
-    expect(finalConstrainedBy.route.points[1]!.y).toBe(480);
+    expect(finalConstrainedBy.route.points[1]!.y).toBe(408);
     expect(finalConstrainedBy.route.points[2]!.x).toBe(step3ConstrainedBy.route.points[2]!.x);
-    expect(finalConstrainedBy.route.points[3]!.y).toBe(576);
+    expect(finalConstrainedBy.route.points[3]!.y).toBe(504);
     expect(finalConstrainedBy.route.points[4]!.x).toBe(finalConstrainedBy.route.points[5]!.x);
     expect(finalSa020Node.y - finalConstrainedBy.route.points[1]!.y).toBeGreaterThanOrEqual(16);
     expect(finalConstrainedBy.route.points[3]!.y - (finalSa020Node.y + finalSa020Node.height)).toBeGreaterThanOrEqual(16);
@@ -618,7 +652,7 @@ describe("staged service_blueprint", () => {
     expect(finalSaConstrainedBy.to.x).toBeLessThan(finalConstrainedBy.route.points[5]!.x);
 
     const finalReadsWrites = findSemanticEdge(rendered.positionedScene.edges, "SA-020__reads_writes__D-020");
-    expect(finalReadsWrites.route.points[1]!.y).toBe(560);
+    expect(finalReadsWrites.route.points[1]!.y).toBe(488);
     expect(finalConstrainedBy.route.points[3]!.y).toBeGreaterThan(finalReadsWrites.route.points[1]!.y);
     expect(finalConstrainedBy.route.points[3]!.y - finalReadsWrites.route.points[1]!.y).toBe(16);
     expect(finalReadsWrites.route.points[1]!.y).toBeGreaterThan(finalSaConstrainedBy.from.y);
@@ -689,8 +723,8 @@ describe("staged service_blueprint", () => {
       expect.objectContaining({
         key: "node:PR-021:bottom",
         axis: "vertical",
-        spanStart: 320,
-        spanEnd: 364
+        spanStart: 280,
+        spanEnd: 316
       })
     ]);
 

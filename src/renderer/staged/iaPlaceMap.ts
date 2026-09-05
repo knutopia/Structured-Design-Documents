@@ -1,12 +1,11 @@
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
-import type { Projection, ProjectionNodeAnnotation } from "../../projector/types.js";
-import { resolvePlaceLabelDisplayOptions } from "../placeLabelLines.js";
+import type { Projection } from "../../projector/types.js";
 import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import { buildIaPlaceMapRenderModel, type IaRenderArea, type IaRenderItem, type IaRenderPlace } from "../iaPlaceMapRenderModel.js";
 import type {
-  ContentBlock,
   LocalRoutePattern,
+  NodeDecoratorMode,
   RendererScene,
   SceneContainer,
   SceneEdge,
@@ -18,8 +17,8 @@ import { IA_LOCAL_ROUTE_PATTERNS } from "./contracts.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import {
   buildIaPlaceMapPorts,
-  buildCardNode,
-  buildDiagramRootContainer
+  buildDiagramRootContainer,
+  buildSharedNode
 } from "./sceneBuilders.js";
 import {
   renderPositionedSceneToPng,
@@ -63,8 +62,7 @@ interface OwnedScopePlan {
 }
 
 interface SceneBuildContext {
-  projectionNodesById: ReadonlyMap<string, Projection["nodes"][number]>;
-  annotationsByNodeId: ReadonlyMap<string, ProjectionNodeAnnotation>;
+  nodeDecoratorMode: NodeDecoratorMode;
   navigationTargetsBySourceId: ReadonlyMap<string, ReadonlySet<string>>;
   placeOrderById: ReadonlyMap<string, number>;
   edges: SceneEdge[];
@@ -73,91 +71,19 @@ interface SceneBuildContext {
 export interface IaPlaceMapStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
 export interface IaPlaceMapStagedPngResult extends StagedRendererPipelineResult, StagedPngArtifact {}
 
-function shouldIncludeMetadata(
-  key: string,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
-): boolean {
-  switch (key) {
-    case "entry_points":
-      return displayOptions.showPlaceEntryPoints;
-    case "primary_nav":
-      return displayOptions.showPlacePrimaryNav;
-    default:
-      return true;
-  }
-}
-
-function buildPlaceContentBlocks(
-  placeId: string,
-  context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
-): ContentBlock[] {
-  const projectionNode = context.projectionNodesById.get(placeId);
-  if (!projectionNode) {
-    return [];
-  }
-
-  const blocks: ContentBlock[] = [
-    {
-      id: `${placeId}__title`,
-      kind: "text",
-      text: projectionNode.name,
-      textStyleRole: "title",
-      priority: "primary"
-    }
-  ];
-  const annotation = context.annotationsByNodeId.get(placeId)?.display;
-
-  if (displayOptions.showPlaceRouteOrKey && annotation?.subtitle) {
-    blocks.push({
-      id: `${placeId}__subtitle`,
-      kind: "text",
-      text: annotation.subtitle,
-      textStyleRole: "subtitle",
-      priority: "secondary"
-    });
-  }
-
-  if (displayOptions.showPlaceAccess && annotation?.badge) {
-    blocks.push({
-      id: `${placeId}__badge`,
-      kind: "badge_text",
-      text: annotation.badge,
-      textStyleRole: "badge",
-      priority: "secondary"
-    });
-  }
-
-  annotation?.metadata
-    ?.filter((entry) => shouldIncludeMetadata(entry.key, displayOptions))
-    .forEach((entry, index) => {
-      blocks.push({
-        id: `${placeId}__metadata__${entry.key}__${index}`,
-        kind: "metadata",
-        text: `${entry.key}: ${entry.value}`,
-        textStyleRole: "metadata",
-        priority: "secondary"
-      });
-    });
-
-  return blocks;
-}
-
 function buildPlaceNode(
   place: IaRenderPlace,
   depth: number,
-  context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+  context: SceneBuildContext
 ): SceneNode {
-  return buildCardNode({
-    id: place.id,
-    role: "place",
+  return buildSharedNode({
+    title: place.title,
+    decoratorMode: context.nodeDecoratorMode,
+    nodeType: "Place",
+    nodeId: place.id,
+    attributes: place.attributes
+  }, {
     classes: ["place", depth === 0 ? "root_place" : "nested_place", `depth-${depth}`],
-    widthPolicy: {
-      preferred: "narrow",
-      allowed: ["narrow", "standard", "wide"]
-    },
-    content: buildPlaceContentBlocks(place.id, context, displayOptions),
     ports: buildIaPlaceMapPorts(CHAIN_PORT_OFFSET)
   });
 }
@@ -433,12 +359,11 @@ function buildSceneItemFromScopeEntry(
   entry: ScopeEntry,
   scopeId: string,
   depth: number,
-  context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+  context: SceneBuildContext
 ): SceneItem {
   return entry.kind === "area"
-    ? buildAreaScene(entry.area, scopeId, context, displayOptions)
-    : buildPlaceGroup(entry.place, entry.followers, scopeId, depth, context, displayOptions);
+    ? buildAreaScene(entry.area, scopeId, context)
+    : buildPlaceGroup(entry.place, entry.followers, scopeId, depth, context);
 }
 
 function buildPlaceGroup(
@@ -446,20 +371,19 @@ function buildPlaceGroup(
   followers: readonly IaRenderPlace[],
   scopeId: string,
   depth: number,
-  context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+  context: SceneBuildContext
 ): SceneContainer {
   const ownedScope = planOwnedScope(place, followers, context);
   const explicitChildren = ownedScope.explicitEntries.map((entry) =>
-    buildSceneItemFromScopeEntry(entry, `${scopeId}/${place.id}`, depth + 1, context, displayOptions)
+    buildSceneItemFromScopeEntry(entry, `${scopeId}/${place.id}`, depth + 1, context)
   );
   const followerChildren = ownedScope.followers.map((follower) =>
-    buildPlaceGroup(follower, [], `${scopeId}/${place.id}__followers`, depth + 1, context, displayOptions)
+    buildPlaceGroup(follower, [], `${scopeId}/${place.id}__followers`, depth + 1, context)
   );
   const ownedChildren = [...explicitChildren, ...followerChildren];
   context.edges.push(...ownedScope.edgePlans.map((edgePlan) => createLocalStructureEdge(place.id, edgePlan)));
 
-  const children: SceneItem[] = [buildPlaceNode(place, depth, context, displayOptions)];
+  const children: SceneItem[] = [buildPlaceNode(place, depth, context)];
   if (ownedScope.kind) {
     children.push(buildOwnedScopeContainer(place.id, ownedScope.kind, ownedChildren));
   }
@@ -470,8 +394,7 @@ function buildPlaceGroup(
 function buildAreaScene(
   area: IaRenderArea,
   scopeId: string,
-  context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+  context: SceneBuildContext
 ): SceneContainer {
   return {
     kind: "container",
@@ -503,7 +426,7 @@ function buildAreaScene(
         priority: "primary"
       }
     ],
-    children: buildScopeSceneItems(area.items, `${scopeId}/${area.id}`, 0, context, displayOptions),
+    children: buildScopeSceneItems(area.items, `${scopeId}/${area.id}`, 0, context),
     ports: []
   };
 }
@@ -512,11 +435,10 @@ function buildScopeSceneItems(
   items: readonly IaRenderItem[],
   scopeId: string,
   depth: number,
-  context: SceneBuildContext,
-  displayOptions: ReturnType<typeof resolvePlaceLabelDisplayOptions>
+  context: SceneBuildContext
 ): SceneItem[] {
   return planScopeEntries(items, context).map((entry) =>
-    buildSceneItemFromScopeEntry(entry, scopeId, depth, context, displayOptions)
+    buildSceneItemFromScopeEntry(entry, scopeId, depth, context)
   );
 }
 
@@ -527,19 +449,21 @@ export function buildIaPlaceMapRendererScene(
   settings: StagedRenderSettings
 ): RendererScene {
   const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
-  const displayOptions = resolvePlaceLabelDisplayOptions(displayPolicy);
   const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
   const placeOrderById = new Map<string, number>();
   buildPlaceOrderIndex(model.rootItems, placeOrderById, { next: 0 });
 
   const context: SceneBuildContext = {
-    projectionNodesById: new Map(projection.nodes.map((node) => [node.id, node])),
-    annotationsByNodeId: new Map(projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])),
+    nodeDecoratorMode: settings.nodeDecoratorMode ?? {
+      id: "none",
+      showNodeType: false,
+      showNodeId: false
+    },
     navigationTargetsBySourceId: buildNavigationTargetsBySourceId(model.edges),
     placeOrderById,
     edges: []
   };
-  const rootChildren = buildScopeSceneItems(model.rootItems, "root", 0, context, displayOptions);
+  const rootChildren = buildScopeSceneItems(model.rootItems, "root", 0, context);
 
   return {
     viewId: "ia_place_map",

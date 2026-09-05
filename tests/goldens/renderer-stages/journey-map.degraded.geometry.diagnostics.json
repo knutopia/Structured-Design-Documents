@@ -59,9 +59,9 @@
     "phase": "routing",
     "code": "renderer.routing.journey_map_secondary_content_intersection",
     "severity": "error",
-    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects secondary content \"J-201__badge__OP-100__0\".",
+    "message": "Journey edge \"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\" intersects secondary content \"J-201__attribute_0_label\".",
     "targetId": "J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0",
-    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\",\"J-201__badge__OP-100__0\"]}"
+    "details": "{\"relatedIds\":[\"J-204__PRECEDES__J-401__318ddfc8a0a2555e2d3e8d652057700201e31e361ac7f271648ae7600f4e1b85__0\",\"J-201\",\"J-201__attribute_0_label\"]}"
   },
   {
     "phase": "routing",

@@ -2,7 +2,12 @@ import path from "node:path";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { loadBundle } from "../src/bundle/loadBundle.js";
 import type { Bundle } from "../src/bundle/types.js";
-import { DefaultsConfigError, type DefaultsConfigRuntime, type DefaultsConfigV1 } from "../src/config/index.js";
+import {
+  DefaultsConfigError,
+  type DefaultsConfigRuntime,
+  type DefaultsConfigSetting,
+  type DefaultsConfigV1
+} from "../src/config/index.js";
 import { runCli, type CliDeps } from "../src/cli/program.js";
 
 let bundle: Bundle;
@@ -27,13 +32,13 @@ function createMemoryDefaults(options: MemoryDefaultsOptions = {}): {
   if (options.global) files.set(globalPath, structuredClone(options.global));
 
   const read = vi.fn(async (filePath: string) => files.get(filePath));
-  const set = vi.fn(async (filePath: string, setting: "validation_profile_id" | "render_detail_id", value: string) => {
+  const set = vi.fn(async (filePath: string, setting: DefaultsConfigSetting, value: string) => {
     const existing = files.get(filePath) ?? { version: "1" as const, defaults: {} };
     const changed = existing.defaults[setting] !== value;
     if (changed) files.set(filePath, { version: "1", defaults: { ...existing.defaults, [setting]: value } });
     return { changed, path: filePath };
   });
-  const unset = vi.fn(async (filePath: string, setting: "validation_profile_id" | "render_detail_id") => {
+  const unset = vi.fn(async (filePath: string, setting: DefaultsConfigSetting) => {
     const existing = files.get(filePath);
     if (!existing || existing.defaults[setting] === undefined) return { changed: false, path: filePath };
     const defaults = { ...existing.defaults };
@@ -289,6 +294,74 @@ describe("persistent defaults CLI resolution", () => {
     }
   });
 
+  it("applies bundle, global, and explicit decorator sources only to show", async () => {
+    const cases = [
+      { name: "bundle", options: {}, expected: "none", extra: [], expectedPath: "/repo/example.ia_place_map.compact.svg" },
+      {
+        name: "global",
+        options: { global: { version: "1" as const, defaults: { node_decorator_mode_id: "type" } } },
+        expected: "type",
+        extra: [],
+        expectedPath: "/repo/example.ia_place_map.compact.decorators-type.svg"
+      },
+      {
+        name: "explicit",
+        options: { global: { version: "1" as const, defaults: { node_decorator_mode_id: "id" } } },
+        expected: "type,id",
+        extra: ["--decorators", "type,id"],
+        expectedPath: "/repo/example.ia_place_map.compact.decorators-type-id.svg"
+      }
+    ];
+
+    for (const testCase of cases) {
+      const context = createCliDeps(createMemoryDefaults(testCase.options).runtime);
+      const result = await runCli([
+        "node", "sdd", "show", "example.sdd", "--view", "ia_place_map", ...testCase.extra
+      ], context.deps);
+      expect(result.exitCode, testCase.name).toBe(0);
+      expect(context.renderSourcePreview.mock.calls[0]?.[2].nodeDecoratorModeId).toBe(testCase.expected);
+      expect(vi.mocked(context.deps.writeTextFile!).mock.calls[0]?.[0]).toBe(testCase.expectedPath);
+    }
+  });
+
+  it("changes omitted decorator behavior from bundle-only mode and fallback changes", async () => {
+    const customBundle = structuredClone(bundle) as Bundle;
+    customBundle.manifest.node_decorator_modes.push({
+      id: "orientation",
+      intent: "custom orientation mode",
+      show_node_type: true,
+      show_node_id: true
+    });
+    customBundle.manifest.tool_defaults.node_decorator_mode_id = "orientation";
+    const context = createCliDeps(createMemoryDefaults().runtime);
+
+    const result = await runCli([
+      "node", "sdd", "show", "example.sdd", "--view", "ia_place_map"
+    ], {
+      ...context.deps,
+      loadBundle: vi.fn(async () => customBundle)
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(context.renderSourcePreview.mock.calls[0]?.[2].nodeDecoratorModeId).toBe("orientation");
+    expect(vi.mocked(context.deps.writeTextFile!).mock.calls[0]?.[0])
+      .toBe("/repo/example.ia_place_map.compact.decorators-orientation.svg");
+  });
+
+  it.each(["id,type", "type,type", "none,type", "all"])(
+    "rejects unsupported explicit decorator mode %s before preview",
+    async (mode) => {
+      const context = createCliDeps(createMemoryDefaults().runtime);
+      const result = await runCli([
+        "node", "sdd", "show", "example.sdd", "--view", "ia_place_map", "--decorators", mode
+      ], context.deps);
+      expect(result.exitCode).toBe(1);
+      expect(context.renderSourcePreview).not.toHaveBeenCalled();
+      expect(context.stderr.join("")).toContain(`Unknown value '${mode}'`);
+      expect(context.stderr.join("")).toContain("Available values: none, type, id, type,id");
+    }
+  );
+
   it("reports an invalid global profile without falling through to the bundle", async () => {
     const memory = createMemoryDefaults({
       global: { version: "1", defaults: { validation_profile_id: "unknown" } }
@@ -313,6 +386,18 @@ describe("persistent defaults CLI resolution", () => {
     expect(context.stderr.join("")).toContain("setting 'render_detail_id'");
     expect(context.stderr.join("")).toContain("/user/config/sdd/config.yaml");
     expect(context.stderr.join("")).toContain("Available values: compact, detailed");
+  });
+
+  it("reports an invalid global decorator mode without falling through to the bundle", async () => {
+    const memory = createMemoryDefaults({
+      global: { version: "1", defaults: { node_decorator_mode_id: "unknown" } }
+    });
+    const context = createCliDeps(memory.runtime);
+    const result = await runCli(["node", "sdd", "show", "example.sdd", "--view", "ia_place_map"], context.deps);
+    expect(result.exitCode).toBe(1);
+    expect(context.renderSourcePreview).not.toHaveBeenCalled();
+    expect(context.stderr.join("")).toContain("setting 'node_decorator_mode_id'");
+    expect(context.stderr.join("")).toContain("Available values: none, type, id, type,id");
   });
 
   it("uses the same persistent detail in show rendering and automatic artifact naming", async () => {
@@ -376,7 +461,7 @@ describe("sdd defaults commands", () => {
       const context = createCliDeps(createMemoryDefaults().runtime);
       expect((await runCli(["node", "sdd", "defaults", ...suffix], context.deps)).exitCode).toBe(0);
       expect(context.stdout.join("")).toBe(
-        "Profile: simple (bundle fallback)\nDetail: compact (bundle fallback)\n"
+        "Profile: simple (bundle fallback)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
       );
     }
 
@@ -385,7 +470,7 @@ describe("sdd defaults commands", () => {
     }).runtime);
     expect((await runCli(["node", "sdd", "defaults"], globalContext.deps)).exitCode).toBe(0);
     expect(globalContext.stdout.join("")).toBe(
-      "Profile: permissive (user default)\nDetail: compact (bundle fallback)\n"
+      "Profile: permissive (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
     );
   });
 
@@ -408,7 +493,7 @@ describe("sdd defaults commands", () => {
     const show = createCliDeps(memory.runtime);
     expect((await runCli(["node", "sdd", "defaults", "show"], show.deps)).exitCode).toBe(0);
     expect(show.stdout.join("")).toBe(
-      "Profile: strict (user default)\nDetail: compact (bundle fallback)\n"
+      "Profile: strict (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
     );
 
     const unset = createCliDeps(memory.runtime);
@@ -423,6 +508,16 @@ describe("sdd defaults commands", () => {
       "node", "sdd", "defaults", "set", "profile", "unknown"
     ], context.deps)).exitCode).toBe(1);
     expect(context.stderr.join("")).toContain("Available values: simple, permissive, strict");
+    expect(memory.set).not.toHaveBeenCalled();
+  });
+
+  it("rejects an unknown decorator default before mutating configuration", async () => {
+    const memory = createMemoryDefaults();
+    const context = createCliDeps(memory.runtime);
+    expect((await runCli([
+      "node", "sdd", "defaults", "set", "decorators", "all"
+    ], context.deps)).exitCode).toBe(1);
+    expect(context.stderr.join("")).toContain("Available values: none, type, id, type,id");
     expect(memory.set).not.toHaveBeenCalled();
   });
 
@@ -471,6 +566,32 @@ describe("sdd defaults commands", () => {
     const unsetContext = createCliDeps(memory.runtime);
     const loadBundleMock = vi.fn(async () => bundle);
     expect((await runCli(["node", "sdd", "defaults", "unset", "detail"], {
+      ...unsetContext.deps,
+      loadBundle: loadBundleMock
+    })).exitCode).toBe(0);
+    expect(loadBundleMock).not.toHaveBeenCalled();
+  });
+
+  it("sets, shows, and unsets decorators without loading a bundle during unset", async () => {
+    const memory = createMemoryDefaults();
+    const setContext = createCliDeps(memory.runtime);
+    expect((await runCli([
+      "node", "sdd", "defaults", "set", "decorators", "type,id"
+    ], setContext.deps)).exitCode).toBe(0);
+    expect(memory.set).toHaveBeenCalledWith(
+      "/user/config/sdd/config.yaml",
+      "node_decorator_mode_id",
+      "type,id",
+      { createParent: true }
+    );
+
+    const showContext = createCliDeps(memory.runtime);
+    expect((await runCli(["node", "sdd", "defaults", "show"], showContext.deps)).exitCode).toBe(0);
+    expect(showContext.stdout.join("")).toContain("Decorators: type,id (user default)");
+
+    const unsetContext = createCliDeps(memory.runtime);
+    const loadBundleMock = vi.fn(async () => bundle);
+    expect((await runCli(["node", "sdd", "defaults", "unset", "decorators"], {
       ...unsetContext.deps,
       loadBundle: loadBundleMock
     })).exitCode).toBe(0);

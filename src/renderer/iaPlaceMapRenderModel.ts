@@ -1,8 +1,9 @@
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
-import { buildIaStylePlaceLabelLines } from "./placeLabelLines.js";
+import { resolvePlaceLabelDisplayOptions } from "./placeLabelLines.js";
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
+import type { SharedNodeAttribute } from "./staged/contracts.js";
 
 export interface IaRenderArea {
   kind: "area";
@@ -15,7 +16,8 @@ export interface IaRenderArea {
 export interface IaRenderPlace {
   kind: "place";
   id: string;
-  labelLines: string[];
+  title: string;
+  attributes: SharedNodeAttribute[];
   items: IaRenderItem[];
   orderAnchorId: string;
 }
@@ -60,6 +62,7 @@ export function buildIaPlaceMapRenderModel(
   const annotationsByNodeId = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
   );
+  const displayOptions = resolvePlaceLabelDisplayOptions(displayPolicy);
   const visibleNodeIds = new Set(projection.nodes.map((node) => node.id));
   const visiblePlaceIds = new Set(projection.nodes.filter((candidate) => candidate.type === "Place").map((node) => node.id));
   const hierarchyTypeSet = new Set(hierarchyEdgeTypes);
@@ -93,14 +96,36 @@ export function buildIaPlaceMapRenderModel(
     const graphNode = graphNodesById.get(placeId);
     const annotation = annotationsByNodeId.get(placeId);
     const display = annotation?.display;
-    const labelLines = buildIaStylePlaceLabelLines({
-      name: projectionNode.name,
-      subtitle: display?.subtitle ?? graphNode?.props.route_or_key,
-      badge: display?.badge ?? graphNode?.props.access,
-      metadata: display?.metadata ?? []
-    }, {
-      displayPolicy
-    });
+    const attributes: SharedNodeAttribute[] = [];
+    const routeOrKey = display?.subtitle ?? graphNode?.props.route_or_key;
+    if (displayOptions.showPlaceRouteOrKey && routeOrKey) {
+      attributes.push({
+        groupId: "route_or_key",
+        label: "route or key",
+        value: routeOrKey
+      });
+    }
+    const access = display?.badge ?? graphNode?.props.access;
+    if (displayOptions.showPlaceAccess && access) {
+      attributes.push({
+        groupId: "access",
+        label: "access",
+        value: access
+      });
+    }
+    for (const metadata of display?.metadata ?? []) {
+      if (
+        (metadata.key === "entry_points" && !displayOptions.showPlaceEntryPoints)
+        || (metadata.key === "primary_nav" && !displayOptions.showPlacePrimaryNav)
+      ) {
+        continue;
+      }
+      attributes.push({
+        groupId: metadata.key,
+        label: metadata.key,
+        value: metadata.value
+      });
+    }
 
     const childItems = getSourceOrderedStructuralStream(graph, placeId, hierarchyEdgeTypes, visiblePlaceIds)
       .filter((entry) => structuralParentByChildId.get(entry.to) === placeId)
@@ -110,7 +135,8 @@ export function buildIaPlaceMapRenderModel(
     const place: IaRenderPlace = {
       kind: "place",
       id: placeId,
-      labelLines,
+      title: projectionNode.name,
+      attributes,
       items: childItems,
       orderAnchorId: placeId
     };

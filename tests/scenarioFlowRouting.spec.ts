@@ -274,30 +274,6 @@ function expectSingleBypassSpanningNodes(
   return bypass.start.x;
 }
 
-function expectCollapsedSourceEdgeEntry(
-  edge: PositionedEdge,
-  boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
-  sourceId: string,
-  blockerIds: readonly string[]
-): number {
-  const source = boxesById.get(sourceId);
-  if (!source) {
-    throw new Error(`Could not find source "${sourceId}".`);
-  }
-  const bypass = getSingleBypassSegmentSpanningNodes(edge, boxesById, blockerIds);
-  const firstHorizontal = getFirstHorizontalSegment(edge);
-  expect(bypass.segmentIndex).toBe(0);
-  expect(edge.from.x).toBe(bypass.start.x);
-  expect(edge.route.points[0]).toEqual({
-    x: bypass.start.x,
-    y: source.y + source.height
-  });
-  expect(bypass.start.x).toBeGreaterThanOrEqual(source.x);
-  expect(bypass.start.x).toBeLessThanOrEqual(source.x + source.width);
-  expect(firstHorizontal.start.x).toBeGreaterThan(firstHorizontal.end.x);
-  return bypass.start.x;
-}
-
 function expectUncollapsedSourceEdgeEntry(
   edge: PositionedEdge,
   boxesById: ReadonlyMap<string, { x: number; y: number; width: number; height: number }>,
@@ -441,8 +417,10 @@ describe("scenario_flow staged routing", () => {
     const wideCX = expectSingleBypassSpanningNodes(wideC, boxesById, ["J-032", "P-031", "P-032"]);
     expect(localAX).toBeLessThan(wideBX);
     expect(wideBX).toBeLessThan(wideCX);
-    expectCollapsedSourceEdgeEntry(localA, boxesById, "J-032", ["P-031"]);
-    expectCollapsedSourceEdgeEntry(wideB, boxesById, "J-032", ["P-031", "P-032", "VS-031a"]);
+    // Equal-width shared nodes put the blocker bypass outside the source box, so preserving
+    // the source port requires the uncollapsed entry lead.
+    expectUncollapsedSourceEdgeEntry(localA, boxesById, ["P-031"]);
+    expectUncollapsedSourceEdgeEntry(wideB, boxesById, ["P-031", "P-032", "VS-031a"]);
     expectUncollapsedSourceEdgeEntry(wideC, boxesById, ["J-032", "P-031", "P-032"]);
     expect(wideB.from.x - localA.from.x).toBeGreaterThanOrEqual(FIXED_SEPARATION_DISTANCE);
 
@@ -454,8 +432,8 @@ describe("scenario_flow staged routing", () => {
     const wideFX = expectSingleBypassSpanningNodes(wideF, boxesById, ["J-035", "P-034", "P-035"]);
     expect(localDX).toBeLessThan(wideEX);
     expect(wideEX).toBeLessThan(wideFX);
-    expectCollapsedSourceEdgeEntry(localD, boxesById, "J-035", ["P-034"]);
-    expectCollapsedSourceEdgeEntry(wideE, boxesById, "J-035", ["P-034", "P-035", "VS-034a"]);
+    expectUncollapsedSourceEdgeEntry(localD, boxesById, ["P-034"]);
+    expectUncollapsedSourceEdgeEntry(wideE, boxesById, ["P-034", "P-035", "VS-034a"]);
     expectUncollapsedSourceEdgeEntry(wideF, boxesById, ["J-035", "P-034", "P-035"]);
     expect(wideE.from.x - localD.from.x).toBeGreaterThanOrEqual(FIXED_SEPARATION_DISTANCE);
 

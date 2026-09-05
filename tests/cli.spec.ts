@@ -22,7 +22,8 @@ const bundle: Bundle = {
     },
     tool_defaults: {
       validation_profile_id: "simple",
-      render_detail_id: "compact"
+      render_detail_id: "compact",
+      node_decorator_mode_id: "none"
     },
     profiles: [
       { id: "simple", path: "profiles/simple.yaml", intent: "drafting" },
@@ -32,6 +33,12 @@ const bundle: Bundle = {
     render_details: [
       { id: "compact", intent: "low noise" },
       { id: "detailed", intent: "full detail" }
+    ],
+    node_decorator_modes: [
+      { id: "none", intent: "no decorators", show_node_type: false, show_node_id: false },
+      { id: "type", intent: "node type", show_node_type: true, show_node_id: false },
+      { id: "id", intent: "node id", show_node_type: false, show_node_id: true },
+      { id: "type,id", intent: "node type and id", show_node_type: true, show_node_id: true }
     ],
     examples: [],
     compatibility: {
@@ -418,6 +425,130 @@ function createBatchPreviewMocks(
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
 
 describe("CLI wrappers", () => {
+  it("suggests the registered long option for an unambiguous single-dash typo", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+
+    const result = await runCli(
+      ["node", "sdd", "show", "arbitrary.sdd", "-view", "arbitrary_value"],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(stderr.join("")).toBe(
+      "error: unknown option '-view'. Did you mean '--view'?\n"
+      + "Run 'sdd show --help' for usage.\n"
+    );
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+  });
+
+  it("aggregates multiple unambiguous single-dash option typos in authored order", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+
+    const result = await runCli(
+      [
+        "node", "sdd", "show", "arbitrary.sdd",
+        "-view", "arbitrary_view",
+        "-detail", "arbitrary_detail"
+      ],
+      deps
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(stderr.join("")).toBe(
+      "errors:\n"
+      + "  unknown option '-view'. Did you mean '--view'?\n"
+      + "  unknown option '-detail'. Did you mean '--detail'?\n"
+      + "Run 'sdd show --help' for usage.\n"
+    );
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+  });
+
+  it("keeps genuine missing-option errors concise", async () => {
+    const { deps, stderr, renderSourcePreviewMock } = createDeps();
+
+    const result = await runCli(["node", "sdd", "show", "arbitrary.sdd"], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(stderr.join("")).toBe(
+      "error: required option '--view <view>' not specified\n"
+      + "Run 'sdd show --help' for usage.\n"
+    );
+    expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+  });
+
+  it("does not suggest a single-dash correction for ambiguous or non-option tokens", async () => {
+    for (const argv of [
+      ["node", "sdd", "show", "arbitrary.sdd", "-view", "arbitrary_value", "--bogus"],
+      ["node", "sdd", "show", "arbitrary.sdd", "-view", "first_value", "-view", "second_value"],
+      ["node", "sdd", "show", "arbitrary.sdd", "--out", "-view"],
+      ["node", "sdd", "show", "arbitrary.sdd", "--", "-view", "arbitrary_value"]
+    ]) {
+      const { deps, stderr, renderSourcePreviewMock } = createDeps();
+      const result = await runCli(argv, deps);
+      const error = stderr.join("");
+
+      expect(result.exitCode).toBe(1);
+      expect(error).toContain("required option '--view <view>' not specified");
+      expect(error).toContain("Run 'sdd show --help' for usage.");
+      expect(error).not.toContain("Did you mean '--view'?");
+      expect(error).not.toContain("Usage:");
+      expect(renderSourcePreviewMock).not.toHaveBeenCalled();
+    }
+  });
+
+  it("uses concise command-specific hints while preserving Commander long-option suggestions", async () => {
+    const singleDash = createDeps();
+    const singleDashResult = await runCli(
+      ["node", "sdd", "compile", "arbitrary.sdd", "-bundle", "manifest.yaml"],
+      singleDash.deps
+    );
+
+    expect(singleDashResult.exitCode).toBe(1);
+    expect(singleDash.stderr.join("")).toBe(
+      "error: unknown option '-bundle'. Did you mean '--bundle'?\n"
+      + "Run 'sdd compile --help' for usage.\n"
+    );
+
+    const compile = createDeps();
+    const compileResult = await runCli(
+      ["node", "sdd", "compile", "arbitrary.sdd", "--bundl", "manifest.yaml"],
+      compile.deps
+    );
+    const compileError = compile.stderr.join("");
+
+    expect(compileResult.exitCode).toBe(1);
+    expect(compileError).toContain("error: unknown option '--bundl'");
+    expect(compileError).toContain("Did you mean --bundle?");
+    expect(compileError).toContain("Run 'sdd compile --help' for usage.");
+    expect(compileError).not.toContain("Usage:");
+    expect(compileError).not.toContain("Examples:");
+
+    const nested = createDeps();
+    const nestedResult = await runCli(
+      ["node", "sdd", "defaults", "show", "--global"],
+      nested.deps
+    );
+    const nestedError = nested.stderr.join("");
+
+    expect(nestedResult.exitCode).toBe(1);
+    expect(nestedError).toContain("error: unknown option '--global'");
+    expect(nestedError).toContain("Run 'sdd defaults show --help' for usage.");
+    expect(nestedError).not.toContain("Usage:");
+  });
+
+  it("keeps explicit command help comprehensive", async () => {
+    const { deps, stdout, stderr } = createDeps();
+
+    const result = await runCli(["node", "sdd", "show", "--help"], deps);
+    const help = stdout.join("");
+
+    expect(result.exitCode).toBe(0);
+    expect(stderr.join("")).toBe("");
+    expect(help).toContain("Usage: sdd show [options] <input>");
+    expect(help).toContain("Options:");
+    expect(help).toContain("Examples:");
+  });
+
   it("resolves the bundle fallback and explicit override for all five profile-consuming commands", async () => {
     const cases = [
       {
@@ -657,6 +788,26 @@ describe("CLI wrappers", () => {
     expect(writeBinaryFileMock).toHaveBeenCalledWith(
       "/repo/bundle/v0.1/examples/outcome_to_ia_trace.outcome_opportunity_map.compact.png",
       Uint8Array.from([1, 2, 3])
+    );
+  });
+
+  it("show --view all passes decorators to preparation and automatic artifact identity", async () => {
+    const batch = createBatchPreviewMocks({ outcome_opportunity_map: ["O-001"] });
+    const { deps, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--decorators", "type,id"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(batch.prepare.mock.calls.every((call) => call[3].nodeDecoratorModeId === "type,id")).toBe(true);
+    expect(writeTextFileMock).toHaveBeenCalledWith(
+      "/repo/bundle/v0.1/examples/outcome_to_ia_trace.outcome_opportunity_map.compact.decorators-type-id.svg",
+      "<svg>outcome_opportunity_map</svg>"
     );
   });
 
@@ -1849,6 +2000,9 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Omit --profile to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Render detail (bundle-declared; shipped v0.1 values shown):");
     expect(help).toContain("Omit --detail to resolve your user default, then the selected-bundle fallback.");
+    expect(help).toContain("Node decorators (bundle-declared; shipped v0.1 values shown):");
+    expect(help).toContain("type,id      semantic node type and stable node ID");
+    expect(help).toContain("Omit --decorators to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all");
@@ -1866,6 +2020,12 @@ describe("CLI wrappers", () => {
       expect(commandHelp, commandName).toContain("profile id override; omission uses the resolved");
       expect(commandHelp, commandName).toContain("user/bundle default");
     }
+
+    const showHelp = program.commands.find((command) => command.name() === "show")!.helpInformation();
+    expect(showHelp).toContain("--decorators <mode>");
+    expect(showHelp).toContain("node decorator mode override; omission uses the");
+    expect(showHelp).toContain("resolved user/bundle default");
+    expect(showHelp).toContain("[.decorators-<mode>]");
   });
 
   it("render help labels DOT and Mermaid output as internal/debug artifacts", () => {

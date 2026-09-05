@@ -30,14 +30,14 @@
     "children": [
       {
         "kind": "container",
-        "id": "elk-zone",
-        "role": "elk_group",
+        "id": "layered-zone",
+        "role": "layered_group",
         "primitive": "cluster",
         "classes": [
-          "elk_group"
+          "layered_group"
         ],
         "layout": {
-          "strategy": "elk_layered",
+          "strategy": "layered",
           "direction": "vertical",
           "gap": 20
         },
@@ -55,7 +55,7 @@
         "children": [
           {
             "kind": "node",
-            "id": "elk-top",
+            "id": "layered-top",
             "role": "place",
             "primitive": "card",
             "classes": [
@@ -73,7 +73,7 @@
             },
             "content": [
               {
-                "id": "elk-top-title",
+                "id": "layered-top-title",
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
@@ -107,7 +107,7 @@
           },
           {
             "kind": "node",
-            "id": "elk-bottom",
+            "id": "layered-bottom",
             "role": "place",
             "primitive": "card",
             "classes": [
@@ -125,7 +125,7 @@
             },
             "content": [
               {
-                "id": "elk-bottom-title",
+                "id": "layered-bottom-title",
                 "kind": "text",
                 "textStyleRole": "title",
                 "lines": [
@@ -160,7 +160,7 @@
               "status": "fits"
             },
             "x": 28,
-            "y": 126,
+              "y": 124,
             "width": 168,
             "height": 48
           }
@@ -168,8 +168,8 @@
         "ports": [],
         "x": 16,
         "y": 16,
-        "width": 193,
-        "height": 170
+          "width": 192,
+          "height": 168
       },
       {
         "kind": "node",
@@ -218,7 +218,7 @@
         "overflow": {
           "status": "fits"
         },
-        "x": 233,
+          "x": 232,
         "y": 16,
         "width": 224,
         "height": 48
@@ -227,27 +227,27 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 473,
-    "height": 202
+      "width": 472,
+      "height": 200
   },
   "edges": [
     {
-      "id": "elk-internal",
+      "id": "layered-internal",
       "role": "transition",
       "classes": [
         "internal"
       ],
       "from": {
-        "itemId": "elk-top",
+        "itemId": "layered-top",
         "portId": "south",
         "x": 112,
         "y": 104
       },
       "to": {
-        "itemId": "elk-bottom",
+        "itemId": "layered-bottom",
         "portId": "north",
         "x": 112,
-        "y": 126
+          "y": 124
       },
       "route": {
         "style": "orthogonal",
@@ -258,28 +258,28 @@
           },
           {
             "x": 112,
-            "y": 126
+              "y": 124
           }
         ]
       },
       "paintGroup": "edges"
     },
     {
-      "id": "elk-external",
+      "id": "layered-external",
       "role": "navigation",
       "classes": [
         "external"
       ],
       "from": {
-        "itemId": "elk-bottom",
+        "itemId": "layered-bottom",
         "portId": "east",
         "x": 196,
-        "y": 150
+          "y": 148
       },
       "to": {
         "itemId": "peer",
         "portId": "west",
-        "x": 233,
+          "x": 232,
         "y": 40
       },
       "route": {
@@ -287,18 +287,18 @@
         "points": [
           {
             "x": 196,
-            "y": 150
+              "y": 148
           },
           {
-            "x": 214.5,
-            "y": 150
+              "x": 214,
+              "y": 148
           },
           {
-            "x": 214.5,
+              "x": 214,
             "y": 40
           },
           {
-            "x": 233,
+              "x": 232,
             "y": 40
           }
         ]

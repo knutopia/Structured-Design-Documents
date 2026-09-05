@@ -1,9 +1,10 @@
-export type DefaultsConfigSetting = "validation_profile_id" | "render_detail_id";
+export type DefaultsConfigSetting = "validation_profile_id" | "render_detail_id" | "node_decorator_mode_id";
 export type DefaultsConfigSource = "cli" | "global" | "bundle";
 
 export interface DefaultsConfigValues {
   validation_profile_id?: string;
   render_detail_id?: string;
+  node_decorator_mode_id?: string;
 }
 
 export interface DefaultsConfigV1 {

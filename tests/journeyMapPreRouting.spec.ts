@@ -35,6 +35,7 @@ import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const fixtureRoot = path.join(repoRoot, "tests/fixtures/render");
+const bundlePromise = loadBundle(manifestPath);
 
 interface JourneyFixtureStages {
   bundle: Bundle;
@@ -55,7 +56,7 @@ function journeyView(bundle: Bundle): ViewSpec {
 }
 
 async function buildFixtureStages(name: string, profileId = "strict"): Promise<JourneyFixtureStages> {
-  const bundle = await loadBundle(manifestPath);
+  const bundle = await bundlePromise;
   const fixturePath = path.join(fixtureRoot, `journey_map_staged_${name}.sdd`);
   const compiled = compileSource({ path: fixturePath, text: await readFile(fixturePath, "utf8") }, bundle);
   expect(compiled.diagnostics).toEqual([]);
@@ -187,32 +188,40 @@ function sha256(value: string | Uint8Array): string {
 }
 
 describe("journey map measurement and pre-routing placement", () => {
-  it("uses vendored font measurement, standard-to-wide escalation, and explicit secondary metadata regions", async () => {
+  it("uses vendored shared-node measurement, fixed width, height growth, and grouped references", async () => {
     const { measuredScene } = await buildFixtureStages("primary");
     const longStep = findMeasuredNode(measuredScene, "J-102");
     expect(longStep.widthPolicy).toEqual({
       preferred: "standard",
-      allowed: ["standard", "wide"]
+      allowed: ["standard"]
     });
-    expect(longStep.widthBand).toBe("wide");
-    expect(longStep.width).toBe(308);
-    expect(longStep.overflow).toEqual({ status: "escalated_width_band" });
+    expect(longStep.widthBand).toBe("standard");
+    expect(longStep.width).toBe(224);
+    expect(longStep.overflow).toEqual({ status: "fits" });
     expect(longStep.content[0]?.lines).toEqual([
-      "Compare plans, eligibility details, and",
-      "expected total cost before choosing"
+      "Compare plans, eligibility",
+      "details, and expected total",
+      "cost before choosing"
     ]);
+    expect(longStep.sharedNode?.body.title.lines).toEqual(longStep.content[0]?.lines);
 
     const badgedStep = findMeasuredNode(measuredScene, "J-201");
     expect(badgedStep.widthBand).toBe("standard");
     expect(badgedStep.content.map(({ id, region }) => ({ id, region }))).toEqual([
       { id: "J-201__title", region: "primary" },
-      { id: "J-201__badge__OP-100__0", region: "secondary" },
-      { id: "J-201__badge__OP-200__0", region: "secondary" }
+      { id: "J-201__attribute_0_label", region: "primary" },
+      { id: "J-201__attribute_0_value_0", region: "primary" },
+      { id: "J-201__attribute_0_value_1", region: "primary" }
     ]);
-    expect(badgedStep.content.slice(1).map(({ kind, textStyleRole }) => ({ kind, textStyleRole }))).toEqual([
-      { kind: "metadata", textStyleRole: "metadata" },
-      { kind: "metadata", textStyleRole: "metadata" }
-    ]);
+    expect(badgedStep.sharedNode?.body.attributeGroups.map((group) => ({
+      id: group.id,
+      label: group.label.lines,
+      values: group.values.map((value) => value.lines)
+    }))).toEqual([{
+      id: "opportunity_ref",
+      label: ["Opportunity Ref"],
+      values: [["Clear total cost"], ["Confidence before commitment"]]
+    }]);
     for (const block of badgedStep.content) {
       expect(block.x).toBeGreaterThanOrEqual(0);
       expect(block.y).toBeGreaterThanOrEqual(0);
@@ -229,7 +238,7 @@ describe("journey map measurement and pre-routing placement", () => {
     const measuredNodes = flattenMeasuredItems(measuredScene.root)
       .filter((item): item is MeasuredNode => item.kind === "node");
     expect(measuredNodes.every((node) =>
-      node.overflow.status === "fits" || node.overflow.status === "escalated_width_band"
+      node.overflow.status === "fits"
     )).toBe(true);
     expect(measuredScene.diagnostics.some((diagnostic) =>
       (diagnostic.phase === "measure" || diagnostic.phase === "layout")
@@ -271,18 +280,17 @@ describe("journey map measurement and pre-routing placement", () => {
     );
   });
 
-  it("preserves source order for every fixture and aligns root Steps with the Stage content row", async () => {
-    const cases = [
-      ["primary", "simple"],
-      ["primary", "permissive"],
-      ["primary", "strict"],
-      ["ordering_ownership", "strict"],
-      ["topology", "strict"],
-      ["duplicate", "strict"],
-      ["compressed", "strict"]
-    ] as const;
-
-    for (const [fixture, profileId] of cases) {
+  it.each([
+    ["primary", "simple"],
+    ["primary", "permissive"],
+    ["primary", "strict"],
+    ["ordering_ownership", "strict"],
+    ["topology", "strict"],
+    ["duplicate", "strict"],
+    ["compressed", "strict"]
+  ] as const)(
+    "preserves source order for %s/%s and aligns root Steps with the Stage content row",
+    async (fixture, profileId) => {
       const { rendererScene, measuredScene, preRoutingPositionedScene } = await buildFixtureStages(
         fixture,
         profileId
@@ -347,7 +355,7 @@ describe("journey map measurement and pre-routing placement", () => {
       }
       expect(preRoutingPositionedScene.root.height).toBeLessThanOrEqual(1050);
     }
-  });
+  );
 
   it("exposes deterministic adjacent, Stage-local, inter-item, and root-outer whitespace", async () => {
     const first = await buildFixtureStages("primary");

@@ -76,31 +76,30 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-001__content__line_0",
-                "kind": "text",
-                "text": "Billing Simplification",
-                "textStyleRole": "label",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Billing Simplification",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "I-001__content__line_1",
-                "kind": "metadata",
-                "text": "Implemented by: P-001 Billing",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Initiative",
+              "nodeId": "I-001",
+              "attributes": [
+                {
+                  "groupId": "implemented_by",
+                  "label": "Implemented by",
+                  "value": "P-001 Billing"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -186,23 +185,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-001__content__line_0",
-                "kind": "text",
-                "text": "Payment Friction",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Payment Friction",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-001",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -288,23 +288,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "O-001__content__line_0",
-                "kind": "text",
-                "text": "Reduce Abandonment",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Reduce Abandonment",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Outcome",
+              "nodeId": "O-001",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -390,38 +391,35 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-001__content__line_0",
-                "kind": "text",
-                "text": "Checkout Completion Rate",
-                "textStyleRole": "label",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Checkout Completion Rate",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "M-001__content__line_1",
-                "kind": "metadata",
-                "text": "Experience: J-002 Confirm Payment",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              },
-              {
-                "id": "M-001__content__line_2",
-                "kind": "metadata",
-                "text": "Event: E-001 Payment Submitted",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Metric",
+              "nodeId": "M-001",
+              "attributes": [
+                {
+                  "groupId": "experience",
+                  "label": "experience",
+                  "value": "J-002 Confirm Payment"
+                },
+                {
+                  "groupId": "event",
+                  "label": "event",
+                  "value": "E-001 Payment Submitted"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -483,8 +481,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -514,8 +511,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -545,8 +541,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",

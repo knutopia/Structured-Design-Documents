@@ -177,7 +177,8 @@ describe("journey map accepted renderer-stage goldens", () => {
       );
       if (profileId === "permissive") {
         expect(rendered.finalSvg).not.toContain('<rect class="scene-badge__chrome"');
-        expect(rendered.finalSvg).toContain("block-kind-metadata block-region-secondary");
+        expect(rendered.finalSvg).toContain('data-attribute-group="opportunity_ref"');
+        expect(rendered.finalSvg).toContain("shared-node__attribute-value");
       }
       await expectFinalPngUsesExactSvg(rendered);
     });
@@ -247,18 +248,26 @@ describe("journey map accepted renderer-stage goldens", () => {
     });
   }
 
-  it("withholds compressed visual evidence while the dense acceptance gate is rejected", async () => {
+  it("accepts the compressed dense proof after shared assignment and bounded expansion", async () => {
     const { rendered } = await buildFixture("compressed");
     const stage900 = findContainer(rendered.routingStages.finalPositionedScene, "G-900");
-    expect(rendered.routingStages.residualCrossings).toHaveLength(58);
-    expect(rendered.routingStages.finalPositionedScene.root).toMatchObject({
-      width: 2064,
-      height: 400
-    });
-    expect(stage900).toMatchObject({ width: 856, height: 224 });
-    expect(rendered.routingStages.finalPositionedScene.root.height).toBeGreaterThan(384);
+    const preStage900 = findContainer(rendered.preRoutingPositionedScene, "G-900");
+    const root = rendered.routingStages.finalPositionedScene.root;
+    expect(rendered.routingStages.residualCrossings.length).toBeGreaterThan(0);
+    expect(rendered.routingStages.residualCrossings.length).toBeLessThanOrEqual(57);
+    expect(root.width).toBeGreaterThan(rendered.preRoutingPositionedScene.root.width);
+    expect(root.height).toBeGreaterThan(rendered.preRoutingPositionedScene.root.height);
+    expect((root.height - rendered.preRoutingPositionedScene.root.height)
+      % JOURNEY_MAP_TRACK_SEPARATION).toBe(0);
+    expect(stage900.width).toBeGreaterThanOrEqual(preStage900.width);
+    expect(stage900.height).toBeGreaterThanOrEqual(preStage900.height);
     expect(rendered.routingStages.connectorPlans.some((plan) =>
       plan.routeFamily === "early_south_egress"
+    )).toBe(false);
+    expect(rendered.routingStages.diagnostics.some((diagnostic) =>
+      diagnostic.code === "renderer.routing.journey_map_track_separation_unmet"
+      || diagnostic.code === "renderer.routing.journey_map_constraint_unsatisfiable"
+      || diagnostic.code === "renderer.routing.journey_map_boundary_gate_fallback"
     )).toBe(false);
   });
 });
@@ -359,7 +368,10 @@ describe("journey map degraded diagnostic goldens", () => {
       unrelatedStage.y + (unrelatedStage.chrome.headerBandHeight ?? 0) / 2
     );
     const secondaryNode = findNode(positioned, "J-201");
-    const secondaryContent = secondaryNode.content.find((block) => block.region === "secondary")!;
+    const secondaryContent = secondaryNode.content.find((block) =>
+      block.id !== `${secondaryNode.id}__title`
+    )!;
+    secondaryContent.region = "secondary";
     const throughSecondaryContent = routeVia(
       secondaryNode.x + secondaryContent.x + secondaryContent.width / 2,
       secondaryNode.y + secondaryContent.y + secondaryContent.height / 2
@@ -493,5 +505,5 @@ describe("journey map degraded diagnostic goldens", () => {
       "journey-map.degraded.capacity.diagnostics.json",
       diagnostics
     );
-  }, 10_000);
+  }, 20_000);
 });

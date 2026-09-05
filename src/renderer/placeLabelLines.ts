@@ -1,5 +1,6 @@
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
 import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
+import type { SharedNodeAttribute } from "./staged/contracts.js";
 
 export interface PlaceLabelMetadata {
   key: string;
@@ -74,4 +75,22 @@ export function buildIaStylePlaceLabelLines(
   }
 
   return lines;
+}
+
+export function buildLegacyIaPlaceLabelLines(
+  title: string,
+  attributes: readonly SharedNodeAttribute[]
+): string[] {
+  return [
+    title,
+    ...attributes.map((attribute) => {
+      if (attribute.groupId === "route_or_key") {
+        return attribute.value;
+      }
+      if (attribute.groupId === "access") {
+        return `[${attribute.value}]`;
+      }
+      return `${attribute.label}: ${attribute.value}`;
+    })
+  ];
 }

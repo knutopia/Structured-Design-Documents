@@ -76,31 +76,30 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-050__content__line_0",
-                "kind": "text",
-                "text": "Review Queue Instrumentation",
-                "textStyleRole": "label",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Review Queue Instrumentation",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "I-050__content__line_1",
-                "kind": "metadata",
-                "text": "Implemented by: P-050 Risk Review Queue",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Initiative",
+              "nodeId": "I-050",
+              "attributes": [
+                {
+                  "groupId": "implemented_by",
+                  "label": "Implemented by",
+                  "value": "P-050 Risk Review Queue"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -186,23 +185,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-050__content__line_0",
-                "kind": "text",
-                "text": "Review Queue Visibility",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Review Queue Visibility",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-050",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -288,23 +288,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "O-050__content__line_0",
-                "kind": "text",
-                "text": "Reduce Risk Review Delays",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Reduce Risk Review Delays",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Outcome",
+              "nodeId": "O-050",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -390,38 +391,35 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-050__content__line_0",
-                "kind": "text",
-                "text": "Alert Stream Coverage",
-                "textStyleRole": "label",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Alert Stream Coverage",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "M-050__content__line_1",
-                "kind": "metadata",
-                "text": "Event: E-050 Alert Emitted",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              },
-              {
-                "id": "M-050__content__line_2",
-                "kind": "metadata",
-                "text": "Event: E-051 Review Completed Event",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Metric",
+              "nodeId": "M-050",
+              "attributes": [
+                {
+                  "groupId": "event",
+                  "label": "event",
+                  "value": "E-050 Alert Emitted"
+                },
+                {
+                  "groupId": "event",
+                  "label": "event",
+                  "value": "E-051 Review Completed Event"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -609,38 +607,35 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-051__content__line_0",
-                "kind": "text",
-                "text": "Manual Review Completion",
-                "textStyleRole": "label",
-                "priority": "primary"
+            "content": [],
+            "sharedNode": {
+              "title": "Manual Review Completion",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
               },
-              {
-                "id": "M-051__content__line_1",
-                "kind": "metadata",
-                "text": "Experience: J-050 Review Risk Alert",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              },
-              {
-                "id": "M-051__content__line_2",
-                "kind": "metadata",
-                "text": "Event: E-051 Review Completed Event",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
+              "nodeType": "Metric",
+              "nodeId": "M-051",
+              "attributes": [
+                {
+                  "groupId": "experience",
+                  "label": "experience",
+                  "value": "J-050 Review Risk Alert"
+                },
+                {
+                  "groupId": "event",
+                  "label": "event",
+                  "value": "E-051 Review Completed Event"
+                }
+              ]
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -702,8 +697,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -733,8 +727,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -764,8 +757,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -795,8 +787,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",

@@ -26,6 +26,11 @@ import {
 } from "./diagnostics.js";
 import { createEdgeLabelMeasurementService } from "./microLayout.js";
 import { decorateServiceBlueprintPositionedScene } from "./serviceBlueprintDecorations.js";
+import {
+  resolveAndReconstructRouteOccupancy,
+  selectRouteCandidate,
+  validatePositionedSceneRouting
+} from "./routingCore/index.js";
 import type {
   ServiceBlueprintMiddleCell,
   ServiceBlueprintMiddleEdge,
@@ -33,6 +38,7 @@ import type {
 } from "./serviceBlueprintMiddleLayer.js";
 
 const FIXED_SEPARATION_DISTANCE = 16;
+const MAX_GLOBAL_GUTTER_ATTEMPTS = 4;
 const OBSTACLE_SWERVE_CLEARANCE = 16;
 const GUTTER_OVERFLOW_TOLERANCE = 8;
 const ROOT_PADDING_FALLBACK = 28;
@@ -3932,7 +3938,7 @@ export function buildServiceBlueprintRoutingStages(
   let workingConnectorPlans = step3ConnectorPlans;
   let workingBucketsByNodeId = step3BucketsByNodeId;
 
-  for (let attempt = 0; attempt < 4; attempt += 1) {
+  for (let attempt = 0; attempt < MAX_GLOBAL_GUTTER_ATTEMPTS; attempt += 1) {
     const { preparedRoutes } = buildPreparedRoutesWithObstacleCompaction(
       workingConnectorPlans,
       workingScene,
@@ -4023,6 +4029,84 @@ export function buildServiceBlueprintRoutingStages(
     preparedRoutesFinal.bundleEndpointCoordinateByEndpointKey,
     preparedRoutesFinal.preparedSegmentCoordinateBySegmentKey
   );
+  const step3PlanById = new Map(finalStep3ConnectorPlans.map((connector) => [connector.id, connector] as const));
+  const blockingCandidateViolations = new Set([
+    "non_orthogonal_segment" as const,
+    "node_intersection" as const
+  ]);
+  for (const connector of nominalFinalConnectorPlans) {
+    const finalState = finalRouteStates.get(connector.id);
+    const step3Plan = step3PlanById.get(connector.id);
+    if (!finalState || !step3Plan) {
+      continue;
+    }
+    const selection = selectRouteCandidate({
+      connectorId: connector.id,
+      sourceItemId: connector.from,
+      targetItemId: connector.to,
+      candidates: [
+        { id: "compacted", route: finalState.route },
+        { id: "step3", route: step3Plan.step3Route }
+      ],
+      boxes: workingIndex.allNodeBoxes.map((box) => ({
+        id: box.itemId,
+        x: box.x,
+        y: box.y,
+        width: box.width,
+        height: box.height
+      })),
+      policy: { minTerminalLeg: 0 },
+      blockingViolationKinds: blockingCandidateViolations
+    });
+    if (selection.status === "resolved" && selection.candidate) {
+      finalRouteStates.set(connector.id, {
+        ...finalState,
+        route: selection.candidate.route
+      });
+      continue;
+    }
+    finalDiagnostics.push(createRoutingDiagnostic(
+      "renderer.routing.service_blueprint_constraint_unsatisfiable",
+      `Service-blueprint connector "${connector.id}" has no node-clear final routing candidate.`,
+      connector.id,
+      "error"
+    ));
+  }
+  const sharedOccupancy = resolveAndReconstructRouteOccupancy(
+    nominalFinalConnectorPlans.map((connector, priority) => {
+      const route = finalRouteStates.get(connector.id)?.route ?? connector.step3Route;
+      return {
+        connectorId: connector.id,
+        route,
+        priority
+      };
+    }),
+    {
+      buildSegmentKey: (connectorId, routeSegmentIndex) => `${connectorId}|${routeSegmentIndex}`,
+      policy: {
+        minSeparation: FIXED_SEPARATION_DISTANCE,
+        epsilon: 0.5,
+        maxExpansionPasses: MAX_GLOBAL_GUTTER_ATTEMPTS
+      },
+      includeEndpointSegments: false
+    }
+  );
+  if (sharedOccupancy.status === "resolved") {
+    for (const [connectorId, route] of sharedOccupancy.routeByConnectorId) {
+      const state = finalRouteStates.get(connectorId);
+      if (state) {
+        finalRouteStates.set(connectorId, { ...state, route });
+      }
+    }
+  } else {
+    finalDiagnostics.push(createRoutingDiagnostic(
+      "renderer.routing.service_blueprint_constraint_unsatisfiable",
+      "Service-blueprint physical track claims could not be resolved within the bounded shared solver.",
+      sharedOccupancy.violations[0]?.connectorIds[0] ?? "root",
+      "error",
+      JSON.stringify({ violations: sharedOccupancy.violations })
+    ));
+  }
   const finalOccupancyResult = extractGutterOccupancyByConnector(
     nominalFinalConnectorPlans,
     new Map([...finalRouteStates.entries()].map(([connectorId, state]) => [connectorId, state.route] as const)),
@@ -4069,7 +4153,30 @@ export function buildServiceBlueprintRoutingStages(
     );
   }
 
-  const finalScene = buildStageScene(workingScene, middleLayer, finalEdges, finalDiagnostics);
+  let finalScene = buildStageScene(workingScene, middleLayer, finalEdges, finalDiagnostics);
+  const sharedViolationKinds = new Set([
+    "non_orthogonal_segment",
+    "endpoint_mismatch",
+    "endpoint_intrusion",
+    "node_intersection"
+  ]);
+  const sharedViolations = validatePositionedSceneRouting(finalScene, {
+    includeEdgeInteractions: false,
+    policy: { minTerminalLeg: 0, crossingTreatment: "allow" }
+  }).filter((violation) => sharedViolationKinds.has(violation.kind));
+  if (sharedViolations.length > 0) {
+    const sharedDiagnostics = sharedViolations.map((violation) => createRoutingDiagnostic(
+      `renderer.routing.service_blueprint_${violation.kind}`,
+      violation.message,
+      violation.connectorIds[0] ?? "service_blueprint",
+      "error"
+    ));
+    finalDiagnostics.push(...sharedDiagnostics);
+    finalScene = {
+      ...finalScene,
+      diagnostics: sortRendererDiagnostics([...finalScene.diagnostics, ...sharedDiagnostics])
+    };
+  }
 
   return {
     step2: {

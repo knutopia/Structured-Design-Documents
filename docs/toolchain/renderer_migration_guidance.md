@@ -203,6 +203,23 @@ interface PositionedNode extends MeasuredNode {
 
 The important point is the boundary, not the exact spelling.
 
+### Shared semantic-node boundary
+
+Every staged leaf that presents one semantic entity uses `buildSharedNode`. The diagram builder supplies only the semantic title, decorator mode, node type, node ID, ordered structured attributes, and integration metadata such as ports, placement classes, and view metadata. The shared component owns its fixed width, grow-height overflow behavior, repeated-attribute grouping, wrapping, typography, internal spacing and alignment, plain-versus-dense composition, and SVG structure.
+
+The adopted leaf set is:
+
+- `ui_contracts` semantic leaves;
+- scenario-flow `Step`, `Place`, and `ViewState` leaves;
+- service-blueprint semantic leaves, including `Step`, `SystemAction`, `DataEntity`, and `Policy`;
+- outcome-opportunity `Outcome`, `Opportunity`, `Initiative`, and `Metric` leaves;
+- IA place-map `Place` leaves; and
+- journey-map `Step` leaves, whether contained in a Stage or placed at the root.
+
+Scene responsibility determines the boundary. An item remains a `SceneContainer` when it contains children, establishes macro layout or routing scope, or owns a header band. This includes IA `Area` and structural Place wrappers, journey `Stage`, diagram roots, and the lane, band, track, cell, column, parking, and routing-only structures used by the other renderers. Container chrome and headers therefore continue to use generic content blocks. Generic blocks also remain valid for connector labels, annotations, diagnostics, and specialized non-shared primitives; they are not an alternate leaf-card formatting path.
+
+Macro layout receives the shared node's measured allocation and may enlarge it through a shared-height policy. It owns placement, containment, ports, and relationship routing, while the shared component finalizes internal alignment inside the allocated box. Geometry-affecting theme or CSS customization must be resolved before measurement and must rerun measurement; paint-only customization may remain an SVG concern.
+
 ## Shared renderer primitives
 
 The new renderer should not let each view invent bespoke visual logic for common diagram elements.
@@ -239,7 +256,7 @@ This is the main defense against one-off renderer logic.
 
 ### Make micro-layout a first-class subsystem
 
-Text sizing, text wrapping, and internal node composition must be solved before ELK is invoked.
+Text sizing, text wrapping, and internal node composition must be solved before macro-layout is invoked.
 
 This should be implemented as a shared micro-layout engine that:
 
@@ -313,31 +330,21 @@ The measurement implementation may change later. The architecture boundary must 
 
 ## Macro-layout and routing
 
-### Treat ELK as a macro-layout engine, not as the renderer architecture
+### Keep staged layout and routing renderer-owned
 
-ELK should be used where it is strong:
+Do not introduce or expand ELK, Graphviz, Mermaid, or another external graph engine for staged placement or routing. Existing ELK remnants are migration debt and must not be used as precedents for new work.
 
-- layered node placement
-- orthogonal routing
-- explicit ports
-- hierarchical graph layout
-- subgraph and container layout
-
-ELK should not become the renderer scene format or the source of truth for text composition.
-
-The SDD renderer should own its own scene forms and translate only the relevant subgraphs into ELK input when needed.
+The SDD renderer owns its scene forms, deterministic placement strategies, route candidates, physical routing resources, track assignment, and final validation. View-specific adapters may select different renderer-owned strategies, but they must operate inside the same staged contracts.
 
 ### Support multiple container layout strategies
-
-Not every view should be solved by one global ELK pass.
 
 The macro-layout layer should support a strategy registry for containers, with strategies such as:
 
 - `stack`
 - `grid`
 - `lanes`
-- `elk_layered`
-- `elk_force`, only if a view genuinely benefits from it
+- renderer-owned `layered`
+- view-specific manual placement where domain layout requires it
 
 Each container chooses its strategy through scene construction.
 
@@ -346,7 +353,7 @@ This allows hybrid layouts:
 - a service blueprint root may use `lanes`
 - a journey phase strip may use `grid`
 - a scenario branch cluster should use custom staged lane/grid placement with branch tracks
-- an IA root may use `elk_layered` while area interiors use `stack`
+- a UI transition graph may use renderer-owned `layered` placement while surrounding scopes use `stack`
 
 This is a feature, not an inconsistency. Different diagram regions have different structural needs.
 
@@ -402,7 +409,7 @@ The routing system then resolves those preferences after placement.
 
 Shared routing policy should also reserve a minimum readable terminal leg for arrow-ended routes when geometry allows, instead of leaving arrowheads cramped against a final bend.
 
-ELK may route edges inside ELK-managed containers. Shared router logic may route edges for manual `grid` or `lanes` containers. The important point is that routing remains a shared subsystem rather than being embedded in individual view emitters.
+Shared router logic routes edges after renderer-owned placement. It may consume view-specific candidates and corridor definitions, but shared geometry, constraint aggregation, track assignment, final validation, and bounded repair must not be reimplemented in individual SVG emitters.
 
 ## View responsibilities
 
@@ -444,7 +451,6 @@ Shared renderer infrastructure owns:
 - text measurement
 - micro-layout
 - macro-layout strategy registry
-- ELK adapter
 - routing
 - SVG backend
 - PNG derivation
@@ -548,12 +554,12 @@ The architecture must support different views choosing different layout mixes.
 
 Recommended bias by view:
 
-- `service_blueprint`: if ELK is used, let `ELK Layered` own final node placement and final routing in the same run; do not snap lane rows after layout and do not rely on renderer-side routing fallback
+- `service_blueprint`: use the active deterministic lane/column placement and custom connector archetypes over shared routing resources; do not use an external layout engine
 - `journey_map`: prefer lane or strip layout for phases, with routing support for cross-phase references
 - `ia_place_map`: use hierarchical containers, explicit ports, and manual hub/follower grouping; let owned child scopes and follower scopes grow parent geometry bottom-up, then route only local structure connectors with deterministic direct-vertical and shared-trunk patterns
 - `scenario_flow`: use the active scenario-flow design's custom staged lane-and-band layout with explicit branch tracks and decision-node port policy; do not use Elk or any other external layout engine for staged placement or routing
 - `outcome_opportunity_map`: use the active custom staged outcome-opportunity design with fixed semantic columns, outcome bands, explicit ports, and custom gutter/occupancy routing; do not use ELK or another external layout engine for staged placement or routing
-- `ui_contracts`: likely benefits from manual scoped containers, reserved gutter space plus dedicated label lanes for container-origin contract edges, and selective ELK use for transition routing
+- `ui_contracts`: use manual scoped containers, reserved gutter space plus dedicated label lanes for container-origin contract edges, and renderer-owned layered placement for transition graphs
 
 The point is not to assign one universal engine to every view. The point is to let each view reuse the same renderer contracts while choosing the right layout strategies.
 
@@ -563,7 +569,7 @@ Future implementation planning should organize work around these architectural w
 
 1. Define the internal renderer contracts: `RendererScene`, `MeasuredScene`, `PositionedScene`, renderer diagnostics, and theme tokens.
 2. Build the shared primitive library and micro-layout engine, including width-band policy, overflow policy, and real text measurement.
-3. Build the macro-layout strategy registry, including at minimum `stack`, `grid`, `lanes`, and an ELK adapter for `elk_layered`.
+3. Build the macro-layout strategy registry, including at minimum `stack`, `grid`, `lanes`, and renderer-owned layered placement where a transition graph requires it.
 4. Build the SVG backend against `PositionedScene`, with CSS class emission and shared marker definitions.
 5. Refactor CLI preview handling so preview generation is backend-aware rather than DOT-hardwired.
 6. Prove the architecture on a view that already has explicit row or lane semantics before expanding broadly.

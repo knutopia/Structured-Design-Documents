@@ -113,7 +113,7 @@
               "view_state_graph"
             ],
             "layout": {
-              "strategy": "elk_layered",
+              "strategy": "layered",
               "direction": "horizontal",
               "gap": 24,
               "crossAlignment": "start"
@@ -153,54 +153,125 @@
                 "primitive": "card",
                 "classes": [
                   "semantic_node",
-                  "shape-box",
-                  "chrome-dashed"
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
-                    "id": "VS-700a__content__line_0",
+                    "id": "VS-700a__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Editing"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 53.88,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 51.96,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "VS-700a__content__line_1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "VS-700a__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "data: DraftRecord"
+                      "Data"
                     ],
-                    "x": 12,
-                    "y": 38,
-                    "width": 98.364,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 21.635,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "VS-700a__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "DraftRecord"
+                    ],
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 68.022,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 63,
+                    "title": {
+                      "id": "VS-700a__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Editing"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 51.96,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "data_required",
+                        "label": {
+                          "id": "VS-700a__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Data"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 21.635,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "VS-700a__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "DraftRecord"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 68.022,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "VS-700a__transition_in",
@@ -213,16 +284,16 @@
                     "id": "VS-700a__transition_out",
                     "role": "transition_out",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 33
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 49,
+                "x": 48,
                 "y": 174,
-                "width": 168,
+                "width": 224,
                 "height": 66
               },
               {
@@ -232,54 +303,125 @@
                 "primitive": "card",
                 "classes": [
                   "semantic_node",
-                  "shape-box",
-                  "chrome-dashed"
+                  "shared-node",
+                  "shared-node-dense"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
-                "widthBand": "narrow",
+                "widthBand": "standard",
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
                 "content": [
                   {
-                    "id": "VS-700b__content__line_0",
+                    "id": "VS-700b__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_title",
                     "lines": [
                       "Done"
                     ],
-                    "x": 12,
-                    "y": 12,
-                    "width": 38.984,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 38.024,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "VS-700b__content__line_1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "VS-700b__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "data: Receipt"
+                      "Data"
                     ],
-                    "x": 12,
-                    "y": 38,
-                    "width": 72.924,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 21.635,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "VS-700b__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "Receipt"
+                    ],
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 42.582,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 63,
+                    "title": {
+                      "id": "VS-700b__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Done"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 38.024,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "data_required",
+                        "label": {
+                          "id": "VS-700b__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Data"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 21.635,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "VS-700b__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "Receipt"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 42.582,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
                 "ports": [
                   {
                     "id": "VS-700b__transition_in",
@@ -292,24 +434,24 @@
                     "id": "VS-700b__transition_out",
                     "role": "transition_out",
                     "side": "east",
-                    "x": 168,
+                    "x": 224,
                     "y": 33
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
-                "x": 344.778,
+                "x": 397.778,
                 "y": 174,
-                "width": 168,
+                "width": 224,
                 "height": 66
               }
             ],
             "ports": [],
             "x": 36,
             "y": 122,
-            "width": 489.778,
-            "height": 192
+            "width": 597.778,
+            "height": 176
           },
           {
             "kind": "container",
@@ -387,55 +529,75 @@
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-oval"
+                      "shared-node",
+                      "shared-node-plain"
                     ],
                     "widthPolicy": {
-                      "preferred": "chip",
+                      "preferred": "standard",
                       "allowed": [
-                        "chip",
-                        "narrow",
                         "standard"
                       ]
                     },
-                    "widthBand": "chip",
+                    "widthBand": "standard",
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
                     "content": [
                       {
-                        "id": "E-700__content__line_0",
+                        "id": "E-700__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
-                          "Submit",
-                          "Review"
+                          "Submit Review"
                         ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 54.744,
-                        "height": 40,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 108.168,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       }
                     ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "E-700__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Submit Review"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 108.168,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
                     "ports": [
                       {
                         "id": "E-700__contract_in",
                         "role": "contract_in",
                         "side": "west",
                         "x": 0,
-                        "y": 32
+                        "y": 24
                       }
                     ],
                     "overflow": {
                       "status": "fits"
                     },
-                    "x": 681.778,
+                    "x": 789.778,
                     "y": 174,
-                    "width": 96,
-                    "height": 64
+                    "width": 224,
+                    "height": 48
                   },
                   {
                     "kind": "node",
@@ -444,38 +606,59 @@
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
-                      "shape-cylinder"
+                      "shared-node",
+                      "shared-node-plain"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "widthBand": "standard",
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
                     "content": [
                       {
-                        "id": "D-700__content__line_0",
+                        "id": "D-700__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
                           "ReviewRecord"
                         ],
-                        "x": 12,
-                        "y": 12,
-                        "width": 107.232,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 103.712,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       }
                     ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "D-700__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "ReviewRecord"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 103.712,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
                     "ports": [
                       {
                         "id": "D-700__contract_in",
@@ -488,17 +671,17 @@
                     "overflow": {
                       "status": "fits"
                     },
-                    "x": 681.778,
-                    "y": 254,
+                    "x": 789.778,
+                    "y": 238,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
-                "x": 553.778,
+                "x": 661.778,
                 "y": 174,
                 "width": 352,
-                "height": 128
+                "height": 112
               }
             ],
             "ports": [
@@ -511,10 +694,10 @@
                 "y": 52
               }
             ],
-            "x": 541.778,
+            "x": 649.778,
             "y": 122,
             "width": 376,
-            "height": 192
+            "height": 176
           }
         ],
         "ports": [
@@ -529,8 +712,8 @@
         ],
         "x": 24,
         "y": 24,
-        "width": 905.778,
-        "height": 302
+        "width": 1013.778,
+        "height": 286
       },
       {
         "kind": "container",
@@ -616,8 +799,8 @@
           }
         ],
         "x": 24,
-        "y": 354,
-        "width": 905.778,
+        "y": 338,
+        "width": 1013.778,
         "height": 110
       },
       {
@@ -700,45 +883,66 @@
             "primitive": "card",
             "classes": [
               "semantic_node",
-              "shape-box"
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "C-702__content__line_0",
+                "id": "C-702__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Summary Card"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 112.704,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 109.184,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "C-702__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Summary Card"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 109.184,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [],
             "overflow": {
               "status": "fits"
             },
             "x": 36,
-            "y": 590,
-            "width": 168,
+            "y": 574,
+            "width": 224,
             "height": 48
           }
         ],
@@ -753,16 +957,16 @@
           }
         ],
         "x": 24,
-        "y": 492,
-        "width": 905.778,
+        "y": 476,
+        "width": 1013.778,
         "height": 158
       }
     ],
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 953.778,
-    "height": 674
+    "width": 1061.778,
+    "height": 658
   },
   "edges": [
     {
@@ -774,25 +978,25 @@
       ],
       "from": {
         "itemId": "C-700",
-        "x": 541.778,
-        "y": 278
+        "x": 649.778,
+        "y": 262
       },
       "to": {
         "itemId": "D-700",
         "portId": "D-700__contract_in",
-        "x": 681.778,
-        "y": 278
+        "x": 789.778,
+        "y": 262
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 541.778,
-            "y": 278
+            "x": 649.778,
+            "y": 262
           },
           {
-            "x": 681.778,
-            "y": 278
+            "x": 789.778,
+            "y": 262
           }
         ]
       },
@@ -804,8 +1008,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 553.778,
-        "y": 267
+        "x": 661.778,
+        "y": 251
       },
       "markers": {
         "end": "arrow"
@@ -821,25 +1025,25 @@
       ],
       "from": {
         "itemId": "C-700",
-        "x": 541.778,
-        "y": 206
+        "x": 649.778,
+        "y": 198
       },
       "to": {
         "itemId": "E-700",
         "portId": "E-700__contract_in",
-        "x": 681.778,
-        "y": 206
+        "x": 789.778,
+        "y": 198
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 541.778,
-            "y": 206
+            "x": 649.778,
+            "y": 198
           },
           {
-            "x": 681.778,
-            "y": 206
+            "x": 789.778,
+            "y": 198
           }
         ]
       },
@@ -851,8 +1055,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 553.778,
-        "y": 195
+        "x": 661.778,
+        "y": 187
       },
       "markers": {
         "end": "arrow"
@@ -868,24 +1072,24 @@
       "from": {
         "itemId": "VS-700a",
         "portId": "VS-700a__transition_out",
-        "x": 217,
+        "x": 272,
         "y": 207
       },
       "to": {
         "itemId": "VS-700b",
         "portId": "VS-700b__transition_in",
-        "x": 344.778,
+        "x": 397.778,
         "y": 207
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 217,
+            "x": 272,
             "y": 207
           },
           {
-            "x": 344.778,
+            "x": 397.778,
             "y": 207
           }
         ]
@@ -898,7 +1102,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 230,
+        "x": 284,
         "y": 173
       },
       "markers": {

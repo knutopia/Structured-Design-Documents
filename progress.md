@@ -2,6 +2,9 @@
 
 ## Open Issues
 
+-routing remediation
+-close out new node adoption after routing fix
+-containment display for ui_contracts
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -27,10 +30,51 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+- Caught 2 missing artifact updates
+
+## Sat 9-5
+
+- Updated, reviewed canonical examples
+- Updated README recent items
+
+## Fri 9-4
+
+- Routing unification done
+- Journey adapter updated to use universal solver
+
+## Thu 9-3
+
+- Phase 1 of new node adoption done
+- Phase 2 done
+- Phase 3 done
+- Phase 4 done
+- Phase 5 done
+- Encountered blocking routing issue in phase 6, captured in remediation document
+- Phase 7 shared-node cleanup and verification completed
+- Planned routing unification
+
+## Wed 9-2
+
+- Visual issues correction successful
+- Created note for future connector label improvement
+- Planned new node adoption
+
+## Tue 9-1
+
+- Authored unified node renderer spec
+- Created unified node figma reference
+- Created unified node sdd
+- Better cli error feedback for `-view` type syntax
+- Good-node plan created
+- Good-node implemented, tracking visual issues
+
 ## Mon 8-31
 
 - Node design improvement exploration
-- Identified, addressed excessive height issue for scenario_flow, journey_map, service_blueprint
+- Fixed excessive height issue for scenario_flow, journey_map, service_blueprint
+- Changed diagram edge stroke to inside
+- Regenerated examples
+- CLI --decorator option, default
 
 ## Thu 8-27
 

@@ -1,20 +1,14 @@
 import type {
-  ContentBlock,
   LayoutIntent,
-  OverflowPolicy,
   PortOffsetPolicy,
   PortSide,
   PortSpec,
   SceneContainer,
   SceneItem,
   SceneNode,
-  WidthPolicy
+  SharedNodeAttribute,
+  NodeDecoratorMode
 } from "./contracts.js";
-
-const DEFAULT_CARD_OVERFLOW_POLICY: OverflowPolicy = {
-  kind: "escalate_width_band",
-  maxLines: 2
-};
 
 interface PortSpecOptions {
   offset?: number;
@@ -30,28 +24,17 @@ interface DiagramRootContainerOptions {
   classes?: string[];
 }
 
-interface CardNodeOptions {
-  id: string;
-  role: string;
-  classes: string[];
-  widthPolicy: WidthPolicy;
-  content: ContentBlock[];
+export interface SharedNodeRequest {
+  title: string;
+  decoratorMode: NodeDecoratorMode;
+  nodeType: string;
+  nodeId: string;
+  attributes: SharedNodeAttribute[];
+}
+
+interface SharedNodeIntegrationOptions {
+  classes?: string[];
   ports?: PortSpec[];
-  overflowPolicy?: OverflowPolicy;
-}
-
-function cloneWidthPolicy(widthPolicy: WidthPolicy): WidthPolicy {
-  return {
-    preferred: widthPolicy.preferred,
-    allowed: [...widthPolicy.allowed]
-  };
-}
-
-function cloneOverflowPolicy(overflowPolicy: OverflowPolicy): OverflowPolicy {
-  return {
-    kind: overflowPolicy.kind,
-    maxLines: overflowPolicy.maxLines
-  };
 }
 
 export function buildPortSpec(
@@ -132,16 +115,31 @@ export function buildDiagramRootContainer(options: DiagramRootContainerOptions):
   };
 }
 
-export function buildCardNode(options: CardNodeOptions): SceneNode {
+export function buildSharedNode(
+  request: SharedNodeRequest,
+  integration: SharedNodeIntegrationOptions = {}
+): SceneNode {
   return {
     kind: "node",
-    id: options.id,
-    role: options.role,
+    id: request.nodeId,
+    role: request.nodeType.toLowerCase(),
     primitive: "card",
-    classes: [...options.classes],
-    widthPolicy: cloneWidthPolicy(options.widthPolicy),
-    overflowPolicy: cloneOverflowPolicy(options.overflowPolicy ?? DEFAULT_CARD_OVERFLOW_POLICY),
-    content: [...options.content],
-    ports: [...(options.ports ?? [])]
+    classes: ["semantic_node", ...(integration.classes ?? [])],
+    widthPolicy: {
+      preferred: "standard",
+      allowed: ["standard"]
+    },
+    overflowPolicy: {
+      kind: "grow_height"
+    },
+    content: [],
+    sharedNode: {
+      title: request.title,
+      decoratorMode: { ...request.decoratorMode },
+      nodeType: request.nodeType,
+      nodeId: request.nodeId,
+      attributes: request.attributes.map((attribute) => ({ ...attribute }))
+    },
+    ports: [...(integration.ports ?? [])]
   };
 }

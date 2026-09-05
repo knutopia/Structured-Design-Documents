@@ -61,31 +61,32 @@
             "role": "place",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "place",
               "root_place",
               "depth-0"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "P-700__title",
-                "kind": "text",
-                "text": "Dashboard",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Dashboard",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Place",
+              "nodeId": "P-700",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "north_chain",
@@ -170,31 +171,32 @@
                     "role": "place",
                     "primitive": "card",
                     "classes": [
+                      "semantic_node",
                       "place",
                       "nested_place",
                       "depth-1"
                     ],
                     "widthPolicy": {
-                      "preferred": "narrow",
+                      "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "P-900__title",
-                        "kind": "text",
-                        "text": "Reports",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Reports",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "Place",
+                      "nodeId": "P-900",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "north_chain",
@@ -295,31 +297,32 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-300__title",
-                    "kind": "text",
-                    "text": "Zeta",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
+                "content": [],
+                "sharedNode": {
+                  "title": "Zeta",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Place",
+                  "nodeId": "P-300",
+                  "attributes": []
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -381,31 +384,32 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-100__title",
-                    "kind": "text",
-                    "text": "Alpha",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
+                "content": [],
+                "sharedNode": {
+                  "title": "Alpha",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Place",
+                  "nodeId": "P-100",
+                  "attributes": []
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -467,31 +471,32 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-200__title",
-                    "kind": "text",
-                    "text": "Beta",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
+                "content": [],
+                "sharedNode": {
+                  "title": "Beta",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Place",
+                  "nodeId": "P-200",
+                  "attributes": []
+                },
                 "ports": [
                   {
                     "id": "north_chain",
@@ -589,31 +594,32 @@
                 "role": "place",
                 "primitive": "card",
                 "classes": [
+                  "semantic_node",
                   "place",
                   "root_place",
                   "depth-0"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "P-050__title",
-                    "kind": "text",
-                    "text": "Archive Home",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
+                "content": [],
+                "sharedNode": {
+                  "title": "Archive Home",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Place",
+                  "nodeId": "P-050",
+                  "attributes": []
+                },
                 "ports": [
                   {
                     "id": "north_chain",

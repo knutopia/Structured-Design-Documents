@@ -9,9 +9,12 @@ import type {
   SceneEdge,
   SceneNode
 } from "../src/renderer/staged/contracts.js";
-import { runElkFixedPositionRouting } from "../src/renderer/staged/elkAdapter.js";
 import { positionMeasuredScene } from "../src/renderer/staged/macroLayout.js";
-import { measureScene, runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import {
+  measureScene,
+  positionSceneBeforeRouting,
+  runStagedRendererPipeline
+} from "../src/renderer/staged/pipeline.js";
 import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 import { buildFixtureScene } from "./stagedRendererFixtures.js";
 
@@ -114,7 +117,7 @@ function buildSharedSizeCell(
   };
 }
 
-function buildHybridElkScene(): RendererScene {
+function buildHybridLayeredScene(): RendererScene {
   return buildRootScene(
     {
       strategy: "stack",
@@ -124,12 +127,12 @@ function buildHybridElkScene(): RendererScene {
     [
       {
         kind: "container",
-        id: "elk-zone",
-        role: "elk_group",
+        id: "layered-zone",
+        role: "layered_group",
         primitive: "cluster",
-        classes: ["elk_group"],
+        classes: ["layered_group"],
         layout: {
-          strategy: "elk_layered",
+          strategy: "layered",
           direction: "vertical",
           gap: 20
         },
@@ -145,14 +148,14 @@ function buildHybridElkScene(): RendererScene {
         },
         ports: [],
         children: [
-          buildCardNode("elk-top", "narrow", "Top", [
+          buildCardNode("layered-top", "narrow", "Top", [
             {
               id: "south",
               role: "primary_out",
               side: "south"
             }
           ]),
-          buildCardNode("elk-bottom", "narrow", "Bottom", [
+          buildCardNode("layered-bottom", "narrow", "Bottom", [
             {
               id: "north",
               role: "primary_in",
@@ -176,15 +179,15 @@ function buildHybridElkScene(): RendererScene {
     ],
     [
       {
-        id: "elk-internal",
+        id: "layered-internal",
         role: "transition",
         classes: ["internal"],
         from: {
-          itemId: "elk-top",
+          itemId: "layered-top",
           portId: "south"
         },
         to: {
-          itemId: "elk-bottom",
+          itemId: "layered-bottom",
           portId: "north"
         },
         routing: {
@@ -195,11 +198,11 @@ function buildHybridElkScene(): RendererScene {
         }
       },
       {
-        id: "elk-external",
+        id: "layered-external",
         role: "navigation",
         classes: ["external"],
         from: {
-          itemId: "elk-bottom",
+          itemId: "layered-bottom",
           portId: "east"
         },
         to: {
@@ -638,10 +641,10 @@ describe("staged macro-layout", () => {
     }));
   });
 
-  it("supports elk_layered containers with orthogonal bend-point routing", async () => {
+  it("supports renderer-owned layered containers with orthogonal routing", async () => {
     const scene = buildRootScene(
       {
-        strategy: "elk_layered",
+        strategy: "layered",
         direction: "vertical",
         gap: 20
       },
@@ -670,7 +673,7 @@ describe("staged macro-layout", () => {
       ],
       [
         {
-          id: "elk-left",
+          id: "layered-left",
           role: "transition",
           classes: [],
           from: {
@@ -689,7 +692,7 @@ describe("staged macro-layout", () => {
           }
         },
         {
-          id: "elk-right",
+          id: "layered-right",
           role: "transition",
           classes: [],
           from: {
@@ -714,31 +717,69 @@ describe("staged macro-layout", () => {
     const top = findPositionedItem(result.positionedScene.root, "top");
     const left = findPositionedItem(result.positionedScene.root, "left");
     const right = findPositionedItem(result.positionedScene.root, "right");
-    const edge = result.positionedScene.edges.find((candidate) => candidate.id === "elk-right");
+    const edge = result.positionedScene.edges.find((candidate) => candidate.id === "layered-right");
 
     expect(top).toEqual(expect.objectContaining({ x: 16, y: 16 }));
-    expect(left).toEqual(expect.objectContaining({ y: 86 }));
-    expect(right).toEqual(expect.objectContaining({ x: 204, y: 86 }));
+    expect(left).toEqual(expect.objectContaining({ y: 84 }));
+    expect(right).toEqual(expect.objectContaining({ x: 204, y: 84 }));
     expect(edge?.from.portId).toBe("south");
     expect(edge?.to.portId).toBe("north");
     expect(edge?.route.points).toEqual([
       { x: 100, y: 64 },
-      { x: 100, y: 75 },
-      { x: 288, y: 75 },
-      { x: 288, y: 86 }
+      { x: 100, y: 74 },
+      { x: 288, y: 74 },
+      { x: 288, y: 84 }
     ]);
     expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.preference_fallback")).toBe(false);
   });
 
-  it("preserves item view metadata through hierarchical ELK subtree positioning", async () => {
-    const top = buildCardNode("metadata-elk-top", "narrow", "Top", [
+  it("ranks cycles, self-loops, and disconnected components deterministically", async () => {
+    const edge = (id: string, from: string, to: string): SceneEdge => ({
+      id,
+      role: "transition",
+      classes: [],
+      from: { itemId: from },
+      to: { itemId: to },
+      routing: { style: "orthogonal", preferAxis: "horizontal" }
+    });
+    const scene = buildRootScene(
+      { strategy: "layered", direction: "horizontal", gap: 20 },
+      ["cycle-a", "cycle-b", "after-cycle", "self-loop", "disconnected"].map((id) =>
+        buildCardNode(id, "narrow")
+      ),
+      [
+        edge("a-to-b", "cycle-a", "cycle-b"),
+        edge("b-to-a", "cycle-b", "cycle-a"),
+        edge("b-to-c", "cycle-b", "after-cycle"),
+        edge("self", "self-loop", "self-loop")
+      ]
+    );
+
+    const first = await positionSceneBeforeRouting(measureScene(scene));
+    const second = await positionSceneBeforeRouting(measureScene(structuredClone(scene)));
+    const cycleA = findPositionedItem(first.root, "cycle-a");
+    const cycleB = findPositionedItem(first.root, "cycle-b");
+    const afterCycle = findPositionedItem(first.root, "after-cycle");
+    const selfLoop = findPositionedItem(first.root, "self-loop");
+    const disconnected = findPositionedItem(first.root, "disconnected");
+
+    expect(cycleA.x).toBe(cycleB.x);
+    expect(cycleA.y).toBeLessThan(cycleB.y);
+    expect(afterCycle.x).toBeGreaterThan(cycleA.x + cycleA.width);
+    expect(selfLoop.x).toBe(cycleA.x);
+    expect(disconnected.x).toBe(cycleA.x);
+    expect(JSON.stringify(first)).toBe(JSON.stringify(second));
+  });
+
+  it("preserves item view metadata through layered subtree positioning", async () => {
+    const top = buildCardNode("metadata-layered-top", "narrow", "Top", [
       {
         id: "south",
         role: "primary_out",
         side: "south"
       }
     ]);
-    const bottom = buildCardNode("metadata-elk-bottom", "narrow", "Bottom", [
+    const bottom = buildCardNode("metadata-layered-bottom", "narrow", "Bottom", [
       {
         id: "north",
         role: "primary_in",
@@ -775,18 +816,15 @@ describe("staged macro-layout", () => {
       [
         {
           kind: "container",
-          id: "metadata-elk-zone",
-          role: "elk_group",
+          id: "metadata-layered-zone",
+          role: "layered_group",
           primitive: "cluster",
-          classes: ["elk_group"],
+          classes: ["layered_group"],
           viewMetadata: cellMetadata,
           layout: {
-            strategy: "elk_layered",
+            strategy: "layered",
             direction: "vertical",
-            gap: 20,
-            elk: {
-              hierarchyHandling: "include_children"
-            }
+            gap: 20
           },
           chrome: {
             padding: {
@@ -804,15 +842,15 @@ describe("staged macro-layout", () => {
       ],
       [
         {
-          id: "metadata-elk-internal",
+          id: "metadata-layered-internal",
           role: "transition",
           classes: ["internal"],
           from: {
-            itemId: "metadata-elk-top",
+            itemId: "metadata-layered-top",
             portId: "south"
           },
           to: {
-            itemId: "metadata-elk-bottom",
+            itemId: "metadata-layered-bottom",
             portId: "north"
           },
           routing: {
@@ -826,30 +864,30 @@ describe("staged macro-layout", () => {
     );
 
     const result = await runStagedRendererPipeline(scene);
-    const measuredElkZone = result.measuredScene.root.children[0];
-    const positionedElkZone = findPositionedItem(result.positionedScene.root, "metadata-elk-zone");
-    const positionedTop = findPositionedItem(result.positionedScene.root, "metadata-elk-top");
+    const measuredLayeredZone = result.measuredScene.root.children[0];
+    const positionedLayeredZone = findPositionedItem(result.positionedScene.root, "metadata-layered-zone");
+    const positionedTop = findPositionedItem(result.positionedScene.root, "metadata-layered-top");
 
-    if (!measuredElkZone || measuredElkZone.kind !== "container") {
-      throw new Error("Expected the measured scene to include the hierarchical ELK container.");
+    if (!measuredLayeredZone || measuredLayeredZone.kind !== "container") {
+      throw new Error("Expected the measured scene to include the layered container.");
     }
-    if (positionedElkZone.kind !== "container") {
-      throw new Error("Expected the positioned scene to include the hierarchical ELK container.");
+    if (positionedLayeredZone.kind !== "container") {
+      throw new Error("Expected the positioned scene to include the layered container.");
     }
     if (positionedTop.kind !== "node") {
-      throw new Error("Expected the positioned scene to include the hierarchical ELK node.");
+      throw new Error("Expected the positioned scene to include the layered node.");
     }
 
-    expect(measuredElkZone.viewMetadata).toEqual(cellMetadata);
-    expect(positionedElkZone.viewMetadata).toEqual(cellMetadata);
+    expect(measuredLayeredZone.viewMetadata).toEqual(cellMetadata);
+    expect(positionedLayeredZone.viewMetadata).toEqual(cellMetadata);
     expect(positionedTop.viewMetadata).toEqual(nodeMetadata);
 
-    expect(measuredElkZone.viewMetadata).not.toBe(cellMetadata);
-    expect(positionedElkZone.viewMetadata).not.toBe(cellMetadata);
+    expect(measuredLayeredZone.viewMetadata).not.toBe(cellMetadata);
+    expect(positionedLayeredZone.viewMetadata).not.toBe(cellMetadata);
     expect(positionedTop.viewMetadata).not.toBe(nodeMetadata);
 
-    expect(measuredElkZone.viewMetadata?.serviceBlueprint).not.toBe(cellMetadata.serviceBlueprint);
-    expect(positionedElkZone.viewMetadata?.serviceBlueprint).not.toBe(cellMetadata.serviceBlueprint);
+    expect(measuredLayeredZone.viewMetadata?.serviceBlueprint).not.toBe(cellMetadata.serviceBlueprint);
+    expect(positionedLayeredZone.viewMetadata?.serviceBlueprint).not.toBe(cellMetadata.serviceBlueprint);
     expect(positionedTop.viewMetadata?.serviceBlueprint).not.toBe(nodeMetadata.serviceBlueprint);
   });
 
@@ -913,22 +951,22 @@ describe("staged macro-layout", () => {
     expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
   });
 
-  it("applies the stronger vertical target-approach rule after ELK route hints are returned", async () => {
+  it("applies the stronger vertical target-approach rule after layered placement", async () => {
     const scene = buildRootScene(
       {
-        strategy: "elk_layered",
+        strategy: "layered",
         direction: "vertical",
         gap: 20
       },
       [
-        buildCardNode("elk-top-approach", "narrow", "Top", [
+        buildCardNode("layered-top-approach", "narrow", "Top", [
           {
             id: "south",
             role: "chain_out",
             side: "south"
           }
         ]),
-        buildCardNode("elk-bottom-approach", "narrow", "Bottom", [
+        buildCardNode("layered-bottom-approach", "narrow", "Bottom", [
           {
             id: "north",
             role: "chain_in",
@@ -938,15 +976,15 @@ describe("staged macro-layout", () => {
       ],
       [
         {
-          id: "elk-target-approach",
+          id: "layered-target-approach",
           role: "navigation",
           classes: ["within_chain"],
           from: {
-            itemId: "elk-top-approach",
+            itemId: "layered-top-approach",
             portId: "south"
           },
           to: {
-            itemId: "elk-bottom-approach",
+            itemId: "layered-bottom-approach",
             portId: "north"
           },
           routing: {
@@ -972,147 +1010,35 @@ describe("staged macro-layout", () => {
     expect(result.positionedScene.diagnostics.some((diagnostic) => diagnostic.code === "renderer.routing.target_approach_unmet")).toBe(false);
   });
 
-  it("preserves already-laid-out child positions when fixed-position ELK routing is used on matching geometry", async () => {
-    const children = [
-      {
-        kind: "node" as const,
-        id: "fixed-top",
-        role: "place",
-        primitive: "card" as const,
-        classes: ["place"],
-        widthPolicy: {
-          preferred: "narrow" as const,
-          allowed: ["narrow" as const]
-        },
-        widthBand: "narrow" as const,
-        overflowPolicy: {
-          kind: "grow_height" as const
-        },
-        content: [],
-        ports: [
-          {
-            id: "south",
-            role: "primary_out",
-            side: "south" as const,
-            x: 84,
-            y: 48
-          }
-        ],
-        overflow: {
-          status: "fits" as const
-        },
-        x: 16,
-        y: 16,
-        width: 168,
-        height: 48
-      },
-      {
-        kind: "node" as const,
-        id: "fixed-bottom",
-        role: "place",
-        primitive: "card" as const,
-        classes: ["place"],
-        widthPolicy: {
-          preferred: "narrow" as const,
-          allowed: ["narrow" as const]
-        },
-        widthBand: "narrow" as const,
-        overflowPolicy: {
-          kind: "grow_height" as const
-        },
-        content: [],
-        ports: [
-          {
-            id: "north",
-            role: "primary_in",
-            side: "north" as const,
-            x: 84,
-            y: 0
-          }
-        ],
-        overflow: {
-          status: "fits" as const
-        },
-        x: 16,
-        y: 86,
-        width: 168,
-        height: 48
-      }
-    ];
-
-    const seeded = await runElkFixedPositionRouting({
-      containerId: "fixed-position-check",
-      direction: "vertical",
-      nodeGap: 20,
-      layerGap: 20,
-      children,
-      edges: [
-        {
-          id: "fixed-route",
-          sourceItemId: "fixed-top",
-          targetItemId: "fixed-bottom",
-          sourcePortId: "south",
-          targetPortId: "north"
-        }
-      ]
-    });
-
-    const elkResult = await runElkFixedPositionRouting({
-      containerId: "fixed-position-check-seeded",
-      direction: "vertical",
-      nodeGap: 20,
-      layerGap: 20,
-      children: children.map((child) => ({
-        ...child,
-        x: seeded.childPositions.get(child.id)?.x ?? child.x,
-        y: seeded.childPositions.get(child.id)?.y ?? child.y
-      })),
-      edges: [
-        {
-          id: "fixed-route",
-          sourceItemId: "fixed-top",
-          targetItemId: "fixed-bottom",
-          sourcePortId: "south",
-          targetPortId: "north"
-        }
-      ]
-    });
-
-    expect(elkResult.positionsPreserved).toBe(true);
-    expect(elkResult.childPositions.get("fixed-top")).toEqual(expect.objectContaining({ x: 0, y: 0 }));
-    expect(elkResult.childPositions.get("fixed-bottom")).toEqual(expect.objectContaining({ x: 0, y: 70 }));
-    expect(elkResult.edgeRoutes.get("fixed-route")).toBeDefined();
-  });
-
-  it("routes mixed-region edges once after elk placement and matches the committed hybrid snapshot", async () => {
-    const scene = buildHybridElkScene();
+  it("routes mixed-region edges once after layered placement and matches the committed hybrid snapshot", async () => {
+    const scene = buildHybridLayeredScene();
     const result = await runStagedRendererPipeline(scene);
-    const elkZone = findPositionedItem(result.positionedScene.root, "elk-zone");
-    const externalEdge = result.positionedScene.edges.find((candidate) => candidate.id === "elk-external");
-    const internalEdge = result.positionedScene.edges.find((candidate) => candidate.id === "elk-internal");
+    const layeredZone = findPositionedItem(result.positionedScene.root, "layered-zone");
+    const externalEdge = result.positionedScene.edges.find((candidate) => candidate.id === "layered-external");
+    const internalEdge = result.positionedScene.edges.find((candidate) => candidate.id === "layered-internal");
 
-    if (elkZone.kind !== "container") {
-      throw new Error("Expected elk-zone to remain a container.");
+    if (layeredZone.kind !== "container") {
+      throw new Error("Expected layered-zone to remain a container.");
     }
 
-    expect(elkZone).toEqual(expect.objectContaining({ x: 16, y: 16, width: 193, height: 170 }));
+    expect(layeredZone).toEqual(expect.objectContaining({ x: 16, y: 16, width: 192, height: 168 }));
     expect(internalEdge?.route.points).toEqual([
       { x: 112, y: 104 },
-      { x: 112, y: 126 }
+      { x: 112, y: 124 }
     ]);
     expect(externalEdge?.from.portId).toBe("east");
     expect(externalEdge?.to.portId).toBe("west");
     expect(externalEdge?.route.points).toEqual([
-      { x: 196, y: 150 },
-      { x: 214.5, y: 150 },
-      { x: 214.5, y: 40 },
-      { x: 233, y: 40 }
+      { x: 196, y: 148 },
+      { x: 214, y: 148 },
+      { x: 214, y: 40 },
+      { x: 232, y: 40 }
     ]);
 
-    await expectRendererStageSnapshot("hybrid-elk.positioned-scene.json", result.positionedScene);
+    await expectRendererStageSnapshot("hybrid-layered.positioned-scene.json", result.positionedScene);
   });
 
-  it("keeps malformed elk scene data from crashing the positioned-scene fallback path", async () => {
+  it("keeps malformed layered scene data from crashing the positioned-scene fallback path", async () => {
     const malformedMeasuredScene = {
       viewId: "ia_place_map",
       detailId: "detailed",
@@ -1124,7 +1050,7 @@ describe("staged macro-layout", () => {
         primitive: "root",
         classes: ["diagram"],
         layout: {
-          strategy: "elk_layered",
+          strategy: "layered",
           direction: "horizontal",
           gap: 20
         },
@@ -1179,7 +1105,7 @@ describe("staged macro-layout", () => {
 
     const positioned = await positionMeasuredScene(malformedMeasuredScene);
 
-    expect(positioned.root.width).toBe(153);
+    expect(positioned.root.width).toBe(152);
     expect(positioned.root.height).toBe(80);
     expect(positioned.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
   });

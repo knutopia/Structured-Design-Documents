@@ -83,26 +83,26 @@
               "slot-kind-primary"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-020__content__line_0",
-                "kind": "text",
-                "text": "Submit Claim",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Submit Claim",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-020",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -277,26 +277,26 @@
               "slot-kind-primary"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-021__content__line_0",
-                "kind": "text",
-                "text": "Receive Confirmation",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Receive Confirmation",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-021",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -393,23 +393,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "PR-020__content__line_0",
-                "kind": "text",
-                "text": "Validate Claim",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Validate Claim",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Process",
+              "nodeId": "PR-020",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -706,23 +707,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "PR-021__content__line_0",
-                "kind": "text",
-                "text": "Review Claim History",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Review Claim History",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Process",
+              "nodeId": "PR-021",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -979,23 +981,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "PR-022__content__line_0",
-                "kind": "text",
-                "text": "Notify Customer",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Notify Customer",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Process",
+              "nodeId": "PR-022",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1092,24 +1095,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "SA-020__content__line_0",
-                "kind": "text",
-                "text": "Store Claim",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Store Claim",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "SystemAction",
+              "nodeId": "SA-020",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1206,24 +1209,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "D-020__content__line_0",
-                "kind": "text",
-                "text": "Claim",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Claim",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "DataEntity",
+              "nodeId": "D-020",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1320,24 +1323,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "SA-021__content__line_0",
-                "kind": "text",
-                "text": "Load Claim History",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Load Claim History",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "SystemAction",
+              "nodeId": "SA-021",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1434,24 +1437,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "SA-022__content__line_0",
-                "kind": "text",
-                "text": "Send Email",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Send Email",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "SystemAction",
+              "nodeId": "SA-022",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1548,23 +1551,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "PL-020__content__line_0",
-                "kind": "text",
-                "text": "Retention Policy",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Retention Policy",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Policy",
+              "nodeId": "PL-020",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1747,8 +1751,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -1775,8 +1778,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "realized by",
@@ -1807,8 +1809,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "realized by",
@@ -1839,8 +1840,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "constrained by",
@@ -1870,8 +1870,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "depends on",
@@ -1900,8 +1899,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -1927,8 +1925,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "depends on",
@@ -1957,8 +1954,7 @@
       "routing": {
         "style": "straight",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -1984,8 +1980,7 @@
         "style": "straight",
         "sourcePortRole": "support_out",
         "targetPortRole": "support_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "depends on",
@@ -2016,8 +2011,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "constrained by",
@@ -2048,8 +2042,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "reads, writes",
@@ -2080,8 +2073,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "reads",
@@ -2112,8 +2104,7 @@
         "style": "straight",
         "sourcePortRole": "resource_out",
         "targetPortRole": "resource_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "reads",

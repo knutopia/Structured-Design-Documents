@@ -11,7 +11,7 @@ export interface ServiceBlueprintRenderNode {
   authorOrder: number;
   shape: string;
   style?: string;
-  labelLines: string[];
+  title: string;
 }
 
 export interface ServiceBlueprintRenderLane {
@@ -179,7 +179,7 @@ export function buildServiceBlueprintRenderModel(
       authorOrder: authorOrderByNodeId.get(node.id) ?? Number.MAX_SAFE_INTEGER,
       shape: display.shape,
       style: display.style,
-      labelLines: [projectionNodesById.get(node.id)?.name ?? node.name]
+      title: projectionNodesById.get(node.id)?.name ?? node.name
     };
   });
 

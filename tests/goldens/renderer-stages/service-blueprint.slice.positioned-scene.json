@@ -82,38 +82,60 @@
               "band-a1",
               "column-1",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-020__content__line_0",
+                "id": "J-020__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Submit Claim"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 102.008,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 98.488,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-020__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Submit Claim"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 98.488,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -126,21 +148,21 @@
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
                 "side": "south",
-                "x": 84,
+                "x": 112,
                 "y": 48
               },
               {
@@ -163,9 +185,9 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 172,
-            "y": 48,
-            "width": 168,
+            "x": 144,
+            "y": 40,
+            "width": 224,
             "height": 48
           }
         ],
@@ -173,8 +195,8 @@
         "x": 132,
         "y": 28,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:0"
       },
@@ -219,8 +241,8 @@
         "x": 404,
         "y": 28,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:0"
       },
@@ -265,8 +287,8 @@
         "x": 676,
         "y": 28,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:0"
       },
@@ -322,67 +344,88 @@
               "band-a2",
               "column-4",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-021__content__line_0",
+                "id": "J-021__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Receive",
-                  "Confirmation"
+                  "Receive Confirmation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 98.264,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 155.152,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-021__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Receive Confirmation"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 155.152,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "support_in",
                 "role": "support_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "support_out",
                 "role": "support_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "resource_in",
@@ -398,24 +441,24 @@
                 "side": "south",
                 "offset": 36,
                 "x": 36,
-                "y": 64
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 988,
+            "x": 960,
             "y": 40,
-            "width": 168,
-            "height": 64
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
         "x": 948,
         "y": 28,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:0"
       },
@@ -471,37 +514,60 @@
               "band-a1",
               "column-1",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "PR-020__content__line_0",
+                "id": "PR-020__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Validate Claim"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 109.192,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 105.032,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "PR-020__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Validate Claim"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 105.032,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -552,17 +618,17 @@
               "status": "fits"
             },
             "x": 144,
-            "y": 160,
+            "y": 136,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 140,
+        "y": 124,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:1"
       },
@@ -605,10 +671,10 @@
         "children": [],
         "ports": [],
         "x": 404,
-        "y": 140,
+        "y": 124,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:1"
       },
@@ -651,10 +717,10 @@
         "children": [],
         "ports": [],
         "x": 676,
-        "y": 140,
+        "y": 124,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:1"
       },
@@ -697,10 +763,10 @@
         "children": [],
         "ports": [],
         "x": 948,
-        "y": 140,
+        "y": 124,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:1"
       },
@@ -743,10 +809,10 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 252,
+        "y": 220,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:2"
       },
@@ -789,10 +855,10 @@
         "children": [],
         "ports": [],
         "x": 404,
-        "y": 252,
+        "y": 220,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:2"
       },
@@ -848,37 +914,60 @@
               "band-i1",
               "column-3",
               "cell-kind-interstitial",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "PR-021__content__line_0",
+                "id": "PR-021__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Review Claim History"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 159.832,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 153.752,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "PR-021__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Review Claim History"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 153.752,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -929,17 +1018,17 @@
               "status": "fits"
             },
             "x": 688,
-            "y": 272,
+            "y": 232,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 676,
-        "y": 252,
+        "y": 220,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:2"
       },
@@ -982,10 +1071,10 @@
         "children": [],
         "ports": [],
         "x": 948,
-        "y": 252,
+        "y": 220,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:2"
       },
@@ -1028,10 +1117,10 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 364,
+        "y": 316,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:3"
       },
@@ -1074,10 +1163,10 @@
         "children": [],
         "ports": [],
         "x": 404,
-        "y": 364,
+        "y": 316,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:3"
       },
@@ -1120,10 +1209,10 @@
         "children": [],
         "ports": [],
         "x": 676,
-        "y": 364,
+        "y": 316,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:3"
       },
@@ -1179,37 +1268,60 @@
               "band-a2",
               "column-4",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "PR-022__content__line_0",
+                "id": "PR-022__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Notify Customer"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 124.44,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 119.96,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "PR-022__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Notify Customer"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 119.96,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1260,17 +1372,17 @@
               "status": "fits"
             },
             "x": 960,
-            "y": 384,
+            "y": 328,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 948,
-        "y": 364,
+        "y": 316,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:3"
       },
@@ -1326,38 +1438,60 @@
               "band-a1",
               "column-1",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "SA-020__content__line_0",
+                "id": "SA-020__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Store Claim"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 88.704,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 85.504,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "SA-020__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Store Claim"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 85.504,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1408,17 +1542,17 @@
               "status": "fits"
             },
             "x": 144,
-            "y": 496,
+            "y": 424,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 476,
+        "y": 412,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:4"
       },
@@ -1474,38 +1608,60 @@
               "band-a1",
               "column-2",
               "cell-kind-anchor",
-              "slot-kind-spill"
+              "slot-kind-spill",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "D-020__content__line_0",
+                "id": "D-020__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Claim"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 43.528,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 42.248,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "D-020__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Claim"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 42.248,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1556,17 +1712,17 @@
               "status": "fits"
             },
             "x": 416,
-            "y": 496,
+            "y": 424,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 404,
-        "y": 476,
+        "y": 412,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:4"
       },
@@ -1622,38 +1778,60 @@
               "band-i1",
               "column-3",
               "cell-kind-interstitial",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "SA-021__content__line_0",
+                "id": "SA-021__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Load Claim History"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 143.08,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 137.64,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "SA-021__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Load Claim History"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 137.64,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1704,17 +1882,17 @@
               "status": "fits"
             },
             "x": 688,
-            "y": 496,
+            "y": 424,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 676,
-        "y": 476,
+        "y": 412,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:4"
       },
@@ -1770,38 +1948,60 @@
               "band-a2",
               "column-4",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "SA-022__content__line_0",
+                "id": "SA-022__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Send Email"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 84.968,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 82.088,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "SA-022__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Send Email"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 82.088,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1852,17 +2052,17 @@
               "status": "fits"
             },
             "x": 960,
-            "y": 496,
+            "y": 424,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 948,
-        "y": 476,
+        "y": 412,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:4"
       },
@@ -1918,37 +2118,60 @@
               "band-a1",
               "column-1",
               "cell-kind-anchor",
-              "slot-kind-primary"
+              "slot-kind-primary",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "PL-020__content__line_0",
+                "id": "PL-020__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Retention Policy"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 122.536,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 117.736,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "PL-020__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Retention Policy"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 117.736,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1999,17 +2222,17 @@
               "status": "fits"
             },
             "x": 144,
-            "y": 608,
+            "y": 536,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 588,
+        "y": 524,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:5"
       },
@@ -2052,10 +2275,10 @@
         "children": [],
         "ports": [],
         "x": 404,
-        "y": 588,
+        "y": 524,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:5"
       },
@@ -2098,10 +2321,10 @@
         "children": [],
         "ports": [],
         "x": 676,
-        "y": 588,
+        "y": 524,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:5"
       },
@@ -2144,10 +2367,10 @@
         "children": [],
         "ports": [],
         "x": 948,
-        "y": 588,
+        "y": 524,
         "width": 248,
-        "height": 88,
-        "resolvedSlotHeight": 64,
+        "height": 72,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "service_blueprint:column:semantic",
         "sharedHeightGroup": "service_blueprint:row:5"
       }
@@ -2156,7 +2379,7 @@
     "x": 0,
     "y": 0,
     "width": 1224,
-    "height": 704
+    "height": 624
   },
   "edges": [
     {
@@ -2170,24 +2393,24 @@
       ],
       "from": {
         "itemId": "J-020",
-        "x": 340,
-        "y": 72
+        "x": 368,
+        "y": 64
       },
       "to": {
         "itemId": "J-021",
-        "x": 988,
-        "y": 72
+        "x": 960,
+        "y": 64
       },
       "route": {
         "style": "straight",
         "points": [
           {
-            "x": 340,
-            "y": 72
+            "x": 368,
+            "y": 64
           },
           {
-            "x": 988,
-            "y": 72
+            "x": 960,
+            "y": 64
           }
         ]
       },
@@ -2208,31 +2431,31 @@
       "from": {
         "itemId": "PR-020",
         "x": 368,
-        "y": 184
+        "y": 160
       },
       "to": {
         "itemId": "PR-021",
         "x": 688,
-        "y": 296
+        "y": 256
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 368,
-            "y": 184
+            "y": 160
           },
           {
             "x": 384,
-            "y": 184
+            "y": 160
           },
           {
             "x": 384,
-            "y": 296
+            "y": 256
           },
           {
             "x": 688,
-            "y": 296
+            "y": 256
           }
         ]
       },
@@ -2253,31 +2476,31 @@
       "from": {
         "itemId": "PR-021",
         "x": 912,
-        "y": 296
+        "y": 256
       },
       "to": {
         "itemId": "PR-022",
         "x": 960,
-        "y": 408
+        "y": 352
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 912,
-            "y": 296
+            "y": 256
           },
           {
             "x": 928,
-            "y": 296
+            "y": 256
           },
           {
             "x": 928,
-            "y": 408
+            "y": 352
           },
           {
             "x": 960,
-            "y": 408
+            "y": 352
           }
         ]
       },
@@ -2299,23 +2522,23 @@
       "from": {
         "itemId": "J-020",
         "x": 256,
-        "y": 96
+        "y": 88
       },
       "to": {
         "itemId": "PR-020",
         "x": 256,
-        "y": 160
+        "y": 136
       },
       "route": {
         "style": "straight",
         "points": [
           {
             "x": 256,
-            "y": 96
+            "y": 88
           },
           {
             "x": 256,
-            "y": 160
+            "y": 136
           }
         ]
       },
@@ -2328,7 +2551,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 127
+        "y": 107
       },
       "markers": {
         "end": "arrow"
@@ -2348,23 +2571,23 @@
       "from": {
         "itemId": "J-021",
         "x": 1072,
-        "y": 104
+        "y": 88
       },
       "to": {
         "itemId": "PR-022",
         "x": 1072,
-        "y": 384
+        "y": 328
       },
       "route": {
         "style": "straight",
         "points": [
           {
             "x": 1072,
-            "y": 104
+            "y": 88
           },
           {
             "x": 1072,
-            "y": 384
+            "y": 328
           }
         ]
       },
@@ -2377,7 +2600,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 1084,
-        "y": 252
+        "y": 220
       },
       "markers": {
         "end": "arrow"
@@ -2397,39 +2620,39 @@
       "from": {
         "itemId": "PR-020",
         "x": 272,
-        "y": 208
+        "y": 184
       },
       "to": {
         "itemId": "PL-020",
         "x": 272,
-        "y": 608
+        "y": 536
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 272,
-            "y": 208
+            "y": 184
           },
           {
             "x": 272,
-            "y": 480
+            "y": 408
           },
           {
             "x": 384,
-            "y": 480
+            "y": 408
           },
           {
             "x": 384,
-            "y": 576
+            "y": 504
           },
           {
             "x": 272,
-            "y": 576
+            "y": 504
           },
           {
             "x": 272,
-            "y": 608
+            "y": 536
           }
         ]
       },
@@ -2442,7 +2665,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 284,
-        "y": 364
+        "y": 316
       },
       "markers": {
         "end": "arrow"
@@ -2461,23 +2684,23 @@
       "from": {
         "itemId": "PR-020",
         "x": 256,
-        "y": 208
+        "y": 184
       },
       "to": {
         "itemId": "SA-020",
         "x": 256,
-        "y": 496
+        "y": 424
       },
       "route": {
         "style": "straight",
         "points": [
           {
             "x": 256,
-            "y": 208
+            "y": 184
           },
           {
             "x": 256,
-            "y": 496
+            "y": 424
           }
         ]
       },
@@ -2490,7 +2713,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 167.518,
-        "y": 364
+        "y": 316
       },
       "markers": {
         "end": "arrow"
@@ -2509,23 +2732,23 @@
       "from": {
         "itemId": "PR-021",
         "x": 800,
-        "y": 320
+        "y": 280
       },
       "to": {
         "itemId": "SA-021",
         "x": 800,
-        "y": 496
+        "y": 424
       },
       "route": {
         "style": "straight",
         "points": [
           {
             "x": 800,
-            "y": 320
+            "y": 280
           },
           {
             "x": 800,
-            "y": 496
+            "y": 424
           }
         ]
       },
@@ -2538,7 +2761,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 812,
-        "y": 397
+        "y": 341
       },
       "markers": {
         "end": "arrow"
@@ -2557,23 +2780,23 @@
       "from": {
         "itemId": "PR-022",
         "x": 1072,
-        "y": 432
+        "y": 376
       },
       "to": {
         "itemId": "SA-022",
         "x": 1072,
-        "y": 496
+        "y": 424
       },
       "route": {
         "style": "straight",
         "points": [
           {
             "x": 1072,
-            "y": 432
+            "y": 376
           },
           {
             "x": 1072,
-            "y": 496
+            "y": 424
           }
         ]
       },
@@ -2586,7 +2809,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 1084,
-        "y": 453
+        "y": 389
       },
       "markers": {
         "end": "arrow"
@@ -2606,23 +2829,23 @@
       "from": {
         "itemId": "SA-020",
         "x": 256,
-        "y": 544
+        "y": 472
       },
       "to": {
         "itemId": "PL-020",
         "x": 256,
-        "y": 608
+        "y": 536
       },
       "route": {
         "style": "straight",
         "points": [
           {
             "x": 256,
-            "y": 544
+            "y": 472
           },
           {
             "x": 256,
-            "y": 608
+            "y": 536
           }
         ]
       },
@@ -2635,7 +2858,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 149.818,
-        "y": 565
+        "y": 493
       },
       "markers": {
         "end": "arrow"
@@ -2655,31 +2878,31 @@
       "from": {
         "itemId": "SA-020",
         "x": 272,
-        "y": 544
+        "y": 472
       },
       "to": {
         "itemId": "D-020",
         "x": 528,
-        "y": 544
+        "y": 472
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 272,
-            "y": 544
+            "y": 472
           },
           {
             "x": 272,
-            "y": 560
+            "y": 488
           },
           {
             "x": 528,
-            "y": 560
+            "y": 488
           },
           {
             "x": 528,
-            "y": 544
+            "y": 472
           }
         ]
       },
@@ -2692,7 +2915,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 406.402,
-        "y": 549
+        "y": 477
       },
       "markers": {
         "end": "arrow"
@@ -2712,31 +2935,31 @@
       "from": {
         "itemId": "SA-021",
         "x": 800,
-        "y": 544
+        "y": 472
       },
       "to": {
         "itemId": "D-020",
         "x": 544,
-        "y": 544
+        "y": 472
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 800,
-            "y": 544
+            "y": 472
           },
           {
             "x": 800,
-            "y": 560
+            "y": 488
           },
           {
             "x": 544,
-            "y": 560
+            "y": 488
           },
           {
             "x": 544,
-            "y": 544
+            "y": 472
           }
         ]
       },
@@ -2749,7 +2972,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 650.409,
-        "y": 549
+        "y": 477
       },
       "markers": {
         "end": "arrow"
@@ -2769,31 +2992,31 @@
       "from": {
         "itemId": "SA-022",
         "x": 1072,
-        "y": 544
+        "y": 472
       },
       "to": {
         "itemId": "D-020",
         "x": 560,
-        "y": 544
+        "y": 472
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 1072,
-            "y": 544
+            "y": 472
           },
           {
             "x": 1072,
-            "y": 576
+            "y": 504
           },
           {
             "x": 560,
-            "y": 576
+            "y": 504
           },
           {
             "x": 560,
-            "y": 544
+            "y": 472
           }
         ]
       },
@@ -2806,7 +3029,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 794.409,
-        "y": 565
+        "y": 493
       },
       "markers": {
         "end": "arrow"
@@ -2824,7 +3047,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 62,
+      "y": 54,
       "text": "Customer",
       "textStyleRole": "label"
     },
@@ -2838,7 +3061,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 104,
+      "y": 88,
       "text": "Line of Interaction",
       "textStyleRole": "edge_label"
     },
@@ -2853,11 +3076,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 127.584,
-        "y": 116
+        "y": 100
       },
       "to": {
         "x": 1196,
-        "y": 116
+        "y": 100
       }
     },
     {
@@ -2869,7 +3092,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 174,
+      "y": 150,
       "text": "Frontstage",
       "textStyleRole": "label"
     },
@@ -2883,7 +3106,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 216,
+      "y": 184,
       "text": "Line of Visibility",
       "textStyleRole": "edge_label"
     },
@@ -2898,11 +3121,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 115.23599999999999,
-        "y": 228
+        "y": 196
       },
       "to": {
         "x": 1196,
-        "y": 228
+        "y": 196
       }
     },
     {
@@ -2914,7 +3137,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 286,
+      "y": 246,
       "text": "Backstage",
       "textStyleRole": "label"
     },
@@ -2929,11 +3152,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 24,
-        "y": 340
+        "y": 292
       },
       "to": {
         "x": 1196,
-        "y": 340
+        "y": 292
       }
     },
     {
@@ -2945,7 +3168,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 398,
+      "y": 342,
       "text": "Support",
       "textStyleRole": "label"
     },
@@ -2958,7 +3181,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 510,
+      "y": 438,
       "text": "System",
       "textStyleRole": "label"
     },
@@ -2971,7 +3194,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 622,
+      "y": 550,
       "text": "Policy",
       "textStyleRole": "label"
     }
